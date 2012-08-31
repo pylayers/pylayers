@@ -1,0 +1,152 @@
+    def __init__(self,x=np.array([]),y=np.array([])):
+    def save(self,filename):
+    def load(self,filename):
+    def setx(self,x):
+    def sety(self,function):
+    def stem(self,color='b-'):
+    def step(self,color='b'):
+    def plot(self,ix=0,col='black',vline=np.array([]),hline=np.array([]),unit1='V',unit2='V',xmin=-1e5,xmax=1e5,ax=[],dB=False,dist=False,display=True,logx=False,logy=False):
+#    def plotdB(self):
+    def gating(self,xmin,xmax):
+    def len(self):
+    def __init__(self,x=np.array([]),y=np.array([])):
+    def __add__(self,u):
+    def __sub__(self,u):
+    def __mul__(self,u):
+    def setx(self,start,stop,dx):
+    def dx(self):
+    def width(self):
+    def expand(self,a):
+    def max(self):
+    def min(self):
+    def truncate(self,posmin,posmax):
+    def align(self,u2):
+    def abs(self):
+    def energy(self):
+    def zright(self,xmax):
+    def zleft(self,xmin):
+    def zlr(self,xmin,xmax):
+    def __init__(self,x=np.array([]),y=np.array([])):
+    def plot(self,ix=0,col='black',vline=np.array([]),hline=np.array([]),showlabel=[True,True],unit1='V',unit2='V',ax=[],tmin=-1e5,tmax=+1e5,dB=False,dist=False,logx=False,logy=False):
+    def translate(self,tau):
+    def b2u(self,N):    
+    def __init__(self,x=np.array([]),y=np.array([])):
+    def __add__(self,u):
+    def __sub__(self,u):
+    def __mul__(self,u):
+    def diff(self):
+    def info(self):
+    def fft(self,shift=False):
+    def fftsh(self):
+    def filter(self,order=4,wp=0.3,ws=0.4,ftype='butter'):
+    def ftshift(self):
+#       def fig1(self,titre='Received Signal'):
+    def psd(self,Tpns=100,R=50):
+        R    : Resistance (default 50 Ohms)
+    def show(self):
+    def esd(self,mode='bilateral'):
+#       def waterfall(self,N,typ='l'):
+    def shift(self,tau):
+    def correlate(self,s,normalized=True):
+    def corrgauss(self,sigma):
+    def Efirst_loc(self,nint,E0):
+    def resample(self,x_new,kind='linear'):
+    def ft(self):
+    def convolve(self,u):
+    def Yadd_zeros2l(self,N):
+        def Yadd_zeros2l(self,N)
+    def Yadd_zeros2r(self,N):
+        def Yadd_zeros2r(self,N)
+    def Epercent(self,N=10):
+    def Etau0(self,tau0=0.0,Tint=1,sym=0.25,dB=True):
+    def Ewin(self,tau,Tint=1,sym=0.25,dB=False):
+    def Etot(self,tau0=0.0,taumax=200,dB=False):
+        dB   : (False default) if True value in dB 
+    def Efirst(self,toa,Tint=1,sym=0.25,dB=True):
+    def Semis(self):
+    def Efirst_corr(self,tau0,Sx,Sy,dB = True):
+    def Efirst_toath(self,tau0,Tint = 1, sym = 0.25,dB = True):
+    def taumax(self):
+    def Emax(self,Tint=1,sym=0.5,dB=False): 
+    def tau_Emax(self):
+    def TDoA(self):
+    def toa_max2(self):
+    def toa_new(self):
+    def toa_win(self,w):
+    def toa_max(self,nint):
+    def toa_th(self,thlos,thnlos,visibility=0):
+    def toa_cum(self,th):
+    def toa_th_tmtm(self):
+    def toa_th_tm(self):
+    def toa_th_tmt(self):
+    def toa_cum_tm(self):
+    def toa_cum_tmtm(self):
+    def toa_cum_tmt(self):
+    def readcea(self,_filename): 
+    def ecdf(self,Tnoise=10,rem_noise=True,in_positivity=True,display=False,normalize=True,delay=0):
+        Tnoise     : Time duration of noise only portion (default=5ns)
+    def tau_moy(self,alpha=0.1,tau0=0):
+    def tau_rms(self,alpha=0.1,tau0=0):
+         1) Approche grossière (default)
+    def __init__(self,x=np.array([]),y=np.array([]),tau=np.array([])):
+    def fig(self,N):
+    def __init__(self,x=np.array([]),y=np.array([])):
+    def plotri(self,nb=-1):
+    def plot(self,phase=True,dB=True,ix=-1):
+    def plotdB(self,mask=False,n=2,phase=True):
+    def stem(self,color='b-'):
+    def __init__(self,x=np.array([]),y=np.array([])):
+    def __add__(self,u):
+    def __sub__(self,u):
+    def __mul__(self,u):
+    def window(self,win='hamming'):
+    def get(self,k):
+    def info(self):
+    def energy(self,axis=0):
+            axis : (default 0)
+    def enthrsh(self,thresh=99.99999):
+        thresh : threshold in percentage (default 99.99)
+    def dBthrsh(self,threshdB=40):
+    def zp(self,N):
+    def newdf(self,df):
+    def dftresamp(self,df_new):
+    def resample(self,x_new,kind='linear'):
+    def symH(self,parity):
+    def symHz(self,Nz):
+    def align(self,u2):
+    def ifft(self,Npt=0):
+    def ift(self,Nz=1,ffts=0):
+    def iftshift(self,Nz=1):
+    def show(self):
+#       def fig(self,N):
+    def decimate(self,N):
+    def __init__(self,x=np.array([]),y=np.array([]),tau0=np.array([])):
+    def minphas(self):
+    def totud(self,Nz=1,ffts=0):
+    def iftd(self,Nz=1,tstart=-10,tstop=100,ffts=0):
+    def ft1(self,Nz,ffts=0):
+    def ftau(self,Nz,k=0,ffts=0):
+    def ft2(self,df=0.01):
+    def __init__(self,x=np.array([]),y=np.array([])):
+    def __mul__(self,u):
+    def ifft(self,ffts=0,tt='centered'):
+            ffts = 0 : no fftshift (default)
+            tt = 'centered'  default
+    def unrex(self):
+#   def __init__(self,x=np.array([]),numchanxxfc=4,band=3,thresh=10,fe=20):
+    def __init__(self,Tobs=100,fe=50,DSPdBmpHz=-174,NF=0,R=50,seed=[]):
+    def amplify(self,GdB,NF):    
+    def gating(self,fcGHz,BGHz,window='rect'):
+          fc     (GHz)   (def = 4GHz)
+          band   (GHz)   (def = 3GHz)
+          thresh (dB)    (def = 10dB)
+          fe     (GHz)   (def = 100GHz)
+    def __init__(self,x=np.array([]),fc=4,band=3,thresh=10,fe=20):
+          fc     (GHz)   (def = 4GHz)
+          band   (GHz)   (def = 3GHz)
+          thresh (dB)    (def = 10dB)
+          fe     (GHz)   (def = 100GHz)
+    def __init__(self,x=np.array([]),fc=4,band=3,thresh=10,Tp=100,Pm=-41.3,R=50,fe=100):
+        thresh : definition of band at Pm - thresh (dB) 
+    def show(self):
+def test():
