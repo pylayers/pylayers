@@ -43,6 +43,7 @@ import pkgutil
 from pylayers.gis.layout import Layout
 #import Slab
 
+import pylayers.util.pyutil as pyu
 import pylayers.util
 import pdb
 
@@ -93,7 +94,7 @@ class ShowNet(Process):
 
         self.coll_plot = {}
         self.C = ConfigParser.ConfigParser()
-        self.C.read(pkgutil.get_loader('pylayers').filename + '/ini/show.ini')
+        self.C.read(pyu.getlong('show.ini','ini'))
         self.RATcolor = dict(self.C.items('RATcolor'))
         self.RATes = dict(self.C.items('RATestyle'))
         self.update = dict(self.C.items('update'))
@@ -220,8 +221,7 @@ class ShowTable(Process):
                                'vel x', 'vel y', 'acc x', 'acc y')
             self.cellText = []
             self.C = ConfigParser.ConfigParser()
-            self.C.read(pkgutil.get_loader(
-                'pylayers').filename + '/ini/show.ini')
+            self.C.read(pyu.getlong('show.ini','ini'))
             self.RATcolor = dict(self.C.items('RATcolor'))
             self.RATes = dict(self.C.items('RATestyle'))
             self.update = dict(self.C.items('update'))
