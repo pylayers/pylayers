@@ -72,7 +72,7 @@ geomutil
 
 pyutil
 -------
-.. automodule:: pylayers.Util.pyutil
+.. automodule:: pylayers.util.pyutil
    :members:
 
 mesuwb
