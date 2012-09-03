@@ -36,6 +36,7 @@ import ConfigParser
 import copy
 import pdb
 #from PyLayers.Network.Node import Node
+import pylayers.util.pyutil as pyu
 from pylayers.network.emsolver import EMSolver
 from pylayers.network.show import ShowNet,ShowTable
 import time
@@ -152,7 +153,8 @@ class Network(nx.MultiGraph):
         self.EMS=EMS
         self.coll_plot={}
         self.pos={}
-
+        self.mat={}
+        self.idx = 0
     def combi(self,iterable,r,key,d=dict()):
         """ combi = itertools.combination(iterable,r) adapted 
     
@@ -752,7 +754,8 @@ class Network(nx.MultiGraph):
             
         """
         C=ConfigParser.ConfigParser()
-        C.read(pkgutil.get_loader('pylayers').filename +'/ini/show.ini')
+        C.read(pyu.getlong('show.ini','ini'))
+#        C.read(pkgutil.get_loader('pylayers').filename +'/ini/show.ini')
         RATcolor=dict(C.items('RATcolor'))
         RATes    =dict(C.items('RATestyle'))
 
@@ -930,11 +933,13 @@ class Network(nx.MultiGraph):
         for i in range(len(pos)):
             if not 'BS' in pos[i][0]:
                 if self.idx == 0:
-                    file=open('../save_data/' + str(pos[i][0]) + '.ini','w')
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini','save_data'),'w')
+#                    file=open('../save_data/' + str(pos[i][0]) + '.ini','w')
                     file.write('[coordinates]')
                     file.write('\n')
                     file.close()
-                file=open('../save_data/' + str(pos[i][0]) + '.ini','a')
+#                file=open('../save_data/' + str(pos[i][0]) + '.ini','a')
+                file=open(pyu.getlong(str(pos[i][0]) + '.ini','save_data'),'a')
                 file.write(str(self.idx+1) +' = ' + str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' 1.5')
                 file.write('\n')
                 file.close()
@@ -967,8 +972,8 @@ class Network(nx.MultiGraph):
                     self.mat[pos[i][0]]={}
                     self.mat[pos[i][0]]['pos']=pos[i][1]
 
-                    
-        sio.savemat('../save_data/mat.mat',self.mat)
+                   
+        sp.io.savemat(pyu.getlong('mat.mat','save_data'),self.mat)
 
 
 
@@ -980,9 +985,9 @@ class PNetwork(Process):
                   'sim':None,
                   'show_sg':False,
                   'disp_inf':False,
-                  'csv_save':True,
-                  'mat_save':True,
-                  'pyray_save':True,
+                  'csv_save':False,
+                  'mat_save':False,
+                  'pyray_save':False,
                   'msql':False}
 
 ##       initialize attributes
@@ -1045,10 +1050,7 @@ class PNetwork(Process):
                 Sg=self.net.compute_Sg(tx,rx)
 
             ############## Show
-            if self.show:
-                self.net.show(ion=True,legend=True,fig=fig,ax=ax,name=fig_net)
-            if self.show_table:
-                self.net.table(fig=fig2,ax=ax2,name=fig_table)
+
             if self.show_sg:
                 self.net.show_sig(Sg,tx,rx,ion=True,fig=fig,ax=ax)
 

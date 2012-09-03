@@ -35,6 +35,7 @@ import time
 import matplotlib.pyplot as plt
 import ConfigParser
 
+import pylayers.util.pyutil as pyu
 
 from pylayers.network.network import Network, Node, PNetwork
 from pylayers.network.show import ShowNet, ShowTable
@@ -55,8 +56,7 @@ class Simul(Simulation):
         Simulation.__init__(self)
         self.initialize()
         self.config = ConfigParser.ConfigParser()
-        self.config.read(pkgutil.get_loader(
-            'pylayers').filename + '/ini/simul_net.ini')
+        self.config.read(pyu.getlong('simulnet.ini','ini'))
         self.sim_opt = dict(self.config.items('Simulation'))
         self.ag_opt = dict(self.config.items('Agent'))
         self.lay_opt = dict(self.config.items('Layout'))
@@ -127,10 +127,10 @@ class Simul(Simulation):
             agents = ['A1', 'A2', 'A3']
 #            agents=['A1','A2','A3','A4' ]
             Cf = ConfigParser.ConfigParser()
-            Cf.read(pkgutil.get_loader('pylayers').filename + '/ini/agent.ini')
+            Cf.read(pyu.getlong('agent.ini','ini'))
+
 
             for i, ag in enumerate(agents):
-
                 ag_opt = dict(Cf.items(ag))
                 self.lAg.append(Agent(
                                 ID=ag_opt['id'],
@@ -201,7 +201,7 @@ class Simul(Simulation):
                              disp_inf=str2bool(self.net_opt['dispinfo']),
                              csv_save=str2bool(self.net_opt['csv_save']),
                              pyray_save=str2bool(self.net_opt['pyray_save']),
-                             save_net=str2bool(self.net_opt['save_net']))
+                             mat_save=str2bool(self.net_opt['mat_save']))
         self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):
@@ -229,11 +229,11 @@ class Simul(Simulation):
         fig_table = 'table'
 
         if str2bool(self.net_opt['show']):
-            self.sh=Show_net(net=self.net, L=self.L,sim=self,fname=fig_net)
+            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net)
             self.activate(self.sh,self.sh.run(),1.0)
 
         if str2bool(self.net_opt['show_table']):
-            self.sht=Show_table(net=self.net,lAg=self.lAg,sim=self,fname=fig_table)
+            self.sht=ShowTable(net=self.net,lAg=self.lAg,sim=self,fname=fig_table)
             self.activate(self.sht,self.sht.run(),1.0)
 
 
