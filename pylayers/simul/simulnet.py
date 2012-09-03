@@ -197,10 +197,10 @@ class Simul(Simulation):
                              net_updt_time=float(self.net_opt['network_update_time']),
                              L=self.L,
                              sim=self,
-                             show=str2bool(self.net_opt['show']),
                              show_sg=str2bool(self.net_opt['show_sg']),
-                             show_table=str2bool(self.net_opt['show_table']),
                              disp_inf=str2bool(self.net_opt['dispinfo']),
+                             csv_save=str2bool(self.net_opt['csv_save']),
+                             pyray_save=str2bool(self.net_opt['pyray_save']),
                              save_net=str2bool(self.net_opt['save_net']))
         self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
@@ -228,18 +228,15 @@ class Simul(Simulation):
         fig_net = 'network'
         fig_table = 'table'
 
-        self.sh = ShowNet(net=self.net, L=self.L, sim=self, fname=fig_net)
-        self.activate(self.sh, self.sh.run(), 1.0)
+        if str2bool(self.net_opt['show']):
+            self.sh=Show_net(net=self.net, L=self.L,sim=self,fname=fig_net)
+            self.activate(self.sh,self.sh.run(),1.0)
 
-        self.sht = ShowTable(
-            net=self.net, lAg=self.lAg, sim=self, fname=fig_table)
-        self.activate(self.sht, self.sht.run(), 1.0)
+        if str2bool(self.net_opt['show_table']):
+            self.sht=Show_table(net=self.net,lAg=self.lAg,sim=self,fname=fig_table)
+            self.activate(self.sht,self.sht.run(),1.0)
 
-#        if self.show_table:
-#            fig2 = plt.figure(fig_table)
-#            ax2=fig2.add_subplot(111,frame_on=False)
-#            ax2.xaxis.set_visible(False)
-#            ax2.yaxis.set_visible(False)
+
     def runsimul(self):
         """ Run simulation
         """
