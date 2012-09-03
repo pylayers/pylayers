@@ -25,9 +25,6 @@ try:
 except:
     raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
 
-
-
-
 try:
     os.path.isdir(basename +'/figures')
 except:

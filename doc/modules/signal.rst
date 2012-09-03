@@ -61,7 +61,6 @@ Uniform signal
 Class TBsignal
 --------------
 
-Time signal 
 
 .. currentmodule:: pylayers.signal.bsignal.TBsignal
 
@@ -173,12 +172,10 @@ Uniform time signal with delays
 .. autosummary::
     :toctree: generated/
 
-    fig
 
 Class FBsignal
 --------------
 
-Frequency signal 
 
 .. currentmodule:: pylayers.signal.bsignal.FBsignal
 
@@ -198,7 +195,6 @@ Frequency signal
 Class FUsignal
 --------------
 
-Uniform frequency signal 
 
 .. currentmodule:: pylayers.signal.bsignal.FUsignal
 
@@ -239,6 +235,28 @@ Uniform frequency signal with delays
 .. class:: pylayers.signal.bsignal.FUDsignal
 
 .. autoattribute:: pylayers.signal.bsignal.FUDsignal 
+
+.. autosummary::
+    :toctree: generated/
+
+    window
+    get 
+    info 
+    energy 
+    enthrsh 
+    dBthrsh
+    zp
+    newdf
+    dftresamp
+    resample
+    symH
+    symHz
+    align 
+    ifft 
+    ift
+    iftshift
+    show
+    decimate 
 
 
 .. autosummary::
