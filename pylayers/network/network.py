@@ -36,6 +36,7 @@ import ConfigParser
 import copy
 import pdb
 #from PyLayers.Network.Node import Node
+import pylayers.util.pyutil as pyu
 from pylayers.network.emsolver import EMSolver
 from pylayers.network.show import ShowNet,ShowTable
 import time
@@ -152,7 +153,8 @@ class Network(nx.MultiGraph):
         self.EMS=EMS
         self.coll_plot={}
         self.pos={}
-
+        self.mat={}
+        self.idx = 0
     def combi(self,iterable,r,key,d=dict()):
         """ combi = itertools.combination(iterable,r) adapted 
     
@@ -752,7 +754,8 @@ class Network(nx.MultiGraph):
             
         """
         C=ConfigParser.ConfigParser()
-        C.read(pkgutil.get_loader('pylayers').filename +'/ini/show.ini')
+        C.read(pyu.getlong('show.ini','ini'))
+#        C.read(pkgutil.get_loader('pylayers').filename +'/ini/show.ini')
         RATcolor=dict(C.items('RATcolor'))
         RATes    =dict(C.items('RATestyle'))
 
@@ -896,16 +899,81 @@ class Network(nx.MultiGraph):
 
 
 
-    def save_net(self,filename,S):
+    def csv_save(self,filename,S):
+        """
+            save node positions into csv file
+
+            Attributes:
+            ----------
+
+        """
+
         pos=np.array(nx.get_node_attributes(self,'p').values())
         pos=np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
         pos=pos.reshape((1,len(self.nodes())*3))
-
         file=open('../save_data/' +filename +'.csv','a')
         file.write(str(S.now()) +',')
         np.savetxt(file,pos,delimiter=',')
         file.write('\n')
         file.close()
+
+
+    def pyray_save(self,S):
+        """
+            save node positions into ini file, compliant with pyray standard
+
+            Attributes:
+            ----------
+
+        """
+
+
+
+        pos=nx.get_node_attributes(self,'p').items()
+        for i in range(len(pos)):
+            if not 'BS' in pos[i][0]:
+                if self.idx == 0:
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini','save_data'),'w')
+#                    file=open('../save_data/' + str(pos[i][0]) + '.ini','w')
+                    file.write('[coordinates]')
+                    file.write('\n')
+                    file.close()
+#                file=open('../save_data/' + str(pos[i][0]) + '.ini','a')
+                file=open(pyu.getlong(str(pos[i][0]) + '.ini','save_data'),'a')
+                file.write(str(self.idx+1) +' = ' + str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' 1.5')
+                file.write('\n')
+                file.close()
+        self.idx=self.idx+1
+
+
+    def mat_save(self,S):
+        """
+            save node positions into a matlab structure file
+
+            Attributes:
+            ----------
+
+        """
+
+        pos=nx.get_node_attributes(self,'p').items()
+        for i in range(len(pos)):
+            if not 'BS' in pos[i][0]:
+                try:
+                    self.mat[pos[i][0]]['pos']=np.vstack((self.mat[pos[i][0]]['pos'],pos[i][1]))
+                    self.mat[pos[i][0]]['time']=np.vstack((self.mat[pos[i][0]]['time'],S.now()))
+                except:
+                    self.mat[pos[i][0]]={}
+                    self.mat[pos[i][0]]['pos']=pos[i][1]
+                    self.mat[pos[i][0]]['time']=np.array(S.now())
+            else :
+                try:
+                    self.mat[pos[i][0]]['pos']=pos[i][1]
+                except:
+                    self.mat[pos[i][0]]={}
+                    self.mat[pos[i][0]]['pos']=pos[i][1]
+
+                   
+        sp.io.savemat(pyu.getlong('mat.mat','save_data'),self.mat)
 
 
 
@@ -915,11 +983,11 @@ class PNetwork(Process):
                   'L':[],
                   'net_updt_time':0.001,
                   'sim':None,
-                  'show':False,
                   'show_sg':False,
-                  'show_table':False,
                   'disp_inf':False,
-                  'save_net':True,
+                  'csv_save':False,
+                  'mat_save':False,
+                  'pyray_save':False,
                   'msql':False}
 
 ##       initialize attributes
@@ -938,24 +1006,6 @@ class PNetwork(Process):
 
     def run(self):
 
-        if self.show:
-            plt.ion()
-            fig_net='network'
-            fig_table='table'
-            fig = plt.figure(fig_net,figsize=(20,5),dpi=100)
-            fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-            fig,ax=self.L.showGs()
-            if self.show_table:
-                fig2 = plt.figure(fig_table)
-                ax2=fig2.add_subplot(111,frame_on=False)
-                ax2.xaxis.set_visible(False)
-                ax2.yaxis.set_visible(False)
-#            size=fig.get_size_inches()
-#            dpi=fig.get_dpi()
-#            pdb.set_trace()
-#            fig.set_size_inches(2*A)
-
-            
 
         ####################################################################################
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
@@ -973,13 +1023,14 @@ class PNetwork(Process):
 
 
 
-        if self.save_net:
+        if self.csv_save:
             nbnodes=len(self.net.nodes())
             entete = 'time'
-            for i in range(nbnodes):
-                entete=entete + ',node#' +str(i)
+            inode=self.net.nodes_iter()
+            for i in inode:
+                entete=entete + ',' + i +',,'
             entete=entete +'\n'
-            file=open(self.filename +'.csv','w')
+            file=open('../save_data/' +self.filename +'.csv','w')
             file.write(entete)
             file.close()
 
@@ -999,10 +1050,7 @@ class PNetwork(Process):
                 Sg=self.net.compute_Sg(tx,rx)
 
             ############## Show
-            if self.show:
-                self.net.show(ion=True,legend=True,fig=fig,ax=ax,name=fig_net)
-            if self.show_table:
-                self.net.table(fig=fig2,ax=ax2,name=fig_table)
+
             if self.show_sg:
                 self.net.show_sig(Sg,tx,rx,ion=True,fig=fig,ax=ax)
 
@@ -1013,20 +1061,13 @@ class PNetwork(Process):
 
 
             ############# save network
-            if self.save_net:
-                self.net.save_net(self.filename,self.sim)
+            if self.csv_save:
+                self.net.csv_save(self.filename,self.sim)
+            if self.pyray_save:
+                self.net.pyray_save(self.sim)
+            if self.mat_save:
+                self.net.mat_save(self.sim)
 
-#            pos=np.array(nx.get_node_attributes(S.net,'p').values())
-#            pos=np.hstack((pos,np.zeros((nbnodes,1))))  # passage en 3D
-#            pos=pos.reshape((1,nbnodes*3))
-#            file=open('pos.csv','a')
-#            np.savetxt(file,pos,delimiter=',')
-#            file.close()
-#            try:
-#                pos=np.dstack((pos,np.array(nx.get_node_attributes(self.net,'p').values())))
-#            except:
-#                pos=np.array(nx.get_node_attributes(self.net,'p').values())
-#            pk.dump(pos,file)
             self.net.pos=self.net.get_pos()
             yield hold, self, self.net_updt_time
 

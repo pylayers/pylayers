@@ -27,6 +27,8 @@ import numpy as np
 import scipy as sp
 import ConfigParser    
 
+import pylayers.util.pyutil as pyu
+
 import pylayers.util.project
 from   pylayers.gis.layout import Layout
 import pylayers.antprop.slab
@@ -40,8 +42,8 @@ class EMSolver(object):
     def __init__(self,L=Layout()):
 
         self.config     = ConfigParser.ConfigParser()
-        
-        self.config.read(pkgutil.get_loader('pylayers').filename +'/ini/EMSolver.ini')
+        self.config.read(pyu.getlong('EMSolver.ini','ini'))
+#        self.config.read(pkgutil.get_loader('pylayers').filename +'/ini/EMSolver.ini')
         self.ems_opt = dict(self.config.items('EMS_config'))
         self.toa_opt = dict(self.config.items('TOA'))
         self.plm_opt = dict(self.config.items('PL_MODEL'))
