@@ -5,9 +5,9 @@ import scipy as sp
 import scipy.linalg as la
 #import GrRay3D
 #import Graph
-import Slab 
-import Layout 
-import GeomUtil as geu 
+import pylayers.antprob.slab
+import pylayers.gis.layout
+import pylayers.util.geomutil as geu
 import matplotlib.pyplot as plt
 
 
@@ -144,14 +144,6 @@ class Signature(object):
         self.typ = sign(u1*u2)
         #return(vn)
         #return(typ)
-
-
-    def ray(self):
-        """
-        """
-        r2 = Ray2D()
-        return(r2)
-
 
 
     def image(self,tx):
@@ -293,9 +285,9 @@ class Signature(object):
 
             >>> import matplotlib.pyplot as plt 
             >>> import numpy as np 
-            >>> import Layout
-            >>> from Signature import *
-            >>> L   = Layout.Layout()
+            >>> from pylayers.gis.layout import *
+            >>> from pylayers.antprop.signature import *
+            >>> L = Layout()
             >>> L.loadstr('exemple.str')
             >>> L.buildGt()
             >>> L.buildGr()
@@ -314,6 +306,7 @@ class Signature(object):
             >>> plt.plot(ray[0,:],ray[1,:],color='#999999',alpha=0.6,linewidth=0.6)
             >>> L.showGs()
             >>> plt.show()
+
         """
 
         pa  = self.pa
