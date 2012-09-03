@@ -6,9 +6,18 @@ import os
 #       """
 #       def __init__(self):
 #       def     
-currentdir=os.getcwd()
-figuredir=os.environ['FIGURDIR']
+currentdir = os.getcwd()
+try: 
+    pulsraydir = os.environ['PULSRAY']
+    print "pulray is in : ",pulsraydir
+except:
+    raise EnvironmentError('Please set the PULSRAY environment variable') 
+try:
+    figuredir = os.environ['FIGURDIR']
+except:
+    figuredir = os.environ['HOME']+"/Pyproject/figures"
 #print currentdir
+print "figures will be stored in ",figuredir
 try:
         basename=os.environ['BASENAME']
         #print "Project in  $BASENAME=",basename

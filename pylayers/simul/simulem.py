@@ -1294,7 +1294,6 @@ class Simul(object):
         D        = spio.loadmat(filecir)
         plt.subplot('211')
         self.show([itx],[irx])
-        plt.show()
         plt.subplot('212')
         kxa = 'ta'   + str(irx)
         kya = 'cira' + str(irx)
