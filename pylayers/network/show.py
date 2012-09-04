@@ -247,7 +247,8 @@ class ShowTable(Process):
                     P = nx.get_edge_attributes(self.net.SubNet[rat], 'Pr')
                     D = nx.get_edge_attributes(self.net.SubNet[rat], 'd')
                     for i in self.net.SubNet[rat].edges():  # boucle sur toute les liaisons
-                        r = [str(rat), str(i), str(T[i][0]), str(T[i][1]), str(P[i][0]), str(P[i][1]), str(D[i])]
+#                        r = [str(rat), str(i), str(T[i][0]), str(T[i][1]), str(P[i][0]), str(P[i][1]), str(D[i])]
+                        r = [str(rat), str(i), "%.2f" % (T[i][0]), "%.2f" % (T[i][1]), "%.2f" % (P[i][0]), "%.2f" % (P[i][1]), "%.2f" % (D[i])]
                     #pdb.set_trace()
                         self.cellText1.append(r)
 
@@ -277,7 +278,7 @@ class ShowTable(Process):
 
                 for a in self.lAg:
                     if a.type != 'ap':
-                        r2 = [str(a.ID), str(a.meca.position[0]), str(a.meca.position[1]), str(a.meca.velocity[0]), str(a.meca.velocity[1]), str(a.meca.acceleration[0]), str(a.meca.acceleration[1])]
+                        r2 = [str(a.ID), "%.2f" % (a.meca.position[0]), "%.2f" % (a.meca.position[1]), "%.2f" % (a.meca.velocity[0]), "%.2f" % (a.meca.velocity[1]), "%.2f" % (a.meca.acceleration[0]), "%.2f" % (a.meca.acceleration[1])]
                         self.cellText2.append(r2)
 
                 self.coll_plot['table2'][1] = self.ax2.table(cellText=self.cellText2, colLabels=self.colLabels2, loc='center')
