@@ -13,9 +13,16 @@ import shapely.ops as sho
 import networkx as nx
 from pylayers.gis.layout import Layout
 
-def savestr2(dpt,dwall):
-    """
-        save walls in str2 format 
+def savestr2(dpt,dwall,_filename='struc.str2'):
+    """ save walls in str2 format 
+
+    The default filename is struc.str2
+    Parameters
+    ----------
+
+    dpt : 
+    dwall:
+
     """
     fd = open('struc.str2','w')
     s1 = str(len(dpt.keys()))+' '+str(len(dwall.keys()))+' 0\n'
@@ -33,15 +40,18 @@ def savestr2(dpt,dwall):
         s1   = str(tail)+' '+str(head)+' 1 '+core+' '+'1 0 '+str(zmin)+' '+str(zmax)+'\n'
         fd.write(s1)
     fd.close()
+
 def stretch(s,alphat=0.1,alphah=0.1):
-    """
-        strech a LineString by a given perc on both terminations 
+    """ strech a LineString by a given perc on both terminations 
+
         Parameters
         ----------
-        s     : LineString shapely 
-        alpha :  
-        Return
-        ------
+        s      : LineString shapely 
+        alphat : stretching coeff tail   
+        alphah : stretching coeff head   
+
+        Returns
+        -------
         ss    : streched segment 
         
         >>> s1  = shg.LineString(((0,0),(1,0)))
@@ -61,8 +71,10 @@ def stretch(s,alphat=0.1,alphah=0.1):
     pph = ph + un*alphah
     ss  = shg.LineString(((ppt[0],ppt[1]),(pph[0],pph[1])))
     return(ss)
+
 def segsplit(s1,s2,tol=0.0001,alpha=0.1):
-    """
+    """ split segment 
+
     Parameters
     ----------
 
@@ -70,11 +82,17 @@ def segsplit(s1,s2,tol=0.0001,alpha=0.1):
     s2    : shapely LineString
     tol   : tolerance for point equality test
     alpha : stretching factor  
-    Return 
+
+    Returns 
     -------
     ts   : list of segment 
     bks1 : boolean keep s1
     bks2 : boolean keep s2
+
+
+    Examples
+    --------
+
     >>> s1 = shg.LineString(((0,0),(1,0)))
     >>> s2 = shg.LineString(((1,0),(2,0)))
     >>> s3 = shg.LineString(((1,-10),(1,10)))
@@ -82,7 +100,6 @@ def segsplit(s1,s2,tol=0.0001,alpha=0.1):
     >>> ts1 = segsplit(s1,s2)
     >>> ts2 = segsplit(s1,s3)
     >>> ts3 = segsplit(s1,s4)
-    >>> assert(ts1==[])
 
     """
     ts1   = []
@@ -143,11 +160,17 @@ def segsplit(s1,s2,tol=0.0001,alpha=0.1):
             bks1 = False
             bks2 = False
     return(ts1,ts2,bks1,bks2)    
-def extract(vrmlstrg,dico):
-    """
-     convert recursively a vrml string into a dictionnary 
 
-     Return
+def extract(vrmlstrg,dico):
+    """ converts recursively a vrml string into a dictionnary 
+
+     Parameters
+     ----------
+
+     vrmlstrg: 
+     dico :
+
+     Returns
      ------
      dico : dictonnary associated with vrml string strg
     """
@@ -159,13 +182,22 @@ def extract(vrmlstrg,dico):
             dico = extract(val,dico)
 
     return(dico)
+
 def inbracket(strg):
-    """ 
-    Return
-    ------
+    """ extraction of bracket content 
+
+    Parameters
+    ----------
+    strg : a string with a bracket
+
+    Returns
+    -------
     lbra : left part of the string 
     inbr : string inside the bracket 
     
+    Examples
+    --------
+
     >>> strg ='abcd{un texte}'
     >>> lbra,inbr = inbracket(strg)
     >>> assert(lbra=='abcd')
@@ -184,11 +216,16 @@ def inbracket(strg):
     inbr = inbr.rstrip('}')
     return(lbra,inbr)    
 def incrochet(strg):
-    """
-    Return
-    ------
+    """ get content inside crochet
+    Parameters
+    ----------
+    strg : string 
+
+    Returns
+    -------
     lbra : left part of the string 
     inbr : string inside the bracket 
+
 
     >>> strg ='abcd[un texte]'
     >>> lbra,inbr = incrochet(strg)
@@ -209,14 +246,14 @@ def incrochet(strg):
     inbr = inbr.rstrip(']')
     return(lbra,inbr)    
 def geomLine(st):
-    """
+    """ build a Line from string
 
     Parameters
     ----------
-    st 
+    st : string 
 
-    Return
-    ------
+    Returns
+    -------
     tabindex   : array of indexes
     tcoord     : array of coordinates
 
@@ -243,7 +280,16 @@ def geomLine(st):
     tcoord = np.array(coord).reshape(len(coord)/3,3)
     return(tabindex,tcoord)
 def geomFace(st):
-    """
+    """ build a Face from string 
+
+    Parameters
+    ----------
+    st : string
+
+    Returns
+    -------
+    tabindex
+    tcoord : ndarray
 
     """
     st1    = st.split('coordIndex')
@@ -315,8 +361,7 @@ def ParseMaterial(st):
         d['transparency']=ts[4].split('transparency')[1]
     return(d)
 def show(dico):
-    """
-    show dico 
+    """ show dico 
     """
     for key in dico.keys():
         if key!='name':
@@ -325,15 +370,14 @@ def show(dico):
             print dico[key]
     plt.show()    
 def parsevrml(filename): 
-    """
-    parse vrml file
+    """ parse a vrml file
 
     Parameters
     ----------
     filename : vrml filename
 
-    Return
-    ------
+    Returns
+    -------
     dg : dictionnaries of group
 
     """
@@ -386,8 +430,7 @@ def parsevrml(filename):
     dg[name]=g
     return(dg)
 def vrml2sha(tg):
-    """
-        convert vrml object into shapely polygons
+    """ convert vrml object into shapely polygons
          
         Parameters
         ----------
@@ -408,13 +451,12 @@ def vrml2sha(tg):
                         tt.append(u)
                 P = geo.Polygon(c)
 def vrml2geom(tg,rac):
-    """
-        convert vrml object into geomview files
+    """ convert vrml object into geomview files
         
-        Parameters
-        ----------
-        tg   : list of objects
-        rac  : filename prefix 
+    Parameters
+    ----------
+    tg   : list of objects
+    rac  : filename prefix 
     """
     for l in tg:
         # prepare geomview file
@@ -443,8 +485,6 @@ def vrml2geom(tg,rac):
         fd.close()           
 
 class VLayout(object):
-    def __init__(self):
-        pass
     def load(self,filename):
         """
         Parameters
@@ -551,8 +591,11 @@ class VLayout(object):
     # 
     #
     def show(self,num=100):
-        """
-            show entities 
+        """ show entities 
+        Parameters
+        ----------
+        num : int 
+            
         """
         if num > len(self.entity.keys()):
             group = self.entity.keys()
@@ -566,8 +609,7 @@ class VLayout(object):
         plt.axis('scaled')
 
     def wallanalysis(self):
-        """
-         walls analysis
+        """ walls analysis
         """
         w  = self.entity['WALL']
         dwall = {}
@@ -624,8 +666,12 @@ class VLayout(object):
                 
         return(dwall)
     def show3entity(self,group,IDs):            
-        """
-            geomview vizualisation of entity 
+        """ geomview vizualisation of entity 
+        Parameters
+        ----------
+        group :
+        IDs :
+
         """
         te = self.entity[group]
         fi1  = 'entity' 
@@ -646,60 +692,6 @@ class VLayout(object):
             print ltt
             G.polygons(c,ltt)
         GL.show3()
-f2       = 'data/building.wrl'
-#dg        = parsevrml(f2)
-VL      = VLayout()
-VL.load(f2)
-plt.figure(figsize=(15,5))
-# 0 1 WALL 2 3 4 
-VL.show(1)
-dwall = VL.wallanalysis()
-for iw in dwall:
-    seg = dwall[iw]['seg']
-    thick = dwall[iw]['thickness']
-    bdoor = dwall[iw]['door']
-    x,y = seg.xy
-    if bdoor:
-        plt.plot(x,y,color='r',linewidth=thick*10,alpha=1)
-    else:    
-        plt.plot(x,y,color='k',linewidth=thick*10,alpha=1)
-plt.axis('scaled')    
-#vrml2geom(tg,'11DE1')
-#lfi = glob.glob('/private/staff/n/en/buguen/Pyproject/struc/bat11/*BAT11D*E1.wrl')
-#for fi in lfi:
-#    if fi.find('furniture')==-1:
-#        tmp  = fi.split('/')
-#        name = tmp[-1].split('.')[0]
-#        print name
-#        tg   = parsevrml(fi)
-#        vrml2geom(tg,name)
-#os.system('ls /private/staff/n/en/Pyproject/struc/bat11')
-#
-##self.entity = {}
-#for t in dg:     # WALL, COLUMN, DOOR , STAIR , SPACE 
-#    self.entity[t] = {}
-#    for ID in dg[t]:
-#        c = dg[t][ID]['coord']
-#        self.entity[t][ID] = {}
-#        self.entity[t][ID]['coord']=c
-#        l = dg[t][ID]['index']
-#        dp = {}
-#        p  = []
-#        k  = 0
-#        for il in l:
-#            if il == -1:
-#                dp[k] = p
-#                p     = []
-#                k     = k + 1
-#            else:
-#                p.append(il)
-#
-#        self.entity[t][ID]['index'] = dp       
-# 
-#
-#plt.axis('equal')
-##doctest.testmod()
-rx  = np.array([[0,0,0,0,0,0,0,0],[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],[1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5]])
-Orx = np.array([10.64-0.78,6.13,0])
-Rx  = rx + np.outer(Orx,ones(8))
-plot(Rx[0,:],Rx[1,:],'or')
+
+if __name__ =="__main__":         
+    doctest.testmod()

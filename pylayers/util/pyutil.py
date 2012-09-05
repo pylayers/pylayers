@@ -61,10 +61,18 @@ def lt2dic(lt):
     return(dic)    
 
 def lt2idic(lt):
-    """
-       convert list of tuple to dictionnary 
-       >>> lt = [ ('1','1 2 3'),('2','1.5 2 3'),('3','4.78 89.0 2')]
-       >>> d = lt2idic(lt)
+    """ convert list of tuple to dictionnary 
+
+    Parameters
+    ----------
+    lt : list 
+
+    Examples 
+    --------
+    >>> from pylayers.util.pyutil import *
+    >>> lt = [ ('1','1 2 3'),('2','1.5 2 3'),('3','4.78 89.0 2')]
+    >>> d = lt2idic(lt)
+
     """
     dic = {}
     for tup in lt:
@@ -101,23 +109,54 @@ def getdir(longname):
     return(dir)
         
 def shp(arr):
+    """ return dimension of an array
+    Parameters
+    ----------
+    arr : ndarray
+
+    Returns 
+    -------
+    shp : tuple 
+    
+    Examples
+    --------
+
+    >>> import pylayers.util.pyutil as pyu 
+    >>> import numpy as np 
+    >>> from scipy import *
+    >>> a = np.arange(10)
+    >>> pyu.shp(a)
+    (1, 10)
+    >>> b = randn(2,2)
+    >>> pyu.shp(b)
+    (2, 2)
+
+    """
     ndim = arr.ndim
     if ndim>1:
-        shp=shape(arr)
+        shp = np.shape(arr)
     else:
-        shp=(1,len(arr))
+        shp = (1,len(arr))
     return(shp)             
 
 def dimcmp(ar1,ar2):
+    """ compare shape of arrays  
+    
+    Parameters
+    ----------
+    ar1 : ndarray
+    ar2 : ndarray
+
+    Returns
+    -------
+    return code : int 
+        0 arrays are not compatible
+        1 arrayis have same dimension 
+        2 second argument has greater dimension 
+        3 first argument has greater dimension
     """
-    return code
-    0 Array are not compatible
-    1 Array have same dimension 
-    2 Second argurment has greater dimension 
-    3 First argument has greater dimension
-    """
-    sh1=shp(ar1)
-    sh2=shp(ar2)
+    sh1 = shp(ar1)
+    sh2 = shp(ar2)
     if (sh1[0]==sh2[0]):
         return(1)
     if ((sh1[0]!=1)&(sh2[0]!=1)):
@@ -309,7 +348,7 @@ def PowFunc (x,y):
     return(alpha,beta)
 
 def randcol(Nc):
-    """Get random color 
+    """ get random color 
 
     Parameters 
     -----------
@@ -323,7 +362,7 @@ def randcol(Nc):
 
     Example
     -------
-    >>> from PyUtil import *
+    >>> from pylayers.util.pyutil import *
     >>> import matplotlib.pyplot as plt
     >>> col = randcol(100)
     """
@@ -930,7 +969,7 @@ def createtrxfile(_filename,freq,phi,theta,Fpr,Fpi,Ftr,Fti):
 def rgb(valex,out='int'):
     """
          convert a hexadecimal color into a (r,g,b) array
-         >>> import PyUtil as pyu
+         >>> import pylayers.util.pyutil as pyu
          >>> coldic = pyu.coldict()
          >>> val = rgb(coldic['gold'],'float')
     """
@@ -1207,7 +1246,7 @@ def foo(var1, var2, long_var_name='hi') :
     pass
     
 
-def cdf(x,color='b',label="",lw=1,xlabel="x"):
+def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF"):
     """ plot the cumulative density function of x
 
     Parameters
@@ -1221,6 +1260,8 @@ def cdf(x,color='b',label="",lw=1,xlabel="x"):
         linewidth
     xlabel : string 
         xlabel 
+    ylabel : string 
+        ylabel 
 
     Examples
     --------
@@ -1228,11 +1269,11 @@ def cdf(x,color='b',label="",lw=1,xlabel="x"):
         :include-source:
 
         >>> from matplotlib.pyplot import * 
-        >>> from PyUtil import *
+        >>> import pylayers.util.pyutil as pyu
         >>> from scipy import *
-        >>> import pylab as plt
+        >>> import matplotlib.pylab as plt
         >>> x = randn(100)
-        >>> cdf(x)
+        >>> pyu.cdf(x)
         >>> plt.show()
 
     """
@@ -1243,7 +1284,7 @@ def cdf(x,color='b',label="",lw=1,xlabel="x"):
     plt.plot(x2,y2,color=color,label=label,linewidth=lw)
     plt.legend()
     plt.xlabel(xlabel)
-    plt.ylabel('CDF')
+    plt.ylabel(ylabel)
 
 def bitreverse(N=256,nbit=9):
     """ 

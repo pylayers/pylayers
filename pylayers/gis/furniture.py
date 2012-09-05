@@ -7,7 +7,7 @@ Summary
 
 This module handle the description of furnitures
 For now furnitures are rectangular objects.
-In the future it should be iable to accept any polygon as a furniture element 
+In the future it should be able to accept any polygon as a furniture element 
 
 Furniture are stored in an ini file of dirstruc. 
 
@@ -52,7 +52,6 @@ from   pylayers.util import pyutil as pyu
 
 class Furniture(object):
     """
-    
     Attributes
     ---------
     name
