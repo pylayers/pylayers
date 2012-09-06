@@ -220,6 +220,8 @@ class RadioNode(object):
             self.position = pt
         else:
             self.position = np.append(self.position, pt, axis=1)
+        self.pos2pt()    
+        self.N = np.shape(self.position)[1]
         self.savespa()
 
     def surface(self, N1=2, N2=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], mode='subst'):
@@ -253,6 +255,7 @@ class RadioNode(object):
         else:
             self.position = np.append(self.position, pt, axis=1)
         self.pos2pt()    
+        self.N = np.shape(self.position)[1]
         self.savespa()    
 
     def volume(self, N1=2, N2=2, N3=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], p3=[0, 0, 1], mode='subst'):
@@ -310,6 +313,7 @@ class RadioNode(object):
         else:
             self.position = np.append(self.position, pt, axis=1)
         self.pos2pt()
+        self.N = np.shape(self.position)[1]
         self.savespa()
 
     def loadini(self, _filespa, rep='simul'):
@@ -380,11 +384,6 @@ class RadioNode(object):
 
         This function save the RadioNode in different files
 
-        Parameters
-        ----------
-        k : integer 
-            
-
         """
         _filespa = self.filespa
         _fileini = self.fileini
@@ -417,8 +416,9 @@ class RadioNode(object):
         elif self.typ == 2:
             filespa = pyu.getlong(_filespa, 'trace')
             colorname = 'blue'
-   
-        # save points in GeomVect container 
+
+        # save points in GeomVect container
+
         filename = self.filegeom.replace('.vect','')
         gv = geo.GeomVect(filename)
         try:
@@ -432,33 +432,16 @@ class RadioNode(object):
             snpt = str(npt) + "\n"
             snpt2 = str(npt) + " " + str(npt) + " " + str(npt) + "\n"
             fi_spa.write("0\n")
-            if k == -1:
-                fi_spa.write(snpt)
-                for i in range(npt):
-                    x = str(self.position[0, i]).replace(',', '.')
-                    y = str(self.position[1, i]).replace(',', '.')
-                    z = str(self.position[2, i]).replace(',', '.')
-                    chaine = x + " " + y + " " + z + "\n"
-                    chaine2 = chaine.replace(',', '.')
-                    fi_spa.write(chaine)
-            else:
-                fi_spa.write("1\n")
-                x = str(self.position[0, k]).replace(',', '.')
-                y = str(self.position[1, k]).replace(',', '.')
-                z = str(self.position[2, k]).replace(',', '.')
+            fi_spa.write(snpt)
+            for i in range(npt):
+                x = str(self.position[0, i]).replace(',', '.')
+                y = str(self.position[1, i]).replace(',', '.')
+                z = str(self.position[2, i]).replace(',', '.')
                 chaine = x + " " + y + " " + z + "\n"
                 chaine2 = chaine.replace(',', '.')
                 fi_spa.write(chaine)
 
             fi_spa.close()
-#        if npt>1:
-#            if self.typ==0:
-#                fi_geom.write(npt*"0 0 1 1\n")
-#            elif self.typ==1:
-#                fi_geom.write(npt*"1 0 0 1\n")
-#            elif self.typ==2:
-#                fi_geom.write(npt*"0 1 0 1\n")
-#        fi_geom.close()
 
     def gpoint(self, mode='subst', display=False):
         """ get a point 

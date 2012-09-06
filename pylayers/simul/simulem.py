@@ -1566,8 +1566,7 @@ class Simul(object):
         return(gr)
 
     def show3(self):
-        """
-            Geomview 3D display of the simulation configuration
+        """ geomview display of the simulation configuration
         """
         self.tx.save()
         self.rx.save()
