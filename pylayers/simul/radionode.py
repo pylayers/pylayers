@@ -51,19 +51,8 @@ class RadioNode(object):
 
     """
 
-    def __init__(self, _filespa, _fileant, type=0):
+    def __init__(self):
         """
-        Parameters
-        ----------
-        _filespa : string
-            short filename of the
-
-        type : integer
-             1=Transmitter 2=Receiver
-
-        This function can read either a spa or an ini file 
-        For compatibility with pulsray we have to keep the old
-        .spa format 
 
         """
 
@@ -74,9 +63,9 @@ class RadioNode(object):
         self.orientation.shape = (3, 3, 0)
         self.antenneid = 0
         self.type = type
+        self.filespa = _filespa
+        self.fileant = _fileant
         if type == 1:
-            self.filespa = _filespa
-            self.fileant = _fileant
             if self.filespa.split('.')[1] == 'spa':
                 self.loadspa(self.filespa, 'launch')
             else:
@@ -84,8 +73,6 @@ class RadioNode(object):
             self.loadvsh()
             self.savespa()
         if type == 2:
-            self.filespa = _filespa
-            self.fileant = _fileant
             if self.filespa.split('.')[1] == 'spa':
                 self.loadspa(self.filespa, 'trace')
             else:
@@ -94,12 +81,13 @@ class RadioNode(object):
             self.loadvsh()
             self.savespa()
             
-        self.N = len(self.points.keys())
-        for k in self.points.keys():
-            try:
-                self.position = np.vstack((self.position, self.points[k]))
-            except:
-                self.position = self.points[k]
+        if isinstance(self.points,dict):
+            self.N = len(self.points.keys())
+            for k in self.points.keys():
+                try:
+                    self.position = np.vstack((self.position, self.points[k]))
+                except:
+                    self.position = self.points[k]
 
     def info(self):
         """ display RadioNodes informations
@@ -118,6 +106,7 @@ class RadioNode(object):
         ----------
         pt : ndarray
              point position (3 x Npt)
+
         """
         pt = np.array(pt)
         self.position = pt
@@ -209,11 +198,10 @@ class RadioNode(object):
             self.position = append(self.position, pt, axis=1)
 
     def volume(self, N1=2, N2=2, N3=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], p3=[0, 0, 1], mode='subst'):
-        """
-        Add a volume to RadioNode
-
-        Usage :  tx.volume(N1,N2,N3,p0,p1,p2,p3,mode)
-
+        """ Add a volume to RadioNode
+        
+        >>> from pylayers.simul.radionode import *
+        >>> tx = RadioNode()
         >>> tx.volume(10,10,10,[0,0,1.0],[3.0,0,1.1],[0.0,3.0,1.1],[0.0,0.0,2.0])
 
         """
@@ -243,7 +231,7 @@ class RadioNode(object):
         else:
             self.position = append(self.position, pt, axis=1)
 
-    def loadini(self, _filespa, rep='launch'):
+    def loadini(self, _filespa, rep='simul'):
         """ load an ini file
 
         Parameters
@@ -259,7 +247,7 @@ class RadioNode(object):
         self.space.read(filespa)
 
         points = self.space.items("coordinates")
-        self.points = lt2idic(points)
+        self.points = pyu.lt2idic(points)
 
     def loadspa(self, _filespa, rep='launch'):
         """
@@ -616,7 +604,6 @@ class RadioNode(object):
 
 
 if (__name__ == "__main__"):
-    import os
     from pylayers.simul.simulem import *
     doctest.testmod()
 
