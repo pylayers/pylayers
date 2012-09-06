@@ -7,7 +7,7 @@ import ConfigParser
 import pylayers.util.easygui as eg
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geo 
-#from pylayers.antprop.antenna import *
+from pylayers.antprop.antenna import *
 from pylayers.util.project import *
 import numpy as np
 import scipy as sp
@@ -51,11 +51,21 @@ class RadioNode(object):
 
     """
 
-    def __init__(self,_fileini='radionode.ini',_fileant='defant.vsh3'):
+    def __init__(self,_fileini='radionode.ini',_fileant='defant.vsh3',typ=0):
         """
 
-        the _fileini file should be placed in the simul directory of the
-        project.
+        the _fileini file should be placed in the simul directory of 
+        the project
+
+        Parameters
+        ----------
+        _fileini : string
+            file which contains the RadioNode coordinates
+        _fileant : string
+        typ : int
+            0 : undefined
+            1 : tx
+            2 : rx
 
         """
         self.position = np.array([], dtype=float)
@@ -64,7 +74,7 @@ class RadioNode(object):
         self.orientation = np.array([], dtype=float)
         self.orientation.shape = (3, 3, 0)
         self.antenneid = 0
-        self.typ = 0
+        self.typ = typ
         self.N = 0
         self.fileini = _fileini
         self.filespa = _fileini.replace('.ini','.spa')
@@ -78,29 +88,8 @@ class RadioNode(object):
             self.loadini(self.fileini,'ini')
         except:
             print fileini+' does not exist'
-#        if type == 1:
-#            if self.filespa.split('.')[1] == 'spa':
-#                self.loadspa(self.filespa, 'launch')
-#            else:
-#                self.loadini(self.filespa, 'launch')
-#            self.loadvsh()
-#            self.savespa()
-#        if type == 2:
-#            if self.filespa.split('.')[1] == 'spa':
-#                self.loadspa(self.filespa, 'trace')
-#            else:
-#                self.loadini(self.filespa, 'trace')
-#                self.N = len(self.points.keys())
-#            self.loadvsh()
-#            self.savespa()
-#            
-#        if isinstance(self.points,dict):
-#            self.N = len(self.points.keys())
-#            for k in self.points.keys():
-#                try:
-#                    self.position = np.vstack((self.position, self.points[k]))
-#                except:
-#                    self.position = self.points[k]
+        self.loadvsh()
+        self.savespa()
 
     def pos2pt(self):
         """ position to point 
@@ -386,7 +375,7 @@ class RadioNode(object):
             self.orientation[:, :, i] = ident
         fid.close()
 
-    def savespa(self, k=-1):
+    def savespa(self):
         """ save RadioNode in  .ini, .spa, .vect file
 
         This function save the RadioNode in different files
@@ -408,6 +397,7 @@ class RadioNode(object):
         space = ConfigParser.ConfigParser()
         space.add_section("coordinates")
         npt = np.shape(self.position)[1]
+
         for k in range(npt): 
             x = self.position[0,k]
             y = self.position[1,k]
@@ -417,10 +407,7 @@ class RadioNode(object):
         fd.close()
 
         points = space.items("coordinates")
-        # appent rx number to filename
-        if k != -1:
-            _filespa = _filespa.replace('.spa', str(k))
-            _filespa = _filespa + '.spa'
+
         if self.typ == 0:
             filespa = pyu.getlong(_filespa, 'ini')
             colorname = 'green'

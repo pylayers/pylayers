@@ -948,8 +948,8 @@ class Simul(object):
         self.filesimul = pyu.getshort(fichsimul)
         self.load()
 
-    def load(self, _filesimul, itx=[]):
-        """ load a configuration file
+    def load(self, _filesimul):
+        """ load a simulation configuration file
 
          each transmiter simulation results in the creation of an .ini file with various sections
          related to the results obtained for different receivers
@@ -957,7 +957,6 @@ class Simul(object):
         Parameters
         ----------
         _filesimul   : file in the simul directory of the Project
-        itx          : obsolete ??
 
         """
         self.filesimul = _filesimul
@@ -1102,7 +1101,6 @@ class Simul(object):
 
             >>> from pylayers.simul.simulem import *
             >>> S = Simul()
-            >>> S.load('where2.ini')
             >>> S.layout('sircut.str')
 
         """
@@ -1461,8 +1459,15 @@ class Simul(object):
             print j, ':', self.__dict__.values()[i]
 
     def filtray(self, itx, irx, tau0, tau1, col='b'):
-        """
-        showray(itx,irx,iray,fig,ax)
+        """ filter rays 
+
+        Parameters
+        ----------
+        itx : 
+        irx :
+        tau0 :
+        tau1 :
+        col :
 
         Display ray and nstr
         """
