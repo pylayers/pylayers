@@ -57,56 +57,57 @@ import sys
         
 
 class Node(nx.MultiGraph):
-	""" Class Node
-	inherit of networkx.Graph()
-	Attributes :
-		Id	: float/hex/str/...
-				node Id
-		p	: np.array
-				True position
-		t	: time.time()
-				Tag time
-		RAT	: list
-				available RAT of the node
-		PN	: Network.Network
-				Personal vision of the Network 
-		pos	: Dictionnary
-				parser from Node.Node to networkx.node.pos
+    """ Class Node
+    inherit of networkx.Graph()
+    Attributes :
+        Id    : float/hex/str/...
+                node Id
+        p    : np.array
+                True position
+        t    : time.time()
+                Tag time
+        RAT    : list
+                available RAT of the node
+        PN    : Network.Network
+                Personal vision of the Network 
+        pos    : Dictionnary
+                parser from Node.Node to networkx.node.pos
 
-	Method:
-		RandomMac(): Generate a RAndom Mac adress	
-
-
-		
-
-	"""
-	def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],type='ag' ):
-		nx.MultiGraph.__init__(self)
-
-		# Personnal Network init
-		self.ID=ID
-		self.PN	= Network(owner=self.ID)
-		self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT))
-
-		# Network init
-
-		self.add_node(ID,dict(PN=self.PN,p=p,t=t,RAT=RAT,type=type))
-		self.p	= self.node[self.ID]['p']
-		self.t	= self.node[self.ID]['t']
-		self.RAT = self.node[self.ID]['RAT']
-
-		
-		
+    Method:
+        RandomMac(): Generate a RAndom Mac adress    
 
 
+        
+
+    """
+    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],type='ag',msqlSave=False):
+        nx.MultiGraph.__init__(self)
+
+        # Personnal Network init
+        self.ID=ID
+        self.PN = Network(owner=self.ID)
+        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT))
+
+        # Network init
+
+        self.add_node(ID,dict(PN=self.PN,p=p,t=t,RAT=RAT,type=type))
+        self.p    = self.node[self.ID]['p']
+        self.t    = self.node[self.ID]['t']
+        self.RAT = self.node[self.ID]['RAT']
+
+        if msqlSave :
+            print 'implement msql save in nodes'
+        
 
 
-	def randomMAC(self):
-		mac = [ 0x00, 0x16, 0x3e,
-		random.randint(0x00, 0x7f),
-		random.randint(0x00, 0xff),
-		random.randint(0x00, 0xff) ]
-		return ':'.join(map(lambda x: "%02x" % x, mac))	
+
+
+    def randomMAC(self):
+        mac = [ 0x00, 0x16, 0x3e,
+        random.randint(0x00, 0x7f),
+        random.randint(0x00, 0xff),
+        random.randint(0x00, 0xff) ]
+        return ':'.join(map(lambda x: "%02x" % x, mac))	
 
 
 
@@ -988,7 +989,7 @@ class PNetwork(Process):
                   'csv_save':False,
                   'mat_save':False,
                   'pyray_save':False,
-                  'msql':False}
+                  'msqlSave':False}
 
 ##       initialize attributes
         for key, value in defaults.items():
@@ -1067,6 +1068,8 @@ class PNetwork(Process):
                 self.net.pyray_save(self.sim)
             if self.mat_save:
                 self.net.mat_save(self.sim)
+            if self.msqlSave:
+                print 'implement sqlsave into PNetwork'
 
             self.net.pos=self.net.get_pos()
             yield hold, self, self.net_updt_time

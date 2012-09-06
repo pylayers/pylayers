@@ -63,6 +63,7 @@ class Simul(Simulation):
         self.meca_opt = dict(self.config.items('Mecanic'))
         self.net_opt = dict(self.config.items('Network'))
         self.loc_opt = dict(self.config.items('Localization'))
+        self.save_opt = dict(self.config.items('Save'))
 
     def create_layout(self):
         """
@@ -144,6 +145,7 @@ class Simul(Simulation):
                                 net=self.net,
                                 world=self.the_world,
                                 RAT=eval(ag_opt['rat']),
+                                msqlSave=str2bool(self.save_opt['msql']),
                                 sim=self))
 
                 if self.lAg[i].type == 'ag':
@@ -199,9 +201,10 @@ class Simul(Simulation):
                              sim=self,
                              show_sg=str2bool(self.net_opt['show_sg']),
                              disp_inf=str2bool(self.net_opt['dispinfo']),
-                             csv_save=str2bool(self.net_opt['csv_save']),
-                             pyray_save=str2bool(self.net_opt['pyray_save']),
-                             mat_save=str2bool(self.net_opt['mat_save']))
+                             csv_save=str2bool(self.save_opt['csv_save']),
+                             pyray_save=str2bool(self.save_opt['pyray_save']),
+                             mat_save=str2bool(self.save_opt['mat_save']),
+                             msqlSave=str2bool(self.save_opt['msql']))
         self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):

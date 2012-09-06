@@ -42,7 +42,7 @@ class Person3(Process):
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True):
+    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True,msqlSave=False):
         """
         boid is initialized in a room of Layout L 
         """        
@@ -96,6 +96,7 @@ class Person3(Process):
         self.net=net
         self.wait=0.0
 
+        self.msqlSave=msqlSave
 
     def move(self):
         """
@@ -131,7 +132,8 @@ class Person3(Process):
 
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position))
-
+                if self.msqlSave:
+                    print 'implement mysql save into Person3'
     #               ax.scatter(self.sim.now(),self.acceleration[0])
     #               plt.draw()
                 if self.arrived:
@@ -196,6 +198,8 @@ class Person3(Process):
                 self.update()
                 self.world.update_boid(self)
                 self.net.update_pos(self.ID,Util.conv_vecarr(self.position))
+                if self.msqlSave:
+                    print 'implement mysql save into Person3'
                 yield hold, self, self.interval
 
     def delete(self):
