@@ -130,10 +130,8 @@ class Geomlist(Geomview):
         fd.close()
 
 class GeomVect(Geomview):
-    """ Geomvect : Geomview VECT file class
+    """ Geomview VECT file class
     
-    Notes
-    -----
        + NPolylines  NVertices  NColors
        + Nv[0] ... Nv[NPolylines-1]     # number of vertices in each polyline
        + Nc[0] ... Nc[NPolylines-1]     # number of colors supplied in each polyline
@@ -143,28 +141,37 @@ class GeomVect(Geomview):
         VECT objects represent lists of polylines (strings of connected line segments, possibly closed).
        
        A degenerate polyline can be used to represent a point:
-    A VECT file begins with the key word VECT or 4VECT and three integers: 
-    NLines, NVertices, and NColors.
-    Here NLines is the number of polylines in the file,
-    NVertices the total number of vertices, and NColors the number of colors as explained below.  
-    Next come NLines 16-bit integers
-    Nv[0] Nv[1] Nv[2] ... Nv[NLines-1]
-    giving the number of vertices in each polyline.
-    A negative number indicates a closed polyline; 1 denotes a single-pixel point.
-    The sum (of absolute values) of the Nv[i] must equal NVertices.
+       A VECT file begins with the key word VECT or 4VECT and three integers: 
 
-    Next come NLines more 16-bit integers Nc[i]: the number of colors in each polyline. 
-    Normally one of three values:
-        0 : No color is specified for this polyline. It's drawn in the same color as the previous polyline.
-        1 : A single color is specified. The entire polyline is drawn in that color. 
-        abs(Nv[i]) : Each vertex has a color. Either each segment is drawn in the corresponding color, 
-        or the colors are smoothly interpolated along the line segments, depending on the implementation.
+       NLines, NVertices, and NColors.
+           Here NLines is the number of polylines in the file,
+           NVertices the total number of vertices, and NColors the number of
+           colors as explained below.
+           Next come NLines 16-bit integers
+       Nv[0] Nv[1] Nv[2] ... Nv[NLines-1]
+           giving the number of vertices in each polyline.
+           A negative number indicates a closed polyline; 1 denotes a single-pixel point.
+           The sum (of absolute values) of the Nv[i] must equal NVertices.
+           Next come NLines more 16-bit integers 
+           Nc[i]: the number of colors in each polyline.
+           Normally one of three values:
+                0 : No color is specified for this polyline. 
+                    It's drawn in the same color as the previous polyline.
+                1 : A single color is specified. 
+                    The entire polyline is drawn in that color. 
+                abs(Nv[i]) : Each vertex has a color. 
+                    Either each segment is drawn in the corresponding color, 
+                    or the colors are smoothly interpolated along the line segments, 
+                    depending on the implementation.
 
-    Next come NVertices groups of 3 or 4 floating-point numbers: the coordinates of all the vertices.
-    If the keyword is 4VECT then there are 4 values per vertex.
-    The first abs(Nv[0]) of them form the first polyline, the next abs(Nv[1]) form the second and so on.
-                                                                                                                          Finally NColors groups of 4 floating-point numbers give red, green, blue and alpha (opacity) values. 
-    The first Nc[0] of them apply to the first polyline, and so on.
+            Next come NVertices groups of 3 or 4 floating-point numbers:
+                            the coordinates of all the vertices.
+            If the keyword is 4VECT then there are 4 values per vertex.
+            The first abs(Nv[0]) of them form the first polyline, 
+                    the next abs(Nv[1]) form the second and so on.
+            Finally NColors groups of 4 floating-point numbers give red, 
+                    green, blue and alpha (opacity) values. 
+            The first Nc[0] of them apply to the first polyline, and so on.
 
     Methods
     -------
@@ -183,10 +190,12 @@ class GeomVect(Geomview):
 
     def segments(self,ds,i2d=True,linewidth=2):
         """
-        Paarameters
+        Parameters
         ----------
-        ds   : len ds
-        i2d  : boolean
+        ds   : 
+            len ds
+        i2d  : 
+            boolean (defaut True)
         linewidth : float 
             default 2 
         """

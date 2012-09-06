@@ -46,6 +46,7 @@ __all__ = ['ynbox'
     ]
 
 import sys, os, string, types, pickle,traceback
+import numpy as np
 
 #--------------------------------------------------
 # check python version and take appropriate action
@@ -364,6 +365,25 @@ def buttonbox(msg="",title=" "
     return __replyButtonText
 
 
+def pointbox(pt,npt=1,text1='Enter point coordinates',text2=''):
+	"""
+	GUI for points
+		npt is a number of points (default : npt=1)
+	"""
+
+        if (npt==1):	
+		point=multenterbox(text1,text2,
+		('x','y','z'),(str(pt[0]),str(pt[1]),str(pt[2])))
+	else:
+		point=multenterbox(text1,text2,
+		('x','y','z','npt'),(str(pt[0]),str(pt[1]),str(pt[2]),str(npt)))
+		npt=eval(point[3])
+
+	px=eval(point[0])
+	py=eval(point[1])
+	pz=eval(point[2])
+	pt= np.array([px,py,pz])
+	return (pt,npt)
 #-------------------------------------------------------------------
 # integerbox
 #-------------------------------------------------------------------

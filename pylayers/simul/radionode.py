@@ -4,13 +4,13 @@ import os
 import doctest
 import numpy as np
 import ConfigParser
-import pylayers.util.geomutil as geo
-import pylayers.util.easygui
+import pylayers.util.easygui as eg
 import pylayers.util.pyutil as pyu
-import pylayers.util.geomutil as geu 
-from pylayers.antprop.antenna import *
-from numpy import *
-from scipy import *
+import pylayers.util.geomutil as geo 
+#from pylayers.antprop.antenna import *
+from pylayers.util.project import *
+import numpy as np
+import scipy as sp
 
 
 class RadioNode(object):
@@ -23,9 +23,9 @@ class RadioNode(object):
      ----------
 
      position
-        position of the RadioNodenp.array([],dtype=float)
+        position of the RadioNode np.array([],dtype=float)
      time
-        time tag of the RadioNodenp.array([],dtype=float)
+        time tag of the RadioNode np.array([],dtype=float)
      orientation
         orientation 3x3xn (rotation matrix for each position)
      antenneid
@@ -51,55 +51,79 @@ class RadioNode(object):
 
     """
 
-    def __init__(self):
+    def __init__(self,_fileini='radionode.ini',_fileant='defant.vsh3'):
         """
 
-        """
+        the _fileini file should be placed in the simul directory of the
+        project.
 
+        """
         self.position = np.array([], dtype=float)
         self.position.shape = (3, 0)
         self.time = np.array([], dtype=float)
         self.orientation = np.array([], dtype=float)
         self.orientation.shape = (3, 3, 0)
         self.antenneid = 0
-        self.type = type
-        self.filespa = _filespa
+        self.typ = 0
+        self.N = 0
+        self.fileini = _fileini
+        self.filespa = _fileini.replace('.ini','.spa')
+        self.filegeom = _fileini.replace('.ini','.vect')
         self.fileant = _fileant
-        if type == 1:
-            if self.filespa.split('.')[1] == 'spa':
-                self.loadspa(self.filespa, 'launch')
-            else:
-                self.loadini(self.filespa, 'launch')
-            self.loadvsh()
-            self.savespa()
-        if type == 2:
-            if self.filespa.split('.')[1] == 'spa':
-                self.loadspa(self.filespa, 'trace')
-            else:
-                self.loadini(self.filespa, 'trace')
-                self.N = len(self.points.keys())
-            self.loadvsh()
-            self.savespa()
-            
-        if isinstance(self.points,dict):
-            self.N = len(self.points.keys())
-            for k in self.points.keys():
-                try:
-                    self.position = np.vstack((self.position, self.points[k]))
-                except:
-                    self.position = self.points[k]
+        fileini = pyu.getlong(_fileini,'ini')
+        # if file _fileini exists it is loaded
+        try:
+            fd = open(fileini,'r')
+            fd.close()
+            self.loadini(self.fileini,'ini')
+        except:
+            print fileini+' does not exist'
+#        if type == 1:
+#            if self.filespa.split('.')[1] == 'spa':
+#                self.loadspa(self.filespa, 'launch')
+#            else:
+#                self.loadini(self.filespa, 'launch')
+#            self.loadvsh()
+#            self.savespa()
+#        if type == 2:
+#            if self.filespa.split('.')[1] == 'spa':
+#                self.loadspa(self.filespa, 'trace')
+#            else:
+#                self.loadini(self.filespa, 'trace')
+#                self.N = len(self.points.keys())
+#            self.loadvsh()
+#            self.savespa()
+#            
+#        if isinstance(self.points,dict):
+#            self.N = len(self.points.keys())
+#            for k in self.points.keys():
+#                try:
+#                    self.position = np.vstack((self.position, self.points[k]))
+#                except:
+#                    self.position = self.points[k]
+
+    def pos2pt(self):
+        """ position to point 
+
+        """
+        npt = np.shape(self.position)[1]
+        self.points = {}
+        for k in range(npt):
+            self.points[k+1]=self.position[:,k]
 
     def info(self):
         """ display RadioNodes informations
         """
-        print "Npos       : ", self.N
-        print "Position   : ", self.position
-        print "type       : ", self.type
+        print "npos       : ", self.N
+        print "position   : ", self.position
+        #print "orientation : ", self.orientation
+        print "type       : ", self.typ
+        print "fileini    : ", self.fileini
         print "filespa    : ", self.filespa
         print "filegeom   : ", self.filegeom
         print "fileant    : ", self.fileant
 
-    def points(self, pt=array([0, 0, 0])):
+    def points(self, pt = np.array([0, 0, 0])):
         """ Add a position to RadioNode
 
         Parameters
@@ -112,9 +136,11 @@ class RadioNode(object):
         self.position = pt
         self.savespa()
 
-    def point(self, pt=array([0, 0, 0]), time=array([1]), orientation=eye(3), mode='subst'):
-        """
-        Add a position to RadioNode
+    def point(self, pt= [0, 0, 0], time= [1],
+              orientation=np.eye(3), mode='subst'):
+        """ add a position to RadioNode
+
+        The new RadioNode is saved in .spa
 
         Parameters
         ----------
@@ -125,14 +151,26 @@ class RadioNode(object):
             orientation
                 3x3 matrix
             mode
-                'subst' for deplacement (default)
+                'subst' for replacement (default)
+                'append' for appending
+         Examples
+         --------
 
          >>> from pylayers.simul.radionode import *
+         >>> import numpy as np
          >>> tx = RadioNode()
-         >>> tx.point([1,1,1],[1],eye(3),'subst')
-         >>> tx.info()
+         >>> tx.point([1,1,1],[1],np.eye(3),'subst')
+         >>> tx.position
+         array([[1],
+                [1],
+                [1]])
 
         """
+        if isinstance(pt,list):
+            pt = np.array(pt)
+        if isinstance(time,list):
+            time = np.array(time)
+
         orientation = np.reshape(orientation, (3, 3, 1))
         pt = np.array(pt)
         time = np.array(time)
@@ -143,35 +181,64 @@ class RadioNode(object):
             self.position = pt
             self.orientation = orientation
         else:
-            self.time = append(self.time, time, axis=0)
-            self.position = append(self.position, pt, axis=1)
-            self.orientation = append(self.orientation, orientation, axis=2)
+            self.time = np.append(self.time, time, axis=0)
+            self.position = np.append(self.position, pt, axis=1)
+            self.orientation = np.append(self.orientation, orientation, axis=2)
 
+        self.pos2pt()
         self.savespa()
 
-    def line(self, Npt, pti=[0, 0, 0], ptf=[1, 0, 0], mode='subst'):
-        """
-        Add a line to RadioNode
+    def line(self, npt, ptt=[0, 0, 0], pth=[1, 0, 0], mode='subst'):
+        """ build a line trajectory for a RadioNode
 
-        Usage :  tx.route(Npt,[0,0,0],[1,1,1])
+        Parameters
+        ----------
+        npt : integer
+            number of points
+        ptt : list or ndarray
+            starting point coordinates  (default [0,0,0])
+        ptf : list or ndarray
+            ending point coordinates
+        mode : string 
+            'subst' for replacement (default)
+            'append' for appending
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.radionode import *
+        >>> r = RadioNode()
+        >>> r.line(3,[0,0,0],[1,0,0])
+        >>> r.position
+        array([[-1. , -0.5,  0. ],
+               [ 0. ,  0. ,  0. ],
+               [ 0. ,  0. ,  0. ]])
+
 
         """
-        pti = np.array(pti)
-        pff = np.array(ptf)
-        pti = np.reshape(pti, (3, 1))
-        ptf = np.reshape(ptf, (3, 1))
-        pas = 1.0 / (Npt - 1)
-        k = arange(0.0, 1.0 + pas, pas)
-        pt = ptf + (1.0 - k) * (pti - ptf)
+        if isinstance(ptt,list):
+            ptt = np.array(ptt)
+        if isinstance(pth,list):    
+            pth = np.array(pth)
+        if (npt<=1):
+            raise ValueError('npt should be greater than 1')
+        ptt = np.reshape(ptt, (3, 1))
+        pth = np.reshape(pth, (3, 1))
+        pas = 1.0 / (npt - 1)
+        k = np.arange(0.0, 1.0 + pas, pas)
+        pt = ptt + (1.0 - k) * (ptt - pth)
         if mode == 'subst':
             self.position = pt
         else:
-            self.position = append(self.position, pt, axis=1)
+            self.position = np.append(self.position, pt, axis=1)
+        self.savespa()
 
     def surface(self, N1=2, N2=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], mode='subst'):
         """
         Add a surface to RadioNode
 
+        >>> from pylayers.simul.radionode import *
+        >>> tx= RadioNode()
         >>> tx.surface(10,10,[0,0,1.5],[3.0,0,1.5],[0.0,3.0,1.5],'subst')
 
         mode = {'subst','append' }
@@ -184,52 +251,77 @@ class RadioNode(object):
         p1 = np.reshape(p1, (3, 1))
         p2 = np.reshape(p2, (3, 1))
         pas1 = 1.0 / (N1 - 1)
-        k1 = arange(0.0, 1.0 + pas1, pas1)
+        k1 = np.arange(0.0, 1.0 + pas1, pas1)
         pas2 = 1.0 / (N2 - 1)
-        k2 = arange(0.0, 1.0 + pas2, pas2)
+        k2 = np.arange(0.0, 1.0 + pas2, pas2)
         n1 = len(k1)
         n2 = len(k2)
-        kk1 = kron(ones(n2), k1)
-        kk2 = kron(k2, ones(n1))
+        kk1 = np.kron(np.ones(n2), k1)
+        kk2 = np.kron(k2, np.ones(n1))
         pt = p0 + kk1 * (p1 - p0) + kk2 * (p2 - p0)
         if mode == 'subst':
             self.position = pt
         else:
-            self.position = append(self.position, pt, axis=1)
+            self.position = np.append(self.position, pt, axis=1)
+        self.pos2pt()    
+        self.savespa()    
 
     def volume(self, N1=2, N2=2, N3=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], p3=[0, 0, 1], mode='subst'):
-        """ Add a volume to RadioNode
+        """ add a volume to RadioNode
+      
+        build a volume with edges : p0p1, p0p2, p0p3
         
+        Parameters
+        ----------
+        N1 : int
+            number of points on axis 1
+        N2 : int
+            number of points on axis 2
+        N3 : int
+            number of points on axis 3
+        p0 : list or ndarray
+        p1 : list or ndarray
+        p2 : list or ndarray
+        p3 : list or ndarray
+
         >>> from pylayers.simul.radionode import *
         >>> tx = RadioNode()
         >>> tx.volume(10,10,10,[0,0,1.0],[3.0,0,1.1],[0.0,3.0,1.1],[0.0,0.0,2.0])
 
         """
-        p0 = np.array(p0)
-        p1 = np.array(p1)
-        p2 = np.array(p2)
-        p3 = np.array(p3)
+        if isinstance(p0,list):
+            p0=np.array(p0)
+        if isinstance(p1,list):
+            p1=np.array(p1)
+        if isinstance(p2,list):
+            p2=np.array(p2)
+        if isinstance(p3,list):
+            p3=np.array(p3)
+        
         p0 = np.reshape(p0, (3, 1))
         p1 = np.reshape(p1, (3, 1))
         p2 = np.reshape(p2, (3, 1))
         p3 = np.reshape(p3, (3, 1))
+
         pas1 = 1.0 / (N1 - 1)
-        k1 = arange(0.0, 1.0 + pas1, pas1)
+        k1 = np.arange(0.0, 1.0 + pas1, pas1)
         pas2 = 1.0 / (N2 - 1)
-        k2 = arange(0.0, 1.0 + pas2, pas2)
+        k2 = np.arange(0.0, 1.0 + pas2, pas2)
         pas3 = 1.0 / (N3 - 1)
-        k3 = arange(0.0, 1.0 + pas3, pas3)
+        k3 = np.arange(0.0, 1.0 + pas3, pas3)
         n1 = len(k1)
         n2 = len(k2)
         n3 = len(k3)
-        kk1 = kron(ones(n2 * n3), k1)
-        kk2 = kron(kron(ones(n1), k2), ones(n3))
-        kk3 = kron(k3, ones(n1 * n2))
+        kk1 = np.kron(np.ones(n2 * n3), k1)
+        kk2 = np.kron(np.kron(np.ones(n1), k2), np.ones(n3))
+        kk3 = np.kron(k3, np.ones(n1 * n2))
         pt = p0 + kk1 * (p1 - p0) + kk2 * (p2 - p0) + kk3 * (p3 - p0)
         if mode == 'subst':
             self.position = pt
         else:
-            self.position = append(self.position, pt, axis=1)
+            self.position = np.append(self.position, pt, axis=1)
+        self.pos2pt()
+        self.savespa()
 
     def loadini(self, _filespa, rep='simul'):
         """ load an ini file
@@ -242,12 +334,18 @@ class RadioNode(object):
             directory name
 
         """
-        filespa = getlong(_filespa, rep)
-        self.space = ConfigParser.ConfigParser()
-        self.space.read(filespa)
+        filespa = pyu.getlong(_filespa, rep)
+        space = ConfigParser.ConfigParser()
+        space.read(filespa)
 
-        points = self.space.items("coordinates")
+        points = space.items("coordinates")
         self.points = pyu.lt2idic(points)
+        self.N = len(self.points.keys())
+        for k in self.points.keys():
+            try:
+                self.position = np.vstack((self.position, self.points[k]))
+            except:
+                self.position = self.points[k]
 
     def loadspa(self, _filespa, rep='launch'):
         """
@@ -262,7 +360,7 @@ class RadioNode(object):
         """
 
         self.filespa = _filespa
-        filespa = getlong(_filespa, rep)
+        filespa = pyu.getlong(_filespa, rep)
 
         try:
             fid = open(filespa)
@@ -278,10 +376,10 @@ class RadioNode(object):
             for index in range(len(coord)):
                 point = map(float, coord[index].split())
                 ndpoint = np.array([[point[0]], [point[1]], [point[2]]])
-                self.position = append(self.position, ndpoint, axis=1)
-        self.time = arange(nnpt)
-        ident = eye(3)
-        tmp = zeros(9 * nnpt)
+                self.position = np.append(self.position, ndpoint, axis=1)
+        self.time = np.arange(nnpt)
+        ident = np.eye(3)
+        tmp = np.zeros(9 * nnpt)
         self.orientation = np.reshape(tmp, (3, 3, nnpt))
         self.N = nnpt
         for i in range(nnpt):
@@ -289,44 +387,61 @@ class RadioNode(object):
         fid.close()
 
     def savespa(self, k=-1):
-        """ save RadioNode in a .spa file and a .vect file
+        """ save RadioNode in  .ini, .spa, .vect file
+
+        This function save the RadioNode in different files
 
         Parameters
         ----------
         k : integer 
             
-        .. todo: save as an ini file 
 
         """
         _filespa = self.filespa
+        _fileini = self.fileini
+        fileini = pyu.getlong(_fileini,'ini')
+        try:
+            fd = open(fileini,"w")
+        except:
+            print fileini+' does not exist'
+
+        space = ConfigParser.ConfigParser()
+        space.add_section("coordinates")
+        npt = np.shape(self.position)[1]
+        for k in range(npt): 
+            x = self.position[0,k]
+            y = self.position[1,k]
+            z = self.position[2,k]
+            space.set("coordinates",str(k+1),str(x)+' '+str(y)+' '+str(z))
+        space.write(fd)
+        fd.close()
+
+        points = space.items("coordinates")
         # appent rx number to filename
         if k != -1:
             _filespa = _filespa.replace('.spa', str(k))
             _filespa = _filespa + '.spa'
-        if self.type == 0:
-            self.filegeom = "RadioNode"
+        if self.typ == 0:
+            filespa = pyu.getlong(_filespa, 'ini')
             colorname = 'green'
-        elif self.type == 1:
-            self.filegeom = "RadioTx"
-            filespa = getlong(_filespa, 'launch')
+        elif self.typ == 1:
+            filespa = pyu.getlong(_filespa, 'launch')
             colorname = 'red'
-        elif self.type == 2:
-            self.filegeom = "RadioRx"
-            filespa = getlong(_filespa, 'trace')
+        elif self.typ == 2:
+            filespa = pyu.getlong(_filespa, 'trace')
             colorname = 'blue'
-
-        gv = geo.GeomVect(self.filegeom)
+   
+        # save points in GeomVect container 
+        filename = self.filegeom.replace('.vect','')
+        gv = geo.GeomVect(filename)
         try:
             gv.points(self.points, colorname)
         except:
             gv.points(self.position, colorname)
-        ##
-        ## ..todo::
-        ##    This is a fix : temporary
-        ##
+
         if _filespa.split('.')[1] == 'spa':
             fi_spa = open(filespa, 'w')
-            npt = shape(self.position)[1]
+            npt = np.shape(self.position)[1]
             snpt = str(npt) + "\n"
             snpt2 = str(npt) + " " + str(npt) + " " + str(npt) + "\n"
             fi_spa.write("0\n")
@@ -350,30 +465,34 @@ class RadioNode(object):
 
             fi_spa.close()
 #        if npt>1:
-#            if self.type==0:
+#            if self.typ==0:
 #                fi_geom.write(npt*"0 0 1 1\n")
-#            elif self.type==1:
+#            elif self.typ==1:
 #                fi_geom.write(npt*"1 0 0 1\n")
-#            elif self.type==2:
+#            elif self.typ==2:
 #                fi_geom.write(npt*"0 1 0 1\n")
 #        fi_geom.close()
 
-    def gpoint(self, mode='subst', dispaly=False):
-        """
+    def gpoint(self, mode='subst', display=False):
+        """ get a point 
         """
         p0 = self.position[:, 0]
-        (p0, n1) = easygui.pointbox(p0, 1)
-        self.point(p0, [1], eye(3), mode)
+        (p0, n1) = eg.pointbox(p0, 1)
+        self.point(p0, [1], np.eye(3), mode)
         self.savespa()
         if display:
             self.show3()
 
     def gline(self, mode='subst', display=False):
-        """
-        gline(mode='subst',display=False)
+        """ get a line 
+
+        A line is built between the first point 
+
+        
+
         """
         p0 = self.position[:, 0]
-        (p1, N1) = easygui.pointbox(p0, 10)
+        (p1, N1) = eg.pointbox(p0, 10)
         self.line(N1, p0, p1, mode)
         self.savespa()
         if display:
@@ -384,9 +503,9 @@ class RadioNode(object):
         gline(mode='subst',display=False)
         """
         p0 = self.position[:, 0]
-        (p1, N1) = easygui.pointbox(p0, 10, 'Enter Surface second point')
+        (p1, N1) = eg.pointbox(p0, 10, 'Enter Surface second point')
 
-        (p2, N2) = easygui.pointbox(p1, 10, 'Enter Surface third point')
+        (p2, N2) = eg.pointbox(p1, 10, 'Enter Surface third point')
         self.surface(N1, N2, p0, p1, p2, mode)
         self.savespa()
         if display:
@@ -397,9 +516,9 @@ class RadioNode(object):
         gline(mode='subst',view=0)
         """
         p0 = self.position[:, 0]
-        (p1, N1) = easygui.pointbox(p0, 10, 'Enter Volume second point')
-        (p2, N2) = easygui.pointbox(p1, 10, 'Enter Volume third point')
-        (p3, N3) = easygui.pointbox(p2, 10, 'Enter Volume fourth point')
+        (p1, N1) = eg.pointbox(p0, 10, 'Enter Volume second point')
+        (p2, N2) = eg.pointbox(p1, 10, 'Enter Volume third point')
+        (p3, N3) = eg.pointbox(p2, 10, 'Enter Volume fourth point')
         self.volume(N1, N2, N3, p0, p1, p2, p3, mode)
         self.savespa()
         if display:
@@ -415,15 +534,15 @@ class RadioNode(object):
 #
 #               """
 #
-#                if self.type==0:
+#                if self.typ==0:
 #                        self.filegeom="RadioNode.vect"
-#                        filegeom   = getlong("RadioNode.vect","geom")
-#                elif self.type==1:
+#                        filegeom   = pyu.getlong("RadioNode.vect","geom")
+#                elif self.typ==1:
 #                        self.filegeom = "RadioTx.vect"
-#                        filegeom   = getlong("RadioTx.vect","geom")
-#                elif self.type==2:
+#                        filegeom   = pyu.getlong("RadioTx.vect","geom")
+#                elif self.typ==2:
 #                        self.filegeom = "RadioRx.vect"
-#                        filegeom   = getlong("RadioRx.vect","geom")
+#                        filegeom   = pyu.getlong("RadioRx.vect","geom")
 #
 #                fi_geom = open(filegeom,'w')
 #
@@ -447,11 +566,11 @@ class RadioNode(object):
 #                        chaine = x+" "+y+" "+z+"\n"
 #                        fi_geom.write(chaine)
 #                if npt>1:
-#                        if self.type==0:
+#                        if self.typ==0:
 #                                fi_geom.write(npt*"0 0 1 1\n")
-#                        elif self.type==1:
+#                        elif self.typ==1:
 #                                fi_geom.write(npt*"1 0 0 1\n")
-#                        elif self.type==2:
+#                        elif self.typ==2:
 #                                fi_geom.write(npt*"0 1 0 1\n")
 #                fi_geom.close()
 
@@ -468,10 +587,10 @@ class RadioNode(object):
 #
 #               _filespa = self.filespa
 #
-#                elif self.type==1:
-#                        filespa    = getlong(_filespa,'launch')
-#                elif self.type==2:
-#                        filespa    = getlong(_filespa,'trace')
+#                elif self.typ==1:
+#                        filespa    = pyu.getlong(_filespa,'launch')
+#                elif self.typ==2:
+#                        filespa    = pyu.getlong(_filespa,'trace')
 #
 #                fi_spa  = open(filespa,'w')
 #
@@ -495,20 +614,16 @@ class RadioNode(object):
         y = self.position[1, num]
         sp.plot(x, y, 'ob')
         #indoor = IndoorStr()
-        #filename = getlong(self.simul.filestr,'struc')
+        #filename = pyu.getlong(self.simul.filestr,'struc')
         #indoor.load(filename)
         #pt =self.position
         #indoor.show([0],[0],pt)
 
     def show3(self):
+        """ display RadioNode position in geomview 
         """
-         Display RadioNode position in the 3D strucure
-         ..todo::
-             Dans GeomUtil classe liste construire un fichier .list à partir d'une liste
-             de fichiers
-        """
-        filename = getlong("strucRN.off", "geom")
-        filegeom = getlong(self.filegeom, "geom")
+        filename = pyu.getlong("strucRN.off", "geom")
+        filegeom = pyu.getlong(self.filegeom, "geom")
         fo = open(filename, "w")
         fo.write("LIST\n")
     #       fo.write("{<RadioNode.vect}\n")
@@ -533,17 +648,22 @@ class RadioNode(object):
         self.savespa()
 
     def extract(self, i):
-        """
-        Extract the i-th radionode component (i=0 first position)
+        """ extract the i-th radionode component (i=0 first position)
+
+        Parameters
+        ----------
+        i : integer 
+
         .. todo::
             Vérifier si deepcopy peut faire la même chose en + court
+
         """
 
-        if self.type == 0:
+        if self.typ == 0:
             u = RadioNode(self.filestr)
-        elif self.type == 1:
+        elif self.typ == 1:
             u = RadioTx(self.filestr, self.signal)
-        elif self.type == 2:
+        elif self.typ == 2:
             u = RadioRx(self.filestr, self.fc, self.bandwidth, self.NF)
 
         u.position = self.position[:, i]
@@ -553,14 +673,14 @@ class RadioNode(object):
 #       u.orientation = self.orientation[:,:,i]
         u.filespa = "filespa.spa"
 
-    #
-    # Write the RadioNode Coordinate in filespa
-    #
+#
+# Write the RadioNode Coordinate in filespa
+#
         if self.type != 0:
             if self.type == 1:
-                filespa = getlong("filespa.spa", "launch")
+                filespa = pyu.getlong("filespa.spa", "launch")
             elif self.type == 2:
-                filespa = getlong("filespa.spa", "trace")
+                filespa = pyu.getlong("filespa.spa", "trace")
             fi = open(filespa, 'w')
             fi.write("0\n")
             fi.write("1\n")
@@ -576,14 +696,15 @@ class RadioNode(object):
     def loadvsh(self):
         """ load an antenna .vsh3 file
 
+        set self.A 
+
         """
 
         A = Antenna('vsh3',self.fileant)
         self.A = A
 
     def gantenna(self, mode='subst'):
-        """
-        gantenna(self,mode='subst'):
+        """ get antenna file
         """
         import tkFileDialog
         FD = tkFileDialog
@@ -597,21 +718,5 @@ class RadioNode(object):
         self.fileant = _fileant
         self.loadvsh()
 
-        if self.type == 1:
-            self.fileantTx = _fileant
-        if self.type == 2:
-            self.fileantRx = _fileant
-
-
 if (__name__ == "__main__"):
-    from pylayers.simul.simulem import *
     doctest.testmod()
-
-    _filestr = 'ceamimo2.str'
-    _fileslab = "def.slab"
-    _filemat = "def.mat"
-    _filefreq = "def.freq"
-    _filepalch = "def.palch"
-    _filepatra = "def.patra"
-    _filespaTx = "Tx.spa"
-    _filespaRx = "Rx.spa"
