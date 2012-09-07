@@ -37,7 +37,7 @@ class RadioNode(object):
      -------
      info     : display information about a RadioNode
      loadspa  : load a spa file in PulsRay data format
-     savespa  : save a spa file in PulsRay data format
+     save     : save a RadioNode file in .spa, .ini, .vect data format
      point    : set a RadioNode point position
      points   : set a RadioNode set of points position
      line     : set a RadioNode route
@@ -89,7 +89,7 @@ class RadioNode(object):
         except:
             print fileini+' does not exist'
         self.loadvsh()
-        self.savespa()
+        self.save()
 
     def pos2pt(self):
         """ position to point 
@@ -123,7 +123,7 @@ class RadioNode(object):
         """
         pt = np.array(pt)
         self.position = pt
-        self.savespa()
+        self.save()
 
     def point(self, pt= [0, 0, 0], time= [1],
               orientation=np.eye(3), mode='subst'):
@@ -175,7 +175,7 @@ class RadioNode(object):
             self.orientation = np.append(self.orientation, orientation, axis=2)
 
         self.pos2pt()
-        self.savespa()
+        self.save()
 
     def line(self, npt, ptt=[0, 0, 0], pth=[1, 0, 0], mode='subst'):
         """ build a line trajectory for a RadioNode
@@ -222,7 +222,7 @@ class RadioNode(object):
             self.position = np.append(self.position, pt, axis=1)
         self.pos2pt()    
         self.N = np.shape(self.position)[1]
-        self.savespa()
+        self.save()
 
     def surface(self, N1=2, N2=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], mode='subst'):
         """
@@ -256,7 +256,7 @@ class RadioNode(object):
             self.position = np.append(self.position, pt, axis=1)
         self.pos2pt()    
         self.N = np.shape(self.position)[1]
-        self.savespa()    
+        self.save()    
 
     def volume(self, N1=2, N2=2, N3=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], p3=[0, 0, 1], mode='subst'):
         """ add a volume to RadioNode
@@ -314,7 +314,7 @@ class RadioNode(object):
             self.position = np.append(self.position, pt, axis=1)
         self.pos2pt()
         self.N = np.shape(self.position)[1]
-        self.savespa()
+        self.save()
 
     def loadini(self, _filespa, rep='simul'):
         """ load an ini file
@@ -379,7 +379,7 @@ class RadioNode(object):
             self.orientation[:, :, i] = ident
         fid.close()
 
-    def savespa(self):
+    def save(self):
         """ save RadioNode in  .ini, .spa, .vect file
 
         This function save the RadioNode in different files
@@ -449,7 +449,7 @@ class RadioNode(object):
         p0 = self.position[:, 0]
         (p0, n1) = eg.pointbox(p0, 1)
         self.point(p0, [1], np.eye(3), mode)
-        self.savespa()
+        self.save()
         if display:
             self.show3()
 
@@ -464,7 +464,7 @@ class RadioNode(object):
         p0 = self.position[:, 0]
         (p1, N1) = eg.pointbox(p0, 10)
         self.line(N1, p0, p1, mode)
-        self.savespa()
+        self.save()
         if display:
             self.show3()
 
@@ -477,7 +477,7 @@ class RadioNode(object):
 
         (p2, N2) = eg.pointbox(p1, 10, 'Enter Surface third point')
         self.surface(N1, N2, p0, p1, p2, mode)
-        self.savespa()
+        self.save()
         if display:
             self.show3()
 
@@ -490,7 +490,7 @@ class RadioNode(object):
         (p2, N2) = eg.pointbox(p1, 10, 'Enter Volume third point')
         (p3, N3) = eg.pointbox(p2, 10, 'Enter Volume fourth point')
         self.volume(N1, N2, N3, p0, p1, p2, p3, mode)
-        self.savespa()
+        self.save()
         if display:
             self.show3()
 #        def savevect(self):
@@ -498,7 +498,7 @@ class RadioNode(object):
 #                Create a .vect file
 #                Le type de format est 0 . Coordonnées explicites de tous les points.
 #
-#       savespa(_filespa)
+#       save(_filespa)
 #
 #       _filespa : file short name
 #
@@ -615,7 +615,7 @@ class RadioNode(object):
         self.position[0, :] += dx
         self.position[1, :] += dy
         self.position[2, :] += dz
-        self.savespa()
+        self.save()
 
     def extract(self, i):
         """ extract the i-th radionode component (i=0 first position)

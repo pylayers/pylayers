@@ -209,8 +209,8 @@ class Pafreq(object):
         print "----------------------------------------------"
         print "    Propagation Channel Frequency Ramp        "
         print "----------------------------------------------"
-        print "fGHzmin : ", self.fGHzmin
-        print "fGHzmax : ", self.fGHzmax
+        print "fGHz min : ", self.fghzmin
+        print "fGHz max : ", self.fghzmax
         print "Nf : ", self.Nf
         for i, j in enumerate(self.__dict__.keys()):
             print j, ':', self.__dict__.values()[i]
@@ -220,15 +220,15 @@ class Pafreq(object):
         fi = open(filefreq)
         l = fi.read()
         u = l.split()
-        self.fGHzmin = eval(u[0])
-        self.fGHzmax = eval(u[1])
+        self.fghzmin = eval(u[0])
+        self.fghzmax = eval(u[1])
         self.Nf = eval(u[2])
 
     def save(self):
         filefreq = pyu.getlong(self.filename, 'tud')
         fi = open(filefreq, 'w')
-        fi.write(str(self.fGHzmin) + ' ')
-        fi.write(str(self.fGHzmax) + ' ')
+        fi.write(str(self.fghzmin) + ' ')
+        fi.write(str(self.fghzmax) + ' ')
         fi.write(str(self.Nfp) + '\n')
         fi.close()
 
@@ -837,7 +837,7 @@ class Simul(object):
         #
         config.add_section("files")
         config.set("files", "conf", self.fileconf)
-        config.set("files", "struc", self.filestr)
+        config.set("files", "struc", self.filestruc)
         config.set("files", "slab", self.fileslab)
         config.set("files", "mat", self.filemat)
         config.set("files", "tx", self.filespaTx)
@@ -863,16 +863,16 @@ class Simul(object):
 
         config.add_section("frequency")
 
-        config.set("frequency", "fGHzmin", self.freq[0])
-        config.set("frequency", "fGHzmax", self.freq[-1])
+        config.set("frequency", "fghzmin", self.freq[0])
+        config.set("frequency", "fghzmax", self.freq[-1])
         config.set("frequency", "Nf", len(self.freq))
 
         #
         # output section 
         #
 
-        if self.progress > 0:
         #filelch exists
+        if self.progress > 0:
             config.add_section("output")
             for k in range(len(self.filelch)):
                 _fileout = "out" + "???"
@@ -880,53 +880,48 @@ class Simul(object):
                 fi.write(filename + '\n')
                 config.set("launch", str(k + 1), filename)
 
+        # filetra exists
         for k in range(len(self.filelch)):
             if self.progress > 1:
-        # filetra exists
                 config.add_section("trace")
                 for l in arange(len(self.filetra[k])):
                     filename = self.filetra[k][l]
                     fi.write(filename + '\n')
                     config.set("trace", "rx" + str(l + 1), filename)
 
-            if self.progress > 2:
         # .tang exists
         # .rang exists
         # .tud exists
+            if self.progress > 2:
                 config.add_section("tud")
                 config.add_section("tang")
                 config.add_section("rang")
 
                 for l in arange(len(self.filetud[k])):
                     ftud = self.filetud[k][l]
-                    fi.write(ftud + '\n')
                     config.set("tud", "rx" + str(l + 1), ftud)
 
                 for l in arange(len(self.filetang[k])):
                     ftang = self.filetang[k][l]
-                    fi.write(ftang + '\n')
                     config.set("tang", "rx" + str(l + 1), ftang)
 
                 for l in arange(len(self.filerang[k])):
                     frang = self.filerang[k][l]
-                    fi.write(frang + '\n')
                     config.set("rang", "rx" + str(l + 1), frang)
 
-            if self.progress > 3:
         # .field exist
         # .tauk exist
+            if self.progress > 3:
                 config.add_section("tauk")
                 config.add_section("field")
                 for l in arange(len(self.filetud[k])):
                     ftauk = self.filetud[k][l]
-                    fi.write(ftauk + '\n')
                     config.set("tauk", "rx" + str(l + 1), ftauk)
 
                 for l in arange(len(self.filefield[k])):
                     ffield = self.filefield[k][l]
-                    fi.write(ffield + '\n')
                     config.set("field", "rx" + str(l + 1), ffield)
-        fi.close()
+
         config.write(fd)
         fd.close()
 
@@ -993,25 +988,25 @@ class Simul(object):
 #
 # Load layout from .str or .str2 file
 #
-        self.filestruc = self.config.get("files", "struc")
+        self.filestr = self.config.get("files", "struc")
         self.L = Layout()
-        self.L.load(self.filestruc,self.filemat,self.fileslab)
+        self.L.load(self.filestr,self.filemat,self.fileslab)
 #
 # Frequency base
 #
         if "frequency" in sections:
-            self.freq = np.linspace(float(self.config.get("frequency", "fGHzmin")),
-                                    float(self.config.get("frequency", "fGHzmax")),
-                                    int(self.config.get("frequency", "Nf")),
+            self.freq = np.linspace(float(self.config.get("frequency", "fghzmin")),
+                                    float(self.config.get("frequency", "fghzmax")),
+                                    int(self.config.get("frequency", "nf")),
                                     endpoint=True)
 
             # update .freq file in tud directory 
 
             self.filefreq = pyu.getlong("def.freq", "tud")
             fd = open(self.filefreq, "w")
-            chaine = self.config.get("frequency", "fGHzmin") + ' ' + \
-                self.config.get("frequency", "fGHzmax") + ' ' + \
-                self.config.get("frequency", "Nf")
+            chaine = self.config.get("frequency", "fghzmin") + ' ' + \
+                self.config.get("frequency", "fghzmax") + ' ' + \
+                self.config.get("frequency", "nf")
             fd.write(chaine)
             fd.close
 #
@@ -1072,30 +1067,32 @@ class Simul(object):
         self.wav.read(self.config)
 
     def layout(self, _filestruc, _filemat='simul8.mat', _fileslab='simul8.slab'):
+        """ load a layout in the simulation oject
+
+        Parameters
+        ----------
+        _filestruc : string
+            short file name of the Layout object
+        _filemat   : string
+            short file name of the Mat object  (default simul8.mat)
+        _fileslab  : string
+            short file name of the Slab object (default simul8.slab)
+
+        Examples
+        --------
+
+        >>> from pylayers.simul.simulem import *
+        >>> S = Simul()
+        >>> S.layout('sircut.str')
+
         """
-            load a layout in the simulation oject
 
-            Parameters
-            ----------
-            _filestruc : short file name of the Layout object
-            _filemat   : short file name of the Mat object  (default simul8.mat)
-            _fileslab  : short file name of the Slab object (default simul8.slab)
+        self.filestr = _filestruc
+        self.filemat = _filemat
+        self.fileslab = _fileslab
 
-            Examples
-            --------
-
-            >>> from pylayers.simul.simulem import *
-            >>> S = Simul()
-            >>> S.layout('sircut.str')
-
-        """
-
-        self.L = Layout()
-        ext = _filestruc.split('.')
-        if ext[1] == 'str2':
-            self.L.loadstr2(_filestruc, _filemat, _fileslab)
-        else:
-            self.L.loadstr(_filestruc, _filemat, _fileslab)
+        self.L = Layout(_filemat,_fileslab)
+        self.L.load(_filestruc)
 
     def help(self):
         """
@@ -1554,8 +1551,14 @@ class Simul(object):
     def show3(self):
         """ geomview display of the simulation configuration
         """
-        self.tx.save()
-        self.rx.save()
+        try:
+            self.tx.save()
+        except:
+            print('tx set is no defined')
+        try:
+            self.rx.save()
+        except:
+            print('rx set is no defined')
         filename = pyu.getlong("strucTxRx.off", "geom")
         fo = open(filename, "w")
         fo.write("LIST\n")

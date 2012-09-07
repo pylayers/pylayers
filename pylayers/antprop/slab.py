@@ -27,6 +27,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pylab as plt
 import struct as stru
+import ConfigParser
 from   pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from   pylayers.util.easygui import *
@@ -600,8 +601,7 @@ class Mat(dict):
         return Ro,Rp
 
 class MatDB(dict):
-    """
-    MatDB Class : Material database
+    """ MatDB Class : Material database
 
 
     Attributes
@@ -628,8 +628,6 @@ class MatDB(dict):
     def dass(self):
         """ create a dictionnary to associate index | name
 
-        Notes
-        -----
         Example of created dictionnary
 
         {-1: 'METALIC',
@@ -698,7 +696,6 @@ class MatDB(dict):
 
            See Also 
            --------
-
            dass
 
         """
@@ -877,7 +874,6 @@ class MatDB(dict):
     def load(self,_filename):
         """ Load a Material from a .mat file
 
-
         Parameters
         ----------
         _filename : string
@@ -932,6 +928,55 @@ class MatDB(dict):
             print "file : ",filename, "is unreachable"
         self.dass()
 
+    def saveini(self):
+        """ save MatDB in an ini file 
+        
+        [dict] 
+            id1 = name1
+        [name1]
+            epsr = 
+            mur  = 
+            roughness = 
+            index = 
+
+
+        """
+        filemat = pyu.getlong('matDB.ini',"ini")
+        fd = open(filemat, "w")
+        config = ConfigParser.ConfigParser()
+        #
+        # config names
+        #
+        config.add_section("dict")
+        
+        for vid in self.di.keys():
+            config.set("dict", str(vid), self.di[vid])
+
+        for vid in self.di.keys():
+            name = self.di[vid]
+            config.add_section(name)
+            try:
+                config.set(name,"epr",str(self[name]['epr']))
+            except:
+                config.set(name,"epr",'(9+0j)')
+            try:
+                config.set(name,"mur",str(self[name]['mur']))
+            except:
+                config.set(name,"mur",'(1+0j)')
+            try:
+                config.set(name,"sigma",str(self[name]['sigma']))
+            except:
+                config.set(name,"sigma",'(0+0j)')
+            try:
+                config.set(name,"roughness",str(self[name]['roughness']))
+            except:
+                config.set(name,"roughness",'0')
+            config.set(name,"index",str(self[name]['index']))
+
+        
+        config.write(fd)
+        fd.close()
+
     def save(self,_filename): 
         """ save a .mat file (PulsRay format)
 
@@ -964,12 +1009,12 @@ class MatDB(dict):
             if L<30:
                 for j in range(30-L):
                     data_name = data_name+"\x00"
-            else:
+            
                     print " Mat : name too long maximum 30 characters !"
 
             data_index    = stru.pack('i',M['index'])
             data_err      = stru.pack('d',np.real(M['epr']))
-            data_eri      = stru.pack('d',np.imag(M['epr']))                     
+            data_eri      = stru.pack('d',np.imag(M['epr']))
             data_epr      = data_err + data_eri
             data_mur      = stru.pack('d',np.real(M['mur']))
             data_mui      = stru.pack('d',np.imag(M['mur']))
@@ -1038,12 +1083,12 @@ class Slab(dict,Interface):
             >>> import numpy as np
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.slab import *
-            >>> sl      = SlabDB('simul9.mat','simul9.slab')
-            >>> lname   = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
-            >>> lthick  = [0.018,0.03,0.018]
+            >>> sl = SlabDB('simul9.mat','simul9.slab')
+            >>> lname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
+            >>> lthick = [0.018,0.03,0.018]
             >>> sl.add('placo',lname,lthick)
-            >>> theta   = np.arange(0,np.pi/2,0.01)
-            >>> fGHz    = np.array([57.5])
+            >>> theta = np.arange(0,np.pi/2,0.01)
+            >>> fGHz = np.array([57.5])
             >>> sl['placo'].ev(fGHz,theta)
             >>> sl['placo'].plotwrta()
             >>> plt.show()
@@ -1332,7 +1377,15 @@ class SlabDB(dict):
         DB : slab dictionnary
 
     """
-    def __init__(self,filemat='',fileslab=''):
+    def __init__(self,filemat='simul9.mat',fileslab='simul9.slab'):
+        """
+
+        Parameters
+        ----------
+        filemat : string
+        fileslab : string 
+
+        """
         self.fileslab = fileslab
         self.mat = MatDB()
         if (filemat != ''):  
@@ -1376,7 +1429,7 @@ class SlabDB(dict):
         print "sl.choose() : dialog to choose mat and slab "
 
     def info(self):
-        """
+        """ information 
         """
         print "fileslab : ",self.fileslab
         print "filemat  : ",self.mat.filemat
@@ -1385,8 +1438,10 @@ class SlabDB(dict):
             S.info()
 
     def dass(self):
-        """ Update conversion dictionnary
+        """ update conversion dictionnary
+
         code <--> name
+
         """
         di = {}
         for name in self.keys():
@@ -1406,7 +1461,7 @@ class SlabDB(dict):
         return(maxi) 
 
     def delete(self,name):
-        """ delete an element from the Database
+        """ delete an element from the database
         """
         self.__delitem__(name)
         self.dass()
@@ -1479,12 +1534,16 @@ class SlabDB(dict):
             sl['DoubleGlass'].ev(freq,theta)
             sl['DoubleGlass'].pcolor(dB=True)
 
-        Exemple from paper `"[Kiani2007] Glass Characterization for Designing Frequency Selective Surfaces to Improve Transmission through Energy saving glass windows  Kiani 2007" <http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=4554974&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974>`_
+        Exemple from paper `"[Kiani2007] Glass Characterization for Designing 
+        Frequency Selective Surfaces to Improve Transmission through Energy saving 
+        glass windows  Kiani 2007" 
+        <http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=4554974&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974>`_
         The surface impedance is :math:`R = 4 \Omega`, the thicknesss is :math:`d = 100 nm` 
 
         `Pilkington Spectrum OnLine applet <http://www.pilkington.com/spectrum2/default.aspx?country_code=FR>`_
 
-        `Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz <http://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=530536&fileOId=624944>`_
+        `Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz 
+        <http://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=530536&fileOId=624944>`_
 
         .. math::
 
@@ -1584,8 +1643,7 @@ class SlabDB(dict):
         try:
             fo = open(filename, "rb")
         except:
-            print "Exception in load : file ", filename, "is unreachable"
-            exit
+            raise NameError("Exception in load : file is unreachable")
  
         data = fo.read()
         #
@@ -1658,9 +1716,9 @@ class SlabDB(dict):
             S['thickness']=thickness
             # insertion du slab dans la liste
             if name in laycol.keys():
-                S['color']     = laycol[name]
+                S['color'] = laycol[name]
             else:
-                S['color']     = 'black'
+                S['color'] = 'black'
             S['linewidth'] = int(np.ceil(epaisseur/3.))
             S['name'] = name
             S.conv()
@@ -1668,6 +1726,27 @@ class SlabDB(dict):
 
         fo.close()
         self.dass()
+        
+    def saveini(self):
+        """ save SlabDB in an ini file
+        """
+        
+        filemat = pyu.getlong('slabDB.ini',"ini")
+        fd = open(filemat, "w")
+        config = ConfigParser.ConfigParser()
+        #
+        # config names
+        #
+        config.add_section("dict")
+        for vid in self.di.keys():
+            config.set("dict", str(vid), self.di[vid])
+        for vid in self.di.keys():
+            name = self.di[vid]
+            config.add_section(name)
+            config.set(name,'color',self[name]['color'])
+            config.set(name,'linewidth',self[name]['linewidth'])
+        config.write(fd)    
+        fd.close()
 
     def save(self,_filename):
         """ Save a Slab database in a .slab file (PulsRay format)

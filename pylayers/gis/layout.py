@@ -160,6 +160,8 @@ class Layout(object):
         self.Ne = 0
         self.Nss = 0
         self.filename = 'Lstruc.str2'
+        self.fileslab = _fileslab
+        self.filemat = _filemat
         self.display = {}
         self.display['title'] = ''
         self.display['ticksoff'] = True
@@ -404,20 +406,21 @@ class Layout(object):
             F.load(_filefur, name)
             self.lfur.append(F)
 
-    def load(self,_filename,_filemat='simul9.mat',_fileslab='simul9.slab'):
+    def load(self,_filename):
         """ load a Layout in different formats
 
         Parameters
         ----------
         _filename
-        _filemat
-        _fileslab
+
         """
+
+        self.filestr=_filename
         filename,ext=os.path.splitext(_filename)
         if ext=='.str':
-            self.loadstr(_filename,_filemat,_fileslab)
+            self.loadstr(_filename,self._filemat,self._fileslab)
         elif ext=='.str2':
-            self.loadstr2(_filename,_filemat,_fileslab)
+            self.loadstr2(_filename,self._filemat,self_fileslab)
         else:
             raise NameError('layout filename extension not recognized')
 
@@ -2218,11 +2221,24 @@ class Layout(object):
         if dnodes:
             self.show_nodes(ndlist=edlist, color='b')
 
-    def show_layer(self, name, edlist=[], alpha=1, width=1, color='black', dnodes=False, dthin=False, dlabels=False, font_size=15):
-        """
-        show_layer
+    def show_layer(self, name, edlist=[], alpha=1, width=1,
+                   color='black', dnodes=False, dthin=False,
+                   dlabels=False, font_size=15):
+        """ show_layer
 
-        show_layer(name,alpha=1,width=1,color='black',dthin=False,dlabels=False):
+        Parameters
+        ----------
+        name : 
+        edlist :
+        alpha : float 
+            transparency 
+        width : int
+        color : string
+            default black'
+        dnodes
+        dthin
+        dlabels
+        font_size
 
 
         """
@@ -2241,7 +2257,9 @@ class Layout(object):
             slab = self.sl[name]
             linewidth = slab['linewidth'] / 3.
             color = slab['color']
-            self.show_edges(edlist, alpha=1, width=linewidth, color=color, dnodes=dnodes, dlabels=dlabels, font_size=font_size)
+            self.show_edges(edlist, alpha=1,
+                            width=linewidth, color=color, dnodes=dnodes,
+                            dlabels=dlabels, font_size=font_size)
 
     def showGt(self, ax=[], roomlist=[]):
         """
@@ -3181,7 +3199,9 @@ class Layout(object):
     def info(self):
         """ gives information about the Layout
         """
-        print "filestruc : ", self.filename
+        print "filestr : ", self.filename
+        print "filemat : ", self.filemat
+        print "fileslab : ", self.fileslab
         try:
             print "filegeom : ", self.filegeom
         except:
