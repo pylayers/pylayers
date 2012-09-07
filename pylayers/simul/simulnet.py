@@ -127,7 +127,7 @@ class Simul(Simulation):
 
         if init == 'random':
             self.lAg = []
-            agents = ['A1', 'A2', 'A3']
+            agents = ['A1', 'A2', 'A3','BS1','BS2']
 #            agents=['A1','A2','A3','A4' ]
             Cf = ConfigParser.ConfigParser()
             Cf.read(pyu.getlong('agent.ini','ini'))
@@ -137,6 +137,7 @@ class Simul(Simulation):
                 ag_opt = dict(Cf.items(ag))
                 self.lAg.append(Agent(
                                 ID=ag_opt['id'],
+                                name=ag_opt['name'],
                                 type=ag_opt['type'],
                                 pos=np.array(eval(ag_opt['pos'])),
                                 roomId=int(ag_opt['roomid']),

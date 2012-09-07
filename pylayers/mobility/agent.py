@@ -9,13 +9,13 @@ from random import normalvariate,uniform,gauss
 import numpy as np
 import networkx as nx
 import time
-
-
+import ConfigParser
+import pylayers.util.pyutil as pyu
 from pylayers.network.network import  Node,Network
 #from pylayers.Location import Localization,PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
-
+from pylayers.util.pymysqldb import Database 
 import pdb
 
 
@@ -23,14 +23,15 @@ class Agent(object):
 
 
     def __init__(self,**args):
-        defaults = {'ID': 0,'type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'msqlSave':False, 'sim':Simulation}
+        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'msqlSave':False, 'sim':Simulation}
 
         for key, value in defaults.items():
             if not args.has_key(key):
                 args[key]=value  
 
-        self.args=args
-        self.ID=args['ID']
+        self.args = args
+        self.ID = args['ID']
+        self.name = args['name']
         self.type=args['type']
         # Create Network
         self.net=args['net']
@@ -70,6 +71,30 @@ class Agent(object):
 
         else :
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')
+
+        MoA=0
+        if self.type == 'ap':
+            MoA=1
+
+        if args['msqlSave']:
+            config = ConfigParser.ConfigParser()
+            config.read(pyu.getlong('simulnet.ini','ini'))
+            sql_opt = dict(config.items('Mysql'))
+            db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
+            db.insertitem1("Nodes",('NodeID',
+                                    'NodeName',
+                                    'NodeOwner',
+                                    'NodeDescription',
+                                    'NodeOwnerID',
+                                    'MobileOrAnchor',
+                                    'TrolleyID'),
+                                     (eval(self.ID),
+                                     self.name,
+                                    'NULL',
+                                    'node description',
+                                    'NULL',
+                                    MoA,
+                                    'NULL'))
 
         if args['loc']:
             self.loc=Localization(PN=self.PN)

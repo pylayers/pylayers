@@ -1,5 +1,6 @@
 from SimPy.Simulation import Process,Simulation,hold
 import ConfigParser
+import datetime
 #from math import *
 from random import normalvariate,uniform
 from pylayers.mobility.transit.vec3 import vec3
@@ -12,7 +13,7 @@ from pylayers.network.network import Network
 from pylayers.util.utilnet import conv_vecarr
 
 import matplotlib.pylab as plt
-from pylayers.util.pymysqldb import Database as DB
+from pylayers.util.pymysqldb import Database 
 import pylayers.util.pyutil as pyu
 
 import pdb
@@ -103,8 +104,8 @@ class Person3(Process):
            config = ConfigParser.ConfigParser()
            config.read(pyu.getlong('simulnet.ini','ini'))
            sql_opt = dict(config.items('Mysql'))
-           self.db = DB(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
-
+           self.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
+           self.date = datetime.datetime.now()
 
     def move(self):
         """
@@ -142,10 +143,44 @@ class Person3(Process):
                 self.net.update_pos(self.ID,conv_vecarr(self.position))
                 if self.msqlSave:
                     p=conv_vecarr(self.position)
-
-                    self.db.insertitem1("TruePosition",('NodeID','Timestamp','X','Y','Z','ReferencePointID'), (eval(self.ID),self.sim.now(),p[0],p[1],'NULL','NULL'))
-
-
+                    v=conv_vecarr(self.velocity)
+                    a=conv_vecarr(self.acceleration)
+                    self.db.insertitem1("TruePosition",('NodeID',
+                                                        'Timestamp',
+                                                        'X',
+                                                        'Y',
+                                                        'Z',
+                                                        'ReferencePointID'),
+                                                        (eval(self.ID),
+                                                        pyu.timestamp(self.sim.now()),
+                                                        p[0],
+                                                        p[1],
+                                                        'NULL',
+                                                        'NULL'))
+                    self.db.insertitem1("CEASensorMeasurements",('NodeID',
+                                                                 'Timestamp',
+                                                                 'CEA_MagX',
+                                                                 'CEA_MagY',
+                                                                 'CEA_AccX',
+                                                                 'CEA_AccY'),
+                                                                 (eval(self.ID),
+                                                                  pyu.timestamp(self.sim.now()),
+                                                                  v[0],
+                                                                  v[1],
+                                                                  a[0],
+                                                                  a[1] ))
+#                    self.db.insertitem1("ACOSensorMeasurements",('NodeID',
+#                                                                 'Timestamp',
+#                                                                 'ACO_MagX',
+#                                                                 'ACO_MagY',
+#                                                                 'ACO_AccX',
+#                                                                 'ACO_AccY'),
+#                                                                 (eval(self.ID),
+#                                                                  self.sim.now(),
+#                                                                  v[0],
+#                                                                  v[1],
+#                                                                  a[0],
+#                                                                  a[1] ))
 
                 if self.arrived:
 
