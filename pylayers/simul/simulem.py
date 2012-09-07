@@ -696,13 +696,13 @@ class Simul(object):
 
         self.freq = np.linspace(2, 11, 181)
         self.config = ConfigParser.ConfigParser()
-        if not(_filesimul == 'SimulDefault.ini'):
+        try:
             self.load()
+        except:
+            print('simulation file does not exist')
 
     def gui(self):
-        """
-               gui to modify the simulation file
-               .. todo :: adapt to .ini file
+        """ gui to modify the simulation file
         """
         simulgui = multenterbox('', 'Simulation file',
                                 ('filesimul',
@@ -943,7 +943,7 @@ class Simul(object):
         """ load a simulation configuration file
 
          each transmiter simulation results in the creation of an .ini file
-         with the folowing sections
+         with the following sections
          related to the results obtained for different receivers
 
         Parameters
@@ -952,7 +952,7 @@ class Simul(object):
 
         """
         self.filesimul = _filesimul
-        filesimul = pyu.getlong(self.filesimul, "simul")
+        filesimul = pyu.getlong(self.filesimul, "ini")
 
         self.config.read(filesimul)
 
@@ -981,7 +981,7 @@ class Simul(object):
 #
 #  Load Simulation Slab File
 #
-        self.filelab= self.config.get("files", "slab")
+        self.fileslab= self.config.get("files", "slab")
         self.sl = SlabDB()
         self.sl.mat = self.mat
         self.sl.load(self.fileslab)
@@ -989,8 +989,8 @@ class Simul(object):
 # Load layout from .str or .str2 file
 #
         self.filestr = self.config.get("files", "struc")
-        self.L = Layout()
-        self.L.load(self.filestr,self.filemat,self.fileslab)
+        self.L = Layout(self.filemat,self.fileslab)
+        self.L.load(self.filestr)
 #
 # Frequency base
 #

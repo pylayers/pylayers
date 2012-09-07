@@ -141,7 +141,7 @@ class Layout(object):
         distwall(self,p,nroom)
 
     """
-    def __init__(self, _fileslab='simul8.slab', _filemat='simul8.mat'):
+    def __init__(self,_filemat='simul8.mat',_fileslab='simul8.slab'):
 
         mat = sb.MatDB()
         mat.load(_filemat)
@@ -418,9 +418,9 @@ class Layout(object):
         self.filestr=_filename
         filename,ext=os.path.splitext(_filename)
         if ext=='.str':
-            self.loadstr(_filename,self._filemat,self._fileslab)
+            self.loadstr(_filename,self.filemat,self.fileslab)
         elif ext=='.str2':
-            self.loadstr2(_filename,self._filemat,self_fileslab)
+            self.loadstr2(_filename,self.filemat,self.fileslab)
         else:
             raise NameError('layout filename extension not recognized')
 
