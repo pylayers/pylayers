@@ -219,11 +219,11 @@ class Layout(object):
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
             >>> for _filename in L.dir():
-            >>>     L.load(_filename)
-            >>>     L.showGs()
-            >>>     plt.title(_filename)
-            >>>     plt.figure()
-            >>>     plt.show()
+            >>>    L.load(_filename)
+            >>>    L.showGs()
+            >>>    plt.title(_filename)
+            >>>    plt.figure()
+            >>>    plt.show()
 
         """
 
@@ -3181,8 +3181,12 @@ class Layout(object):
     def info(self):
         """ gives information about the Layout
         """
-        print "filename : ", self.filename
-        print "filegeom : ", self.filegeom
+        print "filestruc : ", self.filename
+        try:
+            print "filegeom : ", self.filegeom
+        except:
+            print "geomfile (.off) has no been generated"
+
         print "number of Nodes :", self.Nn
         print "number of Segments :", self.Ne
         print "number of Sub-Segments :", self.Nss
@@ -3504,13 +3508,13 @@ class Layout(object):
             return(filename)
 
     def signature(self, iTx, iRx):
-        """ Determine signature between node iTx and node IRx
+        """ Determine signature between node iTx and node iRx
 
         Parameters
         ----------
-        pTx  : np.array (2,1)
-                Transmitter coordinates
-        pRx  :  np.array(2,1)
+        pTx  : np.array (2, 1)
+                ransmitter coordinates
+        pRx  : np.array (2, 1)
                 Receiver coordinates
 
         Returns
@@ -3583,11 +3587,11 @@ class Layout(object):
                     for interaction in path:
                         it = eval(interaction)
                         if type(it) == tuple:
-                            sigarr = np.hstack((sigarr, np.array(
-                                [[it[0]], [1]])))
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]], [1]])))
                         elif it < 0:
-                            sigarr = np.hstack((sigarr, np.array(
-                                [[it], [-1]])))
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it], [-1]])))
                         else:
                             sigarr = np.hstack((sigarr, np.array([[it], [2]])))
 
@@ -3992,69 +3996,69 @@ class Layout(object):
 
         return(data_graph)
 
-    def poly_door(self, nnode):
-        """Creates a polygon with the space between a door.
-
-        Decides the position of the doors in indoor environment, than moves the
-        door extremities points from the extremities d = 5cm and builds a polygon.
-        The polygon includes the length of the doors thus a part of not allowed
-        zone of rooms is also included in required part of the Allowed Zone.
-
-        Parameters
-        ----------
-        nnode : int
-            The nnode number of a node of Gt graph.
-
-        Returns
-        -------
-        describe : shapely.geometry.polygon.Polygon
-            A polygon between a door.
-
-        References
-        ----------
-        http://gispython.org/shapely/docs/1.2/manual.html#object.buffer
-
-        ..  [1] Report "Simulation based on ray tracing for the modeling of
-        dynamic wideband channel" - Localization application, p 31, 2011.
-
-        .. image:: _static/AZ_2.png
-            :width: 200
-            :height: 200
-            :scale: 60 %
-            :alt: alternate text
-
-        Examples
-        --------
-        >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
-        >>> ncoin,ndiff = L.buildGc()
-        >>> L.buildGt()
-        >>> L.buildGr()
-        >>> nnode=0
-        >>> dilated=L.poly_door(nnode)
-        >>> assert dilated.area==0.78413712263648416,'Mistake'
-
-        """
-
-        nd = self.Gr.node[nnode]['doors'][0]
-        n1, n2 = self.Gs.neighbors(nd)
-        x1, y1 = self.Gs.pos[n1]
-        x2, y2 = self.Gs.pos[n2]
-        deltx = self.delta(x1, x2)
-        delty = self.delta(y1, y2)
-
-        if deltx > delty:
-            x1, x2 = self.new_coor_d(x1, x2)
-            y1 = y1
-            y2 = y2
-        if deltx < delty:
-            y1, y2 = self.new_coor_d(y1, y2)
-            x1 = x1
-            x2 = x2
-
-        line = sh.LineString([(x1, y1), (x2, y2)])
-        dilated = line.buffer(0.5)
-        return(dilated)
+#    def poly_door(self, nnode):
+#        """Creates a polygon with the space between a door.
+#
+#        Decides the position of the doors in indoor environment, than moves the
+#        door extremities points from the extremities d = 5cm and builds a polygon.
+#        The polygon includes the length of the doors thus a part of not allowed
+#        zone of rooms is also included in required part of the Allowed Zone.
+#
+#        Parameters
+#        ----------
+#        nnode : int
+#            The nnode number of a node of Gt graph.
+#
+#        Returns
+#        -------
+#        describe : shapely.geometry.polygon.Polygon
+#            A polygon between a door.
+#
+#        References
+#        ----------
+#        http://gispython.org/shapely/docs/1.2/manual.html#object.buffer
+#
+#        ..  [1] Report "Simulation based on ray tracing for the modeling of
+#        dynamic wideband channel" - Localization application, p 31, 2011.
+#
+#        .. image:: _static/AZ_2.png
+#            :width: 200
+#            :height: 200
+#            :scale: 60 %
+#            :alt: alternate text
+#
+#        Examples
+#        --------
+#        >>> L = Layout()
+#        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+#        >>> ncoin,ndiff = L.buildGc()
+#        >>> L.buildGt()
+#        >>> L.buildGr()
+#        >>> nnode=0
+#        >>> dilated=L.poly_door(nnode)
+#        >>> assert dilated.area==0.78413712263648416,'Mistake'
+#
+#        """
+#
+#        nd = self.Gr.node[nnode]['doors'][0]
+#        n1, n2 = self.Gs.neighbors(nd)
+#        x1, y1 = self.Gs.pos[n1]
+#        x2, y2 = self.Gs.pos[n2]
+#        deltx = self.delta(x1, x2)
+#        delty = self.delta(y1, y2)
+#
+#        if deltx > delty:
+#            x1, x2 = self.new_coor_d(x1, x2)
+#            y1 = y1
+#            y2 = y2
+#        if deltx < delty:
+#            y1, y2 = self.new_coor_d(y1, y2)
+#            x1 = x1
+#            x2 = x2
+#
+#        line = sh.LineString([(x1, y1), (x2, y2)])
+#        dilated = line.buffer(0.5)
+#        return(dilated)
 
 #    def moby_allowed_zone(self):
 #        """Defineds Allowed Mobility Zones for an entire indoor environment.

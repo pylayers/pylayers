@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin1 -*-
+# -*- coding: utf-8 -*-
 #
 """
      This module run the Ray Tracing simulation, it is a connection with PulsRay
@@ -62,18 +62,17 @@ def spafile(_filename, point, sdir):
 
 
 class Palch(object):
-    """
-    Launching parameters class
+    """ Launching parameters class 
 
     Methods
     -------
 
-    info()
-    load(filename)
+    info
+    load
         load from Project launch directory
-    save(filename)
+    save
         save to Project launch directory
-    gui()
+    gui
 
     """
     #def __init__(self,angTx=8,ISBang=80,ethreshold=0.1,maxdeep=16,typalgo=0):
@@ -82,6 +81,8 @@ class Palch(object):
         self.load()
 
     def info(self):
+        """ display information
+        """
         print "----------------------------------------------"
         print "            Launching Parameter               "
         print "----------------------------------------------"
@@ -128,7 +129,8 @@ class Palch(object):
                                  'Exploration threshold (linear)',
                                  'Tree deep max (integer value)',
                                  'type of algo (default 0)'),
-                                (self.angTx, self.ISBang, self.ethreshold, self.maxdeep, self.typalgo))
+                                (self.angTx, self.ISBang, self.ethreshold,
+                                 self.maxdeep, self.typalgo))
 
         if palchgui is not None:
             self.angTx = eval(palchgui[0])
@@ -168,8 +170,7 @@ class Patra(object):
         self.var2D3D = eval(u[2])
 
     def save(self):
-        """
-            save
+        """ save
         """
         filepatra = pyu.getlong(self.filename, 'trace')
         fi = open(filepatra, 'w')
@@ -179,8 +180,7 @@ class Patra(object):
         fi.close()
 
     def gui(self):
-        """
-        Get the Launching parameter .palch
+        """ get the Launching parameter .palch
         """
         patragui = multenterbox('', 'Launching Parameter',
                                 ('Max Deep ',
@@ -195,11 +195,10 @@ class Patra(object):
 
 
 class Pafreq(object):
-    """
-    Frequency setting
+    """ frequency setting
     """
     #def __init__(self,maxdeep=2,distdiff=2.0,var2D3D=1):
-    def __init__(self, filename):
+    def __init__(self,filename):
         self.filename = filename
         self.load()
 
@@ -210,9 +209,9 @@ class Pafreq(object):
         print "----------------------------------------------"
         print "    Propagation Channel Frequency Ramp        "
         print "----------------------------------------------"
-        print "fp min (GHz)   : ", self.fp_minGHz
-        print "fp max (GHz)   : ", self.fp_maxGHz
-        print "Nfp            : ", self.Nfp
+        print "fGHzmin : ", self.fGHzmin
+        print "fGHzmax : ", self.fGHzmax
+        print "Nf : ", self.Nf
         for i, j in enumerate(self.__dict__.keys()):
             print j, ':', self.__dict__.values()[i]
 
@@ -221,15 +220,15 @@ class Pafreq(object):
         fi = open(filefreq)
         l = fi.read()
         u = l.split()
-        self.fp_minGHz = eval(u[0])
-        self.fp_maxGHz = eval(u[1])
-        self.Nfp = eval(u[2])
+        self.fGHzmin = eval(u[0])
+        self.fGHzmax = eval(u[1])
+        self.Nf = eval(u[2])
 
     def save(self):
-        filefreq = pyu.getlong(self.filefreq, 'tud')
+        filefreq = pyu.getlong(self.filename, 'tud')
         fi = open(filefreq, 'w')
-        fi.write(str(self.fp_minGHz) + ' ')
-        fi.write(str(self.fp_maxGHz) + ' ')
+        fi.write(str(self.fGHzmin) + ' ')
+        fi.write(str(self.fGHzmax) + ' ')
         fi.write(str(self.Nfp) + '\n')
         fi.close()
 
@@ -250,40 +249,43 @@ class Pafreq(object):
 
 
 class Patud(object):
+    """ tratotud parameters
     """
-    TRacing To TUD parameter
-    perc  : 100
-    nrmin : number min of rays
-    nrmax : number max of rays
-    """
-    #def __init__(self,maxdeep=2,distdiff=2.0,var2D3D=1):
-    def __init__(self, perc=100, nrmin=2, nrmax=-1):
-        self.perc = perc
-        self.nrmin = nrmin
+    def __init__(self, purc=100, num=-1, nrmax=500):
+        self.purc = purc
+        self.num = num
         self.nrmax = nrmax
 
     def info(self):
+        """ info 
+
+        Examples
+        --------
+        >>> from pylayers.simul.simulem import *
+        >>> p=Patud()
+        >>> p.info()
+
+        """
         print "----------------------------------------------"
-        print "            TratoTud  Parameter               "
+        print "            tratotud  parameters              "
         print "----------------------------------------------"
-        print "Nr min      : ", self.nrmin
-        print "Nr max   ( -1 = Tous )   : ", self.nrmax
-        print "perc        : ", self.perc
+        print "num (-1 all rays) : ", self.num
+        print "nrmax : ", self.nrmax
+        print "purc : ", self.purc
         for i, j in enumerate(self.__dict__.keys()):
             print j, ':', self.__dict__.values()[i]
 
     def gui(self):
-        """
-        Gui for Tratotud parameters
+        """ gui for tratotud parameters
         """
         tudgui = multenterbox('', 'Launching Parameter',
-                              ('Nr Min ',
-                               'Nr Max ',
-                               'Perc   '),
-                              (self.nrmin, self.nrmax, self.perc))
-        self.nrmin = eval(tudgui[0])
+                              ('num',
+                               'nrmax',
+                               'purc'),
+                              (self.num, self.nrmax, self.purc))
+        self.num = eval(tudgui[0])
         self.nrmax = eval(tudgui[1])
-        self.perc = eval(tudgui[2])
+        self.purc = eval(tudgui[2])
 
 
 class Launch(object):
@@ -315,12 +317,6 @@ class Launch(object):
     launching :
 
     """
-    def __init__(self):
-        """
-        S is a simulation structure
-        """
-        #self.filestr   = S.filestr
-
     def info(self):
         """ get __dict__ info
         """
@@ -335,7 +331,10 @@ class Launch(object):
         """
         import tkFileDialog
         FD = tkFileDialog
-        filelch = FD.askopenfilename(filetypes=[("Fichiers Launching ", "*.lch"), ("All", "*")], title="Please choose a Launching file", initialdir=lchdir)
+        filelch = FD.askopenfilename(filetypes=[("Fichiers Launching ", "*.lch"),
+                                                ("All", "*")],
+                                     title="Please choose a Launching file",
+                                     initialdir=lchdir)
         _filelch = pyu.getshort(filelch)
         self.load(_filelch)
 
@@ -542,8 +541,7 @@ class Launch(object):
 
 
 class Simul(object):
-    """
-    Simulation Class :
+    """ Simulation Class 
 
     Methods
     -------
@@ -655,11 +653,21 @@ class Simul(object):
         migrer vers importations propres
     """
     def __init__(self, _filesimul='SimulDefault.ini'):
-        #
-        # If an argument is passed this is the name of the simulation file
-        # otherwise the name of the simul is : SimulDefault.ini
-        #
+
         self.filesimul = _filesimul
+        self.filemat = []
+        self.fileslab = []
+        self.filespaTx = []
+        self.filespaRx = []
+        self.fileantTx = []
+        self.fileantRx = []
+        self.filepatra = []
+        self.filepalch = []
+
+        self.patud=Patud()
+
+        self.freq = np.linspace(2.4,2.4,1,endpoint=True)
+
         self.progress = -1  # simulation not loaded
         self.filelch = []
         self.filestr = []
@@ -760,8 +768,7 @@ class Simul(object):
                     print filename
 
     def deepsave(self):
-        """
-            deepsave
+        """ deepsave
         """
         sigui = multenterbox('', 'Simulation file',
                              ('filesimul', 'filestr', 'fileantTx',
@@ -820,16 +827,15 @@ class Simul(object):
     def save(self):
         """ save simulation file
 
-        .. todo::
-           Simul.save This a temporary function. The ini file should be the only configuration file
         """
-        filesimul = pyu.getlong(self.filesimul, "simul")
-        fileini = filesimul.replace(".simul", ".ini")
-        f2 = open(fileini, "w")
+        filesimul = pyu.getlong(self.filesimul,"ini")
+        fd = open(filesimul, "w")
         config = ConfigParser.ConfigParser()
 
-        config.add_section("files")
         #
+        # files section
+        #
+        config.add_section("files")
         config.set("files", "conf", self.fileconf)
         config.set("files", "struc", self.filestr)
         config.set("files", "slab", self.fileslab)
@@ -838,46 +844,33 @@ class Simul(object):
         config.set("files", "rx", self.filespaRx)
         config.set("files", "txant", self.fileantTx)
         config.set("files", "rxant", self.fileantRx)
-        #
-        # TBD Theses 2 files should be removed once the section tud and launching
-        # will be read
-        #
         config.set("files", "patra", self.filepatra)
         config.set("files", "palch", self.filepalch)
 
+        #
+        # tud section
+        #
+
         config.add_section("tud")
 
-        config.set("tud", "perc", self.patud.perc)
-        config.set("tud", "nrmax", self.patud.nrmin)
-        config.set("tud", "num", self.patud.nrmax)
+        config.set("tud", "purc", self.patud.purc)
+        config.set("tud", "nrmax", self.patud.nrmax)
+        config.set("tud", "num", self.patud.num)
+
+        #
+        # frequency section
+        #
 
         config.add_section("frequency")
-        config.set("frequency", "fmin", self.freq[0])
-        config.set("frequency", "fmax", self.freq[-1])
-        config.set("frequency", "nf", len(self.freq))
 
-        #fi  = open(filesimul,"w")
-        #fi.write(self.fileconf+'\n')
-        #fi.write(self.filestr+'\n')
-        #fi.write(self.fileslab+'\n')
-        #fi.write(self.filemat+'\n')
-        #fi.write(self.filepalch+'\n')
-        #fi.write(self.filepatra+'\n')
-        #fi.write(self.filefreq+'\n')
-        #fi.write(self.filespaTx+'\n')
-        #fi.write(self.filespaRx+'\n')
-        #fi.write(self.fileantTx+'\n')
-        #fi.write(self.fileantRx+'\n')
+        config.set("frequency", "fGHzmin", self.freq[0])
+        config.set("frequency", "fGHzmax", self.freq[-1])
+        config.set("frequency", "Nf", len(self.freq))
+
         #
-        # parameter for tratotud
-        #  perc  : pecentage of rays
-        #  nrmin : min number of rays
-        #  nrmax : max number of rays
+        # output section 
         #
-        #fi.write(str(self.patud.perc)+'\n')
-        #fi.write(str(self.patud.nrmin)+'\n')
-        #fi.write(str(self.patud.nrmax)+'\n')
-        #fi.write(str(self.progress)+'\n')
+
         if self.progress > 0:
         #filelch exists
             config.add_section("output")
@@ -934,8 +927,8 @@ class Simul(object):
                     fi.write(ffield + '\n')
                     config.set("field", "rx" + str(l + 1), ffield)
         fi.close()
-        config.write(f2)
-        f2.close()
+        config.write(fd)
+        fd.close()
 
     def choose(self):
         """
@@ -943,15 +936,19 @@ class Simul(object):
 
         """
         import tkFileDialog as FD
-        fichsimul = FD.askopenfilename(filetypes=[("Fichiers simul ", "*.simul"), ("All", "*")],
-                                       title="Please choose a simulation file", initialdir=simuldir)
+        fichsimul = FD.askopenfilename(filetypes=[("Fichiers simul ", 
+                                                   "*.simul"),
+                                                  ("All", "*")],
+                                       title="Please choose a simulation file", 
+                                       initialdir=simuldir)
         self.filesimul = pyu.getshort(fichsimul)
         self.load()
 
     def load(self, _filesimul):
         """ load a simulation configuration file
 
-         each transmiter simulation results in the creation of an .ini file with various sections
+         each transmiter simulation results in the creation of an .ini file
+         with the folowing sections
          related to the results obtained for different receivers
 
         Parameters
@@ -968,6 +965,7 @@ class Simul(object):
 
         filetx = self.config.get("files", "tx")
         filerx = self.config.get("files", "rx")
+
         fileanttx = self.config.get("files", "txant")
         fileantrx = self.config.get("files", "rxant")
 
@@ -977,55 +975,42 @@ class Simul(object):
 # Launching and Tracing parameters
 #
 #        self.palch     = Palch(self.config.get("files","palch"))
-#        self.patra     = Patra(self.config.get("files","patra"))
+        self.patra     = Patra(self.config.get("files","patra"))
         #_outfilename = "out"+self.ntx+".ini"
         #self.outfilename = pyu.getlong(_outfilename,"simul")
 #  Load Simulation Mat File
 #
+        self.filemat = self.config.get("files", "mat")
         self.mat = MatDB()
-        self.mat.load(self.config.get("files", "mat"))
+        self.mat.load(self.filemat)
 #
 #  Load Simulation Slab File
 #
+        self.filelab= self.config.get("files", "slab")
         self.sl = SlabDB()
         self.sl.mat = self.mat
-        self.sl.load(self.config.get("files", "slab"))
-#
-        """
-         .. todo::
-
-             Construire un fichier .ini pour mat et slab
-        """
-#
+        self.sl.load(self.fileslab)
 #
 # Load layout from .str or .str2 file
 #
-        _filename = self.config.get("files", "struc")
+        self.filestruc = self.config.get("files", "struc")
         self.L = Layout()
-        ext = _filename.split('.')
-        if ext[1] == 'str':
-            self.L.loadstr(_filename)
-        else:
-            self.L.loadstr2(_filename)
-        #self.L.sl =  self.sl
-#
-#  .. todo::
-#
-#   loadc : Graph is to be removed once a full save of Layout will be available
-#
-#        G = Graph(sl=self.sl,filename=self.config.get("files","struc"))
-#
-#        self.L.loadGr(G)
-
+        self.L.load(self.filestruc,self.filemat,self.fileslab)
 #
 # Frequency base
 #
         if "frequency" in sections:
-            self.freq = np.linspace(float(self.config.get("frequency", "fmin")), float(self.config.get("frequency", "fmax")), float(self.config.get("frequency", "Nf")), endpoint=True)
+            self.freq = np.linspace(float(self.config.get("frequency", "fGHzmin")),
+                                    float(self.config.get("frequency", "fGHzmax")),
+                                    int(self.config.get("frequency", "Nf")),
+                                    endpoint=True)
+
+            # update .freq file in tud directory 
+
             self.filefreq = pyu.getlong("def.freq", "tud")
             fd = open(self.filefreq, "w")
-            chaine = self.config.get("frequency", "fmin") + ' ' +\
-                self.config.get("frequency", "fmax") + ' ' +\
+            chaine = self.config.get("frequency", "fGHzmin") + ' ' + \
+                self.config.get("frequency", "fGHzmax") + ' ' + \
                 self.config.get("frequency", "Nf")
             fd.write(chaine)
             fd.close
@@ -1388,8 +1373,7 @@ class Simul(object):
         return(b1)
 
     def info(self, itx=[], irx=[]):
-        """
-         simulation information
+        """ display simulation information
 
          Parameters
          ----------
@@ -1397,6 +1381,8 @@ class Simul(object):
          irx : Rx index
 
         """
+        print self.filesimul
+        print '------------------------------------------'
         try:
             print "Layout Info : \n", self.L.info()
         except:
@@ -1589,9 +1575,6 @@ class Simul(object):
         GUI
             Boolean
 
-        Examples
-        --------
-
 
         """
         filefreq = self.filefreq
@@ -1604,7 +1587,8 @@ class Simul(object):
         fo.close()
         if GUI == True:
             val = multenterbox('Enter frequency ramp', '',
-                               ('start', 'stop', 'N'), (str(fmin), str(fmax), str(Nf)))
+                               ('start', 'stop', 'N'), 
+                               (str(fmin), str(fmax), str(Nf)))
             fmin = eval(val[0])
             fmax = eval(val[1])
             Nf = eval(val[2])
@@ -1660,24 +1644,28 @@ class Simul(object):
         """
            start the launching program and get the results files
 
-           Parameters
-           ----------
+        Parameters
+        ----------
+        itx : int 
+            transmiter index
 
         """
-        #chaine = "launching -str " + self.filestr + " -slab " + self.fileslab + " -palch " + self.filepalch + " -spa " + self.filespaTx + " -conf "  + self.fileconf
-
         chaine = "launching -str  " + self.config.get("files", "struc") + \
             " -slab " + self.config.get("files", "slab") + \
             " -palch " + self.config.get("files", "palch") + \
             " -spa " + self.filespaTx + \
             " -conf " + self.config.get("files", "conf")
+
         print chaine
+
         self.claunching.append(chaine)
         os.system(chaine)
         aux = os.popen(chaine, "r")
         recup = aux.read()
         aux.close()
+
         print recup
+
         self.recup = recup
         aux = recup.splitlines()
         len_aux = recup.count("\n")
@@ -1732,15 +1720,13 @@ class Simul(object):
             print "No launching available"
 
     def tratotud2(self, itx, irx):
-        """
-         tratotud2(itx,irx)  convert tracing in .tud
+        """ convert tracing in .tud
 
-         l : launching index
+        Parameters
+        ----------
 
-         loop on all file filetra[l][k]
-
-         .. todo::
-            check if the loop cannot be done in C
+         itx : integer 
+         irx : integer 
 
         """
         nrmin = self.config.get("tud", "nrmax")
@@ -1895,11 +1881,7 @@ class Simul(object):
         if (self.progress >= 3):
             filefield = []
             filetauk = []
-            #for k in range(len(self.filetud[l])):
-            #chaine = "evalfield -tud " + self.filetud[l][k] + " -slab " + self.fileslab + \
-            #        " -mat " +  self.filemat +  " -freq " +  self.filefreq +  " -conf "  + self.fileconf
-            # .. todo::
-            #       creer filefreq
+
             chaine = "evalfield -tud " + self.dtud[itx][irx] + \
                      " -slab " + self.config.get("files", "slab") + \
                      " -mat " + self.config.get("files", "mat") + \
@@ -1954,7 +1936,7 @@ class Simul(object):
         """
         run the simulation until a given runlevel
 
-        runlevel 1  : Launching
+        runlevel 1  : launching
         runlevel 2  : tracing
         runlevel 3  : tratotud
         runlevel 4  : field
@@ -2249,8 +2231,9 @@ class Simul(object):
                         self.output[itx].set("rang", str(irx),
                                              self.drang[itx][irx])
                     gt = self.gt(itx, irx)
-                    gt.save(self.dtud[itx][irx], self.dtang[
-                        itx][irx], self.drang[itx][irx])
+                    gt.save(self.dtud[itx][irx], 
+                            self.dtang[itx][irx],
+                            self.drang[itx][irx])
                     fd = open(outfilename, "w")
                     self.output[itx].write(fd)
                     fd.close()
