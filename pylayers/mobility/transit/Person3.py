@@ -1,4 +1,5 @@
 from SimPy.Simulation import Process,Simulation,hold
+import ConfigParser
 #from math import *
 from random import normalvariate,uniform
 from pylayers.mobility.transit.vec3 import vec3
@@ -11,7 +12,8 @@ from pylayers.network.network import Network
 from pylayers.util.utilnet import conv_vecarr
 
 import matplotlib.pylab as plt
-
+from pylayers.util.pymysqldb import Database as DB
+import pylayers.util.pyutil as pyu
 
 import pdb
 # "near collision avoidance" inspired from
@@ -95,8 +97,14 @@ class Person3(Process):
         self.cancelled = 0
         self.net=net
         self.wait=0.0
-
+        
         self.msqlSave=msqlSave
+        if self.msqlSave:
+           config = ConfigParser.ConfigParser()
+           config.read(pyu.getlong('simulnet.ini','ini'))
+           sql_opt = dict(config.items('Mysql'))
+           self.db = DB(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
+
 
     def move(self):
         """
@@ -133,9 +141,12 @@ class Person3(Process):
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position))
                 if self.msqlSave:
-                    print 'implement mysql save into Person3'
-    #               ax.scatter(self.sim.now(),self.acceleration[0])
-    #               plt.draw()
+                    p=conv_vecarr(self.position)
+
+                    self.db.insertitem1("TruePosition",('NodeID','Timestamp','X','Y','Z','ReferencePointID'), (eval(self.ID),self.sim.now(),p[0],p[1],'NULL','NULL'))
+
+
+
                 if self.arrived:
 
                     self.arrived = False
@@ -197,9 +208,7 @@ class Person3(Process):
             else:
                 self.update()
                 self.world.update_boid(self)
-                self.net.update_pos(self.ID,Util.conv_vecarr(self.position))
-                if self.msqlSave:
-                    print 'implement mysql save into Person3'
+                self.net.update_pos(self.ID,conv_vecarr(self.position))
                 yield hold, self, self.interval
 
     def delete(self):

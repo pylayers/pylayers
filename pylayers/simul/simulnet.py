@@ -46,6 +46,7 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.slab import Slab
 from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
+from pylayers.util.pymysqldb import Database as DB
 
 import pdb
 
@@ -64,6 +65,7 @@ class Simul(Simulation):
         self.net_opt = dict(self.config.items('Network'))
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
+        self.sql_opt = dict(self.config.items('Mysql'))
 
     def create_layout(self):
         """
@@ -219,12 +221,14 @@ class Simul(Simulation):
         """ Create the simulation, to be ready to run
 
         """
+
         self.create_layout()
         self.create_EMS()
         self.create_network()
         if str2bool(self.sim_opt['showtk']):
             self.create_visual()
         self.create_show()
+        
 
     def create_show(self):
         plt.ion()
