@@ -1527,9 +1527,7 @@ class Simul(object):
                       ' ' + str(min(iray)) + ' ' + str(max(iray)))
 
     def show3l(self, itx, irx):
-        """
-
-        geomview display of a specific link
+        """ geomview display of a specific link
 
         g = S.show3l(itx,irx)
 
@@ -1559,16 +1557,29 @@ class Simul(object):
             self.rx.save()
         except:
             print('rx set is no defined')
-        filename = pyu.getlong("strucTxRx.off", "geom")
+        _filename = self.filesimul.replace('.ini','.off')
+        filename = pyu.getlong(_filename, "geom")
         fo = open(filename, "w")
         fo.write("LIST\n")
-        fo.write("{<RadioTx.vect}\n")
-        fo.write("{<RadioRx.vect}\n")
-        fo.write("{<struc.off}\n")
+        try:
+            sttx = "{<"+self.tx.filegeom+"}\n"
+        except:
+            sttx = "\n"
+        try:
+            strx = "{<"+self.tx.filegeom+"}\n"
+        except:
+            strx = "\n"
+        try:
+            stst = "{<"+self.L.filegeom+"}\n"
+        except:
+            stst = "\n"
+        fo.write(sttx)
+        fo.write(strx)
+        fo.write(stst)
         fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
         fo.close()
-        chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
-        os.system(chaine)
+        command = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
+        os.system(command)
 
     def freq(self, GUI=False):
         """

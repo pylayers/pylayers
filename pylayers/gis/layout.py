@@ -421,9 +421,16 @@ class Layout(object):
             self.loadstr(_filename,self.filemat,self.fileslab)
         elif ext=='.str2':
             self.loadstr2(_filename,self.filemat,self.fileslab)
+            self.geomfile
         else:
             raise NameError('layout filename extension not recognized')
 
+        #  construct geomfile (.off) for vizalisation with geomview
+
+        try:
+            self.geomfile()
+        except:
+            print "problem to construct geomfile"
 
     def loadstr(self, _filename, _filemat='simul9.mat', _fileslab='simul9.slab'):
         """ loadstr load a .str de PulsRay

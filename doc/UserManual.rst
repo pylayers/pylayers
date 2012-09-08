@@ -4,7 +4,7 @@ UserManual
 .. toctree::
       :maxdepth: 4  
 
-PyRAy is an interactive platform, used for deterministic channel simulation,
+PyLayers is an interactive platform, used for deterministic channel simulation,
 using python and C as programming languages. This tool allows the evaluation of
 the propagation channel conditions, in indoor environment, between radio nodes for
 different antenna directions and waveforms.
@@ -279,14 +279,11 @@ Terminology
         Terms **nodes** and **edges** are used when refering to graph elements of :math:`\mathcal{G}_{x}(\mathcal{V},\mathcal{E})`. 
         Terms **points** and **segments** are used when refering to geometrical object. 
         
-        It is important to stick to this naming convention in order not to introduce  
-        confusion between those closely related concepts.
-
         A `str2` file is a list of points with their coordinates and a list of segments associating 
         those points by pairs. 
 
-        The description of the layout exploits a **non overlaping  rule**, (which ideally should be checked
-        regularly when creating a new layour for not braking the consistency of the associated graph description).
+        The description of the layout exploits a **non overlaping  rule**,
+        (which is checked regularly when creating a new layout for not braking the consistency of the associated graph description).
 
         **Non overlaping rule**:
                 A segment must never has, as a member, a point of the layout which is not one of its extremity.
