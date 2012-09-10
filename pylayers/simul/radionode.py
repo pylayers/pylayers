@@ -51,35 +51,51 @@ class RadioNode(object):
 
     """
 
-    def __init__(self,_fileini='radionode.ini',_fileant='defant.vsh3',typ=0):
+    def __init__(self,typ='undefined',
+                 _fileini='radionode.ini',
+                 _fileant='defant.vsh3',
+                 _filestr='defstr.str2'):
         """
 
-        the _fileini file should be placed in the simul directory of 
-        the project
+        the _fileini file must be placed in the ini directory
 
         Parameters
         ----------
-        _fileini : string
-            file which contains the RadioNode coordinates
-        _fileant : string
+
         typ : int
             0 : undefined
             1 : tx
             2 : rx
-
+        _fileini : string
+            file of RadioNode coordinates
+        _fileant : string
+            file of antenna VSH
+        _filestr : string
+            file of layout structure
+        
         """
         self.position = np.array([], dtype=float)
-        self.position.shape = (3, 0)
+        self.position = np.array([0, 0, 0]).reshape(3, 1)
         self.time = np.array([], dtype=float)
-        self.orientation = np.array([], dtype=float)
-        self.orientation.shape = (3, 3, 0)
-        self.antenneid = 0
+        self.orientation = np.eye(3).reshape(3,3,1)
         self.typ = typ
-        self.N = 0
+        self.N = 1
+        #
+        if _fileini=='radionode.ini':
+            if typ == 'tx':
+                _fileini = _fileini.replace('node','tx')
+            if typ == 'rx':
+                _fileini = _fileini.replace('node','rx')
+            fileini = pyu.getlong(_fileini,'ini')
+            # delete radionode.ini if it exists
+            try:
+                os.remove(fileini)
+            except:
+                pass
         self.fileini = _fileini
         self.filespa = _fileini.replace('.ini','.spa')
         self.filegeom = _fileini.replace('.ini','.vect')
-        self.fileant = _fileant
+        self.filestr = _filestr
         fileini = pyu.getlong(_fileini,'ini')
         # if file _fileini exists it is loaded
         try:
@@ -87,8 +103,15 @@ class RadioNode(object):
             fd.close()
             self.loadini(self.fileini,'ini')
         except:
-            print fileini+' does not exist'
-        self.loadvsh()
+            pass
+        
+        #
+        self.fileant = _fileant
+        try:
+            self.loadvsh()
+        except:
+            raise NameError('antenna file does not exist')
+
         self.save()
 
     def pos2pt(self):
@@ -111,9 +134,13 @@ class RadioNode(object):
         print "filespa    : ", self.filespa
         print "filegeom   : ", self.filegeom
         print "fileant    : ", self.fileant
+        try:
+            print "filestr    : ", self.filestr
+        except:
+            pass
 
-    def points(self, pt = np.array([0, 0, 0])):
-        """ Add a position to RadioNode
+    def points(self, pt = np.array([[0],[0],[0]])):
+        """ add a set of points to RadioNode
 
         Parameters
         ----------
@@ -121,8 +148,10 @@ class RadioNode(object):
              point position (3 x Npt)
 
         """
-        pt = np.array(pt)
+        if type(pt)==list:
+            pt = np.array(pt)
         self.position = pt
+        self.N = np.shape(self.position)[1]
         self.save()
 
     def point(self, pt= [0, 0, 0], time= [1],
@@ -163,7 +192,7 @@ class RadioNode(object):
         orientation = np.reshape(orientation, (3, 3, 1))
         pt = np.array(pt)
         time = np.array(time)
-        pt = np.reshape(pt, (3, 1))
+        pt = np.reshape(pt,(3,1))
 
         if mode == 'subst':
             self.time = time
@@ -348,8 +377,6 @@ class RadioNode(object):
         ----------
            _filespa : short filename
 
-          .. todo::
-              gérer le problème des lignes blanches !!
         """
 
         self.filespa = _filespa
@@ -362,8 +389,8 @@ class RadioNode(object):
             return()
 
         lig = fid.readlines()
-        type = int(lig[0])
-        if type == 0:
+        typ = int(lig[0])
+        if typ == 0:
             nnpt = int(lig[1])
             coord = lig[2:]
             for index in range(len(coord)):
@@ -383,6 +410,8 @@ class RadioNode(object):
         """ save RadioNode in  .ini, .spa, .vect file
 
         This function save the RadioNode in different files
+        .spa  : pulsray format 
+        .vect : geomview format 
 
         """
         _filespa = self.filespa
@@ -397,7 +426,7 @@ class RadioNode(object):
         space.add_section("coordinates")
         npt = np.shape(self.position)[1]
 
-        for k in range(npt): 
+        for k in range(npt):
             x = self.position[0,k]
             y = self.position[1,k]
             z = self.position[2,k]
@@ -407,13 +436,13 @@ class RadioNode(object):
 
         points = space.items("coordinates")
 
-        if self.typ == 0:
+        if self.typ == 'undefined':
             filespa = pyu.getlong(_filespa, 'ini')
             colorname = 'green'
-        elif self.typ == 1:
+        elif self.typ == 'tx':
             filespa = pyu.getlong(_filespa, 'launch')
             colorname = 'red'
-        elif self.typ == 2:
+        elif self.typ == 'rx':
             filespa = pyu.getlong(_filespa, 'trace')
             colorname = 'blue'
 
@@ -422,9 +451,9 @@ class RadioNode(object):
         filename = self.filegeom.replace('.vect','')
         gv = geo.GeomVect(filename)
         try:
-            gv.points(self.points, colorname)
-        except:
             gv.points(self.position, colorname)
+        except:
+            print " no position available "
 
         if _filespa.split('.')[1] == 'spa':
             fi_spa = open(filespa, 'w')
@@ -455,11 +484,7 @@ class RadioNode(object):
 
     def gline(self, mode='subst', display=False):
         """ get a line 
-
         A line is built between the first point 
-
-        
-
         """
         p0 = self.position[:, 0]
         (p1, N1) = eg.pointbox(p0, 10)
@@ -469,7 +494,7 @@ class RadioNode(object):
             self.show3()
 
     def gsurface(self, mode='subst', display=False):
-        """
+        """ get a surface
         gline(mode='subst',display=False)
         """
         p0 = self.position[:, 0]
@@ -482,7 +507,7 @@ class RadioNode(object):
             self.show3()
 
     def gvolume(self, mode='subst', display=False):
-        """
+        """ get a line
         gline(mode='subst',view=0)
         """
         p0 = self.position[:, 0]
@@ -589,28 +614,40 @@ class RadioNode(object):
         #pt =self.position
         #indoor.show([0],[0],pt)
 
-    def show3(self):
+    def show3(self,_filestr='struc.off'):
         """ display RadioNode position in geomview 
+
+        Parameters
+        ----------
+        _filestr : string 
+
         """
         filename = pyu.getlong("strucRN.off", "geom")
-        filegeom = pyu.getlong(self.filegeom, "geom")
         fo = open(filename, "w")
+        filegeom = pyu.getlong(self.filegeom,"geom")
+        # get .off filename from .str or .str2 filename
+        fileoff,ext = os.path.splitext(self.filestr)
+        fileoff = fileoff+'.off'
         fo.write("LIST\n")
-    #       fo.write("{<RadioNode.vect}\n")
-        fo1 = open(filegeom)
-        fo.write(fo1.read())
-        fo.write("\n")
-        fo1.close()
-
-        fo.write("{<struc.off}\n")
+        try:
+            fo.write("{<"+ fileoff+"}\n")
+        except:
+            pass
+        fo.write("{<"+ self.filegeom+"}\n")
         fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
         fo.close()
         chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(chaine)
 
     def move(self, dx, dy, dz):
-        """
-          Move RadioNode with a specified offset over each cartesian axis
+        """ move RadioNode with a specified offset over each cartesian axis
+        
+        Parameters
+        ----------
+        dx : float
+        dy : float
+        dz : float
+
         """
         self.position[0, :] += dx
         self.position[1, :] += dy
@@ -629,11 +666,11 @@ class RadioNode(object):
 
         """
 
-        if self.typ == 0:
+        if self.typ == 'undefined':
             u = RadioNode(self.filestr)
-        elif self.typ == 1:
+        elif self.typ == 'tx':
             u = RadioTx(self.filestr, self.signal)
-        elif self.typ == 2:
+        elif self.typ == 'rx':
             u = RadioRx(self.filestr, self.fc, self.bandwidth, self.NF)
 
         u.position = self.position[:, i]
@@ -646,10 +683,10 @@ class RadioNode(object):
 #
 # Write the RadioNode Coordinate in filespa
 #
-        if self.type != 0:
-            if self.type == 1:
+        if self.typ != 'undefined':
+            if self.typ == 'tx':
                 filespa = pyu.getlong("filespa.spa", "launch")
-            elif self.type == 2:
+            elif self.typ == 'rx':
                 filespa = pyu.getlong("filespa.spa", "trace")
             fi = open(filespa, 'w')
             fi.write("0\n")

@@ -1566,7 +1566,7 @@ class Simul(object):
         except:
             sttx = "\n"
         try:
-            strx = "{<"+self.tx.filegeom+"}\n"
+            strx = "{<"+self.rx.filegeom+"}\n"
         except:
             strx = "\n"
         try:
