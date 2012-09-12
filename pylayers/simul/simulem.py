@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 """
-     This module run the Ray Tracing simulation, it is a connection with PulsRay
+    This module run the Ray Tracing simulation, it is a connection with PulsRay
 """
 import doctest
 import os
@@ -16,14 +16,14 @@ import numpy as np
 import scipy as sp
 import scipy.io as spio
 import matplotlib.pylab as plt
-import struct
-from pylayers.util import easygui
-from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
+import struct as stru
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
 import pylayers.antprop.waveform as wvf
 import pylayers.signal.bsignal as bs
 from pylayers.simul.radionode import RadioNode
+from pylayers.util import easygui
+from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 # Handle Layout
 from pylayers.gis.layout import Layout
 # Handle Rays
@@ -93,7 +93,7 @@ class Palch(object):
         print "maxdeep    : Tree deep max (integer value)  : ", self.maxdeep
         print "typalgo    : Type of algo (default 0)       : ", self.typalgo
 
-    def info(self):
+    def info2(self):
         for i, j in enumerate(self.__dict__.keys()):
             print j, ':', self.__dict__.values()[i]
 
@@ -338,12 +338,15 @@ class Launch(object):
         _filelch = pyu.getshort(filelch)
         self.load(_filelch)
 
-    def load(self, filelch):
-        """
-            load a .lch file
+    def load(self, _filelch):
+        """ load a .lch file
+
+        Parameters
+        ----------
+        _filelch : string 
         """
 
-        filelch = pyu.getlong(filelch, 'launch')
+        filelch = pyu.getlong(_filelch, 'launch')
         fd = open(filelch, "rb")
         data = fd.read()
         fd.close()
@@ -399,16 +402,16 @@ class Launch(object):
         self.node_num = stru.unpack('i', dt)[0]
         node_num = self.node_num
 
-        self.tail = zeros(node_num - 1, dtype='int')
-        self.head = zeros(node_num - 1, dtype='int')
-        self.nstr = zeros(node_num, dtype='int')
-        self.deep = zeros(node_num, dtype='int')
-        self.x = zeros(node_num, dtype='float')
-        self.y = zeros(node_num, dtype='float')
-        self.node_phii = zeros(node_num, dtype='float')
-        self.node_phid = zeros(node_num, dtype='float')
-        self.edge_length = zeros(node_num - 1, dtype='float')
-        self.edge_type = zeros(node_num - 1, dtype='float')
+        self.tail = np.zeros(node_num - 1, dtype='int')
+        self.head = np.zeros(node_num - 1, dtype='int')
+        self.nstr = np.zeros(node_num, dtype='int')
+        self.deep = np.zeros(node_num, dtype='int')
+        self.x = np.zeros(node_num, dtype='float')
+        self.y = np.zeros(node_num, dtype='float')
+        self.node_phii = np.zeros(node_num, dtype='float')
+        self.node_phid = np.zeros(node_num, dtype='float')
+        self.edge_length = np.zeros(node_num - 1, dtype='float')
+        self.edge_type = np.zeros(node_num - 1, dtype='float')
 
         for k in range(node_num - 1):
             start = stop
@@ -661,10 +664,9 @@ class Simul(object):
         self.filespaRx = []
         self.fileantTx = []
         self.fileantRx = []
-        self.filepatra = []
-        self.filepalch = []
-
-        self.patud=Patud()
+        self.filepatra = "def.patra" 
+        self.filepalch = "def.palch"
+        
 
         self.freq = np.linspace(2.4,2.4,1,endpoint=True)
 
@@ -681,7 +683,7 @@ class Simul(object):
         self.claunching = []
         self.ctracing = []
         self.ctratotud = []
-        self.fileconf = []
+        self.fileconf = "project.conf"
         self.cfield = []
         #
         self.dout = {}
@@ -696,6 +698,16 @@ class Simul(object):
 
         self.freq = np.linspace(2, 11, 181)
         self.config = ConfigParser.ConfigParser()
+        self.config.add_section("files")
+        self.config.add_section("tud")
+        self.config.add_section("frequency")
+        self.config.add_section("output")
+        self.config.add_section("launch")
+        self.config.add_section("trace")
+        self.config.add_section("tang")
+        self.config.add_section("rang")
+        self.config.add_section("tauk")
+        self.config.add_section("field")
         try:
             self.load()
         except:
@@ -835,37 +847,50 @@ class Simul(object):
         #
         # files section
         #
-        config.add_section("files")
-        config.set("files", "conf", self.fileconf)
-        config.set("files", "struc", self.filestruc)
-        config.set("files", "slab", self.fileslab)
-        config.set("files", "mat", self.filemat)
-        config.set("files", "tx", self.filespaTx)
-        config.set("files", "rx", self.filespaRx)
-        config.set("files", "txant", self.fileantTx)
-        config.set("files", "rxant", self.fileantRx)
-        config.set("files", "patra", self.filepatra)
-        config.set("files", "palch", self.filepalch)
+        #config.add_section("files")
+        self.config.set("files", "conf", self.fileconf)
+        self.config.set("files", "struc", self.filestr)
+        self.config.set("files", "slab", self.fileslab)
+        self.config.set("files", "mat", self.filemat)
+
+        try:
+            self.config.set("files", "tx", self.tx.filespa)
+        except:
+            pass
+        try:
+            self.config.set("files", "rx", self.rx.filespa)
+        except:
+            pass
+        try:
+            self.config.set("files", "txant", self.tx.fileant)
+        except:
+            pass
+        try:
+            self.config.set("files", "rxant", self.rx.fileant)
+        except:
+            pass
+        self.config.set("files", "patra", self.filepatra)
+        self.config.set("files", "palch", self.filepalch)
 
         #
         # tud section
         #
 
-        config.add_section("tud")
+        #config.add_section("tud")
 
-        config.set("tud", "purc", self.patud.purc)
-        config.set("tud", "nrmax", self.patud.nrmax)
-        config.set("tud", "num", self.patud.num)
+        self.config.set("tud", "purc", self.patud.purc)
+        self.config.set("tud", "nrmax", self.patud.nrmax)
+        self.config.set("tud", "num", self.atud.num)
 
         #
         # frequency section
         #
 
-        config.add_section("frequency")
+        #config.add_section("frequency")
 
-        config.set("frequency", "fghzmin", self.freq[0])
-        config.set("frequency", "fghzmax", self.freq[-1])
-        config.set("frequency", "Nf", len(self.freq))
+        self.config.set("frequency", "fghzmin", self.freq[0])
+        self.config.set("frequency", "fghzmax", self.freq[-1])
+        self.config.set("frequency", "Nf", len(self.freq))
 
         #
         # output section 
@@ -873,56 +898,54 @@ class Simul(object):
 
         #filelch exists
         if self.progress > 0:
-            config.add_section("output")
+            #config.add_section("output")
             for k in range(len(self.filelch)):
                 _fileout = "out" + "???"
                 filename = self.filelch[k]
-                fi.write(filename + '\n')
-                config.set("launch", str(k + 1), filename)
+                self.config.set("launch", str(k + 1), filename)
 
         # filetra exists
         for k in range(len(self.filelch)):
             if self.progress > 1:
-                config.add_section("trace")
+                #self.config.add_section("trace")
                 for l in arange(len(self.filetra[k])):
                     filename = self.filetra[k][l]
-                    fi.write(filename + '\n')
-                    config.set("trace", "rx" + str(l + 1), filename)
+                    self.config.set("trace", "rx" + str(l + 1), filename)
 
         # .tang exists
         # .rang exists
         # .tud exists
             if self.progress > 2:
-                config.add_section("tud")
-                config.add_section("tang")
-                config.add_section("rang")
+                #config.add_section("tud")
+                #config.add_section("tang")
+                #config.add_section("rang")
 
                 for l in arange(len(self.filetud[k])):
                     ftud = self.filetud[k][l]
-                    config.set("tud", "rx" + str(l + 1), ftud)
+                    self.config.set("tud", "rx" + str(l + 1), ftud)
 
                 for l in arange(len(self.filetang[k])):
                     ftang = self.filetang[k][l]
-                    config.set("tang", "rx" + str(l + 1), ftang)
+                    self.config.set("tang", "rx" + str(l + 1), ftang)
 
                 for l in arange(len(self.filerang[k])):
                     frang = self.filerang[k][l]
-                    config.set("rang", "rx" + str(l + 1), frang)
+                    self.config.set("rang", "rx" + str(l + 1), frang)
 
         # .field exist
         # .tauk exist
             if self.progress > 3:
-                config.add_section("tauk")
-                config.add_section("field")
+                #config.add_section("tauk")
+                #config.add_section("field")
                 for l in arange(len(self.filetud[k])):
                     ftauk = self.filetud[k][l]
-                    config.set("tauk", "rx" + str(l + 1), ftauk)
+                    self.config.set("tauk", "rx" + str(l + 1), ftauk)
 
                 for l in arange(len(self.filefield[k])):
                     ffield = self.filefield[k][l]
-                    config.set("field", "rx" + str(l + 1), ffield)
+                    self.config.set("field", "rx" + str(l + 1), ffield)
 
-        config.write(fd)
+        self.config.write(fd)
         fd.close()
 
     def choose(self):
@@ -963,13 +986,15 @@ class Simul(object):
 
         fileanttx = self.config.get("files", "txant")
         fileantrx = self.config.get("files", "rxant")
+        
+        self.filestr = self.config.get("files", "struc")
 
-        self.tx = RadioNode(filetx, fileanttx, 1)
-        self.rx = RadioNode(filerx, fileantrx, 2)
+        self.tx = RadioNode('tx',filetx, fileanttx, self.filestr)
+        self.rx = RadioNode('rx',filerx, fileantrx, self.filestr)
 #
 # Launching and Tracing parameters
 #
-#        self.palch     = Palch(self.config.get("files","palch"))
+        self.palch     = Palch(self.config.get("files","palch"))
         self.patra     = Patra(self.config.get("files","patra"))
         #_outfilename = "out"+self.ntx+".ini"
         #self.outfilename = pyu.getlong(_outfilename,"simul")
@@ -988,7 +1013,6 @@ class Simul(object):
 #
 # Load layout from .str or .str2 file
 #
-        self.filestr = self.config.get("files", "struc")
         self.L = Layout(self.filemat,self.fileslab)
         self.L.load(self.filestr)
 #
@@ -1016,7 +1040,7 @@ class Simul(object):
         if "output" in sections:
             for itx in self.config.options("output"):
                 _filename = self.config.get("output", itx)
-                filename = pyu.getlong(_filename, "simul")
+                filename = pyu.getlong(_filename, "ini")
                 self.dout[int(itx)] = filename
                 output = ConfigParser.ConfigParser()
                 output.read(filename)
@@ -1271,7 +1295,7 @@ class Simul(object):
 
         >>> S = Simul()
         >>> S.load('where2.ini')
-        >>> S.run2(1,[1])
+        >>> S.run(1,[1])
         >>> S.pltcir(1,1,mode='linear',noise=False,color='k')
 
         """
@@ -1620,39 +1644,43 @@ class Simul(object):
 
         Parameters
         ----------
-        k :  launching index
+        k :  int 
+            launching index (default 1) 
+
+        Launching index starts at 1    
+
         """
-        if str(k) in self.dlch.keys():
-            filename = self.dlch[str(k)]
+        if k in self.dlch.keys():
+            filename = self.dlch[k]
             L = Launch()
             L.load(filename)
             return(L)
         else:
             print("Tx not available")
 
-        def gettra(self, itx, irx):
-            """
-             Gtra = S.gettra(itx,irx)
-            """
-            if (itx < self.tx.N) & (irx < self.rx.N):
-                Gtra = GrRay3D()
-                Gtra.load(self.filetra[itx][irx], self.indoor)
-                return Gtra
-            else:
-                print "gettra warning : wrong tx or rx index"
+    def gettra(self, itx, irx):
+        """
+         Gtra = S.gettra(itx,irx)
+        """
+        if (itx < self.tx.N) & (irx < self.rx.N):
+            Gtra = GrRay3D()
+            Gtra.load(self.filetra[itx][irx], self.indoor)
+            return Gtra
+        else:
+            print "gettra warning : wrong tx or rx index"
 
-        def gettud(self, itx, irx):
-            """
-             Gtud = S.gettud(itx,irx)
-            """
-            if (itx < self.tx.N) & (irx < self.rx.N):
-                Gtud = GrRayTud()
-                Gtud.load(self.filetud[itx][irx], self.sl)
-                return Gtud
-            else:
-                print "gettud warning : wrong tx or rx index"
-        #def gettud(self,k,l):
-        #def getfield(self,k,l):
+    def gettud(self, itx, irx):
+        """
+         Gtud = S.gettud(itx,irx)
+        """
+        if (itx < self.tx.N) & (irx < self.rx.N):
+            Gtud = GrRayTud()
+            Gtud.load(self.filetud[itx][irx], self.sl)
+            return Gtud
+        else:
+            print "gettud warning : wrong tx or rx index"
+    #def gettud(self,k,l):
+    #def getfield(self,k,l):
 
     def launching(self, itx=1):
         """
@@ -1667,8 +1695,8 @@ class Simul(object):
         chaine = "launching -str  " + self.config.get("files", "struc") + \
             " -slab " + self.config.get("files", "slab") + \
             " -palch " + self.config.get("files", "palch") + \
-            " -spa " + self.filespaTx + \
-            " -conf " + self.config.get("files", "conf")
+            " -spa " + self.tx.filespa + \
+            " -conf " + basename+'/'+self.config.get("files", "conf")
 
         print chaine
 
@@ -1710,8 +1738,8 @@ class Simul(object):
             #chaine = "tracing -lch " + self.filelch[l] + " -patra " + self.filepatra + " -spa " + self.filespaRx + " -conf "  + self.fileconf
             chaine = "tracing -lch " + self.dlch[itx] + \
                 " -patra " + self.config.get("files", "patra") + \
-                "  -spa " + self.filespaRx + \
-                " -conf " + self.config.get("files", "conf")
+                "  -spa " + self.rx.filespa + \
+                " -conf " + basename+'/'+self.config.get("files", "conf")
             print chaine
             self.ctracing.append(chaine)
             aux = os.popen(chaine, "r")
@@ -1750,7 +1778,7 @@ class Simul(object):
             " -min " + nrmin + \
             " -purc " + purc + \
             " -num " + num +  \
-            " -conf " + self.config.get("files", "conf")
+            " -conf " + basename+'/'+self.config.get("files", "conf")
         self.ctratotud.append(chaine)
         print chaine
         aux = os.popen(chaine, "r")
@@ -1804,9 +1832,9 @@ class Simul(object):
             print self.dtra[itx][irx]
             chaine = "tratotud -tra " + self.dtra[itx][irx] + \
                 " -min " + nrmin + \
-                            " -purc " + purc + \
+                " -purc " + purc + \
                 " -num " + num +  \
-                            " -conf " + self.config.get("files", "conf")
+                " -conf " + basename+'/'+self.config.get("files", "conf")
             self.ctratotud.append(chaine)
             print chaine
             aux = os.popen(chaine, "r")
@@ -1858,7 +1886,7 @@ class Simul(object):
                  " -slab " + self.config.get("files", "slab") + \
                  " -mat " + self.config.get("files", "mat") + \
                  " -freq " + pyu.getshort(self.filefreq) + \
-                 " -conf " + self.config.get("files", "conf")
+                 " -conf " + basename+'/'+self.config.get("files", "conf")
 
         self.cfield.append(chaine)
         print chaine
@@ -1900,7 +1928,7 @@ class Simul(object):
                      " -slab " + self.config.get("files", "slab") + \
                      " -mat " + self.config.get("files", "mat") + \
                      " -freq " + pyu.getshort(self.filefreq) + \
-                     " -conf " + self.config.get("files", "conf")
+                     " -conf " + basename+'/'+self.config.get("files", "conf")
 
             self.cfield.append(chaine)
             print chaine
@@ -1946,199 +1974,10 @@ class Simul(object):
         self.config.write(f2)
         f2.close()
 
-    def run(self, runlevel=5):
-        """
-        run the simulation until a given runlevel
 
-        runlevel 1  : launching
-        runlevel 2  : tracing
-        runlevel 3  : tratotud
-        runlevel 4  : field
-        runlevel 5  : cir
+    def run(self, itx, srx=[], cirforce=True):
+        """ run the simulation for 1 tx and a set of rx
 
-        """
-        t0 = time.clock()
-        if self.progress < 1:
-            #
-            # Analyse le numero de launching a lancer
-            # et construit le fichier spa associé
-            #
-            ltx = self.tx.points.keys()
-            etx = self.dlch.keys()
-            for k in ltx:
-                if str(k) not in etx:
-                    self.ntx = str(k)
-                    break
-            _filename = 'spaTx.spa'
-            self.filespaTx = _filename
-            filename = pyu.getlong(_filename, "launch")
-            fspa = open(filename, "w")
-            fspa.write("0\n")
-            fspa.write("1\n")
-            chaine = str(self.tx.points[k]).replace('[', '').replace(']', '')
-            fspa.write(chaine + "\n")
-            fspa.close()
-            print "---------------"
-            print "Start Launching Tx : ", self.ntx
-            print "---------------"
-            self.launching(self.ntx)
-            t1 = time.clock()
-            print "elapsed ", t1 - t0
-            if "output" not in  self.config.sections():
-                self.config.add_section("output")
-            _outfilename = "out" + self.ntx + ".ini"
-            self.outfilename = pyu.getlong(_outfilename, "simul")
-            self.config.set("output", self.ntx, _outfilename)
-            self.output.add_section("launch")
-            self.output.set("launch", self.ntx, self.dlch[self.ntx])
-            fd = open(self.outfilename, "w")
-            self.output.write(fd)
-            fd.close()
-            self.saveconfig()
-            self.dtra[self.ntx] = {}
-            self.dtud[self.ntx] = {}
-            self.dtang[self.ntx] = {}
-            self.drang[self.ntx] = {}
-            self.dtauk[self.ntx] = {}
-            self.dfield[self.ntx] = {}
-            self.dcir[self.ntx] = {}
-
-        if (self.progress < 2) & (runlevel > 1):
-            #
-            # Analyse les numero de rx a choisir
-            # et construit le fichier spa associé
-            #
-            lrx = self.rx.points.keys()
-            erx = self.dtra[self.ntx].keys()
-            for k in lrx:
-                print "k= ", k
-                print "erx", erx
-                if str(k) not in erx:
-                    self.nrx = str(k)
-                    break
-            _filename = 'spaRx.spa'
-            self.filespaRx = _filename
-            filename = pyu.getlong(_filename, "trace")
-            fspa = open(filename, "w")
-            fspa.write("0\n")
-            fspa.write("1\n")
-            chaine = str(self.tx.points[k]).replace(
-                '[', '').replace(']', '')
-            fspa.write(chaine + "\n")
-            fspa.close()
-            print "     --------------------"
-            print "     Start Tracing  Rx : ", self.nrx
-            print "     --------------------"
-            #self.filetra=[]
-            #for l in range(len(self.filelch)):
-            #    print "launching N° : ",l
-            t2 = time.clock()
-            self.tracing(self.ntx, self.nrx)
-
-            if "trace" not in  self.output.sections():
-                self.output.add_section("trace")
-            self.output.set("trace", self.nrx, self.dtra[self.ntx][self.nrx])
-            fd = open(self.outfilename, "w")
-            self.output.write(fd)
-            fd.close()
-
-            #print "elapsed time",time.clock()-t2
-            #gr = GrRay3D()
-            #for nf in self.filetra[l]:
-            #    gr.load(nf,self.L)
-            #    gr.save(nf)
-
-        if (self.progress < 3) & (runlevel > 2):
-            print "---------------"
-            print "Start Tratotud"
-            print "---------------"
-            #self.filetud=[]
-            #self.filetang=[]
-            #self.filerang=[]
-            #for l in range(len(self.filelch)):
-            print "launching N° : ", self.ntx
-            t3 = time.clock()
-            self.tratotud(self.ntx, self.nrx)
-            if "tud" not in  self.output.sections():
-                self.output.add_section("tud")
-            if "tang" not in  self.output.sections():
-                self.output.add_section("tang")
-            if "rang" not in  self.output.sections():
-                self.output.add_section("rang")
-            self.output.set("tud", self.ntx, self.dtud[self.ntx][self.nrx])
-            self.output.set("tang", self.ntx, self.dtang[self.ntx][self.nrx])
-            self.output.set("rang", self.ntx, self.drang[self.ntx][self.nrx])
-            fd = open(self.outfilename, "w")
-            self.output.write(fd)
-            fd.close()
-            print "elapsed time", time.clock() - t3
-            print "---------------"
-            print "Stop Tratotud"
-            print "---------------"
-        if (self.progress < 4) & (runlevel > 3):
-            print "---------------"
-            print "Start Field"
-            print "---------------"
-            #self.filetauk=[]
-            #self.filefield=[]
-            #for l in range(len(self.filelch)):
-            print "launching N° : ", self.ntx
-            t3 = time.clock()
-            self.field(self.ntx, self.nrx)
-            if "field" not in  self.output.sections():
-                self.output.add_section("field")
-            if "tauk" not in  self.output.sections():
-                self.output.add_section("tauk")
-            self.output.set("field", self.ntx, self.dfield[self.ntx][self.nrx])
-            self.output.set("tauk", self.ntx, self.dtauk[self.ntx][self.nrx])
-            fd = open(self.outfilename, "w")
-            self.output.write(fd)
-            fd.close()
-            print "elapsed time", time.clock() - t3
-            print "---------------"
-            print "Stop Field "
-            print "---------------"
-        if (self.progress < 5) & (runlevel > 4):
-            if "waveform" in self.config.sections():
-                par = self.config.items("waveform")
-                self.wparam = {}
-                for k in range(len(par)):
-                    key = par[k][0]
-                    val = par[k][1]
-                    if key == "band":
-                        self.wparam[key] = float(val)
-                    if key == "fc":
-                        self.wparam[key] = float(val)
-                    if key == "fe":
-                        self.wparam[key] = float(val)
-                    if key == "thresh":
-                        self.wparam[key] = float(val)
-                    if key == "tw":
-                        self.wparam[key] = float(val)
-                    if key == "type":
-                        self.wparam[key] = val
-
-                self.wav = wvf.Waveform(self.wparam)
-                Ntx = self.tx.N
-                Nrx = self.rx.N
-                alpha = np.sqrt(1. / 30.0)
-                # S.CIR(arange(Ntx),arange(Nrx),self.wav,store_level=16+8+4+2+1,alpha=alpha)
-                #stx      = S.dlch.keys()
-                #srx      = S.dtra[stx[0]].keys()
-                #S.CIR(stx,srx,store_level=16+8+4+2+1,alpha=alpha)
-                self.CIR([self.ntx], [self.nrx], store_level=16 +
-                         8 + 4 + 2 + 1, alpha=alpha)
-                if "cir" not in  self.output.sections():
-                    self.output.add_section("cir")
-                #self.output.set("cir",self.ntx,self.dcir[self.ntx][self.nrx])
-            else:
-                raise("Error no waveform in the config file ")
-
-    def run2(self, itx, srx=[], cirforce=True):
-        """
-            run the simulation for 1 tx and a set of rx
-
-            index point start in 1
 
             Parameters
             ----------
@@ -2147,6 +1986,10 @@ class Simul(object):
             srx      : list of rx index
             cirforce : boolean
 
+            Warnings
+            --------
+
+            index point start with 1
 
             Example
             -------
@@ -2156,11 +1999,14 @@ class Simul(object):
             >>> srx = [1,2,3]
             >>> S   = Simul()
             >>> S.load('where2.ini')
-            >>> out = S.run2(itx,srx)
+            >>> out = S.run(itx,srx)
 
 
         """
         #t0 = time.clock()
+        if type(srx)==int:
+            srx =[srx]
+
         if srx == []:
             srx = self.rx.points.keys()
 
@@ -2188,8 +2034,8 @@ class Simul(object):
         else:
             print "launching exists"
 
-        _outfilename = "out" + str(itx) + ".ini"
-        outfilename = pyu.getlong(_outfilename, "simul")
+        _outfilename = self.filesimul.replace('.ini','') + str(itx) + ".ini"
+        outfilename = pyu.getlong(_outfilename, "ini")
         self.config.set("output", str(itx), _outfilename)
         #
         # save output files
@@ -2458,7 +2304,7 @@ if (__name__ == "__main__"):
 #        else:
 #            srx = range(1,len(S.rx.points.keys())+1,1)
 #
-#        S.run2(itx,srx)
+#        S.run(itx,srx)
 #    else:
 #        S.load('where2.ini')
 #   try:

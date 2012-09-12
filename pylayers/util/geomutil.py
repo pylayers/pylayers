@@ -1,4 +1,6 @@
 # -*- coding:Utf-8 -*-
+from pylayers.util import easygui
+from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 #! /usr/bin/python
 # geomutil.py
 """ functions related to geometry

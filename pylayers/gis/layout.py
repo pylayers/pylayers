@@ -849,6 +849,9 @@ class Layout(object):
             self.Gs.add_node(k + 1, ss_zmin=ce[k][3])
             self.Gs.add_node(k + 1, ss_zmax=ce[k][4])
 
+        self.ndnd = nd_nd
+        self.eded = ed_ed
+        self.nded = nd_ed
         #
         # Create connectivity graph Gc
         #   update Gc with nd_nd ed_ed
@@ -874,6 +877,8 @@ class Layout(object):
             nc = kvu[0] + 1
             for l in nc:
                 self.Gc.add_edge(ne, l)
+
+
         self.Gc.pos = pos
         #
         # The numpy format is conserved for acceleration
@@ -1853,8 +1858,8 @@ class Layout(object):
             p2 : (1 x 2 )
             return (seglist , theta)
 
-            >>> L=Layout()
-            >>> L.loadstr('sircut.str','simul9.mat','simul9.slab')
+            >>> L=Layout('simul9.mat','simul9.slab')
+            >>> L.loadstr('sircut.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,3])
             >>> seglist,theta = L.angleonlink(p1,p2)
@@ -3753,6 +3758,7 @@ class Layout(object):
         Examples
         --------
 
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
         >>> p_Tx,p_Rx = L.randTxRx()
