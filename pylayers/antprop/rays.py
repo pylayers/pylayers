@@ -166,7 +166,7 @@ class Interaction(object):
             print "si : ", self.si
             print "sr : ", self.sr
             for i in range(len(self.Mat1)):
-                print self.Mat1[i].name
+                print self.Mat1[i]['name']
         if (self.typ == 2):
             print "theta : ", self.theta
             print "si : ", self.si
@@ -803,8 +803,7 @@ class RayTud(object):
 
 
 class GrRayTud(object):
-    """
-    GrRayTud Class : A cluster of RayTud
+    """  a cluster of Rays in Tud format 
 
     Attributes
     ----------
@@ -1127,19 +1126,19 @@ class GrRayTud(object):
                     #print r1
                     dis = sl.di
                     if s1 == 0:
-                        matl = sl.mat.DB[dim[l1]]
-                        matr = sl.mat.DB[dim[r1]]
+                        matl = sl.mat[dim[l1]]
+                        matr = sl.mat[dim[r1]]
                     else:
-                        matl = sl.mat.DB[dim[r1]]
-                        matr = sl.mat.DB[dim[l1]]
+                        matl = sl.mat[dim[r1]]
+                        matr = sl.mat[dim[l1]]
 
                     inter.Mat1.append(matl)
-                    slab1 = sl.DB[dis[c1]]
-                    for i in range(slab1.nbmat):
-                        im = slab1.imat[i]
-                        th = slab1.thickness[i]
-                        matc = sl.mat.DB[dim[im]]
-                        matc.thick = th       # !!! thick existe plus
+                    slab1 = sl[dis[c1]]
+                    for i in range(slab1['nbmat']):
+                        im = slab1['imat'][i]
+                        th = slab1['thickness'][i]
+                        matc = sl.mat[dim[im]]
+                        #matc.thick = th       # !!! thick existe plus
                         inter.Mat1.append(matc)
 
                     inter.Mat1.append(matr)
@@ -1149,18 +1148,18 @@ class GrRayTud(object):
                 if (caract == 3):
                     inter.Mat2 = []
                     if s2 == 0:
-                        matl = sl.mat.DB[dim[l2]]
-                        matr = sl.mat.DB[dim[r2]]
+                        matl = sl.mat[dim[l2]]
+                        matr = sl.mat[dim[r2]]
                     else:
-                        matl = sl.mat.DB[dim[r2]]
-                        matr = sl.mat.DB[dim[l2]]
+                        matl = sl.mat[dim[r2]]
+                        matr = sl.mat[dim[l2]]
 
                     inter.Mat2.append(matl)
-                    slab2 = sl.DB[dis[c2]]
+                    slab2 = sl[dis[c2]]
                     for i in range(slab2.nbmat):
                         im = slab2.imat[i]
                         th = slab2.thickness[i]
-                        matc = sl.mat.DB[dim[im]]
+                        matc = sl.mat[dim[im]]
                         matc.thick = th
                         inter.Mat2.append(matc)
 

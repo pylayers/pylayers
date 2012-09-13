@@ -201,17 +201,14 @@ class Pafreq(object):
         self.load()
 
     def info(self):
-        """
-           display frequency base information
+        """ display frequency range information
         """
         print "----------------------------------------------"
-        print "    Propagation Channel Frequency Ramp        "
+        print "    Channel frequency range                   "
         print "----------------------------------------------"
         print "fGHz min : ", self.fghzmin
         print "fGHz max : ", self.fghzmax
-        print "Nf : ", self.Nf
-        for i, j in enumerate(self.__dict__.keys()):
-            print j, ':', self.__dict__.values()[i]
+        print "Number of points : ", self.nf
 
     def load(self):
         filefreq = pyu.getlong(self.filename, 'tud')
@@ -220,14 +217,14 @@ class Pafreq(object):
         u = l.split()
         self.fghzmin = eval(u[0])
         self.fghzmax = eval(u[1])
-        self.Nf = eval(u[2])
+        self.nf = eval(u[2])
 
     def save(self):
         filefreq = pyu.getlong(self.filename, 'tud')
         fi = open(filefreq, 'w')
         fi.write(str(self.fghzmin) + ' ')
         fi.write(str(self.fghzmax) + ' ')
-        fi.write(str(self.Nfp) + '\n')
+        fi.write(str(self.nf) + '\n')
         fi.close()
 
     def gui(self):
@@ -237,12 +234,12 @@ class Pafreq(object):
         pafreqgui = multenterbox('', 'Propagation Channel frequency ',
                                  ('fp_min (GHz) ',
                                   'fp_max (GHz) ',
-                                  'Nfp  '),
-                                 (self.fp_minGHz, self.fp_maxGHz, self.Nfp))
+                                  'nfp  '),
+                                 (self.fghzmin, self.fghzmax, self.nf))
         if pafreqgui is not None:
-            self.fp_minGHz = eval(pafreqgui[0])
-            self.fp_maxGHz = eval(pafreqgui[1])
-            self.Nfp = eval(pafreqgui[2])
+            self.fghzmin = eval(pafreqgui[0])
+            self.fghzmax = eval(pafreqgui[1])
+            self.nf = eval(pafreqgui[2])
             self.save()
 
 
@@ -656,7 +653,7 @@ class Simul(object):
     .. todo::
         migrer vers importations propres
     """
-    def __init__(self, _filesimul='SimulDefault.ini'):
+    def __init__(self, _filesimul='default.ini'):
 
         self.filesimul = _filesimul
         self.filemat = []
@@ -667,10 +664,12 @@ class Simul(object):
         self.fileantRx = "defant.vsh3"
         self.filepatra = "def.patra"
         self.filepalch = "def.palch"
+        self.filefreq = "def.freq"
         self.patud = Patud()
         self.palch = Palch(self.filepalch)
         self.patra = Patra(self.filepatra)
         self.freq  = np.linspace(2.4,2.4,1,endpoint=True)
+        self.pafreq = Pafreq(self.filefreq)
 
         self.progress = -1  # simulation not loaded
         self.filelch = []
@@ -1074,8 +1073,8 @@ class Simul(object):
 
             # update .freq file in tud directory 
 
-            self.filefreq = pyu.getlong("def.freq", "tud")
-            fd = open(self.filefreq, "w")
+            filefreq = pyu.getlong(self.filefreq, "tud")
+            fd = open(filefreq, "w")
             chaine = self.config.get("frequency", "fghzmin") + ' ' + \
                 self.config.get("frequency", "fghzmax") + ' ' + \
                 self.config.get("frequency", "nf")
@@ -1796,7 +1795,7 @@ class Simul(object):
         # append output filename in section output 
         #
         _outfilename = self.filesimul.replace('.ini','') + str(itx) + ".ini"
-        outfilename = pyu.getlong(_outfilename, "trace")
+        outfilename = pyu.getlong(_outfilename, "launch")
         self.config.set("output", str(itx), _outfilename)
 
         fd = open(outfilename, "w")
@@ -1845,7 +1844,7 @@ class Simul(object):
             print "No launching available"
 
         _outfilename = self.config.get('output',str(itx))
-        outfilename = pyu.getlong(_outfilename,'trace') 
+        outfilename = pyu.getlong(_outfilename,'launch') 
         if irx in self.dtra[itx].keys():
             self.output[itx].set("trace", str(irx), self.dtra[itx][irx])
             fd = open(outfilename, "w")
@@ -1876,7 +1875,6 @@ class Simul(object):
         os.system('echo $?')
         recup = aux.read()
         aux.close()
-    #   self.recup=recup
         aux = recup.splitlines()
         print aux
         len_aux = recup.count("\n")
@@ -1896,6 +1894,21 @@ class Simul(object):
                 filename = pyu.getshort(aux[i])
                 print filename
                 self.drang[itx][irx] = filename
+
+        _outfilename = self.config.get('output',str(itx))
+        outfilename = pyu.getlong(_outfilename,'launch') 
+        if irx in self.dtud[itx].keys():
+            self.output[itx].set("tud", str(irx), self.dtud[itx][irx])
+        if irx in self.dtang[itx].keys():
+            self.output[itx].set("tang", str(irx), self.dtang[itx][irx])
+        if irx in self.drang[itx].keys():
+            self.output[itx].set("rang", str(irx), self.drang[itx][irx])
+        fd = open(outfilename, "w")
+        try:
+            self.output[itx].write(fd)
+        except:
+            raise NameError('error writing output ini file')
+        fd.close()
 
     def tratotud(self, itx, irx):
         """
@@ -1976,7 +1989,7 @@ class Simul(object):
         chaine = "evalfield -tud " + self.dtud[itx][irx] + \
                  " -slab " + self.config.get("files", "slab") + \
                  " -mat " + self.config.get("files", "mat") + \
-                 " -freq " + pyu.getshort(self.filefreq) + \
+                 " -freq " + self.filefreq + \
                  " -conf " + basename+'/'+self.config.get("files", "conf")
 
         self.cfield.append(chaine)
@@ -2111,18 +2124,7 @@ class Simul(object):
                 print "--------------------"
                 print "Start Tracing  Rx : " + str(irx)
                 print "--------------------"
-                self.tracing(itx, irx)
-                if irx in self.dtra[itx].keys():
-                    if "trace" not in  self.output[itx].sections():
-                        self.output[itx].add_section("trace")
-                    self.output[itx].set("trace", str(
-                        irx), self.dtra[itx][irx])
-                    fd = open(outfilename, "w")
-                    self.output[itx].write(fd)
-                    fd.close()
-                else:
-                    print 'Erreur dans tracing ', irx
-                    tracingabort = True
+                tracingabort = self.tracing(itx, irx)
 
             if not tracingabort:
                 if irx not in self.dtud[itx].keys():
@@ -2130,28 +2132,6 @@ class Simul(object):
                     print "Start Tratotud ", irx
                     print "---------------"
                     self.tratotud2(itx, irx)
-                    if "tud" not in  self.output[itx].sections():
-                        self.output[itx].add_section("tud")
-                    if "tang" not in  self.output[itx].sections():
-                        self.output[itx].add_section("tang")
-                    if "rang" not in  self.output[itx].sections():
-                        self.output[itx].add_section("rang")
-                    if irx in self.dtud[itx].keys():
-                        self.output[itx].set("tud", str(
-                            irx), self.dtud[itx][irx])
-                    if irx in self.dtang[itx].keys():
-                        self.output[itx].set("tang", str(irx),
-                                             self.dtang[itx][irx])
-                    if irx in self.drang[itx].keys():
-                        self.output[itx].set("rang", str(irx),
-                                             self.drang[itx][irx])
-                    gt = self.gt(itx, irx)
-                    gt.save(self.dtud[itx][irx], 
-                            self.dtang[itx][irx],
-                            self.drang[itx][irx])
-                    fd = open(outfilename, "w")
-                    self.output[itx].write(fd)
-                    fd.close()
                 if irx not in self.dfield[itx].keys():
                     print "---------------"
                     print "Start Field  ", irx
