@@ -2312,6 +2312,10 @@ class Layout(object):
 
         display parameters are defined in  L.display dictionnary
 
+        Returns
+        -------
+        fig,ax 
+
         """
 
         if not isinstance(ax, plt.Axes):

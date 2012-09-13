@@ -932,12 +932,12 @@ def displot(pt, ph, col='black'):
         >>> pt  = sp.rand(2,N)
         >>> ph  = sp.rand(2,N)
         >>> f,a = displot(pt,ph)
-        >>> plt.title('plot 10 random segments')
-        >>> plt.savefig('displot.png')
+        >>> plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
+        >>> plt.savefig('../../doc/auto_examples/util/displot.png')
 
     """
     fig = plt.gcf()
-    ax = fig.gca()
+    ax  = fig.gca()
     Nseg = np.shape(pt)[1]
     pz = np.empty((2,))
     pn = np.zeros((2,))
