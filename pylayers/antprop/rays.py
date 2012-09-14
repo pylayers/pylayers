@@ -5,19 +5,19 @@ import os
 import pdb
 import glob
 import doctest
-import numpy as np 
-import scipy as sp 
-import matplotlib.pyplot as plt 
-import struct as stru 
+import numpy as np
+import scipy as sp
+import matplotlib.pyplot as plt
+import struct as stru
 #from math import *
 #from Indoor import *
 import pylayers.util.geomutil as geu
-import pylayers.util.pyutil as pyu 
+import pylayers.util.pyutil as pyu
 from   pylayers.util.project import *
 import pylayers.antprop.slab as slab
 #
 #  This file contains
-#   
+#
 #       class Interaction
 #           info
 #           class IntB(Interaction)
@@ -98,10 +98,11 @@ import pylayers.antprop.slab as slab
 #        #elif (typ==2):
 #        #elif (typ==3):
 
+
 class Interaction(object):
     """ Interaction parameters
 
-    Notes 
+    Notes
     -----
     This class contains all the informations about a given Interaction
 
@@ -136,48 +137,48 @@ class Interaction(object):
     info()
 
     """
-    def __init__(self,typ=0):
+    def __init__(self, typ=0):
         self.typ = typ
 
     def info(self):
-        if (self.typ==-1):
+        if (self.typ == -1):
             print "local basis"
             print "---"
-        if (self.typ==0):
+        if (self.typ == 0):
             print "LOS"
             print "---"
-        if (self.typ==1):
+        if (self.typ == 1):
             print "Reflexion"
             print "---"
-        if (self.typ==2):
+        if (self.typ == 2):
             print "Transmission"
             print "---"
-        if (self.typ==3):
+        if (self.typ == 3):
             print "Diffraction"
             print "---"
 
-        if (self.typ==-1):
-            print "M : ",self.M
-        if (self.typ==0):
-             print "dist : ",self.dist
-        if (self.typ==1):
-            print "theta : ",self.theta
-            print "si : ",self.si
-            print "sr : ",self.sr
+        if (self.typ == -1):
+            print "M : ", self.M
+        if (self.typ == 0):
+            print "dist : ", self.dist
+        if (self.typ == 1):
+            print "theta : ", self.theta
+            print "si : ", self.si
+            print "sr : ", self.sr
             for i in range(len(self.Mat1)):
-                print self.Mat1[i].name
-        if (self.typ==2):
-            print "theta : ",self.theta
-            print "si : ",self.si
-            print "st : ",self.st
-        if (self.typ==3):
-            print "theta ",self.theta
-            print "thetad ",self.thetad
-            print "self.si ",self.si
-            print "self.sd ",self.sd
-            print "self.beta ",self.beta
-            print "self.N ",self.N
-            print "self.typed ",self.typed
+                print self.Mat1[i]['name']
+        if (self.typ == 2):
+            print "theta : ", self.theta
+            print "si : ", self.si
+            print "st : ", self.st
+        if (self.typ == 3):
+            print "theta ", self.theta
+            print "thetad ", self.thetad
+            print "self.si ", self.si
+            print "self.sd ", self.sd
+            print "self.beta ", self.beta
+            print "self.N ", self.N
+            print "self.typed ", self.typed
 
 
 #        print "Mat1 : left  <=> Mav1    : ",self.Mat[0]
@@ -194,92 +195,96 @@ class IntB(Interaction):
 
     Notes
     ------
-    
+
     """
-    def __init__(self,typ,M):
-        Interaction.__init__(self,typ)
+    def __init__(self, typ, M):
+        Interaction.__init__(self, typ)
         self.M = M
 
-    def eval(self,fGHz):
-        """ evaluate interaction 
+    def eval(self, fGHz):
+        """ evaluate interaction
 
         Parameters
         ----------
-        fGHz :  float 
+        fGHz :  float
 
         Notes
         -----
-        repeat the M matrix along the frequency axis (axis = 0 ) 
+        repeat the M matrix along the frequency axis (axis = 0 )
 
-        .. todo::  consider using broadcasting 
+        .. todo::  consider using broadcasting
         """
 
-        nf  = len(fGHz)
-        Co  = np.array([self.M])
-        return(Co.repeat(nf,axis=0))
+        nf = len(fGHz)
+        Co = np.array([self.M])
+        return(Co.repeat(nf, axis=0))
+
 
 class IntL(Interaction):
     """ LOS interaction class
 
 
     """
-    def __init__(self,typ,dist):
-        Interaction.__init__(self,typ)
+    def __init__(self, typ, dist):
+        Interaction.__init__(self, typ)
         self.dist = dist
 
-    def eval(self,f):
-        nf  = len(f)
-        Co  = np.array(np.zeros([nf,2,2]),dtype=complex)
-        div = 1.0/self.dist
-        Co[:,0,0] = div
-        Co[:,1,1] = div
+    def eval(self, f):
+        nf = len(f)
+        Co = np.array(np.zeros([nf, 2, 2]), dtype=complex)
+        div = 1.0 / self.dist
+        Co[:, 0, 0] = div
+        Co[:, 1, 1] = div
         return(Co)
+
 
 class IntR(Interaction):
     """ Reflexion interaction class
     """
-    def __init__(self,typ,data):
-        Interaction.__init__(self,typ)
+    def __init__(self, typ, data):
+        Interaction.__init__(self, typ)
         self.theta = data[0]
-        self.si    = data[1]
-        self.sr    = data[2]
+        self.si = data[1]
+        self.sr = data[2]
 
-    def eval(self,fGHz): 
+    def eval(self, fGHz):
         """
-        .. todo:: Reflexion interaction is not implemented yet  
-        
+        .. todo:: Reflexion interaction is not implemented yet
+
         Parameters
         ----------
         fGHz : float
             frequency in GHz
 
         """
-        div   = np.sqrt((ro1*ro2)/((dr+ro1)*(dr+ro2)))
-        si    = self.si
-        sr    = self.sr
+        div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
+        si = self.si
+        sr = self.sr
         theta = self.theta
+
 
 class IntT(Interaction):
     """ Transmission  interaction class
     """
-    def __init__(self,typ,data):
-        Interaction.__init__(self,typ)
+    def __init__(self, typ, data):
+        Interaction.__init__(self, typ)
         self.theta = data[0]
-        self.si    = data[1]
-        self.st    = data[2]
+        self.si = data[1]
+        self.st = data[2]
+
 
 class IntD(Interaction):
     """ Diffraction interaction class
     """
-    def __init__(self,typ,data1,data2):
-        Interaction.__init__(self,typ)
-        self.theta  =  data1[0]
-        self.thetad =  data1[1]
-        self.si     =  data1[2]
-        self.sd     =  data1[3]
-        self.beta   =  data1[4]
-        self.N      =  data1[5]
-        self.typed  =  data2[0]
+    def __init__(self, typ, data1, data2):
+        Interaction.__init__(self, typ)
+        self.theta = data1[0]
+        self.thetad = data1[1]
+        self.si = data1[2]
+        self.sd = data1[3]
+        self.beta = data1[4]
+        self.N = data1[5]
+        self.typed = data2[0]
 
 #    def eval(self,freq):
 #        """
@@ -288,21 +293,21 @@ class IntD(Interaction):
 #        typ=self.inpara[0]
 #        if (typ==-1):
 #            self.Ci=intpara[1]
-#    
+#
 #        elif (typ==0):
 #            dist = self.intpara[1]
 #            self.Ci=eye(2)/dist
-#    
+#
 #        elif (typ==1):
 #            theta = self.intpara[1]
 #            Si    = self.intpara[2]
 #            Sr    = self.intpara[3]
-#    
+#
 #        elif (typ==2):
 #            theta = self.intpara[1]
 #            Si    = self.intpara[2]
 #            St    = self.intpara[3]
-#    
+#
 #        elif (typ==3):
 #            theta = self.intpara[1]
 #            thetad = self.intpara[2]
@@ -311,41 +316,45 @@ class IntD(Interaction):
 #            beta0 = self.intpara[5]
 #            n = self.intpara[6]
 #            typd = self.intpara[7]
+
+
 class Ray2D(object):
     """ 2D Ray class
 
     Attributes
     ----------
-    nn      : 
+    nn      :
         number of nodes (number of interactions + 2)
-    pt      : 
+    pt      :
         point coordinates
-    signature   : 
+    signature   :
         (new name for nstr)
     """
     def __init__(self):
         pass
-    def eval(self,L,signature):
+
+    def eval(self, L, signature):
         pass
+
 
 class Ray3D(object):
     """ Ray3D class
 
-    This class handles a 3D ray 
+    This class handles a 3D ray
 
-    Attributes 
+    Attributes
     ----------
     nn      : int
         number of nodes (number of interaction + 2)
-    pt      : np.array 
+    pt      : np.array
         point coordinates
     nstr    : element of a signature
         structure number (>0 edge) (<0 node) (0 Tx or Rx)
-    deep    : int 
+    deep    : int
     beta0   : float
     phii    : float
-    phid    : float 
-    length  : float 
+    phid    : float
+    length  : float
     Bi   : interaction input basis    shape=( nn,3,3)
     Bo   : intercation output basis   shape=( nn,3,3)
 
@@ -366,7 +375,7 @@ class Ray3D(object):
     def info(self):
         """ info
         """
-        print "Number of nodes : "+str(self.nn)
+        print "Number of nodes : " + str(self.nn)
         print "points : "
         print self.pt.transpose()
         print "nstr   : "
@@ -376,13 +385,13 @@ class Ray3D(object):
         print "B out    : "
         print self.Bo
         print "AOD : "
-        print "thetat (deg)   : " + str(self.tht*180/np.pi)
-        print "phit   (deg)   : " + str(self.pht*180/np.pi)
+        print "thetat (deg)   : " + str(self.tht * 180 / np.pi)
+        print "phit   (deg)   : " + str(self.pht * 180 / np.pi)
         print "AOA : "
-        print "thetar (deg)   : " + str(self.thr*180/np.pi)
-        print "phir   (deg)   : " + str(self.phr*180/np.pi)
-    
-    def locbas(self,L):
+        print "thetar (deg)   : " + str(self.thr * 180 / np.pi)
+        print "phir   (deg)   : " + str(self.phr * 180 / np.pi)
+
+    def locbas(self, L):
         """ evaluation of local basis over the ray
 
         Parameters
@@ -393,9 +402,9 @@ class Ray3D(object):
         -----
             evaluate Bi and Bo
         """
-        
-        # initialize RayTud 
-        self.gt       = RayTud()
+
+        # initialize RayTud
+        self.gt = RayTud()
         self.gt.inter = []
 
         nn = self.nn
@@ -407,13 +416,13 @@ class Ray3D(object):
         #
         # Calcul des vecteurs unitaires si
         # .. todo:: remove this for loop
-        #   not tested 
+        #   not tested
 
-        v   = self.pt[1:,:]-self.pt[0:-1,:]
-        lsi = np.sqrt(np.sum(v*v,axis=1))
-        # reshape is required for broadcasting 
-        lsir = lsi.reshape(nn-1,1)   
-        si   = v/lsir
+        v = self.pt[1:, :] - self.pt[0:-1, :]
+        lsi = np.sqrt(np.sum(v * v, axis=1))
+        # reshape is required for broadcasting
+        lsir = lsi.reshape(nn - 1, 1)
+        si = v / lsir
         #for k in range(nn-1):
         #    v  = self.pt[k+1,:]-self.pt[k,:]
         #    nv = np.sqrt(np.dot(v,v))
@@ -423,41 +432,43 @@ class Ray3D(object):
         #    except:
         #        print("error divide by 0 in Ray3D.geom ")
 
-        self.Bi = np.array(np.zeros([nn-1,3,3],dtype=np.float64))
-        self.Bo = np.array(np.zeros([nn-1,3,3],dtype=np.float64))
+        self.Bi = np.array(np.zeros([nn - 1, 3, 3], dtype=np.float64))
+        self.Bo = np.array(np.zeros([nn - 1, 3, 3], dtype=np.float64))
 
-        nint = nn -2
+        nint = nn - 2
 
         #
         # Repere de sortie du Tx
         #
 
-        BoO = np.array(np.zeros([3,3]))
-        th  = np.arccos(si[0,2])
-        ph  = np.arctan2(si[0,1],si[0,0])
-        eth = np.array([np.cos(th)*np.cos(ph),np.cos(th)*np.sin(ph),-np.sin(th)])
-        eph = np.array([-np.sin(ph),np.cos(ph),0.0])
-        Bo0 = np.array([si[0,:],eth,eph]).transpose()
+        BoO = np.array(np.zeros([3, 3]))
+        th = np.arccos(si[0, 2])
+        ph = np.arctan2(si[0, 1], si[0, 0])
+        eth = np.array([np.cos(
+            th) * np.cos(ph), np.cos(th) * np.sin(ph), -np.sin(th)])
+        eph = np.array([-np.sin(ph), np.cos(ph), 0.0])
+        Bo0 = np.array([si[0, :], eth, eph]).transpose()
 
-        self.Bo[0,:,:] = Bo0 
+        self.Bo[0, :, :] = Bo0
         #
         # Ray AOD
         #
-        self.tht  = th
-        self.pht  = ph
+        self.tht = th
+        self.pht = ph
         #
         # Repere d'entree du Rx
         #
         # On impose que le vecteur unitaire d'entree sur
         # le recepteur soit confondu avec le vecteur unitaire
         # de sortie de la derniere interaction
-        #   
-        th  = np.arccos(si[nn-2,2])
-        ph  = np.arctan2(si[nn-2,1],si[nn-2,0])
-        eth = np.array([np.cos(th)*np.cos(ph),np.cos(th)*np.sin(ph),-np.sin(th)])
-        eph = np.array([-np.sin(ph),np.cos(ph),0.0])
-        Bini   = np.array([si[nn-2,:],eth,eph]).transpose()
-        self.Bi[nint,:,:] = Bini
+        #
+        th = np.arccos(si[nn - 2, 2])
+        ph = np.arctan2(si[nn - 2, 1], si[nn - 2, 0])
+        eth = np.array([np.cos(
+            th) * np.cos(ph), np.cos(th) * np.sin(ph), -np.sin(th)])
+        eph = np.array([-np.sin(ph), np.cos(ph), 0.0])
+        Bini = np.array([si[nn - 2, :], eth, eph]).transpose()
+        self.Bi[nint, :, :] = Bini
         #
         # Ray AOA
         #
@@ -467,164 +478,164 @@ class Ray3D(object):
         # loop over the nn-2 interactions
         #
 
-        for l in range(nn-2):
-            typ  = self.etype[l+1]
-            nstr = self.nstr[l+1]
-            
+        for l in range(nn - 2):
+            typ = self.etype[l + 1]
+            nstr = self.nstr[l + 1]
+
             #
             # Retrieve the interaction vector
             #   normal (R or T) or edge direction (D)
             #
-            if nstr>0:
-                # if wall 
-                if nstr<=L.Ne:
+            if nstr > 0:
+                # if wall
+                if nstr <= L.Ne:
                     vn = L.Gs.node[nstr]['norm']
-                else: # if ceil or floor 
-                    if nstr==L.Ne+1:
+                else:  # if ceil or floor
+                    if nstr == L.Ne + 1:
                         # ceil
-                        vn = np.array([0.,0.,-1.0])
-                    if nstr==L.Ne+2:
+                        vn = np.array([0., 0., -1.0])
+                    if nstr == L.Ne + 2:
                         # floor
-                        vn = np.array([0.,0.,1.0])
-            else: #diffaction 
-                 vn = np.array([0.,0.,-1.0])
-            
+                        vn = np.array([0., 0., 1.0])
+            else:  # diffaction
+                vn = np.array([0., 0., -1.0])
+
             # .. todo:: regler le proble de nstr sur rayon 358 : sircut.str
-            #try: 
+            #try:
             #    ps = np.dot(vn,si[l,:])
             #except:
-            #    pdb.set_trace() 
+            #    pdb.set_trace()
             #
-            ps = np.dot(vn,si[l,:])
-            # Si Reflexion ou Transmission inversion signe normale si.n <0 
+            ps = np.dot(vn, si[l, :])
+            # Si Reflexion ou Transmission inversion signe normale si.n <0
             #
-            if (( typ==1) | (typ==2 )):
-                if (ps<0):
-                    vn=-1.0*vn
-            #   
+            if ((typ == 1) | (typ == 2)):
+                if (ps < 0):
+                    vn = -1.0 * vn
+            #
             # Si si et n sont colineaires, le plan d'incidence n'est pas defini
             #
-            if (abs(ps)>1-1e-7):
-                self.Bi[l+1,:]=self.Bo[l,:]
+            if (abs(ps) > 1 - 1e-7):
+                self.Bi[l + 1, :] = self.Bo[l, :]
             else:
-                s_in = si[l,:]
-                w = geu.pvecn(s_in,vn)
-                v = np.cross(w,s_in)
-                M = np.array([s_in,v,w]).transpose()
-                self.Bi[l,:,:]=M
-                s_out = si[l+1,:]
-                w  = geu.pvecn(s_out,vn)
-                v  = np.cross(w,s_out)
-                M  = np.array([s_out,v,w]).transpose()
-                self.Bo[l+1,:,:]=M
+                s_in = si[l, :]
+                w = geu.pvecn(s_in, vn)
+                v = np.cross(w, s_in)
+                M = np.array([s_in, v, w]).transpose()
+                self.Bi[l, :, :] = M
+                s_out = si[l + 1, :]
+                w = geu.pvecn(s_out, vn)
+                v = np.cross(w, s_out)
+                M = np.array([s_out, v, w]).transpose()
+                self.Bo[l + 1, :, :] = M
             #
-            # Create interaction 
+            # Create interaction
             # see GetRayonPram de tratotud.c
             #
-            if typ==1: # Reflexion 
+            if typ == 1:  # Reflexion
                 #theta  = np.arccos(abs(ps))  'validated'
-                theta  = self.phii[l+1]
-                siR    = lsi[l]
-                srR    = lsi[l+1]
-                I      = IntR(typ,[theta,siR,srR])
-            if typ==2: # Transmission 
+                theta = self.phii[l + 1]
+                siR = lsi[l]
+                srR = lsi[l + 1]
+                I = IntR(typ, [theta, siR, srR])
+            if typ == 2:  # Transmission
                 #theta  = np.arccos(abs(ps))  'validated'
-                theta  = self.phii[l+1]
-                siT    = lsi[l]
-                srT    = lsi[l+1]
-                I = IntT(typ,[theta,siT,srT])
-            if typ==3: # Diffraction 
-                theta  =  self.phii[l+1]  
-                thetad =  self.phid[l+1]
-                siD    =  lsi[l]
-                sdD    =  lsi[l+1]
-                beta   =  self.beta0[l+1]
+                theta = self.phii[l + 1]
+                siT = lsi[l]
+                srT = lsi[l + 1]
+                I = IntT(typ, [theta, siT, srT])
+            if typ == 3:  # Diffraction
+                theta = self.phii[l + 1]
+                thetad = self.phid[l + 1]
+                siD = lsi[l]
+                sdD = lsi[l + 1]
+                beta = self.beta0[l + 1]
                 #
-                # Attributes for nst <0 of L.Gs 
+                # Attributes for nst <0 of L.Gs
                 #
-                N      =  0
-                typed  =  0
-                I = IntD(typ,[theta,thetad,siD,sdD,beta,N],[typed])
-            # 
+                N = 0
+                typed = 0
+                I = IntD(typ, [theta, thetad, siD, sdD, beta, N], [typed])
+            #
             # add a new interaction in raytud object
             #
             self.gt.inter.append(I)
         #
-        # Insert rotation matrices between interaction 
+        # Insert rotation matrices between interaction
         #
         # M = np.zeros((nn-1,2,2))
         #gt.inter.append(I=[)
-        for k in range(nn-1):
-            M = np.dot(self.Bo[k,:,1::].T,self.Bi[k,:,1::])
-            I = IntB(-1,M)
-            self.gt.inter.insert(2*k,I)
+        for k in range(nn - 1):
+            M = np.dot(self.Bo[k, :, 1::].T, self.Bi[k, :, 1::])
+            I = IntB(-1, M)
+            self.gt.inter.insert(2 * k, I)
             #M[k,:,:] = np.dot(self.Bo[k,:,1::].T,self.Bi[k,:,1::])
 
-        self.gt.ni = 2*nn - 3 
+        self.gt.ni = 2 * nn - 3
     #def show3(self,bdis=True,bbas=False,col=np.array([1,0,1]),id=0):
+
     def delay(self):
-        """ delay 
+        """ delay
 
         Returns
         -------
 
-        delay : float 
-            delay in ns for each segment of the ray  
+        delay : float
+            delay in ns for each segment of the ray
 
         """
-        pt = self.pt[0:-1,:].T
-        ph = self.pt[1::,:].T
-        d  = pt-ph
-        d2 = d*d
-        delay = sum(np.sqrt(sum(d*d,axis=0))/0.3)
+        pt = self.pt[0:-1, :].T
+        ph = self.pt[1::, :].T
+        d = pt - ph
+        d2 = d * d
+        delay = sum(np.sqrt(sum(d * d, axis=0)) / 0.3)
         return(delay)
 
-    def show(self,ax,col='b',node=False):
+    def show(self, ax, col='b', node=False):
         """
         show(ax,vol='b')
         show a Ray projection in 2D
 
         """
-        Nseg = self.nn-1
-        pt = self.pt[0:-1,0:2].T
-        ph = self.pt[1::,0:2].T
+        Nseg = self.nn - 1
+        pt = self.pt[0:-1, 0:2].T
+        ph = self.pt[1::, 0:2].T
         pz = np.empty((2,))
         pn = np.zeros((2,))
         for i in range(Nseg):
-            pz = np.vstack((pz,pt[:,i],ph[:,i],pn))
-        m1 = np.array([0,0,1])
-        mask = np.kron(np.ones((2,Nseg)),m1)
-        pzz = pz[1:,:].T
-        vertices = np.ma.masked_array(pzz,mask)
-        ax.plot(vertices[0,:],vertices[1,:],color=col)
+            pz = np.vstack((pz, pt[:, i], ph[:, i], pn))
+        m1 = np.array([0, 0, 1])
+        mask = np.kron(np.ones((2, Nseg)), m1)
+        pzz = pz[1:, :].T
+        vertices = np.ma.masked_array(pzz, mask)
+        ax.plot(vertices[0, :], vertices[1, :], color=col)
         if node:
-            ax.plot(self.pt[:,0],self.pt[:,1],'ok')
+            ax.plot(self.pt[:, 0], self.pt[:, 1], 'ok')
 
-
-    def show3(self,bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0,linewidth=1):
+    def show3(self, bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
         """ show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
 
         Parameters
         ----------
 
-        bdis : 
+        bdis :
             display boolean - if False return .vect filename
         bbas :
             display local basis
         bstruc :
             display structure
-        col  : 
+        col  :
             color of the ray
-        id   : 
+        id   :
             id of the ray
         linewidth :
         """
-        filerac   = pyu.getlong("ray"+str(id),"geom")
-        _filerac  = pyu.getshort(filerac)
-        filename_list  = filerac+'.list'
-        filename_vect  = filerac+'.vect'
-    
-        fo = open(filename_vect,"w")
+        filerac = pyu.getlong("ray" + str(id), "geom")
+        _filerac = pyu.getshort(filerac)
+        filename_list = filerac + '.list'
+        filename_vect = filerac + '.vect'
+
+        fo = open(filename_vect, "w")
 
         fo.write("appearance { linewidth %d }\n" % linewidth)
 
@@ -634,69 +645,72 @@ class Ray3D(object):
         fo.write("%d\n" % self.nn)
         fo.write("1\n")
         for i in range(self.nn):
-            fo.write("%g %g %g\n" % (self.pt[i,0],self.pt[i,1],self.pt[i,2]))
+            fo.write("%g %g %g\n" % (self.pt[i, 0], self.pt[i,
+                                                            1], self.pt[i, 2]))
         #fo.write("%d %d %d 0\n" % (col[0],col[1],col[2]))
-        fo.write("%g %g %g 0\n" % (col[0],col[1],col[2]))
-        fo.close()  
-    
+        fo.write("%g %g %g 0\n" % (col[0], col[1], col[2]))
+        fo.close()
+
         #
         # Ajout des bases locales
-        #   
+        #
 
-        fo = open(filename_list,"w")
+        fo = open(filename_list, "w")
         fo.write("LIST\n")
-        fo.write("{<"+filename_vect+"}\n")
+        fo.write("{<" + filename_vect + "}\n")
         if (bstruc):
             #fo.write("{<strucTxRx.off}\n")
             fo.write("{<struc.off}\n")
-        if (bbas):  
-            for i in range(self.nn-1):
-                ptb = (self.pt[i+1,:]+self.pt[i,:])/2
-                fibi = _filerac+"Bi"+str(i)
-                vfibi=GeomVect(fibi)
-                colbi = np.array([[1,0,0],[1,0.25,0.25],[1,0.5,0.5]])
-                vfibi.geomBase(self.Bi[i,:,:],ptb,colbi,2)
-                fibo = _filerac+"Bo"+str(i)
-                vfibo=GeomVect(fibo)
-                colbo = np.array([[0,0,1],[0.25,0.25,1],[0.5,0.5,1]])
-                vfibo.geomBase(self.Bo[i,:,:],ptb,colbo,2)
-                fo.write("{<"+fibi+".vect"+"}\n")
-                fo.write("{<"+fibo+".vect"+"}\n")
+        if (bbas):
+            for i in range(self.nn - 1):
+                ptb = (self.pt[i + 1, :] + self.pt[i, :]) / 2
+                fibi = _filerac + "Bi" + str(i)
+                vfibi = GeomVect(fibi)
+                colbi = np.array([[1, 0, 0], [1, 0.25, 0.25], [1, 0.5, 0.5]])
+                vfibi.geomBase(self.Bi[i, :, :], ptb, colbi, 2)
+                fibo = _filerac + "Bo" + str(i)
+                vfibo = GeomVect(fibo)
+                colbo = np.array([[0, 0, 1], [0.25, 0.25, 1], [0.5, 0.5, 1]])
+                vfibo.geomBase(self.Bo[i, :, :], ptb, colbo, 2)
+                fo.write("{<" + fibi + ".vect" + "}\n")
+                fo.write("{<" + fibo + ".vect" + "}\n")
 
         filename = filename_list
         fo.close()
-                
+
         if (bdis):
         #
         # Geomview Visualisation
-        #   
-            chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
+        #
+            chaine = "geomview -nopanel -b 1 1 1 " + filename + \
+                " 2>/dev/null &"
             os.system(chaine)
         else:
-             return(filename)
-        
+            return(filename)
+
+
 class RayTud(object):
-    """ Ray Tud 
+    """ Ray Tud
 
     Attributes
     ----------
 
-    ni      : 
+    ni      :
         number of interactions
-    inter   : 
-        Interaction object   
-    C       : 
+    inter   :
+        Interaction object
+    C       :
         Ray Transfer function matrix :  np.array(np.zeros([nf,2,2]),dtype=complex)
-    nf      : 
+    nf      :
         number of frequencies
 
-    Methods  
+    Methods
     -------
-    info         : 
+    info         :
         Ray informations
-    eval(f)      : 
+    eval(f)      :
         Evaluate C tilde matrix for a set of frequencies
-    comp(raytud) : 
+    comp(raytud) :
         comparaison de deux rayons Tud
 
     """
@@ -707,74 +721,74 @@ class RayTud(object):
         print "Number of interactions : ", self.ni
         nbi = self.ni
         for i in range(nbi):
-            print "Interaction : ",i
+            print "Interaction : ", i
             self.inter[i].info()
 
     def delay(self):
         """
-            calculate delay of the ray 
+            calculate delay of the ray
         """
         nbi = self.ni
-        d   = 0
+        d = 0
         for i in range(nbi):
             # LOS
-            if self.inter[i].typ == 0 :
+            if self.inter[i].typ == 0:
                 d = self.inter[i].dist
             # Reflexion
-            if self.inter[i].typ == 1 :
-                if d==0:
-                    l1 =  self.inter[i].si
-                    l2 =  self.inter[i].sr
+            if self.inter[i].typ == 1:
+                if d == 0:
+                    l1 = self.inter[i].si
+                    l2 = self.inter[i].sr
                     d = d + l1 + l2
                 else:
-                    l =  self.inter[i].sr
+                    l = self.inter[i].sr
                     d = d + l
             # Transmission
-            if self.inter[i].typ == 2 :
-                if d==0:
-                    l1 =  self.inter[i].si
-                    l2 =  self.inter[i].st
+            if self.inter[i].typ == 2:
+                if d == 0:
+                    l1 = self.inter[i].si
+                    l2 = self.inter[i].st
                     d = d + l1 + l2
                 else:
-                    l =  self.inter[i].st
+                    l = self.inter[i].st
                     d = d + l
             # Diffraction
-            if self.inter[i].typ == 3 :
-                if d==0:
-                    l1 =  self.inter[i].si
-                    l2 =  self.inter[i].sd
+            if self.inter[i].typ == 3:
+                if d == 0:
+                    l1 = self.inter[i].si
+                    l2 = self.inter[i].sd
                     d = d + l1 + l2
                 else:
-                    l =  self.inter[i].sd
+                    l = self.inter[i].sd
                     d = d + l
-        return(d/0.3)
+        return(d / 0.3)
 
     def signature(self):
         """
             return ray signature
         """
-        Signa=[]
+        Signa = []
         for k in range(self.ni):
             Signa.append(self.inter[k].typ)
         return(Signa)
 
-    def eval(self,fGHz=[2.4]):
+    def eval(self, fGHz=[2.4]):
         """
         evaluate the field over the ray
 
         Parameters
         ----------
-        
+
         Evaluate C tilde matrix for a set of frequencies
 
         C  :  np.array(np.zeros([nf,2,2]),dtype=complex)
 
         """
-        nf     = len(fGHz)
-        self.C = np.array(np.zeros([nf,2,2]),dtype=complex)
-        Co     = np.array(np.zeros([nf,2,2]),dtype=complex)
-        Co[:,0,0]=1
-        Co[:,1,1]=1
+        nf = len(fGHz)
+        self.C = np.array(np.zeros([nf, 2, 2]), dtype=complex)
+        Co = np.array(np.zeros([nf, 2, 2]), dtype=complex)
+        Co[:, 0, 0] = 1
+        Co[:, 1, 1] = 1
         #
         # Loop over all the ray interactions
         # ..
@@ -782,15 +796,15 @@ class RayTud(object):
             I = self.inter[i]
             CI = I.eval(fGHz)
             for k in range(nf):
-                U = np.dot(Co[k,:,:],CI[k,:,:])
-                Co[k,:,:]=U
+                U = np.dot(Co[k, :, :], CI[k, :, :])
+                Co[k, :, :] = U
         self.nf = nf
-        self.C  = Co
-      
+        self.C = Co
+
+
 class GrRayTud(object):
-    """
-    GrRayTud Class : A cluster of RayTud
-    
+    """  a cluster of Rays in Tud format 
+
     Attributes
     ----------
     nray    : number of rayTud
@@ -805,19 +819,19 @@ class GrRayTud(object):
     """
     def __init__(self):
         self.nray = 0
-    
+
     def dir(self):
-        """ list the available file in tuddir 
-        
+        """ list the available file in tuddir
+
 
         Returns
         -------
-        lfile_s : list 
+        lfile_s : list
             sorted list of all the .tud file of tuddir
 
         Notes
         -----
-        tuddir is defined in the Project module 
+        tuddir is defined in the Project module
 
         Example
         -------
@@ -828,76 +842,73 @@ class GrRayTud(object):
 
         """
 
-        pathname  = tuddir+'/*.tud'
+        pathname = tuddir + '/*.tud'
         lfile_l = glob.glob(pathname)
         lfile_tud = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
             lfile_tud.append(fis)
-        lfile_tud.sort()    
-        
-        pathname  = tuddir+'/*.tang'
+        lfile_tud.sort()
+
+        pathname = tuddir + '/*.tang'
         lfile_l = glob.glob(pathname)
         lfile_tang = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
             lfile_tang.append(fis)
-        lfile_tang.sort()    
-        
-        pathname  = tuddir+'/*.rang'
+        lfile_tang.sort()
+
+        pathname = tuddir + '/*.rang'
         lfile_l = glob.glob(pathname)
         lfile_rang = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
             lfile_rang.append(fis)
-        lfile_rang.sort()    
-        
-        pathname  = tuddir+'/*.tauk'
+        lfile_rang.sort()
+
+        pathname = tuddir + '/*.tauk'
         lfile_l = glob.glob(pathname)
         lfile_tauk = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
             lfile_tauk.append(fis)
-        lfile_tauk.sort()    
+        lfile_tauk.sort()
 
-        return lfile_tud,lfile_tang,lfile_rang,lfile_tauk
-
-
+        return lfile_tud, lfile_tang, lfile_rang, lfile_tauk
 
     def delay(self):
         """ return ray delays in an array
         """
         dt = np.array([])
         for nr in range(self.nray):
-            d  = self.rayTud[nr].delay()
-            dt = np.hstack((dt,d))
-        return(dt)   
+            d = self.rayTud[nr].delay()
+            dt = np.hstack((dt, d))
+        return(dt)
 
     def choose(self):
         """ Choose a tud  file in tuddir
         """
         import tkFileDialog
         FD = tkFileDialog
-        filetud = FD.askopenfilename(filetypes = [("Fichiers  ","*.tud"), 
-                                     ("All", "*")], 
+        filetud = FD.askopenfilename(filetypes=[("Fichiers  ", "*.tud"),
+                                     ("All", "*")],
                                      title="Please choose a Tracing file",
                                      initialdir=tuddir)
         _filetud = pyu.getshort(filetud)
         tabc = _filetud.split('_')
-        _filestr  =  tabc[0]+'.str'
-        _fileslab =  tabc[1]+'.slab'
-        _filemat  =  tabc[2]+'.mat'
+        _filestr = tabc[0] + '.str'
+        _fileslab = tabc[1] + '.slab'
+        _filemat = tabc[2] + '.mat'
         sl = Slab.SlabDB()
         sl.mat = Slab.MatDB()
         sl.mat.load(_filemat)
         sl.load(_fileslab)
         #indoor = Indoor(sl,_filestr)
-        self.load(_filetud,sl)
+        self.load(_filetud, sl)
 
-
-    def save(self,_filetud='ftud',_filetang='ftang',_filerang='frang'):
+    def save(self, _filetud='ftud', _filetang='ftang', _filerang='frang'):
         """
-            save .tud .tang .rang 
+            save .tud .tang .rang
 
             Parameters
             ----------
@@ -908,65 +919,67 @@ class GrRayTud(object):
 
         """
 
-        filetud  = pyu.getlong(_filetud,"tud")
-        filetang = pyu.getlong(_filetang,"tud")
-        filerang = pyu.getlong(_filerang,"tud")
+        filetud = pyu.getlong(_filetud, "tud")
+        filetang = pyu.getlong(_filetang, "tud")
+        filerang = pyu.getlong(_filerang, "tud")
 
-        fo   = open(filetud,"wb")
-        data = stru.pack('i',self.nray)
-        
+        fo = open(filetud, "wb")
+        data = stru.pack('i', self.nray)
+
         for k in range(self.nray):
-            rk   = self.rayTud[k] 
-            ni   = rk.ni
-            dt   = stru.pack('i',ni)
-            data = data+dt 
+            rk = self.rayTud[k]
+            ni = rk.ni
+            dt = stru.pack('i', ni)
+            data = data + dt
             for it in rk.inter:
-                if (it.typ==-1):
-                    dt     = stru.pack('i',it.typ)
-                    data   = data + dt
-                    dt     = stru.pack('4d',it.M[0,0],it.M[0,1],it.M[1,0],it.M[1,1])
-                    data   = data + dt
-                elif (it.typ==0):
-                    dt     = stru.pack('i',it.typ)
-                    data   = data + dt
-                    dt     = stru.pack('d',it.dist)
-                    data   = data + dt
-                elif (it.typ==1):
-                    dt     = stru.pack('i',it.typ)
-                    data   = data + dt
-                    dt     = stru.pack('3d',it.theta,it.si,it.sr)
-                    data   = data + dt
-                elif (it.typ==2):
-                    dt     = stru.pack('i',it.typ)
-                    data   = data + dt
-                    dt     = stru.pack('3d',it.theta,it.si,it.st)
-                    data   = data + dt
-                elif (it.typ==3):
-                    dt     = stru.pack('i',it.typ)
-                    data   = data + dt
-                    dt     = stru.pack('6d',it.theta,it.thetad,it.si,it.sd,it.beta,it.N)
-                    data   = data + dt
-                    dt     = stru.pack('i',it.typed)
-                    data   = data + dt
-                dt = stru.pack('8i',it.datMat[0],it.datMat[1],it.datMat[2],it.datMat[3],
-                               it.datMat[4],it.datMat[5],it.datMat[6],it.datMat[7])
-                data   = data + dt
+                if (it.typ == -1):
+                    dt = stru.pack('i', it.typ)
+                    data = data + dt
+                    dt = stru.pack('4d', it.M[0, 0], it.M[
+                        0, 1], it.M[1, 0], it.M[1, 1])
+                    data = data + dt
+                elif (it.typ == 0):
+                    dt = stru.pack('i', it.typ)
+                    data = data + dt
+                    dt = stru.pack('d', it.dist)
+                    data = data + dt
+                elif (it.typ == 1):
+                    dt = stru.pack('i', it.typ)
+                    data = data + dt
+                    dt = stru.pack('3d', it.theta, it.si, it.sr)
+                    data = data + dt
+                elif (it.typ == 2):
+                    dt = stru.pack('i', it.typ)
+                    data = data + dt
+                    dt = stru.pack('3d', it.theta, it.si, it.st)
+                    data = data + dt
+                elif (it.typ == 3):
+                    dt = stru.pack('i', it.typ)
+                    data = data + dt
+                    dt = stru.pack('6d', it.theta, it.thetad,
+                                   it.si, it.sd, it.beta, it.N)
+                    data = data + dt
+                    dt = stru.pack('i', it.typed)
+                    data = data + dt
+                dt = stru.pack('8i', it.datMat[0], it.datMat[1], it.datMat[2], it.datMat[3],
+                               it.datMat[4], it.datMat[5], it.datMat[6], it.datMat[7])
+                data = data + dt
         fo.write(data)
         fo.close()
 
-        fo   = open(filetang,"wb")
-        fo.write(stru.pack('i',self.nray))
+        fo = open(filetang, "wb")
+        fo.write(stru.pack('i', self.nray))
         for ag in self.tang:
-            fo.write(stru.pack('2d',ag[0],ag[1]))
+            fo.write(stru.pack('2d', ag[0], ag[1]))
         fo.close()
 
-        fo   = open(filerang,"wb")
-        fo.write(stru.pack('i',self.nray))
+        fo = open(filerang, "wb")
+        fo.write(stru.pack('i', self.nray))
         for ag in self.rang:
-            fo.write(stru.pack('2d',ag[0],ag[1]))
+            fo.write(stru.pack('2d', ag[0], ag[1]))
         fo.close()
 
-    def load(self,_filetud,_filetang,_filerang,sl):
+    def load(self, _filetud, _filetang, _filerang, sl):
         """ Load a set of Ray from the PulsRay .tud file
 
         Parameters
@@ -974,21 +987,21 @@ class GrRayTud(object):
         _filename  : tud filename
         _filetang  : tang filename
         _filerang  : rang filename
-        sl         : slab database object 
+        sl         : slab database object
 
         Notes
         -----
-        a filename beginning with _ is a short filename 
+        a filename beginning with _ is a short filename
 
         Examples
         --------
-        
+
         >>> from pylayers.gis.layout import *
         >>> from pylayers.antprop.rays import *
         >>> L = Layout()
         >>> g3 = GrRay3D()
-        >>> l = g3.dir() 
-        >>> nr = 10 
+        >>> l = g3.dir()
+        >>> nr = 10
         >>> file0 = l[nr]
         >>> s1 = file0.split('_')
         >>> _filestr = s1[0]+'.str'
@@ -1000,176 +1013,175 @@ class GrRayTud(object):
         >>> r30 = g3.ray3d[0]
         >>> rt0 = gt.rayTud[0]
 
-        
-        """ 
+
+        """
 
         valerr = False
 
-        filetud  = pyu.getlong(_filetud,"tud")
-        filetang = pyu.getlong(_filetang,"tud")
-        filerang = pyu.getlong(_filerang,"tud")
+        filetud = pyu.getlong(_filetud, "tud")
+        filetang = pyu.getlong(_filetang, "tud")
+        filerang = pyu.getlong(_filerang, "tud")
 
-        
-        fo = open(filetud,"rb")
+        fo = open(filetud, "rb")
         data = fo.read()
         fo.close()
-        print sl.mat.di 
+        print sl.mat.di
 
-        start       = 0
-        stop        = start+4
-        dt          = data[start:stop]
-        self.nray   = stru.unpack('i',dt)[0]
-    
+        start = 0
+        stop = start + 4
+        dt = data[start:stop]
+        self.nray = stru.unpack('i', dt)[0]
+
         self.rayTud = []
 
         for k in range(self.nray):
             raytud = RayTud()
-            start  = stop
-            stop   = start+4
-            dt     = data[start:stop]
+            start = stop
+            stop = start + 4
+            dt = data[start:stop]
             #
             # Interaction number over the ray
             #
             # if ni==0  : LOS case no interaction
             #
-            nbint   = stru.unpack('i',dt)[0]
+            nbint = stru.unpack('i', dt)[0]
             raytud.ni = nbint
             Inter = []
             #print "Nombre interactions : ",nbint
             for i in range(nbint):
-                start  = stop
-                stop   = start+4
-                dt     = data[start:stop]
-                caract = stru.unpack('i',dt)[0]
-                if (caract==-1):
-                    start  = stop
-                    stop   = start+32
-                    dt     = data[start:stop]
-                    m      = stru.unpack('4d',dt)
-                    M      = np.array([[m[0],m[1]],[m[2],m[3]]])
-                    inter  = IntB(-1,M)
-            #        inter.data = M
-                elif (caract==0):
-                    start  = stop
-                    stop   = start+8
-                    dt     = data[start:stop]
-                    dist   = stru.unpack('d',dt)
-                    inter  = IntL(0,dist[0])
-            #        inter.data = dist
-                elif (caract==1):
-                    start  = stop
-                    stop   = start+24
-                    dt     = data[start:stop]
-                    datR   = stru.unpack('3d',dt)
-                    inter  = IntR(1,datR)
-            #        inter.data = datR
-                elif (caract==2):
-                    start  = stop
-                    stop   = start+24
-                    dt     = data[start:stop]
-                    datT   = stru.unpack('3d',dt)
-                    inter  = IntT(2,datT)
-            #        inter.data = datT
-                elif (caract==3):
-            #        inter.data = []
-                    start  = stop
-                    stop   = start+48
-                    dt     = data[start:stop]
-                    datD   = stru.unpack('6d',dt)
-            #        (inter.data).append(datD)
-                    start  = stop
-                    stop   = start+4
-                    dt     = data[start:stop]
-                    typD   = stru.unpack('i',dt)
-                    inter  = IntD(3,datD,typD)
-            #        (inter.data).append(typD)
-            
                 start = stop
-                stop  = start+32
-                dt    = data[start:stop]
-                datMat= stru.unpack('8i',dt)
-                inter.datMat = datMat 
-                l1     = datMat[0]
-                c1     = datMat[1]
-                r1     = datMat[2]
-                s1     = datMat[3]
+                stop = start + 4
+                dt = data[start:stop]
+                caract = stru.unpack('i', dt)[0]
+                if (caract == -1):
+                    start = stop
+                    stop = start + 32
+                    dt = data[start:stop]
+                    m = stru.unpack('4d', dt)
+                    M = np.array([[m[0], m[1]], [m[2], m[3]]])
+                    inter = IntB(-1, M)
+            #        inter.data = M
+                elif (caract == 0):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    dist = stru.unpack('d', dt)
+                    inter = IntL(0, dist[0])
+            #        inter.data = dist
+                elif (caract == 1):
+                    start = stop
+                    stop = start + 24
+                    dt = data[start:stop]
+                    datR = stru.unpack('3d', dt)
+                    inter = IntR(1, datR)
+            #        inter.data = datR
+                elif (caract == 2):
+                    start = stop
+                    stop = start + 24
+                    dt = data[start:stop]
+                    datT = stru.unpack('3d', dt)
+                    inter = IntT(2, datT)
+            #        inter.data = datT
+                elif (caract == 3):
+            #        inter.data = []
+                    start = stop
+                    stop = start + 48
+                    dt = data[start:stop]
+                    datD = stru.unpack('6d', dt)
+            #        (inter.data).append(datD)
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    typD = stru.unpack('i', dt)
+                    inter = IntD(3, datD, typD)
+            #        (inter.data).append(typD)
 
-                l2     = datMat[4]
-                c2     = datMat[5]
-                r2     = datMat[6]
-                s2     = datMat[7]
-                
-                # evalfield bug fix 
-                # slab material inconsistency 
+                start = stop
+                stop = start + 32
+                dt = data[start:stop]
+                datMat = stru.unpack('8i', dt)
+                inter.datMat = datMat
+                l1 = datMat[0]
+                c1 = datMat[1]
+                r1 = datMat[2]
+                s1 = datMat[3]
+
+                l2 = datMat[4]
+                c2 = datMat[5]
+                r2 = datMat[6]
+                s2 = datMat[7]
+
+                # evalfield bug fix
+                # slab material inconsistency
                 #
                 if l1 not in sl.mat.di:
-                    valerr=True
+                    valerr = True
                     break
 
-                if ((caract==1)|(caract==2)|(caract==3)):
+                if ((caract == 1) | (caract == 2) | (caract == 3)):
                     inter.Mat1 = []
                     dim = sl.mat.di
                     #print dim.keys()
                     #print l1
                     #print r1
                     dis = sl.di
-                    if s1==0:
-                        matl = sl.mat.DB[dim[l1]]
-                        matr = sl.mat.DB[dim[r1]]
+                    if s1 == 0:
+                        matl = sl.mat[dim[l1]]
+                        matr = sl.mat[dim[r1]]
                     else:
-                        matl = sl.mat.DB[dim[r1]]
-                        matr = sl.mat.DB[dim[l1]]
+                        matl = sl.mat[dim[r1]]
+                        matr = sl.mat[dim[l1]]
 
                     inter.Mat1.append(matl)
-                    slab1 = sl.DB[dis[c1]]     
-                    for i in range(slab1.nbmat):
-                        im          = slab1.imat[i]
-                        th          = slab1.thickness[i]
-                        matc        = sl.mat.DB[dim[im]]
-                        matc.thick  = th       # !!! thick existe plus
+                    slab1 = sl[dis[c1]]
+                    for i in range(slab1['nbmat']):
+                        im = slab1['imat'][i]
+                        th = slab1['thickness'][i]
+                        matc = sl.mat[dim[im]]
+                        #matc.thick = th       # !!! thick existe plus
                         inter.Mat1.append(matc)
 
                     inter.Mat1.append(matr)
-#            
+#
 #  Mat 2 is used only for diffraction
 #
-                if (caract==3):
+                if (caract == 3):
                     inter.Mat2 = []
-                    if s2==0:
-                        matl = sl.mat.DB[dim[l2]]
-                        matr = sl.mat.DB[dim[r2]]
+                    if s2 == 0:
+                        matl = sl.mat[dim[l2]]
+                        matr = sl.mat[dim[r2]]
                     else:
-                        matl = sl.mat.DB[dim[r2]]
-                        matr = sl.mat.DB[dim[l2]]
+                        matl = sl.mat[dim[r2]]
+                        matr = sl.mat[dim[l2]]
 
                     inter.Mat2.append(matl)
-                    slab2 = sl.DB[dis[c2]]     
+                    slab2 = sl[dis[c2]]
                     for i in range(slab2.nbmat):
-                        im        = slab2.imat[i]
-                        th        = slab2.thickness[i]
-                        matc      = sl.mat.DB[dim[im]]
+                        im = slab2.imat[i]
+                        th = slab2.thickness[i]
+                        matc = sl.mat[dim[im]]
                         matc.thick = th
                         inter.Mat2.append(matc)
-                
+
                     inter.Mat2.append(matr)
 
                 Inter.append(inter)
             if valerr:
                 break
-            raytud.inter  = Inter
-            delay  = raytud.delay()
+            raytud.inter = Inter
+            delay = raytud.delay()
             #
             # fix a bug in pulsray delay discontinuities²
             #
             # impose que les délais soient croissants
             #
-            if k==0:    
+            if k == 0:
                 self.rayTud.append(raytud)
                 delayold = delay
-            if (k>0) & (delay>delayold):
+            if (k > 0) & (delay > delayold):
                 self.rayTud.append(raytud)
                 delayold = delay
-        nray  = len(self.rayTud)
+        nray = len(self.rayTud)
         self.nray = nray
         # decode the angular files (.tang and .rang)
 
@@ -1177,29 +1189,29 @@ class GrRayTud(object):
         try:
             fo = open(filetang, "rb")
         except:
-            self.fail=True
-            print "file ",filetang, " is unreachable"
+            self.fail = True
+            print "file ", filetang, " is unreachable"
         if not self.fail:
-            nray_tang = stru.unpack('i',fo.read(4))[0]
+            nray_tang = stru.unpack('i', fo.read(4))[0]
             buf = fo.read()
             fo.close()
             # coorectif Bug evalfield
-            tmp     = np.ndarray(shape=(nray_tang,2),buffer=buf)
-            self.tang = tmp[0:nray,:]
+            tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
+            self.tang = tmp[0:nray, :]
         try:
             fo = open(filerang, "rb")
         except:
-            self.fail=True
-            print "file ",filerang, " is unreachable"
+            self.fail = True
+            print "file ", filerang, " is unreachable"
 
         if not self.fail:
-            nray_rang = stru.unpack('i',fo.read(4))[0]
-            buf  = fo.read()
+            nray_rang = stru.unpack('i', fo.read(4))[0]
+            buf = fo.read()
             fo.close()
             # correctif Bug evalfield
-            tmp = np.ndarray(shape=(nray_rang,2),buffer=buf)
-            self.rang = tmp[0:nray,:]
- 
+            tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
+            self.rang = tmp[0:nray, :]
+
 #    def info(self,num=0):
 #            r = self.ray[num]
 #        nbint = r[0]
@@ -1207,8 +1219,7 @@ class GrRayTud(object):
 #            interaction = r[l+1]
 #            print interaction[0]
 
-
-    def info(self,n=-1):
+    def info(self, n=-1):
         """ info
 
         Parameters
@@ -1219,18 +1230,19 @@ class GrRayTud(object):
 
         """
         print "Nb rayons : ", self.nray
-        if n==-1:
+        if n == -1:
             for i in range(self.nray):
-                print "Rayon : ",i
+                print "Rayon : ", i
                 self.rayTud[i].info()
                 print "\n"
         else:
             print "rayon no : ", n
             self.rayTud[n].info()
 
+
 class GrRay3D(object):
     """ A set of Ray3D with the same Tx and Rx
-    
+
     Attributes
     ----------
 
@@ -1252,68 +1264,67 @@ class GrRay3D(object):
 
     """
     def __init__(self):
-        self.n  = 0
-        self.Tx = np.array([0.0,0.0,0.0])
-        self.Rx = np.array([0.0,0.0,0.0])
- 
+        self.n = 0
+        self.Tx = np.array([0.0, 0.0, 0.0])
+        self.Rx = np.array([0.0, 0.0, 0.0])
+
     def dir(self):
         """ list the available file in tradir
-        
+
 
         Returns
         -------
-        lfile_s : list 
+        lfile_s : list
             sorted list of all the .str file of tradir
 
         Notes
         -----
-        tradir is defined in the Project module 
+        tradir is defined in the Project module
 
         Example
         -------
         >>> from pylayers.antprop.rays import *
-        >>> g      = GrRay3D()
-        >>> lfile  = g.dir()
+        >>> g = GrRay3D()
+        >>> lfile = g.dir()
 
+        .. todo:
+            limit to a given filestruc
         """
 
-        pathname  = tradir+'/*.tra'
+        pathname = tradir + '/*.tra'
         lfile_l = glob.glob(pathname)
         lfile_s = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
             lfile_s.append(fis)
-        lfile_s.sort()    
+        lfile_s.sort()
         return lfile_s
 
-
-
-    def info(self,level=1):
+    def info(self, level=1):
         """
         Parameters
         ----------
-        level : int 
-            level of information 
+        level : int
+            level of information
 
         """
-        print "Number of Ray : ",self.n
-        if level==1:
+        print "Number of Ray : ", self.n
+        if level == 1:
             for i in range(self.n):
                 self.ray3d[i].info()
 
-
     def choose(self):
         """ Choose a Tracing  file in tradir
-        
+
         """
         import tkFileDialog
         FD = tkFileDialog
-        filetra = FD.askopenfilename(filetypes = [("Fichiers Launching ","*.tra"), ("All", "*")], title="Please choose a Tracing file", initialdir=tradir)
+        filetra = FD.askopenfilename(filetypes=[("Fichiers Launching ", "*.tra"), ("All", "*")], title="Please choose a Tracing file", initialdir=tradir)
         _filetra = pyu.getshort(filetra)
         tabc = _filetra.split('_')
-        _filestr  =  tabc[0]+'.str'
-        _fileslab =  tabc[1]+'.slab'
-        _filemat  =  tabc[2]+'.mat'
+        _filestr = tabc[0] + '.str'
+        _fileslab = tabc[1] + '.slab'
+        _filemat = tabc[2] + '.mat'
         sl = Slab.SlabDB()
         sl.mat = Slab.MatDB()
         sl.mat.load(_filemat)
@@ -1321,8 +1332,7 @@ class GrRay3D(object):
         self.L = Layout()
         self.L.loadstr(_filestr)
 
-
-    def load(self,_filename,L):
+    def load(self, _filename, L):
         """ load a .tra de PulsRay
 
         Parameters
@@ -1337,9 +1347,9 @@ class GrRay3D(object):
             :include-source:
 
             >>> from pylayers.antprop.rays import *
-            >>> from pylayers.gis.layout import * 
-            >>> import matplotlib.pyplot as plt 
-            >>> import numpy as np 
+            >>> from pylayers.gis.layout import *
+            >>> import matplotlib.pyplot as plt
+            >>> import numpy as np
             >>> import scipy as sp
             >>> g = GrRay3D()
             >>> lfile = g.dir()
@@ -1349,156 +1359,156 @@ class GrRay3D(object):
             >>> s1 = file0.split('_')
             >>> _filestr = s1[0]+'.str'
             >>> L = Layout()
-            >>> L.loadstr(_filestr)
+            >>> L.load(_filestr)
             >>> f,a = L.showGs()
             >>> g.load(file0,L)
-            >>> g.show(a,np.arange(10)) 
+            >>> g.show(a,np.arange(10))
             >>> plt.show()
 
         """
-        filename = pyu.getlong(_filename,"trace")
-        fo = open(filename,"rb")
+        filename = pyu.getlong(_filename, "trace")
+        fo = open(filename, "rb")
         data = fo.read()
         fo.close()
         #
-        # decode read data 
+        # decode read data
         #
-        start  = 0
-        stop   = start+1024
-        dt     = data[start:stop]
-        self.flch   = dt.replace("\x00","")
-    
-        start  = stop
-        stop   = start+1024
-        dt     = data[start:stop]
-        self.fpatra = dt.replace("\x00","")
-    
-        start  = stop
-        stop   = start+1024
-        dt     = data[start:stop]
-        self.fspa   = dt.replace("\x00","")
-    
-        start  = stop
-        stop   = start+8
-        dt     = data[start:stop]
-        self.Tx[0] = stru.unpack('d',dt)[0]
-    
-        start  = stop
-        stop   = start+8
-        dt     = data[start:stop]
-        self.Tx[1] = stru.unpack('d',dt)[0]
-    
-        start  = stop
-        stop   = start+8
-        dt     = data[start:stop]
-        self.Tx[2]  = stru.unpack('d',dt)[0]
-    
-        start  = stop
-        stop   = start+8
-        dt     = data[start:stop]
-        self.Rx[0]  = stru.unpack('d',dt)[0]
-    
-        start  = stop
-        stop   = start+8
-        dt     = data[start:stop]
-        self.Rx[1]  = stru.unpack('d',dt)[0]
-    
-        start  = stop
-        stop   = start+8
-        dt     = data[start:stop]
-        self.Rx[2]  = stru.unpack('d',dt)[0]
-    
-        start  = stop
-        stop   = start+4
-        dt     = data[start:stop]
-        self.Tracing_exist = stru.unpack('i',dt)[0]
+        start = 0
+        stop = start + 1024
+        dt = data[start:stop]
+        self.flch = dt.replace("\x00", "")
 
-        if (self.Tracing_exist!=0):
-            start  = stop
-            stop   = start+4
-            dt     = data[start:stop]
-            self.n = stru.unpack('i',dt)[0]
-        
+        start = stop
+        stop = start + 1024
+        dt = data[start:stop]
+        self.fpatra = dt.replace("\x00", "")
+
+        start = stop
+        stop = start + 1024
+        dt = data[start:stop]
+        self.fspa = dt.replace("\x00", "")
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Tx[0] = stru.unpack('d', dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Tx[1] = stru.unpack('d', dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Tx[2] = stru.unpack('d', dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Rx[0] = stru.unpack('d', dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Rx[1] = stru.unpack('d', dt)[0]
+
+        start = stop
+        stop = start + 8
+        dt = data[start:stop]
+        self.Rx[2] = stru.unpack('d', dt)[0]
+
+        start = stop
+        stop = start + 4
+        dt = data[start:stop]
+        self.Tracing_exist = stru.unpack('i', dt)[0]
+
+        if (self.Tracing_exist != 0):
+            start = stop
+            stop = start + 4
+            dt = data[start:stop]
+            self.n = stru.unpack('i', dt)[0]
+
             self.ray3d = []
 
             for i in range(self.n):
                 #print "Rayon N° : ",i
-                ray3D  = Ray3D()
-                start    = stop
-                stop     = start+4
-                dt       = data[start:stop]
-                ray3D.nn = stru.unpack('i',dt)[0]
-        
-                ray3D.pt = np.array(np.zeros([ray3D.nn,3]),dtype=np.float64)
+                ray3D = Ray3D()
+                start = stop
+                stop = start + 4
+                dt = data[start:stop]
+                ray3D.nn = stru.unpack('i', dt)[0]
 
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+8
-                    dt       = data[start:stop]
-                    ray3D.pt[k,0] = stru.unpack('d',dt)[0]
-    
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+8
-                    dt       = data[start:stop]
-                    ray3D.pt[k,1] = stru.unpack('d',dt)[0]
-    
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+8
-                    dt       = data[start:stop]
-                    ray3D.pt[k,2] = stru.unpack('d',dt)[0]
-    
-                ray3D.nstr  = np.array(np.zeros(ray3D.nn),dtype=int)
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+4
-                    dt       = data[start:stop]
-                    ray3D.nstr[k] = stru.unpack('i',dt)[0]
-            
-                ray3D.deep  = np.array(np.zeros(ray3D.nn),dtype=int)
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+4
-                    dt       = data[start:stop]
-                    ray3D.deep[k] = stru.unpack('i',dt)[0]
-    
-                ray3D.beta0  = np.array(np.zeros(ray3D.nn),dtype=np.float64)
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+8
-                    dt       = data[start:stop]
-                    ray3D.beta0[k] = stru.unpack('d',dt)[0]
-    
-                
-                ray3D.phii  = np.array(np.zeros(ray3D.nn),dtype=np.float64)
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+8
-                    dt       = data[start:stop]
-                    ray3D.phii[k] = stru.unpack('d',dt)[0]
-    
-                ray3D.phid  = np.array(np.zeros(ray3D.nn),dtype=np.float64)
-                for k in range (ray3D.nn):
-                    start    = stop
-                    stop     = start+8
-                    dt       = data[start:stop]
-                    ray3D.phid[k] = stru.unpack('d',dt)[0]
-            
-                ray3D.elength  = np.array(np.zeros(ray3D.nn-1),dtype=np.float64)
-                for k in range (ray3D.nn-1):
-                    start    = stop
-                    stop     = start+8
-                    dt       = data[start:stop]
-                    ray3D.elength[k] = stru.unpack('d',dt)[0]
-            
-                ray3D.etype  = np.array(np.zeros(ray3D.nn-1),dtype=int)
-                for k in range (ray3D.nn-1):
-                    start    = stop
-                    stop     = start+4
-                    dt       = data[start:stop]
-                    ray3D.etype[k] = stru.unpack('i',dt)[0]
-                ray3D.etype=np.append(ray3D.etype,[0])
+                ray3D.pt = np.array(np.zeros([ray3D.nn, 3]), dtype=np.float64)
+
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.pt[k, 0] = stru.unpack('d', dt)[0]
+
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.pt[k, 1] = stru.unpack('d', dt)[0]
+
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.pt[k, 2] = stru.unpack('d', dt)[0]
+
+                ray3D.nstr = np.array(np.zeros(ray3D.nn), dtype=int)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    ray3D.nstr[k] = stru.unpack('i', dt)[0]
+
+                ray3D.deep = np.array(np.zeros(ray3D.nn), dtype=int)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    ray3D.deep[k] = stru.unpack('i', dt)[0]
+
+                ray3D.beta0 = np.array(np.zeros(ray3D.nn), dtype=np.float64)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.beta0[k] = stru.unpack('d', dt)[0]
+
+                ray3D.phii = np.array(np.zeros(ray3D.nn), dtype=np.float64)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.phii[k] = stru.unpack('d', dt)[0]
+
+                ray3D.phid = np.array(np.zeros(ray3D.nn), dtype=np.float64)
+                for k in range(ray3D.nn):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.phid[k] = stru.unpack('d', dt)[0]
+
+                ray3D.elength = np.array(
+                    np.zeros(ray3D.nn - 1), dtype=np.float64)
+                for k in range(ray3D.nn - 1):
+                    start = stop
+                    stop = start + 8
+                    dt = data[start:stop]
+                    ray3D.elength[k] = stru.unpack('d', dt)[0]
+
+                ray3D.etype = np.array(np.zeros(ray3D.nn - 1), dtype=int)
+                for k in range(ray3D.nn - 1):
+                    start = stop
+                    stop = start + 4
+                    dt = data[start:stop]
+                    ray3D.etype[k] = stru.unpack('i', dt)[0]
+                ray3D.etype = np.append(ray3D.etype, [0])
                 #
                 # local basis creation
                 #
@@ -1514,8 +1524,8 @@ class GrRay3D(object):
                 #            n1.append(num)
                 #        except:
                 #            n1.append(-7)
-                #    print n1    
-                iz = np.nonzero(ray3D.nstr==0)
+                #    print n1
+                iz = np.nonzero(ray3D.nstr == 0)
                 niz = len(iz[0])
                 self.ray3d.append(ray3D)
                 #if niz==2:
@@ -1529,205 +1539,206 @@ class GrRay3D(object):
         fo.close()
 #           except:
 #               print "Le fichier", filename, "est introuvable"
+
     def delay(self):
-        """ delay 
-        
+        """ delay
+
         Returns
         -------
         td  : np.array
-            delays 
+            delays
         """
         td = np.array([])
         for n in range(self.n):
-            td = np.hstack((td,self.ray3d[n].delay()))
+            td = np.hstack((td, self.ray3d[n].delay()))
         return(td)
 
-    def save(self,_filename):
+    def save(self, _filename):
         """
         save
-        
-        Parameters 
+
+        Parameters
         ---------
-        _filename : str 
+        _filename : str
 
         Save a  GrRay3d object in a .tra de PulsRay
         filename : PulsRay .tra data format  filename
         """
 
-        filename = pyu.getlong(_filename,"trace")
-        fo = open(filename,"wb")
-       
+        filename = pyu.getlong(_filename, "trace")
+        fo = open(filename, "wb")
+
         dt_lch = self.flch
-        L=len(dt_lch)
-        if L<1024:
-            for i in range(1024-L):
-                dt_lch=dt_lch+"\x00"
+        L = len(dt_lch)
+        if L < 1024:
+            for i in range(1024 - L):
+                dt_lch = dt_lch + "\x00"
 
         dt_patra = self.fpatra
-        L=len(dt_patra)
-        if L<1024:
-            for i in range(1024-L):
-                dt_patra=dt_patra+"\x00"
+        L = len(dt_patra)
+        if L < 1024:
+            for i in range(1024 - L):
+                dt_patra = dt_patra + "\x00"
 
         dt_spa = self.fspa
-        L=len(dt_spa)
-        if L<1024:
-            for i in range(1024-L):
-                dt_spa=dt_spa+"\x00"
+        L = len(dt_spa)
+        if L < 1024:
+            for i in range(1024 - L):
+                dt_spa = dt_spa + "\x00"
 
-        data=dt_lch+dt_patra+dt_spa
+        data = dt_lch + dt_patra + dt_spa
 
         dt = stru.pack('d', self.Tx[0])
-        data = data+dt
-     
+        data = data + dt
+
         dt = stru.pack('d', self.Tx[1])
-        data = data+dt
-    
+        data = data + dt
+
         dt = stru.ack('d', self.Tx[2])
-        data = data+dt
-    
+        data = data + dt
+
         dt = stru.pack('d', self.Rx[0])
-        data = data+dt
-     
+        data = data + dt
+
         dt = stru.pack('d', self.Rx[1])
-        data = data+dt
-    
+        data = data + dt
+
         dt = stru.pack('d', self.Rx[2])
-        data = data+dt
-     
-        dt = stru.pack('i',self.Tracing_exist)
-        data = data+dt
+        data = data + dt
 
-        if (self.Tracing_exist!=0):
+        dt = stru.pack('i', self.Tracing_exist)
+        data = data + dt
 
-            dt = stru.pack('i',self.n)
-            data = data+dt
+        if (self.Tracing_exist != 0):
+
+            dt = stru.pack('i', self.n)
+            data = data + dt
 
             for i in range(self.n):
-                ray3D  = self.ray3d[i]
+                ray3D = self.ray3d[i]
 
-                dt = stru.pack('i',ray3D.nn)
+                dt = stru.pack('i', ray3D.nn)
                 data_ray = dt
-        
-                for k in range (ray3D.nn):
-                    dt = stru.pack('d',ray3D.pt[k,0])
-                    data_ray = data_ray+dt
-    
-                for k in range (ray3D.nn):
-                    dt = stru.pack('d',ray3D.pt[k,1])
-                    data_ray = data_ray+dt
-    
-                for k in range (ray3D.nn):
-                    dt = stru.pack('d',ray3D.pt[k,2])
-                    data_ray = data_ray+dt
-    
-                for k in range (ray3D.nn):
-                    dt = stru.pack('i',ray3D.nstr[k])
-                    data_ray = data_ray+dt
-            
-                for k in range (ray3D.nn):
-                    dt = stru.pack('i',ray3D.deep[k])
-                    data_ray = data_ray+dt
-    
-                for k in range (ray3D.nn):
-                    dt = stru.pack('d',ray3D.beta0[k])
-                    data_ray = data_ray+dt
-                
-                for k in range (ray3D.nn):
-                    dt = stru.pack('d',ray3D.phii[k])
-                    data_ray = data_ray+dt
-    
-                for k in range (ray3D.nn):
-                    dt = stru.pack('d',ray3D.phid[k])
-                    data_ray = data_ray+dt
-            
-                for k in range (ray3D.nn-1):
-                    dt = stru.pack('d',ray3D.elength[k])
-                    data_ray = data_ray+dt
 
-                for k in range (ray3D.nn-1):
-                    dt = stru.pack('i',ray3D.etype[k])
-                    data_ray = data_ray+dt
-            
-                data=data+data_ray
+                for k in range(ray3D.nn):
+                    dt = stru.pack('d', ray3D.pt[k, 0])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack('d', ray3D.pt[k, 1])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack('d', ray3D.pt[k, 2])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack('i', ray3D.nstr[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack('i', ray3D.deep[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack('d', ray3D.beta0[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack('d', ray3D.phii[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn):
+                    dt = stru.pack('d', ray3D.phid[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn - 1):
+                    dt = stru.pack('d', ray3D.elength[k])
+                    data_ray = data_ray + dt
+
+                for k in range(ray3D.nn - 1):
+                    dt = stru.pack('i', ray3D.etype[k])
+                    data_ray = data_ray + dt
+
+                data = data + data_ray
         fo.write(data)
         fo.close()
 
-    def reciprocal(self,L):
+    def reciprocal(self, L):
         """  Reciprocity channel
-        
+
         Parameters
         ----------
-        L   : Layout object 
+        L   : Layout object
         return a reciprocal GrRay3D
         """
-        G=GrRay3D()
-    
-        G.Tx=self.Rx
-        print "G.Tx = ",G.Tx
-        G.Rx=self.Tx
-        print "G.Rx = ",G.Rx
-        G.n=self.n
+        G = GrRay3D()
 
-        print "G.n = ",G.n
-        print "self.n = ",self.n
-        ray3D=[]
+        G.Tx = self.Rx
+        print "G.Tx = ", G.Tx
+        G.Rx = self.Tx
+        print "G.Rx = ", G.Rx
+        G.n = self.n
+
+        print "G.n = ", G.n
+        print "self.n = ", self.n
+        ray3D = []
         for i in range(G.n):
-            ray3d    = Ray3D()
+            ray3d = Ray3D()
             ray3d.nn = self.ray3d[i].nn
-            nn       = ray3d.nn
+            nn = ray3d.nn
 
-            ray3d.pht=self.ray3d[i].phr
-            ray3d.phr=self.ray3d[i].pht
-            ray3d.tht=self.ray3d[i].thr
-            ray3d.thr=self.ray3d[i].tht
-            ray3d.deep=self.ray3d[i].deep
+            ray3d.pht = self.ray3d[i].phr
+            ray3d.phr = self.ray3d[i].pht
+            ray3d.tht = self.ray3d[i].thr
+            ray3d.thr = self.ray3d[i].tht
+            ray3d.deep = self.ray3d[i].deep
 
-            ray3d.elength  = np.array(np.zeros(ray3d.nn-1))
-            ray3d.etype    = np.array(np.zeros(ray3d.nn-1))
+            ray3d.elength = np.array(np.zeros(ray3d.nn - 1))
+            ray3d.etype = np.array(np.zeros(ray3d.nn - 1))
 
-            for j in range (ray3d.nn-1):
-                ray3d.elength[j] = self.ray3d[i].elength[nn-j-2]
-                ray3d.etype[j]   = self.ray3d[i].etype[nn-j-2]
+            for j in range(ray3d.nn - 1):
+                ray3d.elength[j] = self.ray3d[i].elength[nn - j - 2]
+                ray3d.etype[j] = self.ray3d[i].etype[nn - j - 2]
 
-            ray3d.pt    = np.array(np.zeros([ray3d.nn,3]))
-            ray3d.phii  = np.array(np.zeros(ray3d.nn))
-            ray3d.phid  = np.array(np.zeros(ray3d.nn))
+            ray3d.pt = np.array(np.zeros([ray3d.nn, 3]))
+            ray3d.phii = np.array(np.zeros(ray3d.nn))
+            ray3d.phid = np.array(np.zeros(ray3d.nn))
             ray3d.beta0 = np.array(np.zeros(ray3d.nn))
-            ray3d.nstr  = np.array(np.zeros(ray3d.nn))
+            ray3d.nstr = np.array(np.zeros(ray3d.nn))
 
             for j in range(nn):
-                ray3d.pt[j]   = self.ray3d[i].pt[nn-j-1]
-                ray3d.phid[j] = self.ray3d[i].phid[nn-j-1]
-                ray3d.phii[j] = self.ray3d[i].phii[nn-j-1]
-                ray3d.beta0[j]= self.ray3d[i].beta0[nn-j-1]
-            
-                ray3d.nstr[j] = self.ray3d[i].nstr[nn-j-1]
-        
+                ray3d.pt[j] = self.ray3d[i].pt[nn - j - 1]
+                ray3d.phid[j] = self.ray3d[i].phid[nn - j - 1]
+                ray3d.phii[j] = self.ray3d[i].phii[nn - j - 1]
+                ray3d.beta0[j] = self.ray3d[i].beta0[nn - j - 1]
+
+                ray3d.nstr[j] = self.ray3d[i].nstr[nn - j - 1]
+
             ray3d.locbas(L.Gs)
             ray3D.append(ray3d)
-        G.ray3d=ray3D
+        G.ray3d = ray3D
         return(G)
 
-    def show(self,ax,rayset=np.array([]),col='b',node=False):
+    def show(self, ax, rayset=np.array([]), col='b', node=False):
         """
 
         Parameters
         ----------
-        ax     : 
+        ax     :
             axes object
-        rayset : 
+        rayset :
             set of rays np.array([])
-        col  : string 
+        col  : string
             default  {'b'}
-        node : boolean 
+        node : boolean
 
         """
         for i in rayset:
             r = self.ray3d[i]
-            r.show(ax,col,node=node)
-    
-    def show3(self,rayset=np.array([]),bdis=True,bstruc=True,id=0):
+            r.show(ax, col, node=node)
+
+    def show3(self, rayset=np.array([]), bdis=True, bstruc=True, id=0):
         """ 3D show using geomview
         Parameters
         ----------
@@ -1736,20 +1747,20 @@ class GrRay3D(object):
         id   : id of the grRray
 
         """
-        if (len(rayset)==0):
-            rayset=range(self.n)
+        if (len(rayset) == 0):
+            rayset = range(self.n)
 
-        filename =  pyu.getlong("grRay"+str(id)+".list","geom")
-        fo = open(filename,"w")
+        filename = pyu.getlong("grRay" + str(id) + ".list", "geom")
+        fo = open(filename, "w")
         fo.write("LIST\n")
         if bstruc:
-            fo.write("{<struc.off}\n")
-             #fo.write("{<strucTxRx.off}\n")
+            fo.write("{<defstr.off}\n")
+            #fo.write("{<strucTxRx.off}\n")
             for i in rayset:
                 r = self.ray3d[i]
-                col = np.array([0,0,1])
-                fileray =r.show3(False,False,False,col,i)
-                fo.write("{< "+fileray +" }\n")
+                col = np.array([0, 0, 1])
+                fileray = r.show3(False, False, False, col, i)
+                fo.write("{< " + fileray + " }\n")
         fo.close()
         if (bdis):
             chaine = "geomview " + filename + " 2>/dev/null &"
@@ -1758,68 +1769,5 @@ class GrRay3D(object):
             return(filename)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     doctest.testmod()
-#       S = Simul.Simul('simul8.simul')
-#    gr = GrRay3D()
-#    gr.choose()
-#    gt = GrRayTud()
-#    gt.choose()
-#    import tkFileDialog
-#    from easygui import *
-#
-#    FD = tkFileDialog
-#
-#    GUI=True
-#    curdir = os.getcwd()
-#    if (GUI==True):
-#        basename = os.environ['BASENAME']
-#        os.chdir(basename+'/struc')
-#        filestr=fileopenbox('*.str','Structure','*.str')
-#        _filestr=pyu.getshort(filestr)
-#        os.chdir(basename+'/slab')
-#        fileslab=fileopenbox('*.slab','Slab','*.slab')
-#        _fileslab=getshort(fileslab)
-#    else:
-#        _filestr='ceamimo2.str'
-#        filestr=getlong(_filestr,'struc')
-#        _fileslab='ceamimo2.slab'
-#        fileslab=getlong(_fileslab,'slab')
-#
-#
-#    os.chdir(curdir)
-#    sl=SlabDB()
-#    sl.load(_fileslab)
-#    indoor = IndoorStr(sl,_filestr)
-#    indoor.load()
-#    indoor.show3(True)
-#
-#    os.chdir(basename+'/trace')
-#    filetra = FD.askopenfilename(filetypes = [("tra file","*.tra"),("All", "*")],
-#                      title="Please choose a ray tracing file",
-#                      initialdir=tradir)
-#    _filetra=os.path.split(filetra)[1]
-#    #_filetra='ceamimo2_ceamimo2_def_Tx_1_def_Rx_1.tra'
-#
-#    os.chdir(curdir)
-#    grRay = GrRay3D()
-#    grRay.load(_filetra,indoor)
-#    print "grRay has been loaded"
-#    grRay.show3()
-#
-#    os.chdir(basename+'/tud')
-#    filetud = FD.askopenfilename(filetypes = [("tud file","*.tud"),("All", "*")],
-#                      title="Please choose a ray tracing file",
-#                      initialdir=tuddir)
-#    #grRay.save("rox.tra")
-#    _filetud=pyu.getshort(filetud)
-#    os.chdir(curdir)
-#    mat = MatDB()
-#    mat.load('def.mat')
-#    #print "material database has been loaded"
-#    #sl   = SlabDB()
-#    #sl.load('def.slab')
-#    #print "slab database has been loaded"
-#    grTud = GrRayTud()
-#    grTud.load(_filetud,sl,mat)
-#    print "grTud has been loaded"

@@ -9,7 +9,7 @@ import os
 currentdir = os.getcwd()
 try: 
     pulsraydir = os.environ['PULSRAY']
-    print "pulray is in : ",pulsraydir
+    print "PULSRAY  : ",pulsraydir
 except:
     raise EnvironmentError('Please set the PULSRAY environment variable') 
 try:
@@ -17,13 +17,13 @@ try:
 except:
     figuredir = os.environ['HOME']+"/Pyproject/figures"
 #print currentdir
-print "figures will be stored in ",figuredir
+print "FIGURDIR : ",figuredir
 try:
         basename=os.environ['BASENAME']
-        #print "Project in  $BASENAME=",basename
 except:
         basename=os.environ['HOME']+"/Pyproject"
 
+print "BASENAME : ",basename
 try:
         os.chdir(basename)
         strdir = basename + '/struc' 
