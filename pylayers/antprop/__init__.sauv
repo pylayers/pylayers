@@ -1,8 +1,0 @@
-from PyLayers.AntProp.Antenna import SHCoeff,VSHCoeff,Antenna
-from PyLayers.AntProp.Channel import Ctilde,VectChannel,ScalChannel,VectLOS
-from PyLayers.AntProp.GrRay3D import Interaction,IntB,IntL,IntR,IntT,IntD,Ray2D,Ray3D,RayTud,GrRayTud,GrRay3D
-from PyLayers.AntProp.MultiWall import *
-from PyLayers.AntProp.Signature import Signature
-import PyLayers.AntProp.Slab
-#from PyLayers.Ant_Prop.Slab import Interface,MatInterface,Mat,MatDB,Slab,SlabDB
-from PyLayers.AntProp.Waveform import Waveform
