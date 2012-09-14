@@ -90,3 +90,4 @@ gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
 print "Evalfiled "
 print "-----------------"
 S.field2(1,1)
+S.cir(1,1)

@@ -11,7 +11,6 @@ import matplotlib.pylab as plt
 from pylayers.signal   import bsignal as bs
 from pylayers.util     import easygui
 from pylayers.measures import mesuwb
-#from mescea6 import *
 
 class Waveform:
     """
@@ -19,7 +18,6 @@ class Waveform:
     """
     def __init__(self,parameters=[]):
         """
-        __init__(self,parameters)
                wavetype   =   'generic' =   'mbofdm' =   'fromfile'
                st  : time domain
                sf  : frequency domain
@@ -47,7 +45,7 @@ class Waveform:
             [st,sf]=self.ip_generic()
         if self.parameters['type']  == 'mbofdm':
             [st,sf]=self.mbofdm()
-        if self.parameters['type'] == 'fromfile':
+        if self.parameters['type'] == 'file':
             [st,sf]=self.fromfile()
 
         self.st       = st
@@ -61,6 +59,7 @@ class Waveform:
 
     def info(self):
         """  display information about waveform
+
         Results
         -------
 
@@ -84,6 +83,10 @@ class Waveform:
 
     def show2(self,Tp=1000):
         """ show2
+
+        Parameters
+        ----------
+        Tp : float
         
         """
         plt.subplot(211)
@@ -94,7 +97,7 @@ class Waveform:
         psd.plotdB(mask=True)
 
     def ip_generic(self):
-        """    Create an Energy normalized Gaussian impulse (Usignal)  
+        """    Create an Energy normalized Gaussian impulse (Usignal)
             ip_generic(self,parameters)
         
 
@@ -165,9 +168,10 @@ class Waveform:
         """
         Parameters
         ----------
-            config : config  Parser
-        Return
-        ------
+            config : ConfigParser object
+
+        Returns
+        -------
             w      : waveform
          """
 
