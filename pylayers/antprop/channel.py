@@ -7,7 +7,6 @@ import struct as stru
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs
 import pylayers.util.geomutil as geu
-import pylayers.antprop.waveform as wvf
 from pylayers.antprop.rays import GrRay3D
 from pylayers.util.project import *
 

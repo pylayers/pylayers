@@ -723,7 +723,7 @@ class Simul(object):
 
         self.config.set("frequency", "fghzmin", self.freq[0])
         self.config.set("frequency", "fghzmax", self.freq[-1])
-        self.config.set("frequency", "Nf", len(self.freq))
+        self.config.set("frequency", "nf", len(self.freq))
         #
         # waveform section
         #
@@ -736,6 +736,8 @@ class Simul(object):
             self.load(self.filesimul)
         except:
             print('simulation file does not exist')
+        self.wav = wvf.Waveform()
+        self.wav.read(self.config)
 
     def gui(self):
         """ gui to modify the simulation file
@@ -1134,8 +1136,8 @@ class Simul(object):
         #
         # Waveform section
         #
-        #self.wav = wvf.Waveform()
-        #self.wav.read(self.config)
+        self.wav = wvf.Waveform()
+        self.wav.read(self.config)
 
     def layout(self, _filestruc, _filemat='simul8.mat', _fileslab='simul8.slab'):
         """ load a layout in the simulation oject

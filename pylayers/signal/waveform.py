@@ -131,7 +131,8 @@ class Waveform:
         fe     = self.parameters['fe']
         te     = 1.0/fe
     
-        M = MesCEA.CEAMesure(1,1)
+        M = mesuwb.UWBMesure(1,1)
+
         Tx=M.tdd.tx.y
         timeTx=M.tdd.tx.x
         tf=200.005
@@ -249,4 +250,3 @@ class Waveform:
 
 if __name__ == "__main__":
     doctest.testmod()
-    
