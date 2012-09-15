@@ -6,6 +6,8 @@
 gis
 ===
 
+This modules gathers all the classes and function related to geographical
+information.
 
 Layout
 ******
@@ -99,8 +101,8 @@ Signatures
     image_M_Tx 
     showSig 
 
-Mobility
---------
+Functions related to nodes mobility
+-----------------------------------
 
 .. autosummary::
     :toctree: generated/
@@ -133,5 +135,41 @@ Utilities
     cross_shortest 
     plot_sign2 
 
-Lirevrm
-*******
+readvrml
+********
+
+.. automodule:: pylayers.gis.readvrml
+
+.. autosummary::
+    :toctree: generated/
+
+    savestr2
+    stretch
+    segsplit
+    extract
+    inbracket
+    incrochet
+    geomLine
+    geomFace
+    ParseDirectionalLight
+    ParseMaterial
+    show
+    parsevrml
+    vrml2sha
+
+furniture
+*********
+
+.. autoclass:: pylayers.gis.furniture.Furniture
+
+.. autosummary::
+    :toctree: generated/
+
+    info
+    set_position 
+    load
+    save
+    position 
+    show
+
+

@@ -964,7 +964,6 @@ class Simul(object):
         self.config.read(filesimul)
 
         sections = self.config.sections()
-        print sections
 
         filetx = self.config.get("files", "tx")
         filerx = self.config.get("files", "rx")

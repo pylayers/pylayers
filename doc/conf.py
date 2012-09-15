@@ -18,7 +18,7 @@ import sphinx
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.append('~/svn2/devel/simulator/pyray/')
-sys.path.insert(0, os.path.abspath('../PyLayers/'))
+sys.path.insert(0, os.path.abspath('../pylayers/'))
 sys.path.insert(0,os.path.abspath('./sphinxext'))
 # -- General configuration -----------------------------------------------------
 
@@ -32,6 +32,7 @@ extensions = [
     'sphinx.ext.doctest', 
     'numpydoc',
 #    'numpydoc.plot_directive',
+    'ipython_directive',
     'matplotlib.sphinxext.mathmpl',
     'matplotlib.sphinxext.only_directives',
     'matplotlib.sphinxext.plot_directive',

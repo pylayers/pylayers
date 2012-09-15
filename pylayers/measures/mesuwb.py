@@ -4,12 +4,12 @@ import os.path
 import numpy   as np
 import scipy   as sp
 import matplotlib.pylab as plt
-from   scipy import io 
-from   scipy import signal,linspace,polyval,polyfit,stats
 import pylayers.util.pyutil  as pyu 
 import pylayers.util.geomutil as geu 
 import pylayers.signal.bsignal as bs 
 from   pylayers.util  import project 
+from   scipy import io 
+from   scipy import signal,linspace,polyval,polyfit,stats
 #from   pylayers.Simul import SimulEM
 
 #
@@ -51,7 +51,7 @@ def mesname(n,dirname,h=1):
     return(filename)
 
 def ptw1():
-    """ return WHERE1 Tx and Rx points
+    """ return W1 Tx and Rx points
     """
 
     p0  = np.array([298626.5107,2354073.213])
@@ -737,7 +737,6 @@ class CAL_DATA(object):
         #
         s1 = self.ch1
         s2 = self.ch2
-
 class Fdd(object):
     """ Frequency Domain Deconv Data
 
@@ -832,7 +831,6 @@ class Fdd(object):
         plt.xlabel('Freq (GHz)')
         plt.title('CH4')
         plt.show()
-
 class Tdd(object):
     """
     Time Domain Deconv Data
@@ -1141,7 +1139,6 @@ class Tdd(object):
         plt.title('CH4')
         plt.axis(ax)
         plt.show()
-
 class TFP(object):
     """
     Tx
