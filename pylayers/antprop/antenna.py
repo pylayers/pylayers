@@ -648,7 +648,8 @@ class VSHCoeff(object):
     #    show()
 
     def s1tos2(self, N2=-1):
-        """
+        """ convert shape 1 to shape 2 
+
         Parameters
         ----------
         N2 : max level
@@ -660,10 +661,13 @@ class VSHCoeff(object):
         self.Cr.s1tos2(N2)
 
     def s2tos3(self, threshold=1e-20):
-        """
-            s2tos3(threshold=1e-12):
+        """ convert shape 2 to shape 3
 
-            convert from s2 shape to s3 shape
+        Parameters
+        ----------
+
+        threshold : float 
+
 
            Energy thresholded coefficients
         """
@@ -1290,7 +1294,7 @@ class Antenna(object):
         ax.legend()
 
     def show3_geom(self, k=0, typ='Gain', mode='linear', silent=False):
-        """
+        """ show3 geomview 
 
         Parameters
         ----------
