@@ -39,6 +39,9 @@ import pdb
 import pylayers.util.pyutil as pyu
 from pylayers.network.emsolver import EMSolver
 from pylayers.network.show import ShowNet,ShowTable
+from pylayers.util.pymysqldb import Database 
+import pylayers.util.pyutil as pyu
+
 import time
 
 
@@ -976,6 +979,17 @@ class Network(nx.MultiGraph):
                    
         sp.io.savemat(pyu.getlong('mat.mat','save_data'),self.mat)
 
+    def sql_save(self,S):
+        """
+            save network state into mysqldatabase
+
+            Attributes:
+            ----------
+
+        """
+        self.db.writenet(self,S.now())
+
+
 
 
 class PNetwork(Process):
@@ -1003,6 +1017,13 @@ class PNetwork(Process):
         Process.__init__(self,name='PNetwork',sim=self.sim)
         self.cpt=self.sim.now()
         self.filename='pos'
+
+        if self.msqlSave:
+           config = ConfigParser.ConfigParser()
+           config.read(pyu.getlong('simulnet.ini','ini'))
+           sql_opt = dict(config.items('Mysql'))
+           self.net.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
+
 
 
     def run(self):
@@ -1069,7 +1090,7 @@ class PNetwork(Process):
             if self.mat_save:
                 self.net.mat_save(self.sim)
             if self.msqlSave:
-                print 'implement sqlsave into PNetwork'
+                self.net.sql_save(self.sim)
 
             self.net.pos=self.net.get_pos()
             yield hold, self, self.net_updt_time

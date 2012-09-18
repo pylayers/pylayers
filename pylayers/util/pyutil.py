@@ -7,6 +7,7 @@ import scipy.special as spe
 import doctest
 from   bitstring  import BitString
 import datetime as dat
+import pdb
 #
 # getlong 
 # getshort
@@ -1276,7 +1277,7 @@ def timestamp(now):
     
     dt = dat.datetime.now()
     dn = str(dat.timedelta(seconds=float(now))).split(':')
-    return (dt.strftime('%Y-%m-%d ')+dn[0]+':'+dn[1] +':'+dn[2])
+    return (dt.strftime('%Y-%m-%d ')+dn[0]+':'+dn[1] +':'+dn[2][:2] +dn[2][2:5])
 
 
 if __name__ == "__main__":

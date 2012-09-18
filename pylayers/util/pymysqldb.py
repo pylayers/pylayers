@@ -1,4 +1,5 @@
 import MySQLdb as msql
+import pylayers.util.pyutil as pyu
 import pdb
 
 class Database:
@@ -96,6 +97,60 @@ class Database:
                     sql=sql+'\"' +str(v) + '\"'+','
         sql=sql+")"
         dbc.execute(sql)
+
+    def writemeca(self,ID,time,p,v,a):
+        """
+        write mecanic information into the mysql db
+        """
+        self.insertitem1("TruePosition",('NodeID',
+                                            'Timestamp',
+                                            'X',
+                                            'Y',
+                                            'Z',
+                                            'ReferencePointID'),
+                                            (eval(ID),
+                                            pyu.timestamp(time),
+                                            p[0],
+                                            p[1],
+                                            'NULL',
+                                            'NULL'))
+        self.insertitem1("CEASensorMeasurements",('NodeID',
+                                                     'Timestamp',
+                                                     'CEA_MagX',
+                                                     'CEA_MagY',
+                                                     'CEA_AccX',
+                                                     'CEA_AccY'),
+                                                     (eval(ID),
+                                                      pyu.timestamp(time),
+                                                      v[0],
+                                                      v[1],
+                                                      a[0],
+                                                      a[1] ))
+
+
+
+    def writenet(self,net,t):
+        """
+        write mecanic information into the mysql db
+        """
+        for e in net.edges_iter(data=True):
+            self.insertitem1("ACOLinkMeasurements",('NodeID',
+                                                'ACO_PeerID',
+                                                'ACO_RSSI',
+                                                'Timestamp'),
+                                                (eval(e[0]),
+                                                eval(e[1]),
+                                                e[2]['Pr'][0],
+                                                pyu.timestamp(t)))
+            self.insertitem1("CEALinkMeasurements",('NodeID',
+                                                'Timestamp',
+                                                'CEA_PeerID',
+                                                'CEA_Dist'),
+                                                (eval(e[0]),
+                                                pyu.timestamp(t),
+                                                eval(e[1]),
+                                                e[2]['d']))
+
 
 
 

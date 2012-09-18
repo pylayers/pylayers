@@ -81,6 +81,7 @@ class Agent(object):
             config.read(pyu.getlong('simulnet.ini','ini'))
             sql_opt = dict(config.items('Mysql'))
             db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
+            print self.ID
             db.insertitem1("Nodes",('NodeID',
                                     'NodeName',
                                     'NodeOwner',

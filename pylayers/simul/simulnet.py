@@ -49,7 +49,7 @@ from pylayers.mobility.transit.World import world
 from pylayers.util.pymysqldb import Database as DB
 
 import pdb
-
+import os
 
 class Simul(Simulation):
 
@@ -222,6 +222,12 @@ class Simul(Simulation):
         """ Create the simulation, to be ready to run
 
         """
+
+        # this is just to redump the database at each simulation
+        if str2bool(self.save_opt['msql']):
+            if str2bool(self.sql_opt['dumpdb']):
+                os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
+                '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
 
         self.create_layout()
         self.create_EMS()

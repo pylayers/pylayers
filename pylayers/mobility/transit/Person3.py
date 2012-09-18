@@ -145,42 +145,8 @@ class Person3(Process):
                     p=conv_vecarr(self.position)
                     v=conv_vecarr(self.velocity)
                     a=conv_vecarr(self.acceleration)
-                    self.db.insertitem1("TruePosition",('NodeID',
-                                                        'Timestamp',
-                                                        'X',
-                                                        'Y',
-                                                        'Z',
-                                                        'ReferencePointID'),
-                                                        (eval(self.ID),
-                                                        pyu.timestamp(self.sim.now()),
-                                                        p[0],
-                                                        p[1],
-                                                        'NULL',
-                                                        'NULL'))
-                    self.db.insertitem1("CEASensorMeasurements",('NodeID',
-                                                                 'Timestamp',
-                                                                 'CEA_MagX',
-                                                                 'CEA_MagY',
-                                                                 'CEA_AccX',
-                                                                 'CEA_AccY'),
-                                                                 (eval(self.ID),
-                                                                  pyu.timestamp(self.sim.now()),
-                                                                  v[0],
-                                                                  v[1],
-                                                                  a[0],
-                                                                  a[1] ))
-#                    self.db.insertitem1("ACOSensorMeasurements",('NodeID',
-#                                                                 'Timestamp',
-#                                                                 'ACO_MagX',
-#                                                                 'ACO_MagY',
-#                                                                 'ACO_AccX',
-#                                                                 'ACO_AccY'),
-#                                                                 (eval(self.ID),
-#                                                                  self.sim.now(),
-#                                                                  v[0],
-#                                                                  v[1],
-#                                                                  a[0],
-#                                                                  a[1] ))
+                    self.db.writemeca(self.ID,self.sim.now(),p,v,a)
+
 
                 if self.arrived:
 
