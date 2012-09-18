@@ -46,9 +46,10 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.slab import Slab
 from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
+from pylayers.util.pymysqldb import Database as DB
 
 import pdb
-
+import os
 
 class Simul(Simulation):
 
@@ -63,6 +64,8 @@ class Simul(Simulation):
         self.meca_opt = dict(self.config.items('Mecanic'))
         self.net_opt = dict(self.config.items('Network'))
         self.loc_opt = dict(self.config.items('Localization'))
+        self.save_opt = dict(self.config.items('Save'))
+        self.sql_opt = dict(self.config.items('Mysql'))
 
     def create_layout(self):
         """
@@ -124,7 +127,7 @@ class Simul(Simulation):
 
         if init == 'random':
             self.lAg = []
-            agents = ['A1', 'A2', 'A3']
+            agents = ['A1', 'A2', 'A3','BS1','BS2']
 #            agents=['A1','A2','A3','A4' ]
             Cf = ConfigParser.ConfigParser()
             Cf.read(pyu.getlong('agent.ini','ini'))
@@ -134,6 +137,7 @@ class Simul(Simulation):
                 ag_opt = dict(Cf.items(ag))
                 self.lAg.append(Agent(
                                 ID=ag_opt['id'],
+                                name=ag_opt['name'],
                                 type=ag_opt['type'],
                                 pos=np.array(eval(ag_opt['pos'])),
                                 roomId=int(ag_opt['roomid']),
@@ -144,6 +148,7 @@ class Simul(Simulation):
                                 net=self.net,
                                 world=self.the_world,
                                 RAT=eval(ag_opt['rat']),
+                                msqlSave=str2bool(self.save_opt['msql']),
                                 sim=self))
 
                 if self.lAg[i].type == 'ag':
@@ -199,9 +204,10 @@ class Simul(Simulation):
                              sim=self,
                              show_sg=str2bool(self.net_opt['show_sg']),
                              disp_inf=str2bool(self.net_opt['dispinfo']),
-                             csv_save=str2bool(self.net_opt['csv_save']),
-                             pyray_save=str2bool(self.net_opt['pyray_save']),
-                             mat_save=str2bool(self.net_opt['mat_save']))
+                             csv_save=str2bool(self.save_opt['csv_save']),
+                             pyray_save=str2bool(self.save_opt['pyray_save']),
+                             mat_save=str2bool(self.save_opt['mat_save']),
+                             msqlSave=str2bool(self.save_opt['msql']))
         self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):
@@ -216,12 +222,20 @@ class Simul(Simulation):
         """ Create the simulation, to be ready to run
 
         """
+
+        # this is just to redump the database at each simulation
+        if str2bool(self.save_opt['msql']):
+            if str2bool(self.sql_opt['dumpdb']):
+                os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
+                '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
+
         self.create_layout()
         self.create_EMS()
         self.create_network()
         if str2bool(self.sim_opt['showtk']):
             self.create_visual()
         self.create_show()
+        
 
     def create_show(self):
         plt.ion()

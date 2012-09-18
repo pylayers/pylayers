@@ -1,4 +1,6 @@
 from SimPy.Simulation import Process,Simulation,hold
+import ConfigParser
+import datetime
 #from math import *
 from random import normalvariate,uniform
 from pylayers.mobility.transit.vec3 import vec3
@@ -11,7 +13,8 @@ from pylayers.network.network import Network
 from pylayers.util.utilnet import conv_vecarr
 
 import matplotlib.pylab as plt
-
+from pylayers.util.pymysqldb import Database 
+import pylayers.util.pyutil as pyu
 
 import pdb
 # "near collision avoidance" inspired from
@@ -42,7 +45,7 @@ class Person3(Process):
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True):
+    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True,msqlSave=False):
         """
         boid is initialized in a room of Layout L 
         """        
@@ -95,7 +98,14 @@ class Person3(Process):
         self.cancelled = 0
         self.net=net
         self.wait=0.0
-
+        
+        self.msqlSave=msqlSave
+        if self.msqlSave:
+           config = ConfigParser.ConfigParser()
+           config.read(pyu.getlong('simulnet.ini','ini'))
+           sql_opt = dict(config.items('Mysql'))
+           self.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
+           self.date = datetime.datetime.now()
 
     def move(self):
         """
@@ -131,9 +141,13 @@ class Person3(Process):
 
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position))
+                if self.msqlSave:
+                    p=conv_vecarr(self.position)
+                    v=conv_vecarr(self.velocity)
+                    a=conv_vecarr(self.acceleration)
+                    self.db.writemeca(self.ID,self.sim.now(),p,v,a)
 
-    #               ax.scatter(self.sim.now(),self.acceleration[0])
-    #               plt.draw()
+
                 if self.arrived:
 
                     self.arrived = False
@@ -195,7 +209,7 @@ class Person3(Process):
             else:
                 self.update()
                 self.world.update_boid(self)
-                self.net.update_pos(self.ID,Util.conv_vecarr(self.position))
+                self.net.update_pos(self.ID,conv_vecarr(self.position))
                 yield hold, self, self.interval
 
     def delete(self):
