@@ -23,6 +23,20 @@ try:
 except:
     basename = os.environ['HOME'] + "/Pyproject"
 
+pstruc = {}
+pstruc['DIRSTRUC'] = 'struc'
+pstruc['DIRSTRUC2'] = 'struc'
+pstruc['DIRSLAB'] = 'ini'
+pstruc['DIRSLAB2'] = 'ini'
+pstruc['DIRMAT'] = 'ini'
+pstruc['DIRMAT2'] = 'ini'
+pstruc['ANT']='ant'
+pstruc['DIRTRA'] = 'output'
+pstruc['DIRLCH'] = 'output'
+pstruc['DIRTUD'] = 'output'
+pstruc['DIRGEOM'] = 'geom'
+pstruc['DIRTRA'] = 'output'
+
 print "BASENAME : ", basename
 try:
     os.chdir(basename)
