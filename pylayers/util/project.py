@@ -1,5 +1,6 @@
 # -*- coding: latin1 -*-
 import os
+import sys
 #class Project(object)
 #       """
 #       Création d'une arborescence de projet 
@@ -7,6 +8,19 @@ import os
 #       def __init__(self):
 #       def     
 currentdir = os.getcwd()
+
+
+try:
+    basename=os.environ['BASENAME']
+except:
+    print "Select a name for creating a home directory for hosting all your projects:"
+    name = sys.stdin.readline()
+    basename = os.environ['HOME'] + '/' + name[:-1]
+    os.mkdir(basename)
+    print "Please setup the $BASENAME environement variable at : ", basename; '\n and rerun the program'
+    break
+
+
 try: 
     pulsraydir = os.environ['PULSRAY']
     print "PULSRAY  : ",pulsraydir
@@ -24,6 +38,9 @@ except:
         basename=os.environ['HOME']+"/Pyproject"
 
 print "BASENAME : ",basename
+
+
+
 try:
         os.chdir(basename)
         strdir = basename + '/struc' 
