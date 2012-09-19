@@ -87,7 +87,8 @@ S.tratotud2(1,1)
 gt = GrRayTud()
 # loading rays in tud format 
 gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
-print "Evalfiled "
+print "Evalfield "
 print "-----------------"
 S.field2(1,1)
 S.cir(1,1)
+S.pltcir(1,1)

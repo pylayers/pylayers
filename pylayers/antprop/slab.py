@@ -1395,7 +1395,8 @@ class SlabDB(dict):
             self.dass()
 
     def showall(self):
-        """
+        """ show all
+
         """
         lsl = self.keys()
         k   = len(lsl)
@@ -1478,7 +1479,7 @@ class SlabDB(dict):
         slab.edit()
 
     def show(self,name='WOOD',fGHz=np.array([2.4])):
-        """
+        """ show
         Parameters
         ----------
         name : string
