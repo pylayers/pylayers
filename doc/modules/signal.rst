@@ -1,11 +1,13 @@
 .. _routines.bsignal:
 
-bsignal 
-=======
+Module Bsignal 
+==============
 
 
-bsignal
--------
+Class Bsignal
+-------------
+
+signal with a x axis basis
 
 .. currentmodule:: pylayers.signal.bsignal.Bsignal
 
@@ -28,8 +30,10 @@ bsignal
     save
     load
               
-Usignal
--------
+Class Usignal
+-------------
+
+Uniform signal 
 
 .. currentmodule:: pylayers.signal.bsignal.Usignal
 
@@ -54,8 +58,10 @@ Usignal
     zleft
     zlr
 
-Tbsignal
+TBsignal
 ---------
+
+Time signal 
 
 .. currentmodule:: pylayers.signal.bsignal.TBsignal
 
@@ -74,11 +80,61 @@ Tbsignal
 TUsignal
 ---------
 
+Uniform time signal 
+
 .. currentmodule:: pylayers.signal.bsignal.TUsignal
 
 .. class:: pylayers.signal.bsignal.TUsignal
 
 .. autoattribute:: pylayers.signal.bsignal.TUsignal 
+
+.. autosummary::
+    :toctree: generated/
+
+    diff
+    info
+    fft
+    fftsh
+    filter
+    ftshift
+    psd
+    show
+    esd
+    shift
+    correlate
+    corrgauss
+    Efirst_loc
+    resample
+    ft 
+    convolve
+    Yadd_zero2l
+    Yadd_zero2r
+    Epercent
+    Etau0
+    Ewin
+    Etot 
+    Efirst 
+    Efirst_corr
+    Efirst_toath
+    taumax
+    Emax
+    tau_Emax
+    toa_max2
+    toa_new
+    toa_win
+    toa_max
+    toa_th
+    toa_cum
+    toa_th_tm
+    toa_th_tmt
+    toa_cum_tm
+    toa_cum_tmtm
+    toa_cum_tmt
+    readuwb
+    ecdf
+    tau_moy
+    tau_rms
+
 
 
 Utilities
@@ -118,8 +174,8 @@ Processing
     Yadd_zeros2l
     Yadd_zeros2
 
-Energy content
-~~~~~~~~~~~~~~
+Determining signal energy content
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autosummary::
   :toctree: generated/
@@ -133,8 +189,9 @@ Energy content
     Efirst_toath
     Efirst_loc
 
-ToA estimation
-~~~~~~~~~~~~~~
+Time of Arrival estimation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 .. autosummary::
   :toctree: generated/
@@ -147,8 +204,10 @@ ToA estimation
     toa_win
     toa_max
 
-TUDsignal
----------
+Class TUDsignal
+-----~~~~~~~----
+
+Uniform time signal with delays 
 
 .. currentmodule:: pylayers.signal.bsignal.TUDsignal
 
@@ -159,9 +218,12 @@ TUDsignal
 .. autosummary::
     :toctree: generated/
 
+    fig
 
-Fbsignal
----------
+Class FBsignal
+--------------
+
+Frequency signal 
 
 .. currentmodule:: pylayers.signal.bsignal.FBsignal
 
@@ -169,9 +231,19 @@ Fbsignal
 
 .. autoattribute:: pylayers.signal.bsignal.FBsignal 
 
+.. autosummary::
+    :toctree: generated/
 
-FUsignal
----------
+    plotri
+    plot
+    plotdB
+    stem
+
+
+Class FUsignal
+--------------
+
+Uniform frequency signal 
 
 .. currentmodule:: pylayers.signal.bsignal.FUsignal
 
@@ -179,9 +251,33 @@ FUsignal
 
 .. autoattribute:: pylayers.signal.bsignal.FUsignal 
 
+.. autosummary::
+    :toctree: generated/
 
-FUDsignal
----------
+    window
+    get
+    info
+    energy 
+    enthrsh
+    dBthrsh
+    zp
+    newdf
+    dftresamp
+    resample
+    symH
+    symHz
+    align
+    ifft
+    ift
+    iftshift
+    show
+    decimate
+
+
+Class FUDsignal
+---------------
+
+Uniform frequency signal with delays
 
 .. currentmodule:: pylayers.signal.bsignal.FUDsignal
 
@@ -190,9 +286,20 @@ FUDsignal
 .. autoattribute:: pylayers.signal.bsignal.FUDsignal 
 
 
+.. autosummary::
+    :toctree: generated/
+    
+    minphas
+    totud
+    iftd
+    ft1
+    ft2
+    ftau
 
-FHsignal
----------
+Class FHsignal
+--------------
+
+Frequency hermitian signal 
 
 .. currentmodule:: pylayers.signal.bsignal.FHsignal
 
@@ -200,8 +307,14 @@ FHsignal
 
 .. autoattribute:: pylayers.signal.bsignal.FHsignal 
 
-Noise
----------
+.. autosummary::
+    :toctree: generated/
+
+    ifft 
+    unrex
+
+Class Noise
+------------
 
 .. currentmodule:: pylayers.signal.bsignal.Noise
 
@@ -210,8 +323,14 @@ Noise
 .. autoattribute:: pylayers.signal.bsignal.Noise
 
 
-EnImpulse
----------
+.. autosummary::
+    :toctree: generated/
+
+    amplify 
+    gating 
+
+Class EnImpulse
+---------------
 
 .. currentmodule:: pylayers.signal.bsignal.EnImpulse
 
