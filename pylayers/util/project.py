@@ -23,36 +23,19 @@ try:
 except:
     basename = os.environ['HOME'] + "/Pyproject"
 
-pstruc = {}
-
-pstruc['DIRSTRUC'] ='struc'
-pstruc['DIRSTRUC2'] = 'struc'
-pstruc['DIRSLAB'] = 'ini'
-pstruc['DIRSLAB2'] = 'ini'
-pstruc['DIRMAT'] = 'ini'
-pstruc['DIRMAT2'] = 'ini'
-pstruc['DIRANT'] = 'ant'
-pstruc['DIRTRA'] = 'output'
-pstruc['DIRLCH'] = 'output'
-pstruc['DIRTUD'] = 'output'
-pstruc['DIRGEOM'] = 'geom'
-pstruc['DIRTRA'] = 'output'
-
 print "BASENAME : ", basename
 try:
     os.chdir(basename)
-    for nm in pstruc.keys():
-        dirname =  basename + '/'+pstruc[nm] 
-        try:
-            os.chdir(dirname)
-            os.chdir('..')
-        except:
-            print "create "+ dirname
-            os.mkdir(dirname)
-            os.chdir('..')
+    strdir = basename + '/struc'
+    try:
+        os.chdir(strdir)
+        #print "struc dir already exist"
+        os.chdir('..')
+    except:
+        print "create struc dir"
+        os.mkdir(strdir)
+        os.chdir('..')
 
-        if nm = ['DIRSTRUC']:
-            strdir = dirname 
     geomdir = basename + '/geom'
     try:
         os.chdir(geomdir)
