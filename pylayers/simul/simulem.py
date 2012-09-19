@@ -98,7 +98,7 @@ class Palch(object):
             print j, ':', self.__dict__.values()[i]
 
     def load(self):
-        filepalch = pyu.getlong(self.filename, 'launch')
+        filepalch = pyu.getlong(self.filename, pstruc['DIRTUD'])
         fi = open(filepalch)
         l = fi.read()
         u = l.split()
@@ -110,7 +110,7 @@ class Palch(object):
         fi.close()
 
     def save(self):
-        filepalch = pyu.getlong(self.filename, 'launch')
+        filepalch = pyu.getlong(self.filename, pstruc['DIRTUD'])
         fi = open(filepalch, 'w')
         fi.write(str(self.angTx) + '\n')
         fi.write(str(self.ISBang) + '\n')
@@ -160,7 +160,7 @@ class Patra(object):
             print j, ':', self.__dict__.values()[i]
 
     def load(self):
-        filepatra = pyu.getlong(self.filename, 'trace')
+        filepatra = pyu.getlong(self.filename, pstruc['DIRTRA'])
         fi = open(filepatra)
         l = fi.read()
         u = l.split()
@@ -171,7 +171,7 @@ class Patra(object):
     def save(self):
         """ save
         """
-        filepatra = pyu.getlong(self.filename, 'trace')
+        filepatra = pyu.getlong(self.filename, pstruc['DIRTRA'])
         fi = open(filepatra, 'w')
         fi.write(str(self.maxdeep) + '\n')
         fi.write(str(self.distdiff) + '\n')
@@ -338,7 +338,7 @@ class Launch(object):
         _filelch : string
         """
 
-        filelch = pyu.getlong(_filelch, 'launch')
+        filelch = pyu.getlong(_filelch, pstruc['DIRLCH'])
         fd = open(filelch, "rb")
         data = fd.read()
         fd.close()
@@ -779,28 +779,29 @@ class Simul(object):
         """
         if level > 0:
             for itx in range(self.tx.N):
-                filename = pyu.getlong(self.filelch[itx], 'launch')
+                filename = pyu.getlong(self.filelch[itx], pstruc['DIRLCH'])
                 print filename
         if level > 1:
             for itx in range(self.tx.N):
                 for irx in range(self.rx.N):
-                    filename = pyu.getlong(self.filetra[itx][irx], 'trace')
+                    filename = pyu.getlong(self.filetra[itx][irx],
+                                           pstruc(['DIRTRA']))
                     print filename
         if level > 2:
             for itx in range(self.tx.N):
                 for irx in range(self.rx.N):
-                    filename = pyu.getlong(self.filetud[itx][irx], 'tud')
+                    filename = pyu.getlong(self.filetud[itx][irx], pstruc['DIRTUD'])
                     print filename
-                    filename = pyu.getlong(self.filetauk[itx][irx], 'tud')
+                    filename = pyu.getlong(self.filetauk[itx][irx],pstruc['DIRTUD'])
                     print filename
         if level > 3:
             for itx in range(self.tx.N):
                 for irx in range(self.rx.N):
-                    filename = pyu.getlong(self.filetang[itx][irx], 'tud')
+                    filename = pyu.getlong(self.filetang[itx][irx], pstruc['DIRTUD'])
                     print filename
-                    filename = pyu.getlong(self.filerang[itx][irx], 'tud')
+                    filename = pyu.getlong(self.filerang[itx][irx], pstruc['DIRTUD'])
                     print filename
-                    filename = pyu.getlong(self.filefield[itx][irx], 'tud')
+                    filename = pyu.getlong(self.filefield[itx][irx], pstruc['DIRTUD'])
                     print filename
 
     def save(self):
@@ -1010,7 +1011,7 @@ class Simul(object):
 
             # update .freq file in tud directory
 
-            filefreq = pyu.getlong(self.filefreq, "tud")
+            filefreq = pyu.getlong(self.filefreq, pstruc['DIRTUD'])
             fd = open(filefreq, "w")
             chaine = self.config.get("frequency", "fghzmin") + ' ' + \
                 self.config.get("frequency", "fghzmax") + ' ' + \
@@ -1266,7 +1267,7 @@ class Simul(object):
         if len(ext) == 2:
             ext = '0' + ext
 
-        filecir = pyu.getlong(_filecir, 'cir/Tx' + ext)
+        filecir = pyu.getlong(_filecir, pstruc['DIRCIR']+'/Tx' + ext)
         D = spio.loadmat(filecir)
 
         kxa = 'ta' + str(irx)
@@ -1301,7 +1302,7 @@ class Simul(object):
 
         """
         _filecir = self.dcir[itx][irx] + '.mat'
-        filecir = pyu.getlong(_filecir, 'cir/Tx' + str('%0.3d' % itx))
+        filecir = pyu.getlong(_filecir, pstruc['DIRCIR']+'/Tx' + str('%0.3d' % itx))
         D = spio.loadmat(filecir)
         plt.subplot('211')
 
@@ -1585,7 +1586,7 @@ class Simul(object):
         except:
             print('rx set is no defined')
         _filename = self.filesimul.replace('.ini', '.off')
-        filename = pyu.getlong(_filename, "geom")
+        filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
         fo = open(filename, "w")
         fo.write("LIST\n")
         try:
@@ -1619,7 +1620,7 @@ class Simul(object):
 
         """
         filefreq = self.filefreq
-        filefreq = pyu.getlong(filefreq, 'tud')
+        filefreq = pyu.getlong(filefreq, pstruc['DIRTUD'])
         fo = open(filefreq)
         l = fo.readline().split()
         fmin = eval(l[0])
@@ -1746,14 +1747,14 @@ class Simul(object):
         # append output filename in section output
         #
         _outfilename = self.filesimul.replace('.ini', '') + str(itx) + ".ini"
-        outfilename = pyu.getlong(_outfilename, "launch")
+        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
         self.config.set("output", str(itx), _outfilename)
 
         fd = open(outfilename, "w")
         self.output[itx].write(fd)
         fd.close()
 
-        filesimul = pyu.getlong(self.filesimul, 'ini')
+        filesimul = pyu.getlong(self.filesimul,'ini')
         fd = open(filesimul, "w")
         self.config.write(fd)
         fd.close()
@@ -1794,7 +1795,7 @@ class Simul(object):
             print "No launching available"
 
         _outfilename = self.config.get('output', str(itx))
-        outfilename = pyu.getlong(_outfilename, 'launch')
+        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
         if irx in self.dtra[itx].keys():
             self.output[itx].set("trace", str(irx), self.dtra[itx][irx])
             fd = open(outfilename, "w")
@@ -1848,7 +1849,7 @@ class Simul(object):
                 self.drang[itx][irx] = filename
 
         _outfilename = self.config.get('output', str(itx))
-        outfilename = pyu.getlong(_outfilename, 'launch')
+        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
         if irx in self.dtud[itx].keys():
             self.output[itx].set("tud", str(irx), self.dtud[itx][irx])
         if irx in self.dtang[itx].keys():
@@ -1963,7 +1964,7 @@ class Simul(object):
                 self.dtauk[itx][irx] = filename
 
         _outfilename = self.config.get('output', str(itx))
-        outfilename = pyu.getlong(_outfilename, 'launch')
+        outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
         if irx in self.dtauk[itx].keys():
             self.output[itx].set("tauk", str(irx), self.dtauk[itx][irx])
         if irx in self.dfield[itx].keys():
@@ -2203,7 +2204,7 @@ class Simul(object):
         VCl = channel.VectChannel(self, itx, irx, False)
         return(VCl)
 
-    def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep='cir'):
+    def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep=pstruc['DIRCIR']):
         """
         Calculate a set of channel impulse responses
 

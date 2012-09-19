@@ -1,6 +1,7 @@
 # -*- coding: latin1 -*-
 import os
-import pkgutil 
+import shutil
+import pkgutil
 #class Project(object)
 #       """
 #       Création d'une arborescence de projet
@@ -8,7 +9,7 @@ import pkgutil
 #       def __init__(self):
 #       def
 currentdir = os.getcwd()
-dir1 = pkgutil.get_loader('pylayers').filename 
+dir1 = pkgutil.get_loader('pylayers').filename
 os.chdir(dir1)
 os.chdir('..')
 pylayersdir = os.getcwd()
@@ -93,7 +94,32 @@ for nm in pstruc.keys():
     fd = open(basename+'/project.conf','a')
     fd.write(nm+' '+dirname +'\n')
     fd.close()
+#
+# copy files from /data/ini in project directory 
+#
 filelist = os.listdir(pylayersdir+'/data/ini')
 for fi in filelist:
-    print fi
+    if os.path.isfile(basename+'/ini/'+fi):
+        print fi + '  already exists'
+    else:
+        shutil.copy(pylayersdir+'/data/ini/'+fi,basename+'/ini/'+fi)
+
+#
+# copy files from /data/struc in project directory 
+#
+filelist = os.listdir(pylayersdir+'/data/struc')
+for fi in filelist:
+    if os.path.isfile(basename+'/struc/'+fi):
+        print fi + '  already exists'
+    else:
+        shutil.copy(pylayersdir+'/data/struc/'+fi,basename+'/struc/'+fi)
+#
+# copy files from /data/ant in project directory 
+#
+filelist = os.listdir(pylayersdir+'/data/ant')
+for fi in filelist:
+    if os.path.isfile(basename+'/ant/'+fi):
+        print fi + '  already exists'
+    else:
+        shutil.copy(pylayersdir+'/data/ant/'+fi,basename+'/ant/'+fi)
 os.chdir(currentdir)

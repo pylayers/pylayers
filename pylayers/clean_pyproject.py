@@ -17,7 +17,10 @@ import pdb
 
 
 inifile='where2.ini'
-path='/private/staff/t/ot/niamiot/Pyproject/'
+try:
+    path=os.getenv('BASENAME')
+except:
+    print('Error : there is no project  directory in $BASENAME')
 
 
 
