@@ -44,7 +44,7 @@ where :math:`B` is the bandwidth defined at :math:`\gamma_{dB}` and
 
     In [1]: from pylayers.signal.bsignal import *
 
-    In [2]: ip     = EnImpulse([],4,2,10,100)
+    In [2]: ip  = EnImpulse([],4,2,10,100)
 
     In [3]: Et  = sum(ip.y*ip.y)*ip.dx()
 
