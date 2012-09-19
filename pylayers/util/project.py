@@ -7,23 +7,35 @@ import os
 #       def __init__(self):
 #       def     
 currentdir = os.getcwd()
-
-
+try:
     pulsraydir = os.environ['PULSRAY']
-    print "PULSRAY  : ",pulsraydir
+    print "PULSRAY  : ", pulsraydir
 except:
-    raise EnvironmentError('Please set the PULSRAY environment variable') 
+    raise EnvironmentError('Please set the PULSRAY environment variable')
 try:
     figuredir = os.environ['FIGURDIR']
 except:
-    figuredir = os.environ['HOME']+"/Pyproject/figures"
+    figuredir = os.environ['HOME'] + "/Pyproject/figures"
 #print currentdir
-print "FIGURDIR : ",figuredir
+print "FIGURDIR : ", figuredir
 try:
-        basename=os.environ['BASENAME']
+    basename = os.environ['BASENAME']
 except:
-        basename=os.environ['HOME']+"/Pyproject"
+    basename = os.environ['HOME'] + "/Pyproject"
 
+pstruc = {}
+pstruc['DIRSTRUC'] = 'struc'
+pstruc['DIRSTRUC2'] = 'struc'
+pstruc['DIRSLAB'] = 'ini'
+pstruc['DIRSLAB2'] = 'ini'
+pstruc['DIRMAT'] = 'ini'
+pstruc['DIRMAT2'] = 'ini'
+pstruc['ANT']='ant'
+pstruc['DIRTRA'] = 'output'
+pstruc['DIRLCH'] = 'output'
+pstruc['DIRTUD'] = 'output'
+pstruc['DIRGEOM'] = 'geom'
+pstruc['DIRTRA'] = 'output'
 
 print "BASENAME : ",basename
 
