@@ -630,12 +630,14 @@ class Ray3D(object):
             id of the ray
         linewidth :
         """
-        filerac = pyu.getlong("ray" + str(id), "geom")
+        filerac = pyu.getlong("ray" + str(id), pstruc['DIRGEOM'])
         _filerac = pyu.getshort(filerac)
         filename_list = filerac + '.list'
         filename_vect = filerac + '.vect'
-
-        fo = open(filename_vect, "w")
+        try:
+            fo = open(filename_vect, "w")
+        except:
+            raise NameError(filename)
 
         fo.write("appearance { linewidth %d }\n" % linewidth)
 
@@ -919,9 +921,9 @@ class GrRayTud(object):
 
         """
 
-        filetud = pyu.getlong(_filetud, "tud")
-        filetang = pyu.getlong(_filetang, "tud")
-        filerang = pyu.getlong(_filerang, "tud")
+        filetud = pyu.getlong(_filetud, pstruc['DIRTUD'])
+        filetang = pyu.getlong(_filetang,pstruc['DIRTUD'] )
+        filerang = pyu.getlong(_filerang,pstruc['DIRTUD'])
 
         fo = open(filetud, "wb")
         data = stru.pack('i', self.nray)
@@ -1018,9 +1020,9 @@ class GrRayTud(object):
 
         valerr = False
 
-        filetud = pyu.getlong(_filetud, "tud")
-        filetang = pyu.getlong(_filetang, "tud")
-        filerang = pyu.getlong(_filerang, "tud")
+        filetud = pyu.getlong(_filetud, pstruc['DIRTUD'])
+        filetang = pyu.getlong(_filetang,pstruc['DIRTUD'])
+        filerang = pyu.getlong(_filerang,pstruc['DIRTUD'])
 
         fo = open(filetud, "rb")
         data = fo.read()
@@ -1171,7 +1173,7 @@ class GrRayTud(object):
             raytud.inter = Inter
             delay = raytud.delay()
             #
-            # fix a bug in pulsray delay discontinuities²
+            # this is fix of a bug in pulsray delay discontinuities²
             #
             # impose que les délais soient croissants
             #
@@ -1366,8 +1368,12 @@ class GrRay3D(object):
             >>> plt.show()
 
         """
-        filename = pyu.getlong(_filename, "trace")
-        fo = open(filename, "rb")
+        filename = pyu.getlong(_filename, pstruc['DIRTRA'])
+        try:
+            fo = open(filename, "rb")
+        except:
+            raise NameError(filename)
+
         data = fo.read()
         fo.close()
         #
@@ -1565,8 +1571,11 @@ class GrRay3D(object):
         filename : PulsRay .tra data format  filename
         """
 
-        filename = pyu.getlong(_filename, "trace")
-        fo = open(filename, "wb")
+        filename = pyu.getlong(_filename, pstruc['DIRTRA'])
+        try:
+            fo = open(filename, "wb")
+        except:
+            raise NameError(filename)
 
         dt_lch = self.flch
         L = len(dt_lch)
@@ -1740,6 +1749,7 @@ class GrRay3D(object):
 
     def show3(self, rayset=np.array([]), bdis=True, bstruc=True, id=0):
         """ 3D show using geomview
+
         Parameters
         ----------
         rayset : set of index of rays to be displayed
@@ -1750,7 +1760,7 @@ class GrRay3D(object):
         if (len(rayset) == 0):
             rayset = range(self.n)
 
-        filename = pyu.getlong("grRay" + str(id) + ".list", "geom")
+        filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
         fo = open(filename, "w")
         fo.write("LIST\n")
         if bstruc:

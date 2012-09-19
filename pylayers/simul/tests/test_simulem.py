@@ -6,7 +6,7 @@ S = Simul()
 
 # loading a layout 
 filestr = 'defstr'
-S.layout(filestr+'.str')
+S.layout(filestr+'.str','def.mat','def.slab')
 
 # setting transmitter
 
