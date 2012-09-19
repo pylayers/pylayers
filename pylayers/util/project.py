@@ -116,7 +116,7 @@ try:
                 os.mkdir(antdir)
                 os.chdir('..')
 
- 	tuddir = basename + '/tud' 
+        tuddir = basename + '/tud' 
         try:
                 os.chdir(tuddir)
                 #print "tud dir already exist"
@@ -126,7 +126,7 @@ try:
                 os.mkdir(tuddir)
                 os.chdir('..')
 
-	mesdir = basename + '/measures' 
+        mesdir = basename + '/measures' 
         try:
                 os.chdir(mesdir)
                 #print "tud dir already exist"
@@ -135,7 +135,7 @@ try:
                 print "create mes dir"
                 os.mkdir(mesdir)
                 os.chdir('..')
-	simuldir = basename + '/simul' 
+        simuldir = basename + '/simul' 
         try:
                 os.chdir(simuldir)
                 #print "tud dir already exist"
@@ -144,7 +144,7 @@ try:
                 print "create simul dir"
                 os.mkdir(simuldir)
                 os.chdir('..')
-	wavedir = basename + '/wave' 
+        wavedir = basename + '/wave' 
         try:
                 os.chdir(wavedir)
                 #print "wavedir already exist"
@@ -153,7 +153,7 @@ try:
                 print "create wavedir"
                 os.mkdir(wavedir)
                 os.chdir('..')
-	cirdir = basename + '/cir' 
+        cirdir = basename + '/cir' 
         try:
                 os.chdir(cirdir)
                 #print "wavedir already exist"
