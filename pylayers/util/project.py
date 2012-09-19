@@ -7,6 +7,7 @@ import os
 #       def __init__(self):
 #       def
 currentdir = os.getcwd()
+print test
 try:
     pulsraydir = os.environ['PULSRAY']
     print "PULSRAY  : ", pulsraydir
