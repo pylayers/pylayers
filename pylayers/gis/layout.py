@@ -361,6 +361,9 @@ class Layout(object):
 #        return(sign_Tx_Rx)
 
     def help(self):
+        """ help 
+
+        """
         print "L.showGs(clear=True)"
         print "L.showGs(edlist=L.subseg()['WOOD'],dthin=False,dlabels=True)"
 
@@ -1553,9 +1556,25 @@ class Layout(object):
             self.Nss += 1
 
     def add_window(self, e1):
+        """ add a window on segment 
+
+        Parameters 
+        ----------
+        e1 : integer 
+            segment number 
+
+        """
         pass
 
     def add_door(self, e1):
+        """ add a door on segment 
+
+        Parameters 
+        ----------
+        e1 : integer 
+            segment number 
+
+        """
         pass
 
     def find_edgelist(self, edgelist, nodelist):
@@ -2274,7 +2293,14 @@ class Layout(object):
                             dlabels=dlabels, font_size=font_size)
 
     def showGt(self, ax=[], roomlist=[]):
-        """
+        """ show topological graph Gt 
+
+        Parameters
+        -----------
+        ax : matlplotlib axes
+        roomlist : list 
+            list of room numbers
+
         """
         if not isinstance(ax, plt.Axes):
             fig = plt.gcf()
@@ -2296,8 +2322,7 @@ class Layout(object):
         ax.axis('scaled')
 
     def showGs(self, ax=[], ndlist=[], edlist=[], show=False, furniture=False, roomlist=[]):
-        """
-        show structure graph Gs
+        """ show structure graph Gs
 
         Parameters
         ----------
@@ -2835,17 +2860,15 @@ class Layout(object):
 #        if kwargs['show']:
 #            plt.show()
     def showG(self, graph='r', **kwargs):
-        """
+        """ show graphs
+
         Parameters
         ----------
-        show : boolean
-        fig
-        nodes
-        eded
-        ndnd
-        nded
-        linewidth
-        nodelist
+        graph : char 
+            't' : Gt
+            'r' : Gr
+            's' : Gs
+            'v' : Gv 
         """
 
         defaults = {'show': False,
