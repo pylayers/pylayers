@@ -4,9 +4,11 @@
 antprop
 =======
 
+This modules gather all classes and functions related to antenna and
+propagation modelling.
 
-antenna
-*******
+Module antenna
+**************
 
 .. currentmodule:: pylayers.antprop.antenna
 
@@ -22,6 +24,9 @@ Functions
     VW
     AFLegendre
     show3D
+
+Class SHCoeff
+-------------
 
 .. currentmodule:: pylayers.antprop.antenna.SHCoeff
 
@@ -43,6 +48,8 @@ Functions
     info
     show
 
+Class VSHCoeff
+---------------
 
 .. currentmodule:: pylayers.antprop.antenna.VSHCoeff
 
@@ -61,6 +68,8 @@ Functions
     drag3 
     put3
 
+Class Antenna
+-------------
 
 .. currentmodule:: pylayers.antprop.antenna.Antenna
 
@@ -101,8 +110,9 @@ Functions
 
     
 
-Slab
-****
+Module Slab
+***********
+
     
 .. currentmodule:: pylayers.antprop.slab.Interface
 

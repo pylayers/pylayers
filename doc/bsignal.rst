@@ -26,8 +26,8 @@ where :math:`B` is the bandwidth defined at :math:`\gamma_{dB}` and
 .. plot::
     :include-source:
 
-    from PyLayers.Signal.Bsignal import *
-    from PyLayers.Simul.SimulEM import *
+    from pylayers.signal.bsignal import *
+    from pylayers.simul.simulem import *
     from matplotlib.pylab import *
     fc     = 4 
     band   = 2
@@ -40,90 +40,117 @@ where :math:`B` is the bandwidth defined at :math:`\gamma_{dB}` and
 
 *Verification of energy normalization in both domains*
 
+.. ipython::
 
-    E1  = sum(ip.y*ip.y)*ip.dx()
-    print "Integration in time",E1
+    In [1]: from pylayers.signal.bsignal import *
 
+    In [2]: ip  = EnImpulse([],4,2,10,100)
 
-P = ip.esd()
-E2 = sum(P.y)*P.dx()
-print "Integration in frequency domain ",E2
+    In [3]: Et  = sum(ip.y*ip.y)*ip.dx()
 
+    In [4]: print "Time integration",Et
 
-# ## Calcul of UWB channel impulse response
+    In [5]: P = ip.esd()
+   
+    In [6]: Ef = sum(P.y)*P.dx()
 
-
-S= Simul()
-S.load('where2.ini')
-
-
-st = S.wav.st
-sf = S.wav.sf
-S.wav.info()
+    In [7]: print "Frequency integration",Ef
 
 
-st.plot()
-figure()
-sf.plot()
+*Calcul of UWB channel impulse response*
 
-# <markdowncell>
+A simulation file contains the description of an applied waveform. 
+
+.. ipython::
+
+    In [1]: from pylayers.simul.simulem import *
+
+    In [2]: from matplotlib.pylab import *
+
+    In [3]: S = Simul()
+
+    In [4]: S.load('where2.ini')
+
+    In [5]: st = S.wav.st
+
+    In [6]: sf = S.wav.sf
+
+    In [7]: S.wav.info()
+
+    In [8]: st.plot()
+
+
+.. plot::
+
+    from pylayers.simul.simulem import *
+    from matplotlib.pylab import *
+    S = Simul()
+    S.load('where2.ini')
+    st = S.wav.st
+    sf = S.wav.sf
+    st.plot()
+    figure()
+    sf.plot()
+    show()
+
+
 
 *Construction of the VectChannel*
 
+.. ipython::
+
+    In [9]: vc = S.VC(1,1)
+
+    In [10]: vc.doadod()
 
 
-vc = S.VC(1,1)
+.. plot::
 
-
-vc.doadod()
-
+    from pylayers.simul.simulem import *
+    from matplotlib.pylab import *
+    S = Simul()
+    S.load('where2.ini')
+    vc = S.VC(1,1)
+    figure(figsize=(16,8))
+    vc.doadod()
+    show()
 
 *Construction of the ScalChannel*
 
-# <codecell>
+.. ipython::
 
-sc = vc.vec2scal()
+    sc = vc.vec2scal()
 
-# <markdowncell>
 
 # The ScalChannel object contain all the information about the ray transfer function 
 
-# <codecell>
 
 S.tx.A.info()
 
-# <codecell>
 
 sc.H.plot()
 
-# <markdowncell>
 
 # The antenna can also been taken into account
 
-# <codecell>
 
 alpha = 1./sqrt(30)
 sca = vc.vec2scalA(S.tx.A,S.rx.A,alpha)
 sca.H.plot()
 
-# <markdowncell>
 
 # ## Calculate UWB Channel Impulse Response 
 
-# <codecell>
 
 cir = sc.applywavB(S.wav.sfg)
 
-# <codecell>
 
 cir.plot()
 
-# <codecell>
 
 CIR=cir.esd(mode='unilateral')
 CIR.plot()
 
-# <markdowncell>
 
 # This is wrong 
 # 
@@ -147,13 +174,11 @@ uh.plot()
 #IP0  = ip0.fft()
 #IP0.plot()
 
-# <codecell>
 
 ips  = Y.ift(500,1)
 t    = ips.x 
 ip0  = TUsignal(t,ips.y[0,:])
 
-# <codecell>
 
 plot(UH.x,real(UH.y[0,:]),UH.x,imag(UH.y[0,:]))
 U0 = FHsignal(UH.x,UH.y[0,:])
@@ -163,17 +188,14 @@ plt.figure()
 plot(uh.x,uh.y[0,:]*1000+3)
 S.wav.st.plot()
 
-# <codecell>
 
 U0.plot()
 
-# <markdowncell>
 
 # # Here is the problem 
 # 
 # For some reason the Hermitian symmetry forcing is not working here
 
-# <codecell>
 
 U1=u0.fft()
 g = fft(u1)
@@ -185,102 +207,76 @@ plot(abs(g))
 #plot(uh.x,uh.y[0,:])
 #plot(uh.x,s*50+0.003)
 
-# <codecell>
-
 plot(abs(fft(s)),'r')
 plot(abs(fft(uh.y[0,:])),'g')
 
-# <codecell>
 
 wgam.plot()
 
-# <codecell>
 
 S.wav.sf.plot()
 
-# <codecell>
 
 print uh.y[0,:]
 
-# <codecell>
 
 plot(imag(s))
 
-# <markdowncell>
 
 # Problem $s$ is not real 
 
-# <codecell>
 
 u0
 
-# <codecell>
 
 plot(real(u0.y))
 
-# <codecell>
 
 plot(imag(s))
 
-# <codecell>
 
 U0.y
 
-# <codecell>
 
 plot(real(U0.y))
 
-# <codecell>
 
 U0.y[0]
 
-# <codecell>
 
 U0.y[50]
 
-# <codecell>
 
 U0.y[-50]
 
-# <codecell>
 
 UH.y[0,2]
 
-# <codecell>
 
 UH.y[0,-2]
 
-# <codecell>
 
 N = len(UH.y)
 
-# <codecell>
 
 v1 = UH.y[1:(N-1)/2.]
 v2 = UH.y[N:-1:(N-1)/2.]
 
-# <codecell>
-
 
 len(v1)
 
-# <codecell>
 
 len(v2)
 
-# <codecell>
 
 UH.y[0,-1]
 
-# <codecell>
 
 UH.y[0,1]
 
-# <codecell>
 
 plot(real(UH.y[0,:]))
 plot(imag(UH.y[1,:]))
 
-# <codecell>
 
 
