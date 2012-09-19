@@ -141,7 +141,7 @@ class Layout(object):
         distwall(self,p,nroom)
 
     """
-    def __init__(self,_filemat='simul8.mat',_fileslab='simul8.slab'):
+    def __init__(self,_filemat='def.mat',_fileslab='def.slab'):
 
         mat = sb.MatDB()
         mat.load(_filemat)
@@ -435,7 +435,7 @@ class Layout(object):
         except:
             print "problem to construct geomfile"
 
-    def loadstr(self, _filename, _filemat='simul9.mat', _fileslab='simul9.slab'):
+    def loadstr(self, _filename, _filemat='def.mat', _fileslab='def.slab'):
         """ loadstr load a .str de PulsRay
 
         Parameters
@@ -894,7 +894,7 @@ class Layout(object):
         #
         self.boundary(1, 1)
 
-    def loadstr2(self, _filename, _filemat='simul9.mat', _fileslab='simul9.slab'):
+    def loadstr2(self, _filename, _filemat='def.mat', _fileslab='def.slab'):
         """ load a Graph from a str2 file
 
             Parameters
@@ -1877,7 +1877,7 @@ class Layout(object):
             p2 : (1 x 2 )
             return (seglist , theta)
 
-            >>> L=Layout('simul9.mat','simul9.slab')
+            >>> L=Layout('def.mat','def.slab')
             >>> L.loadstr('sircut.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,3])
@@ -3787,7 +3787,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> p_Tx,p_Rx = L.randTxRx()
 
         Notes
@@ -3825,7 +3825,7 @@ class Layout(object):
         --------
 
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> L.boundary()
 
         """
@@ -3864,7 +3864,7 @@ class Layout(object):
         --------
 
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -3925,7 +3925,7 @@ class Layout(object):
 #        Examples
 #        --------
 #        >>> L = Layout()
-#        >>> L.loadstr('tag.str','simul8.mat','simul8.slab')
+#        >>> L.loadstr('tag.str','def.mat','def.slab')
 #        >>> L.buildGt()
 #        >>> L.buildGr()
 #        >>> GvF,posF,labelsF=L.GvF('tag.lo')
@@ -4001,7 +4001,7 @@ class Layout(object):
         Examples
         --------
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -4044,7 +4044,7 @@ class Layout(object):
         Examples
         --------
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -4090,7 +4090,7 @@ class Layout(object):
 #        Examples
 #        --------
 #        >>> L = Layout()
-#        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+#        >>> L.loadstr('exemple.str','def.mat','def.slab')
 #        >>> ncoin,ndiff = L.buildGc()
 #        >>> L.buildGt()
 #        >>> L.buildGr()
@@ -4148,7 +4148,7 @@ class Layout(object):
 #        Examples
 #        --------
 #        >>> L = Layout()
-#        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+#        >>> L.loadstr('exemple.str','def.mat','def.slab')
 #        >>> ncoin,ndiff = L.buildGc()
 #        >>> L.buildGt()
 #        >>> L.buildGr()
@@ -4190,7 +4190,7 @@ class Layout(object):
         Examples
         --------
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -4262,7 +4262,7 @@ class Layout(object):
         Examples
         --------
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -4354,7 +4354,7 @@ class Layout(object):
 #        Examples
 #        --------
 #        >>> L = Layout()
-#        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+#        >>> L.loadstr('exemple.str','def.mat','def.slab')
 #        >>> ncoin,ndiff = L.buildGc()
 #        >>> L.buildGt()
 #        >>> L.buildGr()
@@ -4411,7 +4411,7 @@ class Layout(object):
         Examples
         --------
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> p_Tx=np.array([2,0])
         >>> p_Rx=np.array([7.5,0])
         >>> Nc=10
@@ -4463,7 +4463,7 @@ class Layout(object):
         Examples
         --------
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+        >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> L.buildGt()
         >>> L.buildGr()
         >>> p_Tx=np.array([2,0])
@@ -4523,7 +4523,7 @@ class Layout(object):
 #        Examples
 #        --------
 #        >>> L=Layout()
-#        >>> L.loadstr('exemple.str','simul8.mat','simul8.slab')
+#        >>> L.loadstr('exemple.str','def.mat','def.slab')
 #        >>> ncoin,ndiff=L.buildGc()
 #        >>> L.buildGt()
 #        >>> L.buildGr()

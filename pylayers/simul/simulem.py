@@ -1075,7 +1075,7 @@ class Simul(object):
         self.wav = wvf.Waveform()
         self.wav.read(self.config)
 
-    def layout(self, _filestruc, _filemat='simul8.mat', _fileslab='simul8.slab'):
+    def layout(self, _filestruc, _filemat='def.mat', _fileslab='def.slab'):
         """ load a layout in the simulation oject
 
         Parameters
@@ -1092,7 +1092,7 @@ class Simul(object):
 
         >>> from pylayers.simul.simulem import *
         >>> S = Simul()
-        >>> S.layout('sircut.str')
+        >>> S.layout('defstr.str')
 
         """
 

@@ -45,7 +45,7 @@ class Interface(object):
     Io     np.array (nf,nt,2,2)
 
     """
-    def __init__(self,fGHz=np.array([2.4]),theta=np.array([[0.0+0*1j]]),name=''):
+    def __init__(self, fGHz=np.array([2.4]), theta=np.array([[0.0 + 0 * 1j]]), name=''):
         """
         fGHz  :
             frequency in GHz (default 2.4)
@@ -56,28 +56,28 @@ class Interface(object):
         # reshape theta if necessary
         # allows to use a ndim = 1 array
         #
-        if theta.ndim !=2:
-            theta = theta.reshape(1,len(theta))
-        self.nf    = len(fGHz)
-        self.nt    = np.shape(theta)[1]
-        self.fGHz  = fGHz.reshape(self.nf,1)
+        if theta.ndim != 2:
+            theta = theta.reshape(1, len(theta))
+        self.nf = len(fGHz)
+        self.nt = np.shape(theta)[1]
+        self.fGHz = fGHz.reshape(self.nf, 1)
         #self.theta = np.outer(np.ones(nf),theta).astype('complex')
         self.theta = theta
         #
         # Initialize Io and Ip  (nf,nt,2,2)
         #
-        self.Ip = np.array(np.zeros([self.nf,self.nt,2,2]),dtype=complex)
-        self.Io = np.array(np.zeros([self.nf,self.nt,2,2]),dtype=complex)
+        self.Ip = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
+        self.Io = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         self.name = name
 
-    def RT(self,metalic=False):
+    def RT(self, metalic=False):
         """ evaluate Reflection and Transmission matrix
 
             .. math::
 
             R = \\matrix(R_o & 0\\\\0 & R_p)
             T = \\matrix(T_o & 0\\\\0 & T_p)
-    
+
         Notes
         -----
         R : np.array   (nf , nt , 2, 2)
@@ -86,19 +86,19 @@ class Interface(object):
         sh = np.shape(self.Io)
         nf = sh[0]
         nt = sh[1]
-     
+
         #
         # R and T matrices are diagonal
         #
-        self.R  = np.array(np.zeros([nf,nt,2,2]),dtype=complex)
-        self.T  = np.array(np.zeros([nf,nt,2,2]),dtype=complex)
+        self.R = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
+        self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
-        self.R[:,:,0,0] = self.Io[:,:,0,1]/self.Io[:,:,0,0]
-        self.R[:,:,1,1] = self.Ip[:,:,0,1]/self.Ip[:,:,0,0]
+        self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
+        self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
 
         if not metalic:
-            self.T[:,:,0,0] = 1.0/self.Io[:,:,0,0]
-            self.T[:,:,1,1] = 1.0/self.Ip[:,:,0,0]
+            self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
+            self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
 
         #self.R[:,:,0,0]= self.Ro
         #self.R[:,:,1,1]= self.Rp
@@ -109,64 +109,64 @@ class Interface(object):
         #print 'RT : To : ',self.To[15,31]
         #print 'RT : Tp : ',self.Tp[15,31]
 
-    def pcolor(self,dB=False):
-        """ display of R & T coefficients wrt frequency an angle 
+    def pcolor(self, dB=False):
+        """ display of R & T coefficients wrt frequency an angle
 
         Parameters
         ----------
-            dB : boolean 
+            dB : boolean
                 default False
 
 
         """
-        rtd   = 180/np.pi
+        rtd = 180 / np.pi
         #nom = self.m1.name+'|'+self.m2.name
         if dB:
-            modRo = 20*np.log10(abs(self.R[:,:,0,0]))
-            modRp = 20*np.log10(abs(self.R[:,:,1,1]))
-            modTo = 20*np.log10(abs(self.T[:,:,0,0]))
-            modTp = 20*np.log10(abs(self.T[:,:,1,1]))
+            modRo = 20 * np.log10(abs(self.R[:, :, 0, 0]))
+            modRp = 20 * np.log10(abs(self.R[:, :, 1, 1]))
+            modTo = 20 * np.log10(abs(self.T[:, :, 0, 0]))
+            modTp = 20 * np.log10(abs(self.T[:, :, 1, 1]))
         else:
-            modRo = abs(self.R[:,:,0,0])
-            modRp = abs(self.R[:,:,1,1])
-            modTo = abs(self.T[:,:,0,0])
-            modTp = abs(self.T[:,:,1,1])
-        plt.hot() 
+            modRo = abs(self.R[:, :, 0, 0])
+            modRp = abs(self.R[:, :, 1, 1])
+            modTo = abs(self.T[:, :, 0, 0])
+            modTp = abs(self.T[:, :, 1, 1])
+        plt.hot()
         plt.subplot(221)
-        plt.pcolor(self.theta[0,:]*rtd,self.fGHz[:,0],modRo)
+        plt.pcolor(self.theta[0, :] * rtd, self.fGHz[:, 0], modRo)
         plt.colorbar()
-        plt.contour(self.theta[0,:]*rtd,self.fGHz[:,0],modRo)
+        plt.contour(self.theta[0, :] * rtd, self.fGHz[:, 0], modRo)
         plt.xlabel(r'$\theta$ (degrees) ')
         plt.ylabel('f (GHz)')
         #title('R _|_ '+nom)
         plt.title('R _|_ ')
         plt.subplot(222)
-        plt.pcolor(self.theta[0,:]*rtd,self.fGHz[:,0],modRp)
+        plt.pcolor(self.theta[0, :] * rtd, self.fGHz[:, 0], modRp)
         plt.colorbar()
-        plt.contour(self.theta[0,:]*rtd,self.fGHz[:,0],modRp)
+        plt.contour(self.theta[0, :] * rtd, self.fGHz[:, 0], modRp)
         #title('R // '+nom)
         plt.title('R // ')
         plt.xlabel(r'$\theta$ (degrees) ')
         plt.ylabel('f (GHz)')
         plt.subplot(223)
-        plt.pcolor(self.theta[0,:]*rtd,self.fGHz[:,0],modTo)
+        plt.pcolor(self.theta[0, :] * rtd, self.fGHz[:, 0], modTo)
         plt.colorbar()
-        plt.contour(self.theta[0,:]*rtd,self.fGHz[:,0],modTo)
+        plt.contour(self.theta[0, :] * rtd, self.fGHz[:, 0], modTo)
         #title('T _|_ '+nom)
         plt.title('T _|_ ')
         plt.xlabel(r'$\theta$ (degrees) ')
         plt.ylabel('f (GHz)')
         plt.subplot(224)
-        plt.pcolor(self.theta[0,:]*rtd,self.fGHz[:,0],modTp)
+        plt.pcolor(self.theta[0, :] * rtd, self.fGHz[:, 0], modTp)
         plt.colorbar()
-        plt.contour(self.theta[0,:]*rtd,self.fGHz[:,0],modTp)
+        plt.contour(self.theta[0, :] * rtd, self.fGHz[:, 0], modTp)
         #title('T // '+nom)
         plt.title('T // ')
         plt.xlabel(r'$\theta$ (degrees) ')
         plt.ylabel('f (GHz)')
         plt.show()
 
-    def loss0(self,fGHz,display=False):
+    def loss0(self, fGHz, display=False):
         """ Evaluate Loss at normal incidence theta=0
 
         Parameters
@@ -180,25 +180,25 @@ class Interface(object):
         Lp : loss in dB polarization parallel
 
         """
-        modTo = abs(self.T[:,:,0,0])
-        modTp = abs(self.T[:,:,1,1])
+        modTo = abs(self.T[:, :, 0, 0])
+        modTp = abs(self.T[:, :, 1, 1])
 
-        Lo    = -20*np.log10(modTo[:,0])
-        Lp    = -20*np.log10(modTp[:,0])
- 
+        Lo = -20 * np.log10(modTo[:, 0])
+        Lp = -20 * np.log10(modTp[:, 0])
+
         if display:
-            plt.plot(f,Lo,'b')
+            plt.plot(f, Lo, 'b')
             #plot(f,Lp,'r')
             #legend(('L0 _|_','L0 //'),loc='upper right')
-            plt.legend(('L0 (dB)'),loc='upper right')
+            plt.legend(('L0 (dB)'), loc='upper right')
             plt.xlabel('frequency (GHz)')
             plt.show()
 
-        return(Lo,Lp)
+        return(Lo, Lp)
 
-    def losst(self,fGHz,display=False):
+    def losst(self, fGHz, display=False):
         """  Evaluate Loss
-     
+
         Parameters
         ----------
 
@@ -212,32 +212,30 @@ class Interface(object):
         Lp : np.array
 
         """
-     
-        modTo = abs(self.T[:,:,0,0])
-        modTp = abs(self.T[:,:,1,1])
 
-        Lo    = -20*np.log10(modTo[:,0])
-        Lp    = -20*np.log10(modTp[:,0])
- 
+        modTo = abs(self.T[:, :, 0, 0])
+        modTp = abs(self.T[:, :, 1, 1])
+
+        Lo = -20 * np.log10(modTo[:, 0])
+        Lp = -20 * np.log10(modTp[:, 0])
+
         if display:
-            np.plot(fGHz,Lo,'b')
+            np.plot(fGHz, Lo, 'b')
             #plot(f,Lp,'r')
             #legend(('L0 _|_','L0 //'),loc='upper right')
-            np.legend(('L0 (dB)'),loc='upper right')
+            np.legend(('L0 (dB)'), loc='upper right')
             np.xlabel('frequency (GHz)')
             np.show()
 
-        return(Lo,Lp)
+        return(Lo, Lp)
 
-
-
-    def plotwrtf(self,k=0):
+    def plotwrtf(self, k=0):
         """ plot R & T coefficients with respect to frequency
 
          Parameters
          ----------
 
-         k     : int 
+         k     : int
              theta index
 
          Examples
@@ -251,7 +249,7 @@ class Interface(object):
              >>> import numpy as np
              >>> theta = np.arange(0,np.pi/2,0.01)
              >>> fGHz  = np.arange(0.1,10,0.2)
-             >>> sl    = SlabDB('simul8.mat','simul8.slab')
+             >>> sl    = SlabDB('def.mat','def.slab')
              >>> mat   = sl.mat
              >>> lmat  = [mat['AIR'],mat['WOOD']]
              >>> II    = MatInterface(lmat,0,fGHz,theta)
@@ -262,25 +260,25 @@ class Interface(object):
 
         """
         plt.subplot(211)
-        modRo = abs(self.R[:,:,0,0])
-        modRp = abs(self.R[:,:,1,1])
-        modTo = abs(self.T[:,:,0,0])
-        modTp = abs(self.T[:,:,1,1])
+        modRo = abs(self.R[:, :, 0, 0])
+        modRp = abs(self.R[:, :, 1, 1])
+        modTo = abs(self.T[:, :, 0, 0])
+        modTp = abs(self.T[:, :, 1, 1])
         #nom = self.m1.name+'|'+self.m2.name+' '+str(theta[k])+'degrees'
         #title('Reflection & Transmission Coefficient  : '+ nom)
         plt.title(self.name)
-        plt.plot(self.fGHz,modRo[:,k],'b')
-        plt.plot(self.fGHz,modRp[:,k],'r')
-        plt.legend(('R _|_','R //'),loc='upper left')
+        plt.plot(self.fGHz, modRo[:, k], 'b')
+        plt.plot(self.fGHz, modRp[:, k], 'r')
+        plt.legend(('R _|_', 'R //'), loc='upper left')
         plt.xlabel('frequency (GHz)')
         plt.subplot(212)
-        plt.plot(self.fGHz,modTo[:,k],'b')
-        plt.plot(self.fGHz,modTp[:,k],'r')
-        plt.legend(('T _|_','T //'),loc='upper right')
+        plt.plot(self.fGHz, modTo[:, k], 'b')
+        plt.plot(self.fGHz, modTp[:, k], 'r')
+        plt.legend(('T _|_', 'T //'), loc='upper right')
         plt.xlabel('frequency (GHz)')
         plt.show()
 
-    def plotwrta(self,k=0,display='modulus',name='',dB=False):
+    def plotwrta(self, k=0, display='modulus', name='', dB=False):
         """ plot R & T coefficients with respect to angle
 
          Parameters
@@ -311,52 +309,56 @@ class Interface(object):
              >>> fig = plt.figure()
              >>> II.plotwrta(0)
              >>> plt.show()
-  
+
         """
-        rtd   = 180/np.pi
+        rtd = 180 / np.pi
 
         plt.subplot(211)
 
-        modRo = abs(self.R[:,:,0,0])
-        modRp = abs(self.R[:,:,1,1])
-        modTo = abs(self.T[:,:,0,0])
-        modTp = abs(self.T[:,:,1,1])
+        modRo = abs(self.R[:, :, 0, 0])
+        modRp = abs(self.R[:, :, 1, 1])
+        modTo = abs(self.T[:, :, 0, 0])
+        modTp = abs(self.T[:, :, 1, 1])
 
-        angleRo = np.angle(self.R[:,:,0,0])
-        angleRp = np.angle(self.R[:,:,1,1])
-        angleTo = np.angle(self.T[:,:,0,0])
-        angleTp = np.angle(self.T[:,:,1,1])
+        angleRo = np.angle(self.R[:, :, 0, 0])
+        angleRp = np.angle(self.R[:, :, 1, 1])
+        angleTo = np.angle(self.T[:, :, 0, 0])
+        angleTp = np.angle(self.T[:, :, 1, 1])
 
-        if display=='phase':
-            plt.plot(self.theta[0,:]*rtd,angleRo[k,:]*rtd,'b')
-            plt.plot(self.theta[0,:]*rtd,angleRp[k,:]*rtd,'r')
-        else: 
+        if display == 'phase':
+            plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
+            plt.plot(self.theta[0, :] * rtd, angleRp[k, :] * rtd, 'r')
+        else:
             if dB:
-                plt.plot(self.theta[0,:]*rtd,20*np.log10(modRo[k,:]),'b')
-                plt.plot(self.theta[0,:]*rtd,20*np.log10(modRp[k,:]),'r')
+                plt.plot(self.theta[0, :] * rtd, 20 *
+                         np.log10(modRo[k, :]), 'b')
+                plt.plot(self.theta[0, :] * rtd, 20 *
+                         np.log10(modRp[k, :]), 'r')
             else:
-                plt.plot(self.theta[0,:]*rtd,modRo[k,:],'b')
-                plt.plot(self.theta[0,:]*rtd,modRp[k,:],'r')
-        plt.legend(('R _|_','R //'),loc='upper left')
+                plt.plot(self.theta[0, :] * rtd, modRo[k, :], 'b')
+                plt.plot(self.theta[0, :] * rtd, modRp[k, :], 'r')
+        plt.legend(('R _|_', 'R //'), loc='upper left')
         plt.xlabel('theta (degrees)')
         #nom = self.m1.name+'|'+self.m2.name+' '+str(f[k])+'GHz'
-        nom = ' f ='+str(self.fGHz[k,0])+' GHz'
+        nom = ' f =' + str(self.fGHz[k, 0]) + ' GHz'
         if name != '':
-            plt.title(name+nom)
-        else: 
-            plt.title(self.name+nom)
+            plt.title(name + nom)
+        else:
+            plt.title(self.name + nom)
         plt.subplot(212)
-        if display=='phase':
-            plt.plot(self.theta[0,:]*rtd,angleTo[k,:]*rtd,'b')
-            plt.plot(self.theta[0,:]*rtd,angleTp[k,:]*rtd,'r')
-        else: 
+        if display == 'phase':
+            plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, 'b')
+            plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, 'r')
+        else:
             if dB:
-                plt.plot(self.theta[0,:]*rtd,20*np.log10(modTo[k,:]),'b')
-                plt.plot(self.theta[0,:]*rtd,20*np.log10(modTp[k,:]),'r')
+                plt.plot(self.theta[0, :] * rtd, 20 *
+                         np.log10(modTo[k, :]), 'b')
+                plt.plot(self.theta[0, :] * rtd, 20 *
+                         np.log10(modTp[k, :]), 'r')
             else:
-                plt.plot(self.theta[0,:]*rtd,modTo[k,:],'b')
-                plt.plot(self.theta[0,:]*rtd,modTp[k,:],'r')
-        plt.legend(('T _|_','T //'),loc='upper right')
+                plt.plot(self.theta[0, :] * rtd, modTo[k, :], 'b')
+                plt.plot(self.theta[0, :] * rtd, modTp[k, :], 'r')
+        plt.legend(('T _|_', 'T //'), loc='upper right')
         plt.xlabel('theta (degrees)')
         plt.show()
 
@@ -378,7 +380,7 @@ class MatInterface(Interface):
        >>> fGHz   = np.arange(3.1,10.6,0.2)
        >>> Nf     = len(fGHz)
        >>> Nt     = len(theta)
-       >>> sl     = SlabDB('simul8.mat','simul8.slab')
+       >>> sl     = SlabDB('def.mat','def.slab')
        >>> mat    = sl.mat
        >>> m1     = mat['AIR']
        >>> m2     = mat['PLASTER']
@@ -396,7 +398,7 @@ class MatInterface(Interface):
 
 
     """
-    def __init__(self,lmat,l,fGHz,theta):
+    def __init__(self, lmat, l, fGHz, theta):
         """ Fresnel reflection coefficients
 
         Parameters
@@ -413,28 +415,28 @@ class MatInterface(Interface):
         #if not isinstance(theta,np.ndarray):
         #    theta=np.array([theta])
         name = '|'.join(mat['name'] for mat in lmat)
-        Interface.__init__(self,fGHz,theta,name=name)
+        Interface.__init__(self, fGHz, theta, name=name)
         self.m1 = lmat[0]
         self.m2 = lmat[1]
         # 2*np.pi* f(GHz)*eps0 = f(Ghz)/18
 
-        epr1  =  self.m1['epr']-1j*abs(self.m1['sigma'])*18/self.fGHz
-        epr2  =  self.m2['epr']-1j*abs(self.m2['sigma'])*18/self.fGHz
+        epr1 = self.m1['epr'] - 1j * abs(self.m1['sigma']) * 18 / self.fGHz
+        epr2 = self.m2['epr'] - 1j * abs(self.m2['sigma']) * 18 / self.fGHz
 
-        mur1  =  self.m1['mur']
-        mur2  =  self.m2['mur']
+        mur1 = self.m1['mur']
+        mur2 = self.m2['mur']
 
         #n1    =  sqrte(epr1/mur1)
         #n2    =  sqrte(epr2/mur2)
 
-        n1    =  np.sqrt(epr1/mur1)
-        n2    =  np.sqrt(epr2/mur2)
+        n1 = np.sqrt(epr1 / mur1)
+        n2 = np.sqrt(epr2 / mur2)
 
-        ct    =  np.cos(self.theta)
+        ct = np.cos(self.theta)
 
-        nT1p  = n1/ct         # //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
-        nT1o  = n1*ct         # _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
-    
+        nT1p = n1 / ct         # //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        nT1o = n1 * ct         # _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+
         #print np.shape(n1)
         #print np.shape(ct)
         #print "Slab cst n1 et ct ",n1[15,0],ct[0,31]
@@ -442,53 +444,54 @@ class MatInterface(Interface):
         #print "Slab cst nT1o ",nT1o[15,31]
 
         #cti       =  pyu.sqrte(1-((n1/n2)*np.sin(self.theta))**2)
-        cti       =  np.sqrt(1-((n1/n2)*np.sin(self.theta))**2)
+        cti = np.sqrt(1 - ((n1 / n2) * np.sin(self.theta)) ** 2)
         #CTI   =  np.sqrt(1-((n1/n2)*np.sin(THETA))**2)
-        self.theta =  np.arccos(cti)
+        self.theta = np.arccos(cti)
         #print np.shape(cti)
         #print "cti ",cti[15,31]
         #print "arcos(cti)  ",self.theta[15,31]
         #print '-------------------------'
 
-        if l!=0:
-            deltai = 2*np.pi*l*n2*cti*self.fGHz/0.3
+        if l != 0:
+            deltai = 2 * np.pi * l * n2 * cti * self.fGHz / 0.3
         else:
             deltai = 0
 
-        nT2p  = n2/cti
-        nT2o  = n2*cti
+        nT2p = n2 / cti
+        nT2o = n2 * cti
 
-        Rp    =  (nT1p-nT2p)/(nT1p+nT2p)
+        Rp = (nT1p - nT2p) / (nT1p + nT2p)
         #Ro    =  (nT1o-nT2o)/(nT1o+nT2o)
-        Ro    =  -(nT1o-nT2o)/(nT1o+nT2o)   #modif Eric
-        Tp    =  1.0+Rp
-        To    =  1.0+Ro
+        Ro = -(nT1o - nT2o) / (nT1o + nT2o)  # modif Eric
+        Tp = 1.0 + Rp
+        To = 1.0 + Ro
 
         self.Ro = Ro
         self.Rp = Rp
 
-        epd = np.exp( 1j*deltai)
-        emd = np.exp(-1j*deltai)
+        epd = np.exp(1j * deltai)
+        emd = np.exp(-1j * deltai)
 
-        self.Ip[:,:,0,0] = epd/Tp
-        self.Ip[:,:,0,1] = Rp*emd/Tp
-        self.Ip[:,:,1,0] = Rp*epd/Tp
-        self.Ip[:,:,1,1] = emd/Tp
+        self.Ip[:, :, 0, 0] = epd / Tp
+        self.Ip[:, :, 0, 1] = Rp * emd / Tp
+        self.Ip[:, :, 1, 0] = Rp * epd / Tp
+        self.Ip[:, :, 1, 1] = emd / Tp
 
-        self.Io[:,:,0,0] = epd/To
-        self.Io[:,:,0,1] = Ro*emd/To
-        self.Io[:,:,1,0] = Ro*epd/To
-        self.Io[:,:,1,1] = emd/To
-     
+        self.Io[:, :, 0, 0] = epd / To
+        self.Io[:, :, 0, 1] = Ro * emd / To
+        self.Io[:, :, 1, 0] = Ro * epd / To
+        self.Io[:, :, 1, 1] = emd / To
+
         #print 'Slab MatInterface Ip00',self.Ip[15,31,0,0]
         #print 'Slab MatInterface Ip01',self.Ip[15,31,0,1]
         #print 'Slab MatInterface Ip10',self.Ip[15,31,1,0]
         #print 'Slab MatInterface Ip11',self.Ip[15,31,1,1]
-    
+
         #print 'Slab MatInterface Io00',self.Io[15,31,0,0]
         #print 'Slab MatInterface Io01',self.Io[15,31,0,1]
         #print 'Slab MatInterface Io10',self.Io[15,31,1,0]
         #print 'Slab MatInterface Io11',self.Io[15,31,1,1]
+
 
 class Mat(dict):
     """ Handle constitutive materials dictionnary
@@ -510,26 +513,26 @@ class Mat(dict):
         (meter)                        0
 
     """
-    def __init__(self,name="AIR",index=1,epr=1+0.0j,mur=1+0.0j,sigma=0.0,roughness=0.):
+    def __init__(self, name="AIR", index=1, epr=1 + 0.0j, mur=1 + 0.0j, sigma=0.0, roughness=0.):
         """
         Parameters
         ----------
-        name  : 
-        index : int 
+        name  :
+        index : int
         epr   :
         mur   :
         sigma  :
         roughness :
         """
-        self['name']        = name
-        self['index']       = index
-        self['epr']         = epr
-        self['mur']         = mur
-        self['sigma']       = sigma
-        self['roughness']   = roughness
- 
-    def eval(self,fGHz):
-        """ evaluate Mat at given frequencies 
+        self['name'] = name
+        self['index'] = index
+        self['epr'] = epr
+        self['mur'] = mur
+        self['sigma'] = sigma
+        self['roughness'] = roughness
+
+    def eval(self, fGHz):
+        """ evaluate Mat at given frequencies
 
         Parameters
         ----------
@@ -543,7 +546,7 @@ class Mat(dict):
 
         w = 2*np.pi*f*1e-9
         eps0 = 8.854e-12
- 
+
         100 MHz = 0.1  GHz
         10  MHz = 0.01 GHz
 
@@ -553,7 +556,8 @@ class Mat(dict):
         """
 
         self['fGHz'] = fGHz
-        epsc         = self['epr']-1j*18*abs(self['sigma'])/self['fGHz']
+        epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / \
+            self['fGHz']
 
         return(epsc)
 
@@ -561,10 +565,10 @@ class Mat(dict):
         """
         Display material properties
         """
-     
+
         print "---------------------------------"
         for k in self:
-            print k ,self[k]
+            print k, self[k]
         #print " "
         #print "name : ",self.name
         #print "index :",self.index
@@ -572,10 +576,10 @@ class Mat(dict):
         #print "mur : ",self.mur
         #print "sigma :",self.sigma
         #print "roughness : ",self.roughness
-         
-    def R(self,fGHz,theta):
+
+    def R(self, fGHz, theta):
         """ Calculate Reflection coefficient on the air|mat interface
- 
+
         Parameters
         ----------
 
@@ -584,21 +588,22 @@ class Mat(dict):
 
         """
 
-        air   = Mat()
-        lmat  = [air,self]
+        air = Mat()
+        lmat = [air, self]
 
-        Nf    = len(fGHz)
-        Nt    = np.shape(theta)[1]
+        Nf = len(fGHz)
+        Nt = np.shape(theta)[1]
 
-        fGHz.reshape(Nf,1)
-        theta.reshape(1,Nt)
-        II    = MatInterface(lmat,0,fGHz,theta)
+        fGHz.reshape(Nf, 1)
+        theta.reshape(1, Nt)
+        II = MatInterface(lmat, 0, fGHz, theta)
         II.RT()
         #Ro  = II.Ro
-        Ro  = II.Ro   # modif eric plouhinec
-        Rp  = II.Rp
+        Ro = II.Ro   # modif eric plouhinec
+        Rp = II.Rp
 
-        return Ro,Rp
+        return Ro, Rp
+
 
 class MatDB(dict):
     """ MatDB Class : Material database
@@ -610,11 +615,11 @@ class MatDB(dict):
         associate numeric and alphanumeric keys
 
     """
-    def __init__(self,_filemat=''):
+    def __init__(self, _filemat=''):
         """
         """
         self.filemat = _filemat
-        if (_filemat != ''):  
+        if (_filemat != ''):
             self.load(_filemat)
             self.dass()
 
@@ -622,7 +627,7 @@ class MatDB(dict):
         """ get MatDB info
         """
         for i in self:
-            S=self[i]
+            S = self[i]
             S.info()
 
     def dass(self):
@@ -652,7 +657,7 @@ class MatDB(dict):
         18: 'PLASTERBOARD_10CM',
         19: 'PLASTERBOARD_14CM',
         20: 'PLASTERBOARD_7CM'}
-     
+
         This dictionnary is useful for quick access to a given slab
 
         """
@@ -661,10 +666,9 @@ class MatDB(dict):
             # get the integer
             index = self[name]['index']
             # associate the integer to name
-            di[index]=name
+            di[index] = name
         # update Class variable key association dictionnary
-        self.di=di
-
+        self.di = di
 
     def maxindex(self):
         """ find the max value of the index in DB
@@ -673,11 +677,11 @@ class MatDB(dict):
         maxi = 0
         for i in self.keys():
             v = self[i]['index']
-            if (v>maxi):
+            if (v > maxi):
                 maxi = v
-        return(maxi) 
-     
-    def delete(self,name):
+        return(maxi)
+
+    def delete(self, name):
         """ Delete a material in the DB
 
         Parameters
@@ -687,30 +691,30 @@ class MatDB(dict):
         """
         self.__delitem__(name)
 
-    def edit(self,name):
+    def edit(self, name):
         """ Edit a material in the DB
 
            Parameters
            ----------
            name : vstring
 
-           See Also 
+           See Also
            --------
            dass
 
         """
-        data    = multenterbox('Material','Enter',('name','index','epr','mur','sigma','roughness'),
-                (name,M.index,str(M.epr),str(M.mur),M.sigma,M.roughness))
-        self['name']  = data[0]
+        data = multenterbox('Material', 'Enter', ('name', 'index', 'epr', 'mur', 'sigma', 'roughness'),
+                            (name, M.index, str(M.epr), str(M.mur), M.sigma, M.roughness))
+        self['name'] = data[0]
         self['index'] = eval(data[1])
-        self['epr']   = eval(data[2])
-        self['mur']   = eval(data[3])
+        self['epr'] = eval(data[2])
+        self['mur'] = eval(data[3])
         self['sigma'] = eval(data[4])
         self['roughness'] = eval(data[5])
         # update keys association dictionnary
         self.dass()
 
-    def add(self,name='MAT',cval=1+0*1j,sigma=0,alpha_cmm1=1,mur=1,fGHz=1,typ='epsr'):
+    def add(self, name='MAT', cval=1 + 0 * 1j, sigma=0, alpha_cmm1=1, mur=1, fGHz=1, typ='epsr'):
         """ Add a material in the DB
 
         Parameters
@@ -724,7 +728,7 @@ class MatDB(dict):
         mur  : float
         typ  : string
             {'epsr'|'ind'|'THz'}
-     
+
         Notes
         -----
         There are two manners to enter a material
@@ -735,10 +739,10 @@ class MatDB(dict):
 
         Examples
         --------
-     
+
         >>> from pylayers.antprop.slab import *
         >>> m = MatDB()
-        >>> m.load('simul8.mat')
+        >>> m.load('def.mat')
         >>> m.add('ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
         >>> m.add('GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
         >>> out = m.save('Jacob.mat')
@@ -747,65 +751,62 @@ class MatDB(dict):
 
         maxid = self.maxindex()
         M = Mat()
-        M['name']  = name
+        M['name'] = name
         M['index'] = maxid + 1
-        M['fGHz']  = fGHz
+        M['fGHz'] = fGHz
         if typ == 'epsr':
-            M['epr']   = cval
-            M['sigma'] = sigma 
+            M['epr'] = cval
+            M['sigma'] = sigma
 
         if typ == 'ind':
-            M['n']     = cval
-            M['epsr']  = cval**2/mur
-            M['epr']   = np.real(M['epsr'])
-            M['epr2']  = np.imag(M['epsr'])
-            M['sigma'] = -M['epr2']*M['fGHz']/18
+            M['n'] = cval
+            M['epsr'] = cval ** 2 / mur
+            M['epr'] = np.real(M['epsr'])
+            M['epr2'] = np.imag(M['epsr'])
+            M['sigma'] = -M['epr2'] * M['fGHz'] / 18
         #
         # Terahertz Dielectric Properties of Polymers Yun-Sik Jin
         # Terahertz characterization of building materials (R.Piesiewicz) El.Jou Jan 2005 Vol 41 N°18
         #
         if typ == 'THz':
-           M['n']          = cval
-           M['alpha_cmm1'] = alpha_cmm1
-           M['kappa']      = 30*M['alpha_cmm1']/(4*np.pi*M['fGHz'])
-           M['epr']        = np.real(M['n']**2-M['kappa']**2)
-           M['epr2']       = np.real(2*M['kappa']*M['n'])
-           M['sigma']      = M['epr2']*M['fGHz']/18
-           M['Z']          = 1.0/np.sqrt(M['epr']+1j*M['epr2'] )
+            M['n'] = cval
+            M['alpha_cmm1'] = alpha_cmm1
+            M['kappa'] = 30 * M['alpha_cmm1'] / (4 * np.pi * M['fGHz'])
+            M['epr'] = np.real(M['n'] ** 2 - M['kappa'] ** 2)
+            M['epr2'] = np.real(2 * M['kappa'] * M['n'])
+            M['sigma'] = M['epr2'] * M['fGHz'] / 18
+            M['Z'] = 1.0 / np.sqrt(M['epr'] + 1j * M['epr2'])
 
-        M['mur']       = mur
+        M['mur'] = mur
         M['roughness'] = 0
 
         self[name] = M
         self.dass()
 
-
-    def addgui(self,name='MAT'):
+    def addgui(self, name='MAT'):
         """ Add a material in the DB
 
         Parameters
         ----------
 
-        name : string 
+        name : string
             default 'MAT'
 
         """
         max = self.maxindex()
-        data = multenterbox('Material','Enter',('name','index','epr','mur','sigma','roughness'),
-                (name,max+1,'(1+0j)','(1+0j)',0,0))
+        data = multenterbox('Material', 'Enter', ('name', 'index', 'epr', 'mur', 'sigma', 'roughness'),
+                            (name, max + 1, '(1+0j)', '(1+0j)', 0, 0))
         M = Mat()
-        M['name']=data[0]
-        M['index']=eval(data[1])
-        M['epr']=eval(data[2])
-        M['mur']=eval(data[3])
-        M['sigma']=eval(data[4])
-        M['roughness']=eval(data[5])
-        self[name]=M
+        M['name'] = data[0]
+        M['index'] = eval(data[1])
+        M['epr'] = eval(data[2])
+        M['mur'] = eval(data[3])
+        M['sigma'] = eval(data[4])
+        M['roughness'] = eval(data[5])
+        self[name] = M
         self.dass()
 
-
-
-    def loadold(self,_filename):
+    def loadold(self, _filename):
         """ load a Mat from a .mat file
 
         Parameters
@@ -813,65 +814,66 @@ class MatDB(dict):
         _filename : short file name
 
         """
-        filename = pyu.getlong(_filename,pstruc['DIRMAT'])
+        filename = pyu.getlong(_filename, pstruc['DIRMAT'])
         try:
-            fo = open(filename,"rb")
+            fo = open(filename, "rb")
             data = fo.read()
             #
             # decodage des donnees lues
             #
             data_listname = data[0:1200]
-            self.tname = data_listname.replace("\x00","").replace("\"","").split()
-            data_N   = data[1200:1204]
-            self.N   = stru.unpack('i',data_N)[0]
+            self.tname = data_listname.replace(
+                "\x00", "").replace("\"", "").split()
+            data_N = data[1200:1204]
+            self.N = stru.unpack('i', data_N)[0]
 
             for i in range(self.N):
                 # Creation d'un objet Mat
-                M={}
-                delta = i*82
-                data_name    = data[1204+delta:1234+delta]
-                name=data_name.replace("\x00","")
-                M['name']=name
-                data_index  = data[1234+delta:1238+delta]
-                index= stru.unpack('i',data_index)[0]
-                M['index']=index
-                data_err      = data[1238+delta:1246+delta]
-                err= stru.unpack('d',data_err)[0]
-                data_eri      = data[1246+delta:1254+delta]
-                eri= stru.unpack('d',data_eri)[0]
-                epr = err+1j*eri
+                M = {}
+                delta = i * 82
+                data_name = data[1204 + delta:1234 + delta]
+                name = data_name.replace("\x00", "")
+                M['name'] = name
+                data_index = data[1234 + delta:1238 + delta]
+                index = stru.unpack('i', data_index)[0]
+                M['index'] = index
+                data_err = data[1238 + delta:1246 + delta]
+                err = stru.unpack('d', data_err)[0]
+                data_eri = data[1246 + delta:1254 + delta]
+                eri = stru.unpack('d', data_eri)[0]
+                epr = err + 1j * eri
                 M['epr'] = epr
-                data_mur      = data[1254+delta:1262+delta]
-                mur= stru.unpack('d',data_mur)[0]
-                data_mui      = data[1262+delta:1270+delta]
-                mui= stru.unpack('d',data_mui)[0]
-                mur = mur+1j*mui
+                data_mur = data[1254 + delta:1262 + delta]
+                mur = stru.unpack('d', data_mur)[0]
+                data_mui = data[1262 + delta:1270 + delta]
+                mui = stru.unpack('d', data_mui)[0]
+                mur = mur + 1j * mui
                 M['mur'] = mur
-                data_sigma      = data[1270+delta:1278+delta]
-                sigma= stru.unpack('d',data_sigma)[0]
+                data_sigma = data[1270 + delta:1278 + delta]
+                sigma = stru.unpack('d', data_sigma)[0]
                 M['sigma'] = sigma
-                data_roughness      = data[1278+delta:1286+delta]
-                roughness= stru.unpack('d',data_roughness)[0]
+                data_roughness = data[1278 + delta:1286 + delta]
+                roughness = stru.unpack('d', data_roughness)[0]
                 M['roughness'] = roughness
-                self[name]=M
+                self[name] = M
             fo.close()
         except:
-            print "file : ",filename, "is unreachable"
+            print "file : ", filename, "is unreachable"
         self.dass()
- 
-    def choose(self):                
+
+    def choose(self):
         """ Choose a mat from matdir
         """
         import tkFileDialog
         FD = tkFileDialog
-        filename = FD.askopenfilename(filetypes = [("Mat file ","*.mat"),
-                 ("All", "*")],
-                 title="Please choose a .mat  file",
-                 initialdir=matdir)
+        filename = FD.askopenfilename(filetypes=[("Mat file ", "*.mat"),
+                                                 ("All", "*")],
+                                      title="Please choose a .mat  file",
+                                      initialdir=matdir)
         _filename = pyu.getshort(filename)
         self.load(_filename)
 
-    def load(self,_filename):
+    def load(self, _filename):
         """ Load a Material from a .mat file
 
         Parameters
@@ -880,75 +882,76 @@ class MatDB(dict):
                  a short file name
 
         """
-        filename = pyu.getlong(_filename,pstruc['DIRMAT'])
+        filename = pyu.getlong(_filename, pstruc['DIRMAT'])
         try:
-            fo = open(filename,"rb")
+            fo = open(filename, "rb")
             data = fo.read()
             #
             # decodage des donnees lues
             #
             data_listname = data[0:1200]
-            self.tname = data_listname.replace("\x00","").replace("\"","").split()
-            data_N   = data[1200:1204]
-            self.N   = stru.unpack('i',data_N)[0]
+            self.tname = data_listname.replace(
+                "\x00", "").replace("\"", "").split()
+            data_N = data[1200:1204]
+            self.N = stru.unpack('i', data_N)[0]
 
             for i in range(self.N):
                 # Creation d'un objet Mat
-                M=Mat()
-                delta = i*82
-                data_name    = data[1204+delta:1234+delta]
-                name=data_name.replace("\x00","")
-                M['name']=name
+                M = Mat()
+                delta = i * 82
+                data_name = data[1204 + delta:1234 + delta]
+                name = data_name.replace("\x00", "")
+                M['name'] = name
 
-                data_index  = data[1234+delta:1238+delta]
-                index= stru.unpack('i',data_index)[0]
-                M['index']=index
+                data_index = data[1234 + delta:1238 + delta]
+                index = stru.unpack('i', data_index)[0]
+                M['index'] = index
 
-                data_err      = data[1238+delta:1246+delta]
-                err= stru.unpack('d',data_err)[0]
-                data_eri      = data[1246+delta:1254+delta]
-                eri= stru.unpack('d',data_eri)[0]
-                epr = err+1j*eri
+                data_err = data[1238 + delta:1246 + delta]
+                err = stru.unpack('d', data_err)[0]
+                data_eri = data[1246 + delta:1254 + delta]
+                eri = stru.unpack('d', data_eri)[0]
+                epr = err + 1j * eri
                 M['epr'] = epr
-                data_mur      = data[1254+delta:1262+delta]
-                mur= stru.unpack('d',data_mur)[0]
-                data_mui      = data[1262+delta:1270+delta]
-                mui= stru.unpack('d',data_mui)[0]
-                mur = mur+1j*mui
+                data_mur = data[1254 + delta:1262 + delta]
+                mur = stru.unpack('d', data_mur)[0]
+                data_mui = data[1262 + delta:1270 + delta]
+                mui = stru.unpack('d', data_mui)[0]
+                mur = mur + 1j * mui
                 M['mur'] = mur
-                data_sigma      = data[1270+delta:1278+delta]
-                sigma= stru.unpack('d',data_sigma)[0]
+                data_sigma = data[1270 + delta:1278 + delta]
+                sigma = stru.unpack('d', data_sigma)[0]
                 M['sigma'] = sigma
-                data_roughness      = data[1278+delta:1286+delta]
-                roughness= stru.unpack('d',data_roughness)[0]
+                data_roughness = data[1278 + delta:1286 + delta]
+                roughness = stru.unpack('d', data_roughness)[0]
                 M['roughness'] = roughness
-                self[name]=M
+                self[name] = M
             fo.close()
         except:
-            print "file : ",filename, "is unreachable"
+            print "file : ", filename, "is unreachable"
         self.dass()
 
     def saveini(self):
-        """ save MatDB in an ini file 
-        
-        [dict] 
+        """ save MatDB in an ini file
+
+        [dict]
             id1 = name1
         [name1]
-            epsr = 
-            mur  = 
-            roughness = 
-            index = 
+            epsr =
+            mur  =
+            roughness =
+            index =
 
 
         """
-        filemat = pyu.getlong('matDB.ini',"ini")
+        filemat = pyu.getlong('matDB.ini', "ini")
         fd = open(filemat, "w")
         config = ConfigParser.ConfigParser()
         #
         # config names
         #
         config.add_section("dict")
-        
+
         for vid in self.di.keys():
             config.set("dict", str(vid), self.di[vid])
 
@@ -956,87 +959,87 @@ class MatDB(dict):
             name = self.di[vid]
             config.add_section(name)
             try:
-                config.set(name,"epr",str(self[name]['epr']))
+                config.set(name, "epr", str(self[name]['epr']))
             except:
-                config.set(name,"epr",'(9+0j)')
+                config.set(name, "epr", '(9+0j)')
             try:
-                config.set(name,"mur",str(self[name]['mur']))
+                config.set(name, "mur", str(self[name]['mur']))
             except:
-                config.set(name,"mur",'(1+0j)')
+                config.set(name, "mur", '(1+0j)')
             try:
-                config.set(name,"sigma",str(self[name]['sigma']))
+                config.set(name, "sigma", str(self[name]['sigma']))
             except:
-                config.set(name,"sigma",'(0+0j)')
+                config.set(name, "sigma", '(0+0j)')
             try:
-                config.set(name,"roughness",str(self[name]['roughness']))
+                config.set(name, "roughness", str(self[name]['roughness']))
             except:
-                config.set(name,"roughness",'0')
-            config.set(name,"index",str(self[name]['index']))
+                config.set(name, "roughness", '0')
+            config.set(name, "index", str(self[name]['index']))
 
-        
         config.write(fd)
         fd.close()
 
-    def save(self,_filename): 
+    def save(self, _filename):
         """ save a .mat file (PulsRay format)
 
         Attributes
         ----------
         _filename : string
-            a short file name 
+            a short file name
         """
-        filename = pyu.getlong(_filename,pstruc['DIRMAT'])
-        fo   = open(filename,'wb')
-        N    = len(self.di)
+        filename = pyu.getlong(_filename, pstruc['DIRMAT'])
+        fo = open(filename, 'wb')
+        N = len(self.di)
         data_listname = ''
         for k in range(N):
-            data_listname = data_listname+"\""+self.di[k-1]+"\" "
+            data_listname = data_listname + "\"" + self.di[k - 1] + "\" "
 
         L = len(data_listname)
-        if L<1200:
-            for i in range(1200-L):
-                data_listname = data_listname+"\x00"
+        if L < 1200:
+            for i in range(1200 - L):
+                data_listname = data_listname + "\x00"
         else:
             print " out of range in save Mat - too many materials"
-        data_N = stru.pack('i',N)
-        data = data_listname+data_N
+        data_N = stru.pack('i', N)
+        data = data_listname + data_N
 
         for i in range(len(self.di)):
-            key = self.di[i-1]
+            key = self.di[i - 1]
             M = self[key]
             data_name = key
             L = len(data_name)
-            if L<30:
-                for j in range(30-L):
-                    data_name = data_name+"\x00"
-            
+            if L < 30:
+                for j in range(30 - L):
+                    data_name = data_name + "\x00"
+
                     print " Mat : name too long maximum 30 characters !"
 
-            data_index    = stru.pack('i',M['index'])
-            data_err      = stru.pack('d',np.real(M['epr']))
-            data_eri      = stru.pack('d',np.imag(M['epr']))
-            data_epr      = data_err + data_eri
-            data_mur      = stru.pack('d',np.real(M['mur']))
-            data_mui      = stru.pack('d',np.imag(M['mur']))
-            data_mu       = data_mur + data_mui
-            data_sigma    = stru.pack('d',M['sigma'])
-            data_roughness = stru.pack('d',M['roughness'])
-            data_mat = data_name + data_index + data_epr + data_mu + data_sigma + data_roughness
+            data_index = stru.pack('i', M['index'])
+            data_err = stru.pack('d', np.real(M['epr']))
+            data_eri = stru.pack('d', np.imag(M['epr']))
+            data_epr = data_err + data_eri
+            data_mur = stru.pack('d', np.real(M['mur']))
+            data_mui = stru.pack('d', np.imag(M['mur']))
+            data_mu = data_mur + data_mui
+            data_sigma = stru.pack('d', M['sigma'])
+            data_roughness = stru.pack('d', M['roughness'])
+            data_mat = data_name + data_index + data_epr + \
+                data_mu + data_sigma + data_roughness
             data = data + data_mat
 
         fo.write(data)
         fo.close()
 
 
-class Slab(dict,Interface):
+class Slab(dict, Interface):
     """ Handle slab
- 
+
     Summary
     -------
     A slab is a sequence of layers which has
         - a given width
         - an integer index refering a given material in the material DB
-     
+
 
     Attributes
     ----------
@@ -1057,19 +1060,19 @@ class Slab(dict,Interface):
         linewidth for structure display
     mat       :
         Associated Material Database
-    evaluated   : Boolean 
+    evaluated   : Boolean
 
     """
-    def __init__(self,mat,name='NEWSLAB'):
-        self['name']        = name
-        self['index']       = 0
-        self['nbmat']       = 1
-        self['imat']        = (0,0,0,0,0,0,0,0)
-        self['thickness']   = (10.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0)
-        self['color']       = 'black'
-        self['linewidth']   = 1.0
-        self.mat            = mat
-        self['evaluated']   = False
+    def __init__(self, mat, name='NEWSLAB'):
+        self['name'] = name
+        self['index'] = 0
+        self['nbmat'] = 1
+        self['imat'] = (0, 0, 0, 0, 0, 0, 0, 0)
+        self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        self['color'] = 'black'
+        self['linewidth'] = 1.0
+        self.mat = mat
+        self['evaluated'] = False
 
     def info(self):
         """ Display Slab Info
@@ -1079,7 +1082,7 @@ class Slab(dict,Interface):
 
         .. plot::
             :include-source:
-        
+
             >>> import numpy as np
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.slab import *
@@ -1095,38 +1098,37 @@ class Slab(dict,Interface):
 
         """
         print "------------"
-        print "name : ",self.name
-        print "nbmat : ",self.nbmat
+        print "name : ", self.name
+        print "nbmat : ", self.nbmat
         chaine = "[ "
         for i in range(self.nbmat):
             index_mat = self.imat[i]
-            name_mat  = self.mat.di[index_mat]
+            name_mat = self.mat.di[index_mat]
             self.mat[name_mat].info()
             if self['evaluated']:
                 epsrc = self.mat[name_mat].epsc(self.fGHz[0])
-                print "epsrc : ",epsrc
+                print "epsrc : ", epsrc
             chaine = chaine + name_mat + '   '
             chaine = chaine + ']'
             print chaine
-            print "index : ",self.index
-            print "imat   : ",self.imat
-            print "thickness (m) : ",self.thickness
-            print "color : ",self.color
-            print "linewidth :",self.linewidth
+            print "index : ", self.index
+            print "imat   : ", self.imat
+            print "thickness (m) : ", self.thickness
+            print "color : ", self.color
+            print "linewidth :", self.linewidth
             if self['evaluated']:
                 print "---------------------"
                 nf = len(self.fGHz)
                 nt = len(self.theta)
-                if nf>1:
-                    print "f (GHz)   : ",(self.fGHz[0],self.fGHz[-1],nf)
+                if nf > 1:
+                    print "f (GHz)   : ", (self.fGHz[0], self.fGHz[-1], nf)
                 else:
-                    print "f (GHz)   : ",self.fGHz[0]
-             
-                if nt>1:
-                    print "theta : ",(self.theta[0],self.theta[-1],nt)
-                else:
-                    print "th (rad)  : ",self.theta[0]
+                    print "f (GHz)   : ", self.fGHz[0]
 
+                if nt > 1:
+                    print "theta : ", (self.theta[0], self.theta[-1], nt)
+                else:
+                    print "th (rad)  : ", self.theta[0]
 
     def conv(self):
         """ build lmat and thick
@@ -1139,16 +1141,16 @@ class Slab(dict,Interface):
 
         """
         #m1 = self.mat['AIR']
-        self['lmat']  = []
+        self['lmat'] = []
         self['lthick'] = []
         #self.lmat.append(m1)
 
         for i in range(self['nbmat']):
             index_mat = self['imat'][i]
-            name_mat  = self.mat.di[index_mat]
-            mi        = self.mat[name_mat]
+            name_mat = self.mat.di[index_mat]
+            mi = self.mat[name_mat]
             self['lmat'].append(mi)
-            self['lthick'].append(self['thickness'][i]*0.01)   #cm ->m
+            self['lthick'].append(self['thickness'][i] * 0.01)  # cm ->m
 
         #self.lmat.append(m1)
         #
@@ -1157,7 +1159,7 @@ class Slab(dict,Interface):
         #
         #self.thick.append(0.0)
 
-    def ev(self,fGHz=np.array([1.0]),theta=np.linspace(0,np.pi/2,50)):
+    def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50)):
         """ Evaluation of the slab
 
         Parameters
@@ -1167,66 +1169,66 @@ class Slab(dict,Interface):
             incidence angle (from normal) radians
 
         """
-        if not isinstance(fGHz,np.ndarray):
-            fGHz=np.array([fGHz])
-        if not isinstance(theta,np.ndarray):
+        if not isinstance(fGHz, np.ndarray):
+            fGHz = np.array([fGHz])
+        if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
- 
+
         metalic = False
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
         name2 = '|'.join(str(thick) for thick in self['lthick'])
-        name  = '('+name1+')'+'('+name2+')'
-        Interface.__init__(self,fGHz,theta,name=name)
+        name = '(' + name1 + ')' + '(' + name2 + ')'
+        Interface.__init__(self, fGHz, theta, name=name)
         #self.lmat   = lmat
         #self.lthick = lthick
-        self.n      = len(self['lmat'])+2
+        self.n = len(self['lmat']) + 2
 
         #nf    =  len(fGHz)
         #nt    =  np.shape(self.theta)[1]
 
-        Co = np.array(np.zeros([self.nf,self.nt,2,2]),dtype=complex)
-        Co[:,:,0,0] = 1
-        Co[:,:,1,1] = 1
+        Co = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
+        Co[:, :, 0, 0] = 1
+        Co[:, :, 1, 1] = 1
 
-        Cp = np.array(np.zeros([self.nf,self.nt,2,2]),dtype=complex)
-        Cp[:,:,0,0] = 1
-        Cp[:,:,1,1] = 1
+        Cp = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
+        Cp[:, :, 0, 0] = 1
+        Cp[:, :, 1, 1] = 1
         #
         # Boucle sur les n-1 matériaux
         #      lmat[0] est toujours l'air  (à modifier)
         #
-        for i in range(self.n-1):
-            if i==0:    # first material is AIR
-                ml=Mat()
+        for i in range(self.n - 1):
+            if i == 0:    # first material is AIR
+                ml = Mat()
             else:
-                ml = self['lmat'][i-1]
-            if i==self.n-2:
-                mr=Mat()  # last material is AIR
+                ml = self['lmat'][i - 1]
+            if i == self.n - 2:
+                mr = Mat()  # last material is AIR
             else:
                 mr = self['lmat'][i]
-            if mr['name']=='METAL':
-                Io = np.array(np.ones([self.nf,self.nt,2,2]),dtype=complex)
-                Io[:,:,0,1]=-1
-                Io[:,:,1,0]=-1
-                Ip = np.array(np.ones([self.nf,self.nt,2,2]),dtype=complex)
-                Ip[:,:,0,1]=-1
-                Ip[:,:,1,0]=-1
+            if mr['name'] == 'METAL':
+                Io = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
+                Io[:, :, 0, 1] = -1
+                Io[:, :, 1, 0] = -1
+                Ip = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
+                Ip[:, :, 0, 1] = -1
+                Ip[:, :, 1, 0] = -1
             else:
-                if i==self.n-2:
-                    II = MatInterface([ml,mr],0,fGHz,theta)
+                if i == self.n - 2:
+                    II = MatInterface([ml, mr], 0, fGHz, theta)
                 else:
-                    II = MatInterface([ml,mr],self['lthick'][i],fGHz,theta)
+                    II = MatInterface([ml, mr], self['lthick'][i], fGHz, theta)
             #
             # chain the angle
             #
-                theta = II.theta 
+                theta = II.theta
             #
             # theta depends on frequency nf x nt
             #
                 #THETA = II.THETA
                 Io = II.Io
                 Ip = II.Ip
-         
+
             #
             # dot product Co.Io and Cp.Ip
             #
@@ -1241,19 +1243,19 @@ class Slab(dict,Interface):
             #
             # Using Einstein summation instead of a for loop increases speed by an order of magnitude
             #
-            Co  = np.einsum('ijkl,ijln->ijkn',Co,Io)
-            Cp  = np.einsum('ijkl,ijln->ijkn',Cp,Ip)
-            if mr['name']=='METAL':
+            Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
+            Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
+            if mr['name'] == 'METAL':
                 metalic = True
                 break
 
         self.Io = Co
         self.Ip = Cp
- 
-        self.RT(metalic)
-        self['evaluated']=True
 
-    def loss0(self,fGHz=2.4):
+        self.RT(metalic)
+        self['evaluated'] = True
+
+    def loss0(self, fGHz=2.4):
         """
         Calculate loss for theta=0 at frequency (f)
 
@@ -1267,27 +1269,27 @@ class Slab(dict,Interface):
         Lo  : np.array
             Loss at 0 deg polarization ortho
         Lp :  np.array
-            Loss at 0 deg polarization para  
+            Loss at 0 deg polarization para
 
-            
+
 
         Examples
         --------
 
         >>> from pylayers.antprop.slab import *
-        >>> sl = SlabDB('simul8.mat','simul8.slab')
+        >>> sl = SlabDB('def.mat','def.slab')
         >>> s1 = sl['PARTITION']
         >>> Lo,Lp = s1.loss0(2.4)
-        >>> assert ((Lo[0]>5.54)&(Lo[0]<5.56)),'simul8 Partition has changed'
+        >>> assert ((Lo[0]>5.54)&(Lo[0]<5.56)),'def Partition has changed'
         >>> assert (Lo[0]==Lp[0]),'something wrong with polarization'
 
         """
 
-        self.ev(fGHz,theta=np.array([0.0]))
-        Lo,Lp  = Interface.loss0(self,fGHz) 
-        return(Lo,Lp)
+        self.ev(fGHz, theta=np.array([0.0]))
+        Lo, Lp = Interface.loss0(self, fGHz)
+        return(Lo, Lp)
 
-    def losst(self,fGHz,theta):
+    def losst(self, fGHz, theta):
         """
         Calculate loss for theta=th at frequency (f)
 
@@ -1300,15 +1302,15 @@ class Slab(dict,Interface):
 
         Returns
         -------
-        Lo  : np.array 
+        Lo  : np.array
             Loss orthogonal
         Lp  : np.array
             Loss paralell
 
         """
-        self.ev(fGHz,theta=np.array([theta]))
-        Lo,Lp = Interface.losst(self,fGHz) 
-        return(Lo,Lp)
+        self.ev(fGHz, theta=np.array([theta]))
+        Lo, Lp = Interface.losst(self, fGHz)
+        return(Lo, Lp)
 
     def editgui(self):
         """ edit a Slab in the DB
@@ -1318,41 +1320,42 @@ class Slab(dict,Interface):
         chaine2 = ""
         for i in range(self.nbmat):
             index_mat = self.imat[i]
-            name_mat  = self.mat.di[index_mat]
-            thick   = str(self.thickness[i])
+            name_mat = self.mat.di[index_mat]
+            thick = str(self.thickness[i])
             chaine1 = chaine1 + name_mat + '   '
             chaine2 = chaine2 + thick + ' '
 
-        data = multenterbox('Slab','Enter',
-            ('name','index','nbmat','imat','thickness (cm)','color','linewidth'),
-            (self.name,self.index,self.nbmat,chaine1,
-                    chaine2,self.color,str(self.linewidth)))
+        data = multenterbox('Slab', 'Enter',
+                            ('name', 'index', 'nbmat', 'imat',
+                             'thickness (cm)', 'color', 'linewidth'),
+                            (self.name, self.index, self.nbmat, chaine1,
+                             chaine2, self.color, str(self.linewidth)))
 
-        self.index=eval(data[1])
-        self.nbmat=eval(data[2])
+        self.index = eval(data[1])
+        self.nbmat = eval(data[2])
         chaine1 = data[3].split()
         chaine2 = data[4].split()
 
-        tt = [0,0,0,0,0,0,0,0]
-        th = [0,0,0,0,0,0,0,0]
-        if (len(chaine1)!=len(chaine2)):
+        tt = [0, 0, 0, 0, 0, 0, 0, 0]
+        th = [0, 0, 0, 0, 0, 0, 0, 0]
+        if (len(chaine1) != len(chaine2)):
             print ('erreur edit slab')
             return(-1)
         for i in range(len(chaine1)):
-            nom   = chaine1[i]
+            nom = chaine1[i]
             thick = chaine2[i]
             index = self.mat[nom].index
             tt[i] = index
             th[i] = eval(thick)
 
-        self.imat=tt
-        self.charindex=str(tt)
-        self.thickness=th
-        self.color=data[5]
-        self.linewidth=eval(data[6])
+        self.imat = tt
+        self.charindex = str(tt)
+        self.thickness = th
+        self.color = data[5]
+        self.linewidth = eval(data[6])
         self.dass()
 
-    def show(self,fGHz=2.4,theta=np.arange(0,np.pi/2.,0.01),dtype=np.float64,display='modulus',dB=False):
+    def show(self, fGHz=2.4, theta=np.arange(0, np.pi / 2., 0.01), dtype=np.float64, display='modulus', dB=False):
         """ show slab Reflection and Transmission coefficient
 
         Parameters
@@ -1362,12 +1365,13 @@ class Slab(dict,Interface):
         dtype :
         display :  string
             {'modulus'}
-        dB  : boolean 
+        dB  : boolean
             False
         """
-        self.ev(fGHz,theta)
+        self.ev(fGHz, theta)
         if self['evaluated']:
-            self.M.plotwrta(display=display,dB=dB)
+            self.M.plotwrta(display=display, dB=dB)
+
 
 class SlabDB(dict):
     """ Slab data base
@@ -1377,20 +1381,20 @@ class SlabDB(dict):
         DB : slab dictionnary
 
     """
-    def __init__(self,filemat='simul9.mat',fileslab='simul9.slab'):
+    def __init__(self, filemat='def.mat', fileslab='def.slab'):
         """
 
         Parameters
         ----------
         filemat : string
-        fileslab : string 
+        fileslab : string
 
         """
         self.fileslab = fileslab
         self.mat = MatDB()
-        if (filemat != ''):  
+        if (filemat != ''):
             self.mat.load(filemat)
-        if (fileslab != ''):  
+        if (fileslab != ''):
             self.load(fileslab)
             self.dass()
 
@@ -1399,14 +1403,14 @@ class SlabDB(dict):
 
         """
         lsl = self.keys()
-        k   = len(lsl)
-        nl  = k/2
+        k = len(lsl)
+        nl = k / 2
         cpt = 1
         for k in lsl:
             plt.figure()
             self[k].show()
 
-        plt.show() 
+        plt.show()
 
     def help(self):
         """ The problem with this class is to cope with 2 diferent format
@@ -1430,12 +1434,12 @@ class SlabDB(dict):
         print "sl.choose() : dialog to choose mat and slab "
 
     def info(self):
-        """ information 
+        """ information
         """
-        print "fileslab : ",self.fileslab
-        print "filemat  : ",self.mat.filemat
+        print "fileslab : ", self.fileslab
+        print "filemat  : ", self.mat.filemat
         for i in self.keys():
-            S=self[i]
+            S = self[i]
             S.info()
 
     def dass(self):
@@ -1447,8 +1451,8 @@ class SlabDB(dict):
         di = {}
         for name in self.keys():
             index = self[name]['index']
-            di[index]=name
-        self.di=di
+            di[index] = name
+        self.di = di
 
     def maxindex(self):
         """ find the max value of the index in DB
@@ -1457,17 +1461,17 @@ class SlabDB(dict):
         maxi = 0
         for i in self.keys():
             v = self[i]['index']
-            if (v>maxi):
+            if (v > maxi):
                 maxi = v
-        return(maxi) 
+        return(maxi)
 
-    def delete(self,name):
+    def delete(self, name):
         """ delete an element from the database
         """
         self.__delitem__(name)
         self.dass()
 
-    def edit(self,name):
+    def edit(self, name):
         """ edit a Slab in the DB
 
         Parameters
@@ -1478,7 +1482,7 @@ class SlabDB(dict):
         slab = self[name]
         slab.edit()
 
-    def show(self,name='WOOD',fGHz=np.array([2.4])):
+    def show(self, name='WOOD', fGHz=np.array([2.4])):
         """ show
         Parameters
         ----------
@@ -1489,8 +1493,7 @@ class SlabDB(dict):
         slab.ev(fGHz=fGHz)
         slab.M.plotwrta(name=name)
 
-
-    def add(self,name,lname,lthick,color='black'):
+    def add(self, name, lname, lthick, color='black'):
         """
         Parameters
         ----------
@@ -1504,7 +1507,7 @@ class SlabDB(dict):
 
         Examples
         --------
-       
+
         Example from the paper:
         "Reflection ant Transmission Properties of Building Materials in D-Band
         for Modeling Future mm-Wave Communication Systems "
@@ -1518,12 +1521,13 @@ class SlabDB(dict):
             from pylayers.antprop.slab import *
             import numpy as np
             import matplotlib.pylab as plt
-            sl = SlabDB('simul8.mat','simul8.slab')
+            sl = SlabDB('def.mat','def.slab')
 
             sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
             sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
             sl.add('ConcreteJc',['ConcreteJc'],[0.049])
-            sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[0.0029,0.0102,0.0029])
+            sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[
+                0.0029,0.0102,0.0029])
             theta = np.linspace(20,60,100)*np.pi/180
             sl['ConcreteJc'].ev(120,theta)
             sl['ConcreteJc'].plotwrta(dB=True)
@@ -1535,20 +1539,20 @@ class SlabDB(dict):
             sl['DoubleGlass'].ev(freq,theta)
             sl['DoubleGlass'].pcolor(dB=True)
 
-        Exemple from paper `"[Kiani2007] Glass Characterization for Designing 
-        Frequency Selective Surfaces to Improve Transmission through Energy saving 
-        glass windows  Kiani 2007" 
+        Exemple from paper `"[Kiani2007] Glass Characterization for Designing
+        Frequency Selective Surfaces to Improve Transmission through Energy saving
+        glass windows  Kiani 2007"
         <http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=4554974&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974>`_
-        The surface impedance is :math:`R = 4 \Omega`, the thicknesss is :math:`d = 100 nm` 
+        The surface impedance is :math:`R = 4 \Omega`, the thicknesss is :math:`d = 100 nm`
 
         `Pilkington Spectrum OnLine applet <http://www.pilkington.com/spectrum2/default.aspx?country_code=FR>`_
 
-        `Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz 
+        `Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz
         <http://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=530536&fileOId=624944>`_
 
         .. math::
 
-            \sigma =  \\frac{1}{Rd} = 2.5 10^{6} S/m   
+            \sigma =  \\frac{1}{Rd} = 2.5 10^{6} S/m
 
         .. plot::
             :include-source:
@@ -1556,10 +1560,11 @@ class SlabDB(dict):
             from pylayers.antprop.slab import *
             import numpy as np
             import matplotlib.pylab as plt
-            sl = SlabDB('simul8.mat','simul8.slab')
+            sl = SlabDB('def.mat','def.slab')
             sl.mat.add('CoatingPilkington',cval=1,sigma=2.5e6,typ='epsr')
             sl.mat.add('GlassPilkington',cval = 6.9,sigma = 5e-4,typ='epsr')
-            sl.add('Optitherm382',['CoatingPilkington','GlassPilkington'],[100e-9,0.00382])
+            sl.add('Optitherm382',['CoatingPilkington',
+                'GlassPilkington'],[100e-9,0.00382])
             fGHz  = np.linspace(0.9,2.2,50)
             theta = np.linspace(0,np.pi/2,100)
             sl['Optitherm382'].ev(fGHz,theta)
@@ -1567,42 +1572,41 @@ class SlabDB(dict):
 
         """
 
-        U           = Slab(self.mat,name)
-        maxi        = self.maxindex()
-        U['lname']  = lname
+        U = Slab(self.mat, name)
+        maxi = self.maxindex()
+        U['lname'] = lname
         U['lthick'] = lthick
-        U['index']  = maxi+1
-        U['nbmat']  = len(lname)
-        imat        = np.zeros(8).astype(int)
-        thickness   = np.zeros(8)
-        for i  in range(len(lname)):
-            namem   = lname[i]
+        U['index'] = maxi + 1
+        U['nbmat'] = len(lname)
+        imat = np.zeros(8).astype(int)
+        thickness = np.zeros(8)
+        for i in range(len(lname)):
+            namem = lname[i]
             imat[i] = U.mat[namem]['index']
-            thickness[i] = lthick[i]*100 # m ->cm
-        U['imat']      = tuple(imat)
-        U['thickness'] = tuple(thickness) # cm
-        U['color']     = color
+            thickness[i] = lthick[i] * 100  # m ->cm
+        U['imat'] = tuple(imat)
+        U['thickness'] = tuple(thickness)  # cm
+        U['color'] = color
         U['linewidth'] = 1
         U['evaluated'] = False
         U.conv()
-        self[name]=U
+        self[name] = U
         self.dass()
 
-
-    def addgui(self,name):
+    def addgui(self, name):
         """ add a slab in the DB
 
         Parameters
         ----------
-        name 
+        name
 
         """
-        U = Slab(self.mat,name)
+        U = Slab(self.mat, name)
         U.edit()
-        self[U.name]=U
+        self[U.name] = U
         self.dass()
-                    
-    def loadsl(self,_filename):
+
+    def loadsl(self, _filename):
         """
            Loadslab from a .sl file (PyRay format)
 
@@ -1611,28 +1615,28 @@ class SlabDB(dict):
            _filename : string
 
         """
-        filename = pyu.getlong(_filename,pstruc['DIRSLAB'])
-        fo   = open(filename,'r')
+        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+        fo = open(filename, 'r')
         DB = cPickle.load(fo)
         self = DB
         self.conv()
         fo.close()
 
-    def choose(self):                
+    def choose(self):
         """ Choose a mat file from matdir and slab from slabdir
         """
         import tkFileDialog
         FD = tkFileDialog
 
         self.mat.choose()
-        fileslab = FD.askopenfilename(filetypes = [("Slab file ","*.slab"),
-                 ("All", "*")],
-                 title="Please choose a .slab  file",
-                 initialdir=slabdir)
-        _fileslab =  pyu.getshort(fileslab)
+        fileslab = FD.askopenfilename(filetypes=[("Slab file ", "*.slab"),
+                                                 ("All", "*")],
+                                      title="Please choose a .slab  file",
+                                      initialdir=slabdir)
+        _fileslab = pyu.getshort(fileslab)
         self.load(_fileslab)
 
-    def load(self,_filename):
+    def load(self, _filename):
         """ load a .slab file (PulsRay format)
 
         Parameters
@@ -1640,99 +1644,100 @@ class SlabDB(dict):
             _filename
 
         """
-        filename= pyu.getlong(_filename,pstruc['DIRSLAB'])
+        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+        print filename
         try:
             fo = open(filename, "rb")
         except:
             raise NameError("Exception in load : file is unreachable")
- 
+
         data = fo.read()
         #
         # decodage des donnees lues
         #
         data_listname = data[0:1200]
-        self.tname = data_listname.replace("\x00","").replace("\"","").split()
-        data_N   = data[1200:1204]
-        self.N   = stru.unpack('i',data_N)[0]
+        self.tname = data_listname.replace(
+            "\x00", "").replace("\"", "").split()
+        data_N = data[1200:1204]
+        self.N = stru.unpack('i', data_N)[0]
 
-        laycol ={}
-        laycol['METALIC']='black'
-        laycol['ABSORBENT']='honeydew2'
-        laycol['AIR']='white'
-        laycol['WALL']='grey20'
-        laycol['WOOD']='maroon'
-        laycol['DOOR']='maroon'
-        laycol['CEIL']='grey20'
-        laycol['FLOOR']='grey20'
-        laycol['WINDOW']='blue'
-        laycol['WINDOW_GLASS']='blue2'
-        laycol['3D_WINDOW_GLASS']='blue3'
-        laycol['WALLS']='grey20'
-        laycol['PARTITION']='orchid1'
-        laycol['PILLAR']='brown4'
-        laycol['METAL']='black'
-        laycol['CONCRETE_15CM3D']='DimGrey'
-        laycol['CONCRETE_20CM3D']='SlateGray'
-        laycol['CONCRETE_7CM3D']='LightGray'
-        laycol['CONCRETE_6CM3D']='LightGray'
-        laycol['PLASTERBOARD_10CM']='tomato'
-        laycol['PLASTERBOARD_14CM']='red'
-        laycol['PLASTERBOARD_7CM']='pink'
-        laycol['TATA']='yellow'
-        laycol['TOTO']='yellow'
-
+        laycol = {}
+        laycol['METALIC'] = 'black'
+        laycol['ABSORBENT'] = 'honeydew2'
+        laycol['AIR'] = 'white'
+        laycol['WALL'] = 'grey20'
+        laycol['WOOD'] = 'maroon'
+        laycol['DOOR'] = 'maroon'
+        laycol['CEIL'] = 'grey20'
+        laycol['FLOOR'] = 'grey20'
+        laycol['WINDOW'] = 'blue'
+        laycol['WINDOW_GLASS'] = 'blue2'
+        laycol['3D_WINDOW_GLASS'] = 'blue3'
+        laycol['WALLS'] = 'grey20'
+        laycol['PARTITION'] = 'orchid1'
+        laycol['PILLAR'] = 'brown4'
+        laycol['METAL'] = 'black'
+        laycol['CONCRETE_15CM3D'] = 'DimGrey'
+        laycol['CONCRETE_20CM3D'] = 'SlateGray'
+        laycol['CONCRETE_7CM3D'] = 'LightGray'
+        laycol['CONCRETE_6CM3D'] = 'LightGray'
+        laycol['PLASTERBOARD_10CM'] = 'tomato'
+        laycol['PLASTERBOARD_14CM'] = 'red'
+        laycol['PLASTERBOARD_7CM'] = 'pink'
+        laycol['TATA'] = 'yellow'
+        laycol['TOTO'] = 'yellow'
 
         for i in range(self.N):
             # Creation d'un objet slab
             S = Slab(self.mat)
-     
-            delta = i*168
-     
-            data_nb_mat_slab = data[1204+delta:1208+delta]
+
+            delta = i * 168
+
+            data_nb_mat_slab = data[1204 + delta:1208 + delta]
             #
             # !! Bug in PulsRay nb_mat is the same than nbmat
             #
             #S['nb_mat']= stru.unpack('i',data_nb_mat_slab)[0]
 
-            data_slabname    = data[1208+delta:1238+delta]
-            name=data_slabname.replace("\x00","")
+            data_slabname = data[1208 + delta:1238 + delta]
+            name = data_slabname.replace("\x00", "")
 
-            data_charindex   = data[1238+delta:1268+delta]
-            charindex=data_charindex.replace("\x00","")
+            data_charindex = data[1238 + delta:1268 + delta]
+            charindex = data_charindex.replace("\x00", "")
     #        S['charindex']=charindex
 
-            data_slab_index  = data[1268+delta:1272+delta]
-            index= stru.unpack('i',data_slab_index)[0]
-            S['index']=index
-            data_nb_mat      = data[1272+delta:1276+delta]
-            nbmat= stru.unpack('i',data_nb_mat)[0]
-            S['nbmat']=nbmat
-            data_index_mat   = data[1276+delta:1308+delta]
-            index_mat= stru.unpack('8i',data_index_mat)
-            S['imat']=index_mat
-            data_thickness   = data[1308+delta:1372+delta]
-            thickness= stru.unpack('8d',data_thickness)
+            data_slab_index = data[1268 + delta:1272 + delta]
+            index = stru.unpack('i', data_slab_index)[0]
+            S['index'] = index
+            data_nb_mat = data[1272 + delta:1276 + delta]
+            nbmat = stru.unpack('i', data_nb_mat)[0]
+            S['nbmat'] = nbmat
+            data_index_mat = data[1276 + delta:1308 + delta]
+            index_mat = stru.unpack('8i', data_index_mat)
+            S['imat'] = index_mat
+            data_thickness = data[1308 + delta:1372 + delta]
+            thickness = stru.unpack('8d', data_thickness)
             epaisseur = thickness[0]
             # en cm
-            S['thickness']=thickness
+            S['thickness'] = thickness
             # insertion du slab dans la liste
             if name in laycol.keys():
                 S['color'] = laycol[name]
             else:
                 S['color'] = 'black'
-            S['linewidth'] = int(np.ceil(epaisseur/3.))
+            S['linewidth'] = int(np.ceil(epaisseur / 3.))
             S['name'] = name
             S.conv()
-            self[name]=S
+            self[name] = S
 
         fo.close()
         self.dass()
-        
+
     def saveini(self):
         """ save SlabDB in an ini file
         """
-        
-        filemat = pyu.getlong('slabDB.ini',"ini")
+
+        filemat = pyu.getlong('slabDB.ini', "ini")
         fd = open(filemat, "w")
         config = ConfigParser.ConfigParser()
         #
@@ -1744,12 +1749,12 @@ class SlabDB(dict):
         for vid in self.di.keys():
             name = self.di[vid]
             config.add_section(name)
-            config.set(name,'color',self[name]['color'])
-            config.set(name,'linewidth',self[name]['linewidth'])
-        config.write(fd)    
+            config.set(name, 'color', self[name]['color'])
+            config.set(name, 'linewidth', self[name]['linewidth'])
+        config.write(fd)
         fd.close()
 
-    def save(self,_filename):
+    def save(self, _filename):
         """ Save a Slab database in a .slab file (PulsRay format)
 
         Parameters
@@ -1759,84 +1764,85 @@ class SlabDB(dict):
 
         """
         print '----------------------------------------'
-        filename = pyu.getlong(_filename,pstruc['DIRSLAB'])
-        fo   = open(filename,'wb')
-        N    = len(self.di)
+        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+        fo = open(filename, 'wb')
+        N = len(self.di)
         tname = self.keys()
         data_listname = ''
         for k in range(N):
-            data_listname = data_listname+"\""+self.di[k-1]+"\" "
+            data_listname = data_listname + "\"" + self.di[k - 1] + "\" "
 #                data_listname = string.join(tname,"\" \"")
 #                data_listname = "\""+data_listname+"\""
         L = len(data_listname)
         # On complete avec \x00 jusqu'a 2500 valeurs
-        if L<1200:
-            for i in range(1200-L):
-                data_listname = data_listname+"\x00"
+        if L < 1200:
+            for i in range(1200 - L):
+                data_listname = data_listname + "\x00"
         else:
             print " out of range in save Slab - too many slabs"
-     
-        data_N = stru.pack('i',N)
-        data = data_listname+data_N
-         
+
+        data_N = stru.pack('i', N)
+        data = data_listname + data_N
+
         for i in range(N):
             ## Creation d'un dictionnaire slab
-            key =self.di[i-1]
+            key = self.di[i - 1]
             print key
             S = self[key]
-            data_nb_mat_slab=stru.pack('i',S['nbmat'])
+            data_nb_mat_slab = stru.pack('i', S['nbmat'])
             L = len(key)
-            data_slabname    = key
-            if L<30:
-                for i in range(30-L):
-                    data_slabname = data_slabname+"\x00"
+            data_slabname = key
+            if L < 30:
+                for i in range(30 - L):
+                    data_slabname = data_slabname + "\x00"
             else:
                 print " Slab : slabname too long maximum 30 characters !"
-             
-            data_charindex    = str(S['imat'])
+
+            data_charindex = str(S['imat'])
             L = len(data_charindex)
-            if L<30:
-                for i in range(30-L):
-                    data_charindex = data_charindex+"\x00"
+            if L < 30:
+                for i in range(30 - L):
+                    data_charindex = data_charindex + "\x00"
             else:
                 print " Slab : charindex too long maximum 30 characters !"
 
-            data_slab_index = stru.pack('i',S['index'])
-            data_nb_mat = stru.pack('i',S['nbmat'])
-     
+            data_slab_index = stru.pack('i', S['index'])
+            data_nb_mat = stru.pack('i', S['nbmat'])
+
             data_index_mat = ""
             for j in range(len(S['imat'])):
-                data_index_mat = data_index_mat+stru.pack('i',S['imat'][j])
-     
+                data_index_mat = data_index_mat + stru.pack('i', S['imat'][j])
+
             data_thickness = ""
             for j in range(len(S['thickness'])):
-                data_thickness = data_thickness+stru.pack('d',S['thickness'][j])
+                data_thickness = data_thickness + \
+                    stru.pack('d', S['thickness'][j])
             data_slab = data_nb_mat + data_slabname + data_charindex + data_slab_index + data_nb_mat + data_index_mat + data_thickness
             data = data + data_slab
 
         fo.write(data)
         fo.close()
 
-    def savesl(self,_filename):
+    def savesl(self, _filename):
         """ the short filename _filename needs to have the extension .sl
 
         """
         ia = _filename.find('.sl')
-        if (ia==-1):
+        if (ia == -1):
             print("error : _filename needs a .sl extension")
             exit()
         else:
         # save in .sl format
-            filename = pyu.getlong(_filename,pstruc['DIRSLAB'])
-            fo   = open(filename,'w')
-            cPickle.dump(self,fo)
+            filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+            fo = open(filename, 'w')
+            cPickle.dump(self, fo)
             fo.close()
         # save in .slab format
-            f2 = _filename.replace('.sl',pstruc['DIRSLAB'])
+            f2 = _filename.replace('.sl', pstruc['DIRSLAB'])
             self.save(f2)
 
 
-def calsig(cval,fGHz,typ='epsr'):
+def calsig(cval, fGHz, typ='epsr'):
     """ evaluate sigma from epsr or index at a given frequency
 
     Parameters
@@ -1847,86 +1853,33 @@ def calsig(cval,fGHz,typ='epsr'):
     type :
         {'epsr' | 'ind'}
 
- 
+
     Returns
     -------
     epr1  :  ..math::
     sigma : float
         conductivity (S/m)
     delta :
- 
+
 
 
     """
 
-    if typ=='epsr':
+    if typ == 'epsr':
         epsr = cval
-    if typ=='ind':
-        epsr = cval**2
+    if typ == 'ind':
+        epsr = cval ** 2
 
-    epr1  = np.real(epsr)
-    epr2  = np.imag(epsr)
-    sigma = -epr2*fGHz/18
+    epr1 = np.real(epsr)
+    epr2 = np.imag(epsr)
+    sigma = -epr2 * fGHz / 18
 
-    n     =  np.sqrt(epsr)
-    n2    = -np.imag(n)
-    delta = (0.3/(2*np.pi*fGHz*n2))
+    n = np.sqrt(epsr)
+    n2 = -np.imag(n)
+    delta = (0.3 / (2 * np.pi * fGHz * n2))
 
-    return( epr1,sigma,delta)
+    return(epr1, sigma, delta)
 
 
-
-if (__name__=="__main__"):
+if (__name__ == "__main__"):
     doctest.testmod()
-#    sl  = SlabDB('simul9.mat','simul9.slab')
-#    #sl.choose()
-#    print "sl  : SlabDB object"
-##    mat.save2(fileout)
-#    mat = sl.mat
-#    m1=mat['AIR']
-#    #m2=mat['METAL']
-#    #m2=mat['PLATRE-57GHz']
-#    m2=mat['PLASTER']
-#    #    m2=mat['CONCRETE']
-#    #    m2.epr=6.25
-#    #    m2.sigma=0
-#    #    m2=Mat(name='TEST',epr=2.25)
-#
-#    #lmat   = [m1,m2,m1,m2,m1]
-#    lmat   = [m2,m1,m2]
-#    #    lmat   = [m1,m2,m1]
-#    #    lmat   = [m2]
-#    #    thick  = [0.15]
-#    #    thick  = [0.50,0]
-#    thick2  = [0.1,0.3,0.1]
-#    theta  = np.arange(0,np.pi/2,0.01,dtype=np.float64)
-#    fGHz   = np.arange(0.4,2.3,0.05)
-#    #    theta  = array([np.pi/2-0.01])
-#    #    theta  = array([np.pi/4])
-#    #    fGHz   = array([5.0])
-#    #    fGHz      = array([2.4])
-#    #    fGHz      = array([0.3])
-#    S1     = MLayer(lmat,thick2,fGHz,theta)
-#    S1.RT()
-# 
-#    plt.figure()
-#    S1.plotwrta(0)
-#    plt.figure()
-#    S1.plotwrtf(0)
-#    #    S1 = MLayer(lmat,thick,fGHz,theta)
-#    S1.pcolor()
-#    #    S1.plotwrta()
-#    #    S2 = MLayer(lmat2,thick2,fGHz,theta)
-#    #    S2.plotwrta()
-#    #    II.plotwrta(0)
-#    #    II.plotwrtf(0)
-#    #    II.pcolor(f,theta)
-#    # 
-#
-#    #    sl['WALL'].eval(f,theta)
-#    #    sl['METAL'].eval(1.0,0)
-#    #
-#    #
-#    #
-#    #       L=sl['WALL'].loss0(f)
-#    #    Lo,Lp=sl['WALL'].losst(f,pi/3)
