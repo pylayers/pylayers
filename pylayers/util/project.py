@@ -1,11 +1,14 @@
 # -*- coding: latin1 -*-
 import os
+import pkgutil 
 #class Project(object)
 #       """
 #       Création d'une arborescence de projet
 #       """
 #       def __init__(self):
 #       def
+pylayersdir = pkgutil.get_loader('pylayers').filename 
+print "pylayers is in : " + pylayersdir
 currentdir = os.getcwd()
 try:
     pulsraydir = os.environ['PULSRAY']
@@ -83,9 +86,11 @@ for nm in pstruc.keys():
         mesdir = dirname
     if nm == 'DIRCIR':
         mesdir = dirname
-        
+
     fd = open(basename+'/project.conf','a')
     fd.write(nm+' '+dirname +'\n')
     fd.close()
-
+filelist = os.listdir(pylayersdir+'/data/ini')
+for fi in filelist:
+    print fi
 os.chdir(currentdir)
