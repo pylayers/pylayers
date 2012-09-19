@@ -122,4 +122,13 @@ for fi in filelist:
         print fi + '  already exists'
     else:
         shutil.copy(pylayersdir+'/data/ant/'+fi,basename+'/ant/'+fi)
+#
+# copy files from /data/output in project directory 
+#
+filelist = os.listdir(pylayersdir+'/data/output')
+for fi in filelist:
+    if os.path.isfile(basename+'/output/'+fi):
+        print fi + '  already exists'
+    else:
+        shutil.copy(pylayersdir+'/data/output/'+fi,basename+'/output/'+fi)
 os.chdir(currentdir)

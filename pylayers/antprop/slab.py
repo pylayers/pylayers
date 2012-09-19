@@ -813,7 +813,7 @@ class MatDB(dict):
         _filename : short file name
 
         """
-        filename = pyu.getlong(_filename,"mat")
+        filename = pyu.getlong(_filename,pstruc['DIRMAT'])
         try:
             fo = open(filename,"rb")
             data = fo.read()
@@ -880,7 +880,7 @@ class MatDB(dict):
                  a short file name
 
         """
-        filename = pyu.getlong(_filename,'mat')
+        filename = pyu.getlong(_filename,pstruc['DIRMAT'])
         try:
             fo = open(filename,"rb")
             data = fo.read()
@@ -985,7 +985,7 @@ class MatDB(dict):
         _filename : string
             a short file name 
         """
-        filename = pyu.getlong(_filename,'mat')
+        filename = pyu.getlong(_filename,pstruc['DIRMAT'])
         fo   = open(filename,'wb')
         N    = len(self.di)
         data_listname = ''
@@ -1611,7 +1611,7 @@ class SlabDB(dict):
            _filename : string
 
         """
-        filename = pyu.getlong(_filename,'slab')
+        filename = pyu.getlong(_filename,pstruc['DIRSLAB'])
         fo   = open(filename,'r')
         DB = cPickle.load(fo)
         self = DB
@@ -1640,7 +1640,7 @@ class SlabDB(dict):
             _filename
 
         """
-        filename= pyu.getlong(_filename,'slab')
+        filename= pyu.getlong(_filename,pstruc['DIRSLAB'])
         try:
             fo = open(filename, "rb")
         except:
@@ -1759,7 +1759,7 @@ class SlabDB(dict):
 
         """
         print '----------------------------------------'
-        filename = pyu.getlong(_filename,'slab')
+        filename = pyu.getlong(_filename,pstruc['DIRSLAB'])
         fo   = open(filename,'wb')
         N    = len(self.di)
         tname = self.keys()
@@ -1827,12 +1827,12 @@ class SlabDB(dict):
             exit()
         else:
         # save in .sl format
-            filename = pyu.getlong(_filename,'slab')
+            filename = pyu.getlong(_filename,pstruc['DIRSLAB'])
             fo   = open(filename,'w')
             cPickle.dump(self,fo)
             fo.close()
         # save in .slab format
-            f2 = _filename.replace('.sl','.slab')
+            f2 = _filename.replace('.sl',pstruc['DIRSLAB'])
             self.save(f2)
 
 

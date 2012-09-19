@@ -211,7 +211,7 @@ class Pafreq(object):
         print "Number of points : ", self.nf
 
     def load(self):
-        filefreq = pyu.getlong(self.filename, 'tud')
+        filefreq = pyu.getlong(self.filename, pstruc['DIRTUD'])
         fi = open(filefreq)
         l = fi.read()
         u = l.split()
@@ -220,7 +220,7 @@ class Pafreq(object):
         self.nf = eval(u[2])
 
     def save(self):
-        filefreq = pyu.getlong(self.filename, 'tud')
+        filefreq = pyu.getlong(self.filename, pstruc['DIRTUD'])
         fi = open(filefreq, 'w')
         fi.write(str(self.fghzmin) + ' ')
         fi.write(str(self.fghzmax) + ' ')
