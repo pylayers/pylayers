@@ -7,9 +7,12 @@ import pkgutil
 #       """
 #       def __init__(self):
 #       def
-pylayersdir = pkgutil.get_loader('pylayers').filename 
-print "pylayers is in : " + pylayersdir
 currentdir = os.getcwd()
+dir1 = pkgutil.get_loader('pylayers').filename 
+os.chdir(dir1)
+os.chdir('..')
+pylayersdir = os.getcwd()
+print "pylayers is in : " + pylayersdir
 try:
     pulsraydir = os.environ['PULSRAY']
     print "PULSRAY  : ", pulsraydir
