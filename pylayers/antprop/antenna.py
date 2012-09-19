@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
 #from spharm import Spharmt,getspecindx
-#from pypayers.util import project
+from pylayers.util.project import *
 from sphere import spherepack, Wrapec, mathtogeo
 
 from matplotlib.font_manager import FontProperties
@@ -119,7 +119,7 @@ def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
     g = round((R - minr) * (Ncol - 1) / (maxr - minr))
 
     _filename = racine + str(1000 + f)[1:] + '.off'
-    filename = pyu.getlong(_filename, "geom")
+    filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
     fd = open(filename, 'w')
     fd.write('COFF\n')
     chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
@@ -325,12 +325,12 @@ class SHCoeff(object):
 
         if typ == 2:
 
-            file_ind = pyu.getlong("outfile_i2.txt", "ant")
+            file_ind = pyu.getlong("outfile_i2.txt",pstruc['DIRANT'])
             aux = load(file_ind)
             ind = aux[0]
             ind2 = np.array([aux[1], aux[2]])
 
-            file_s2 = pyu.getlong("outfile_s2.txt", "ant")
+            file_s2 = pyu.getlong("outfile_s2.txt",pstruc['DIRANT'])
             s2 = load(file_s2)
 
             self.s2p = s2
@@ -343,13 +343,13 @@ class SHCoeff(object):
 
         if typ == 3:
 
-            file_ind = pyu.getlong("outfile_i3.txt", "ant")
+            file_ind = pyu.getlong("outfile_i3.txt",pstruc['DIRANT'])
             aux = load(file_ind)
             ind = aux[0]
             ind3 = np.array([aux[1], aux[2]])
             k2 = aux[3]
 
-            file_s3 = pyu.getlong("outfile_s3.txt", "ant")
+            file_s3 = pyu.getlong("outfile_s3.txt",pstruc['DIRANT'])
             s3 = load(file_s3)
 
             a = insert(self.ind3, ind, ind3, axis=0)
@@ -1326,7 +1326,7 @@ class Antenna(object):
         geom_pattern(th, ph, V, k, po, minr, maxr, typ)
 
         _filename = typ + str(k) + '.off'
-        filename = pyu.getlong(_filename, "geom")
+        filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
 
         if not silent:
             chaine = "geomview -nopanel -b 1 1 1 " + filename + \
@@ -1403,7 +1403,7 @@ class Antenna(object):
 
         """
         _filename = 'Polar' + str(10000 + k)[1:] + '.list'
-        filename = pyu.getlong(_filename, "geom")
+        filename = pyu.getlong(_filename,pstruc['DIRGEOM'])
         fd = open(filename, "w")
         fd.write("LIST\n")
         Nt = self.Nt
@@ -1976,7 +1976,7 @@ class Antenna(object):
         # create vsh3 file
 
         _filevsh3 = self._filename.replace('.trx', '.vsh3')
-        filevsh3 = pyu.getlong(_filevsh3, 'ant')
+        filevsh3 = pyu.getlong(_filevsh3, pstruc['DIRANT'])
 
         #filevsh3 = pyu.getlong(self._filename,'ant')
 
@@ -2004,12 +2004,15 @@ class Antenna(object):
             io.savemat(filevsh3, coeff, appendmat=False)
 
     def loadvsh3(self):
-        """ Load antenna's vsh3 file which only contains
-            the significant vsh coefficients in shape 3
+        """ Load antenna's vsh3 file 
+        
+            it contains a thesholded version of vsh coefficients in shape 3
         """
 
         _filevsh3 = self._filename
-        filevsh3 = pyu.getlong(_filevsh3, 'ant')
+        filevsh3 = pyu.getlong(_filevsh3,pstruc['DIRANT'])
+        print filevsh3
+
         if os.path.isfile(filevsh3):
             coeff = io.loadmat(filevsh3, appendmat=False)
             #
@@ -2046,7 +2049,7 @@ class Antenna(object):
         # create vsh2 file
 
         _filevsh2 = self._filename.replace('.trx', '.vsh2')
-        filevsh2 = pyu.getlong(_filevsh2, 'ant')
+        filevsh2 = pyu.getlong(_filevsh2,pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
             print filevsh2, ' already exist'
@@ -2076,7 +2079,7 @@ class Antenna(object):
         """
 
         _filevsh2 = self._filename
-        filevsh2 = pyu.getlong(_filevsh2, 'ant')
+        filevsh2 = pyu.getlong(_filevsh2,pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
             coeff = io.loadmat(filevsh2, appendmat=False)
@@ -2113,7 +2116,7 @@ class Antenna(object):
         """
 
         _filevsh3 = self._filename
-        filevsh3 = getlong(_filevsh3, 'ant')
+        filevsh3 = getlong(_filevsh3,pstruc['DIRANT'])
         fmin = 2.
         fmax = 8.
         if os.path.isfile(filevsh3):

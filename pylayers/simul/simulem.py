@@ -2266,6 +2266,13 @@ class Simul(object):
                 _filename = racine + txrx
                 self.dcir[l][k] = _filename
                 rep = rep + '/Tx' + str('%0.3d' % l)
+                if not os.path.isdir(rep):
+                    try:
+                        os.mkdir(basename+'/'+rep)
+                    except:
+                        raise NameError(basename+'/'+rep)
+
+
                 filename = pyu.getlong(_filename, rep)
                 VCl = channel.VectChannel(self, l, k, False)
                 CVC.append(VCl)

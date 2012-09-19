@@ -107,6 +107,7 @@ class RadioNode(object):
 
         #
         self.fileant = _fileant
+        print _fileant
         try:
             self.loadvsh()
         except:
@@ -345,7 +346,7 @@ class RadioNode(object):
         self.N = np.shape(self.position)[1]
         self.save()
 
-    def loadini(self, _filespa, rep='simul'):
+    def loadini(self, _filespa, rep='ini'):
         """ load an ini file
 
         Parameters
@@ -369,7 +370,7 @@ class RadioNode(object):
             except:
                 self.position = self.points[k]
 
-    def loadspa(self, _filespa, rep='launch'):
+    def loadspa(self, _filespa, rep=pstruc['DIRLCH']):
         """
         load a spa file
 
@@ -441,10 +442,10 @@ class RadioNode(object):
             filespa = pyu.getlong(_filespa, 'ini')
             colorname = 'green'
         elif self.typ == 'tx':
-            filespa = pyu.getlong(_filespa, 'launch')
+            filespa = pyu.getlong(_filespa, pstruc['DIRLCH'])
             colorname = 'red'
         elif self.typ == 'rx':
-            filespa = pyu.getlong(_filespa, 'trace')
+            filespa = pyu.getlong(_filespa, pstruc['DIRTRA'])
             colorname = 'blue'
 
         # save points in GeomVect container
@@ -623,9 +624,9 @@ class RadioNode(object):
         _filestr : string
 
         """
-        filename = pyu.getlong("strucRN.off", "geom")
+        filename = pyu.getlong("strucRN.off", pstruc['DIRGEOM'])
         fo = open(filename, "w")
-        filegeom = pyu.getlong(self.filegeom, "geom")
+        filegeom = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
         # get .off filename from .str or .str2 filename
         fileoff, ext = os.path.splitext(self.filestr)
         fileoff = fileoff + '.off'
@@ -686,9 +687,9 @@ class RadioNode(object):
 #
         if self.typ != 'undefined':
             if self.typ == 'tx':
-                filespa = pyu.getlong("filespa.spa", "launch")
+                filespa = pyu.getlong("filespa.spa", pstruc['DIRLCH'])
             elif self.typ == 'rx':
-                filespa = pyu.getlong("filespa.spa", "trace")
+                filespa = pyu.getlong("filespa.spa", pstruc['DIRTRA'])
             fi = open(filespa, 'w')
             fi.write("0\n")
             fi.write("1\n")
@@ -707,7 +708,7 @@ class RadioNode(object):
         set self.A
 
         """
-
+        print self.fileant
         A = Antenna('vsh3', self.fileant)
         self.A = A
 
