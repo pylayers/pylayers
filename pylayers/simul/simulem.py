@@ -966,16 +966,16 @@ class Simul(object):
 
         sections = self.config.sections()
 
-        filetx = self.config.get("files", "tx")
-        filerx = self.config.get("files", "rx")
+        _filetx = self.config.get("files", "tx")
+        _filerx = self.config.get("files", "rx")
 
-        fileanttx = self.config.get("files", "txant")
-        fileantrx = self.config.get("files", "rxant")
+        _fileanttx = self.config.get("files", "txant")
+        _fileantrx = self.config.get("files", "rxant")
 
         self.filestr = self.config.get("files", "struc")
 
-        self.tx = RadioNode('tx', filetx, fileanttx, self.filestr)
-        self.rx = RadioNode('rx', filerx, fileantrx, self.filestr)
+        self.tx = RadioNode('tx', _filetx, _fileanttx, self.filestr)
+        self.rx = RadioNode('rx', _filerx, _fileantrx, self.filestr)
 #
 # Launching and Tracing parameters
 #
@@ -1025,7 +1025,7 @@ class Simul(object):
         if "output" in sections:
             for itx in self.config.options("output"):
                 _filename = self.config.get("output", itx)
-                filename = pyu.getlong(_filename, "ini")
+                filename = pyu.getlong(_filename, "output")
                 self.dout[int(itx)] = filename
                 output = ConfigParser.ConfigParser()
                 output.read(filename)
@@ -1456,8 +1456,9 @@ class Simul(object):
                 print " ", self.dtang[itx][irx]
                 print " ", self.drang[itx][irx]
                 gt = GrRay3D.GrRayTud()
-                gt.load(self.dtud[itx][irx], self.dtang[
-                    itx][irx], self.drang[itx][irx], self.sl)
+                gt.load(self.dtud[itx][irx],
+                        self.dtang[itx][irx],
+                        self.drang[itx][irx], self.sl)
             if irx in self.dtauk[itx].keys():
                 print self.dtauk[itx][irx]
                 print self.dfield[itx][irx]
