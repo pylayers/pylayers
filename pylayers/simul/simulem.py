@@ -1952,7 +1952,7 @@ class Simul(object):
             # launching itx does not exist
             self.filespaTx = 'tx' + str(itx) + '.spa'
             point = self.tx.points[itx]
-            spafile(self.filespaTx, point, "launch")
+            spafile(self.filespaTx, point, pstruc['DIRLCH'])
             print "---------------"
             print "Start Launching Tx : " + str(itx)
             print "---------------"
@@ -1966,7 +1966,7 @@ class Simul(object):
             if irx not in self.dtra[itx].keys():
                 self.filespaRx = 'rx' + str(irx) + '.spa'
                 point = self.rx.points[irx]
-                spafile(self.filespaRx, point, "trace")
+                spafile(self.filespaRx, point, pstruc['DIRTRA'])
                 print "--------------------"
                 print "Start tracing  Rx : " + str(irx)
                 print "--------------------"
@@ -2011,14 +2011,6 @@ class Simul(object):
                         alpha = np.sqrt(1. / 30.0)
                         self.cir([itx], [irx],
                                  store_level=16 + 8 + 4 + 2 + 1, alpha=alpha)
-
-                        if "cir" not in  self.output[itx].sections():
-                            self.output[itx].add_section("cir")
-                        if irx in self.dcir[itx].keys():
-                            self.output[itx].set("cir", str(irx), self.dcir[itx][irx])
-                        fd = open(outfilename, "w")
-                        self.output[itx].write(fd)
-                        fd.close()
                     else:
                         raise("Error no waveform in the config file ")
                         return(False)
