@@ -4,10 +4,10 @@ import shutil
 import pkgutil
 #class Project(object)
 #       """
-#       Création d'une arborescence de projet
+#       Création d'une arborescence de projet 
 #       """
 #       def __init__(self):
-#       def
+#       def     
 currentdir = os.getcwd()
 dir1 = pkgutil.get_loader('pylayers').filename
 os.chdir(dir1)
@@ -51,6 +51,7 @@ pstruc['DIRTRA'] = 'output'
 pstruc['DIRCIR'] = 'output'
 pstruc['DIRMES'] = 'meas'
 
+
 print "BASENAME : ", basename
 
 # if basename directory does not exit it is created 
@@ -72,6 +73,7 @@ for nm in pstruc.keys():
         os.mkdir(dirname)
         os.chdir('..')
 
+
     if nm == 'DIRSTRUC':
         strdir = dirname
     if nm == 'DIRGEOM':
@@ -91,6 +93,7 @@ for nm in pstruc.keys():
     if nm == 'DIRCIR':
         mesdir = dirname
 
+
     fd = open(basename+'/project.conf','a')
     fd.write(nm+' '+dirname +'\n')
     fd.close()
@@ -100,9 +103,17 @@ for nm in pstruc.keys():
 filelist = os.listdir(pylayersdir+'/data/ini')
 for fi in filelist:
     if os.path.isfile(basename+'/ini/'+fi):
-        print fi + '  already exists'
+        if os.path.getsize(pylayersdir+'/data/ini/'+fi) != os.path.getsize(basename+'/ini/'+fi):
+            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+            A=raw_input()
+            if A == 'y':
+                shutil.move(basename+'/ini/'+fi,basename+'/ini/'+fi+'.old')
+                shutil.copy(pylayersdir+'/data/ini/'+fi,basename+'/ini/'+fi)
+        else: 
+            print fi + '  already exists'
     else:
         shutil.copy(pylayersdir+'/data/ini/'+fi,basename+'/ini/'+fi)
+
 
 #
 # copy files from /data/struc in project directory 
@@ -110,7 +121,14 @@ for fi in filelist:
 filelist = os.listdir(pylayersdir+'/data/struc')
 for fi in filelist:
     if os.path.isfile(basename+'/struc/'+fi):
-        print fi + '  already exists'
+        if os.path.getsize(pylayersdir+'/data/struc/'+fi) != os.path.getsize(basename+'/struc/'+fi):
+            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+            A=raw_input()
+            if A == 'y':
+                shutil.move(basename+'/struc/'+fi,basename+'/struc/'+fi+'.old')
+                shutil.copy(pylayersdir+'/data/struc/'+fi,basename+'/struc/'+fi)
+        else: 
+            print fi + '  already exists'
     else:
         shutil.copy(pylayersdir+'/data/struc/'+fi,basename+'/struc/'+fi)
 #
@@ -119,7 +137,14 @@ for fi in filelist:
 filelist = os.listdir(pylayersdir+'/data/ant')
 for fi in filelist:
     if os.path.isfile(basename+'/ant/'+fi):
-        print fi + '  already exists'
+        if os.path.getsize(pylayersdir+'/data/ant/'+fi) != os.path.getsize(basename+'/ant/'+fi):
+            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+            A=raw_input()
+            if A == 'y':
+                shutil.move(basename+'/ant/'+fi,basename+'/ant/'+fi+'.old')
+                shutil.copy(pylayersdir+'/data/ant/'+fi,basename+'/ant/'+fi)
+        else:
+            print fi + '  already exists'
     else:
         shutil.copy(pylayersdir+'/data/ant/'+fi,basename+'/ant/'+fi)
 #
@@ -128,7 +153,14 @@ for fi in filelist:
 filelist = os.listdir(pylayersdir+'/data/output')
 for fi in filelist:
     if os.path.isfile(basename+'/output/'+fi):
-        print fi + '  already exists'
+        if os.path.getsize(pylayersdir+'/data/output/'+fi) != os.path.getsize(basename+'/output/'+fi):
+            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+            A=raw_input()
+            if A == 'y':
+                shutil.move(basename+'/output/'+fi,basename+'/output/'+fi+'.old')
+                shutil.copy(pylayersdir+'/data/output/'+fi,basename+'/output/'+fi)
+        else :
+            print fi + '  already exists'
     else:
         shutil.copy(pylayersdir+'/data/output/'+fi,basename+'/output/'+fi)
 os.chdir(currentdir)
