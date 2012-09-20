@@ -105,7 +105,7 @@ class RadioNode(object):
             fd.close()
             self.loadini(self.fileini, 'ini')
         except:
-            raise NameError(self.fileini)
+            pass
 
         #
         self.fileant = _fileant
