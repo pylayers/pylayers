@@ -1911,35 +1911,6 @@ class Simul(object):
             raise NameError('error writing output ini file')
         fd.close()
 
-    def tratotud(self, itx, irx):
-        """
-         tratotud(itx,irx)  convert tracing in .tud
-
-         l : launching index
-
-         loop on all file filetra[l][k]
-
-         .. todo::
-            check if the loop cannot be done in C
-
-        """
-        print " t2t ", itx, irx
-        if (self.progress >= 2):
-            nrmin = self.config.get("tud", "nrmax")
-            num = self.config.get("tud", "num")
-            purc = self.config.get("tud", "purc")
-            filetud = []
-            filetang = []
-            filerang = []
-            print nrmin
-            print purc
-            print num
-            print self.dtra[itx][irx]
-            chaine = "tratotud -tra " + self.dtra[itx][irx] + \
-                " -min " + nrmin + \
-                " -purc " + purc + \
-                " -num " + num +  \
-                " -conf " + basename + '/' + self.config.get("files", "conf")
 
     def run(self, itx, srx=[], cirforce=True):
         """ run the simulation for 1 tx and a set of rx
