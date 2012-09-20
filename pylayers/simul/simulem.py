@@ -2114,7 +2114,7 @@ class Simul(object):
         racine = self.filesimul.replace('.ini', '') + 'cir-'
         for l in itx:
             # create cir entry in outputTx if required
-            _outfilename = self.config.get('output', str(itx))
+            _outfilename = self.config.get('output', str(l))
             outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
             if "cir" not in  self.output[l].sections():
                 self.output[l].add_section("cir")
@@ -2135,7 +2135,7 @@ class Simul(object):
                 _filename = racine + txrx
                 self.dcir[l][k] = _filename
                 rep = rep + '/Tx' + str('%0.3d' % l)
-                if not os.path.isdir(rep):
+                if not os.path.isdir(basename+'/'+rep):
                     try:
                         os.mkdir(basename+'/'+rep)
                     except:
@@ -2162,7 +2162,7 @@ class Simul(object):
                     spio.savemat(filename, D)
                     self.output[l].set("cir", str(k), self.dcir[l][k])
                     fd = open(outfilename, "w")
-                    self.output[itx].write(fd)
+                    self.output[l].write(fd)
                     fd.close()
                 else:
                     CSCO.append([])
