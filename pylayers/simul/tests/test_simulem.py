@@ -83,7 +83,7 @@ gr.show(a,np.arange(100))
 print "Tratotud "
 print "-----------------"
 print "purc :",S.config.get('tud','purc')
-S.tratotud2(1,1)
+S.tratotud(1,1)
 gt = GrRayTud()
 # loading rays in tud format 
 gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)

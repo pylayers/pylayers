@@ -113,7 +113,6 @@ class RadioNode(object):
         except:
             raise NameError('antenna file does not exist')
 
-        self.save()
 
     def pos2pt(self):
         """ position to point

@@ -727,7 +727,7 @@ class Simul(object):
         self.config.set("waveform", "tw", 30)
         self.config.set("waveform", "band", 0.499)
         self.config.set("waveform", "fc", 4.493)
-        self.config.set("waveform", "thsh", 3)
+        self.config.set("waveform", "thresh", 3)
         self.config.set("waveform", "type", 'generic')
         self.config.set("waveform", "fe", 50)
         self.wav = wvf.Waveform()
@@ -1802,7 +1802,7 @@ class Simul(object):
             self.output[itx].write(fd)
             fd.close()
 
-    def tratotud2(self, itx, irx):
+    def tratotud(self, itx, irx):
         """ convert tracing in .tud
 
         Parameters
@@ -1863,70 +1863,6 @@ class Simul(object):
             raise NameError('error writing output ini file')
         fd.close()
 
-    def tratotud(self, itx, irx):
-        """
-         tratotud(itx,irx)  convert tracing in .tud
-
-         l : launching index
-
-         loop on all file filetra[l][k]
-
-         .. todo::
-            check if the loop cannot be done in C
-
-        """
-        print " t2t ", itx, irx
-        if (self.progress >= 2):
-            nrmin = self.config.get("tud", "nrmax")
-            num = self.config.get("tud", "num")
-            purc = self.config.get("tud", "purc")
-            filetud = []
-            filetang = []
-            filerang = []
-            print nrmin
-            print purc
-            print num
-            print self.dtra[itx][irx]
-            chaine = "tratotud -tra " + self.dtra[itx][irx] + \
-                " -min " + nrmin + \
-                " -purc " + purc + \
-                " -num " + num +  \
-                " -conf " + basename + '/' + self.config.get("files", "conf")
-            self.ctratotud.append(chaine)
-            print chaine
-            aux = os.popen(chaine, "r")
-            os.system('echo $?')
-            recup = aux.read()
-            aux.close()
-        #   self.recup=recup
-            aux = recup.splitlines()
-            len_aux = recup.count("\n")
-        #   self.aux=aux
-        #   .. todo::
-        #       remove the loop
-            for i in range(len_aux):
-                if aux[i].find("filetudout") != -1:
-                    aux[i] = aux[i].replace('filetudout : ', '')
-                    filename = pyu.getshort(aux[i])
-                    #filetud.append(filename)
-                    self.dtud[itx][irx] = filename
-                elif aux[i].find("filetangout") != -1:
-                    aux[i] = aux[i].replace('filetangout : ', '')
-                    filename = pyu.getshort(aux[i])
-                    #filetang.append(filename)
-                    self.dtang[itx][irx] = filename
-                elif aux[i].find("filerangout") != -1:
-                    aux[i] = aux[i].replace('filerangout : ', '')
-                    filename = pyu.getshort(aux[i])
-                    #filerang.append(filename)
-                    self.drang[itx][irx] = filename
-
-            #self.filetud.insert(l,filetud)
-            #self.filetang.insert(l,filetang)
-            #self.filerang.insert(l,filerang)
-            self.progress = 3
-        else:
-            print "No tracing available"
 
     def field2(self, itx, irx):
         """
@@ -2150,8 +2086,7 @@ class Simul(object):
                         if "cir" not in  self.output[itx].sections():
                             self.output[itx].add_section("cir")
                         if irx in self.dcir[itx].keys():
-                            self.output[itx].set("cir", str(irx), self.dcir[
-                                itx][irx])
+                            self.output[itx].set("cir", str(irx), self.dcir[itx][irx])
                         fd = open(outfilename, "w")
                         self.output[itx].write(fd)
                         fd.close()
