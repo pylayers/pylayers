@@ -105,7 +105,7 @@ class RadioNode(object):
             fd.close()
             self.loadini(self.fileini, 'ini')
         except:
-            raise NameError(self.fileini)
+            print self.fileini
 
         #
         self.fileant = _fileant
@@ -113,7 +113,7 @@ class RadioNode(object):
             self.loadvsh()
         except:
             raise NameError('antenna file does not exist')
-
+        self.save()
 
     def pos2pt(self):
         """ position to point

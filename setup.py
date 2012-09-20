@@ -5,7 +5,7 @@ Setup script for pylayers
 """
 import numpy
 
-from distutils.core import setup
+from setuptools import setup,find_packages
 
 setup(name='pylayers' ,
       version='0.1',
@@ -21,7 +21,7 @@ setup(name='pylayers' ,
 #        'matplotlib>=1.1.0',
 #        'SimPy>=2.2'
 #                        ],
-      packages=['pylayers'],
+      packages=find_packages()
 
 )
 

@@ -9,10 +9,11 @@ import pkgutil
 #       def __init__(self):
 #       def     
 currentdir = os.getcwd()
-dir1 = pkgutil.get_loader('pylayers').filename
-os.chdir(dir1)
-os.chdir('..')
+#dir1 = pkgutil.get_loader('pylayers').filename
+#os.chdir(dir1)
+#os.chdir('..')
 pylayersdir = os.getcwd()
+pylayersdir='/private/staff/t/ot/niamiot/Documents/Code/pylayers/'
 print "pylayers is in : " + pylayersdir
 try:
     pulsraydir = os.environ['PULSRAY']
