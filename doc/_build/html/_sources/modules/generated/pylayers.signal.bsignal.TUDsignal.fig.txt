@@ -1,6 +1,0 @@
-pylayers.signal.bsignal.TUDsignal.fig
-=====================================
-
-.. currentmodule:: pylayers.signal.bsignal
-
-.. automethod:: TUDsignal.fig

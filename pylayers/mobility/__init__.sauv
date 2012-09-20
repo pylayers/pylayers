@@ -1,4 +1,0 @@
-from PyLayers.Mobility.Agent import Agent
-from PyLayers.Mobility.Transit import Person3
-
-

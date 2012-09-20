@@ -1,6 +1,0 @@
-pylayers.signal.bsignal.TUsignal.tau_moy
-========================================
-
-.. currentmodule:: pylayers.signal.bsignal
-
-.. automethod:: TUsignal.tau_moy

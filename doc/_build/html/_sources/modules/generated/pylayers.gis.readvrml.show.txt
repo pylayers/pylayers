@@ -1,6 +1,0 @@
-pylayers.gis.readvrml.show
-==========================
-
-.. currentmodule:: pylayers.gis
-
-.. automethod:: readvrml.show
