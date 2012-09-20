@@ -1,5 +1,6 @@
 # -*- coding: latin1 -*-
 import os
+import sys
 import shutil
 import pkgutil
 #class Project(object)
@@ -8,29 +9,29 @@ import pkgutil
 #       """
 #       def __init__(self):
 #       def     
-currentdir = os.getcwd()
-dir1 = pkgutil.get_loader('pylayers').filename
-os.chdir(dir1)
-os.chdir('..')
-pylayersdir = os.getcwd()
-print "pylayers is in : " + pylayersdir
+
+currentdir=os.getcwd()
+pylayersdir=currentdir.split('pylayers')[0] + '/pylayers/'
+
+try:
+    basename = os.environ['BASENAME']
+    print "BASENAME  : ", basename
+except:
+    raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
+
 try:
     pulsraydir = os.environ['PULSRAY']
     print "PULSRAY  : ", pulsraydir
 except:
     raise EnvironmentError('Please set the PULSRAY environment variable')
-try:
-    figuredir = os.environ['FIGURDIR']
-except:
-    figuredir = os.environ['HOME'] + "/Pyproject/figures"
-#print currentdir
-print "FIGURDIR : ", figuredir
-try:
-    basename = os.environ['BASENAME']
-except:
-    basename = os.environ['HOME'] + "/Pyproject"
 
-#
+try:
+    os.path.isdir(basename +'/figures')
+except:
+    os.mkdir(basename+'/figures')
+
+
+
 # Dictionnary which associate PULSRAY environment variable with sub direrories
 # of the project 
 #
@@ -100,67 +101,22 @@ for nm in pstruc.keys():
 #
 # copy files from /data/ini in project directory 
 #
-filelist = os.listdir(pylayersdir+'/data/ini')
-for fi in filelist:
-    if os.path.isfile(basename+'/ini/'+fi):
-        if os.path.getsize(pylayersdir+'/data/ini/'+fi) != os.path.getsize(basename+'/ini/'+fi):
-            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-            A=raw_input()
-            if A == 'y':
-                shutil.move(basename+'/ini/'+fi,basename+'/ini/'+fi+'.old')
-                shutil.copy(pylayersdir+'/data/ini/'+fi,basename+'/ini/'+fi)
-        else: 
-            print fi + '  already exists'
-    else:
-        shutil.copy(pylayersdir+'/data/ini/'+fi,basename+'/ini/'+fi)
+dirlist=['ini','struc','ant','output']
+
+for dl in dirlist:
 
 
-#
-# copy files from /data/struc in project directory 
-#
-filelist = os.listdir(pylayersdir+'/data/struc')
-for fi in filelist:
-    if os.path.isfile(basename+'/struc/'+fi):
-        if os.path.getsize(pylayersdir+'/data/struc/'+fi) != os.path.getsize(basename+'/struc/'+fi):
-            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-            A=raw_input()
-            if A == 'y':
-                shutil.move(basename+'/struc/'+fi,basename+'/struc/'+fi+'.old')
-                shutil.copy(pylayersdir+'/data/struc/'+fi,basename+'/struc/'+fi)
-        else: 
-            print fi + '  already exists'
-    else:
-        shutil.copy(pylayersdir+'/data/struc/'+fi,basename+'/struc/'+fi)
-#
-# copy files from /data/ant in project directory 
-#
-filelist = os.listdir(pylayersdir+'/data/ant')
-for fi in filelist:
-    if os.path.isfile(basename+'/ant/'+fi):
-        if os.path.getsize(pylayersdir+'/data/ant/'+fi) != os.path.getsize(basename+'/ant/'+fi):
-            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-            A=raw_input()
-            if A == 'y':
-                shutil.move(basename+'/ant/'+fi,basename+'/ant/'+fi+'.old')
-                shutil.copy(pylayersdir+'/data/ant/'+fi,basename+'/ant/'+fi)
+    filelist = os.listdir(pylayersdir+'/data/' + dl)
+    for fi in filelist:
+        if os.path.isfile(basename+'/' + dl +'/' +fi):
+            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
+                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+                A=raw_input()
+                if A == 'y':
+                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
+                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
         else:
-            print fi + '  already exists'
-    else:
-        shutil.copy(pylayersdir+'/data/ant/'+fi,basename+'/ant/'+fi)
-#
-# copy files from /data/output in project directory 
-#
-filelist = os.listdir(pylayersdir+'/data/output')
-for fi in filelist:
-    if os.path.isfile(basename+'/output/'+fi):
-        if os.path.getsize(pylayersdir+'/data/output/'+fi) != os.path.getsize(basename+'/output/'+fi):
-            print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-            A=raw_input()
-            if A == 'y':
-                shutil.move(basename+'/output/'+fi,basename+'/output/'+fi+'.old')
-                shutil.copy(pylayersdir+'/data/output/'+fi,basename+'/output/'+fi)
-        else :
-            print fi + '  already exists'
-    else:
-        shutil.copy(pylayersdir+'/data/output/'+fi,basename+'/output/'+fi)
+            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+
+
 os.chdir(currentdir)
