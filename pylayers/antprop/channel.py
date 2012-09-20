@@ -440,13 +440,13 @@ class VectChannel(Ctilde):
         #   a verifier -ravel-
         self.fail = False
         _filefield = S.dfield[itx][irx]
-        filefield = pyu.getlong(_filefield, 'tud')
+        filefield = pyu.getlong(_filefield,pstruc['DIRTUD'])
         _filetauk = S.dtauk[itx][irx]
-        filetauk = pyu.getlong(_filetauk, 'tud')
+        filetauk = pyu.getlong(_filetauk,pstruc['DIRTUD'])
         _filetang = S.dtang[itx][irx]
-        filetang = pyu.getlong(_filetang, 'tud')
+        filetang = pyu.getlong(_filetang,pstruc['DIRTUD'])
         _filerang = S.drang[itx][irx]
-        filerang = pyu.getlong(_filerang, 'tud')
+        filerang = pyu.getlong(_filerang,pstruc['DIRTUD'])
 
         """
         .. todo::
@@ -550,7 +550,7 @@ class VectChannel(Ctilde):
         gr = GrRay3D()
         gr.load(self.filetra, self.L)
 
-        filename = pyu.getlong("grRay" + str(id) + "_col.list", "geom")
+        filename = pyu.getlong("grRay" + str(id) + "_col.list",pstruc['DIRGEOM'])
         fo = open(filename, "w")
         fo.write("LIST\n")
         fo.write("{<strucTxRx.off}\n")
@@ -628,7 +628,7 @@ class VectChannel(Ctilde):
         gr = GrRay3D()
         gr.load(self.filetra, self.L)
 
-        filename = pyu.getlong("grRay" + str(seuildb) + "_col.list", "geom")
+        filename = pyu.getlong("grRay" + str(seuildb) + "_col.list", pstruc['DIRGEOM'])
         fo = open(filename, "w")
         fo.write("LIST\n")
         fo.write("{<strucTxRx.off}\n")

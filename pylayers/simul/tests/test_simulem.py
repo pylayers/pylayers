@@ -6,7 +6,7 @@ S = Simul()
 
 # loading a layout 
 filestr = 'defstr'
-S.layout(filestr+'.str')
+S.layout(filestr+'.str','def.mat','def.slab')
 
 # setting transmitter
 
@@ -83,12 +83,12 @@ gr.show(a,np.arange(100))
 print "Tratotud "
 print "-----------------"
 print "purc :",S.config.get('tud','purc')
-S.tratotud2(1,1)
+S.tratotud(1,1)
 gt = GrRayTud()
 # loading rays in tud format 
 gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
 print "Evalfield "
 print "-----------------"
-S.field2(1,1)
+S.field(1,1)
 S.cir(1,1)
 S.pltcir(1,1)
