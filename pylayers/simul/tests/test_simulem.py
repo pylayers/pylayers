@@ -89,6 +89,6 @@ gt = GrRayTud()
 gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
 print "Evalfield "
 print "-----------------"
-S.field2(1,1)
+S.field(1,1)
 S.cir(1,1)
 S.pltcir(1,1)

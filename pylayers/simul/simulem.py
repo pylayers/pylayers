@@ -1864,9 +1864,8 @@ class Simul(object):
         fd.close()
 
 
-    def field2(self, itx, irx):
-        """
-        field calculation for Tx Rx
+    def field(self, itx, irx):
+        """ field calculation for Tx Rx using evalfield command
 
         Parameters
         ----------
@@ -1942,49 +1941,6 @@ class Simul(object):
                 " -num " + num +  \
                 " -conf " + basename + '/' + self.config.get("files", "conf")
 
-    def field(self, itx, irx):
-        """ field calculation  for link (itx,irx)
-
-        Parameters
-        ----------
-            ntx
-                 transmitter index
-            nrx
-                 receiver index
-        """
-        if (self.progress >= 3):
-            filefield = []
-            filetauk = []
-
-            chaine = "evalfield -tud " + self.dtud[itx][irx] + \
-                     " -slab " + self.config.get("files", "slab") + \
-                     " -mat " + self.config.get("files", "mat") + \
-                     " -freq " + pyu.getshort(self.filefreq) + \
-                     " -conf " + basename + '/' + \
-                self.config.get("files", "conf")
-
-            self.cfield.append(chaine)
-            print chaine
-            os.system(chaine)
-            aux = os.popen(chaine, "r")
-            recup = aux.read()
-            aux.close()
-            aux = recup.splitlines()
-            len_aux = recup.count("\n")
-            for i in range(len_aux):
-                if aux[i].find("filefieldout") != -1:
-                    aux[i] = aux[i].replace('filefieldout : ', '')
-                    filename = pyu.getshort(aux[i]).replace(' ', '')
-                    self.dfield[itx][irx] = filename
-                elif aux[i].find("filetaukout") != -1:
-                    aux[i] = aux[i].replace('filetaukout : ', '')
-                    filename = pyu.getshort(aux[i]).replace(' ', '')
-                    self.dtauk[itx][irx] = filename
-
-            self.progress = 4
-        else:
-            print "no .tud file available, try tratotud"
-
     def run(self, itx, srx=[], cirforce=True):
         """ run the simulation for 1 tx and a set of rx
 
@@ -2049,12 +2005,12 @@ class Simul(object):
                     print "---------------"
                     print "Start tratotud ", irx
                     print "---------------"
-                    self.tratotud2(itx, irx)
+                    self.tratotud(itx, irx)
                 if irx not in self.dfield[itx].keys():
                     print "---------------"
                     print "Start field  ", irx
                     print "---------------"
-                    self.field2(itx, irx)
+                    self.field(itx, irx)
 
                 if ((irx not in self.dcir[itx].keys()) | cirforce):
                     print "---------------"
@@ -2081,8 +2037,9 @@ class Simul(object):
 
                         self.wav = wvf.Waveform(self.wparam)
                         alpha = np.sqrt(1. / 30.0)
-                        self.cir([itx], [irx], store_level=16 + 8 +
-                                 4 + 2 + 1, alpha=alpha)
+                        self.cir([itx], [irx],
+                                 store_level=16 + 8 + 4 + 2 + 1, alpha=alpha)
+
                         if "cir" not in  self.output[itx].sections():
                             self.output[itx].add_section("cir")
                         if irx in self.dcir[itx].keys():
@@ -2185,6 +2142,12 @@ class Simul(object):
             self.CIRa = []
         racine = self.filesimul.replace('.ini', '') + 'cir-'
         for l in itx:
+            # create cir entry in outputTx if required
+            _outfilename = self.config.get('output', str(itx))
+            outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
+            if "cir" not in  self.output[l].sections():
+                self.output[l].add_section("cir")
+
             CVC = []
             CSCO = []
             CSCA = []
@@ -2226,6 +2189,10 @@ class Simul(object):
                     D['ciro' + str(k)] = ciro.y
                     D['cira' + str(k)] = cira.y
                     spio.savemat(filename, D)
+                    self.output[l].set("cir", str(k), self.dcir[l][k])
+                    fd = open(outfilename, "w")
+                    self.output[itx].write(fd)
+                    fd.close()
                 else:
                     CSCO.append([])
                     CSCA.append([])
