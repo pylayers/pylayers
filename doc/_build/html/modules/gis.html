@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gis &mdash; PyLayers v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers v0.1 documentation" href="../index.html" />
+    <link rel="up" title="pylayers reference" href="index.html" />
+    <link rel="next" title="pylayers.gis.layout.Layout.interact" href="generated/pylayers.gis.layout.Layout.interact.html" />
+    <link rel="prev" title="pylayers reference" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.gis.layout.Layout.interact.html" title="pylayers.gis.layout.Layout.interact"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pylayers reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" accesskey="U">pylayers reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">gis</a><ul>
+<li><a class="reference internal" href="#layout">Layout</a><ul>
+<li><a class="reference internal" href="#layout-edition">Layout Edition</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#layout-vizualization">Layout Vizualization</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#layout-i-o">Layout I/O</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#graph-construction">Graph Construction</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#signatures">Signatures</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions-related-to-nodes-mobility">Functions related to nodes mobility</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilities">Utilities</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pylayers.gis.readvrml">readvrml</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#furniture">furniture</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">pylayers reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/pylayers.gis.layout.Layout.interact.html"
+                        title="next chapter">pylayers.gis.layout.Layout.interact</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/gis.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-pylayers.gis"><span id="routines-layout"></span></span><div class="section" id="gis">
+<h1>gis<a class="headerlink" href="#gis" title="Permalink to this headline">¶</a></h1>
+<p>This modules gathers all the classes and function related to geographical
+information.</p>
+<div class="section" id="layout">
+<h2>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<p>This class handles the description of the indoor propagation environment.
+It manages various input and output data format.</p>
+<p>The most basic description of a Layout is given in a <cite>.str2</cite> file
+which contains the points and edges list of the Layout.</p>
+<p>Then this raw information is processes to generate a .str file which
+contains additional visibility relationships between vertices and edges</p>
+<dl class="class">
+<dt id="pylayers.gis.layout.Layout">
+<em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filemat='def.mat'</em>, <em>_fileslab='def.slab'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handling of Layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>Gs</strong> : Structure graph</p>
+<p><strong>Gt</strong> : Topological graph  (indicates topological relationships between rooms)</p>
+<p><strong>Gr</strong> : Graph of room</p>
+<p><strong>Gv</strong> : Graph of visibility</p>
+<p><strong>Gc</strong> : Connection graph (indicates visbility relationships)</p>
+<p><strong>Nnode</strong> : Number of nodes of Gs</p>
+<p><strong>Nedge</strong> : Number of edges of Gs</p>
+<p><strong>pt</strong> : points sequence</p>
+<p><strong>tahe</strong> : tail head</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>dir_ray_sign(self,Tx_x,Tx_y,Rx_x,Rx_y)</strong> :</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>to be explained</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>v_color(self,ob)</dt>
+<dd><p class="first last">to be explained</p>
+</dd>
+<dt>help(self)</dt>
+<dd><p class="first last">give information about the Layout</p>
+</dd>
+<dt>ss-dico = L.subseg(self)</dt>
+<dd><p class="first last">extract the dictionnary of subseg
+interact(self)  : edit the layout interctively</p>
+</dd>
+<dt>add_pnod(self,p,e1,e2)</dt>
+<dd><p class="first last">tbd</p>
+</dd>
+<dt>add_fnod(self,p=(0.0,0.0))</dt>
+<dd><p class="first last">add free node p</p>
+</dd>
+<dt>add_nfpe(self,np0,e1,e2)</dt>
+<dd><p class="first last">tbd</p>
+</dd>
+<dt>add_none(self,ns,alpha=0.5)</dt>
+<dd><p class="first last">add node on edge</p>
+</dd>
+<dt>add_edge(self,n1,n2,name=&#8217;PARTITION&#8217;,zmin=0,zmax=3.0)</dt>
+<dd><p class="first last">add edge between n1 and n2</p>
+</dd>
+<dt>del_node(self,n1)</dt>
+<dd><p class="first last">delete node n1</p>
+</dd>
+<dt>del_edge(self,e1)</dt>
+<dd><p class="first last">add edge between n1 and n2</p>
+</dd>
+</dl>
+<p>displaygui(self)
+info_edge(self,e1)
+edit_edge(self,e1)
+have_subseg(self,e1)
+del_subseg(self,e1)
+add_subseg(self,e1)
+add_window(self,e1)
+add_door(self,e1)
+check(self)
+ispoint(self,pt,tol=0.45)
+onseg(self,pt,tol=0.01)
+checkvis(self,p,edgelist,nodelist)
+visilist(self,p)
+visi_papb(self,pa,pb,edgelist=np.array([]))
+boundary(self)</p>
+<p>clip(self,xmin,xmax,ymin,ymax)
+find_edgelist(self,edgelist,nodelist)
+diag(self,p1,p2,l,al1,al2,quadsel=0)
+nd2ed(self,ndlist)
+ed2nd(self,edlist)
+nl,el = L.zone(self,xmin=0,xmax=10,ymin=0,ymax=10)
+closest_edge(self,p,AAS)
+walls = L.thwall(self,offx,offy)</p>
+<blockquote>
+<div><p>extract walls as polygon &#8211;&gt; Simpy World</p>
+</div></blockquote>
+<p>save(self,filename)
+load(self,filename)
+geomfile(self,filename=&#8217;Lstruc.off&#8217;)
+savestr2(self)</p>
+<blockquote>
+<div><p>export Layout as an  .str2 file</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>show_nodes(self,ndlist=[1e8],size=10,color=&#8217;b&#8217;,</dt>
+<dd><p class="first last">dlabels=False,font_size=15,alpha=1)</p>
+</dd>
+<dt>show_edge(self,edlist=[],alpha=1,width=1,size=2,</dt>
+<dd><p class="first last">color=&#8217;black&#8217;,font_size=15,dlabels=False)</p>
+</dd>
+<dt>show_edges(self,edlist=[],alpha=1,width=1,color=&#8217;black&#8217;,</dt>
+<dd><p class="first last">dnodes=False,dlabels=False,font_size=15)</p>
+</dd>
+<dt>show_layer(self,name,edlist=[],alpha=1,width=1,color=&#8217;black&#8217;,</dt>
+<dd><p class="first last">dnodes=False,dthin=False,dlabels=False,font_size=15)</p>
+</dd>
+</dl>
+<p>showGs(self,ndlist=[],edlist=[])
+show3(self,bdis=True)
+buildGc(self)
+buildGt(self)
+buildGr(self)
+buildGi(self)
+waypoint(self,nroom1,nroom2)
+info(self)
+facets3D(self,edlist,name=&#8217;Layer&#8217;,subseg=False)
+facet3D(self,e,subseg=False)
+signature(self,pTx,pRx,NroomTx,NroomRx)
+distwall(self,p,nroom)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This class exploits <cite>networkx</cite> to store Layout information</p>
+</dd></dl>
+
+<div class="section" id="layout-edition">
+<h3>Layout Edition<a class="headerlink" href="#layout-edition" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.interact.html#pylayers.gis.layout.Layout.interact" title="pylayers.gis.layout.Layout.interact"><tt class="xref py py-obj docutils literal"><span class="pre">interact</span></tt></a>()</td>
+<td>interact</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_pnod.html#pylayers.gis.layout.Layout.add_pnod" title="pylayers.gis.layout.Layout.add_pnod"><tt class="xref py py-obj docutils literal"><span class="pre">add_pnod</span></tt></a>(p,&nbsp;e1,&nbsp;e2)</td>
+<td>Project point p on segment e1 along segment e2</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_fnod.html#pylayers.gis.layout.Layout.add_fnod" title="pylayers.gis.layout.Layout.add_fnod"><tt class="xref py py-obj docutils literal"><span class="pre">add_fnod</span></tt></a>([p])</td>
+<td>add free node  p</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_nfpe.html#pylayers.gis.layout.Layout.add_nfpe" title="pylayers.gis.layout.Layout.add_nfpe"><tt class="xref py py-obj docutils literal"><span class="pre">add_nfpe</span></tt></a>(np0,&nbsp;e1,&nbsp;e2)</td>
+<td>Add node on e1 from projection of np0 along e2</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_none.html#pylayers.gis.layout.Layout.add_none" title="pylayers.gis.layout.Layout.add_none"><tt class="xref py py-obj docutils literal"><span class="pre">add_none</span></tt></a>(ns[,&nbsp;alpha])</td>
+<td>L.add_none(ns,alpha=0.5) : add node on edge ns</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_edge.html#pylayers.gis.layout.Layout.add_edge" title="pylayers.gis.layout.Layout.add_edge"><tt class="xref py py-obj docutils literal"><span class="pre">add_edge</span></tt></a>(n1,&nbsp;n2[,&nbsp;name,&nbsp;zmin,&nbsp;zmax])</td>
+<td>L.add_edge(n1,n2,name=&#8217;PARTITION&#8217;,zmin=0,zmax=3.0)     : add edge between n1 and n2</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_subseg.html#pylayers.gis.layout.Layout.add_subseg" title="pylayers.gis.layout.Layout.add_subseg"><tt class="xref py py-obj docutils literal"><span class="pre">add_subseg</span></tt></a>(e1)</td>
+<td>add a sub segment on segment e1</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_window.html#pylayers.gis.layout.Layout.add_window" title="pylayers.gis.layout.Layout.add_window"><tt class="xref py py-obj docutils literal"><span class="pre">add_window</span></tt></a>(e1)</td>
+<td>add a window on segment</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.add_door.html#pylayers.gis.layout.Layout.add_door" title="pylayers.gis.layout.Layout.add_door"><tt class="xref py py-obj docutils literal"><span class="pre">add_door</span></tt></a>(e1)</td>
+<td>add a door on segment</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_node.html#pylayers.gis.layout.Layout.del_node" title="pylayers.gis.layout.Layout.del_node"><tt class="xref py py-obj docutils literal"><span class="pre">del_node</span></tt></a>(ln)</td>
+<td>delete node in list ln</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_edge.html#pylayers.gis.layout.Layout.del_edge" title="pylayers.gis.layout.Layout.del_edge"><tt class="xref py py-obj docutils literal"><span class="pre">del_edge</span></tt></a>(le)</td>
+<td>delete edge e</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.del_cycle.html#pylayers.gis.layout.Layout.del_cycle" title="pylayers.gis.layout.Layout.del_cycle"><tt class="xref py py-obj docutils literal"><span class="pre">del_cycle</span></tt></a>(lnc)</td>
+<td>delete a cycle</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="layout-vizualization">
+<h3>Layout Vizualization<a class="headerlink" href="#layout-vizualization" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.showG.html#pylayers.gis.layout.Layout.showG" title="pylayers.gis.layout.Layout.showG"><tt class="xref py py-obj docutils literal"><span class="pre">showG</span></tt></a>(**kwargs[,&nbsp;graph])</td>
+<td>show graphs</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.showGv.html#pylayers.gis.layout.Layout.showGv" title="pylayers.gis.layout.Layout.showGv"><tt class="xref py py-obj docutils literal"><span class="pre">showGv</span></tt></a>(**kwargs)</td>
+<td>show graph Gv (visibility)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.show3.html#pylayers.gis.layout.Layout.show3" title="pylayers.gis.layout.Layout.show3"><tt class="xref py py-obj docutils literal"><span class="pre">show3</span></tt></a>([bdis])</td>
+<td>geomview display of the indoor structure</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="layout-i-o">
+<h3>Layout I/O<a class="headerlink" href="#layout-i-o" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadfur.html#pylayers.gis.layout.Layout.loadfur" title="pylayers.gis.layout.Layout.loadfur"><tt class="xref py py-obj docutils literal"><span class="pre">loadfur</span></tt></a>(_filefur)</td>
+<td>loadfur load a furniture file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadstr.html#pylayers.gis.layout.Layout.loadstr" title="pylayers.gis.layout.Layout.loadstr"><tt class="xref py py-obj docutils literal"><span class="pre">loadstr</span></tt></a>(_filename[,&nbsp;_filemat,&nbsp;_fileslab])</td>
+<td>loadstr load a .str de PulsRay</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadstr2.html#pylayers.gis.layout.Layout.loadstr2" title="pylayers.gis.layout.Layout.loadstr2"><tt class="xref py py-obj docutils literal"><span class="pre">loadstr2</span></tt></a>(_filename[,&nbsp;_filemat,&nbsp;_fileslab])</td>
+<td>load a Graph from a str2 file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.savestr2.html#pylayers.gis.layout.Layout.savestr2" title="pylayers.gis.layout.Layout.savestr2"><tt class="xref py py-obj docutils literal"><span class="pre">savestr2</span></tt></a>(_filename[,&nbsp;furniture])</td>
+<td>save Layout in .str2 format</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">loadGt</span></tt></td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.saveGv.html#pylayers.gis.layout.Layout.saveGv" title="pylayers.gis.layout.Layout.saveGv"><tt class="xref py py-obj docutils literal"><span class="pre">saveGv</span></tt></a>(_fileGv)</td>
+<td>Creates Layout&#8217;s Gv file which contains Gv graph values.</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.savelay.html#pylayers.gis.layout.Layout.savelay" title="pylayers.gis.layout.Layout.savelay"><tt class="xref py py-obj docutils literal"><span class="pre">savelay</span></tt></a>(_fileGv,&nbsp;_filelay)</td>
+<td>Creates Layout&#8217;s lay file which contains graphs values.</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadlay.html#pylayers.gis.layout.Layout.loadlay" title="pylayers.gis.layout.Layout.loadlay"><tt class="xref py py-obj docutils literal"><span class="pre">loadlay</span></tt></a>(_filelay)</td>
+<td>Loads Layout&#8217;s lay file which contains graphs values.</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.geomfile.html#pylayers.gis.layout.Layout.geomfile" title="pylayers.gis.layout.Layout.geomfile"><tt class="xref py py-obj docutils literal"><span class="pre">geomfile</span></tt></a>()</td>
+<td>create a geomview file of the layout</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.save.html#pylayers.gis.layout.Layout.save" title="pylayers.gis.layout.Layout.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>(filename)</td>
+<td>save Layout</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="graph-construction">
+<h3>Graph Construction<a class="headerlink" href="#graph-construction" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGw.html#pylayers.gis.layout.Layout.buildGw" title="pylayers.gis.layout.Layout.buildGw"><tt class="xref py py-obj docutils literal"><span class="pre">buildGw</span></tt></a>()</td>
+<td>build Graph of waypaths</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGv.html#pylayers.gis.layout.Layout.buildGv" title="pylayers.gis.layout.Layout.buildGv"><tt class="xref py py-obj docutils literal"><span class="pre">buildGv</span></tt></a>([show])</td>
+<td>build global visibility graph</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGi.html#pylayers.gis.layout.Layout.buildGi" title="pylayers.gis.layout.Layout.buildGi"><tt class="xref py py-obj docutils literal"><span class="pre">buildGi</span></tt></a>()</td>
+<td>Build graph of interaction   ..</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.buildGr.html#pylayers.gis.layout.Layout.buildGr" title="pylayers.gis.layout.Layout.buildGr"><tt class="xref py py-obj docutils literal"><span class="pre">buildGr</span></tt></a>()</td>
+<td>A room is a cycle with at least one door.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">GvF</span></tt></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="signatures">
+<h3>Signatures<a class="headerlink" href="#signatures" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.signature.html#pylayers.gis.layout.Layout.signature" title="pylayers.gis.layout.Layout.signature"><tt class="xref py py-obj docutils literal"><span class="pre">signature</span></tt></a>(iTx,&nbsp;iRx)</td>
+<td>Determine signature between node iTx and node iRx</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.points_image.html#pylayers.gis.layout.Layout.points_image" title="pylayers.gis.layout.Layout.points_image"><tt class="xref py py-obj docutils literal"><span class="pre">points_image</span></tt></a>(p_Tx)</td>
+<td>Returns all image points of the bases</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">filtre_sign</span></tt></td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">image_M_Tx</span></tt></td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.showSig.html#pylayers.gis.layout.Layout.showSig" title="pylayers.gis.layout.Layout.showSig"><tt class="xref py py-obj docutils literal"><span class="pre">showSig</span></tt></a>(sig[,&nbsp;Tx,&nbsp;Rx,&nbsp;fig,&nbsp;ax])</td>
+<td>Show signature</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="functions-related-to-nodes-mobility">
+<h3>Functions related to nodes mobility<a class="headerlink" href="#functions-related-to-nodes-mobility" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.waypoint.html#pylayers.gis.layout.Layout.waypoint" title="pylayers.gis.layout.Layout.waypoint"><tt class="xref py py-obj docutils literal"><span class="pre">waypoint</span></tt></a>(nroom2)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.waypointGw.html#pylayers.gis.layout.Layout.waypointGw" title="pylayers.gis.layout.Layout.waypointGw"><tt class="xref py py-obj docutils literal"><span class="pre">waypointGw</span></tt></a>(nroom1,&nbsp;nroom2)</td>
+<td>get the waypoint between room1 and room2</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.thwall.html#pylayers.gis.layout.Layout.thwall" title="pylayers.gis.layout.Layout.thwall"><tt class="xref py py-obj docutils literal"><span class="pre">thwall</span></tt></a>(offx,&nbsp;offy)</td>
+<td>Create a list of wall tuples (Transit.world format )</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utilities">
+<h3>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.info.html#pylayers.gis.layout.Layout.info" title="pylayers.gis.layout.Layout.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>gives information about the Layout</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.pt2ro.html#pylayers.gis.layout.Layout.pt2ro" title="pylayers.gis.layout.Layout.pt2ro"><tt class="xref py py-obj docutils literal"><span class="pre">pt2ro</span></tt></a>([pt])</td>
+<td>point to room</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.facets3D.html#pylayers.gis.layout.Layout.facets3D" title="pylayers.gis.layout.Layout.facets3D"><tt class="xref py py-obj docutils literal"><span class="pre">facets3D</span></tt></a>(name)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.ispoint.html#pylayers.gis.layout.Layout.ispoint" title="pylayers.gis.layout.Layout.ispoint"><tt class="xref py py-obj docutils literal"><span class="pre">ispoint</span></tt></a>(pt[,&nbsp;tol])</td>
+<td>ispoint(pt,tol) : verify if pt is a point of Layout</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.onseg.html#pylayers.gis.layout.Layout.onseg" title="pylayers.gis.layout.Layout.onseg"><tt class="xref py py-obj docutils literal"><span class="pre">onseg</span></tt></a>(tol)</td>
+<td>return the segment number which contains point pt</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.facet3D.html#pylayers.gis.layout.Layout.facet3D" title="pylayers.gis.layout.Layout.facet3D"><tt class="xref py py-obj docutils literal"><span class="pre">facet3D</span></tt></a>(e[,&nbsp;subseg])</td>
+<td>facet3D</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.get_Sg_pos.html#pylayers.gis.layout.Layout.get_Sg_pos" title="pylayers.gis.layout.Layout.get_Sg_pos"><tt class="xref py py-obj docutils literal"><span class="pre">get_Sg_pos</span></tt></a>(signature)</td>
+<td>return position of the signatures</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.distwall.html#pylayers.gis.layout.Layout.distwall" title="pylayers.gis.layout.Layout.distwall"><tt class="xref py py-obj docutils literal"><span class="pre">distwall</span></tt></a>(p,&nbsp;nroom)</td>
+<td>calculate distance to wall</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.randTxRx.html#pylayers.gis.layout.Layout.randTxRx" title="pylayers.gis.layout.Layout.randTxRx"><tt class="xref py py-obj docutils literal"><span class="pre">randTxRx</span></tt></a>()</td>
+<td>Returns random coordinates for Tx and Rx.</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.boundary.html#pylayers.gis.layout.Layout.boundary" title="pylayers.gis.layout.Layout.boundary"><tt class="xref py py-obj docutils literal"><span class="pre">boundary</span></tt></a>([dx,&nbsp;dy])</td>
+<td>set a boundary around layout</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.loadGv.html#pylayers.gis.layout.Layout.loadGv" title="pylayers.gis.layout.Layout.loadGv"><tt class="xref py py-obj docutils literal"><span class="pre">loadGv</span></tt></a>(_fileGv)</td>
+<td>Load Layout Gv file which contains Gv graph Values and reconstruct Gv graph.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">poly_door</span></tt></td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">moby_allowed_zone</span></tt></td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.segs_cross.html#pylayers.gis.layout.Layout.segs_cross" title="pylayers.gis.layout.Layout.segs_cross"><tt class="xref py py-obj docutils literal"><span class="pre">segs_cross</span></tt></a>(line)</td>
+<td>Gives segment/subsegment numbers crossed by a line.</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.sign_cross.html#pylayers.gis.layout.Layout.sign_cross" title="pylayers.gis.layout.Layout.sign_cross"><tt class="xref py py-obj docutils literal"><span class="pre">sign_cross</span></tt></a>(pTx,&nbsp;pRx,&nbsp;pt,&nbsp;seg_num)</td>
+<td>Returns some possible signatures which have at last one reflexion.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">cross_shortest</span></tt></td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.layout.Layout.plot_sign2.html#pylayers.gis.layout.Layout.plot_sign2" title="pylayers.gis.layout.Layout.plot_sign2"><tt class="xref py py-obj docutils literal"><span class="pre">plot_sign2</span></tt></a>(p_Tx,&nbsp;p_Rx)</td>
+<td>Displays a lot of possible signatures.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-pylayers.gis.readvrml">
+<span id="readvrml"></span><h2>readvrml<a class="headerlink" href="#module-pylayers.gis.readvrml" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.savestr2.html#pylayers.gis.readvrml.savestr2" title="pylayers.gis.readvrml.savestr2"><tt class="xref py py-obj docutils literal"><span class="pre">savestr2</span></tt></a>(dpt,&nbsp;dwall[,&nbsp;_filename])</td>
+<td>save walls in str2 format</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.stretch.html#pylayers.gis.readvrml.stretch" title="pylayers.gis.readvrml.stretch"><tt class="xref py py-obj docutils literal"><span class="pre">stretch</span></tt></a>(s[,&nbsp;alphat,&nbsp;alphah])</td>
+<td>strech a LineString by a given perc on both terminations</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.segsplit.html#pylayers.gis.readvrml.segsplit" title="pylayers.gis.readvrml.segsplit"><tt class="xref py py-obj docutils literal"><span class="pre">segsplit</span></tt></a>(s1,&nbsp;s2[,&nbsp;tol,&nbsp;alpha])</td>
+<td>split segment</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.extract.html#pylayers.gis.readvrml.extract" title="pylayers.gis.readvrml.extract"><tt class="xref py py-obj docutils literal"><span class="pre">extract</span></tt></a>(vrmlstrg,&nbsp;dico)</td>
+<td>converts recursively a vrml string into a dictionnary</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.inbracket.html#pylayers.gis.readvrml.inbracket" title="pylayers.gis.readvrml.inbracket"><tt class="xref py py-obj docutils literal"><span class="pre">inbracket</span></tt></a>(strg)</td>
+<td>extraction of bracket content</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.incrochet.html#pylayers.gis.readvrml.incrochet" title="pylayers.gis.readvrml.incrochet"><tt class="xref py py-obj docutils literal"><span class="pre">incrochet</span></tt></a>(strg)</td>
+<td>get content inside crochet</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.geomLine.html#pylayers.gis.readvrml.geomLine" title="pylayers.gis.readvrml.geomLine"><tt class="xref py py-obj docutils literal"><span class="pre">geomLine</span></tt></a>(st)</td>
+<td>build a Line from string</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.geomFace.html#pylayers.gis.readvrml.geomFace" title="pylayers.gis.readvrml.geomFace"><tt class="xref py py-obj docutils literal"><span class="pre">geomFace</span></tt></a>(st)</td>
+<td>build a Face from string</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.ParseDirectionalLight.html#pylayers.gis.readvrml.ParseDirectionalLight" title="pylayers.gis.readvrml.ParseDirectionalLight"><tt class="xref py py-obj docutils literal"><span class="pre">ParseDirectionalLight</span></tt></a>(st)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.ParseMaterial.html#pylayers.gis.readvrml.ParseMaterial" title="pylayers.gis.readvrml.ParseMaterial"><tt class="xref py py-obj docutils literal"><span class="pre">ParseMaterial</span></tt></a>(st)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.show.html#pylayers.gis.readvrml.show" title="pylayers.gis.readvrml.show"><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></a>(dico)</td>
+<td>show dico</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.parsevrml.html#pylayers.gis.readvrml.parsevrml" title="pylayers.gis.readvrml.parsevrml"><tt class="xref py py-obj docutils literal"><span class="pre">parsevrml</span></tt></a>(filename)</td>
+<td>parse a vrml file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.vrml2sha.html#pylayers.gis.readvrml.vrml2sha" title="pylayers.gis.readvrml.vrml2sha"><tt class="xref py py-obj docutils literal"><span class="pre">vrml2sha</span></tt></a>(tg)</td>
+<td>convert vrml object into shapely polygons</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="furniture">
+<h2>furniture<a class="headerlink" href="#furniture" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.gis.furniture.Furniture">
+<em class="property">class </em><tt class="descclassname">pylayers.gis.furniture.</tt><tt class="descname">Furniture</tt><big>(</big><em>name=''</em>, <em>desc=''</em>, <em>origin=array([0</em>, <em>0])</em>, <em>angle=0</em>, <em>H=1.0</em>, <em>L=1.0</em>, <em>W=1</em>, <em>T=0</em>, <em>Matname='METAL'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture" title="Permalink to this definition">¶</a></dt>
+<dd><p>name
+desc
+origin
+height
+length
+width
+thichness
+Matname</p>
+<p class="rubric">Notes</p>
+<p>A piece of furniture is a rectangular object with the following parameters</p>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_position</span></tt></td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">position</span></tt></td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.gis.readvrml.show.html#pylayers.gis.readvrml.show" title="pylayers.gis.readvrml.show"><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></a>(dico)</td>
+<td>show dico</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.gis.layout.Layout.interact.html" title="pylayers.gis.layout.Layout.interact"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pylayers reference"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >pylayers reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

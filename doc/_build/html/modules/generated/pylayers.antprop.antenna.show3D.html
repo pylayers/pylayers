@@ -1,0 +1,189 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.antenna.show3D &mdash; PyLayers v0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers v0.1 documentation" href="../../index.html" />
+    <link rel="up" title="antprop" href="../antprop.html" />
+    <link rel="next" title="pylayers.antprop.antenna.SHCoeff.inits1" href="pylayers.antprop.antenna.SHCoeff.inits1.html" />
+    <link rel="prev" title="pylayers.antprop.antenna.AFLegendre" href="pylayers.antprop.antenna.AFLegendre.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.SHCoeff.inits1.html" title="pylayers.antprop.antenna.SHCoeff.inits1"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.AFLegendre.html" title="pylayers.antprop.antenna.AFLegendre"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../index.html" >pylayers reference</a> &raquo;</li>
+          <li><a href="../antprop.html" accesskey="U">antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.AFLegendre.html"
+                        title="previous chapter">pylayers.antprop.antenna.AFLegendre</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.SHCoeff.inits1.html"
+                        title="next chapter">pylayers.antprop.antenna.SHCoeff.inits1</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.show3D.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-antprop-antenna-show3d">
+<h1>pylayers.antprop.antenna.show3D<a class="headerlink" href="#pylayers-antprop-antenna-show3d" title="Permalink to this headline">¶</a></h1>
+<dl class="staticmethod">
+<dt id="pylayers.antprop.antenna.show3D">
+<em class="property">static </em><tt class="descclassname">antenna.</tt><tt class="descname">show3D</tt><big>(</big><em>F</em>, <em>theta</em>, <em>phi</em>, <em>k</em>, <em>col=True</em><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.show3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>show 3D matplotlib diagram</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>F</strong> : ndarray (Nf,Nt,Np)</p>
+<p><strong>theta</strong> : ndarray (1xNt)</p>
+<blockquote>
+<div><p>angle</p>
+</div></blockquote>
+<p><strong>phi</strong> : ndarray (1xNp)</p>
+<blockquote>
+<div><p>angle</p>
+</div></blockquote>
+<p><strong>theta</strong> : ndarray (Nt)</p>
+<p><strong>k</strong> : int</p>
+<blockquote>
+<div><p>frequency index</p>
+</div></blockquote>
+<p><strong>col</strong> : boolean</p>
+<blockquote class="last">
+<div><p>if col  -&gt; color coded plot3D
+if col == False -&gt; simple plot3D</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">len(theta) must be equal with shape(F)[1]
+len(phi) must be equal with shape(F)[2]</p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ifreq</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span>     <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;vsh3&#39;</span><span class="p">,</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span>  <span class="o">=</span> <span class="mi">30</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Np</span>  <span class="o">=</span> <span class="mi">60</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phi</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">th</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ph</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">),</span><span class="n">phi</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fth3</span><span class="p">,</span><span class="n">Fph3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FTh3</span> <span class="o">=</span> <span class="n">Fth3</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FPh3</span> <span class="o">=</span> <span class="n">Fph3</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">show3D</span><span class="p">(</span><span class="n">FTh3</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">ifreq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">plt</span><span class="p">(</span><span class="s">&#39;show3D example&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../modules/generated/pylayers-antprop-antenna-show3D-1.py">Source code</a>)</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.SHCoeff.inits1.html" title="pylayers.antprop.antenna.SHCoeff.inits1"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.AFLegendre.html" title="pylayers.antprop.antenna.AFLegendre"
+             >previous</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../index.html" >pylayers reference</a> &raquo;</li>
+          <li><a href="../antprop.html" >antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

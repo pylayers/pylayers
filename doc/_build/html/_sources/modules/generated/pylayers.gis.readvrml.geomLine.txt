@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.geomLine
+==============================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.geomLine

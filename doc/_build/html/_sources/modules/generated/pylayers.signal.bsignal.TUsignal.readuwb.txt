@@ -1,0 +1,6 @@
+pylayers.signal.bsignal.TUsignal.readuwb
+========================================
+
+.. currentmodule:: pylayers.signal.bsignal
+
+.. automethod:: TUsignal.readuwb

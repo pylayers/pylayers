@@ -1,0 +1,6 @@
+pylayers.signal.bsignal.TUsignal.tau_rms
+========================================
+
+.. currentmodule:: pylayers.signal.bsignal
+
+.. automethod:: TUsignal.tau_rms

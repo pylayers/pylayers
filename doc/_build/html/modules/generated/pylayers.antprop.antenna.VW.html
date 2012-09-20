@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.antenna.VW &mdash; PyLayers v0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers v0.1 documentation" href="../../index.html" />
+    <link rel="up" title="antprop" href="../antprop.html" />
+    <link rel="next" title="pylayers.antprop.antenna.AFLegendre" href="pylayers.antprop.antenna.AFLegendre.html" />
+    <link rel="prev" title="pylayers.antprop.antenna.geom_pattern" href="pylayers.antprop.antenna.geom_pattern.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.AFLegendre.html" title="pylayers.antprop.antenna.AFLegendre"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.geom_pattern.html" title="pylayers.antprop.antenna.geom_pattern"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../index.html" >pylayers reference</a> &raquo;</li>
+          <li><a href="../antprop.html" accesskey="U">antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.geom_pattern.html"
+                        title="previous chapter">pylayers.antprop.antenna.geom_pattern</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.antenna.AFLegendre.html"
+                        title="next chapter">pylayers.antprop.antenna.AFLegendre</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.antenna.VW.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-antprop-antenna-vw">
+<h1>pylayers.antprop.antenna.VW<a class="headerlink" href="#pylayers-antprop-antenna-vw" title="Permalink to this headline">¶</a></h1>
+<dl class="staticmethod">
+<dt id="pylayers.antprop.antenna.VW">
+<em class="property">static </em><tt class="descclassname">antenna.</tt><tt class="descname">VW</tt><big>(</big><em>n</em>, <em>m</em>, <em>x</em>, <em>phi</em>, <em>Pmm1n</em>, <em>Pmp1n</em><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.VW" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate vector Spherical Harmonics basis functions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n</strong> : int</p>
+<blockquote>
+<div><p>level</p>
+</div></blockquote>
+<p><strong>m</strong> : int</p>
+<blockquote>
+<div><p>mode</p>
+</div></blockquote>
+<p><strong>x</strong> :  np.array</p>
+<blockquote>
+<div><p>function argument</p>
+</div></blockquote>
+<p><strong>phi</strong> : np.array</p>
+<p><strong>Pmm1n</strong> : Legendre Polynomial</p>
+<p class="last"><strong>Pmp1n</strong> : Legendre Polynomial</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pylayers.antprop.antenna.AFLegendre.html#pylayers.antprop.antenna.AFLegendre" title="pylayers.antprop.antenna.AFLegendre"><tt class="xref py py-obj docutils literal"><span class="pre">AFLegendre</span></tt></a></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.AFLegendre.html" title="pylayers.antprop.antenna.AFLegendre"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.antenna.geom_pattern.html" title="pylayers.antprop.antenna.geom_pattern"
+             >previous</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../index.html" >pylayers reference</a> &raquo;</li>
+          <li><a href="../antprop.html" >antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

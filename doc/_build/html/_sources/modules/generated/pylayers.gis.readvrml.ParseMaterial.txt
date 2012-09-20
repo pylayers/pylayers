@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.ParseMaterial
+===================================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.ParseMaterial

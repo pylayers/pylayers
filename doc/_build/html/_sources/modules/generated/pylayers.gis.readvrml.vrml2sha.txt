@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.vrml2sha
+==============================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.vrml2sha

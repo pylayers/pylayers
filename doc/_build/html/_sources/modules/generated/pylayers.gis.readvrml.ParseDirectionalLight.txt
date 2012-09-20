@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.ParseDirectionalLight
+===========================================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.ParseDirectionalLight

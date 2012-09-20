@@ -1,0 +1,6 @@
+pylayers.signal.bsignal.FUsignal.align
+======================================
+
+.. currentmodule:: pylayers.signal.bsignal
+
+.. automethod:: FUsignal.align

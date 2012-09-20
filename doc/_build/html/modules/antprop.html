@@ -1,0 +1,852 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>antprop &mdash; PyLayers v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers v0.1 documentation" href="../index.html" />
+    <link rel="up" title="pylayers reference" href="index.html" />
+    <link rel="next" title="pylayers.antprop.antenna.indexvsh" href="generated/pylayers.antprop.antenna.indexvsh.html" />
+    <link rel="prev" title="pylayers.signal.bsignal.Noise.gating" href="generated/pylayers.signal.bsignal.Noise.gating.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.antprop.antenna.indexvsh.html" title="pylayers.antprop.antenna.indexvsh"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.signal.bsignal.Noise.gating.html" title="pylayers.signal.bsignal.Noise.gating"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" accesskey="U">pylayers reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">antprop</a><ul>
+<li><a class="reference internal" href="#module-antenna">Module antenna</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-shcoeff">Class SHCoeff</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-vshcoeff">Class VSHCoeff</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-antenna">Class Antenna</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-slab">Module Slab</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#channel">Channel</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/pylayers.signal.bsignal.Noise.gating.html"
+                        title="previous chapter">pylayers.signal.bsignal.Noise.gating</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/pylayers.antprop.antenna.indexvsh.html"
+                        title="next chapter">pylayers.antprop.antenna.indexvsh</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/antprop.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-pylayers.antprop"></span><div class="section" id="antprop">
+<h1>antprop<a class="headerlink" href="#antprop" title="Permalink to this headline">¶</a></h1>
+<p>This modules gather all classes and functions related to antenna and
+propagation modelling.</p>
+<div class="section" id="module-antenna">
+<h2>Module antenna<a class="headerlink" href="#module-antenna" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.indexvsh.html#pylayers.antprop.antenna.indexvsh" title="pylayers.antprop.antenna.indexvsh"><tt class="xref py py-obj docutils literal"><span class="pre">indexvsh</span></tt></a>(N)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.geom_pattern.html#pylayers.antprop.antenna.geom_pattern" title="pylayers.antprop.antenna.geom_pattern"><tt class="xref py py-obj docutils literal"><span class="pre">geom_pattern</span></tt></a>(theta,&nbsp;phi,&nbsp;E,&nbsp;f,&nbsp;p,&nbsp;minr,&nbsp;...)</td>
+<td>export antenna pattern in geomview format</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VW.html#pylayers.antprop.antenna.VW" title="pylayers.antprop.antenna.VW"><tt class="xref py py-obj docutils literal"><span class="pre">VW</span></tt></a>(n,&nbsp;m,&nbsp;x,&nbsp;phi,&nbsp;Pmm1n,&nbsp;Pmp1n)</td>
+<td>evaluate vector Spherical Harmonics basis functions</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.AFLegendre.html#pylayers.antprop.antenna.AFLegendre" title="pylayers.antprop.antenna.AFLegendre"><tt class="xref py py-obj docutils literal"><span class="pre">AFLegendre</span></tt></a>(N,&nbsp;M,&nbsp;x)</td>
+<td>calculate Pmm1n and Pmp1n</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.show3D.html#pylayers.antprop.antenna.show3D" title="pylayers.antprop.antenna.show3D"><tt class="xref py py-obj docutils literal"><span class="pre">show3D</span></tt></a>(F,&nbsp;theta,&nbsp;phi,&nbsp;k[,&nbsp;col])</td>
+<td>show 3D matplotlib diagram</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-shcoeff">
+<h3>Class SHCoeff<a class="headerlink" href="#class-shcoeff" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylayers.antprop.antenna.SHCoeff.pylayers.signal.antenna.SHCoeff">
+<em class="property">class </em><tt class="descclassname">pylayers.signal.antenna.</tt><tt class="descname">SHCoeff</tt><a class="headerlink" href="#pylayers.antprop.antenna.SHCoeff.pylayers.signal.antenna.SHCoeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.inits1.html#pylayers.antprop.antenna.SHCoeff.inits1" title="pylayers.antprop.antenna.SHCoeff.inits1"><tt class="xref py py-obj docutils literal"><span class="pre">inits1</span></tt></a>(data)</td>
+<td>initialize shape 1 format</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.inits2.html#pylayers.antprop.antenna.SHCoeff.inits2" title="pylayers.antprop.antenna.SHCoeff.inits2"><tt class="xref py py-obj docutils literal"><span class="pre">inits2</span></tt></a>(data)</td>
+<td>initialize shape 2 format</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.inits3.html#pylayers.antprop.antenna.SHCoeff.inits3" title="pylayers.antprop.antenna.SHCoeff.inits3"><tt class="xref py py-obj docutils literal"><span class="pre">inits3</span></tt></a>(data,&nbsp;ind,&nbsp;k)</td>
+<td>initialize shape 3 format</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.s1tos2.html#pylayers.antprop.antenna.SHCoeff.s1tos2" title="pylayers.antprop.antenna.SHCoeff.s1tos2"><tt class="xref py py-obj docutils literal"><span class="pre">s1tos2</span></tt></a>([N2])</td>
+<td>convert shape 1 &#8211;&gt; shape 2</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.s3tos2.html#pylayers.antprop.antenna.SHCoeff.s3tos2" title="pylayers.antprop.antenna.SHCoeff.s3tos2"><tt class="xref py py-obj docutils literal"><span class="pre">s3tos2</span></tt></a>()</td>
+<td>transform shape3 to shape 2</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.delete.html#pylayers.antprop.antenna.SHCoeff.delete" title="pylayers.antprop.antenna.SHCoeff.delete"><tt class="xref py py-obj docutils literal"><span class="pre">delete</span></tt></a>(ind,&nbsp;typ)</td>
+<td>delete coeff</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.delete3.html#pylayers.antprop.antenna.SHCoeff.delete3" title="pylayers.antprop.antenna.SHCoeff.delete3"><tt class="xref py py-obj docutils literal"><span class="pre">delete3</span></tt></a>(ind)</td>
+<td>delete3(self,ind): delete coeff.s3</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.put3.html#pylayers.antprop.antenna.SHCoeff.put3" title="pylayers.antprop.antenna.SHCoeff.put3"><tt class="xref py py-obj docutils literal"><span class="pre">put3</span></tt></a>(i,&nbsp;i3)</td>
+<td>put3</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.info.html#pylayers.antprop.antenna.SHCoeff.info" title="pylayers.antprop.antenna.SHCoeff.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>info about SHCoeff</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.SHCoeff.show.html#pylayers.antprop.antenna.SHCoeff.show" title="pylayers.antprop.antenna.SHCoeff.show"><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;seuildb,&nbsp;titre,&nbsp;xl,&nbsp;yl,&nbsp;...])</td>
+<td>show coeff</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-vshcoeff">
+<h3>Class VSHCoeff<a class="headerlink" href="#class-vshcoeff" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylayers.antprop.antenna.VSHCoeff.pylayers.signal.antenna.VSHCoeff">
+<em class="property">class </em><tt class="descclassname">pylayers.signal.antenna.</tt><tt class="descname">VSHCoeff</tt><a class="headerlink" href="#pylayers.antprop.antenna.VSHCoeff.pylayers.signal.antenna.VSHCoeff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VSHCoeff.show.html#pylayers.antprop.antenna.VSHCoeff.show" title="pylayers.antprop.antenna.VSHCoeff.show"><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></a>([typ,&nbsp;k,&nbsp;N,&nbsp;M,&nbsp;seuildb,&nbsp;animate])</td>
+<td>show VSH coeff</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VSHCoeff.s1tos2.html#pylayers.antprop.antenna.VSHCoeff.s1tos2" title="pylayers.antprop.antenna.VSHCoeff.s1tos2"><tt class="xref py py-obj docutils literal"><span class="pre">s1tos2</span></tt></a>([N2])</td>
+<td>convert shape 1 to shape 2</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VSHCoeff.s2tos3.html#pylayers.antprop.antenna.VSHCoeff.s2tos3" title="pylayers.antprop.antenna.VSHCoeff.s2tos3"><tt class="xref py py-obj docutils literal"><span class="pre">s2tos3</span></tt></a>([threshold])</td>
+<td>convert shape 2 to shape 3</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VSHCoeff.strip3.html#pylayers.antprop.antenna.VSHCoeff.strip3" title="pylayers.antprop.antenna.VSHCoeff.strip3"><tt class="xref py py-obj docutils literal"><span class="pre">strip3</span></tt></a>()</td>
+<td>Thresholded coefficient conversion</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VSHCoeff.ens3.html#pylayers.antprop.antenna.VSHCoeff.ens3" title="pylayers.antprop.antenna.VSHCoeff.ens3"><tt class="xref py py-obj docutils literal"><span class="pre">ens3</span></tt></a>()</td>
+<td>return the sorted energies from minimal to maximal value</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VSHCoeff.drag3.html#pylayers.antprop.antenna.VSHCoeff.drag3" title="pylayers.antprop.antenna.VSHCoeff.drag3"><tt class="xref py py-obj docutils literal"><span class="pre">drag3</span></tt></a>(Emin)</td>
+<td>Thresholded coefficient conversion</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.VSHCoeff.put3.html#pylayers.antprop.antenna.VSHCoeff.put3" title="pylayers.antprop.antenna.VSHCoeff.put3"><tt class="xref py py-obj docutils literal"><span class="pre">put3</span></tt></a>(i,&nbsp;i3)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-antenna">
+<h3>Class Antenna<a class="headerlink" href="#class-antenna" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="pylayers.antprop.antenna.Antenna.pylayers.antprop.antenna.Antenna">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.antenna.</tt><tt class="descname">Antenna</tt><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pylayers.antprop.antenna.Antenna" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.antprop.antenna.Antenna">
+<tt class="descclassname">antenna.</tt><tt class="descname">Antenna</tt><a class="headerlink" href="#pylayers.antprop.antenna.Antenna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class Antenna</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>name</strong> : Antenna name</p>
+<p><strong>Nf</strong> : number of frequency</p>
+<p><strong>Nt</strong> : number of theta</p>
+<p><strong>Np</strong> : number of phi</p>
+<p><strong>Ftheta</strong> : Normalized Ftheta    (nf,ntheta,nphi)</p>
+<p><strong>Fphi</strong> : Normalized Fphi      (nf,ntheta,nphi)</p>
+<p><strong>SqG</strong> : Square root of gain  (nf,ntheta,nphi)</p>
+<p><strong>Ttheta</strong> : theta                (nf,ntheta,nphi)</p>
+<p><strong>Tphi</strong> : phi                  (nf,ntheta,nphi)</p>
+<p><strong>theta</strong> : theta base            1 x ntheta</p>
+<p><strong>phi</strong> : phi base              1 x phi</p>
+<p><strong>C</strong> : VSH Coefficients</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>info()</strong> : Display information about antenna</p>
+<p><strong>vsh()</strong> : calculates Vector Spherical Harmonics</p>
+<p><strong>show3_geom()</strong> : Geomview diagram</p>
+<p><strong>show3()</strong> : 3D diagram plotting using matplotlib toolkit</p>
+<p><strong>Fsynth2</strong> : Antenna F synthesis from coeff in s2</p>
+<p><strong>Antenna trx file can be stored in various order</strong> :</p>
+<blockquote>
+<div><p>natural : HFSS
+bcp     : near filed chamber</p>
+</div></blockquote>
+<p><strong>It is important when initializing an antenna object to be aware of the typ of trx file</strong> :</p>
+<p class="last"><strong>.trx (ASCII Vectorial antenna Pattern)</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.loadmat.html#pylayers.antprop.antenna.Antenna.loadmat" title="pylayers.antprop.antenna.Antenna.loadmat"><tt class="xref py py-obj docutils literal"><span class="pre">loadmat</span></tt></a>([directory])</td>
+<td>load an antenna stored in a mat file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.load_trx.html#pylayers.antprop.antenna.Antenna.load_trx" title="pylayers.antprop.antenna.Antenna.load_trx"><tt class="xref py py-obj docutils literal"><span class="pre">load_trx</span></tt></a>([directory,&nbsp;nf,&nbsp;ntheta,&nbsp;nphi,&nbsp;ncol])</td>
+<td>load a trx file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.loadtrx.html#pylayers.antprop.antenna.Antenna.loadtrx" title="pylayers.antprop.antenna.Antenna.loadtrx"><tt class="xref py py-obj docutils literal"><span class="pre">loadtrx</span></tt></a>(directory)</td>
+<td>load trx file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.checkpole.html#pylayers.antprop.antenna.Antenna.checkpole" title="pylayers.antprop.antenna.Antenna.checkpole"><tt class="xref py py-obj docutils literal"><span class="pre">checkpole</span></tt></a>([kf])</td>
+<td>display the reconstructed field on pole for integrity verification</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.info.html#pylayers.antprop.antenna.Antenna.info" title="pylayers.antprop.antenna.Antenna.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>gives info about antenna object</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.help.html#pylayers.antprop.antenna.Antenna.help" title="pylayers.antprop.antenna.Antenna.help"><tt class="xref py py-obj docutils literal"><span class="pre">help</span></tt></a>()</td>
+<td>help on available functions</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.polar.html#pylayers.antprop.antenna.Antenna.polar" title="pylayers.antprop.antenna.Antenna.polar"><tt class="xref py py-obj docutils literal"><span class="pre">polar</span></tt></a>([k,&nbsp;it,&nbsp;ip,&nbsp;dyn,&nbsp;GmaxdB,&nbsp;alpha])</td>
+<td>polar plot</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.show3_geom.html#pylayers.antprop.antenna.Antenna.show3_geom" title="pylayers.antprop.antenna.Antenna.show3_geom"><tt class="xref py py-obj docutils literal"><span class="pre">show3_geom</span></tt></a>([k,&nbsp;typ,&nbsp;mode,&nbsp;silent])</td>
+<td>show3 geomview</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.show3.html#pylayers.antprop.antenna.Antenna.show3" title="pylayers.antprop.antenna.Antenna.show3"><tt class="xref py py-obj docutils literal"><span class="pre">show3</span></tt></a>([k])</td>
+<td>k : frequency index</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.pol3d.html#pylayers.antprop.antenna.Antenna.pol3d" title="pylayers.antprop.antenna.Antenna.pol3d"><tt class="xref py py-obj docutils literal"><span class="pre">pol3d</span></tt></a>([k,&nbsp;R,&nbsp;St,&nbsp;Sp,&nbsp;silent])</td>
+<td>Display polarisation diagram  in 3D</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.mse.html#pylayers.antprop.antenna.Antenna.mse" title="pylayers.antprop.antenna.Antenna.mse"><tt class="xref py py-obj docutils literal"><span class="pre">mse</span></tt></a>(Fth,&nbsp;Fph[,&nbsp;N])</td>
+<td>mean square error</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.elec_delay.html#pylayers.antprop.antenna.Antenna.elec_delay" title="pylayers.antprop.antenna.Antenna.elec_delay"><tt class="xref py py-obj docutils literal"><span class="pre">elec_delay</span></tt></a>()</td>
+<td>apply an electrical delay</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.vshd.html#pylayers.antprop.antenna.Antenna.vshd" title="pylayers.antprop.antenna.Antenna.vshd"><tt class="xref py py-obj docutils literal"><span class="pre">vshd</span></tt></a>([dsf])</td>
+<td>This function calculates the Vector Spherical Harmonics coefficients</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.vsh.html#pylayers.antprop.antenna.Antenna.vsh" title="pylayers.antprop.antenna.Antenna.vsh"><tt class="xref py py-obj docutils literal"><span class="pre">vsh</span></tt></a>()</td>
+<td>It makes use of the spherepack function vha</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.demo.html#pylayers.antprop.antenna.Antenna.demo" title="pylayers.antprop.antenna.Antenna.demo"><tt class="xref py py-obj docutils literal"><span class="pre">demo</span></tt></a>()</td>
+<td>display few commands for executing little demo</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.Fsynth.html#pylayers.antprop.antenna.Antenna.Fsynth" title="pylayers.antprop.antenna.Antenna.Fsynth"><tt class="xref py py-obj docutils literal"><span class="pre">Fsynth</span></tt></a>(theta,&nbsp;phi[,&nbsp;k])</td>
+<td>calculate complex antenna pattern  from VSH Coefficients (shape 2)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.Fsynth2.html#pylayers.antprop.antenna.Antenna.Fsynth2" title="pylayers.antprop.antenna.Antenna.Fsynth2"><tt class="xref py py-obj docutils literal"><span class="pre">Fsynth2</span></tt></a>(theta,&nbsp;phi)</td>
+<td>Calculate complex antenna pattern  from VSH Coefficients (shape 2)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.Fsynth3.html#pylayers.antprop.antenna.Antenna.Fsynth3" title="pylayers.antprop.antenna.Antenna.Fsynth3"><tt class="xref py py-obj docutils literal"><span class="pre">Fsynth3</span></tt></a>(theta,&nbsp;phi)</td>
+<td>synthesis of a complex antenna pattern from VSH Coefficients (shape 3)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.movie_vsh.html#pylayers.antprop.antenna.Antenna.movie_vsh" title="pylayers.antprop.antenna.Antenna.movie_vsh"><tt class="xref py py-obj docutils literal"><span class="pre">movie_vsh</span></tt></a>([mode])</td>
+<td>movie_vsh</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.minsh3.html#pylayers.antprop.antenna.Antenna.minsh3" title="pylayers.antprop.antenna.Antenna.minsh3"><tt class="xref py py-obj docutils literal"><span class="pre">minsh3</span></tt></a>([emax])</td>
+<td>Create antenna&#8217;s vsh3 file which only contains</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.savevsh3.html#pylayers.antprop.antenna.Antenna.savevsh3" title="pylayers.antprop.antenna.Antenna.savevsh3"><tt class="xref py py-obj docutils literal"><span class="pre">savevsh3</span></tt></a>()</td>
+<td>Create a .vsh3 antenna file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.loadvsh3.html#pylayers.antprop.antenna.Antenna.loadvsh3" title="pylayers.antprop.antenna.Antenna.loadvsh3"><tt class="xref py py-obj docutils literal"><span class="pre">loadvsh3</span></tt></a>()</td>
+<td>Load antenna&#8217;s vsh3 file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.savevsh2.html#pylayers.antprop.antenna.Antenna.savevsh2" title="pylayers.antprop.antenna.Antenna.savevsh2"><tt class="xref py py-obj docutils literal"><span class="pre">savevsh2</span></tt></a>()</td>
+<td>Create a .vsh2 antenna file</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.loadvsh2.html#pylayers.antprop.antenna.Antenna.loadvsh2" title="pylayers.antprop.antenna.Antenna.loadvsh2"><tt class="xref py py-obj docutils literal"><span class="pre">loadvsh2</span></tt></a>()</td>
+<td>Load antenna&#8217;s vsh2 file which only contains</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.loadvsh3_old.html#pylayers.antprop.antenna.Antenna.loadvsh3_old" title="pylayers.antprop.antenna.Antenna.loadvsh3_old"><tt class="xref py py-obj docutils literal"><span class="pre">loadvsh3_old</span></tt></a>()</td>
+<td>Load antenna&#8217;s vsh3 file which only contains</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.pol2cart.html#pylayers.antprop.antenna.Antenna.pol2cart" title="pylayers.antprop.antenna.Antenna.pol2cart"><tt class="xref py py-obj docutils literal"><span class="pre">pol2cart</span></tt></a>(ith)</td>
+<td>Conversion FTheta, FPhi to Fx,Fy,Fz for theta=ith</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.antenna.Antenna.cart2pol.html#pylayers.antprop.antenna.Antenna.cart2pol" title="pylayers.antprop.antenna.Antenna.cart2pol"><tt class="xref py py-obj docutils literal"><span class="pre">cart2pol</span></tt></a>(Fx,&nbsp;Fy,&nbsp;Fz,&nbsp;ith)</td>
+<td>Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-slab">
+<h2>Module Slab<a class="headerlink" href="#module-slab" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.antprop.slab.Interface.pylayers.antprop.slab.Interface">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">Interface</tt><a class="headerlink" href="#pylayers.antprop.slab.Interface.pylayers.antprop.slab.Interface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.antprop.slab.Interface">
+<tt class="descclassname">slab.</tt><tt class="descname">Interface</tt><a class="headerlink" href="#pylayers.antprop.slab.Interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface between 2 medium</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>fGHz   np.array (nf,1)</strong> :</p>
+<p><strong>theta  np.array (1,nt)</strong> :</p>
+<p><strong>Ip     np.array (nf,nt,2,2)</strong> :</p>
+<p class="last"><strong>Io     np.array (nf,nt,2,2)</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.RT.html#pylayers.antprop.slab.Interface.RT" title="pylayers.antprop.slab.Interface.RT"><tt class="xref py py-obj docutils literal"><span class="pre">RT</span></tt></a>([metalic])</td>
+<td>evaluate Reflection and Transmission matrix</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.loss0.html#pylayers.antprop.slab.Interface.loss0" title="pylayers.antprop.slab.Interface.loss0"><tt class="xref py py-obj docutils literal"><span class="pre">loss0</span></tt></a>(fGHz[,&nbsp;display])</td>
+<td>Evaluate Loss at normal incidence theta=0</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.losst.html#pylayers.antprop.slab.Interface.losst" title="pylayers.antprop.slab.Interface.losst"><tt class="xref py py-obj docutils literal"><span class="pre">losst</span></tt></a>(fGHz[,&nbsp;display])</td>
+<td>Evaluate Loss</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.pcolor.html#pylayers.antprop.slab.Interface.pcolor" title="pylayers.antprop.slab.Interface.pcolor"><tt class="xref py py-obj docutils literal"><span class="pre">pcolor</span></tt></a>([dB])</td>
+<td>display of R &amp; T coefficients wrt frequency an angle</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.plotwrta.html#pylayers.antprop.slab.Interface.plotwrta" title="pylayers.antprop.slab.Interface.plotwrta"><tt class="xref py py-obj docutils literal"><span class="pre">plotwrta</span></tt></a>([k,&nbsp;display,&nbsp;name,&nbsp;dB])</td>
+<td>plot R &amp; T coefficients with respect to angle</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Interface.plotwrtf.html#pylayers.antprop.slab.Interface.plotwrtf" title="pylayers.antprop.slab.Interface.plotwrtf"><tt class="xref py py-obj docutils literal"><span class="pre">plotwrtf</span></tt></a>([k])</td>
+<td>plot R &amp; T coefficients with respect to frequency</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pylayers.antprop.slab.MatInterface.pylayers.antprop.slab.MatInterface">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">MatInterface</tt><a class="headerlink" href="#pylayers.antprop.slab.MatInterface.pylayers.antprop.slab.MatInterface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.antprop.slab.MatInterface">
+<tt class="descclassname">slab.</tt><tt class="descname">MatInterface</tt><a class="headerlink" href="#pylayers.antprop.slab.MatInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>MatInterface : Class for Interface between two materials</p>
+<blockquote>
+<div>l distance from the next Interface</div></blockquote>
+<p class="rubric">Notes</p>
+<p>This is required for recursive utilization of this function when the
+output angle of an interface happens to be the input angle of the
+next interface. As this angle depends on materials which themselves
+depends on frequency THETA is becoming a full matrix without redundancy
+between lines.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">3.1</span><span class="p">,</span><span class="mf">10.6</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Nf</span>     <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Nt</span>     <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span>     <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;def.mat&#39;</span><span class="p">,</span><span class="s">&#39;def.slab&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span>    <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span>     <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m2</span>     <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;PLASTER&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span>     <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="math">
+<p><img src="../_images/math/a1a21454210271898ec33236787f0f1b1cd820f0.png" alt="I_p = \left| \begin{array}{cc} \frac{1}{T_p}   &amp; \frac{R_p}{T_p} \\ \frac{R_p}{T_p} &amp; \frac{1}{T_p} \end{array}\right|
+
+I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_o}{T_o} &amp; \frac{1}{T_o} \end{array}\right|" /></p>
+</div><div class="admonition-todo admonition " id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">MatIinterface  fix the np.pi/2 NaN problem</p>
+</div>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="class">
+<dt id="pylayers.antprop.slab.Mat.pylayers.antprop.slab.Mat">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">Mat</tt><a class="headerlink" href="#pylayers.antprop.slab.Mat.pylayers.antprop.slab.Mat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.antprop.slab.Mat">
+<tt class="descclassname">slab.</tt><tt class="descname">Mat</tt><a class="headerlink" href="#pylayers.antprop.slab.Mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle constitutive materials dictionnary</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>name character string (default &#8216;AIR&#8217;)</p>
+</div></blockquote>
+<p><strong>index</strong> : int</p>
+<blockquote>
+<div><p>default 1</p>
+</div></blockquote>
+<p><strong>er</strong> : complex</p>
+<blockquote>
+<div><p>relative permittivity (w.d)   (1+0j)</p>
+</div></blockquote>
+<p><strong>mur</strong> : complex</p>
+<blockquote>
+<div><p>relative permeability (w.d)   (1+0j)</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>conductivity  (S/m)            0</p>
+</div></blockquote>
+<p><strong>roughness</strong> : float</p>
+<blockquote class="last">
+<div><p>(meter)                        0</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Mat.R.html#pylayers.antprop.slab.Mat.R" title="pylayers.antprop.slab.Mat.R"><tt class="xref py py-obj docutils literal"><span class="pre">R</span></tt></a>(fGHz,&nbsp;theta)</td>
+<td>Calculate Reflection coefficient on the air|mat interface</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pylayers.antprop.slab.MatDB.pylayers.antprop.slab.MatDB">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">MatDB</tt><a class="headerlink" href="#pylayers.antprop.slab.MatDB.pylayers.antprop.slab.MatDB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.antprop.slab.MatDB">
+<tt class="descclassname">slab.</tt><tt class="descname">MatDB</tt><a class="headerlink" href="#pylayers.antprop.slab.MatDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>MatDB Class : Material database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>di</strong> : dict</p>
+<blockquote class="last">
+<div><p>associate numeric and alphanumeric keys</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.info.html#pylayers.antprop.slab.MatDB.info" title="pylayers.antprop.slab.MatDB.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>get MatDB info</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.dass.html#pylayers.antprop.slab.MatDB.dass" title="pylayers.antprop.slab.MatDB.dass"><tt class="xref py py-obj docutils literal"><span class="pre">dass</span></tt></a>()</td>
+<td>create a dictionnary to associate index | name</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.maxindex.html#pylayers.antprop.slab.MatDB.maxindex" title="pylayers.antprop.slab.MatDB.maxindex"><tt class="xref py py-obj docutils literal"><span class="pre">maxindex</span></tt></a>()</td>
+<td>find the max value of the index in DB</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.delete.html#pylayers.antprop.slab.MatDB.delete" title="pylayers.antprop.slab.MatDB.delete"><tt class="xref py py-obj docutils literal"><span class="pre">delete</span></tt></a>(name)</td>
+<td>Delete a material in the DB</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.MatDB.edit.html#pylayers.antprop.slab.MatDB.edit" title="pylayers.antprop.slab.MatDB.edit"><tt class="xref py py-obj docutils literal"><span class="pre">edit</span></tt></a>(name)</td>
+<td>Edit a material in the DB</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pylayers.antprop.slab.Slab.pylayers.antprop.slab.Slab">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">Slab</tt><a class="headerlink" href="#pylayers.antprop.slab.Slab.pylayers.antprop.slab.Slab" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.antprop.slab.Slab">
+<tt class="descclassname">slab.</tt><tt class="descname">Slab</tt><a class="headerlink" href="#pylayers.antprop.slab.Slab" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>A slab is a sequence of layers which has</dt>
+<dd><ul class="first last simple">
+<li>a given width</li>
+<li>an integer index refering a given material in the material DB</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>name      :</strong> :</p>
+<blockquote>
+<div><p>Slab name</p>
+</div></blockquote>
+<p><strong>nbmat    :</strong> :</p>
+<blockquote>
+<div><p>Number of layers</p>
+</div></blockquote>
+<p><strong>index     :</strong> :</p>
+<blockquote>
+<div><p>Slab Index</p>
+</div></blockquote>
+<p><strong>imat      :</strong> :</p>
+<blockquote>
+<div><p>index of layers material</p>
+</div></blockquote>
+<p><strong>thickness  :</strong> :</p>
+<blockquote>
+<div><p>thickness of layers</p>
+</div></blockquote>
+<p><strong>color     :</strong> :</p>
+<blockquote>
+<div><p>color of slab dor display</p>
+</div></blockquote>
+<p><strong>linewidth :</strong> :</p>
+<blockquote>
+<div><p>linewidth for structure display</p>
+</div></blockquote>
+<p><strong>mat       :</strong> :</p>
+<blockquote>
+<div><p>Associated Material Database</p>
+</div></blockquote>
+<p class="last"><strong>evaluated</strong> : Boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.conv.html#pylayers.antprop.slab.Slab.conv" title="pylayers.antprop.slab.Slab.conv"><tt class="xref py py-obj docutils literal"><span class="pre">conv</span></tt></a>()</td>
+<td>build lmat and thick</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.editgui.html#pylayers.antprop.slab.Slab.editgui" title="pylayers.antprop.slab.Slab.editgui"><tt class="xref py py-obj docutils literal"><span class="pre">editgui</span></tt></a>()</td>
+<td>edit a Slab in the DB</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.info.html#pylayers.antprop.slab.Slab.info" title="pylayers.antprop.slab.Slab.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>Display Slab Info</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.loss0.html#pylayers.antprop.slab.Slab.loss0" title="pylayers.antprop.slab.Slab.loss0"><tt class="xref py py-obj docutils literal"><span class="pre">loss0</span></tt></a>([fGHz])</td>
+<td>Calculate loss for theta=0 at frequency (f)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.Slab.losst.html#pylayers.antprop.slab.Slab.losst" title="pylayers.antprop.slab.Slab.losst"><tt class="xref py py-obj docutils literal"><span class="pre">losst</span></tt></a>(fGHz,&nbsp;theta)</td>
+<td>Calculate loss for theta=th at frequency (f)</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pylayers.antprop.slab.SlabDB.pylayers.antprop.slab.SlabDB">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">SlabDB</tt><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pylayers.antprop.slab.SlabDB">
+<tt class="descclassname">slab.</tt><tt class="descname">SlabDB</tt><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slab data base</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes :</th><td class="field-body"><strong>DB</strong> : slab dictionnary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.addgui.html#pylayers.antprop.slab.SlabDB.addgui" title="pylayers.antprop.slab.SlabDB.addgui"><tt class="xref py py-obj docutils literal"><span class="pre">addgui</span></tt></a>(name)</td>
+<td>add a slab in the DB</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.choose.html#pylayers.antprop.slab.SlabDB.choose" title="pylayers.antprop.slab.SlabDB.choose"><tt class="xref py py-obj docutils literal"><span class="pre">choose</span></tt></a>()</td>
+<td>Choose a mat file from matdir and slab from slabdir</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.dass.html#pylayers.antprop.slab.SlabDB.dass" title="pylayers.antprop.slab.SlabDB.dass"><tt class="xref py py-obj docutils literal"><span class="pre">dass</span></tt></a>()</td>
+<td>update conversion dictionnary</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.delete.html#pylayers.antprop.slab.SlabDB.delete" title="pylayers.antprop.slab.SlabDB.delete"><tt class="xref py py-obj docutils literal"><span class="pre">delete</span></tt></a>(name)</td>
+<td>delete an element from the database</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.edit.html#pylayers.antprop.slab.SlabDB.edit" title="pylayers.antprop.slab.SlabDB.edit"><tt class="xref py py-obj docutils literal"><span class="pre">edit</span></tt></a>(name)</td>
+<td>edit a Slab in the DB</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.help.html#pylayers.antprop.slab.SlabDB.help" title="pylayers.antprop.slab.SlabDB.help"><tt class="xref py py-obj docutils literal"><span class="pre">help</span></tt></a>()</td>
+<td>The problem with this class is to cope with 2 diferent format</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.info.html#pylayers.antprop.slab.SlabDB.info" title="pylayers.antprop.slab.SlabDB.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>information</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.load.html#pylayers.antprop.slab.SlabDB.load" title="pylayers.antprop.slab.SlabDB.load"><tt class="xref py py-obj docutils literal"><span class="pre">load</span></tt></a>(_filename)</td>
+<td>load a .slab file (PulsRay format)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.save.html#pylayers.antprop.slab.SlabDB.save" title="pylayers.antprop.slab.SlabDB.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>(_filename)</td>
+<td>Save a Slab database in a .slab file (PulsRay format)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.loadsl.html#pylayers.antprop.slab.SlabDB.loadsl" title="pylayers.antprop.slab.SlabDB.loadsl"><tt class="xref py py-obj docutils literal"><span class="pre">loadsl</span></tt></a>(_filename)</td>
+<td>Loadslab from a .sl file (PyRay format)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.savesl.html#pylayers.antprop.slab.SlabDB.savesl" title="pylayers.antprop.slab.SlabDB.savesl"><tt class="xref py py-obj docutils literal"><span class="pre">savesl</span></tt></a>(_filename)</td>
+<td>the short filename _filename needs to have the extension .sl</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.maxindex.html#pylayers.antprop.slab.SlabDB.maxindex" title="pylayers.antprop.slab.SlabDB.maxindex"><tt class="xref py py-obj docutils literal"><span class="pre">maxindex</span></tt></a>()</td>
+<td>find the max value of the index in DB</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.show.html#pylayers.antprop.slab.SlabDB.show" title="pylayers.antprop.slab.SlabDB.show"><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></a>([name,&nbsp;fGHz])</td>
+<td>show</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.slab.SlabDB.showall.html#pylayers.antprop.slab.SlabDB.showall" title="pylayers.antprop.slab.SlabDB.showall"><tt class="xref py py-obj docutils literal"><span class="pre">showall</span></tt></a>()</td>
+<td>show all</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="channel">
+<h2>Channel<a class="headerlink" href="#channel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pylayers.antprop.channel.Ctilde.pylayers.antprop.slab.Ctilde">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">Ctilde</tt><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.pylayers.antprop.slab.Ctilde" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.Ctilde.choose.html#pylayers.antprop.channel.Ctilde.choose" title="pylayers.antprop.channel.Ctilde.choose"><tt class="xref py py-obj docutils literal"><span class="pre">choose</span></tt></a>()</td>
+<td>Choose a field file in tud directory</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.Ctilde.info.html#pylayers.antprop.channel.Ctilde.info" title="pylayers.antprop.channel.Ctilde.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>Info (Nf,Nray,shape(y))</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.Ctilde.doadod.html#pylayers.antprop.channel.Ctilde.doadod" title="pylayers.antprop.channel.Ctilde.doadod"><tt class="xref py py-obj docutils literal"><span class="pre">doadod</span></tt></a>([cmap,&nbsp;s])</td>
+<td>scatter plot of the DoA-DoD channel structure</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.Ctilde.energy.html#pylayers.antprop.channel.Ctilde.energy" title="pylayers.antprop.channel.Ctilde.energy"><tt class="xref py py-obj docutils literal"><span class="pre">energy</span></tt></a>()</td>
+<td>Calculate energy on co and cross channel</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.Ctilde.sort.html#pylayers.antprop.channel.Ctilde.sort" title="pylayers.antprop.channel.Ctilde.sort"><tt class="xref py py-obj docutils literal"><span class="pre">sort</span></tt></a>(tauk)</td>
+<td>sort Ctilde with respect of tauk</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.Ctilde.vec2scal.html#pylayers.antprop.channel.Ctilde.vec2scal" title="pylayers.antprop.channel.Ctilde.vec2scal"><tt class="xref py py-obj docutils literal"><span class="pre">vec2scal</span></tt></a>()</td>
+<td>calculate scalChannel from VectChannel and antenna</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.Ctilde.vec2scalA.html#pylayers.antprop.channel.Ctilde.vec2scalA" title="pylayers.antprop.channel.Ctilde.vec2scalA"><tt class="xref py py-obj docutils literal"><span class="pre">vec2scalA</span></tt></a>(At,&nbsp;Ar[,&nbsp;alpha])</td>
+<td>vec2scalA(self,At,Ar,alpha=1.0):</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pylayers.antprop.channel.VectChannel.pylayers.antprop.slab.VectChannel">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">VectChannel</tt><a class="headerlink" href="#pylayers.antprop.channel.VectChannel.pylayers.antprop.slab.VectChannel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.VectChannel.show3.html#pylayers.antprop.channel.VectChannel.show3" title="pylayers.antprop.channel.VectChannel.show3"><tt class="xref py py-obj docutils literal"><span class="pre">show3</span></tt></a>([seuildb])</td>
+<td>geomview vizualization</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.VectChannel.mobility.html#pylayers.antprop.channel.VectChannel.mobility" title="pylayers.antprop.channel.VectChannel.mobility"><tt class="xref py py-obj docutils literal"><span class="pre">mobility</span></tt></a>(v,&nbsp;dt)</td>
+<td>Modify channel for uniform mobility</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="pylayers.antprop.channel.ScalChannel.pylayers.antprop.slab.ScalChannel">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">ScalChannel</tt><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.pylayers.antprop.slab.ScalChannel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.info.html#pylayers.antprop.channel.ScalChannel.info" title="pylayers.antprop.channel.ScalChannel.info"><tt class="xref py py-obj docutils literal"><span class="pre">info</span></tt></a>()</td>
+<td>display information</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">show</span></tt></td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.apply.html#pylayers.antprop.channel.ScalChannel.apply" title="pylayers.antprop.channel.ScalChannel.apply"><tt class="xref py py-obj docutils literal"><span class="pre">apply</span></tt></a>(W)</td>
+<td>Apply a FUsignal W to the ScalChannel.</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.applywavA.html#pylayers.antprop.channel.ScalChannel.applywavA" title="pylayers.antprop.channel.ScalChannel.applywavA"><tt class="xref py py-obj docutils literal"><span class="pre">applywavA</span></tt></a>(Wgam,&nbsp;Tw)</td>
+<td>apply waveform method A</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.applywavB.html#pylayers.antprop.channel.ScalChannel.applywavB" title="pylayers.antprop.channel.ScalChannel.applywavB"><tt class="xref py py-obj docutils literal"><span class="pre">applywavB</span></tt></a>(Wgam)</td>
+<td>apply waveform method B (time domain )</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.applywavC.html#pylayers.antprop.channel.ScalChannel.applywavC" title="pylayers.antprop.channel.ScalChannel.applywavC"><tt class="xref py py-obj docutils literal"><span class="pre">applywavC</span></tt></a>(w,&nbsp;dxw)</td>
+<td>apply waveform method C</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.doddoa.html#pylayers.antprop.channel.ScalChannel.doddoa" title="pylayers.antprop.channel.ScalChannel.doddoa"><tt class="xref py py-obj docutils literal"><span class="pre">doddoa</span></tt></a>()</td>
+<td>doddoa() : DoD / DoA diagram</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.wavefig.html#pylayers.antprop.channel.ScalChannel.wavefig" title="pylayers.antprop.channel.ScalChannel.wavefig"><tt class="xref py py-obj docutils literal"><span class="pre">wavefig</span></tt></a>(w[,&nbsp;Nray])</td>
+<td>display</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/pylayers.antprop.channel.ScalChannel.rayfig.html#pylayers.antprop.channel.ScalChannel.rayfig" title="pylayers.antprop.channel.ScalChannel.rayfig"><tt class="xref py py-obj docutils literal"><span class="pre">rayfig</span></tt></a>(k,&nbsp;W[,&nbsp;col])</td>
+<td>build a figure with rays</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.antprop.antenna.indexvsh.html" title="pylayers.antprop.antenna.indexvsh"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/pylayers.signal.bsignal.Noise.gating.html" title="pylayers.signal.bsignal.Noise.gating"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >pylayers reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>UserManual &mdash; PyLayers v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyLayers v0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">UserManual</a><ul>
+<li><a class="reference internal" href="#overview-of-the-simulation-workflow">Overview of the simulation Workflow</a></li>
+<li><a class="reference internal" href="#description-of-the-different-blocks">Description of the different blocks</a><ul>
+<li><a class="reference internal" href="#ray-launching-bloc">Ray Launching bloc</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ray-tracing-bloc">Ray Tracing bloc</a></li>
+<li><a class="reference internal" href="#d-rays-computing-using-tud">3D rays computing using TUD</a><ul>
+<li><a class="reference internal" href="#electromagnetic-field-evaluation">Electromagnetic field evaluation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#simulation-file">Simulation File</a></li>
+<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
+<li><a class="reference internal" href="#simulation-ini-file">Simulation <cite>.ini</cite>  file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#terminology">Terminology</a></li>
+<li><a class="reference internal" href="#using-the-bsignal-module">Using the Bsignal Module</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/UserManual.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usermanual">
+<h1>UserManual<a class="headerlink" href="#usermanual" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<p>PyLayers is an interactive platform, used for deterministic channel simulation,
+using python and C as programming languages. This tool allows the evaluation of
+the propagation channel conditions, in indoor environment, between radio nodes for
+different antenna directions and waveforms.</p>
+<p>It consists in several interacting python modules as well as a set of various high level
+commands coded in C which exchange information through files.</p>
+<p>The main class which is used for defining a Simulation is called <cite>Simul</cite>
+which defines the different parameters files relative to a given multilink simulation.</p>
+<p>The simulation workflow goes through several steps; each one is managed by an
+independent bloc which corresponds to a standalone command. Those commands are
+originaly written in C.</p>
+<blockquote>
+<div><ul class="simple">
+<li><cite>launching</cite></li>
+<li><cite>tracing</cite></li>
+<li><cite>tratotud</cite></li>
+<li><cite>evalfield</cite></li>
+</ul>
+</div></blockquote>
+<p>It is foressen to gradually convert all those
+different block in Python. During this
+transition period where co-exists both python and C tools, we have to deals with
+various data formats which feed either the old version of the code or the most recent
+one written and Python and which uses parsing of <cite>ini</cite> files.</p>
+<p>The technical choice which has been made is to use <cite>ini</cite> files which are simple
+ascii file which can easily be parsed into Python dictionnary and which are human
+readable. One of the interest of the <cite>ini</cite> file is their flexibility because
+the order the data apppears in each section is not relevant.</p>
+<div class="section" id="overview-of-the-simulation-workflow">
+<h2>Overview of the simulation Workflow<a class="headerlink" href="#overview-of-the-simulation-workflow" title="Permalink to this headline">¶</a></h2>
+<p>The following figure presents a summary of the different pylayers blocs:</p>
+<img alt="_images/workflow1.png" src="_images/workflow1.png" />
+<img alt="_images/workflow2.png" src="_images/workflow2.png" />
+<p>The parameter “progress” indicates the evolution of channel simulation.
+The figure mention others files which are relative to the environment, in fact,
+pylayers is a simulation channel tool for indoor environment, for that reason we
+need to describe the environment using the object Layout which is
+constructed using different files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><cite>filestr</cite>: geometric details of the propagation environment such as the
+number of points and their coordinates (expressed in meter), the
+number of segment represents the walls, their starts, ends,
+lengths... and the number of  co-segments (windows, floors...)</li>
+<li><cite>fileslab</cite>: represents the different dielectric layers, their number
+and thickness</li>
+<li><cite>filemat</cite>: represents the characteristics of the materials defined in</li>
+<li><cite>fileslab</cite>: relative permittivity, permeability, conductivity ,</li>
+</ul>
+</div></blockquote>
+<p>The configuration file fileconf contains the list of parameter files relative
+to the simulation.</p>
+<p>Others objects are used in pylayers:</p>
+<p><cite>RadioNode</cite>:  This means a transmitter or a receiver. It manages the spatial and
+temporal behavior of a radio node.  GrRay3D: corresponds to the 3D rays between
+the receiver and the transmitter.</p>
+<p>Prior to any calculation or simulation it is required to define various input files i.e</p>
+<blockquote>
+<div><ul class="simple">
+<li>Layout file    handle in <cite>Layout.py</cite> module</li>
+<li>Mat file       handle in <cite>Slab.py</cite> module</li>
+<li>Slab file      handle in <cite>Slab.py</cite> module</li>
+<li>separate space files for tx and rx</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="description-of-the-different-blocks">
+<h2>Description of the different blocks<a class="headerlink" href="#description-of-the-different-blocks" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ray-launching-bloc">
+<h3>Ray Launching bloc<a class="headerlink" href="#ray-launching-bloc" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>Bloc Description</dt>
+<dd><ul class="first simple">
+<li>Function:  in this part of the simulation, knowing the Tx position,
+the aim is to ibuild a tree which facilitates the futher calculation
+of rays.  The launching phase generates different rays the Tx using a
+precalculated visibility matrix. Note that this approach is currently</li>
+</ul>
+<blockquote class="last">
+<div><p>being completely reinterpreted by using dedicated graph data structure.
++ Operating Base : geometric optic
++ Layer: physical layer</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Interfacing</dt>
+<dd><ul class="first simple">
+<li>Programming language : C</li>
+<li>Operating system:  works on Linux and not tested on windows</li>
+<li>Input/output list:</li>
+</ul>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>The parameter of this module are given by the input files:</dt>
+<dd><ul class="first last simple">
+<li><cite>filepalch</cite></li>
+<li><cite>filestr</cite></li>
+<li><cite>filetx.spa</cite></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>Once the launching is achieved the output file is</dt>
+<dd><ul class="first last simple">
+<li><cite>filelch</cite> this files contains a tree emanating from the transmitter
+and goes through the entire layout until ithe layout. Breadth and
+depth exploration of the graph is balanced by using various
+propagation heuristics.</li>
+<li>Input/output format:  both Input and Output are ASCII files</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="ray-tracing-bloc">
+<h2>Ray Tracing bloc<a class="headerlink" href="#ray-tracing-bloc" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Bloc Description</dt>
+<dd><ul class="first last simple">
+<li>Function: at this step of simulation, the coordinates of the
+receivers are used to calculate the rays between the receivers and
+transmitter + Operating Base : geometric optic</li>
+<li>Layer: Physical layer</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Interfacing</dt>
+<dd><ul class="first simple">
+<li>Programming language: Python and C</li>
+<li>Operating system: works on Linux  and not tested on windows</li>
+<li>Input/output list:</li>
+</ul>
+<p class="last">The parameters of the tracing module are given by the input file :
+filepatra, the filelch is used as input to determine the rays to the receivers. As the launching module an output file filetra is generated.
++ Input/output format : both Input and Output are ASCII files</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="d-rays-computing-using-tud">
+<h2>3D rays computing using TUD<a class="headerlink" href="#d-rays-computing-using-tud" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Bloc Description</dt>
+<dd><ul class="first last simple">
+<li>Function: after ray launching and tracing, all we have is geometric models for rays between the Tx and Rx, on which we need to apply electromagnetic models. In order to have the 3D-TUD rays.</li>
+<li>Operating Base : uniform theory of diffraction</li>
+<li>Layer: physical layer</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Interfacing</dt>
+<dd><ul class="first simple">
+<li>Programming language: Python and C</li>
+<li>Operating system: works on Linux  and not tested on windows</li>
+<li>Input/output list:  the input files are: filepatud for TUD parameter
+and the tracing file filetra. At the end 4 files are generated:
+filetud: containing 3d-TUD rays, filetauk: relative to propagation
+delay for each ray and fileang and filerang: for departure and
+arrival angles for each ray.</li>
+<li>Input/output format: both Input and</li>
+</ul>
+<blockquote class="last">
+<div><p>Output are ASCII files</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="section" id="electromagnetic-field-evaluation">
+<h3>Electromagnetic field evaluation<a class="headerlink" href="#electromagnetic-field-evaluation" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>Bloc Description</dt>
+<dd><ul class="first last simple">
+<li>Function: this bloc allow  the evaluation the electromagnetic filed by executing the  field module of Simulation</li>
+<li>Operating Base : combination of ray tracing, optical geometrics and TUD methods</li>
+<li>Layer: physical layer</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Interfacing</dt>
+<dd><ul class="first simple">
+<li>Programming language: Python and C</li>
+<li>Operating system: on Linux  and not testes on windows</li>
+<li>Input/output list: input file: filefreq for the frequency range and the output file is filefield containing the relation the matrix connecting the transmitted and received field.</li>
+<li>Input/output format: both Input and Output  are ASCII files</li>
+</ul>
+<p class="last">Regarding the execution time it depends on several parameters such as the
+environment (point, segment, nodes, edges...)  or the requirement: minimum
+number of rays...</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="simulation-file">
+<h2>Simulation File<a class="headerlink" href="#simulation-file" title="Permalink to this headline">¶</a></h2>
+<p>This example load a simulation file and shows the layout with the surimposed
+grid of tx and rx points which define the links of interest for the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">Simul</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">Layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;where2.ini&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">loadfur</span><span class="p">(</span><span class="s">&#39;FurSiradel.ini&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">furniture</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href=".//UserManual-1.py">Source code</a>)</p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Before starting a simulation it is required to fill a ini file which gathers
+the information required for starting a simulation.</p>
+<div class="section" id="simulation-ini-file">
+<h3>Simulation <cite>.ini</cite>  file<a class="headerlink" href="#simulation-ini-file" title="Permalink to this headline">¶</a></h3>
+<p>Below is presented an example of a simulation file <cite>where2.ini</cite>:</p>
+<div class="highlight-python"><pre>[files]
+struc = sircut.str
+mat   = simul9.mat
+slab  = simul9.slab
+tx    = w2tx.ini
+rx    = w2rx.ini
+txant = UWB_CEA.vsh3
+rxant = UWB_CEA.vsh3
+conf  = $HOME/Pyproject/project.conf
+palch = simul9.palch
+patra = simul9.patra
+
+[tracing]
+maxdeep  = 10
+distdiff = 5.0
+var2d3d  = 1
+
+[waveform]
+tw     = 30
+band   = 0.499
+fc     = 4.493
+thresh = 3
+fe     = 50
+type   = generic
+
+[frequency]
+fmax  = 11
+nf    = 181
+fmin  = 2
+
+[output]
+42 = out42.ini
+22 = out22.ini
+43 = out43.ini
+
+[tud]
+purc = 100
+num = -1
+nrmax = 500
+
+[launching]
+typealgo = 1
+angtx    = 0.05
+isbang   = 20
+ethreshold = 1e-05
+maxdeep  = 20</pre>
+</div>
+<p>This file is composed of independant sections which are respectively</p>
+<div class="highlight-python"><pre>[files]
+        This section contains the short name of the required input file
+        for high level commands
+[launching]
+        various parameters for the launching phase
+[tracing]
+        various parameters for the tracing phase
+[waveform]
+        parameters defining the applied waveform
+[frequency]
+        electromagnetic frequency range
+[tud]
+        ray filtering parameters
+[output]
+        already calculated output files</pre>
+</div>
+</div>
+</div>
+<div class="section" id="terminology">
+<h2>Terminology<a class="headerlink" href="#terminology" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>One of the key design idea of the ray tracing tool is to pre-process
+the Layout description exploiting the graph abstract data structure.</p>
+<p>Terms <strong>nodes</strong> and <strong>edges</strong> are used when refering to graph elements of <img class="math" src="_images/math/db5d1d161f2ba8f393fb42a27ba460e264619d87.png" alt="\mathcal{G}_{x}(\mathcal{V},\mathcal{E})"/>.
+Terms <strong>points</strong> and <strong>segments</strong> are used when refering to geometrical object.</p>
+<p>A <cite>str2</cite> file is a list of points with their coordinates and a list of segments associating
+those points by pairs.</p>
+<p>The description of the layout exploits a <strong>non overlaping  rule</strong>,
+(which is checked regularly when creating a new layout for not braking the consistency of the associated graph description).</p>
+<dl class="docutils">
+<dt><strong>Non overlaping rule</strong>:</dt>
+<dd>A segment must never has, as a member, a point of the layout which is not one of its extremity.</dd>
+</dl>
+<p>This rule aims maintaining intrinsically a consistent spatial relationship between points and segments.</p>
+<p>see <a href="#id1"><span class="problematic" id="id2">:ref:`Uguen2012`_</span></a></p>
+</div></blockquote>
+</div>
+<div class="section" id="using-the-bsignal-module">
+<h2>Using the Bsignal Module<a class="headerlink" href="#using-the-bsignal-module" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bsignal.html">Bsignal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bsignal.html#generation-of-an-impulse-of-normalized-energy">Generation of an Impulse of normalized energy</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

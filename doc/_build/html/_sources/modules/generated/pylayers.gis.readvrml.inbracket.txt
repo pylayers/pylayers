@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.inbracket
+===============================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.inbracket

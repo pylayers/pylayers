@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.antprop.channel.VectChannel.mobility &mdash; PyLayers v0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers v0.1 documentation" href="../../index.html" />
+    <link rel="up" title="antprop" href="../antprop.html" />
+    <link rel="next" title="pylayers.antprop.channel.ScalChannel.info" href="pylayers.antprop.channel.ScalChannel.info.html" />
+    <link rel="prev" title="pylayers.antprop.channel.VectChannel.show3" href="pylayers.antprop.channel.VectChannel.show3.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.ScalChannel.info.html" title="pylayers.antprop.channel.ScalChannel.info"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.VectChannel.show3.html" title="pylayers.antprop.channel.VectChannel.show3"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../index.html" >pylayers reference</a> &raquo;</li>
+          <li><a href="../antprop.html" accesskey="U">antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pylayers.antprop.channel.VectChannel.show3.html"
+                        title="previous chapter">pylayers.antprop.channel.VectChannel.show3</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pylayers.antprop.channel.ScalChannel.info.html"
+                        title="next chapter">pylayers.antprop.channel.ScalChannel.info</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/modules/generated/pylayers.antprop.channel.VectChannel.mobility.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pylayers-antprop-channel-vectchannel-mobility">
+<h1>pylayers.antprop.channel.VectChannel.mobility<a class="headerlink" href="#pylayers-antprop-channel-vectchannel-mobility" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="pylayers.antprop.channel.VectChannel.mobility">
+<tt class="descclassname">VectChannel.</tt><tt class="descname">mobility</tt><big>(</big><em>v</em>, <em>dt</em><big>)</big><a class="reference internal" href="../../_modules/pylayers/antprop/channel.html#VectChannel.mobility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.VectChannel.mobility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify channel for uniform mobility</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>v</strong> : float</p>
+<blockquote>
+<div><p>velocity (m/s)</p>
+</div></blockquote>
+<p><strong>dt</strong> : float</p>
+<blockquote>
+<div><p>delta t (s)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>VC</strong> : modified VectChannel</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate new channel field from the old one and v(terminal vitese) 
+and dt(time of deplacement)</p>
+<p>dt en s  (le temps d&#8217;observation entre deux position de Rx)
+v en m/s (vitesse de changement de Rx)</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.ScalChannel.info.html" title="pylayers.antprop.channel.ScalChannel.info"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pylayers.antprop.channel.VectChannel.show3.html" title="pylayers.antprop.channel.VectChannel.show3"
+             >previous</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../index.html" >pylayers reference</a> &raquo;</li>
+          <li><a href="../antprop.html" >antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

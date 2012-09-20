@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.extract
+=============================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.extract

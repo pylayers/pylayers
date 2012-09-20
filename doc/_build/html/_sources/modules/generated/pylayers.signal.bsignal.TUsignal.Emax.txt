@@ -1,0 +1,6 @@
+pylayers.signal.bsignal.TUsignal.Emax
+=====================================
+
+.. currentmodule:: pylayers.signal.bsignal
+
+.. automethod:: TUsignal.Emax

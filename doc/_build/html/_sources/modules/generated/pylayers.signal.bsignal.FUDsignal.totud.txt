@@ -1,0 +1,6 @@
+pylayers.signal.bsignal.FUDsignal.totud
+=======================================
+
+.. currentmodule:: pylayers.signal.bsignal
+
+.. automethod:: FUDsignal.totud

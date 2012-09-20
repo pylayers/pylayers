@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.gis.furniture &mdash; PyLayers v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="pylayers.gis" href="../gis.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../../index.html"><img src="../../../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../gis.html" accesskey="U">pylayers.gis</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.gis.furniture</h1><div class="highlight"><pre>
+<span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Handle Furnitures </span>
+
+
+<span class="sd">Summary</span>
+<span class="sd">-------</span>
+
+<span class="sd">This module handle the description of furnitures</span>
+<span class="sd">For now furnitures are rectangular objects.</span>
+<span class="sd">In the future it should be able to accept any polygon as a furniture element </span>
+
+<span class="sd">Furniture are stored in an ini file of dirstruc. </span>
+
+<span class="sd">.. sourcecode:: ipython</span>
+<span class="sd">    </span>
+<span class="sd">    import Layout</span>
+<span class="sd">    import matplotlib.pylab as plt</span>
+<span class="sd">    L = Layout.Layout()</span>
+<span class="sd">    L.loadstr(&#39;sircut.str&#39;)</span>
+<span class="sd">    L.showGs()</span>
+<span class="sd">    L.loadfur(&#39;Furw1.ini&#39;)</span>
+<span class="sd">    fig = plt.gcf()</span>
+<span class="sd">    ax  = fig.get_axes()[0]</span>
+<span class="sd">    for fur in L.lfur:</span>
+<span class="sd">        fur.show(fig,ax)</span>
+
+<span class="sd">    </span>
+<span class="sd">    import Layout</span>
+<span class="sd">    import matplotlib.pylab as plt</span>
+<span class="sd">    L = Layout.Layout()</span>
+<span class="sd">    L.loadstr(&#39;sircut.str&#39;)</span>
+<span class="sd">    plt.figure(figsize=(10,4))</span>
+<span class="sd">    L.showGs()</span>
+<span class="sd">    L.loadfur(&#39;Furw1.ini&#39;)</span>
+<span class="sd">    fig = plt.gcf()</span>
+<span class="sd">    ax  = fig.get_axes()[0]</span>
+<span class="sd">    for fur in L.lfur:</span>
+<span class="sd">        fur.show(fig,ax)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">ConfigParser</span>
+<span class="c">#import Graph</span>
+<span class="kn">from</span>   <span class="nn">matplotlib.path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span>   <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">PathPatch</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.easygui</span> 
+<span class="kn">from</span>   <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">pyutil</span> <span class="k">as</span> <span class="n">pyu</span> 
+
+<div class="viewcode-block" id="Furniture"><a class="viewcode-back" href="../../../modules/gis.html#pylayers.gis.furniture.Furniture">[docs]</a><span class="k">class</span> <span class="nc">Furniture</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ---------</span>
+<span class="sd">    name</span>
+<span class="sd">    desc</span>
+<span class="sd">    origin</span>
+<span class="sd">    height</span>
+<span class="sd">    length</span>
+<span class="sd">    width</span>
+<span class="sd">    thichness</span>
+<span class="sd">    Matname</span>
+
+<span class="sd">    Notes </span>
+<span class="sd">    -----</span>
+<span class="sd">    A piece of furniture is a rectangular object with the following parameters</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">desc</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">origin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span>
+                 <span class="n">angle</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">H</span>      <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">L</span>      <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">W</span>      <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">T</span>      <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">Matname</span><span class="o">=</span><span class="s">&#39;METAL&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            desc    : furniture reference name  </span>
+<span class="sd">            origin</span>
+<span class="sd">            angle</span>
+<span class="sd">            H</span>
+<span class="sd">            L</span>
+<span class="sd">            W</span>
+<span class="sd">            T</span>
+<span class="sd">            Matname</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="o">=</span><span class="n">desc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="o">=</span><span class="n">origin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">=</span><span class="n">angle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">=</span><span class="n">H</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="o">=</span><span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">=</span><span class="n">W</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span><span class="o">=</span><span class="n">T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Matname</span><span class="o">=</span><span class="n">Matname</span> 
+
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; display furniture information </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">key</span><span class="p">,</span><span class="s">&#39;</span><span class="se">\t\t</span><span class="s">:</span><span class="se">\t</span><span class="s">&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; set position </span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="n">data</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s">&#39;Choose position and angle &#39;</span><span class="p">,</span><span class="s">&#39;Enter&#39;</span><span class="p">,</span> \
+                            <span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;angle(deg)&#39;</span><span class="p">),</span> \
+                            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span>     <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; load furniture from file </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        _filename</span>
+<span class="sd">            file of furnitures </span>
+<span class="sd">        name</span>
+<span class="sd">            furniture id </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filefurn</span>  <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="s">&quot;struc&quot;</span><span class="p">)</span>
+        <span class="n">config</span>    <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filefurn</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span>   <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;name&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desc</span>   <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;desc&quot;</span><span class="p">)</span>
+
+        <span class="n">ch</span>          <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;origin&quot;</span><span class="p">)</span>
+        <span class="n">ch</span>          <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">ch</span>          <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">ch</span>          <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">eval</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">eval</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span>     <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;angle&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;height&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span>     <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;width&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;length&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;thickness&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Matname</span>   <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="s">&quot;Matname&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">_filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; save furniture file</span>
+
+<span class="sd">        .. todo::</span>
+<span class="sd">            save a furniture file (struc)</span>
+<span class="sd">           </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filefurn</span>  <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span><span class="s">&quot;struc&quot;</span><span class="p">)</span>
+        <span class="n">fd</span>        <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filefurn</span><span class="p">,</span><span class="s">&quot;a&quot;</span><span class="p">)</span>
+        <span class="n">config</span>    <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+
+        <span class="n">secname</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">secname</span><span class="p">)</span>
+
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;desc&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+        <span class="n">sorigin</span> <span class="o">=</span> <span class="s">&#39;[ &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; , &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span> <span class="s">&#39; ]&#39;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;origin&quot;</span><span class="p">,</span><span class="n">sorigin</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;angle&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;height&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;length&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;width&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;thickness&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">thickness</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">secname</span><span class="p">,</span><span class="s">&quot;Matname&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Matname</span><span class="p">)</span>
+        
+        <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Calculate the coordinate of the furniture</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">           position : a list of points </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">p0</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
+        <span class="n">u</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)])</span>
+        <span class="n">v</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)])</span>
+        <span class="n">p1</span>  <span class="o">=</span> <span class="n">p0</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">p2</span>  <span class="o">=</span> <span class="n">p1</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">p3</span>  <span class="o">=</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="p">[</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">position</span>
+
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[],</span><span class="n">offx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">offy</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;  </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            fig   </span>
+<span class="sd">                figure</span>
+<span class="sd">            ax    </span>
+<span class="sd">                axes </span>
+<span class="sd">            offx  </span>
+<span class="sd">                offset x (0)</span>
+<span class="sd">            offy  </span>
+<span class="sd">                offset y  (10)</span>
+
+<span class="sd">        Depends on Shapely </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">codes</span>    <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">codes</span>    <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="o">.</span><span class="n">MOVETO</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">Path</span><span class="o">.</span><span class="n">LINETO</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="n">Path</span><span class="o">.</span><span class="n">CLOSEPOLY</span><span class="p">]</span>
+
+        <span class="n">p0</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
+        <span class="n">u</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)])</span>
+        <span class="n">v</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)])</span>
+        <span class="n">p1</span>  <span class="o">=</span> <span class="n">p0</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">p2</span>  <span class="o">=</span> <span class="n">p1</span> <span class="o">+</span> <span class="n">v</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">p3</span>  <span class="o">=</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">u</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> 
+
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span>  <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="p">,</span> <span class="n">p0</span><span class="p">]</span>
+
+        <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">codes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Matname</span><span class="o">==</span><span class="s">&#39;METAL&#39;</span><span class="p">:</span>
+            <span class="n">pathpatch</span> <span class="o">=</span> <span class="n">PathPatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;grey&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pathpatch</span> <span class="o">=</span> <span class="n">PathPatch</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c"># create figure  do not exist create it </span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">plt</span><span class="o">.</span><span class="n">Figure</span><span class="p">):</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="c">#ax = fig.get_axes()[0]</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">pathpatch</span><span class="p">)</span>
+        <span class="c">#ax.dataLim.update_from_data_xy(vertices)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">autoscale_view</span><span class="p">()</span>
+
+        </div>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+
+<span class="c">#   fig.savefig(figuredir+filename+ext1,orientation=&#39;portrait&#39;)</span>
+<span class="c">#   fig.savefig(figuredir+filename+ext2,orientation=&#39;portrait&#39;)</span>
+<span class="c">#   fig.savefig(figuredir+filename+ext3,orientation=&#39;portrait&#39;)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../gis.html" >pylayers.gis</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

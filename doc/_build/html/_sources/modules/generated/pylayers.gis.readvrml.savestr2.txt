@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.savestr2
+==============================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.savestr2

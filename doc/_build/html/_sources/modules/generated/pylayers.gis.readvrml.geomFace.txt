@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.geomFace
+==============================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.geomFace

@@ -1,0 +1,6 @@
+pylayers.signal.bsignal.FUDsignal.minphas
+=========================================
+
+.. currentmodule:: pylayers.signal.bsignal
+
+.. automethod:: FUDsignal.minphas

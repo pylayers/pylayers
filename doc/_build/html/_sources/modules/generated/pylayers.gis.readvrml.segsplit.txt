@@ -1,0 +1,6 @@
+pylayers.gis.readvrml.segsplit
+==============================
+
+.. currentmodule:: pylayers.gis
+
+.. automethod:: readvrml.segsplit
