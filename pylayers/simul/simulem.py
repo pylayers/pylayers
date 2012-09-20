@@ -966,16 +966,16 @@ class Simul(object):
 
         sections = self.config.sections()
 
-        filetx = self.config.get("files", "tx")
-        filerx = self.config.get("files", "rx")
+        _filetx = self.config.get("files", "tx")
+        _filerx = self.config.get("files", "rx")
 
-        fileanttx = self.config.get("files", "txant")
-        fileantrx = self.config.get("files", "rxant")
+        _fileanttx = self.config.get("files", "txant")
+        _fileantrx = self.config.get("files", "rxant")
 
         self.filestr = self.config.get("files", "struc")
 
-        self.tx = RadioNode('tx', filetx, fileanttx, self.filestr)
-        self.rx = RadioNode('rx', filerx, fileantrx, self.filestr)
+        self.tx = RadioNode('tx', _filetx, _fileanttx, self.filestr)
+        self.rx = RadioNode('rx', _filerx, _fileantrx, self.filestr)
 #
 # Launching and Tracing parameters
 #
@@ -1025,7 +1025,7 @@ class Simul(object):
         if "output" in sections:
             for itx in self.config.options("output"):
                 _filename = self.config.get("output", itx)
-                filename = pyu.getlong(_filename, "ini")
+                filename = pyu.getlong(_filename, "output")
                 self.dout[int(itx)] = filename
                 output = ConfigParser.ConfigParser()
                 output.read(filename)
@@ -1456,8 +1456,9 @@ class Simul(object):
                 print " ", self.dtang[itx][irx]
                 print " ", self.drang[itx][irx]
                 gt = GrRay3D.GrRayTud()
-                gt.load(self.dtud[itx][irx], self.dtang[
-                    itx][irx], self.drang[itx][irx], self.sl)
+                gt.load(self.dtud[itx][irx],
+                        self.dtang[itx][irx],
+                        self.drang[itx][irx], self.sl)
             if irx in self.dtauk[itx].keys():
                 print self.dtauk[itx][irx]
                 print self.dfield[itx][irx]
@@ -1951,7 +1952,7 @@ class Simul(object):
             # launching itx does not exist
             self.filespaTx = 'tx' + str(itx) + '.spa'
             point = self.tx.points[itx]
-            spafile(self.filespaTx, point, "launch")
+            spafile(self.filespaTx, point, pstruc['DIRLCH'])
             print "---------------"
             print "Start Launching Tx : " + str(itx)
             print "---------------"
@@ -1965,7 +1966,7 @@ class Simul(object):
             if irx not in self.dtra[itx].keys():
                 self.filespaRx = 'rx' + str(irx) + '.spa'
                 point = self.rx.points[irx]
-                spafile(self.filespaRx, point, "trace")
+                spafile(self.filespaRx, point, pstruc['DIRTRA'])
                 print "--------------------"
                 print "Start tracing  Rx : " + str(irx)
                 print "--------------------"
@@ -2010,14 +2011,6 @@ class Simul(object):
                         alpha = np.sqrt(1. / 30.0)
                         self.cir([itx], [irx],
                                  store_level=16 + 8 + 4 + 2 + 1, alpha=alpha)
-
-                        if "cir" not in  self.output[itx].sections():
-                            self.output[itx].add_section("cir")
-                        if irx in self.dcir[itx].keys():
-                            self.output[itx].set("cir", str(irx), self.dcir[itx][irx])
-                        fd = open(outfilename, "w")
-                        self.output[itx].write(fd)
-                        fd.close()
                     else:
                         raise("Error no waveform in the config file ")
                         return(False)
@@ -2114,7 +2107,7 @@ class Simul(object):
         racine = self.filesimul.replace('.ini', '') + 'cir-'
         for l in itx:
             # create cir entry in outputTx if required
-            _outfilename = self.config.get('output', str(itx))
+            _outfilename = self.config.get('output', str(l))
             outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
             if "cir" not in  self.output[l].sections():
                 self.output[l].add_section("cir")
@@ -2135,7 +2128,7 @@ class Simul(object):
                 _filename = racine + txrx
                 self.dcir[l][k] = _filename
                 rep = rep + '/Tx' + str('%0.3d' % l)
-                if not os.path.isdir(rep):
+                if not os.path.isdir(basename+'/'+rep):
                     try:
                         os.mkdir(basename+'/'+rep)
                     except:
@@ -2162,7 +2155,7 @@ class Simul(object):
                     spio.savemat(filename, D)
                     self.output[l].set("cir", str(k), self.dcir[l][k])
                     fd = open(outfilename, "w")
-                    self.output[itx].write(fd)
+                    self.output[l].write(fd)
                     fd.close()
                 else:
                     CSCO.append([])

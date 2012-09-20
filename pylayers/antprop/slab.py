@@ -1645,7 +1645,6 @@ class SlabDB(dict):
 
         """
         filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-        print filename
         try:
             fo = open(filename, "rb")
         except:

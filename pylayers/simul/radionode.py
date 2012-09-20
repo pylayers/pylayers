@@ -92,22 +92,23 @@ class RadioNode(object):
                 os.remove(fileini)
             except:
                 pass
-        self.fileini = _fileini
-        self.filespa = _fileini.replace('.ini', '.spa')
-        self.filegeom = _fileini.replace('.ini', '.vect')
+        prefix = _fileini.replace('.ini','')
+        prefix = prefix.replace('.spa','')
+        self.fileini = prefix + '.ini'
+        self.filespa = prefix + '.spa'
+        self.filegeom = prefix + '.vect'
         self.filestr = _filestr
-        fileini = pyu.getlong(_fileini, 'ini')
+        fileini = pyu.getlong(self.fileini,'ini')
         # if file _fileini exists it is loaded
         try:
-            fd = open(fileini, 'r')
+            fd = open(fileini,'r')
             fd.close()
             self.loadini(self.fileini, 'ini')
         except:
-            pass
+            raise NameError(self.fileini)
 
         #
         self.fileant = _fileant
-        print _fileant
         try:
             self.loadvsh()
         except:
@@ -357,18 +358,21 @@ class RadioNode(object):
 
         """
         filespa = pyu.getlong(_filespa, rep)
+        print filespa+  "   loadini"
         space = ConfigParser.ConfigParser()
         space.read(filespa)
 
         points = space.items("coordinates")
         self.points = pyu.lt2idic(points)
         self.N = len(self.points.keys())
+        del self.position
         for k in self.points.keys():
             try:
-                self.position = np.vstack((self.position, self.points[k]))
+                self.position = np.hstack((self.position,
+                                           self.points[k].reshape(3,1)))
             except:
-                self.position = self.points[k]
-
+                self.position = self.points[k].reshape(3,1)
+        
     def loadspa(self, _filespa, rep=pstruc['DIRLCH']):
         """
         load a spa file
