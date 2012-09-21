@@ -1,6 +1,0 @@
-pylayers.signal.bsignal.TUsignal.toa_cum_tmt
-============================================
-
-.. currentmodule:: pylayers.signal.bsignal
-
-.. automethod:: TUsignal.toa_cum_tmt
