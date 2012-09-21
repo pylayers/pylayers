@@ -1,0 +1,4 @@
+*.html 
+*.o
+*.pyc
+doc/_build

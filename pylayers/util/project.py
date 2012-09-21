@@ -9,6 +9,7 @@ import pkgutil
 #       """
 #       def __init__(self):
 #       def     
+<<<<<<< HEAD
 
 
 currentdir=os.getcwd()
@@ -21,10 +22,14 @@ except:
     raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
 
 
+=======
+currentdir = os.getcwd()
+>>>>>>> master_bernard/master
 try:
-    pulsraydir = os.environ['PULSRAY']
-    print "PULSRAY  : ", pulsraydir
+    pylayersdir = os.environ['PYLAYERS']
+    print pylayersdir
 except:
+<<<<<<< HEAD
     raise EnvironmentError('Please set the PULSRAY environment variable')
 
 try:
@@ -34,6 +39,29 @@ except:
 
 
 
+=======
+    raise NameError('PYLAYERS environemnt variable need to be defined')
+
+try:
+    puslarydir = os.environ['PULSRAY']
+except:
+    pulsraydir = pylayersdir
+
+try:
+    basename = os.environ['BASENAME']
+except:
+    basename = os.environ['HOME'] + "/PyLayers/Project"
+    try:
+        os.chdir(dirname)
+    except:
+        os.mkdir(dirname)
+
+try:
+    figuredir = os.environ['FIGURDIR']
+except:
+    figuredir = os.environ['HOME'] + "/Pyproject/figures"
+#
+>>>>>>> master_bernard/master
 # Dictionnary which associate PULSRAY environment variable with sub direrories
 # of the project 
 #
