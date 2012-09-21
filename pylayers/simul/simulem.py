@@ -740,8 +740,8 @@ class Simul(object):
             self.fileantTx = simulgui[9]
             self.fileantRx = simulgui[10]
 
-    def uptcfg(self):
-        """ uptcfg
+    def updcfg(self):
+        """ updcfg
 
             update simulation .ini config file with values currently in use.
         """
@@ -767,8 +767,8 @@ class Simul(object):
         # waveform section
         #
         self.config.set("waveform", "tw", '30')
-        self.config.set("waveform", "band", 0.499)
-        self.config.set("waveform", "fc", 4.493)
+        self.config.set("waveform", "band", '0.499')
+        self.config.set("waveform", "fc", '4.493')
         self.config.set("waveform", "thresh", '3')
         self.config.set("waveform", "type", 'generic')
         self.config.set("waveform", "fe", '50')
@@ -1952,7 +1952,7 @@ class Simul(object):
 
         """
 
-        self.uptcfg()
+        self.updcfg()
         #t0 = time.clock()
         if type(srx) == int:
             srx = [srx]
