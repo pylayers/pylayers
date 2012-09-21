@@ -105,11 +105,7 @@ class RadioNode(object):
             fd.close()
             self.loadini(self.fileini, 'ini')
         except:
-<<<<<<< HEAD
-            print self.fileini
-=======
             pass
->>>>>>> master_bernard/master
 
         #
         self.fileant = _fileant
