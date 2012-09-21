@@ -705,7 +705,7 @@ class Simul(object):
         self.config.add_section("output")
 
 
-        self.uptcfg()
+        self.updcfg()
 
         #self.wav.read(self.config)
         try:
