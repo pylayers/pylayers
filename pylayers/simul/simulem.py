@@ -704,33 +704,9 @@ class Simul(object):
         self.config.add_section("waveform")
         self.config.add_section("output")
 
-        self.config.set("files", "conf", self.fileconf)
-        self.config.set("files", "patra", self.filepatra)
-        self.config.set("files", "palch", self.filepalch)
-        self.config.set("files", "txant", self.fileantTx)
-        self.config.set("files", "rxant", self.fileantRx)
 
-        self.config.set("tud", "purc", self.patud.purc)
-        self.config.set("tud", "nrmax", self.patud.nrmax)
-        self.config.set("tud", "num", self.patud.num)
+        self.uptcfg()
 
-        #
-        # frequency section
-        #
-
-        self.config.set("frequency", "fghzmin", self.freq[0])
-        self.config.set("frequency", "fghzmax", self.freq[-1])
-        self.config.set("frequency", "nf", len(self.freq))
-        #
-        # waveform section
-        #
-        self.config.set("waveform", "tw", 30)
-        self.config.set("waveform", "band", 0.499)
-        self.config.set("waveform", "fc", 4.493)
-        self.config.set("waveform", "thresh", 3)
-        self.config.set("waveform", "type", 'generic')
-        self.config.set("waveform", "fe", 50)
-        self.wav = wvf.Waveform()
         #self.wav.read(self.config)
         try:
             self.load(self.filesimul)
@@ -763,6 +739,40 @@ class Simul(object):
             self.filespaRx = simulgui[8]
             self.fileantTx = simulgui[9]
             self.fileantRx = simulgui[10]
+
+    def uptcfg(self):
+        """ uptcfg
+
+            update simulation .ini config file with values currently in use.
+        """
+
+        self.config.set("files", "conf", self.fileconf)
+        self.config.set("files", "patra", self.filepatra)
+        self.config.set("files", "palch", self.filepalch)
+        self.config.set("files", "txant", self.fileantTx)
+        self.config.set("files", "rxant", self.fileantRx)
+
+        self.config.set("tud", "purc", str(self.patud.purc))
+        self.config.set("tud", "nrmax", str(self.patud.nrmax))
+        self.config.set("tud", "num", str(self.patud.num))
+
+        #
+        # frequency section
+        #
+
+        self.config.set("frequency", "fghzmin", self.freq[0])
+        self.config.set("frequency", "fghzmax", self.freq[-1])
+        self.config.set("frequency", "nf", str(len(self.freq)))
+        #
+        # waveform section
+        #
+        self.config.set("waveform", "tw", '30')
+        self.config.set("waveform", "band", 0.499)
+        self.config.set("waveform", "fc", 4.493)
+        self.config.set("waveform", "thresh", '3')
+        self.config.set("waveform", "type", 'generic')
+        self.config.set("waveform", "fe", '50')
+        self.wav = wvf.Waveform()
 
     def clean(self, level=1):
         """ clean
@@ -1941,6 +1951,8 @@ class Simul(object):
 
 
         """
+
+        self.uptcfg()
         #t0 = time.clock()
         if type(srx) == int:
             srx = [srx]
