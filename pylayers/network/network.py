@@ -62,7 +62,9 @@ import sys
 class Node(nx.MultiGraph):
     """ Class Node
     inherit of networkx.Graph()
-    Attributes :
+    
+    Attributes
+    ----------
         Id    : float/hex/str/...
                 node Id
         p    : np.array
@@ -76,11 +78,9 @@ class Node(nx.MultiGraph):
         pos    : Dictionnary
                 parser from Node.Node to networkx.node.pos
 
-    Method:
+    Method
+    ------
         RandomMac(): Generate a RAndom Mac adress    
-
-
-        
 
     """
     def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],type='ag',msqlSave=False):
@@ -120,30 +120,30 @@ class Network(nx.MultiGraph):
 
     Attributes
     ----------
-        RAT : dictionnary
-            keys  = RAT 
-            value = list of nodes id
-        RATe : dictionnary
-            keys  = RAT 
-            value = list of edges id  
-        SubNet : dictionnary
-            keys  = RAT 
-            value = Subgraph of the given RAT
-        pos : dictionnary
-            keys  = node id
-            value = node position
+    RAT : dictionnary
+        keys  = RAT 
+        value = list of nodes id
+    RATe : dictionnary
+        keys  = RAT 
+        value = list of edges id  
+    SubNet : dictionnary
+        keys  = RAT 
+        value = Subgraph of the given RAT
+    pos : dictionnary
+        keys  = node id
+        value = node position
 
     Methods
     -------
-        get_RAT(self)                    : Get RAT from nodes of the network
-        connect(self)                    : Connect each node from a rat together
-        create(self)                    : compute get_RAT(),get_pos() and connect()
-        update_LDP(self,n1,n2,RAT,LDP=None,value=[])    : update Location Dependent Parameter  
-        compute_LDP(self,n1,n2,RAT,LDP,method='direct') : compute the LDP value thanks to a ElectroMag Solver 
-        update_pos(self,n,p=np.array)            : update node (or node list) position
-        get_pos(self,RAT=None)                : get node positions
-        pp(self)                    : pretty print on std out all edtges informations
-        show(Rat=None,legend=True)            : Display network for all rat or specified in Rat. 
+    get_RAT(self)                    : Get RAT from nodes of the network
+    connect(self)                    : Connect each node from a rat together
+    create(self)                    : compute get_RAT(),get_pos() and connect()
+    update_LDP(self,n1,n2,RAT,LDP=None,value=[])    : update Location Dependent Parameter  
+    compute_LDP(self,n1,n2,RAT,LDP,method='direct') : compute the LDP value thanks to a ElectroMag Solver 
+    update_pos(self,n,p=np.array)            : update node (or node list) position
+    get_pos(self,RAT=None)                : get node positions
+    pp(self)                    : pretty print on std out all edtges informations
+    show(Rat=None,legend=True)            : Display network for all rat or specified in Rat. 
     """
 
 
@@ -159,6 +159,9 @@ class Network(nx.MultiGraph):
         self.pos={}
         self.mat={}
         self.idx = 0
+
+
+
     def combi(self,iterable,r,key,d=dict()):
         """ combi = itertools.combination(iterable,r) adapted 
     
@@ -172,24 +175,26 @@ class Network(nx.MultiGraph):
 
         Attributes
         ----------
-            iterable : list
-                list of node
-            r     : int
-                number of node gathered in the output tuple ( always set 2 ! )
+        iterable : list
+            list of node
+        r     : int
+            number of node gathered in the output tuple ( always set 2 ! )
 
 
         Returns
         ------     
 
         out : tuple(node_list,r,RAT,d):
-            node_list    : list of node1        
-            r        : gather r node in the tuple
-            RAT        : the specified RAT
-            d        : dictionnary of RAT attribute
+        node_list    : list of node1        
+        r        : gather r node in the tuple
+        RAT        : the specified RAT
+        d        : dictionnary of RAT attribute
 
+        Example
+        -------
 
-
-        >>> N=Network.Network()
+        >>> from pylayers.network.network import *
+        >>> N=Network()
         >>> l= [0,1,2,3,4]
         >>> key='toto'
         >>> d=dict(key1=1,key2=2) 
@@ -198,8 +203,6 @@ class Network(nx.MultiGraph):
         (0, 1, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
         >>> comb.next()        
         (0, 2, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
-        ...
-
 
         """
         for l in self.LDP:
@@ -227,21 +230,25 @@ class Network(nx.MultiGraph):
 
     def Gen_tuple(self,gene,rat,var):
         """
-            generate a specific tuple  
+        generate a specific tuple  
 
-            Attributes
-            ----------
+        Attributes
+        ----------
 
-                gene : tuple(x,y) iterator 
-                rat  : str
-                var  : list
-                    len(var) = len(gene)
+        gene : tuple(x,y) iterator 
+        rat  : str
+        var  : list
+            len(var) = len(gene)
 
-            Yield
-            -----
-                    tuple : (gene[i][0],gene[i][1],rat,var[i]) for iteration i
+        Yield
+        -----
+        tuple : (gene[i][0],gene[i][1],rat,var[i]) for iteration i
 
-        >>> N=Network.Network()
+        Example
+        -------
+
+        >>> from pylayers.network.network import *
+        >>> N=Network()
         >>> tup = zip(range(5),range(5))
         [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)]
         >>> g = iter(tup)
@@ -254,7 +261,7 @@ class Network(nx.MultiGraph):
         >>> T.next()
         (1, 1, 'string rat', 11)
 
-        """
+            """
 
         gvar=iter(var)
         while True:
@@ -266,14 +273,20 @@ class Network(nx.MultiGraph):
     def get_RAT(self,Rat=None):
         """ get rat from nodes of the network
         
+
         Attributes
         ----------
             Rat : specify which RAt you want to append to your network. If None, all rat are appended.
 
-            >>>    N=Network.Network()
-            >>> for i in range(3):
-                    no = Node.Node(ID=i,RAT=['wifi','bt'])
-                    N.add_nodes_from(no.nodes(data=True))
+        Example
+        -------
+
+        >>> from pylayers.network.network import *
+        >>> N=Network()
+        >>>    N=Network.Network()
+        >>> for i in range(3):
+                no = Node.Node(ID=i,RAT=['wifi','bt'])
+                N.add_nodes_from(no.nodes(data=True))
 
         >>> N.get_RAT()
         {'bt': [0, 1, 2], 'wifi': [0, 1, 2]}
@@ -302,7 +315,8 @@ class Network(nx.MultiGraph):
         
 
     def connect(self):
-        """ Connect all nodes from the network sharing the same RAT and creating the associated Subnetwork
+        """ 
+        Connect all nodes from the network sharing the same RAT and creating the associated Subnetwork
 
         """
         
@@ -321,17 +335,20 @@ class Network(nx.MultiGraph):
 
     def get_SubNet(self,Rat=None):
         """
-            get SubNetworks of a network
-            !!! ALWAYS use self.get_RAT() BEFORE !!!!!
+        get SubNetworks of a network
+        !!! ALWAYS use self.get_RAT() BEFORE !!!!!
 
 
 
         Attributes
         ----------
-            Rat : specify which SubNet you want to create
+        Rat : specify which SubNet you want to create
         
+        Example
+        -------
 
-        >>>    N=Network.Network()
+        >>> from pylayers.network.network import *
+        >>> N=Network()
         >>> for i in range(2):
                 no = Node.Node(ID=i,RAT=['wifi','bt'])
                 N.add_nodes_from(no.nodes(data=True))
@@ -396,9 +413,10 @@ class Network(nx.MultiGraph):
     def create(self):
         """ create the network
 
-        This method computes :     * get_RAT()
-                    * connect()
-                    * connect_PN()
+        This method computes :     
+            * get_RAT()
+            * connect()
+            * connect_PN()
 
         
         
@@ -408,44 +426,6 @@ class Network(nx.MultiGraph):
         self.init_PN()
 
 
-#    def update_LDP(self,n1,n2,RAT,LDP=None,value=[]):
-#        """Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT
-#            
-#        This method update :     * The network edges 
-#                    * The personal network (PN) of both n1 and n2
-
-#        Attributes
-#        ----------
-
-#            n1      : node ID
-#            n2      : node ID
-#            RAT     : string
-#                A specific RAT which exist in the network ( if not , raises an error)
-#            LDP    : a LDP ( 'Pr' or 'TOA' ) ( if LDP don't exist it raises an error)
-#            value    : list : [LDP value , LDP standard deviation] 
-
-
-#        TODO 
-#        ----
-#            Check if LDP value is complient with the LDP
-#                 
-
-#        """
-
-#        if (n1 in self.edge) and (n2 in self.edge):
-#            try:
-#                self.edge[n1][n2][RAT][LDP]
-#                self.edge[n1][n2][RAT][LDP]=value
-#                self.node[n1]['PN'].add_edge(n1,n2,key=RAT,attr_dict=self.edge[n1][n2][RAT])
-#                self.node[n1]['PN'].add_node(n2,attr_dict=self.node[n2]['PN'].node[n2])
-#                self.node[n2]['PN'].add_edge(n2,n1,key=RAT,attr_dict=self.edge[n2][n1][RAT])
-#                self.node[n2]['PN'].add_node(n1,attr_dict=self.node[n1]['PN'].node[n1])
-
-#            except:
-#                raise NameError('invalid RAT or LDP')
-
-#        else :
-#            raise NameError('nodes n1 and/or n2 does not exist')
 
     def update_LDPs(self,ln,RAT,lD):
         """Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT
@@ -456,14 +436,14 @@ class Network(nx.MultiGraph):
         Attributes
         ----------
 
-            n1      : node ID
-            n2      : node ID
-            RAT     : string
-                A specific RAT which exist in the network ( if not , raises an error)
-            ln     : list 
-                list of nodes
-            lD     : list of dictionnary:
-                [ {LDP1_1:[value , std],LDP2_1:[value , std] } , {LDPL_N:[value , std],LDPL_N:[value , std] }    ] for N nodes and L LDPS
+        n1      : node ID
+        n2      : node ID
+        RAT     : string
+            A specific RAT which exist in the network ( if not , raises an error)
+        ln     : list 
+            list of nodes
+        lD     : list of dictionnary:
+            [ {LDP1_1:[value , std],LDP2_1:[value , std] } , {LDPL_N:[value , std],LDPL_N:[value , std] }    ] for N nodes and L LDPS
 
         TODO 
         ----
@@ -474,54 +454,10 @@ class Network(nx.MultiGraph):
         
         
 
-#        self.add_edges_from(self.Gen_tuple(self.edges_iter(),RAT,lD))
-#        [self.node[e]['PN'].add_edges_from(self.edges(nbunch=e,data=True,keys=True)) for e in self.nodes_iter()]
         self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
         [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
 
 
-    
-#        if (n1 in self.edge) and (n2 in self.edge):
-#            try:
-#                self.edge[n1][n2][RAT][LDP]
-#                self.edge[n1][n2][RAT][LDP]=value
-#                self.node[n1]['PN'].add_edge(n1,n2,key=RAT,attr_dict=self.edge[n1][n2][RAT])
-#                self.node[n1]['PN'].add_node(n2,attr_dict=self.node[n2]['PN'].node[n2])
-#                self.node[n2]['PN'].add_edge(n2,n1,key=RAT,attr_dict=self.edge[n2][n1][RAT])
-#                self.node[n2]['PN'].add_node(n1,attr_dict=self.node[n1]['PN'].node[n1])
-
-#            except:
-#                raise NameError('invalid RAT or LDP')
-
-#        else :
-#            raise NameError('nodes n1 and/or n2 does not exist')
-    
-#    def compute_LDP(self,n1,n2,RAT,LDP,method='direct'):
-#        """compute edge LDP
-
-#        Attributes
-#        ----------
-
-#            n1      : float/string
-#                node ID
-#            n2      : float/string
-#                node ID
-#            RAT     : string
-#                A specific RAT which exist in the network ( if not , raises an error)
-#            LDP    : a LDP ( 'Pr' or 'TOA' ) ( if LDP don't exist it raises an error)
-#            value    : list : [LDP value , LDP standard deviation] 
-#            method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
-
-
-#        """
-#        try :
-#            EMS = EMSolver.EMSolver(method=method)
-#        except: 
-#            raise NameError('invalid method name')
-
-#        value,std = EMS.solve(self.node[n1]['p'],self.node[n2]['p'],LDP)
-#            
-#        self.update_LDP(n1,n2,RAT,LDP,[value,std])
     def compute_LDPs(self,ln,RAT,LDP,method='direct'):
         """compute edge LDP
 
@@ -544,19 +480,7 @@ class Network(nx.MultiGraph):
             LDP=[LDP]
 
             lD=[]
-        
-#        for it,ldp in enumerate (LDP):
-#            p=nx.get_node_attributes(self,'p')
-#            e=self.edges()
-#            lv = EMS.solve(p,e,ldp)
-#            ### lv = [[value1,std1],[value2,std2],.....,[value nb edge, std nb edge]     ]
-#            if  it ==0:
-#                lD=[{ldp:lv[i]} for i in range(len(lv))]
-#            else :
-#                [lD[i].update({ldp:lv[i]} for i in range(len(lv)))]
-#            ### lD =[{ldp1:[value1,std1],ldp2:[value2,std2]},....., ]
-#                    
-#        self.update_LDPs(ln,RAT,lD)
+
 
         for it,ldp in enumerate (LDP):
             p=nx.get_node_attributes(self.SubNet[RAT],'p')
@@ -569,13 +493,14 @@ class Network(nx.MultiGraph):
                 lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]
             else :
                 [lD[i].update({ldp:lv[i],'d':d[i]} for i in range(len(lv)))]
-            ### lD =[{ldp1:[value1,std1],ldp2:[value2,std2]},....., ]
+
 
         self.update_LDPs(ln,RAT,lD)
 
 
     def update_pos(self,n,p):
-        """ Update Position of a node
+        """ 
+        Update Position of a node
 
         Attributes
         ----------
@@ -609,12 +534,12 @@ class Network(nx.MultiGraph):
 
         Attributes
         ----------
-            RAT : specify a RAT to display node position. If None, all RAT are displayed    
+        RAT : specify a RAT to display node position. If None, all RAT are displayed    
         
         Retuns 
         ------
-            dictionnary :     key     : node ID
-                    value     : np.array node position
+        dictionnary :     key     : node ID
+        value     : np.array node position
         
 
         """
@@ -637,12 +562,12 @@ class Network(nx.MultiGraph):
 
         Attributes
         ----------
-            RAT : specify a RAT to display node position. If None, all RAT are displayed    
+        RAT : specify a RAT to display node position. If None, all RAT are displayed    
         
         Retuns 
         ------
-            dictionnary :     key     : node ID
-                    value     : np.array node position
+        dictionnary :     key     : node ID
+        value     : np.array node position
         
 
         """
@@ -696,55 +621,6 @@ class Network(nx.MultiGraph):
                 print('{0:10} | {1:1.4} | {2:7.4} | {3:1.4} | {4:7.4} | {5:7.4} |'.format(i,T[i][0],T[i][1],P[i][0],P[i][1],D[i]))
 
 
-
-
-#    def show(self,RAT=None,legend=False,ion=False,info=False):
-#        """ Show your network
-
-#        Attributes 
-#        ----------
-
-#            RAT     : specify a RAT to display. If None, all RAT are displayed
-#            legend     : Bool. Toggle display edge legend 
-#            
-#        """
-#        C=ConfigParser.ConfigParser()
-#        C.read('show.ini')
-#        RATcolor=dict(C.items('RATcolor'))
-#        RATes    =dict(C.items('RATestyle'))
-#        leg=[]
-#        
-#        
-
-#        if RAT == None:
-#            rloop = self.RAT.keys()
-
-#        else :
-#            if isinstance(RAT,list):
-#                rloop = RAT    
-#            elif isinstance(RAT,str) :
-#                rloop=[RAT]    
-#            else :
-#                raise NameError('Arg must be a string or a string list')
-#    
-
-#        plt.axis('scaled')
-#        for rl in rloop:
-#            pos = self.get_pos(rl)
-#            #L=nx.get_edge_attributes(self.SubNet[rl],'TOA')
-#            nx.draw_networkx_nodes(self,pos=pos,nodelist=self.SubNet[rl].nodes(),node_size=100.,node_color='r')
-#            nx.draw_networkx_labels(self.SubNet[rl],pos=pos,font_size=10)
-##            nx.draw_networkx_edge_labels(self.SubNet[rl],pos=pos,edge_labels=L,font_size=8)
-#            leg.append(nx.draw_networkx_edges(self,pos=pos,edgelist=self.SubNet[rl].edges(),width=2.,alpha=0.9,edge_color=RATcolor[rl],style=RATes[rl]))
-#            
-#        if legend:
-#            plt.legend((leg),(rloop),loc=3)
-#        if info :
-#            L=nx.get_edge_attributes(self,'TOA')
-#            
-
-#        if ion:
-#            plt.draw()
 
 
     def show(self,RAT=None,legend=False,ion=False,info=False,fig=plt.figure(),ax=None,name=None):
@@ -862,7 +738,8 @@ class Network(nx.MultiGraph):
 
 
     def table(self,fig=plt.figure(),ax=None,name=None):
-        """ Display a table with values
+        """ 
+        Display a table with values
 
  
         """
@@ -905,10 +782,15 @@ class Network(nx.MultiGraph):
 
     def csv_save(self,filename,S):
         """
-            save node positions into csv file
+        save node positions into csv file
 
-            Attributes:
-            ----------
+        Attributes:
+        ----------
+        
+        filename : string 
+                   name of the csv file
+        S        : Simulation
+                   Scipy.Simulation object
 
         """
 
@@ -926,9 +808,13 @@ class Network(nx.MultiGraph):
         """
             save node positions into ini file, compliant with pyray standard
 
-            Attributes:
-            ----------
-
+        Attributes:
+        ----------
+        
+        filename : string 
+                   name of the pyray file
+        S        : Simulation
+                   Scipy.Simulation object
         """
 
 
@@ -954,9 +840,14 @@ class Network(nx.MultiGraph):
         """
             save node positions into a matlab structure file
 
-            Attributes:
-            ----------
 
+        Attributes:
+        ----------
+        
+        filename : string 
+                   name of the mat file
+        S        : Simulation
+                   Scipy.Simulation object
         """
 
         pos=nx.get_node_attributes(self,'p').items()
@@ -981,10 +872,14 @@ class Network(nx.MultiGraph):
 
     def sql_save(self,S):
         """
-            save network state into mysqldatabase
+        save network state into mysqldatabase
 
-            Attributes:
-            ----------
+
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
 
         """
         self.db.writenet(self,S.now())
@@ -993,6 +888,9 @@ class Network(nx.MultiGraph):
 
 
 class PNetwork(Process):
+    """
+    Process version of the Network class
+    """
     def __init__(self,**args):
         defaults={'net':Network(),
                   'L':[],
