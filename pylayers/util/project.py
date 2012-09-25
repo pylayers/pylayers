@@ -10,11 +10,15 @@ import pkgutil
 #       def __init__(self):
 #       def     
 
-currentdir=os.getcwd()
-pylayersdir=currentdir.split('pylayers')[0] + '/pylayers/'
+currentdir = os.getcwd()
+
+try:
+    pylayersdir = os.environ['PYLAYERS']
+except:
+    pylayersdir = currentdir.split('pylayers')[0] + '/pylayers/'
+
 if len(pylayersdir) == 1:
     raise EnvironmentError('Please verify that pylayers sources are into the "pylayers/" directory')
-
 
 try:
     basename = os.environ['BASENAME']
