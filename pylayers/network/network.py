@@ -190,8 +190,8 @@ class Network(nx.MultiGraph):
         RAT        : the specified RAT
         d        : dictionnary of RAT attribute
 
-        Example
-        -------
+        Examples
+        --------
 
         >>> from pylayers.network.network import *
         >>> N=Network()
@@ -244,8 +244,8 @@ class Network(nx.MultiGraph):
         -----
         tuple : (gene[i][0],gene[i][1],rat,var[i]) for iteration i
 
-        Example
-        -------
+        Examples
+        --------
 
         >>> from pylayers.network.network import *
         >>> N=Network()
@@ -278,8 +278,8 @@ class Network(nx.MultiGraph):
         ----------
             Rat : specify which RAt you want to append to your network. If None, all rat are appended.
 
-        Example
-        -------
+        Examples
+        --------
 
         >>> from pylayers.network.network import *
         >>> N=Network()
@@ -344,8 +344,8 @@ class Network(nx.MultiGraph):
         ----------
         Rat : specify which SubNet you want to create
         
-        Example
-        -------
+        Examples
+        --------
 
         >>> from pylayers.network.network import *
         >>> N=Network()
@@ -397,7 +397,8 @@ class Network(nx.MultiGraph):
             raise NameError('invalid RAT name')
 
     def init_PN(self):
-        """ initializing personnal networks
+        """ 
+        Initializing personnal networks
 
         """
 
@@ -447,7 +448,7 @@ class Network(nx.MultiGraph):
 
         TODO 
         ----
-            Check if LDP value is complient with the LDP
+        Check if LDP value is complient with the LDP
                  
 
         """
@@ -464,15 +465,15 @@ class Network(nx.MultiGraph):
         Attributes
         ----------
 
-            n1      : float/string
-                node ID
-            n2      : float/string
-                node ID
-            RAT     : string
-                A specific RAT which exist in the network ( if not , raises an error)
-            LDP    : a LDP ( 'Pr' or 'TOA' ) ( if LDP don't exist it raises an error)
-            value    : list : [LDP value , LDP standard deviation] 
-            method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
+        n1      : float/string
+            node ID
+        n2      : float/string
+            node ID
+        RAT     : string
+            A specific RAT which exist in the network ( if not , raises an error)
+        LDP    : a LDP ( 'Pr' or 'TOA' ) ( if LDP don't exist it raises an error)
+        value    : list : [LDP value , LDP standard deviation] 
+        method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
 
 
         """
@@ -505,10 +506,10 @@ class Network(nx.MultiGraph):
         Attributes
         ----------
 
-            n      : float/string (or a list of)
-                node ID
-            p    : np.array  ( or a list of )
-                node position 
+        n      : float/string (or a list of)
+            node ID
+        p    : np.array  ( or a list of )
+            node position 
                 
         """
 
@@ -536,7 +537,7 @@ class Network(nx.MultiGraph):
         ----------
         RAT : specify a RAT to display node position. If None, all RAT are displayed    
         
-        Retuns 
+        Returns 
         ------
         dictionnary :     key     : node ID
         value     : np.array node position
@@ -564,7 +565,7 @@ class Network(nx.MultiGraph):
         ----------
         RAT : specify a RAT to display node position. If None, all RAT are displayed    
         
-        Retuns 
+        Returns 
         ------
         dictionnary :     key     : node ID
         value     : np.array node position
@@ -594,17 +595,10 @@ class Network(nx.MultiGraph):
 
         return (O)
 
-#    def pp(self,O):
-#        for rat in O.keys():
-#            print '-'*30
-#            print rat
-#            print('{0:10} | {1:5} | {2:5} | {3:5} | {4:5} |'.format('Node link','TOA ','TOA std', 'Pr','Pr std' ))
-#            print '-'*30
-#            for i in O[rat]['Pr'].keys(): # boucle sur toute les liaisons
-#                print('{0:10} | {1:1.4} | {2:7.4} | {3:1.4} | {4:7.4} |'.format(i,O[rat]['TOA'][i][0],O[rat]['TOA'][i][1],O[rat]['Pr'][i][0],O[rat]['Pr'][i][1]))
 
     def pp(self):
         """ pretty print information
+            OBSOLETE
         
         Print information on edges connection and LDPs values and accuracy
 
@@ -624,13 +618,20 @@ class Network(nx.MultiGraph):
 
 
     def show(self,RAT=None,legend=False,ion=False,info=False,fig=plt.figure(),ax=None,name=None):
-        """ Show your network
+        """ 
+        Show the network
 
         Attributes 
         ----------
 
-            RAT     : specify a RAT to display. If None, all RAT are displayed
-            legend     : Bool. Toggle display edge legend 
+        RAT     : specify a RAT to display. If None, all RAT are displayed
+        legend     : Bool. Toggle display edge legend
+        ion     : interactive mode for matplotlib 
+        info    : plot information on edges 
+        fig     : plt.figure() to plot 
+        ax      : plt.figure.ax to plot 
+        name    : figure name
+
             
         """
         C=ConfigParser.ConfigParser()
@@ -735,48 +736,6 @@ class Network(nx.MultiGraph):
 
             plt.draw()
             self.coll_plot['Sg'][0]=self.coll_plot['Sg'][1]
-
-
-    def table(self,fig=plt.figure(),ax=None,name=None):
-        """ 
-        Display a table with values
-
- 
-        """
-        
-        if fig==None:
-            fig = plt.figure()
-            ax=fig.add_subplot(111)
-        elif ax== None:
-            ax=fig.add_subplot(111)
-        plt.figure(name)
-        colLabels=('RAT','Node link','TOA ','TOA std', 'Pr','Pr std', 'distance')
-
-        try:
-            self.coll_plot['table'][1]=[]
-        except:
-            self.coll_plot['table']=[[]]
-            self.coll_plot['table'].append([])
-
-        cellText=[]
-        for rat in self.RAT.keys():
-            T=nx.get_edge_attributes(self.SubNet[rat],'TOA')
-            P=nx.get_edge_attributes(self.SubNet[rat],'Pr')
-            D=nx.get_edge_attributes(self.SubNet[rat],'d')
-            for i in self.SubNet[rat].edges(): # boucle sur toute les liaisons
-                r=[str(rat) ,str(i) ,str(T[i][0]) , str(T[i][1]) ,str(P[i][0]) ,str(P[i][1]) ,str(D[i])]
-            #pdb.set_trace()
-                cellText.append(r)
-
-
-        self.coll_plot['table'][1] = ax.table(cellText=cellText,colLabels=colLabels,loc='center')
-        try:
-            self.coll_plot['table'][0].remove()
-        except:
-            pass
-
-        plt.draw()
-        self.coll_plot['table'][0]=self.coll_plot['table'][1]
 
 
 
