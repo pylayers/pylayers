@@ -23,7 +23,7 @@ class Agent(object):
 
 
     def __init__(self,**args):
-        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'msqlSave':False, 'sim':Simulation}
+        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'save':False, 'sim':Simulation}
 
         for key, value in defaults.items():
             if not args.has_key(key):
@@ -45,12 +45,12 @@ class Agent(object):
                                wld=args['world'],
                                sim=args['sim'],
                                moving=True,
-                               msqlSave=args['msqlSave'])
+                               save=args['save'])
             self.meca.behaviors  = [Seek(),Containment(),Separation(),InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
 #            self.meca.steering_mind = queue_steering_mind
         # filll in network
-            self.node = Node(ID=self.ID,p=conv_vecarr(self.meca.position),t=time.time(),RAT=args['RAT'],type=self.type,msqlSave=args['msqlSave'])
+            self.node = Node(ID=self.ID,p=conv_vecarr(self.meca.position),t=time.time(),RAT=args['RAT'],type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim=args['sim']
             self.sim.activate(self.meca, self.meca.move(),0.0)
@@ -60,10 +60,10 @@ class Agent(object):
 #            self.meca=Person3(ID=self.ID,roomId=args['roomId'],L=args['Layout'],net=self.net,interval=args['meca_updt'],sim=args['sim'],moving=False)
 #            self.meca.behaviors  = []
             if args['roomId'] == -1:
-                self.node = Node(ID=self.ID,p=self.args['pos'],t=time.time(),RAT=args['RAT'],type=self.type,msqlSave=args['msqlSave'])
+                self.node = Node(ID=self.ID,p=self.args['pos'],t=time.time(),RAT=args['RAT'],type=self.type)
             else:
                 pp = np.array(args['Layout'].Gr.pos[self.args['roomId']])
-                self.node = Node(ID=self.ID,p=pp,t=time.time(),RAT=args['RAT'],type=self.type,msqlSave=args['msqlSave'])
+                self.node = Node(ID=self.ID,p=pp,t=time.time(),RAT=args['RAT'],type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim=args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
@@ -76,7 +76,7 @@ class Agent(object):
         if self.type == 'ap':
             MoA=1
 
-        if args['msqlSave']:
+        if 'mysql' in args['save']:
             config = ConfigParser.ConfigParser()
             config.read(pyu.getlong('simulnet.ini','ini'))
             sql_opt = dict(config.items('Mysql'))

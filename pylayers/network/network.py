@@ -83,7 +83,7 @@ class Node(nx.MultiGraph):
         RandomMac(): Generate a RAndom Mac adress    
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],type='ag',msqlSave=False):
+    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],type='ag'):
         nx.MultiGraph.__init__(self)
 
         # Personnal Network init
@@ -98,9 +98,6 @@ class Node(nx.MultiGraph):
         self.t    = self.node[self.ID]['t']
         self.RAT = self.node[self.ID]['RAT']
 
-        if msqlSave :
-            print 'implement msql save in nodes'
-        
 
 
 
@@ -323,12 +320,6 @@ class Network(nx.MultiGraph):
     
 
         for ratnb,Rat in enumerate(self.RAT.keys()):
-#            pdb.set_trace()
-#            edges=self.combi(self.RAT[Rat],2,Rat)
-#            self.add_edges_from(edges)    
-#            # creating SubNetworks
-#            self.SubNet[Rat]    = self.subgraph(self.RAT[Rat])
-
             edges=self.combi(self.RAT[Rat],2,Rat)
             self.add_edges_from(edges)    
             self.get_SubNet(Rat)
@@ -371,12 +362,6 @@ class Network(nx.MultiGraph):
                 # creating all SubNetworks 
                 self.SubNet[Rat]= self.subgraph(self.RAT[Rat])
                 # remove information from previous subnetwork (because subgraph copy the whole edge information)
-#                for k in self.RAT.keys():
-#                    if k != Rat:
-#                        try:
-#                            self.SubNet[Rat].remove_edges_from(self.SubNet[k].edges(keys=True))
-#                        except :
-#                            pass
                 ek = self.SubNet[Rat].edges(keys=True)
                 for e in ek :
                     if e[2] != Rat:
@@ -488,7 +473,6 @@ class Network(nx.MultiGraph):
             e=self.SubNet[RAT].edges()
 
             lv , d= self.EMS.solve(p,e,ldp)
-            ### lv = [[value1,std1],[value2,std2],.....,[value nb edge, std nb edge]     ]
 
             if  it ==0:
                 lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]
@@ -518,7 +502,6 @@ class Network(nx.MultiGraph):
             if not(isinstance(n,list)):
                 n=[n]
                 p=[p]
-                        # test if 2 list has the same length
             if len(n) == len(p):    
                 d=dict(zip(n,p))    # transform data to be complient with nx.set_node_attributes            
             else :
@@ -636,7 +619,6 @@ class Network(nx.MultiGraph):
         """
         C=ConfigParser.ConfigParser()
         C.read(pyu.getlong('show.ini','ini'))
-#        C.read(pkgutil.get_loader('pylayers').filename +'/ini/show.ini')
         RATcolor=dict(C.items('RATcolor'))
         RATes    =dict(C.items('RATestyle'))
 
@@ -783,11 +765,9 @@ class Network(nx.MultiGraph):
             if not 'BS' in pos[i][0]:
                 if self.idx == 0:
                     file=open(pyu.getlong(str(pos[i][0]) + '.ini','save_data'),'w')
-#                    file=open('../save_data/' + str(pos[i][0]) + '.ini','w')
                     file.write('[coordinates]')
                     file.write('\n')
                     file.close()
-#                file=open('../save_data/' + str(pos[i][0]) + '.ini','a')
                 file=open(pyu.getlong(str(pos[i][0]) + '.ini','save_data'),'a')
                 file.write(str(self.idx+1) +' = ' + str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' 1.5')
                 file.write('\n')
@@ -857,10 +837,7 @@ class PNetwork(Process):
                   'sim':None,
                   'show_sg':False,
                   'disp_inf':False,
-                  'csv_save':False,
-                  'mat_save':False,
-                  'pyray_save':False,
-                  'msqlSave':False}
+                  'save':[]}
 
 ##       initialize attributes
         for key, value in defaults.items():
@@ -875,7 +852,7 @@ class PNetwork(Process):
         self.cpt=self.sim.now()
         self.filename='pos'
 
-        if self.msqlSave:
+        if 'mysql' in self.save:
            config = ConfigParser.ConfigParser()
            config.read(pyu.getlong('simulnet.ini','ini'))
            sql_opt = dict(config.items('Mysql'))
@@ -897,12 +874,11 @@ class PNetwork(Process):
             
         ####################################################################################
         self.pos=self.net.get_pos()
-#        if self.msql:
-#            db,cursor=Util.create_msql()
 
 
 
-        if self.csv_save:
+
+        if 'csv' in self.save:
             nbnodes=len(self.net.nodes())
             entete = 'time'
             inode=self.net.nodes_iter()
@@ -940,13 +916,13 @@ class PNetwork(Process):
 
 
             ############# save network
-            if self.csv_save:
+            if 'csv' in self.save:
                 self.net.csv_save(self.filename,self.sim)
-            if self.pyray_save:
+            if 'pyray' in self.save:
                 self.net.pyray_save(self.sim)
-            if self.mat_save:
+            if 'matlab' in self.save:
                 self.net.mat_save(self.sim)
-            if self.msqlSave:
+            if 'msql' in self.save:
                 self.net.sql_save(self.sim)
 
             self.net.pos=self.net.get_pos()
