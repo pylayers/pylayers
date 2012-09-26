@@ -47,6 +47,7 @@ from pylayers.antprop.slab import Slab
 from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
 from pylayers.util.pymysqldb import Database as DB
+from pylayers.util.project import *
 
 import pdb
 import os
@@ -225,6 +226,21 @@ class Simul(Simulation):
             if str2bool(self.sql_opt['dumpdb']):
                 os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
                 '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
+
+        if 'txt' in self.save_opt['save']:
+            if os.path.isfile(basename+'/output/Nodes.txt'):
+                print 'would you like to erase previous txt files ?'
+                A=raw_input()
+                if A == 'y':
+                    for f in os.listdir(basename+'/output/'):
+                        try:
+                            fi,ext=f.split('.')
+                            if ext == 'txt':
+                                os.remove(basename+'/output/'+f)
+                        except:
+                            pass
+                        
+
 
         self.create_layout()
         self.create_EMS()

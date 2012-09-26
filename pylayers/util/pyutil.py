@@ -8,6 +8,7 @@ import doctest
 from   bitstring  import BitString
 import datetime as dat
 from pylayers.util.project import *
+import shutil
 import pdb
 #
 # getlong 
@@ -1321,15 +1322,47 @@ def timestamp(now):
     dn = str(dat.timedelta(seconds=float(now))).split(':')
     return (dt.strftime('%Y-%m-%d ')+dn[0]+':'+dn[1] +':'+dn[2][:2] +dn[2][2:5])
 
-#def writemeca(self,ID,time,p,v,a):
-#    """
-#    write mecanic information into text file
-#    """
-
-#    filelist=['TruePosition.txt','ACOLinkMeasurements.txt','CEASensorMeasurements.txt','CEALinkMeasurements.txt']
+def writemeca(ID,time,p,v,a):
+    """
+    write mecanic information into text file
+    """
 
 
-#    if not os.path.isfile(basename+'/' + 'save_data' +'/' +fi):
+    ### TruePosition
+    if not os.path.isfile(basename+'/' + 'output' +'/TruePosition.txt'):
+        entete = 'TruePositionID,NodeID, Timestamp, X,Y,Z,ReferencePointID\n'
+        file=open(basename+'/' + 'output' +'/TruePosition.txt','w')
+        file.write(entete)
+        data = '1,'+str(ID) +','+ str(timestamp(time)) +',' + str(p[0])+',' +str(p[1])+','+',\n'
+        file.write(data)
+        file.close()
+    else:
+        file=open(basename+'/' + 'output' +'/TruePosition.txt','r')
+        lst=file.readlines()
+        file.close()
+        data = str(eval(lst[-1].split(',')[0])+1) +','+str(ID) +','+ str(timestamp(time)) +',' + str(p[0])+ ',' +str(p[1])+','+',\n'
+        file=open(basename+'/' + 'output' +'/TruePosition.txt','a')
+        file.write(data)
+        file.close()
+
+    ### UWBSensorMeasurements
+    if not os.path.isfile(basename+'/' + 'output' +'/UWBSensorMeasurements.txt'):
+        entete = 'UWBSensorMeasurementsID,NodeID, Timestamp, UWB_MagX,UWB_MagY,UWB_MagZ,UWB_AccX,UWB_AccY,UWB_AccZ,UWB_GyroX,UWB_GyroY,UWB_GyroZ\n'
+        file=open(basename+'/' + 'output' +'/UWBSensorMeasurements.txt','w')
+        file.write(entete)
+        data = '1,'+str(ID) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
+        file.write(data)
+        file.close()
+    else:
+        file=open(basename+'/' + 'output' +'/UWBSensorMeasurements.txt','r')
+        lst=file.readlines()
+        file.close()
+        data = str(eval(lst[-1].split(',')[0])+1) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
+        file=open(basename+'/' + 'output' +'/UWBSensorMeasurements.txt','a')
+        file.write(data)
+        file.close()
+
+
 
 #    pos=np.array(nx.get_node_attributes(self,'p').values())
 #    pos=np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
@@ -1393,17 +1426,16 @@ def timestamp(now):
 
 def writenode(agent):
 
-    if not os.path.isfile(basename+'/' + 'save_data' +'/Nodes.txt'):
-        entete = 'NodeID, NodeName, NodeOwner, NodeDescription, NodeOwnerID, Mobile OrAnchor, TrolleyID'
-        file=open(basename+'/' + 'save_data' +'/Nodes.txt','w')
+    if not os.path.isfile(basename+'/' + 'output' +'/Nodes.txt'):
+        entete = 'NodeID, NodeName, NodeOwner, NodeDescription, NodeOwnerID, Mobile OrAnchor, TrolleyID\n'
+        file=open(basename+'/' + 'output' +'/Nodes.txt','w')
         file.write(entete)
         file.close()
 
-    else :
-        data = str(eval(agent.ID)) + agent.name + ',,node description,,' + agent.MoA +',\n'
-        file=open(basename+'/' + 'save_data' +'/Nodes.txt','a')
-        file.write(entete)
-        file.close()
+    data = str(eval(agent.ID)) +','+ agent.name + ',,,,' + str(agent.MoA) +',\n'
+    file=open(basename+'/' + 'output' +'/Nodes.txt','a')
+    file.write(data)
+    file.close()
 
 
 if __name__ == "__main__":

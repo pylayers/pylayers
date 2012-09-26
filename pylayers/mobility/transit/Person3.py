@@ -141,12 +141,14 @@ class Person3(Process):
 
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position))
-                if 'mysql' in self.save:
+                if len(self.save)!=0:
                     p=conv_vecarr(self.position)
                     v=conv_vecarr(self.velocity)
                     a=conv_vecarr(self.acceleration)
+                if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
-
+                if 'txt' in self.save:
+                    pyu.writemeca(self.ID,self.sim.now(),p,v,a)
 
                 if self.arrived:
 
