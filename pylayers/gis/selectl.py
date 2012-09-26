@@ -112,7 +112,8 @@ class SelectL(object):
             self.nsel  = self.g.ispoint(self.ptsel,dd/100)
 
 
-        print "Selected point coord : ",self.ptsel
+        print
+        "Selected point coord : ",self.ptsel
         print "Selected point number: ",self.nsel
         if self.nsel > 0:
             print "Selected Edge : ",self.nsel

@@ -6,9 +6,17 @@ import doctest
 
 
 L = Layout()
-L.loadstr('defstr.str')
+L.load('Lstruc.str')
+#L.interact()
+# build topological graph 
 #L.buildGt()
+#L.showG('t')
+#plt.title('topological graph')
+# build graph of rooms
 #L.buildGr()
+#L.showG('r')
+#plt.title('Graph of rooms')
+#plt.show()
 #L.buildGv()
 #L.showG('v')
 #plt.title('Visibility graph')

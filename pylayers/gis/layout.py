@@ -1,7 +1,6 @@
 # -*- coding:Utf-8 -*-
 #
 # Class Layout
-# Class SelectL
 #
 #
 import pdb
@@ -32,7 +31,7 @@ from pylayers.util import graphutil as gru
 # Handle furnitures
 import pylayers.gis.furniture as fur
 from pylayers.gis import cycles as Cycls
-import pylayers.gis.selectl
+from pylayers.gis.selectl import SelectL
 from pylayers.util.easygui import *
 from pylayers.util.project import *
 #from   PyUtil  import *
@@ -193,7 +192,7 @@ class Layout(object):
 
         self.ax = (-10, 10, -10, 10)
 
-    def dir(self, typ='str'):
+    def ls(self, typ='str'):
         """ list the available file in dirstruc
 
         Parameters
@@ -220,13 +219,12 @@ class Layout(object):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> listfile = L.dir()
-            >>> for _filename in listfile:
+            >>> for _filename in L.ls():
+            >>>    plt.figure()
             >>>    L.load(_filename)
             >>>    L.showGs()
             >>>    plt.title(_filename)
-            >>>    plt.figure()
-            >>>    plt.show()
+            >>> plt.show()
 
         """
 
@@ -928,7 +926,7 @@ class Layout(object):
             --------
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> L.loadstr2('Lstruc.str2')
+            >>> L.load('Lstruc.str2')
 
         """
 
@@ -1133,7 +1131,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str')
+        >>> L.load('exemple.str')
         >>> L.add_fnod((10.0,10.0))
         -9
 
@@ -1274,7 +1272,7 @@ class Layout(object):
             self.labels.pop(n1)
             self.Nn = self.Nn - 1
 
-    def del_edge(self, le):
+    def del_edge(self,le):
         """ delete edge e
 
         Parameters
@@ -1285,9 +1283,13 @@ class Layout(object):
         -----
 
         """
+        print type(le) 
         if (type(le) == np.ndarray):
             le = list(le)
 
+        if (type(le) == np.int32):
+            le = [le]
+        
         if (type(le) == int):
             le = [le]
 
@@ -1879,7 +1881,7 @@ class Layout(object):
             return (seglist , theta)
 
             >>> L=Layout('def.mat','def.slab')
-            >>> L.loadstr('office.str')
+            >>> L.load('office.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,3])
             >>> seglist,theta = L.angleonlink(p1,p2)
@@ -1961,7 +1963,7 @@ class Layout(object):
         --------
 
         >>> L = Layout()
-        >>> L.loadstr('exemple.str')
+        >>> L.load('exemple.str')
         >>> ptlist  = np.array([0,1])
         >>> seglist = L.segpt(ptlist)
 
@@ -1996,7 +1998,7 @@ class Layout(object):
             --------
 
             >>> L = Layout()
-            >>> L.loadstr('office.str')
+            >>> L.load('office.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,10])
             >>> seglist = L.seginframe(p1,p2)
@@ -2602,7 +2604,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str')
+        >>> L.load('exemple.str')
         >>> L.buildGt()
         >>> L.buildGr()
         >>> L.buildGv()
@@ -2962,7 +2964,7 @@ class Layout(object):
 
             >>> from pylayers.gis.Layout import *
             >>> L = Layout()
-            >>> L.loadstr('exemple.str')
+            >>> L.load('exemple.str')
             >>> L.buildGt()
             >>> L.buildGr()
             >>> L.buildGv()
@@ -3039,7 +3041,7 @@ class Layout(object):
         --------
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> L.loadstr('Lstruc.str')
+            >>> L.load('Lstruc.str')
             >>> L.buildGt()
             >>> L.buildGr()
             >>> L.buildGw()
@@ -3068,8 +3070,8 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('office.str2')
-        >>> L.thwall(0,0)
+        >>> L.load('office.str2')
+        >>> walls = L.thwall(0,0)
 
         """
         keyn = self.Gs.node.keys()
@@ -3226,7 +3228,7 @@ class Layout(object):
         """
         fig = plt.figure()
         plt.axis(self.ax)
-        self.af = SelectL.SelectL(self, fig)
+        self.af = SelectL(self, fig)
         self.af.show()
         self.cid1 = fig.canvas.mpl_connect(
             'button_press_event', self.af.OnClick)
@@ -3870,7 +3872,7 @@ class Layout(object):
         >>> L.buildGt()
         >>> L.buildGr()
         >>> _fileGv = 'exemple.lo'
-        >>> Gv_re,pos,labels=L.loadGv( _fileGv)
+        >>> Gv_re,pos,labels = L.loadGv( _fileGv)
         >>> assert Gv_re.nodes()[5]== 6,'Mistake'
         >>> a=plt.title('Test Gv loadGv')
         >>> fig,ax = L.showGs()
