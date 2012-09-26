@@ -36,7 +36,7 @@ from pylayers.antprop import channel
 from pylayers.util.project import *
 # Handle UWB measurements
 from pylayers.measures import mesuwb as muwb
-
+import pdb
 
 def spafile(_filename, point, sdir):
     """
@@ -541,6 +541,8 @@ class Launch(object):
         """
 
 
+
+
 class Simul(object):
     """ Simulation Class
 
@@ -707,11 +709,36 @@ class Simul(object):
 
         self.updcfg()
 
+############### The following is replaced by self.updcfg()
+
+
+
+#        #
+#        # frequency section
+#        #
+
+#        self.config.set("frequency", "fghzmin", self.freq[0])
+#        self.config.set("frequency", "fghzmax", self.freq[-1])
+#        self.config.set("frequency", "nf", len(self.freq))
+#        #
+#        # waveform section
+#        #
+#        self.config.set("waveform", "tw", 30)
+#        self.config.set("waveform", "band", 0.499)
+#        self.config.set("waveform", "fc", 4.493)
+#        self.config.set("waveform", "thresh", 3)
+#        self.config.set("waveform", "type", 'generic')
+#        self.config.set("waveform", "fe", 50)
+#        self.wav = wvf.Waveform()
+
+
         #self.wav.read(self.config)
         try:
             self.load(self.filesimul)
         except:
             print('simulation file does not exist')
+
+
 
     def gui(self):
         """ gui to modify the simulation file
@@ -1922,7 +1949,6 @@ class Simul(object):
             raise NameError('error writing output ini file')
         fd.close()
 
-
     def run(self, itx, srx=[], cirforce=True):
         """ run the simulation for 1 tx and a set of rx
 
@@ -1954,6 +1980,7 @@ class Simul(object):
 
         self.updcfg()
         #t0 = time.clock()
+        self.Updconf()
         if type(srx) == int:
             srx = [srx]
 
@@ -1989,6 +2016,7 @@ class Simul(object):
                     print "---------------"
                     print "Start tratotud ", irx
                     print "---------------"
+                    pdb.set_trace()
                     self.tratotud(itx, irx)
                 if irx not in self.dfield[itx].keys():
                     print "---------------"
@@ -2184,6 +2212,9 @@ class Simul(object):
                 self.CIRo.append(CIRo)
             if (store_level) & 16 == 16:
                 self.CIRa.append(CIRa)
+
+
+
 
 if (__name__ == "__main__"):
     doctest.testmod()

@@ -1576,15 +1576,19 @@ class Antenna(object):
             #
             # Fpr     Ntheta,Nphi
             #
-            brr, bir, crr, cir = gridComp.vha(nt, np, 1, lvha,
-                                              wvha, transpose(Fpr), transpose(Ftr))
+            brr, bir, crr, cir = gridComp.vha(nt, np, 1, 
+                                              lvha, wvha,
+                                              transpose(Fpr),
+                                              transpose(Ftr))
             #
             # Imaginary part
             #
             Fpi = self.Fphi[k][::dsf, ::dsf].imag
             Fti = self.Ftheta[k][::dsf, ::dsf].imag
-            bri, bii, cri, cii = gridComp.vha(nt, np, 1, lvha,
-                                              wvha, transpose(Fpi), transpose(Fti))
+            bri, bii, cri, cii = gridComp.vha(nt, np, 1, 
+                                              lvha, wvha,
+                                              transpose(Fpi),
+                                              transpose(Fti))
 
             Br[k, :, :] = brr + 1j * bri
             Bi[k, :, :] = bir + 1j * bii

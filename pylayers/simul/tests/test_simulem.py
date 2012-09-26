@@ -69,7 +69,7 @@ for k in range(N):
     ax = fig.add_subplot(M,2,k+1)
     fig,ax = L1.show(S.L,k+1)
 
-fig.savefig('../../../doc/auto_examples/simul/'+filestr+'-launching.png')    
+fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')    
 print "Tracing "
 print "-----------------"
 print "purc :",S.config.get('tud','purc')
