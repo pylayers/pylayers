@@ -823,6 +823,19 @@ class Network(nx.MultiGraph):
         """
         self.db.writenet(self,S.now())
 
+    def txt_save(self,S):
+        """
+        save network state into mysqldatabase
+
+
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
+
+        """
+        pyu.writenet(self,S)
 
 
 
@@ -924,6 +937,8 @@ class PNetwork(Process):
                 self.net.mat_save(self.sim)
             if 'msql' in self.save:
                 self.net.sql_save(self.sim)
+            if 'txt' in self.save:
+                self.net.txt_save(self.sim)
 
             self.net.pos=self.net.get_pos()
             yield hold, self, self.net_updt_time

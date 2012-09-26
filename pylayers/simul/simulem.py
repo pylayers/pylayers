@@ -996,6 +996,7 @@ class Simul(object):
         _filesimul   : file in the simul directory of the Project
 
         """
+
         self.filesimul = _filesimul
         filesimul = pyu.getlong(self.filesimul, "ini")
 
@@ -1040,10 +1041,11 @@ class Simul(object):
 #
 # Frequency base
 #
+        pdb.set_trace()
         if "frequency" in sections:
-            self.freq = np.linspace(float(self.config.get("frequency", "fghzmin")),
-                                    float(self.config.get("frequency", "fghzmax")),
-                                    int(self.config.get("frequency", "nf")),
+            self.freq = np.linspace(float(self.config.getfloat("frequency", "fghzmin")),
+                                    float(self.config.getfloat("frequency", "fghzmax")),
+                                    int(self.config.getint("frequency", "nf")),
                                     endpoint=True)
 
             # update .freq file in tud directory
@@ -1980,7 +1982,6 @@ class Simul(object):
 
         self.updcfg()
         #t0 = time.clock()
-        self.Updconf()
         if type(srx) == int:
             srx = [srx]
 

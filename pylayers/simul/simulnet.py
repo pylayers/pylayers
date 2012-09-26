@@ -228,6 +228,7 @@ class Simul(Simulation):
                 '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
 
         if 'txt' in self.save_opt['save']:
+            pyu.writeDetails(self)
             if os.path.isfile(basename+'/output/Nodes.txt'):
                 print 'would you like to erase previous txt files ?'
                 A=raw_input()

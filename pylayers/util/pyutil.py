@@ -1324,7 +1324,9 @@ def timestamp(now):
 
 def writemeca(ID,time,p,v,a):
     """
-    write mecanic information into text file
+    write mecanic information into text file:
+        output/TruePosition.txt
+        output/UWBSensorMeasurements.txt
     """
 
 
@@ -1357,55 +1359,55 @@ def writemeca(ID,time,p,v,a):
         file=open(basename+'/' + 'output' +'/UWBSensorMeasurements.txt','r')
         lst=file.readlines()
         file.close()
-        data = str(eval(lst[-1].split(',')[0])+1) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
+        data = str(eval(lst[-1].split(',')[0])+1)+',' +str(ID) +','+ str(timestamp(time)) +',' + str(v[0])+',' +str(v[1])+',,'+str(a[0])+','+str(a[1])+',,,,\n'
         file=open(basename+'/' + 'output' +'/UWBSensorMeasurements.txt','a')
         file.write(data)
         file.close()
 
 
 
-#    pos=np.array(nx.get_node_attributes(self,'p').values())
-#    pos=np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
-#    pos=pos.reshape((1,len(self.nodes())*3))
-#    file=open('../save_data/' +filename +'.csv','a')
-#    file.write(str(S.now()) +',')
-#    np.savetxt(file,pos,delimiter=',')
-#    file.write('\n')
-#    file.close()
+def writenet(net,t):
+    """
+    write network information into text file:
+        output/ZIGLinkMeasurements.txt
+        output/UWBLinkMeasurements.txt
+    """
+    for e in net.edges_iter(data=True):
+        ### ZIGLinkMeasurements
+        if not os.path.isfile(basename+'/' + 'output' +'/ZIGLinkMeasurements.txt'):
+            entete = 'ZIGLinkMeasurementsID,NodeID, ZIG_PeerID, ZIG_RSSI, Timestamp\n'
+            file=open(basename+'/' + 'output' +'/ZIGLinkMeasurements.txt','w')
+            file.write(entete)
+            data = '1,'+ e[0] +','+ e[1] +',' + str(e[2]['Pr'][0]) +',' +timestamp(t.now()) +',\n'
+            file.write(data)
+            file.close()
+        else:
+            file=open(basename+'/' + 'output' +'/ZIGLinkMeasurements.txt','r')
+            lst=file.readlines()
+            file.close()
+            data = str(eval(lst[-1].split(',')[0])+1)+','+ e[0] +','+ e[1] +',' + str(e[2]['Pr'][0]) +',' +timestamp(t.now()) +',\n'
+            file=open(basename+'/' + 'output' +'/ZIGLinkMeasurements.txt','a')
+            file.write(data)
+            file.close()
+
+        ### UWBLinkMeasurements
+        if not os.path.isfile(basename+'/' + 'output' +'/UWBLinkMeasurements.txt'):
+            entete = 'UWBLinkMeasurementsID, NodeID, Timestamp, UWB_PeerID, UWB_Dist, UWB_BER, UWB_FER, UWB_CIR\n'
+            file=open(basename+'/' + 'output' +'/UWBLinkMeasurements.txt','w')
+            file.write(entete)
+            data = '1,'+ e[0] +','+ timestamp(t.now()) +',' +e[1] +','+ str(e[2]['d']) +',,,,\n'
+            file.write(data)
+            file.close()
+        else:
+            file=open(basename+'/' + 'output' +'/UWBLinkMeasurements.txt','r')
+            lst=file.readlines()
+            file.close()
+            data = str(eval(lst[-1].split(',')[0])+1)+','+ e[0] +','+ timestamp(t.now()) +',' +e[1] +','+ str(e[2]['d']) +',,,,\n'
+            file=open(basename+'/' + 'output' +'/UWBLinkMeasurements.txt','a')
+            file.write(data)
+            file.close()
 
 
-#    self.insertitem1("TruePosition",('NodeID',
-#                                        'Timestamp',
-#                                        'X',
-#                                        'Y',
-#                                        'Z',
-#                                        'ReferencePointID'),
-#                                        (eval(ID),
-#                                        pyu.timestamp(time),
-#                                        p[0],
-#                                        p[1],
-#                                        'NULL',
-#                                        'NULL'))
-#    self.insertitem1("CEASensorMeasurements",('NodeID',
-#                                                 'Timestamp',
-#                                                 'CEA_MagX',
-#                                                 'CEA_MagY',
-#                                                 'CEA_AccX',
-#                                                 'CEA_AccY'),
-#                                                 (eval(ID),
-#                                                  pyu.timestamp(time),
-#                                                  v[0],
-#                                                  v[1],
-#                                                  a[0],
-#                                                  a[1] ))
-
-
-
-#def writenet(self,net,t):
-#    """
-#    write mecanic information into text file
-#    """
-#    for e in net.edges_iter(data=True):
 #        self.insertitem1("ACOLinkMeasurements",('NodeID',
 #                                            'ACO_PeerID',
 #                                            'ACO_RSSI',
@@ -1425,7 +1427,9 @@ def writemeca(ID,time,p,v,a):
 
 
 def writenode(agent):
-
+    '''
+    write Nodes.txt
+    '''
     if not os.path.isfile(basename+'/' + 'output' +'/Nodes.txt'):
         entete = 'NodeID, NodeName, NodeOwner, NodeDescription, NodeOwnerID, Mobile OrAnchor, TrolleyID\n'
         file=open(basename+'/' + 'output' +'/Nodes.txt','w')
@@ -1434,6 +1438,21 @@ def writenode(agent):
 
     data = str(eval(agent.ID)) +','+ agent.name + ',,,,' + str(agent.MoA) +',\n'
     file=open(basename+'/' + 'output' +'/Nodes.txt','a')
+    file.write(data)
+    file.close()
+
+def writeDetails(t,description='simulation', location ='Rennes'):
+    '''
+    write MeasurementsDetails.txt
+    '''
+    if not os.path.isfile(basename+'/' + 'output' +'/MeasurementsDetails.txt'):
+        entete = 'MeasurementsDetailsID, MeasurementsDate, MeasurementsDescription, MeasurementsLocation\n'
+        file=open(basename+'/' + 'output' +'/MeasurementsDetails.txt','w')
+        file.write(entete)
+        file.close()
+
+    data = '1' +','+ timestamp(t.now()) + ', ' +description + location +',\n'
+    file=open(basename+'/' + 'output' +'/MeasurementsDetails.txt','a')
     file.write(data)
     file.close()
 
