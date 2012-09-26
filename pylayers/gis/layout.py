@@ -220,7 +220,8 @@ class Layout(object):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> for _filename in L.dir():
+            >>> listfile = L.dir()
+            >>> for _filename in listfile:
             >>>    L.load(_filename)
             >>>    L.showGs()
             >>>    plt.title(_filename)
@@ -1878,7 +1879,7 @@ class Layout(object):
             return (seglist , theta)
 
             >>> L=Layout('def.mat','def.slab')
-            >>> L.loadstr('sircut.str')
+            >>> L.loadstr('office.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,3])
             >>> seglist,theta = L.angleonlink(p1,p2)
@@ -1995,11 +1996,11 @@ class Layout(object):
             --------
 
             >>> L = Layout()
-            >>> L.loadstr('sircut.str')
+            >>> L.loadstr('office.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,10])
             >>> seglist = L.seginframe(p1,p2)
-            >>> assert len(seglist)==97,"something has changed in sircut.str"
+            >>> assert len(seglist)==97,"something has changed in office.str"
 
         """
 
@@ -3067,7 +3068,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('sircut.str2')
+        >>> L.loadstr('office.str2')
         >>> L.thwall(0,0)
 
         """

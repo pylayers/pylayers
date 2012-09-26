@@ -1,19 +1,397 @@
- savestr2
- stretch
- segsplit
- extract
- inbracket
- incrochet
- geomLine
- geomFace
- ParseDirectionalLight
- ParseMaterial
- show
- parsevrml
- vrml2sha
-
- vrml2geom
-    def load
-    def show
-    def wallanalysis
-    def show3entity
+**********************************************************************
+File "layout.py", line 223, in __main__.Layout.dir
+Failed example:
+    for _filename in L.dir():
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.dir[3]>", line 1
+         for _filename in L.dir():
+                                 ^
+     SyntaxError: unexpected EOF while parsing
+**********************************************************************
+File "layout.py", line 224, in __main__.Layout.dir
+Failed example:
+       L.load(_filename)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.dir[4]>", line 1
+         L.load(_filename)
+        ^
+     IndentationError: unexpected indent
+**********************************************************************
+File "layout.py", line 225, in __main__.Layout.dir
+Failed example:
+       L.showGs()
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.dir[5]>", line 1
+         L.showGs()
+        ^
+     IndentationError: unexpected indent
+**********************************************************************
+File "layout.py", line 226, in __main__.Layout.dir
+Failed example:
+       plt.title(_filename)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.dir[6]>", line 1
+         plt.title(_filename)
+        ^
+     IndentationError: unexpected indent
+**********************************************************************
+File "layout.py", line 227, in __main__.Layout.dir
+Failed example:
+       plt.figure()
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.dir[7]>", line 1
+         plt.figure()
+        ^
+     IndentationError: unexpected indent
+**********************************************************************
+File "layout.py", line 228, in __main__.Layout.dir
+Failed example:
+       plt.show()
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.dir[8]>", line 1
+         plt.show()
+        ^
+     IndentationError: unexpected indent
+**********************************************************************
+File "layout.py", line 3873, in __main__.Layout.loadGv
+Failed example:
+    assert Gv_re.nodes()[5]== 6,'Mistake'
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.loadGv[7]>", line 1, in <module>
+        assert Gv_re.nodes()[5]== 6,'Mistake'
+    IndexError: list index out of range
+**********************************************************************
+File "layout.py", line 4054, in __main__.Layout.loadlay
+Failed example:
+    data_graph=L.loadlay(_filelay)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.loadlay[6]>", line 1, in <module>
+        data_graph=L.loadlay(_filelay)
+      File "layout.py", line 4057, in loadlay
+        data_graph = cPickle.load(open(filelay))
+    IOError: [Errno 2] No such file or directory: '/private/staff/n/en/buguen/Bureau/P1/struc/exemple.lay'
+**********************************************************************
+File "layout.py", line 4472, in __main__.Layout.points_image
+Failed example:
+    Tx_im,nodes_posi=L.points_image(p_Tx)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.points_image[5]>", line 1, in <module>
+        Tx_im,nodes_posi=L.points_image(p_Tx)
+      File "layout.py", line 4477, in points_image
+        nodes_posi = self.nodes_posi()
+    AttributeError: 'Layout' object has no attribute 'nodes_posi'
+**********************************************************************
+File "layout.py", line 4473, in __main__.Layout.points_image
+Failed example:
+    assert Tx_im[0][0]==2,'Mistake'
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.points_image[6]>", line 1, in <module>
+        assert Tx_im[0][0]==2,'Mistake'
+    NameError: name 'Tx_im' is not defined
+**********************************************************************
+File "layout.py", line 4013, in __main__.Layout.savelay
+Failed example:
+    assert os.path.isfile(filelay)==True,'already exist'
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.savelay[10]>", line 1, in <module>
+        assert os.path.isfile(filelay)==True,'already exist'
+    AssertionError: already exist
+**********************************************************************
+File "layout.py", line 4205, in __main__.Layout.segs_cross
+Failed example:
+    signature,num_seg_val=L.filtre_sign(p_Tx,p_Rx,_fileGv,color)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[11]>", line 1, in <module>
+        signature,num_seg_val=L.filtre_sign(p_Tx,p_Rx,_fileGv,color)
+    AttributeError: 'Layout' object has no attribute 'filtre_sign'
+**********************************************************************
+File "layout.py", line 4206, in __main__.Layout.segs_cross
+Failed example:
+    kuku=num_seg_val[0]
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[12]>", line 1, in <module>
+        kuku=num_seg_val[0]
+    NameError: name 'num_seg_val' is not defined
+**********************************************************************
+File "layout.py", line 4211, in __main__.Layout.segs_cross
+Failed example:
+    Tx_im_x, Tx_im_y=L.image_M_Tx(p_Tx,kuku)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[17]>", line 1, in <module>
+        Tx_im_x, Tx_im_y=L.image_M_Tx(p_Tx,kuku)
+    AttributeError: 'Layout' object has no attribute 'image_M_Tx'
+**********************************************************************
+File "layout.py", line 4212, in __main__.Layout.segs_cross
+Failed example:
+    line=sh.LineString([(Tx_im_x, Tx_im_y),(Rx_x, Rx_y)])
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[18]>", line 1, in <module>
+        line=sh.LineString([(Tx_im_x, Tx_im_y),(Rx_x, Rx_y)])
+    NameError: name 'Tx_im_x' is not defined
+**********************************************************************
+File "layout.py", line 4213, in __main__.Layout.segs_cross
+Failed example:
+    p_int=L.cross_shortest(line)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[19]>", line 1, in <module>
+        p_int=L.cross_shortest(line)
+    AttributeError: 'Layout' object has no attribute 'cross_shortest'
+**********************************************************************
+File "layout.py", line 4214, in __main__.Layout.segs_cross
+Failed example:
+    line1=sh.LineString([(Tx_x, Tx_y),(p_int[0].x,p_int[0].y),(Rx_x, Rx_y)])
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[20]>", line 1, in <module>
+        line1=sh.LineString([(Tx_x, Tx_y),(p_int[0].x,p_int[0].y),(Rx_x, Rx_y)])
+    NameError: name 'p_int' is not defined
+**********************************************************************
+File "layout.py", line 4215, in __main__.Layout.segs_cross
+Failed example:
+    sign=L.segs_cross(line1)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[21]>", line 1, in <module>
+        sign=L.segs_cross(line1)
+    NameError: name 'line1' is not defined
+**********************************************************************
+File "layout.py", line 4216, in __main__.Layout.segs_cross
+Failed example:
+    segs_cross=L.segs_cross(line)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.segs_cross[22]>", line 1, in <module>
+        segs_cross=L.segs_cross(line)
+    NameError: name 'line' is not defined
+**********************************************************************
+File "layout.py", line 2962, in __main__.Layout.showGv
+Failed example:
+    from pylayers.gis.Layout import *
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.showGv[0]>", line 1, in <module>
+        from pylayers.gis.Layout import *
+    ImportError: No module named Layout
+**********************************************************************
+File "layout.py", line 2969, in __main__.Layout.showGv
+Failed example:
+    L.showGv(fig=fig,ax=ax)
+Expected nothing
+Got:
+    (<matplotlib.figure.Figure object at 0xa3c310c>, <matplotlib.axes.AxesSubplot object at 0xa5fb98c>)
+**********************************************************************
+File "layout.py", line 2970, in __main__.Layout.showGv
+Failed example:
+    plt.axis('off')
+Expected nothing
+Got:
+    (-2.0, 12.0, -3.0, 3.0)
+**********************************************************************
+File "layout.py", line 4279, in __main__.Layout.sign_cross
+Failed example:
+    signature,num_seg_val=L.filtre_sign(p_Tx,p_Rx,_fileGv,color)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[13]>", line 1, in <module>
+        signature,num_seg_val=L.filtre_sign(p_Tx,p_Rx,_fileGv,color)
+    AttributeError: 'Layout' object has no attribute 'filtre_sign'
+**********************************************************************
+File "layout.py", line 4280, in __main__.Layout.sign_cross
+Failed example:
+    kuku=num_seg_val[0]
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[14]>", line 1, in <module>
+        kuku=num_seg_val[0]
+    NameError: name 'num_seg_val' is not defined
+**********************************************************************
+File "layout.py", line 4285, in __main__.Layout.sign_cross
+Failed example:
+    Tx_im_x, Tx_im_y=L.image_M_Tx(p_Tx,kuku)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[19]>", line 1, in <module>
+        Tx_im_x, Tx_im_y=L.image_M_Tx(p_Tx,kuku)
+    AttributeError: 'Layout' object has no attribute 'image_M_Tx'
+**********************************************************************
+File "layout.py", line 4286, in __main__.Layout.sign_cross
+Failed example:
+    line=sh.LineString([(Tx_im_x, Tx_im_y),(Rx_x, Rx_y)])
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[20]>", line 1, in <module>
+        line=sh.LineString([(Tx_im_x, Tx_im_y),(Rx_x, Rx_y)])
+    NameError: name 'Tx_im_x' is not defined
+**********************************************************************
+File "layout.py", line 4287, in __main__.Layout.sign_cross
+Failed example:
+    p_int=L.cross_shortest(line)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[21]>", line 1, in <module>
+        p_int=L.cross_shortest(line)
+    AttributeError: 'Layout' object has no attribute 'cross_shortest'
+**********************************************************************
+File "layout.py", line 4288, in __main__.Layout.sign_cross
+Failed example:
+    pt=p_int[0]
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[22]>", line 1, in <module>
+        pt=p_int[0]
+    NameError: name 'p_int' is not defined
+**********************************************************************
+File "layout.py", line 4289, in __main__.Layout.sign_cross
+Failed example:
+    line1=sh.LineString([(Tx_x, Tx_y),(pt.x,pt.y),(Rx_x, Rx_y)])
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[23]>", line 1, in <module>
+        line1=sh.LineString([(Tx_x, Tx_y),(pt.x,pt.y),(Rx_x, Rx_y)])
+    NameError: name 'pt' is not defined
+**********************************************************************
+File "layout.py", line 4290, in __main__.Layout.sign_cross
+Failed example:
+    sign=L.segs_cross(line1)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[24]>", line 1, in <module>
+        sign=L.segs_cross(line1)
+    NameError: name 'line1' is not defined
+**********************************************************************
+File "layout.py", line 4291, in __main__.Layout.sign_cross
+Failed example:
+    segs_cross=L.segs_cross(line)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[25]>", line 1, in <module>
+        segs_cross=L.segs_cross(line)
+    NameError: name 'line' is not defined
+**********************************************************************
+File "layout.py", line 4292, in __main__.Layout.sign_cross
+Failed example:
+    seg_num=segs_cross[0]
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[26]>", line 1, in <module>
+        seg_num=segs_cross[0]
+    NameError: name 'segs_cross' is not defined
+**********************************************************************
+File "layout.py", line 4293, in __main__.Layout.sign_cross
+Failed example:
+    sign=L.sign_cross(pTx,pRx, pt,seg_num)
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.sign_cross[27]>", line 1, in <module>
+        sign=L.sign_cross(pTx,pRx, pt,seg_num)
+    NameError: name 'pt' is not defined
+**********************************************************************
+File "layout.py", line 3070, in __main__.Layout.thwall
+Failed example:
+    L.loadstr('office.str2')
+Exception raised:
+    Traceback (most recent call last):
+      File "/usr/lib/python2.6/doctest.py", line 1248, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.Layout.thwall[2]>", line 1, in <module>
+        L.loadstr('office.str2')
+      File "/private/staff/n/en/buguen/Documents/rch/devel/pylayers/pylayers/gis/layout.py", line 489, in loadstr
+        codesl = np.array(np.zeros(Ne), dtype=int)
+    ValueError: array is too big.
+**********************************************************************
+File "layout.py", line 3071, in __main__.Layout.thwall
+Failed example:
+    L.thwall(0,0)
+Expected nothing
+Got:
+    []
+**********************************************************************
+9 items had failures:
+   6 of   9 in __main__.Layout.dir
+   1 of  13 in __main__.Layout.loadGv
+   1 of   7 in __main__.Layout.loadlay
+   2 of   7 in __main__.Layout.points_image
+   1 of  11 in __main__.Layout.savelay
+   8 of  23 in __main__.Layout.segs_cross
+   3 of  10 in __main__.Layout.showGv
+  11 of  28 in __main__.Layout.sign_cross
+   2 of   4 in __main__.Layout.thwall
+***Test Failed*** 35 failures.

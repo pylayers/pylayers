@@ -91,52 +91,6 @@ Uniform time signal
 .. autosummary::
     :toctree: generated/
 
-    diff
-    info
-    fft
-    fftsh
-    filter
-    ftshift
-    psd
-    show
-    esd
-    shift
-    correlate
-    corrgauss
-    Efirst_loc
-    resample
-    ft 
-    convolve
-    Yadd_zero2l
-    Yadd_zero2r
-    Epercent
-    Etau0
-    Ewin
-    Etot 
-    Efirst 
-    Efirst_corr
-    Efirst_toath
-    taumax
-    Emax
-    tau_Emax
-    toa_max2
-    toa_new
-    toa_win
-    toa_max
-    toa_th
-    toa_cum
-    toa_th_tm
-    toa_th_tmt
-    toa_cum_tm
-    toa_cum_tmtm
-    toa_cum_tmt
-    readuwb
-    ecdf
-    tau_moy
-    tau_rms
-
-
-
 Utilities
 ~~~~~~~~~
 
@@ -190,7 +144,7 @@ Determining signal energy content
     Efirst_loc
 
 Time of Arrival estimation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 .. autosummary::
@@ -198,14 +152,13 @@ Time of Arrival estimation
 
     taumax
     tau_Emax
-    TDoA
     toa_max2
     toa_new
     toa_win
     toa_max
 
 Class TUDsignal
------~~~~~~~----
+----------------
 
 Uniform time signal with delays 
 

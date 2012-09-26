@@ -22,7 +22,6 @@ if len(pylayersdir) == 1:
 
 try:
     basename = os.environ['BASENAME']
-    print "BASENAME  : ", basename
 except:
     raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
 
@@ -56,8 +55,6 @@ pstruc['DIRTRA'] = 'output'
 pstruc['DIRCIR'] = 'output'
 pstruc['DIRMES'] = 'meas'
 
-
-print "BASENAME : ", basename
 
 # if basename directory does not exit it is created 
 try:
