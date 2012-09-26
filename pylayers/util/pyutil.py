@@ -7,6 +7,7 @@ import scipy.special as spe
 import doctest
 from   bitstring  import BitString
 import datetime as dat
+from pylayers.util.project import *
 import pdb
 #
 # getlong 
@@ -1319,6 +1320,90 @@ def timestamp(now):
     dt = dat.datetime.now()
     dn = str(dat.timedelta(seconds=float(now))).split(':')
     return (dt.strftime('%Y-%m-%d ')+dn[0]+':'+dn[1] +':'+dn[2][:2] +dn[2][2:5])
+
+#def writemeca(self,ID,time,p,v,a):
+#    """
+#    write mecanic information into text file
+#    """
+
+#    filelist=['TruePosition.txt','ACOLinkMeasurements.txt','CEASensorMeasurements.txt','CEALinkMeasurements.txt']
+
+
+#    if not os.path.isfile(basename+'/' + 'save_data' +'/' +fi):
+
+#    pos=np.array(nx.get_node_attributes(self,'p').values())
+#    pos=np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
+#    pos=pos.reshape((1,len(self.nodes())*3))
+#    file=open('../save_data/' +filename +'.csv','a')
+#    file.write(str(S.now()) +',')
+#    np.savetxt(file,pos,delimiter=',')
+#    file.write('\n')
+#    file.close()
+
+
+#    self.insertitem1("TruePosition",('NodeID',
+#                                        'Timestamp',
+#                                        'X',
+#                                        'Y',
+#                                        'Z',
+#                                        'ReferencePointID'),
+#                                        (eval(ID),
+#                                        pyu.timestamp(time),
+#                                        p[0],
+#                                        p[1],
+#                                        'NULL',
+#                                        'NULL'))
+#    self.insertitem1("CEASensorMeasurements",('NodeID',
+#                                                 'Timestamp',
+#                                                 'CEA_MagX',
+#                                                 'CEA_MagY',
+#                                                 'CEA_AccX',
+#                                                 'CEA_AccY'),
+#                                                 (eval(ID),
+#                                                  pyu.timestamp(time),
+#                                                  v[0],
+#                                                  v[1],
+#                                                  a[0],
+#                                                  a[1] ))
+
+
+
+#def writenet(self,net,t):
+#    """
+#    write mecanic information into text file
+#    """
+#    for e in net.edges_iter(data=True):
+#        self.insertitem1("ACOLinkMeasurements",('NodeID',
+#                                            'ACO_PeerID',
+#                                            'ACO_RSSI',
+#                                            'Timestamp'),
+#                                            (eval(e[0]),
+#                                            eval(e[1]),
+#                                            e[2]['Pr'][0],
+#                                            pyu.timestamp(t)))
+#        self.insertitem1("CEALinkMeasurements",('NodeID',
+#                                            'Timestamp',
+#                                            'CEA_PeerID',
+#                                            'CEA_Dist'),
+#                                            (eval(e[0]),
+#                                            pyu.timestamp(t),
+#                                            eval(e[1]),
+#                                            e[2]['d']))
+
+
+def writenode(agent):
+
+    if not os.path.isfile(basename+'/' + 'save_data' +'/Nodes.txt'):
+        entete = 'NodeID, NodeName, NodeOwner, NodeDescription, NodeOwnerID, Mobile OrAnchor, TrolleyID'
+        file=open(basename+'/' + 'save_data' +'/Nodes.txt','w')
+        file.write(entete)
+        file.close()
+
+    else :
+        data = str(eval(agent.ID)) + agent.name + ',,node description,,' + agent.MoA +',\n'
+        file=open(basename+'/' + 'save_data' +'/Nodes.txt','a')
+        file.write(entete)
+        file.close()
 
 
 if __name__ == "__main__":

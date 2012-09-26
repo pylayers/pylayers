@@ -151,8 +151,21 @@ class Database:
                                                 eval(e[1]),
                                                 e[2]['d']))
 
-
-
+    def writenode(self,ID,name,MoA):
+        self.insertitem1("Nodes",('NodeID',
+                            'NodeName',
+                            'NodeOwner',
+                            'NodeDescription',
+                            'NodeOwnerID',
+                            'MobileOrAnchor',
+                            'TrolleyID'),
+                             (eval(ID),
+                             name,
+                            'NULL',
+                            'node description',
+                            'NULL',
+                            MoA,
+                            'NULL'))
 
 if __name__=="__main__":
 
