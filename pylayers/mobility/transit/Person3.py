@@ -45,7 +45,7 @@ class Person3(Process):
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True,msqlSave=False):
+    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True,save=[]):
         """
         boid is initialized in a room of Layout L 
         """        
@@ -99,8 +99,8 @@ class Person3(Process):
         self.net=net
         self.wait=0.0
         
-        self.msqlSave=msqlSave
-        if self.msqlSave:
+        self.save=save
+        if 'mysql' in self.save:
            config = ConfigParser.ConfigParser()
            config.read(pyu.getlong('simulnet.ini','ini'))
            sql_opt = dict(config.items('Mysql'))
@@ -141,12 +141,14 @@ class Person3(Process):
 
 
                 self.net.update_pos(self.ID,conv_vecarr(self.position))
-                if self.msqlSave:
+                if len(self.save)!=0:
                     p=conv_vecarr(self.position)
                     v=conv_vecarr(self.velocity)
                     a=conv_vecarr(self.acceleration)
+                if 'mysql' in self.save:
                     self.db.writemeca(self.ID,self.sim.now(),p,v,a)
-
+                if 'txt' in self.save:
+                    pyu.writemeca(self.ID,self.sim.now(),p,v,a)
 
                 if self.arrived:
 

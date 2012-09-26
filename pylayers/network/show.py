@@ -34,31 +34,26 @@ import matplotlib.pyplot as plt
 import ConfigParser
 import pkgutil
 
-#import Node
-#import Agent
-#import Network
-#import Localization
-#import EMSolverself.net.RAT.keys()
-
 from pylayers.gis.layout import Layout
-#import Slab
 
 import pylayers.util.pyutil as pyu
 import pylayers.util
 import pdb
 
 
-#sys.path.append('./Transit')
-#from Transit.Person3 import Person3
-#from Transit.StateProcess import Updater
-#from Transit.World import world
-#from Transit.vec3 import vec3
-#from Transit.SteeringBehavior2 import Seek, Wander, Queuing, FollowWaypoints, Separation, Containment, InterpenetrationConstraint, queue_steering_mind
-
-import pdb
-
 
 class ShowNet(Process):
+    '''
+    Show network process
+   
+    Process which update the plot from the dynamic information from the network
+
+    Method
+    -------
+        run : run the show process
+
+    '''
+
     def __init__(self, **args):
         defaults = {'net': None,
                     'L': None,
@@ -78,11 +73,6 @@ class ShowNet(Process):
         self.fname = self.args['fname']
 
         Process.__init__(self, name='shownet', sim=self.args['sim'])
-#        if self.fig==None:
-#            self.fig = plt.figure()
-#            self.ax=self.fig.add_subplot(111)
-#        elif self.ax== None:
-#            self.ax=fig.add_subplot(111)
 
         self.fig = plt.figure(self.fname, figsize=(20, 5), dpi=100)
         self.fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
@@ -102,11 +92,8 @@ class ShowNet(Process):
         self.cpt = self.sim.now()
 
     def run(self):
-        """ Show your network
-
-        Attributes
-        ----------
-
+        """ 
+        Display the network
 
         """
 
@@ -156,215 +143,127 @@ class ShowNet(Process):
                 yield hold, self, float(self.update['meca'])
 
 
-#    def show_sig(self,Sg,tx,rx,ion=False,fig=None,ax=None):
-#        if fig==None:
-#            fig = plt.figure()
-#            ax=fig.add_subplot(111)
-#        elif ax== None:
-#            ax=fig.add_subplot(111)
-#        try:
-#            self.coll_plot['Sg'][1]=[]
-#        except:
-#            self.coll_plot['Sg']=[[]]
-#            self.coll_plot['Sg'].append([])
-#        fig,ax,self.coll_plot['Sg'][1]=self.EMS.L.showSig(Sg,Tx=self.net.pos[tx],Rx=self.net.pos[rx],sr=True,fig=fig,ax=ax)
-#        if ion:
-#            try:
-#                [jj.remove() for jj in self.coll_plot['Sg'][0]]
-#            except:
-#                pass
-#            plt.draw()
-#            self.coll_plot['Sg'][0]=self.coll_plot['Sg'][1]
 class ShowTable(Process):
+    '''
+    Show table process
+   
+    Process which update the table from the dynamic information from the network
 
-        def __init__(self, **args):
+    Method
+    -------
+        run : run the show process
 
-            defaults = {'net': None,
-                        'fname': 'table',
-                        'lAg': None,
-                        'fig': None,
-                        'ax': None,
-                        'sim': None}
+    '''
+    def __init__(self, **args):
+
+        defaults = {'net': None,
+                    'fname': 'table',
+                    'lAg': None,
+                    'fig': None,
+                    'ax': None,
+                    'sim': None}
 
 ##       initialize attributes
-            for key, value in defaults.items():
-                if key in args:
-                    setattr(self, key, args[key])
-                else:
-                    setattr(self, key, value)
-                    args[key] = value
-            self.args = args
-            self.fname = self.args['fname']
+        for key, value in defaults.items():
+            if key in args:
+                setattr(self, key, args[key])
+            else:
+                setattr(self, key, value)
+                args[key] = value
+        self.args = args
+        self.fname = self.args['fname']
 
-#            if self.fig==None:
-#                self.fig = plt.figure()
-#                self.ax=self.fig.add_subplot(111)
-#            elif self.ax== None:
-#                self.ax=fig.add_subplot(111)
+        self.fig = plt.figure(self.fname, figsize=(30, 15), dpi=50)
+        self.fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+        self.ax1 = self.fig.add_subplot(111, frame_on=False)
+        self.ax1.xaxis.set_visible(False)
+        self.ax1.yaxis.set_visible(False)
 
-            self.fig = plt.figure(self.fname, figsize=(30, 15), dpi=50)
-            self.fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-            self.ax1 = self.fig.add_subplot(111, frame_on=False)
-            self.ax1.xaxis.set_visible(False)
-            self.ax1.yaxis.set_visible(False)
+        self.fig2 = plt.figure(
+            self.fname + str(2), figsize=(30, 15), dpi=50)
+        self.ax2 = self.fig2.add_subplot(111, frame_on=False)
+        self.ax2.xaxis.set_visible(False)
+        self.ax2.yaxis.set_visible(False)
 
-            self.fig2 = plt.figure(
-                self.fname + str(2), figsize=(30, 15), dpi=50)
-            self.ax2 = self.fig2.add_subplot(111, frame_on=False)
-            self.ax2.xaxis.set_visible(False)
-            self.ax2.yaxis.set_visible(False)
+        self.coll_plot = {}
+        self.colLabels1 = ('RAT', 'Node link', 'TOA ',
+                           'TOA std', 'Pr', 'Pr std', 'distance')
+        self.colLabels2 = ('name', 'pos x', 'pos y ',
+                           'vel x', 'vel y', 'acc x', 'acc y')
+        self.cellText = []
+        self.C = ConfigParser.ConfigParser()
+        self.C.read(pyu.getlong('show.ini','ini'))
+        self.RATcolor = dict(self.C.items('RATcolor'))
+        self.RATes = dict(self.C.items('RATestyle'))
+        self.update = dict(self.C.items('update'))
 
-            self.coll_plot = {}
-            self.colLabels1 = ('RAT', 'Node link', 'TOA ',
-                               'TOA std', 'Pr', 'Pr std', 'distance')
-            self.colLabels2 = ('name', 'pos x', 'pos y ',
-                               'vel x', 'vel y', 'acc x', 'acc y')
-            self.cellText = []
-            self.C = ConfigParser.ConfigParser()
-            self.C.read(pyu.getlong('show.ini','ini'))
-            self.RATcolor = dict(self.C.items('RATcolor'))
-            self.RATes = dict(self.C.items('RATestyle'))
-            self.update = dict(self.C.items('update'))
+        Process.__init__(self, name='PShowTable', sim=self.args['sim'])
 
-            Process.__init__(self, name='PShowTable', sim=self.args['sim'])
+    def run(self):
+        while True:
 
-        def run(self):
-            while True:
+            plt.figure(self.fname)
+            self.ax1.axis('scaled')
+            self.ax2.axis('scaled')
 
-                plt.figure(self.fname)
-                self.ax1.axis('scaled')
-                self.ax2.axis('scaled')
+            try:
+                self.coll_plot['table'][1] = []
+            except:
+                self.coll_plot['table'] = [[]]
+                self.coll_plot['table'].append([])
 
-                try:
-                    self.coll_plot['table'][1] = []
-                except:
-                    self.coll_plot['table'] = [[]]
-                    self.coll_plot['table'].append([])
+            self.cellText1 = []
+            for rat in self.net.RAT.keys():
+                T = nx.get_edge_attributes(self.net.SubNet[rat], 'TOA')
+                P = nx.get_edge_attributes(self.net.SubNet[rat], 'Pr')
+                D = nx.get_edge_attributes(self.net.SubNet[rat], 'd')
+                for i in self.net.SubNet[rat].edges():  # boucle sur toute les liaisons
+                    r = [str(rat), str(i), "%.2f" % (T[i][0]), "%.2f" % (T[i][1]), "%.2f" % (P[i][0]), "%.2f" % (P[i][1]), "%.2f" % (D[i])]
+                    self.cellText1.append(r)
 
-                self.cellText1 = []
-                for rat in self.net.RAT.keys():
-                    T = nx.get_edge_attributes(self.net.SubNet[rat], 'TOA')
-                    P = nx.get_edge_attributes(self.net.SubNet[rat], 'Pr')
-                    D = nx.get_edge_attributes(self.net.SubNet[rat], 'd')
-                    for i in self.net.SubNet[rat].edges():  # boucle sur toute les liaisons
-#                        r = [str(rat), str(i), str(T[i][0]), str(T[i][1]), str(P[i][0]), str(P[i][1]), str(D[i])]
-                        r = [str(rat), str(i), "%.2f" % (T[i][0]), "%.2f" % (T[i][1]), "%.2f" % (P[i][0]), "%.2f" % (P[i][1]), "%.2f" % (D[i])]
-                    #pdb.set_trace()
-                        self.cellText1.append(r)
-
-                self.coll_plot['table'][1] = self.ax1.table(cellText=self.cellText1, colLabels=self.colLabels1, loc='center')
-                self.coll_plot['table'][1].scale(2, 5)
-                self.coll_plot['table'][1].auto_set_font_size(False)
-                self.coll_plot['table'][1].set_fontsize(18)
+            self.coll_plot['table'][1] = self.ax1.table(cellText=self.cellText1, colLabels=self.colLabels1, loc='center')
+            self.coll_plot['table'][1].scale(2, 5)
+            self.coll_plot['table'][1].auto_set_font_size(False)
+            self.coll_plot['table'][1].set_fontsize(18)
 
 #                self.coll_plot['table'][1].auto_set_font_size(False)
 #                self.coll_plot['table'][1].set_fontsize(20)
-                try:
-                    self.coll_plot['table'][0].remove()
-                except:
-                    pass
+            try:
+                self.coll_plot['table'][0].remove()
+            except:
+                pass
 
-                plt.draw()
-                self.coll_plot['table'][0] = self.coll_plot['table'][1]
+            plt.draw()
+            self.coll_plot['table'][0] = self.coll_plot['table'][1]
 
-                try:
-                    self.coll_plot['table2'][1] = []
-                except:
-                    self.coll_plot['table2'] = [[]]
-                    self.coll_plot['table2'].append([])
+            try:
+                self.coll_plot['table2'][1] = []
+            except:
+                self.coll_plot['table2'] = [[]]
+                self.coll_plot['table2'].append([])
 
-                plt.figure(self.fname + str(2))
-                self.cellText2 = []
+            plt.figure(self.fname + str(2))
+            self.cellText2 = []
 
-                for a in self.lAg:
-                    if a.type != 'ap':
-                        r2 = [str(a.ID), "%.2f" % (a.meca.position[0]), "%.2f" % (a.meca.position[1]), "%.2f" % (a.meca.velocity[0]), "%.2f" % (a.meca.velocity[1]), "%.2f" % (a.meca.acceleration[0]), "%.2f" % (a.meca.acceleration[1])]
-                        self.cellText2.append(r2)
+            for a in self.lAg:
+                if a.type != 'ap':
+                    r2 = [str(a.ID), "%.2f" % (a.meca.position[0]), "%.2f" % (a.meca.position[1]), "%.2f" % (a.meca.velocity[0]), "%.2f" % (a.meca.velocity[1]), "%.2f" % (a.meca.acceleration[0]), "%.2f" % (a.meca.acceleration[1])]
+                    self.cellText2.append(r2)
 
-                self.coll_plot['table2'][1] = self.ax2.table(cellText=self.cellText2, colLabels=self.colLabels2, loc='center')
-                self.coll_plot['table2'][1].scale(2, 5)
-                self.coll_plot['table2'][1].auto_set_font_size(False)
-                self.coll_plot['table2'][1].set_fontsize(18)
+            self.coll_plot['table2'][1] = self.ax2.table(cellText=self.cellText2, colLabels=self.colLabels2, loc='center')
+            self.coll_plot['table2'][1].scale(2, 5)
+            self.coll_plot['table2'][1].auto_set_font_size(False)
+            self.coll_plot['table2'][1].set_fontsize(18)
 
-                try:
-                    self.coll_plot['table2'][0].remove()
-                except:
-                    pass
+            try:
+                self.coll_plot['table2'][0].remove()
+            except:
+                pass
 
-                plt.draw()
-                self.coll_plot['table2'][0] = self.coll_plot['table2'][1]
-#                self.coll_plot['table2'][1].auto_set_font_size(False)
-#                self.coll_plot['table2'][1].set_fontsize(20)
-
-                yield hold, self, float(self.update['table'])
+            plt.draw()
+            self.coll_plot['table2'][0] = self.coll_plot['table2'][1]
 
 
-#class PShow.py(Process):
-#    def __init__(self,**args):
-#        defaults={'net':Network(),
-#                  'L':[],
-#                  'net_updt_time':0.001,
-#                  'meca_updt_time':0.001,
-#                  'loca_updt_time':0.001,
-#                  'sim':None,
-#                  'show_net':False,
-#                  'show_sg':False,
-#                  'show_table':False,
-#                  'save_net':True,
-#                  'msql':False}
-
-###       initialize attributes
-#        for key, value in defaults.items():
-#            if args.has_key(key):
-#                setattr(self, key, args[key])
-#            else:
-#                setattr(self, key, value)
-#                args[key]=value
-#        self.args=args
-
-#        Pro
-#        Process.__init__(self,name='Show',sim=self.sim)
-#        self.cpt=self.sim.now()
-#cess.__init__(self,name='Show',sim=self.sim)
-#        self.cpt=self.sim.now()
-
-#    def run(self):
-#        while True:
-
-#            if self.show_sg:
-#                ############### compute Signature (Sg)
-#                tx=self.net.node.keys()[0]
-#                rx=self.net.node.keys()[1]
-#                Sg=self.net.compute_Sg(tx,rx)
-
-#            ############## Show
-#            if self.show:
-#                self.net.show(ion=True,legend=True,fig=fig,ax=ax,name=fig_net)
-#            if self.show_table:
-#                self.net.table(fig=fig2,ax=ax2,name=fig_table)
-#            if self.show_sg:
-#                self.net.show_sig(Sg,tx,rx,ion=True,fig=fig,ax=ax)
-
-#            if self.disp_inf:
-#                self.net.pp()
-#
-#            print 'network update @',self.sim.now()
+            yield hold, self, float(self.update['table'])
 
 
-#            ############# save network
-#            if self.save_net:
-#                self.net.save_net(self.filename,self.sim)
-
-##            pos=np.array(nx.get_node_attributes(S.net,'p').values())
-##            pos=np.hstack((pos,np.zeros((nbnodes,1))))  # passage en 3D
-##            pos=pos.reshape((1,nbnodes*3))
-##            file=open('pos.csv','a')
-##            np.savetxt(file,pos,delimiter=',')
-##            file.close()
-##            try:
-##                pos=np.dstack((pos,np.array(nx.get_node_attributes(self.net,'p').values())))
-##            except:
-##                pos=np.array(nx.get_node_attributes(self.net,'p').values())
-##            pk.dump(pos,file)
-#            self.net.pos=self.net.get_pos()
-#            yield hold, self, self.net_updt_time

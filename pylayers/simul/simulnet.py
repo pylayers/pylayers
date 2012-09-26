@@ -47,6 +47,7 @@ from pylayers.antprop.slab import Slab
 from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
 from pylayers.util.pymysqldb import Database as DB
+from pylayers.util.project import *
 
 import pdb
 import os
@@ -148,7 +149,7 @@ class Simul(Simulation):
                                 net=self.net,
                                 world=self.the_world,
                                 RAT=eval(ag_opt['rat']),
-                                msqlSave=str2bool(self.save_opt['msql']),
+                                save=eval(self.save_opt['save']),
                                 sim=self))
 
                 if self.lAg[i].type == 'ag':
@@ -204,10 +205,7 @@ class Simul(Simulation):
                              sim=self,
                              show_sg=str2bool(self.net_opt['show_sg']),
                              disp_inf=str2bool(self.net_opt['dispinfo']),
-                             csv_save=str2bool(self.save_opt['csv_save']),
-                             pyray_save=str2bool(self.save_opt['pyray_save']),
-                             mat_save=str2bool(self.save_opt['mat_save']),
-                             msqlSave=str2bool(self.save_opt['msql']))
+                             save=eval(self.save_opt['save']))
         self.activate(self.Pnet, self.Pnet.run(), 0.0)
 
     def create_visual(self):
@@ -224,10 +222,26 @@ class Simul(Simulation):
         """
 
         # this is just to redump the database at each simulation
-        if str2bool(self.save_opt['msql']):
+        if 'mysql' in self.save_opt['save']:
             if str2bool(self.sql_opt['dumpdb']):
                 os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
                 '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
+
+        if 'txt' in self.save_opt['save']:
+            pyu.writeDetails(self)
+            if os.path.isfile(basename+'/output/Nodes.txt'):
+                print 'would you like to erase previous txt files ?'
+                A=raw_input()
+                if A == 'y':
+                    for f in os.listdir(basename+'/output/'):
+                        try:
+                            fi,ext=f.split('.')
+                            if ext == 'txt':
+                                os.remove(basename+'/output/'+f)
+                        except:
+                            pass
+                        
+
 
         self.create_layout()
         self.create_EMS()
