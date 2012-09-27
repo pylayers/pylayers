@@ -18,6 +18,4 @@ in indoor environments.
 
     modules/index.rst
 
-
     bsignal.rst
-

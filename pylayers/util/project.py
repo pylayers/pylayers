@@ -105,8 +105,6 @@ for nm in pstruc.keys():
 dirlist=['ini','struc','ant','output']
 
 for dl in dirlist:
-
-
     filelist = os.listdir(pylayersdir+'/data/' + dl)
     for fi in filelist:
         if os.path.isfile(basename+'/' + dl +'/' +fi):

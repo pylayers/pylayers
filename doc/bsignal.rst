@@ -1,8 +1,6 @@
 Bsignal
 =======
 
-
-
 Generation of an Impulse of normalized energy 
 ---------------------------------------------
 
@@ -23,41 +21,37 @@ where :math:`B` is the bandwidth defined at :math:`\gamma_{dB}` and
 :math:`f_c` is the central frequency of the pulse.
 
 
-.. plot::
-    :include-source:
-
-    from pylayers.signal.bsignal import *
-    from pylayers.simul.simulem import *
-    from matplotlib.pylab import *
-    fc     = 4 
-    band   = 2
-    thresh = 10
-    fe     = 100 
-    ip     = EnImpulse([],fc,band,thresh,fe)
-    ip.plot()
-    show()
-
-
-*Verification of energy normalization in both domains*
 
 .. ipython::
 
     In [1]: from pylayers.signal.bsignal import *
 
-    In [2]: ip  = EnImpulse([],4,2,10,100)
+    In [1]: fc = 4 
+    
+    In [1]: band   = 2
 
-    In [3]: Et  = sum(ip.y*ip.y)*ip.dx()
+    In [1]: thresh = 10
+    
+    In [1]: fe     = 100 
 
-    In [4]: print "Time integration",Et
-
-    In [5]: P = ip.esd()
+    In [1]: ip  = EnImpulse([],fc,band,thres,fe)
    
-    In [6]: Ef = sum(P.y)*P.dx()
+    @savefig simple_impulse.png width=5in
+    In [1]: ip.plot()
 
-    In [7]: print "Frequency integration",Ef
+*Verification of energy normalization in both domains*
 
+.. ipython::
 
-*Calcul of UWB channel impulse response*
+    In [1]: Et  = sum(ip.y*ip.y)*ip.dx()
+
+    In [1]: print "Time integration",Et
+
+    In [1]: P = ip.esd()
+   
+    In [1]: Ef = sum(P.y)*P.dx()
+
+    In [1]: print "Frequency integration",Ef
 
 A simulation file contains the description of an applied waveform. 
 
@@ -69,7 +63,7 @@ A simulation file contains the description of an applied waveform.
 
     In [3]: S = Simul()
 
-    In [4]: S.load('where2.ini')
+    In [4]: S.load('default.ini')
 
     In [5]: st = S.wav.st
 
@@ -77,22 +71,8 @@ A simulation file contains the description of an applied waveform.
 
     In [7]: S.wav.info()
 
+    @savefig default_wav.png width=5in 
     In [8]: st.plot()
-
-
-.. plot::
-
-    from pylayers.simul.simulem import *
-    from matplotlib.pylab import *
-    S = Simul()
-    S.load('where2.ini')
-    st = S.wav.st
-    sf = S.wav.sf
-    st.plot()
-    figure()
-    sf.plot()
-    show()
-
 
 
 *Construction of the VectChannel*
@@ -100,20 +80,10 @@ A simulation file contains the description of an applied waveform.
 .. ipython::
 
     In [9]: vc = S.VC(1,1)
-
+    
+    @savefig doadod.png width=8in
     In [10]: vc.doadod()
 
-
-.. plot::
-
-    from pylayers.simul.simulem import *
-    from matplotlib.pylab import *
-    S = Simul()
-    S.load('where2.ini')
-    vc = S.VC(1,1)
-    figure(figsize=(16,8))
-    vc.doadod()
-    show()
 
 *Construction of the ScalChannel*
 
@@ -122,7 +92,7 @@ A simulation file contains the description of an applied waveform.
     sc = vc.vec2scal()
 
 
-# The ScalChannel object contain all the information about the ray transfer function 
+ScalChannel object contains all the information about the ray transfer function 
 
 
 S.tx.A.info()

@@ -88,9 +88,6 @@ Uniform time signal
 
 .. autoattribute:: pylayers.signal.bsignal.TUsignal 
 
-.. autosummary::
-    :toctree: generated/
-
 Utilities
 ~~~~~~~~~
 

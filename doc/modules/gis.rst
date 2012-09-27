@@ -69,7 +69,6 @@ Layout I/O
     loadstr
     loadstr2
     savestr2
-    loadGt
     saveGv 
     savelay 
     loadlay 
@@ -87,7 +86,6 @@ Graph Construction
     buildGv 
     buildGi 
     buildGr 
-    GvF 
 
 Signatures 
 ----------
@@ -97,8 +95,6 @@ Signatures
     
     signature 
     points_image 
-    filtre_sign 
-    image_M_Tx 
     showSig 
 
 Functions related to nodes mobility
@@ -128,12 +124,6 @@ Utilities
     randTxRx 
     boundary 
     loadGv 
-    poly_door 
-    moby_allowed_zone 
-    segs_cross 
-    sign_cross 
-    cross_shortest 
-    plot_sign2 
 
 readvrml
 ********
@@ -159,6 +149,8 @@ readvrml
 
 furniture
 *********
+
+.. automodule:: pylayers.gis.furniture.Furniture
 
 .. autoclass:: pylayers.gis.furniture.Furniture
 

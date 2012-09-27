@@ -211,14 +211,15 @@ Module Slab
 Channel
 *******
 
-.. currentmodule:: pylayers.antprop.channel 
 
+Class Ctilde
+-------------
 
 .. currentmodule:: pylayers.antprop.channel.Ctilde
 
-.. class:: pylayers.antprop.slab.Ctilde
+.. class:: pylayers.antprop.channel.Ctilde
 
-.. autoattribute:: pylayers.antprop.slab.Ctilde
+.. autoattribute:: pylayers.antprop.channel.Ctilde
 
 .. autosummary::
     :toctree: generated/
@@ -231,11 +232,15 @@ Channel
     vec2scal 
     vec2scalA
 
+
+Class VectChannel 
+-----------------
+
 .. currentmodule:: pylayers.antprop.channel.VectChannel
 
-.. class:: pylayers.antprop.slab.VectChannel
+.. class:: pylayers.antprop.channel.VectChannel
 
-.. autoattribute:: pylayers.antprop.slab.VectChannel
+.. autoattribute:: pylayers.antprop.channel.VectChannel
 
 .. autosummary::
     :toctree: generated/
@@ -243,17 +248,19 @@ Channel
     show3
     mobility
 
+
+Class ScalChannel 
+-----------------
+
 .. currentmodule:: pylayers.antprop.channel.ScalChannel
 
-.. class:: pylayers.antprop.slab.ScalChannel
-
-.. autoattribute:: pylayers.antprop.slab.ScalChannel
+.. class:: pylayers.antprop.channel.ScalChannel
 
 .. autosummary::
     :toctree: generated/
 
     info
-    show
+    imshow
     apply 
     applywavA
     applywavB

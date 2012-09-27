@@ -17,17 +17,8 @@ For learning how to use PyLayers, see also :ref:`user`.
 .. toctree::
    :maxdepth: 2
 
-   GIS 
-   -------------
-
    gis.rst
-
-   Signal 
-   --------
-
+   antprop.rst
    signal.rst
 
-   Antenna and Propagation  
-   ------------------------
-   antprop.rst
 

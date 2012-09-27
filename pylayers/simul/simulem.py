@@ -1041,7 +1041,6 @@ class Simul(object):
 #
 # Frequency base
 #
-        pdb.set_trace()
         if "frequency" in sections:
             self.freq = np.linspace(float(self.config.getfloat("frequency", "fghzmin")),
                                     float(self.config.getfloat("frequency", "fghzmax")),
