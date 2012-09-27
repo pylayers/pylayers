@@ -34,7 +34,7 @@ where :math:`B` is the bandwidth defined at :math:`\gamma_{dB}` and
     
     In [1]: fe     = 100 
 
-    In [1]: ip  = EnImpulse([],fc,band,thres,fe)
+    In [1]: ip  = EnImpulse([],fc,band,thresh,fe)
    
     @savefig simple_impulse.png width=5in
     In [1]: ip.plot()
@@ -89,44 +89,55 @@ A simulation file contains the description of an applied waveform.
 
 .. ipython::
 
-    sc = vc.vec2scal()
+    In [1]: sc = vc.vec2scal()
 
 
-ScalChannel object contains all the information about the ray transfer function 
+ScalChannel object is the container for the ray transfer function 
+
+.. ipython::
+
+    In [1]: S.tx.A.info()
+
+    @savefig rayTF.png width=10in 
+    In [2]: sc.H.plot()
 
 
-S.tx.A.info()
+The antenna is taken into account as follows
+
+.. ipython::
+
+    In [1]: alpha = 1./sqrt(30)
+
+    In [1]: sca = vc.vec2scalA(S.tx.A,S.rx.A,alpha)
+    
+    @savefig scalch.png width=10in
+    In [1]: sca.H.plot()
 
 
-sc.H.plot()
+To evaluate the UWB Channel Impulse Response (CIR), the simulation waveform 
+is applied to the ScalChannel
 
 
-# The antenna can also been taken into account
+
+.. ipython::
+    
+    In [1]: cir = sc.applywavB(S.wav.sfg)
+
+    @savefig cir.png width=6in 
+    In [1]: cir.plot()
+
+.. ipython::
+
+    In [1]: CIR=cir.esd(mode='unilateral')
+    
+    @savefig CIR.png width=6in
+    In [1]: CIR.plot()
 
 
-alpha = 1./sqrt(30)
-sca = vc.vec2scalA(S.tx.A,S.rx.A,alpha)
-sca.H.plot()
+.. math:: 
 
+    \mathbf{Y} = \mathbf{S} \odot \mathbf{W}
 
-# ## Calculate UWB Channel Impulse Response 
-
-
-cir = sc.applywavB(S.wav.sfg)
-
-
-cir.plot()
-
-
-CIR=cir.esd(mode='unilateral')
-CIR.plot()
-
-
-# This is wrong 
-# 
-# $\mathbf{Y} = \mathbf{S} \odot \mathbf{W}$
-
-# <codecell>
 
 wgam = S.wav.sfg
 Y    = sc.apply(wgam)

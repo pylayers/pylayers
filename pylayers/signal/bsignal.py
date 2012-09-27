@@ -2216,7 +2216,7 @@ class FBsignal(Bsignal):
                         plt.xlabel('Frequency (GHz)')
                         plt.ylabel('Modulus')
                         plt.subplot(212)
-                        plot(self.x, np.unwrap(np.angle(self.y[k])))
+                        plt.plot(self.x, np.unwrap(np.angle(self.y[k])))
                         plt.xlabel('Frequency (GHz)')
                         plt.ylabel('Phase (rad)')
                     else:

@@ -153,7 +153,7 @@ class Ctilde(object):
             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
             self.rang = tmp[0:nray, :]
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12):
         """ doadod scatter plot
 
         Parameters
@@ -161,6 +161,8 @@ class Ctilde(object):
         cmap : color map
         s    : float
             size (default 30)
+        fontsize : integer
+            default 12
 
         Summary
         --------
@@ -192,29 +194,29 @@ class Ctilde(object):
                     cmap=cmap, edgecolors='none')
         #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
         plt.axis((0, 180, 0, 360))
-        plt.xticks(fontsize=20)
-        plt.yticks(fontsize=20)
-        #a=colorbar()
+        #plt.xticks(fontsize=20)
+        #plt.yticks(fontsize=20)
+        a = plt.colorbar()
         #for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
-        #a.set_label('dB')
-        plt.xlabel("$\\theta_t(\degree)$", fontsize=14)
-        plt.ylabel('$\phi(\degree)$', fontsize=14)
+        a.set_label('dB')
+        plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
+        plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
         #ylabel('$\phi_t(\degree)$',fontsize=18)
-        plt.title('DoD', fontsize=18)
+        plt.title('DoD',fontsize=fontsize+2)
         plt.subplot(122)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
         plt.axis((0, 180, 0, 360))
-        plt.xticks(fontsize=20)
-        plt.yticks(fontsize=20)
-        #b=colorbar()
-        #b.set_label('dB',fontsize=18)
+        #plt.xticks(fontsize=20)
+        #plt.yticks(fontsize=20)
+        b = plt.colorbar()
+        b.set_label('dB')
         #for t in b.ax.get_yticklabels():
         #    t.set_fontsize(20)
-        plt.xlabel("$\\theta_r(\degree)$", fontsize=14)
-        plt.title('DoA', fontsize=18)
-        plt.ylabel("$\phi_r (\degree)$", fontsize=14)
+        plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
+        plt.title('DoA', fontsize=fontsize+2)
+        plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
 
     def show(self, display=False, mode='linear'):
         """ show
