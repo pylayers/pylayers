@@ -3774,7 +3774,6 @@ class Layout(object):
         lines = []
         ps = self.get_Sg_pos(sigarr)
         nz = np.nonzero(sig == 0)[0]
-        pdb.set_trace()
         mask = np.zeros((2, len(sig)))
         mask[:, nz] = 1
         vertices = np.ma.masked_array(ps.T, mask)
