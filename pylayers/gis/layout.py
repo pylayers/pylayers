@@ -115,8 +115,6 @@ class Layout(object):
         save(self,filename)
         load(self,filename)
         geomfile(self,filename='Lstruc.off')
-        savestr2(self)
-            export Layout as an  .str2 file
 
         show_nodes(self,ndlist=[1e8],size=10,color='b',
             dlabels=False,font_size=15,alpha=1)
@@ -1256,14 +1254,20 @@ class Layout(object):
         if (type(ln) == np.ndarray):
             ln = list(ln)
 
+        if (type(ln) == np.int32):
+            ln = [ln]
+        
         if (type(ln) == int):
             ln = [ln]
 
         for n1 in ln:
             nbrs = self.Gs.neighbors(n1)
-            nbrc = self.Gc.neighbors(n1)
+            #nbrc = self.Gc.neighbors(n1)
             self.Gs.remove_node(n1)
-            self.Gc.remove_node(n1)
+            try:
+                self.Gc.remove_node(n1)
+            except:
+                print "No Gc node",n1
             for k in nbrs:
                 self.del_edge(k)
             #
@@ -1764,7 +1768,7 @@ class Layout(object):
         edlist = self.nd2ed(ndlist)
         return ndlist, edlist
 
-    def savestr2(self, _filename, furniture=False):
+    def savestr2(self, _filename='default.str2', furniture=False):
         """ save Layout in .str2 format
 
         Parameters
@@ -1772,7 +1776,6 @@ class Layout(object):
         _filename : string
             file is  written in the struc directory of the current Project
             directory which is defined through the environment variable $BASENAME
-            extension .str2 is added to short name filename
             furniture :  boolean
 
         Notes
@@ -1782,7 +1785,7 @@ class Layout(object):
 
                 > newstruc -str2 file.str2 -conf ../project.conf
 
-        .. todo:: Create a savestr from the Layout Class require Gv
+        .. todo:: Create a savestr from the Layout Class requires Gv
 
         """
         if furniture:
@@ -1808,7 +1811,10 @@ class Layout(object):
         cne = str(ne)
         cnss = str(nss)
 
-        fo = open(filename + '.str2', 'w')
+        fo = open(filename, 'w')
+        #
+        # Write in .str2 file
+        #
         chaine = cnn + " " + cne + " " + cnss + "\n"
         fo.write(chaine)
 

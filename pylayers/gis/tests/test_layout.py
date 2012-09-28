@@ -6,8 +6,8 @@ import doctest
 
 
 L = Layout()
-L.load('Lstruc.str')
-#L.interact()
+L.load('Lstruc.str2')
+L.interact()
 # build topological graph 
 #L.buildGt()
 #L.showG('t')

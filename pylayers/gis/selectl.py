@@ -207,7 +207,8 @@ class SelectL(object):
         # r : Refresh
         #
         if self.evt == 'r':
-            axis(self.g.ax)
+            #plt.axis(self.g.ax)
+            plt.axis('tight')
             self.show(clear=True)
             return
         #
@@ -250,7 +251,10 @@ class SelectL(object):
             return
         if self.evt == 'x':
         # save structure
-            self.g.savestr2(self.g.filename)
+            racine,ext =os.path.splitext(self.g.filename)
+            filename = racine+'.str2'
+            self.g.savestr2(filename)
+            print "structure saved in ",filename
             return
         if self.evt == 'w':
         # display all layer
@@ -282,7 +286,7 @@ class SelectL(object):
                 title='SP1 Node : %d '%(self.nsel)
                 self.show(clear=False,title=title)
                 self.g.show_nodes(ndlist=[self.nsel],alpha=0.5,color='y',size=200)
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -307,7 +311,7 @@ class SelectL(object):
 
                 self.show(clear=True,title=titre)
                 self.g.show_nodes(ndlist=[nse],size=200,color='r',alpha=0.5)
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -325,7 +329,7 @@ class SelectL(object):
                 self.g.add_fnod(self.ptsel)
                 self.show(clear=False)
                 self.pt_previous = self.ptsel
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -335,7 +339,7 @@ class SelectL(object):
                 self.g.add_fnod(self.ptsel)
                 self.show(clear=False)
                 self.pt_previous = self.ptsel
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -358,7 +362,7 @@ class SelectL(object):
                     self.selected_pt1 = 0
                     self.p1[0].set_visible(False)
                     self.show(clear=True,title='Init State')
-                    self.spl.axis(self.g.ax)
+                    #self.spl.axis(self.g.ax)
                     self.fig.canvas.draw()
                     print "Out State",self.state
                     return
@@ -374,7 +378,7 @@ class SelectL(object):
                     self.p2[0].set_visible(True)
                     self.show(clear=True,title='SP2 : cclic -> delete point / rclic -> add segment Layer %s'%(self.current_layer))
                     self.g.show_nodes(ndlist=[self.selected_pt1,self.selected_pt2],alpha=0.5,color='g',size=200)
-                    self.spl.axis(self.g.ax)
+                    #self.spl.axis(self.g.ax)
                     self.fig.canvas.draw()
                     print "Out State",self.state
                     return
@@ -385,7 +389,7 @@ class SelectL(object):
                 self.g.del_node(self.nsel)
                 self.p1[0].set_visible(False)
                 self.show(clear=True,title='Init State')
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -393,7 +397,7 @@ class SelectL(object):
             # edit point
                 #self.g.Gs.edit_node(self.selected_pt1)
                 self.state='Init'
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -412,7 +416,7 @@ class SelectL(object):
                     self.selected_pt2=0
                     self.p2[0].set_visible(False)
                     self.state='SP1'
-                    self.spl.axis(self.g.ax)
+                    #self.spl.axis(self.g.ax)
                     self.fig.canvas.draw()
                     print "Out State",self.state
                     return
@@ -425,7 +429,7 @@ class SelectL(object):
                     self.p1[0].set_color('yellow')
                     self.p1[0].set_visible(True)
                     self.state='SP1'
-                    self.spl.axis(self.g.ax)
+                    #self.spl.axis(self.g.ax)
                     self.fig.canvas.draw()
                     print "Out State",self.state
                     return
@@ -434,7 +438,7 @@ class SelectL(object):
                 self.selected_pt2    = 0
                 self.p2[0].set_visible(False)
                 self.state       = 'SP1'
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -443,7 +447,7 @@ class SelectL(object):
                 self.selected_pt2=0
                 self.g.del_node(self.nsel)
                 self.state='SP1'
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -493,7 +497,7 @@ class SelectL(object):
                     self.show(clear=True,title=titre)
                     self.selected_edge = nume
                     self.g.show_nodes(ndlist=[nume],size=200,color='r',alpha=0.5)
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -517,7 +521,7 @@ class SelectL(object):
                 self.state='Init'
                 self.show(clear=True,title='Init')
                 print "Out State",self.state
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 return
             if (self.evt=='cclic'):
@@ -529,7 +533,7 @@ class SelectL(object):
                     self.state='Init'
                     self.text.set_text('Init')
                     print "Out State",self.state
-                    self.spl.axis(self.g.ax)
+                    #self.spl.axis(self.g.ax)
                     self.fig.canvas.draw()
                     return
 
@@ -554,7 +558,7 @@ class SelectL(object):
                     self.state='SS'
                     self.show(clear=True,title="SS : Try again ")
 
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 print "Out State",self.state
                 return
@@ -562,7 +566,7 @@ class SelectL(object):
             if (self.evt=='alt'):
                 print "Edit Coseg"
                 print "Out State",self.state
-                self.spl.axis(self.g.ax)
+                #self.spl.axis(self.g.ax)
                 self.fig.canvas.draw()
                 return
 
