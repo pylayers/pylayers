@@ -61,8 +61,7 @@ class Ctilde(object):
         try:
             fo = open(filefield, "rb")
         except:
-            print "file ", filefield, " is unreachable"
-            exit()
+            raise NameError( "file "+ filefield+ " is unreachable")
 
         # decode filename (*.field file obtained from evalfield simulation)
         nray = stru.unpack('i', fo.read(4))[0]
