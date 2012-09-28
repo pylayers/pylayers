@@ -72,7 +72,6 @@ class Layout(object):
             give information about the Layout
         ss-dico = L.subseg(self)
             extract the dictionnary of subseg
-            interact(self)  : edit the layout interctively
         add_pnod(self,p,e1,e2)
             tbd
         add_fnod(self,p=(0.0,0.0))
@@ -108,7 +107,6 @@ class Layout(object):
         diag(self,p1,p2,l,al1,al2,quadsel=0)
         nd2ed(self,ndlist)
         ed2nd(self,edlist)
-        nl,el = L.zone(self,xmin=0,xmax=10,ymin=0,ymax=10)
         closest_edge(self,p,AAS)
         walls = L.thwall(self,offx,offy)
             extract walls as polygon --> Simpy World
@@ -1728,36 +1726,70 @@ class Layout(object):
         return(edgelist)
 
     def nd2ed(self, ndlist):
-        """
-        convert nodelist to edgelist
-        """
-        if type(ndlist) == ndarray:
+        """ convert node list to edge list
+        
+        Parameters
+        ----------
+        ndlist : list or ndarray
+            node list 
+
+        Returns
+        -------
+        edlist : ndarray
+            edge list 
+
+
+                """
+        if isinstance(ndlist,np.ndarray):
             ndlist = ndlist.tolist()
             #mecanisme puissant de concatenation de listes
         edlist = []
         for n in ndlist:
             edlist = edlist + self.Gs.adj[n].keys()
 
-        return(unique(edlist))
+        return(np.unique(edlist))
 
     def ed2nd(self, edlist):
+        """ convert edgelist to nodelist
+
+        Parameters
+        ----------
+        edlist : list or ndarray
+            edge list 
+
+        Returns
+        -------
+        ndlist : ndarray 
+            node list 
+
         """
-        convert edgelist to nodelist
-        """
-        if type(edlist) == ndarray:
+        if isinstance(edlist,np.ndarray):
             edlist = edlist.tolist()
             # mecanisme de concatenation de listes
         ndlist = []
         for e in edlist:
             ndlist = ndlist + self.Gs.adj[e].keys()
 
-        return(unique(ndlist))
+        return(np.unique(ndlist))
 
-    def zone(self, xmin=0, xmax=10, ymin=0, ymax=10):
-        """
-        nl,el = zone(xmin=0,xmax=10,ymin=0,,ymax=10):
+    def get_zone(self, ax):
+        """ get node list and edge list in a rectangular zone
+
+        Parameters
+        ----------
+        ax  : list ot tuple
+            [xmin,xmax,ymin,ymax]
+
+        Returns
+        -------
+        ndlist,edlist
 
         """
+
+        xmin = ax[0]
+        xmax = ax[1]
+        ymin = ax[2]
+        ymax = ax[3]
         ndlist = []
         for n in self.Gs.node.keys():
             if n < 0:
@@ -3212,8 +3244,8 @@ class Layout(object):
         waypoint.append((proom2[0], proom2[1]))
         return(waypoint)
 
-    def interact(self):
-        """ interact
+    def editor(self):
+        """ layout graphical editor
 
         Notes
         -----

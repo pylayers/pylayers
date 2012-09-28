@@ -9,8 +9,8 @@ gis
 This modules gathers all the classes and function related to geographical
 information.
 
-Layout
-******
+Class Layout
+************
 
 .. currentmodule:: pylayers.gis.layout.Layout
 
@@ -45,6 +45,7 @@ Layout Edition
     del_node
     del_edge
     del_cycle
+    get_zone
     
 
 Layout Vizualization
@@ -147,8 +148,8 @@ readvrml
     parsevrml
     vrml2sha
 
-furniture
-*********
+Class furniture
+***************
 
 .. automodule:: pylayers.gis.furniture.Furniture
 
@@ -165,3 +166,15 @@ furniture
     show
 
 
+Class selectl
+***************
+
+.. automodule:: pylayers.gis.selectl.SelectL
+
+.. autoclass:: pylayers.gis.selectl.SelectL
+
+.. autosummary::
+    :toctree: generated/
+    
+    call_editor 
+    show
