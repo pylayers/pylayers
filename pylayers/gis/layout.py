@@ -19,6 +19,7 @@ import random
 import matplotlib.pyplot as plt
 import matplotlib.colors as clr
 import networkx as nx
+from networkx.readwrite import write_gpickle,read_gpickle
 import shapely.geometry as sh
 from   shapely.ops import cascaded_union
 from   descartes.patch import PolygonPatch
@@ -2418,6 +2419,74 @@ class Layout(object):
         fig = plt.gcf()
         return fig, ax
 
+    def build(self, graph='trwcvi'):
+        """ build graphs
+
+        Parameters
+        ----------
+            't' : Gt
+            'r' : Gr
+            's' : Gs
+            'v' : Gv 
+            'i' : Gi 
+        """
+
+        if 't' in graph:
+            self.buildGt()
+        if 'r' in graph:
+            self.buildGr()
+        if 'w' in graph:
+            self.buildGw()
+        if 'c' in graph:
+            self.buildGc()
+        if 'v' in graph:
+            self.buildGv()
+        if 'i' in graph:
+            self.buildGi()
+
+    def dumpw(self, graph='trwcvi'):
+        """ write a dump of given Graph
+
+        Parameters
+        ----------
+            't' : Gt
+            'r' : Gr
+            's' : Gs
+            'v' : Gv 
+            'i' : Gi 
+        """
+        allg= ['t','r','w','c','v','i']
+        for g in allg:
+            if g in graph:
+                try:
+                    gname='G'+g
+                    write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
+                except:
+                    raise NameError('G'+g+' graph cannot be saved, probably because it has not been build')
+
+
+    def dumpr(self, graph='trwcvi'):
+        """ read a dump of given Graph
+
+        Parameters
+        ----------
+            't' : Gt
+            'r' : Gr
+            's' : Gs
+            'v' : Gv 
+            'i' : Gi 
+        """
+        allg= ['t','r','w','c','v','i']
+        for g in allg:
+            if g in graph:
+                try:
+                    gname='G'+g
+                    setattr(self, gname, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
+                except:
+                    raise NameError('G'+g +' graph cannot be load')
+
+
+
     def buildGc(self):
         """ build the connectivity graph
 
@@ -2669,8 +2738,6 @@ class Layout(object):
                 self.Gi.pos[n] = self.Gs.pos[n]
             if n > 0:
                 cy = self.Gs.node[n]['ncycles']
-                if n == 129:
-                    pdb.set_trace()
                 if len(cy) == 2:
                     cy0 = cy[0]
                     cy1 = cy[1]
@@ -2718,7 +2785,7 @@ class Layout(object):
                                     # R-R
                             else:
                                 print node1, node2
-                                pdb.set_trace()
+                                #pdb.set_trace()
 
                             if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
                                 node1 = str(n)
@@ -2727,7 +2794,7 @@ class Layout(object):
                                     self.Gi.add_edge(node1, node2)
                                 else:
                                     print node1, node2
-                                    pdb_set_trace()
+                                    #pdb_set_trace()
                         else:                                    # R-D
                             node1 = str(n)
                             node2 = str(nb)
@@ -2735,7 +2802,7 @@ class Layout(object):
                                 self.Gi.add_edge(node1, node2)
                             else:
                                 print node1, node2
-                                pdb_set_trace()
+                                #pdb_set_trace()
             else:  # transmission or diffraction
                 if n > 0:  # transmission
                     ns = n
@@ -2752,8 +2819,8 @@ class Layout(object):
                                 node2 = str((nb, cy0))
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(node1, node2)
-                                else:
-                                    pdb.set_trace()
+#                                else:
+#                                    #pdb.set_trace()
                                 if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
                                     node1 = str(n)
                                     node2 = str(nb)
@@ -2761,7 +2828,7 @@ class Layout(object):
                                         self.Gi.add_edge(node1, node2)
                                     else:
                                         print node1, node2
-                                        pdb.set_trace()
+                                        #pdb.set_trace()
                             else:
                                 node1 = str(n)
                                 node2 = str(nb)
@@ -2769,7 +2836,7 @@ class Layout(object):
                                     self.Gi.add_edge(str(n), str(nb))
                                 else:
                                     print node1, node2
-                                    pdb.set_trace()
+                                    #pdb.set_trace()
                         if nb in vnodes1:    # Si Voisin dans cycle reflexion 1
                             if nb > 0:
                                 node1 = str(n)
@@ -2778,7 +2845,7 @@ class Layout(object):
                                     self.Gi.add_edge(node1, node2)
                                 else:
                                     print node1, node2
-                                    pdb.set_trace()
+                                    #pdb.set_trace()
                                 if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
                                     node1 = str(n)
                                     node2 = str(nb)
@@ -2786,7 +2853,7 @@ class Layout(object):
                                         self.Gi.add_edge(node1, node2)
                                     else:
                                         print node1, node2
-                                        pdb.set_trace()
+                                        #pdb.set_trace()
                             else:
                                 node1 = str(n)
                                 node2 = str(nb)
@@ -2794,7 +2861,7 @@ class Layout(object):
                                     self.Gi.add_edge(node1, node2)
                                 else:
                                     print node1, node2
-                                    pdb.set_trace()
+                                    #pdb.set_trace()
 
 #    def showGraph(self,**kwargs):
 #        """
@@ -3603,6 +3670,10 @@ class Layout(object):
         #
         # Practically those list of nodes should depend on pTx , pRx
         #
+        try:
+            self.Gi
+        except:
+            raise NameError('Interaction graph layout.Gi must be build before signature computation')
         if isinstance(iTx, np.ndarray):
             NroomTx = self.pt2ro(iTx)
         elif isinstance(iTx, int):
@@ -3665,17 +3736,17 @@ class Layout(object):
 
         return(sigarr, signature)
 
-    def get_Sg_pos(self, signature):
+    def get_Sg_pos(self, sigarr):
         """ return position of the signatures
         """
-        signature = signature[0][0]
+        signature = sigarr[0]
         sposfull = np.zeros((len(signature), 2))
         iz = np.nonzero(signature != 0)[0]
         spos = np.array([self.Gs.pos[i] for i in signature if i != 0])
         sposfull[iz, :] = spos
         return (sposfull)
 
-    def showSig(self, sig, Tx=None, Rx=None, fig=plt.figure(), ax=None):
+    def showSig(self, sigarr, Tx=None, Rx=None, fig=plt.figure(), ax=None):
         """ Show signature
 
         Parameters
@@ -3694,21 +3765,21 @@ class Layout(object):
         lines : lines instance
 
         """
-
+        sig =sigarr[0]
         if fig is None:
             fig = plt.figure()
             ax = fig.add_subplot(111)
         elif ax is None:
             ax = fig.add_subplot(111)
         lines = []
-        ps = self.get_Sg_pos(sig)
+        ps = self.get_Sg_pos(sigarr)
         nz = np.nonzero(sig == 0)[0]
-        if sr != []:
-            mask = np.zeros((2, len(sig)))
-            mask[:, nz] = 1
-            vertices = np.ma.masked_array(ps.T, mask)
-            lines.extend(ax.plot(vertices[0, :], vertices[1, :], color='k'))
         pdb.set_trace()
+        mask = np.zeros((2, len(sig)))
+        mask[:, nz] = 1
+        vertices = np.ma.masked_array(ps.T, mask)
+        lines.extend(ax.plot(vertices[0, :], vertices[1, :], color='k'))
+
         if Tx != []:
             itx = np.unique(sig[nz[1:-1] + 1], return_index=True)[1]
             itx2 = np.kron(itx, [1, 1])

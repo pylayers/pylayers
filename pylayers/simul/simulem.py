@@ -1257,6 +1257,8 @@ class Simul(object):
                         ax.text(self.tx.position[0,k - 1],
                                 self.tx.position[1,k - 1],
                                 str(k), color='black')
+
+        return (fig,ax)
         #for k in range(self.tx.N):
         #    ax.text(self.tx.position[0,k],self.tx.position[1,k],str(k+1),color='black')
         #    ax.scatter(self.tx.position[0,:],self.tx.position[0,:],
@@ -2218,3 +2220,5 @@ class Simul(object):
 
 if (__name__ == "__main__"):
     doctest.testmod()
+
+
