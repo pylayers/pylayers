@@ -3222,10 +3222,8 @@ class Layout(object):
                                            self.af.OnClick)
         self.cid2 = fig.canvas.mpl_connect('key_press_event',
                                            self.af.OnPress)
-        self.cid3 = fig.canvas.mpl_connect('xlim_changed',
-                                           self.af.OnChanged)
-        #fig.canvas.mpl_connect('button_press_event',af.OnClick)
-        #fig.canvas.mpl_connect('key_press_event',af.OnPress)
+        self.cid3 = fig.canvas.mpl_connect('resize_event',
+                                           self.af.OnResize)
         plt.draw()
         plt.show()
 
