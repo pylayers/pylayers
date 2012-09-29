@@ -68,7 +68,7 @@ class SelectL(object):
         #ymin,ymax=laxe.yaxis.get_view_interval()
         #xmin,xmax,ymin,ymax = self.g.ax
         #ax = plt.axis('tight')
-        ax = plt.axis()
+        #ax = plt.axis()
         self.g.display['clear'] = clear
         self.g.display['nodes'] = dnodes
         self.g.display['edges'] = dedges
@@ -77,8 +77,8 @@ class SelectL(object):
         self.g.display['fontsize'] = font_size
         self.g.display['title'] = title
         self.g.display['ednodes'] = True
-        self.g.showGs()
-        plt.axis(ax)
+        self.g.showGs(ax=self.ax)
+        #plt.axis(ax)
 
     def OnChanged(self):
         """ OnChanged event 
