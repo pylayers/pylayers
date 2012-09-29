@@ -81,7 +81,7 @@ class SelectL(object):
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
         self.L.display['ednodes'] = True
-        self.L.showGs()
+        self.L.showGs(ax=self.ax)
 
     def OnResize(self, event):
         """ OnResize
