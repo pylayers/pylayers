@@ -26,14 +26,13 @@ class SelectL(object):
 
 
     """
-    def __init__(self, g, fig):
+    def __init__(self,g,fig):
         """
         Select is a class which associate a Layout and a figure
         """
         self.g = g
         self.fig = fig
         self.spl = self.fig.add_subplot(111)
-        #self.title = self.spl.title='Title is not set'
         self.text = self.spl.text(0.05, 0.95, 'selected : none',
                                   transform=self.spl.transAxes, va='top')
         self.pt = []
@@ -49,6 +48,7 @@ class SelectL(object):
         self.nedge_sel = 0
         self.indp = 0
         self.state = 'Init'
+        self.show()
 
     def show(self, clear=False, dnodes=True, dedges=True, dlabels=False, font_size=10, title='Init'):
         """ show 
@@ -65,6 +65,7 @@ class SelectL(object):
         #xmin,xmax=laxe.xaxis.get_view_interval()
         #ymin,ymax=laxe.yaxis.get_view_interval()
         #xmin,xmax,ymin,ymax = self.g.ax
+        #ax = plt.axis('tight')
         ax = plt.axis()
         self.g.display['clear'] = clear
         self.g.display['nodes'] = dnodes
@@ -77,6 +78,11 @@ class SelectL(object):
         self.g.showGs()
         #plt.axis((xmin,xmax,ymin,ymax))
         plt.axis(ax)
+
+    def OnChanged(self,event):
+        ax = plt.gca()
+        print ax.get_xlim()
+        print ax.get_ylim()
 
     def OnPress(self, event):
         """
@@ -213,9 +219,16 @@ class SelectL(object):
 
         if self.evt == 'c':
             if self.state == 'Init':
-                ax = plt.axis()
-                ndlist,edlist = self.g.get_zone(ax)
-                self.g.del_node(ndlist)
+                ax = plt.gca()
+                x1 = ax.get_xlim()
+                y1 = ax.get_ylim()
+                axx = plt.axis()
+                #ndlist,edlist = self.g.get_zone([x1[0],x1[1],y1[0],y1[1])
+                print x1,y1
+                print axx
+                #print ndlist 
+                #self.g.del_node(ndlist)
+                self.show(clear=True, title='Init')
 
         #
         # r : Refresh

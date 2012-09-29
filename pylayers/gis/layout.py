@@ -1285,7 +1285,6 @@ class Layout(object):
         -----
 
         """
-        print type(le) 
         if (type(le) == np.ndarray):
             le = list(le)
 
@@ -3264,13 +3263,15 @@ class Layout(object):
             o : toggle overlay
 
         """
-        fig = plt.figure()
-        plt.axis(self.ax)
+        fig = plt.gcf()
         self.af = SelectL(self, fig)
         self.af.show()
-        self.cid1 = fig.canvas.mpl_connect(
-            'button_press_event', self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect('key_press_event', self.af.OnPress)
+        self.cid1 = fig.canvas.mpl_connect('button_press_event',
+                                           self.af.OnClick)
+        self.cid2 = fig.canvas.mpl_connect('key_press_event',
+                                           self.af.OnPress)
+        self.cid3 = fig.canvas.mpl_connect('xlim_changed',
+                                           self.af.OnChanged)
         #fig.canvas.mpl_connect('button_press_event',af.OnClick)
         #fig.canvas.mpl_connect('key_press_event',af.OnPress)
         plt.draw()
