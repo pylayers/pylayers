@@ -59,7 +59,9 @@ class SelectL(object):
         dnodes    : boolean 
         dedges    : boolean 
         dlabels   : boolean 
-        font_size :  
+        font_size : integer 
+        title     : string 
+
         """
         #laxe  = self.spl.get_axes()
         #xmin,xmax=laxe.xaxis.get_view_interval()
@@ -76,10 +78,11 @@ class SelectL(object):
         self.g.display['title'] = title
         self.g.display['ednodes'] = True
         self.g.showGs()
-        #plt.axis((xmin,xmax,ymin,ymax))
         plt.axis(ax)
 
-    def OnChanged(self,event):
+    def OnChanged(self):
+        """ OnChanged event 
+        """
         ax = plt.gca()
         print ax.get_xlim()
         print ax.get_ylim()
@@ -152,9 +155,7 @@ class SelectL(object):
         'x'  : save .str2 file
         'w'  : display all layers
 
-        Notes
-        -----
-            ----p----> CP
+            <----p----> CP
             <---p-----
             ----ml---> SP1
             <---ml---- SP1

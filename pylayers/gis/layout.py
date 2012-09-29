@@ -62,79 +62,6 @@ class Layout(object):
     ------
      This class exploits `networkx` to store Layout information
 
-    Methods
-    -------
-
-        dir_ray_sign(self,Tx_x,Tx_y,Rx_x,Rx_y)
-            to be explained
-        v_color(self,ob)
-            to be explained
-        help(self)
-            give information about the Layout
-        ss-dico = L.subseg(self)
-            extract the dictionnary of subseg
-        add_pnod(self,p,e1,e2)
-            tbd
-        add_fnod(self,p=(0.0,0.0))
-            add free node p
-        add_nfpe(self,np0,e1,e2)
-            tbd
-        add_none(self,ns,alpha=0.5)
-           add node on edge
-        add_edge(self,n1,n2,name='PARTITION',zmin=0,zmax=3.0)
-            add edge between n1 and n2
-        del_node(self,n1)
-            delete node n1
-        del_edge(self,e1)
-            add edge between n1 and n2
-        displaygui(self)
-        info_edge(self,e1)
-        edit_edge(self,e1)
-        have_subseg(self,e1)
-        del_subseg(self,e1)
-        add_subseg(self,e1)
-        add_window(self,e1)
-        add_door(self,e1)
-        check(self)
-        ispoint(self,pt,tol=0.45)
-        onseg(self,pt,tol=0.01)
-        checkvis(self,p,edgelist,nodelist)
-        visilist(self,p)
-        visi_papb(self,pa,pb,edgelist=np.array([]))
-        boundary(self)
-
-        clip(self,xmin,xmax,ymin,ymax)
-        find_edgelist(self,edgelist,nodelist)
-        diag(self,p1,p2,l,al1,al2,quadsel=0)
-        nd2ed(self,ndlist)
-        ed2nd(self,edlist)
-        closest_edge(self,p,AAS)
-        walls = L.thwall(self,offx,offy)
-            extract walls as polygon --> Simpy World
-        save(self,filename)
-        load(self,filename)
-        geomfile(self,filename='Lstruc.off')
-
-        show_nodes(self,ndlist=[1e8],size=10,color='b',
-            dlabels=False,font_size=15,alpha=1)
-        show_edge(self,edlist=[],alpha=1,width=1,size=2,
-            color='black',font_size=15,dlabels=False)
-        show_edges(self,edlist=[],alpha=1,width=1,color='black',
-            dnodes=False,dlabels=False,font_size=15)
-        show_layer(self,name,edlist=[],alpha=1,width=1,color='black',
-            dnodes=False,dthin=False,dlabels=False,font_size=15)
-        showGs(self,ndlist=[],edlist=[])
-        show3(self,bdis=True)
-        buildGc(self)
-        buildGt(self)
-        buildGr(self)
-        buildGi(self)
-        waypoint(self,nroom1,nroom2)
-        info(self)
-        facets3D(self,edlist,name='Layer',subseg=False)
-        facet3D(self,e,subseg=False)
-        signature(self,pTx,pRx,NroomTx,NroomRx)
-        distwall(self,p,nroom)
 
     """
     def __init__(self,_filemat='def.mat',_fileslab='def.slab'):
@@ -313,48 +240,6 @@ class Layout(object):
         iseg = np.arange(self.Ne)
 
         return np.setdiff1d(iseg, u)
-
-#    def dir_ray_sign(self,Tx_x,Tx_y,Rx_x,Rx_y):
-#        """
-#            L.dir_ray_sign(Tx_x,Tx_y,Rx_x,Rx_y): takes transmitter and receiver coordinates
-#            and returns the shortest ray and his signature
-#        """
-#
-#        xmin=min(Tx_x,Rx_x)
-#        xmax=max(Tx_x,Rx_x)
-#        ymin=min(Tx_y,Rx_y)
-#        ymax=max(Tx_y,Rx_y)
-#
-#        seg=self.clip(xmin,xmax,ymin,ymax)
-#
-#        # creation of direct signature and ray
-#        sign=[]
-#        sign_Tx_Rx=[]
-#        line = sh.LineString([(Tx_x, Tx_y), (Rx_x, Rx_y)])
-#        for i in range(len(seg)):
-#            n1,n2=self.Gs.neighbors(seg[i]+1)
-#            line_i = sh.LineString([(self.Gs.pos[n1][0], self.Gs.pos[n1][1]), (self.Gs.pos[n2][0], self.Gs.pos[n2][1])])
-#            if line.crosses(line_i)==True:
-#                sign.append(seg[i]+1)
-#        fig = plt.figure(1, dpi=90)
-#        ax = fig.add_subplot(1,1,1)
-#
-#        geu.plot_coords2(ax, line)
-#        geu.plot_bounds2(ax, line)
-#        geu.plot_line2(ax, line)
-#        sign_Tx_Rx.append('Tx')
-#
-#        for i in range(len(sign)):
-#                 sign_Tx_Rx.append(sign[i])
-#
-#        sign_Tx_Rx.append('Rx')
-#
-#
-#
-#        self.showGs()
-#        plt.draw()
-#        plt.show()
-#        return(sign_Tx_Rx)
 
     def help(self):
         """ help 
@@ -4013,63 +3898,6 @@ class Layout(object):
                 Gv_re.add_edge(Gv_edges[j, 0], Gv_edges[j, 1])
 
         return(Gv_re, pos, labels)
-
-#    def GvF(self, _fileGv):
-#        """build GvF graph
-#        
-#        GvF Graph of visibility between the walls and
-#        the furnitures of indoor environment.
-#
-#        Parameters
-#        ----------
-#        _fileGv : .lo file which contains graph of visibility (Gv).
-#
-#        Returns
-#        -------
-#        GvF : networkx.classes.graph.Graph
-#            The graph of visibility between the walls and the furnitures(GvF).
-#        posF : dict
-#            Explicitly set positions of the nodes
-#        labelsF : dict
-#            Node labels in a dictionary keyed by edge two-tuple of text labels
-#            (default=None), Only labels for the keys in the dictionary are drawn.
-#
-#        Examples
-#        --------
-#        >>> L = Layout()
-#        >>> L.loadstr('tag.str','def.mat','def.slab')
-#        >>> L.buildGt()
-#        >>> L.buildGr()
-#        >>> GvF,posF,labelsF=L.GvF('tag.lo')
-#        >>> assert posF[-14][0]==8.5,'Mistake'
-#
-#        """
-#
-#        visik1, visik2 = self.visi_list_F()
-#        posF = {}
-#        labelsF = {}
-#        GF = nx.Graph()
-#        Gv_re, pos_re, labels_re = self.loadGv(_fileGv)
-#
-#        for i in range(len(visik1)):
-#            GF.add_node(visik1[i])
-#            posF[visik1[i]] = (self.Gs.pos[visik1[i]][0],
-#                self.Gs.pos[visik1[i]][1])
-#            labelsF[visik1[i]] = str(visik1[i])
-#            GF.add_node(visik2[i])
-#            posF[visik2[i]] = (self.Gs.pos[visik2[i]][0],
-#                self.Gs.pos[visik2[i]][1])
-#            labelsF[visik2[i]] = str(visik2[i])
-#            GF.add_edge(visik1[i], visik2[i])
-#
-#        posF.update(pos_re, **posF)
-#        labelsF.update(labels_re, **labelsF)
-#        GvF = nx.compose(Gv_re, GF)
-#nx.draw(GvF,posF)
-#L.showGs()
-#show()
-
-#        return(GvF, posF, labelsF)
 
     def saveGv(self, _fileGv):
         """Creates Layout's Gv file which contains Gv graph values.

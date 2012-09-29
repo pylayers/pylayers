@@ -41,7 +41,7 @@ def indexvsh(N):
 
 
 def index_vsh(N, M):
-    """
+    """ vector sperical harmonics indexing
 
     Parameters
     ----------
@@ -164,17 +164,17 @@ class SHCoeff(object):
 
     def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
                  ind=np.array([]), k=np.array([])):
-        """
+        """ init SHCoeff
 
          Parameters
          ----------
          typ : string
             's1' | 's2' | 's3'
-         fmin
-         fmax
-         data
-         ind
-         k
+         fmin : float 
+         fmax : float 
+         data : ndarray
+         ind  : ndarray
+         k    : ndarray
 
          s1, s2 , s3 containers are created
         """
@@ -820,7 +820,7 @@ class Antenna(object):
     .trx (ASCII Vectorial antenna Pattern)
 
     F   Phi   Theta  Fphi  Ftheta
-    -----------------------------
+
     """
     def __init__(self, typ, _filename='', directory="ant", nf=104, ntheta=181, nphi=90):
         """
@@ -1002,9 +1002,6 @@ class Antenna(object):
         self._filename: short name of the antenna file
 
         the file is seek in the $PyProject/ant directory
-
-        header format
-        -------------
 
 
         """
@@ -2843,7 +2840,7 @@ def show3D(F, theta, phi, k, col=True):
         >>> FTh3 = Fth3.reshape(A.Nf,A.Nt,A.Np)
         >>> FPh3 = Fph3.reshape(A.Nf,A.Nt,A.Np)
         >>> show3D(FTh3,theta,phi,ifreq)
-        >>> txt = plt('show3D example')
+        >>> txt = plt.title('show3D example')
         >>> plt.show()
 
 

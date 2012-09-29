@@ -33,7 +33,7 @@ Layout Edition
 .. autosummary::
     :toctree: generated/
 
-    interact 
+    editor 
     add_pnod
     add_fnod
     add_nfpe
@@ -176,5 +176,5 @@ Class selectl
 .. autosummary::
     :toctree: generated/
     
-    call_editor 
     show
+    call_editor 

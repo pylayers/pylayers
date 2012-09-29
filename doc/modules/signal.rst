@@ -58,8 +58,8 @@ Uniform signal
     zleft
     zlr
 
-TBsignal
----------
+Class TBsignal
+--------------
 
 Time signal 
 
@@ -77,8 +77,8 @@ Time signal
     translate
     
 
-TUsignal
----------
+Class TUsignal
+---------------
 
 Uniform time signal 
 
@@ -90,6 +90,7 @@ Uniform time signal
 
 Utilities
 ~~~~~~~~~
+Various utility functions
 
 .. autosummary::
     :toctree: generated/
@@ -98,6 +99,7 @@ Utilities
 
 Visualization
 ~~~~~~~~~~~~~
+Signal vizualization 
 
 .. autosummary::
     :toctree: generated/
@@ -106,6 +108,8 @@ Visualization
 
 Processing 
 ~~~~~~~~~~
+
+Time frequency processing 
 
 .. autosummary::
     :toctree: generated/
@@ -123,10 +127,11 @@ Processing
     corrgauss
     resample
     Yadd_zeros2l
-    Yadd_zeros2
+    Yadd_zeros2r
 
 Determining signal energy content
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 .. autosummary::
   :toctree: generated/
