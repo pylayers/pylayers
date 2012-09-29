@@ -81,7 +81,7 @@ class SelectL(object):
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
         self.L.display['ednodes'] = True
-        self.L.showGs(ax=self.ax)
+        self.L.showGs()
 
     def OnResize(self, event):
         """ OnResize
@@ -224,8 +224,8 @@ class SelectL(object):
             if self.state == 'Init':
                 #pt = plt.ginput(4)
                 #self.ax = plt.gca()
-                x1 = self.ax.get_xlim()
-                y1 = self.ax.get_ylim()
+                x1 = self.ax.get_xbound()
+                y1 = self.ax.get_ybound()
                 #self.ax.autoscale(True)
                 #axx = plt.axis()
                 #ndlist,edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1])
