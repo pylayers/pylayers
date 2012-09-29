@@ -91,12 +91,17 @@ class Simul(Simulation):
             self.L.loadstr(_filename)
         else:
             self.L.loadstr2(_filename)
+
+        try:
+            self.L.dumpr()
+        except:
         #self.L.sl = sl
         #self.L.loadGr(G1)
-        self.L.buildGt()
-        self.L.buildGr()
-#        self.L.buildGv()
-        self.L.buildGw()
+            self.L.buildGt()
+            self.L.buildGr()
+            self.L.buildGw()
+            self.L.buildGv()
+
         x_offset = 0  # float(self.lay_opt['x_offset'])
         y_offset = 0  # float(self.lay_opt['y_offset'])
         for ks in self.L.Gs.pos.keys():
