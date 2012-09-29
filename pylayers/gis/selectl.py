@@ -12,23 +12,17 @@ from pylayers.util.easygui import *
 class SelectL(object):
     """ Associates a Layout and a figure
 
-    Methods
-    -------
-
-    show(clear=F,dnodes=T,dedges=T,dlabels=T,font_size=10):
-    OnPress(event)
-    OnClick(event)
-    call_editor()
-        o : toggle overlay
-        p : create point
-        x : save graph in .str2 file
-        w : show all layers
+    o : toggle overlay
+    p : create point
+    x : save graph in .str2 file
+    w : show all layers
 
 
     """
     def __init__(self,g,fig):
         """
         Select is a class which associate a Layout and a figure
+
         """
         self.g = g
         self.fig = fig
