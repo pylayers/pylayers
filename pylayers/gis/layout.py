@@ -105,7 +105,7 @@ class Layout(object):
         self.display['layer'] = []
         self.display['clear'] = False
         self.display['activelayer'] = self.sl.keys()[0]
-        self.display['layers'] = self.sl.keys()
+        self.display['layers'] = []
         self.display['overlay'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = "TA-Office.png"
@@ -324,7 +324,9 @@ class Layout(object):
         ----------
         _filename : string
         _filemat  : string
+            default 'def.mat'
         _fileslab : string
+            default 'def.slab'
 
         Examples
         --------
@@ -720,6 +722,10 @@ class Layout(object):
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
+
+            if lname[k] not in self.display['layers']:
+                self.display['layers'].append(lname[k])
+
             if lname[k] in self.name:
                 self.name[lname[k]].append(k + 1)
             else:
@@ -771,7 +777,6 @@ class Layout(object):
         self.pt = pt
         self.tahe = tahe
         self.display['activelayer'] = self.sl.keys()[0]
-        self.display['layers'] = self.sl.keys()
         #
         # update boundary
         #
@@ -808,9 +813,11 @@ class Layout(object):
 
             Examples
             --------
+
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
             >>> L.load('Lstruc.str2')
+            
 
         """
 
@@ -938,6 +945,10 @@ class Layout(object):
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
+            # update list of layers
+            if lname[k] not in self.display['layers']:
+                self.display['layers'].append(lname[k])
+
             if lname[k] in self.name:
                 self.name[lname[k]].append(k + 1)
             else:
@@ -965,7 +976,6 @@ class Layout(object):
         self.pt = pt
         self.tahe = tahe
         self.display['activelayer'] = self.sl.keys()[0]
-        self.display['layers'] = self.sl.keys()
         #self.boundary(1,1)
 
     def subseg(self):
@@ -1163,6 +1173,11 @@ class Layout(object):
 
     def del_node(self, ln):
         """ delete node in list ln
+
+        Parameters
+        ----------
+        ln : list 
+            node list 
         """
         if (type(ln) == np.ndarray):
             ln = list(ln)
@@ -1177,6 +1192,7 @@ class Layout(object):
             nbrs = self.Gs.neighbors(n1)
             #nbrc = self.Gc.neighbors(n1)
             self.Gs.remove_node(n1)
+            del self.Gs.pos[n1]
             try:
                 self.Gc.remove_node(n1)
             except:
@@ -1841,17 +1857,31 @@ class Layout(object):
         fo.close()
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
-        """
-            angleonlink(self,p1,p2) return seglist between p1 and p2
-            p1 : (1 x 2 )
-            p2 : (1 x 2 )
-            return (seglist , theta)
+        """ angleonlink(self,p1,p2) return seglist between p1 and p2
 
-            >>> L=Layout('def.mat','def.slab')
-            >>> L.load('office.str')
-            >>> p1 = np.array([0,0])
-            >>> p2 = np.array([10,3])
-            >>> seglist,theta = L.angleonlink(p1,p2)
+        Parameters
+        ----------
+        p1 : (1 x 2 )
+            [0,0]
+        p2 : (1 x 2 )
+            [10,3]
+
+        Returns
+        -------
+
+        seglist 
+
+        theta
+
+        Examples
+        --------
+        
+        >>> from pylayers.gis.layout import *
+        >>> L=Layout('def.mat','def.slab')
+        >>> L.load('office.str')
+        >>> p1 = np.array([0,0])
+        >>> p2 = np.array([10,3])
+        >>> seglist,theta = L.angleonlink(p1,p2)
 
         """
         u = p1 - p2
@@ -2225,7 +2255,7 @@ class Layout(object):
     def show_layer(self, name, edlist=[], alpha=1, width=1,
                    color='black', dnodes=False, dthin=False,
                    dlabels=False, font_size=15):
-        """ show_layer
+        """ show layer
 
         Parameters
         ----------
@@ -3270,8 +3300,6 @@ class Layout(object):
                                            self.af.OnClick)
         self.cid2 = fig.canvas.mpl_connect('key_press_event',
                                            self.af.OnPress)
-        self.cid3 = fig.canvas.mpl_connect('resize_event',
-                                           self.af.OnResize)
         plt.draw()
         plt.show()
 
@@ -3853,7 +3881,7 @@ class Layout(object):
         return(p_Tx, p_Rx)
 
     def boundary(self, dx=0, dy=0):
-        """ set a boundary around layout
+        """ add a blank boundary around layout
 
         Parameters
         ----------
@@ -3867,6 +3895,7 @@ class Layout(object):
         Examples
         --------
 
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> L.boundary()
@@ -3906,6 +3935,7 @@ class Layout(object):
         Examples
         --------
 
+        >>> from pylayers.gis.import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
@@ -3986,6 +4016,7 @@ class Layout(object):
 
         Examples
         --------
+        
         >>> from pylayers.util.project import *
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
@@ -4031,6 +4062,8 @@ class Layout(object):
 
         Examples
         --------
+
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
@@ -4038,6 +4071,7 @@ class Layout(object):
         >>> L.buildGr()
         >>> _filelay = 'exemple.lay'
         >>> data_graph=L.loadlay(_filelay)
+
         """
         filelay = pyu.getlong(_filelay, pstruc['DIRSTRUC'])
         data_graph = cPickle.load(open(filelay))
@@ -4062,6 +4096,7 @@ class Layout(object):
 
         Examples
         --------
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> L.buildGt()
