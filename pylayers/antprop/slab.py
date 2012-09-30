@@ -300,7 +300,7 @@ class Interface(object):
              >>> import matplotlib.pyplot as plt
              >>> theta = np.arange(0,np.pi/2,0.01)
              >>> fGHz  = np.arange(0.1,10,0.2)
-             >>> sl  = SlabDB('simul9.mat','simul9.slab')
+             >>> sl  = SlabDB('def.mat','def.slab')
              >>> mat = sl.mat
              >>> air = mat['AIR']
              >>> brick  = mat['BRICK']
@@ -982,10 +982,12 @@ class MatDB(dict):
     def save(self, _filename):
         """ save a .mat file (PulsRay format)
 
-        Attributes
+        Parameters
         ----------
+
         _filename : string
             a short file name
+
         """
         filename = pyu.getlong(_filename, pstruc['DIRMAT'])
         fo = open(filename, 'wb')
@@ -1011,7 +1013,7 @@ class MatDB(dict):
             if L < 30:
                 for j in range(30 - L):
                     data_name = data_name + "\x00"
-
+            else:
                     print " Mat : name too long maximum 30 characters !"
 
             data_index = stru.pack('i', M['index'])
@@ -1086,7 +1088,7 @@ class Slab(dict, Interface):
             >>> import numpy as np
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.slab import *
-            >>> sl = SlabDB('simul9.mat','simul9.slab')
+            >>> sl = SlabDB('def.mat','def.slab')
             >>> lname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
             >>> lthick = [0.018,0.03,0.018]
             >>> sl.add('placo',lname,lthick)

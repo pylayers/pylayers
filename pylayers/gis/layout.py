@@ -114,7 +114,7 @@ class Layout(object):
         for k in self.sl.keys():
             self.name[k] = []
 
-        self.ax = (-10, 10, -10, 10)
+        #self.ax = (-10, 10, -10, 10)
 
     def ls(self, typ='str'):
         """ list the available file in dirstruc
@@ -146,7 +146,7 @@ class Layout(object):
             >>> for _filename in L.ls():
             >>>    plt.figure()
             >>>    L.load(_filename)
-            >>>    L.showGs()
+            >>>    ax = L.showGs()
             >>>    plt.title(_filename)
             >>> plt.show()
 
@@ -275,7 +275,7 @@ class Layout(object):
             >>> L = Layout()
             >>> L.load('Lstruc.str')
             >>> L.loadfur('Furw1.ini')
-            >>> f,a = L.showGs()
+            >>> ax = L.showGs()
             >>> plt.show()
 
 
@@ -1085,8 +1085,22 @@ class Layout(object):
         self.add_edge(num, nop[1], name=namens, zmin=zminns, zmax=zmaxns)
 
     def add_edge(self, n1, n2, name='PARTITION', zmin=0, zmax=3.0):
-        """
-        L.add_edge(n1,n2,name='PARTITION',zmin=0,zmax=3.0)     : add edge between n1 and n2
+        """  add edge between n1 and n2
+        
+        Parameters
+        ----------
+        n1  : integer < 0  
+        n2  : integer < 0
+        name : string 
+            layer name 'PARTITION'
+        zmin : float 
+            default = 0 
+        zmax : float    
+            default 3.0 
+        
+        Returns
+        -------
+        num : segment number (>0) 
         """
         if ((n1 < 0) & (n2 < 0)):
             nn = np.array(self.Gs.node.keys())
@@ -1360,8 +1374,13 @@ class Layout(object):
             pass
 
     def edit_edge(self, e1):
-        """
-        L.edit_edge(e1)       : edit edge e1
+        """ edit edge
+
+        Parameters
+        ----------
+        e1 : integer 
+            edge number 
+
         """
         nebd = self.Gs.neighbors(e1)
         n1 = nebd[0]
@@ -2247,11 +2266,13 @@ class Layout(object):
                     poly.plot(color='blue', alpha=0.5)
         ax.axis('scaled')
 
-    def showGs(self, ax=[], ndlist=[], edlist=[], show=False, furniture=False, roomlist=[]):
+    def showGs(self, ax=[], ndlist=[], edlist=[], show=False, furniture=False,
+               roomlist=[],axis=[]):
         """ show structure graph Gs
 
         Parameters
         ----------
+        ax      : ax 
         ndlist  : np.array
             set of nodes to be displayed
         edlist  : np.array
@@ -2260,18 +2281,20 @@ class Layout(object):
             default True
         furniture : boolean
             default False
+        roomlist : list
+            default : []
 
         display parameters are defined in  L.display dictionnary
 
         Returns
         -------
-        fig,ax 
+        ax 
 
         """
 
         if not isinstance(ax, plt.Axes):
-            fig = plt.gcf()
-            ax = fig.add_subplot(111)
+            fig = plt.figure()
+            ax  = fig.add_subplot(111)
 
         if furniture:
             if 'lfur' in self.__dict__:
@@ -2283,6 +2306,7 @@ class Layout(object):
 
         if self.display['clear']:
             ax.cla()
+        # display overlay image    
         if self.display['overlay']:
             image = Image.open(strdir + '/' + self.display['fileoverlay'])
             ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.8)
@@ -2306,7 +2330,9 @@ class Layout(object):
             alpha = self.display['alpha']
             for nameslab in self.display['activelayer']:
                 #print len(edlist)
-                self.show_layer(nameslab, edlist=edlist, alpha=alpha, dthin=dthin, dnodes=dnodes, dlabels=dlabels, font_size=font_size)
+                self.show_layer(nameslab, edlist=edlist, alpha=alpha,
+                                dthin=dthin, dnodes=dnodes, dlabels=dlabels,
+                                font_size=font_size)
         if self.display['subseg']:
             dico = self.subseg()
             for k in dico.keys():
@@ -2328,12 +2354,16 @@ class Layout(object):
         for nr in roomlist:
             ncy = self.Gr.node[nr]['cycle']
             self.Gt.node[ncy]['polyg'].plot()
+        
+        if axis==[]:
+            ax.axis('scaled')
+        else:
+            ax.axis(axis)
 
         if show:
             plt.show()
 
-        fig = plt.gcf()
-        return fig, ax
+        return ax
 
     def build(self, graph='trwcvi'):
         """ build graphs
@@ -2957,14 +2987,13 @@ class Layout(object):
             >>> L.buildGt()
             >>> L.buildGr()
             >>> L.buildGv()
-            >>> fig,ax=L.showGs()
-            >>> (fig,ax)=L.showGv(fig=fig,ax=ax)
+            >>> ax = L.showGs()
+            >>> ax = L.showGv(ax=ax)
             >>> t = plt.axis('off')
             >>> plt.show()
 
         """
         defaults = {'show': False,
-                    'fig': [],
                     'ax': [],
                     'nodes': False,
                     'eded': True,
@@ -2980,14 +3009,9 @@ class Layout(object):
                 setattr(self, key, value)
                 kwargs[key] = value
 
-        if kwargs['fig'] == []:
-            fig = plt.figure()
-            fig.set_frameon(True)
-        else:
-            fig = kwargs['fig']
-
         if kwargs['ax'] == []:
-            ax = fig.gca()
+            fig = plt.figure()
+            ax  = fig.gca()
         else:
             ax = kwargs['ax']
 
@@ -3016,7 +3040,7 @@ class Layout(object):
         if kwargs['show']:
             plt.show()
 
-        return(fig, ax)
+        return ax
 
     def waypointGw(self, nroom1, nroom2):
         """ get the waypoint between room1 and room2
@@ -3867,7 +3891,7 @@ class Layout(object):
         >>> Gv_re,pos,labels = L.loadGv( _fileGv)
         >>> assert Gv_re.nodes()[5]== 6,'Mistake'
         >>> a=plt.title('Test Gv loadGv')
-        >>> fig,ax = L.showGs()
+        >>> ax = L.showGs()
         >>> nx.draw(Gv_re,pos,node_color='r')
         >>> plt.show()
         >>> plt.clf()

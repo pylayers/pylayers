@@ -148,7 +148,7 @@ readvrml
     parsevrml
     vrml2sha
 
-Class furniture
+Class Furniture
 ***************
 
 .. automodule:: pylayers.gis.furniture.Furniture
@@ -163,10 +163,9 @@ Class furniture
     load
     save
     position 
-    show
 
 
-Class selectl
+Class Selectl
 ***************
 
 .. automodule:: pylayers.gis.selectl.SelectL
@@ -176,5 +175,5 @@ Class selectl
 .. autosummary::
     :toctree: generated/
     
-    show
-    call_editor 
+    update_state
+    new_state
