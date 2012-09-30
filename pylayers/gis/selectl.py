@@ -146,7 +146,7 @@ class SelectL(object):
                 del self.pt_previous
             except:
                 pass
-            self.ax.title.set_text('Init')
+            self.ax.title.set_text('Init : '+self.L.display['activelayer'])
             try:
                 self.p1[0].set_visible(False)
             except:
@@ -218,6 +218,9 @@ class SelectL(object):
             self.ax.title.set_text(titre)
             self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5)
 
+        if self.state == 'SSS':
+            print "state SSS"
+
         if self.state == 'CP':
             self.show(clear=False,title='lclic : free point, rclic same x, cclic same y')
 
@@ -253,19 +256,39 @@ class SelectL(object):
         print "In State ",self.state
         print "In Event ",self.evt
         #
-        #
+        # Choose layers to visualized
         #
         if self.evt == "l":
             listchoices = self.L.name.keys()
-            self.L.display['activelayer'] = multchoicebox(
-                'message', 'titre', listchoices)
+            self.L.display['layers'] = multchoicebox('message',
+                                                     'titre', listchoices)
+            self.state = 'Init'
+            self.update_state()
+            return
+        #
+        # Increment layer
+        #
+        if self.evt=='=':
+            N = len(self.L.display['layerset'])
+            index = self.L.display['layerset'].index(self.L.display['activelayer'])
+            self.L.display['activelayer'] = self.L.display['layerset'][(index+1) % N]
+            self.state = 'Init'
+            self.update_state()
+            return
+
+        if self.evt=='$':
+            N = len(self.L.display['layerset'])
+            index = self.L.display['layerset'].index(self.L.display['activelayer'])
+            self.L.display['activelayer'] = self.L.display['layerset'][(index-1) % N]
+            self.state = 'Init'
+            self.update_state()
             return
         #
         # e : Edit
         #
         if self.evt == 'i':
             self.state = 'Init'
-            print "State", self.state
+            self.update_state()
             return
 
         if self.evt == 'e':
@@ -275,6 +298,8 @@ class SelectL(object):
                 self.show(clear=True, title='Init')
                 print "State", self.state
                 return
+            if self.state == 'SP1':
+                print "Write edit_node"
         #
         # h : add subsegment
         #
@@ -282,18 +307,27 @@ class SelectL(object):
             if self.state == 'SS':
                 self.L.add_subseg(self.selected_edge)
                 self.show(clear=True, title='Init')
-                self.state = 'Init'
-                print "Out State", self.state
+                self.state = 'SSS'
+                self.update_state()
                 return
         #
         # d : delete 
         #
         if self.evt == 'd':
-            if self.state == 'SS':
-                self.L.del_subseg(self.selected_edge)
-                self.show(clear=True, title='Init')
+            if self.state == 'SP1':
                 self.state = 'Init'
-                print "Out State", self.state
+                self.L.del_node(self.selected_pt1)
+                self.update_state()
+                return
+            if self.state == 'SS':
+                self.L.del_edge(self.selected_edge)
+                self.state = 'Init'
+                self.update_state()
+                return
+            if self.state == 'SSS':
+                self.L.del_subseg(self.selected_edge)
+                self.state = 'Init'
+                self.update_state()
                 return
 
         if self.evt == 'c':
@@ -327,9 +361,10 @@ class SelectL(object):
         if self.evt == 'o':
             if self.L.display['overlay']:
                 self.L.display['overlay'] = False
+                self.update_state()
             else:
                 self.L.display['overlay'] = True
-            self.show(clear=True)
+                self.update_state()
             return
 
         #
@@ -504,17 +539,6 @@ class SelectL(object):
 #                    print "Out State", self.state
 #                    return
 
-#            if (self.evt == 'cclic') & (self.nsel<0):
-#            # center clic delete point     
-#            #   delete selected point
-#                self.state = 'Init'
-#                self.selected_pt1 = 0
-#                self.L.del_node(self.nsel)
-#                self.p1[0].set_visible(False)
-#                #self.show(clear=True, title='Init State')
-#                self.fig.canvas.draw()
-#                print "Out State", self.state
-#                return
             
 #            if (self.evt == 'rclic') & (self.nsel < 0):
 #                if self.nsel == self.selected_pt1:

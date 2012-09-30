@@ -778,8 +778,7 @@ class VSHCoeff(object):
 
 
 class Antenna(object):
-    """
-    Class Antenna
+    """ Class Antenna
 
     Attributes
     ----------

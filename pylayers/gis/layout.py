@@ -104,12 +104,13 @@ class Layout(object):
         self.display['alpha'] = 0.5
         self.display['layer'] = []
         self.display['clear'] = False
-        self.display['activelayer'] = self.sl.keys()
+        self.display['activelayer'] = self.sl.keys()[0]
+        self.display['layers'] = self.sl.keys()
         self.display['overlay'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = "TA-Office.png"
         self.display['box'] = (-11.4, 19.525, -8.58, 23.41)
-        self.display['subLayer'] = self.sl.keys()
+        self.display['layerset'] = self.sl.keys()
         self.name = {}
         for k in self.sl.keys():
             self.name[k] = []
@@ -769,7 +770,8 @@ class Layout(object):
         #
         self.pt = pt
         self.tahe = tahe
-        self.display['activelayer'] = self.name.keys()
+        self.display['activelayer'] = self.sl.keys()[0]
+        self.display['layers'] = self.sl.keys()
         #
         # update boundary
         #
@@ -962,7 +964,8 @@ class Layout(object):
         #    self.display['ActiveLayer'].append(i)
         self.pt = pt
         self.tahe = tahe
-        self.display['activelayer'] = self.name.keys()
+        self.display['activelayer'] = self.sl.keys()[0]
+        self.display['layers'] = self.sl.keys()
         #self.boundary(1,1)
 
     def subseg(self):
@@ -1142,8 +1145,8 @@ class Layout(object):
             self.name[name] = [num]
         # update label
         self.labels[num] = str(num)
-        if name not in self.display['activelayer']:
-            self.display['activelayer'].append(name)
+        if name not in self.display['layers']:
+            self.display['layers'].append(name)
         return(num)
 
     def del_node(self, ln):
@@ -2309,7 +2312,7 @@ class Layout(object):
         # display overlay image    
         if self.display['overlay']:
             image = Image.open(strdir + '/' + self.display['fileoverlay'])
-            ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.8)
+            ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.3)
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
@@ -2328,8 +2331,7 @@ class Layout(object):
             dnodes = self.display['ednodes']
             dthin = self.display['thin']
             alpha = self.display['alpha']
-            for nameslab in self.display['activelayer']:
-                #print len(edlist)
+            for nameslab in self.display['layers']:
                 self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
                                 font_size=font_size)
