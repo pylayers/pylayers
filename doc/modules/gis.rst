@@ -1,4 +1,4 @@
-.. _routines.Layout:
+.. _routines.gis:
 
 .. module:: pylayers.gis
 
@@ -6,17 +6,12 @@
 gis
 ===
 
-This modules gathers all the classes and function related to geographical
-information.
+This module gathers all classes and functions related to geographical information.
 
 .. toctree::
    :maxdepth: 2
 
-    layout.rst 
-
-    readvrml.rst 
-
-    furniture.rst 
-
-    selectl.rst 
-
+   layout.rst 
+   readvrml.rst 
+   furniture.rst 
+   selectl.rst 

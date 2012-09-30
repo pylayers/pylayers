@@ -21,3 +21,5 @@ in indoor environments.
     UserManual.rst 
 
     bsignal.rst
+
+    references.rst

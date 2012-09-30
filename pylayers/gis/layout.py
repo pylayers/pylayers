@@ -1068,9 +1068,21 @@ class Layout(object):
         #print x
 
     def add_none(self, ns, alpha=0.5):
-        """
-        L.add_none(ns,alpha=0.5) : add node on edge ns
-        alpha is a parameterisation on the  edge
+        """ add node on edge 
+
+        Parameters
+        ----------
+        ns  : int 
+            segment number 
+        alpha : parameterization of the point 
+            alpha = 0 (tail) alpha = 1 (head)
+
+        Notes
+        -----
+
+        delete segment ns 
+        create 2 segments with same properties 
+
         """
         nop = self.Gs.neighbors(ns)
         namens = self.Gs.node[ns]['name']
@@ -1445,11 +1457,20 @@ class Layout(object):
         else:
             print "no subseg to delete"
 
-    def add_subseg(self, e1):
-        """
-        add_subseg(e1)
+    def add_subseg(self,e1,name='DOOR',zmin=0,zmax=2.24):
+        """ add a subsegment on a segment 
 
-        add a sub segment on segment e1
+        Parameters
+        ----------
+
+        e1 : integer
+            edge number > 0
+        name : string
+            slab name
+        zmin : float
+            default 0
+        zmax : float
+            default 2.4 m 
 
         """
         if self.have_subseg(e1):
@@ -1457,8 +1478,9 @@ class Layout(object):
         else:
             self.info_edge(e1)
             message = str(self.sl.keys())
-            data = multenterbox(message, title, ('name',
-                                                 'zmin', 'zmax'), ('DOOR', 0, 2.24))
+            title = 'Add a subsegment'
+            data = multenterbox(message, title, ('name', 'zmin', 'zmax'),
+                                                (name, zmin, zmax))
 
             self.Gs.node[e1]['ss_name'] = data[0]
             self.Gs.node[e1]['ss_zmin'] = eval(data[1])
