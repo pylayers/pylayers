@@ -2942,10 +2942,53 @@ class Layout(object):
         Parameters
         ----------
         graph : char 
-            't' : Gt
-            'r' : Gr
-            's' : Gs
-            'v' : Gv 
+            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv 
+        show : boolean 
+            False
+        fig : matplotlib figure 
+            []
+        ax
+            []
+        nodes : boolean 
+            False
+        eded :
+            True
+        ndnd :
+            True
+        nded :
+            True
+        linewidth
+            2
+        nodelist
+            []
+
+        Examples
+        --------
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.gis.layout import  * 
+            >>> import matplotlib.pyplot as plt
+            >>> L = Layout()
+            >>> L.load('exemple.str')
+            >>> L.buildGt()
+            >>> L.buildGr()
+            >>> L.buildGv()
+            >>> fig = plt.figure(figsize=(10,10))
+            >>> ax = fig.add_subplot(221)
+            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+            >>> plt.title("Gs")
+            >>> ax = fig.add_subplot(222)
+            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+            >>> plt.title("Gt")
+            >>> ax = fig.add_subplot(223)
+            >>> fig,ax = L.showG('c',fig=fig,ax=ax)
+            >>> plt.title("Gc")
+            >>> ax = fig.add_subplot(224)
+            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
+            >>> plt.title("Gv")
+            >>> plt.show()
+
         """
 
         defaults = {'show': False,
@@ -2989,6 +3032,9 @@ class Layout(object):
         if 'v' in graph:
             G = self.Gv
             nx.draw(G, self.Gs.pos, node_color='m', edge_color='m')
+        if 'c' in graph:
+            G = self.Gc
+            nx.draw(G, self.Gs.pos, node_color='c', edge_color='c')
 
         for k, ncy in enumerate(self.Gt.node.keys()):
             self.Gt.node[ncy]['polyg'].plot()
@@ -3011,6 +3057,8 @@ class Layout(object):
 
         if kwargs['show']:
             plt.show()
+
+        return fig,ax
 
     def showGv(self, **kwargs):
         """ show graph Gv (visibility)

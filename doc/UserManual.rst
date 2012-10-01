@@ -180,14 +180,13 @@ grid of tx and rx points which define the links of interest for the simulation
 .. plot::
     :include-source:        
 
-    from Simul import *
-    from Layout import *
+    from pylayers.simul.simulem import *
+    from pylayers.gis.layout import *
     from numpy import *
     import matplotlib.pylab as plt  
 
-    S = Simul('where2.ini')
-    S.L.loadfur('FurSiradel.ini')
-    S.show(furniture=True)
+    S = Simul('example.ini')
+    S.L.showGs()
     plt.show()
 
 
