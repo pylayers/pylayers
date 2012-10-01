@@ -2412,6 +2412,7 @@ class Layout(object):
         if axis==[]:
             ax.axis('scaled')
         else:
+            print "showGs",axis
             ax.axis(axis)
 
         if show:

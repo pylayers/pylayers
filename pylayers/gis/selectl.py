@@ -40,9 +40,10 @@ class SelectL(object):
         self.coseg = []
         self.pt1 = np.array([])
         self.pt2 = np.array([])
-        self.selected_pt1 = -1
-        self.selected_pt2 = -1
-        self.selected_edge = -1
+        self.selected_pt1 = 0
+        self.selected_pt2 = 0  
+        self.selected_edge1 = 0  
+        self.selected_edge2 = 0  
         self.current_layer = self.L.display['activelayer']
         self.npsel = 0
         self.nedge_sel = 0
@@ -78,7 +79,7 @@ class SelectL(object):
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
         self.L.display['ednodes'] = True
-        self.ax = self.L.showGs(self.ax,axis=axis)
+        self.ax=self.L.showGs(ax=self.ax,axis=axis)
 
     def OnPress(self, event):
         """
@@ -223,7 +224,7 @@ class SelectL(object):
             self.L.show_nodes(ndlist=[nse], size=200, color='r', alpha=0.5)
 
         if self.state == 'SSS':
-            nse = self.selected_edge
+            nse = self.selected_edge1
             segdico = self.L.Gs.node[nse]
             zmin    = segdico['ss_zmin']
             zmax    = segdico['ss_zmax']
@@ -348,7 +349,7 @@ class SelectL(object):
 
         if self.evt == 'e':
             if (self.state == 'SS') | (self.state =='SSS'):
-                self.L.edit_edge(self.selected_edge)
+                self.L.edit_edge(self.selected_edge1)
                 self.state = 'Init'
                 self.update_state()
                 return
@@ -359,7 +360,7 @@ class SelectL(object):
         #
         if self.evt == 'h':
             if self.state == 'SS':
-                self.L.add_subseg(self.selected_edge,self.current_layer)
+                self.L.add_subseg(self.selected_edge1,self.current_layer)
                 self.state = 'SSS'
                 self.update_state()
                 return
@@ -373,30 +374,27 @@ class SelectL(object):
                 self.update_state()
                 return
             if self.state == 'SS':
-                self.L.del_edge(self.selected_edge)
+                self.L.del_edge(self.selected_edge1)
                 self.state = 'Init'
                 self.update_state()
                 return
             if self.state == 'SSS':
-                self.L.del_subseg(self.selected_edge)
+                self.L.del_subseg(self.selected_edge1)
                 self.state = 'Init'
                 self.update_state()
                 return
-
-        if self.evt == 'c':
-            if self.state == 'Init':
-                #pt = plt.ginput(4)
-                #self.ax = plt.gca()
+        #
+        # deleter points in the current axis region
+        #
+        if self.evt == 'delete':
+            if self.state=='Init':
                 x1 = self.ax.get_xbound()
                 y1 = self.ax.get_ybound()
-                #self.ax.autoscale(True)
-                #axx = plt.axis()
-                #ndlist,edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1])
-                print x1,y1
-                #print axx
+                ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
+                #print x1,y1
                 #print ndlist
-                #self.L.del_node(ndlist)
-                #self.show(clear=True, title='Init')
+                self.L.del_node(ndlist)
+                self.update_state()
                 return
 
         #
@@ -491,7 +489,7 @@ class SelectL(object):
                 return
 
             if self.state=='SS':
-                self.nsel = self.selected_edge
+                self.nsel = self.selected_edge1
                 segdico = self.L.Gs.node[self.nsel]
                 if 'ss_name' in segdico:
                     self.state = 'SSS'
