@@ -3215,6 +3215,9 @@ class Layout(object):
         self.Door = {}
         d = self.subseg()
         #ldoorseg    = np.array(d['WOOD'])
+        #
+        # .. todo::   avoid using slab to determine transition segments
+        #
         ldoorseg = np.array(d['DOOR'])
         j = 0
         #
