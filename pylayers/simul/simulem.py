@@ -699,18 +699,22 @@ class Simul(object):
         self.output = {}
 
         self.freq = np.linspace(2, 11, 181)
-        self.config = ConfigParser.ConfigParser()
+        self.config=ConfigParser.ConfigParser()
+
+
         self.config.add_section("files")
         self.config.add_section("tud")
         self.config.add_section("frequency")
         self.config.add_section("waveform")
         self.config.add_section("output")
-
-
         self.updcfg()
 
-############### The following is replaced by self.updcfg()
 
+############### The following is replaced by self.updcfg()
+        try:
+            self.load(self.filesimul)
+        except:
+            print('simulation file does not exist')
 
 
 #        #
@@ -733,10 +737,7 @@ class Simul(object):
 
 
         #self.wav.read(self.config)
-        try:
-            self.load(self.filesimul)
-        except:
-            print('simulation file does not exist')
+
 
 
 
@@ -1003,22 +1004,51 @@ class Simul(object):
         self.config.read(filesimul)
 
         sections = self.config.sections()
+    
+        try:
+            _filetx = self.config.get("files", "tx")
+        except:
+            raise NameError('Error in section tx from '+ _filesimul)
 
-        _filetx = self.config.get("files", "tx")
-        _filerx = self.config.get("files", "rx")
+        try:
+            _filerx = self.config.get("files", "rx")
+        except:
+            raise NameError('Error in section rx from '+ _filesimul)
 
-        _fileanttx = self.config.get("files", "txant")
-        _fileantrx = self.config.get("files", "rxant")
 
-        self.filestr = self.config.get("files", "struc")
+        try:
+            _fileanttx = self.config.get("files", "txant")
+        except:
+            raise NameError('Error in section txant from '+ _filesimul)
 
-        self.tx = RadioNode('tx', _filetx, _fileanttx, self.filestr)
-        self.rx = RadioNode('rx', _filerx, _fileantrx, self.filestr)
+        try:
+           _fileantrx = self.config.get("files", "rxant")
+        except:
+            raise NameError('Error in section rxant from '+ _filesimul)
+
+        try:
+            self.filestr = self.config.get("files", "struc")
+        except: 
+            raise NameError('Error in section struc from '+ _filesimul)
+
+        try:
+            self.tx = RadioNode('tx', _filetx, _fileanttx, self.filestr)
+            self.rx = RadioNode('rx', _filerx, _fileantrx, self.filestr)
+        except:
+            raise NameError('Error during Radionode load')
 #
 # Launching and Tracing parameters
 #
-        self.palch = Palch(self.config.get("files", "palch"))
-        self.patra = Patra(self.config.get("files", "patra"))
+
+        try:
+            self.palch = Palch(self.config.get("files", "palch"))
+        except: 
+            raise NameError('Error in section palch from '+ _filesimul)
+
+        try:
+            self.patra = Patra(self.config.get("files", "patra"))
+        except: 
+            raise NameError('Error in section patra from '+ _filesimul)
         #_outfilename = "out"+self.ntx+".ini"
         #self.outfilename = pyu.getlong(_outfilename,"simul")
 #  Load Simulation Mat File
@@ -1029,24 +1059,32 @@ class Simul(object):
 #
 #  Load Simulation Slab File
 #
-        self.fileslab = self.config.get("files", "slab")
-        self.sl = SlabDB()
-        self.sl.mat = self.mat
-        self.sl.load(self.fileslab)
+        try:
+            self.fileslab = self.config.get("files", "slab")
+            self.sl = SlabDB()
+            self.sl.mat = self.mat
+            self.sl.load(self.fileslab)
+        except:
+            raise NameError('Slab load error')
 #
 # Load layout from .str or .str2 file
 #
-        self.L = Layout(self.filemat, self.fileslab)
-        self.L.load(self.filestr)
+        try:
+            self.L = Layout(self.filemat, self.fileslab)
+            self.L.load(self.filestr)
+        except:
+            raise NameError('Layout load error')
 #
 # Frequency base
 #
         if "frequency" in sections:
-            self.freq = np.linspace(float(self.config.getfloat("frequency", "fghzmin")),
-                                    float(self.config.getfloat("frequency", "fghzmax")),
-                                    int(self.config.getint("frequency", "nf")),
-                                    endpoint=True)
-
+            try:
+                self.freq = np.linspace(float(self.config.getfloat("frequency", "fghzmin")),
+                                        float(self.config.getfloat("frequency", "fghzmax")),
+                                        int(self.config.getint("frequency", "nf")),
+                                        endpoint=True)
+            except:
+                raise NameError('Error in section frequency from '+ _filesimul)
             # update .freq file in tud directory
 
             filefreq = pyu.getlong(self.filefreq, pstruc['DIRTUD'])
@@ -2018,7 +2056,7 @@ class Simul(object):
                     print "---------------"
                     print "Start tratotud ", irx
                     print "---------------"
-                    pdb.set_trace()
+
                     self.tratotud(itx, irx)
                 if irx not in self.dfield[itx].keys():
                     print "---------------"
