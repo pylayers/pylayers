@@ -53,7 +53,10 @@ def stretch(s,alphat=0.1,alphah=0.1):
         Returns
         -------
         ss    : streched segment 
-        
+     
+        Examples
+        --------
+
         >>> s1  = shg.LineString(((0,0),(1,0)))
         >>> ss1 = stretch(s1,0.1)
         >>> s2 = shg.LineString(((-0.1,0),(1.1,0)))
@@ -226,6 +229,8 @@ def incrochet(strg):
     lbra : left part of the string 
     inbr : string inside the bracket 
 
+    Examples
+    --------
 
     >>> strg ='abcd[un texte]'
     >>> lbra,inbr = incrochet(strg)

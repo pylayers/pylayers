@@ -124,9 +124,9 @@ class Bsignal(object):
         if ndim > 1:
             nl = len(self.y)
             for k in range(nl):
-                stem(self.x, self.y[k], color)
+                plt.stem(self.x, self.y[k], color)
         else:
-            stem(self.x, self.y, color)
+            plt.stem(self.x, self.y, color)
 
     def step(self, color='b'):
         """ plot steps display
@@ -818,7 +818,7 @@ class TBsignal(Bsignal):
         Warnings
         --------
 
-        Once translated original signal and translated might be not on the same grid
+        Once translated original signal and translated signal might be not on the same grid
 
         Examples
         --------
@@ -842,12 +842,19 @@ class TBsignal(Bsignal):
 
         Parameters
         ----------
-        N : Number of points
+
+        N : integer 
+            Number of points
 
         Returns
         -------
 
-            TUsignal
+        U : TUsignal
+
+
+        Notes
+        -----
+        This function exploits linear interp1d
 
         Examples
         --------
@@ -857,15 +864,16 @@ class TBsignal(Bsignal):
 
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
-            >>> x     = np.array( [ 1, 3 , 6 , 11 , 18])
-            >>> y     = np.array( [ 0,1 ,-5, 8 , 10])
-            >>> sb    = TBsignal(x,y)
-            >>> su20  = sb.b2u(20)
+            >>> x = np.array( [ 1, 3 , 6 , 11 , 18])
+            >>> y = np.array( [ 0,1 ,-5, 8 , 10])
+            >>> sb = TBsignal(x,y)
+            >>> su20 = sb.b2u(20)
             >>> su100 = sb.b2u(100)
-            >>> fi    = plt.figure()
+            >>> fi = plt.figure()
+            >>> sb.stem()
             >>> su20.plot(col='k')
             >>> su100.plot(col='r')
-            >>> ti    = plt.title('TBsignal : b2u ')
+            >>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
             >>> plt.show()
 
         """
@@ -1006,8 +1014,9 @@ class TUsignal(TBsignal, Usignal):
     def fftsh(self):
         """ return an FHsignal
 
-        Warning
+        Warnings
         --------
+
         This fft is a scaled fft and takes into account the value of the
         sampling period.
 
@@ -1040,8 +1049,8 @@ class TUsignal(TBsignal, Usignal):
         ws    : float
         ftype : string 
 
-        Return
-        ------
+        Returns
+        -------
         O : Output filetered TUsignal
 
         Examples
@@ -2361,31 +2370,10 @@ class FUsignal(FBsignal, Usignal):
     """
     FUsignal : Uniform signal in Frequency domain
 
-    MEMBERS
+    Members
+    -------
         x  (,N    )  Real
         y  (M x N )  Complex
-
-
-    METHODS
-    +
-    -
-    *
-    symH     : force Hermitian symetry --> FHsignal
-    symHz    : force Hermitian symetry with zero padding --> FHsignal
-    align    : align two FUsignal on a same frequency base
-           return a list with the two aligned signals
-    enthrsh  : Energy thresholding thresh = 99.99 %
-    dBthrsh  : dB thresholding thresh  = 40dB
-    ift      : Inverse Fourier transform
-    resample : resampling with a new base
-    newdf    : resampling with a new df
-    zp       : zero padding until len(x) = N
-
-
-    plot     : plot modulus and phase
-    plotri   : plot real part and imaginary part
-    plotdB   : plot modulus in dB
-    get      : get k th ray
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
@@ -2422,20 +2410,29 @@ class FUsignal(FBsignal, Usignal):
         return(U)
 
     def window(self, win='hamming'):
-        """
-        windowing of FU signal
+        """ windowing of FU signal
 
-            hamming
-            blackman
-            hanning
+        Parameters
+        ----------
+        win : string 
+            window type ('hamming','blackman','hanning')
 
-        >>> x = np.arange(2,8,0.1)
-        >>> y = np.ones(len(x))
-        >>> U = FUsignal(x,y)
-        >>> fi = plt.figure()
-        >>> U.plot()
-        >>> U.window('hamming')
-        >>> U.plot()
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> import numpy as np
+            >>> import matplotlib.pyplot as plt
+            >>> from pylayers.signal.bsignal import *
+            >>> x = np.arange(2,8,0.1)
+            >>> y = np.ones(len(x))
+            >>> U = FUsignal(x,y)
+            >>> fi = plt.figure()
+            >>> U.plot()
+            >>> U.window('hamming')
+            >>> U.plot()
 
 
 
@@ -2523,14 +2520,17 @@ class FUsignal(FBsignal, Usignal):
 
         return(EMH2)
 
-    def enthrsh(self, thresh=99.99999):
-        """
-        dBthrsh : Energy thresholding of an FUsignal
+    def enthrsh(self, thresh=99.99):
+        """ Energy thresholding of an FUsignal
 
-        enthrsh(thresh)
+        Parameters
+        ----------
 
-        thresh : threshold in percentage (default 99.99)
+        thresh : float 
+            threshold in percentage (default 99.99)
 
+        Returns
+        -------
 
         EMH2 : cumul energie H
 
@@ -3152,9 +3152,14 @@ class FHsignal(FUsignal):
             ffts = 0 : no fftshift (default)
             ffts = 1 : apply fftshift
             tt = 'centered'  default
-        Return
-        ------
+
+        Returns
+        -------
+
             return a real TUsignal
+
+        Examples
+        --------
 
         >>> e  = EnImpulse(fe=200)
         >>> E  = e.fft()

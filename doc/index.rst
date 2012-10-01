@@ -17,5 +17,9 @@ in indoor environments.
     :maxdepth: 2 
 
     modules/index.rst
+    
+    UserManual.rst 
 
     bsignal.rst
+
+    references.rst

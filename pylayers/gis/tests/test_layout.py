@@ -7,7 +7,10 @@ import doctest
 
 L = Layout()
 L.load('Lstruc.str2')
-L.interact()
+L.editor()
+#ax  = plt.gca()
+#ax  = L.showGs(ax=ax)
+#plt.show()
 # build topological graph 
 #L.buildGt()
 #L.showG('t')

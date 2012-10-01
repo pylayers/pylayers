@@ -18,7 +18,9 @@ For learning how to use PyLayers, see also :ref:`user`.
    :maxdepth: 2
 
    gis.rst
+
    antprop.rst
+
    signal.rst
 
 

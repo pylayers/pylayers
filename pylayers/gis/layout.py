@@ -62,81 +62,6 @@ class Layout(object):
     ------
      This class exploits `networkx` to store Layout information
 
-    Methods
-    -------
-
-        dir_ray_sign(self,Tx_x,Tx_y,Rx_x,Rx_y)
-            to be explained
-        v_color(self,ob)
-            to be explained
-        help(self)
-            give information about the Layout
-        ss-dico = L.subseg(self)
-            extract the dictionnary of subseg
-            interact(self)  : edit the layout interctively
-        add_pnod(self,p,e1,e2)
-            tbd
-        add_fnod(self,p=(0.0,0.0))
-            add free node p
-        add_nfpe(self,np0,e1,e2)
-            tbd
-        add_none(self,ns,alpha=0.5)
-           add node on edge
-        add_edge(self,n1,n2,name='PARTITION',zmin=0,zmax=3.0)
-            add edge between n1 and n2
-        del_node(self,n1)
-            delete node n1
-        del_edge(self,e1)
-            add edge between n1 and n2
-        displaygui(self)
-        info_edge(self,e1)
-        edit_edge(self,e1)
-        have_subseg(self,e1)
-        del_subseg(self,e1)
-        add_subseg(self,e1)
-        add_window(self,e1)
-        add_door(self,e1)
-        check(self)
-        ispoint(self,pt,tol=0.45)
-        onseg(self,pt,tol=0.01)
-        checkvis(self,p,edgelist,nodelist)
-        visilist(self,p)
-        visi_papb(self,pa,pb,edgelist=np.array([]))
-        boundary(self)
-
-        clip(self,xmin,xmax,ymin,ymax)
-        find_edgelist(self,edgelist,nodelist)
-        diag(self,p1,p2,l,al1,al2,quadsel=0)
-        nd2ed(self,ndlist)
-        ed2nd(self,edlist)
-        nl,el = L.zone(self,xmin=0,xmax=10,ymin=0,ymax=10)
-        closest_edge(self,p,AAS)
-        walls = L.thwall(self,offx,offy)
-            extract walls as polygon --> Simpy World
-        save(self,filename)
-        load(self,filename)
-        geomfile(self,filename='Lstruc.off')
-
-        show_nodes(self,ndlist=[1e8],size=10,color='b',
-            dlabels=False,font_size=15,alpha=1)
-        show_edge(self,edlist=[],alpha=1,width=1,size=2,
-            color='black',font_size=15,dlabels=False)
-        show_edges(self,edlist=[],alpha=1,width=1,color='black',
-            dnodes=False,dlabels=False,font_size=15)
-        show_layer(self,name,edlist=[],alpha=1,width=1,color='black',
-            dnodes=False,dthin=False,dlabels=False,font_size=15)
-        showGs(self,ndlist=[],edlist=[])
-        show3(self,bdis=True)
-        buildGc(self)
-        buildGt(self)
-        buildGr(self)
-        buildGi(self)
-        waypoint(self,nroom1,nroom2)
-        info(self)
-        facets3D(self,edlist,name='Layer',subseg=False)
-        facet3D(self,e,subseg=False)
-        signature(self,pTx,pRx,NroomTx,NroomRx)
-        distwall(self,p,nroom)
 
     """
     def __init__(self,_filemat='def.mat',_fileslab='def.slab'):
@@ -179,17 +104,18 @@ class Layout(object):
         self.display['alpha'] = 0.5
         self.display['layer'] = []
         self.display['clear'] = False
-        self.display['activelayer'] = self.sl.keys()
+        self.display['activelayer'] = self.sl.keys()[0]
+        self.display['layers'] = []
         self.display['overlay'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = "TA-Office.png"
         self.display['box'] = (-11.4, 19.525, -8.58, 23.41)
-        self.display['subLayer'] = self.sl.keys()
+        self.display['layerset'] = self.sl.keys()
         self.name = {}
         for k in self.sl.keys():
             self.name[k] = []
 
-        self.ax = (-10, 10, -10, 10)
+        #self.ax = (-10, 10, -10, 10)
 
     def ls(self, typ='str'):
         """ list the available file in dirstruc
@@ -221,7 +147,7 @@ class Layout(object):
             >>> for _filename in L.ls():
             >>>    plt.figure()
             >>>    L.load(_filename)
-            >>>    L.showGs()
+            >>>    ax = L.showGs()
             >>>    plt.title(_filename)
             >>> plt.show()
 
@@ -316,48 +242,6 @@ class Layout(object):
 
         return np.setdiff1d(iseg, u)
 
-#    def dir_ray_sign(self,Tx_x,Tx_y,Rx_x,Rx_y):
-#        """
-#            L.dir_ray_sign(Tx_x,Tx_y,Rx_x,Rx_y): takes transmitter and receiver coordinates
-#            and returns the shortest ray and his signature
-#        """
-#
-#        xmin=min(Tx_x,Rx_x)
-#        xmax=max(Tx_x,Rx_x)
-#        ymin=min(Tx_y,Rx_y)
-#        ymax=max(Tx_y,Rx_y)
-#
-#        seg=self.clip(xmin,xmax,ymin,ymax)
-#
-#        # creation of direct signature and ray
-#        sign=[]
-#        sign_Tx_Rx=[]
-#        line = sh.LineString([(Tx_x, Tx_y), (Rx_x, Rx_y)])
-#        for i in range(len(seg)):
-#            n1,n2=self.Gs.neighbors(seg[i]+1)
-#            line_i = sh.LineString([(self.Gs.pos[n1][0], self.Gs.pos[n1][1]), (self.Gs.pos[n2][0], self.Gs.pos[n2][1])])
-#            if line.crosses(line_i)==True:
-#                sign.append(seg[i]+1)
-#        fig = plt.figure(1, dpi=90)
-#        ax = fig.add_subplot(1,1,1)
-#
-#        geu.plot_coords2(ax, line)
-#        geu.plot_bounds2(ax, line)
-#        geu.plot_line2(ax, line)
-#        sign_Tx_Rx.append('Tx')
-#
-#        for i in range(len(sign)):
-#                 sign_Tx_Rx.append(sign[i])
-#
-#        sign_Tx_Rx.append('Rx')
-#
-#
-#
-#        self.showGs()
-#        plt.draw()
-#        plt.show()
-#        return(sign_Tx_Rx)
-
     def help(self):
         """ help 
 
@@ -392,7 +276,7 @@ class Layout(object):
             >>> L = Layout()
             >>> L.load('Lstruc.str')
             >>> L.loadfur('Furw1.ini')
-            >>> f,a = L.showGs()
+            >>> ax = L.showGs()
             >>> plt.show()
 
 
@@ -440,7 +324,9 @@ class Layout(object):
         ----------
         _filename : string
         _filemat  : string
+            default 'def.mat'
         _fileslab : string
+            default 'def.slab'
 
         Examples
         --------
@@ -836,6 +722,10 @@ class Layout(object):
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
+
+            if lname[k] not in self.display['layers']:
+                self.display['layers'].append(lname[k])
+
             if lname[k] in self.name:
                 self.name[lname[k]].append(k + 1)
             else:
@@ -886,7 +776,7 @@ class Layout(object):
         #
         self.pt = pt
         self.tahe = tahe
-        self.display['activelayer'] = self.name.keys()
+        self.display['activelayer'] = self.sl.keys()[0]
         #
         # update boundary
         #
@@ -923,9 +813,11 @@ class Layout(object):
 
             Examples
             --------
+
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
             >>> L.load('Lstruc.str2')
+            
 
         """
 
@@ -1053,6 +945,10 @@ class Layout(object):
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
+            # update list of layers
+            if lname[k] not in self.display['layers']:
+                self.display['layers'].append(lname[k])
+
             if lname[k] in self.name:
                 self.name[lname[k]].append(k + 1)
             else:
@@ -1079,7 +975,7 @@ class Layout(object):
         #    self.display['ActiveLayer'].append(i)
         self.pt = pt
         self.tahe = tahe
-        self.display['activelayer'] = self.name.keys()
+        self.display['activelayer'] = self.sl.keys()[0]
         #self.boundary(1,1)
 
     def subseg(self):
@@ -1182,9 +1078,21 @@ class Layout(object):
         #print x
 
     def add_none(self, ns, alpha=0.5):
-        """
-        L.add_none(ns,alpha=0.5) : add node on edge ns
-        alpha is a parameterisation on the  edge
+        """ add node on edge 
+
+        Parameters
+        ----------
+        ns  : int 
+            segment number 
+        alpha : parameterization of the point 
+            alpha = 0 (tail) alpha = 1 (head)
+
+        Notes
+        -----
+
+        delete segment ns 
+        create 2 segments with same properties 
+
         """
         nop = self.Gs.neighbors(ns)
         namens = self.Gs.node[ns]['name']
@@ -1202,8 +1110,22 @@ class Layout(object):
         self.add_edge(num, nop[1], name=namens, zmin=zminns, zmax=zmaxns)
 
     def add_edge(self, n1, n2, name='PARTITION', zmin=0, zmax=3.0):
-        """
-        L.add_edge(n1,n2,name='PARTITION',zmin=0,zmax=3.0)     : add edge between n1 and n2
+        """  add edge between n1 and n2
+        
+        Parameters
+        ----------
+        n1  : integer < 0  
+        n2  : integer < 0
+        name : string 
+            layer name 'PARTITION'
+        zmin : float 
+            default = 0 
+        zmax : float    
+            default 3.0 
+        
+        Returns
+        -------
+        num : segment number (>0) 
         """
         if ((n1 < 0) & (n2 < 0)):
             nn = np.array(self.Gs.node.keys())
@@ -1245,12 +1167,17 @@ class Layout(object):
             self.name[name] = [num]
         # update label
         self.labels[num] = str(num)
-        if name not in self.display['activelayer']:
-            self.display['activelayer'].append(name)
+        if name not in self.display['layers']:
+            self.display['layers'].append(name)
         return(num)
 
     def del_node(self, ln):
         """ delete node in list ln
+
+        Parameters
+        ----------
+        ln : list 
+            node list 
         """
         if (type(ln) == np.ndarray):
             ln = list(ln)
@@ -1265,6 +1192,7 @@ class Layout(object):
             nbrs = self.Gs.neighbors(n1)
             #nbrc = self.Gc.neighbors(n1)
             self.Gs.remove_node(n1)
+            del self.Gs.pos[n1]
             try:
                 self.Gc.remove_node(n1)
             except:
@@ -1288,7 +1216,6 @@ class Layout(object):
         -----
 
         """
-        print type(le) 
         if (type(le) == np.ndarray):
             le = list(le)
 
@@ -1478,8 +1405,13 @@ class Layout(object):
             pass
 
     def edit_edge(self, e1):
-        """
-        L.edit_edge(e1)       : edit edge e1
+        """ edit edge
+
+        Parameters
+        ----------
+        e1 : integer 
+            edge number 
+
         """
         nebd = self.Gs.neighbors(e1)
         n1 = nebd[0]
@@ -1541,11 +1473,20 @@ class Layout(object):
         else:
             print "no subseg to delete"
 
-    def add_subseg(self, e1):
-        """
-        add_subseg(e1)
+    def add_subseg(self,e1,name='DOOR',zmin=0,zmax=2.24):
+        """ add a subsegment on a segment 
 
-        add a sub segment on segment e1
+        Parameters
+        ----------
+
+        e1 : integer
+            edge number > 0
+        name : string
+            slab name
+        zmin : float
+            default 0
+        zmax : float
+            default 2.4 m 
 
         """
         if self.have_subseg(e1):
@@ -1553,8 +1494,9 @@ class Layout(object):
         else:
             self.info_edge(e1)
             message = str(self.sl.keys())
-            data = multenterbox(message, title, ('name',
-                                                 'zmin', 'zmax'), ('DOOR', 0, 2.24))
+            title = 'Add a subsegment'
+            data = multenterbox(message, title, ('name', 'zmin', 'zmax'),
+                                                (name, zmin, zmax))
 
             self.Gs.node[e1]['ss_name'] = data[0]
             self.Gs.node[e1]['ss_zmin'] = eval(data[1])
@@ -1729,36 +1671,70 @@ class Layout(object):
         return(edgelist)
 
     def nd2ed(self, ndlist):
-        """
-        convert nodelist to edgelist
-        """
-        if type(ndlist) == ndarray:
+        """ convert node list to edge list
+        
+        Parameters
+        ----------
+        ndlist : list or ndarray
+            node list 
+
+        Returns
+        -------
+        edlist : ndarray
+            edge list 
+
+
+                """
+        if isinstance(ndlist,np.ndarray):
             ndlist = ndlist.tolist()
             #mecanisme puissant de concatenation de listes
         edlist = []
         for n in ndlist:
             edlist = edlist + self.Gs.adj[n].keys()
 
-        return(unique(edlist))
+        return(np.unique(edlist))
 
     def ed2nd(self, edlist):
+        """ convert edgelist to nodelist
+
+        Parameters
+        ----------
+        edlist : list or ndarray
+            edge list 
+
+        Returns
+        -------
+        ndlist : ndarray 
+            node list 
+
         """
-        convert edgelist to nodelist
-        """
-        if type(edlist) == ndarray:
+        if isinstance(edlist,np.ndarray):
             edlist = edlist.tolist()
             # mecanisme de concatenation de listes
         ndlist = []
         for e in edlist:
             ndlist = ndlist + self.Gs.adj[e].keys()
 
-        return(unique(ndlist))
+        return(np.unique(ndlist))
 
-    def zone(self, xmin=0, xmax=10, ymin=0, ymax=10):
-        """
-        nl,el = zone(xmin=0,xmax=10,ymin=0,,ymax=10):
+    def get_zone(self, ax):
+        """ get node list and edge list in a rectangular zone
+
+        Parameters
+        ----------
+        ax  : list ot tuple
+            [xmin,xmax,ymin,ymax]
+
+        Returns
+        -------
+        ndlist,edlist
 
         """
+
+        xmin = ax[0]
+        xmax = ax[1]
+        ymin = ax[2]
+        ymax = ax[3]
         ndlist = []
         for n in self.Gs.node.keys():
             if n < 0:
@@ -1881,17 +1857,31 @@ class Layout(object):
         fo.close()
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
-        """
-            angleonlink(self,p1,p2) return seglist between p1 and p2
-            p1 : (1 x 2 )
-            p2 : (1 x 2 )
-            return (seglist , theta)
+        """ angleonlink(self,p1,p2) return seglist between p1 and p2
 
-            >>> L=Layout('def.mat','def.slab')
-            >>> L.load('office.str')
-            >>> p1 = np.array([0,0])
-            >>> p2 = np.array([10,3])
-            >>> seglist,theta = L.angleonlink(p1,p2)
+        Parameters
+        ----------
+        p1 : (1 x 2 )
+            [0,0]
+        p2 : (1 x 2 )
+            [10,3]
+
+        Returns
+        -------
+
+        seglist 
+
+        theta
+
+        Examples
+        --------
+        
+        >>> from pylayers.gis.layout import *
+        >>> L=Layout('def.mat','def.slab')
+        >>> L.load('office.str')
+        >>> p1 = np.array([0,0])
+        >>> p2 = np.array([10,3])
+        >>> seglist,theta = L.angleonlink(p1,p2)
 
         """
         u = p1 - p2
@@ -2265,7 +2255,7 @@ class Layout(object):
     def show_layer(self, name, edlist=[], alpha=1, width=1,
                    color='black', dnodes=False, dthin=False,
                    dlabels=False, font_size=15):
-        """ show_layer
+        """ show layer
 
         Parameters
         ----------
@@ -2331,11 +2321,13 @@ class Layout(object):
                     poly.plot(color='blue', alpha=0.5)
         ax.axis('scaled')
 
-    def showGs(self, ax=[], ndlist=[], edlist=[], show=False, furniture=False, roomlist=[]):
+    def showGs(self, ax=[], ndlist=[], edlist=[], show=False, furniture=False,
+               roomlist=[],axis=[]):
         """ show structure graph Gs
 
         Parameters
         ----------
+        ax      : ax 
         ndlist  : np.array
             set of nodes to be displayed
         edlist  : np.array
@@ -2344,18 +2336,20 @@ class Layout(object):
             default True
         furniture : boolean
             default False
+        roomlist : list
+            default : []
 
         display parameters are defined in  L.display dictionnary
 
         Returns
         -------
-        fig,ax 
+        ax 
 
         """
 
         if not isinstance(ax, plt.Axes):
-            fig = plt.gcf()
-            ax = fig.add_subplot(111)
+            fig = plt.figure()
+            ax  = fig.add_subplot(111)
 
         if furniture:
             if 'lfur' in self.__dict__:
@@ -2367,9 +2361,10 @@ class Layout(object):
 
         if self.display['clear']:
             ax.cla()
+        # display overlay image    
         if self.display['overlay']:
             image = Image.open(strdir + '/' + self.display['fileoverlay'])
-            ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.8)
+            ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.3)
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
@@ -2388,9 +2383,10 @@ class Layout(object):
             dnodes = self.display['ednodes']
             dthin = self.display['thin']
             alpha = self.display['alpha']
-            for nameslab in self.display['activelayer']:
-                #print len(edlist)
-                self.show_layer(nameslab, edlist=edlist, alpha=alpha, dthin=dthin, dnodes=dnodes, dlabels=dlabels, font_size=font_size)
+            for nameslab in self.display['layers']:
+                self.show_layer(nameslab, edlist=edlist, alpha=alpha,
+                                dthin=dthin, dnodes=dnodes, dlabels=dlabels,
+                                font_size=font_size)
         if self.display['subseg']:
             dico = self.subseg()
             for k in dico.keys():
@@ -2412,12 +2408,17 @@ class Layout(object):
         for nr in roomlist:
             ncy = self.Gr.node[nr]['cycle']
             self.Gt.node[ncy]['polyg'].plot()
+        
+        if axis==[]:
+            ax.axis('scaled')
+        else:
+            print "showGs",axis
+            ax.axis(axis)
 
         if show:
             plt.show()
 
-        fig = plt.gcf()
-        return fig, ax
+        return ax
 
     def build(self, graph='trwcvi'):
         """ build graphs
@@ -3041,14 +3042,13 @@ class Layout(object):
             >>> L.buildGt()
             >>> L.buildGr()
             >>> L.buildGv()
-            >>> fig,ax=L.showGs()
-            >>> (fig,ax)=L.showGv(fig=fig,ax=ax)
+            >>> ax = L.showGs()
+            >>> ax = L.showGv(ax=ax)
             >>> t = plt.axis('off')
             >>> plt.show()
 
         """
         defaults = {'show': False,
-                    'fig': [],
                     'ax': [],
                     'nodes': False,
                     'eded': True,
@@ -3064,14 +3064,9 @@ class Layout(object):
                 setattr(self, key, value)
                 kwargs[key] = value
 
-        if kwargs['fig'] == []:
-            fig = plt.figure()
-            fig.set_frameon(True)
-        else:
-            fig = kwargs['fig']
-
         if kwargs['ax'] == []:
-            ax = fig.gca()
+            fig = plt.figure()
+            ax  = fig.gca()
         else:
             ax = kwargs['ax']
 
@@ -3100,7 +3095,7 @@ class Layout(object):
         if kwargs['show']:
             plt.show()
 
-        return(fig, ax)
+        return ax
 
     def waypointGw(self, nroom1, nroom2):
         """ get the waypoint between room1 and room2
@@ -3279,8 +3274,8 @@ class Layout(object):
         waypoint.append((proom2[0], proom2[1]))
         return(waypoint)
 
-    def interact(self):
-        """ interact
+    def editor(self):
+        """ layout graphical editor
 
         Notes
         -----
@@ -3299,15 +3294,13 @@ class Layout(object):
             o : toggle overlay
 
         """
-        fig = plt.figure()
-        plt.axis(self.ax)
+        fig = plt.gcf()
         self.af = SelectL(self, fig)
         self.af.show()
-        self.cid1 = fig.canvas.mpl_connect(
-            'button_press_event', self.af.OnClick)
-        self.cid2 = fig.canvas.mpl_connect('key_press_event', self.af.OnPress)
-        #fig.canvas.mpl_connect('button_press_event',af.OnClick)
-        #fig.canvas.mpl_connect('key_press_event',af.OnPress)
+        self.cid1 = fig.canvas.mpl_connect('button_press_event',
+                                           self.af.OnClick)
+        self.cid2 = fig.canvas.mpl_connect('key_press_event',
+                                           self.af.OnPress)
         plt.draw()
         plt.show()
 
@@ -3774,7 +3767,6 @@ class Layout(object):
         lines = []
         ps = self.get_Sg_pos(sigarr)
         nz = np.nonzero(sig == 0)[0]
-        pdb.set_trace()
         mask = np.zeros((2, len(sig)))
         mask[:, nz] = 1
         vertices = np.ma.masked_array(ps.T, mask)
@@ -3890,7 +3882,7 @@ class Layout(object):
         return(p_Tx, p_Rx)
 
     def boundary(self, dx=0, dy=0):
-        """ set a boundary around layout
+        """ add a blank boundary around layout
 
         Parameters
         ----------
@@ -3904,6 +3896,7 @@ class Layout(object):
         Examples
         --------
 
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> L.boundary()
@@ -3943,6 +3936,7 @@ class Layout(object):
         Examples
         --------
 
+        >>> from pylayers.gis.import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
@@ -3952,7 +3946,7 @@ class Layout(object):
         >>> Gv_re,pos,labels = L.loadGv( _fileGv)
         >>> assert Gv_re.nodes()[5]== 6,'Mistake'
         >>> a=plt.title('Test Gv loadGv')
-        >>> fig,ax = L.showGs()
+        >>> ax = L.showGs()
         >>> nx.draw(Gv_re,pos,node_color='r')
         >>> plt.show()
         >>> plt.clf()
@@ -3981,63 +3975,6 @@ class Layout(object):
                 Gv_re.add_edge(Gv_edges[j, 0], Gv_edges[j, 1])
 
         return(Gv_re, pos, labels)
-
-#    def GvF(self, _fileGv):
-#        """build GvF graph
-#        
-#        GvF Graph of visibility between the walls and
-#        the furnitures of indoor environment.
-#
-#        Parameters
-#        ----------
-#        _fileGv : .lo file which contains graph of visibility (Gv).
-#
-#        Returns
-#        -------
-#        GvF : networkx.classes.graph.Graph
-#            The graph of visibility between the walls and the furnitures(GvF).
-#        posF : dict
-#            Explicitly set positions of the nodes
-#        labelsF : dict
-#            Node labels in a dictionary keyed by edge two-tuple of text labels
-#            (default=None), Only labels for the keys in the dictionary are drawn.
-#
-#        Examples
-#        --------
-#        >>> L = Layout()
-#        >>> L.loadstr('tag.str','def.mat','def.slab')
-#        >>> L.buildGt()
-#        >>> L.buildGr()
-#        >>> GvF,posF,labelsF=L.GvF('tag.lo')
-#        >>> assert posF[-14][0]==8.5,'Mistake'
-#
-#        """
-#
-#        visik1, visik2 = self.visi_list_F()
-#        posF = {}
-#        labelsF = {}
-#        GF = nx.Graph()
-#        Gv_re, pos_re, labels_re = self.loadGv(_fileGv)
-#
-#        for i in range(len(visik1)):
-#            GF.add_node(visik1[i])
-#            posF[visik1[i]] = (self.Gs.pos[visik1[i]][0],
-#                self.Gs.pos[visik1[i]][1])
-#            labelsF[visik1[i]] = str(visik1[i])
-#            GF.add_node(visik2[i])
-#            posF[visik2[i]] = (self.Gs.pos[visik2[i]][0],
-#                self.Gs.pos[visik2[i]][1])
-#            labelsF[visik2[i]] = str(visik2[i])
-#            GF.add_edge(visik1[i], visik2[i])
-#
-#        posF.update(pos_re, **posF)
-#        labelsF.update(labels_re, **labelsF)
-#        GvF = nx.compose(Gv_re, GF)
-#nx.draw(GvF,posF)
-#L.showGs()
-#show()
-
-#        return(GvF, posF, labelsF)
 
     def saveGv(self, _fileGv):
         """Creates Layout's Gv file which contains Gv graph values.
@@ -4080,6 +4017,7 @@ class Layout(object):
 
         Examples
         --------
+        
         >>> from pylayers.util.project import *
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
@@ -4125,6 +4063,8 @@ class Layout(object):
 
         Examples
         --------
+
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> ncoin,ndiff = L.buildGc()
@@ -4132,6 +4072,7 @@ class Layout(object):
         >>> L.buildGr()
         >>> _filelay = 'exemple.lay'
         >>> data_graph=L.loadlay(_filelay)
+
         """
         filelay = pyu.getlong(_filelay, pstruc['DIRSTRUC'])
         data_graph = cPickle.load(open(filelay))
@@ -4156,6 +4097,7 @@ class Layout(object):
 
         Examples
         --------
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','def.mat','def.slab')
         >>> L.buildGt()
