@@ -136,7 +136,7 @@ class SelectL(object):
 
         if self.state == 'Init':
             self.show(clear=True)
-            self.selected_edge = 0
+            self.selected_edge1 = 0
             self.selected_pt1 = 0
             self.selected_pt2 = 0
             try:
@@ -200,7 +200,7 @@ class SelectL(object):
                 self.p2[0].set_visible(False)
             except:
                 pass
-            self.selected_edge = self.nsel
+            self.selected_edge1 = self.nsel
             nse = self.nsel
             ta, he = self.L.Gs.neighbors(nse)
             pta = np.array(self.L.Gs.pos[ta])

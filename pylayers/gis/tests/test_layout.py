@@ -6,7 +6,7 @@ import doctest
 
 
 L = Layout()
-L.load('Lstruc.str2')
+L.load('Lstruc.str')
 L.editor()
 #ax  = plt.gca()
 #ax  = L.showGs(ax=ax)
