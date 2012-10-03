@@ -39,6 +39,7 @@ from pylayers.util.project import *
 #from   interval import interval
 from itertools import combinations
 import pdb
+import ast
 #
 #
 
@@ -290,7 +291,7 @@ class Layout(object):
             F = fur.Furniture()
             F.load(_filefur, name)
             self.lfur.append(F)
-
+        
     def load(self,_filename):
         """ load a Layout in different formats
 
@@ -1171,7 +1172,7 @@ class Layout(object):
             self.display['layers'].append(name)
         return(num)
 
-    def add_furniture(name='R1_C', matname='PARTITION', origin=(0.,0.), zmin=0., height=0., width=0., length=0., angle=0.):
+    def add_furniture(self, name='R1_C', matname='PARTITION', origin=(0.,0.), zmin=0., height=0., width=0., length=0., angle=0.):
         """  add piece of furniture
         
         Parameters
@@ -1204,7 +1205,32 @@ class Layout(object):
         self.add_edge(n0, n1, matname, zmin, zmin+height)
         self.add_edge(n1, n2, matname, zmin, zmin+height)
         self.add_edge(n2, n3, matname, zmin, zmin+height)
-        self.add_edge(n3, n0, matname, zmin, zmin+height)        
+        self.add_edge(n3, n0, matname, zmin, zmin+height)
+        
+    def add_furniture_file(self, _filefur):
+        """  add pieces of furniture from .ini files
+        
+        Parameters
+        ----------
+        _filefur : string
+        """
+        
+        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC'])
+        config = ConfigParser.ConfigParser()
+        config.read(filefur)
+        furname = config.sections()
+        for fur in furname:
+		    name = config.get(fur, "name")
+		    matname = config.get(fur, "matname")
+		    origin = tuple(ast.literal_eval(config.get(fur, "origin")))
+		    zmin = 0.0
+		    height = config.getfloat(fur, "height")
+		    width = config.getfloat(fur, "width")
+		    length = config.getfloat(fur, "length")
+		    angle = config.getfloat(fur, "angle")
+		    self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
+		    
+                
         
         
 
