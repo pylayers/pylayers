@@ -1,3 +1,8 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+
+
 import numpy as np
 import scipy as sp
 import pylab as pl
@@ -91,12 +96,12 @@ def ffann_learn(layers=1, data_train=np.array([]), target_train=np.array([]), da
     targets : numpy.ndarray
 
     """
+
     net = ffnetwork(np.shape(data_train)[1], layers, np.shape(data_train)[1])
     target_train = target_train * 1.0
     net.train_tnc(data_train, target_train)
     targets = net(data_test)
     return targets
-
 
 def svm_learn(kernel='linear', data_train=np.array([]), target_train=np.array([]), data_test=np.array([])):
     """
