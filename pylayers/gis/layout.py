@@ -1171,6 +1171,43 @@ class Layout(object):
             self.display['layers'].append(name)
         return(num)
 
+    def add_furniture(name='R1_C', matname='PARTITION', origin=(0.,0.), zmin=0., height=0., width=0., length=0., angle=0.):
+        """  add piece of furniture
+        
+        Parameters
+        ----------
+        name : string
+            default = 'R1_C'
+        matname : string
+            default = 'PARTITION'
+        origin : tuple of floats
+        height : float
+            default = 0 
+        width : float
+            default = 0
+        length : float
+            default = 0
+        angle : float
+            default = 0
+        """
+        # compute the four points
+        p0=origin
+        p1=(p0[0]+length*np.cos(angle),p0[1]+length*np.sin(angle))
+        p2=(p1[0]-width*np.sin(angle),p1[1]+width*np.cos(angle))
+        p3=(p0[0]-width*np.sin(angle),p0[1]+width*np.cos(angle))
+        # adding free nodes
+        n0 = self.add_fnod(p0)
+        n1 = self.add_fnod(p1)
+        n2 = self.add_fnod(p2)
+        n3 = self.add_fnod(p3)
+        # adding segments
+        self.add_edge(n0, n1, matname, zmin, zmin+height)
+        self.add_edge(n1, n2, matname, zmin, zmin+height)
+        self.add_edge(n2, n3, matname, zmin, zmin+height)
+        self.add_edge(n3, n0, matname, zmin, zmin+height)        
+        
+        
+
     def del_node(self, ln):
         """ delete node in list ln
 
