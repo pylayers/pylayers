@@ -147,7 +147,7 @@ class Layout(object):
             >>> for _filename in L.ls():
             >>>    plt.figure()
             >>>    L.load(_filename)
-            >>>    ax = L.showGs()
+            >>>    fig,ax = L.showGs()
             >>>    plt.title(_filename)
             >>> plt.show()
 
@@ -3090,8 +3090,8 @@ class Layout(object):
             >>> L.buildGt()
             >>> L.buildGr()
             >>> L.buildGv()
-            >>> ax = L.showGs()
-            >>> ax = L.showGv(ax=ax)
+            >>> fig, ax = L.showGs()
+            >>> fig,ax = L.showGv(ax=ax)
             >>> t = plt.axis('off')
             >>> plt.show()
 
@@ -3997,7 +3997,7 @@ class Layout(object):
         >>> Gv_re,pos,labels = L.loadGv( _fileGv)
         >>> assert Gv_re.nodes()[5]== 6,'Mistake'
         >>> a=plt.title('Test Gv loadGv')
-        >>> ax = L.showGs()
+        >>> fig,ax = L.showGs()
         >>> nx.draw(Gv_re,pos,node_color='r')
         >>> plt.show()
         >>> plt.clf()
