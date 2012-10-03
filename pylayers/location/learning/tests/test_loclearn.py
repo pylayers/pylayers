@@ -1,6 +1,6 @@
 from pylayers.location.learning.loclearn import *
 
-data_train = np.array([[1.0,2.3,3.5],[5.2,6.3,7.2],[5.4,6.8,9.5]])
+data_train = np.array([[1.0,2.3,3.1],[5.2,6.3,7.2],[5.4,6.8,9.5]])
 target_train = np.array([[2.27],[6.23],[7.23]])
 data_test = np.array([[2.0,3.3,3.5],[4.2,6.3,8.2],[9.4,6.8,5.5]])
 
