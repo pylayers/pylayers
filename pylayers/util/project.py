@@ -102,18 +102,31 @@ for nm in pstruc.keys():
 #
 # copy files from /data/ini in project directory 
 #
-dirlist=['ini','struc','ant','output']
+dirlist=['ini','struc','ant','output','geom']
 
+#for dl in dirlist:
+#    filelist = os.listdir(pylayersdir+'/data/' + dl)
+#    for fi in filelist:
+#        if os.path.isfile(basename+'/' + dl +'/' +fi):
+#            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
+#                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+#                A=raw_input()
+#                if A == 'y':
+#                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
+#                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
+#        else:
+#            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 for dl in dirlist:
     filelist = os.listdir(pylayersdir+'/data/' + dl)
     for fi in filelist:
         if os.path.isfile(basename+'/' + dl +'/' +fi):
-            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
-                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-                A=raw_input()
-                if A == 'y':
-                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
-                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
+            pass
+#            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
+#                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+#                A=raw_input()
+#                if A == 'y':
+#                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
+#                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
         else:
             shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 

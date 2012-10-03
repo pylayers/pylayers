@@ -25,7 +25,7 @@ import numpy as np
 import os
 import pdb
 import copy
-import Geomview as g 
+from pylayers.geometric.util.geomview import geomview as g 
 import time
 
 

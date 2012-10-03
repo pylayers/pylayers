@@ -76,7 +76,7 @@ class ShowNet(Process):
 
         self.fig = plt.figure(self.fname, figsize=(20, 5), dpi=100)
         self.fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-        self.fig, self.ax = self.L.showGs()
+        self.fig, self.ax = self.L.showGs(fig=self.fig)
 
         self.legend = True
         self.ion = True

@@ -101,7 +101,7 @@ class Containment:
 		walls = the_world.obstacles(boid)
 		acceleration = vec3()
 		front_intersect = left_intersect = right_intersect = False
-		front_distance = left_distance = right_distance = 30000
+		front_distance = left_distance = right_distance = 3000
 		speed = boid.velocity.length()
 		front_check = 0.5 + speed * 1.5
 		side_check = 0.5 + speed * 0.5

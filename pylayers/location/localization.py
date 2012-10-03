@@ -1,22 +1,21 @@
-
+from pylayers.util.project import *
 import sys
 
 import SimPy.Simulation
-from SimPy.Simulation import Process
+from SimPy.Simulation import Process,hold
 
-from pylayers.util import Util_net
-from pylayers.network import Network, Node
+from pylayers.util import utilnet
+from pylayers.network.network import Network, Node
 from pylayers.location.locarule import Take_all,  merge_rules
 
 import pdb
 
 #mport CSP10
-
-sys.path.append('./geometric/constraints') 
-import RSS 
-import TOA
-import TDOA 
-import CLA 
+from pylayers.location.geometric.constraints.cla import *
+from pylayers.location.geometric.constraints.rss import *
+from pylayers.location.geometric.constraints.toa import *
+from pylayers.location.geometric.constraints.tdoa import *
+from pylayers.location.geometric.constraints.exclude import *
 
 
 class Localization(object):
@@ -32,7 +31,7 @@ class Localization(object):
                 args[key]=value  
         self.args=args
 
-        self.cla = CLA.CLA()
+        self.cla = CLA()
 
     def get_const(self,RAT=None,LDP=None):
         """ get constraints
@@ -50,7 +49,7 @@ class Localization(object):
             for rat in self.dc[ldp].keys():
                 if ldp == 'Pr':
                     [self.cla.append(
-                          RSS.RSS(value=self.dc[ldp][rat][i][1][0],
+                          RSS(value=self.dc[ldp][rat][i][1][0],
                           std=self.dc[ldp][rat][i][1][1],
                           vcw=1.0,
                           model={},
@@ -68,7 +67,6 @@ class Localization(object):
 
 
 
-
 class PLocalization(Process):
     def __init__(self,loc=Localization(),loc_updt_time=.5,sim=None):
         Process.__init__(self,name='Location',sim=sim)
@@ -78,7 +76,8 @@ class PLocalization(Process):
     def run(self):
         while True:
 
-            self.loc.get_const(RAT='lte')
-            
-            print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!localization update @',self.sim.now()
+            self.loc.get_const()
+            self.loc.fill_cla()
+
+            print 'localization update @',self.sim.now()
             yield hold, self, self.loc_updt_time

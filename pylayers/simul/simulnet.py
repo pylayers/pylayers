@@ -40,7 +40,6 @@ import pylayers.util.pyutil as pyu
 from pylayers.network.network import Network, Node, PNetwork
 from pylayers.network.show import ShowNet, ShowTable
 from pylayers.mobility.agent import Agent
-#import pylayers.Network.Localization
 from pylayers.network.emsolver import EMSolver
 from pylayers.gis.layout import Layout
 from pylayers.antprop.slab import Slab
@@ -79,6 +78,7 @@ class Simul(Simulation):
         """
 
         self.the_world = world(width=float(self.lay_opt['the_world_width']), height=float(self.lay_opt['the_world_height']), scale=float(self.lay_opt['the_world_scale']))
+
         tk = self.the_world.tk
         canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
         canvas.create_rectangle(x_(-1), y_(-1), x_(100), y_(100), fill='white')
@@ -113,6 +113,7 @@ class Simul(Simulation):
         for ks in self.L.Gw.pos.keys():
             self.L.Gw.pos[ks] = (self.L.Gw.pos[ks][0] +
                                  x_offset, self.L.Gw.pos[ks][1] + y_offset)
+
         #
         # Create Layout
         #
@@ -133,10 +134,10 @@ class Simul(Simulation):
 
         if init == 'random':
             self.lAg = []
-            agents = ['A1', 'A2', 'A3','BS1','BS2']
-#            agents=['A1','A2','A3','A4' ]
+            agents=[]
             Cf = ConfigParser.ConfigParser()
             Cf.read(pyu.getlong('agent.ini','ini'))
+            agents=eval(dict(Cf.items('used_agent'))['list'])
 
 
             for i, ag in enumerate(agents):

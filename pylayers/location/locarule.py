@@ -1,3 +1,4 @@
+from pylayers.util.project import *
 import networkx as nx
 import ConfigParser	
 import scipy.stats as sps
@@ -6,7 +7,7 @@ import pdb
 
 #### global info PL_model
 config	 = ConfigParser.ConfigParser()
-config.read('EMSolver.ini')
+config.read(basename+'/ini/EMSolver.ini')
 plm_opt = dict(config.items('PL_MODEL'))
 sigmaRSS	= float(plm_opt['sigmarss'])# dBm !!!!!! 			 			
 f 			= float(plm_opt['f'])
@@ -95,55 +96,54 @@ class Take_all():
 #			cd['TOA'][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()
 
 
-class Qconnect():
-	"""
-		take only nodes from a given RAT assuming connectivity probability
-	
-		p(n1,n2) = Q((10 np log_10(d_(1,2)/R))/sigma_sh)
+#class Qconnect():
+#	"""
+#		take only nodes from a given RAT assuming connectivity probability
+#	
+#		p(n1,n2) = Q((10 np log_10(d_(1,2)/R))/sigma_sh)
 
-		with R = 10^((P_0-P_th)/10np) 
+#		with R = 10^((P_0-P_th)/10np) 
 
-		p_0 = 1/2 with d1,2 =R
-
-
-	"""
-	
-	def take(self,net,RAT=None,LDP=None):
-
-		if Rat == None :
-			Rat = net.RAT
-
-		elif isinstance(Rat,str):
-			Rat = [Rat]
+#		p_0 = 1/2 with d1,2 =R
 
 
-			
-			for rat in Rat:
-				d=nx.get_edge_attributes(self.net.SubNet[rat],'d')
-				P=nx.get_edge_attributes(self.net.SubNet[rat],'Pr')
-				
+#	"""
+#	
+#	def take(self,net,RAT=None,LDP=None):
 
-		for ldp in Ldp:
-			cd[ldp]={}
-			for rat in Rat:
-				try:
-					cd[ldp][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()
-				except: 
-					pass # if the specified RAT doesn't exist in the PN
+#		if Rat == None :
+#			Rat = net.RAT
+
+#		elif isinstance(Rat,str):
+#			Rat = [Rat]
 
 
+#			
+#			for rat in Rat:
+#				d=nx.get_edge_attributes(self.net.SubNet[rat],'d')
+#				P=nx.get_edge_attributes(self.net.SubNet[rat],'Pr')
+#				
 
-			R = pow(10,()) 
-			var = 10*RSSnp*np.log10(d/R)
-			
-			#N=sps.uniform(scale=)
-			
+#		for ldp in Ldp:
+#			cd[ldp]={}
+#			for rat in Rat:
+#				try:
+#					cd[ldp][rat]=nx.get_edge_attributes(net.SubNet[rat],ldp).items()
+#				except: 
+#					pass # if the specified RAT doesn't exist in the PN
+
+
+
+#			R = pow(10,()) 
+#			var = 10*RSSnp*np.log10(d/R)
+#			
+#			#N=sps.uniform(scale=)
+#			
 
 def merge_rules(self,RAT=None,LDP=None):
 	rules = {}
 
 	for rule in self.rule:
-
 		rules.update(rule.take(self.PN,RAT,LDP))
 	return (rules)
 

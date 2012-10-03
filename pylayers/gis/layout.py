@@ -2321,7 +2321,7 @@ class Layout(object):
                     poly.plot(color='blue', alpha=0.5)
         ax.axis('scaled')
 
-    def showGs(self, ax=[], ndlist=[], edlist=[], show=False, furniture=False,
+    def showGs(self,fig=[], ax=[], ndlist=[], edlist=[], show=False, furniture=False,
                roomlist=[],axis=[]):
         """ show structure graph Gs
 
@@ -2346,9 +2346,10 @@ class Layout(object):
         ax 
 
         """
-
+        if fig == []:
+           fig = plt.figure()
         if not isinstance(ax, plt.Axes):
-            fig = plt.figure()
+
             ax  = fig.add_subplot(111)
 
         if furniture:
@@ -2418,7 +2419,7 @@ class Layout(object):
         if show:
             plt.show()
 
-        return ax
+        return fig,ax
 
     def build(self, graph='trwcvi'):
         """ build graphs

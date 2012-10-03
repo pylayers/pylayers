@@ -873,6 +873,7 @@ class PNetwork(Process):
 
 
 
+
     def run(self):
 
 
@@ -884,7 +885,9 @@ class PNetwork(Process):
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
-            
+            pdb.set_trace()
+            if self.net.node[n]['type']=='ap':
+                self.net.node[n]['PN'].node[n]['pe']=self.net.node[n]['p']
         ####################################################################################
         self.pos=self.net.get_pos()
 
