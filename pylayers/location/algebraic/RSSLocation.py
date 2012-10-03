@@ -37,7 +37,9 @@ class RSSLocation(object):
         2- a set of RSSs measurements (RSS) with associated STD of shadowing(RSSStd) and associated propagation constant (RSSnp) 
 
         This class manages the RSS-based localization techniques.
-        MEMBERS:
+
+        Attributes
+        ----------
 
                 RN      : An Array that defines the Radio nodes implied in localization (coordiantes in meters)
                         : shape(RN)= (2 or 3,RNnum)
@@ -52,7 +54,8 @@ class RSSLocation(object):
                 lamda   : Associated wavelength (meters)
 
 
-        Provided Methods:
+        Methods
+        -------
         
                 info()                                                  : Display information about the scenario
 
