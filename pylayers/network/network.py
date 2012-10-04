@@ -89,7 +89,7 @@ class Node(nx.MultiGraph):
         # Personnal Network init
         self.ID=ID
         self.PN = Network(owner=self.ID)
-        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT))
+        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
 
         # Network init
 
@@ -439,8 +439,9 @@ class Network(nx.MultiGraph):
         """
         
         
-
+        # update network LDP
         self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
+        # update each personnal LDP
         [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
 
 
@@ -563,6 +564,20 @@ class Network(nx.MultiGraph):
             except: 
                 raise NameError('invalid RAT name')
 
+
+
+    def haspe(self,n):
+        """
+            Test if a node has a pe key
+        
+        Returns
+        -------
+            Boolean : True if node n has a pe k
+        """
+        try:
+            return  self.node[n]['pe'].any()
+        except:
+            return False
 
 
     def overview(self):
@@ -885,12 +900,11 @@ class PNetwork(Process):
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
-            pdb.set_trace()
-            if self.net.node[n]['type']=='ap':
-                self.net.node[n]['PN'].node[n]['pe']=self.net.node[n]['p']
+            # Add access point position in each personal network (PN)
+            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
+                
         ####################################################################################
         self.pos=self.net.get_pos()
-
 
 
 
