@@ -6,8 +6,7 @@ S = Simul()
 
 # loading a layout 
 filestr = 'defstr'
-S.layout(filestr+'.str','def.mat','def.slab')
-
+S.layout(filestr+'.str','matDB.ini','slabDB.ini')
 # setting transmitter
 
 S.tx = RadioNode(typ='tx')
@@ -67,7 +66,7 @@ M = N/2
 #
 for k in range(N):
     ax = fig.add_subplot(M,2,k+1)
-    fig,ax = L1.show(S.L,k+1)
+    fig,ax = L1.show(S.L,k+1,f=fig)
 
 fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')    
 print "Tracing "
@@ -77,9 +76,9 @@ fig = plt.figure()
 S.tracing(1,1)
 gr = GrRay3D()
 gr.load(S.dtra[1][1],S.L)
-f,a = S.L.showGs()
-plt.axis('on')
-gr.show(a,np.arange(100))
+f,a = S.L.showGs(fig=fig)
+#plt.axis('on')
+gr.show(fig=f,ax=a,rayset=np.arange(100))
 print "Tratotud "
 print "-----------------"
 print "purc :",S.config.get('tud','purc')
@@ -91,4 +90,5 @@ print "Evalfield "
 print "-----------------"
 S.field(1,1)
 S.cir(1,1)
-S.pltcir(1,1)
+f=plt.figure()
+S.pltcir(1,1,fig=f)
