@@ -31,7 +31,7 @@ import ConfigParser
 from   pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from   pylayers.util.easygui import *
-
+import pdb
 
 class Interface(object):
     """ Interface between 2 medium
@@ -615,13 +615,13 @@ class MatDB(dict):
         associate numeric and alphanumeric keys
 
     """
-    def __init__(self, _filemat=''):
+    def __init__(self, _fileini='matDB.ini'):
         """
         """
-        self.filemat = _filemat
-        if (_filemat != ''):
-            self.load(_filemat)
-            self.dass()
+        self.fileini = _fileini
+        self.filemat=self.fileini.replace('.ini','.mat')
+
+
 
     def info(self):
         """ get MatDB info
@@ -806,60 +806,6 @@ class MatDB(dict):
         self[name] = M
         self.dass()
 
-    def loadold(self, _filename):
-        """ load a Mat from a .mat file
-
-        Parameters
-        ----------
-        _filename : short file name
-
-        """
-        filename = pyu.getlong(_filename, pstruc['DIRMAT'])
-        try:
-            fo = open(filename, "rb")
-            data = fo.read()
-            #
-            # decodage des donnees lues
-            #
-            data_listname = data[0:1200]
-            self.tname = data_listname.replace(
-                "\x00", "").replace("\"", "").split()
-            data_N = data[1200:1204]
-            self.N = stru.unpack('i', data_N)[0]
-
-            for i in range(self.N):
-                # Creation d'un objet Mat
-                M = {}
-                delta = i * 82
-                data_name = data[1204 + delta:1234 + delta]
-                name = data_name.replace("\x00", "")
-                M['name'] = name
-                data_index = data[1234 + delta:1238 + delta]
-                index = stru.unpack('i', data_index)[0]
-                M['index'] = index
-                data_err = data[1238 + delta:1246 + delta]
-                err = stru.unpack('d', data_err)[0]
-                data_eri = data[1246 + delta:1254 + delta]
-                eri = stru.unpack('d', data_eri)[0]
-                epr = err + 1j * eri
-                M['epr'] = epr
-                data_mur = data[1254 + delta:1262 + delta]
-                mur = stru.unpack('d', data_mur)[0]
-                data_mui = data[1262 + delta:1270 + delta]
-                mui = stru.unpack('d', data_mui)[0]
-                mur = mur + 1j * mui
-                M['mur'] = mur
-                data_sigma = data[1270 + delta:1278 + delta]
-                sigma = stru.unpack('d', data_sigma)[0]
-                M['sigma'] = sigma
-                data_roughness = data[1278 + delta:1286 + delta]
-                roughness = stru.unpack('d', data_roughness)[0]
-                M['roughness'] = roughness
-                self[name] = M
-            fo.close()
-        except:
-            print "file : ", filename, "is unreachable"
-        self.dass()
 
     def choose(self):
         """ Choose a mat from matdir
@@ -873,18 +819,42 @@ class MatDB(dict):
         _filename = pyu.getshort(filename)
         self.load(_filename)
 
-    def load(self, _filename):
+
+
+    def load(self,_fileini): 
+        """Load a Material from a .ini file
+
+        """
+        fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
+        config = ConfigParser.ConfigParser()
+        config.read(fileini)
+
+        di = dict(config.items("dict") )
+        self.di={}
+        for d in di:
+            self.di[eval(d)]=di[d]
+        for matname in self.di.values():
+            M=Mat(name=matname)
+            M['sigma'] = eval(config.get(matname,'sigma'))
+            M['roughness'] = eval(config.get(matname,'roughness'))
+            M['epr'] = eval(config.get(matname,'epr'))
+            M['index'] = eval(config.get(matname,'index'))
+            M['mur'] = eval(config.get(matname,'mur'))
+            self[matname] = M
+        self.savemat(self.filemat)
+
+    def loadmat(self, _filemat):
         """ Load a Material from a .mat file
 
         Parameters
         ----------
-        _filename : string
+        _filemat : string
                  a short file name
 
         """
-        filename = pyu.getlong(_filename, pstruc['DIRMAT'])
+        filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])
         try:
-            fo = open(filename, "rb")
+            fo = open(filemat, "rb")
             data = fo.read()
             #
             # decodage des donnees lues
@@ -931,7 +901,7 @@ class MatDB(dict):
             print "file : ", filename, "is unreachable"
         self.dass()
 
-    def saveini(self):
+    def saveini(self,_fileini='matDB.ini'):
         """ save MatDB in an ini file
 
         [dict]
@@ -944,8 +914,8 @@ class MatDB(dict):
 
 
         """
-        filemat = pyu.getlong('matDB.ini', "ini")
-        fd = open(filemat, "w")
+        fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
+        fd = open(fileini, "w")
         config = ConfigParser.ConfigParser()
         #
         # config names
@@ -979,18 +949,18 @@ class MatDB(dict):
         config.write(fd)
         fd.close()
 
-    def save(self, _filename):
+    def savemat(self, _filemat):
         """ save a .mat file (PulsRay format)
 
         Parameters
         ----------
 
-        _filename : string
+        _filemat : string
             a short file name
 
         """
-        filename = pyu.getlong(_filename, pstruc['DIRMAT'])
-        fo = open(filename, 'wb')
+        filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])
+        fo = open(filemat, 'wb')
         N = len(self.di)
         data_listname = ''
         for k in range(N):
@@ -1383,7 +1353,7 @@ class SlabDB(dict):
         DB : slab dictionnary
 
     """
-    def __init__(self, filemat='def.mat', fileslab='def.slab'):
+    def __init__(self, filemat='matDB.ini', fileslabini='slabDB.ini'):
         """
 
         Parameters
@@ -1392,12 +1362,13 @@ class SlabDB(dict):
         fileslab : string
 
         """
-        self.fileslab = fileslab
+        self.fileslabini = fileslabini
+        self.fileslab=self.fileslabini.replace('.ini','.slab')
         self.mat = MatDB()
         if (filemat != ''):
             self.mat.load(filemat)
-        if (fileslab != ''):
-            self.load(fileslab)
+        if (fileslabini != ''):
+            self.load(fileslabini)
             self.dass()
 
     def showall(self):
@@ -1608,37 +1579,72 @@ class SlabDB(dict):
         self[U.name] = U
         self.dass()
 
+#    def loadsl(self, _filename):
+#        """
+#           Loadslab from a .sl file (PyRay format)
+
+#           Parameters
+#           ----------
+#           _filename : string
+
+#        """
+#        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+#        fo = open(filename, 'r')
+#        DB = cPickle.load(fo)
+#        self = DB
+#        self.conv()
+#        fo.close()
+
+#    def choose(self):
+#        """ Choose a mat file from matdir and slab from slabdir
+#        """
+#        import tkFileDialog
+#        FD = tkFileDialog
+
+#        self.mat.choose()
+#        fileslab = FD.askopenfilename(filetypes=[("Slab file ", "*.slab"),
+#                                                 ("All", "*")],
+#                                      title="Please choose a .slab  file",
+#                                      initialdir=slabdir)
+#        _fileslab = pyu.getshort(fileslab)
+#        self.load(_fileslab)
+
+    def load(self,_fileini='slabDB.ini'): 
+        """Load a Material from a .ini file
+
+        """
+        fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
+        config = ConfigParser.ConfigParser()
+        config.read(fileini)
+
+        di = dict(config.items("dict") )
+        self.di={}
+        for d in di:
+            self.di[eval(d)]=di[d]
+        for slabname in self.di.values():
+            S=Slab(name=slabname,mat=self.mat)
+            S['lmatname']=eval(config.get(slabname,'lmatname'))
+            S['nbmat']=len(S['lmatname'])
+            S['color']=config.get(slabname,'color')
+            S['lthick']=eval(config.get(slabname,'lthick'))
+            S['linewidth']=eval(config.get(slabname,'linewidth'))
+            imat=[0,0,0,0,0,0,0,0]
+            for i,m in enumerate(S['lmatname']):
+                imat[i]=S.mat[m]['index']
+            S['imat']=tuple(imat)
+
+            thickness=[0,0,0,0,0,0,0,0]
+            for i,t in enumerate(S['lthick']):
+                thickness[i]=t*100.
+            S['thickness']=tuple(thickness)
+            S.conv()
+            self[slabname] = S
+
+        self.savesl(self.fileslab)
+
+
+
     def loadsl(self, _filename):
-        """
-           Loadslab from a .sl file (PyRay format)
-
-           Parameters
-           ----------
-           _filename : string
-
-        """
-        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-        fo = open(filename, 'r')
-        DB = cPickle.load(fo)
-        self = DB
-        self.conv()
-        fo.close()
-
-    def choose(self):
-        """ Choose a mat file from matdir and slab from slabdir
-        """
-        import tkFileDialog
-        FD = tkFileDialog
-
-        self.mat.choose()
-        fileslab = FD.askopenfilename(filetypes=[("Slab file ", "*.slab"),
-                                                 ("All", "*")],
-                                      title="Please choose a .slab  file",
-                                      initialdir=slabdir)
-        _fileslab = pyu.getshort(fileslab)
-        self.load(_fileslab)
-
-    def load(self, _filename):
         """ load a .slab file (PulsRay format)
 
         Parameters
@@ -1734,12 +1740,12 @@ class SlabDB(dict):
         fo.close()
         self.dass()
 
-    def saveini(self):
+    def save(self,_fileini='slabDB.ini'):
         """ save SlabDB in an ini file
         """
 
-        filemat = pyu.getlong('slabDB.ini', "ini")
-        fd = open(filemat, "w")
+        fileini = pyu.getlong(_fileini, pstruc['DIRSLAB'])
+        fd = open(fileini, "w")
         config = ConfigParser.ConfigParser()
         #
         # config names
@@ -1750,12 +1756,23 @@ class SlabDB(dict):
         for vid in self.di.keys():
             name = self.di[vid]
             config.add_section(name)
-            config.set(name, 'color', self[name]['color'])
+            config.set(name, 'color', str(self[name]['color']))
             config.set(name, 'linewidth', self[name]['linewidth'])
+            config.set(name, 'lthick', self[name]['lthick'])
+            lmat=[]
+            for i in self[name]['imat']:
+                if i !=0:
+                    lmat.append(self.mat.di[i])
+                else:
+                    if lmat ==[]:
+                        lmat=['ABSORBENT']
+                        break
+            config.set(name, 'lmatname', lmat)
+
         config.write(fd)
         fd.close()
 
-    def save(self, _filename):
+    def savesl(self, _filename):
         """ Save a Slab database in a .slab file (PulsRay format)
 
         Parameters
@@ -1824,23 +1841,23 @@ class SlabDB(dict):
         fo.write(data)
         fo.close()
 
-    def savesl(self, _filename):
-        """ the short filename _filename needs to have the extension .sl
+#    def savesl(self, _filename):
+#        """ the short filename _filename needs to have the extension .sl
 
-        """
-        ia = _filename.find('.sl')
-        if (ia == -1):
-            print("error : _filename needs a .sl extension")
-            exit()
-        else:
-        # save in .sl format
-            filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-            fo = open(filename, 'w')
-            cPickle.dump(self, fo)
-            fo.close()
-        # save in .slab format
-            f2 = _filename.replace('.sl', pstruc['DIRSLAB'])
-            self.save(f2)
+#        """
+#        ia = _filename.find('.sl')
+#        if (ia == -1):
+#            print("error : _filename needs a .sl extension")
+#            exit()
+#        else:
+#        # save in .sl format
+#            filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+#            fo = open(filename, 'w')
+#            cPickle.dump(self, fo)
+#            fo.close()
+#        # save in .slab format
+#            f2 = _filename.replace('.sl', pstruc['DIRSLAB'])
+#            self.save(f2)
 
 
 def calsig(cval, fGHz, typ='epsr'):
