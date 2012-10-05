@@ -36,7 +36,7 @@ except:
 # of the project 
 #
 pstruc = {}
-
+pstruc['DIRSIMUL'] ='ini'
 pstruc['DIRSTRUC'] ='struc'
 pstruc['DIRSTRUC2'] = 'struc'
 pstruc['DIRSLAB'] = 'ini'
@@ -101,18 +101,27 @@ for nm in pstruc.keys():
 #
 dirlist=['ini','struc','ant','output']
 
+
 for dl in dirlist:
     filelist = os.listdir(pylayersdir+'/data/' + dl)
     for fi in filelist:
         if os.path.isfile(basename+'/' + dl +'/' +fi):
-            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
-                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-                A=raw_input()
-                if A == 'y':
-                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
-                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
+            pass
         else:
             shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+
+#for dl in dirlist:
+#    filelist = os.listdir(pylayersdir+'/data/' + dl)
+#    for fi in filelist:
+#        if os.path.isfile(basename+'/' + dl +'/' +fi):
+#            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
+#                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
+#                A=raw_input()
+#                if A == 'y':
+#                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
+#                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
+#        else:
+#            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 
 
 os.chdir(currentdir)
