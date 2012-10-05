@@ -53,10 +53,9 @@ class Localization(object):
             for rat in self.PN.edge[self.ID][e].keys():
                 try:
                     self.cla.append(
-                        RSS(id = rat+'-'+self.ID+'-'+e,
+                        RSS(id = rat+'-Pr-'+self.ID+'-'+e,
                             value = self.PN.edge[self.ID][e][rat]['Pr'][0],
                             std = self.PN.edge[self.ID][e][rat]['Pr'][1],
-                            vcw = 1.0,
                             model={},
                             p = self.PN.node[e]['pe'],
                             origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
@@ -66,22 +65,36 @@ class Localization(object):
                     pass
 
 
-#                elif ldp == 'TOA':
-#                    pass
+                try:
+                    self.cla.append(
+                        TOA(id = rat+'-TOA-'+self.ID+'-'+e,
+                            value = self.PN.edge[self.ID][e][rat]['TOA'][0]*0.3,
+                            std = self.PN.edge[self.ID][e][rat]['TOA'][1]*0.3,
+                            p= self.PN.node[e]['pe'],
+                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
+                            )
+                                    )
+                except:
+                    pass
+
+
 
 
 #                elif ldp == 'TDOA':
 #                    pass
 
 
-
-
-    def update(self,RAT=None,LDP=None):
+    def update(self,rat='all',ldp='all'):
+        if rat == 'all':
+            rat=self.PN.SubNet.keys()
+        if ldp == 'all':
+            ldp=['Pr','TOA','TDOA']
         for c in self.cla.c:
-            rat,ldp,e,own=c.origin.values()
-            c.p = self.PN.node[e[0]]['pe']
-            c.value = self.PN.edge[e[0]][self.ID][rat][ldp][0]
-            c.std = self.PN.edge[e[0]][self.ID][rat][ldp][1]
+            crat,cldp,e,own=c.origin.values()
+            if (crat in rat) and (cldp in ldp) :
+                c.p = self.PN.node[e[0]]['pe']
+                c.value = self.PN.edge[e[0]][self.ID][crat][cldp][0]
+                c.std = self.PN.edge[e[0]][self.ID][crat][cldp][1]
         self.cla.update()
 
 
@@ -95,6 +108,15 @@ class PLocalization(Process):
 #        self.loc.get_const()
         self.loc.fill_cla()
         while True:
+
             self.loc.update()
+            self.loc.cla.merge2()
+            self.loc.cla.refine(self.loc.cla.Nc)
+            self.loc.cla.estpos2()
+            self.loc.cla.Nc=len(self.loc.cla.c)
+#            print self.loc.ID
+#            print self.loc.cla.pe
+#            print self.loc.cla.Nc
+
             print 'localization update @',self.sim.now()
             yield hold, self, self.loc_updt_time

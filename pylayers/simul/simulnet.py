@@ -52,7 +52,26 @@ import pdb
 import os
 
 class Simul(Simulation):
+    """
 
+    Attributes
+    ----------
+    config  : config parser instance
+    sim_opt : dictionary of configuration option for simulation
+    ag_opt : dictionary of configuration option for agent
+    lay_opt : dictionary of  configuration option for layout
+    meca_opt : dictionary of  configuration option for mecanic
+    net_opt : dictionary of  configuration option for network
+    loc_opt : dictionary of  configuration option for localization
+    save_opt : dictionary of  configuration option for save
+    sql_opt : dictionary of  configuration option for sql
+
+    Notes
+    ------
+     All the prvious dictionnary are obtained from the chosen simulnet.ini file
+    in the project directory
+
+    """
     def __init__(self):
         Simulation.__init__(self)
         self.initialize()
@@ -70,10 +89,6 @@ class Simul(Simulation):
     def create_layout(self):
         """
         Create Layout in Simpy the_world thantks to Tk backend
-
-        TODO
-        ----
-        automatically update Simpy the_world in regards of the Pyray Layout
 
         """
 
@@ -127,61 +142,44 @@ class Simul(Simulation):
             for ii in range(0, len(wall) - 1):
                 self.the_world.add_wall(wall[ii], wall[ii + 1])
 
-    def create_agent(self, init='random'):
-        """    create simulation's Agents
+    def create_agent(self):
+        """    
+        create simulation's Agents
+
+        ..todo:: change lAg list to a dictionnary ( modification in show.py too) 
 
         """
 
-        if init == 'random':
-            self.lAg = []
-            agents=[]
-            Cf = ConfigParser.ConfigParser()
-            Cf.read(pyu.getlong('agent.ini','ini'))
-            agents=eval(dict(Cf.items('used_agent'))['list'])
+
+        self.lAg = []
+        agents=[]
+        Cf = ConfigParser.ConfigParser()
+        Cf.read(pyu.getlong('agent.ini','ini'))
+        agents=eval(dict(Cf.items('used_agent'))['list'])
 
 
-            for i, ag in enumerate(agents):
-                ag_opt = dict(Cf.items(ag))
-                self.lAg.append(Agent(
-                                ID=ag_opt['id'],
-                                name=ag_opt['name'],
-                                type=ag_opt['type'],
-                                pos=np.array(eval(ag_opt['pos'])),
-                                roomId=int(ag_opt['roomid']),
-                                meca_updt=float(self.meca_opt['mecanic_update_time']),
-                                loc=str2bool(self.loc_opt['localization']),
-                                loc_updt=float(self.loc_opt['localization_update_time']),
-                                Layout=self.L,
-                                net=self.net,
-                                world=self.the_world,
-                                RAT=eval(ag_opt['rat']),
-                                save=eval(self.save_opt['save']),
-                                sim=self))
+        for i, ag in enumerate(agents):
+            ag_opt = dict(Cf.items(ag))
+            self.lAg.append(Agent(
+                            ID=ag_opt['id'],
+                            name=ag_opt['name'],
+                            type=ag_opt['type'],
+                            pos=np.array(eval(ag_opt['pos'])),
+                            roomId=int(ag_opt['roomid']),
+                            meca_updt=float(self.meca_opt['mecanic_update_time']),
+                            loc=str2bool(self.loc_opt['localization']),
+                            loc_updt=float(self.loc_opt['localization_update_time']),
+                            Layout=self.L,
+                            net=self.net,
+                            world=self.the_world,
+                            RAT=eval(ag_opt['rat']),
+                            save=eval(self.save_opt['save']),
+                            sim=self))
 
-                if self.lAg[i].type == 'ag':
-                    self.activate(self.lAg[i].meca,
-                                  self.lAg[i].meca.move(), 0.0)
+            if self.lAg[i].type == 'ag':
+                self.activate(self.lAg[i].meca,
+                              self.lAg[i].meca.move(), 0.0)
 
-#            R=[0,9,8,18,12,1,2,3,4,5,6,7,8,10,11,12,14,15]
-#            #rat = [['rat1','rat6'],['rat1','rat2'],['rat2','rat3'],['rat3','rat4'],['rat4','rat5'],['rat5','rat6'],['rat6','rat1']]
-#            rat = [['lte','bt'],['wifi','lte','bt'],['wifi','bt'],['wifi','bt'],['lte'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],['wifi','lte','bt'],]
-#            type=['ag','ag','ap','ap','ap']
-#            self.lAg=[]
-#            for i in range(int(self.ag_opt['number_of_agent'])):
-#                self.lAg.append(Agent.Agent(
-#                                            ID=i,
-#                                            type=type[i],
-#                                            pos=[],
-#                                            roomId=R[i],
-#                                            meca_updt=float(self.meca_opt['mecanic_update_time']),
-#                                            loc=Util.str2bool(self.loc_opt['localization']),
-#                                            loc_updt=float(self.loc_opt['localization_update_time']),
-#                                            Layout=self.L,
-#                                            net=self.net,
-#                                            RAT=rat[i],
-#                                            sim=self))
-#                if self.lAg[i].type == 'ag':
-#                    self.activate(self.lAg[i].meca,self.lAg[i].meca.move(),0.0)
 
     def create_EMS(self):
         """
@@ -263,7 +261,7 @@ class Simul(Simulation):
         fig_table = 'table'
 
         if str2bool(self.net_opt['show']):
-            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net)
+            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,)
             self.activate(self.sh,self.sh.run(),1.0)
 
         if str2bool(self.net_opt['show_table']):
