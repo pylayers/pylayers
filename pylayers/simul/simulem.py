@@ -658,10 +658,11 @@ class Simul(object):
         self.filesimul = _filesimul
         self.filemat = []
         self.fileslab = []
-        self.filespaTx = []
-        self.filespaRx = []
-        self.fileantTx = "defant.vsh3"
-        self.fileantRx = "defant.vsh3"
+#        self.filespaTx = []
+#        self.filespaRx = []
+        self.filestr = 'defstr.str2	'
+        self.tx = RadioNode('tx', 'radiotx.ini', 'defant.vsh3', self.filestr)
+        self.rx = RadioNode('rx', 'radiorx.ini', 'defant.vsh3', self.filestr)
         self.filepatra = "def.patra"
         self.filepalch = "def.palch"
         self.filefreq = "def.freq"
@@ -673,7 +674,7 @@ class Simul(object):
 
         self.progress = -1  # simulation not loaded
         self.filelch = []
-        self.filestr = []
+
         self.filetra = []
         self.filetud = []
         self.filetang = []
@@ -711,10 +712,9 @@ class Simul(object):
 
 
 ############### The following is replaced by self.updcfg()
-        try:
-            self.load(self.filesimul)
-        except:
-            print('simulation file does not exist')
+        self.load(self.filesimul)
+
+
 
 
 #        #
@@ -773,12 +773,16 @@ class Simul(object):
 
             update simulation .ini config file with values currently in use.
         """
-
+        self.config.set("files", "struc", self.filestr)
         self.config.set("files", "conf", self.fileconf)
         self.config.set("files", "patra", self.filepatra)
         self.config.set("files", "palch", self.filepalch)
-        self.config.set("files", "txant", self.fileantTx)
-        self.config.set("files", "rxant", self.fileantRx)
+
+        self.config.set("files", "txant", self.tx.fileant)
+        self.config.set("files", "rxant", self.rx.fileant)
+        self.config.set("files", "tx", self.tx.fileini)
+        self.config.set("files", "rx", self.rx.fileini)
+
 
         self.config.set("tud", "purc", str(self.patud.purc))
         self.config.set("tud", "nrmax", str(self.patud.nrmax))
@@ -801,6 +805,9 @@ class Simul(object):
         self.config.set("waveform", "type", 'generic')
         self.config.set("waveform", "fe", '50')
         self.wav = wvf.Waveform()
+        self.save()
+        self.tx.save()
+        self.rx.save()
 
     def clean(self, level=1):
         """ clean
@@ -853,11 +860,11 @@ class Simul(object):
         fd = open(filesimul, "w")
         # getting current spa file if any
         try:
-            self.config.set("files", "tx", self.tx.filespa)
+            self.config.set("files", "tx", self.tx.fileini)
         except:
             pass
         try:
-            self.config.set("files", "rx", self.rx.filespa)
+            self.config.set("files", "rx", self.rx.fileini)
         except:
             pass
         self.config.write(fd)
