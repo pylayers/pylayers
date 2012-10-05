@@ -36,7 +36,7 @@ except:
 # of the project 
 #
 pstruc = {}
-
+pstruc['DIRSIMUL'] ='ini'
 pstruc['DIRSTRUC'] ='struc'
 pstruc['DIRSTRUC2'] = 'struc'
 pstruc['DIRSLAB'] = 'ini'
@@ -100,6 +100,15 @@ for nm in pstruc.keys():
 # copy files from /data/ini in project directory 
 #
 dirlist=['ini','struc','ant','output']
+
+
+for dl in dirlist:
+    filelist = os.listdir(pylayersdir+'/data/' + dl)
+    for fi in filelist:
+        if os.path.isfile(basename+'/' + dl +'/' +fi):
+            pass
+        else:
+            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 
 #for dl in dirlist:
 #    filelist = os.listdir(pylayersdir+'/data/' + dl)

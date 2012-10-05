@@ -901,7 +901,7 @@ class MatDB(dict):
             print "file : ", filename, "is unreachable"
         self.dass()
 
-    def saveini(self,_fileini='matDB.ini'):
+    def save(self,_fileini='matDB.ini'):
         """ save MatDB in an ini file
 
         [dict]
@@ -1626,6 +1626,7 @@ class SlabDB(dict):
             S['lmatname']=eval(config.get(slabname,'lmatname'))
             S['nbmat']=len(S['lmatname'])
             S['color']=config.get(slabname,'color')
+            S['index']=eval(config.get(slabname,'index'))
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
             imat=[0,0,0,0,0,0,0,0]
@@ -1639,7 +1640,6 @@ class SlabDB(dict):
             S['thickness']=tuple(thickness)
             S.conv()
             self[slabname] = S
-
         self.savesl(self.fileslab)
 
 
@@ -1759,6 +1759,7 @@ class SlabDB(dict):
             config.set(name, 'color', str(self[name]['color']))
             config.set(name, 'linewidth', self[name]['linewidth'])
             config.set(name, 'lthick', self[name]['lthick'])
+            config.set(name, 'index', self[name]['index'])
             lmat=[]
             for i in self[name]['imat']:
                 if i !=0:

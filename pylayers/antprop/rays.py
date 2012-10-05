@@ -591,12 +591,18 @@ class Ray3D(object):
         delay = sum(np.sqrt(sum(d * d, axis=0)) / 0.3)
         return(delay)
 
-    def show(self, ax, col='b', node=False):
+    def show(self, fig=[], ax=[], col='b', node=False):
         """
         show(ax,vol='b')
         show a Ray projection in 2D
 
         """
+        if fig ==[]:
+            fig = plt.gcf()
+        if ax==[]:
+            ax = fig.gca()
+
+
         Nseg = self.nn - 1
         pt = self.pt[0:-1, 0:2].T
         ph = self.pt[1::, 0:2].T
@@ -611,6 +617,7 @@ class Ray3D(object):
         ax.plot(vertices[0, :], vertices[1, :], color=col)
         if node:
             ax.plot(self.pt[:, 0], self.pt[:, 1], 'ok')
+        return fig,ax
 
     def show3(self, bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
         """ show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
@@ -1729,7 +1736,7 @@ class GrRay3D(object):
         G.ray3d = ray3D
         return(G)
 
-    def show(self, ax, rayset=np.array([]), col='b', node=False):
+    def show(self,fig=[], ax=[], rayset=np.array([]), col='b', node=False):
         """
 
         Parameters
@@ -1743,9 +1750,17 @@ class GrRay3D(object):
         node : boolean
 
         """
+        if fig ==[]:
+            fig = plt.gcf()
+        if ax==[]:
+            ax = fig.gca()
+
+
         for i in rayset:
             r = self.ray3d[i]
-            r.show(ax, col, node=node)
+            fig,ax=r.show(fig=fig,ax=ax, col=col, node=node)
+        return fig, ax
+
 
     def show3(self, rayset=np.array([]), bdis=True, bstruc=True, id=0):
         """ 3D show using geomview
