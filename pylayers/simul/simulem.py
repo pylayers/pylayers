@@ -779,6 +779,8 @@ class Simul(object):
         self.config.set("files", "palch", self.filepalch)
         self.config.set("files", "txant", self.fileantTx)
         self.config.set("files", "rxant", self.fileantRx)
+        self.config.set("files", "tx", self.tx.filespa)
+        self.config.set("files", "rx", self.rx.filespa)
 
         self.config.set("tud", "purc", str(self.patud.purc))
         self.config.set("tud", "nrmax", str(self.patud.nrmax))
@@ -801,6 +803,7 @@ class Simul(object):
         self.config.set("waveform", "type", 'generic')
         self.config.set("waveform", "fe", '50')
         self.wav = wvf.Waveform()
+        self.save()
 
     def clean(self, level=1):
         """ clean

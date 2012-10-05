@@ -1172,9 +1172,10 @@ class Layout(object):
             self.display['layers'].append(name)
         return(num)
 
-    def add_furniture(self, name='R1_C', matname='PARTITION', origin=(0.,0.), zmin=0., height=0., width=0., length=0., angle=0.):
+    def add_furniture(self, name='R1_C', matname='PARTITION', origin=(0.,0.),
+                      zmin=0., height=0., width=0., length=0., angle=0.):
         """  add piece of furniture
-        
+
         Parameters
         ----------
         name : string
@@ -1183,7 +1184,7 @@ class Layout(object):
             default = 'PARTITION'
         origin : tuple of floats
         height : float
-            default = 0 
+            default = 0
         width : float
             default = 0
         length : float
@@ -1206,33 +1207,33 @@ class Layout(object):
         self.add_edge(n1, n2, matname, zmin, zmin+height)
         self.add_edge(n2, n3, matname, zmin, zmin+height)
         self.add_edge(n3, n0, matname, zmin, zmin+height)
-        
+
     def add_furniture_file(self, _filefur):
         """  add pieces of furniture from .ini files
-        
+
         Parameters
         ----------
         _filefur : string
         """
-        
+
         filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
         for fur in furname:
-		    name = config.get(fur, "name")
-		    matname = config.get(fur, "matname")
-		    origin = tuple(ast.literal_eval(config.get(fur, "origin")))
-		    zmin = 0.0
-		    height = config.getfloat(fur, "height")
-		    width = config.getfloat(fur, "width")
-		    length = config.getfloat(fur, "length")
-		    angle = config.getfloat(fur, "angle")
-		    self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
-		    
-                
-        
-        
+            name = config.get(fur, "name")
+            matname = config.get(fur, "matname")
+            origin = tuple(ast.literal_eval(config.get(fur, "origin")))
+            zmin = 0.0
+            height = config.getfloat(fur, "height")
+            width = config.getfloat(fur, "width")
+            length = config.getfloat(fur, "length")
+            angle = config.getfloat(fur, "angle")
+            self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
+
+
+
+
 
     def del_node(self, ln):
         """ delete node in list ln
