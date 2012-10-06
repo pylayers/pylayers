@@ -770,9 +770,7 @@ class Simul(object):
             self.fileantRx = simulgui[10]
 
     def updcfg(self):
-        """ updcfg
-
-            update simulation .ini config file with values currently in use.
+        """ update simulation .ini config file with values currently in use.
         """
         self.config.set("files", "struc", self.filestr)
         self.config.set("files", "conf", self.fileconf)
@@ -1926,12 +1924,12 @@ class Simul(object):
             receiver index
 
         """
-#        nrmin = self.config.get("tud", "nrmax")
-#        num = self.config.get("tud", "num")
-#        purc = self.config.get("tud", "purc")
-        nrmin = self.dtud['nrmax']
-        num = self.dtud['num'] 
-        purc = self.dtud['purc'] 
+        #
+        # .. todo:: take value from the simulation class
+        #
+        nrmin = self.config.get("tud", "nrmax")
+        num = self.config.get("tud", "num")
+        purc = self.config.get("tud", "purc")
         chaine = "tratotud -tra " + self.dtra[itx][irx] + \
             " -min " + nrmin + \
             " -purc " + purc + \
