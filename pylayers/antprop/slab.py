@@ -562,8 +562,7 @@ class Mat(dict):
         return(epsc)
 
     def info(self):
-        """
-        Display material properties
+        """ Display material properties
         """
 
         print "---------------------------------"
@@ -812,9 +811,9 @@ class MatDB(dict):
         """
         import tkFileDialog
         FD = tkFileDialog
-        filename = FD.askopenfilename(filetypes=[("Mat file ", "*.mat"),
+        filename = FD.askopenfilename(filetypes=[("Mat file ", "*.ini"),
                                                  ("All", "*")],
-                                      title="Please choose a .mat  file",
+                                      title="Please choose a Material .ini  file",
                                       initialdir=matdir)
         _filename = pyu.getshort(filename)
         self.load(_filename)
@@ -1580,10 +1579,6 @@ class SlabDB(dict):
         U.edit()
         self[U.name] = U
         self.dass()
-
-#    def loadsl(self, _filename):
-#        """
-#           Loadslab from a .sl file (PyRay format)
 
 #           Parameters
 #           ----------

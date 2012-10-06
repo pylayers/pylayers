@@ -24,9 +24,10 @@
 import numpy as np
 import scipy as sp 
 from copy import copy
-from Constraint import *
-sys.path.append('./Geometric_Loc/Util') 
-from BoxN import *
+#from Constraint import *
+#sys.path.append('./Geometric_Loc/Util') 
+from pylayers.location.geometric.util.BoxN import *
+from pylayers.location.geometric.constraints.Constraint import *
 
 
 	

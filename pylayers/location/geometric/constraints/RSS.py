@@ -25,10 +25,12 @@ import numpy as np
 import scipy as sp 
 from copy import copy
 from Constraint import *
-sys.path.append('../Util') 
-from BoxN import *
-sys.path.append('./Algebraic_loc') 
-from RSSLocation import *
+#sys.path.append('../Util') 
+#from BoxN import *
+from pylayers.location.geometric.util.BoxN import *
+#sys.path.append('./Algebraic_loc') 
+#from RSSlocation import *
+from pylayers.location.algebraic.rss import *
 #from Model import *
 
 

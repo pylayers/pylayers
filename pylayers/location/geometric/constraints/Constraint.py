@@ -25,8 +25,9 @@ import numpy as np
 import scipy as sp 
 import time
 import sys
-sys.path.append('./Geometric_Loc/Util') 
-from BoxN import *
+#sys.path.append('./Geometric_Loc/Util') 
+from pylayers.location.geometric.util.BoxN import *
+#from BoxN import *
 
 
 

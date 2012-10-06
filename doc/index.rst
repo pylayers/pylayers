@@ -1,9 +1,7 @@
-
 pylayers
 ========
 
-pylayers is a python platform for studying and testing localization algorithms 
-in indoor environments. 
+pylayers is a python platform which is developped with the purpose of studying and testing localization algorithms in indoor environments. 
 
 + Indoor Layout description 
 + Mobile user mobility 
