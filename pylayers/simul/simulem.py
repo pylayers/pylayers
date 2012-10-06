@@ -601,10 +601,6 @@ class Simul(object):
         filepalch
         filepatra
         filefreq
-        filespaTx
-        filespaRx
-        fileantTx
-        fileantRx
 
 
     filefield
@@ -647,13 +643,6 @@ class Simul(object):
 
         filefreq
 
-    Position of Tx and Rx files :
-
-        filespaTx
-        filespaRx
-
-    .. todo::
-        migrer vers importations propres
     """
     def __init__(self, _filesimul='default.ini'):
 
@@ -703,7 +692,7 @@ class Simul(object):
         self.output = {}
 
         self.freq = np.linspace(2, 11, 181, endpoint=True)
-        self.config=ConfigParser.ConfigParser()
+        self.config = ConfigParser.ConfigParser()
 
 
         self.config.add_section("files")
@@ -712,8 +701,8 @@ class Simul(object):
         self.config.add_section("waveform")
         self.config.add_section("output")
 ############### The following is replaced by self.updcfg()
-        self.updcfg()
         self.load(self.filesimul)
+        self.updcfg()
 
 
 
@@ -803,6 +792,12 @@ class Simul(object):
         self.config.set("waveform", "thresh", '3')
         self.config.set("waveform", "type", 'generic')
         self.config.set("waveform", "fe", '50')
+        #
+        # output section
+        #
+        for k in self.output.keys():
+            self.config.set("output",str(k),self.dout[k])
+
         self.wav = wvf.Waveform()
         self.save()
 
@@ -1114,12 +1109,11 @@ class Simul(object):
 # Simulation Progress
 #
         self.output = {}
-        pdb.set_trace()
         if "output" in sections:
             for itx in self.config.options("output"):
-                _filename = self.config.get("output", itx)
+                _filename  =  self.config.get("output", itx)
+                self.dout[int(itx)] = _filename
                 filename = pyu.getlong(_filename, "output")
-                self.dout[int(itx)] = filename
                 output = ConfigParser.ConfigParser()
                 output.read(filename)
                 secout = output.sections()
@@ -1858,8 +1852,9 @@ class Simul(object):
         # append output filename in section output
         #
         _outfilename = self.filesimul.replace('.ini', '') + str(itx) + ".ini"
+        self.dout[itx] = _outfilename
         outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-        self.config.set("output", str(itx), _outfilename)
+        self.config.set("output", str(itx), self.out[itx])
 
         fd = open(outfilename, "w")
         self.output[itx].write(fd)
