@@ -699,8 +699,8 @@ class Simul(object):
         self.config.add_section("waveform")
         self.config.add_section("output")
 ############### The following is replaced by self.updcfg()
-        self.load(self.filesimul)
         self.updcfg()
+        self.load(self.filesimul)
 
 
 
@@ -1828,7 +1828,7 @@ class Simul(object):
         _outfilename = self.filesimul.replace('.ini', '') + str(itx) + ".ini"
         self.dout[itx] = _outfilename
         outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-        self.config.set("output", str(itx), self.out[itx])
+        self.config.set("output", str(itx), self.dout[itx])
 
         fd = open(outfilename, "w")
         self.output[itx].write(fd)
