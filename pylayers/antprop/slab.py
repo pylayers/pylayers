@@ -1457,10 +1457,12 @@ class SlabDB(dict):
 
     def show(self, name='WOOD', fGHz=np.array([2.4])):
         """ show
+
         Parameters
         ----------
         name : string
         fGHz : np.array
+
         """
         slab = self[name]
         slab.ev(fGHz=fGHz)
@@ -1782,7 +1784,6 @@ class SlabDB(dict):
             shortname of slabfile
 
         """
-        print '----------------------------------------'
         filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
         fo = open(filename, 'wb')
         N = len(self.di)
@@ -1806,7 +1807,7 @@ class SlabDB(dict):
         for i in range(N):
             ## Creation d'un dictionnaire slab
             key = self.di[i - 1]
-            print key
+            #print key
             S = self[key]
             data_nb_mat_slab = stru.pack('i', S['nbmat'])
             L = len(key)
