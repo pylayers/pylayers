@@ -1084,9 +1084,9 @@ class Simul(object):
             raise NameError('Layout load error')
 
         try:
-            self.dtud['nrmax'] = self.config.get("tud", "nrmax")
-            self.dtud['num'] = self.config.get("tud", "num")
-            self.dtud['purc'] = self.config.get("tud", "purc")
+            self.patud.nrmax = self.config.get("tud", "nrmax")
+            self.patud.num = self.config.get("tud", "num")
+            self.patud.purc = self.config.get("tud", "purc")
         except:
             pass
 
@@ -1114,6 +1114,7 @@ class Simul(object):
 # Simulation Progress
 #
         self.output = {}
+        pdb.set_trace()
         if "output" in sections:
             for itx in self.config.options("output"):
                 _filename = self.config.get("output", itx)
