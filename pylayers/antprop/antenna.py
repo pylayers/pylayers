@@ -1421,7 +1421,6 @@ class Antenna(object):
                     k, n, m], self.Fphi[k, n, m], N)
                 fd.write('}\n')
         fd.close()
-        print filename
         if not silent:
             chaine = "geomview " + filename + " 2>/dev/null &"
             os.system(chaine)
@@ -2011,7 +2010,6 @@ class Antenna(object):
 
         _filevsh3 = self._filename
         filevsh3 = pyu.getlong(_filevsh3,pstruc['DIRANT'])
-        print filevsh3
 
         if os.path.isfile(filevsh3):
             coeff = io.loadmat(filevsh3, appendmat=False)
@@ -2108,11 +2106,8 @@ class Antenna(object):
             print _filevsh2, ' does not exist'
 
     def loadvsh3_old(self):
-        """
-            A.loadvsh3()
+        """ Load antenna vsh coefficients in shape 3
 
-        Load antenna's vsh3 file which only contains
-        the significant vsh coefficients in shape 3
         """
 
         _filevsh3 = self._filename

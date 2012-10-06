@@ -651,7 +651,6 @@ class Simul(object):
         self.fileslabini = "slabDB.ini"
         self.filemat = self.filematini.replace('.ini','.mat')
         self.fileslab = self.fileslabini.replace('.ini','.slab')
-
         self.slab=SlabDB(self.filematini, self.fileslabini)
         self.filestr = 'defstr.str2'
         self.tx = RadioNode('tx', 'radiotx.ini', 'defant.vsh3', self.filestr)
@@ -693,7 +692,6 @@ class Simul(object):
 
         self.freq = np.linspace(2, 11, 181, endpoint=True)
         self.config = ConfigParser.ConfigParser()
-
 
         self.config.add_section("files")
         self.config.add_section("tud")
@@ -1193,30 +1191,6 @@ class Simul(object):
         self.config.set("files", "slab", self.fileslabini)
         self.config.set("files", "mat", self.filematini)
         self.save()
-
-    def help(self):
-        """
-            use >>> instead
-        """
-        print "S.help()  : display help"
-        print "S.info()  : display simulation info"
-        print "S.palch.gui() : gui launching parameters "
-        print "S.patra.gui() : gui tracing parameters"
-        print "S.tx.gpoint() : gui Tx point "
-        print "S.rx.gpoint() : gui Rx point"
-        print "S.tx.position = hstack((Tx[1,:],1.2)).reshape(3,1)"
-        print "S.rx.position = hstack((Rx[40,:],1.2)).reshape(3,1)"
-        print "S.run(1,1) : run launching tracing tratotud evalfield "
-        print "S.launching() : exec ray launching "
-        print "L = S.getlaunch(0) : get ray launching 0"
-        print "S.tracing(0)  : exec ray tracing with tx 0"
-        print "gr=GrRay3D() "
-        print "gr.load(S.filetra[0][0],L.Gs)"
-        print "gr.ray3d[0].show3() "
-        print "S.tratotud(0) : exec tratotud with tx 0"
-        print "S.field() : exec evalfield"
-        print "VC = VectChannel(S,0,0,False)"
-        print "SC = VC.vec2scalA(S.tx.A,S.rx.A)"
 
     def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):
         """ show simulation

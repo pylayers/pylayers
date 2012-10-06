@@ -249,7 +249,7 @@ class Interface(object):
              >>> import numpy as np
              >>> theta = np.arange(0,np.pi/2,0.01)
              >>> fGHz  = np.arange(0.1,10,0.2)
-             >>> sl    = SlabDB('def.mat','def.slab')
+             >>> sl    = SlabDB('matDB.ini','slabDB.ini')
              >>> mat   = sl.mat
              >>> lmat  = [mat['AIR'],mat['WOOD']]
              >>> II    = MatInterface(lmat,0,fGHz,theta)
@@ -300,7 +300,7 @@ class Interface(object):
              >>> import matplotlib.pyplot as plt
              >>> theta = np.arange(0,np.pi/2,0.01)
              >>> fGHz  = np.arange(0.1,10,0.2)
-             >>> sl  = SlabDB('def.mat','def.slab')
+             >>> sl  = SlabDB('matDB.ini','slabDB.ini')
              >>> mat = sl.mat
              >>> air = mat['AIR']
              >>> brick  = mat['BRICK']
@@ -380,7 +380,7 @@ class MatInterface(Interface):
        >>> fGHz   = np.arange(3.1,10.6,0.2)
        >>> Nf     = len(fGHz)
        >>> Nt     = len(theta)
-       >>> sl     = SlabDB('def.mat','def.slab')
+       >>> sl     = SlabDB('matDB.ini','slabDB.ini')
        >>> mat    = sl.mat
        >>> m1     = mat['AIR']
        >>> m2     = mat['PLASTER']
@@ -742,10 +742,10 @@ class MatDB(dict):
 
         >>> from pylayers.antprop.slab import *
         >>> m = MatDB()
-        >>> m.load('def.mat')
+        >>> m.load('matDB.ini')
         >>> m.add('ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
         >>> m.add('GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> out = m.save('Jacob.mat')
+        >>> out = m.save('Jacob.ini')
 
         """
 
@@ -1058,7 +1058,7 @@ class Slab(dict, Interface):
             >>> import numpy as np
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.slab import *
-            >>> sl = SlabDB('def.mat','def.slab')
+            >>> sl = SlabDB('matDB.ini','slabDB.ini')
             >>> lname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
             >>> lthick = [0.018,0.03,0.018]
             >>> sl.add('placo',lname,lthick)
@@ -1249,7 +1249,7 @@ class Slab(dict, Interface):
         --------
 
         >>> from pylayers.antprop.slab import *
-        >>> sl = SlabDB('def.mat','def.slab')
+        >>> sl = SlabDB('matDB.ini','slabDB.ini')
         >>> s1 = sl['PARTITION']
         >>> Lo,Lp = s1.loss0(2.4)
         >>> assert ((Lo[0]>5.54)&(Lo[0]<5.56)),'def Partition has changed'
@@ -1496,7 +1496,7 @@ class SlabDB(dict):
             from pylayers.antprop.slab import *
             import numpy as np
             import matplotlib.pylab as plt
-            sl = SlabDB('def.mat','def.slab')
+            sl = SlabDB('matDB.ini','slabDB.ini')
 
             sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
             sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
@@ -1535,7 +1535,7 @@ class SlabDB(dict):
             from pylayers.antprop.slab import *
             import numpy as np
             import matplotlib.pylab as plt
-            sl = SlabDB('def.mat','def.slab')
+            sl = SlabDB('matDB.ini','slabDB.ini')
             sl.mat.add('CoatingPilkington',cval=1,sigma=2.5e6,typ='epsr')
             sl.mat.add('GlassPilkington',cval = 6.9,sigma = 5e-4,typ='epsr')
             sl.add('Optitherm382',['CoatingPilkington',
