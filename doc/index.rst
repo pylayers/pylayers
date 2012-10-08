@@ -75,9 +75,8 @@ Mailing List
 ------------
 
 
-There is a "http://groups.google.com/group/pylayers-users" mailing list for users of Pylayers  on which you can get help with using or extending the software. New releases will also be announced on the mailing list. To join, enter your email address below.
+There is a "http://groups.google.com/group/pylayers-users" mailing list for users of Pylayers  on which you can get help with using or extending the software. New releases will also be announced on the mailing list. 
 
-http://groups.google.com/group/imusim-users/boxsubscribe
 
 
 License
