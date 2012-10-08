@@ -89,12 +89,13 @@ class Node(nx.MultiGraph):
         # Personnal Network init
         self.ID=ID
         self.PN = Network(owner=self.ID)
-        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT))
+        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
 
         # Network init
 
-        self.add_node(ID,dict(PN=self.PN,p=p,t=t,RAT=RAT,type=type))
+        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,type=type))
         self.p    = self.node[self.ID]['p']
+        self.pe    = self.PN.node[self.ID]['pe']
         self.t    = self.node[self.ID]['t']
         self.RAT = self.node[self.ID]['RAT']
 
@@ -439,8 +440,9 @@ class Network(nx.MultiGraph):
         """
         
         
-
+        # update network LDP
         self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
+        # update each personnal LDP
         [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
 
 
@@ -483,7 +485,7 @@ class Network(nx.MultiGraph):
         self.update_LDPs(ln,RAT,lD)
 
 
-    def update_pos(self,n,p):
+    def update_pos(self,n,p,p_pe='p'):
         """ 
         Update Position of a node
 
@@ -507,7 +509,7 @@ class Network(nx.MultiGraph):
             else :
                 raise TypeError('n and p must have the same length')
             # update position
-            nx.set_node_attributes(self,'p',d)        
+            nx.set_node_attributes(self,p_pe,d)        
 
         else :
             raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
@@ -563,6 +565,20 @@ class Network(nx.MultiGraph):
             except: 
                 raise NameError('invalid RAT name')
 
+
+
+    def haspe(self,n):
+        """
+            Test if a node has a pe key
+        
+        Returns
+        -------
+            Boolean : True if node n has a pe k
+        """
+        try:
+            return  self.node[n]['pe'].any()
+        except:
+            return False
 
 
     def overview(self):
@@ -873,6 +889,7 @@ class PNetwork(Process):
 
 
 
+
     def run(self):
 
 
@@ -884,10 +901,11 @@ class PNetwork(Process):
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
-            
+            # Add access point position in each personal network (PN)
+            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
+                
         ####################################################################################
         self.pos=self.net.get_pos()
-
 
 
 
@@ -941,6 +959,7 @@ class PNetwork(Process):
                 self.net.txt_save(self.sim)
 
             self.net.pos=self.net.get_pos()
+
             yield hold, self, self.net_updt_time
 
 

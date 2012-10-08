@@ -21,11 +21,11 @@
 #Bernard UGUEN		: bernard.uguen@univ-rennes1.fr
 #Mohamed LAARAIEDH	: mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
+from pylayers.util.project import *
 import numpy as np  
 import os
 import pdb
 import copy
-import Geomview as g 
 import time
 
 
@@ -445,7 +445,7 @@ class LBoxN(object):
 
 		"""
 		filename  = "lbox"+str(Id)+".list"
-		filename2 = "./geom/"+filename
+		filename2 = basename +"/geom/"+filename
 		fd = open(filename2,"w")
 		fd.write("LIST\n")
 		for k in range(len(self.box)):
@@ -781,7 +781,7 @@ class BoxN(object):
 			for c in Id:
 				ch = ch+str(c)+'_'
 			fname = "box"+ch+".list"
-			filename = "./geom/"+fname
+			filename = basename+"/geom/"+fname
 			fd = open(filename,"w")
 			fd.write("LIST\n")
 			if self.ndim==3 :

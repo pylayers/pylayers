@@ -1230,34 +1230,18 @@ class Layout(object):
             name = config.get(fur, "name")
             matname = config.get(fur, "matname")
             origin = tuple(ast.literal_eval(config.get(fur, "origin")))
-<<<<<<< HEAD
             zmin = 0.0
-=======
->>>>>>> 493544d4e4fcd52887f7c8807d361797cac5d408
             height = config.getfloat(fur, "height")
             width = config.getfloat(fur, "width")
             length = config.getfloat(fur, "length")
             angle = config.getfloat(fur, "angle")
-<<<<<<< HEAD
             self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
-
-
-
-
-=======
             thickness=config.getfloat(fur, "thickness")
             #~ if matname=='WOOD':
                 #~ zmin = height
                 #~ height=thickness
             #~ else:
                 #~ zmin=0.0       
-            zmin=0.0
-            self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
-            
-                
-        
-        
->>>>>>> 493544d4e4fcd52887f7c8807d361797cac5d408
 
     def del_node(self, ln):
         """ delete node in list ln
@@ -2435,11 +2419,14 @@ class Layout(object):
 
         """
 
-
-        if fig ==[]:
-            fig = plt.gcf()
-        if ax==[]:
-            ax = fig.gca()
+#        if fig ==[]:
+#            fig = plt.gcf()
+#        if ax==[]:
+#            ax = fig.gca()
+        if fig == []:
+           fig = plt.figure()
+        if not isinstance(ax, plt.Axes):
+            ax  = fig.add_subplot(111)
 
         if furniture:
             if 'lfur' in self.__dict__:

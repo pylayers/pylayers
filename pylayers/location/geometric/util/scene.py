@@ -24,7 +24,7 @@
 import numpy as np
 import scipy as sp 
 import pdb
-import Geomview as g
+from pylayers.location.geometric.util import geomview as g
 
 
 
