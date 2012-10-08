@@ -12,7 +12,7 @@ import time
 import ConfigParser
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import  Node,Network
-#from pylayers.Location import Localization,PLocalization
+from pylayers.location.localization import Localization,PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
 from pylayers.util.pymysqldb import Database 
@@ -66,6 +66,7 @@ class Agent(object):
             self.sim=args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
+            self.PN[self.ID]['pe']=self.net.node[self.ID]['p']
 
         else :
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')
@@ -85,10 +86,9 @@ class Agent(object):
 
         if 'txt' in args['save']:
             pyu.writenode(self)
-
-        if args['loc']:
-            self.loc=Localization(PN=self.PN)
+        if args['loc'] and self.type != 'ap':
+            self.loc=Localization(net=self.net,ID=self.ID)
             self.Ploc = PLocalization(loc=self.loc,loc_updt_time=args['loc_updt'],sim=args['sim'])
-            self.sim.activate(self.Ploc,self.Ploc.run(),0.0)
+            self.sim.activate(self.Ploc,self.Ploc.run(),1.0)
 
 

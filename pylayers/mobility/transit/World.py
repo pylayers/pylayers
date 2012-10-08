@@ -3,7 +3,7 @@ from Tkinter import *
 from math import pi, sin, cos
 import os
 from pylayers.mobility.transit.vec3 import vec3
-
+import pdb
 # This has to be 50% more than influence radius for the sub-tiling to work
 # 1.71 from Pascal Stucki, Obstacles in Pedestrian Simulations
 tile_size = 1.5

@@ -23,9 +23,8 @@
 #####################################################################
 import numpy as np
 import scipy as sp 
-from Constraint import *
-sys.path.append('../Util') 
-from BoxN import *
+from pylayers.location.geometric.util.boxn import *
+from pylayers.location.geometric.constraints.constraint import *
 
 
 class Exclude(Constraint):		

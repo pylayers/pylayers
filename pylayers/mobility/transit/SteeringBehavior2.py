@@ -103,7 +103,7 @@ class Containment:
         front_distance = left_distance = right_distance = 30000
         speed = boid.velocity.length()
         front_check = 0.1 + speed * 0.5
-        side_check = 0.1 + speed * 0.1
+        side_check = 0.1 + speed * 0.5
         front_test = boid.localy.scale(front_check)
         left_test = (boid.localy - boid.localx).scale(side_check)
         right_test = (boid.localy + boid.localx).scale(side_check)
@@ -113,19 +113,19 @@ class Containment:
         for wall in walls:
             if wall in checked: continue
             checked.append(wall)
-            intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, front_test)
+            intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, front_test,method = 'gauss')
 #        if intersect:
 #        pdb.set_trace()
             if intersect and distance_along_check < front_distance:
                 front_intersect = True
                 front_distance = distance_along_check
                 front_direction = direction
-            intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, left_test)
+            intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, left_test,method = 'direct')
             if not front_intersect and intersect and distance_along_check < left_distance:
                 left_intersect = True
                 left_distance = distance_along_check
                 left_direction = direction
-            intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, right_test)
+            intersect, distance_along_check, direction = self.test_intersection(boid, wall, position, right_test,method = 'direct')
             if not front_intersect and intersect and distance_along_check < right_distance:
                 right_intersect = True
                 right_distance = distance_along_check
@@ -138,8 +138,8 @@ class Containment:
 #    # parabolic speed 
         d_no_influ = 0.1 # m
         repuls     = boid.velocity.length() #/ boid.max_speed
-        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
-
+#        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
+        speed = 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2))
        # speed = boid.velocity.length() / boid.max_speed
         if front_intersect:
             if front_direction == 'left':
@@ -153,7 +153,6 @@ class Containment:
             acceleration = -boid.localx.scale(speed)
         else:
             acceleration = vec3()
-
 
         return acceleration
 

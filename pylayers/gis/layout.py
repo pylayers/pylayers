@@ -1251,7 +1251,7 @@ class Layout(object):
 
         if (type(ln) == np.int32):
             ln = [ln]
-        
+
         if (type(ln) == int):
             ln = [ln]
 
@@ -2414,11 +2414,14 @@ class Layout(object):
 
         """
 
-
-        if fig ==[]:
-            fig = plt.gcf()
-        if ax==[]:
-            ax = fig.gca()
+#        if fig ==[]:
+#            fig = plt.gcf()
+#        if ax==[]:
+#            ax = fig.gca()
+        if fig == []:
+           fig = plt.figure()
+        if not isinstance(ax, plt.Axes):
+            ax  = fig.add_subplot(111)
 
         if furniture:
             if 'lfur' in self.__dict__:

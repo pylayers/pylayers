@@ -76,7 +76,7 @@ class ShowNet(Process):
 
         self.fig = plt.figure(self.fname, figsize=(20, 5), dpi=100)
         self.fig.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-        self.fig, self.ax = self.L.showGs()
+        self.fig, self.ax = self.L.showGs(fig=self.fig)
 
         self.legend = True
         self.ion = True
@@ -88,7 +88,7 @@ class ShowNet(Process):
         self.RATcolor = dict(self.C.items('RATcolor'))
         self.RATes = dict(self.C.items('RATestyle'))
         self.update = dict(self.C.items('update'))
-
+        self.option= dict(self.C.items('option'))
         self.cpt = self.sim.now()
 
     def run(self):
@@ -118,6 +118,13 @@ class ShowNet(Process):
             for ii, rl in enumerate(rloop):
                 pos = self.net.get_pos(rl)
                 self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pos, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='r'))
+#                if self.option['estimate']:
+#                    try:
+#                        pose = self.net.get_pos_est(rl)
+#                        pdb.set_trace()
+#                        self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pose, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='b',alpha=0.5))
+#                    except:
+#                        pass
                 Cl = nx.draw_networkx_labels(self.net.SubNet[rl], pos=pos, font_size=10)
                 self.coll_plot['label'][1].extend(Cl.values())
                 self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, edge_color=self.RATcolor[rl], style=self.RATes[rl])))

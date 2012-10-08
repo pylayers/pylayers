@@ -146,19 +146,19 @@ class Model(object):
 			r	= self.iOneSlope(RSS)
 
 		elif self.method == 'mode': 
-			S	= -(log(10)/10)* RSSStd/self.RSSnp                    # STD of ranges distribution
-		        M	= (log(10)/10)*(self.PL0-RSS)/self.RSSnp + log(self.d0)        # Mean of ranges distribution
-			r	=  exp(M-S**2)
+			S	= -(np.log(10)/10)* RSSStd/self.RSSnp                    # STD of ranges distribution
+		        M	= (np.log(10)/10)*(self.PL0-RSS)/self.RSSnp + np.log(self.d0)        # Mean of ranges distribution
+			r	=  np.exp(M-S**2)
 
 		elif self.method == 'median':
-			S	= -(log(10)/10)* RSSStd/self.RSSnp                    # STD of ranges distribution
-		        M	= (log(10)/10)*(self.PL0-RSS)/self.RSSnp + log(self.d0)        # Mean of ranges distribution
-			r	= exp(M)
+			S	= -(np.log(10)/10)* RSSStd/self.RSSnp                    # STD of ranges distribution
+		        M	= (np.log(10)/10)*(self.PL0-RSS)/self.RSSnp + np.log(self.d0)        # Mean of ranges distribution
+			r	= np.exp(M)
 
 		elif self.method == 'mean':
-			S	= -(log(10)/10)* RSSStd/self.RSSnp                    # STD of ranges distribution
-		        M	= (log(10)/10)*(self.PL0-RSS)/self.RSSnp + log(self.d0)        # Mean of ranges distribution
-			r	=  exp(M+0.5*S**2)
+			S	= -(np.log(10)/10)* RSSStd/self.RSSnp                    # STD of ranges distribution
+		        M	= (np.log(10)/10)*(self.PL0-RSS)/self.RSSnp + np.log(self.d0)        # Mean of ranges distribution
+			r	=  np.exp(M+0.5*S**2)
 	
 		else :
 			raise NameError('invlalid Pathloss method name for range computation')
@@ -174,19 +174,19 @@ class Model(object):
 		"""
 
 		if self.method == 'mode': 
-			S       = -(log(10)/10)* RSSStd/self.RSSnp                                    # STD of ranges distribution
-			M       = (log(10)/10)*(self.PL0-RSS)/RSSnp + log(self.d0)             # Mean of ranges distribution
-			r	=  sqrt((exp(2*M-2*S**2))*(-exp(-S**2)+1))
+			S       = -(np.log(10)/10)* RSSStd/self.RSSnp                                    # STD of ranges distribution
+			M       = (np.log(10)/10)*(self.PL0-RSS)/self.RSSnp + np.log(self.d0)             # Mean of ranges distribution
+			r	=  np.sqrt((np.exp(2*M-2*S**2))*(-np.exp(-S**2)+1))
 
 		elif self.method == 'median':
-			S       = -(log(10)/10)* RSSStd/self.RSSnp                                    # STD of ranges distribution
-			M       = (log(10)/10)*(self.PL0-RSS)/RSSnp + log(self.d0)             # Mean of ranges distribution
-			r	= sqrt((exp(2*M+S**2))*(exp(S**2)-1))
+			S       = -(np.log(10)/10)* RSSStd/self.RSSnp                                    # STD of ranges distribution
+			M       = (np.log(10)/10)*(self.PL0-RSS)/self.RSSnp + np.log(self.d0)             # Mean of ranges distribution
+			r	= np.sqrt((np.exp(2*M+S**2))*(np.exp(S**2)-1))
 
 		elif self.method == 'mean':
-			S       = -(log(10)/10)* RSSStd/self.RSSnp                                    # STD of ranges distribution
-			M       = (log(10)/10)*(self.PL0-RSS)/RSSnp + log(self.d0)             # Mean of ranges distribution
-			r	=  sqrt((exp(2*M+3*S**2))*(exp(S**2)-1))
+			S       = -(np.log(10)/10)* RSSStd/self.RSSnp                                    # STD of ranges distribution
+			M       = (np.log(10)/10)*(self.PL0-RSS)/self.RSSnp + np.log(self.d0)             # Mean of ranges distribution
+			r	=  np.sqrt((np.exp(2*M+3*S**2))*(np.exp(S**2)-1))
 	
 		else :
 			raise NameError('invalid Pathloss method name STD range computation')
