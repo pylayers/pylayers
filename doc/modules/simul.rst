@@ -3,5 +3,7 @@
 Simul
 =====
 
-.. automodule:: pylayers.simul
-    :members:
+.. toctree::
+    :maxdepth: 2
+
+    simul.simulem.rst
