@@ -93,8 +93,9 @@ class Node(nx.MultiGraph):
 
         # Network init
 
-        self.add_node(ID,dict(PN=self.PN,p=p,t=t,RAT=RAT,type=type))
+        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,type=type))
         self.p    = self.node[self.ID]['p']
+        self.pe    = self.PN.node[self.ID]['pe']
         self.t    = self.node[self.ID]['t']
         self.RAT = self.node[self.ID]['RAT']
 
@@ -484,7 +485,7 @@ class Network(nx.MultiGraph):
         self.update_LDPs(ln,RAT,lD)
 
 
-    def update_pos(self,n,p):
+    def update_pos(self,n,p,p_pe='p'):
         """ 
         Update Position of a node
 
@@ -508,7 +509,7 @@ class Network(nx.MultiGraph):
             else :
                 raise TypeError('n and p must have the same length')
             # update position
-            nx.set_node_attributes(self,'p',d)        
+            nx.set_node_attributes(self,p_pe,d)        
 
         else :
             raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
@@ -923,6 +924,11 @@ class PNetwork(Process):
 
 
         while True:
+            print '---------NETWORK--------------'
+            print self.net.node['1']['PN'].node['1']['pe']
+            print self.net.node['1']['pe']
+            print '--------------------------------------------'
+            pdb.set_trace()
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
                 for ldp in self.net.LDP:
@@ -958,6 +964,11 @@ class PNetwork(Process):
                 self.net.txt_save(self.sim)
 
             self.net.pos=self.net.get_pos()
+            print '---------NETWORK after--------------'
+            print self.net.node['1']['PN'].node['1']['pe']
+            print self.net.node['1']['pe']
+            print '--------------------------------------------'
+            pdb.set_trace()
             yield hold, self, self.net_updt_time
 
 

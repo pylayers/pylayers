@@ -78,7 +78,7 @@ class Simul(Simulation):
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong('simulnet.ini','ini'))
         self.sim_opt = dict(self.config.items('Simulation'))
-        self.ag_opt = dict(self.config.items('Agent'))
+#        self.ag_opt = dict(self.config.items('Agent'))
         self.lay_opt = dict(self.config.items('Layout'))
         self.meca_opt = dict(self.config.items('Mecanic'))
         self.net_opt = dict(self.config.items('Network'))
@@ -109,14 +109,17 @@ class Simul(Simulation):
 
         try:
             self.L.dumpr()
+            print 'Layout graphs loaded'
         except:
         #self.L.sl = sl
-        #self.L.loadGr(G1)
+        #self.L.loadGr(G1)            
+            print 'First time your use the Layout.Graphs are curently build, it may take few minutes.'
             self.L.buildGt()
             self.L.buildGr()
             self.L.buildGw()
             self.L.buildGv()
-
+            self.L.buildGi()
+            self.L.dumpw()
         x_offset = 0  # float(self.lay_opt['x_offset'])
         y_offset = 0  # float(self.lay_opt['y_offset'])
         for ks in self.L.Gs.pos.keys():
@@ -156,7 +159,6 @@ class Simul(Simulation):
         Cf = ConfigParser.ConfigParser()
         Cf.read(pyu.getlong('agent.ini','ini'))
         agents=eval(dict(Cf.items('used_agent'))['list'])
-
 
         for i, ag in enumerate(agents):
             ag_opt = dict(Cf.items(ag))

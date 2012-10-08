@@ -98,6 +98,9 @@ class Localization(object):
         self.cla.update()
 
 
+    def savep(self):
+        self.PN.update_pos(self.ID,self.cla.pe,p_pe='pe')
+
 class PLocalization(Process):
     def __init__(self,loc=Localization(),loc_updt_time=.5,sim=None):
         Process.__init__(self,name='Location',sim=sim)
@@ -113,10 +116,12 @@ class PLocalization(Process):
             self.loc.cla.merge2()
             self.loc.cla.refine(self.loc.cla.Nc)
             self.loc.cla.estpos2()
+            self.loc.savep()
             self.loc.cla.Nc=len(self.loc.cla.c)
-#            print self.loc.ID
-#            print self.loc.cla.pe
-#            print self.loc.cla.Nc
-
+            
+            print '-------------LOC--------------------------'
+            for i in self.loc.cla.c:
+                print i.id,i.value
+            print '--------------------------------------------'
             print 'localization update @',self.sim.now()
             yield hold, self, self.loc_updt_time
