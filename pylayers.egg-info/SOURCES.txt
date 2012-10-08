@@ -34,6 +34,13 @@ pylayers/location/algebraic/toa.py
 pylayers/location/geometric/Scenario_base.py
 pylayers/location/geometric/__init__.py
 pylayers/location/geometric/exploit_CDF.py
+pylayers/location/geometric/constraints/CLA.py
+pylayers/location/geometric/constraints/Constraint.py
+pylayers/location/geometric/constraints/EXCLUDE.py
+pylayers/location/geometric/constraints/RSS.py
+pylayers/location/geometric/constraints/TDOA.py
+pylayers/location/geometric/constraints/TOA.py
+pylayers/location/geometric/constraints/__init__.py
 pylayers/location/geometric/util/BoxN.py
 pylayers/location/geometric/util/CDF2.py
 pylayers/location/geometric/util/Geomview.py
