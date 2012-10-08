@@ -1191,11 +1191,16 @@ class Layout(object):
         angle : float
             default = 0
         """
+        
         # compute the four points
-        p0=origin
-        p1=(p0[0]+length*np.cos(angle),p0[1]+length*np.sin(angle))
-        p2=(p1[0]-width*np.sin(angle),p1[1]+width*np.cos(angle))
-        p3=(p0[0]-width*np.sin(angle),p0[1]+width*np.cos(angle))
+        p0 = origin
+        u = np.array([np.cos(angle * np.pi / 180), np.sin(
+            angle * np.pi / 180)])
+        v = np.array([-np.sin(angle * np.pi / 180), np.cos(
+            angle * np.pi / 180)])
+        p1 = p0 + u * length
+        p2 = p1 + v * width
+        p3 = p2 - u * length
         # adding free nodes
         n0 = self.add_fnod(p0)
         n1 = self.add_fnod(p1)
@@ -1220,16 +1225,22 @@ class Layout(object):
         config.read(filefur)
         furname = config.sections()
         for fur in furname:
-		    name = config.get(fur, "name")
-		    matname = config.get(fur, "matname")
-		    origin = tuple(ast.literal_eval(config.get(fur, "origin")))
-		    zmin = 0.0
-		    height = config.getfloat(fur, "height")
-		    width = config.getfloat(fur, "width")
-		    length = config.getfloat(fur, "length")
-		    angle = config.getfloat(fur, "angle")
-		    self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
-		    
+            name = config.get(fur, "name")
+            matname = config.get(fur, "matname")
+            origin = tuple(ast.literal_eval(config.get(fur, "origin")))
+            height = config.getfloat(fur, "height")
+            width = config.getfloat(fur, "width")
+            length = config.getfloat(fur, "length")
+            angle = config.getfloat(fur, "angle")
+            thickness=config.getfloat(fur, "thickness")
+            #~ if matname=='WOOD':
+                #~ zmin = height
+                #~ height=thickness
+            #~ else:
+                #~ zmin=0.0       
+            zmin=0.0
+            self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
+            
                 
         
         
