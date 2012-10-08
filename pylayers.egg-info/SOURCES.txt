@@ -8,6 +8,7 @@ pylayers.egg-info/top_level.txt
 pylayers/antprop/__init__.py
 pylayers/antprop/antenna.py
 pylayers/antprop/channel.py
+pylayers/antprop/loadTMP.py
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/signature.py
@@ -25,7 +26,6 @@ pylayers/location/localization.py
 pylayers/location/locarule.py
 pylayers/location/simSQL.py
 pylayers/location/geometric/Scenario_base.py
-pylayers/location/geometric/__init__.py
 pylayers/location/geometric/exploit_CDF.py
 pylayers/location/geometric/constraints/__init__.py
 pylayers/location/geometric/constraints/cla.py
@@ -34,7 +34,6 @@ pylayers/location/geometric/constraints/exclude.py
 pylayers/location/geometric/constraints/rss.py
 pylayers/location/geometric/constraints/tdoa.py
 pylayers/location/geometric/constraints/toa.py
-pylayers/location/geometric/util/BoxN.py
 pylayers/location/geometric/util/CDF2.py
 pylayers/location/geometric/util/__init__.py
 pylayers/location/geometric/util/boxn.py
