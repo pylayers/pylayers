@@ -924,11 +924,6 @@ class PNetwork(Process):
 
 
         while True:
-            print '---------NETWORK--------------'
-            print self.net.node['1']['PN'].node['1']['pe']
-            print self.net.node['1']['pe']
-            print '--------------------------------------------'
-            pdb.set_trace()
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
                 for ldp in self.net.LDP:
@@ -964,11 +959,7 @@ class PNetwork(Process):
                 self.net.txt_save(self.sim)
 
             self.net.pos=self.net.get_pos()
-            print '---------NETWORK after--------------'
-            print self.net.node['1']['PN'].node['1']['pe']
-            print self.net.node['1']['pe']
-            print '--------------------------------------------'
-            pdb.set_trace()
+
             yield hold, self, self.net_updt_time
 
 

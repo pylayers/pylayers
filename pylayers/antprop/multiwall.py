@@ -127,7 +127,7 @@ def Loss0_v2(S,Pts,f,p):
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.multiwall import *
         >>> S = Simul()
-        >>> S.layout('sircut.str','simul8.mat','simul8.slab')
+        >>> S.layout('Lstruc.str','matDB.mat','slabDB.slab')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
         >>> Lwo,Lwp = Loss0_v2(S,Tx,fGHz,Rx[1,0:2])

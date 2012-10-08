@@ -22,7 +22,7 @@ class Localization(object):
 
     def __init__(self,**args):
         
-        defaults={'PN':Network(),'method':'RGPA','rule':[Take_all()],'dc':[],'ID':'0'}
+        defaults={'PN':Network(),'net':Network(),'method':'RGPA','rule':[Take_all()],'dc':[],'ID':'0'}
 
         for key, value in defaults.items():
             if args.has_key(key):
@@ -49,15 +49,15 @@ class Localization(object):
             Fill the constraint layer array
         """
 
-        for e in self.PN.edge[self.ID].keys():
-            for rat in self.PN.edge[self.ID][e].keys():
+        for e in self.net.node[self.ID]['PN'].edge[self.ID].keys():
+            for rat in self.net.node[self.ID]['PN'].edge[self.ID][e].keys():
                 try:
                     self.cla.append(
                         RSS(id = rat+'-Pr-'+self.ID+'-'+e,
-                            value = self.PN.edge[self.ID][e][rat]['Pr'][0],
-                            std = self.PN.edge[self.ID][e][rat]['Pr'][1],
+                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][0],
+                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][1],
                             model={},
-                            p = self.PN.node[e]['pe'],
+                            p = self.net.node[self.ID]['PN'].node[e]['pe'],
                             origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
                             )
                                     )
@@ -68,9 +68,9 @@ class Localization(object):
                 try:
                     self.cla.append(
                         TOA(id = rat+'-TOA-'+self.ID+'-'+e,
-                            value = self.PN.edge[self.ID][e][rat]['TOA'][0]*0.3,
-                            std = self.PN.edge[self.ID][e][rat]['TOA'][1]*0.3,
-                            p= self.PN.node[e]['pe'],
+                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0]*0.3,
+                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1]*0.3,
+                            p= self.net.node[self.ID]['PN'].node[e]['pe'],
                             origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
                             )
                                     )
@@ -86,20 +86,21 @@ class Localization(object):
 
     def update(self,rat='all',ldp='all'):
         if rat == 'all':
-            rat=self.PN.SubNet.keys()
+            rat=self.net.node[self.ID]['PN'].SubNet.keys()
         if ldp == 'all':
             ldp=['Pr','TOA','TDOA']
         for c in self.cla.c:
             crat,cldp,e,own=c.origin.values()
             if (crat in rat) and (cldp in ldp) :
-                c.p = self.PN.node[e[0]]['pe']
-                c.value = self.PN.edge[e[0]][self.ID][crat][cldp][0]
-                c.std = self.PN.edge[e[0]][self.ID][crat][cldp][1]
+                c.p = self.net.node[self.ID]['PN'].node[e[0]]['pe']
+                c.value = self.net.node[self.ID]['PN'].edge[e[0]][self.ID][crat][cldp][0]
+                c.std = self.net.node[self.ID]['PN'].edge[e[0]][self.ID][crat][cldp][1]
         self.cla.update()
 
 
     def savep(self):
-        self.PN.update_pos(self.ID,self.cla.pe,p_pe='pe')
+        self.net.node[self.ID]['PN'].update_pos(self.ID,self.cla.pe,p_pe='pe')
+        self.net.update_pos(self.ID,self.cla.pe,p_pe='pe')
 
 class PLocalization(Process):
     def __init__(self,loc=Localization(),loc_updt_time=.5,sim=None):
