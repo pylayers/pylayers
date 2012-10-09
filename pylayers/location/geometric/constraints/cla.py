@@ -31,8 +31,7 @@ from pylayers.location.geometric.util.scene import *
 import os
 import sys
 import numpydoc
-#sys.path.append('../Util')
-#from Scene import *
+
 #__docformat__ = 'reStructuredText'
 
 
@@ -41,56 +40,56 @@ class CLA(object):
     Constraint Layer Array class
     The Constraint Layer Array gather all constraints and process them.
 
-        :Parameters:
-        ============
-                c  : list
-                        contraints contained in CLA
-                type : list
-                        types of contraints contained in CLA
-                std  : list
-                        standard deviation of constraints
-                vcw   : list
-                        scale factor of constraints
-                Nc : integer
-                        Layer number of current processing
-                pe :  np.array
-                        Position estimated
-                dlayer  : dictionnary
-                        key : Layer number
-                        value : list of Enclosed (0) and ambiguous (1) boxes.
-                iter : integer
-                        current iteration of refine process
-                erronous : list
-                        fills with number constraint which are not compatibleselfselfselfself.
+    :Parameters:
+    ============
+            c  : list
+                    contraints contained in CLA
+            type : list
+                    types of contraints contained in CLA
+            std  : list
+                    standard deviation of constraints
+            vcw   : list
+                    scale factor of constraints
+            Nc : integer
+                    Layer number of current processing
+            pe :  np.array
+                    Position estimated
+            dlayer  : dictionnary
+                    key : Layer number
+                    value : list of Enclosed (0) and ambiguous (1) boxes.
+            iter : integer
+                    current iteration of refine process
+            erronous : list
+                    fills with number constraint which are not compatibleselfselfselfself.
 
-        :Methods:
-        =========
-                info(self)                              : Give info
+    :Methods:
+    =========
+            info(self)                              : Give info
 
-                rescale(self,f_vcw,cid=None)            : rescale Constraint Box
+            rescale(self,f_vcw,cid=None)            : rescale Constraint Box
 
-                annulus_bound(self,cid=None)            : rescale Constraint
+            annulus_bound(self,cid=None)            : rescale Constraint
 
-                append(self,c)                          : Append a Constraint to CLA
+            append(self,c)                          : Append a Constraint to CLA
 
-                setvcw(self,vcw):                       : Set vcw for all constraint
+            setvcw(self,vcw):                       : Set vcw for all constraint
 
-                merge2(self,vcw_init=1.0)               : Merge all constraint from the CLA
+            merge2(self,vcw_init=1.0)               : Merge all constraint from the CLA
 
-                valid_v(self,lv,N)                      : Test vertexes with all constraints
+            valid_v(self,lv,N)                      : Test vertexes with all constraints
 
-                refine(self,l,NBOXMAX=100,VOLMIN=0.1)   : reduce the validity zone
+            refine(self,l,NBOXMAX=100,VOLMIN=0.1)   : reduce the validity zone
 
-                show3(self,l=-1,amb=False,sc='all')     : show3
+            show3(self,l=-1,amb=False,sc='all')     : show3
 
-                prob(self,c,d)                          : Compute DDP for the given vertexes
+            prob(self,c,d)                          : Compute DDP for the given vertexes
 
-                gapdetect(self,l,dlindx)                : Gap detection for bimodal solution
+            gapdetect(self,l,dlindx)                : Gap detection for bimodal solution
 
-                min_dist(self,a,b)                      : OBSOLETE
+            min_dist(self,a,b)                      : OBSOLETE
 
-                estpos2(self,l=-1,amb=False)            : Position estimation
-        """
+            estpos2(self,l=-1,amb=False)            : Position estimation
+    """
 #       MEMBERS
 #               Nc        : number of constraints
 #               c         : list of constraints                                  1 x Nc
@@ -120,6 +119,7 @@ class CLA(object):
 #               estpos(amb=False)
 
 #       List of elementary Constraints
+
     def __init__(self, parmsh={}):
         self.c = []
         self.type = []
@@ -162,8 +162,7 @@ class CLA(object):
 
     def update(self):
         """update
-
-            update all constraints of the CLA
+                update all constraints of the CLA
         """
         [c.update() for c in self.c if c.runable]
 
@@ -219,6 +218,7 @@ class CLA(object):
 
         ...
 
+
         :Parameters:
                 c       : any constraint wichi heritates from Constraint object
 
@@ -227,6 +227,8 @@ class CLA(object):
 
         """
         self.c.append(c)
+        self.id.append(c.id)
+        self.origin.append(c.origin)
         self.type.append(c.type)
         self.std.append(c.std)
         self.Nc = self.Nc + 1
@@ -241,9 +243,10 @@ class CLA(object):
 
     def remove(self, k):
         """OBSOLETE/ TO BE DEVELOPPED
+
         ...
 
-        remove(k) : remove a constraint from cla
+        remove(k) : remove a constraint to cla
         """
         self.c.remove(self.c[k])
         self.std.remove(c.std[k])
@@ -280,15 +283,10 @@ class CLA(object):
     def merge2(self, vcw_init=1.0):
         """Merge all constraints from the CLA2_reduc2
 
-        Inteligent merging of  constraints in the CLA and look for the smallest intersection box of 
-        all the constraints through a dichotomous process.
+        Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.
 
-        - if the result of this merging is empty (no common intersections between all the boxes)
-        , all the constraints's vcw are increased (x2) and this processing is operated until an
-        intersection exists (physically intersection MUST exist)
-        - if the result of this merging is not empty (intersection exists between all the boxes)
-        , all the constraints's vcw are decreased and this processing is operated until no intersection exists
-        . The previous value of vcw is thus used for all constraints.
+        - if the result of this merging is empty (no common intersections between all the boxes), all the constraints's vcw are increased (x2) and this processing is operated until an intersection exists (physically intersection MUST exist)
+        - if the result of this merging is not empty (intersection exists between all the boxes), all the constraints's vcw are decreased and this processing is operated until no intersection exists. the previous value of vcw is thus used for all constraints.
 
         This method ensure to find the smallest instersection box satisfaying all the constraints
 
@@ -309,15 +307,10 @@ class CLA(object):
 
 
         :Parameters:
-                vcw_init        : intial value of scale factor vcw. 
-                    This value is updated during the process and affect all constraints ! 
-                    default =1.0
+                vcw_init        : intial value of scale factor vcw. This value is updated during the process and affect all constraints ! default =1.0
 
         :Returns:
-                Nothing but fills self.dlayer[Nc][0] 
-                (with a void list)  and self.dlayer[Nc][1] (with the intial
-                restricted box).
-                Nc is the number of intersecting constraints
+                Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints
         """
 
         Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0])
@@ -383,14 +376,12 @@ class CLA(object):
     def valid_v(self, lv, N):
         """test a vertex list with constraints
 
-        Each vertexes from boxes pass into the list are tested to
-        determine if the box is out (OB), ambiguous (AB) or enclosed (EB)
+        Each vertexes from boxes pass into the list are tested to determine if the box is out (OB), ambiguous (AB) or enclosed (EB)
 
         ...
 
 
         :Parameters:
-        -----------
                 self
                 lv : a vertex list from BOXN.octants
                 N  : number of constraints aka layer number
@@ -417,8 +408,8 @@ class CLA(object):
 
             if (c.type != 'RSS') & (c.type != 'Exclude'):
 
-                DDB, TB = c.valid_v(lv)
-                    # .reshape(2,len(lv)/4,pow(2,self.ndim))
+                DDB, TB = c.valid_v(
+                    lv)  # .reshape(2,len(lv)/4,pow(2,self.ndim))
                 TT.append(TB)
 
                 if not (DDB[0].any()) | (DDB[1].any()):         # if all  boxes  are out
@@ -594,35 +585,38 @@ class CLA(object):
         """
         pdb.set_trace()
         Nc = self.Nc
-        filename = "./geom/cla.list"
+        filename = basename + "/geom/cla.list"
         fd = open(filename, "w")
         fd.write("LIST\n")
         par = self.parmsh
-
         if par['constr_boxes']:
 
             if l == -1:
                 if sc == 'all':
                     for c in self.c:
-                        c.parmsh['display'] = False
-                        c.parmsh['scene'] = False
-                        fname = c.show3()
-                        fd.write("{<" + fname + ".list}\n")
+                        if c.runable:
+                            c.parmsh['display'] = False
+                            c.parmsh['scene'] = False
+                            fname = c.show3()
+                            fd.write("{<" + fname + ".list}\n")
+
                 else:
                     try:
                         for vsc in sc:
-                            self.c[vsc].parmsh['display'] = False
-                            self.c[vsc].parmsh['scene'] = False
-                            fname = self.c[vsc].show3()
-                            fd.write("{<" + fname + ".list}\n")
+                            if vsc.runable:
+                                self.c[vsc].parmsh['display'] = False
+                                self.c[vsc].parmsh['scene'] = False
+                                fname = self.c[vsc].show3()
+                                fd.write("{<" + fname + ".list}\n")
                     except:
-                        self.c[sc].parmsh['display'] = False
-                        self.c[sc].parmsh['scene'] = False
-                        fname = self.c[sc].show3()
-                        fd.write("{<" + fname + ".list}\n")
+                        if sc.runable:
+                            self.c[sc].parmsh['display'] = False
+                            self.c[sc].parmsh['scene'] = False
+                            fname = self.c[sc].show3()
+                            fd.write("{<" + fname + ".list}\n")
 
             else:
-                if c[1].runable:
+                if c[l].runable:
                     self.c[l].parmsh['dispay'] = False
                     self.c[l].parmsh['scene'] = False
                     fname = self.c[l].show3()
@@ -633,7 +627,8 @@ class CLA(object):
         if par['scene']:
             an = np.zeros(len(self.bn))
             for c in self.c:
-                an = np.vstack((an, c.p))
+                if c.runable:
+                    an = np.vstack((an, c.p))
 
             S = Scene(an=an, bn=self.bn)
             sce = S.generate()
@@ -697,10 +692,9 @@ class CLA(object):
 #
 #                       v = (1/(((self.c[c].sstd)*self.c[c].vcw)*np.sqrt(2*np.pi)))*np.exp(-(d-self.c[c].value*0.3)**2/(2*(self.c[c].sstd)*self.c[c].vcw)**2)
 #                       v=v[0]
-            S = (-self.c[c].model['RSSStd'] * np.log(10)) / (-
-                                                             10 * self.c[c].model['RSSnp'])
-            M = ((self.c[c].model['PL0'] - self.c[c].value) *
-                 np.log(10)) / (10 * self.c[c].model['RSSnp'])
+            S = (-self.c[c].sstd * np.log(10)) / (-10 * self.c[c].model.RSSnp)
+            M = ((self.c[c].model.PL0 - self.c[c].value) *
+                 np.log(10)) / (10 * self.c[c].model.RSSnp)
             v = 1 / (d * S * np.sqrt(2 * np.pi)) * np.exp(
                 -(((np.log(d) - M) ** 2) / (2. * (S ** 2))))
 
@@ -864,6 +858,7 @@ class CLA(object):
         self.saveP = poids
 #                       PP.append(P*self.dlayer[l][dlindx].box[i].ctr)
 ##########################################
+
         if clust != []:
             print 'cluster'
             lclust = []
@@ -892,8 +887,8 @@ class CLA(object):
                         clusters = np.intersect1d(clust[count[i,
                                                               0]], clust[count[i, 1]])
                     else:
-                        clusters = np.intersect1d(clust[count[0]],
-                                                  clust[count[1]])
+                        clusters = np.intersect1d(clust[count[
+                            0]], clust[count[1]])
 
                 clust_vol = np.sum(np.array(self.dlayer[l][
                     dlindx].vol)[np.unique(clusters)])
@@ -919,39 +914,39 @@ class CLA(object):
             try:
                 M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)
                       ) / (10. * self.c[0].model['RSSnp']))[0]
-                LL = np.log(dd[1] / dd[0]) * (
-                    1 + np.log(dd[0] * dd[1]) - 2 * M)
+                LL = np.log(dd[1] / dd[0]) * (1 + np.log(
+                    dd[0] * dd[1]) - 2 * M)
 
                 if LL > 0:
 #                                       vmax = np.max(poids[np.unique(lclust[0])])
 #                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
 #                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[0])[peindx]]
 
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[np.unique(
-                        lclust[0])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[0])])
-                    pestdmin = np.min(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[0])])
+                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
+                        np.unique(lclust[0])], axis=0)
+                    pestdmax = np.max(self.dlayer[l][
+                        dlindx].ctr[np.unique(lclust[0])])
+                    pestdmin = np.min(self.dlayer[l][
+                        dlindx].ctr[np.unique(lclust[0])])
                     self.pestd = pestdmax - pestdmin
                 else:
 #                                       vmax = np.max(poids[np.unique(lclust[1])])
 #                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
 #                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[1])[peindx]]
 
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[np.unique(
-                        lclust[1])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[1])])
-                    pestdmin = np.min(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[1])])
+                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
+                        np.unique(lclust[1])], axis=0)
+                    pestdmax = np.max(self.dlayer[l][
+                        dlindx].ctr[np.unique(lclust[1])])
+                    pestdmin = np.min(self.dlayer[l][
+                        dlindx].ctr[np.unique(lclust[1])])
                     self.pestd = pestdmax - pestdmin
 
             except:
 
                 if np.sum(poids) > 0.:
-                    self.pe = np.sum(poids * self.dlayer[l][dlindx].ctr.T,
-                                     axis=1) / np.sum(poids)
+                    self.pe = np.sum(poids * self.dlayer[l][dlindx]
+                        .ctr.T, axis=1) / np.sum(poids)
                 else:
                     self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
                         len(self.dlayer[l][dlindx].ctr)
@@ -971,11 +966,11 @@ class CLA(object):
 #                               pdb.set_trace()
         else:
             if np.sum(poids) > 0.:
-                self.pe = np.sum(poids * self.dlayer[l][dlindx]
-                    .ctr.T, axis=1) / np.sum(poids)
+                self.pe = np.sum(poids * self.dlayer[l][
+                    dlindx].ctr.T, axis=1) / np.sum(poids)
             else:
-                self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
-                    len(self.dlayer[l][dlindx].ctr)
+                self.pe = np.sum(self.dlayer[l][dlindx].ctr,
+                                 axis=0) / len(self.dlayer[l][dlindx].ctr)
             pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
             pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
             self.pestd = pestdmax - pestdmin
