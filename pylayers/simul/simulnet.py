@@ -78,7 +78,6 @@ class Simul(Simulation):
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong('simulnet.ini','ini'))
         self.sim_opt = dict(self.config.items('Simulation'))
-#        self.ag_opt = dict(self.config.items('Agent'))
         self.lay_opt = dict(self.config.items('Layout'))
         self.meca_opt = dict(self.config.items('Mecanic'))
         self.net_opt = dict(self.config.items('Network'))
@@ -109,7 +108,7 @@ class Simul(Simulation):
 
         try:
             self.L.dumpr()
-            print 'Layout graphs loaded'
+            print 'Layout graphs are loaded from ',basename,'/struc'
         except:
         #self.L.sl = sl
         #self.L.loadGr(G1)            
