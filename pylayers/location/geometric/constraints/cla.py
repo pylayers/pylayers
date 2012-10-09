@@ -163,10 +163,9 @@ class CLA(object):
 
 
 	def update(self):
-        """update
-            
-            update all constraints of the CLA
-        """
+		"""update
+			update all constraints of the CLA
+		"""
 		[c.update() for c in self.c if c.runable]
 
 	def rescale(self,f_vcw,cid=None):
