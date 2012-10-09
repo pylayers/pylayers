@@ -41,58 +41,85 @@ class CLA(object):
     Constraint Layer Array class
     The Constraint Layer Array gather all constraints and process them.
 
-    Parameters
-    ==========
-        c  : list
-                contraints contained in CLA
-        type : list
-                types of contraints contained in CLA
-        std  : list
-                standard deviation of constraints
-        vcw   : list
-                scale factor of constraints
-        Nc : integer
-                Layer number of current processing
-        pe :  np.array
-                Position estimated
-        dlayer  : dictionnary
-                key : Layer number
-                value : list of Enclosed (0) and ambiguous (1) boxes.
-        iter : integer
-                current iteration of refine process
-        erronous : list
-                fills with number constraint which are not compatibleselfselfselfself.
+        :Parameters:
+        ============
+                c  : list
+                        contraints contained in CLA
+                type : list
+                        types of contraints contained in CLA
+                std  : list
+                        standard deviation of constraints
+                vcw   : list
+                        scale factor of constraints
+                Nc : integer
+                        Layer number of current processing
+                pe :  np.array
+                        Position estimated
+                dlayer  : dictionnary
+                        key : Layer number
+                        value : list of Enclosed (0) and ambiguous (1) boxes.
+                iter : integer
+                        current iteration of refine process
+                erronous : list
+                        fills with number constraint which are not compatibleselfselfselfself.
 
-    Methods
-    =======
+        :Methods:
+        =========
+                info(self)                              : Give info
 
-        info(self)                              : Give info
+                rescale(self,f_vcw,cid=None)            : rescale Constraint Box
 
-        rescale(self,f_vcw,cid=None)            : rescale Constraint Box
+                annulus_bound(self,cid=None)            : rescale Constraint
 
-        annulus_bound(self,cid=None)            : rescale Constraint
+                append(self,c)                          : Append a Constraint to CLA
 
-        append(self,c)                          : Append a Constraint to CLA
+                setvcw(self,vcw):                       : Set vcw for all constraint
 
-        setvcw(self,vcw):                       : Set vcw for all constraint
+                merge2(self,vcw_init=1.0)               : Merge all constraint from the CLA
 
-        merge2(self,vcw_init=1.0)               : Merge all constraint from the CLA
+                valid_v(self,lv,N)                      : Test vertexes with all constraints
 
-        valid_v(self,lv,N)                      : Test vertexes with all constraints
+                refine(self,l,NBOXMAX=100,VOLMIN=0.1)   : reduce the validity zone
 
-        refine(self,l,NBOXMAX=100,VOLMIN=0.1)   : reduce the validity zone
+                show3(self,l=-1,amb=False,sc='all')     : show3
 
-        show3(self,l=-1,amb=False,sc='all')     : show3
+                prob(self,c,d)                          : Compute DDP for the given vertexes
 
-        prob(self,c,d)                          : Compute DDP for the given vertexes
+                gapdetect(self,l,dlindx)                : Gap detection for bimodal solution
 
-        gapdetect(self,l,dlindx)                : Gap detection for bimodal solution
+                min_dist(self,a,b)                      : OBSOLETE
 
-        min_dist(self,a,b)                      : OBSOLETE
+                estpos2(self,l=-1,amb=False)            : Position estimation
+        """
+#       MEMBERS
+#               Nc        : number of constraints
+#               c         : list of constraints                                  1 x Nc
+#               std       : list of standard deviation of constraints            1 x Nc
+#                          if std = 0 it means the constraint is hard and it force the
+#                          the estimated point to belong to the bounding box of this
+#                          constraint
+#               w         : list of weight of constraints                        1 x Nc
+#                          if w = 0 it means the constraint is hard and it force the
+#                          the estimated point to belong to the bounding box of this
+#                          constraint
+#
+#               validity  : validity array (N x Nc)
+#               dlayer    : dictionnary containing a list of 2 elements :
+#                               - the list of boxes that are inside the validity area (VA)
+#                               - the list of boxes which at least an edge is inside the validity area(VA)
+#               dpe       : dictionnary containing the estimated points
+#       :Methods:
+#               info()
+#               append(c,std)
+#               remove(c,k)
+#               merge2()
+#               layer(lbox,l=-1)
+#               grid(l=-1,Msz=1000)
+#               eval(Msz=1000)
+#               show3()
+#               estpos(amb=False)
 
-        estpos2(self,l=-1,amb=False)            : Position estimation
-    """
-
+#       List of elementary Constraints
     def __init__(self, parmsh={}):
         self.c = []
         self.type = []
@@ -104,11 +131,13 @@ class CLA(object):
         self.dlayer = {}
         self.iter = 0
         self.erronous = []
+        self.id = []
+        self.origin = []
 
         if len(parmsh) == 0:
             self.parmsh = parmsh
             self.parmsh['display'] = False     # launch geomview interactively
-            self.parmsh['scene'] = True      # display whole scene
+            self.parmsh['scene'] = False      # display whole scene
             self.parmsh['boxes'] = True       # display constraint box
             self.parmsh['constr_boxes'] = True       # display constraint box
             self.parmsh['estimated'] = True  # display estimated point
@@ -130,6 +159,13 @@ class CLA(object):
         for k in range(N):
             print "Constraint N° ", k
             self.c[k].info()
+
+    def update(self):
+        """update
+
+            update all constraints of the CLA
+        """
+        [c.update() for c in self.c if c.runable]
 
     def rescale(self, f_vcw, cid=None):
         """idem setvcw but update current vcw with a multiplier factor
@@ -165,11 +201,9 @@ class CLA(object):
 
 
         :Parameters:
-        ------------
                 cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None
 
         :Returns:
-        ----------
                 Nothing but update boxe size either for each constraints from cid list either for all contraints in the CLA list self.c.
         """
         #print "rescale",vcw
@@ -246,10 +280,15 @@ class CLA(object):
     def merge2(self, vcw_init=1.0):
         """Merge all constraints from the CLA2_reduc2
 
-        Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.
+        Inteligent merging of  constraints in the CLA and look for the smallest intersection box of 
+        all the constraints through a dichotomous process.
 
-        - if the result of this merging is empty (no common intersections between all the boxes), all the constraints's vcw are increased (x2) and this processing is operated until an intersection exists (physically intersection MUST exist)
-        - if the result of this merging is not empty (intersection exists between all the boxes), all the constraints's vcw are decreased and this processing is operated until no intersection exists. the previous value of vcw is thus used for all constraints.
+        - if the result of this merging is empty (no common intersections between all the boxes)
+        , all the constraints's vcw are increased (x2) and this processing is operated until an
+        intersection exists (physically intersection MUST exist)
+        - if the result of this merging is not empty (intersection exists between all the boxes)
+        , all the constraints's vcw are decreased and this processing is operated until no intersection exists
+        . The previous value of vcw is thus used for all constraints.
 
         This method ensure to find the smallest instersection box satisfaying all the constraints
 
@@ -270,10 +309,15 @@ class CLA(object):
 
 
         :Parameters:
-                vcw_init        : intial value of scale factor vcw. This value is updated during the process and affect all constraints ! default =1.0
+                vcw_init        : intial value of scale factor vcw. 
+                    This value is updated during the process and affect all constraints ! 
+                    default =1.0
 
         :Returns:
-                Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints
+                Nothing but fills self.dlayer[Nc][0] 
+                (with a void list)  and self.dlayer[Nc][1] (with the intial
+                restricted box).
+                Nc is the number of intersecting constraints
         """
 
         Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0])
@@ -834,7 +878,8 @@ class CLA(object):
                     try:
                         count = np.vstack((count, np.repeat(range(2 * (p - 1), (2 * (p - 1)) + 2) * (pow(2, saxis - p)), p)))
                     except:
-                        count = np.repeat(range(2 * (p - 1), (2 * (p - 1)) + 2) * (pow(2, saxis - p)), p)
+                        count = np.repeat(range(2 * (p - 1), (2 * (p - 1)) + 2)
+                                          * (pow(2, saxis - p)), p)
                     p = p + 1
             count = count.T
 
@@ -844,7 +889,8 @@ class CLA(object):
                 else:
 
                     if len(np.shape(count)) > 1:
-                        clusters = np.intersect1d(clust[count[i, 0]], clust[count[i, 1]])
+                        clusters = np.intersect1d(clust[count[i,
+                                                              0]], clust[count[i, 1]])
                     else:
                         clusters = np.intersect1d(clust[count[0]],
                                                   clust[count[1]])
@@ -871,7 +917,8 @@ class CLA(object):
 #                               peindx = np.nonzero(poids==max(vmax))[0][0]
 #                               self.pe = self.dlayer[l][dlindx].ctr[peindx]
             try:
-                M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)) / (10. * self.c[0].model['RSSnp']))[0]
+                M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)
+                      ) / (10. * self.c[0].model['RSSnp']))[0]
                 LL = np.log(dd[1] / dd[0]) * (
                     1 + np.log(dd[0] * dd[1]) - 2 * M)
 
@@ -906,7 +953,8 @@ class CLA(object):
                     self.pe = np.sum(poids * self.dlayer[l][dlindx].ctr.T,
                                      axis=1) / np.sum(poids)
                 else:
-                    self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / len(self.dlayer[l][dlindx].ctr)
+                    self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
+                        len(self.dlayer[l][dlindx].ctr)
                 pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
                 pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
                 self.pestd = pestdmax - pestdmin
