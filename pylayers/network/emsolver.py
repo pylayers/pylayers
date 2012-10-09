@@ -25,7 +25,7 @@ import pkgutil
 
 import numpy as np
 import scipy as sp
-import ConfigParser    
+import ConfigParser
 
 import pylayers.util.pyutil as pyu
 

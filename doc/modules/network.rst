@@ -4,7 +4,7 @@
 Network
 =======
 
-.. toc-tree::
+.. toctree::
     :maxdepth: 2
 
     network.emsolver.rst

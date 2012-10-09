@@ -196,8 +196,8 @@ grid of tx and rx points which define the links of interest for the simulation
 Getting started 
 ---------------
 
-Before starting a simulation it is required to fill a ini file which gathers
-the information required for starting a simulation.
+First of all, it is required to fill an **.ini** file which gathers
+informations required for starting a simulation.
 
 Simulation `.ini`  file
 ~~~~~~~~~~~~~~~~~~~~~~~

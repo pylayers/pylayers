@@ -1,16 +1,18 @@
 Class Furniture
 ===============
 
-.. automodule:: pylayers.gis.furniture.Furniture
+.. automodule:: pylayers.gis.furniture
+    :members:
+    
 
-.. autoclass:: pylayers.gis.furniture.Furniture
+.. . autoclass:: pylayers.gis.furniture.Furniture
 
-.. autosummary::
+.. . autosummary::
     :toctree: generated/
 
-    info
-    set_position 
-    load
-    save
-    position 
+..    info
+..    set_position 
+..    load
+..    save
+..    position 
 
