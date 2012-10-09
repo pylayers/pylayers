@@ -301,7 +301,6 @@ class Layout(object):
         _filename
 
         """
-
         self.filestr=_filename
         filename,ext=os.path.splitext(_filename)
         if ext=='.str':
@@ -338,6 +337,7 @@ class Layout(object):
         >>> L.loadstr('exemple.str')
 
         """
+
         self.filename = _filename
         self.delete()
         mat = sb.MatDB()
@@ -345,11 +345,9 @@ class Layout(object):
         self.sl = sb.SlabDB()
         self.sl.mat = mat
         self.sl.load(_fileslabini)
-
         self.labels = {}
         self.name = {}
         self.Gs.pos = {}
-
         lname = []
         filename = pyu.getlong(_filename, pstruc['DIRSTRUC'])
         fo = open(filename, "rb")
@@ -711,6 +709,7 @@ class Layout(object):
         #----------------------------------------
         # Node labelling (structure edges)
         #----------------------------------------
+        self.display['layers']=[]
         for k in range(Ne):
             self.Gs.add_node(k + 1, name=lname[k])
             self.Gs.add_node(k + 1, zmin=z[0, k])
@@ -724,7 +723,6 @@ class Layout(object):
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
-
             if lname[k] not in self.display['layers']:
                 self.display['layers'].append(lname[k])
 
@@ -933,7 +931,7 @@ class Layout(object):
         #----------------------------------------
         # Node labelling (structure edges)
         #----------------------------------------
-
+        self.display['layers']=[]
         for k in range(Ne):
             #print k, lname[k]
             self.Gs.add_node(k + 1, name=lname[k])
