@@ -10,7 +10,7 @@ import pylayers.measures.mesuwb
 def LOSS_furniture(Tx,Rx,furn):
     """
       Yu Lei 
-      Pas utilisé
+      Not used
     """
     for i in range(1,5):
         rx = Rx[i]

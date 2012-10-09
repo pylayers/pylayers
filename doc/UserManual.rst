@@ -1,9 +1,6 @@
 UserManual
 ==========
 
-.. toctree::
-      :maxdepth: 4
-
 PyLayers is an interactive platform, used for deterministic channel simulation,
 using python and C as programming languages. This tool allows the evaluation of
 the propagation channel conditions, in indoor environment, between radio nodes for

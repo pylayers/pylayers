@@ -38,6 +38,8 @@ import pdb
 
 
 class EMSolver(object):
+    """ Invoque an electromagnetic solver
+    """
 
     def __init__(self,L=Layout()):
 

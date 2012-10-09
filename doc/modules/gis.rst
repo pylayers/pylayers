@@ -3,8 +3,8 @@
 .. module:: pylayers.gis
 
 
-gis
-===
+Module gis
+==========
 
 This module gathers all classes and functions related to geographical information.
 

@@ -1,7 +1,7 @@
 .. _localization:
 
 
-localisation
+localization
 =============
 
 .. automodule:: pylayers.location.localization

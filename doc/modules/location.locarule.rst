@@ -2,7 +2,7 @@
 
 
 locarule
-======
+========
 
 .. automodule:: pylayers.location.locarule
     :members:

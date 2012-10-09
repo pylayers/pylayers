@@ -1,7 +1,7 @@
 .. _reference:
 
 ###################
-pylayers reference
+PYLAYERS references
 ###################
 
 :Release: |version|
