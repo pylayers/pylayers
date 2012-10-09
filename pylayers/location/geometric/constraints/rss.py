@@ -30,7 +30,7 @@ import pylayers.util.pyutil as pyu
 
 from pylayers.location.geometric.util.boxn import *
 from pylayers.location.geometric.constraints.constraint import *
-from pylayers.location.algebraic.RSSLocation import *
+#from pylayers.location.algebraic.RSSLocation import *
 from pylayers.network.model import *
 
 
