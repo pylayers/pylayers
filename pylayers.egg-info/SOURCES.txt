@@ -54,6 +54,7 @@ pylayers/location/learning/loclearn.py
 =======
 pylayers/location/simSQL.py
 pylayers/location/geometric/Scenario_base.py
+pylayers/location/geometric/__init__.py
 pylayers/location/geometric/exploit_CDF.py
 pylayers/location/geometric/constraints/__init__.py
 pylayers/location/geometric/constraints/cla.py
