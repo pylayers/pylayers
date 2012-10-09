@@ -1,3 +1,6 @@
+
+.. _furniture:
+
 Class Furniture
 ===============
 
