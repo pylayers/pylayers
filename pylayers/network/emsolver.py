@@ -35,6 +35,7 @@ from   pylayers.gis.layout import Layout
 import pylayers.antprop.slab
 from pylayers.antprop.multiwall import *
 
+from pylayers.util.project import *
 from   pylayers.network.model import Model
 
 
@@ -48,23 +49,44 @@ class EMSolver(object):
     def __init__(self,L=Layout()):
 
         self.config     = ConfigParser.ConfigParser()
-        self.config.read(pyu.getlong('EMSolver.ini','ini'))
-#        self.config.read(pkgutil.get_loader('pylayers').filename +'/ini/EMSolver.ini')
+        self.fileini='EMSolver.ini'
+        self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
         self.ems_opt = dict(self.config.items('EMS_config'))
         self.toa_opt = dict(self.config.items('TOA'))
-        self.plm_opt = dict(self.config.items('PL_MODEL'))
+        self.rss_opt = dict(self.config.items('RSS'))
+
+
         self.EMS_method = self.ems_opt['method']
         self.sigmaTOA      = float(self.toa_opt['sigmatoa']) # meters !!!!!!
-        self.sigmaRSS    = float(self.plm_opt['sigmarss'])# dBm !!!!!!                          
-        self.f             = float(self.plm_opt['f'])
-        self.RSSnp        = float(self.plm_opt['rssnp'])
-        self.d0               = float(self.plm_opt['d0'])
-        self.PL_method     = self.plm_opt['method'] # mean, median , mode
+
+        self.model={}
+        self.method     = self.rss_opt['method'] # mean, median , mode
 
         self.L=L
 
+    
+    def save_model(self,RAT,model):
+        """save a RAT model
+            
+        """
+        fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
+        fd = open(fileini, "a")
+        nconfig     = ConfigParser.ConfigParser()
+        nconfig.add_section(RAT+'_PLM')
+        nconfig.set(RAT+'_PLM','sigrss', str(model.sigrss))
+        nconfig.set(RAT+'_PLM','f', str(model.f))
+        nconfig.set(RAT+'_PLM','rssnp', str(model.rssnp))
+        nconfig.set(RAT+'_PLM','d0', str(model.d0))
+        nconfig.write(fd)
+        fd.close()
 
-    def solve(self,p,e,LDP):
+
+
+    def load_model(self,RAT):
+        ratopt=dict(self.config.items(RAT+'_PLM'))
+        self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=self.method)
+
+    def solve(self,p,e,LDP,RAT):
         """compute and return a LDP value thanks to a given method
 
         Attributes
@@ -87,42 +109,31 @@ class EMSolver(object):
 
         """
 
-    
-#        if self.method == 'direct':
+        try:
+            model= self.model[RAT]
+        except:
+            try:
+                self.load_model(RAT)
+            except:
+                self.model[RAT]=Model()
+                self.save_model(RAT,self.model[RAT])
+                model=self.model[RAT]
 
-#            d =np.linalg.norm(n1p-n2p)
-#            
-#            if LDP == 'TOA':
-#                sp.random.seed(0)
-#                std = self.sigmaTOA*sp.randn()
-#                return ((d + std)*0.3,self.sigmaTOA)
 
-#            elif LDP == 'Pr':
-#                sp.random.seed(0)
-#                std = self.sigmaRSS*sp.randn()
-#                M = Model.Model(method='mean')
-#                r,rssstd=M.imeasure(d,self.sigmaRSS)
-#                return (r,rssstd)
-#                
-#            else :
-#                raise NameError('invlaid LDP name')
-        #sp.random.seed(0)
         if self.EMS_method == 'direct':
             dd={} # distance dictionnary
 
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
-            #    dd=dict(zip(e,d))
                 if LDP == 'TOA':
                     std = self.sigmaTOA*sp.randn(len(d))
                     return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
                 elif LDP == 'Pr':
-                    std = self.sigmaRSS	*sp.randn(len(d))
-                    M = Model(method=self.PL_method,f=self.f,RSSnp=self.RSSnp,d0=self.d0)
-                    r=M.getPL(d,self.sigmaRSS)
-                    return ([[r[i],self.sigmaRSS] for i in range(len(d))],d)
+                    std = self.model.sigrss	*sp.randn(len(d))
+                    r=model.getPL(d,model.sigrss)
+                    return ([[r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)
                 
             
 
@@ -152,8 +163,8 @@ class EMSolver(object):
                     lpa = len(pa)
                     Lwo = []
                     for i in range(lpa-1):
-                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],self.f,pa[i])[0])
-                    return ([[Lwo[i],self.sigmaRSS] for i in range(len(Lwo))],d)
+                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
+                    return ([[Lwo[i],model.sigrss] for i in range(len(Lwo))],d)
 #                    std = self.sigmaRSS*sp.randn(len(d))
 #                    M = Model(method=self.PL_method,f=self.f,RSSnp=self.RSSnp,d0=self.d0)
 #                    r=M.getPL(d,self.sigmaRSS)
