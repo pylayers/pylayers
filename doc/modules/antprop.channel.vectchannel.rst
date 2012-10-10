@@ -1,7 +1,7 @@
 Class VectChannel 
 =================
 
-.. currentmodule:: pylayers.antprop.channel.VectChannel
+.. automodule:: pylayers.antprop.channel.VectChannel
     :members:
 
 .. .. class:: pylayers.antprop.channel.VectChannel

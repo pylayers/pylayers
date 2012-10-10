@@ -1,7 +1,7 @@
-Class SlabDB
-============
+Module Slab
+===========
 
-.. currentmodule:: pylayers.antprop.slab.SlabDB
+.. automodule:: pylayers.antprop.slab
     :members:
 
 .. .. class:: pylayers.antprop.slab.SlabDB
