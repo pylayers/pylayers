@@ -26,6 +26,7 @@ import pkgutil
 import numpy as np
 import scipy as sp
 import ConfigParser
+import itertools
 
 import pylayers.util.pyutil as pyu
 
@@ -59,6 +60,7 @@ class EMSolver(object):
         self.RSSnp        = float(self.plm_opt['rssnp'])
         self.d0               = float(self.plm_opt['d0'])
         self.PL_method     = self.plm_opt['method'] # mean, median , mode
+
         self.L=L
 
 
@@ -117,7 +119,7 @@ class EMSolver(object):
                     return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
                 elif LDP == 'Pr':
-                    std = self.sigmaRSS*sp.randn(len(d))
+                    std = self.sigmaRSS	*sp.randn(len(d))
                     M = Model(method=self.PL_method,f=self.f,RSSnp=self.RSSnp,d0=self.d0)
                     r=M.getPL(d,self.sigmaRSS)
                     return ([[r[i],self.sigmaRSS] for i in range(len(d))],d)
@@ -144,10 +146,14 @@ class EMSolver(object):
 #                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
                 if LDP == 'Pr':
-                    pdb.set_trace()
-                    pa=np.vstack(p.values())
-                    for px in pa:
-                        Lwo,Lwp=Loss0_v2(self.L,pa,self.f,px)
+
+                    pa = np.vstack(p.values())
+                    pn = p.keys()
+                    lpa = len(pa)
+                    Lwo = []
+                    for i in range(lpa-1):
+                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],self.f,pa[i])[0])
+                    return ([[Lwo[i],self.sigmaRSS] for i in range(len(Lwo))],d)
 #                    std = self.sigmaRSS*sp.randn(len(d))
 #                    M = Model(method=self.PL_method,f=self.f,RSSnp=self.RSSnp,d0=self.d0)
 #                    r=M.getPL(d,self.sigmaRSS)
