@@ -27,10 +27,10 @@ from numpy.linalg import *
 import cvxmod as cvxm
 import cvxopt as cvxo
 from string import *
-from CRBLocation import *
-from RSSLocation import *
-from ToALocation import *
-from TDoALocation import *
+from pylayers.location.algebraic.crb import *
+from pylayers.location.algebraic.rss import *
+from pylayers.location.algebraic.toa import *
+from pylayers.location.algebraic.tdoa import *
 
 """
                 RN      : An Array that defines the Radio nodes implied in localization (coordiantes in meters)

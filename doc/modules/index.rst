@@ -1,7 +1,7 @@
 .. _reference:
 
 ###################
-pylayers reference
+PYLAYERS references
 ###################
 
 :Release: |version|
@@ -11,6 +11,7 @@ pylayers reference
 
 This reference manual details functions, modules, and objects
 included in PyLayers, describing what they are and what they do.
+
 For learning how to use PyLayers, see also :ref:`user`.
 
 
@@ -22,5 +23,17 @@ For learning how to use PyLayers, see also :ref:`user`.
    antprop.rst
 
    signal.rst
+
+   location.rst 
+
+   mobility.rst 
+
+   measures.rst 
+
+   network.rst 
+
+   simul.rst 
+
+   util.rst 
 
 

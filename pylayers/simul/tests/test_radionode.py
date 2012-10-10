@@ -2,7 +2,7 @@ from pylayers.simul.radionode import *
 
 # create a RadioNode
 
-tx = RadioNode(typ='tx')
+tx = RadioNode()
 tx.point([1,1,1])
 tx.info()
 

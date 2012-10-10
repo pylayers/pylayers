@@ -87,13 +87,17 @@ def lt2idic(lt):
 def getlong(shortname,dir):
     """  get a long name
 
+    This function allows to construct the long file name relatively
+    to a current project directory which is stored in the environment
+    variable $BASENAME
+
     Parameters
     ----------
-    shortname : string 
+    shortname : string
+        short name of the file
+
     dir       : directory in $BASENAME
 
-    If $BASENAME is define
-    expl: getlong(_filetrx,'ant') 
     """
 
     try:

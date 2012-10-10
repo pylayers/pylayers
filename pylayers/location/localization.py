@@ -10,7 +10,6 @@ from pylayers.location.locarule import Take_all,  merge_rules
 
 import pdb
 
-#mport CSP10
 from pylayers.location.geometric.constraints.cla import *
 from pylayers.location.geometric.constraints.rss import *
 from pylayers.location.geometric.constraints.toa import *
@@ -25,14 +24,22 @@ class Localization(object):
         defaults={'PN':Network(),'net':Network(),'method':'RGPA','rule':[Take_all()],'dc':[],'ID':'0'}
 
         for key, value in defaults.items():
-            if args.has_key(key):
+            if key in args:
                 setattr(self, key, args[key])
             else:
                 setattr(self, key, value)
-                args[key]=value  
-        self.args=args
+                args[key] = value
+        self.args = args
         self.cla = CLA()
 
+#    def get_const(self, RAT=None, LDP=None):
+#        """ get constraints
+#
+#   get the constraint of the networl followinf rule given in self.rule list.
+#            These rules are defined in Loca_Rule
+#
+#                args[key]=value  
+#
 #    def get_const(self,RAT=None,LDP=None):
 #        """ get constraints
 #            
@@ -41,8 +48,6 @@ class Localization(object):
 #        
 #        """
 #        self.dc= merge_rules(self,RAT=RAT,LDP=LDP)
-
-
 
     def fill_cla(self):
         """
@@ -64,7 +69,6 @@ class Localization(object):
                 except:
                     pass
 
-
                 try:
                     self.cla.append(
                         TOA(id = rat+'-TOA-'+self.ID+'-'+e,
@@ -76,9 +80,6 @@ class Localization(object):
                                     )
                 except:
                     pass
-
-
-
 
 #                elif ldp == 'TDOA':
 #                    pass
@@ -103,11 +104,11 @@ class Localization(object):
         self.net.update_pos(self.ID,self.cla.pe,p_pe='pe')
 
 class PLocalization(Process):
-    def __init__(self,loc=Localization(),loc_updt_time=.5,sim=None):
-        Process.__init__(self,name='Location',sim=sim)
-        self.loc = loc  
-        self.loc_updt_time = loc_updt_time    
-        
+    def __init__(self, loc=Localization(), loc_updt_time=.5, sim=None):
+        Process.__init__(self, name='Location', sim=sim)
+        self.loc = loc
+        self.loc_updt_time = loc_updt_time
+
     def run(self):
 #        self.loc.get_const()
         self.loc.fill_cla()

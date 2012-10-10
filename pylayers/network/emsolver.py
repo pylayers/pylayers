@@ -25,7 +25,7 @@ import pkgutil
 
 import numpy as np
 import scipy as sp
-import ConfigParser    
+import ConfigParser
 
 import pylayers.util.pyutil as pyu
 
@@ -38,6 +38,8 @@ import pdb
 
 
 class EMSolver(object):
+    """ Invoque an electromagnetic solver
+    """
 
     def __init__(self,L=Layout()):
 

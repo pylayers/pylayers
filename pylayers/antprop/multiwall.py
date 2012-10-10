@@ -10,7 +10,7 @@ import pylayers.measures.mesuwb
 def LOSS_furniture(Tx,Rx,furn):
     """
       Yu Lei 
-      Pas utilisé
+      Not used
     """
     for i in range(1,5):
         rx = Rx[i]
@@ -120,14 +120,14 @@ def Loss0_v2(S,Pts,f,p):
     --------
     
     .. plot::
-        :included-source:
+        :include-source:
 
         >>> import matplotlib.pyplot as plt 
         >>> from pylayers.simul.simulem import * 
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.multiwall import *
         >>> S = Simul()
-        >>> S.layout('Lstruc.str','matDB.mat','slabDB.slab')
+        >>> S.layout('Lstruc.str','matDB.ini','slabDB.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
         >>> Lwo,Lwp = Loss0_v2(S,Tx,fGHz,Rx[1,0:2])
@@ -951,7 +951,7 @@ def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size
     #sp.spines['top'].set_position('center')
         #sp.spines['top'].set_color('none')
     #
-    # Siradel Rooms annotation
+    # Rooms annotation
     #
     annotate('R 8',xy=(-19,14.1))
     annotate('R 9',xy=(-24.5,6.5))

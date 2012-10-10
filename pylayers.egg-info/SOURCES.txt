@@ -1,3 +1,4 @@
+README.rst
 setup.py
 pylayers/__init__.py
 pylayers/clean_pyproject.py
@@ -24,6 +25,33 @@ pylayers/gis/selectl.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
+<<<<<<< HEAD
+pylayers/location/simsql.py
+pylayers/location/algebraic/__init__.py
+pylayers/location/algebraic/crb.py
+pylayers/location/algebraic/hdf.py
+pylayers/location/algebraic/rss.py
+pylayers/location/algebraic/tdoa.py
+pylayers/location/algebraic/toa.py
+pylayers/location/geometric/Scenario_base.py
+pylayers/location/geometric/__init__.py
+pylayers/location/geometric/exploit_CDF.py
+pylayers/location/geometric/constraints/CLA.py
+pylayers/location/geometric/constraints/Constraint.py
+pylayers/location/geometric/constraints/EXCLUDE.py
+pylayers/location/geometric/constraints/RSS.py
+pylayers/location/geometric/constraints/TDOA.py
+pylayers/location/geometric/constraints/TOA.py
+pylayers/location/geometric/constraints/__init__.py
+pylayers/location/geometric/util/BoxN.py
+pylayers/location/geometric/util/CDF2.py
+pylayers/location/geometric/util/Geomview.py
+pylayers/location/geometric/util/Model.py
+pylayers/location/geometric/util/Scene.py
+pylayers/location/geometric/util/__init__.py
+pylayers/location/learning/__init__.py
+pylayers/location/learning/loclearn.py
+=======
 pylayers/location/simSQL.py
 pylayers/location/geometric/Scenario_base.py
 pylayers/location/geometric/__init__.py
@@ -41,6 +69,7 @@ pylayers/location/geometric/util/boxn.py
 pylayers/location/geometric/util/geomview.py
 pylayers/location/geometric/util/model.py
 pylayers/location/geometric/util/scene.py
+>>>>>>> 2e25fab2d3750609b6df5f6f6248a9c8066c1d59
 pylayers/measures/__init__.py
 pylayers/measures/mesuwb.py
 pylayers/mobility/__init__.py
@@ -74,6 +103,9 @@ pylayers/simul/__init__.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
+pylayers/util/PyGraphTool.py
+pylayers/util/PyMathTool.py
+pylayers/util/Util_net.py
 pylayers/util/__init__.py
 pylayers/util/easygui-olld.py
 pylayers/util/easygui.py

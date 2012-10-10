@@ -17,13 +17,13 @@
 
 #-------------------------------------------------------------------
 #authors :
-#Nicolas AMIOT		: nicolas.amiot@univ-rennes1.fr
-#Bernard UGUEN		: bernard.uguen@univ-rennes1.fr
-#Mohamed LAARAIEDH	: mohamed.laaraiedh@univ-rennes1.fr
+#Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr
+#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr
+#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
 from pylayers.util.project import *
 import numpy as np
-import scipy as sp 
+import scipy as sp
 import time
 import sys
 from pylayers.location.geometric.util.boxn import *
@@ -31,198 +31,201 @@ from pylayers.location.geometric.util import geomview as g
 
 
 class Constraint(object):
-	""" Constraint class
-
-	
-
-	attributes
-	----------
-
-	Constraint.C_Id : Contraint Identity automatically increased for new instanciation
-
-	type	: contraint type
-	time	: time stamp
-	lbox	: LBoxN intialisation
-	runable : boolean. information on constraint center ( TO DO)
-	p	: Constraint center
-	validity: validity duration ( not use yet)
-	self.Id	: Constraint.C_Id
-	ndim	: Constraint dimension
-
-
-	parmsh : dictionary
-		keys :	['display']=True     # launch geomview interactively 
-			['mode']='Current'   # display current box or full constraint
-			['scene']=True      # display whole scene
-			['point']=True       # display constraint point(s)
-			['boxes']=True       # display constraint box
-			['estimated']=True  # display estimated point
-			['estimated_LS']=False # display estimated point with LS method
-			['quadric']=True   # display sphere or hyperbola 
-			['grid']=True       # display grid 
-			['grav']=True 
-
-
-	methods
-	-------
-		
-	info()     : Display information about constraint
-	show3()    : display constraint on Geomview. Parameters tahnks to self.parmsh
-
-
-	TODO
-	----
-	ini file for geom view !
-
-	"""
-	def __init__(self,type,id='0',p=np.array(()),origin={}):
-		
-		self.type       = type
-		self.time       = time.time()
-		self.lbox       = LBoxN([])
-		self.evaluated  = False
-		if p.any():
-			self.runable = True
-		else:	
-			self.runable = False
-		self.p = p 
-		self.validity   = 20                  # not used 
-		self.id         = id  # Id of constraint is set to counter + 1
-		self.ndim       = len(p.T)
-		self.origin=origin
-		#
-		# Parameters for show3 with geomview 
-		#
- 		self.parmsh={}
-		self.parmsh['display']=True     # launch geomview interactively 
-		self.parmsh['mode']='Current'   # display current box or full constraint
-		self.parmsh['scene']=False      # display whole scene
-		self.parmsh['point']=True       # display constraint point(s)
-		self.parmsh['boxes']=True       # display constraint box
-		self.parmsh['estimated']=True  # display estimated point
-		self.parmsh['estimated_LS']=False # display estimated point with LS method
-		self.parmsh['quadric']=True   # display sphere or hyperbola 
-		self.parmsh['grid']=True       # display grid 
-		self.parmsh['grav']=True       # display box gravity center 
+    """ Constraint class
 
 
 
+    attributes
+    ----------
 
-	def info(self):
-		""" display info on constraint
-		"""
-		print "Type         : ",self.type
-		print "--------------------------"
-		print "Time         : ",self.time
-		print "validity (s) : ",self.validity
-		
-		if ((self.runable)):
-			print "Origin : ",self.p
-		
-		if self.evaluated:
-			Npts = np.shape(self.g.p)[0]
-			print "Nb valid points in volume    : ",Npts," voxel"
-			print "Taille kO: ",Npts*12/(2**10)  ," kO"
+    Constraint.C_Id : Contraint Identity automatically increased for new instanciation
 
-		if self.type=="TOA":
-			self.estvol()
-			print "Volume Estimatif",self.estvlm
-		 	print "Toa (ns)", self.value	
-		 	print "std (ns)", self.std
-		 	print "vcw     ", self.vcw
-		 	print "Range(m)", self.range	
-		 	print "sstd (m)", self.sstd
-		print "-------------------"
-		self.lbox.info()
-		print "-------------------"
+    type    : contraint type
+    time    : time stamp
+    lbox    : LBoxN intialisation
+    runable : boolean. information on constraint center ( TO DO)
+    p       : Constraint center
+    validity: validity duration ( not use yet)
+    self.Id : Constraint.C_Id
+    ndim    : Constraint dimension
 
 
+    parmsh : dictionary
+            keys :  ['display']=True     # launch geomview interactively
+                    ['mode']='Current'   # display current box or full constraint
+                    ['scene']=True      # display whole scene
+                    ['point']=True       # display constraint point(s)
+                    ['boxes']=True       # display constraint box
+                    ['estimated']=True  # display estimated point
+                    ['estimated_LS']=False # display estimated point with LS method
+                    ['quadric']=True   # display sphere or hyperbola
+                    ['grid']=True       # display grid
+                    ['grav']=True
 
-	def show3(self):
-		""" display constraint on Geomview
-		
-		The filename is boxes{Id}.list 
 
-		Id is the Id of the current constraint
+    methods
+    -------
+
+    info()     : Display information about constraint
+    show3()    : display constraint on Geomview. Parameters tahnks to self.parmsh
+
+
+    TODO
+    ----
+    ini file for geom view !
+
+    """
+    def __init__(self, type, id='0', p=np.array(()), origin={}):
+
+        self.type = type
+        self.time = time.time()
+        self.lbox = LBoxN([])
+        self.evaluated = False
+        if p.any():
+            self.runable = True
+        else:
+            self.runable = False
+        self.p = p
+        self.validity = 20                  # not used
+        self.id = id  # Id of constraint is set to counter + 1
+        self.ndim = len(p.T)
+        self.origin = origin
+        #
+        # Parameters for show3 with geomview
+        #
+        self.parmsh = {}
+        self.parmsh['display'] = True     # launch geomview interactively
+        self.parmsh['mode'] = 'Current'   # display current box or full constraint
+        self.parmsh['scene'] = False      # display whole scene
+        self.parmsh['point'] = True       # display constraint point(s)
+        self.parmsh['boxes'] = True       # display constraint box
+        self.parmsh['estimated'] = True  # display estimated point
+        self.parmsh['estimated_LS'] = False  # display estimated point with LS method
+        self.parmsh['quadric'] = True   # display sphere or hyperbola
+        self.parmsh['grid'] = True       # display grid
+        self.parmsh['grav'] = True       # display box gravity center
+
+    def info(self):
+        """ display info on constraint
+        """
+        print "Type         : ", self.type
+        print "--------------------------"
+        print "Time         : ", self.time
+        print "validity (s) : ", self.validity
+
+        if ((self.runable)):
+            print "Origin : ", self.p
+
+        if self.evaluated:
+            Npts = np.shape(self.g.p)[0]
+            print "Nb valid points in volume    : ", Npts, " voxel"
+            print "Taille kO: ", Npts * 12 / (2 ** 10), " kO"
+
+        if self.type == "TOA":
+            self.estvol()
+            print "Volume Estimatif", self.estvlm
+            print "Toa (ns)", self.value
+            print "std (ns)", self.std
+            print "vcw     ", self.vcw
+            print "Range(m)", self.range
+            print "sstd (m)", self.sstd
+        print "-------------------"
+        self.lbox.info()
+        print "-------------------"
+
+    def show3(self):
+        """ display constraint on Geomview
+
+        The filename is boxes{Id}.list
+
+        Id is the Id of the current constraint
 
 
 
-		"""
-		if self.runable:
-			fname    = 'boxes'+str(self.id)
-			filename = basename+"/geom/"+fname+".list"
-			fd = open(filename,"w")
-			fd.write("LIST\n")
+        """
+        if self.runable:
+            fname = 'boxes' + str(self.id)
+            filename = basename + "/geom/" + fname + ".list"
+            fd = open(filename, "w")
+            fd.write("LIST\n")
 
-			#
-			# Display scene
-			#
-			if self.parmsh['scene']:
-				fd.write("{<scene.list}\n")
+            #
+            # Display scene
+            #
+            if self.parmsh['scene']:
+                fd.write("{<scene.list}\n")
 
-			#
-			# Display boxes
-			#
+            #
+            # Display boxes
+            #
 
-	#		if self.parmsh['mode']=='Full':
-	#			H_Id=self.history[-1].Id+1
-	#			#
-	#			# Display all boxes
-	#			#
-	#			for k in range(len(self.history)):		
-	#				cons = self.history[k]   # constraint k 
-	#				lb   = cons.lbox
-	#				lb.parmsh['display']=False
-	#				filename2=lb.show3(Id=cons.Id)
-	#				fd.write("{<"+filename2+"}\n")
-			elif self.parmsh['mode']=='Current':
-				#
-				# Display current box
-				#
-				color = ['m','g','c','y','m','b','r','m','g','c','y','orange','skyblue']	
-				#color = ['skyblue','skyblue','orange']
-				
-				lb = self.lbox
-				lb.parmsh['display']=False
-				filename2 = lb.show3(Id=[self.id],col='m')#)color[self.Id])				
-				fd.write("{<"+filename2+"}\n")
-				#
-				# Display Spherical Constraint
-				#
-				if self.parmsh['quadric']:
-					if self.type=='TOA':
-						c1 = str(self.range+self.vcw*self.sstd)
-						c2 = str(max(0,self.range-self.vcw*self.sstd))
-						try:
-							c3 = str(self.p[0])+" "+str(self.p[1])+" "+str(self.p[2])
-						except : 
-							c3 = str(self.p[0])+" "+str(self.p[1])+" "+str(0)
-						fd.write("{appearance {-edge  patchdice	10 10 material {alpha 0.2}} {SPHERE "+ c1 +" "+ c3+ " }}\n")
-						fd.write("{appearance {-edge  patchdice	10 10 material {alpha 0.2}} {SPHERE "+ c2 +" "+ c3+ " }}\n")
-			fd.close()		
-			#
-			# Display points
-			#
-			if self.parmsh['point']:
-				if self.type!='Fusion':
-					g.cloud(self.p,name=fname,color='g',dice=6,access='append')
+    #               if self.parmsh['mode']=='Full':
+    #                       H_Id=self.history[-1].Id+1
+    #                       #
+    #                       # Display all boxes
+    #                       #
+    #                       for k in range(len(self.history)):
+    #                               cons = self.history[k]   # constraint k
+    #                               lb   = cons.lbox
+    #                               lb.parmsh['display']=False
+    #                               filename2=lb.show3(Id=cons.Id)
+    #                               fd.write("{<"+filename2+"}\n")
+            elif self.parmsh['mode'] == 'Current':
+                #
+                # Display current box
+                #
+                color = ['m', 'g', 'c', 'y', 'm', 'b', 'r',
+                         'm', 'g', 'c', 'y', 'orange', 'skyblue']
+                #color = ['skyblue','skyblue','orange']
 
-			if self.evaluated:
-				if self.parmsh['estimated']:
-					g.cloud(self.pe,name=fname,color='b',dice=6,access='append')
-			
-				if self.parmsh['estimated_LS']:
-					g.cloud(self.p_LS,name=fname,color='r',dice=6,access='append')
+                lb = self.lbox
+                lb.parmsh['display'] = False
+                filename2 = lb.show3(Id=[self.id], col='m')  # )color[self.Id])
+                fd.write("{<" + filename2 + "}\n")
+                #
+                # Display Spherical Constraint
+                #
+                if self.parmsh['quadric']:
+                    if self.type == 'TOA':
+                        c1 = str(self.range + self.vcw * self.sstd)
+                        c2 = str(max(0, self.range - self.vcw * self.sstd))
+                        try:
+                            c3 = str(self.p[0]) + " " + str(self.p[1]) + " " + \
+                                str(self.p[2])
+                        except:
+                            c3 = str(self.p[0]) + " " + str(self.p[
+                                1]) + " " + str(0)
+                        fd.write("{appearance {-edge  patchdice 10 10 material {alpha 0.2}} {SPHERE " + c1 + " " + c3 + " }}\n")
+                        fd.write("{appearance {-edge  patchdice 10 10 material {alpha 0.2}} {SPHERE " + c2 + " " + c3 + " }}\n")
+            fd.close()
+            #
+            # Display points
+            #
+            if self.parmsh['point']:
+                if self.type != 'Fusion':
+                    g.cloud(self.p, name=fname, color='g',
+                            dice=6, access='append')
 
-				if self.parmsh['grid']:
-					if self.evaluated:
-						g.cloud(self.g.p,name=fname,color='k',dice=2,R=0.1,access='append')
+            if self.evaluated:
+                if self.parmsh['estimated']:
+                    g.cloud(self.pe, name=fname, color='b',
+                            dice=6, access='append')
 
-			if self.parmsh['display']:
-				print filename
-				chaine = "geomview  -nopanel  -b 1 1 1 " + filename + " 2>/dev/null &"
-				os.system(chaine)
-			else:
-				return(fname)
-		else:
-			print 'constraint is not runnable. It can not be displayed'
+                if self.parmsh['estimated_LS']:
+                    g.cloud(self.p_LS, name=fname, color='r',
+                            dice=6, access='append')
+
+                if self.parmsh['grid']:
+                    if self.evaluated:
+                        g.cloud(self.g.p, name=fname, color='k', dice=2,
+                                R=0.1, access='append')
+
+            if self.parmsh['display']:
+                print filename
+                chaine = "geomview  -nopanel  -b 1 1 1 " + \
+                    filename + " 2>/dev/null &"
+                os.system(chaine)
+            else:
+                return(fname)
+        else:
+            print 'constraint is not runnable. It can not be displayed'

@@ -1076,7 +1076,7 @@ class TUsignal(TBsignal, Usignal):
             >>> from pylayers.signal.bsignal import *
 
         """
-        A = self.fftsh()
+        A  = self.fftsh()
         AU = A.unrex()
         return(AU)
 
@@ -1089,7 +1089,7 @@ class TUsignal(TBsignal, Usignal):
         Tpns : PRP
 
         .. note::
-            If the Time is expressed in ns the resulting PSD is expressed in dBm/MHz (~10-9)
+            If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)
 
         """
         P = self.esd(mode='unilateral')
@@ -1114,9 +1114,11 @@ class TUsignal(TBsignal, Usignal):
 
     def esd(self, mode='bilateral'):
         """  Calculate the energy spectral density of the U signal
+        
+        Returns
+        -------
+        FUsignal
 
-        usage : esd()
-        return a FUsignal
         """
         te = self.dx()
         Y = self.fft()
@@ -2370,11 +2372,32 @@ class FUsignal(FBsignal, Usignal):
     """
     FUsignal : Uniform signal in Frequency domain
 
-    Members
-    -------
-        x  (,N    )  Real
-        y  (M x N )  Complex
+    Attributes
+    ----------
 
+    x  : nd.array((1xN))  
+    y  : Complex nd.array((M x N )  
+
+
+    Methods
+    -------
+
+    symH     : force Hermitian symetry --> FHsignal
+    symHz    : force Hermitian symetry with zero padding --> FHsignal
+    align    : align two FUsignal on a same frequency base
+           return a list with the two aligned signals
+    enthrsh  : Energy thresholding thresh = 99.99 %
+    dBthrsh  : dB thresholding thresh  = 40dB
+    ift      : Inverse Fourier transform
+    resample : resampling with a new base
+    newdf    : resampling with a new df
+    zp       : zero padding until len(x) = N
+    plot     : plot modulus and phase
+    plotri   : plot real part and imaginary part
+    plotdB   : plot modulus in dB
+    get      : get k th ray
+
+>>>>>>> update documentation
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         FBsignal.__init__(self, x, y)
@@ -2960,10 +2983,19 @@ class FUDsignal(FUsignal):
 
     Attributes
     ----------
-        y    :
+        x    : ndarray 1xN
+        y    : ndarray MxN
         tau0 : delay
         tau1 : additional delay
 
+    Methods
+    -------
+
+    minphas : force minimal phase    (Not tested)
+    totud   : transform to a TUD signal
+    iftd    : inverse Fourier transform
+    ft1     : construct CIR from ifft(RTF)
+    ft2     :
     """
     def __init__(self, x=np.array([]), y=np.array([]), tau0=np.array([])):
         FUsignal.__init__(self, x, y)
@@ -3079,7 +3111,6 @@ class FUDsignal(FUsignal):
         Returns
         -------
         r : TUsignal 
-            
         """
         tau = self.tau0
         s = self.ift(Nz, ffts)
@@ -3301,7 +3332,9 @@ class EnImpulse(TUsignal):
           band   (GHz)   (def = 3GHz)
           thresh (dB)    (def = 10dB)
           fe     (GHz)   (def = 100GHz)
-    Exemple :
+
+    Example
+    -------
 
         """
     def __init__(self, x=np.array([]), fc=4, band=3, thresh=10, fe=20):

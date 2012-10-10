@@ -25,9 +25,6 @@ try:
 except:
     raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
 
-
-
-
 try:
     os.path.isdir(basename +'/figures')
 except:
@@ -39,7 +36,7 @@ except:
 # of the project 
 #
 pstruc = {}
-
+pstruc['DIRSIMUL'] ='ini'
 pstruc['DIRSTRUC'] ='struc'
 pstruc['DIRSTRUC2'] = 'struc'
 pstruc['DIRSLAB'] = 'ini'
@@ -102,31 +99,15 @@ for nm in pstruc.keys():
 #
 # copy files from /data/ini in project directory 
 #
+
+
 dirlist=['ini','struc','ant','output','geom']
 
-#for dl in dirlist:
-#    filelist = os.listdir(pylayersdir+'/data/' + dl)
-#    for fi in filelist:
-#        if os.path.isfile(basename+'/' + dl +'/' +fi):
-#            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
-#                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-#                A=raw_input()
-#                if A == 'y':
-#                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
-#                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
-#        else:
-#            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 for dl in dirlist:
     filelist = os.listdir(pylayersdir+'/data/' + dl)
     for fi in filelist:
         if os.path.isfile(basename+'/' + dl +'/' +fi):
             pass
-#            if os.path.getsize(pylayersdir+'/data/' + dl +'/'+fi) != os.path.getsize(basename + '/' +dl +'/' + fi):
-#                print ('Would you like to replace your ' +fi +' by the default configuration file ?')
-#                A=raw_input()
-#                if A == 'y':
-#                    shutil.move(basename+'/' + dl +'/'+fi,basename+'/' +dl +'/'+fi+'.old')
-#                    shutil.copy(pylayersdir+'/data/' + dl +'/'+fi,basename+'/' + dl +'/'+fi)
         else:
             shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 

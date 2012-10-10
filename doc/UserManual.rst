@@ -1,15 +1,12 @@
 UserManual
 ==========
 
-.. toctree::
-      :maxdepth: 4  
-
 PyLayers is an interactive platform, used for deterministic channel simulation,
 using python and C as programming languages. This tool allows the evaluation of
 the propagation channel conditions, in indoor environment, between radio nodes for
 different antenna directions and waveforms.
 
-It consists in several interacting python modules as well as a set of various high level 
+It consists in several interacting python modules as well as a set of various high level
 commands coded in C which exchange information through files. 
 
 The main class which is used for defining a Simulation is called `Simul`
@@ -43,8 +40,10 @@ Overview of the simulation Workflow
 The following figure presents a summary of the different pylayers blocs:
 
 .. image:: _static/workflow1.png
+    :scale: 50%
 
 .. image:: _static/workflow2.png
+    :scale: 50%
 
 The parameter “progress” indicates the evolution of channel simulation. 
 The figure mention others files which are relative to the environment, in fact,
@@ -180,14 +179,13 @@ grid of tx and rx points which define the links of interest for the simulation
 .. plot::
     :include-source:        
 
-    from Simul import *
-    from Layout import *
+    from pylayers.simul.simulem import *
+    from pylayers.gis.layout import *
     from numpy import *
     import matplotlib.pylab as plt  
 
-    S = Simul('where2.ini')
-    S.L.loadfur('FurSiradel.ini')
-    S.show(furniture=True)
+    S = Simul('example.ini')
+    S.L.showGs()
     plt.show()
 
 
@@ -195,61 +193,49 @@ grid of tx and rx points which define the links of interest for the simulation
 Getting started 
 ---------------
 
-Before starting a simulation it is required to fill a ini file which gathers
-the information required for starting a simulation.
+First of all, it is required to fill an **.ini** file which gathers
+informations required for starting a simulation.
 
 Simulation `.ini`  file
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Below is presented an example of a simulation file `where2.ini`::
+Below is presented an example of a simulation file `default.ini`::
 
-        
-        [files]
-        struc = sircut.str
-        mat   = simul9.mat
-        slab  = simul9.slab
-        tx    = w2tx.ini
-        rx    = w2rx.ini
-        txant = UWB_CEA.vsh3
-        rxant = UWB_CEA.vsh3
-        conf  = $HOME/Pyproject/project.conf
-        palch = simul9.palch
-        patra = simul9.patra
 
-        [tracing]
-        maxdeep  = 10
-        distdiff = 5.0
-        var2d3d  = 1
+    [files]
+    mat = matDB.ini
+    tx = radiotx.ini
+    slab = slabDB.ini
+    txant = defant.vsh3
+    rx = radiorx.ini
+    patra = def.patra
+    conf = project.conf
+    palch = def.palch
+    struc = Lstruc.str
+    rxant = defant.vsh3
 
-        [waveform]
-        tw     = 30
-        band   = 0.499
-        fc     = 4.493
-        thresh = 3
-        fe     = 50
-        type   = generic
+    [waveform]
+    tw = 30
+    band = 0.499
+    fc = 4.493
+    thresh = 3
+    fe = 50
+    type = generic
 
-        [frequency]
-        fmax  = 11
-        nf    = 181
-        fmin  = 2
+    [frequency]
+    fghzmin = 2.0
+    fghzmax = 11.0
+    nf = 181
 
-        [output]
-        42 = out42.ini
-        22 = out22.ini
-        43 = out43.ini
+    [tud]
+    purc = 100
+    num = -1
+    nrmax = 500
 
-        [tud]
-        purc = 100
-        num = -1
-        nrmax = 500
+    [output]
+    1 = default1.ini
 
-        [launching]
-        typealgo = 1
-        angtx    = 0.05
-        isbang   = 20
-        ethreshold = 1e-05
-        maxdeep  = 20
+    
 
 This file is composed of independant sections which are respectively ::
 
@@ -268,6 +254,44 @@ This file is composed of independant sections which are respectively ::
                 ray filtering parameters
         [output]
                 already calculated output files
+
+
+
+Output Section 
+--------------
+
+The output section is used to keep track of already calculated links. The key 
+is an integer which correspond to a radionode index and the corresponding
+associated value is a file which is stored in the `output` directory of the
+project. 
+
+Below is an example of the content of an output `.ini` file ::
+
+
+    [rang]
+    1 = defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500.rang
+
+    [trace]
+    1 = defstr_slabDB_def_radiotx_1_def_radiorx_1.tra
+
+    [launch]
+    1 = defstr_slabDB_def_radiotx_1.lch
+
+    [tang]
+    1 = defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500.tang
+
+    [tauk]
+    1 = defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500.tauk
+
+    [field]
+    1 = defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500.field
+
+    [tud]
+    1 = defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500.tud
+
+    [cir]
+    1 = where2cir-tx001-rx001
+
 
 
 Terminology

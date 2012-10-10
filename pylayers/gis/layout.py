@@ -39,6 +39,7 @@ from pylayers.util.project import *
 #from   interval import interval
 from itertools import combinations
 import pdb
+import ast
 #
 #
 
@@ -64,14 +65,15 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filemat='def.mat',_fileslab='def.slab'):
+    def __init__(self,_filename='defstr.str2',_filematini='matDB.ini',_fileslabini='slabDB.ini'):
+
 
         mat = sb.MatDB()
-        mat.load(_filemat)
+        mat.load(_filematini)
 
         self.sl = sb.SlabDB()
         self.sl.mat = mat
-        self.sl.load(_fileslab)
+        self.sl.load(_fileslabini)
 
         self.Gs = nx.Graph()
         self.Gc = nx.Graph()
@@ -82,9 +84,9 @@ class Layout(object):
         self.Nn = 0
         self.Ne = 0
         self.Nss = 0
-        self.filename = 'Lstruc.str2'
-        self.fileslab = _fileslab
-        self.filemat = _filemat
+        self.filename = _filename
+        self.fileslabini = _fileslabini
+        self.filematini = _filematini
         self.display = {}
         self.display['title'] = ''
         self.display['ticksoff'] = True
@@ -114,7 +116,7 @@ class Layout(object):
         self.name = {}
         for k in self.sl.keys():
             self.name[k] = []
-
+        self.load(_filename)
         #self.ax = (-10, 10, -10, 10)
 
     def ls(self, typ='str'):
@@ -147,7 +149,7 @@ class Layout(object):
             >>> for _filename in L.ls():
             >>>    plt.figure()
             >>>    L.load(_filename)
-            >>>    ax = L.showGs()
+            >>>    fig,ax = L.showGs()
             >>>    plt.title(_filename)
             >>> plt.show()
 
@@ -290,7 +292,7 @@ class Layout(object):
             F = fur.Furniture()
             F.load(_filefur, name)
             self.lfur.append(F)
-
+        
     def load(self,_filename):
         """ load a Layout in different formats
 
@@ -299,13 +301,12 @@ class Layout(object):
         _filename
 
         """
-
         self.filestr=_filename
         filename,ext=os.path.splitext(_filename)
         if ext=='.str':
-            self.loadstr(_filename,self.filemat,self.fileslab)
+            self.loadstr(_filename,self.filematini,self.fileslabini)
         elif ext=='.str2':
-            self.loadstr2(_filename,self.filemat,self.fileslab)
+            self.loadstr2(_filename,self.filematini,self.fileslabini)
             self.geomfile
         else:
             raise NameError('layout filename extension not recognized')
@@ -317,16 +318,16 @@ class Layout(object):
         except:
             print "problem to construct geomfile"
 
-    def loadstr(self, _filename, _filemat='def.mat', _fileslab='def.slab'):
+    def loadstr(self, _filename, _filematini='matDB.ini', _fileslabini='slabDB.ini'):
         """ loadstr load a .str de PulsRay
 
         Parameters
         ----------
         _filename : string
-        _filemat  : string
-            default 'def.mat'
-        _fileslab : string
-            default 'def.slab'
+        _filematini  : string
+            default 'matDB.ini'
+        _fileslabini : string
+            default 'slabDB.ini'
 
         Examples
         --------
@@ -336,18 +337,17 @@ class Layout(object):
         >>> L.loadstr('exemple.str')
 
         """
+
         self.filename = _filename
         self.delete()
         mat = sb.MatDB()
-        mat.load(_filemat)
+        mat.load(_filematini)
         self.sl = sb.SlabDB()
         self.sl.mat = mat
-        self.sl.load(_fileslab)
-
+        self.sl.load(_fileslabini)
         self.labels = {}
         self.name = {}
         self.Gs.pos = {}
-
         lname = []
         filename = pyu.getlong(_filename, pstruc['DIRSTRUC'])
         fo = open(filename, "rb")
@@ -709,6 +709,7 @@ class Layout(object):
         #----------------------------------------
         # Node labelling (structure edges)
         #----------------------------------------
+        self.display['layers']=[]
         for k in range(Ne):
             self.Gs.add_node(k + 1, name=lname[k])
             self.Gs.add_node(k + 1, zmin=z[0, k])
@@ -722,7 +723,6 @@ class Layout(object):
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
-
             if lname[k] not in self.display['layers']:
                 self.display['layers'].append(lname[k])
 
@@ -782,16 +782,16 @@ class Layout(object):
         #
         self.boundary(1, 1)
 
-    def loadstr2(self, _filename, _filemat='def.mat', _fileslab='def.slab'):
+    def loadstr2(self, _filename, _filematini='matDB.ini', _fileslabini='slabDB.ini'):
         """ load a Graph from a str2 file
 
             Parameters
             ----------
             _filename : string
                 str2 filename
-            _filemat
+            _filematini
                 mat filename
-            _fileslab
+            _fileslabini
                 slab filename
 
             Notes
@@ -824,11 +824,11 @@ class Layout(object):
         self.delete()
         self.filename = _filename
         mat = sb.MatDB()
-        mat.load(_filemat)
+        mat.load(_filematini)
 
         self.sl = sb.SlabDB()
         self.sl.mat = mat
-        self.sl.load(_fileslab)
+        self.sl.load(_fileslabini)
 
         filename = pyu.getlong(_filename, pstruc['DIRSTRUC'])
         fo = open(filename)
@@ -931,7 +931,7 @@ class Layout(object):
         #----------------------------------------
         # Node labelling (structure edges)
         #----------------------------------------
-
+        self.display['layers']=[]
         for k in range(Ne):
             #print k, lname[k]
             self.Gs.add_node(k + 1, name=lname[k])
@@ -1171,6 +1171,71 @@ class Layout(object):
             self.display['layers'].append(name)
         return(num)
 
+    def add_furniture(self, name='R1_C', matname='PARTITION', origin=(0.,0.),
+                      zmin=0., height=0., width=0., length=0., angle=0.):
+        """  add piece of furniture
+
+        Parameters
+        ----------
+        name : string
+            default = 'R1_C'
+        matname : string
+            default = 'PARTITION'
+        origin : tuple of floats
+        height : float
+            default = 0
+        width : float
+            default = 0
+        length : float
+            default = 0
+        angle : float
+            default = 0
+        """
+        
+        # compute the four points
+        p0 = origin
+        u = np.array([np.cos(angle * np.pi / 180), 
+                      np.sin(angle * np.pi / 180)])
+        v = np.array([-np.sin(angle * np.pi / 180), 
+                      np.cos(angle * np.pi / 180)])
+        p1 = p0 + u * length
+        p2 = p1 + v * width
+        p3 = p2 - u * length
+        # adding free nodes
+        n0 = self.add_fnod(p0)
+        n1 = self.add_fnod(p1)
+        n2 = self.add_fnod(p2)
+        n3 = self.add_fnod(p3)
+        # adding segments
+        self.add_edge(n0, n1, matname, zmin, zmin+height)
+        self.add_edge(n1, n2, matname, zmin, zmin+height)
+        self.add_edge(n2, n3, matname, zmin, zmin+height)
+        self.add_edge(n3, n0, matname, zmin, zmin+height)
+
+    def add_furniture_file(self, _filefur):
+        """  add pieces of furniture from .ini files
+
+        Parameters
+        ----------
+        _filefur : string
+        """
+
+        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC'])
+        config = ConfigParser.ConfigParser()
+        config.read(filefur)
+        furname = config.sections()
+        for fur in furname:
+            name = config.get(fur, "name")
+            matname = config.get(fur, "matname")
+            origin = tuple(ast.literal_eval(config.get(fur, "origin")))
+            zmin = 0.0
+            height = config.getfloat(fur, "height")
+            width = config.getfloat(fur, "width")
+            length = config.getfloat(fur, "length")
+            angle = config.getfloat(fur, "angle")
+            self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
+            thickness=config.getfloat(fur, "thickness")
+
     def del_node(self, ln):
         """ delete node in list ln
 
@@ -1184,7 +1249,7 @@ class Layout(object):
 
         if (type(ln) == np.int32):
             ln = [ln]
-        
+
         if (type(ln) == int):
             ln = [ln]
 
@@ -1877,7 +1942,7 @@ class Layout(object):
         --------
         
         >>> from pylayers.gis.layout import *
-        >>> L=Layout('def.mat','def.slab')
+        >>> L=Layout('matDB.ini','slabDB.ini')
         >>> L.load('office.str')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
@@ -2346,10 +2411,14 @@ class Layout(object):
         ax 
 
         """
+
+#        if fig ==[]:
+#            fig = plt.gcf()
+#        if ax==[]:
+#            ax = fig.gca()
         if fig == []:
            fig = plt.figure()
         if not isinstance(ax, plt.Axes):
-
             ax  = fig.add_subplot(111)
 
         if furniture:
@@ -2943,10 +3012,53 @@ class Layout(object):
         Parameters
         ----------
         graph : char 
-            't' : Gt
-            'r' : Gr
-            's' : Gs
-            'v' : Gv 
+            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv 
+        show : boolean 
+            False
+        fig : matplotlib figure 
+            []
+        ax
+            []
+        nodes : boolean 
+            False
+        eded :
+            True
+        ndnd :
+            True
+        nded :
+            True
+        linewidth
+            2
+        nodelist
+            []
+
+        Examples
+        --------
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.gis.layout import  * 
+            >>> import matplotlib.pyplot as plt
+            >>> L = Layout()
+            >>> L.load('exemple.str')
+            >>> L.buildGt()
+            >>> L.buildGr()
+            >>> L.buildGv()
+            >>> fig = plt.figure(figsize=(10,10))
+            >>> ax = fig.add_subplot(221)
+            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+            >>> plt.title("Gs")
+            >>> ax = fig.add_subplot(222)
+            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+            >>> plt.title("Gt")
+            >>> ax = fig.add_subplot(223)
+            >>> fig,ax = L.showG('c',fig=fig,ax=ax)
+            >>> plt.title("Gc")
+            >>> ax = fig.add_subplot(224)
+            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
+            >>> plt.title("Gv")
+            >>> plt.show()
+
         """
 
         defaults = {'show': False,
@@ -2990,6 +3102,9 @@ class Layout(object):
         if 'v' in graph:
             G = self.Gv
             nx.draw(G, self.Gs.pos, node_color='m', edge_color='m')
+        if 'c' in graph:
+            G = self.Gc
+            nx.draw(G, self.Gs.pos, node_color='c', edge_color='c')
 
         for k, ncy in enumerate(self.Gt.node.keys()):
             self.Gt.node[ncy]['polyg'].plot()
@@ -3012,6 +3127,8 @@ class Layout(object):
 
         if kwargs['show']:
             plt.show()
+
+        return fig,ax
 
     def showGv(self, **kwargs):
         """ show graph Gv (visibility)
@@ -3043,8 +3160,8 @@ class Layout(object):
             >>> L.buildGt()
             >>> L.buildGr()
             >>> L.buildGv()
-            >>> ax = L.showGs()
-            >>> ax = L.showGv(ax=ax)
+            >>> fig,ax = L.showGs()
+            >>> fig,ax = L.showGv(ax=ax)
             >>> t = plt.axis('off')
             >>> plt.show()
 
@@ -3312,8 +3429,8 @@ class Layout(object):
         """ gives information about the Layout
         """
         print "filestr : ", self.filename
-        print "filemat : ", self.filemat
-        print "fileslab : ", self.fileslab
+        print "filematini : ", self.filematini
+        print "fileslabini : ", self.fileslabini
         try:
             print "filegeom : ", self.filegeom
         except:
@@ -3863,7 +3980,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','def.mat','def.slab')
+        >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
         >>> p_Tx,p_Rx = L.randTxRx()
 
         Notes
@@ -3902,7 +4019,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','def.mat','def.slab')
+        >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
         >>> L.boundary()
 
         """
@@ -3940,9 +4057,9 @@ class Layout(object):
         Examples
         --------
 
-        >>> from pylayers.gis.import *
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','def.mat','def.slab')
+        >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -3950,7 +4067,7 @@ class Layout(object):
         >>> Gv_re,pos,labels = L.loadGv( _fileGv)
         >>> assert Gv_re.nodes()[5]== 6,'Mistake'
         >>> a=plt.title('Test Gv loadGv')
-        >>> ax = L.showGs()
+        >>> fig,ax = L.showGs()
         >>> nx.draw(Gv_re,pos,node_color='r')
         >>> plt.show()
         >>> plt.clf()
@@ -4025,7 +4142,7 @@ class Layout(object):
         >>> from pylayers.util.project import *
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','def.mat','def.slab')
+        >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -4070,7 +4187,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','def.mat','def.slab')
+        >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
         >>> ncoin,ndiff = L.buildGc()
         >>> L.buildGt()
         >>> L.buildGr()
@@ -4103,7 +4220,7 @@ class Layout(object):
         --------
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str','def.mat','def.slab')
+        >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
         >>> L.buildGt()
         >>> L.buildGr()
         >>> p_Tx=np.array([2,0])

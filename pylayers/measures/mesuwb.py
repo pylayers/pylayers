@@ -4,12 +4,12 @@ import os.path
 import numpy   as np
 import scipy   as sp
 import matplotlib.pylab as plt
-import pylayers.util.pyutil  as pyu 
-import pylayers.util.geomutil as geu 
-import pylayers.signal.bsignal as bs 
-from   pylayers.util  import project 
-from   scipy import io 
-from   scipy import signal,linspace,polyval,polyfit,stats
+import pylayers.util.pyutil as pyu
+import pylayers.util.geomutil as geu
+import pylayers.signal.bsignal as bs
+from   pylayers.util.project import *
+from   scipy import io
+from   scipy import signal, linspace, polyval, polyfit, stats
 #from   pylayers.Simul import SimulEM
 
 #

@@ -123,7 +123,7 @@
 #    Group['Couloir right']=np.array(range(232,255,1))
 #  
 #    S   = Simul.Simul()
-#    S.layout('sircut.str','simul9.mat','simul9.slab')
+#    S.layout('sircut.str','matDB.mat','slabDB.ini')
 #    S.load
 #    Tx,Rx = ptSiradel()
 #    #S.load('simul-siradel')

@@ -20,8 +20,6 @@ import pdb
 
 
 class Agent(object):
-
-
     def __init__(self,**args):
         defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'save':False, 'sim':Simulation}
 

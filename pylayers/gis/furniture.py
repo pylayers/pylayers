@@ -145,7 +145,7 @@ class Furniture(object):
         Examples
         --------
         .. plot::
-            :included-source:
+            :include-source:
 
             >>> from pylayers.gis.furniture import *
             >>> import matplotlib.pylab as plt 
