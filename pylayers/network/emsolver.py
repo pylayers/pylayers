@@ -32,8 +32,11 @@ import pylayers.util.pyutil as pyu
 import pylayers.util.project
 from   pylayers.gis.layout import Layout
 import pylayers.antprop.slab
+from pylayers.antprop.multiwall import *
 
 from   pylayers.network.model import Model
+
+
 import pdb
 
 
@@ -129,9 +132,34 @@ class EMSolver(object):
                 return ([[0.],[0.]])
 
 
-        elif self.method == 'multiwall':
-            print 'Okay, I think we\'ve got something to append in the TODO list'
+        elif self.EMS_method == 'multiwall':
 
+            dd={} # distance dictionnary
+
+            if len(e) > 0:
+                lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
+                d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
+#                if LDP == 'TOA':
+#                    std = self.sigmaTOA*sp.randn(len(d))
+#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
+
+                if LDP == 'Pr':
+                    pdb.set_trace()
+                    pa=np.vstack(p.values())
+                    for px in pa:
+                        Lwo,Lwp=Loss0_v2(self.L,pa,self.f,px)
+#                    std = self.sigmaRSS*sp.randn(len(d))
+#                    M = Model(method=self.PL_method,f=self.f,RSSnp=self.RSSnp,d0=self.d0)
+#                    r=M.getPL(d,self.sigmaRSS)
+#                    return ([[r[i],self.sigmaRSS] for i in range(len(d))],d)
+            
+                elif LDP == 'TOA': #### NOT CORRECT !
+                    std = self.sigmaTOA*sp.randn(len(d))
+                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
+
+
+            else :
+                return ([[0.],[0.]])
 
 
         elif self.method == 'Pyray':
