@@ -19,19 +19,19 @@ algebraic methods
 .. toctree::
     :max-depth: 2
 
-    location.algebraic.crblocation.rst 
+    location.algebraic.crb.rst 
 
-    location.algebraic.hdflocation.rst 
+    location.algebraic.hdf.rst 
 
     location.algebraic.pygraphtool.rst 
 
     location.algebraic.pymathtool.rst 
 
-    location.algebraic.toalocation.rst 
+    location.algebraic.toa.rst 
 
-    location.algebraic.tdoalocation.rst 
+    location.algebraic.tdoa.rst 
 
-    location.algebraic.rsslocation.rst 
+    location.algebraic.rss.rst 
 
 
 geometric methods
