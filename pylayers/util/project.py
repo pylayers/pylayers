@@ -17,6 +17,7 @@ try:
 except:
     pylayersdir = currentdir.split('pylayers')[0] + '/pylayers/'
 
+
 if len(pylayersdir) == 1:
     raise EnvironmentError('Please verify that pylayers sources are into the "pylayers/" directory')
 
@@ -24,6 +25,11 @@ try:
     basename = os.environ['BASENAME']
 except:
     raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
+
+try:
+    mesdir = os.environ['MESDIR']
+except:
+    mesdir = basename + '/meas'
 
 try:
     os.path.isdir(basename +'/figures')
@@ -60,6 +66,9 @@ except:
     print "Create directory " + basename
     os.mkdir(basename)
 
+#
+# write file project.conf
+#
 fd = open(basename+'/project.conf','w')
 fd.close()
 for nm in pstruc.keys():
@@ -87,10 +96,6 @@ for nm in pstruc.keys():
         matdir = dirname
     if nm == 'DIRTRA':
         tradir = dirname
-    if nm == 'DIRMES':
-        mesdir = dirname
-    if nm == 'DIRCIR':
-        mesdir = dirname
 
 
     fd = open(basename+'/project.conf','a')

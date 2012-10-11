@@ -7,3 +7,5 @@ Simul
     :maxdepth: 2
 
     simul.simulem.rst
+
+    simul.simulnet.rst

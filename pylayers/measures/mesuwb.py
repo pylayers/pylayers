@@ -1,5 +1,6 @@
 #!/usr/bin/python
 #-*- coding: latin1 -*-
+import doctest
 import os.path
 import numpy   as np
 import scipy   as sp
@@ -1549,6 +1550,7 @@ class UWBMesure(object):
 
          Examples
          --------
+         >>> from pylayers.measure.mesuwb import *
          >>> M1 = UWBMesure(1)
          >>> M1.show()
         """
