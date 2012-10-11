@@ -107,7 +107,6 @@ class Coverage(object):
         .. plot::
         :include-source:
 
-        >>> import matplotlib.pyplot as plt 
         >>> from pylayers.antprop.coverage import * 
         >>> C=Coverage()
         >>> C.cover()
@@ -172,23 +171,3 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-#if (__name__ == "__main__"):
-
-#    C=Coverage(tx=np.array((0.3,0.3)))
-#    C.cover()
-#    fig=plt.figure()
-#    fig,ax=C.L.showGs(fig=fig)
-##    fig=plt.figure()
-##    fig2,ax2=C.L.showGs(fig=fig)
-
-#    l=C.grid[0,0]
-#    r=C.grid[-1,0]
-#    b=C.grid[0,1]
-#    t=C.grid[-1,-1]
-#    cc=ax.imshow(C.Pr.reshape((C.xstep,C.ystep)).T,extent=(l,r,b,t),vmin=-120,origin='lower')
-#    ax.scatter(C.tx[0],C.tx[1],linewidth=0)
-#    fig.colorbar(cc)
-##    ax2.imshow(C.Pr.reshape((C.xstep,C.ystep)).T,extent=(l,r,b,t),vmin=-120)
-##    ax2.scatter(C.tx[0],C.tx[1],linewidth=0)
-
-#    plt.show()
