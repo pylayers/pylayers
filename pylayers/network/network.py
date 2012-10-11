@@ -474,7 +474,7 @@ class Network(nx.MultiGraph):
             p=nx.get_node_attributes(self.SubNet[RAT],'p')
             e=self.SubNet[RAT].edges()
 
-            lv , d= self.EMS.solve(p,e,ldp)
+            lv , d= self.EMS.solve(p,e,ldp,RAT)
 
             if  it ==0:
                 lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]

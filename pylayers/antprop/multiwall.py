@@ -103,12 +103,12 @@ def OneSlopeMdl(D,n,fGHz):
     PL = PL0(fGHz)+10*n*np.log10(D)
     return(PL)
 
-def Loss0_v2(S,Pts,f,p):
+def Loss0_v2(L,Pts,f,p):
     """
     Parameters
     ----------
-    S
-        Simulation object
+    L
+        Layout object
     Pts
         (Np x 2) array
     f
@@ -130,7 +130,7 @@ def Loss0_v2(S,Pts,f,p):
         >>> S.layout('Lstruc.str','matDB.ini','slabDB.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp = Loss0_v2(S,Tx,fGHz,Rx[1,0:2])
+        >>> Lwo,Lwp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
         >>> fig,ax = S.L.showGs()
         >>> tit = plt.title('test Loss0_v2')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
@@ -147,13 +147,13 @@ def Loss0_v2(S,Pts,f,p):
         Lo = 0.0
         Lp = 0.0
         pi = Pts[i,:]
-        seglist,theta = S.L.angleonlink(p,pi)
+        seglist,theta = L.angleonlink(p,pi)
         i = 0
         for k in seglist:
             try:
-                name = S.L.Gs.node[k]['ss_name']
+                name = L.Gs.node[k]['ss_name']
             except:
-                name = S.L.Gs.node[k]['name']
+                name = L.Gs.node[k]['name']
             #if k in S.indoor.ce.keys():
             #if k in S.L.ce.keys():
             # nom du sous-segment  
@@ -172,7 +172,7 @@ def Loss0_v2(S,Pts,f,p):
             #
             # Loss0 du slab
             #
-            lko,lkp  = S.L.sl[name].losst(f,the)
+            lko,lkp  = L.sl[name].losst(f,the)
 #            print lko
 #            print lkp
             Lo   = Lo + lko[0]
