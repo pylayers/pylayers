@@ -1004,23 +1004,26 @@ class GrRayTud(object):
 
         Examples
         --------
+        
+        .. plot::
+            :include-source:
 
-        >>> from pylayers.gis.layout import *
-        >>> from pylayers.antprop.rays import *
-        >>> L = Layout()
-        >>> g3 = GrRay3D()
-        >>> l = g3.dir()
-        >>> nr = 10
-        >>> file0 = l[nr]
-        >>> s1 = file0.split('_')
-        >>> _filestr = s1[0]+'.str'
-        >>> L.loadstr(_filestr)
-        >>> g3.load(l[nr],L)
-        >>> gt = GrRayTud()
-        >>> l1,l2,l3,l4 = gt.dir()
-        >>> gt.load(l1[nr],l2[nr],l3[nr],L.sl)
-        >>> r30 = g3.ray3d[0]
-        >>> rt0 = gt.rayTud[0]
+            >>> from pylayers.gis.layout import *
+            >>> from pylayers.antprop.rays import *
+            >>> L = Layout()
+            >>> g3 = GrRay3D()
+            >>> l = g3.dir()
+            >>> nr = 10
+            >>> file0 = l[nr]
+            >>> s1 = file0.split('_')
+            >>> _filestr = s1[0]+'.str'
+            >>> L.loadstr(_filestr)
+            >>> g3.load(l[nr],L)
+            >>> gt = GrRayTud()
+            >>> l1,l2,l3,l4 = gt.dir()
+            >>> gt.load(l1[nr],l2[nr],l3[nr],L.sl)
+            >>> r30 = g3.ray3d[0]
+            >>> rt0 = gt.rayTud[0]
 
 
         """
