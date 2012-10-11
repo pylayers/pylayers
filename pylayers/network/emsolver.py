@@ -164,11 +164,7 @@ class EMSolver(object):
                     Lwo = []
                     for i in range(lpa-1):
                         Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
-                    return ([[Lwo[i],model.sigrss] for i in range(len(Lwo))],d)
-#                    std = self.sigmaRSS*sp.randn(len(d))
-#                    M = Model(method=self.PL_method,f=self.f,RSSnp=self.RSSnp,d0=self.d0)
-#                    r=M.getPL(d,self.sigmaRSS)
-#                    return ([[r[i],self.sigmaRSS] for i in range(len(d))],d)
+                    return ([[-Lwo[i]-model.PL0,model.sigrss] for i in range(len(Lwo))],d)
             
                 elif LDP == 'TOA': #### NOT CORRECT !
                     std = self.sigmaTOA*sp.randn(len(d))
