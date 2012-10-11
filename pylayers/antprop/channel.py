@@ -12,7 +12,7 @@ from pylayers.util.project import *
 
 
 class Ctilde(object):
-    """ container for the 4 components of the polarimetric 1 ray channel
+    """ container for the 4 components of the polarimetric ray channel
 
     Attributes
     ----------
@@ -46,6 +46,9 @@ class Ctilde(object):
 
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
+    
+        Load the three files .tauk .tang .rang xhic contains respectively 
+        delay , angle of departure , angle of arrival.
 
         Parameters
         ----------
@@ -53,6 +56,15 @@ class Ctilde(object):
         filefield  : string
         transpose  : boolean
             default False
+
+        Examples
+        --------
+        >>> from pylayers.antprop.channel import *
+        >>> from pylayers.simul.simulem import *
+        >>> S=Simul()
+        >>> S.load('default.ini')
+        >>> C =Ctilde()
+        >>> C.load(S.dtud[1][1])
 
         """
         filetauk = filefield.replace('.field', '.tauk')
@@ -121,7 +133,6 @@ class Ctilde(object):
             print "nb rayons 2: ", nray
             self.tauk = np.ndarray(shape=nray, buffer=buf)
             if nray_tauk != nray:
-                print itx, irx
                 print nray_tauk - nray
         self.tauk = self.tauk
 
