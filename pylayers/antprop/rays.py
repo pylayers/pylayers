@@ -592,9 +592,7 @@ class Ray3D(object):
         return(delay)
 
     def show(self, fig=[], ax=[], col='b', node=False):
-        """
-        show(ax,vol='b')
-        show a Ray projection in 2D
+        """ show a Ray projection in 2D
 
         """
         if fig ==[]:
@@ -835,8 +833,14 @@ class GrRayTud(object):
 
         Returns
         -------
-        lfile_s : list
+        lfile_tud : list
             sorted list of all the .tud file of tuddir
+        lfile_tang : list
+            sorted list of all the .tang file of tuddir
+        lfile_rang : list
+            sorted list of all the .rang file of tuddir
+        lfile_tauk : list
+            sorted list of all the .tauk file of tuddir
 
         Notes
         -----
@@ -847,7 +851,7 @@ class GrRayTud(object):
 
         >>> from pylayers.antprop.rays import *
         >>> g = GrRay3D()
-        >>> l1,l2,l3,l4  = g.dir()
+        >>> tud,tang,rang,tauk  = g.dir()
 
         """
 
@@ -1359,6 +1363,7 @@ class GrRay3D(object):
             :include-source:
 
             >>> from pylayers.antprop.rays import *
+            >>> from pylayers.util.project import *
             >>> from pylayers.gis.layout import *
             >>> import matplotlib.pyplot as plt
             >>> import numpy as np
@@ -1366,15 +1371,20 @@ class GrRay3D(object):
             >>> g = GrRay3D()
             >>> lfile = g.dir()
             >>> n = len(lfile)
-            >>> k = np.ceil(n*sp.rand()).astype('int')
-            >>> file0  = lfile[k]
+            >>> file0  = lfile[0]
             >>> s1 = file0.split('_')
             >>> _filestr = s1[0]+'.str'
             >>> L = Layout()
             >>> L.load(_filestr)
             >>> f,a = L.showGs()
             >>> g.load(file0,L)
-            >>> g.show(a,np.arange(10))
+            >>> g.show(f,a,np.arange(10))
+            >>> plt.show()
+            >>> f,a = L.showGs()
+            >>> g.show(f,a,np.arange(100))
+            >>> plt.show()
+            >>> f,a = L.showGs()
+            >>> g.show(f,a,np.arange(300))
             >>> plt.show()
 
         """
@@ -1740,12 +1750,12 @@ class GrRay3D(object):
         return(G)
 
     def show(self,fig=[], ax=[], rayset=np.array([]), col='b', node=False):
-        """
+        """ show a cluster of rays 
 
         Parameters
         ----------
-        ax     :
-            axes object
+        fig    : figure instance 
+        ax     : axes instance  
         rayset :
             set of rays np.array([])
         col  : string
@@ -1757,7 +1767,6 @@ class GrRay3D(object):
             fig = plt.gcf()
         if ax==[]:
             ax = fig.gca()
-
 
         for i in rayset:
             r = self.ray3d[i]

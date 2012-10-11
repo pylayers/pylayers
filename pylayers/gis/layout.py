@@ -3069,7 +3069,8 @@ class Layout(object):
                     'ndnd': True,
                     'nded': True,
                     'linewidth': 2,
-                    'nodelist': []
+                    'nodelist': [],
+                    'figsize': (5,5)
                     }
 
         for key, value in defaults.items():
@@ -3080,7 +3081,7 @@ class Layout(object):
                 kwargs[key] = value
 
         if kwargs['fig'] == []:
-            fig = plt.figure()
+            fig = plt.figure(figsize=kwargs['figsize'])
             fig.set_frameon(True)
         else:
             fig = kwargs['fig']
