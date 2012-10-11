@@ -64,7 +64,7 @@ class Ctilde(object):
         >>> S=Simul()
         >>> S.load('default.ini')
         >>> C =Ctilde()
-        >>> C.load(S.dtud[1][1])
+        >>> C.load(pyu.getlong(S.dtud[1][1],'output'))
 
         """
         filetauk = filefield.replace('.field', '.tauk')
