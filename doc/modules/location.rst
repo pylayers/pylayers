@@ -5,7 +5,7 @@ Module location
 ===============
 
 .. toctree::
-    :max-depth: 2
+    :maxdepth: 2
 
 
     location.localization.rst
@@ -17,7 +17,7 @@ algebraic methods
 -----------------
 
 .. toctree::
-    :max-depth: 2
+    :maxdepth: 2
 
     location.algebraic.crb.rst 
 

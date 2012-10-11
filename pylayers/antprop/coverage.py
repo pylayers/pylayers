@@ -98,27 +98,25 @@ class Coverage(object):
 
 
     def cover(self):
-        """ cover
-        start the cover estimation
+        """ start the coverage calculation
 
         Examples
         --------
     
         .. plot::
-        :include-source:
+            :include-source:
 
-        >>> from pylayers.antprop.coverage import * 
-        >>> C=Coverage()
-        >>> C.cover()
-        >>> C.showPr()
+            >>> from pylayers.antprop.coverage import * 
+            >>> C=Coverage()
+            >>> C.cover()
+            >>> C.showPr()
 
         """
         self.Lwo,self.Lwp=Loss0_v2(self.L,self.grid,self.model.f,self.tx)
         self.Pr=self.txpe-self.model.PL0-self.Lwo
 
     def showPr(self):
-        """ show
-        show the map of received power
+        """ show the map of received power
         """
 
         fig=plt.figure()
