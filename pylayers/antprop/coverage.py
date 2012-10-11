@@ -112,7 +112,6 @@ class Coverage(object):
         >>> C=Coverage()
         >>> C.cover()
         >>> C.showPr()
-        >>> plt.show()
 
         """
         self.Lwo,self.Lwp=Loss0_v2(self.L,self.grid,self.model.f,self.tx)
