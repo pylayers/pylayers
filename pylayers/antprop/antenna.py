@@ -13,7 +13,7 @@ from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
 #from spharm import Spharmt,getspecindx
 from pylayers.util.project import *
-#from sphere import spherepack, Wrapec, mathtogeo
+from sphere import spherepack, Wrapec, mathtogeo
 
 from matplotlib.font_manager import FontProperties
 from mpl_toolkits.mplot3d import axes3d
@@ -32,10 +32,10 @@ def indexvsh(N):
     """
     Kmax = (N + 1) * (N + 2) / 2
     k = np.arange(Kmax)
-    n = ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
+    n = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
     m = k - n * (n + 1) / 2
     #u = vstack((k,n,m)).T
-    u = vstack((n, m)).T
+    u = np.vstack((n, m)).T
     t = u.astype(int)
     return(t)
 
@@ -61,7 +61,7 @@ def index_vsh(N, M):
 
     Kmax1 = (M + 1) * (M + 2) / 2
     k = np.arange(Kmax1)
-    n = ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
+    n = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
     m = k - n * (n + 1) / 2
     if (M < N):
         n1 = np.outer(np.arange(N - M) + M + 1, np.ones(M + 1)).ravel()
@@ -69,7 +69,7 @@ def index_vsh(N, M):
         n = np.hstack((n, n1))
         m = np.hstack((m, m1))
 
-    u = vstack((n, m)).T
+    u = np.vstack((n, m)).T
     t = u.astype(int)
     return(t)
 
@@ -103,9 +103,9 @@ def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
 
     T = (R - minr) / (maxr - minr)
     Ry = 5 + 2 * T
-    x = Ry * sin(Th) * cos(Ph) + p[0]
-    y = Ry * sin(Th) * sin(Ph) + p[1]
-    z = Ry * cos(Th) + p[2]
+    x = Ry * np.sin(Th) * np.cos(Ph) + p[0]
+    y = Ry * np.sin(Th) * np.sin(Ph) + p[1]
+    z = Ry * np.cos(Th) + p[2]
 
     Npoints = Nt * Np
     Nfaces = (Nt - 1) * Np
@@ -223,7 +223,7 @@ class SHCoeff(object):
         sh = np.shape(data)
         self.Nf = sh[0]
         kmax = sh[1]
-        nmax = ceil((-1 + np.sqrt(1 + 8 * (kmax + 1))) / 2) - 1
+        nmax = np.ceil((-1 + np.sqrt(1 + 8 * (kmax + 1))) / 2) - 1
         t = indexvsh(nmax)
         N2 = t[:, 0].max() - 1
         M2 = t[:, 1].max() - 1
@@ -497,10 +497,10 @@ class SHCoeff(object):
                     plt.ylabel('n', fontsize=fontsize)
 
         if typ == 's2':
-            if shape(self.s2)[1] <= 1:
+            if np.shape(self.s2)[1] <= 1:
                 plt.plot(fa, 10 * np.log10(abs(self.s2[:, 0])))
             else:
-                K = shape(self.s2)[1]
+                K = np.shape(self.s2)[1]
 
             kmax = k
 
@@ -521,10 +521,10 @@ class SHCoeff(object):
                 ylabel('Frequency (GHz)', fontsize=fontsize)
 
         if typ == 's3':
-            if shape(self.s3)[1] <= 1:
+            if np.shape(self.s3)[1] <= 1:
                 plt.plot(fa, 10 * np.log10(abs(self.s3[:, 0])))
             else:
-                K = shape(self.s3)[1]
+                K = np.shape(self.s3)[1]
 
             kmax = k
 
@@ -1363,8 +1363,8 @@ class Antenna(object):
         Th = np.outer(th, vp)
         Ph = np.outer(vt, ph)
 
-        X = abs(V) * np.cos(Ph) * sin(Th)
-        Y = abs(V) * np.sin(Ph) * sin(Th)
+        X = abs(V) * np.cos(Ph) * np.sin(Th)
+        Y = abs(V) * np.sin(Ph) * np.sin(Th)
         Z = abs(V) * np.cos(Th)
 
         ax.set_xlabel('X')
@@ -1414,8 +1414,9 @@ class Antenna(object):
                 phi = self.phi[m]
                 #print "n,phi=:",n,phi*180/np.pi
                 B = vec_sph(theta, phi)
-                p = R * np.array((np.cos(phi) * np.sin(theta), np.sin(
-                    phi) * np.sin(theta), np.cos(theta)))
+                p = R * np.array((np.cos(phi) * np.sin(theta),
+                                  np.sin(phi) * np.sin(theta),
+                                  np.cos(theta)))
                 fd.write('{\n')
                 ellipse(fd, p, B[0, :], B[1, :], self.Ftheta[
                     k, n, m], self.Fphi[k, n, m], N)
@@ -1543,16 +1544,16 @@ class Antenna(object):
         th = self.theta[::dsf]
         ph = self.phi[::dsf]
 
-        nt = len(th)
-        np = len(ph)
+        nth = len(th)
+        nph = len(ph)
         nf = self.Nf
 
-        if np % 2:
-            mdab = min(nt, (np + 1) / 2)
+        if (nph % 2)==1:
+            mdab = min(nth, (nph + 1) / 2)
         else:
-            mdab = min(nt, np / 2)
+            mdab = min(nth, nph / 2)
 
-        ndab = nt
+        ndab = nth
 
         Br = 1j * np.zeros((nf, ndab, mdab))
         Bi = 1j * np.zeros((nf, ndab, mdab))
@@ -1560,7 +1561,7 @@ class Antenna(object):
         Ci = 1j * np.zeros((nf, ndab, mdab))
 
         gridComp = Wrapec()
-        wvha, lvha = gridComp.vhai(nt, np)
+        wvha, lvha = gridComp.vhai(nth, nph)
 
         for k in range(nf):
             #
@@ -1571,19 +1572,19 @@ class Antenna(object):
             #
             # Fpr     Ntheta,Nphi
             #
-            brr, bir, crr, cir = gridComp.vha(nt, np, 1, 
+            brr, bir, crr, cir = gridComp.vha(nth, nph, 1, 
                                               lvha, wvha,
-                                              transpose(Fpr),
-                                              transpose(Ftr))
+                                              np.transpose(Fpr),
+                                              np.transpose(Ftr))
             #
             # Imaginary part
             #
             Fpi = self.Fphi[k][::dsf, ::dsf].imag
             Fti = self.Ftheta[k][::dsf, ::dsf].imag
-            bri, bii, cri, cii = gridComp.vha(nt, np, 1, 
+            bri, bii, cri, cii = gridComp.vha(nth, nph, 1, 
                                               lvha, wvha,
-                                              transpose(Fpi),
-                                              transpose(Fti))
+                                              np.transpose(Fpi),
+                                              np.transpose(Fti))
 
             Br[k, :, :] = brr + 1j * bri
             Bi[k, :, :] = bir + 1j * bii
@@ -1725,7 +1726,7 @@ class Antenna(object):
         # The - sign is necessary to get the good reconstruction
         #     deduced from observation
         #     May be it comes from a different definition of theta in SPHEREPACK
-        x = -cos(theta)
+        x = -np.cos(theta)
         Pmm1n, Pmp1n = AFLegendre(N, M, x)
         ind = index_vsh(N, M)
         n = ind[:, 0]
@@ -1775,17 +1776,17 @@ class Antenna(object):
         # The - sign is necessary to get the good reconstruction
         #     deduced from observation
         #     May be it comes from a different definition of theta in SPHEREPACK
-        x = -cos(theta)
+        x = -np.cos(theta)
         Pmm1n, Pmp1n = AFLegendre(N, M, x)
         ind = index_vsh(N, M)
         n = ind[:, 0]
         m = ind[:, 1]
         V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
 
-        Fth = np.dot(Br, real(V.T)) - np.dot(Bi, imag(V.T)) + \
-            np.dot(Ci, real(W.T)) + np.dot(Cr, imag(W.T))
-        Fph = -np.dot(Cr, real(V.T)) + np.dot(Ci, imag(V.T)) + \
-            np.dot(Bi, real(W.T)) + np.dot(Br, imag(W.T))
+        Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
+            np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
+        Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
+            np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
         return Fth, Fph
 
@@ -2100,7 +2101,7 @@ class Antenna(object):
             Ci = SHCoeff(typ='s2', fmin=fmin, fmax=fmax,
                          data=coeff['Ci.s2'], ind=coeff['Ci.ind'])
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
-            Nf = shape(Br.s2)[0]
+            Nf = np.shape(Br.s2)[0]
             self.fa = np.linspace(fmin, fmax, Nf)
         else:
             print _filevsh2, ' does not exist'
@@ -2142,9 +2143,9 @@ class Antenna(object):
         th = self.theta[ith]
         ph = self.phi
 
-        Fx = Fth * cos(th) * cos(ph) - Fph * sin(ph)
-        Fy = Fth * cos(th) * sin(ph) + Fph * cos(ph)
-        Fz = (-1) * Fth * sin(th)
+        Fx = Fth * np.cos(th) * np.cos(ph) - Fph * np.sin(ph)
+        Fy = Fth * np.cos(th) * np.sin(ph) + Fph * np.cos(ph)
+        Fz = (-1) * Fth * np.sin(th)
 
         return(Fx, Fy, Fz)
 
@@ -2162,9 +2163,8 @@ class Antenna(object):
         th = self.theta[ith]
         ph = self.phi
 
-        Fth = Fx * np.cos(th) * np.cos(
-            ph) + Fy * np.cos(th) * np.sin(ph) - Fz * np.sin(th)
-        Fph = -Fx * sin(ph) + Fy * cos(th)
+        Fth = Fx * np.cos(th) * np.cos(ph) + Fy * np.cos(th) * np.sin(ph) - Fz * np.sin(th)
+        Fph = -Fx * np.sin(ph) + Fy * np.cos(th)
 
         SqG = np.sqrt(np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth)))
         self.SqG[:, ith, :] = SqG
@@ -2573,7 +2573,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
          = 'english'
     """
 
-    Nf = shape(Fthr)[0]
+    Nf = np.shape(Fthr)[0]
 
     #Fthr = Fthr.reshape(Nf,len(th),len(ph))
     #Fphr = Fphr.reshape(Nf,len(th),len(ph))
@@ -2618,35 +2618,35 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     mrP = min(minPrr, minPor)
 
     # limites real Fthr, Ftho, Fphr, Fpho
-    maxTri = imag(Fthr[k, :, :]).max()
-    maxToi = imag(Ftho[k, :, :]).max()
+    maxTri = np.imag(Fthr[k, :, :]).max()
+    maxToi = np.imag(Ftho[k, :, :]).max()
     MiT = max(maxTri, maxToi)
 
-    minTri = imag(Fthr[k, :, :]).min()
-    minToi = imag(Ftho[k, :, :]).min()
+    minTri = np.imag(Fthr[k, :, :]).min()
+    minToi = np.imag(Ftho[k, :, :]).min()
     miT = min(minTri, minToi)
 
-    maxPri = imag(Fphr[k, :, :]).max()
-    maxPoi = imag(Fpho[k, :, :]).max()
+    maxPri = np.imag(Fphr[k, :, :]).max()
+    maxPoi = np.imag(Fpho[k, :, :]).max()
     MiP = max(maxPri, maxPoi)
 
-    minPri = imag(Fphr[k, :, :]).min()
-    minPoi = imag(Fpho[k, :, :]).min()
+    minPri = np.imag(Fphr[k, :, :]).min()
+    minPoi = np.imag(Fpho[k, :, :]).min()
     miP = min(minPri, minPoi)
 
     # limithes arg Fth,Fph
-    maxATr = angle(Fthr[k, :, :]).max()
-    maxATo = angle(Ftho[k, :, :]).max()
+    maxATr = np.angle(Fthr[k, :, :]).max()
+    maxATo = np.angle(Ftho[k, :, :]).max()
     maT = max(maxATr, maxATo)
-    minATr = angle(Fthr[k, :, :]).min()
-    minATo = angle(Ftho[k, :, :]).min()
+    minATr = np.angle(Fthr[k, :, :]).min()
+    minATo = np.angle(Ftho[k, :, :]).min()
     maT0 = min(minATr, minATo)
 
-    maxAPr = angle(Fphr[k, :, :]).max()
-    maxAPo = angle(Fpho[k, :, :]).max()
+    maxAPr = np.angle(Fphr[k, :, :]).max()
+    maxAPo = np.angle(Fpho[k, :, :]).max()
     maP = max(maxAPr, maxAPo)
-    minAPr = angle(Fphr[k, :, :]).min()
-    minAPo = angle(Fpho[k, :, :]).min()
+    minAPr = np.angle(Fphr[k, :, :]).min()
+    minAPo = np.angle(Fpho[k, :, :]).min()
     maP0 = min(minAPr, minAPo)
 
     ax = axes([0, 0, 360, 180])
@@ -2673,7 +2673,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         title(r'Re ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'imag':
         #pcolor(A.phi*rtd,A.theta*rtd,imag(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
-        pcolor(A.phi * rtd, A.theta * rtd, imag(Ftho[k, :, :]),
+        pcolor(A.phi * rtd, A.theta * rtd, np.imag(Ftho[k, :, :]),
                cmap=cm.hot_r, vmin=miT, vmax=MiT)
         title(r'Im ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'phase':
