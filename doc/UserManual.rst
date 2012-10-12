@@ -21,16 +21,14 @@ originaly written in C.
         + `tratotud`
         + `evalfield`
 
-It is foressen to gradually convert all those 
-different block in Python. During this 
+It is foreseen to gradually rewrite all those 
+different blocks in Python. During this 
 transition period where co-exists both python and C tools, we have to deals with
 various data formats which feed either the old version of the code or the most recent 
 one written and Python and which uses parsing of `ini` files. 
 
-The technical choice which has been made is to use `ini` files which are simple
-ascii file which can easily be parsed into Python dictionnary and which are human
-readable. One of the interest of the `ini` file is their flexibility because
-the order the data apppears in each section is not relevant. 
+`ini` files are simple Ascii files which can easily be parsed into Python dictionnary and which are human
+readable.  The order of the data which apppear in each section is not relevant.
 
 
 
