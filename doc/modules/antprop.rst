@@ -9,6 +9,8 @@ Module antprop
 .. toctree::
    :maxdepth: 2
 
+   antprop.antenna.rst
+
    antprop.channel.rst
 
    antprop.rays.rst

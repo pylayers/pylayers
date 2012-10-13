@@ -4,6 +4,7 @@ import subprocess
 import os
 import re
 import sys
+import pdb
 import numpy as np
 import scipy as sp
 import scipy.special as special
@@ -20,7 +21,6 @@ from mpl_toolkits.mplot3d import axes3d
 from scipy import sparse
 from matplotlib import rc
 from matplotlib import cm
-
 
 def indexvsh(N):
     """ indexvsh(N)
@@ -993,6 +993,104 @@ class Antenna(object):
         self.Nt = 91
         self.Np = 180
         self.Nf = 104
+    
+    def errel(self,lmax,kf,dsf):
+        """ calculates error between antenna pattern and reference pattern
+
+        This function works for a single frequency point
+
+        Parameters
+        ----------
+
+        Fth : ndarray
+            F:math:`\\theta ` reference
+        Fph : ndarray
+            F:math:`\phi` reference
+        kf  : integer
+        dsf : down sampling factor
+        lmax : maximum order
+        theta : ndarray
+            :math:`\\theta` range
+        phi: : ndarray
+            :math:`\\phi` range
+
+        Returns
+        -------
+
+        errelTh : float
+            relative error on :math:`F_{\\theta}`
+        errelPh : float 
+            relative error on :math:`F_{\phi}`
+        errel   : float 
+
+        Notes
+        -----
+
+        ..math::
+            
+            \epsilon_r^{\\theta} =
+            \frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta)(\phi)|^2}
+                 {|F_{\\theta}(\\theta,\phi)|^2}
+            
+            \epsilon_r^{\phi} =
+            \frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta)(\phi)|^2}
+                 {|F_{\\theta}(\\theta,\phi)|^2}
+
+        .. todo:: normalize wrt to original instead 
+
+        """
+        #
+        # Convert shape1 to shape 2 until order lmax
+        #
+        self.C.s1tos2(lmax)
+        #pdb.set_trace()
+        #
+        # Retrieve angular bases from the down sampling factor dsf
+        #
+        theta = self.theta[::dsf]
+        phi = self.phi[::dsf]
+        Nt = len(theta)
+        Np = len(phi)
+
+        Th = np.kron(theta,np.ones(Np))
+        Ph = np.kron(np.ones(Nt),phi)
+
+        Fth,Fph = self.Fsynth2(Th,Ph)
+
+        FTh = Fth.reshape(self.Nf,Nt,Np)
+        FPh = Fph.reshape(self.Nf,Nt,Np)
+        #
+        #  Jacobian
+        #
+        #st    = outer(sin(theta),ones(len(phi)))
+        st = np.sin(theta).reshape((len(theta),1))
+        #
+        # Construct difference between reference and reconstructed
+        #
+        dTh   = (FTh[kf,:,:] - self.Ftheta[kf,::dsf,::dsf])
+        dPh   = (FPh[kf,:,:] - self.Fphi[kf,::dsf,::dsf])
+        #
+        # squaring  + Jacobian
+        #
+        dTh2  = np.real(dTh*np.conj(dTh))*st
+        dPh2  = np.real(dPh*np.conj(dPh))*st
+
+        vTh2  = np.real(self.Ftheta[kf,::dsf,::dsf]*np.conj(self.Ftheta[kf,::dsf,::dsf]))*st
+        vPh2  = np.real(self.Fphi[kf,::dsf,::dsf]*np.conj(self.Fphi[kf,::dsf,::dsf]))*st
+
+        mvTh2 = np.sum(vTh2)
+        mvPh2 = np.sum(vPh2)
+
+        errTh = np.sum(dTh2)
+        errPh = np.sum(dPh2)
+
+        errelTh = errTh/mvTh2
+        errelPh = errPh/mvPh2
+        errel   = (errTh+errPh)/(mvTh2+mvPh2)
+
+        return(errelTh,errelPh,errel)
+
+
 
     def loadtrx(self, directory):
         """
@@ -1745,24 +1843,23 @@ class Antenna(object):
 
         return Fth, Fph
 
-    def Fsynth2(self, theta, phi):
+    def Fsynth2(self,theta, phi):
         """  pattern synthesis from shape 2 vsh coeff
 
         Parameters
         ----------
-            theta
-            phi
+        theta
+        phi
 
-        Summary
-        -------
+        Notes
+        -----
 
-        Calculate complex antenna pattern  from VSH Coefficients (shape 2)
-        for the specified direction theta,phi
-        theta and phi need to be same size
+        Calculate complex antenna pattern from VSH Coefficients (shape 2)
+        for the specified directions (theta,phi)
+        theta and phi arrays needs to have the same size
 
         """
 
-        nray = len(theta)
 
         Br = self.C.Br.s2
         Bi = self.C.Bi.s2
@@ -1771,16 +1868,19 @@ class Antenna(object):
 
         N = self.C.Br.N2
         M = self.C.Br.M2
+
         #print "N,M",N,M
         #
         # The - sign is necessary to get the good reconstruction
         #     deduced from observation
         #     May be it comes from a different definition of theta in SPHEREPACK
         x = -np.cos(theta)
+
         Pmm1n, Pmp1n = AFLegendre(N, M, x)
         ind = index_vsh(N, M)
         n = ind[:, 0]
         m = ind[:, 1]
+
         V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
 
         Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
@@ -2649,10 +2749,10 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     minAPo = np.angle(Fpho[k, :, :]).min()
     maP0 = min(minAPr, minAPo)
 
-    ax = axes([0, 0, 360, 180])
+    ax = plt.axes([0, 0, 360, 180])
     rtd = 180 / np.pi
 
-    subplot(221)
+    plt.subplot(221)
     if typ == 'modulus':
     #
     #cmap=cm.jet
@@ -2662,13 +2762,13 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     #pcolor(A.phi*rtd,A.theta*rtd,abs(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
             #
     #cmap=cm.hot
-        pcolor(A.phi * rtd, A.theta * rtd, abs(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Ftho[k, :, :]),
                cmap=cm.hot_r, vmin=mmT, vmax=MmT)
-        title(r'$|F_{\theta}|$ original', fontsize=fontsize)
+        plt.title(r'$|F_{\theta}|$ original', fontsize=fontsize)
 
     if typ == 'real':
         #pcolor(A.phi*rtd,A.theta*rtd,real(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
-        pcolor(A.phi * rtd, A.theta * rtd, np.real(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Ftho[k, :, :]),
                cmap=cm.hot_r, vmin=mrT, vmax=MrT)
         title(r'Re ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'imag':
@@ -2678,119 +2778,119 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         title(r'Im ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'phase':
         #pcolor(A.phi*rtd,A.theta*rtd,angle(Ftho[k,:,:]),cmap=cm.gray_r,vmin=maT0,vmax=maT)
-        pcolor(A.phi * rtd, A.theta * rtd, angle(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Ftho[k, :, :]),
                cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
-            title(r'Arg ($F_{\theta}$) original', fontsize=fontsize)
+            plt.title(r'Arg ($F_{\theta}$) original', fontsize=fontsize)
         else:
-            title(r'Ang ($F_{\theta}$) original', fontsize=fontsize)
-    axis([0, 360, 0, 180])
-    ylabel(r'$\theta$ (deg)', fontsize=fontsize)
-    xticks(fontsize=fontsize)
-    yticks(fontsize=fontsize)
-    cbar = colorbar()
+            plt.title(r'Ang ($F_{\theta}$) original', fontsize=fontsize)
+    plt.axis([0, 360, 0, 180])
+    plt.ylabel(r'$\theta$ (deg)', fontsize=fontsize)
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
+    cbar = plt.colorbar()
     for t in cbar.ax.get_yticklabels():
         t.set_fontsize(fontsize)
 
-    subplot(222)
+    plt.subplot(222)
     if typ == 'modulus':
-        pcolor(A.phi * rtd, A.theta * rtd, abs(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Fpho[k, :, :]),
                cmap=cm.hot_r, vmin=mmP, vmax=MmP)
-        title('$|F_{\phi}|$ original', fontsize=fontsize)
+        plt.title('$|F_{\phi}|$ original', fontsize=fontsize)
     if typ == 'real':
-        pcolor(A.phi * rtd, A.theta * rtd, np.real(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Fpho[k, :, :]),
                cmap=cm.hot_r, vmin=mrP, vmax=MrP)
-        title('Re ($F_{\phi}$) original', fontsize=fontsize)
+        plt.title('Re ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'imag':
-        pcolor(A.phi * rtd, A.theta * rtd, np.imag(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.imag(Fpho[k, :, :]),
                cmap=cm.hot_r, vmin=miP, vmax=MiP)
-        title('Im ($F_{\phi}$) original', fontsize=fontsize)
+        plt.title('Im ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'phase':
-        pcolor(A.phi * rtd, A.theta * rtd, angle(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fpho[k, :, :]),
                cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
-            title('Arg ($F_{\phi}$) original', fontsize=fontsize)
+            plt.title('Arg ($F_{\phi}$) original', fontsize=fontsize)
         else:
-            title('Ang ($F_{\phi}$) original', fontsize=fontsize)
-    axis([0, 360, 0, 180])
-    xticks(fontsize=fontsize)
-    yticks(fontsize=fontsize)
-    cbar = colorbar()
+            plt.title('Ang ($F_{\phi}$) original', fontsize=fontsize)
+    plt.axis([0, 360, 0, 180])
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
+    cbar = plt.colorbar()
     for t in cbar.ax.get_yticklabels():
         t.set_fontsize(fontsize)
 
-    subplot(223)
+    plt.subplot(223)
     if typ == 'modulus':
-        pcolor(ph * rtd, th * rtd, abs(Fthr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, abs(Fthr[k, :, :]),
                cmap=cm.hot_r, vmin=mmT, vmax=MmT)
         if lang == 'french':
-            title(r'$|F_{\theta}|$ reconstruit', fontsize=fontsize)
+            plt.title(r'$|F_{\theta}|$ reconstruit', fontsize=fontsize)
         else:
-            title(r'$|F_{\theta}|$ reconstructed', fontsize=fontsize)
+            plt.title(r'$|F_{\theta}|$ reconstructed', fontsize=fontsize)
     if typ == 'real':
-        pcolor(ph * rtd, th * rtd, np.real(Fthr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.real(Fthr[k, :, :]),
                cmap=cm.hot_r, vmin=mrT, vmax=MrT)
         if lang == 'french':
             title(r'Re ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
             title(r'Re ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'imag':
-        pcolor(ph * rtd, th * rtd, np.imag(Fthr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.imag(Fthr[k, :, :]),
                cmap=cm.hot_r, vmin=miT, vmax=MiT)
         if lang == 'french':
-            title(r'Im ($F_{\theta}$) reconstruit', fontsize=fontsize)
+            plt.title(r'Im ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
-            title(r'Im ($F_{\theta}$) reconstructed', fontsize=fontsize)
+            plt.title(r'Im ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        pcolor(A.phi * rtd, A.theta * rtd, angle(Fthr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fthr[k, :, :]),
                cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
-            title(r'Arg ($F_{\theta}$) reconstruit', fontsize=fontsize)
+            plt.title(r'Arg ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
-            title(r'Ang ($F_{\theta}$) reconstructed', fontsize=fontsize)
-    axis([0, 360, 0, 180])
-    xlabel(r'$\phi$ (deg)', fontsize=fontsize)
-    ylabel(r'$\theta$ (deg)', fontsize=fontsize)
-    xticks(fontsize=fontsize)
-    yticks(fontsize=fontsize)
-    cbar = colorbar()
+            plt.title(r'Ang ($F_{\theta}$) reconstructed', fontsize=fontsize)
+    plt.axis([0, 360, 0, 180])
+    plt.xlabel(r'$\phi$ (deg)', fontsize=fontsize)
+    plt.ylabel(r'$\theta$ (deg)', fontsize=fontsize)
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
+    cbar = plt.colorbar()
     for t in cbar.ax.get_yticklabels():
         t.set_fontsize(fontsize)
 
-    subplot(224)
+    plt.subplot(224)
     if typ == 'modulus':
-        pcolor(ph * rtd, th * rtd, abs(Fphr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, abs(Fphr[k, :, :]),
                cmap=cm.hot_r, vmin=mmP, vmax=MmP)
         if lang == 'french':
-            title('$|F_{\phi}|$ reconstruit', fontsize=fontsize)
+            plt.title('$|F_{\phi}|$ reconstruit', fontsize=fontsize)
         else:
-            title('$|F_{\phi}|$ reconstructed', fontsize=fontsize)
+            plt.title('$|F_{\phi}|$ reconstructed', fontsize=fontsize)
     if typ == 'real':
-        pcolor(ph * rtd, th * rtd, np.real(Fphr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.real(Fphr[k, :, :]),
                cmap=cm.hot_r, vmin=mrP, vmax=MrP)
         if lang == 'french':
-            title('Re ($F_{\phi}$) reconstruit', fontsize=fontsize)
+            plt.title('Re ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
-            title('Re ($F_{\phi}$) reconstructed', fontsize=fontsize)
+            plt.title('Re ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'imag':
-        pcolor(ph * rtd, th * rtd, np.imag(Fphr[k, :, :]),
+        plt.pcolor(ph * rtd, th * rtd, np.imag(Fphr[k, :, :]),
                cmap=cm.hot_r, vmin=miP, vmax=MiP)
         if lang == 'french':
-            title('Im ($F_{\phi}$) reconstruit', fontsize=fontsize)
+            plt.title('Im ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
-            title('Im ($F_{\phi}$) reconstructed', fontsize=fontsize)
+            plt.title('Im ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        pcolor(A.phi * rtd, A.theta * rtd, angle(Fphr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fphr[k, :, :]),
                cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
-            title('Arg ($F_{\phi}$) reconstruit', fontsize=fontsize)
+            plt.title('Arg ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
-            title('Ang ($F_{\phi}$) reconstructed', fontsize=fontsize)
-    axis([0, 360, 0, 180])
-    xlabel(r'$\phi$ (deg)', fontsize=fontsize)
-    xticks(fontsize=fontsize)
-    yticks(fontsize=fontsize)
-    cbar = colorbar()
+            plt.title('Ang ($F_{\phi}$) reconstructed', fontsize=fontsize)
+    plt.axis([0, 360, 0, 180])
+    plt.xlabel(r'$\phi$ (deg)', fontsize=fontsize)
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
+    cbar = plt.colorbar()
     for t in cbar.ax.get_yticklabels():
         t.set_fontsize(fontsize)
 
