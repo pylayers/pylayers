@@ -9,7 +9,7 @@ import numpy as np
 import scipy as sp
 import scipy.special as special
 from scipy import io
-import matplotlib.pyplot as plt
+import matplotlib.pylab as plt
 from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
 #from spharm import Spharmt,getspecindx
@@ -21,6 +21,7 @@ from mpl_toolkits.mplot3d import axes3d
 from scipy import sparse
 from matplotlib import rc
 from matplotlib import cm
+
 
 def indexvsh(N):
     """ indexvsh(N)
@@ -170,8 +171,8 @@ class SHCoeff(object):
          ----------
          typ : string
             's1' | 's2' | 's3'
-         fmin : float 
-         fmax : float 
+         fmin : float
+         fmax : float
          data : ndarray
          ind  : ndarray
          k    : ndarray
@@ -253,11 +254,13 @@ class SHCoeff(object):
 
         shape 1   array [ Nf x (N+1) x (M+1) ]
         shape 2   array [ Nf x (N+1)*(M+1)   ]
+
         n = 0...N2
         m = 0...N2
 
         Parameters
         ----------
+
         N2 : int <= N1
             shape 1 has 3 axis - shape 2 has 2 axis
             by default all s1 coefficients are kept N2=-1 means N2=min(N1,M1) because M2 must be equal to N2
@@ -325,12 +328,12 @@ class SHCoeff(object):
 
         if typ == 2:
 
-            file_ind = pyu.getlong("outfile_i2.txt",pstruc['DIRANT'])
+            file_ind = pyu.getlong("outfile_i2.txt", pstruc['DIRANT'])
             aux = load(file_ind)
             ind = aux[0]
             ind2 = np.array([aux[1], aux[2]])
 
-            file_s2 = pyu.getlong("outfile_s2.txt",pstruc['DIRANT'])
+            file_s2 = pyu.getlong("outfile_s2.txt", pstruc['DIRANT'])
             s2 = load(file_s2)
 
             self.s2p = s2
@@ -343,13 +346,13 @@ class SHCoeff(object):
 
         if typ == 3:
 
-            file_ind = pyu.getlong("outfile_i3.txt",pstruc['DIRANT'])
+            file_ind = pyu.getlong("outfile_i3.txt", pstruc['DIRANT'])
             aux = load(file_ind)
             ind = aux[0]
             ind3 = np.array([aux[1], aux[2]])
             k2 = aux[3]
 
-            file_s3 = pyu.getlong("outfile_s3.txt",pstruc['DIRANT'])
+            file_s3 = pyu.getlong("outfile_s3.txt", pstruc['DIRANT'])
             s3 = load(file_s3)
 
             a = insert(self.ind3, ind, ind3, axis=0)
@@ -434,31 +437,34 @@ class SHCoeff(object):
 
     def show(self,
              typ='s1',
-             k=1,
-             N=-1,
-             M=-1,
-             seuildb=50,
-             titre='SHC',
-             xl=True,
-             yl=True,
+             k = 0,
+             N = -1,
+             M = -1,
+             kmax = 1000,
+             seuildb = 50,
+             titre = 'SHC',
+             xl = True,
+             yl = True,
              fontsize=14,
-             dB=True,
-             cmap=cm.hot_r,
-             anim=True):
+             dB = True,
+             cmap = plt.cm.hot_r,
+             anim = True):
         """ show coeff
 
         Parameters
         ----------
-        typ =  's1' : shape 1  (Nf , N , M )
-               's2' : shape 2  (Nf , N*M   )
-               's3' : shape 3  (Nf , K )  T ( K x 2 )
+        typ :  string 
+            default ('s1')
+            's1'  shape 1  (Nf , N , M )
+            's2'  shape 2  (Nf , N*M   )
+            's3'  shape 3  (Nf , K )  T ( K x 2 )
 
-        if typ = 's1' : k = frequency index
+        k  : integer 
+            frequency index default 0
 
         N, M = maximal value for degree, mode respectively
         (not to be defined if 's2' or 's3')
 
-        if typ = 's2' or 's3' : k = maximal value for k index
         """
 
         fa = np.linspace(self.fmin, self.fmax, self.Nf)
@@ -467,28 +473,28 @@ class SHCoeff(object):
         if M == -1:
             M = self.M1
         if typ == 's1':
-            Mg, Ng = meshgrid(np.arange(M), np.arange(N))
+            Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
             if anim:
-                fig = gcf()
+                fig = plt.gcf()
                 ax = fig.gca()
-                v = abs(self.s1[k, 0:N, 0:M])
+                v = np.abs(self.s1[k, 0:N, 0:M])
                 if dB:
                     v = 20 * np.log10(v)
-                p = scatter(Mg, Ng, c=v, s=30, cmap=cmap,
+                p = plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap,
                             linewidth=0, vmin=-seuildb, vmax=0)
                 plt.colorbar()
                 plt.draw()
             else:
-                v = abs(self.s1[k, 0:N, 0:M])
+                v = np.abs(self.s1[k, 0:N, 0:M])
                 if dB:
                     vdB = 20 * np.log10(v + 1e-15)
                     plt.scatter(Mg, Ng, c=vdB, s=30, cmap=cmap, linewidth=0,
                                 vmin=-seuildb, vmax=0)
-                    title(titre)
+                    plt.title(titre)
                     plt.colorbar()
                 else:
                     plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap, linewidth=0)
-                    title(titre)
+                    plt.title(titre)
                     plt.colorbar()
 
                 if xl:
@@ -501,9 +507,8 @@ class SHCoeff(object):
                 plt.plot(fa, 10 * np.log10(abs(self.s2[:, 0])))
             else:
                 K = np.shape(self.s2)[1]
-
-            kmax = k
-
+            
+            kmax = min(kmax,K)
             db = 20 * np.log10(abs(self.s2[:, 0:kmax] + 1e-15))
             col = 1 - (db > -seuildb) * (db + seuildb) / seuildb
             #
@@ -513,12 +518,11 @@ class SHCoeff(object):
             #
             #color
             #
-            pcolor(np.arange(K + 1)[0:kmax], fa, col,
-                   cmap=cm.hot, vmin=0.0, vmax=1.0)
+            plt.pcolor(np.arange(K + 1)[0:kmax], fa, col, cmap=plt.cm.hot, vmin=0.0, vmax=1.0)
             if xl:
-                xlabel('index', fontsize=26)
+                plt.xlabel('index', fontsize=26)
             if yl:
-                ylabel('Frequency (GHz)', fontsize=fontsize)
+                plt.ylabel('Frequency (GHz)', fontsize=fontsize)
 
         if typ == 's3':
             if np.shape(self.s3)[1] <= 1:
@@ -526,28 +530,27 @@ class SHCoeff(object):
             else:
                 K = np.shape(self.s3)[1]
 
-            kmax = k
-
+            kmax = min(kmax,K)
             db = 20 * np.log10(abs(self.s3[:, 0:kmax] + 1e-15))
             col = 1 - (db > -seuildb) * (db + seuildb) / seuildb
-            pcolor(np.arange(K + 1)[0:kmax], fa, col,
-                   cmap=cm.hot, vmin=0.0, vmax=1.0)
+            plt.pcolor(np.arange(K + 1)[0:kmax], fa, col,
+                   cmap=plt.cm.hot, vmin=0.0, vmax=1.0)
             if xl:
-                xlabel('index', fontsize=fontsize)
+                plt.xlabel('index', fontsize=fontsize)
             if yl:
-                ylabel('Frequency (GHz)', fontsize=fontsize)
+                plt.ylabel('Frequency (GHz)', fontsize=fontsize)
 
                 #echelle=[str(0), str(-10), str(-20), str(-30), str(-40), str(-50)]
-            echelle = [str(0), str(-seuildb + 40), str(-seuildb + 30), str(
-                -seuildb + 20), str(-seuildb + 10), str(-seuildb)]
-            cbar = colorbar(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1])
+            echelle = [str(0), str(-seuildb + 40), str(-seuildb + 30), 
+                       str(-seuildb + 20), str(-seuildb + 10), str(-seuildb)]
+            cbar = plt.colorbar(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1])
             cbar.ax.set_yticklabels(echelle)
             cbar.ax.set_ylim(1, 0)
             for t in cbar.ax.get_yticklabels():
                 t.set_fontsize(fontsize)
-            xticks(fontsize=fontsize)
-            yticks(fontsize=fontsize)
-            title(titre, fontsize=fontsize + 2)
+            plt.xticks(fontsize=fontsize)
+            plt.yticks(fontsize=fontsize)
+            plt.title(titre, fontsize=fontsize + 2)
 
 
 class VSHCoeff(object):
@@ -602,7 +605,7 @@ class VSHCoeff(object):
         print "-------------"
         self.Ci.info()
 
-    def show(self, typ='s1', k=1, N=-1, M=-1, seuildb=50, animate=False):
+    def show(self, typ='s1', k=1, N=-1, M=-1, kmax = 1000, seuildb=50, animate=False):
         """ show VSH coeff
 
         Parameters
@@ -611,6 +614,8 @@ class VSHCoeff(object):
             {'s1','s2','s3'}
         k  : int
             frequency index
+        kmax : int 
+            maximum of the unfolded coefficient axes
         N  : int
         M  : int
         seuildB  : float
@@ -621,39 +626,40 @@ class VSHCoeff(object):
         if not animate:
             plt.subplot(221)
             titre = '$|Br_{n}^{(m)}|$'
-            self.Br.show(typ, k, N, M, seuildb, titre, xl=False, yl=True)
+            self.Br.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=True)
             plt.subplot(222)
             titre = '$|Bi_{n}^{(m)}|$'
-            self.Bi.show(typ, k, N, M, seuildb, titre, xl=False, yl=False)
+            self.Bi.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=False)
             plt.subplot(223)
             titre = '$|Cr_{n}^{(m)}|$'
-            self.Cr.show(typ, k, N, M, seuildb, titre, xl=True, yl=True)
+            self.Cr.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=True)
             plt.subplot(224)
             titre = '$|Ci_{n}^{(m)}|$'
-            self.Ci.show(typ, k, N, M, seuildb, titre, xl=True, yl=False)
+            self.Ci.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=False)
         else:
             for k in np.arange(self.Br.Nf):
                 plt.subplot(221)
                 titre = '$|Br_{n}^{(m)}|$'
-                self.Br.show(typ, k, N, M, seuildb, titre, xl=False, yl=True)
+                self.Br.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=True)
                 plt.subplot(222)
                 titre = '$|Bi_{n}^{(m)}|$'
-                self.Bi.show(typ, k, N, M, seuildb, titre, xl=False, yl=False)
+                self.Bi.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=False)
                 plt.subplot(223)
                 titre = '$|Cr_{n}^{(m)}|$'
-                self.Cr.show(typ, k, N, M, seuildb, titre, xl=True, yl=True)
+                self.Cr.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=True)
                 plt.subplot(224)
                 titre = '$|Ci_{n}^{(m)}|$'
-                self.Ci.show(typ, k, N, M, seuildb, titre, xl=True, yl=False)
+                self.Ci.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=False)
     #    show()
 
     def s1tos2(self, N2=-1):
-        """ convert shape 1 to shape 2 
+        """ convert shape 1 to shape 2
 
         Parameters
         ----------
         N2 : max level
             default (-1 means all values)
+
         """
         self.Bi.s1tos2(N2)
         self.Br.s1tos2(N2)
@@ -661,25 +667,28 @@ class VSHCoeff(object):
         self.Cr.s1tos2(N2)
 
     def s2tos3(self, threshold=1e-20):
-        """ convert shape 2 to shape 3
+        """ convert vector spherical coefficient from shape 2 to shape 3
 
         Parameters
         ----------
 
-        threshold : float 
+        threshold : float
+            default 1e-20 
 
 
-           Energy thresholded coefficients
+        Energy thresholded coefficients
+        
+
         """
 
-        EBr = sum(abs(self.Br.s2) ** 2, axis=0)
-        EBi = sum(abs(self.Bi.s2) ** 2, axis=0)
-        ECr = sum(abs(self.Cr.s2) ** 2, axis=0)
-        ECi = sum(abs(self.Ci.s2) ** 2, axis=0)
+        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0)
+        EBi = np.sum(np.abs(self.Bi.s2) ** 2, axis=0)
+        ECr = np.sum(np.abs(self.Cr.s2) ** 2, axis=0)
+        ECi = np.sum(np.abs(self.Ci.s2) ** 2, axis=0)
 
         E = EBr + EBi + ECr + ECi
 
-        ind = find(E > (E.max() * threshold))
+        ind = np.nonzero(E > (E.max() * threshold))[0]
 
         self.Br.ind3 = self.Br.ind2[ind]
         self.Br.s3 = self.Br.s2[:, ind]
@@ -880,12 +889,13 @@ class Antenna(object):
         .. plot::
             :include-source:
 
-
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.antenna import *
             >>> A = Antenna('mat','S1R1.mat','ant/UWBAN/Matfile')
-            >>> pol = plt.polar(A.phi,abs(A.Ftheta[10,45,:]))
-            >>> txt = plt.title('test loadmat')
+            >>> pol1 = plt.polar(A.phi,abs(A.Ftheta[10,45,:]),'b')
+            >>> pol2 = plt.polar(A.phi,abs(A.Ftheta[20,45,:]),'r')
+            >>> pol3 = plt.polar(A.phi,abs(A.Ftheta[30,45,:]),'g')
+            >>> txt = plt.title('S1R1 antenna : st loadmat')
             >>> plt.show()
 
 
@@ -993,8 +1003,8 @@ class Antenna(object):
         self.Nt = 91
         self.Np = 180
         self.Nf = 104
-    
-    def errel(self,lmax,kf,dsf):
+
+    def errel(self, lmax, kf, dsf):
         """ calculates error between antenna pattern and reference pattern
 
         This function works for a single frequency point
@@ -1002,48 +1012,40 @@ class Antenna(object):
         Parameters
         ----------
 
-        Fth : ndarray
-            F:math:`\\theta ` reference
-        Fph : ndarray
-            F:math:`\phi` reference
+        lmax : integer
+            maximum order
         kf  : integer
+            frequency index
         dsf : down sampling factor
-        lmax : maximum order
-        theta : ndarray
-            :math:`\\theta` range
-        phi: : ndarray
-            :math:`\\phi` range
 
         Returns
         -------
 
         errelTh : float
             relative error on :math:`F_{\\theta}`
-        errelPh : float 
+        errelPh : float
             relative error on :math:`F_{\phi}`
-        errel   : float 
+        errel   : float
 
         Notes
         -----
 
-        ..math::
-            
+        .. math::
+
             \epsilon_r^{\\theta} =
-            \frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta)(\phi)|^2}
-                 {|F_{\\theta}(\\theta,\phi)|^2}
-            
-            \epsilon_r^{\phi} =
-            \frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta)(\phi)|^2}
+            \\frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta)(\phi)|^2}
                  {|F_{\\theta}(\\theta,\phi)|^2}
 
-        .. todo:: normalize wrt to original instead 
+            \epsilon_r^{\phi} =
+            \\frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta)(\phi)|^2}
+                 {|F_{\\theta}(\\theta,\phi)|^2}
+
 
         """
         #
         # Convert shape1 to shape 2 until order lmax
         #
         self.C.s1tos2(lmax)
-        #pdb.set_trace()
         #
         # Retrieve angular bases from the down sampling factor dsf
         #
@@ -1052,31 +1054,33 @@ class Antenna(object):
         Nt = len(theta)
         Np = len(phi)
 
-        Th = np.kron(theta,np.ones(Np))
-        Ph = np.kron(np.ones(Nt),phi)
+        Th = np.kron(theta, np.ones(Np))
+        Ph = np.kron(np.ones(Nt), phi)
 
-        Fth,Fph = self.Fsynth2(Th,Ph)
+        Fth, Fph = self.Fsynth2(Th, Ph)
 
-        FTh = Fth.reshape(self.Nf,Nt,Np)
-        FPh = Fph.reshape(self.Nf,Nt,Np)
+        FTh = Fth.reshape(self.Nf, Nt, Np)
+        FPh = Fph.reshape(self.Nf, Nt, Np)
         #
         #  Jacobian
         #
         #st    = outer(sin(theta),ones(len(phi)))
-        st = np.sin(theta).reshape((len(theta),1))
+        st = np.sin(theta).reshape((len(theta), 1))
         #
         # Construct difference between reference and reconstructed
         #
-        dTh   = (FTh[kf,:,:] - self.Ftheta[kf,::dsf,::dsf])
-        dPh   = (FPh[kf,:,:] - self.Fphi[kf,::dsf,::dsf])
+        dTh = (FTh[kf, :, :] - self.Ftheta[kf, ::dsf, ::dsf])
+        dPh = (FPh[kf, :, :] - self.Fphi[kf, ::dsf, ::dsf])
         #
         # squaring  + Jacobian
         #
-        dTh2  = np.real(dTh*np.conj(dTh))*st
-        dPh2  = np.real(dPh*np.conj(dPh))*st
+        dTh2 = np.real(dTh * np.conj(dTh)) * st
+        dPh2 = np.real(dPh * np.conj(dPh)) * st
 
-        vTh2  = np.real(self.Ftheta[kf,::dsf,::dsf]*np.conj(self.Ftheta[kf,::dsf,::dsf]))*st
-        vPh2  = np.real(self.Fphi[kf,::dsf,::dsf]*np.conj(self.Fphi[kf,::dsf,::dsf]))*st
+        vTh2 = np.real(self.Ftheta[kf, ::dsf, ::dsf] * np.conj(
+            self.Ftheta[kf, ::dsf, ::dsf])) * st
+        vPh2 = np.real(self.Fphi[kf, ::dsf, ::dsf] * np.conj(
+            self.Fphi[kf, ::dsf, ::dsf])) * st
 
         mvTh2 = np.sum(vTh2)
         mvPh2 = np.sum(vPh2)
@@ -1084,13 +1088,11 @@ class Antenna(object):
         errTh = np.sum(dTh2)
         errPh = np.sum(dPh2)
 
-        errelTh = errTh/mvTh2
-        errelPh = errPh/mvPh2
-        errel   = (errTh+errPh)/(mvTh2+mvPh2)
+        errelTh = errTh / mvTh2
+        errelPh = errPh / mvPh2
+        errel = (errTh + errPh) / (mvTh2 + mvPh2)
 
-        return(errelTh,errelPh,errel)
-
-
+        return(errelTh, errelPh, errel)
 
     def loadtrx(self, directory):
         """
@@ -1388,7 +1390,7 @@ class Antenna(object):
         ax.legend()
 
     def show3_geom(self, k=0, typ='Gain', mode='linear', silent=False):
-        """ show3 geomview 
+        """ show3 geomview
 
         Parameters
         ----------
@@ -1497,7 +1499,7 @@ class Antenna(object):
 
         """
         _filename = 'Polar' + str(10000 + k)[1:] + '.list'
-        filename = pyu.getlong(_filename,pstruc['DIRGEOM'])
+        filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
         fd = open(filename, "w")
         fd.write("LIST\n")
         Nt = self.Nt
@@ -1541,7 +1543,8 @@ class Antenna(object):
 
         The mse is evaluated on both polarization and normalized over the energy of each
         original pattern.
-        The function return the maximum between those two errors
+
+        The function returns the maximum between those two errors
 
         N is a parameter which allows to suppress value at the pole for the calculation of the error
         if N=0 all values are kept else   N < n < Nt - N
@@ -1575,8 +1578,7 @@ class Antenna(object):
 
         errth = Ftho - Fthr
         errph = Fpho - Fphr
-        Err = np.real(np.sqrt(np.dot(
-            np.conj(errth), errth) + np.dot(np.conj(errph), errph)))
+        Err = np.real(np.sqrt(np.dot(np.conj(errth), errth) + np.dot(np.conj(errph), errph)))
 
         Errth = np.real(np.sqrt(np.dot(np.conj(errth), errth)))
         Errph = np.real(np.sqrt(np.dot(np.conj(errph), errph)))
@@ -1588,6 +1590,29 @@ class Antenna(object):
         Err_rel = Err / Eo
 
         return Err_rel, Errth_rel, Errph_rel
+
+    def getdelay(self,freq,delayCandidates = np.arange(-10,10,0.001)):
+        """ getelectrical delay
+
+        Parameters
+        ----------
+        delayCandidates : ndarray
+            default np.arange(-10,10,0.001)
+
+        Returns
+        -------
+        electricalDelay  : float
+
+        Author : Troels Pedersen (Aalborg University)
+                 B.Uguen
+        """
+        maxPowerInd  = np.unravel_index(np.argmax(abs(self.Ftheta)),np.shape(self.Ftheta))
+        electricalDelay  = delayCandidates[np.argmax(abs(
+            np.dot(self.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]
+                ,np.exp(2j*np.pi*freq.reshape(len(freq),1)
+                  *delayCandidates.reshape(1,len(delayCandidates))))
+                ))]
+        return(electricalDelay)
 
     def elec_delay(self):
         """ apply an electrical delay
@@ -1646,7 +1671,7 @@ class Antenna(object):
         nph = len(ph)
         nf = self.Nf
 
-        if (nph % 2)==1:
+        if (nph % 2) == 1:
             mdab = min(nth, (nph + 1) / 2)
         else:
             mdab = min(nth, nph / 2)
@@ -1670,7 +1695,7 @@ class Antenna(object):
             #
             # Fpr     Ntheta,Nphi
             #
-            brr, bir, crr, cir = gridComp.vha(nth, nph, 1, 
+            brr, bir, crr, cir = gridComp.vha(nth, nph, 1,
                                               lvha, wvha,
                                               np.transpose(Fpr),
                                               np.transpose(Ftr))
@@ -1679,7 +1704,7 @@ class Antenna(object):
             #
             Fpi = self.Fphi[k][::dsf, ::dsf].imag
             Fti = self.Ftheta[k][::dsf, ::dsf].imag
-            bri, bii, cri, cii = gridComp.vha(nth, nph, 1, 
+            bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
                                               lvha, wvha,
                                               np.transpose(Fpi),
                                               np.transpose(Fti))
@@ -1843,7 +1868,7 @@ class Antenna(object):
 
         return Fth, Fph
 
-    def Fsynth2(self,theta, phi):
+    def Fsynth2(self, theta, phi):
         """  pattern synthesis from shape 2 vsh coeff
 
         Parameters
@@ -1859,7 +1884,6 @@ class Antenna(object):
         theta and phi arrays needs to have the same size
 
         """
-
 
         Br = self.C.Br.s2
         Bi = self.C.Bi.s2
@@ -2036,7 +2060,7 @@ class Antenna(object):
         the significant vsh coefficients in shape 3,
         in order to obtain a reconstruction maximal error =  emax
 
-        This function requires a trx file reading before being executed
+        This function requires a reading of .trx file before being executed
 
         """
 
@@ -2104,13 +2128,13 @@ class Antenna(object):
             io.savemat(filevsh3, coeff, appendmat=False)
 
     def loadvsh3(self):
-        """ Load antenna's vsh3 file 
-        
+        """ Load antenna's vsh3 file
+
             it contains a thesholded version of vsh coefficients in shape 3
         """
 
         _filevsh3 = self._filename
-        filevsh3 = pyu.getlong(_filevsh3,pstruc['DIRANT'])
+        filevsh3 = pyu.getlong(_filevsh3, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh3):
             coeff = io.loadmat(filevsh3, appendmat=False)
@@ -2148,7 +2172,7 @@ class Antenna(object):
         # create vsh2 file
 
         _filevsh2 = self._filename.replace('.trx', '.vsh2')
-        filevsh2 = pyu.getlong(_filevsh2,pstruc['DIRANT'])
+        filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
             print filevsh2, ' already exist'
@@ -2178,7 +2202,7 @@ class Antenna(object):
         """
 
         _filevsh2 = self._filename
-        filevsh2 = pyu.getlong(_filevsh2,pstruc['DIRANT'])
+        filevsh2 = pyu.getlong(_filevsh2, pstruc['DIRANT'])
 
         if os.path.isfile(filevsh2):
             coeff = io.loadmat(filevsh2, appendmat=False)
@@ -2212,7 +2236,7 @@ class Antenna(object):
         """
 
         _filevsh3 = self._filename
-        filevsh3 = getlong(_filevsh3,pstruc['DIRANT'])
+        filevsh3 = getlong(_filevsh3, pstruc['DIRANT'])
         fmin = 2.
         fmax = 8.
         if os.path.isfile(filevsh3):
@@ -2263,7 +2287,8 @@ class Antenna(object):
         th = self.theta[ith]
         ph = self.phi
 
-        Fth = Fx * np.cos(th) * np.cos(ph) + Fy * np.cos(th) * np.sin(ph) - Fz * np.sin(th)
+        Fth = Fx * np.cos(th) * np.cos(
+            ph) + Fy * np.cos(th) * np.sin(ph) - Fz * np.sin(th)
         Fph = -Fx * np.sin(ph) + Fy * np.cos(th)
 
         SqG = np.sqrt(np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth)))
@@ -2763,13 +2788,13 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
             #
     #cmap=cm.hot
         plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Ftho[k, :, :]),
-               cmap=cm.hot_r, vmin=mmT, vmax=MmT)
+                   cmap=cm.hot_r, vmin=mmT, vmax=MmT)
         plt.title(r'$|F_{\theta}|$ original', fontsize=fontsize)
 
     if typ == 'real':
         #pcolor(A.phi*rtd,A.theta*rtd,real(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
         plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Ftho[k, :, :]),
-               cmap=cm.hot_r, vmin=mrT, vmax=MrT)
+                   cmap=cm.hot_r, vmin=mrT, vmax=MrT)
         title(r'Re ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'imag':
         #pcolor(A.phi*rtd,A.theta*rtd,imag(Ftho[k,:,:]),cmap=cm.gray_r,vmin=0,vmax=mmT)
@@ -2779,7 +2804,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     if typ == 'phase':
         #pcolor(A.phi*rtd,A.theta*rtd,angle(Ftho[k,:,:]),cmap=cm.gray_r,vmin=maT0,vmax=maT)
         plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Ftho[k, :, :]),
-               cmap=cm.hot_r, vmin=maT0, vmax=maT)
+                   cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) original', fontsize=fontsize)
         else:
@@ -2795,19 +2820,19 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     plt.subplot(222)
     if typ == 'modulus':
         plt.pcolor(A.phi * rtd, A.theta * rtd, abs(Fpho[k, :, :]),
-               cmap=cm.hot_r, vmin=mmP, vmax=MmP)
+                   cmap=cm.hot_r, vmin=mmP, vmax=MmP)
         plt.title('$|F_{\phi}|$ original', fontsize=fontsize)
     if typ == 'real':
         plt.pcolor(A.phi * rtd, A.theta * rtd, np.real(Fpho[k, :, :]),
-               cmap=cm.hot_r, vmin=mrP, vmax=MrP)
+                   cmap=cm.hot_r, vmin=mrP, vmax=MrP)
         plt.title('Re ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'imag':
         plt.pcolor(A.phi * rtd, A.theta * rtd, np.imag(Fpho[k, :, :]),
-               cmap=cm.hot_r, vmin=miP, vmax=MiP)
+                   cmap=cm.hot_r, vmin=miP, vmax=MiP)
         plt.title('Im ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'phase':
         plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fpho[k, :, :]),
-               cmap=cm.hot_r, vmin=maP0, vmax=maP)
+                   cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) original', fontsize=fontsize)
         else:
@@ -2822,28 +2847,28 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     plt.subplot(223)
     if typ == 'modulus':
         plt.pcolor(ph * rtd, th * rtd, abs(Fthr[k, :, :]),
-               cmap=cm.hot_r, vmin=mmT, vmax=MmT)
+                   cmap=cm.hot_r, vmin=mmT, vmax=MmT)
         if lang == 'french':
             plt.title(r'$|F_{\theta}|$ reconstruit', fontsize=fontsize)
         else:
             plt.title(r'$|F_{\theta}|$ reconstructed', fontsize=fontsize)
     if typ == 'real':
         plt.pcolor(ph * rtd, th * rtd, np.real(Fthr[k, :, :]),
-               cmap=cm.hot_r, vmin=mrT, vmax=MrT)
+                   cmap=cm.hot_r, vmin=mrT, vmax=MrT)
         if lang == 'french':
             title(r'Re ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
             title(r'Re ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'imag':
         plt.pcolor(ph * rtd, th * rtd, np.imag(Fthr[k, :, :]),
-               cmap=cm.hot_r, vmin=miT, vmax=MiT)
+                   cmap=cm.hot_r, vmin=miT, vmax=MiT)
         if lang == 'french':
             plt.title(r'Im ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
             plt.title(r'Im ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
         plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fthr[k, :, :]),
-               cmap=cm.hot_r, vmin=maT0, vmax=maT)
+                   cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) reconstruit', fontsize=fontsize)
         else:
@@ -2860,28 +2885,28 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
     plt.subplot(224)
     if typ == 'modulus':
         plt.pcolor(ph * rtd, th * rtd, abs(Fphr[k, :, :]),
-               cmap=cm.hot_r, vmin=mmP, vmax=MmP)
+                   cmap=cm.hot_r, vmin=mmP, vmax=MmP)
         if lang == 'french':
             plt.title('$|F_{\phi}|$ reconstruit', fontsize=fontsize)
         else:
             plt.title('$|F_{\phi}|$ reconstructed', fontsize=fontsize)
     if typ == 'real':
         plt.pcolor(ph * rtd, th * rtd, np.real(Fphr[k, :, :]),
-               cmap=cm.hot_r, vmin=mrP, vmax=MrP)
+                   cmap=cm.hot_r, vmin=mrP, vmax=MrP)
         if lang == 'french':
             plt.title('Re ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
             plt.title('Re ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'imag':
         plt.pcolor(ph * rtd, th * rtd, np.imag(Fphr[k, :, :]),
-               cmap=cm.hot_r, vmin=miP, vmax=MiP)
+                   cmap=cm.hot_r, vmin=miP, vmax=MiP)
         if lang == 'french':
             plt.title('Im ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
             plt.title('Im ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
         plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fphr[k, :, :]),
-               cmap=cm.hot_r, vmin=maP0, vmax=maP)
+                   cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) reconstruit', fontsize=fontsize)
         else:
