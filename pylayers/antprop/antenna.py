@@ -1004,7 +1004,7 @@ class Antenna(object):
         self.Np = 180
         self.Nf = 104
 
-    def errel(self, lmax, kf, dsf):
+    def errel(self, lmax, kf, dsf, typ='s3'):
         """ calculates error between antenna pattern and reference pattern
 
         This function works for a single frequency point
@@ -1043,10 +1043,6 @@ class Antenna(object):
 
         """
         #
-        # Convert shape1 to shape 2 until order lmax
-        #
-        self.C.s1tos2(lmax)
-        #
         # Retrieve angular bases from the down sampling factor dsf
         #
         theta = self.theta[::dsf]
@@ -1057,7 +1053,12 @@ class Antenna(object):
         Th = np.kron(theta, np.ones(Np))
         Ph = np.kron(np.ones(Nt), phi)
 
-        Fth, Fph = self.Fsynth2(Th, Ph)
+        if typ =='s1':
+            Fth, Fph = self.Fsynth1(Th, Ph)
+        if typ =='s2':
+            Fth, Fph = self.Fsynth2(Th, Ph)
+        if typ =='s3':
+            Fth, Fph = self.Fsynth3(Th, Ph)
 
         FTh = Fth.reshape(self.Nf, Nt, Np)
         FPh = Fph.reshape(self.Nf, Nt, Np)
@@ -1823,8 +1824,9 @@ class Antenna(object):
         print "FPh = Fph.reshape(A.Nf,A.Nt,A.Np)"
         print "compdiag(20,A,A.theta,A.phi,FTh,FPh) "
 
-    def Fsynth(self, theta, phi, k=0):
-        """ calculate complex antenna pattern  from VSH Coefficients (shape 2)
+    #def Fsynth1(self, theta, phi, k=0):
+    def Fsynth1(self, theta, phi):
+        """ calculate complex antenna pattern  from VSH Coefficients (shape 1)
 
         Parameters
         ----------
@@ -1837,10 +1839,15 @@ class Antenna(object):
 
         nray = len(theta)
 
-        Br = self.C.Br.s1[k, :, :]
-        Bi = self.C.Bi.s1[k, :, :]
-        Cr = self.C.Cr.s1[k, :, :]
-        Ci = self.C.Ci.s1[k, :, :]
+        #Br = self.C.Br.s1[k, :, :]
+        #Bi = self.C.Bi.s1[k, :, :]
+        #Cr = self.C.Cr.s1[k, :, :]
+        #Ci = self.C.Ci.s1[k, :, :]
+
+        Br = self.C.Br.s1[:, :, :]
+        Bi = self.C.Bi.s1[:, :, :]
+        Cr = self.C.Cr.s1[:, :, :]
+        Ci = self.C.Ci.s1[:, :, :]
 
         N = self.C.Br.N1
         M = self.C.Br.M1
@@ -1855,16 +1862,35 @@ class Antenna(object):
         n = ind[:, 0]
         m = ind[:, 1]
         V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        #
+        # broadcasting along frequency axis
+        #
+        V = np.expand_dims(V,0)
+        W = np.expand_dims(V,0)
+        pdb.set_trace()
+        #
+        #   k : frequency axis 
+        #   l : coeff l 
+        #   m  
+        Fth = np.eisum('klm,kilm->ki',Br,np.real(V.T)) - \
+              np.eisum('klm,kilm->ki',Bi,np.imag(V.T)) + \
+              np.eisum('klm,kilm->ki',Ci,np.real(W.T)) + \
+              np.eisum('klm,kilm->ki',Cr,np.imag(W.T)) 
 
-        Fth = np.dot(Br, np.real(V.T)) - \
-            np.dot(Bi, np.imag(V.T)) + \
-            np.dot(Ci, np.real(W.T)) + \
-            np.dot(Cr, np.imag(W.T))
+        Fph = -np.eisum('klm,kilm->ki',Cr,np.real(V.T)) + \
+              np.eisum('klm,kilm->ki',Ci,np.imag(V.T)) + \
+              np.eisum('klm,kilm->ki',Bi,np.real(W.T)) + \
+              np.eisum('klm,kilm->ki',Br,np.imag(W.T))
 
-        Fph = -np.dot(Cr, np.real(V.T)) + \
-            np.dot(Ci, np.imag(V.T)) + \
-            np.dot(Bi, np.real(W.T)) + \
-            np.dot(Br, np.imag(W.T))
+        #Fth = np.dot(Br, np.real(V.T)) - \
+        #    np.dot(Bi, np.imag(V.T)) + \
+        #    np.dot(Ci, np.real(W.T)) + \
+        #    np.dot(Cr, np.imag(W.T))
+
+        #Fph = -np.dot(Cr, np.real(V.T)) + \
+        #    np.dot(Ci, np.imag(V.T)) + \
+        #    np.dot(Bi, np.real(W.T)) + \
+        #    np.dot(Br, np.imag(W.T))
 
         return Fth, Fph
 
@@ -1902,10 +1928,12 @@ class Antenna(object):
 
         Pmm1n, Pmp1n = AFLegendre(N, M, x)
         ind = index_vsh(N, M)
+
         n = ind[:, 0]
         m = ind[:, 1]
 
         V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+
 
         Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
             np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
@@ -2329,6 +2357,95 @@ def forcesympol(A):
     A.cart2pol(Fx0, Fy0, Fz0, 0)
     A.cart2pol(Fxp, Fyp, Fzp, -1)
 
+def AFLegendre2(L, M, x):
+    """ calculate Pmm1l and Pmp1l
+
+    Parameters
+    ----------
+        L : int
+            max order  (theta)   (also called l or level )
+        M : int
+            max degree (phi)
+        x : np.array
+            function argument
+
+    Returns
+    -------
+
+    Pmm1l : ndarray (Nx , L , M )
+        :math:`\\bar{P}_{l}^{(m-1)}(x)`
+    Pmp1l : ndarray (Nx , L , M )
+        :math:`\\bar{P}_{l}^{(m+1)}(x)`
+
+    Notes
+    -----
+
+    This function returns :
+        .. math::
+
+            \\bar{P}_{l}^{(m-1)}(x)
+
+            \\bar{P}_{l}^{(m+1)}(x)
+
+     Where
+
+        .. math::
+
+            P_l^{(m)}(x)= \\sqrt{ \\frac{2}{2 l+1} \\frac{(l+m)!}{(l-m)!} } \\bar{P}_{l}^{(m)}(x)
+
+    Examples
+    --------
+
+
+    >>> Pmm1n,Pmp1n = AFLegendre2(5,4,np.array([0,1]))
+
+    Notes
+    -----
+
+    L shoud be greater or equal to M
+
+    See Also
+    --------
+
+    VW
+
+    """
+    PML = []
+    nx = len(x)
+    if M < L:
+        MM = np.expand_dims(np.arange(M + 2),1)
+        LL = np.expand_dims(np.arange(L + 1),0)
+    else:
+        MM = np.expand_dims(np.arange(M + 1),1)
+        LL = np.expand_dims(np.arange(L + 1),0)
+    #
+    # Warning : this is a dangerous factorial ratio
+    # surprinsingly it works well
+    #
+    C1 = np.sqrt((LL + 0.5) * factorial(LL - MM) / factorial(LL + MM))
+    for i in range(nx):
+        if M < L:
+            pml = special.lpmn(M + 1, L, x[i])[0]
+        else:
+            pml = special.lpmn(M, L, x[i])[0]
+        pml = pml * C1
+        PML.append(pml)
+
+    Pml = np.array(PML)
+    if M < L:
+        Pmp1l = Pml[:, 1::1, :]
+    else:
+        Pmp1l = np.zeros((nx, M + 1, L + 1))
+        Pmp1l[:, 0:-1, :] = Pml[:, 1::1, :]
+
+    Pmm1l = np.zeros((nx, M + 1, L + 1))
+    if M < L:
+        Pmm1l[:, 1::1, :] = Pml[:, 0:-2, :]
+    else:
+        Pmm1l[:, 1::1, :] = Pml[:, 0:-1, :]
+        Pmm1l[:, 0, :] = -Pml[:, 1, :]
+
+    return Pmm1l, Pmp1l
 
 def AFLegendre(N, M, x):
     """ calculate Pmm1n and Pmp1n
@@ -2344,8 +2461,11 @@ def AFLegendre(N, M, x):
 
     Returns
     -------
-    Pmm1n :  :math:`\\bar{P}_{n}^{(m-1)}(x)`
-    Pmp1n :  :math:`\\bar{P}_{n}^{(m+1)}(x)`
+    Pmm1l :  ndarray ( Ndir, M , L ) 
+
+        :math:`\\bar{P}_{n}^{(m-1)}(x)`
+    Pmp1l :  ndarray ( Ndir, M , L )
+        :math:`\\bar{P}_{n}^{(m+1)}(x)`
 
     Notes
     -----
@@ -2353,21 +2473,21 @@ def AFLegendre(N, M, x):
     This function returns :
         .. math::
 
-            \\bar{P}_{n}^{(m-1)}(x)
+            \\bar{P}_{l}^{(m-1)}(x)
 
-            \\bar{P}_{n}^{(m+1)}(x)
+            \\bar{P}_{l}^{(m+1)}(x)
 
      Where
 
         .. math::
 
-            P_n^{(m)}(x)= \\sqrt{ \\frac{2}{2 n+1} \\frac{(n+m)!}{(n-m)!} } \\bar{P}_{n}^{(m)}(x)
+            P_l^{(m)}(x)= \\sqrt{ \\frac{2}{2 l+1} \\frac{(l+m)!}{(l-m)!} } \\bar{P}_{l}^{(m)}(x)
 
     Examples
     --------
 
 
-    >>> Pmm1n,Pmp1n = AFLegendre(5,5,np.array([0,1]))
+    >>> Pmm1n,Pmp1n = AFLegendre(5,4,np.array([0,1]))
 
     See Also
     --------
@@ -2414,6 +2534,60 @@ def AFLegendre(N, M, x):
 
     return Pmm1n, Pmp1n
 
+def VW2(L, M, x, phi, Pmm1l, Pmp1l):
+    """ evaluate vector Spherical Harmonics basis functions
+
+    Parameters
+    ----------
+    L    : ndarray (1 x K)
+        level
+    M    : ndarray (1 x K) 
+        mode
+    x    :  np.array
+
+    phi   : np.array
+
+    Pmm1l : Legendre Polynomial
+
+    Pmp1l : Legendre Polynomial
+
+    Returns
+    -------
+
+    V  : ndarray (Nx,L,M)
+    W  : ndarray (Nx,L,M)
+
+    See Also
+    --------
+
+    AFLegendre
+
+    Nx x M x L
+    
+    Examples
+    --------
+
+    """
+
+    l   = np.arange(L).reshape(1,1,L)
+    m   = np.arange(M).reshape(1,M,1)
+    phi = phi.reshape(len(phi),1,1)
+    x   = x.reshape(len(x),1,1)
+
+    t1 = np.sqrt((l + m) * (l - m + 1))
+    t2 = np.sqrt((l - m) * (l + m + 1))
+
+    Ephi = np.exp(1j*m*phi)
+
+    Y1 = t1 * Pmm1l + t2 * Pmp1l
+    Y2 = t1 * Pmm1l - t2 * Pmp1l
+
+
+    W = Y1 * (-1.0) ** n / (2 * x * np.sqrt(n * (n + 1))) * Ephi
+    W[np.isinf(W) | np.isnan(W)] = 0
+    V = Y2 * (-1.0) ** n / (2 * np.sqrt(n * (n + 1))) * Ephi
+    V[np.isinf(V) | np.isnan(V)] = 0
+    return V, W
 
 def VW(n, m, x, phi, Pmm1n, Pmp1n):
     """ evaluate vector Spherical Harmonics basis functions
@@ -2452,8 +2626,7 @@ def VW(n, m, x, phi, Pmm1n, Pmp1n):
     W = Y1 * np.outer(1.0 / x, (-1.0) ** n / (2 * np.sqrt(n * (n + 1)))) * Ephi
     W[np.isinf(W) | np.isnan(W)] = 0
     del Y1
-    V = Y2 * np.outer(
-        np.ones(len(x)), (-1.0) ** n / (2 * np.sqrt(n * (n + 1)))) * Ephi
+    V = Y2 * np.outer( np.ones(len(x)), (-1.0) ** n / (2 * np.sqrt(n * (n + 1)))) * Ephi
     V[np.isinf(V) | np.isnan(V)] = 0
     del Y2
     return V, W

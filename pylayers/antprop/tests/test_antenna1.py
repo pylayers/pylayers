@@ -33,7 +33,8 @@ tmse = []
 tl  = range(1,15)
 for l in tl:
     print 'l : ',l
-    errelTh,errelPh,errel = A.errel(l,20,dsf)
+    A.C.s1tos2(l)
+    errelTh,errelPh,errel = A.errel(l,20,dsf,typ='s2')
     tet.append(errelTh)
     tep.append(errelPh)
     te.append(errel)
