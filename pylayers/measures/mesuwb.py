@@ -1114,6 +1114,7 @@ class Tdd(object):
 
         Examples
         --------
+        
         >>> M  = UWBMesure(1)
         >>> T  = M.tdd
         >>> bo = T.box()
@@ -1508,9 +1509,14 @@ class UWBMesure(object):
 
          Examples
          --------
-         >>> from pylayers.measures.mesuwb import *
-         >>> M1 = UWBMesure(1)
-         >>> M1.show()
+
+         .. plot::
+             :included-source:
+
+             >>> from pylayers.measures.mesuwb import *
+             >>> M1 = UWBMesure(1)
+             >>> M1.show()
+
         """
         # Raw data matlab file reading
         Tx, Rx = ptw1()
