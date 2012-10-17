@@ -52,7 +52,7 @@ import select
 import sys
 
 
-#comment prendre en compte 1 key spécifique pour 1 MultiGraph
+# How to take into account  1 specific key specifique for 1 MultiGraph
 # MULTIGRAPH !!!! G.add_edge(10,11,key='wifi',attr_dict=dict(Pr=0,TOA=10))
 
 

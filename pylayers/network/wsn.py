@@ -69,14 +69,14 @@ def wsngraph():
     nx.draw_networkx_labels(G,G.pos)
     return(G) 
 
-if __init__==__main__:
+#if ( __name__=="__main__"):
 
-    G  = wsngraph()
-    T  = nx.minimum_spanning_tree(G)
-    nx.draw(T,G.pos)
-    T.edge.values()
+G  = wsngraph()
+T  = nx.minimum_spanning_tree(G)
+nx.draw(T,G.pos)
+T.edge.values()
 
-    SPT = shortest_path_tree(G,1)
+SPT = shortest_path_tree(G,1)
 
 
 
