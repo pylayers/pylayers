@@ -2569,8 +2569,8 @@ def VW2(L, M, x, phi, Pmm1l, Pmp1l):
 
     """
 
-    l   = np.arange(L).reshape(1,1,L)
-    m   = np.arange(M).reshape(1,M,1)
+    l   = np.arange(L+1).reshape(1,1,L+1)
+    m   = np.arange(M+1).reshape(1,M+1,1)
     phi = phi.reshape(len(phi),1,1)
     x   = x.reshape(len(x),1,1)
 
@@ -2583,9 +2583,9 @@ def VW2(L, M, x, phi, Pmm1l, Pmp1l):
     Y2 = t1 * Pmm1l - t2 * Pmp1l
 
 
-    W = Y1 * (-1.0) ** n / (2 * x * np.sqrt(n * (n + 1))) * Ephi
+    W = Y1 * (-1.0) ** l / (2 * x * np.sqrt(l * (l + 1))) * Ephi
     W[np.isinf(W) | np.isnan(W)] = 0
-    V = Y2 * (-1.0) ** n / (2 * np.sqrt(n * (n + 1))) * Ephi
+    V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
     V[np.isinf(V) | np.isnan(V)] = 0
     return V, W
 
