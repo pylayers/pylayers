@@ -2633,7 +2633,7 @@ def VW(n, m, x, phi, Pmm1n, Pmp1n):
 
 
 def plotVW(n, m, theta, phi, sf=False):
-    """ plot VSH transform basis in 3D
+    """ plot VSH transform vsh basis in 3D plot
         (V in fig1 and W in fig2)
     Parameters
     ----------

@@ -2,7 +2,9 @@ from pylayers.antprop.antenna import *
 import matplotlib.pylab as plt 
 from numpy import *
 import pdb
-
+#
+# Visalization of coefficient in different shapes
+#
 filename = 'S1R1.mat'
 
 A = Antenna('mat',filename,'ant/UWBAN/Matfile')
