@@ -26,9 +26,31 @@ from matplotlib import cm
 def indexvsh(N):
     """ indexvsh(N)
 
-    Prameters
-    ---------
+   
+    Parameters
+    ----------
          N : degree max
+
+
+    Returns
+    -------
+        t : ndarray ( (N+1)(N+2)/2 ,  2 ) 
+            tab for indexing the upper triangle 
+    Examples
+    --------
+
+        >>> from pylayers.antprop.antenna import *
+        >>> indexvsh(3)
+        array([[0, 0],
+               [1, 0],
+               [1, 1],
+               [2, 0],
+               [2, 1],
+               [2, 2],
+               [3, 0],
+               [3, 1],
+               [3, 2],
+               [3, 3]])
 
     """
     Kmax = (N + 1) * (N + 2) / 2
@@ -2604,6 +2626,20 @@ def VW(n, m, x, phi, Pmm1n, Pmp1n):
     Pmm1n : Legendre Polynomial
     Pmp1n : Legendre Polynomial
 
+
+    Returns
+    -------
+
+    V
+    W
+
+
+    Example
+    -------
+
+    >>> from pylayers.antprop.antenna import *
+    >>> N = 2
+    
     See Also
     --------
 

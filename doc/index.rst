@@ -60,7 +60,7 @@ Documentation
 .. toctree::
     :maxdepth: 1 
 
-    UserManual.rst 
+    manual/manual.rst 
 
     modules/index.rst
     

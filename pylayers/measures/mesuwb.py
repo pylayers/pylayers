@@ -984,12 +984,20 @@ class Tdd(object):
         display
             if display == False the first subplot is reserved for displaying the Layout
 
-        >>> ntx = 2
-        >>> M  = UWBMesure(ntx)
-        >>> T  = M.tdd
-        >>> fig = plt.figure()
-        >>> t = plt.title('test Tdd.show  Tx='+str(ntx))
-        >>> T.show()
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.measures.mesuwb import *
+            >>> import matplotlib.pylab as plt
+            >>> ntx = 2
+            >>> M  = UWBMesure(ntx)
+            >>> T  = M.tdd
+            >>> fig = plt.figure()
+            >>> t = plt.title('test Tdd.show  Tx='+str(ntx))
+            >>> T.show()
 
         """
 
@@ -1069,6 +1077,7 @@ class Tdd(object):
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -1076,7 +1085,7 @@ class Tdd(object):
             >>> from pylayers.measures.mesuwb import *
             >>> M  = UWBMesure(2)
             >>> T  = M.tdd
-            >>  fig = T.show_span()
+            >>  T.show_span()
             >>> plt.show()
 
         """
@@ -1114,6 +1123,8 @@ class Tdd(object):
 
         Examples
         --------
+
+        >>> from pylayers.measures.mesuwb import *
         >>> M  = UWBMesure(1)
         >>> T  = M.tdd
         >>> bo = T.box()
@@ -1508,9 +1519,14 @@ class UWBMesure(object):
 
          Examples
          --------
-         >>> from pylayers.measures.mesuwb import *
-         >>> M1 = UWBMesure(1)
-         >>> M1.show()
+         
+         .. plot::
+             :include-source:
+
+             >>> from pylayers.measures.mesuwb import *
+             >>> M1 = UWBMesure(1)
+             >>> M1.show()
+
         """
         # Raw data matlab file reading
         Tx, Rx = ptw1()
