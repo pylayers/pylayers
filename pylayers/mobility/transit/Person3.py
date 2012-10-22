@@ -68,12 +68,11 @@ class Person3(Process):
         self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
         while self.nextroomId == self.roomId or (self.nextroomId == 20 ) or (self.nextroomId == 5): # test destination different de l'arrive
             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-        print "nextroom : ", self.nextroomId
         self.wp       =  self.L.waypoint(roomId,self.nextroomId)
         for tup in self.wp[1:]:
             self.waypoints.append(vec3(tup)) 
         try:
-            self.position = vec3(L.Gr.pos[roomId])
+            self.position = vec3(L.Gr.pos[roomId][0],L.Gr.pos[roomId][1])
         except:     
             self.position = vec3()
 #           self.old_pos = vec3()

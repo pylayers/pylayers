@@ -79,7 +79,12 @@ class Coverage(object):
         try:
             self.L.Gt.nodes()
         except:
+            pass
+        try:
+            self.L.dumpr('t')
+        except:
             self.L.buildGt()
+            self.L.dumpw('t')
         self.creategrid()
 
 
@@ -168,4 +173,13 @@ class Coverage(object):
         fig.colorbar(cov)
         if self.show:
             plt.show()
+
+
+
+
+
+if (__name__ == "__main__"):
+    C=Coverage()
+    C.L.dumpr()
+    sigar,sig=C.L.signature(C.grid[2],C.tx)
 
