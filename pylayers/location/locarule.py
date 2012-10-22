@@ -5,15 +5,15 @@ import scipy.stats as sps
 import pdb
 
 
-#### global info PL_model
-config = ConfigParser.ConfigParser()
-config.read(basename+'/ini/EMSolver.ini')
-plm_opt = dict(config.items('PL_MODEL'))
-sigmaRSS = float(plm_opt['sigmarss'])# dBm !!!!!!
-f = float(plm_opt['f'])
-RSSnp = float(plm_opt['rssnp'])
-d0 = float(plm_opt['d0'])
-PL_method = plm_opt['method'] # mean, median , mode
+##### global info PL_model
+#config = ConfigParser.ConfigParser()
+#config.read(basename+'/ini/EMSolver.ini')
+#plm_opt = dict(config.items('PL_MODEL'))
+#sigmaRSS = float(plm_opt['sigmarss'])# dBm !!!!!!
+#f = float(plm_opt['f'])
+#RSSnp = float(plm_opt['rssnp'])
+#d0 = float(plm_opt['d0'])
+#PL_method = plm_opt['method'] # mean, median , mode
 
 class Take_all():
     """

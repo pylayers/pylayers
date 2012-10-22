@@ -1,6 +1,5 @@
 .. _localization:
 
-
 localization
 =============
 

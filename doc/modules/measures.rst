@@ -1,3 +1,9 @@
 .. _measures:
-.. automodule:: pylayers.measures
-    :members:
+
+Module measures
+===============
+
+.. toctree::
+    :maxdepth: 2 
+
+    measures.mesuwb.rst

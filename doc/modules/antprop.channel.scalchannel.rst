@@ -1,7 +1,7 @@
 Class ScalChannel 
 =================
 
-.. currentmodule:: pylayers.antprop.channel.ScalChannel
+.. automodule:: pylayers.antprop.channel.ScalChannel
     :members:
 
 

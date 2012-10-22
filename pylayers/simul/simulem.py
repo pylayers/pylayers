@@ -1212,8 +1212,8 @@ class Simul(object):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.simul.simulem import *
             >>> S = Simul()
-            >>> S.load('where2.ini')
-            >>> S.L.loadfur('FurSiradel.ini')
+            >>> S.load('w1.ini')
+            >>> S.L.loadfur('FurW1.ini')
             >>> S.show()
             >>> plt.show()
 

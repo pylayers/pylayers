@@ -1214,17 +1214,29 @@ def SphericalBasis(a):
 
 
 def AngleDir(s):
-    """ a = AngleDir(s)
+    """ evaluate (theta,phi) from direction vector
 
-    Summary
-    -------
+    .. math:: 
+
+        \\theta = \\arccos{(\\frac{\\mathbf{s}}/\\hat{\mathbf{z}})}
 
     Parameters
     ----------
-      s  :
-          direction 3 x N (sx,sy,sz)  x N
-      a  :
-          angle     2 x N (theta,phi) x N
+
+    s  :  ndarray
+         direction (3 x N (sx,sy,sz) )
+
+    Returns
+    -------
+
+      a  : ndarray
+          angle    (2 x N (theta,phi) )
+    
+    Example
+    -------
+
+        
+
     """
     N = np.shape(s)[0]
     x = np.array((1, 0, 0))

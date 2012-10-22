@@ -52,7 +52,7 @@ import select
 import sys
 
 
-#comment prendre en compte 1 key spécifique pour 1 MultiGraph
+# How to take into account  1 specific key specifique for 1 MultiGraph
 # MULTIGRAPH !!!! G.add_edge(10,11,key='wifi',attr_dict=dict(Pr=0,TOA=10))
 
 
@@ -474,7 +474,7 @@ class Network(nx.MultiGraph):
             p=nx.get_node_attributes(self.SubNet[RAT],'p')
             e=self.SubNet[RAT].edges()
 
-            lv , d= self.EMS.solve(p,e,ldp)
+            lv , d= self.EMS.solve(p,e,ldp,RAT)
 
             if  it ==0:
                 lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]

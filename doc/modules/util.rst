@@ -7,7 +7,6 @@ Util
 .. toctree:: 
     :maxdepth: 2 
 
-    util.easygui.rst
     util.geomutil.rst
     util.graphutil.rst
     util.project.rst

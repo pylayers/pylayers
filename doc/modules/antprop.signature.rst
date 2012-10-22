@@ -1,5 +1,5 @@
-Signatures 
-----------
+Module Signature
+================
 
-.. automodule:: gis.signature
+.. automodule:: pylayers.antprop.signature
     :members:
