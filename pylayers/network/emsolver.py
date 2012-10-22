@@ -108,12 +108,12 @@ class EMSolver(object):
                                     * A received power in dBm for LDP ='Pr'
 
         """
-
         try:
             model= self.model[RAT]
         except:
             try:
                 self.load_model(RAT)
+                model=self.model[RAT]
             except:
                 self.model[RAT]=Model()
                 self.save_model(RAT,self.model[RAT])
@@ -131,7 +131,7 @@ class EMSolver(object):
                     return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
                 elif LDP == 'Pr':
-                    std = self.model.sigrss	*sp.randn(len(d))
+                    std = self.model.sigrss*sp.randn(len(d))
                     r=model.getPL(d,model.sigrss)
                     return ([[r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)
                 

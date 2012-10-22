@@ -2837,7 +2837,7 @@ class Layout(object):
         #
         for sn in self.Gi.node:
             n = eval(sn)
-            print n
+#            print n
             if n == (161, 53):
                 pass
                 #pdb.set_trace()
@@ -2854,8 +2854,8 @@ class Layout(object):
                             if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                 self.Gi.add_edge(node1, node2)
                                     # R-R
-                            else:
-                                print node1, node2
+#                            else:
+#                                print node1, node2
                                 #pdb.set_trace()
 
                             if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
@@ -2863,16 +2863,16 @@ class Layout(object):
                                 node2 = str(nb)
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(node1, node2)
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb_set_trace()
                         else:                                    # R-D
                             node1 = str(n)
                             node2 = str(nb)
                             if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                 self.Gi.add_edge(node1, node2)
-                            else:
-                                print node1, node2
+#                            else:
+#                                print node1, node2
                                 #pdb_set_trace()
             else:  # transmission or diffraction
                 if n > 0:  # transmission
@@ -2897,16 +2897,16 @@ class Layout(object):
                                     node2 = str(nb)
                                     if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                         self.Gi.add_edge(node1, node2)
-                                    else:
-                                        print node1, node2
+#                                    else:
+#                                        print node1, node2
                                         #pdb.set_trace()
                             else:
                                 node1 = str(n)
                                 node2 = str(nb)
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(str(n), str(nb))
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb.set_trace()
                         if nb in vnodes1:    # Si Voisin dans cycle reflexion 1
                             if nb > 0:
@@ -2914,24 +2914,24 @@ class Layout(object):
                                 node2 = str((nb, cy1))
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(node1, node2)
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb.set_trace()
                                 if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
                                     node1 = str(n)
                                     node2 = str(nb)
                                     if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                         self.Gi.add_edge(node1, node2)
-                                    else:
-                                        print node1, node2
+#                                    else:
+#                                        print node1, node2
                                         #pdb.set_trace()
                             else:
                                 node1 = str(n)
                                 node2 = str(nb)
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(node1, node2)
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb.set_trace()
 
 #    def showGraph(self,**kwargs):

@@ -1,10 +1,10 @@
-README.rst
 setup.py
 pylayers/__init__.py
 pylayers/clean_pyproject.py
 pylayers.egg-info/PKG-INFO
 pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt
+pylayers.egg-info/requires.txt
 pylayers.egg-info/top_level.txt
 pylayers/antprop/__init__.py
 pylayers/antprop/antenna.py

@@ -413,6 +413,24 @@ class Network(nx.MultiGraph):
         self.init_PN()
 
 
+    def update_PN(self):
+        """ update personnal network
+
+
+
+        """
+        ####################################################################################
+        # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
+        for rat in self.RAT.iterkeys():
+            for ldp in self.LDP:
+                self.compute_LDPs(self.nodes(),rat,ldp,method='direct')
+        for n in self.nodes():
+            self.node[n]['PN'].get_RAT()
+            self.node[n]['PN'].get_SubNet()
+            # Add access point position in each personal network (PN)
+            [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['type'] == 'ap']
+                
+        ####################################################################################
 
     def update_LDPs(self,ln,RAT,lD):
         """Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT
