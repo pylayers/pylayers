@@ -1078,7 +1078,7 @@ class Antenna(object):
         if typ =='s1':
             Fth, Fph = self.Fsynth1(Th, Ph)
         if typ =='s2':
-            Fth, Fph = self.Fsynth2(Th, Ph)
+            Fth, Fph = self.Fsynth2b(Th, Ph)
         if typ =='s3':
             Fth, Fph = self.Fsynth3(Th, Ph)
 
@@ -1916,6 +1916,55 @@ class Antenna(object):
 
         return Fth, Fph
 
+    def Fsynth2b(self, theta, phi):
+        """  pattern synthesis from shape 2 vsh coeff
+
+        Parameters
+        ----------
+        theta
+        phi
+
+        Notes
+        -----
+
+        Calculate complex antenna pattern from VSH Coefficients (shape 2)
+        for the specified directions (theta,phi)
+        theta and phi arrays needs to have the same size
+
+        """
+
+        Br = self.C.Br.s2
+        Bi = self.C.Bi.s2
+        Cr = self.C.Cr.s2
+        Ci = self.C.Ci.s2
+
+        N = self.C.Br.N2
+        M = self.C.Br.M2
+
+        #print "N,M",N,M
+        #
+        # The - sign is necessary to get the good reconstruction
+        #     deduced from observation
+        #     May be it comes from a different definition of theta in SPHEREPACK
+        x = -np.cos(theta)
+
+        Pmm1n, Pmp1n = AFLegendre(N, M, x)
+        ind = index_vsh(N, M)
+
+        n = ind[:, 0]
+        m = ind[:, 1]
+
+        V, W = VW2(n, m, x, phi, Pmm1n, Pmp1n)
+
+
+        Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
+            np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
+        Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
+            np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
+
+        return Fth, Fph
+
+
     def Fsynth2(self, theta, phi):
         """  pattern synthesis from shape 2 vsh coeff
 
@@ -1963,6 +2012,7 @@ class Antenna(object):
             np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
         return Fth, Fph
+
 
     def Fsynth3(self, theta, phi):
         """ synthesis of a complex antenna pattern from VSH Coefficients (shape 3)
@@ -2556,18 +2606,18 @@ def AFLegendre(N, M, x):
 
     return Pmm1n, Pmp1n
 
-def VW2(L, M, x, phi, Pmm1l, Pmp1l):
+def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     """ evaluate vector Spherical Harmonics basis functions
 
     Parameters
     ----------
-    L    : ndarray (1 x K)
+    l    : ndarray (1 x K)
         level
-    M    : ndarray (1 x K) 
+    m    : ndarray (1 x K) 
         mode
-    x    :  np.array
+    x    :  ndarray (1 x Nray)
 
-    phi   : np.array
+    phi   : np.array (1 x Nray) 
 
     Pmm1l : Legendre Polynomial
 
@@ -2590,21 +2640,22 @@ def VW2(L, M, x, phi, Pmm1l, Pmp1l):
     --------
 
     """
-
-    l   = np.arange(L+1).reshape(1,1,L+1)
-    m   = np.arange(M+1).reshape(1,M+1,1)
-    phi = phi.reshape(len(phi),1,1)
-    x   = x.reshape(len(x),1,1)
+    
+    K   = len(l)
+    Nr  = len(x)
+    l   = l.reshape(1,K)
+    m   = m.reshape(1,K)
+    phi = phi.reshape(Nr,1)
+    x   = x.reshape(Nr,1)
 
     t1 = np.sqrt((l + m) * (l - m + 1))
     t2 = np.sqrt((l - m) * (l + m + 1))
 
     Ephi = np.exp(1j*m*phi)
 
-    Y1 = t1 * Pmm1l + t2 * Pmp1l
-    Y2 = t1 * Pmm1l - t2 * Pmp1l
-
-
+    Y1 = (t1 * Pmm1l[:,m,l] + t2 * Pmp1l[:,m,l]).reshape(Nr,K)
+    Y2 = (t1 * Pmm1l[:,m,l] - t2 * Pmp1l[:,m,l]).reshape(Nr,K)
+    #pdb.set_trace()
     W = Y1 * (-1.0) ** l / (2 * x * np.sqrt(l * (l + 1))) * Ephi
     W[np.isinf(W) | np.isnan(W)] = 0
     V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi

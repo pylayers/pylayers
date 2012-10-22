@@ -14,15 +14,11 @@ electricalDelay = A.getdelay(freq,delayCandidates)
 disp('Electrical Delay = ' + str(electricalDelay)+' ns') 
 
 
-# An example of broadcasting
-
 A.Ftheta = A.Ftheta*exp(2*1j*pi*freq*electricalDelay)
-
 A.Fphi   = A.Fphi*exp(2*1j*pi*freq*electricalDelay)
 
 
 dsf = 2
-
 A.vshd(dsf)
 
 tn  = []
