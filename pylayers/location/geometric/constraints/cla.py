@@ -583,7 +583,6 @@ class CLA(object):
 
 
         """
-        pdb.set_trace()
         Nc = self.Nc
         filename = basename + "/geom/cla.list"
         fd = open(filename, "w")
@@ -860,6 +859,7 @@ class CLA(object):
 ##########################################
 
         if clust != []:
+            self.pecluster=[]
             print 'cluster'
             lclust = []
             dd = []
@@ -911,6 +911,7 @@ class CLA(object):
 #                                       vmax.append(np.max(poids[np.unique(lclust[i])]))
 #                               peindx = np.nonzero(poids==max(vmax))[0][0]
 #                               self.pe = self.dlayer[l][dlindx].ctr[peindx]
+            pdb.set_trace()
             try:
                 M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)
                       ) / (10. * self.c[0].model['RSSnp']))[0]
@@ -933,6 +934,7 @@ class CLA(object):
 #                                       vmax = np.max(poids[np.unique(lclust[1])])
 #                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
 #                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[1])[peindx]]
+                    
 
                     self.pe = np.mean(self.dlayer[l][dlindx].ctr[
                         np.unique(lclust[1])], axis=0)
@@ -941,6 +943,10 @@ class CLA(object):
                     pestdmin = np.min(self.dlayer[l][
                         dlindx].ctr[np.unique(lclust[1])])
                     self.pestd = pestdmax - pestdmin
+                    pdb.set_trace()
+                    for cl in lclust:
+                        self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
+                        np.unique(cl)], axis=0))
 
             except:
 
@@ -953,6 +959,9 @@ class CLA(object):
                 pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
                 pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
                 self.pestd = pestdmax - pestdmin
+                for cl in lclust:	
+                    self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
+                    np.unique(cl)], axis=0))
                 #self.pe = np.sum(self.dlayer[l][dlindx].ctr,axis=0)/len(self.dlayer[l][dlindx].ctr)
 #                       try:
 #                               print 'clust vol',clust_vol
