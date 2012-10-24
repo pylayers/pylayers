@@ -119,7 +119,8 @@ class Coverage(object):
 
         """
         self.Lwo,self.Lwp=Loss0_v2(self.L,self.grid,self.model.f,self.tx)
-        self.Pr=self.txpe-self.model.PL0-self.Lwo
+        self.freespace = PL(self.grid,self.model.f,self.tx)
+        self.Pr = self.txpe - self.freespace - self.Lwo
 
     def showPr(self):
         """ show
