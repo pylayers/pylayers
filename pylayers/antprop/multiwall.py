@@ -103,6 +103,18 @@ def OneSlopeMdl(D,n,fGHz):
     PL = PL0(fGHz)+10*n*np.log10(D)
     return(PL)
 
+
+def PL(pts,f,p,n=2.0):
+    """
+    """
+    D=np.sqrt(np.sum((pts-p)**2,axis=1))
+    return(PL0(f)+10*n*np.log10(D))
+
+
+
+
+
+
 def Loss0_v2(L,Pts,f,p):
     """
     Parameters

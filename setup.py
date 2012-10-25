@@ -25,7 +25,8 @@ setup(name='pylayers' ,
         'cvxopt>=1.1.5',
         'numpydoc>=0.4',
         'PIL>=1.1.5',
-        'bitstring>=3.0.2'
+        'bitstring>=3.0.2',
+        'MySQLdb>=1.2.3'
                         ],
       packages=find_packages()
 
