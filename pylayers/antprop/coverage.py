@@ -182,11 +182,21 @@ class Coverage(object):
 #        tCM._lut[:-3,-1] = alphas
         title='Map of received power'
 
+        cdict = {
+        'red'  :  ((0., 0.5, 0.5), (1., 1., 1.)),
+        'green':  ((0., 0.5, 0.5), (1., 1., 1.)),
+        'blue' :  ((0., 0.5, 0.5), (1., 1., 1.))
+        }
+        #generate the colormap with 1024 interpolated values
+        my_cmap = m.colors.LinearSegmentedColormap('my_colormap', cdict, 1024)
+
+
+
         if rxsens :
 
             ### values between the rx sensitivity and noise floor
             mcPrf=np.ma.masked_where((self.Pr > self.rxsens) & (self.Pr < self.noisefl),self.Pr)
-            cov1=ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'gray',vmin=self.rxsens,origin='lower')
+            cov1=ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = my_cmap,vmin=self.rxsens,origin='lower')
 
             ### values above the sensitivity
             mcPrs=np.ma.masked_where(self.Pr < self.rxsens,self.Pr)
