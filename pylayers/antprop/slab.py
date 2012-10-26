@@ -1226,6 +1226,25 @@ class Slab(dict, Interface):
         self.RT(metalic)
         self['evaluated'] = True
 
+    def filter(self,win,theta=0):
+        """ filtering waveform
+
+        Parameters
+        ----------
+
+        win : waveform
+
+        Returns
+        -------
+
+        wout : 
+
+        """
+        f = win.sf.x
+        self.ev(f,theta)
+        wout = Wafeform()
+        return(wout)
+
     def loss0(self, fGHz=2.4):
         """
         Calculate loss for theta=0 at frequency (f)

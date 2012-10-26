@@ -8,6 +8,8 @@ from pylayers.network.model import *
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as m
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import ConfigParser
 import pdb
 
@@ -64,6 +66,7 @@ class Coverage(object):
         self.layoutopt = dict(self.config.items('layout'))
         self.gridopt = dict(self.config.items('grid'))
         self.txopt = dict(self.config.items('tx'))
+        self.rxopt = dict(self.config.items('rx'))
         self.showopt=dict(self.config.items('show'))
 
         self.L=Layout(self.layoutopt['filename'])
@@ -73,6 +76,10 @@ class Coverage(object):
 
         self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
         self.txpe = eval(self.txopt['pe'])
+
+        self.rxsens = eval(self.rxopt['sensitivity'])
+
+        self.noisefl = -100.
 
         self.show = str2bool(self.showopt['show'])
 
@@ -121,8 +128,18 @@ class Coverage(object):
         self.freespace = PL(self.grid,self.model.f,self.tx)
         self.Pr = self.txpe - self.freespace - self.Lwo
 
-    def showPr(self):
+
+    def showPr(self,rxsens=True,nfl=True):
         """ show the map of received power
+    
+        Parameters
+        ----------
+
+            rxsens : bool
+                clip the map with rx sensitivity set in self.rxsens
+            fnl : bool
+                clip the map with noise floor set in self.noisefl
+
         """
 
         fig=plt.figure()
@@ -131,10 +148,56 @@ class Coverage(object):
         r=self.grid[-1,0]
         b=self.grid[0,1]
         t=self.grid[-1,-1]
-        cov=ax.imshow(self.Pr.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),vmin=-120,origin='lower')
+
+
+
+#        tCM = plt.cm.get_cmap('jet')
+#        tCM._init()
+#        alphas = np.abs(np.linspace(.0,1.0, tCM.N))
+#        tCM._lut[:-3,-1] = alphas
+        title='Map of received power'
+
+        cdict = {
+        'red'  :  ((0., 0.5, 0.5), (1., 1., 1.)),
+        'green':  ((0., 0.5, 0.5), (1., 1., 1.)),
+        'blue' :  ((0., 0.5, 0.5), (1., 1., 1.))
+        }
+        #generate the colormap with 1024 interpolated values
+        my_cmap = m.colors.LinearSegmentedColormap('my_colormap', cdict, 1024)
+
+
+
+        if rxsens :
+
+            ### values between the rx sensitivity and noise floor
+            mcPrf=np.ma.masked_where((self.Pr > self.rxsens) & (self.Pr < self.noisefl),self.Pr)
+            cov1=ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = my_cmap,vmin=self.rxsens,origin='lower')
+
+            ### values above the sensitivity
+            mcPrs=np.ma.masked_where(self.Pr < self.rxsens,self.Pr)
+            cov=ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.rxsens,origin='lower')
+            title=title + '\n black : dBm < rx sensitivity'
+
+        else :
+            cov=ax.imshow(self.Pr.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.noisefl,origin='lower')
+
+        if nfl:
+            ### values under the noise floor 
+            ### we first clip the value below he noise fllor
+            cl = np.nonzero(self.Pr<=self.noisefl)
+            cPr=self.Pr
+            cPr[cl]=self.noisefl
+            mcPruf=np.ma.masked_where(cPr > self.noisefl ,cPr)
+            cov2=ax.imshow(mcPruf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'binary',vmax=self.noisefl,origin='lower')
+            title=title + '\n white : dBm < noisefloor'
+
+
         ax.scatter(self.tx[0],self.tx[1],linewidth=0)
-        ax.set_title('Map of received power')
-        fig.colorbar(cov)
+
+        ax.set_title(title)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        fig.colorbar(cov,cax)
         if self.show:
             plt.show()
 

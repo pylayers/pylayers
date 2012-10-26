@@ -18,10 +18,10 @@ class Waveform:
     """
     def __init__(self,parameters=[]):
         """
-               wavetype   =   'generic' =   'mbofdm' =   'fromfile'
-               st  : time domain
-               sf  : frequency domain
-               sfg : frequency domain integrated
+           wavetype   =   'generic' =   'mbofdm' =   'fromfile'
+           st  : time domain
+           sf  : frequency domain
+           sfg : frequency domain integrated
         """
         param= {'type' : 'generic',
                 'band': 0.499,
@@ -62,7 +62,6 @@ class Waveform:
 
         Results
         -------
-
         >>> param= {'type' : 'generic',\
             'band': 0.499,\
             'fc': 4.493,\
@@ -70,12 +69,12 @@ class Waveform:
             'thresh': 3,\
             'tw': 30}
         >>> w = Waveform(param)
-        >>> W = {}
-        >>> W['t']=w.st.x
-        >>> W['p']=w.st.y
-        >>> io.savemat('tx-waveform.mat',W)
+        >>> # W = {}
+        >>> # W['t']=w.st.x
+        >>> # W['p']=w.st.y
         >>> w.show()
         >>> plt.show()         
+
 
         """
         for k in self.parameters.keys():

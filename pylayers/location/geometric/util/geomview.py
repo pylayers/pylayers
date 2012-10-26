@@ -44,7 +44,7 @@ def cloud(p, name="cloud", display=False, color='r', dice=2, R=0.5, access='new'
     if len(sh) == 1:
         p = p.reshape((1, len(p)))
     Np = np.shape(p)[0]
-    filename = './geom/' + name + '.list'
+    filename = basename + '/geom/' + name + '.list'
     if access == 'new':
         fd = open(filename, "w")
         fd.write("LIST\n")
