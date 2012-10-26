@@ -201,7 +201,7 @@ class Coverage(object):
             ### values above the sensitivity
             mcPrs=np.ma.masked_where(self.Pr < self.rxsens,self.Pr)
             cov=ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.rxsens,origin='lower')
-            title=title + '\n black : dBm < rx sensitivity'
+            title=title + '\n gray : dBm < rx sensitivity'
 
         else :
             cov=ax.imshow(self.Pr.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.noisefl,origin='lower')
