@@ -911,7 +911,7 @@ class CLA(object):
 #                                       vmax.append(np.max(poids[np.unique(lclust[i])]))
 #                               peindx = np.nonzero(poids==max(vmax))[0][0]
 #                               self.pe = self.dlayer[l][dlindx].ctr[peindx]
-            pdb.set_trace()
+
             try:
                 M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)
                       ) / (10. * self.c[0].model['RSSnp']))[0]
@@ -943,7 +943,7 @@ class CLA(object):
                     pestdmin = np.min(self.dlayer[l][
                         dlindx].ctr[np.unique(lclust[1])])
                     self.pestd = pestdmax - pestdmin
-                    pdb.set_trace()
+
                     for cl in lclust:
                         self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
                         np.unique(cl)], axis=0))
