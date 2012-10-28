@@ -1,6 +1,6 @@
 from SimPy.Simulation import *
-from Transit.StateProcess import StateProcess, Updater, new_state
-from World import world
+from pylayers.mobility.transit.StateProcess import StateProcess, Updater, new_state
+from pylayers.mobility.transit.World import world
 import os
 
 class Railcar(StateProcess):

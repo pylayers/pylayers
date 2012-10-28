@@ -902,7 +902,7 @@ class ScalChannel(object):
         Parameters
         ----------
         Wgam :
-            waveform including gamme factor
+            waveform including gamma factor
 
         Returns
         -------

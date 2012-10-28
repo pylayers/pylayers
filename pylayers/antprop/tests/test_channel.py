@@ -3,6 +3,8 @@
 ###########################
 from pylayers.antprop.channel import *
 from pylayers.simul.simulem import *
+from pylayers.signal.waveform import *
+from pylayers.signal.bsignal import *
 import numpy as np 
 #
 # create a Simulation object 
@@ -11,17 +13,17 @@ S = Simul('default.ini')
 #
 #   VectChannel(Simulation,itx,irx,transpose)
 #
-VC   = VectChannel(S,0,0,False)
+VC   = VectChannel(S,1,1,False)
 #
 # Frequency range for Siradel measurements
 #
-f     = arange(2,11.05,0.05)
+f     = np.arange(2,11.05,0.05)
 
 #################################
 # definition de la forme d'onde a l'emission
 #################################
 Tw = 10
-x  = arange(-Tw,Tw,0.005)
+x  = np.arange(-Tw,Tw,0.005)
 w  = EnImpulse(x,5,3,10)
 
 W = w.ft()
