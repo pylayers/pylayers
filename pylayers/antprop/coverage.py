@@ -244,6 +244,8 @@ class Coverage(object):
 
 if (__name__ == "__main__"):
     C=Coverage()
+    C.cover()
+    C.showPr()
     C.L.dumpr()
     sigar,sig=C.L.signature(C.grid[2],C.tx)
 

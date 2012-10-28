@@ -2,53 +2,16 @@
 # test Channel, Simulation, Antenna
 ###########################
 from pylayers.antprop.channel import *
+from pylayers.simul.simulem import *
 import numpy as np 
-#
-# choix des antennes
-#
-fileantt = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
-     ("All", "*")],
-      title="Please choose an antenna file",
-      initialdir=antdir)
-
-fileantr = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
-("All", "*")],
-title="Please choose an antenna file",
-initialdir=antdir)
-
 #
 # create a Simulation object 
 #
-S = Simulation(fileantTx=_fileantt,fileantRx=_fileantr)
-
+S = Simul('default.ini')
 #
-# choix du fichier field
+#   VectChannel(Simulation,itx,irx,transpose)
 #
-filefield = FD.askopenfilename(filetypes = [("Fichiers field","*.field"),
-("All", "*")],
-title="Please choose a field file",
-initialdir=tuddir)
-
-filetauk = filefield.replace('.field','.tauk')
-filetang = filefield.replace('.field','.tang')
-filerang = filefield.replace('.field','.rang')
-filefreq = filefield.replace('.field','.freq')
-# il faudra recuperer aussi filetra
-
-S.filefield.append(getshort(filefield))
-S.filetauk.append(getshort(filetauk))
-S.filetang.append(getshort(filetang))
-S.filerang.append(getshort(filerang))
-#S.filetra.append(getshort(filetra))
-
-fichsimulin = FD.askopenfilename(filetypes = [("Fichiers simul ","*.simul"),
-  ("All", "*")],
-  title="Please choose a simulation file",
-  initialdir=simuldir)
-#          parent=root)
-_fichsimulin = getshort(fichsimulin)
-S = Simulation(_fichsimulin)
-
+VC   = VectChannel(S,0,0,False)
 #
 # Frequency range for Siradel measurements
 #
@@ -81,11 +44,10 @@ wgam  = Wgam.ift()
 ##       grid(linewidth=2)
 ##       show()
 #
-#      ################################
-#      # recuperation du canal de propagation simule
-#      ################################
+################################
+# get the simulated propagation channel
+################################
 #
-#      VC   = VectChannel(S,0,False)
 #      #
 #      # If file from Siradel
 #      #
