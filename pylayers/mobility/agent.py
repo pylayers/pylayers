@@ -15,13 +15,16 @@ from pylayers.network.network import  Node,Network
 from pylayers.location.localization import Localization,PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
-from pylayers.util.pymysqldb import Database 
+from pylayers.util.pymysqldb import Database
 import pdb
+
+
+
 
 
 class Agent(object):
     def __init__(self,**args):
-        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'save':[], 'sim':Simulation(), 'epwr':{}}
+        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'save':[], 'sim':Simulation(), 'epwr':[], 'dcond':{} }
 
         for key, value in defaults.items():
             if not args.has_key(key):
@@ -34,6 +37,10 @@ class Agent(object):
         # Create Network
         self.net=args['net']
         self.epwr=args['epwr']
+        try:
+            self.dcond=args['dcond']
+        except :
+            pass
         # mecanique
         if self.type == 'ag':
             self.meca=Person3( ID=self.ID,

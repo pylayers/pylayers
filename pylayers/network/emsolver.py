@@ -157,7 +157,6 @@ class EMSolver(object):
 #                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
                 if LDP == 'Pr':
-
                     pa = np.vstack(p.values())
                     pn = p.keys()
                     lpa = len(pa)
