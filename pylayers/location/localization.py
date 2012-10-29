@@ -53,12 +53,13 @@ class Localization(object):
         """
             Fill the constraint layer array
         """
-
+        ## loop on edges
         for e in self.net.node[self.ID]['PN'].edge[self.ID].keys():
+            ## loop on rat
             for rat in self.net.node[self.ID]['PN'].edge[self.ID][e].keys():
                 try:
                     self.cla.append(
-                        RSS(id = rat+'-Pr-'+self.ID+'-'+e,
+                        R=RSS(id = rat+'-Pr-'+self.ID+'-'+e,
                             value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][0],
                             std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][1],
                             model={},
@@ -72,8 +73,8 @@ class Localization(object):
                 try:
                     self.cla.append(
                         TOA(id = rat+'-TOA-'+self.ID+'-'+e,
-                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0]*0.3,
-                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1]*0.3,
+                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0]/0.3,
+                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1]/0.3,
                             p= self.net.node[self.ID]['PN'].node[e]['pe'],
                             origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
                             )
@@ -113,7 +114,6 @@ class PLocalization(Process):
 #        self.loc.get_const()
         self.loc.fill_cla()
         while True:
-
             self.loc.update(ldp='TOA')
             self.loc.cla.merge2()
             self.loc.cla.refine(self.loc.cla.Nc)
