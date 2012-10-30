@@ -67,7 +67,7 @@ class Agent(object):
             self.sim=args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
-            self.PN[self.ID]['pe']=self.net.node[self.ID]['p']
+            self.PN.node[self.ID]['pe']=self.net.node[self.ID]['p']
 
         else :
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')
