@@ -135,6 +135,7 @@ class TX(Process):
 
 
 
+
 #class RX(Process):
 #     def __init__(self,**args):
 #        defaults={'sim':None,
@@ -213,7 +214,8 @@ if (__name__ == "__main__"):
 
 
 
-    tx=TX(net=N,ID=Ag[0].ID,dcond=Ag[0].dcond)
+    tx1=TX(net=N,ID=Ag[0].ID,dcond=Ag[0].dcond)
+    tx2=TX(net=N,ID=Ag[1].ID,dcond=Ag[1].dcond)
 ##    N.node[0]['PN'].node[0]['pe']=np.array((4,4))
 ##    N.node[0]['PN'].node[1]['pe']=np.array((8,8))
 ##    N.node[0]['PN'].node[2]['pe']=np.array((30,8))

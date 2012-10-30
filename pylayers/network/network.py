@@ -443,8 +443,9 @@ class Network(nx.MultiGraph):
             self.node[n]['PN'].get_RAT()
             self.node[n]['PN'].get_SubNet()
             # Add access point position in each personal network (PN)
+
             [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['type'] == 'ap']
-                
+
         ####################################################################################
 
     def update_LDPs(self,ln,RAT,lD):

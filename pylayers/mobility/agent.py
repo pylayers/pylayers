@@ -61,7 +61,6 @@ class Agent(object):
             self.sim=args['sim']
             self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
-
         elif self.type== 'ap':
 #            self.meca=Person3(ID=self.ID,roomId=args['roomId'],L=args['Layout'],net=self.net,interval=args['meca_updt'],sim=args['sim'],moving=False)
 #            self.meca.behaviors  = []
@@ -74,7 +73,7 @@ class Agent(object):
             self.sim=args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
-            self.PN[self.ID]['pe']=self.net.node[self.ID]['p']
+            self.PN.node[self.ID]['pe']=self.net.node[self.ID]['p']
 
         else :
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')
