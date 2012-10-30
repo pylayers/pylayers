@@ -86,7 +86,7 @@ class EMSolver(object):
         ratopt=dict(self.config.items(RAT+'_PLM'))
         self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=self.method)
 
-    def solve(self,p,e,LDP,RAT):
+    def solve(self,p,e,LDP,RAT,epwr):
         """compute and return a LDP value thanks to a given method
 
         Attributes
@@ -97,7 +97,8 @@ class EMSolver(object):
                 node 2 postion
             LDP : string
                 Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
-        
+            epwr : list of nodes emmited power
+                
         Returns
         -------
             value : float
@@ -108,47 +109,46 @@ class EMSolver(object):
                                     * A received power in dBm for LDP ='Pr'
 
         """
-
         try:
             model= self.model[RAT]
         except:
             try:
                 self.load_model(RAT)
+                model=self.model[RAT]
             except:
                 self.model[RAT]=Model()
                 self.save_model(RAT,self.model[RAT])
                 model=self.model[RAT]
 
 
-        if self.EMS_method == 'direct':
+#        if self.EMS_method == 'direct':
+#            dd={} # distance dictionnary
+
+#            if len(e) > 0:
+#                lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
+#                d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
+#                if LDP == 'TOA':
+#                    std = self.sigmaTOA*sp.randn(len(d))
+#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
+
+#                elif LDP == 'Pr':
+#                    std = self.model.sigrss*sp.randn(len(d))
+#                    r=model.getPL(d,model.sigrss)
+#                    return ([[- r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)
+#                
+#            
+
+
+
+#                else :
+#                    raise NameError('invalid LDP name')
+#            else :
+#                return ([[0.],[0.]])
+
+
+        if self.EMS_method == 'multiwall':
+
             dd={} # distance dictionnary
-
-            if len(e) > 0:
-                lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
-                d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
-                if LDP == 'TOA':
-                    std = self.sigmaTOA*sp.randn(len(d))
-                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
-
-                elif LDP == 'Pr':
-                    std = self.model.sigrss	*sp.randn(len(d))
-                    r=model.getPL(d,model.sigrss)
-                    return ([[r[i]-model.PL0,model.sigrss] for i in range(len(d))],d)
-                
-            
-
-
-
-                else :
-                    raise NameError('invalid LDP name')
-            else :
-                return ([[0.],[0.]])
-
-
-        elif self.EMS_method == 'multiwall':
-
-            dd={} # distance dictionnary
-
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
@@ -162,9 +162,15 @@ class EMSolver(object):
                     pn = p.keys()
                     lpa = len(pa)
                     Lwo = []
+                    frees=[]
+                    lepwr=[]
                     for i in range(lpa-1):
                         Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
-                    return ([[-Lwo[i]-model.PL0,model.sigrss] for i in range(len(Lwo))],d)
+                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
+                        lepwr.extend(epwr[i+1:lpa])
+                    ### ajouter Puissance emission
+
+                    return ([[lepwr - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
             
                 elif LDP == 'TOA': #### NOT CORRECT !
                     std = self.sigmaTOA*sp.randn(len(d))

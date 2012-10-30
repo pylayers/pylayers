@@ -103,6 +103,18 @@ def OneSlopeMdl(D,n,fGHz):
     PL = PL0(fGHz)+10*n*np.log10(D)
     return(PL)
 
+
+def PL(pts,f,p,n=2.0):
+    """
+    """
+    D=np.sqrt(np.sum((pts-p)**2,axis=1))
+    return(PL0(f)+10*n*np.log10(D))
+
+
+
+
+
+
 def Loss0_v2(L,Pts,f,p):
     """
     Parameters
@@ -150,33 +162,34 @@ def Loss0_v2(L,Pts,f,p):
         seglist,theta = L.angleonlink(p,pi)
         i = 0
         for k in seglist:
-            try:
-                name = L.Gs.node[k]['ss_name']
-            except:
-                name = L.Gs.node[k]['name']
-            #if k in S.indoor.ce.keys():
-            #if k in S.L.ce.keys():
-            # nom du sous-segment  
-            #    indss = S.L.ce[k][0]
-            #    name  = S.L.sl.di[indss]
-            #    print name
-            #"else:  
-            # nom du segment   
-            #    name = S.L.Gs.node[k]['name'] 
-            the = theta[i]
-            # idea paper : comparison multiwall th=0 th=variable
-            # comparison mesurement
-            #the = 0
+            if k != 0:
+                try:
+                    name = L.Gs.node[k]['ss_name']
+                except:
+                    name = L.Gs.node[k]['name']
+                #if k in S.indoor.ce.keys():
+                #if k in S.L.ce.keys():
+                # nom du sous-segment  
+                #    indss = S.L.ce[k][0]
+                #    name  = S.L.sl.di[indss]
+                #    print name
+                #"else:  
+                # nom du segment   
+                #    name = S.L.Gs.node[k]['name'] 
+                the = theta[i]
+                # idea paper : comparison multiwall th=0 th=variable
+                # comparison mesurement
+                #the = 0
 
-            i   = i + 1
-            #
-            # Loss0 du slab
-            #
-            lko,lkp  = L.sl[name].losst(f,the)
-#            print lko
-#            print lkp
-            Lo   = Lo + lko[0]
-            Lp   = Lp + lkp[0]
+                i   = i + 1
+                #
+                # Loss0 du slab
+                #
+                lko,lkp  = L.sl[name].losst(f,the)
+    #            print lko
+    #            print lkp
+                Lo   = Lo + lko[0]
+                Lp   = Lp + lkp[0]
         Lwo = np.hstack((Lwo,Lo))
         Lwp = np.hstack((Lwp,Lp))
 

@@ -645,8 +645,13 @@ class Simul(object):
 
     """
     def __init__(self, _filesimul='default.ini'):
-
         self.filesimul = _filesimul
+        self.config = ConfigParser.ConfigParser()
+        self.config.add_section("files")
+        self.config.add_section("tud")
+        self.config.add_section("frequency")
+        self.config.add_section("waveform")
+        self.config.add_section("output")
         self.filematini = "matDB.ini"
         self.fileslabini = "slabDB.ini"
         self.filemat = self.filematini.replace('.ini','.mat')
@@ -691,40 +696,11 @@ class Simul(object):
         self.output = {}
 
         self.freq = np.linspace(2, 11, 181, endpoint=True)
-        self.config = ConfigParser.ConfigParser()
-
-        self.config.add_section("files")
-        self.config.add_section("tud")
-        self.config.add_section("frequency")
-        self.config.add_section("waveform")
-        self.config.add_section("output")
-############### The following is replaced by self.updcfg()
-        self.updcfg()
-        self.load(self.filesimul)
-
-
-
-
-#        #
-#        # frequency section
-#        #
-
-#        self.config.set("frequency", "fghzmin", self.freq[0])
-#        self.config.set("frequency", "fghzmax", self.freq[-1])
-#        self.config.set("frequency", "nf", len(self.freq))
-#        #
-#        # waveform section
-#        #
-#        self.config.set("waveform", "tw", 30)
-#        self.config.set("waveform", "band", 0.499)
-#        self.config.set("waveform", "fc", 4.493)
-#        self.config.set("waveform", "thresh", 3)
-#        self.config.set("waveform", "type", 'generic')
-#        self.config.set("waveform", "fe", 50)
-#        self.wav = wvf.Waveform()
-
-
-        #self.wav.read(self.config)
+        try:
+            self.load(_filesimul)
+        except:
+            self.updcfg()
+            #self.load(self.filesimul)
 
 
 

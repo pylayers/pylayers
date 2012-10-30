@@ -855,7 +855,7 @@ class ScalChannel(object):
         Notes
         -----
             + W may have a more important number of points and a smaller frequency band.
-            + If the frequency band of the waveform exceed the one of the ScalChannel a warning is sent.
+            + If the frequency band of the waveform exceeds the one of the ScalChannei, a warning is sent.
             + W is a FUsignal whose shape doesn't need to be homogeneous with FUDsignal H
 
         """
@@ -908,7 +908,7 @@ class ScalChannel(object):
         Parameters
         ----------
         Wgam :
-            waveform including gamme factor
+            waveform including gamma factor
 
         Returns
         -------

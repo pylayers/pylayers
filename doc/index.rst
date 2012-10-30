@@ -2,17 +2,10 @@ PYLAYERS Overview
 =================
 
 Pylayers is a simulator designed to model mobile pedestrian radio propagation
-in Indoor environments.
+in indoor environments.
 
 
-The simulator is able to welcome various kind of radio propagation solvers of 
-unequal complexity. The current version can generate UWB channel
-impulse responses along trajectory thanks to external C functions which have
-been developed few years ago during the french ANR project AUBADE.
-
-
-Taking advantage of the project FP7 UCELLS, FP7 WHERE1 and FP7 WHERE2 the tool
-has gradually been dedicated to localization applications. Pylayers contains
+Pylayers contains
 various functions which allows to estimate the position based a given number
 of Location Dependent Parameters (LDPs)
 
@@ -38,11 +31,22 @@ localization, but it may be also useful to help with the development of
 characterization, Wireless Sensor Network, MANET, radio cooperation techniques, physical layer
 security ...
 
-The simulator is written in Python and C making use of NumPy, SciPy, SimPy,
-Matplotlib, Scikit-Learn, CVXOPT, Shapely, Networkx. It is designed to be easy to
-extend with new functionalities, allowing it to evolve over the time as a common
+The simulator is written mostly in Python making use of the following modules 
++ numpy
++ scipy
++ simpy
++ matplotlib
++ networkx   
++ shapely   
++ scikit-Learn
++ cvxopt
+  
+`PYLAYERS` is designed to be easy to extend with new functionalities, 
+allowing it to evolve over the time as a common
 tool for research and development in a wide range of communications and
-localization applications. We warmly encourage all users to contribute 
+localization applications.
+
+We warmly encourage all users to contribute 
 new algorithms, models and other improvements back to the project.
 
 Just fork the github repository on github.

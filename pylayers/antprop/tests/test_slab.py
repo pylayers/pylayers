@@ -1,4 +1,5 @@
-#    sl  = SlabDB('def.mat','def.slab')
+from pylayers.antprop.slab import *
+sl  = SlabDB('matDB.ini','slabDB.ini')
 #    #sl.choose()
 #    print "sl  : SlabDB object"
 ##    mat.save2(fileout)
@@ -37,6 +38,7 @@
 #    S1.pcolor()
 #    #    S1.plotwrta()
 #    #    S2 = MLayer(lmat2,thick2,fGHz,theta)
+
 #    #    S2.plotwrta()
 #    #    II.plotwrta(0)
 #    #    II.plotwrtf(0)

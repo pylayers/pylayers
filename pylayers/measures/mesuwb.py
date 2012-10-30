@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: latin1 -*-
+#-*- coding: utf-8 -*-
 import doctest
 import os.path
 import numpy as np
@@ -458,9 +458,11 @@ def ptw1():
 
 
 def visibility():
-    """ determine visibility type of WHERE1 measurements points
+    """ determine visibility type of WHERE1 measurements campaign points
+
     Returns
     -------
+
     visi
         visibility status of each link
     Warning
@@ -764,7 +766,6 @@ class Fdd(object):
     freq
         frequency
     tx
-        ???
 
     Methods
     -------
@@ -798,10 +799,10 @@ class Fdd(object):
                {'moddB' : modulus in dB ,
                  'mod', : modulus in linear scale,
                  'ang'   : unwraped phase in radians}
-       Examples
-       --------
-       .. plot::
-           :include-source:
+        Examples
+        --------
+        .. plot::
+            :include-source:
 
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
@@ -815,6 +816,7 @@ class Fdd(object):
             >>> fig = plt.figure()
             >>> F.plot('ang')
             >>> plt.show()
+
         """
 
         f = self.freq
@@ -1196,7 +1198,7 @@ class Tdd(object):
         plt.xlabel('Time (ns)')
         plt.title('CH4')
         plt.axis(ax)
-        plt.show()
+        plt. show()
 
 
 class TFP(object):
@@ -1281,7 +1283,7 @@ class TFP(object):
             (self.chan_param['toa_new'], FP.chan_param['toa_new']))
         #self.chan_param['toa_th_tmtm']=hstack((self.chan_param['toa_th_tmtm'],FP.chan_param['toa_th_tmtm']))
         #self.chan_param['toa_th_tm']=hstack((self.chan_param['toa_th_tm'],FP.chan_param['toa_th_tm']))
-        #self.chan_param['toa_th_tmt']=hstack((self.chan_param['toa_th_tmt'],FP.chan_param['toa_th_tmt']))
+        #self .chan_param['toa_th_tmt']=hstack((self.chan_param['toa_th_tmt'],FP.chan_param['toa_th_tmt']))
 
 
 class FP(object):
@@ -1331,7 +1333,7 @@ class FP(object):
             sym   : Symmetry
             nint  : int
             thlos : float
-            w     : w ??
+            w     : w 
         """
         #
         # Metadata : general parameters links to measurement configuration
@@ -1444,7 +1446,7 @@ class FP(object):
         self.chan_param['toa_win'] = toa_win
         #self.chan_param['toa_th_tmtm']=toa_th_tmtm
         #self.chan_param['toa_th_tm']=toa_th_tm
-        #self.chan_param['toa_th_tmt']=toa_th_tmt
+        #self. chan_param['toa_th_tmt']=toa_th_tmt
 #\hline
 #\hline
 #$E_{tot}$ & ~& & & \\
@@ -1499,7 +1501,7 @@ class UWBMesure(object):
     etot()
     TDoA()
     Fingerprint()
-    fp()           : calculate fingerprint
+    fp() : calculate fingerprint
     TOA()
 
     Notes
@@ -1519,7 +1521,6 @@ class UWBMesure(object):
 
          Examples
          --------
-         
          .. plot::
              :include-source:
 
@@ -1793,8 +1794,7 @@ class UWBMesure(object):
                 #tdoa = np.array([t12,t13,t14])
                 #return tdoa
     def toa_max2(self):
-        """
-        calculate toa_max
+        """ calculate toa_max (meth2)
         """
         toa_max21 = self.tdd.ch1.toa_max2()
         toa_max22 = self.tdd.ch2.toa_max2()
@@ -1802,17 +1802,17 @@ class UWBMesure(object):
         toa_max24 = self.tdd.ch4.toa_max2()
 
     def tau_Emax(self):
-                """
-                Calculate the delay of energy peak
-                """
-                tau_Emax1 = self.tdd.ch1.tau_Emax()
-                tau_Emax2 = self.tdd.ch2.tau_Emax()
-                tau_Emax3 = self.tdd.ch3.tau_Emax()
-                tau_Emax4 = self.tdd.ch4.tau_Emax()
-                tau_Emax = np.array([tau_Emax1, tau_Emax2,
-                                     tau_Emax3, tau_Emax4])
+        """
+        Calculate the delay of energy peak
+        """
+        tau_Emax1 = self.tdd.ch1.tau_Emax()
+        tau_Emax2 = self.tdd.ch2.tau_Emax()
+        tau_Emax3 = self.tdd.ch3.tau_Emax()
+        tau_Emax4 = self.tdd.ch4.tau_Emax()
+        tau_Emax = np.array([tau_Emax1, tau_Emax2,
+                             tau_Emax3, tau_Emax4])
 
-                return tau_Emax
+        return tau_Emax
 
     def tau_moy(self, display=False):
         """
@@ -1830,8 +1830,7 @@ class UWBMesure(object):
         return taum
 
     def tau_rms(self, display=False):
-        """
-            calculate the RMS delay spread
+        """ calculate the RMS delay spread
         """
 
         taurms1 = self.tdd.ch1.tau_rms()
@@ -1845,8 +1844,7 @@ class UWBMesure(object):
         return taurms
 
     def toa_new(self, display=False):
-        """
-            descendant threshold based toa estimation
+        """ descendant threshold based toa estimation
         """
         toa1 = self.tdd.ch1.toa_new()
         toa2 = self.tdd.ch2.toa_new()
@@ -1859,12 +1857,13 @@ class UWBMesure(object):
         return toa
 
     def toa_win(self, n=9, display=False):
-        """
-            descendant threshold based toa estimation
+        """ descendant threshold based toa estimation
 
-            Parameters
-            ----------
-            n  : key parameter n = 9
+        Parameters
+        ----------
+        n  : key parameter n = 9
+        display : False 
+
         """
         toa1 = self.tdd.ch1.toa_win(w=n)
         toa2 = self.tdd.ch2.toa_win(w=n)
@@ -1924,8 +1923,7 @@ class UWBMesure(object):
         #return toa
 
     def toa_cum(self, n, display=False):
-        """
-        threshold based toa estimation using cumulative energy
+        """ threshold based toa estimation using cumulative energy
         """
 
         toa1 = self.tdd.ch1.toa_cum(th=n)

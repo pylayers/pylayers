@@ -158,7 +158,6 @@ class Simul(Simulation):
         Cf = ConfigParser.ConfigParser()
         Cf.read(pyu.getlong('agent.ini','ini'))
         agents=eval(dict(Cf.items('used_agent'))['list'])
-
         for i, ag in enumerate(agents):
             ag_opt = dict(Cf.items(ag))
             self.lAg.append(Agent(
@@ -172,11 +171,12 @@ class Simul(Simulation):
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             Layout=self.L,
                             net=self.net,
+                            epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
                             world=self.the_world,
                             RAT=eval(ag_opt['rat']),
                             save=eval(self.save_opt['save']),
                             sim=self))
-
+#                            
             if self.lAg[i].type == 'ag':
                 self.activate(self.lAg[i].meca,
                               self.lAg[i].meca.move(), 0.0)

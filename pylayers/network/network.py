@@ -52,7 +52,7 @@ import select
 import sys
 
 
-#comment prendre en compte 1 key spécifique pour 1 MultiGraph
+# How to take into account  1 specific key specifique for 1 MultiGraph
 # MULTIGRAPH !!!! G.add_edge(10,11,key='wifi',attr_dict=dict(Pr=0,TOA=10))
 
 
@@ -83,7 +83,7 @@ class Node(nx.MultiGraph):
         RandomMac(): Generate a RAndom Mac adress    
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],type='ag'):
+    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],epwr={},type='ag'):
         nx.MultiGraph.__init__(self)
 
         # Personnal Network init
@@ -93,11 +93,12 @@ class Node(nx.MultiGraph):
 
         # Network init
 
-        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,type=type))
+        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,type=type))
         self.p    = self.node[self.ID]['p']
         self.pe    = self.PN.node[self.ID]['pe']
         self.t    = self.node[self.ID]['t']
         self.RAT = self.node[self.ID]['RAT']
+        self.epwr = self.node[self.ID]['epwr']
 
 
 
@@ -352,11 +353,12 @@ class Network(nx.MultiGraph):
         >>> N.get_SubNet()
         >>> N.SubNet['bt'].nodes()
         [0, 1]
-        >>> N.SubNet['wifi'].nodess()
+        >>> N.SubNet['wifi'].nodes()
         [0, 1, 2]
 
 
         """
+
         if Rat == None:
         #    pdb.set_trace()
             for Rat in self.RAT:            
@@ -367,6 +369,12 @@ class Network(nx.MultiGraph):
                 for e in ek :
                     if e[2] != Rat:
                         self.SubNet[Rat].remove_edge(e[0],e[1],e[2])
+                for n in self.SubNet[Rat].nodes():
+                    try:
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
+                    except: 
+                        pass
+
 
         elif Rat in self.RAT:
             # creating SubNetworks
@@ -379,6 +387,13 @@ class Network(nx.MultiGraph):
                         self.SubNet[Rat].remove_edges_from(self.SubNet[k].edges(keys=True))
                     except :
                         pass
+                for n in self.SubNet[Rat].nodes():
+                    try:
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
+                    except: 
+                        pass
+
+
         else :
             raise NameError('invalid RAT name')
 
@@ -413,6 +428,24 @@ class Network(nx.MultiGraph):
         self.init_PN()
 
 
+    def update_PN(self):
+        """ update personnal network
+
+
+
+        """
+        ####################################################################################
+        # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
+        for rat in self.RAT.iterkeys():
+            for ldp in self.LDP:
+                self.compute_LDPs(self.nodes(),rat,ldp,method='direct')
+        for n in self.nodes():
+            self.node[n]['PN'].get_RAT()
+            self.node[n]['PN'].get_SubNet()
+            # Add access point position in each personal network (PN)
+            [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['type'] == 'ap']
+                
+        ####################################################################################
 
     def update_LDPs(self,ln,RAT,lD):
         """Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT
@@ -471,10 +504,12 @@ class Network(nx.MultiGraph):
 
 
         for it,ldp in enumerate (LDP):
+#            recuperer puissance emission et la passer a EMS pour correct mesure de Pr
             p=nx.get_node_attributes(self.SubNet[RAT],'p')
+            epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
             e=self.SubNet[RAT].edges()
 
-            lv , d= self.EMS.solve(p,e,ldp,RAT)
+            lv , d= self.EMS.solve(p,e,ldp,RAT,epwr)
 
             if  it ==0:
                 lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]

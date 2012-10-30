@@ -21,11 +21,45 @@ import pdb
 
 class Agent(object):
     def __init__(self,**args):
-        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'save':False, 'sim':Simulation}
+        """ Mobile Agent Init 
+
+           Parameters
+           ----------
+           'ID': 0,
+           'name': 'johndoe'
+           'type':'ag'
+           'pos':np.array([])
+           'roomId':0, 
+           'meca_updt':0.1,
+           'loc':False,
+           'loc_updt':0.5,
+           'Layout':Layout(),
+           'net':Network(),
+           'RAT':['wifi'],
+           'world':world(),
+           'save':[], 
+           'sim':Simulation(),
+           'epwr':{}
+        """
+        defaults =  {'ID': 0,
+                    'name': 'johndoe',
+                    'type':'ag',
+                    'pos':np.array([]),
+                    'roomId':0,
+                    'meca_updt':0.1,
+                    'loc':False,
+                    'loc_updt':0.5,
+                    'Layout':Layout(),
+                    'net':Network(),
+                    'RAT':['wifi'],
+                    'world':world(),
+                    'save':[],
+                    'sim':Simulation(),
+                    'epwr':{}}
 
         for key, value in defaults.items():
             if not args.has_key(key):
-                args[key]=value  
+                args[key]=value
 
         self.args = args
         self.ID = args['ID']
@@ -33,6 +67,7 @@ class Agent(object):
         self.type=args['type']
         # Create Network
         self.net=args['net']
+        self.epwr=args['epwr']
         # mecanique
         if self.type == 'ag':
             self.meca=Person3( ID=self.ID,
@@ -48,7 +83,7 @@ class Agent(object):
             self.meca.steering_mind = queue_steering_mind
 #            self.meca.steering_mind = queue_steering_mind
         # filll in network
-            self.node = Node(ID=self.ID,p=conv_vecarr(self.meca.position),t=time.time(),RAT=args['RAT'],type=self.type)
+            self.node = Node(ID=self.ID,p=conv_vecarr(self.meca.position),t=time.time(),RAT=args['RAT'],epwr=args['epwr'],type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim=args['sim']
             self.sim.activate(self.meca, self.meca.move(),0.0)
@@ -58,10 +93,10 @@ class Agent(object):
 #            self.meca=Person3(ID=self.ID,roomId=args['roomId'],L=args['Layout'],net=self.net,interval=args['meca_updt'],sim=args['sim'],moving=False)
 #            self.meca.behaviors  = []
             if args['roomId'] == -1:
-                self.node = Node(ID=self.ID,p=self.args['pos'],t=time.time(),RAT=args['RAT'],type=self.type)
+                self.node = Node(ID=self.ID,p=self.args['pos'],t=time.time(),RAT=args['RAT'],epwr=args['epwr'],type=self.type)
             else:
                 pp = np.array(args['Layout'].Gr.pos[self.args['roomId']])
-                self.node = Node(ID=self.ID,p=pp,t=time.time(),RAT=args['RAT'],type=self.type)
+                self.node = Node(ID=self.ID,p=pp,t=time.time(),RAT=args['RAT'],epwr=args['epwr'],type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim=args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
