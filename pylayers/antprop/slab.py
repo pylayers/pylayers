@@ -100,22 +100,13 @@ class Interface(object):
             self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
             self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
 
-        #self.R[:,:,0,0]= self.Ro
-        #self.R[:,:,1,1]= self.Rp
-        #self.T[:,:,0,0]= self.To
-        #self.T[:,:,1,1]= self.Tp
-        #print 'RT : Ro : ',self.Ro[15,31]
-        #print 'RT : Rp : ',self.Rp[15,31]
-        #print 'RT : To : ',self.To[15,31]
-        #print 'RT : Tp : ',self.Tp[15,31]
-
     def pcolor(self, dB=False):
         """ display of R & T coefficients wrt frequency an angle
 
         Parameters
         ----------
-            dB : boolean
-                default False
+        dB : boolean
+             default False
 
 
         """
@@ -235,8 +226,8 @@ class Interface(object):
          Parameters
          ----------
 
-         k     : int
-             theta index
+         k  : int
+            theta index
 
          Examples
          ---------

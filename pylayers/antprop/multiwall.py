@@ -184,7 +184,14 @@ def Loss0_v2(L,Pts,f,p):
   
 
 def Loss0_v2_separe(S,pi,f,p):
-    """
+    """ Loss0_v2_separe
+
+    Parameters
+    ----------
+    S 
+    pi ????
+    f 
+    p 
     """
     # for calibrate the loss multiwall
     lwo   = np.array([])

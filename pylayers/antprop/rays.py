@@ -774,10 +774,10 @@ class RayTud(object):
         """
             return ray signature
         """
-        Signa = []
+        Signature = []
         for k in range(self.ni):
-            Signa.append(self.inter[k].typ)
-        return(Signa)
+            Signaiture.append(self.inter[k].typ)
+        return(Signature)
 
     def eval(self, fGHz=[2.4]):
         """

@@ -1,3 +1,8 @@
+from pylayers.antprop.rays import *
+from pylayers.simul.simulem import *
+
+S     = Simul()
+grTud = GrRayTud()
 #       S = Simul.Simul('simul8.simul')
 #    gr = GrRay3D()
 #    gr.choose()
