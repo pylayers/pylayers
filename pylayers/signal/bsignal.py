@@ -1086,7 +1086,8 @@ class TUsignal(TBsignal, Usignal):
         Parameters
         ----------
         R    : Resistance (default 50 Ohms)
-        Tpns : PRP
+        Tpns : real 
+            PRP (default 100 ns)
 
         .. note::
             If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)
@@ -1115,9 +1116,20 @@ class TUsignal(TBsignal, Usignal):
     def esd(self, mode='bilateral'):
         """  Calculate the energy spectral density of the U signal
         
+        Parameters
+        ----------
+        mode : string
+            'unilateral' | 'bilateral'
+
         Returns
         -------
-        FUsignal
+        FHsignal : if mode == 'bilateral'
+        FUsignal : if mode == 'unilateral'
+
+        See Also
+        --------
+
+        FHsignal.unrex
 
         """
         te = self.dx()
@@ -2203,70 +2215,61 @@ class FBsignal(Bsignal):
             plt.xlabel('Frequency (GHz)')
             plt.ylabel('Imaginary part')
 
-    def plot(self, phase=True, dB=True, ix=-1):
+    def plot(self, phase=True, dB=True, ix=np.array([0])):
         """ plot
 
         Parameters
         ----------
-        phase
-        dB
-        ix 
+        phase : boolean 
+            default True 
+        dB : boolean
+            default True 
+        ix : index of y value to be displayed
+            default [0]  only first value is displayed
+
+        Examples  
+        --------
+
+        >>> from pylayers.signal.bsignal import *
+        >>> from numpy import *
+        >>> from scipy import *
+        >>> S = FBsignal()
+        >>> S.x = arange(100)
+        >>> S.y = cos(2*pi*S.x)+1j*sin(3*pi*S.x+pi/3)
+        >>> S.plot()
+        >>> plt.show()
 
         """
         ndim = self.y.ndim
         if ndim > 1:
-            if (ix == -1):
-                nl = len(self.y)
-                for k in range(nl):
-                    if phase:
-                        plt.subplot(211)
-                        if dB:
-                            plt.plot(self.x, 20 * np.log10(abs(self.y[k])))
-                        else:
-                            plt.plot(self.x, abs(self.y[k]))
-                        plt.xlabel('Frequency (GHz)')
-                        plt.ylabel('Modulus')
-                        plt.subplot(212)
-                        plt.plot(self.x, np.unwrap(np.angle(self.y[k])))
-                        plt.xlabel('Frequency (GHz)')
-                        plt.ylabel('Phase (rad)')
-                    else:
-                        if dB:
-                            plt.plot(self.x, 20 * np.log10(abs(self.y[k])))
-                        else:
-                            plt.plot(self.x, abs(self.y[k]))
-                        plt.xlabel('Frequency (GHz)')
-                        plt.ylabel('Modulus')
-            else:
+            for k in ix:
                 if phase:
-                    subplot(211)
+                    ax1 = plt.subplot(211)
                     if dB:
-                        plt.plot(self.x, 20 * np.log10(abs(self.y[ix, :])))
+                        plt.plot(self.x, 20 * np.log10(abs(self.y[k])))
                     else:
-                        plt.plot(self.x, abs(self.y[ix, :]))
-                    plt.xlabel('Frequency (GHz)')
+                        plt.plot(self.x, abs(self.y[k]))
                     plt.ylabel('Modulus')
-                    plt.subplot(212)
-                    plt.plot(self.x, np.unwrap(np.angle(self.y[ix, :])))
+                    ax2 = plt.subplot(212,sharex=ax1)
+                    plt.plot(self.x, np.unwrap(np.angle(self.y[k])))
                     plt.xlabel('Frequency (GHz)')
                     plt.ylabel('Phase (rad)')
                 else:
                     if dB:
-                        plt.plot(self.x, 20 * np.log10(abs(self.y[ix, :])))
+                        plt.plot(self.x, 20 * np.log10(abs(self.y[k])))
                     else:
-                        plt.plot(self.x, abs(self.y[ix, :]))
+                        plt.plot(self.x, abs(self.y[k]))
                     plt.xlabel('Frequency (GHz)')
                     plt.ylabel('Modulus')
         else:
             if phase:
-                plt.subplot(211)
+                ax1 = plt.subplot(211)
                 if dB:
                     plt.plot(self.x, 20 * np.log10(abs(self.y)))
                 else:
                     plt.plot(self.x, abs(self.y))
-                plt.xlabel('Frequency (GHz)')
                 plt.ylabel('Modulus')
-                plt.subplot(212)
+                ax2 = plt.subplot(212,sharex=ax1)
                 #plot(self.x,np.unwrap(angle(self.y)))
                 plt.plot(self.x, np.unwrap(np.angle(self.y)))
                 plt.xlabel('Frequency (GHz)')
@@ -2375,8 +2378,8 @@ class FUsignal(FBsignal, Usignal):
     Attributes
     ----------
 
-    x  : nd.array((1xN))  
-    y  : Complex nd.array((M x N )  
+    x  : nd.array((1xN))
+    y  : Complex nd.array((M x N )
 
 
     Methods
@@ -2385,7 +2388,6 @@ class FUsignal(FBsignal, Usignal):
     symH     : force Hermitian symetry --> FHsignal
     symHz    : force Hermitian symetry with zero padding --> FHsignal
     align    : align two FUsignal on a same frequency base
-           return a list with the two aligned signals
     enthrsh  : Energy thresholding thresh = 99.99 %
     dBthrsh  : dB thresholding thresh  = 40dB
     ift      : Inverse Fourier transform
@@ -2397,7 +2399,6 @@ class FUsignal(FBsignal, Usignal):
     plotdB   : plot modulus in dB
     get      : get k th ray
 
->>>>>>> update documentation
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         FBsignal.__init__(self, x, y)
@@ -3005,6 +3006,8 @@ class FUDsignal(FUsignal):
     def minphas(self):
         """ construct a minimal phase FUsignal
 
+        Notes
+        -----
 
         - Evaluate slope of the phase
         - deduce delay
@@ -3079,9 +3082,10 @@ class FUDsignal(FUsignal):
 
         Parameters
         ----------
-        Nz  : number of zeros for zero padding
-                ffts = 0  no fftshift
-                ffts = 1  apply fftshift
+        Nz   : number of zeros for zero padding
+        ffts : fftshift indicator
+            0  no fftshift
+            1  apply fftshift
 
         """
         tau = self.tau0
@@ -3129,14 +3133,14 @@ class FUDsignal(FUsignal):
         df : float 
             frequency step (dafault 0.01)
         
-        1. recupere fmin et fmax
-        2. construit un nouvelle base au pas df
-        3. Initialise un FUsignal a la taille de de la base de frequence
-        4. construit la matrice tau * f  (Nray x Nf)
-        5. construit la matrice E= exp(-2 j pi f tau)
-        6. reechantillone le FUDsignal selon f --> S
-        7. realise le produit terme a terme E * S
-        8. somme selon les rayons
+        1. get  fmin and fmax
+        2. build a new base with frequency step df
+        3. Initialize a FUsignal with the new frequency base 
+        4. build  matrix tau * f  (Nray x Nf)
+        5. buildl matrix E= exp(-2 j pi f tau)
+        6. resampling of FUDsignal according to f --> S
+        7. apply the element wise product E .* S
+        8. add all rays 
 
         """
         fmin = self.x[0]

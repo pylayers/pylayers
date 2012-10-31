@@ -142,11 +142,11 @@ def Loss0_v2(L,Pts,f,p):
         >>> S.layout('Lstruc.str','matDB.ini','slabDB.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
+        >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
         >>> fig,ax = S.L.showGs()
         >>> tit = plt.title('test Loss0_v2')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
-        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Lwo,c=Lwo,linewidth=0)
+        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
         >>> plt.show()
 
 
@@ -155,9 +155,13 @@ def Loss0_v2(L,Pts,f,p):
     N   = np.shape(Pts)[0]
     Lwo = np.array([])
     Lwp = np.array([])
+    Edo = np.array([])
+    Edp = np.array([])
     for i in range(N):
         Lo = 0.0
         Lp = 0.0
+        edo = 0.0
+        edp = 0.0
         pi = Pts[i,:]
         seglist,theta = L.angleonlink(p,pi)
         i = 0
@@ -186,18 +190,29 @@ def Loss0_v2(L,Pts,f,p):
                 # Loss0 du slab
                 #
                 lko,lkp  = L.sl[name].losst(f,the)
+                do , dp  = L.sl[name].excess_grdelay(theta=the)
+                edo     = edo - np.mean(do)
+                edp     = edp - np.mean(dp)
     #            print lko
     #            print lkp
                 Lo   = Lo + lko[0]
                 Lp   = Lp + lkp[0]
         Lwo = np.hstack((Lwo,Lo))
         Lwp = np.hstack((Lwp,Lp))
+        Edo = np.hstack((Edo,edo))
+        Edp = np.hstack((Edp,edp))
 
-    return(Lwo,Lwp)  
-  
+    return(Lwo,Lwp,Edo,Edp)
 
 def Loss0_v2_separe(S,pi,f,p):
-    """
+    """ Loss0_v2_separe
+
+    Parameters
+    ----------
+    S 
+    pi ????
+    f 
+    p 
     """
     # for calibrate the loss multiwall
     lwo   = np.array([])
@@ -273,22 +288,18 @@ def Loss_diff(u):
     return(Ld)
 
 def Diffraction_parameter(h,d1,d2,f):
-    """ Calculate the diffraction parameter
+    """ Calculate the diffraction Fresnel parameter
 
     Parameters
     ----------
-    h 
-        height 
-    d1
-        distance 1
-    d2
-        distance 2
-    fGHz
-        frequency GHz
+    h  : height (meter) 
+    d1 : distance 1 (meter)
+    d2 : distance 2 (meter) 
+    fGHz  : frequency GHz
 
     Notes
     -----
-    .. math::   \\nu = h \\sqrt{2\\frac{d_1+d_2}{\\lambda d_1d_2}}
+    .. math::   \\nu = h \\sqrt{\\frac{2}{\\lambda} \\frac{d_1+d_2}{d_1 d_2}}
     """
     ld  = 0.3/f
     nu  = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
@@ -296,10 +307,10 @@ def Diffraction_parameter(h,d1,d2,f):
     return(nu)
 
 def Carretosegment(Mob):
+    """ define 4 segment using the position of the rectangle
+
     """
-    define 4 segment using the position of the rectangle
-    """
-  
+
     PC = Mob.position()
 
     seg1 = (PC[0][0],PC[0][1],PC[1][0],PC[1][1])
@@ -349,7 +360,6 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                     return False
                 else:
                     return(Xa,Ya)  
-      
             else:
         #  
         # y = A1*x+B1     y = A2*x+B2
@@ -358,13 +368,13 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                 A2 = (y3-y4)/(x3-x4)
                 B1 = (x2*y1-x1*y2)/(x2-x1)
                 B2 = (x4*y3-x3*y4)/(x4-x3)
-  
+
                 if A1 == A2:
                     return False
-      
+
             # intersect point (Xa,Ya)
                 else:
-  
+
                     Xa = (B2-B1)/(A1-A2)
                     Ya = Xa*A1+B1
 

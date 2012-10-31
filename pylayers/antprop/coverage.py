@@ -117,24 +117,23 @@ class Coverage(object):
 
         Examples
         --------
-    
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import * 
+            >>> from pylayers.antprop.coverage import *
             >>> C=Coverage()
             >>> C.cover()
             >>> C.showPr()
 
         """
-        self.Lwo,self.Lwp=Loss0_v2(self.L,self.grid,self.model.f,self.tx)
+        self.Lwo,self.Lwp,self.Edo,self.Edp=Loss0_v2(self.L,self.grid,self.model.f,self.tx)
         self.freespace = PL(self.grid,self.model.f,self.tx)
         self.Pr = self.txpe - self.freespace - self.Lwo
 
 
     def showPr(self,rxsens=True,nfl=True):
         """ show the map of received power
-    
+
         Parameters
         ----------
 
@@ -215,6 +214,25 @@ class Coverage(object):
         if self.show:
             plt.show()
 
+
+    def showEdo(self):
+        """ show
+        map of Loss from orthogonal field
+        """
+
+        fig=plt.figure()
+        fig,ax=self.L.showGs(fig=fig)
+        l=self.grid[0,0]
+        r=self.grid[-1,0]
+        b=self.grid[0,1]
+        t=self.grid[-1,-1]
+        cov=ax.imshow(self.Edo.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),origin='lower')
+        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
+        ax.set_title('Map of excess delay from orthogonal field')
+        fig.colorbar(cov)
+        if self.show:
+            plt.show()
+
     def showLo(self):
         """ map Losses for orthogonal field
         """
@@ -231,7 +249,6 @@ class Coverage(object):
         fig.colorbar(cov)
         if self.show:
             plt.show()
-
 
     def showLp(self):
         """ map Losses for parallel field
@@ -254,6 +271,8 @@ class Coverage(object):
 
 if (__name__ == "__main__"):
     C=Coverage()
+    C.cover()
+    C.showPr()
     C.L.dumpr()
     sigar,sig=C.L.signature(C.grid[2],C.tx)
 

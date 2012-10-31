@@ -100,22 +100,14 @@ class Interface(object):
             self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
             self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
 
-        #self.R[:,:,0,0]= self.Ro
-        #self.R[:,:,1,1]= self.Rp
-        #self.T[:,:,0,0]= self.To
-        #self.T[:,:,1,1]= self.Tp
-        #print 'RT : Ro : ',self.Ro[15,31]
-        #print 'RT : Rp : ',self.Rp[15,31]
-        #print 'RT : To : ',self.To[15,31]
-        #print 'RT : Tp : ',self.Tp[15,31]
 
     def pcolor(self, dB=False):
         """ display of R & T coefficients wrt frequency an angle
 
         Parameters
         ----------
-            dB : boolean
-                default False
+        dB : boolean
+             default False
 
 
         """
@@ -229,14 +221,16 @@ class Interface(object):
 
         return(Lo, Lp)
 
-    def plotwrtf(self, k=0):
+    def plotwrtf(self, k=0, typ='mod'):
         """ plot R & T coefficients with respect to frequency
 
          Parameters
          ----------
 
-         k     : int
-             theta index
+         k  : int
+            theta index
+         typ: string 
+            type of dispaly default ('mod')
 
          Examples
          ---------
@@ -259,21 +253,33 @@ class Interface(object):
              >>> plt.show()
 
         """
-        plt.subplot(211)
+        ax1 = plt.subplot(211)
         modRo = abs(self.R[:, :, 0, 0])
         modRp = abs(self.R[:, :, 1, 1])
         modTo = abs(self.T[:, :, 0, 0])
         modTp = abs(self.T[:, :, 1, 1])
+        angRo = np.angle((self.R[:, :, 0, 0]))
+        angRp = np.angle((self.R[:, :, 1, 1]))
+        angTo = np.angle((self.T[:, :, 0, 0]))
+        angTp = np.angle((self.T[:, :, 1, 1]))
         #nom = self.m1.name+'|'+self.m2.name+' '+str(theta[k])+'degrees'
         #title('Reflection & Transmission Coefficient  : '+ nom)
         plt.title(self.name)
-        plt.plot(self.fGHz, modRo[:, k], 'b')
-        plt.plot(self.fGHz, modRp[:, k], 'r')
+        if typ=='mod':
+            plt.plot(self.fGHz, modRo[:, k], 'b')
+            plt.plot(self.fGHz, modRp[:, k], 'r')
+        else:
+            plt.plot(self.fGHz, angRo[:, k], 'b')
+            plt.plot(self.fGHz, angRp[:, k], 'r')
         plt.legend(('R _|_', 'R //'), loc='upper left')
         plt.xlabel('frequency (GHz)')
-        plt.subplot(212)
-        plt.plot(self.fGHz, modTo[:, k], 'b')
-        plt.plot(self.fGHz, modTp[:, k], 'r')
+        ax2 = plt.subplot(212,sharex=ax1)
+        if typ=='mod':
+            plt.plot(self.fGHz, modTo[:, k], 'b')
+            plt.plot(self.fGHz, modTp[:, k], 'r')
+        else:
+            plt.plot(self.fGHz, angTo[:, k], 'b')
+            plt.plot(self.fGHz, angTp[:, k], 'r')
         plt.legend(('T _|_', 'T //'), loc='upper right')
         plt.xlabel('frequency (GHz)')
         plt.show()
@@ -427,7 +433,6 @@ class MatInterface(Interface):
         mur2 = self.m2['mur']
 
         #n1    =  sqrte(epr1/mur1)
-        #n2    =  sqrte(epr2/mur2)
 
         n1 = np.sqrt(epr1 / mur1)
         n2 = np.sqrt(epr2 / mur2)
@@ -1130,7 +1135,7 @@ class Slab(dict, Interface):
         #
         #self.thick.append(0.0)
 
-    def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50)):
+    def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False):
         """ Evaluation of the slab
 
         Parameters
@@ -1140,10 +1145,17 @@ class Slab(dict, Interface):
             incidence angle (from normal) radians
 
         """
+
         if not isinstance(fGHz, np.ndarray):
             fGHz = np.array([fGHz])
         if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
+
+        nf = len(fGHz)
+        nt = len(theta)
+        thetai = theta[0]
+        thetaf = theta[-1]
+        th1  = np.linspace(thetai,thetaf,nt)
 
         metalic = False
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
@@ -1224,6 +1236,14 @@ class Slab(dict, Interface):
         self.Ip = Cp
 
         self.RT(metalic)
+        #pdb.set_trace()
+        if compensate:
+            fGHz  = fGHz.reshape(nf,1,1,1)
+            th1   = th1.reshape(1,nt,1,1)
+            thickness = sum(self['lthick'])
+            d = thickness*np.cos(th1)
+            self.T = self.T*np.exp(1j*2*np.pi*fGHz*d/0.3)
+
         self['evaluated'] = True
 
     def filter(self,win,theta=0):
@@ -1244,6 +1264,33 @@ class Slab(dict, Interface):
         self.ev(f,theta)
         wout = Wafeform()
         return(wout)
+
+    def excess_grdelay(self,fGHz=np.arange(2.4,4.0,0.1),theta=0):
+        """ calculate transmission excess delay in ns
+
+        >>> from pylayers.antprop.slab import *
+        >>> from matplotlib.pylab import *
+        >>> import numpy as np 
+        >>> sl = SlabDB('matDB.ini','slabDB.ini')
+        >>> s1 = sl['PARTITION']
+        >>> fGHz = np.arange(3.1,10.6,0.1)
+        >>> delayo,delayp = s1.excess_grdelay(fGHz,0)
+        >>> lineo = plt.plot(fGHz[0:-1],delayo)
+        >>> linep = plt.plot(fGHz[0:-1],delayp)
+        >>> plt.show()
+
+        """
+        df = fGHz[1]-fGHz[0]
+        self.ev(fGHz,theta=np.array([theta]),compensate=True)
+        T   = self.T
+        To  = T[:,0,0,0]
+        Tp  = T[:,0,1,1]
+        ao  = np.unwrap(np.angle(To))
+        ap  = np.unwrap(np.angle(Tp))
+        delayo = np.diff(ao)/(2*np.pi*df)
+        delayp = np.diff(ap)/(2*np.pi*df)
+        return (delayo,delayp)
+
 
     def loss0(self, fGHz=2.4):
         """
@@ -1275,7 +1322,7 @@ class Slab(dict, Interface):
 
         """
 
-        self.ev(fGHz, theta=np.array([0.0]))
+        self.ev(fGHz, theta=np.array([0.0]),compensate=True)
         Lo, Lp = Interface.loss0(self, fGHz)
         return(Lo, Lp)
 

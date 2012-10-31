@@ -1,40 +1,24 @@
-#       S = Simul.Simul('simul8.simul')
-#    gr = GrRay3D()
-#    gr.choose()
-#    gt = GrRayTud()
-#    gt.choose()
-#    sl=SlabDB()
-#    sl.load(_fileslab)
-#    indoor = IndoorStr(sl,_filestr)
-#    indoor.load()
-#    indoor.show3(True)
-#
-#    os.chdir(basename+'/trace')
-#    filetra = FD.askopenfilename(filetypes = [("tra file","*.tra"),("All", "*")],
-#                      title="Please choose a ray tracing file",
-#                      initialdir=tradir)
-#    _filetra=os.path.split(filetra)[1]
-#    #_filetra='ceamimo2_ceamimo2_def_Tx_1_def_Rx_1.tra'
-#
-#    os.chdir(curdir)
-#    grRay = GrRay3D()
-#    grRay.load(_filetra,indoor)
-#    print "grRay has been loaded"
-#    grRay.show3()
-#
-#    os.chdir(basename+'/tud')
-#    filetud = FD.askopenfilename(filetypes = [("tud file","*.tud"),("All", "*")],
-#                      title="Please choose a ray tracing file",
-#                      initialdir=tuddir)
-#    #grRay.save("rox.tra")
-#    _filetud=pyu.getshort(filetud)
-#    os.chdir(curdir)
-#    mat = MatDB()
-#    mat.load('def.mat')
-#    #print "material database has been loaded"
-#    #sl   = SlabDB()
-#    #sl.load('def.slab')
-#    #print "slab database has been loaded"
-#    grTud = GrRayTud()
-#    grTud.load(_filetud,sl,mat)
-#    print "grTud has been loaded"
+from pylayers.antprop.rays import *
+from pylayers.simul.simulem import *
+from numpy import *
+
+# load default simuluation
+S     = Simul()
+# get the tud file for link 1 -> 1
+grTud = GrRayTud()
+grTud.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
+# get the first ray of the tay cluster 
+g0 = grTud.rayTud[0]
+g0.info()
+g0.inter
+g0.inter[0]
+# get the first 3 interactions 
+i0 = g0.inter[0]
+i1 = g0.inter[1]
+i2 = g0.inter[2]
+
+I = Interactions()
+I.C = np.array([[1,-1],[2,3]]).reshape(1,1,2,2)
+M = np.array([[1,2],[3,4]])
+I.addB(M)
+U  = np.eye(2).reshape(1,1,2,2)

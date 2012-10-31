@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: latin1 -*-
+#-*- coding: utf-8 -*-
 import doctest
 import os.path
 import numpy as np
@@ -458,14 +458,18 @@ def ptw1():
 
 
 def visibility():
-    """ determine visibility type of WHERE1 measurements points
+    """ determine visibility type of WHERE1 measurements campaign points
+
     Returns
     -------
+
     visi
         visibility status of each link
+
     Warning
     -------
     This should be done automatically in the future
+
     """
 
     R1 = []
@@ -677,8 +681,6 @@ class RAW_DATA(object):
     timeTX
     tx
 
-    Methods
-    -------
     """
 
     def __init__(self, d):
@@ -742,7 +744,7 @@ class CAL_DATA(object):
         getwave
         """
         #
-        # placer une fenêtre sur chaque voie
+        # place a window on each channel
         #
         s1 = self.ch1
         s2 = self.ch2
@@ -764,7 +766,6 @@ class Fdd(object):
     freq
         frequency
     tx
-        ???
 
     Methods
     -------
@@ -798,14 +799,14 @@ class Fdd(object):
                {'moddB' : modulus in dB ,
                  'mod', : modulus in linear scale,
                  'ang'   : unwraped phase in radians}
-       Examples
-       --------
-       .. plot::
-           :include-source:
+        Examples
+        --------
+        .. plot::
+            :include-source:
 
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pylab as plt 
+            >>> import matplotlib.pylab as plt
             >>> M  = UWBMesure(1)
             >>> F  = M.fdd
             >>> fig = plt.figure()
@@ -815,6 +816,7 @@ class Fdd(object):
             >>> fig = plt.figure()
             >>> F.plot('ang')
             >>> plt.show()
+
         """
 
         f = self.freq
@@ -923,7 +925,7 @@ class Tdd(object):
 
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pylab as plt 
+            >>> import matplotlib.pylab as plt
             >>> M  = UWBMesure(1)
             >>> T  = M.tdd
             >>> freq,pl = T.PL(3,7,10)
@@ -984,12 +986,20 @@ class Tdd(object):
         display
             if display == False the first subplot is reserved for displaying the Layout
 
-        >>> ntx = 2
-        >>> M  = UWBMesure(ntx)
-        >>> T  = M.tdd
-        >>> fig = plt.figure()
-        >>> t = plt.title('test Tdd.show  Tx='+str(ntx))
-        >>> T.show()
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.measures.mesuwb import *
+            >>> import matplotlib.pylab as plt
+            >>> ntx = 2
+            >>> M  = UWBMesure(ntx)
+            >>> T  = M.tdd
+            >>> fig = plt.figure()
+            >>> t = plt.title('test Tdd.show  Tx='+str(ntx))
+            >>> T.show()
 
         """
 
@@ -1001,7 +1011,7 @@ class Tdd(object):
         else:
             createfig = False
 
-        if display == True:
+        if display:
             N = 4
             M = 0
         else:
@@ -1027,7 +1037,7 @@ class Tdd(object):
         #axis([0,200,-2,2])
         #"sp1.add_title(titre[0])
         if createfig:
-            sp2 = fig.add_subplot(N, NC, 2 * NC + C)
+            sp2 = fig.add_subplot(N, NC, 2 * NC + C,sharex=sp1)
         elif N == 4:
             sp2 = ax[1]
         else:
@@ -1039,7 +1049,7 @@ class Tdd(object):
         #plt.axis([0,200,-2,2])
         #plt.title(titre[1])
         if createfig:
-            sp3 = fig.add_subplot(N, NC, 3 * NC + C)
+            sp3 = fig.add_subplot(N, NC, 3 * NC + C,sharex=sp1)
         elif N == 4:
             sp3 = ax[2]
         else:
@@ -1050,7 +1060,7 @@ class Tdd(object):
         #plt.show()
         #plt.title(titre[2])
         if createfig:
-            sp4 = fig.add_subplot(N, NC, 4 * NC + C)
+            sp4 = fig.add_subplot(N, NC, 4 * NC + C,sharex=sp1)
         elif N == 4:
             sp4 = ax[3]
         else:
@@ -1061,7 +1071,7 @@ class Tdd(object):
         #plt.show()
         #plt.axis([0,200,-2,2])
         #plt.title(titre[3])
-        if display == True:
+        if display:
             plt.show()
 
     def show_span(self, delay=np.array([0, 0, 0, 0]), wide=np.array([0, 0, 0, 0])):
@@ -1069,6 +1079,7 @@ class Tdd(object):
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -1076,7 +1087,7 @@ class Tdd(object):
             >>> from pylayers.measures.mesuwb import *
             >>> M  = UWBMesure(2)
             >>> T  = M.tdd
-            >>  fig = T.show_span()
+            >>> s1 = T.show_span()
             >>> plt.show()
 
         """
@@ -1114,7 +1125,8 @@ class Tdd(object):
 
         Examples
         --------
-        
+
+        >>> from pylayers.measures.mesuwb import *
         >>> M  = UWBMesure(1)
         >>> T  = M.tdd
         >>> bo = T.box()
@@ -1186,7 +1198,7 @@ class Tdd(object):
         plt.xlabel('Time (ns)')
         plt.title('CH4')
         plt.axis(ax)
-        plt.show()
+        plt. show()
 
 
 class TFP(object):
@@ -1231,6 +1243,11 @@ class TFP(object):
         self.chan_param['angular'] = np.array([])
 
     def append(self, FP):
+        """
+        Parameters
+        ----------
+        FP 
+        """
         tx = FP.metadata['Tx'].reshape(3, 1)
         rx = FP.metadata['Rx'].reshape(3, 1)
         self.metadata['Tx'] = hstack((self.metadata['Tx'], tx))
@@ -1271,7 +1288,7 @@ class TFP(object):
             (self.chan_param['toa_new'], FP.chan_param['toa_new']))
         #self.chan_param['toa_th_tmtm']=hstack((self.chan_param['toa_th_tmtm'],FP.chan_param['toa_th_tmtm']))
         #self.chan_param['toa_th_tm']=hstack((self.chan_param['toa_th_tm'],FP.chan_param['toa_th_tm']))
-        #self.chan_param['toa_th_tmt']=hstack((self.chan_param['toa_th_tmt'],FP.chan_param['toa_th_tmt']))
+        #self .chan_param['toa_th_tmt']=hstack((self.chan_param['toa_th_tmt'],FP.chan_param['toa_th_tmt']))
 
 
 class FP(object):
@@ -1289,7 +1306,7 @@ class FP(object):
     thnlos : threshold for nlos case toa_th
     thcum  : threshold for toa_cum
 
-    This method build the Fingerprint from UWBMesure M - Rx N°k
+    This method build the Fingerprint from UWBMesure M - Rx number k
 
     Attributes
     ----------
@@ -1321,7 +1338,7 @@ class FP(object):
             sym   : Symmetry
             nint  : int
             thlos : float
-            w     : w ??
+            w     : w
         """
         #
         # Metadata : general parameters links to measurement configuration
@@ -1434,7 +1451,7 @@ class FP(object):
         self.chan_param['toa_win'] = toa_win
         #self.chan_param['toa_th_tmtm']=toa_th_tmtm
         #self.chan_param['toa_th_tm']=toa_th_tm
-        #self.chan_param['toa_th_tmt']=toa_th_tmt
+        #self. chan_param['toa_th_tmt']=toa_th_tmt
 #\hline
 #\hline
 #$E_{tot}$ & ~& & & \\
@@ -1489,7 +1506,7 @@ class UWBMesure(object):
     etot()
     TDoA()
     Fingerprint()
-    fp()           : calculate fingerprint
+    fp() : calculate fingerprint
     TOA()
 
     Notes
@@ -1509,9 +1526,8 @@ class UWBMesure(object):
 
          Examples
          --------
-
          .. plot::
-             :included-source:
+             :include-source:
 
              >>> from pylayers.measures.mesuwb import *
              >>> M1 = UWBMesure(1)
@@ -1577,7 +1593,7 @@ class UWBMesure(object):
             d4 = pyu.delay(self.rx[4, :], self.tx)
             self.de = np.array([d1, d2, d3, d4])
             #display measurements
-            if display == True:
+            if display:
                 self.tdd.show(self.de)
             #calculate angle
             ang1 = geu.angular(self.tx, self.rx[1, :])
@@ -1783,8 +1799,7 @@ class UWBMesure(object):
                 #tdoa = np.array([t12,t13,t14])
                 #return tdoa
     def toa_max2(self):
-        """
-        calculate toa_max
+        """ calculate toa_max (meth2)
         """
         toa_max21 = self.tdd.ch1.toa_max2()
         toa_max22 = self.tdd.ch2.toa_max2()
@@ -1792,17 +1807,17 @@ class UWBMesure(object):
         toa_max24 = self.tdd.ch4.toa_max2()
 
     def tau_Emax(self):
-                """
-                Calculate the delay of energy peak
-                """
-                tau_Emax1 = self.tdd.ch1.tau_Emax()
-                tau_Emax2 = self.tdd.ch2.tau_Emax()
-                tau_Emax3 = self.tdd.ch3.tau_Emax()
-                tau_Emax4 = self.tdd.ch4.tau_Emax()
-                tau_Emax = np.array([tau_Emax1, tau_Emax2,
-                                     tau_Emax3, tau_Emax4])
+        """
+        Calculate the delay of energy peak
+        """
+        tau_Emax1 = self.tdd.ch1.tau_Emax()
+        tau_Emax2 = self.tdd.ch2.tau_Emax()
+        tau_Emax3 = self.tdd.ch3.tau_Emax()
+        tau_Emax4 = self.tdd.ch4.tau_Emax()
+        tau_Emax = np.array([tau_Emax1, tau_Emax2,
+                             tau_Emax3, tau_Emax4])
 
-                return tau_Emax
+        return tau_Emax
 
     def tau_moy(self, display=False):
         """
@@ -1815,13 +1830,12 @@ class UWBMesure(object):
         taum4 = self.tdd.ch4.tau_moy()
 
         taum = np.array([taum1, taum2, taum3, taum4])
-        if display == True:
+        if display:
             self.tdd.show(taum)
         return taum
 
     def tau_rms(self, display=False):
-        """
-            calculate the RMS delay spread
+        """ calculate the RMS delay spread
         """
 
         taurms1 = self.tdd.ch1.tau_rms()
@@ -1830,13 +1844,12 @@ class UWBMesure(object):
         taurms4 = self.tdd.ch4.tau_rms()
 
         taurms = np.array([taurms1, taurms2, taurms3, taurms4])
-        if display == True:
+        if display:
             self.tdd.show_span(self.tau_moy(display=False), taurms)
         return taurms
 
     def toa_new(self, display=False):
-        """
-            descendant threshold based toa estimation
+        """ descendant threshold based toa estimation
         """
         toa1 = self.tdd.ch1.toa_new()
         toa2 = self.tdd.ch2.toa_new()
@@ -1844,17 +1857,18 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_new()
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
     def toa_win(self, n=9, display=False):
-        """
-            descendant threshold based toa estimation
+        """ descendant threshold based toa estimation
 
-            Parameters
-            ----------
-            n  : key parameter n = 9
+        Parameters
+        ----------
+        n  : key parameter n = 9
+        display : False
+
         """
         toa1 = self.tdd.ch1.toa_win(w=n)
         toa2 = self.tdd.ch2.toa_win(w=n)
@@ -1862,7 +1876,7 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_win(w=n)
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1877,7 +1891,7 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_max(nint=n)
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1893,7 +1907,7 @@ class UWBMesure(object):
 
         toa = np.array([toa1, toa2, toa3, toa4])
 
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1914,8 +1928,7 @@ class UWBMesure(object):
         #return toa
 
     def toa_cum(self, n, display=False):
-        """
-        threshold based toa estimation using cumulative energy
+        """ threshold based toa estimation using cumulative energy
         """
 
         toa1 = self.tdd.ch1.toa_cum(th=n)
@@ -1924,7 +1937,7 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_cum(th=n)
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1939,7 +1952,7 @@ class UWBMesure(object):
         #toa4 = self.tdd.ch4.toa_cum_tmt()
 
         #toa  =  np.array([toa1,toa2,toa3,toa4])
-        #if display == True:
+        #if display:
             #self.tdd.show(toa)
         #return toa
 

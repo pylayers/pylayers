@@ -1,6 +1,6 @@
 from SimPy.Simulation import *
-from Transit.StateProcess import PASSIVATE, DONT_PASSIVATE
-from Transit.World import world
+from pylayers.mobility.transit.StateProcess import PASSIVATE, DONT_PASSIVATE
+from pylayers.mobility.transit.World import world
 
 # this should be handled by notifications, not polling
 class RailStationManager(Process):

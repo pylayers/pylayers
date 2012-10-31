@@ -26,9 +26,9 @@ For learning how to use PyLayers, see also :ref:`user`.
 
    location.rst 
 
-   mobility.rst 
+   measures.rst
 
-   measures.rst 
+   mobility.rst 
 
    network.rst 
 

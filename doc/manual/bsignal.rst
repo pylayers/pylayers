@@ -77,6 +77,8 @@ A simulation file contains the description of an applied waveform.
 
 *Construction of the VectChannel*
 
+:ref:`pylayers.antprop.channel.VectChannel`
+
 .. ipython::
 
     In [9]: vc = S.VC(1,1)
@@ -98,8 +100,10 @@ ScalChannel object is the container for the ray transfer function
 
     In [1]: S.tx.A.info()
 
-    @savefig rayTF.png width=10in 
-    In [2]: sc.H.plot()
+    In [1]: plt.figure()
+
+    @savefig rayTF.png width=6in 
+    In [2]: sc.H.plot(ix=np.arange(10))
 
 
 The antenna is taken into account as follows
@@ -110,8 +114,10 @@ The antenna is taken into account as follows
 
     In [1]: sca = vc.vec2scalA(S.tx.A,S.rx.A,alpha)
     
-    @savefig scalch.png width=10in
-    In [1]: sca.H.plot()
+    In [1]: plt.figure()
+
+    @savefig scalch.png width=6in
+    In [1]: sca.H.plot(ix=arange(10))
 
 
 To evaluate the UWB Channel Impulse Response (CIR), the simulation waveform 
@@ -122,78 +128,88 @@ is applied to the ScalChannel
 .. ipython::
     
     In [1]: cir = sc.applywavB(S.wav.sfg)
+    
+    In [1]: plt.figure()
 
     @savefig cir.png width=6in 
     In [1]: cir.plot()
 
 .. ipython::
 
-    In [1]: CIR=cir.esd(mode='unilateral')
+    In [1]: CIR = cir.esd(mode='unilateral')
+    
+    In [1]: plt.figure()
     
     @savefig CIR.png width=6in
-    In [1]: CIR.plot()
+    In [1]: CIR.plot(phase=False,dB=True)
 
+
+    
 
 .. math:: 
 
     \mathbf{Y} = \mathbf{S} \odot \mathbf{W}
 
+
 .. ipython::
     
-    In[1]: wgam = S.wav.sfg
+    In [1]: wgam = S.wav.sfg
     
-    In[1]: Y    = sc.apply(wgam)
+    In [1]: Y    = sc.apply(wgam)
 
-    tau  = Y.tau0
+    In [1]: tau  = Y.tau0
 
-    #print 'tau=',tau
+    In [1]: print 'tau=',tau
 
-    ri   = Y.ft1(500,1)
+:math:`r_i(t)` is obtained through the :ref:`pylayers.signal.bsignal.FUDsignal.ft1` function 
 
-    UH   = Y.symHz(500)
+.. ipython::
 
-    uh   = UH.ifft(1)
+    In [1]: ri   = Y.ft1(500,1)
 
-    UH.plot()
+    In [1]: UH   = Y.symHz(500)
 
-    plt.figure()
-
-    uh.plot()
+    In [1]: uh   = UH.ifft(1)
     
-    #figure()
+    In [1]: plt.figure()
 
-    #ip0.plot()
+    @savefig figUH.png width=6in 
+    In [1]: UH.plot()
 
-    #figure()
+    In [1]: plt.figure()
 
-    #IP0  = ip0.fft()
-
-    #IP0.plot()
-
-
-    ips  = Y.ift(500,1)
+    @savefig figuh.png width=6in 
+    In [1]: uh.plot()
     
-    t    = ips.x 
+    In [1]: ips  = Y.ift(500,1)
     
-    ip0  = TUsignal(t,ips.y[0,:])
-
-    plot(UH.x,real(UH.y[0,:]),UH.x,imag(UH.y[0,:]))
+    In [1]: t    = ips.x 
     
-    U0 = FHsignal(UH.x,UH.y[0,:])
+    In [1]: ip0  = TUsignal(t,ips.y[0,:])
 
-    u0 = U0.ifft(1)
+    In [1]: plt.figure()
 
-    u1 = ifft(U0.y)
+    @savefig figip0.png width=6in 
+    In [1]: plot(UH.x,real(UH.y[0,:]),UH.x,imag(UH.y[0,:]))
+    
+    In [1]: U0 = FHsignal(UH.x,UH.y[0,:])
 
-    plt.figure()
+    In [1]: u0 = U0.ifft(1)
 
-    plot(uh.x,uh.y[0,:]*1000+3)
+    In [1]: u1 = ifft(U0.y)
 
-    S.wav.st.plot()
+    In [1]: plt.figure()
+
+    @savefig figuh0.png width=6in 
+    In [1]: plot(uh.x,uh.y[0,:]*1000+3)
+
+    In [1]: S.wav.st.plot()
+
+    In [1]: plt.figure()
 
 
-
-    U0.plot()
+    @savefig figU0.png width=6in 
+    In [1]: U0.plot()
 
 
 Here is the problem 
@@ -201,92 +217,60 @@ For some reason the Hermitian symmetry forcing is not working here
 
 .. ipython::
 
-    U1=u0.fft()
+    In [1]: U1 = u0.fft()
 
-    g = fft(u1)
+    In [1]: g = fft(u1)
+   
+    @savefig figabsg.png width=6in 
+    In [1]: plot(abs(g))
     
-    plot(abs(g))
+    In [1]: plt.figure()
     
-    plt.figure()
+    In [1]: s  = fftshift(u1)
     
-    s  = fftshift(u1)
+    @savefig figabffts.png width=6in 
+    In [1]: plot(abs(fft(s)),'r')
     
-    plot(abs(g))
-    
-    #plt.figure()
-    #plot(uh.x,uh.y[0,:])
-    #plot(uh.x,s*50+0.003)
+    In [1]: plt.figure()
 
-    plot(abs(fft(s)),'r')
-    
-    plot(abs(fft(uh.y[0,:])),'g')
+    @savefig figabuhy.png width=6in 
+    In [1]: plot(abs(fft(uh.y[0,:])),'g')
 
+    In [1]: wgam.plot()
 
-    wgam.plot()
+    In [1]: S.wav.sf.plot()
 
+    In [1]: print uh.y[0,:]
 
-    S.wav.sf.plot()
-
-
-    print uh.y[0,:]
-
-
-    plot(imag(s))
+    In [1]: plot(imag(s))
 
 
 Problem :math:`s` is not real 
 
 
+.. ipython::
 
-    plot(real(u0.y))
+    In [1]: plot(real(u0.y))
 
+    In [1]: plot(imag(s))
 
-    plot(imag(s))
+    In [1]: U0.y
 
+    In [1]: plot(real(U0.y))
 
-    U0.y
+    In [1]: U0.y[0]
 
+    In [1]: U0.y[50]
 
-    plot(real(U0.y))
+    In [1]: U0.y[-50]
 
+    In [1]: UH.y[0,2]
 
-    U0.y[0]
+    In [1]: UH.y[0,-2]
 
+    In [1]: N = len(UH.y)
 
-    U0.y[50]
+    In [1]: v1 = UH.y[1:(N-1)/2.]
 
-
-    U0.y[-50]
-
-
-    UH.y[0,2]
-
-
-    UH.y[0,-2]
-
-
-    N = len(UH.y)
-
-
-    v1 = UH.y[1:(N-1)/2.]
-    v2 = UH.y[N:-1:(N-1)/2.]
-
-
-    len(v1)
-
-
-    len(v2)
-
-
-    UH.y[0,-1]
-
-
-    UH.y[0,1]
-
-
-    plot(real(UH.y[0,:]))
-    
-    plot(imag(UH.y[1,:]))
-
-
+    In [1]: v2 = UH.y[N:-1:(N-1)/2.]
 

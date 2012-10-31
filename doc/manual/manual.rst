@@ -317,10 +317,18 @@ Terminology
 
 
 
-Using the Bsignal Module 
+``bsignal`` module 
 ------------------------
 
 .. toctree::
     :maxdepth: 2
 
     bsignal.rst 
+
+``antenna`` module     
+------------------
+
+.. toctree::
+    :maxdepth: 2
+
+    antenna.rst 

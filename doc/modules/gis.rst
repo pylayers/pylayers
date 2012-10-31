@@ -12,6 +12,9 @@ This module gathers all classes and functions related to geographical informatio
    :maxdepth: 2
 
    gis.layout.rst 
+
    gis.readvrml.rst 
+
    gis.furniture.rst 
+
    gis.selectl.rst 

@@ -1934,13 +1934,13 @@ class Layout(object):
         Returns
         -------
 
-        seglist 
+        seglist
 
         theta
 
         Examples
         --------
-        
+
         >>> from pylayers.gis.layout import *
         >>> L=Layout('matDB.ini','slabDB.ini')
         >>> L.load('office.str')

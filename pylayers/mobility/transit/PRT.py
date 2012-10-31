@@ -1,8 +1,8 @@
 from SimPy.Simulation import *
-from Transit.StateProcess import StateProcess, Updater, new_state, next_state
-from Transit.Path import *
-from Transit.World import world
-from Transit.vec3 import vec3
+from pylayers.mobility.transit.StateProcess import StateProcess, Updater, new_state, next_state
+from pylayers.mobility.transit.Path import *
+from pylayers.mobility.transit.World import world
+from pylayers.mobility.transit.vec3 import vec3
 from math import *
 from random import lognormvariate, uniform
 import os
