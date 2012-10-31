@@ -53,6 +53,7 @@ import SimPy.Simulation
 from SimPy.Simulation import Process,hold,SimEvent,Simulation,waitevent
 from random import uniform,gauss
 from pylayers.network.network import  Node,Network
+import networkx as nx
 import pdb
 
 
@@ -90,9 +91,10 @@ class dcond(dict):
 
 
 class TX(Process):
-     def __init__(self,**args):
+    def __init__(self,**args):
         defaults={'sim':None,
                   'net': Network(),
+                  'gmp': Gmp(),
                   'ID': 0,
                   'dcond':{},
                   'levt': [],
@@ -109,30 +111,131 @@ class TX(Process):
         self.dcond = args['dcond']
         self.args=args
         self.net=args['net']
+        self.gmp=args['gmp']
         self.PN=self.net.node[self.ID]['PN']
-
+        self.evt_create()
+        self.c_init()
         Process.__init__(self,name='Tx'+str(self.ID),sim=self.sim)
 
 
-     def run(self):
+    def run(self):
         while True:
             self.levt=[]
-            for c in self.cond:
-                if self.c_interpret(c):
+            for d in self.dcond.keys():
+                if self.c_interpret(self.dcond[d]):
                     self.levt.append(self.dcste[c])
             print 'Tx ', self.ID,' @',self.sim.now()
             yield hold, self, self.refresh
 
 
-#    def c_interpret(self,c):
-#        """
-#        test si la constrainte est vrai a l'instant t
-#         """
-#        return True
 
 
-#    def evt_create(self):
 
+    def evt_create(self):
+        for e in self.gmp.edges(self.ID,keys=True):
+            self.levt.append(SimEvent(e,sim=self.sim))
+
+
+    def c_init(self):
+        for dk in self.dcond.keys():
+            d=self.dcond[dk]
+            ### Rat
+            if d['rat']=='all':
+                lr=self.PN.SubNet.keys()
+            else:
+                try:
+                    lr=d['rat'] # d['rat'] mustr contain a list of
+                               # rat to be processed
+                except: 
+                    raise NameError('rat constraints must be a list of \
+                    rat available in the personnal network of node' \
+                    +str(self.ID) +'Please modify our agent.ini')
+
+
+            ### Node
+            ie =[]
+            if d['node']=='all':
+                if not isinstance(lr,list):
+                    lr=[lr]
+                for r in lr:
+                    dg = nx.DiGraph(self.PN.SubNet[r])
+                    ie.append(dg.edges_iter(self.ID))
+            else:
+                try:
+                    for r in lr:
+                        dg = nx.DiGraph(self.PN.SubNet[r])
+                        iet.append(dg.edges(self.ID))
+                        for i in iet:
+                            for j in d['node']:
+                                if j in i :
+                                    ie.append(i)
+                      # d['node'] must contain a list of node to be processed
+                except:
+                    raise NameError('node constraints must be a list of \
+                    node available in the personnal network of node' \
+                    +str(self.ID) +'Please modify our agent.ini')
+
+
+            lmess = []
+            di={}
+            [di.update({it:[]}) for it in d['message'] ]
+            for r in lr:
+                if d['node']=='all':
+                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges()))
+                else:
+                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges(d['node'])))
+
+
+            self.gmp.fill_edge(ie,lr,lmess)
+
+
+
+
+    def c_interpret(self,d):
+
+        # first great criteria
+        if 'distance' in d.keys():
+            pass
+        elif 'topology' in d.keys():
+            pass
+        else: 
+            NameError('Type of mp constraint not yet taking into account')
+
+
+
+class Gmp(nx.MultiDiGraph):
+
+
+    def __init__(self,net=Network(),sim=Simulation()):
+        nx.MultiDiGraph.__init__(self)
+        self.net=net
+        self.sim=sim
+        self.create_graph()
+        self.create_evt()
+
+    def create_graph(self):
+        for rat in self.net.SubNet:
+            for n in self.net.SubNet[rat].nodes():
+                G=nx.DiGraph(self.net.SubNet[rat])
+                le = G.edges(n)
+                ld = [{'message':[],'t':-1}] * len(le)
+                if le[0][0] == n :
+                    self.add_edges_from(self.net.Gen_tuple(G.edges_iter(n),rat,ld))
+                else :
+                    self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),rat,ld))
+
+    def create_evt(self):
+        self.levt=[]
+        for e in self.edges(keys=True):
+            self.levt.append(SimEvent(e,sim=self.sim))
+
+
+    def fill_edge(self,le,rat,mess):
+
+        for i,r in enumerate(rat):
+            self.add_edges_from(self.net.Gen_tuple(le[i],r,mess[i]))
+#        Z=self.dcond['1']['message']*len(le[1])
+#        self.gmp.add_edges_from(self.net.Gen_tuple(le,'rat1',Z))
 
 
 
@@ -213,9 +316,12 @@ if (__name__ == "__main__"):
     N.update_PN()
 
 
+    gmp=Gmp(net=N,sim=sim)
 
-    tx1=TX(net=N,ID=Ag[0].ID,dcond=Ag[0].dcond)
-    tx2=TX(net=N,ID=Ag[1].ID,dcond=Ag[1].dcond)
+    tx=[]
+    for a in Ag:
+        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gmp=gmp,sim=sim))
+
 ##    N.node[0]['PN'].node[0]['pe']=np.array((4,4))
 ##    N.node[0]['PN'].node[1]['pe']=np.array((8,8))
 ##    N.node[0]['PN'].node[2]['pe']=np.array((30,8))

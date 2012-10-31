@@ -269,7 +269,7 @@ class Network(nx.MultiGraph):
             yield(tuple((G[0],G[1],rat,Gvar)))
 
 
-    def get_RAT(self,Rat=None):
+    def get_RAT(self):
         """ get rat from nodes of the network
         
 
@@ -291,20 +291,20 @@ class Network(nx.MultiGraph):
         {'bt': [0, 1, 2], 'wifi': [0, 1, 2]}
 
         """
-        if Rat !=None :
-            for n in self.nodes():
-                if Rat in self.node[n]['RAT']:
-                    try:
-                        self.RAT[Rat].append(n)
-                    except :
-                        self.RAT[Rat]=[n]
-        else :
-            for n in self.nodes(): 
-                for Rat in self.node[n]['RAT']:
-                    try:
-                        self.RAT[Rat].append(n)
-                    except :
-                        self.RAT[Rat]=[n]
+#        if Rat !='None' :
+        for no in self.nodes():
+            for r in self.node[no]['RAT']:
+                try:
+                    self.RAT[r].extend(no)
+                except :
+                    self.RAT[r]=[no]
+#        else :
+#            for no in self.nodes(): 
+#                for r in self.node[no]['RAT']:
+#                    try:
+#                        self.RAT[r].extend(no)
+#                    except :
+#                        self.RAT[r]=[no]
 
         # uniquify results
         for Rat in self.RAT.keys():
@@ -379,7 +379,6 @@ class Network(nx.MultiGraph):
         elif Rat in self.RAT:
             # creating SubNetworks
             self.SubNet[Rat]= self.subgraph(self.RAT[Rat])
-
             # remove information from previous subnetwork (because subgraph copy the whole edge information)
             for k in self.RAT.keys():
                 if k != Rat:
@@ -403,13 +402,23 @@ class Network(nx.MultiGraph):
 
         """
 
+#        for Sn in self.SubNet.iteritems():
+#            print Sn
+#            for n in Sn[1].nodes():
+#                print Sn
+#                pdb.set_trace()
+#                try:
+#                    [Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0]) for nn in Sn[1].nodes() if nn != n]
+#                except:
+#                    [Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type']) for nn in Sn[1].nodes() if nn != n] 
         for Sn in self.SubNet.iteritems():
-            print Sn
             for n in Sn[1].nodes():
-                try:
-                    [Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0]) for nn in Sn[1].nodes() if nn != n]
-                except:
-                    [Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type']) for nn in Sn[1].nodes() if nn != n] 
+                for nn in Sn[1].nodes():
+                    if nn != n:
+                        try:
+                            Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
+                        except:
+                            Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type'])
 
 
     def create(self):
@@ -426,7 +435,6 @@ class Network(nx.MultiGraph):
         self.get_RAT()
         self.connect()
         self.init_PN()
-
 
     def update_PN(self):
         """ update personnal network
