@@ -88,7 +88,8 @@ class Node(nx.MultiGraph):
 
         # Personnal Network init
         self.ID=ID
-        self.PN = Network(owner=self.ID)
+#        self.PN = Network(owner=self.ID)
+        self.PN = PNet(owner=self.ID)
         self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
 
         # Network init
@@ -110,6 +111,7 @@ class Node(nx.MultiGraph):
         random.randint(0x00, 0xff),
         random.randint(0x00, 0xff) ]
         return ':'.join(map(lambda x: "%02x" % x, mac))	
+
 
 
 
@@ -420,7 +422,6 @@ class Network(nx.MultiGraph):
                         except:
                             Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type'])
 
-
     def create(self):
         """ create the network
 
@@ -481,12 +482,11 @@ class Network(nx.MultiGraph):
 
         """
         
-        
         # update network LDP
         self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
         # update each personnal LDP
-        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
-
+#        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edgs(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
+        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(e,data=True,keys=True)) for e in self.SubNet[RAT].nodes()]
 
     def compute_LDPs(self,ln,RAT,LDP,method='direct'):
         """compute edge LDP
@@ -897,7 +897,17 @@ class Network(nx.MultiGraph):
         """
         pyu.writenet(self,S)
 
-
+class PNet(Network,nx.MultiDiGraph):
+     def __init__(self,owner='sim',EMS=EMSolver()):
+        nx.MultiDiGraph.__init__(self,name='PN'+owner)
+        self.RAT={}
+        self.LDP = ['TOA','Pr'] 
+        self.SubNet={}
+        self.EMS=EMS
+        self.coll_plot={}
+        self.pos={}
+        self.mat={}
+        self.idx = 0
 
 class PNetwork(Process):
     """

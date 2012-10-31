@@ -95,8 +95,8 @@ class Localization(object):
             crat,cldp,e,own=c.origin.values()
             if (crat in rat) and (cldp in ldp) :
                 c.p = self.net.node[self.ID]['PN'].node[e[0]]['pe']
-                c.value = self.net.node[self.ID]['PN'].edge[e[0]][self.ID][crat][cldp][0]
-                c.std = self.net.node[self.ID]['PN'].edge[e[0]][self.ID][crat][cldp][1]
+                c.value = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat][cldp][0]
+                c.std = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat][cldp][1]
         self.cla.update()
 
 

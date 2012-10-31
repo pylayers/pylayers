@@ -94,10 +94,10 @@ class TX(Process):
     def __init__(self,**args):
         defaults={'sim':None,
                   'net': Network(),
-                  'gmp': Gmp(),
+                  'gcom': Gcom(),
                   'ID': 0,
                   'dcond':{},
-                  'levt': [],
+                  'devt': {},
                   'lcst': []
                   }
 ##       initialize attributes
@@ -108,10 +108,7 @@ class TX(Process):
             else:
                 setattr(self, key, value)
                 args[key]=value  
-        self.dcond = args['dcond']
         self.args=args
-        self.net=args['net']
-        self.gmp=args['gmp']
         self.PN=self.net.node[self.ID]['PN']
         self.evt_create()
         self.c_init()
@@ -128,12 +125,10 @@ class TX(Process):
             yield hold, self, self.refresh
 
 
-
-
-
     def evt_create(self):
-        for e in self.gmp.edges(self.ID,keys=True):
-            self.levt.append(SimEvent(e,sim=self.sim))
+#        for e in self.gcom.edges(self.ID,keys=True):
+        for e in self.PN.edges(self.ID,keys=True):
+            self.devt[e]=self.gcom.devt[e]
 
 
     def c_init(self):
@@ -185,8 +180,7 @@ class TX(Process):
                 else:
                     lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges(d['node'])))
 
-
-            self.gmp.fill_edge(ie,lr,lmess)
+            self.gcom.fill_edge(ie,lr,lmess)
 
 
 
@@ -203,7 +197,57 @@ class TX(Process):
 
 
 
-class Gmp(nx.MultiDiGraph):
+
+
+
+class RX(Process):
+    def __init__(self,**args):
+        defaults={'sim':None,
+                  'ID':'A1',
+                  'net':Network()
+                  }
+##       initialize attributes
+        for key, value in defaults.items():
+            if args.has_key(key):
+
+                setattr(self, key, args[key])
+            else:
+                setattr(self, key, value)
+                args[key]=value  
+        self.args=args
+        self.net=args['net']
+        self.sim=args['sim']
+        self.ID==args['ID']
+        self.PN=self.net.node[self.ID]['PN']
+        self.create_evt()
+
+        Process.__init__(self,name='Rx-'+str(self.ID),sim=self.sim)
+
+#        Cf = ConfigParser.ConfigParser()
+#        Cf.read(pyu.getlong('agent.ini','ini'))
+#        ag_opt = dict(Cf.items(self.ID))
+#        self.cond = eval(ag_opt['condition'])
+#        self.inode = eval(ag_opt['inode'])
+#        self.irat = eval(ag_opt['irat'])
+#        self.mess = eval(ag_opt['message'])
+
+
+    def create_evt(self):
+        rPN=self.PN.reverse(copy=False)
+        for e in rPN.edges(keys=True):
+            self.devt[e]=self.gcom[e]
+
+#     def run(self):
+#        while True:
+#            yield waitevent, self, self.event
+#            print 'Tx ', self.ID,' @',self.sim.now()
+
+
+
+
+
+
+class Gcom(nx.MultiDiGraph):
 
 
     def __init__(self,net=Network(),sim=Simulation()):
@@ -225,9 +269,9 @@ class Gmp(nx.MultiDiGraph):
                     self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),rat,ld))
 
     def create_evt(self):
-        self.levt=[]
+        self.devt={}
         for e in self.edges(keys=True):
-            self.levt.append(SimEvent(e,sim=self.sim))
+            self.devt[e]=(SimEvent(e,sim=self.sim))
 
 
     def fill_edge(self,le,rat,mess):
@@ -237,42 +281,6 @@ class Gmp(nx.MultiDiGraph):
 #        Z=self.dcond['1']['message']*len(le[1])
 #        self.gmp.add_edges_from(self.net.Gen_tuple(le,'rat1',Z))
 
-
-
-#class RX(Process):
-#     def __init__(self,**args):
-#        defaults={'sim':None,
-#                  'ID':'A1'
-#                  }
-###       initialize attributes
-#        for key, value in defaults.items():
-#            if args.has_key(key):
-
-#                setattr(self, key, args[key])
-#            else:
-#                setattr(self, key, value)
-#                args[key]=value  
-#        self.args=args
-#        self.net=args['net']
-#        self.sim=args['sim']
-#        self.ID==args['ID']
-
-
-#        Process.__init__(self,name='Rx-'+str(self.ID),sim=self.sim)
-
-#        Cf = ConfigParser.ConfigParser()
-#        Cf.read(pyu.getlong('agent.ini','ini'))
-#        ag_opt = dict(Cf.items(self.ID))
-#        self.cond = eval(ag_opt['condition'])
-#        self.inode = eval(ag_opt['inode'])
-#        self.irat = eval(ag_opt['irat'])
-#        self.mess = eval(ag_opt['message'])
-
-
-#     def run(self):
-#        while True:
-#            yield waitevent, self, self.event
-#            print 'Tx ', self.ID,' @',self.sim.now()
 
 if (__name__ == "__main__"):
 
@@ -316,12 +324,13 @@ if (__name__ == "__main__"):
     N.update_PN()
 
 
-    gmp=Gmp(net=N,sim=sim)
+    gcom=Gcom(net=N,sim=sim)
 
     tx=[]
+    rx=[]
     for a in Ag:
-        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gmp=gmp,sim=sim))
-
+        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
+        rx.append(RX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
 ##    N.node[0]['PN'].node[0]['pe']=np.array((4,4))
 ##    N.node[0]['PN'].node[1]['pe']=np.array((8,8))
 ##    N.node[0]['PN'].node[2]['pe']=np.array((30,8))
