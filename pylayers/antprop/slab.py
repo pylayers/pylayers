@@ -1226,8 +1226,8 @@ class Slab(dict, Interface):
             #
             # Using Einstein summation instead of a for loop increases speed by an order of magnitude
             #
-            Co = np.eisum('ijkl,ijln->ijkn', Co, Io)
-            Cp = np.eisum('ijkl,ijln->ijkn', Cp, Ip)
+            Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
+            Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
             if mr['name'] == 'METAL':
                 metalic = True
                 break

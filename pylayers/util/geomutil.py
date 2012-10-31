@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
+import pdb
 #! /usr/bin/python
 # geomutil.py
 """ functions related to geometry
@@ -901,6 +902,31 @@ def ptonseg(pta, phe, pt):
         p = np.array([])
     return p
 
+def dptseg(p,pt,ph):
+    """ Distance between a set of points and a segment
+
+    Parameters
+    ----------
+    ps  : ndim x p
+    pt  : ndim x 1 
+    ph  : ndim x 1
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pylayers.util.geomutil import *
+    >>> pt = np.array([0,0])
+    >>> ph = np.array([10,0])
+    >>> p  = np.array([[1 ,3,4],[1,2,3]])
+    >>> vn = dptseg(p,pt,ph)
+    """
+    ndim = len(pt)
+    l = ph.reshape(ndim,1)-pt.reshape(ndim,1)
+    un = l/np.sqrt(np.dot(l.T,l))
+    v  = p - pt.reshape(2,1)
+    vn = v - np.dot(un.T,v)*un
+    dn = np.sqrt(np.sum(vn*vn,axis=0))
+    return(dn)
 
 def displot(pt, ph, col='black'):
     """ discontinuous plot

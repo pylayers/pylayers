@@ -92,28 +92,22 @@ def OneSlopeMdl(D,n,fGHz):
     """
     Parameters
     ----------
-    n 
+    n : float
         path loss exponent
-    D 
+    D : array
         Distance array
-    fGHz 
+    fGHz : array
         frequency  GHz
 
     """
     PL = PL0(fGHz)+10*n*np.log10(D)
     return(PL)
 
-
 def PL(pts,f,p,n=2.0):
     """
     """
     D=np.sqrt(np.sum((pts-p)**2,axis=1))
     return(PL0(f)+10*n*np.log10(D))
-
-
-
-
-
 
 def Loss0_v2(L,Pts,f,p):
     """
@@ -384,6 +378,7 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                     else:
                         return(Xa,Ya)
           
+
 def Dis(x1,y1,x2,y2,x3,y3):
     """ Distance between a point and a line
 
@@ -403,7 +398,6 @@ def Dis(x1,y1,x2,y2,x3,y3):
     h = abs(A*x1-y1+B)/np.sqrt(A*A+1)
 
     return h
-
 
 def Interline(x1,y1,x2,y2,Obstacle):
     """
@@ -574,10 +568,10 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
                 h0 = hc
                 hm = ha
                 hn = hb
-            d01 = np.sqrt((p0[0]-x1)*(p0[0]-x1)+(p0[1]-y1)*(p0[1]-y1)-h0*h0)                  
-            d02 = np.sqrt((p0[0]-x2)*(p0[0]-x2)+(p0[1]-y2)*(p0[1]-y2)-h0*h0)                  
-            dm1 = np.sqrt((pm[0]-x1)*(pm[0]-x1)+(pm[1]-y1)*(pm[1]-y1)-hm*hm)                  
-            dm2 = np.sqrt((pm[0]-x2)*(pm[0]-x2)+(pm[1]-y2)*(pm[1]-y2)-hm*hm)                  
+            d01 = np.sqrt((p0[0]-x1)*(p0[0]-x1)+(p0[1]-y1)*(p0[1]-y1)-h0*h0)
+            d02 = np.sqrt((p0[0]-x2)*(p0[0]-x2)+(p0[1]-y2)*(p0[1]-y2)-h0*h0)
+            dm1 = np.sqrt((pm[0]-x1)*(pm[0]-x1)+(pm[1]-y1)*(pm[1]-y1)-hm*hm)
+            dm2 = np.sqrt((pm[0]-x2)*(pm[0]-x2)+(pm[1]-y2)*(pm[1]-y2)-hm*hm)
             dn1 = np.sqrt((pn[0]-x1)*(pn[0]-x1)+(pn[1]-y1)*(pn[1]-y1)-hn*hn)
             dn2 = np.sqrt((pn[0]-x2)*(pn[0]-x2)+(pn[1]-y2)*(pn[1]-y2)-hn*hn)
             nl  = find(np.hstack((dm1,dn1))<d01)
