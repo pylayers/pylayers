@@ -70,7 +70,10 @@ class Coverage(object):
         self.showopt=dict(self.config.items('show'))
 
         self.L=Layout(self.layoutopt['filename'])
-        self.model=Model(f=eval(self.plm['f']),rssnp=eval(self.plm['rssnp']),d0=eval(self.plm['d0']),sigrss=eval(self.plm['sigrss']))
+        self.model=Model(f=eval(self.plm['f']),
+                         rssnp=eval(self.plm['rssnp']),
+                         d0=eval(self.plm['d0']),
+                         sigrss=eval(self.plm['sigrss']))
         self.xstep = eval(self.gridopt['xstep'])
         self.ystep = eval(self.gridopt['ystep'])
 
@@ -97,7 +100,7 @@ class Coverage(object):
 
     def creategrid(self):
         """create a grid
-            create a grid for evaluating losses
+            create a grid for various evaluation
 
         """
         mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
@@ -170,25 +173,36 @@ class Coverage(object):
         if rxsens :
 
             ### values between the rx sensitivity and noise floor
-            mcPrf=np.ma.masked_where((self.Pr > self.rxsens) & (self.Pr < self.noisefl),self.Pr)
-            cov1=ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = my_cmap,vmin=self.rxsens,origin='lower')
+            mcPrf = np.ma.masked_where((self.Pr > self.rxsens) 
+                                     & (self.Pr < self.noisefl),self.Pr)
+            cov1 = ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,
+                             extent=(l,r,b,t),cmap = my_cmap,
+                             vmin=self.rxsens,origin='lower')
 
             ### values above the sensitivity
-            mcPrs=np.ma.masked_where(self.Pr < self.rxsens,self.Pr)
-            cov=ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.rxsens,origin='lower')
+            mcPrs = np.ma.masked_where(self.Pr < self.rxsens,self.Pr)
+            cov = ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,
+                            extent=(l,r,b,t),
+                            cmap = 'jet',
+                            vmin=self.rxsens,origin='lower')
             title=title + '\n black : dBm < rx sensitivity'
 
         else :
-            cov=ax.imshow(self.Pr.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.noisefl,origin='lower')
+            cov=ax.imshow(self.Pr.reshape((self.xstep,self.ystep)).T,
+                          extent=(l,r,b,t),
+                          cmap = 'jet',
+                          vmin=self.noisefl,origin='lower')
 
         if nfl:
             ### values under the noise floor 
             ### we first clip the value below he noise fllor
             cl = np.nonzero(self.Pr<=self.noisefl)
-            cPr=self.Pr
-            cPr[cl]=self.noisefl
-            mcPruf=np.ma.masked_where(cPr > self.noisefl ,cPr)
-            cov2=ax.imshow(mcPruf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'binary',vmax=self.noisefl,origin='lower')
+            cPr = self.Pr
+            cPr[cl] = self.noisefl
+            mcPruf = np.ma.masked_where(cPr > self.noisefl ,cPr)
+            cov2 = ax.imshow(mcPruf.reshape((self.xstep,self.ystep)).T,
+                             extent=(l,r,b,t),cmap = 'binary',
+                             vmax=self.noisefl,origin='lower')
             title=title + '\n white : dBm < noisefloor'
 
 
@@ -202,8 +216,7 @@ class Coverage(object):
             plt.show()
 
     def showLo(self):
-        """ show
-        map of Loss from orthogonal field
+        """ map Losses for orthogonal field
         """
 
         fig=plt.figure()
@@ -221,8 +234,7 @@ class Coverage(object):
 
 
     def showLp(self):
-        """ show
-        map of Loss from parallel field
+        """ map Losses for parallel field
         """
 
         fig=plt.figure()
@@ -237,8 +249,6 @@ class Coverage(object):
         fig.colorbar(cov)
         if self.show:
             plt.show()
-
-
 
 
 
