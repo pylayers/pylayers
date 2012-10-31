@@ -16,7 +16,7 @@ sl['test'].plotwrtf(typ='angle')
 plt.show()
 T   = sl['test'].T
 To  = T[:,0,0,0]
-Tp  = T[:,0,0,0]
+Tp  = T[:,0,1,1]
 ao  = np.unwrap(np.angle(To))
 ap  = np.unwrap(np.angle(Tp))
 delayo = np.diff(ao)/(2*np.pi*df)

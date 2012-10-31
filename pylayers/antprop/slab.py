@@ -1266,6 +1266,33 @@ class Slab(dict, Interface):
         wout = Wafeform()
         return(wout)
 
+    def excess_grdelay(self,fGHz=np.arange(2.4,4.0,0.1),theta=0):
+        """ calculate transmission excess delay in ns
+
+        >>> from pylayers.antprop.slab import *
+        >>> from matplotlib.pylab import *
+        >>> import numpy as np 
+        >>> sl = SlabDB('matDB.ini','slabDB.ini')
+        >>> s1 = sl['PARTITION']
+        >>> fGHz = np.arange(3.1,10.6,0.1)
+        >>> delayo,delayp = s1.excess_grdelay(fGHz,0)
+        >>> lineo = plt.plot(fGHz[0:-1],delayo)
+        >>> linep = plt.plot(fGHz[0:-1],delayp)
+        >>> plt.show()
+
+        """
+        df = fGHz[1]-fGHz[0]
+        self.ev(fGHz,theta=np.array([theta]),compensate=True)
+        T   = self.T
+        To  = T[:,0,0,0]
+        Tp  = T[:,0,1,1]
+        ao  = np.unwrap(np.angle(To))
+        ap  = np.unwrap(np.angle(Tp))
+        delayo = np.diff(ao)/(2*np.pi*df)
+        delayp = np.diff(ap)/(2*np.pi*df)
+        return (delayo,delayp)
+
+
     def loss0(self, fGHz=2.4):
         """
         Calculate loss for theta=0 at frequency (f)
@@ -1296,7 +1323,7 @@ class Slab(dict, Interface):
 
         """
 
-        self.ev(fGHz, theta=np.array([0.0]))
+        self.ev(fGHz, theta=np.array([0.0]),compensate=True)
         Lo, Lp = Interface.loss0(self, fGHz)
         return(Lo, Lp)
 
