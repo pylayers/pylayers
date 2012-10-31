@@ -204,7 +204,9 @@ class RX(Process):
     def __init__(self,**args):
         defaults={'sim':None,
                   'ID':'A1',
-                  'net':Network()
+                  'net':Network(),
+                  'gcom': Gcom(),
+                  'devt': {},
                   }
 ##       initialize attributes
         for key, value in defaults.items():
@@ -235,7 +237,7 @@ class RX(Process):
     def create_evt(self):
         rPN=self.PN.reverse(copy=False)
         for e in rPN.edges(keys=True):
-            self.devt[e]=self.gcom[e]
+            self.devt[e]=self.gcom.devt[e]
 
 #     def run(self):
 #        while True:
