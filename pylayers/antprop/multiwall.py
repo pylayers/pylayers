@@ -142,11 +142,11 @@ def Loss0_v2(L,Pts,f,p):
         >>> S.layout('Lstruc.str','matDB.ini','slabDB.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
+        >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
         >>> fig,ax = S.L.showGs()
         >>> tit = plt.title('test Loss0_v2')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
-        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Lwo,c=Lwo,linewidth=0)
+        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
         >>> plt.show()
 
 
@@ -155,9 +155,13 @@ def Loss0_v2(L,Pts,f,p):
     N   = np.shape(Pts)[0]
     Lwo = np.array([])
     Lwp = np.array([])
+    Edo = np.array([])
+    Edp = np.array([])
     for i in range(N):
         Lo = 0.0
         Lp = 0.0
+        edo = 0.0
+        edp = 0.0
         pi = Pts[i,:]
         seglist,theta = L.angleonlink(p,pi)
         i = 0
@@ -186,18 +190,29 @@ def Loss0_v2(L,Pts,f,p):
                 # Loss0 du slab
                 #
                 lko,lkp  = L.sl[name].losst(f,the)
+                do , dp  = L.sl[name].excess_grdelay(theta=the)
+                edo     = edo - np.mean(do)
+                edp     = edp - np.mean(dp)
     #            print lko
     #            print lkp
                 Lo   = Lo + lko[0]
                 Lp   = Lp + lkp[0]
         Lwo = np.hstack((Lwo,Lo))
         Lwp = np.hstack((Lwp,Lp))
+        Edo = np.hstack((Edo,edo))
+        Edp = np.hstack((Edp,edp))
 
-    return(Lwo,Lwp)  
-  
+    return(Lwo,Lwp,Edo,Edp)
 
 def Loss0_v2_separe(S,pi,f,p):
-    """
+    """ Loss0_v2_separe
+
+    Parameters
+    ----------
+    S 
+    pi ????
+    f 
+    p 
     """
     # for calibrate the loss multiwall
     lwo   = np.array([])

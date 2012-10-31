@@ -28,8 +28,6 @@ For learning how to use PyLayers, see also :ref:`user`.
 
    mobility.rst 
 
-   measures.rst 
-
    network.rst 
 
    simul.rst 

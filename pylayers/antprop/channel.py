@@ -47,7 +47,7 @@ class Ctilde(object):
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
     
-        Load the three files .tauk .tang .rang xhic contains respectively 
+        Load the three files .tauk .tang .rang which contain  respectively 
         delay , angle of departure , angle of arrival.
 
         Parameters
@@ -59,6 +59,7 @@ class Ctilde(object):
 
         Examples
         --------
+
         >>> from pylayers.antprop.channel import *
         >>> from pylayers.simul.simulem import *
         >>> S=Simul()
@@ -307,10 +308,15 @@ class Ctilde(object):
     def energy(self):
         """ Calculate energy on co and cross channel
 
-            Returns
-            -------
-            Eco    : Energy on co channel    tt + pp
-            Ecross : Energy on cross channel tp + pt
+        Returns
+        -------
+        Eco    : Energy on co channel    tt + pp
+        Ecross : Energy on cross channel tp + pt
+
+        See Also
+        --------
+        pylayers.signal.bsignal.FUsignal.energy
+
         """
         ECtt = self.Ctt.energy(1)
         ECtp = self.Ctp.energy(1)
