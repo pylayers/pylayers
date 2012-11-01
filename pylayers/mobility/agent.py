@@ -12,6 +12,7 @@ import time
 import ConfigParser
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import  Node,Network
+from pylayers.network.communication import  Gcom,TX,RX
 from pylayers.location.localization import Localization,PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
@@ -24,7 +25,7 @@ import pdb
 
 class Agent(object):
     def __init__(self,**args):
-        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'save':[], 'sim':Simulation(), 'epwr':[], 'dcond':{} }
+        defaults = {'ID': 0,'name': 'johndoe','type':'ag','pos':np.array([]),'roomId':0, 'meca_updt':0.1,'loc':False,'loc_updt':0.5,'Layout':Layout(),'net':Network(),'RAT':['wifi'],'world':world(),'save':[], 'sim':Simulation(), 'epwr':[], 'dcond':{} ,'gcom':Gcom()}
 
         for key, value in defaults.items():
             if not args.has_key(key):
@@ -37,6 +38,7 @@ class Agent(object):
         # Create Network
         self.net=args['net']
         self.epwr=args['epwr']
+        self.gcom=args['gcom']
         try:
             self.dcond=args['dcond']
         except :
@@ -61,6 +63,9 @@ class Agent(object):
             self.sim=args['sim']
             self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
+            self.rx=RX(net=self.net,ID=self.ID,dcond=self.dcond,gcom=self.gcom)
+
+
         elif self.type== 'ap':
 #            self.meca=Person3(ID=self.ID,roomId=args['roomId'],L=args['Layout'],net=self.net,interval=args['meca_updt'],sim=args['sim'],moving=False)
 #            self.meca.behaviors  = []

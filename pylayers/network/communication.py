@@ -43,7 +43,7 @@ import numpy as np
 #import pylayers.util.pyutil as pyu
 
 #import time
-from pylayers.mobility.agent import Agent
+#from pylayers.mobility.agent import Agent
 from pylayers.network.emsolver import EMSolver
 from pylayers.gis.layout import Layout
 from pylayers.util.project import *
@@ -207,6 +207,8 @@ class RX(Process):
                   'net':Network(),
                   'gcom': Gcom(),
                   'devt': {},
+                  'refreshRSS':0.5,
+                  'mp':False
                   }
 ##       initialize attributes
         for key, value in defaults.items():
@@ -221,10 +223,14 @@ class RX(Process):
         self.sim=args['sim']
         self.ID==args['ID']
         self.PN=self.net.node[self.ID]['PN']
+        self.mp=args['mp']
         self.create_evt()
 
         Process.__init__(self,name='Rx-'+str(self.ID),sim=self.sim)
+        
 
+
+        self.ref_RSS_time=args['refreshRSS']
 #        Cf = ConfigParser.ConfigParser()
 #        Cf.read(pyu.getlong('agent.ini','ini'))
 #        ag_opt = dict(Cf.items(self.ID))
@@ -238,15 +244,21 @@ class RX(Process):
         rPN=self.PN.reverse(copy=False)
         for e in rPN.edges(keys=True):
             self.devt[e]=self.gcom.devt[e]
-
+        if self.mp :
+            for e in rPN.edges(keys=True):
+                self.devt[e]=self.gcom.devt[e+str(mp)]
 #     def run(self):
 #        while True:
 #            yield waitevent, self, self.event
 #            print 'Tx ', self.ID,' @',self.sim.now()
 
 
-
-
+    def refresh_RSS(self):
+        while 1:
+            for e in self.PN.edges():
+                for rat in self.PN.RAT:
+                    self.PN.edge[self.ID][e][rat]['Pr'][0]=self.net.edge[self.ID][e][rat]['Pr'][0]
+            yield hold, self, self.ref_RSS_time
 
 
 class Gcom(nx.MultiDiGraph):
@@ -256,6 +268,9 @@ class Gcom(nx.MultiDiGraph):
         nx.MultiDiGraph.__init__(self)
         self.net=net
         self.sim=sim
+
+
+    def create(self):
         self.create_graph()
         self.create_evt()
 
@@ -265,10 +280,14 @@ class Gcom(nx.MultiDiGraph):
                 G=nx.DiGraph(self.net.SubNet[rat])
                 le = G.edges(n)
                 ld = [{'message':[],'t':-1}] * len(le)
-                if le[0][0] == n :
-                    self.add_edges_from(self.net.Gen_tuple(G.edges_iter(n),rat,ld))
-                else :
-                    self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),rat,ld))
+                try:
+                    if le[0][0] == n :
+                        self.add_edges_from(self.net.Gen_tuple(G.edges_iter(n),rat,ld))
+                    else :
+                        self.add_edges_from(self.net.Gen_tuple(nx.DiGraph(le).reverse().edges_iter(),rat,ld))
+                except:
+                    print 'WARNING : no edge on rat',rat
+
 
     def create_evt(self):
         self.devt={}
@@ -284,71 +303,71 @@ class Gcom(nx.MultiDiGraph):
 #        self.gmp.add_edges_from(self.net.Gen_tuple(le,'rat1',Z))
 
 
-if (__name__ == "__main__"):
+#if (__name__ == "__main__"):
 
-    sim =Simulation()
-    sim.initialize()
-
-
-    L=Layout('TA-Office.str')
-    L.build('str') # build 's'tructure, 't'opological and 'r'oom graphs
-    N=Network()
-
-    Ag=[]
-    Cf = ConfigParser.ConfigParser()
-    Cf.read(pyu.getlong('agent.ini','ini'))
-    agents=eval(dict(Cf.items('used_agent'))['list'])
-    for i, ag in enumerate(agents):
-        ag_opt = dict(Cf.items(ag))
-        print ag_opt['id']
-        Ag.append(Agent(
-                          ID=ag_opt['id'],
-                          name=ag_opt['name'],
-                          type=ag_opt['type'],
-                          roomId=int(ag_opt['roomid']),
-                          pos=np.array(eval(ag_opt['pos'])),
-                          Layout=L,
-                          net=N,
-                          RAT=eval(ag_opt['rat']),
-                          dcond=dcond(ag),
-                          epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
-                          sim=sim)
-                  )
+#    sim =Simulation()
+#    sim.initialize()
 
 
-    N.create()
-    N.EMS=EMSolver(L)
+#    L=Layout('TA-Office.str')
+#    L.build('str') # build 's'tructure, 't'opological and 'r'oom graphs
+#    N=Network()
 
-    for ldp in ['Pr','TOA']:
-        N.compute_LDPs(N.nodes(),RAT='rat1',LDP=ldp)
+#    Ag=[]
+#    Cf = ConfigParser.ConfigParser()
+#    Cf.read(pyu.getlong('agent.ini','ini'))
+#    agents=eval(dict(Cf.items('used_agent'))['list'])
+#    for i, ag in enumerate(agents):
+#        ag_opt = dict(Cf.items(ag))
+#        print ag_opt['id']
+#        Ag.append(Agent(
+#                          ID=ag_opt['id'],
+#                          name=ag_opt['name'],
+#                          type=ag_opt['type'],
+#                          roomId=int(ag_opt['roomid']),
+#                          pos=np.array(eval(ag_opt['pos'])),
+#                          Layout=L,
+#                          net=N,
+#                          RAT=eval(ag_opt['rat']),
+#                          dcond=dcond(ag),
+#                          epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
+#                          sim=sim)
+#                  )
 
 
-    N.update_PN()
+#    N.create()
+#    N.EMS=EMSolver(L)
+
+#    for ldp in ['Pr','TOA']:
+#        N.compute_LDPs(N.nodes(),RAT='rat1',LDP=ldp)
 
 
-    gcom=Gcom(net=N,sim=sim)
+#    N.update_PN()
 
-    tx=[]
-    rx=[]
-    for a in Ag:
-        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
-        rx.append(RX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
-##    N.node[0]['PN'].node[0]['pe']=np.array((4,4))
-##    N.node[0]['PN'].node[1]['pe']=np.array((8,8))
-##    N.node[0]['PN'].node[2]['pe']=np.array((30,8))
 
-##    nbtx=2
-##    tx=[]
-##    evt=[]
-##    b=[]
-##    for t in range(nbtx):
-##        evt.append(SimEvent('pos'+str(t),sim=sim))
-###        tx.append(TX(ID=t,sim=sim,evt=evt[t]))
-##        b.append(Brain(ID=t,sim=sim,evt=evt[t]))
-###        sim.activate (tx[t], tx[t].run(),0.0)
-##        sim.activate (b[t], b[t].run(),0.0)
-##    
-##    T=TX(ID=t,sim=sim,evt=evt)
-##    sim.activate (T, T.run(),0.0)
-##    sim.simulate(until=10)
+#    gcom=Gcom(net=N,sim=sim)
+
+#    tx=[]
+#    rx=[]
+#    for a in Ag:
+#        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
+#        rx.append(RX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
+###    N.node[0]['PN'].node[0]['pe']=np.array((4,4))
+###    N.node[0]['PN'].node[1]['pe']=np.array((8,8))
+###    N.node[0]['PN'].node[2]['pe']=np.array((30,8))
+
+###    nbtx=2
+###    tx=[]
+###    evt=[]
+###    b=[]
+###    for t in range(nbtx):
+###        evt.append(SimEvent('pos'+str(t),sim=sim))
+####        tx.append(TX(ID=t,sim=sim,evt=evt[t]))
+###        b.append(Brain(ID=t,sim=sim,evt=evt[t]))
+####        sim.activate (tx[t], tx[t].run(),0.0)
+###        sim.activate (b[t], b[t].run(),0.0)
+###    
+###    T=TX(ID=t,sim=sim,evt=evt)
+###    sim.activate (T, T.run(),0.0)
+###    sim.simulate(until=10)
 

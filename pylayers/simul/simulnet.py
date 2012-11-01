@@ -38,6 +38,7 @@ import ConfigParser
 import pylayers.util.pyutil as pyu
 
 from pylayers.network.network import Network, Node, PNetwork
+from pylayers.network.communication import Gcom
 from pylayers.network.show import ShowNet, ShowTable
 from pylayers.mobility.agent import Agent
 from pylayers.network.emsolver import EMSolver
@@ -175,6 +176,7 @@ class Simul(Simulation):
                             world=self.the_world,
                             RAT=eval(ag_opt['rat']),
                             save=eval(self.save_opt['save']),
+                            gcom=self.gcom,
                             sim=self))
 #                            
             if self.lAg[i].type == 'ag':
@@ -194,7 +196,7 @@ class Simul(Simulation):
         """
 
         self.net = Network(EMS=self.EMS)
-
+        self.gcom=Gcom(net=self.net,sim=self)
         self.create_agent()
         # create network
         self.net.create()
@@ -202,8 +204,8 @@ class Simul(Simulation):
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
-
-        # create Process Network
+        self.gcom.create()
+       # create Process Network
         self.Pnet = PNetwork(net=self.net,
                              net_updt_time=float(self.net_opt['network_update_time']),
                              L=self.L,
