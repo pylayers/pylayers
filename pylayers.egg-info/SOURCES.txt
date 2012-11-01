@@ -72,6 +72,8 @@ pylayers/mobility/transit/Zones.py
 pylayers/mobility/transit/__init__.py
 pylayers/mobility/transit/vec3.py
 pylayers/network/__init__.py
+pylayers/network/brain.py
+pylayers/network/communication.py
 pylayers/network/emsolver.py
 pylayers/network/model.py
 pylayers/network/network.py
