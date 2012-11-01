@@ -917,16 +917,22 @@ def dptseg(p,pt,ph):
     >>> from pylayers.util.geomutil import *
     >>> pt = np.array([0,0])
     >>> ph = np.array([10,0])
-    >>> p  = np.array([[1 ,3,4],[1,2,3]])
-    >>> vn = dptseg(p,pt,ph)
+    >>> p  = np.array([[-1,1 ,3,4,11],[8,1,2,3,3]])
+    >>> d1,d2,h = dptseg(p,pt,ph)
     """
     ndim = len(pt)
     l = ph.reshape(ndim,1)-pt.reshape(ndim,1)
-    un = l/np.sqrt(np.dot(l.T,l))
-    v  = p - pt.reshape(2,1)
-    vn = v - np.dot(un.T,v)*un
-    dn = np.sqrt(np.sum(vn*vn,axis=0))
-    return(dn)
+    norml = np.sqrt(np.dot(l.T,l))
+    ln = l/norml
+
+    ptp = p - pt.reshape(2,1)
+    d1 = np.dot(ln.T,ptp)
+    d2 = norml - d1
+    ptpl = d1*ln
+    ptpo = ptp - ptpl
+    h = np.sqrt(np.sum(ptpo*ptpo,axis=0))
+
+    return(d1,d2,h)
 
 def displot(pt, ph, col='black'):
     """ discontinuous plot

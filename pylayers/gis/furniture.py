@@ -288,6 +288,7 @@ class Furniture(object):
         ax.add_patch(pathpatch)
         #ax.dataLim.update_from_data_xy(vertices)
         ax.autoscale_view()
+        return(fig,ax)
 
 
 if __name__ == "__main__":
