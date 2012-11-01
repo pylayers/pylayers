@@ -115,6 +115,7 @@ class PLocalization(Process):
         self.loc.fill_cla()
         while True:
             self.loc.update(ldp='TOA')
+
             self.loc.cla.merge2()
             self.loc.cla.refine(self.loc.cla.Nc)
             self.loc.cla.estpos2()
