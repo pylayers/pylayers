@@ -32,7 +32,7 @@ def PL0(fGHz,GtdB=0,GrdB=0):
         frequency GHz
     GtdB:
         transmitting antenna gain dB (default 0 dB)
-    GrdB:   
+    GrdB:
         receiving antenna gain dB (default 0 dB)
 
     Notes
@@ -42,10 +42,10 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     Examples
     --------
-        
-        >>> fGHz  = 2.4
-        >>> PL = PL0(fGHz)
-        >>> assert (PL<41)&(PL>40),"something wrong"
+
+    >>> fGHz  = 2.4
+    >>> PL = PL0(fGHz)
+    >>> assert (PL<41)&(PL>40),"something wrong"
 
     """
     ld  = 0.3/fGHz
@@ -103,11 +103,19 @@ def OneSlopeMdl(D,n,fGHz):
     PL = PL0(fGHz)+10*n*np.log10(D)
     return(PL)
 
-def PL(pts,f,p,n=2.0):
+def PL(pts,fGHz,p,n=2.0):
+    """ Path Loss
+
+    Parameters
+    ----------
+    pts    : array (2xNp)
+    fGHz   : frequency (GHz)
+    p      : array (2x1)
+    n      : path loss exponent
+
     """
-    """
-    D=np.sqrt(np.sum((pts-p)**2,axis=1))
-    return(PL0(f)+10*n*np.log10(D))
+    D = np.sqrt(np.sum((pts-p)**2,axis=1))
+    return(PL0(fGHz)+10*n*np.log10(D))
 
 def Loss0_v2(L,Pts,f,p):
     """
