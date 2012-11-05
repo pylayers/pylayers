@@ -157,7 +157,6 @@ class EMSolver(object):
 #                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
                 if LDP == 'Pr':
-
                     pa = np.vstack(p.values())
                     pn = p.keys()
                     lpa = len(pa)
@@ -168,9 +167,7 @@ class EMSolver(object):
                         Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
                         frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
                         lepwr.extend(epwr[i+1:lpa])
-                    ### ajouter Puissance emission
-
-                    return ([[lepwr - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
+                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
             
                 elif LDP == 'TOA': #### NOT CORRECT !
                     std = self.sigmaTOA*sp.randn(len(d))

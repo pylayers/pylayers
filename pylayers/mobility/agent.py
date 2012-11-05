@@ -12,11 +12,15 @@ import time
 import ConfigParser
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import  Node,Network
+from pylayers.network.communication import  Gcom,TX,RX
 from pylayers.location.localization import Localization,PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
-from pylayers.util.pymysqldb import Database 
+from pylayers.util.pymysqldb import Database
 import pdb
+
+
+
 
 
 class Agent(object):
@@ -40,6 +44,8 @@ class Agent(object):
            'save':[], 
            'sim':Simulation(),
            'epwr':{}
+           'dcond':{},
+           'gcom':Gcom()
         """
         defaults =  {'ID': 0,
                     'name': 'johndoe',
@@ -55,7 +61,9 @@ class Agent(object):
                     'world':world(),
                     'save':[],
                     'sim':Simulation(),
-                    'epwr':{}}
+                    'epwr':{},
+                    'dcond':{},
+                    'gcom':Gcom()}
 
         for key, value in defaults.items():
             if not args.has_key(key):
@@ -68,6 +76,11 @@ class Agent(object):
         # Create Network
         self.net=args['net']
         self.epwr=args['epwr']
+        self.gcom=args['gcom']
+        try:
+            self.dcond=args['dcond']
+        except :
+            pass
         # mecanique
         if self.type == 'ag':
             self.meca=Person3( ID=self.ID,
@@ -88,6 +101,10 @@ class Agent(object):
             self.sim=args['sim']
             self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
+            self.rxr=RX(net=self.net,ID=self.ID,dcond=self.dcond,gcom=self.gcom,sim=self.sim)
+            self.rxt=RX(net=self.net,ID=self.ID,dcond=self.dcond,gcom=self.gcom,sim=self.sim)
+            self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
+            self.sim.activate(self.rxt, self.rxt.refresh_TOA(), 0.0)
 
         elif self.type== 'ap':
 #            self.meca=Person3(ID=self.ID,roomId=args['roomId'],L=args['Layout'],net=self.net,interval=args['meca_updt'],sim=args['sim'],moving=False)
@@ -101,7 +118,7 @@ class Agent(object):
             self.sim=args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
-            self.PN[self.ID]['pe']=self.net.node[self.ID]['p']
+            self.PN.node[self.ID]['pe']=self.net.node[self.ID]['p']
 
         else :
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')

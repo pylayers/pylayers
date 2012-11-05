@@ -133,6 +133,7 @@ class CLA(object):
         self.erronous = []
         self.id = []
         self.origin = []
+        self.runable = []
 
         if len(parmsh) == 0:
             self.parmsh = parmsh
@@ -230,6 +231,7 @@ class CLA(object):
         self.id.append(c.id)
         self.origin.append(c.origin)
         self.type.append(c.type)
+        self.runable.append(c.runable)
         self.std.append(c.std)
         self.Nc = self.Nc + 1
         self.vcw.append(c.vcw)
@@ -313,7 +315,7 @@ class CLA(object):
                 Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints
         """
 
-        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0])
+        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
         self.Nc = Nc
         vcwmin = 1.0  # max(self.vcw)
         step = 1.0
@@ -341,11 +343,12 @@ class CLA(object):
             for c in self.c:                # find intersection between all constraints for the current vcw
                 if (c.type != 'Exclude'):
                     if (c.type != 'RSS') or onlyRSS:
-                        lb = c.lbox
-                        try:
-                            tlb = tlb.intersect(lb)
-                        except:
-                            tlb = lb
+                        if c.runable:
+                            lb = c.lbox
+                            try:
+                                tlb = tlb.intersect(lb)
+                            except:
+                                tlb = lb
                     else:
                         pass
                 else:
@@ -368,7 +371,6 @@ class CLA(object):
 
         except:
             pass
-
         self.vcw_init = vcw_init
         self.dlayer[Nc] = [LBoxN([]), tlb]
         self.dlayer[Nc][1].volume()
@@ -406,7 +408,7 @@ class CLA(object):
 
         for c in self.c:                # for each constraints
 
-            if (c.type != 'RSS') & (c.type != 'Exclude'):
+            if (c.type != 'RSS') & (c.type != 'Exclude') & (c.runable):
 
                 DDB, TB = c.valid_v(
                     lv)  # .reshape(2,len(lv)/4,pow(2,self.ndim))
@@ -832,7 +834,7 @@ class CLA(object):
 
         for j in range(len(self.c)):
             #if self.c[j].type != 'Exclude':
-            if self.c[j].type != 'Exclude':
+            if (self.c[j].type != 'Exclude') & (self.c[j].runable):
 
                 # compute distance between contraint center and all vertexes
                 if self.c[j].type == 'TOA' or self.c[j].type == 'RSS':

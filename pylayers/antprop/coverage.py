@@ -212,7 +212,7 @@ class Coverage(object):
                             extent=(l,r,b,t),
                             cmap = 'jet',
                             vmin=self.rxsens,origin='lower')
-            title=title + '\n black : PrdBm < rx sensitivity'
+            title=title + '\n gray : PrdBm < rx sensitivity'
 
         else :
             cov=ax.imshow(self.prdbm.reshape((self.xstep,self.ystep)).T,
