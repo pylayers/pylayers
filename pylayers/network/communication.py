@@ -208,6 +208,7 @@ class RX(Process):
                   'gcom': Gcom(),
                   'devt': {},
                   'refreshRSS':0.5,
+                  'refreshTOA':0.3,
                   'mp':False
                   }
 ##       initialize attributes
@@ -219,18 +220,14 @@ class RX(Process):
                 setattr(self, key, value)
                 args[key]=value  
         self.args=args
-        self.net=args['net']
-        self.sim=args['sim']
-        self.ID==args['ID']
         self.PN=self.net.node[self.ID]['PN']
-        self.mp=args['mp']
         self.create_evt()
 
         Process.__init__(self,name='Rx-'+str(self.ID),sim=self.sim)
         
 
 
-        self.ref_RSS_time=args['refreshRSS']
+
 #        Cf = ConfigParser.ConfigParser()
 #        Cf.read(pyu.getlong('agent.ini','ini'))
 #        ag_opt = dict(Cf.items(self.ID))
@@ -240,25 +237,52 @@ class RX(Process):
 #        self.mess = eval(ag_opt['message'])
 
 
+    def swap_lt(self,lt):
+        """
+        swap edge tuple node number 
+        """
+        lto=[]
+        for t in lt :
+            if t[0] == self.ID:
+                lto.append((t[1],t[0],t[2]))
+            else :
+                lto.append((t[0],t[1],t[2]))
+        return lto
+
+
+
     def create_evt(self):
-        rPN=self.PN.reverse(copy=False)
-        for e in rPN.edges(keys=True):
+        rPNe = self.swap_lt(self.PN.edges(keys=True))
+        for e in rPNe:
             self.devt[e]=self.gcom.devt[e]
         if self.mp :
-            for e in rPN.edges(keys=True):
+            for e in rPNe:
                 self.devt[e]=self.gcom.devt[e+str(mp)]
-#     def run(self):
-#        while True:
-#            yield waitevent, self, self.event
-#            print 'Tx ', self.ID,' @',self.sim.now()
 
 
     def refresh_RSS(self):
         while 1:
-            for e in self.PN.edges():
-                for rat in self.PN.RAT:
-                    self.PN.edge[self.ID][e][rat]['Pr'][0]=self.net.edge[self.ID][e][rat]['Pr'][0]
-            yield hold, self, self.ref_RSS_time
+            for rat in self.PN.SubNet.keys():
+                [self.PN.edge[self.ID][n][rat].update(
+                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now()})
+                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+            print 'refresh RSS node', self.ID
+            yield hold, self, self.refreshRSS
+
+
+    def refresh_TOA(self):
+        while 1:
+            for rat in self.PN.SubNet.keys():
+                [self.PN.edge[self.ID][n][rat].update(
+                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
+                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+            print 'refresh TOA node', self.ID
+            yield hold, self, self.refreshTOA
+
+#                [[self.SubNet[RAT].node[e]['PN'].edge[e][f][RAT].update(
+#         {'TOA':self.SubNet[RAT].edge[e][f][RAT]['TOA'],'tTOA':self.sim.now()}) 
+#         for f in self.SubNet[RAT].edge[e].keys()]
+#         for e in self.SubNet[RAT].nodes()]
 
 
 class Gcom(nx.MultiDiGraph):
@@ -346,12 +370,17 @@ class Gcom(nx.MultiDiGraph):
 
 
 #    gcom=Gcom(net=N,sim=sim)
-
+#    gcom.create_graph()
+#    gcom.create_evt()
 #    tx=[]
 #    rx=[]
 #    for a in Ag:
-#        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
+##        tx.append(TX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
 #        rx.append(RX(net=N,ID=a.ID,dcond=a.dcond,gcom=gcom,sim=sim))
+
+
+
+
 ###    N.node[0]['PN'].node[0]['pe']=np.array((4,4))
 ###    N.node[0]['PN'].node[1]['pe']=np.array((8,8))
 ###    N.node[0]['PN'].node[2]['pe']=np.array((30,8))

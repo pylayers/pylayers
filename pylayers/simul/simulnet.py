@@ -183,7 +183,6 @@ class Simul(Simulation):
                 self.activate(self.lAg[i].meca,
                               self.lAg[i].meca.move(), 0.0)
 
-
     def create_EMS(self):
         """
             Electromagnetic Solver object
@@ -199,12 +198,15 @@ class Simul(Simulation):
         self.gcom=Gcom(net=self.net,sim=self)
         self.create_agent()
         # create network
+
         self.net.create()
         # create All Personnal networks
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
         self.gcom.create()
+
+
        # create Process Network
         self.Pnet = PNetwork(net=self.net,
                              net_updt_time=float(self.net_opt['network_update_time']),

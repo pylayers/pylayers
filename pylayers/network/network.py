@@ -88,10 +88,8 @@ class Node(nx.MultiGraph):
 
         # Personnal Network init
         self.ID=ID
-#        self.PN = Network(owner=self.ID)
-        self.PN = PNet(owner=self.ID)
+        self.PN = Network(owner=self.ID)
         self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
-
         # Network init
 
         self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,type=type))
@@ -398,6 +396,7 @@ class Network(nx.MultiGraph):
         else :
             raise NameError('invalid RAT name')
 
+
     def init_PN(self):
         """ 
         Initializing personnal networks
@@ -413,6 +412,7 @@ class Network(nx.MultiGraph):
 #                    [Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0]) for nn in Sn[1].nodes() if nn != n]
 #                except:
 #                    [Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type']) for nn in Sn[1].nodes() if nn != n] 
+
         for Sn in self.SubNet.iteritems():
             for n in Sn[1].nodes():
                 for nn in Sn[1].nodes():
@@ -421,6 +421,16 @@ class Network(nx.MultiGraph):
                             Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
                         except:
                             Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type'])
+#                pdb.set_trace()
+
+                ### init edge of PN
+
+                Z= Sn[1].edges(n,keys=True,data=True)
+                Sn[1].node[n]['PN'].add_edges_from(Z)
+#                if Sn[1].node[n]['PN'].edge[n] == {}:
+#                    Z1=self.swap_lt(Z,n)
+#                    Sn[1].node[n]['PN'].add_edges_from(Z1)
+#                print n,Sn[1].node[n]['PN'].edge[n]
 
     def create(self):
         """ create the network
@@ -433,6 +443,7 @@ class Network(nx.MultiGraph):
         
         
         """
+
         self.get_RAT()
         self.connect()
         self.init_PN()
@@ -456,6 +467,7 @@ class Network(nx.MultiGraph):
             [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['type'] == 'ap']
 
         ####################################################################################
+
 
     def update_LDPs(self,ln,RAT,lD):
         """Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT
@@ -485,8 +497,19 @@ class Network(nx.MultiGraph):
         # update network LDP
         self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
         # update each personnal LDP
+#        [self.PN.edge[self.ID][n][RAT].update({'TOA':self.net.edge[self.ID][n][RAT]['Pr'],'tPr':self.sim.now()}) for n in self.PN.SubNet[RAT].edge[self.ID].keys()]
 #        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edgs(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
-        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(e,data=True,keys=True)) for e in self.SubNet[RAT].nodes()]
+#        print "le probleme est le remplissage des directed graph dans netwrok x.\
+#                ici ajouter [1,2] donne la mauvaise direction (2,1) "        
+
+#        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(e,data=True,keys=True)) for e in self.SubNet[RAT].nodes()]
+#        for n in self.SubNet[RAT].nodes():
+#            Z=self.SubNet[RAT].edges(n,data=True,keys=True)
+#            self.SubNet[RAT].node[n]['PN'].add_edges_from(Z)
+
+
+
+
 
     def compute_LDPs(self,ln,RAT,LDP,method='direct'):
         """compute edge LDP
@@ -897,17 +920,8 @@ class Network(nx.MultiGraph):
         """
         pyu.writenet(self,S)
 
-class PNet(Network,nx.MultiDiGraph):
-     def __init__(self,owner='sim',EMS=EMSolver()):
-        nx.MultiDiGraph.__init__(self,name='PN'+owner)
-        self.RAT={}
-        self.LDP = ['TOA','Pr'] 
-        self.SubNet={}
-        self.EMS=EMS
-        self.coll_plot={}
-        self.pos={}
-        self.mat={}
-        self.idx = 0
+
+
 
 class PNetwork(Process):
     """
@@ -976,7 +990,6 @@ class PNetwork(Process):
 
 
 
-
         while True:
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
@@ -998,6 +1011,7 @@ class PNetwork(Process):
                 self.net.pp()
             
             print 'network update @',self.sim.now()            
+            print self.net.node['1']['PN'].edge['1']['7']
 
 
             ############# save network

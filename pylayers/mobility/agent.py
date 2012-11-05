@@ -63,8 +63,10 @@ class Agent(object):
             self.sim=args['sim']
             self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN=self.net.node[self.ID]['PN']
-            self.rx=RX(net=self.net,ID=self.ID,dcond=self.dcond,gcom=self.gcom)
-
+            self.rxr=RX(net=self.net,ID=self.ID,dcond=self.dcond,gcom=self.gcom,sim=self.sim)
+            self.rxt=RX(net=self.net,ID=self.ID,dcond=self.dcond,gcom=self.gcom,sim=self.sim)
+            self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
+            self.sim.activate(self.rxt, self.rxt.refresh_TOA(), 0.0)
 
         elif self.type== 'ap':
 #            self.meca=Person3(ID=self.ID,roomId=args['roomId'],L=args['Layout'],net=self.net,interval=args['meca_updt'],sim=args['sim'],moving=False)
