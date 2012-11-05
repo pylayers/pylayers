@@ -33,7 +33,7 @@ def PL0(fGHz,GtdB=0,GrdB=0):
         frequency GHz
     GtdB:
         transmitting antenna gain dB (default 0 dB)
-    GrdB:   
+    GrdB:
         receiving antenna gain dB (default 0 dB)
 
     Notes
@@ -43,10 +43,10 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     Examples
     --------
-        
-        >>> fGHz  = 2.4
-        >>> PL = PL0(fGHz)
-        >>> assert (PL<41)&(PL>40),"something wrong"
+
+    >>> fGHz  = 2.4
+    >>> PL = PL0(fGHz)
+    >>> assert (PL<41)&(PL>40),"something wrong"
 
     """
     ld  = 0.3/fGHz
@@ -93,28 +93,30 @@ def OneSlopeMdl(D,n,fGHz):
     """
     Parameters
     ----------
-    n 
+    n : float
         path loss exponent
-    D 
+    D : array
         Distance array
-    fGHz 
+    fGHz : array
         frequency  GHz
 
     """
     PL = PL0(fGHz)+10*n*np.log10(D)
     return(PL)
 
+def PL(pts,fGHz,p,n=2.0):
+    """ Path Loss
 
-def PL(pts,f,p,n=2.0):
+    Parameters
+    ----------
+    pts    : array (2xNp)
+    fGHz   : frequency (GHz)
+    p      : array (2x1)
+    n      : path loss exponent
+
     """
-    """
-    D=np.sqrt(np.sum((pts-p)**2,axis=1))
-    return(PL0(f)+10*n*np.log10(D))
-
-
-
-
-
+    D = np.sqrt(np.sum((pts-p)**2,axis=1))
+    return(PL0(fGHz)+10*n*np.log10(D))
 
 def Loss0_v2(L,Pts,f,p):
     """
@@ -289,22 +291,18 @@ def Loss_diff(u):
     return(Ld)
 
 def Diffraction_parameter(h,d1,d2,f):
-    """ Calculate the diffraction parameter
+    """ Calculate the diffraction Fresnel parameter
 
     Parameters
     ----------
-    h 
-        height 
-    d1
-        distance 1
-    d2
-        distance 2
-    fGHz
-        frequency GHz
+    h  : height (meter) 
+    d1 : distance 1 (meter)
+    d2 : distance 2 (meter) 
+    fGHz  : frequency GHz
 
     Notes
     -----
-    .. math::   \\nu = h \\sqrt{2\\frac{d_1+d_2}{\\lambda d_1d_2}}
+    .. math::   \\nu = h \\sqrt{\\frac{2}{\\lambda} \\frac{d_1+d_2}{d_1 d_2}}
     """
     ld  = 0.3/f
     nu  = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
@@ -312,10 +310,10 @@ def Diffraction_parameter(h,d1,d2,f):
     return(nu)
 
 def Carretosegment(Mob):
+    """ define 4 segment using the position of the rectangle
+
     """
-    define 4 segment using the position of the rectangle
-    """
-  
+
     PC = Mob.position()
 
     seg1 = (PC[0][0],PC[0][1],PC[1][0],PC[1][1])
@@ -365,7 +363,6 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                     return False
                 else:
                     return(Xa,Ya)  
-      
             else:
         #  
         # y = A1*x+B1     y = A2*x+B2
@@ -374,13 +371,13 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                 A2 = (y3-y4)/(x3-x4)
                 B1 = (x2*y1-x1*y2)/(x2-x1)
                 B2 = (x4*y3-x3*y4)/(x4-x3)
-  
+
                 if A1 == A2:
                     return False
-      
+
             # intersect point (Xa,Ya)
                 else:
-  
+
                     Xa = (B2-B1)/(A1-A2)
                     Ya = Xa*A1+B1
 
@@ -390,6 +387,7 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                     else:
                         return(Xa,Ya)
           
+
 def Dis(x1,y1,x2,y2,x3,y3):
     """ Distance between a point and a line
 
@@ -409,7 +407,6 @@ def Dis(x1,y1,x2,y2,x3,y3):
     h = abs(A*x1-y1+B)/np.sqrt(A*A+1)
 
     return h
-
 
 def Interline(x1,y1,x2,y2,Obstacle):
     """
@@ -580,10 +577,10 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
                 h0 = hc
                 hm = ha
                 hn = hb
-            d01 = np.sqrt((p0[0]-x1)*(p0[0]-x1)+(p0[1]-y1)*(p0[1]-y1)-h0*h0)                  
-            d02 = np.sqrt((p0[0]-x2)*(p0[0]-x2)+(p0[1]-y2)*(p0[1]-y2)-h0*h0)                  
-            dm1 = np.sqrt((pm[0]-x1)*(pm[0]-x1)+(pm[1]-y1)*(pm[1]-y1)-hm*hm)                  
-            dm2 = np.sqrt((pm[0]-x2)*(pm[0]-x2)+(pm[1]-y2)*(pm[1]-y2)-hm*hm)                  
+            d01 = np.sqrt((p0[0]-x1)*(p0[0]-x1)+(p0[1]-y1)*(p0[1]-y1)-h0*h0)
+            d02 = np.sqrt((p0[0]-x2)*(p0[0]-x2)+(p0[1]-y2)*(p0[1]-y2)-h0*h0)
+            dm1 = np.sqrt((pm[0]-x1)*(pm[0]-x1)+(pm[1]-y1)*(pm[1]-y1)-hm*hm)
+            dm2 = np.sqrt((pm[0]-x2)*(pm[0]-x2)+(pm[1]-y2)*(pm[1]-y2)-hm*hm)
             dn1 = np.sqrt((pn[0]-x1)*(pn[0]-x1)+(pn[1]-y1)*(pn[1]-y1)-hn*hn)
             dn2 = np.sqrt((pn[0]-x2)*(pn[0]-x2)+(pn[1]-y2)*(pn[1]-y2)-hn*hn)
             nl  = find(np.hstack((dm1,dn1))<d01)

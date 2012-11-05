@@ -42,7 +42,7 @@ class Coverage(object):
         L
             a Layout
         model
-            a pylayers.network.model object. 
+            a pylayers.network.model object.
         xstep
             x step for grid
         ystep
@@ -51,7 +51,7 @@ class Coverage(object):
             transmitter position
         txpe
             transmitter power emmission level
-        show 
+        show
             Boolean to automatic display power map
 
     """
@@ -70,16 +70,26 @@ class Coverage(object):
         self.showopt=dict(self.config.items('show'))
 
         self.L=Layout(self.layoutopt['filename'])
-        self.model=Model(f=eval(self.plm['f']),rssnp=eval(self.plm['rssnp']),d0=eval(self.plm['d0']),sigrss=eval(self.plm['sigrss']))
+        self.model=Model(f=eval(self.plm['f']),
+                         rssnp=eval(self.plm['rssnp']),
+                         d0=eval(self.plm['d0']),
+                         sigrss=eval(self.plm['sigrss']))
         self.xstep = eval(self.gridopt['xstep'])
         self.ystep = eval(self.gridopt['ystep'])
-
+        # transitter section
         self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
-        self.txpe = eval(self.txopt['pe'])
+        self.ptdbm = eval(self.txopt['ptdbm'])
+        self.framelengthbytes = eval(self.txopt['framelengthbytes'])
 
+        # receiver section
         self.rxsens = eval(self.rxopt['sensitivity'])
+        kBoltzmann = 1.3806503e-23
+        self.bandwidthmhz = eval(self.rxopt['bandwidthmhz'])
+        self.temperaturek = eval(self.rxopt['temperaturek'])
+        self.noisefactordb = eval(self.rxopt['noisefactordb'])
 
-        self.noisefl = -100.
+        Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bandwidthmhz*1e3
+        self.pndbm = 10*np.log10(Pn)+60
 
         self.show = str2bool(self.showopt['show'])
 
@@ -97,7 +107,7 @@ class Coverage(object):
 
     def creategrid(self):
         """create a grid
-            create a grid for evaluating losses
+            create a grid for various evaluation
 
         """
         mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
@@ -114,11 +124,10 @@ class Coverage(object):
 
         Examples
         --------
-    
         .. plot::
             :include-source:
 
-            >>> from pylayers.antprop.coverage import * 
+            >>> from pylayers.antprop.coverage import *
             >>> C=Coverage()
             >>> C.cover()
             >>> C.showPr()
@@ -126,7 +135,7 @@ class Coverage(object):
         """
         self.Lwo,self.Lwp,self.Edo,self.Edp=Loss0_v2(self.L,self.grid,self.model.f,self.tx)
         self.freespace = PL(self.grid,self.model.f,self.tx)
-        self.Pr = self.txpe - self.freespace - self.Lwo
+        self.prdbm = self.ptdbm - self.freespace - self.Lwo
 
 
     def showEdo(self):
@@ -152,14 +161,14 @@ class Coverage(object):
 
     def showPr(self,rxsens=True,nfl=True):
         """ show the map of received power
-    
+
         Parameters
         ----------
 
             rxsens : bool
                 clip the map with rx sensitivity set in self.rxsens
             fnl : bool
-                clip the map with noise floor set in self.noisefl
+                clip the map with noise floor set in self.pndbm
 
         """
 
@@ -191,26 +200,37 @@ class Coverage(object):
         if rxsens :
 
             ### values between the rx sensitivity and noise floor
-            mcPrf=np.ma.masked_where((self.Pr > self.rxsens) & (self.Pr < self.noisefl),self.Pr)
-            cov1=ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = my_cmap,vmin=self.rxsens,origin='lower')
+            mcPrf = np.ma.masked_where((self.prdbm > self.rxsens) 
+                                     & (self.prdbm < self.pndbm),self.prdbm)
+            cov1 = ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,
+                             extent=(l,r,b,t),cmap = my_cmap,
+                             vmin=self.rxsens,origin='lower')
 
             ### values above the sensitivity
-            mcPrs=np.ma.masked_where(self.Pr < self.rxsens,self.Pr)
-            cov=ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.rxsens,origin='lower')
-            title=title + '\n black : dBm < rx sensitivity'
+            mcPrs = np.ma.masked_where(self.prdbm < self.rxsens,self.prdbm)
+            cov = ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,
+                            extent=(l,r,b,t),
+                            cmap = 'jet',
+                            vmin=self.rxsens,origin='lower')
+            title=title + '\n black : PrdBm < rx sensitivity'
 
         else :
-            cov=ax.imshow(self.Pr.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'jet',vmin=self.noisefl,origin='lower')
+            cov=ax.imshow(self.prdbm.reshape((self.xstep,self.ystep)).T,
+                          extent=(l,r,b,t),
+                          cmap = 'jet',
+                          vmin=self.PndBm,origin='lower')
 
         if nfl:
             ### values under the noise floor 
             ### we first clip the value below he noise fllor
-            cl = np.nonzero(self.Pr<=self.noisefl)
-            cPr=self.Pr
-            cPr[cl]=self.noisefl
-            mcPruf=np.ma.masked_where(cPr > self.noisefl ,cPr)
-            cov2=ax.imshow(mcPruf.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),cmap = 'binary',vmax=self.noisefl,origin='lower')
-            title=title + '\n white : dBm < noisefloor'
+            cl = np.nonzero(self.prdbm<=self.pndbm)
+            cPr = self.prdbm
+            cPr[cl] = self.pndbm
+            mcPruf = np.ma.masked_where(cPr > self.pndbm,cPr)
+            cov2 = ax.imshow(mcPruf.reshape((self.xstep,self.ystep)).T,
+                             extent=(l,r,b,t),cmap = 'binary',
+                             vmax=self.pndbm,origin='lower')
+            title=title + '\n white : PrdBm < ' + str(self.pndbm) + 'dBm'
 
 
         ax.scatter(self.tx[0],self.tx[1],linewidth=0)
@@ -222,9 +242,70 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-    def showLo(self):
+
+    def showTransistionRegion(self):
+        """
+        Notes
+        -----
+        See  : Analyzing the Transitional Region in Low Power Wireless Links
+                  Marco Zuniga and Bhaskar Krishnamachari
+
+        """
+        frameLength = self.framelengthbytes
+        PndBm = self.pndbm
+        gammaU = 10*np.log10(-1.28*np.log(2*(1-0.9**(1./(8*frameLength)))))
+        gammaL = 10*np.log10(-1.28*np.log(2*(1-0.1**(1./(8*frameLength)))))
+        PrU = PndBm + gammaU
+        PrL = PndBm + gammaL
+
+        fig=plt.figure()
+        fig,ax = self.L.showGs(fig=fig)
+        l = self.grid[0,0]
+        r = self.grid[-1,0]
+        b = self.grid[0,1]
+        t = self.grid[-1,-1]
+
+        zones = np.zeros(len(self.prdbm))
+        uconnected  = np.nonzero(self.prdbm>PrU)[0]
+        utransition = np.nonzero((self.prdbm < PrU)&(self.prdbm > PrL))[0]
+        udisconnected = np.nonzero(self.prdbm < PrL)[0]
+
+        zones[uconnected] = 1
+        zones[utransition] = (self.prdbm[utransition]-PrL)/(PrU-PrL)
+        cov = ax.imshow(zones.reshape((self.xstep,self.ystep)).T,
+                             extent=(l,r,b,t),cmap = 'BuGn',origin='lower')
+
+        title='PDR region'
+        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
+
+        ax.set_title(title)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        fig.colorbar(cov,cax)
+        if self.show:
+            plt.show()
+
+    def showEdo(self):
         """ show
         map of Loss from orthogonal field
+
+        """
+
+        fig=plt.figure()
+        fig,ax=self.L.showGs(fig=fig)
+        l=self.grid[0,0]
+        r=self.grid[-1,0]
+        b=self.grid[0,1]
+        t=self.grid[-1,-1]
+        cov=ax.imshow(self.Edo.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),origin='lower')
+        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
+        ax.set_title('Map of excess delay from orthogonal field')
+        fig.colorbar(cov)
+        if self.show:
+            plt.show()
+
+    def showLo(self):
+        """ map Losses for orthogonal field
         """
 
         fig=plt.figure()
@@ -240,10 +321,8 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-
     def showLp(self):
-        """ show
-        map of Loss from parallel field
+        """ map Losses for parallel field
         """
 
         fig=plt.figure()
@@ -258,8 +337,6 @@ class Coverage(object):
         fig.colorbar(cov)
         if self.show:
             plt.show()
-
-
 
 
 

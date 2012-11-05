@@ -465,9 +465,11 @@ def visibility():
 
     visi
         visibility status of each link
+
     Warning
     -------
     This should be done automatically in the future
+
     """
 
     R1 = []
@@ -679,8 +681,6 @@ class RAW_DATA(object):
     timeTX
     tx
 
-    Methods
-    -------
     """
 
     def __init__(self, d):
@@ -744,7 +744,7 @@ class CAL_DATA(object):
         getwave
         """
         #
-        # placer une fenêtre sur chaque voie
+        # place a window on each channel
         #
         s1 = self.ch1
         s2 = self.ch2
@@ -806,7 +806,7 @@ class Fdd(object):
 
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pylab as plt 
+            >>> import matplotlib.pylab as plt
             >>> M  = UWBMesure(1)
             >>> F  = M.fdd
             >>> fig = plt.figure()
@@ -925,7 +925,7 @@ class Tdd(object):
 
             >>> from pylayers.util.project import *
             >>> from pylayers.measures.mesuwb import *
-            >>> import matplotlib.pylab as plt 
+            >>> import matplotlib.pylab as plt
             >>> M  = UWBMesure(1)
             >>> T  = M.tdd
             >>> freq,pl = T.PL(3,7,10)
@@ -1011,7 +1011,7 @@ class Tdd(object):
         else:
             createfig = False
 
-        if display == True:
+        if display:
             N = 4
             M = 0
         else:
@@ -1037,7 +1037,7 @@ class Tdd(object):
         #axis([0,200,-2,2])
         #"sp1.add_title(titre[0])
         if createfig:
-            sp2 = fig.add_subplot(N, NC, 2 * NC + C)
+            sp2 = fig.add_subplot(N, NC, 2 * NC + C,sharex=sp1)
         elif N == 4:
             sp2 = ax[1]
         else:
@@ -1049,7 +1049,7 @@ class Tdd(object):
         #plt.axis([0,200,-2,2])
         #plt.title(titre[1])
         if createfig:
-            sp3 = fig.add_subplot(N, NC, 3 * NC + C)
+            sp3 = fig.add_subplot(N, NC, 3 * NC + C,sharex=sp1)
         elif N == 4:
             sp3 = ax[2]
         else:
@@ -1060,7 +1060,7 @@ class Tdd(object):
         #plt.show()
         #plt.title(titre[2])
         if createfig:
-            sp4 = fig.add_subplot(N, NC, 4 * NC + C)
+            sp4 = fig.add_subplot(N, NC, 4 * NC + C,sharex=sp1)
         elif N == 4:
             sp4 = ax[3]
         else:
@@ -1071,7 +1071,7 @@ class Tdd(object):
         #plt.show()
         #plt.axis([0,200,-2,2])
         #plt.title(titre[3])
-        if display == True:
+        if display:
             plt.show()
 
     def show_span(self, delay=np.array([0, 0, 0, 0]), wide=np.array([0, 0, 0, 0])):
@@ -1087,7 +1087,7 @@ class Tdd(object):
             >>> from pylayers.measures.mesuwb import *
             >>> M  = UWBMesure(2)
             >>> T  = M.tdd
-            >>  T.show_span()
+            >>> s1 = T.show_span()
             >>> plt.show()
 
         """
@@ -1243,6 +1243,11 @@ class TFP(object):
         self.chan_param['angular'] = np.array([])
 
     def append(self, FP):
+        """
+        Parameters
+        ----------
+        FP 
+        """
         tx = FP.metadata['Tx'].reshape(3, 1)
         rx = FP.metadata['Rx'].reshape(3, 1)
         self.metadata['Tx'] = hstack((self.metadata['Tx'], tx))
@@ -1301,7 +1306,7 @@ class FP(object):
     thnlos : threshold for nlos case toa_th
     thcum  : threshold for toa_cum
 
-    This method build the Fingerprint from UWBMesure M - Rx N°k
+    This method build the Fingerprint from UWBMesure M - Rx number k
 
     Attributes
     ----------
@@ -1333,7 +1338,7 @@ class FP(object):
             sym   : Symmetry
             nint  : int
             thlos : float
-            w     : w 
+            w     : w
         """
         #
         # Metadata : general parameters links to measurement configuration
@@ -1588,7 +1593,7 @@ class UWBMesure(object):
             d4 = pyu.delay(self.rx[4, :], self.tx)
             self.de = np.array([d1, d2, d3, d4])
             #display measurements
-            if display == True:
+            if display:
                 self.tdd.show(self.de)
             #calculate angle
             ang1 = geu.angular(self.tx, self.rx[1, :])
@@ -1825,7 +1830,7 @@ class UWBMesure(object):
         taum4 = self.tdd.ch4.tau_moy()
 
         taum = np.array([taum1, taum2, taum3, taum4])
-        if display == True:
+        if display:
             self.tdd.show(taum)
         return taum
 
@@ -1839,7 +1844,7 @@ class UWBMesure(object):
         taurms4 = self.tdd.ch4.tau_rms()
 
         taurms = np.array([taurms1, taurms2, taurms3, taurms4])
-        if display == True:
+        if display:
             self.tdd.show_span(self.tau_moy(display=False), taurms)
         return taurms
 
@@ -1852,7 +1857,7 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_new()
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1862,7 +1867,7 @@ class UWBMesure(object):
         Parameters
         ----------
         n  : key parameter n = 9
-        display : False 
+        display : False
 
         """
         toa1 = self.tdd.ch1.toa_win(w=n)
@@ -1871,7 +1876,7 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_win(w=n)
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1886,7 +1891,7 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_max(nint=n)
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1902,7 +1907,7 @@ class UWBMesure(object):
 
         toa = np.array([toa1, toa2, toa3, toa4])
 
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1932,7 +1937,7 @@ class UWBMesure(object):
         toa4 = self.tdd.ch4.toa_cum(th=n)
 
         toa = np.array([toa1, toa2, toa3, toa4])
-        if display == True:
+        if display:
             self.tdd.show(toa)
         return toa
 
@@ -1947,7 +1952,7 @@ class UWBMesure(object):
         #toa4 = self.tdd.ch4.toa_cum_tmt()
 
         #toa  =  np.array([toa1,toa2,toa3,toa4])
-        #if display == True:
+        #if display:
             #self.tdd.show(toa)
         #return toa
 

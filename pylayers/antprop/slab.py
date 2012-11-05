@@ -433,7 +433,6 @@ class MatInterface(Interface):
         mur2 = self.m2['mur']
 
         #n1    =  sqrte(epr1/mur1)
-        #n2    =  sqrte(epr2/mur2)
 
         n1 = np.sqrt(epr1 / mur1)
         n2 = np.sqrt(epr2 / mur2)
@@ -1242,7 +1241,7 @@ class Slab(dict, Interface):
             fGHz  = fGHz.reshape(nf,1,1,1)
             th1   = th1.reshape(1,nt,1,1)
             thickness = sum(self['lthick'])
-            d = thickness/np.cos(th1)
+            d = thickness*np.cos(th1)
             self.T = self.T*np.exp(1j*2*np.pi*fGHz*d/0.3)
 
         self['evaluated'] = True

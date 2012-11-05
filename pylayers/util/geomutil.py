@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
+import pdb
 #! /usr/bin/python
 # geomutil.py
 """ functions related to geometry
@@ -901,6 +902,37 @@ def ptonseg(pta, phe, pt):
         p = np.array([])
     return p
 
+def dptseg(p,pt,ph):
+    """ Distance between a set of points and a segment
+
+    Parameters
+    ----------
+    ps  : ndim x p
+    pt  : ndim x 1 
+    ph  : ndim x 1
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pylayers.util.geomutil import *
+    >>> pt = np.array([0,0])
+    >>> ph = np.array([10,0])
+    >>> p  = np.array([[-1,1 ,3,4,11],[8,1,2,3,3]])
+    >>> d1,d2,h = dptseg(p,pt,ph)
+    """
+    ndim = len(pt)
+    l = ph.reshape(ndim,1)-pt.reshape(ndim,1)
+    norml = np.sqrt(np.dot(l.T,l))
+    ln = l/norml
+
+    ptp = p - pt.reshape(2,1)
+    d1 = np.dot(ln.T,ptp)
+    d2 = norml - d1
+    ptpl = d1*ln
+    ptpo = ptp - ptpl
+    h = np.sqrt(np.sum(ptpo*ptpo,axis=0))
+
+    return(d1,d2,h)
 
 def displot(pt, ph, col='black'):
     """ discontinuous plot
@@ -2388,130 +2420,6 @@ def angle_fix(al):
     else:
         pass
     return(al1)
-
-
-def loc_to_glob(al1, al2, al3, al4):
-    """Links the local angle of the unitary vector to the global system.
-
-    Parameters
-    ----------
-    al1 : float
-      An angleformed with +x-axis.
-    al2 : float
-      An angleformed with +y-axis.
-    al3 : float
-      An angleformed with -x-axis.
-    al4 : float
-      An angleformed with -y-axis.
-
-    Returns
-    -------
-    ali : float
-        The angle of the unitary vector in the global system
-
-    Examples
-    --------
-    >>> from pylayers.gis.layout import Layout
-    >>> L  = Layout()
-    >>> L.loadstr('tag.str')
-    >>> ncoin,ndiff = L.buildGc()
-    >>> L.buildGt()
-    >>> L.buildGr()
-    >>> nd = -12
-    >>> ax_ch,ay_ch,bx_ch,by_ch,cx_ch,cy_ch,dx_ch,dy_ch=global_system()
-    >>> s1x_ch,s1y_ch,s2x_ch,s2y_ch = L.alph_diff_angle(nd)
-    >>> al1  = angle_fix(np.arccos(s1x_ch*ax_ch+s1y_ch*ay_ch))#pi/2
-    >>> al2  = angle_fix(np.arccos(s1x_ch*bx_ch+s1y_ch*by_ch))#0
-    >>> al3  = angle_fix(np.arccos(s1x_ch*cx_ch+s1y_ch*cy_ch))#pi/2
-    >>> al4  = angle_fix(np.arccos(s1x_ch*dx_ch+s1y_ch*dy_ch))#pi
-    >>> ali  = loc_to_glob(al1,al2,al3,al4)
-
-    Notes
-    -----
-
-    To be removed
-    """
-    if al1 == 0.:
-        ali = 0.
-    if al2 == 0.:
-        ali = np.pi / 2
-    if al3 == 0.:
-        ali = np.pi
-    if al4 == 0.:
-        ali = 3 * np.pi / 2
-
-    return(ali)
-
-
-def global_system():
-    """Definition of directive unitary vectors of Cartesian coordinate system.
-
-    Defines four vectors in direction +,- x-axis and +,- y-axis.
-    Returns x,y components of each  vector.
-
-    Returns
-    -------
-    ax_ch : numpy.float64
-        The x component of +x axis.
-    ay_ch : numpy.float64
-        The y component of +x axis.
-    bx_ch : numpy.float64
-        The x component of +y axis.
-    by_ch : numpy.float64
-        The y component of +y axis.
-    cx_ch : numpy.float64
-        The x component of -x axis.
-    cy_ch : numpy.float64
-        The y component of -x axis.
-    dx_ch : numpy.float64
-        The x component of -y axis.
-    dy_ch : numpy.float64
-        The y component of -y axis.
-
-    Examples
-    --------
-    >>> from pylayers.gis.layout import Layout
-    >>> L  = Layout()
-    >>> L.load('exemple.str')
-    >>> ncoin,ndiff = L.buildGc()
-    >>> L.buildGt()
-    >>> L.buildGr()
-    >>> ax_ch,ay_ch,bx_ch,by_ch,cx_ch,cy_ch,dx_ch,dy_ch=global_system()
-
-
-    """
-    O = np.array([0, 0])
-    A = np.array([1, 0])
-    axx = A[0] - O[0]
-    ayy = A[1] - O[1]
-
-    a_abs = np.sqrt(axx ** 2 + ayy ** 2)
-    ax_ch = axx / a_abs
-    ay_ch = ayy / a_abs
-    B = np.array([0, 1])
-
-    bx = B[0] - O[0]
-    by = B[1] - O[1]
-    b_abs = np.sqrt(bx ** 2 + by ** 2)
-    bx_ch = bx / b_abs
-    by_ch = by / b_abs
-
-    C = np.array([-1, 0])
-    cx = C[0] - O[0]
-    cy = C[1] - O[1]
-    c_abs = np.sqrt(cx ** 2 + cy ** 2)
-    cx_ch = cx / c_abs
-    cy_ch = cy / c_abs
-
-    D = np.array([0, -1])
-    dx = D[0] - O[0]
-    dy = D[1] - O[1]
-    d_abs = np.sqrt(dx ** 2 + dy ** 2)
-
-    dx_ch = dx / d_abs
-    dy_ch = dy / d_abs
-
-    return (ax_ch, ay_ch, bx_ch, by_ch, cx_ch, cy_ch, dx_ch, dy_ch)
 
 
 def plot_coords2(ax, ob):
