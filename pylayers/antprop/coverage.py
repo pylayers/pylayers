@@ -140,7 +140,7 @@ class Coverage(object):
 
     def showEdo(self):
         """ show
-        map of Loss from orthogonal field
+        map of excess of delays
         """
 
         fig=plt.figure()

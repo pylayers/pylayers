@@ -511,7 +511,7 @@ class Network(nx.MultiGraph):
 
 
 
-    def compute_LDPs(self,ln,RAT,LDP,method='direct'):
+    def compute_LDPs(self,ln,RAT,LDP):
         """compute edge LDP
 
         Attributes
@@ -965,7 +965,7 @@ class PNetwork(Process):
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
         for rat in self.net.RAT.iterkeys():
             for ldp in self.net.LDP:
-                self.net.compute_LDPs(self.net.nodes(),rat,ldp,method='direct')
+                self.net.compute_LDPs(self.net.nodes(),rat,ldp)
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
@@ -994,7 +994,7 @@ class PNetwork(Process):
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
                 for ldp in self.net.LDP:
-                    self.net.compute_LDPs(self.net.nodes(),rat,ldp,method='direct')
+                    self.net.compute_LDPs(self.net.nodes(),rat,ldp)
             
             if self.show_sg:
                 ############### compute Signature (Sg)

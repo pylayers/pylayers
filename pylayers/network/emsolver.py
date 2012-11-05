@@ -152,9 +152,6 @@ class EMSolver(object):
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
-#                if LDP == 'TOA':
-#                    std = self.sigmaTOA*sp.randn(len(d))
-#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
                 if LDP == 'Pr':
                     pa = np.vstack(p.values())
@@ -163,7 +160,9 @@ class EMSolver(object):
                     Lwo = []
                     frees=[]
                     lepwr=[]
+                    MW=[]
                     for i in range(lpa-1):
+                        MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
                         Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
                         frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
                         lepwr.extend(epwr[i+1:lpa])
