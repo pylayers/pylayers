@@ -70,25 +70,41 @@ def wsngraph():
     elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] > 8]
     esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <= 8]
     nx.draw_networkx_nodes(G,G.pos,node_color='w')
-    nx.draw_networkx_edges(G,G.pos,elarge,width=3,edge_color='r')
-    nx.draw_networkx_edges(G,G.pos,esmall,width=1,edge_color='b')
+    nx.draw_networkx_edges(G,G.pos,elarge,width=3,edge_color='r',alpha=0.3)
+    nx.draw_networkx_edges(G,G.pos,esmall,width=1,edge_color='b',alpha=0.3)
     nx.draw_networkx_labels(G,G.pos)
-    return(G) 
+    ax=plt.gca()
+    ax.axison = False
+    label = {} 
+    for (u,v) in G.edges():
+        d = G.get_edge_data(u,v)
+        label[(u,v)]=d['weight']
+    edge_label=nx.draw_networkx_edge_labels(G,G.pos,edge_labels=label)
+
+    return(G)
 
 #if ( __name__=="__main__"):
 
 plt.figure()
-plt.subplot(311)
+plt.subplot(511)
 G  = wsngraph()
-plt.subplot(312)
+plt.subplot(512)
 T  = nx.minimum_spanning_tree(G)
 nx.draw(T,G.pos)
 T.edge.values()
 plt.title("Minimum spanning tree")
-plt.subplot(313)
+plt.subplot(513)
 SPT = shortest_path_tree(G,1)
-plt.title("Shortest path tree")
 nx.draw(SPT,G.pos)
+plt.title("Shortest path tree")
+plt.subplot(514)
+BFST = nx.bfs_tree(G,1)
+nx.draw(BFST,G.pos)
+plt.title("Breadth first search tree")
+plt.subplot(515)
+DFST = nx.dfs_tree(G,1)
+nx.draw(DFST,G.pos)
+plt.title("Depth first search tree")
 
 
 
