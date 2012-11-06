@@ -10,6 +10,7 @@ pylayers/antprop/__init__.py
 pylayers/antprop/antenna.py
 pylayers/antprop/channel.py
 pylayers/antprop/coverage.py
+pylayers/antprop/loadTMP.py
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/signature.py
@@ -25,7 +26,6 @@ pylayers/gis/selectl.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
-pylayers/location/simsql.py
 pylayers/location/algebraic/__init__.py
 pylayers/location/algebraic/crb.py
 pylayers/location/algebraic/hdf.py
@@ -72,12 +72,12 @@ pylayers/mobility/transit/Zones.py
 pylayers/mobility/transit/__init__.py
 pylayers/mobility/transit/vec3.py
 pylayers/network/__init__.py
+pylayers/network/brain.py
+pylayers/network/communication.py
 pylayers/network/emsolver.py
-pylayers/network/f1.py
 pylayers/network/model.py
 pylayers/network/network.py
 pylayers/network/show.py
-pylayers/pulsray/__init__.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
 pylayers/signal/waveform.py
@@ -85,9 +85,6 @@ pylayers/simul/__init__.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
-pylayers/util/PyGraphTool.py
-pylayers/util/PyMathTool.py
-pylayers/util/Util_net.py
 pylayers/util/__init__.py
 pylayers/util/easygui-olld.py
 pylayers/util/easygui.py

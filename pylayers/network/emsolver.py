@@ -147,17 +147,38 @@ class EMSolver(object):
 
 
         if self.EMS_method == 'multiwall':
-
             dd={} # distance dictionnary
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
-#                if LDP == 'TOA':
-#                    std = self.sigmaTOA*sp.randn(len(d))
-#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
-                if LDP == 'Pr':
+                if LDP=='all':
 
+                    pa = np.vstack(p.values())
+                    lpa = len(pa)
+#                    MW=[]
+#                    frees=[]
+#                    lepwr=[]
+                    Pr=[]
+                    TOA=[]
+
+                    for i in range(lpa-1):
+                        MW=Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
+#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
+                        frees=PL(pa[i+1:lpa],model.f,pa[i],model.rssnp)
+                        lepwr=epwr[i+1:lpa]
+                        Pr.extend(lepwr - MW[0] - frees)
+                        TOA.extend(MW[2])
+                    P=np.outer(Pr,[1,1])
+                    P[:,1]=model.sigrss
+                    T=np.outer(TOA,[1,1])
+                    T[:,1]=self.sigmaTOA*0.3
+                    return (P,T,d)
+
+
+
+
+                elif LDP == 'Pr':
                     pa = np.vstack(p.values())
                     pn = p.keys()
                     lpa = len(pa)
@@ -165,12 +186,11 @@ class EMSolver(object):
                     frees=[]
                     lepwr=[]
                     for i in range(lpa-1):
+                        MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
                         Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
                         frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
                         lepwr.extend(epwr[i+1:lpa])
-                    ### ajouter Puissance emission
-
-                    return ([[lepwr - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
+                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
             
                 elif LDP == 'TOA': #### NOT CORRECT !
                     std = self.sigmaTOA*sp.randn(len(d))
@@ -178,7 +198,7 @@ class EMSolver(object):
 
 
             else :
-                return ([[0.],[0.]])
+                return (np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)))
 
 
         elif self.method == 'Pyray':
