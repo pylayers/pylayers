@@ -20,7 +20,6 @@
 #Bernard UGUEN          : bernard.uguen@univ-rennes1.fr
 #Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr
 #####################################################################
-
 import numpy as np
 import scipy as sp
 from scipy import optimize
@@ -29,40 +28,40 @@ import cvxmod as cvxm
 import cvxopt as cvxo
 import matplotlib.pylab as plt
 import string
+import doctest
 
 class algloc(object):
-    """
-    This class regroups all the algebraic localization sceanrios and
-    techniques
+    """ regroups algebraic localization scenarios and techniques
+
     Attributes
     ----------
         RN : An Array that defines the Radio nodes implied in
-           localization (coordiantes in meters)
+           localization (coordinates in meters)
            shape(RN)= (2 or 3,RNnum)
         c : speed of light
           float
     """
 
     def __init__(self, RN):
-        if len(np.shape(RN))==2:
+        if len(np.shape(RN)) == 2:
             self.RN = RN
         else:
             raise ValueError("inputs must be of shape (n,p), p=2 or 3")
         self.c = 3.e08
 
     def info(self):
-        """
-        Dispaly scenario information
+        """ display scenario information
+
         """
         print "Reference Radio Nodes : ", self.RN
         print "Speed of light : ", self.c
 
     def show(self):
-        """
-        plots the refernces nodes (scenario)
+        """ plots the reference nodes (scenario)
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -70,14 +69,15 @@ class algloc(object):
             >>> import matplotlib.pyplot as plt
             >>> RN = np.array([[0., 0., 10., 10.],[0., 10., 10., 0.]])
             >>> S = algloc(RN)
-            >>> S.show() 
+            >>> S.show()
         """
-        plt.plot(self.RN[0,:], self.RN[1,:],'D')
-        plt.xlablel('X')
+        plt.plot(self.RN[0, :], self.RN[1, :], 'D')
+        plt.xlabel('X')
         plt.ylabel('Y')
+        plt.axis('scaled')
         plt.show()
 
-    def dist(self,x,y,ax):
+    def dist(self, x, y, ax):
         """
         calculates distance between two arrays along a given axis
         Parameters
@@ -100,12 +100,12 @@ class algloc(object):
             >>> y = np.array([[5.],[5.]])
             >>> S = algloc(x)
             >>> ax = 0
-            >>> S.dist(x,y,ax) 
+            >>> S.dist(x,y,ax)
         """
-        d = np.sqrt(np.sum((x-y)**2, axis=ax))
+        d = np.sqrt(np.sum((x - y) ** 2, axis=ax))
         return d
 
-        
+
 class Toa(algloc):
     """
     This class contains:
@@ -113,7 +113,7 @@ class Toa(algloc):
     2- a set of TOAs measurements (TOA) with associated std (TOA_std)
 
     This class manages the TOA-based localization techniques.
-    Attributes 
+    Attributes
     -----------
 
         RN : An Array that defines the Radio nodes implied in
@@ -125,30 +125,30 @@ class Toa(algloc):
         TOA_std : Associated std of TOA (std in seconds)
                 shape(TOA_std)= (RNnum,1)
         c : speed of light
-          float 
+          float
 
     """
     def __init__(self, RN, TOA, TOA_std):
         algloc.__init__(self, RN)
-        if len(np.shape(TOA))==2:
-            if np.shape(TOA)[0]==1:
-                self.TOA = TOA[0,:]
-            elif np.shape(TOA)[1]==1:
-                self.TOA = TOA[:,1]
+        if len(np.shape(TOA)) == 2:
+            if np.shape(TOA)[0] == 1:
+                self.TOA = TOA[0, :]
+            elif np.shape(TOA)[1] == 1:
+                self.TOA = TOA[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(TOA))==1:
+        elif len(np.shape(TOA)) == 1:
             self.TOA = TOA
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
-        if len(np.shape(TOA_std))==2:
-            if np.shape(TOA_std)[0]==1:
-                self.TOA_std = TOA_std[0,:]
-            elif np.shape(TOA_std)[1]==1:
-                self.TOA_std = TOA_std[:,1]
+        if len(np.shape(TOA_std)) == 2:
+            if np.shape(TOA_std)[0] == 1:
+                self.TOA_std = TOA_std[0, :]
+            elif np.shape(TOA_std)[1] == 1:
+                self.TOA_std = TOA_std[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(TOA_std))==1:
+        elif len(np.shape(TOA_std)) == 1:
             self.TOA_std = TOA_std
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
@@ -165,7 +165,7 @@ class Toa(algloc):
     def ls_locate(self):
         """
         This method applies least squares (LS) approximation on TOA to
-        get position P.    
+        get position P.
         Returns
         -------
             P : numpy.ndarray
@@ -200,12 +200,12 @@ class Toa(algloc):
         A = self.RN[:, 1:].T - self.RN[:, 0]
         # Apply LS operator
         P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-        return P.reshape(np.shape(self.RN[:,0:1]))
+        return P.reshape(np.shape(self.RN[:, 0:1]))
 
     def tls_locate(self):
         """
         This method applies total least squares (TLS) approximation on
-        TOA to get position P.  
+        TOA to get position P.
         Returns
         -------
             P : numpy.ndarray
@@ -241,7 +241,7 @@ class Toa(algloc):
         A = self.RN[:, 1:].T - self.RN[:, 0]
         A2 = np.dot(np.transpose(A), A)
         [U, S, V] = nplg.svd(A2)
-        J = 1/S
+        J = 1 / S
         rA = np.rank(A)
         m, n = np.shape(A)
         f = 0
@@ -252,12 +252,12 @@ class Toa(algloc):
                 J[u] = 0
         A2i = np.dot(np.dot(V.T, np.diag(J)), U.T)
         P = 0.5 * np.dot(A2i, np.dot(A.T, K))
-        return P.reshape(np.shape(self.RN[:,0:1]))
+        return P.reshape(np.shape(self.RN[:, 0:1]))
 
     def wls_locate(self):
         """
         This method applies weighted least squares (WLS) approximation
-        on TOA to get position P. 
+        on TOA to get position P.
         Returns
         -------
             P : numpy.ndarray
@@ -294,14 +294,14 @@ class Toa(algloc):
         ROA_std = self.c * self.TOA_std
         C = np.diag((ROA_std[1:]) ** 2)
         # Apply LS operator
-        P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),A))), \
-            np.dot(np.dot(A.T, nplg.inv(C)), K))
-        return P.reshape(np.shape(self.RN[:,0:1]))
+        P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))),
+                         np.dot(np.dot(A.T, nplg.inv(C)), K))
+        return P.reshape(np.shape(self.RN[:, 0:1]))
 
     def twls_locate(self):
         """
         This method applies total weighted least squares (TWLS)
-        approximation on TOA to get position P.  
+        approximation on TOA to get position P.
         Returns
         -------
             P : numpy.ndarray
@@ -340,7 +340,7 @@ class Toa(algloc):
         C = np.diag((ROA_std[1:]) ** 2)
         A2 = np.dot(A.T, np.dot(nplg.inv(C), A))
         [U, S, V] = nplg.svd(A2)
-        J = 1/S
+        J = 1 / S
         rA = np.rank(A)
         m, n = np.shape(A)
         f = 0
@@ -351,7 +351,7 @@ class Toa(algloc):
                 J[u] = 0
         A2i = np.dot(np.dot(V.T, np.diag(J)), U.T)
         P = 0.5 * np.dot(A2i, np.dot(np.dot(A.T, nplg.inv(C)), K))
-        return P.reshape(np.shape(self.RN[:,0:1]))
+        return P.reshape(np.shape(self.RN[:, 0:1]))
 
     def ts_locate(self, P0, Niter):
         """
@@ -360,7 +360,7 @@ class Toa(algloc):
         Parameters
         ----------
             P0 : numpy.ndarray
-            Niter : integer 
+            Niter : integer
         Returns
         -------
             P : numpy.ndarray
@@ -392,14 +392,14 @@ class Toa(algloc):
         ROA_std = self.c * self.TOA_std
         for i in np.arange(Niter):
             # Construct the matrix A (see theory)
-            A = ((P - self.RN) / np.sqrt( \
+            A = ((P - self.RN) / np.sqrt(
                 np.sum((P - self.RN) ** 2, axis=0))).T
             # Construct the Covariance Matrix
             C = np.diag((ROA_std[:]) ** 2)
             # Construct the vector D (see theory)
             D = ROA - np.sqrt((np.sum((P - self.RN) ** 2, axis=0)))
             # construct the vector Delta (see theory)
-            Delta = np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv( \
+            Delta = np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(
                 C), A))), np.dot(np.dot(A.T, nplg.inv(C)), D))
             # update P
             P = P + Delta.reshape(np.shape(P))
@@ -408,7 +408,7 @@ class Toa(algloc):
     def sdp_locate(self):
         """
         This method applies semidefinite programming (SDP) on TOA
-        to get position P.  
+        to get position P.
         Returns
         -------
             P : numpy.ndarray
@@ -445,8 +445,8 @@ class Toa(algloc):
         prob.constr.append(Y >= 0)
         prob.constr.append(Y[mtoa, mtoa] == 1)
         for i in range(ntoa):
-            X0 = cvxm.matrix([[Im, -cvxm.transpose(RN[:, i])], \
-                 [-RN[:, i], cvxm.transpose(RN[:, i]) * RN[:, i]]])
+            X0 = cvxm.matrix([[Im, -cvxm.transpose(RN[:, i])],
+                              [-RN[:, i], cvxm.transpose(RN[:, i]) * RN[:, i]]])
             prob.constr.append(-t[i] < (cvxm.trace(
                 X0 * Y) - ROA[i] ** 2) * (1 / ROA_std[i]))
             prob.constr.append(t[i] > (cvxm.trace(
@@ -495,9 +495,9 @@ class Toa(algloc):
         ROA_std = self.c * self.TOA_std
         # construct the ML function to be minimized
         RNmP = self.RN - np.outer(P, np.ones(RNnum))
-        mRNmP = np.sqrt(np.diag(np.dot(RNmP.T,RNmP)))
-        tk = (ROA-mRNmP) ** 2
-        uk = tk/(2*ROA_std**2)+np.log(np.sqrt(2*np.pi)*ROA_std)
+        mRNmP = np.sqrt(np.diag(np.dot(RNmP.T, RNmP)))
+        tk = (ROA - mRNmP) ** 2
+        uk = tk / (2 * ROA_std ** 2) + np.log(np.sqrt(2 * np.pi) * ROA_std)
         ML = uk.sum(axis=0)
         return(ML)
 
@@ -507,7 +507,7 @@ class Toa(algloc):
         to get position P.
         Parameters
         ----------
-            P0 : numpy.ndarray  
+            P0 : numpy.ndarray
         Returns
         -------
             P : numpy.ndarray
@@ -532,7 +532,7 @@ class Toa(algloc):
             >>> T = TOA(RN, TOA, TOA_std)
             >>> T.ml_locate(BN0)
         """
-        P = optimize.fmin(self.ml_function, P0, args=(),disp=0)
+        P = optimize.fmin(self.ml_function, P0, args=(), disp=0)
         return P.reshape(np.shape(P0))
 
     def fim(self, P):
@@ -565,11 +565,11 @@ class Toa(algloc):
             >>> T.fim(BN)
         """
         ROA_std = self.c * self.TOA_std
-        FIM = np.zeros((np.shape(self.RN)[0],np.shape(self.RN)[0]))
+        FIM = np.zeros((np.shape(self.RN)[0], np.shape(self.RN)[0]))
         for i in range(np.shape(self.RN)[1]):
-            FIM += np.dot((P-self.RN[:,i:i+1]),(P-self.RN[:,i:i+1]).T)/\
-            ((ROA_std[i]**2)*np.dot((P-self.RN[:,i:i+1]).T,\
-            (P-self.RN[:,i:i+1])))
+            FIM += np.dot((P - self.RN[:, i:i + 1]), (P - self.RN[:, i:i + 1]).T) /\
+                ((ROA_std[i] ** 2) * np.dot((P - self.RN[:, i:i + 1]).T,
+                                            (P - self.RN[:, i:i + 1])))
         return FIM
 
     def crb(self, P):
@@ -605,6 +605,7 @@ class Toa(algloc):
         CRB = np.sqrt(np.trace(nplg.inv(FIM)))
         return CRB
 
+
 class Rss(algloc):
     """
     This class contains:
@@ -636,48 +637,48 @@ class Rss(algloc):
     """
     def __init__(self, RN, RSS, d0, RSS_std, RSS_np, PL0, Rest):
         algloc.__init__(self, RN)
-        if len(np.shape(RSS))==2:
-            if np.shape(RSS)[0]==1:
-                self.RSS = RSS[0,:]
-            elif np.shape(RSS)[1]==1:
-                self.RSS = RSS[:,1]
+        if len(np.shape(RSS)) == 2:
+            if np.shape(RSS)[0] == 1:
+                self.RSS = RSS[0, :]
+            elif np.shape(RSS)[1] == 1:
+                self.RSS = RSS[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(RSS))==1:
+        elif len(np.shape(RSS)) == 1:
             self.RSS = RSS
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
-        if len(np.shape(RSS_std))==2:
-            if np.shape(RSS_std)[0]==1:
-                self.RSS_std = RSS_std[0,:]
-            elif np.shape(RSS_std)[1]==1:
-                self.RSS_std = RSS_std[:,1]
+        if len(np.shape(RSS_std)) == 2:
+            if np.shape(RSS_std)[0] == 1:
+                self.RSS_std = RSS_std[0, :]
+            elif np.shape(RSS_std)[1] == 1:
+                self.RSS_std = RSS_std[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(RSS_std))==1:
+        elif len(np.shape(RSS_std)) == 1:
             self.RSS_std = RSS_std
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
-        if len(np.shape(RSS_np))==2:
-            if np.shape(RSS_np)[0]==1:
-                self.RSS_np = RSS_np[0,:]
-            elif np.shape(RSS_np)[1]==1:
-                self.RSS_np = RSS_np[:,1]
+        if len(np.shape(RSS_np)) == 2:
+            if np.shape(RSS_np)[0] == 1:
+                self.RSS_np = RSS_np[0, :]
+            elif np.shape(RSS_np)[1] == 1:
+                self.RSS_np = RSS_np[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(RSS_np))==1:
+        elif len(np.shape(RSS_np)) == 1:
             self.RSS_np = RSS_np
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
 
-        if len(np.shape(PL0))==2:
-            if np.shape(PL0)[0]==1:
-                self.PL0 = PL0[0,:]
-            elif np.shape(PL0)[1]==1:
-                self.PL0 = PL0[:,1]
+        if len(np.shape(PL0)) == 2:
+            if np.shape(PL0)[0] == 1:
+                self.PL0 = PL0[0, :]
+            elif np.shape(PL0)[1] == 1:
+                self.PL0 = PL0[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(PL0))==1:
+        elif len(np.shape(PL0)) == 1:
             self.PL0 = PL0
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
@@ -759,7 +760,7 @@ class Rss(algloc):
             >>> R = Rss(RN, RSS, d0, RSS_std, RSS_np, PL0, Rest)
             >>> R.get_plmean(BN)
         """
-        RNmP = self.dist(self.RN,P,0)
+        RNmP = self.dist(self.RN, P, 0)
         PLmean = self.PL0 - 10 * self.RSS_np * np.log10(RNmP / self.d0)
         return PLmean
 
@@ -830,17 +831,16 @@ class Rss(algloc):
             >>> R = Rss(RN, RSS, d0, RSS_std, RSS_np, PL0, Rest)
             >>> R.get_range()
         """
-        S = (np.log(10)/10)*self.RSS_std/self.RSS_np
-        M = (np.log(10)/10)*(self.PL0-self.RSS)/self.RSS_np+\
+        S = (np.log(10) / 10) * self.RSS_std / self.RSS_np
+        M = (np.log(10) / 10) * (self.PL0 - self.RSS) / self.RSS_np +\
             np.log(self.d0)
 
-        
         if string.lower(self.Rest) == 'mode':
-            Range = np.exp(M-S**2)
+            Range = np.exp(M - S ** 2)
         elif string.lower(self.Rest) == 'median':
             Range = np.exp(M)
         elif string.lower(self.Rest) == 'mean':
-            Range = np.exp(M+0.5*S**2)
+            Range = np.exp(M + 0.5 * S ** 2)
         else:
             raise ValueError(Rest + ": no such ranging estimator")
         return Range
@@ -876,15 +876,18 @@ class Rss(algloc):
             >>> R = Rss(RN, RSS, d0, RSS_std, RSS_np, PL0, Rest)
             >>> R.get_range_std()
         """
-        S = (np.log(10)/10)*self.RSS_std/self.RSS_np
-        M = (np.log(10)/10)*(self.PL0-self.RSS)/self.RSS_np+\
-             np.log(self.d0)
+        S = (np.log(10) / 10) * self.RSS_std / self.RSS_np
+        M = (np.log(10) / 10) * (self.PL0 - self.RSS) / self.RSS_np +\
+            np.log(self.d0)
         if string.lower(self.Rest) == 'mode':
-            Range_std = np.sqrt((np.exp(2*M-2*S**2))*(1-np.exp(-S**2)))
+            Range_std = np.sqrt((np.exp(
+                2 * M - 2 * S ** 2)) * (1 - np.exp(-S ** 2)))
         elif string.lower(self.Rest) == 'median':
-            Range_std = np.sqrt((np.exp(2*M+S**2))*(np.exp(S**2)-1))
+            Range_std = np.sqrt(
+                (np.exp(2 * M + S ** 2)) * (np.exp(S ** 2) - 1))
         elif string.lower(self.Rest) == 'mean':
-            Range_std = np.sqrt((np.exp(2*M+3*S**2))*(np.exp(S**2)-1))
+            Range_std = np.sqrt((np.exp(
+                2 * M + 3 * S ** 2)) * (np.exp(S ** 2) - 1))
         else:
             raise ValueError(Rest + ": no such ranging estimator")
         return Range_std
@@ -996,7 +999,7 @@ class Rss(algloc):
         A2i = np.dot(np.dot(V.T, np.diag(J)), U.T)
         P = 0.5 * np.dot(A2i, np.dot(A.T, K))
         # Return the estimated position
-        return P.reshape(np.shape(self.RN[:,0:1]))
+        return P.reshape(np.shape(self.RN[:, 0:1]))
 
     def wls_locate(self):
         """
@@ -1045,9 +1048,9 @@ class Rss(algloc):
         # Construct the Covariance Matrix
         C = np.diag((ROA_std[1:]) ** 2)
         # Apply LS operator
-        P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))),\
-            np.dot(np.dot(A.T, nplg.inv(C)), K))
-        return P.reshape(np.shape(self.RN[:,0:1]))
+        P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))),
+                         np.dot(np.dot(A.T, nplg.inv(C)), K))
+        return P.reshape(np.shape(self.RN[:, 0:1]))
 
     def twls_locate(self):
         """
@@ -1109,7 +1112,7 @@ class Rss(algloc):
 
         A2i = np.dot(np.dot(V.T, np.diag(J)), U.T)
         P = 0.5 * np.dot(A2i, np.dot(np.dot(A.T, nplg.inv(C)), K))
-        return P.reshape(np.shape(self.RN[:,0:1]))
+        return P.reshape(np.shape(self.RN[:, 0:1]))
 
     def ts_locate(self, P0, Niter):
         """
@@ -1119,7 +1122,7 @@ class Rss(algloc):
         ----------
             Rest : string
             P0 : numpy.ndarray
-            Niter : integer 
+            Niter : integer
         Returns
         -------
             P : numpy.ndarray
@@ -1155,14 +1158,14 @@ class Rss(algloc):
         ROA_std = self.get_range_std()
         for i in np.arange(Niter):
             # Construct the matrix A (see theory)
-            A = ((P - self.RN) / np.sqrt( \
+            A = ((P - self.RN) / np.sqrt(
                 np.sum((P - self.RN) ** 2, axis=0))).T
             # Construct the Covariance Matrix
             C = np.diag((ROA_std[:]) ** 2)
             # Construct the vector D (see theory)
             D = ROA - np.sqrt((np.sum((P - self.RN) ** 2, axis=0)))
             # construct the vector Delta (see theory)
-            Delta = np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv( \
+            Delta = np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(
                 C), A))), np.dot(np.dot(A.T, nplg.inv(C)), D))
             # update P
             P = P + Delta.reshape(np.shape(P))
@@ -1210,11 +1213,11 @@ class Rss(algloc):
         PL0 = cvxm.matrix(self.PL0)
         ROA = cvxm.matrix(ROA)
         mrss, nrss = cvxm.size(RN)
-        Si = np.array([(1/self.d0**2)*10**((RSS[0,0]-PL0[0,0])/(5.0*\
-            RSS_np[0,0])),(1/self.d0**2)*10**((RSS[1,0]-PL0[1,0])/\
-            (5.0*RSS_np[1,0])),(1/self.d0**2)*10**((RSS[2,0]-PL0[2,0])\
-            /(5.0*RSS_np[2,0])),(1/self.d0**2)*10**((RSS[3,0]-PL0[3,0])\
-            /(5.0*RSS_np[3,0]))])
+        Si = np.array([(1 / self.d0 ** 2) * 10 ** ((RSS[0, 0] - PL0[0, 0]) / (5.0 *
+                                                                              RSS_np[0, 0])), (1 / self.d0 ** 2) * 10 ** ((RSS[1, 0] - PL0[1, 0]) /
+                                                                                                                          (5.0 * RSS_np[1, 0])), (1 / self.d0 ** 2) * 10 ** ((RSS[2, 0] - PL0[2, 0])
+                                                                                                                                                                             / (5.0 * RSS_np[2, 0])), (1 / self.d0 ** 2) * 10 ** ((RSS[3, 0] - PL0[3, 0])
+                                                                                                                                                                                                                                  / (5.0 * RSS_np[3, 0]))])
         Im = cvxm.eye(mrss)
         Y = cvxm.optvar('Y', mrss + 1, mrss + 1)
         t = cvxm.optvar('t', nrss, 1)
@@ -1222,12 +1225,12 @@ class Rss(algloc):
         prob.constr.append(Y >= 0)
         prob.constr.append(Y[mrss, mrss] == 1)
         for i in range(nrss):
-            X0 = cvxm.matrix([[Im,-cvxm.transpose(RN[:,i])],\
-                 [-RN[:,i],cvxm.transpose(RN[:,i])*RN[:, i]]])
-            prob.constr.append(-RSS_std[i,0]*t[i]<Si[i]*\
-                               cvxm.trace(X0*Y)-1)
-            prob.constr.append(RSS_std[i,0]*t[i]>Si[i]*\
-                               cvxm.trace(X0*Y)-1)
+            X0 = cvxm.matrix([[Im, -cvxm.transpose(RN[:, i])],
+                              [-RN[:, i], cvxm.transpose(RN[:, i]) * RN[:, i]]])
+            prob.constr.append(-RSS_std[i, 0] * t[i] < Si[i] *
+                               cvxm.trace(X0 * Y) - 1)
+            prob.constr.append(RSS_std[i, 0] * t[i] > Si[i] *
+                               cvxm.trace(X0 * Y) - 1)
         prob.solve(quiet=True)
         Pval = Y.value
         P = Pval[:mrss, -1]
@@ -1274,9 +1277,9 @@ class Rss(algloc):
         ROA_std = self.get_range_std()
         # construct the ML function to be minimized
         RNmP = self.RN - np.outer(P, np.ones(RNnum))
-        mRNmP = np.sqrt(np.diag(np.dot(RNmP.T,RNmP)))
-        tk = (ROA-mRNmP) ** 2
-        uk = tk/(2*ROA_std**2)+np.log(np.sqrt(2*np.pi)*ROA_std)
+        mRNmP = np.sqrt(np.diag(np.dot(RNmP.T, RNmP)))
+        tk = (ROA - mRNmP) ** 2
+        uk = tk / (2 * ROA_std ** 2) + np.log(np.sqrt(2 * np.pi) * ROA_std)
         ML = uk.sum(axis=0)
         return(ML)
 
@@ -1316,7 +1319,7 @@ class Rss(algloc):
             >>> R.iml_locate(BN0)
         """
 
-        P = optimize.fmin(self.iml_function, P0, args=(),disp=0)
+        P = optimize.fmin(self.iml_function, P0, args=(), disp=0)
         return P.reshape(np.shape(P0))
 
     def dml_function(self, P):
@@ -1351,17 +1354,17 @@ class Rss(algloc):
             >>> R = Rss(RN, RSS, d0, RSS_std, RSS_np, PL0, Rest)
             >>> PL = R.get_pl(BN)
             >>> R.RSS = PL
-            >>> R.dml_function(BN)
+            >>> ML = R.dml_function(BN)
         """
         RNnum = np.shape(self.RN)[1]
-        S = (np.log(10)/10)*self.RSS_std/self.RSS_np
-        M = (np.log(10)/10)*(self.PL0-self.RSS)/self.RSS_np+\
+        S = (np.log(10) / 10) * self.RSS_std / self.RSS_np
+        M = (np.log(10) / 10) * (self.PL0 - self.RSS) / self.RSS_np +\
             np.log(self.d0)
         # construct the ML function to be minimized
-        RNmP = self.RN-np.outer(P, np.ones(RNnum))
-        mRNmP = np.sqrt(np.diag(np.dot(RNmP.T,RNmP)))
-        tk = (M-S**2-np.log(mRNmP))**2
-        uk = tk/(2*S**2)
+        RNmP = self.RN - np.outer(P, np.ones(RNnum))
+        mRNmP = np.sqrt(np.diag(np.dot(RNmP.T, RNmP)))
+        tk = (M - S ** 2 - np.log(mRNmP)) ** 2
+        uk = tk / (2 * S ** 2)
         ML = uk.sum(axis=0)
         return(ML)
 
@@ -1437,12 +1440,12 @@ class Rss(algloc):
             >>> R.fim(BN)
 
         """
-        S = (np.log(10)/10)*self.RSS_std/self.RSS_np
-        FIM = np.zeros((np.shape(self.RN)[0],np.shape(self.RN)[0]))
+        S = (np.log(10) / 10) * self.RSS_std / self.RSS_np
+        FIM = np.zeros((np.shape(self.RN)[0], np.shape(self.RN)[0]))
         for i in range(np.shape(self.RN)[1]):
-            FIM += np.dot((P-self.RN[:,i:i+1]),(P-self.RN[:,i:i+1]).T)/\
-                 ((S[0]**2)*(np.dot((P-self.RN[:,i:i+1]).T,\
-                 (P-self.RN[:,i:i+1])))**2)
+            FIM += np.dot((P - self.RN[:, i:i + 1]), (P - self.RN[:, i:i + 1]).T) /\
+                ((S[0] ** 2) * (np.dot((P - self.RN[:, i:i + 1]).T,
+                 (P - self.RN[:, i:i + 1]))) ** 2)
         return FIM
 
     def crb(self, P):
@@ -1476,12 +1479,13 @@ class Rss(algloc):
             >>> R = Rss(RN, RSS, d0, RSS_std, RSS_np, PL0, Rest)
             >>> PL = R.get_pl(BN)
             >>> R.RSS = PL
-            >>> R.crb(BN)
+            >>> CRB = R.crb(BN)
         """
 
         FIM = self.fim(P)
         CRB = np.sqrt(np.trace(nplg.inv(FIM)))
         return CRB
+
 
 class Tdoa(algloc):
     """
@@ -1507,33 +1511,32 @@ class Tdoa(algloc):
 
     def __init__(self, RN, RNr, TDOA, TDOA_std):
         algloc.__init__(self, RN)
-        if len(np.shape(RNr))==2:
+        if len(np.shape(RNr)) == 2:
             self.RNr = RNr
         else:
             raise ValueError("inputs must be of shape (n,p), p=2 or 3")
-        if len(np.shape(TDOA))==2:
-            if np.shape(TDOA)[0]==1:
-                self.TDOA = TDOA[0,:]
-            elif np.shape(TDOA)[1]==1:
-                self.TDOA = TDOA[:,1]
+        if len(np.shape(TDOA)) == 2:
+            if np.shape(TDOA)[0] == 1:
+                self.TDOA = TDOA[0, :]
+            elif np.shape(TDOA)[1] == 1:
+                self.TDOA = TDOA[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(TDOA))==1:
+        elif len(np.shape(TDOA)) == 1:
             self.TDOA = TDOA
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
-        if len(np.shape(TDOA_std))==2:
-            if np.shape(TDOA_std)[0]==1:
-                self.TDOA_std = TDOA_std[0,:]
-            elif np.shape(TDOA_std)[1]==1:
-                self.TDOA_std = TDOA_std[:,1]
+        if len(np.shape(TDOA_std)) == 2:
+            if np.shape(TDOA_std)[0] == 1:
+                self.TDOA_std = TDOA_std[0, :]
+            elif np.shape(TDOA_std)[1] == 1:
+                self.TDOA_std = TDOA_std[:, 1]
             else:
                 raise ValueError("inputs shape must be (1,n) or (n,)")
-        elif len(np.shape(TDOA_std))==1:
+        elif len(np.shape(TDOA_std)) == 1:
             self.TDOA_std = TDOA_std
         else:
             raise ValueError("inputs shape must be (1,n) or (n,)")
-
 
     def ls_locate(self):
         """
@@ -1563,17 +1566,17 @@ class Tdoa(algloc):
         """
         shRN = np.shape(self.RN)
         # Construct the vector K (see theory)
-        k1 = (np.sum((self.RN-self.RNr) * (self.RN-self.RNr), axis=0))
+        k1 = (np.sum((self.RN - self.RNr) * (self.RN - self.RNr), axis=0))
         RDOA = self.c * self.TDOA
-        RDOA2 = RDOA*RDOA
+        RDOA2 = RDOA * RDOA
         k2 = RDOA2
-        K = k1-k2
+        K = k1 - k2
         # Construct the matrix A (see theory)
-        A = np.hstack((self.RN.T-self.RNr.T, \
-        RDOA.reshape(np.shape(self.TDOA)[0],1)))
+        A = np.hstack((self.RN.T - self.RNr.T,
+                       RDOA.reshape(np.shape(self.TDOA)[0], 1)))
         # Apply LS operator
         Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-        P = Pr[:shRN[0]].reshape(shRN[0],1)
+        P = Pr[:shRN[0]].reshape(shRN[0], 1)
         return P
 
     def tls_locate(self):
@@ -1604,22 +1607,22 @@ class Tdoa(algloc):
         """
         shRN = np.shape(self.RN)
         # Construct the vector K (see theory)
-        k1 = (np.sum((self.RN-self.RNr) * (self.RN-self.RNr), axis=0))
+        k1 = (np.sum((self.RN - self.RNr) * (self.RN - self.RNr), axis=0))
         RDOA = self.c * self.TDOA
-        RDOA2 = RDOA*RDOA
+        RDOA2 = RDOA * RDOA
         k2 = RDOA2
-        K = k1-k2
+        K = k1 - k2
         # Construct the matrix A (see theory)
-        A = np.hstack((self.RN.T-self.RNr.T, \
-        RDOA.reshape(np.shape(self.TDOA)[0],1)))
+        A = np.hstack((self.RN.T - self.RNr.T,
+                       RDOA.reshape(np.shape(self.TDOA)[0], 1)))
         A2 = np.dot(A.T, A)
         [U, S, V] = nplg.svd(A2)
-        J = 1/S
+        J = 1 / S
         rA = np.rank(A)
         m, n = np.shape(A)
         f = 0
         if np.log10(nplg.cond(A)) >= self.c * max(self.TDOA_std):
-            f = f+1
+            f = f + 1
             for i in range(n - rA):
                 u = np.where(J == max(J))
                 J[u] = 0
@@ -1627,7 +1630,7 @@ class Tdoa(algloc):
         A2i = np.dot(np.dot(V.T, np.diag(J)), U.T)
         # Apply LS operator
         Pr = 0.5 * np.dot(A2i, np.dot(A.T, K))
-        P = Pr[:shRN[0]].reshape(shRN[0],1)
+        P = Pr[:shRN[0]].reshape(shRN[0], 1)
         return P
 
     def wls_locate(self):
@@ -1658,21 +1661,21 @@ class Tdoa(algloc):
         """
         shRN = np.shape(self.RN)
         # Construct the vector K (see theory)
-        k1 = (np.sum((self.RN-self.RNr) * (self.RN-self.RNr), axis=0))
+        k1 = (np.sum((self.RN - self.RNr) * (self.RN - self.RNr), axis=0))
         RDOA = self.c * self.TDOA
         RDOA_std = self.c * self.TDOA_std
-        RDOA2 = RDOA*RDOA
+        RDOA2 = RDOA * RDOA
         k2 = RDOA2
-        K = k1-k2
+        K = k1 - k2
         # Construct the matrix A (see theory)
-        A = np.hstack((self.RN.T-self.RNr.T, \
-        RDOA.reshape(np.shape(self.TDOA)[0],1)))
+        A = np.hstack((self.RN.T - self.RNr.T,
+                       RDOA.reshape(np.shape(self.TDOA)[0], 1)))
         # Construct the Covariance Matrix
         C = np.diag(RDOA_std[:] ** 2)
         # Apply LS operator
-        Pr = 0.5*np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),A))),\
-             np.dot(np.dot(A.T, nplg.inv(C)), K))
-        P = Pr[:shRN[0]].reshape(shRN[0],1)
+        Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))),
+                          np.dot(np.dot(A.T, nplg.inv(C)), K))
+        P = Pr[:shRN[0]].reshape(shRN[0], 1)
         return P
 
     def twls_locate(self):
@@ -1703,33 +1706,33 @@ class Tdoa(algloc):
         """
         shRN = np.shape(self.RN)
         # Construct the vector K (see theory)
-        k1 = (np.sum((self.RN-self.RNr) * (self.RN-self.RNr), axis=0))
+        k1 = (np.sum((self.RN - self.RNr) * (self.RN - self.RNr), axis=0))
         RDOA = self.c * self.TDOA
         RDOA_std = self.c * self.TDOA_std
-        RDOA2 = RDOA*RDOA
+        RDOA2 = RDOA * RDOA
         k2 = RDOA2
-        K = k1-k2
+        K = k1 - k2
         # Construct the matrix A (see theory)
-        A = np.hstack((self.RN.T-self.RNr.T, \
-        RDOA.reshape(np.shape(self.TDOA)[0],1)))
+        A = np.hstack((self.RN.T - self.RNr.T,
+                       RDOA.reshape(np.shape(self.TDOA)[0], 1)))
         # Construct the Covariance Matrix
         C = np.diag(RDOA_std[:] ** 2)
         # Apply LS operator
-        A2 = np.dot(A.T,np.dot(nplg.inv(C), A))
+        A2 = np.dot(A.T, np.dot(nplg.inv(C), A))
         [U, S, V] = nplg.svd(A2)
-        J = 1/S
+        J = 1 / S
         rA = np.rank(A)
         m, n = np.shape(A)
         f = 0
         if np.log10(nplg.cond(A)) >= self.c * max(self.TDOA_std):
-            f = f+1
+            f = f + 1
             for i in range(n - rA):
                 u = np.where(J == max(J))
                 J[u] = 0
 
         A2i = np.dot(np.dot(V.T, np.diag(J)), U.T)
-        Pr = 0.5*np.dot(A2i, np.dot(np.dot(A.T, nplg.inv(C)), K))
-        P = Pr[:shRN[0]].reshape(shRN[0],1)
+        Pr = 0.5 * np.dot(A2i, np.dot(np.dot(A.T, nplg.inv(C)), K))
+        P = Pr[:shRN[0]].reshape(shRN[0], 1)
         return P
 
     def ts_locate(self, P0, Niter):
@@ -1739,7 +1742,7 @@ class Tdoa(algloc):
         Parameters
         ----------
             P0 : numpy.ndarray
-            Niter : integer 
+            Niter : integer
         Returns
         -------
             P : numpy.ndarray
@@ -1771,15 +1774,16 @@ class Tdoa(algloc):
         RDOA_std = self.c * self.TDOA_std
         for i in np.arange(Niter):
             # Construct the matrix A (see theory)
-            A = ((P-self.RN)/np.sqrt(np.sum((P-self.RN)**2,axis=0))).T-\
-                ((P-self.RNr)/np.sqrt(np.sum((P-self.RNr)**2,axis=0))).T
+            A = ((P - self.RN) / np.sqrt(np.sum((P - self.RN) ** 2, axis=0))).T -\
+                ((P - self.RNr) / np.sqrt(
+                    np.sum((P - self.RNr) ** 2, axis=0))).T
             # Construct the Covariance Matrix
             C = np.diag((RDOA_std[:]) ** 2)
             # Construct the vector D (see theory)
-            D = RDOA - (np.sqrt((np.sum((P-self.RN)**2, axis=0)))-\
-                       np.sqrt((np.sum((P-self.RNr)**2, axis=0))))
+            D = RDOA - (np.sqrt((np.sum((P - self.RN) ** 2, axis=0))) -
+                        np.sqrt((np.sum((P - self.RNr) ** 2, axis=0))))
             # construct the vector Delta (see theory)
-            Delta = np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv( \
+            Delta = np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(
                 C), A))), np.dot(np.dot(A.T, nplg.inv(C)), D))
             # update P
             P = P + Delta.reshape(np.shape(P))
@@ -1817,8 +1821,8 @@ class Tdoa(algloc):
 
         shRN = np.shape(self.RN)
         RNnum = shRN[1]
-        RDOA = self.c*self.TDOA
-        RDOA_std = self.c*self.TDOA_std
+        RDOA = self.c * self.TDOA
+        RDOA_std = self.c * self.TDOA_std
 
         # construct the ML function to be minimized
         RN1mP = self.RN - np.outer(P, np.ones(RNnum))
@@ -1838,7 +1842,7 @@ class Tdoa(algloc):
         to get position P.
         Parameters
         ----------
-            P0 : numpy.ndarray  
+            P0 : numpy.ndarray
         Returns
         -------
             P : numpy.ndarray
@@ -1863,7 +1867,7 @@ class Tdoa(algloc):
             >>> D = Tdoa(RN, RNr, TDOA, TDOA_std)
             >>> D.ml_locate(BN0)
         """
-        P = optimize.fmin(self.ml_function, P0, args=(),disp=0)
+        P = optimize.fmin(self.ml_function, P0, args=(), disp=0)
         return P.reshape(np.shape(P0))
 
     def fim(self, P):
@@ -1896,15 +1900,15 @@ class Tdoa(algloc):
             >>> D.fim(BN)
         """
         RDOA_std = self.c * self.TDOA_std
-        FIM = np.zeros((np.shape(self.RN)[0],np.shape(self.RN)[0]))
+        FIM = np.zeros((np.shape(self.RN)[0], np.shape(self.RN)[0]))
         for i in range(np.shape(self.RN)[1]):
-            PmRN = np.sqrt(np.dot((P-self.RN[:,i:i+1]).T,\
-                   P-self.RN[:,i:i+1]))
-            PmRNr = np.sqrt(np.dot((P-self.RNr[:,i:i+1]).T,\
-                    P-self.RNr[:,i:i+1]))
-            FIM += (1/RDOA_std[i]**2)*np.dot((P-self.RN[:,i:i+1])/PmRN-\
-                (P-self.RNr[:,i:i+1])/PmRNr,((P-self.RN[:,i:i+1])/PmRN-\
-                (P-self.RNr[:,i:i+1])/PmRNr).T)
+            PmRN = np.sqrt(np.dot((P - self.RN[:, i:i + 1]).T,
+                                  P - self.RN[:, i:i + 1]))
+            PmRNr = np.sqrt(np.dot((P - self.RNr[:, i:i + 1]).T,
+                                   P - self.RNr[:, i:i + 1]))
+            FIM += (1 / RDOA_std[i] ** 2) * np.dot((P - self.RN[:, i:i + 1]) / PmRN -
+                                                   (P - self.RNr[:, i:i + 1]) / PmRNr, ((P - self.RN[:, i:i + 1]) / PmRN -
+                                                                                        (P - self.RNr[:, i:i + 1]) / PmRNr).T)
         return FIM
 
     def crb(self, P):
@@ -1940,4 +1944,5 @@ class Tdoa(algloc):
         CRB = np.sqrt(np.trace(nplg.inv(FIM)))
         return CRB
 
-    
+if __name__ == "__main__":
+    doctest.testmod()
