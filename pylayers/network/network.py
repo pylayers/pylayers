@@ -511,7 +511,7 @@ class Network(nx.MultiGraph):
 
 
 
-    def compute_LDPs(self,ln,RAT,LDP):
+    def compute_LDPs(self,ln,RAT):
         """compute edge LDP
 
         Attributes
@@ -523,33 +523,34 @@ class Network(nx.MultiGraph):
             node ID
         RAT     : string
             A specific RAT which exist in the network ( if not , raises an error)
-        LDP    : a LDP ( 'Pr' or 'TOA' ) ( if LDP don't exist it raises an error)
         value    : list : [LDP value , LDP standard deviation] 
         method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
 
 
         """
-        if not isinstance(LDP,list):
-            LDP=[LDP]
 
-            lD=[]
-
-
-        for it,ldp in enumerate (LDP):
-#            recuperer puissance emission et la passer a EMS pour correct mesure de Pr
-            p=nx.get_node_attributes(self.SubNet[RAT],'p')
-            epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
-            e=self.SubNet[RAT].edges()
-
-            lv , d= self.EMS.solve(p,e,ldp,RAT,epwr)
-
-            if  it ==0:
-                lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]
-            else :
-                [lD[i].update({ldp:lv[i],'d':d[i]} for i in range(len(lv)))]
-
-
+        p=nx.get_node_attributes(self.SubNet[RAT],'p')
+        epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
+        e=self.SubNet[RAT].edges()
+        lp,lt, d= self.EMS.solve(p,e,'all',RAT,epwr)
+        lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i]} for i in range(len(d))]
         self.update_LDPs(ln,RAT,lD)
+
+#        for it,ldp in enumerate (LDP):
+##            recuperer puissance emission et la passer a EMS pour correct mesure de Pr
+#            p=nx.get_node_attributes(self.SubNet[RAT],'p')
+#            epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
+#            e=self.SubNet[RAT].edges()
+#            pdb.set_trace()
+#            lv, d= self.EMS.solve(p,e,'all',RAT,epwr)
+
+#            if  it ==0:
+#                lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]
+#            else :
+#                [lD[i].update({ldp:lv[i],'d':d[i]} for i in range(len(lv)))]
+
+
+#        self.update_LDPs(ln,RAT,lD)
 
 
     def update_pos(self,n,p,p_pe='p'):
@@ -964,8 +965,7 @@ class PNetwork(Process):
         ####################################################################################
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
         for rat in self.net.RAT.iterkeys():
-            for ldp in self.net.LDP:
-                self.net.compute_LDPs(self.net.nodes(),rat,ldp)
+            self.net.compute_LDPs(self.net.nodes(),rat)
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
@@ -993,8 +993,7 @@ class PNetwork(Process):
         while True:
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
-                for ldp in self.net.LDP:
-                    self.net.compute_LDPs(self.net.nodes(),rat,ldp)
+                self.net.compute_LDPs(self.net.nodes(),rat)
             
             if self.show_sg:
                 ############### compute Signature (Sg)
@@ -1009,9 +1008,7 @@ class PNetwork(Process):
 
             if self.disp_inf:
                 self.net.pp()
-            
-            print 'network update @',self.sim.now()            
-            print self.net.node['1']['PN'].edge['1']['7']
+
 
 
             ############# save network

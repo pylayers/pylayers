@@ -115,6 +115,8 @@ class TX(Process):
         Process.__init__(self,name='Tx'+str(self.ID),sim=self.sim)
 
 
+
+
     def run(self):
         while True:
             self.levt=[]
@@ -203,11 +205,11 @@ class TX(Process):
 class RX(Process):
     def __init__(self,**args):
         defaults={'sim':None,
-                  'ID':'A1',
+                  'ID':'1',
                   'net':Network(),
                   'gcom': Gcom(),
                   'devt': {},
-                  'refreshRSS':0.5,
+                  'refreshRSS':0.3,
                   'refreshTOA':0.3,
                   'mp':False
                   }
@@ -224,17 +226,19 @@ class RX(Process):
         self.create_evt()
 
         Process.__init__(self,name='Rx-'+str(self.ID),sim=self.sim)
-        
 
+        Cf = ConfigParser.ConfigParser()
+        Cf.read(pyu.getlong('agent.ini','ini'))
+        for s in Cf.sections():
+            try:
+                d= dict(Cf.items(s))
+                if d['id']==self.ID:
+                    self.refreshRSS=eval(d['refreshrss'])
+                    self.refreshTOA=eval(d['refreshtoa'])
+                break
+            except:
+                pass
 
-
-#        Cf = ConfigParser.ConfigParser()
-#        Cf.read(pyu.getlong('agent.ini','ini'))
-#        ag_opt = dict(Cf.items(self.ID))
-#        self.cond = eval(ag_opt['condition'])
-#        self.inode = eval(ag_opt['inode'])
-#        self.irat = eval(ag_opt['irat'])
-#        self.mess = eval(ag_opt['message'])
 
 
     def swap_lt(self,lt):

@@ -153,14 +153,38 @@ class EMSolver(object):
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
 
-                if LDP == 'Pr':
+                if LDP=='all':
+                    pa = np.vstack(p.values())
+                    lpa = len(pa)
+#                    MW=[]
+#                    frees=[]
+#                    lepwr=[]
+                    Pr=[]
+                    TOA=[]
+
+                    for i in range(lpa-1):
+                        MW=Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
+#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
+                        frees=PL(pa[i+1:lpa],model.f,pa[i],model.rssnp)
+                        lepwr=epwr[i+1:lpa]
+                        Pr.extend(lepwr - MW[0] - frees)
+                        TOA.extend(MW[2])
+                    P=np.outer(Pr,[1,1])
+                    P[:,1]=model.sigrss
+                    T=np.outer(TOA,[1,1])
+                    T[:,1]=self.sigmaTOA*0.3
+                    return (P,T,d)
+
+
+
+
+                elif LDP == 'Pr':
                     pa = np.vstack(p.values())
                     pn = p.keys()
                     lpa = len(pa)
                     Lwo = []
                     frees=[]
                     lepwr=[]
-                    MW=[]
                     for i in range(lpa-1):
                         MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
                         Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
