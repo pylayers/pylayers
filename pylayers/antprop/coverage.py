@@ -138,6 +138,27 @@ class Coverage(object):
         self.prdbm = self.ptdbm - self.freespace - self.Lwo
 
 
+    def showEdo(self):
+        """ show
+        map of excess of delays
+        """
+
+        fig=plt.figure()
+        fig,ax=self.L.showGs(fig=fig)
+        l=self.grid[0,0]
+        r=self.grid[-1,0]
+        b=self.grid[0,1]
+        t=self.grid[-1,-1]
+        cov=ax.imshow(self.Edo.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),origin='lower')
+        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
+        ax.set_title('Map of excess of delays')
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        fig.colorbar(cov,cax)
+        if self.show:
+            plt.show()
+
+
     def showPr(self,rxsens=True,nfl=True):
         """ show the map of received power
 
@@ -191,7 +212,7 @@ class Coverage(object):
                             extent=(l,r,b,t),
                             cmap = 'jet',
                             vmin=self.rxsens,origin='lower')
-            title=title + '\n black : PrdBm < rx sensitivity'
+            title=title + '\n gray : PrdBm < rx sensitivity'
 
         else :
             cov=ax.imshow(self.prdbm.reshape((self.xstep,self.ystep)).T,
