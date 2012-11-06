@@ -9,7 +9,7 @@ df = 0.01
 fGHz   = np.arange(1,5,df)
 theta = 1
 plt.ion()
-sl['test'].ev(fGHz,theta,compensate=True)
+sl['test'].ev(fGHz,theta,compensate=False)
 sl['test'].plotwrtf(typ='mod')
 plt.figure()
 sl['test'].plotwrtf(typ='angle')
