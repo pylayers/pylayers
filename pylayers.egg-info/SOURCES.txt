@@ -77,7 +77,6 @@ pylayers/network/f1.py
 pylayers/network/model.py
 pylayers/network/network.py
 pylayers/network/show.py
-pylayers/pulsray/__init__.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
 pylayers/signal/waveform.py
