@@ -357,11 +357,11 @@ class CLA(object):
             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
                 vcw1 = vcw1 + step
                 step = step * 1.2
-                print step, vcw1
+#                print step, vcw1
             else:                           # if the list is not empty (intersection exist) vcw1 is decreased
                 vcw1 = max(vcw1 - step / 2., vcwmin)  # vcw > vcwmin
                 step = step / 4.
-                print step, vcw1
+#                print step, vcw1
 
         if (np.diff(tlb.box[0].bd, axis=0)[0][0] == 0) | (np.diff(tlb.box[0].bd, axis=0)[0][1] == 0):
             self.setvcw(vcw1 + 1.0)
@@ -484,7 +484,7 @@ class CLA(object):
         self.erro = np.zeros(self.Nc)
 
         a = []
-        print 'iter', self.iter
+#        print 'iter', self.iter
         B = self.dlayer[l][1].octant()
 
         lv = B.bd2coord()
@@ -496,8 +496,8 @@ class CLA(object):
         nbox = len(EB)
         nboxamb = len(AB)
 
-        print nbox
-        print nboxamb
+#        print nbox
+#        print nboxamb
         # if all boxes are out of the VA...
 #               if  ((nboxamb==0)&(nbox==0)) and len(self.dlayer[l][0].box) == 0:
         if  ((nboxamb == 0) & (nbox == 0)) and len(self.dlayer[l][0].box) == 0:
@@ -823,10 +823,10 @@ class CLA(object):
 
         if len(self.dlayer[l][0].box) != 0:  # si enclosed box exists
             dlindx = 0
-            print 'Enclosed pos estim'
+#            print 'Enclosed pos estim'
         else:
             dlindx = 1
-            print 'Amiguous pos estim'
+#            print 'Amiguous pos estim'
         self.saveP = np.zeros((len(self.dlayer[l][dlindx].box)))
         clust, axis = self.gapdetect(l, dlindx)
 

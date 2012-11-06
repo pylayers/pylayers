@@ -114,12 +114,13 @@ class PLocalization(Process):
 #        self.loc.get_const()
         self.loc.fill_cla()
         while True:
-            self.loc.update(ldp='TOA')
-
-            self.loc.cla.merge2()
-            self.loc.cla.refine(self.loc.cla.Nc)
-            self.loc.cla.estpos2()
-            self.loc.savep()
-            self.loc.cla.Nc=len(self.loc.cla.c)
-            print 'localization update @',self.sim.now()
+            if sum(self.loc.cla.runable) >= 2:
+                self.loc.update(ldp='TOA')
+                self.loc.cla.merge2()
+                self.loc.cla.refine(self.loc.cla.Nc)
+                if sum(self.loc.cla.runable) >= 3:
+                    self.loc.cla.estpos2()
+                    self.loc.savep()
+                self.loc.cla.Nc=len(self.loc.cla.c)
+            print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time

@@ -147,13 +147,13 @@ class EMSolver(object):
 
 
         if self.EMS_method == 'multiwall':
-
             dd={} # distance dictionnary
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
 
                 if LDP=='all':
+
                     pa = np.vstack(p.values())
                     lpa = len(pa)
 #                    MW=[]
@@ -198,7 +198,7 @@ class EMSolver(object):
 
 
             else :
-                return ([[0.],[0.]])
+                return (np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)))
 
 
         elif self.method == 'Pyray':
