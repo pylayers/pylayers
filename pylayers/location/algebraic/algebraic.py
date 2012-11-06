@@ -688,7 +688,7 @@ class Rss(algloc):
 
     def info(self):
         """
-        Dispaly scenario information
+        Display scenario information
         """
         print "Reference Radio Nodes:\n", self.RN
         print "Measured RSS:\n", self.RSS
@@ -699,8 +699,8 @@ class Rss(algloc):
         print "Range estimator:\n", self.Rest
 
     def get_pl0(self, lamda):
-        """
-        Compute the thoretic path loss PL0 at distance d0
+        """ computes the theoretic path loss PL0 at distance d0
+
         Parameters
         ----------
             lamda : float
@@ -1213,11 +1213,11 @@ class Rss(algloc):
         PL0 = cvxm.matrix(self.PL0)
         ROA = cvxm.matrix(ROA)
         mrss, nrss = cvxm.size(RN)
-        Si = np.array([(1 / self.d0 ** 2) * 10 ** ((RSS[0, 0] - PL0[0, 0]) / (5.0 *
-                                                                              RSS_np[0, 0])), (1 / self.d0 ** 2) * 10 ** ((RSS[1, 0] - PL0[1, 0]) /
-                                                                                                                          (5.0 * RSS_np[1, 0])), (1 / self.d0 ** 2) * 10 ** ((RSS[2, 0] - PL0[2, 0])
-                                                                                                                                                                             / (5.0 * RSS_np[2, 0])), (1 / self.d0 ** 2) * 10 ** ((RSS[3, 0] - PL0[3, 0])
-                                                                                                                                                                                                                                  / (5.0 * RSS_np[3, 0]))])
+        Si = np.array([(1 / self.d0 ** 2) * 10 ** ((RSS[0, 0] - PL0[0, 0]) / (5.0 * RSS_np[0, 0])), 
+                       (1 / self.d0 ** 2) * 10 ** ((RSS[1, 0] - PL0[1, 0]) / (5.0 * RSS_np[1, 0])),
+                       (1 / self.d0 ** 2) * 10 ** ((RSS[2, 0] - PL0[2, 0]) / (5.0 * RSS_np[2, 0])), 
+                       (1 / self.d0 ** 2) * 10 ** ((RSS[3, 0] - PL0[3, 0]) / (5.0 * RSS_np[3, 0]))])
+
         Im = cvxm.eye(mrss)
         Y = cvxm.optvar('Y', mrss + 1, mrss + 1)
         t = cvxm.optvar('t', nrss, 1)
@@ -1450,7 +1450,8 @@ class Rss(algloc):
 
     def crb(self, P):
         """
-        This method compute the cramer rao bound (CRB) at position P.
+        This method compute the Cramer Rao bound (CRB) at position P.
+
         Parameters
         ----------
             P : numpy.ndarray
