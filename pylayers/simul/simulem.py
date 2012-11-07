@@ -2336,11 +2336,11 @@ class Simul(object):
                     CIRa.append(cira)
                     D['Rx' + str(k)] = self.rx.points[int(k)]
                     if 'o' in format:
-                        D['to' + str(k)] = ciro.x
-                        D['ciro' + str(k)] = ciro.y
+                        D['to'] = ciro.x
+                        D['ciro'] = ciro.y
                     if 'a' in format:
-                        D['ta' + str(k)] = cira.x
-                        D['cira' + str(k)] = cira.y
+                        D['t'] = cira.x
+                        D['cir'] = cira.y
                     spio.savemat(filename, D)
                     self.output[l].set("cir", str(k), self.dcir[l][k])
                     fd = open(outfilename, "w")
