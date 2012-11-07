@@ -1019,11 +1019,13 @@ class Simul(object):
 
         try:
             self.palch = Palch(self.config.get("files", "palch"))
+            self.filepalch = self.config.get("files", "palch")
         except: 
             raise NameError('Error in section palch from '+ _filesimul)
 
         try:
             self.patra = Patra(self.config.get("files", "patra"))
+            self.filepatra = self.config.get("files", "patra")
         except: 
             raise NameError('Error in section patra from '+ _filesimul)
         #_outfilename = "out"+self.ntx+".ini"

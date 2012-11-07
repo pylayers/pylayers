@@ -29,7 +29,6 @@ pylayers/location/algebraic/__init__.py
 pylayers/location/algebraic/algebraic.py
 pylayers/location/algebraic/algebraic_old.py
 pylayers/location/algebraic/crb.py
-pylayers/location/algebraic/hdf.py
 pylayers/location/algebraic/hdf_old.py
 pylayers/location/algebraic/rss.py
 pylayers/location/algebraic/tdoa.py
