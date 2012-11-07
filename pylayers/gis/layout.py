@@ -1239,7 +1239,8 @@ class Layout(object):
             #~ else:
                 #~ zmin=0.0
             zmin=0.0
-            self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
+            if matname == 'METAL':
+                self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
 
     def del_node(self, ln):
         """ delete node in list ln
