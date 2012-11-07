@@ -10,7 +10,7 @@ import numpy.fft as fft
 from copy import *
 import matplotlib.pylab as plt
 from pylayers.util.pyutil import *
-from scipy import io
+import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin
 
 
@@ -73,7 +73,7 @@ class Bsignal(object):
         d = {}
         d['x'] = self.x
         d['y'] = self.y
-        io.savemat(filename, d)
+        ios.savemat(filename, d)
 
     def load(self, filename):
         """ load a Bsignal saved in a Matlab File
@@ -83,7 +83,7 @@ class Bsignal(object):
         filename : string
 
         """
-        d = io.loadmat(filename)
+        d = ios.loadmat(filename)
         self.x = d['x'][:, 0]
         self.y = d['y'][:, 0]
 
@@ -1949,11 +1949,32 @@ class TUsignal(TBsignal, Usignal):
         toa = t[v[0]]
         return toa
 
+    def readcir(self,filename,outdir=[]):
+        """ read channel impulse response
+
+        Parameters
+        ----------
+        filename : string
+            long file name if outdir is []
+            short file name is outdir is <> []
+        outdir : string
+            output directory
+        """
+        if outdir <> []:
+            outdir = 'output/'+outdir
+            filename = getlong(filename, outdir)
+
+        cir = ios.loadmat(filename)
+        self.x = cir['ta1']
+        self.y = cir['cira1']
+
+
     def readuwb(self, _filename):
         """ read  Waveform from Matlab file
         """
-        filename = getlong(_filename, 'wave')
-        wfm = io.loadmat(filename)
+        outdir = 'output/'+outdir
+        filename = getlong(_filename, outdir)
+        wfm = ios.loadmat(filename)
         d = wfm['data'][0][0]
         T0 = d.T0[0][0] / 1e-9
         Tres = d.Tres[0][0] / 1e-9

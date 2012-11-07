@@ -63,7 +63,8 @@ for na in range(nb_agent):
                     Layout = L,
                     net = N,
                     roomId = room_init[na],
-                    RAT=['rat1'] )
+                    RAT=['rat1']
+                    )
               )
 
 # <markdowncell>

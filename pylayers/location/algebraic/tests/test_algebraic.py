@@ -51,7 +51,6 @@ if __name__=="__main__":
     d_RSS = dist(RN_RSS,BN,0) # actual distances
     X = RSS_std * np.random.randn(np.shape(PL0)[0])
     RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
 
     RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
     d = dist(RN_TDOA,BN,0)
@@ -77,10 +76,11 @@ if __name__=="__main__":
     ldp['TOA_std'] = TOA_std
     ldp['TDOA'] = TDOA
     ldp['TDOA_std'] = TDOA_std
+
     S = algloc(nodes, ldp)
 
     S.show(1,1,1)
-    
+
     print 'BN'
     print BN
     print '--------------------------------'

@@ -56,8 +56,8 @@ class algloc(object):
         print "Location dependant parameters : ", self.ldp
 
     def plot(self, rss, toa, tdoa):
-        """
-        Plot sceanrio
+        """ Plot scenario
+
         Parameters
         ----------
             rss : boolean
@@ -108,8 +108,8 @@ class algloc(object):
                             label='Ref TDOA node')
 
     def show(self, rss, toa, tdoa):
-        """
-        Plot sceanrio
+        """ Plot scenario
+
         Parameters
         ----------
             rss : boolean
@@ -181,8 +181,8 @@ class algloc(object):
         
 
     def get_range(self, Rest='mode'):
-        """
-        Compute the range from RSS using the "Rest" estimator
+        """ Compute the range from RSS using the "Rest" estimator
+
         Parameters
         ----------
             Rest : string

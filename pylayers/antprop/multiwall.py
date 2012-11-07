@@ -6,6 +6,7 @@ from scipy import io
 import matplotlib.pylab as plt 
 import pylayers.simul.simulem 
 import pylayers.measures.mesuwb
+import pdb
 
 def LOSS_furniture(Tx,Rx,furn):
     """

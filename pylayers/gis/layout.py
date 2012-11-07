@@ -1237,7 +1237,7 @@ class Layout(object):
                 #~ zmin = height
                 #~ height=thickness
             #~ else:
-                #~ zmin=0.0       
+                #~ zmin=0.0
             zmin=0.0
             if matname == 'METAL':
                 self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
