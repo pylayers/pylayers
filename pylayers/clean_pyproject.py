@@ -16,7 +16,7 @@ import pdb
 ##########################################################
 
 
-inifile='where2.ini'
+inifile='default.ini'
 try:
     path=os.getenv('BASENAME')
 except:
@@ -24,7 +24,7 @@ except:
 
 
 
-dirlist=['launch/','trace/','tud/']
+dirlist=['output']
 extension=['.lch','.field','.tra','.tud','.tang','.rang','.tauk']
 rindic=False
 
@@ -33,7 +33,7 @@ rindic=False
 
 for d in dirlist:
     for ex in extension:
-        files = os.listdir(path +d )
+        files = os.listdir(path +'/' +d )
         for f in files:
             if not os.path.isdir(path+d+f) and ex in f:
                 rindic=True
@@ -49,10 +49,10 @@ for d in dirlist:
 # remove output into the where2.ini file
 
 flagout=False
-file=open(path +'simul/' +inifile,'r')
+file=open(path +'/simul/' +inifile,'r')
 lines=file.readlines()
 file.close()
-file=open(path +'simul/' +inifile,'w')
+file=open(path +'/simul/' +inifile,'w')
 for line in lines:
     if line =='[output]\n':
         file.write(line)
