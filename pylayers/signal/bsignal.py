@@ -9,6 +9,7 @@ import scipy.interpolate as interp
 import numpy.fft as fft
 from copy import *
 import matplotlib.pylab as plt
+import matplotlib.gridspec as gridspec
 from pylayers.util.pyutil import *
 import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin
@@ -696,7 +697,7 @@ class Usignal(Bsignal):
 
         Summary
         --------
-        This is a gatin between xmin and xmax
+        This is a gating between xmin and xmax
 
         Examples
         --------
@@ -742,19 +743,19 @@ class TBsignal(Bsignal):
     def __init__(self, x=np.array([]), y=np.array([])):
         Bsignal.__init__(self, x, y)
 
-    def plot(self, 
-             ix=0, 
-             col='black', 
-             vline=np.array([]), 
-             hline=np.array([]), 
-             showlabel=[True, True], 
-             unit1 = 'V', 
+    def plot(self,
+             ix=0,
+             col='black',
+             vline=np.array([]),
+             hline=np.array([]),
+             showlabel=[True, True],
+             unit1 = 'V',
              unit2 = 'V',
              ax=[],
              tmin = -1e5,
              tmax = +1e5,
-             dB = False, 
-             dist=False, 
+             dB = False,
+             dist=False,
              logx=False,
              logy=False):
         """ plot TBsignal
@@ -1097,25 +1098,54 @@ class TUsignal(TBsignal, Usignal):
         P.y = P.y / (R * Tpns)
         return(P)
 
-    def show(self):
+    def show(self,fig=[],ax=[],display=True,PRPns=100):
         """  show psd
+
+        Parameters
+        ----------
+        fig
+        ax
+        display
+
+        See Also
+        ---------
+
+        psd
+        zlr
         """
-        fig = plt.gcf()
-        fig.add_subplot(121)
+        if fig == []:
+            fig = plt.gcf()
+
+        Y = self.psd(PRPns)
+        kboltzmann = 1.3806503e-23
+        T = 300
+        # +30 dBW/Hz -> dBm/MHz
+        N0dB = 10*np.log10(kboltzmann*T)+30
+
+        u      = np.nonzero(Y.y>N0dB)
+        Pnoise = sum(Y.y[u])*Y.dx()
+
+        ax1 = fig.add_subplot(121)
         self.plot()
+        ax1.axhline(3*np.sqrt(Pnoise),color='r',linewidth=2)
+        ax1.axhline(-3*np.sqrt(Pnoise),color='r',linewidth=2)
         plt.grid()
-        fig.add_subplot(122)
-        self.zlr(0, 150)
-        Y = self.psd(100)
-        axis([1, 10, -120, -60])
-        plot(Y.x, 10 * np.log10(Y.y), 'k')
+        ax2 = fig.add_subplot(122)
+        #self.zlr(0,150)
+        # unilateral
+        plt.plot(Y.x, 10 * np.log10(Y.y), 'k')
         plt.xlabel('Frequency (GHz)')
-        plt.ylabel('PSD (dBm/MHz) PRP=100 ns')
+        plt.xlim([1,10])
+        ax2.axhline(N0dB,color='r',linewidth=2)
+        plt.ylabel('PSD (dBm/MHz) assuming PRP='+str(PRPns)+' ns')
         plt.grid()
+        if display:
+            plt.show()
+
+        return(fig,[ax1,ax2])
 
     def esd(self, mode='bilateral'):
         """  Calculate the energy spectral density of the U signal
-        
         Parameters
         ----------
         mode : string
@@ -1965,8 +1995,8 @@ class TUsignal(TBsignal, Usignal):
             filename = getlong(filename, outdir)
 
         cir = ios.loadmat(filename)
-        self.x = cir['ta1']
-        self.y = cir['cira1']
+        self.x = cir['ta1'].ravel()
+        self.y = cir['cira1'].ravel()
 
 
     def readuwb(self, _filename):
@@ -3397,8 +3427,6 @@ class EnImpulse(TUsignal):
         >>> errb  = Eip1-Eipb
         """
         pass
-
-
 
 class MaskImpulse(TUsignal):
     """
