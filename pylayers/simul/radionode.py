@@ -358,7 +358,7 @@ class RadioNode(object):
 
         """
         filespa = pyu.getlong(_filespa, rep)
-        print filespa+  "   loadini"
+        #print filespa+  "   loadini"
         space = ConfigParser.ConfigParser()
         space.read(filespa)
 
@@ -711,7 +711,7 @@ class RadioNode(object):
         set self.A
 
         """
-        print self.fileant
+        #print self.fileant
         A = Antenna('vsh3', self.fileant)
         self.A = A
 

@@ -145,7 +145,7 @@ class Furniture(object):
         Examples
         --------
         .. plot::
-            :included-source:
+            :include-source:
 
             >>> from pylayers.gis.furniture import *
             >>> import matplotlib.pylab as plt 
@@ -223,14 +223,16 @@ class Furniture(object):
         """
         position = []
         p0 = self.origin
-        u = np.array([np.cos(self.angle * np.pi / 180), np.sin(
-            self.angle * np.pi / 180)])
-        v = np.array([-np.sin(self.angle * np.pi / 180), np.cos(
-            self.angle * np.pi / 180)])
+        u = np.array([np.cos(self.angle * np.pi / 180),
+                      np.sin( self.angle * np.pi / 180)])
+        v = np.array([-np.sin(self.angle * np.pi / 180),
+                      np.cos(self.angle * np.pi / 180)])
+
         p1 = p0 + u * self.length
         p2 = p1 + v * self.width
         p3 = p2 - u * self.length
         position = [p0, p1, p2, p3]
+
         return position
 
     def show(self, fig=[], ax=[], offx=0, offy=10):
@@ -286,6 +288,7 @@ class Furniture(object):
         ax.add_patch(pathpatch)
         #ax.dataLim.update_from_data_xy(vertices)
         ax.autoscale_view()
+        return(fig,ax)
 
 
 if __name__ == "__main__":

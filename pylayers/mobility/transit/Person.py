@@ -1,9 +1,9 @@
 from SimPy.Simulation import *
 from math import *
 from random import normalvariate
-from Transit.vec3 import vec3
-from Transit.World import world
-from Transit.SteeringBehavior import default_steering_mind
+from pylayers.mobility.transit.vec3 import vec3
+from pylayers.mobility.transit.World import world
+from pylayers.mobility.transit.SteeringBehavior import default_steering_mind
 
 # "near collision avoidance" inspired from
 #   http://people.revoledu.com/kardi/publication/Kouchi2001.pdf

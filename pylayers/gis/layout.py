@@ -301,7 +301,6 @@ class Layout(object):
         _filename
 
         """
-
         self.filestr=_filename
         filename,ext=os.path.splitext(_filename)
         if ext=='.str':
@@ -338,6 +337,7 @@ class Layout(object):
         >>> L.loadstr('exemple.str')
 
         """
+
         self.filename = _filename
         self.delete()
         mat = sb.MatDB()
@@ -345,11 +345,9 @@ class Layout(object):
         self.sl = sb.SlabDB()
         self.sl.mat = mat
         self.sl.load(_fileslabini)
-
         self.labels = {}
         self.name = {}
         self.Gs.pos = {}
-
         lname = []
         filename = pyu.getlong(_filename, pstruc['DIRSTRUC'])
         fo = open(filename, "rb")
@@ -711,6 +709,7 @@ class Layout(object):
         #----------------------------------------
         # Node labelling (structure edges)
         #----------------------------------------
+        self.display['layers']=[]
         for k in range(Ne):
             self.Gs.add_node(k + 1, name=lname[k])
             self.Gs.add_node(k + 1, zmin=z[0, k])
@@ -724,7 +723,6 @@ class Layout(object):
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
-
             if lname[k] not in self.display['layers']:
                 self.display['layers'].append(lname[k])
 
@@ -933,7 +931,7 @@ class Layout(object):
         #----------------------------------------
         # Node labelling (structure edges)
         #----------------------------------------
-
+        self.display['layers']=[]
         for k in range(Ne):
             #print k, lname[k]
             self.Gs.add_node(k + 1, name=lname[k])
@@ -1196,10 +1194,10 @@ class Layout(object):
         
         # compute the four points
         p0 = origin
-        u = np.array([np.cos(angle * np.pi / 180), np.sin(
-            angle * np.pi / 180)])
-        v = np.array([-np.sin(angle * np.pi / 180), np.cos(
-            angle * np.pi / 180)])
+        u = np.array([np.cos(angle * np.pi / 180), 
+                      np.sin(angle * np.pi / 180)])
+        v = np.array([-np.sin(angle * np.pi / 180), 
+                      np.cos(angle * np.pi / 180)])
         p1 = p0 + u * length
         p2 = p1 + v * width
         p3 = p2 - u * length
@@ -1241,10 +1239,8 @@ class Layout(object):
             #~ else:
                 #~ zmin=0.0       
             zmin=0.0
-            self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
-            
-                
-
+            if matname == 'METAL':
+                self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
 
     def del_node(self, ln):
         """ delete node in list ln
@@ -1259,7 +1255,7 @@ class Layout(object):
 
         if (type(ln) == np.int32):
             ln = [ln]
-        
+
         if (type(ln) == int):
             ln = [ln]
 
@@ -1944,13 +1940,13 @@ class Layout(object):
         Returns
         -------
 
-        seglist 
+        seglist
 
         theta
 
         Examples
         --------
-        
+
         >>> from pylayers.gis.layout import *
         >>> L=Layout('matDB.ini','slabDB.ini')
         >>> L.load('office.str')
@@ -2422,11 +2418,14 @@ class Layout(object):
 
         """
 
-
-        if fig ==[]:
-            fig = plt.gcf()
-        if ax==[]:
-            ax = fig.gca()
+#        if fig ==[]:
+#            fig = plt.gcf()
+#        if ax==[]:
+#            ax = fig.gca()
+        if fig == []:
+           fig = plt.figure()
+        if not isinstance(ax, plt.Axes):
+            ax  = fig.add_subplot(111)
 
         if furniture:
             if 'lfur' in self.__dict__:
@@ -2844,7 +2843,7 @@ class Layout(object):
         #
         for sn in self.Gi.node:
             n = eval(sn)
-            print n
+#            print n
             if n == (161, 53):
                 pass
                 #pdb.set_trace()
@@ -2861,8 +2860,8 @@ class Layout(object):
                             if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                 self.Gi.add_edge(node1, node2)
                                     # R-R
-                            else:
-                                print node1, node2
+#                            else:
+#                                print node1, node2
                                 #pdb.set_trace()
 
                             if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
@@ -2870,16 +2869,16 @@ class Layout(object):
                                 node2 = str(nb)
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(node1, node2)
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb_set_trace()
                         else:                                    # R-D
                             node1 = str(n)
                             node2 = str(nb)
                             if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                 self.Gi.add_edge(node1, node2)
-                            else:
-                                print node1, node2
+#                            else:
+#                                print node1, node2
                                 #pdb_set_trace()
             else:  # transmission or diffraction
                 if n > 0:  # transmission
@@ -2904,16 +2903,16 @@ class Layout(object):
                                     node2 = str(nb)
                                     if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                         self.Gi.add_edge(node1, node2)
-                                    else:
-                                        print node1, node2
+#                                    else:
+#                                        print node1, node2
                                         #pdb.set_trace()
                             else:
                                 node1 = str(n)
                                 node2 = str(nb)
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(str(n), str(nb))
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb.set_trace()
                         if nb in vnodes1:    # Si Voisin dans cycle reflexion 1
                             if nb > 0:
@@ -2921,24 +2920,24 @@ class Layout(object):
                                 node2 = str((nb, cy1))
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(node1, node2)
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb.set_trace()
                                 if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
                                     node1 = str(n)
                                     node2 = str(nb)
                                     if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                         self.Gi.add_edge(node1, node2)
-                                    else:
-                                        print node1, node2
+#                                    else:
+#                                        print node1, node2
                                         #pdb.set_trace()
                             else:
                                 node1 = str(n)
                                 node2 = str(nb)
                                 if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
                                     self.Gi.add_edge(node1, node2)
-                                else:
-                                    print node1, node2
+#                                else:
+#                                    print node1, node2
                                     #pdb.set_trace()
 
 #    def showGraph(self,**kwargs):
@@ -3076,7 +3075,8 @@ class Layout(object):
                     'ndnd': True,
                     'nded': True,
                     'linewidth': 2,
-                    'nodelist': []
+                    'nodelist': [],
+                    'figsize': (5,5)
                     }
 
         for key, value in defaults.items():
@@ -3087,7 +3087,7 @@ class Layout(object):
                 kwargs[key] = value
 
         if kwargs['fig'] == []:
-            fig = plt.figure()
+            fig = plt.figure(figsize=kwargs['figsize'])
             fig.set_frameon(True)
         else:
             fig = kwargs['fig']
@@ -3167,7 +3167,7 @@ class Layout(object):
             >>> L.buildGt()
             >>> L.buildGr()
             >>> L.buildGv()
-            >>> fig, ax = L.showGs()
+            >>> fig,ax = L.showGs()
             >>> fig,ax = L.showGv(ax=ax)
             >>> t = plt.axis('off')
             >>> plt.show()
@@ -4064,7 +4064,7 @@ class Layout(object):
         Examples
         --------
 
-        >>> from pylayers.gis.import *
+        >>> from pylayers.gis.layout import *
         >>> L = Layout()
         >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
         >>> ncoin,ndiff = L.buildGc()

@@ -10,7 +10,7 @@ import pylayers.measures.mesuwb
 def LOSS_furniture(Tx,Rx,furn):
     """
       Yu Lei 
-      Pas utilisé
+      Not used
     """
     for i in range(1,5):
         rx = Rx[i]
@@ -32,7 +32,7 @@ def PL0(fGHz,GtdB=0,GrdB=0):
         frequency GHz
     GtdB:
         transmitting antenna gain dB (default 0 dB)
-    GrdB:   
+    GrdB:
         receiving antenna gain dB (default 0 dB)
 
     Notes
@@ -42,10 +42,10 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     Examples
     --------
-        
-        >>> fGHz  = 2.4
-        >>> PL = PL0(fGHz)
-        >>> assert (PL<41)&(PL>40),"something wrong"
+
+    >>> fGHz  = 2.4
+    >>> PL = PL0(fGHz)
+    >>> assert (PL<41)&(PL>40),"something wrong"
 
     """
     ld  = 0.3/fGHz
@@ -92,23 +92,37 @@ def OneSlopeMdl(D,n,fGHz):
     """
     Parameters
     ----------
-    n 
+    n : float
         path loss exponent
-    D 
+    D : array
         Distance array
-    fGHz 
+    fGHz : array
         frequency  GHz
 
     """
     PL = PL0(fGHz)+10*n*np.log10(D)
     return(PL)
 
-def Loss0_v2(S,Pts,f,p):
+def PL(pts,fGHz,p,n=2.0):
+    """ Path Loss
+
+    Parameters
+    ----------
+    pts    : array (2xNp)
+    fGHz   : frequency (GHz)
+    p      : array (2x1)
+    n      : path loss exponent
+
+    """
+    D = np.sqrt(np.sum((pts-p)**2,axis=1))
+    return(PL0(fGHz)+10*n*np.log10(D))
+
+def Loss0_v2(L,Pts,f,p):
     """
     Parameters
     ----------
-    S
-        Simulation object
+    L
+        Layout object
     Pts
         (Np x 2) array
     f
@@ -120,21 +134,21 @@ def Loss0_v2(S,Pts,f,p):
     --------
     
     .. plot::
-        :included-source:
+        :include-source:
 
         >>> import matplotlib.pyplot as plt 
         >>> from pylayers.simul.simulem import * 
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.multiwall import *
         >>> S = Simul()
-        >>> S.layout('sircut.str','simul8.mat','simul8.slab')
+        >>> S.layout('Lstruc.str','matDB.ini','slabDB.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp = Loss0_v2(S,Tx,fGHz,Rx[1,0:2])
+        >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
         >>> fig,ax = S.L.showGs()
         >>> tit = plt.title('test Loss0_v2')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
-        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Lwo,c=Lwo,linewidth=0)
+        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
         >>> plt.show()
 
 
@@ -143,48 +157,64 @@ def Loss0_v2(S,Pts,f,p):
     N   = np.shape(Pts)[0]
     Lwo = np.array([])
     Lwp = np.array([])
+    Edo = np.array([])
+    Edp = np.array([])
     for i in range(N):
         Lo = 0.0
         Lp = 0.0
+        edo = 0.0
+        edp = 0.0
         pi = Pts[i,:]
-        seglist,theta = S.L.angleonlink(p,pi)
+        seglist,theta = L.angleonlink(p,pi)
         i = 0
         for k in seglist:
-            try:
-                name = S.L.Gs.node[k]['ss_name']
-            except:
-                name = S.L.Gs.node[k]['name']
-            #if k in S.indoor.ce.keys():
-            #if k in S.L.ce.keys():
-            # nom du sous-segment  
-            #    indss = S.L.ce[k][0]
-            #    name  = S.L.sl.di[indss]
-            #    print name
-            #"else:  
-            # nom du segment   
-            #    name = S.L.Gs.node[k]['name'] 
-            the = theta[i]
-            # idea paper : comparison multiwall th=0 th=variable
-            # comparison mesurement
-            #the = 0
+            if k != 0:
+                try:
+                    name = L.Gs.node[k]['ss_name']
+                except:
+                    name = L.Gs.node[k]['name']
+                #if k in S.indoor.ce.keys():
+                #if k in S.L.ce.keys():
+                # nom du sous-segment  
+                #    indss = S.L.ce[k][0]
+                #    name  = S.L.sl.di[indss]
+                #    print name
+                #"else:  
+                # nom du segment   
+                #    name = S.L.Gs.node[k]['name'] 
+                the = theta[i]
+                # idea paper : comparison multiwall th=0 th=variable
+                # comparison mesurement
+                #the = 0
 
-            i   = i + 1
-            #
-            # Loss0 du slab
-            #
-            lko,lkp  = S.L.sl[name].losst(f,the)
-#            print lko
-#            print lkp
-            Lo   = Lo + lko[0]
-            Lp   = Lp + lkp[0]
+                i   = i + 1
+                #
+                # Loss0 du slab
+                #
+                lko,lkp  = L.sl[name].losst(f,the)
+                do , dp  = L.sl[name].excess_grdelay(theta=the)
+                edo     = edo - np.mean(do)
+                edp     = edp - np.mean(dp)
+    #            print lko
+    #            print lkp
+                Lo   = Lo + lko[0]
+                Lp   = Lp + lkp[0]
         Lwo = np.hstack((Lwo,Lo))
         Lwp = np.hstack((Lwp,Lp))
+        Edo = np.hstack((Edo,edo))
+        Edp = np.hstack((Edp,edp))
 
-    return(Lwo,Lwp)  
-  
+    return(Lwo,Lwp,Edo,Edp)
 
 def Loss0_v2_separe(S,pi,f,p):
-    """
+    """ Loss0_v2_separe
+
+    Parameters
+    ----------
+    S 
+    pi ????
+    f 
+    p 
     """
     # for calibrate the loss multiwall
     lwo   = np.array([])
@@ -260,22 +290,18 @@ def Loss_diff(u):
     return(Ld)
 
 def Diffraction_parameter(h,d1,d2,f):
-    """ Calculate the diffraction parameter
+    """ Calculate the diffraction Fresnel parameter
 
     Parameters
     ----------
-    h 
-        height 
-    d1
-        distance 1
-    d2
-        distance 2
-    fGHz
-        frequency GHz
+    h  : height (meter) 
+    d1 : distance 1 (meter)
+    d2 : distance 2 (meter) 
+    fGHz  : frequency GHz
 
     Notes
     -----
-    .. math::   \\nu = h \\sqrt{2\\frac{d_1+d_2}{\\lambda d_1d_2}}
+    .. math::   \\nu = h \\sqrt{\\frac{2}{\\lambda} \\frac{d_1+d_2}{d_1 d_2}}
     """
     ld  = 0.3/f
     nu  = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
@@ -283,10 +309,10 @@ def Diffraction_parameter(h,d1,d2,f):
     return(nu)
 
 def Carretosegment(Mob):
+    """ define 4 segment using the position of the rectangle
+
     """
-    define 4 segment using the position of the rectangle
-    """
-  
+
     PC = Mob.position()
 
     seg1 = (PC[0][0],PC[0][1],PC[1][0],PC[1][1])
@@ -336,7 +362,6 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                     return False
                 else:
                     return(Xa,Ya)  
-      
             else:
         #  
         # y = A1*x+B1     y = A2*x+B2
@@ -345,13 +370,13 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                 A2 = (y3-y4)/(x3-x4)
                 B1 = (x2*y1-x1*y2)/(x2-x1)
                 B2 = (x4*y3-x3*y4)/(x4-x3)
-  
+
                 if A1 == A2:
                     return False
-      
+
             # intersect point (Xa,Ya)
                 else:
-  
+
                     Xa = (B2-B1)/(A1-A2)
                     Ya = Xa*A1+B1
 
@@ -361,6 +386,7 @@ def Intersection(x1,y1,x2,y2,x3,y3,x4,y4):
                     else:
                         return(Xa,Ya)
           
+
 def Dis(x1,y1,x2,y2,x3,y3):
     """ Distance between a point and a line
 
@@ -380,7 +406,6 @@ def Dis(x1,y1,x2,y2,x3,y3):
     h = abs(A*x1-y1+B)/np.sqrt(A*A+1)
 
     return h
-
 
 def Interline(x1,y1,x2,y2,Obstacle):
     """
@@ -551,10 +576,10 @@ def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
                 h0 = hc
                 hm = ha
                 hn = hb
-            d01 = np.sqrt((p0[0]-x1)*(p0[0]-x1)+(p0[1]-y1)*(p0[1]-y1)-h0*h0)                  
-            d02 = np.sqrt((p0[0]-x2)*(p0[0]-x2)+(p0[1]-y2)*(p0[1]-y2)-h0*h0)                  
-            dm1 = np.sqrt((pm[0]-x1)*(pm[0]-x1)+(pm[1]-y1)*(pm[1]-y1)-hm*hm)                  
-            dm2 = np.sqrt((pm[0]-x2)*(pm[0]-x2)+(pm[1]-y2)*(pm[1]-y2)-hm*hm)                  
+            d01 = np.sqrt((p0[0]-x1)*(p0[0]-x1)+(p0[1]-y1)*(p0[1]-y1)-h0*h0)
+            d02 = np.sqrt((p0[0]-x2)*(p0[0]-x2)+(p0[1]-y2)*(p0[1]-y2)-h0*h0)
+            dm1 = np.sqrt((pm[0]-x1)*(pm[0]-x1)+(pm[1]-y1)*(pm[1]-y1)-hm*hm)
+            dm2 = np.sqrt((pm[0]-x2)*(pm[0]-x2)+(pm[1]-y2)*(pm[1]-y2)-hm*hm)
             dn1 = np.sqrt((pn[0]-x1)*(pn[0]-x1)+(pn[1]-y1)*(pn[1]-y1)-hn*hn)
             dn2 = np.sqrt((pn[0]-x2)*(pn[0]-x2)+(pn[1]-y2)*(pn[1]-y2)-hn*hn)
             nl  = find(np.hstack((dm1,dn1))<d01)
@@ -951,7 +976,7 @@ def visuPts(S,nu,nd,Pts,Values,fig=[],sp=[],vmin=0,vmax=-1,label=' ',tit='',size
     #sp.spines['top'].set_position('center')
         #sp.spines['top'].set_color('none')
     #
-    # Siradel Rooms annotation
+    # Rooms annotation
     #
     annotate('R 8',xy=(-19,14.1))
     annotate('R 9',xy=(-24.5,6.5))

@@ -645,13 +645,17 @@ class Simul(object):
 
     """
     def __init__(self, _filesimul='default.ini'):
-
         self.filesimul = _filesimul
+        self.config = ConfigParser.ConfigParser()
+        self.config.add_section("files")
+        self.config.add_section("tud")
+        self.config.add_section("frequency")
+        self.config.add_section("waveform")
+        self.config.add_section("output")
         self.filematini = "matDB.ini"
         self.fileslabini = "slabDB.ini"
         self.filemat = self.filematini.replace('.ini','.mat')
         self.fileslab = self.fileslabini.replace('.ini','.slab')
-
         self.slab=SlabDB(self.filematini, self.fileslabini)
         self.filestr = 'defstr.str2'
         self.tx = RadioNode('tx', 'radiotx.ini', 'defant.vsh3', self.filestr)
@@ -692,41 +696,11 @@ class Simul(object):
         self.output = {}
 
         self.freq = np.linspace(2, 11, 181, endpoint=True)
-        self.config = ConfigParser.ConfigParser()
-
-
-        self.config.add_section("files")
-        self.config.add_section("tud")
-        self.config.add_section("frequency")
-        self.config.add_section("waveform")
-        self.config.add_section("output")
-############### The following is replaced by self.updcfg()
-        self.load(self.filesimul)
-        self.updcfg()
-
-
-
-
-#        #
-#        # frequency section
-#        #
-
-#        self.config.set("frequency", "fghzmin", self.freq[0])
-#        self.config.set("frequency", "fghzmax", self.freq[-1])
-#        self.config.set("frequency", "nf", len(self.freq))
-#        #
-#        # waveform section
-#        #
-#        self.config.set("waveform", "tw", 30)
-#        self.config.set("waveform", "band", 0.499)
-#        self.config.set("waveform", "fc", 4.493)
-#        self.config.set("waveform", "thresh", 3)
-#        self.config.set("waveform", "type", 'generic')
-#        self.config.set("waveform", "fe", 50)
-#        self.wav = wvf.Waveform()
-
-
-        #self.wav.read(self.config)
+        try:
+            self.load(_filesimul)
+        except:
+            self.updcfg()
+            #self.load(self.filesimul)
 
 
 
@@ -1194,30 +1168,6 @@ class Simul(object):
         self.config.set("files", "mat", self.filematini)
         self.save()
 
-    def help(self):
-        """
-            use >>> instead
-        """
-        print "S.help()  : display help"
-        print "S.info()  : display simulation info"
-        print "S.palch.gui() : gui launching parameters "
-        print "S.patra.gui() : gui tracing parameters"
-        print "S.tx.gpoint() : gui Tx point "
-        print "S.rx.gpoint() : gui Rx point"
-        print "S.tx.position = hstack((Tx[1,:],1.2)).reshape(3,1)"
-        print "S.rx.position = hstack((Rx[40,:],1.2)).reshape(3,1)"
-        print "S.run(1,1) : run launching tracing tratotud evalfield "
-        print "S.launching() : exec ray launching "
-        print "L = S.getlaunch(0) : get ray launching 0"
-        print "S.tracing(0)  : exec ray tracing with tx 0"
-        print "gr=GrRay3D() "
-        print "gr.load(S.filetra[0][0],L.Gs)"
-        print "gr.ray3d[0].show3() "
-        print "S.tratotud(0) : exec tratotud with tx 0"
-        print "S.field() : exec evalfield"
-        print "VC = VectChannel(S,0,0,False)"
-        print "SC = VC.vec2scalA(S.tx.A,S.rx.A)"
-
     def show(self, itx=[-1], irx=[-1], furniture=True, s=8, c='b', traj=False, num=False,fig=[],ax=[]):
         """ show simulation
 
@@ -1238,8 +1188,8 @@ class Simul(object):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.simul.simulem import *
             >>> S = Simul()
-            >>> S.load('where2.ini')
-            >>> S.L.loadfur('FurSiradel.ini')
+            >>> S.load('w1.ini')
+            >>> S.L.loadfur('FurW1.ini')
             >>> S.show()
             >>> plt.show()
 
@@ -1854,7 +1804,7 @@ class Simul(object):
         _outfilename = self.filesimul.replace('.ini', '') + str(itx) + ".ini"
         self.dout[itx] = _outfilename
         outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
-        self.config.set("output", str(itx), self.out[itx])
+        self.config.set("output", str(itx), self.dout[itx])
 
         fd = open(outfilename, "w")
         self.output[itx].write(fd)

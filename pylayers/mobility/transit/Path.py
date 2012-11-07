@@ -1,8 +1,8 @@
 from SimPy.Simulation import *
 from Tkinter import *
 from math import *
-from Transit.StateProcess import StateProcess, Updater, new_state
-from Transit.World import world
+from pylayers.mobility.transit.StateProcess import StateProcess, Updater, new_state
+from pylayers.mobility.transit.World import world
 
 
 # Easements

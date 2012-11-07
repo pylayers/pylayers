@@ -52,7 +52,7 @@ import select
 import sys
 
 
-#comment prendre en compte 1 key spécifique pour 1 MultiGraph
+# How to take into account  1 specific key specifique for 1 MultiGraph
 # MULTIGRAPH !!!! G.add_edge(10,11,key='wifi',attr_dict=dict(Pr=0,TOA=10))
 
 
@@ -83,20 +83,22 @@ class Node(nx.MultiGraph):
         RandomMac(): Generate a RAndom Mac adress    
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],type='ag'):
+    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],epwr={},type='ag'):
         nx.MultiGraph.__init__(self)
 
         # Personnal Network init
         self.ID=ID
         self.PN = Network(owner=self.ID)
-        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT))
+        self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
 
         # Network init
 
-        self.add_node(ID,dict(PN=self.PN,p=p,t=t,RAT=RAT,type=type))
+        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,type=type))
         self.p    = self.node[self.ID]['p']
+        self.pe    = self.PN.node[self.ID]['pe']
         self.t    = self.node[self.ID]['t']
         self.RAT = self.node[self.ID]['RAT']
+        self.epwr = self.node[self.ID]['epwr']
 
 
 
@@ -351,11 +353,12 @@ class Network(nx.MultiGraph):
         >>> N.get_SubNet()
         >>> N.SubNet['bt'].nodes()
         [0, 1]
-        >>> N.SubNet['wifi'].nodess()
+        >>> N.SubNet['wifi'].nodes()
         [0, 1, 2]
 
 
         """
+
         if Rat == None:
         #    pdb.set_trace()
             for Rat in self.RAT:            
@@ -366,6 +369,12 @@ class Network(nx.MultiGraph):
                 for e in ek :
                     if e[2] != Rat:
                         self.SubNet[Rat].remove_edge(e[0],e[1],e[2])
+                for n in self.SubNet[Rat].nodes():
+                    try:
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
+                    except: 
+                        pass
+
 
         elif Rat in self.RAT:
             # creating SubNetworks
@@ -378,6 +387,13 @@ class Network(nx.MultiGraph):
                         self.SubNet[Rat].remove_edges_from(self.SubNet[k].edges(keys=True))
                     except :
                         pass
+                for n in self.SubNet[Rat].nodes():
+                    try:
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
+                    except: 
+                        pass
+
+
         else :
             raise NameError('invalid RAT name')
 
@@ -412,6 +428,24 @@ class Network(nx.MultiGraph):
         self.init_PN()
 
 
+    def update_PN(self):
+        """ update personnal network
+
+
+
+        """
+        ####################################################################################
+        # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
+        for rat in self.RAT.iterkeys():
+            for ldp in self.LDP:
+                self.compute_LDPs(self.nodes(),rat,ldp,method='direct')
+        for n in self.nodes():
+            self.node[n]['PN'].get_RAT()
+            self.node[n]['PN'].get_SubNet()
+            # Add access point position in each personal network (PN)
+            [self.node[n]['PN'].node[n2].update({'pe':self.node[n2]['p']}) for n2 in self.node[n]['PN'].node.iterkeys() if self.node[n]['PN'].node[n2]['type'] == 'ap']
+                
+        ####################################################################################
 
     def update_LDPs(self,ln,RAT,lD):
         """Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT
@@ -439,8 +473,9 @@ class Network(nx.MultiGraph):
         """
         
         
-
+        # update network LDP
         self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
+        # update each personnal LDP
         [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
 
 
@@ -469,10 +504,12 @@ class Network(nx.MultiGraph):
 
 
         for it,ldp in enumerate (LDP):
+#            recuperer puissance emission et la passer a EMS pour correct mesure de Pr
             p=nx.get_node_attributes(self.SubNet[RAT],'p')
+            epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
             e=self.SubNet[RAT].edges()
 
-            lv , d= self.EMS.solve(p,e,ldp)
+            lv , d= self.EMS.solve(p,e,ldp,RAT,epwr)
 
             if  it ==0:
                 lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]
@@ -483,7 +520,7 @@ class Network(nx.MultiGraph):
         self.update_LDPs(ln,RAT,lD)
 
 
-    def update_pos(self,n,p):
+    def update_pos(self,n,p,p_pe='p'):
         """ 
         Update Position of a node
 
@@ -507,7 +544,7 @@ class Network(nx.MultiGraph):
             else :
                 raise TypeError('n and p must have the same length')
             # update position
-            nx.set_node_attributes(self,'p',d)        
+            nx.set_node_attributes(self,p_pe,d)        
 
         else :
             raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
@@ -563,6 +600,20 @@ class Network(nx.MultiGraph):
             except: 
                 raise NameError('invalid RAT name')
 
+
+
+    def haspe(self,n):
+        """
+            Test if a node has a pe key
+        
+        Returns
+        -------
+            Boolean : True if node n has a pe k
+        """
+        try:
+            return  self.node[n]['pe'].any()
+        except:
+            return False
 
 
     def overview(self):
@@ -873,6 +924,7 @@ class PNetwork(Process):
 
 
 
+
     def run(self):
 
 
@@ -884,10 +936,11 @@ class PNetwork(Process):
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
-            
+            # Add access point position in each personal network (PN)
+            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
+                
         ####################################################################################
         self.pos=self.net.get_pos()
-
 
 
 
@@ -941,6 +994,7 @@ class PNetwork(Process):
                 self.net.txt_save(self.sim)
 
             self.net.pos=self.net.get_pos()
+
             yield hold, self, self.net_updt_time
 
 

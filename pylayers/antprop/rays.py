@@ -99,12 +99,63 @@ import pylayers.antprop.slab as slab
 #        #elif (typ==3):
 
 
+class  Interactions(object):
+    """ Interaction parameters
+
+    Notes
+    -----
+    This class contains all the informations about a succection of Interaction
+
+    type :  Interaction type
+            -1  -  Ray's local basis
+                   m11 m12
+                   m21 m22
+             0  -  Direct (LOS)
+                   LOS distance
+             1  -  Reflexion
+                   theta
+                   Si
+                   Sr
+             2  -  Transmission
+                   theta
+                   Si
+                   St
+             3  -  Difraction
+                   theta
+                   theta_d
+                   Si
+                   Sd
+                   beta0
+                   N
+                   typed
+
+    Mat  : ( Mav1 , Mslab1 , Map1 , sense1 , Mav2 , Mslab2 , Map2 , sense2 )
+
+    Methods
+    -------
+
+    info()
+
+    """
+    def __init__(self):
+        """
+        C   : (nf,ni,2,2) 
+        typ : (ni,)
+
+        """
+        self.typ = []
+        self.C   = np.eye(2,dtype=complex).reshape(1,1,2,2)
+
+    def addB(self,M):
+        self.typ.insert(0,-1)
+        self.C = np.concatenate((M.reshape(1,1,2,2),self.C),axis=1) 
+
 class Interaction(object):
     """ Interaction parameters
 
     Notes
     -----
-    This class contains all the informations about a given Interaction
+    This class contains all the informations about a succection of Interaction
 
     type :  Interaction type
             -1  -  Ray's local basis
@@ -138,7 +189,8 @@ class Interaction(object):
 
     """
     def __init__(self, typ=0):
-        self.typ = typ
+        self.typ = [typ]
+        self.C   = np.eye(2,dtype=complex).reshape(1,1,2,2)
 
     def info(self):
         if (self.typ == -1):
@@ -221,7 +273,7 @@ class IntB(Interaction):
 
 
 class IntL(Interaction):
-    """ LOS interaction class
+    """ LOS interaction c lass
 
 
     """
@@ -249,8 +301,6 @@ class IntR(Interaction):
 
     def eval(self, fGHz):
         """
-        .. todo:: Reflexion interaction is not implemented yet
-
         Parameters
         ----------
         fGHz : float
@@ -272,6 +322,18 @@ class IntT(Interaction):
         self.si = data[1]
         self.st = data[2]
 
+    def eval(self, fGHz):
+        """
+        Parameters
+        ----------
+        fGHz : float
+            frequency in GHz
+
+        """
+        div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
+        si = self.si
+        sr = self.sr
+        theta = self.theta
 
 class IntD(Interaction):
     """ Diffraction interaction class
@@ -444,9 +506,12 @@ class Ray3D(object):
         BoO = np.array(np.zeros([3, 3]))
         th = np.arccos(si[0, 2])
         ph = np.arctan2(si[0, 1], si[0, 0])
-        eth = np.array([np.cos(
-            th) * np.cos(ph), np.cos(th) * np.sin(ph), -np.sin(th)])
-        eph = np.array([-np.sin(ph), np.cos(ph), 0.0])
+        eth = np.array([np.cos(th) * np.cos(ph),
+                        np.cos(th) * np.sin(ph),
+                        -np.sin(th)])
+        eph = np.array([-np.sin(ph), 
+                        np.cos(ph), 
+                        0.0])
         Bo0 = np.array([si[0, :], eth, eph]).transpose()
 
         self.Bo[0, :, :] = Bo0
@@ -464,8 +529,9 @@ class Ray3D(object):
         #
         th = np.arccos(si[nn - 2, 2])
         ph = np.arctan2(si[nn - 2, 1], si[nn - 2, 0])
-        eth = np.array([np.cos(
-            th) * np.cos(ph), np.cos(th) * np.sin(ph), -np.sin(th)])
+        eth = np.array([np.cos(th) * np.cos(ph),
+                        np.cos(th) * np.sin(ph),
+                        -np.sin(th)])
         eph = np.array([-np.sin(ph), np.cos(ph), 0.0])
         Bini = np.array([si[nn - 2, :], eth, eph]).transpose()
         self.Bi[nint, :, :] = Bini
@@ -592,9 +658,7 @@ class Ray3D(object):
         return(delay)
 
     def show(self, fig=[], ax=[], col='b', node=False):
-        """
-        show(ax,vol='b')
-        show a Ray projection in 2D
+        """ show a Ray projection in 2D
 
         """
         if fig ==[]:
@@ -776,37 +840,33 @@ class RayTud(object):
         """
             return ray signature
         """
-        Signa = []
+        Signature = []
         for k in range(self.ni):
-            Signa.append(self.inter[k].typ)
-        return(Signa)
+            Signature.append(self.inter[k].typ)
+        return(Signature)
 
     def eval(self, fGHz=[2.4]):
-        """
-        evaluate the field over the ray
+        """ evaluate the field over the ray
 
         Parameters
         ----------
+        fGHz : ndarray
+            frequency axis
 
-        Evaluate C tilde matrix for a set of frequencies
-
-        C  :  np.array(np.zeros([nf,2,2]),dtype=complex)
 
         """
-        nf = len(fGHz)
-        self.C = np.array(np.zeros([nf, 2, 2]), dtype=complex)
-        Co = np.array(np.zeros([nf, 2, 2]), dtype=complex)
-        Co[:, 0, 0] = 1
-        Co[:, 1, 1] = 1
+        nf     = len(fGHz)
+        self.C = np.zeros((2,2),dtype=complex).reshape(1,2,2)
+        Co     = np.eye(2,2,dtype=complex).reshape(1,2,2)
         #
         # Loop over all the ray interactions
-        # ..
+        #   + left matrix multiplication
+        #   + broadcasting along frequency axis
+        #
         for i in range(self.ni):
-            I = self.inter[i]
-            CI = I.eval(fGHz)
-            for k in range(nf):
-                U = np.dot(Co[k, :, :], CI[k, :, :])
-                Co[k, :, :] = U
+            I  = self.inter[i]
+            Ci = I.eval(fGHz)
+            Co = np.einsum('kpq,kqr->kpr',Ci,Co)
         self.nf = nf
         self.C = Co
 
@@ -835,8 +895,14 @@ class GrRayTud(object):
 
         Returns
         -------
-        lfile_s : list
+        lfile_tud : list
             sorted list of all the .tud file of tuddir
+        lfile_tang : list
+            sorted list of all the .tang file of tuddir
+        lfile_rang : list
+            sorted list of all the .rang file of tuddir
+        lfile_tauk : list
+            sorted list of all the .tauk file of tuddir
 
         Notes
         -----
@@ -847,7 +913,7 @@ class GrRayTud(object):
 
         >>> from pylayers.antprop.rays import *
         >>> g = GrRay3D()
-        >>> l1,l2,l3,l4  = g.dir()
+        >>> tud,tang,rang,tauk  = g.dir()
 
         """
 
@@ -1004,23 +1070,26 @@ class GrRayTud(object):
 
         Examples
         --------
+        
+        .. plot::
+            :include-source:
 
-        >>> from pylayers.gis.layout import *
-        >>> from pylayers.antprop.rays import *
-        >>> L = Layout()
-        >>> g3 = GrRay3D()
-        >>> l = g3.dir()
-        >>> nr = 10
-        >>> file0 = l[nr]
-        >>> s1 = file0.split('_')
-        >>> _filestr = s1[0]+'.str'
-        >>> L.loadstr(_filestr)
-        >>> g3.load(l[nr],L)
-        >>> gt = GrRayTud()
-        >>> l1,l2,l3,l4 = gt.dir()
-        >>> gt.load(l1[nr],l2[nr],l3[nr],L.sl)
-        >>> r30 = g3.ray3d[0]
-        >>> rt0 = gt.rayTud[0]
+            >>> from pylayers.gis.layout import *
+            >>> from pylayers.antprop.rays import *
+            >>> L = Layout()
+            >>> g3 = GrRay3D()
+            >>> l = g3.dir()
+            >>> nr = 10
+            >>> file0 = l[nr]
+            >>> s1 = file0.split('_')
+            >>> _filestr = s1[0]+'.str'
+            >>> L.loadstr(_filestr)
+            >>> g3.load(l[nr],L)
+            >>> gt = GrRayTud()
+            >>> l1,l2,l3,l4 = gt.dir()
+            >>> gt.load(l1[nr],l2[nr],l3[nr],L.sl)
+            >>> r30 = g3.ray3d[0]
+            >>> rt0 = gt.rayTud[0]
 
 
         """
@@ -1356,6 +1425,7 @@ class GrRay3D(object):
             :include-source:
 
             >>> from pylayers.antprop.rays import *
+            >>> from pylayers.util.project import *
             >>> from pylayers.gis.layout import *
             >>> import matplotlib.pyplot as plt
             >>> import numpy as np
@@ -1363,15 +1433,20 @@ class GrRay3D(object):
             >>> g = GrRay3D()
             >>> lfile = g.dir()
             >>> n = len(lfile)
-            >>> k = np.ceil(n*sp.rand()).astype('int')
-            >>> file0  = lfile[k]
+            >>> file0  = lfile[0]
             >>> s1 = file0.split('_')
             >>> _filestr = s1[0]+'.str'
             >>> L = Layout()
             >>> L.load(_filestr)
             >>> f,a = L.showGs()
             >>> g.load(file0,L)
-            >>> g.show(a,np.arange(10))
+            >>> g.show(f,a,np.arange(10))
+            >>> plt.show()
+            >>> f,a = L.showGs()
+            >>> g.show(f,a,np.arange(100))
+            >>> plt.show()
+            >>> f,a = L.showGs()
+            >>> g.show(f,a,np.arange(300))
             >>> plt.show()
 
         """
@@ -1737,12 +1812,12 @@ class GrRay3D(object):
         return(G)
 
     def show(self,fig=[], ax=[], rayset=np.array([]), col='b', node=False):
-        """
+        """ show a cluster of rays 
 
         Parameters
         ----------
-        ax     :
-            axes object
+        fig    : figure instance 
+        ax     : axes instance  
         rayset :
             set of rays np.array([])
         col  : string
@@ -1754,7 +1829,6 @@ class GrRay3D(object):
             fig = plt.gcf()
         if ax==[]:
             ax = fig.gca()
-
 
         for i in rayset:
             r = self.ray3d[i]

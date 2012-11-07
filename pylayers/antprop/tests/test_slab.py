@@ -1,22 +1,31 @@
-#    sl  = SlabDB('def.mat','def.slab')
-#    #sl.choose()
-#    print "sl  : SlabDB object"
-##    mat.save2(fileout)
-#    mat = sl.mat
-#    m1=mat['AIR']
-#    #m2=mat['METAL']
-#    #m2=mat['PLATRE-57GHz']
-#    m2=mat['PLASTER']
-#    #    m2=mat['CONCRETE']
-#    #    m2.epr=6.25
-#    #    m2.sigma=0
-#    #    m2=Mat(name='TEST',epr=2.25)
-#
-#    #lmat   = [m1,m2,m1,m2,m1]
-#    lmat   = [m2,m1,m2]
-#    #    lmat   = [m1,m2,m1]
-#    #    lmat   = [m2]
-#    #    thick  = [0.15]
+import numpy as np
+import matplotlib.pyplot as plt
+from pylayers.antprop.slab import *
+sl  = SlabDB('matDB.ini','slabDB.ini')
+lname  = ['WOOD']
+lthick = [0.5]
+sl.add('test',lname,lthick)
+df = 0.01
+fGHz   = np.arange(1,5,df)
+theta = 1
+plt.ion()
+sl['test'].ev(fGHz,theta,compensate=True)
+sl['test'].plotwrtf(typ='mod')
+plt.figure()
+sl['test'].plotwrtf(typ='angle')
+plt.show()
+T   = sl['test'].T
+To  = T[:,0,0,0]
+Tp  = T[:,0,1,1]
+ao  = np.unwrap(np.angle(To))
+ap  = np.unwrap(np.angle(Tp))
+delayo = np.diff(ao)/(2*np.pi*df)
+delayp = np.diff(ap)/(2*np.pi*df)
+plt.figure()
+plt.plot(fGHz[0:-1],-delayo*0.3*100)
+plt.plot(fGHz[0:-1],-delayp*0.3*100)
+plt.xlabel('frequency(GHz)')
+plt.ylabel('excess distance (cm)')
 #    #    thick  = [0.50,0]
 #    thick2  = [0.1,0.3,0.1]
 #    theta  = np.arange(0,np.pi/2,0.01,dtype=np.float64)
@@ -37,6 +46,7 @@
 #    S1.pcolor()
 #    #    S1.plotwrta()
 #    #    S2 = MLayer(lmat2,thick2,fGHz,theta)
+
 #    #    S2.plotwrta()
 #    #    II.plotwrta(0)
 #    #    II.plotwrtf(0)
