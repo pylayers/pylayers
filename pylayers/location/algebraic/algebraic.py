@@ -34,7 +34,6 @@ class algloc(object):
 
     Attributes
     ----------
-<<<<<<< HEAD
         RN : An Array that defines the Radio nodes implied in
            localization (coordinates in meters)
            shape(RN)= (2 or 3,RNnum)
@@ -1298,7 +1297,7 @@ class Rss(algloc):
 
     def info(self):
         """
-        Dispaly scenario information
+        Display scenario information
         """
         print "Speed of light : ", self.c
         print "Nodes : ", self.nodes
@@ -1632,7 +1631,9 @@ class Tdoa(algloc):
     2- a set of TDoAs measurements (TDOA) with associated std (TDOA_std)
 
     This class manages the TDOA-based localization techniques.
-    MEMBERS:
+
+    Attributes 
+    ----------
 
             RN : An Array that defines the set of radio nodes implied in
                  localization (coordiantes in meters)
