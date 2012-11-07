@@ -815,6 +815,118 @@ class Simul(object):
                     filename = pyu.getlong(self.filefield[itx][irx], pstruc['DIRTUD'])
                     print filename
 
+
+    def clean_project(self,verbose= True):
+        """
+        Clean Pyrpoject directory
+
+        remove .lch, .tra, .field .tud, .tauk, .tang, .rang, <pyproject>/output
+
+        remove [output] entries into .ini of self.filesimul
+
+
+        Parameters
+        ----------
+        
+        verbose : boolean
+            Verbose mode on/off
+
+
+        Returns
+        -------
+            Boolean:
+                True if the project has been cleaned, False otherwise
+
+
+        """
+
+        if verbose:
+
+            print "-----------------------------------"
+            print "-----------------------------------"
+            print "          WARNING                  "
+            print "-----------------------------------"
+            print "-----------------------------------"
+            print "You are about to remove ALL previous computed raytracing files."
+            print "If you decide to remove it, you will need to restart the entire \
+    raytracing simulation to exploit simulation results"
+            print "\n Do you want to remove these simulation files ? y/n"
+            r=raw_input()
+
+        else :
+            r =='y'
+
+        if r == 'y':
+            inifile=self.filesimul
+            try:
+                path=os.getenv('BASENAME')
+            except:
+                print('Error : there is no project  directory in $BASENAME')
+
+
+
+            dirlist=['output']
+            extension=['.lch','.field','.tra','.tud','.tang','.rang','.tauk']
+            rindic=False
+
+
+            # remove file
+
+            for d in dirlist:
+                for ex in extension:
+                    files = os.listdir(path +'/' +d )
+                    for f in files:
+                        if not os.path.isdir(path+d+f) and ex in f:
+                            rindic=True
+                            if verbose:
+                                print f
+                            os.remove(path+'/'+d+'/'+f)
+            #                print path+d+f
+
+                    if rindic:
+                        if verbose:
+                            print 'removed *' + ex +' from ' +d +'\n'
+                        rindic=False
+
+
+            # remove output into the self.filesimul ini file
+
+
+#            simcfg = ConfigParser.ConfigParser()
+#            simcfg.read(pyu.getlong(inifile,pstruc['DIRSIMUL']))
+#            simcfg.remove_section('output')
+#            simcfg.add_section('output')
+#            f=open(path +'/ini/' +inifile,'a')
+#            simcfg.write(f)
+#            
+
+            flagout=False
+            file=open(path +'/ini/' +inifile,'r')
+            lines=file.readlines()
+            file.close()
+            file=open(path +'/ini/' +inifile,'w')
+            for line in lines:
+                if line =='[output]\n':
+                    file.write(line)
+                    flagout=True
+                elif flagout:
+                    if line =='[tud]\n':
+                        file.write('\n')
+                        file.write(line)
+                        flagout=False
+                else :
+                    file.write(line)
+            file.close()
+            if verbose:
+                print 'removed [output] entries into ' +inifile +'\n'
+                print 'Project CLEANED'
+            return True
+        else :
+            if verbose:
+                print "clean project process ABORTED"
+            return False
+
+
     def save(self):
         """ save simulation file
 
@@ -1323,7 +1435,7 @@ class Simul(object):
 
         return(cira, ciro)
 
-    def pltcir(self, itx=1, irx=1, mode='linear', noise=False, color='b',fig=[],ax=[]):
+    def pltcir(self, itx=1, irx=1, mode='linear', noise=False, color='b',format='a',fig=[],ax=[]):
         """ plot Channel Impulse Reresponse
 
         Parameters
@@ -1356,27 +1468,28 @@ class Simul(object):
 
         fig,ax=self.show(itx, irx,fig=fig,ax=ax)
         ax=fig.add_subplot('212')
-        kxa = 'ta' + str(irx)
-        kya = 'cira' + str(irx)
-        kxo = 'to' + str(irx)
-        kyo = 'ciro' + str(irx)
-        ta = D[kxa]
-        to = D[kxo]
+        if 'a' in format :
+            kxa = 'ta' + str(irx)
+            kya = 'cira' + str(irx)
+            ta = D[kxa]
+            Tobs = ta[-1] - ta[0]
+            te = ta[1] - ta[0]
+            if noise:
+                na = bs.Noise(Tobs + te, 1. / te)
+                naf = na.gating(4.493, 0.5)
+            cira = bs.TUsignal(ta, D[kya][:, 0])
 
-        Tobs = ta[-1] - ta[0]
-        te = ta[1] - ta[0]
-        if noise:
-            na = bs.Noise(Tobs + te, 1. / te)
-            naf = na.gating(4.493, 0.5)
 
-        Tobs = to[-1] - to[0]
-        te = to[1] - to[0]
-        if noise:
-            no = bs.Noise(Tobs + te, 1. / te)
-            nof = no.gating(4.493, 0.5)
-
-        cira = bs.TUsignal(ta, D[kya][:, 0])
-        ciro = bs.TUsignal(to, D[kyo][:, 0])
+        if 'o' in format:
+            kxo = 'to' + str(irx)
+            kyo = 'ciro' + str(irx)
+            to = D[kxo]
+            Tobs = to[-1] - to[0]
+            te = to[1] - to[0]
+            if noise:
+                no = bs.Noise(Tobs + te, 1. / te)
+                nof = no.gating(4.493, 0.5)
+            ciro = bs.TUsignal(to, D[kyo][:, 0])
 
         if mode == 'linear':
             #plt.plot(ta,naf.y,color='k',label='Noise')
@@ -2119,7 +2232,7 @@ class Simul(object):
         VCl = channel.VectChannel(self, itx, irx, False)
         return(VCl)
 
-    def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep=pstruc['DIRCIR']):
+    def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep=pstruc['DIRCIR'],format='a'):
         """
         Calculate a set of channel impulse responses
 
@@ -2138,7 +2251,9 @@ class Simul(object):
             alpha : normalization factor
             ext :
             rep :
-
+            format : string
+                a : with antenna
+                o : omnidirectionnal
          Notes
          -----
          A factor ::math`\\sqrt{1}{30}` is necessary when applying the antenna
@@ -2180,13 +2295,19 @@ class Simul(object):
                 D = {}
                 D['Tx'] = self.tx.points[l]
                 if ext == '':
-                    txrx = 'tx' + str('%0.3d' % l) + '-rx' + str('%0.3d' % k)
+                    if (self.tx.name == '') and (self.rx.name == ''):
+                        txrx = 'tx' + str('%0.3d' % l) + '-rx' + str('%0.3d' % k)
+                    else :
+                        txrx = 'ap' + self.tx.name +'-ag' + self.rx.name + str('-p%0.3d' % k)
                 else:
                     txrx = ext
 
                 _filename = racine + txrx
                 self.dcir[l][k] = _filename
-                rep = rep + '/Tx' + str('%0.3d' % l)
+                if self.tx.name == '':
+                    rep = rep + '/Tx' + str('%0.3d' % l)
+                else :
+                    rep = rep +'/' + self.tx.name
                 if not os.path.isdir(basename+'/'+rep):
                     try:
                         os.mkdir(basename+'/'+rep)
@@ -2207,10 +2328,12 @@ class Simul(object):
                     cira = SCA.applywavB(self.wav.sfg)
                     CIRa.append(cira)
                     D['Rx' + str(k)] = self.rx.points[int(k)]
-                    D['to' + str(k)] = ciro.x
-                    D['ta' + str(k)] = cira.x
-                    D['ciro' + str(k)] = ciro.y
-                    D['cira' + str(k)] = cira.y
+                    if 'o' in format:
+                        D['to' + str(k)] = ciro.x
+                        D['ciro' + str(k)] = ciro.y
+                    if 'a' in format:
+                        D['ta' + str(k)] = cira.x
+                        D['cira' + str(k)] = cira.y
                     spio.savemat(filename, D)
                     self.output[l].set("cir", str(k), self.dcir[l][k])
                     fd = open(outfilename, "w")

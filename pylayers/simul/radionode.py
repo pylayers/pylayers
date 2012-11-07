@@ -51,7 +51,7 @@ class RadioNode(object):
 
     """
 
-    def __init__(self, typ='undefined',
+    def __init__(self, name = '',typ='undefined',
                  _fileini='radionode.ini',
                  _fileant='defant.vsh3',
                  _filestr='defstr.str2'):
@@ -80,6 +80,7 @@ class RadioNode(object):
         self.orientation = np.eye(3).reshape(3, 3, 1)
         self.typ = typ
         self.N = 1
+        self.name=name
         #
         if _fileini == 'radionode.ini':
             if typ == 'tx':
@@ -129,6 +130,7 @@ class RadioNode(object):
         """
         print "npos       : ", self.N
         print "position   : ", self.position
+        print "name       : ", self.name
         #print "orientation : ", self.orientation
         print "type       : ", self.typ
         print "fileini    : ", self.fileini
