@@ -2603,5 +2603,32 @@ def sector(p1, p2, pt):
         return(np.array([beta, alpha]) * 180 / pi)
 
 
+def dist(x,y,ax):
+        """
+        calculates distance between two arrays along a given axis
+        Parameters
+        ----------
+            x : numpy.ndarray
+            y : numpy.ndarray
+            ax : integer (0,1)
+
+        Returns
+        -------
+            d : numpy.ndarray
+
+        Examples
+        --------
+        .. plot::
+            :include-source:
+
+            >>> import numpy as np
+            >>> x = np.array([[0., 0., 10., 10.],[0., 10., 10., 0.]])
+            >>> y = np.array([[5.],[5.]])
+            >>> ax = 0
+            >>> d = dist(x,y,ax)
+        """
+        d = np.sqrt(np.sum((x-y)**2, axis=ax))
+        return d
+
 if __name__ == "__main__":
     doctest.testmod()
