@@ -1100,10 +1100,10 @@ class TUsignal(TBsignal, Usignal):
     def show(self):
         """  show psd
         """
-        fig = gcf()
+        fig = plt.gcf()
         fig.add_subplot(121)
         self.plot()
-        grid()
+        plt.grid()
         fig.add_subplot(122)
         self.zlr(0, 150)
         Y = self.psd(100)
