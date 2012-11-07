@@ -652,6 +652,7 @@ class Simul(object):
         self.config.add_section("frequency")
         self.config.add_section("waveform")
         self.config.add_section("output")
+
         self.filematini = "matDB.ini"
         self.fileslabini = "slabDB.ini"
         self.filemat = self.filematini.replace('.ini','.mat')
@@ -876,12 +877,13 @@ class Simul(object):
                 for ex in extension:
                     files = os.listdir(path +'/' +d )
                     for f in files:
-                        if not os.path.isdir(path+d+f) and ex in f:
+                        if not os.path.isdir(path+'/'+d+'/'+f) and ex in f:
                             rindic=True
                             if verbose:
                                 print f
                             os.remove(path+'/'+d+'/'+f)
-            #                print path+d+f
+
+
 
                     if rindic:
                         if verbose:
@@ -891,32 +893,23 @@ class Simul(object):
 
             # remove output into the self.filesimul ini file
 
+            simcfg = ConfigParser.ConfigParser()
+            simcfg.read(pyu.getlong(inifile,pstruc['DIRSIMUL']))
+            simcfg.remove_section('output')
+            f=open(pyu.getlong(inifile,pstruc['DIRSIMUL']),'wb')
+            simcfg.write(f)
+            f.close()
+            self.dout = {}
+            self.dlch = {}
+            self.dtra = {}
+            self.dtud = {}
+            self.dtang = {}
+            self.drang = {}
+            self.dtauk = {}
+            self.dfield = {}
+            self.dcir = {}
+            self.output = {}
 
-#            simcfg = ConfigParser.ConfigParser()
-#            simcfg.read(pyu.getlong(inifile,pstruc['DIRSIMUL']))
-#            simcfg.remove_section('output')
-#            simcfg.add_section('output')
-#            f=open(path +'/ini/' +inifile,'a')
-#            simcfg.write(f)
-#            
-
-            flagout=False
-            file=open(path +'/ini/' +inifile,'r')
-            lines=file.readlines()
-            file.close()
-            file=open(path +'/ini/' +inifile,'w')
-            for line in lines:
-                if line =='[output]\n':
-                    file.write(line)
-                    flagout=True
-                elif flagout:
-                    if line =='[tud]\n':
-                        file.write('\n')
-                        file.write(line)
-                        flagout=False
-                else :
-                    file.write(line)
-            file.close()
             if verbose:
                 print 'removed [output] entries into ' +inifile +'\n'
                 print 'Project CLEANED'
@@ -1848,7 +1841,7 @@ class Simul(object):
     #def gettud(self,k,l):
     #def getfield(self,k,l):
 
-    def launching(self, itx=1):
+    def launching(self, itx=1,verbose=False):
         """ start the launching program and get the results files
 
         Parameters
@@ -1868,16 +1861,16 @@ class Simul(object):
             " -palch " + self.filepalch + \
             " -spa " + self.tx.filespa + \
             " -conf " + basename + '/' + self.fileconf
-
-        print chaine
+        if verbose:
+            print chaine
 
         self.claunching.append(chaine)
         os.system(chaine)
         aux = os.popen(chaine, "r")
         recup = aux.read()
         aux.close()
-
-        print recup
+        if verbose:
+            print recup
 
         self.recup = recup
         aux = recup.splitlines()
@@ -1928,7 +1921,7 @@ class Simul(object):
         self.config.write(fd)
         fd.close()
 
-    def tracing(self, itx, irx):
+    def tracing(self, itx, irx,verbose=False):
         """ exec tracing
 
         Parameters
@@ -1942,11 +1935,13 @@ class Simul(object):
                 " -patra " + self.filepatra + \
                 "  -spa " + self.rx.filespa + \
                 " -conf " + basename + '/' + self.fileconf
-            print chaine
+            if verbose:
+                print chaine
             self.ctracing.append(chaine)
             aux = os.popen(chaine, "r")
             recup = aux.read()
-            print recup
+            if verbose:
+                print recup
             aux.close()
             self.recup = recup
             aux = recup.splitlines()
@@ -1957,7 +1952,8 @@ class Simul(object):
                     aux[i] = aux[i].replace('filetraout : ', '')
                     filetra.append(pyu.getshort(aux[i]))
                     self.dtra[itx][irx] = filetra[0]
-            print filetra
+            if verbose:
+                print filetra
             #self.filetra.insert(ntx,filetra)
             self.progress = 2
         else:
@@ -1971,7 +1967,7 @@ class Simul(object):
             self.output[itx].write(fd)
             fd.close()
 
-    def tratotud(self, itx, irx):
+    def tratotud(self, itx, irx,verbose=False):
         """ convert tracing in .tud
 
         Parameters
@@ -1995,29 +1991,34 @@ class Simul(object):
             " -num " + num +  \
             " -conf " + basename + '/' + self.fileconf
         self.ctratotud.append(chaine)
-        print chaine
+        if verbose:
+            print chaine
         aux = os.popen(chaine, "r")
         os.system('echo $?')
         recup = aux.read()
         aux.close()
         aux = recup.splitlines()
-        print aux
+        if verbose:
+            print aux
         len_aux = recup.count("\n")
         for i in range(len_aux):
             if aux[i].find("filetudout") != -1:
                 aux[i] = aux[i].replace('filetudout : ', '')
                 filename = pyu.getshort(aux[i])
-                print filename
+                if verbose:
+                    print filename
                 self.dtud[itx][irx] = filename
             elif aux[i].find("filetangout") != -1:
                 aux[i] = aux[i].replace('filetangout : ', '')
                 filename = pyu.getshort(aux[i])
-                print filename
+                if verbose:
+                    print filename
                 self.dtang[itx][irx] = filename
             elif aux[i].find("filerangout") != -1:
                 aux[i] = aux[i].replace('filerangout : ', '')
                 filename = pyu.getshort(aux[i])
-                print filename
+                if verbose:
+                    print filename
                 self.drang[itx][irx] = filename
 
         _outfilename = self.config.get('output', str(itx))
@@ -2036,7 +2037,7 @@ class Simul(object):
         fd.close()
 
 
-    def field(self, itx, irx):
+    def field(self, itx, irx,verbose=False):
         """ field calculation for Tx Rx using evalfield command
 
         Parameters
@@ -2053,7 +2054,8 @@ class Simul(object):
                  " -conf " + basename + '/' + self.fileconf
 
         self.cfield.append(chaine)
-        print chaine
+        if verbose:
+            print chaine
         os.system(chaine)
         aux = os.popen(chaine, "r")
         recup = aux.read()
@@ -2083,7 +2085,7 @@ class Simul(object):
             raise NameError('error writing output ini file')
         fd.close()
 
-    def run(self, itx, srx=[], cirforce=True):
+    def run(self, itx, srx=[], cirforce=True,verbose=False):
         """ run the simulation for 1 tx and a set of rx
 
 
@@ -2124,9 +2126,10 @@ class Simul(object):
             self.filespaTx = 'tx' + str(itx) + '.spa'
             point = self.tx.points[itx]
             spafile(self.filespaTx, point, pstruc['DIRLCH'])
-            print "---------------"
-            print "Start Launching Tx : " + str(itx)
-            print "---------------"
+            if verbose:
+                print "---------------"
+                print "Start Launching Tx : " + str(itx)
+                print "---------------"
             self.launching(itx)
 
         #
@@ -2138,28 +2141,32 @@ class Simul(object):
                 self.filespaRx = 'rx' + str(irx) + '.spa'
                 point = self.rx.points[irx]
                 spafile(self.filespaRx, point, pstruc['DIRTRA'])
-                print "--------------------"
-                print "Start tracing  Rx : " + str(irx)
-                print "--------------------"
+                if verbose:
+                    print "--------------------"
+                    print "Start tracing  Rx : " + str(irx)
+                    print "--------------------"
                 tracingabort = self.tracing(itx, irx)
 
             if not tracingabort:
                 if irx not in self.dtud[itx].keys():
-                    print "---------------"
-                    print "Start tratotud ", irx
-                    print "---------------"
+                    if verbose:
+                        print "---------------"
+                        print "Start tratotud ", irx
+                        print "---------------"
 
                     self.tratotud(itx, irx)
                 if irx not in self.dfield[itx].keys():
-                    print "---------------"
-                    print "Start field  ", irx
-                    print "---------------"
+                    if verbose:
+                        print "---------------"
+                        print "Start field  ", irx
+                        print "---------------"
                     self.field(itx, irx)
 
                 if ((irx not in self.dcir[itx].keys()) | cirforce):
-                    print "---------------"
-                    print "Start cir      ", irx
-                    print "---------------"
+                    if verbose:
+                        print "---------------"
+                        print "Start cir      ", irx
+                        print "---------------"
                     if "waveform" in self.config.sections():
                         par = self.config.items("waveform")
                         self.wparam = {}
@@ -2298,7 +2305,7 @@ class Simul(object):
                     if (self.tx.name == '') and (self.rx.name == ''):
                         txrx = 'tx' + str('%0.3d' % l) + '-rx' + str('%0.3d' % k)
                     else :
-                        txrx = 'ap' + self.tx.name +'-ag' + self.rx.name + str('-p%0.3d' % k)
+                        txrx = self.tx.name +'-' + self.rx.name + str('-p%0.3d' % k)
                 else:
                     txrx = ext
 
