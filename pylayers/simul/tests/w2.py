@@ -1,10 +1,7 @@
 from pylayers.simul.simulem import *
 import ConfigParser
 import pylayers.util.pyutil as pyu
-
-
-
-
+import itertools
 
 
 # Load simulnet_data configuration file
@@ -22,7 +19,6 @@ uptime = eval(simcfg.get('simulation','updatetime'))
 S = Simul()
 S.layout(Lfilename,'matDB.ini','slabDB.ini')
 S.clean_project(verbose=True)
-
 ### STEP 1 : all mobile node with all agent
 #
 
@@ -47,94 +43,21 @@ for apidx,ap in enumerate(AP):
         S.rx.loadini(ag+'.ini',rep='savedata')
         S.run(apidx+1,range(1,S.rx.N+1))
 
+#### STEP 2 : all mobile/mobile
+
+icag = itertools.combinations(AG,2)
+for cag in icag:
+    S.tx = RadioNode(typ='tx',name=cag[0])
+    S.tx.loadini(cag[0]+'.ini',rep='savedata')
+    S.rx = RadioNode(typ='tx',name=cag[1])
+    S.rx.loadini(cag[1]+'.ini',rep='savedata')
+    lidxpts = range(1,S.rx.N+1)
+    for n in lidxpts:
+        print '---------------------'
+        print ' Raytracing for :    '
+        print ' AG #', cag[0] ,' / AG #',cag[1]
+        print '---------------------'
+        S.run(n,n)
 
 
 
-
-### STEP 2 : all mobile/mobile
-
-
-
-#S.tx = RadioNode(typ='tx')
-#S.tx.point([1.2,1,1.4])
-
-## setting receiver
-
-#S.rx = RadioNode(typ='rx')
-#S.rx.point([8,-1.2,1.5])
-
-#S.save()
-
-## print launching parameters
-#S.palch.info()
-
-## ang Tx : angular step from Tx
-#S.palch.angTx  = 1
-
-## ISB ang Incident Shadow Boundary angle (degree) 
-#S.palch.ISBang = 90  
-
-## ray elimination Threshold 
-#S.palch.ethreshold = 0.001
-
-## maximum depth
-#S.palch.maxdeep  = 10
-
-## typealgo = 0 (include diffraction) 1 (no diffraction)
-#S.palch.typalgo = 1
-#title = str(S.palch.angTx) + '-' +\
-#        str(S.palch.ISBang) + '-' +\
-#        str(S.palch.ethreshold) + '-' + \
-#        str(S.palch.maxdeep) + '-' + \
-#        str(S.palch.typalgo)
-
-#S.palch.save()
-#S.pafreq.fghzmin=2
-#S.pafreq.fghzmax=11
-#S.pafreq.nf=181
-#S.pafreq.save()
-## showing the simulation 
-#print "Launching "
-#print "-----------------"
-#S.launching(1)
-
-## retrieve the launching tree
-
-#L1 = S.getlaunch(1)
-
-## display the launching tree for different depths
-
-#fig = plt.figure(figsize=(10,10))
-#plt.title('launching parameters '+title+' '+filestr )
-#plt.axis('off')
-#N = S.palch.maxdeep
-#M = N/2
-##
-#for k in range(N):
-#    ax = fig.add_subplot(M,2,k+1)
-#    fig,ax = L1.show(S.L,k+1,f=fig)
-
-#fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')    
-#print "Tracing "
-#print "-----------------"
-#print "purc :",S.config.get('tud','purc')
-#fig = plt.figure()
-#S.tracing(1,1)
-#gr = GrRay3D()
-#gr.load(S.dtra[1][1],S.L)
-#f,a = S.L.showGs(fig=fig)
-##plt.axis('on')
-#gr.show(fig=f,ax=a,rayset=np.arange(100))
-#print "Tratotud "
-#print "-----------------"
-#print "purc :",S.config.get('tud','purc')
-#S.tratotud(1,1)
-#gt = GrRayTud()
-## loading rays in tud format 
-#gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
-#print "Evalfield "
-#print "-----------------"
-#S.field(1,1)
-#S.cir(1,1)
-#f=plt.figure()
-#S.pltcir(1,1,fig=f)
