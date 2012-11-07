@@ -27,14 +27,12 @@ pylayers/gis/selectl.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
-pylayers/location/simsql.py
+pylayers/location/simSQL.py
 pylayers/location/algebraic/__init__.py
 pylayers/location/algebraic/algebraic.py
 pylayers/location/algebraic/crb.py
 pylayers/location/algebraic/hdf.py
-pylayers/location/algebraic/rss.py
-pylayers/location/algebraic/tdoa.py
-pylayers/location/algebraic/toa.py
+pylayers/location/algebraic/hdf_old.py
 pylayers/location/geometric/Scenario_base.py
 pylayers/location/geometric/__init__.py
 pylayers/location/geometric/exploit_CDF.py
