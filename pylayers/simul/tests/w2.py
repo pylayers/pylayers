@@ -60,6 +60,7 @@ for cag in icag:
     print '---------------------'
     for n in lidxpts:
         print ' trajectory point #',n,'/',S.rx.N+1
+        print '---------------------'
         S.run(n,n)
 
 
