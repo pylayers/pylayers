@@ -7,6 +7,7 @@
 """
 import doctest
 import os
+import re
 import getopt
 import sys
 import time
@@ -37,6 +38,28 @@ from pylayers.util.project import *
 # Handle UWB measurements
 from pylayers.measures import mesuwb as muwb
 import pdb
+
+
+def rename(_filename,itx,irx,rep='./'):
+    """ rename simulation file with proper itx/irx 
+    Parameters
+    ----------
+    _filmename : short file name
+    itx : transmitter index
+    irx : transmitter index
+    rep : directory
+
+    See Also
+    --------
+    tratotud
+
+    """
+    filename = pyu.getlong(_filename,rep)
+    f1  = re.sub('tx_[0-9]*','tx_'+str(itx),_filename)
+    new = re.sub('rx_[0-9]*','rx_'+str(irx),f1)
+    filenew = pyu.getlong(new,rep)
+    os.rename(filename,filenew)
+    return(new)
 
 def spafile(_filename, point, sdir):
     """
@@ -652,6 +675,7 @@ class Simul(object):
         self.config.add_section("frequency")
         self.config.add_section("waveform")
         self.config.add_section("output")
+
         self.filematini = "matDB.ini"
         self.fileslabini = "slabDB.ini"
         self.filemat = self.filematini.replace('.ini','.mat')
@@ -814,6 +838,110 @@ class Simul(object):
                     print filename
                     filename = pyu.getlong(self.filefield[itx][irx], pstruc['DIRTUD'])
                     print filename
+
+
+    def clean_project(self,verbose= True):
+        """
+        Clean Pyrpoject directory
+
+        remove .lch, .tra, .field .tud, .tauk, .tang, .rang, <pyproject>/output
+
+        remove [output] entries into .ini of self.filesimul
+
+
+        Parameters
+        ----------
+        
+        verbose : boolean
+            Verbose mode on/off
+
+
+        Returns
+        -------
+            Boolean:
+                True if the project has been cleaned, False otherwise
+
+
+        """
+
+        if verbose:
+
+            print "-----------------------------------"
+            print "-----------------------------------"
+            print "          WARNING                  "
+            print "-----------------------------------"
+            print "-----------------------------------"
+            print "You are about to remove ALL previous computed raytracing files."
+            print "If you decide to remove it, you will need to restart the entire \
+    raytracing simulation to exploit simulation results"
+            print "\n Do you want to remove these simulation files ? y/n"
+            r=raw_input()
+
+        else :
+            r =='y'
+
+        if r == 'y':
+            inifile=self.filesimul
+            try:
+                path=os.getenv('BASENAME')
+            except:
+                print('Error : there is no project  directory in $BASENAME')
+
+
+
+            dirlist=['output']
+            extension=['.lch','.field','.tra','.tud','.tang','.rang','.tauk']
+            rindic=False
+
+
+            # remove file
+
+            for d in dirlist:
+                for ex in extension:
+                    files = os.listdir(path +'/' +d )
+                    for f in files:
+                        if not os.path.isdir(path+'/'+d+'/'+f) and ex in f:
+                            rindic=True
+                            if verbose:
+                                print f
+                            os.remove(path+'/'+d+'/'+f)
+
+
+
+                    if rindic:
+                        if verbose:
+                            print 'removed *' + ex +' from ' +d +'\n'
+                        rindic=False
+
+
+            # remove output into the self.filesimul ini file
+
+            simcfg = ConfigParser.ConfigParser()
+            simcfg.read(pyu.getlong(inifile,pstruc['DIRSIMUL']))
+            simcfg.remove_section('output')
+            f=open(pyu.getlong(inifile,pstruc['DIRSIMUL']),'wb')
+            simcfg.write(f)
+            f.close()
+            self.dout = {}
+            self.dlch = {}
+            self.dtra = {}
+            self.dtud = {}
+            self.dtang = {}
+            self.drang = {}
+            self.dtauk = {}
+            self.dfield = {}
+            self.dcir = {}
+            self.output = {}
+
+            if verbose:
+                print 'removed [output] entries into ' +inifile +'\n'
+                print 'Project CLEANED'
+            return True
+        else :
+            if verbose:
+                print "clean project process ABORTED"
+            return False
+
 
     def save(self):
         """ save simulation file
@@ -1323,7 +1451,7 @@ class Simul(object):
 
         return(cira, ciro)
 
-    def pltcir(self, itx=1, irx=1, mode='linear', noise=False, color='b',fig=[],ax=[]):
+    def pltcir(self, itx=1, irx=1, mode='linear', noise=False, color='b',format='a',fig=[],ax=[]):
         """ plot Channel Impulse Reresponse
 
         Parameters
@@ -1356,27 +1484,28 @@ class Simul(object):
 
         fig,ax=self.show(itx, irx,fig=fig,ax=ax)
         ax=fig.add_subplot('212')
-        kxa = 'ta' + str(irx)
-        kya = 'cira' + str(irx)
-        kxo = 'to' + str(irx)
-        kyo = 'ciro' + str(irx)
-        ta = D[kxa]
-        to = D[kxo]
+        if 'a' in format :
+            kxa = 't'
+            kya = 'cir'
+            ta = D[kxa]
+            Tobs = ta[-1] - ta[0]
+            te = ta[1] - ta[0]
+            if noise:
+                na = bs.Noise(Tobs + te, 1. / te)
+                naf = na.gating(4.493, 0.5)
+            cira = bs.TUsignal(ta, D[kya][:, 0])
 
-        Tobs = ta[-1] - ta[0]
-        te = ta[1] - ta[0]
-        if noise:
-            na = bs.Noise(Tobs + te, 1. / te)
-            naf = na.gating(4.493, 0.5)
 
-        Tobs = to[-1] - to[0]
-        te = to[1] - to[0]
-        if noise:
-            no = bs.Noise(Tobs + te, 1. / te)
-            nof = no.gating(4.493, 0.5)
-
-        cira = bs.TUsignal(ta, D[kya][:, 0])
-        ciro = bs.TUsignal(to, D[kyo][:, 0])
+        if 'o' in format:
+            kxo = 'to' + str(irx)
+            kyo = 'ciro' + str(irx)
+            to = D[kxo]
+            Tobs = to[-1] - to[0]
+            te = to[1] - to[0]
+            if noise:
+                no = bs.Noise(Tobs + te, 1. / te)
+                nof = no.gating(4.493, 0.5)
+            ciro = bs.TUsignal(to, D[kyo][:, 0])
 
         if mode == 'linear':
             #plt.plot(ta,naf.y,color='k',label='Noise')
@@ -1735,7 +1864,7 @@ class Simul(object):
     #def gettud(self,k,l):
     #def getfield(self,k,l):
 
-    def launching(self, itx=1):
+    def launching(self, itx=1,verbose=False):
         """ start the launching program and get the results files
 
         Parameters
@@ -1755,16 +1884,16 @@ class Simul(object):
             " -palch " + self.filepalch + \
             " -spa " + self.tx.filespa + \
             " -conf " + basename + '/' + self.fileconf
-
-        print chaine
+        if verbose:
+            print chaine
 
         self.claunching.append(chaine)
         os.system(chaine)
         aux = os.popen(chaine, "r")
         recup = aux.read()
         aux.close()
-
-        print recup
+        if verbose:
+            print recup
 
         self.recup = recup
         aux = recup.splitlines()
@@ -1815,7 +1944,7 @@ class Simul(object):
         self.config.write(fd)
         fd.close()
 
-    def tracing(self, itx, irx):
+    def tracing(self, itx, irx,verbose=False):
         """ exec tracing
 
         Parameters
@@ -1829,11 +1958,13 @@ class Simul(object):
                 " -patra " + self.filepatra + \
                 "  -spa " + self.rx.filespa + \
                 " -conf " + basename + '/' + self.fileconf
-            print chaine
+            if verbose:
+                print chaine
             self.ctracing.append(chaine)
             aux = os.popen(chaine, "r")
             recup = aux.read()
-            print recup
+            if verbose:
+                print recup
             aux.close()
             self.recup = recup
             aux = recup.splitlines()
@@ -1843,8 +1974,14 @@ class Simul(object):
                 if aux[i].find("filetraout") != -1:
                     aux[i] = aux[i].replace('filetraout : ', '')
                     filetra.append(pyu.getshort(aux[i]))
-                    self.dtra[itx][irx] = filetra[0]
-            print filetra
+            #
+            # Warning : this is a bad fix - Need to get the true irx
+            #
+            for k,filename in enumerate(filetra) :
+                self.dtra[itx][k+1] = filename 
+
+            if verbose:
+                print filetra
             #self.filetra.insert(ntx,filetra)
             self.progress = 2
         else:
@@ -1858,7 +1995,7 @@ class Simul(object):
             self.output[itx].write(fd)
             fd.close()
 
-    def tratotud(self, itx, irx):
+    def tratotud(self, itx, irx,verbose=False):
         """ convert tracing in .tud
 
         Parameters
@@ -1881,30 +2018,42 @@ class Simul(object):
             " -purc " + purc + \
             " -num " + num +  \
             " -conf " + basename + '/' + self.fileconf
+        print 'DEBUG '+chaine
         self.ctratotud.append(chaine)
-        print chaine
+        if verbose:
+            print chaine
         aux = os.popen(chaine, "r")
         os.system('echo $?')
         recup = aux.read()
         aux.close()
         aux = recup.splitlines()
-        print aux
+        if verbose:
+            print aux
         len_aux = recup.count("\n")
         for i in range(len_aux):
             if aux[i].find("filetudout") != -1:
                 aux[i] = aux[i].replace('filetudout : ', '')
                 filename = pyu.getshort(aux[i])
-                print filename
+                # fix
+                #filename = rename(filename,itx,irx,'output')
+                if verbose:
+                    print filename
                 self.dtud[itx][irx] = filename
             elif aux[i].find("filetangout") != -1:
                 aux[i] = aux[i].replace('filetangout : ', '')
                 filename = pyu.getshort(aux[i])
-                print filename
+                # fix
+                #filename = rename(filename,itx,irx,'output')
+                if verbose:
+                    print filename
                 self.dtang[itx][irx] = filename
             elif aux[i].find("filerangout") != -1:
                 aux[i] = aux[i].replace('filerangout : ', '')
                 filename = pyu.getshort(aux[i])
-                print filename
+                # fix
+                #filename = rename(filename,itx,irx,'output')
+                if verbose:
+                    print filename
                 self.drang[itx][irx] = filename
 
         _outfilename = self.config.get('output', str(itx))
@@ -1923,7 +2072,7 @@ class Simul(object):
         fd.close()
 
 
-    def field(self, itx, irx):
+    def field(self, itx, irx,verbose=False):
         """ field calculation for Tx Rx using evalfield command
 
         Parameters
@@ -1940,7 +2089,8 @@ class Simul(object):
                  " -conf " + basename + '/' + self.fileconf
 
         self.cfield.append(chaine)
-        print chaine
+        if verbose:
+            print chaine
         os.system(chaine)
         aux = os.popen(chaine, "r")
         recup = aux.read()
@@ -1951,10 +2101,14 @@ class Simul(object):
             if aux[i].find("filefieldout") != -1:
                 aux[i] = aux[i].replace('filefieldout : ', '')
                 filename = pyu.getshort(aux[i]).replace(' ', '')
+                # fix
+                # filename = rename(filename,itx,irx,'output')
                 self.dfield[itx][irx] = filename
             elif aux[i].find("filetaukout") != -1:
                 aux[i] = aux[i].replace('filetaukout : ', '')
                 filename = pyu.getshort(aux[i]).replace(' ', '')
+                # fix
+                # filename = rename(filename,itx,irx,'output')
                 self.dtauk[itx][irx] = filename
 
         _outfilename = self.config.get('output', str(itx))
@@ -1970,9 +2124,8 @@ class Simul(object):
             raise NameError('error writing output ini file')
         fd.close()
 
-    def run(self, itx, srx=[], cirforce=True):
+    def run(self, itx, srx=[], cirforce=True,verbose=False):
         """ run the simulation for 1 tx and a set of rx
-
 
             Parameters
             ----------
@@ -2011,42 +2164,48 @@ class Simul(object):
             self.filespaTx = 'tx' + str(itx) + '.spa'
             point = self.tx.points[itx]
             spafile(self.filespaTx, point, pstruc['DIRLCH'])
-            print "---------------"
-            print "Start Launching Tx : " + str(itx)
-            print "---------------"
+            if verbose:
+                print "---------------"
+                print "Start Launching Tx : " + str(itx)
+                print "---------------"
             self.launching(itx)
 
         #
         # Loop over a set of rx
         #
+        #pdb.set_trace()
         for irx in srx:
             tracingabort = False
             if irx not in self.dtra[itx].keys():
                 self.filespaRx = 'rx' + str(irx) + '.spa'
                 point = self.rx.points[irx]
                 spafile(self.filespaRx, point, pstruc['DIRTRA'])
-                print "--------------------"
-                print "Start tracing  Rx : " + str(irx)
-                print "--------------------"
+                if verbose:
+                    print "--------------------"
+                    print "Start tracing  Rx : " + str(irx)
+                    print "--------------------"
                 tracingabort = self.tracing(itx, irx)
 
             if not tracingabort:
                 if irx not in self.dtud[itx].keys():
-                    print "---------------"
-                    print "Start tratotud ", irx
-                    print "---------------"
+                    if verbose:
+                        print "---------------"
+                        print "Start tratotud ", irx
+                        print "---------------"
 
                     self.tratotud(itx, irx)
                 if irx not in self.dfield[itx].keys():
-                    print "---------------"
-                    print "Start field  ", irx
-                    print "---------------"
+                    if verbose:
+                        print "---------------"
+                        print "Start field  ", irx
+                        print "---------------"
                     self.field(itx, irx)
 
                 if ((irx not in self.dcir[itx].keys()) | cirforce):
-                    print "---------------"
-                    print "Start cir      ", irx
-                    print "---------------"
+                    if verbose:
+                        print "---------------"
+                        print "Start cir      ", irx
+                        print "---------------"
                     if "waveform" in self.config.sections():
                         par = self.config.items("waveform")
                         self.wparam = {}
@@ -2068,6 +2227,7 @@ class Simul(object):
 
                         self.wav = wvf.Waveform(self.wparam)
                         alpha = np.sqrt(1. / 30.0)
+                        print "run debug ",itx,irx
                         self.cir([itx], [irx],
                                  store_level=16 + 8 + 4 + 2 + 1, alpha=alpha)
                     else:
@@ -2119,7 +2279,7 @@ class Simul(object):
         VCl = channel.VectChannel(self, itx, irx, False)
         return(VCl)
 
-    def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep=pstruc['DIRCIR']):
+    def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep=pstruc['DIRCIR'],format='a'):
         """
         Calculate a set of channel impulse responses
 
@@ -2138,7 +2298,9 @@ class Simul(object):
             alpha : normalization factor
             ext :
             rep :
-
+            format : string
+                a : with antenna
+                o : omnidirectionnal
          Notes
          -----
          A factor ::math`\\sqrt{1}{30}` is necessary when applying the antenna
@@ -2180,13 +2342,19 @@ class Simul(object):
                 D = {}
                 D['Tx'] = self.tx.points[l]
                 if ext == '':
-                    txrx = 'tx' + str('%0.3d' % l) + '-rx' + str('%0.3d' % k)
+                    if (self.tx.name == '') and (self.rx.name == ''):
+                        txrx = 'tx' + str('%0.3d' % l) + '-rx' + str('%0.3d' % k)
+                    else :
+                        txrx = self.tx.name +'-' + self.rx.name + str('-p%0.3d' % k)
                 else:
                     txrx = ext
 
                 _filename = racine + txrx
                 self.dcir[l][k] = _filename
-                rep = rep + '/Tx' + str('%0.3d' % l)
+                if self.tx.name == '':
+                    rep = rep + '/Tx' + str('%0.3d' % l)
+                else :
+                    rep = rep +'/' + self.tx.name
                 if not os.path.isdir(basename+'/'+rep):
                     try:
                         os.mkdir(basename+'/'+rep)
@@ -2207,10 +2375,12 @@ class Simul(object):
                     cira = SCA.applywavB(self.wav.sfg)
                     CIRa.append(cira)
                     D['Rx' + str(k)] = self.rx.points[int(k)]
-                    D['to' + str(k)] = ciro.x
-                    D['ta' + str(k)] = cira.x
-                    D['ciro' + str(k)] = ciro.y
-                    D['cira' + str(k)] = cira.y
+                    if 'o' in format:
+                        D['to'] = ciro.x
+                        D['ciro'] = ciro.y
+                    if 'a' in format:
+                        D['t'] = cira.x
+                        D['cir'] = cira.y
                     spio.savemat(filename, D)
                     self.output[l].set("cir", str(k), self.dcir[l][k])
                     fd = open(outfilename, "w")

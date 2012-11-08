@@ -64,7 +64,7 @@ class EMSolver(object):
 
         self.L=L
 
-    
+
     def save_model(self,RAT,model):
         """save a RAT model
             
@@ -85,6 +85,8 @@ class EMSolver(object):
     def load_model(self,RAT):
         ratopt=dict(self.config.items(RAT+'_PLM'))
         self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=self.method)
+
+
 
     def solve(self,p,e,LDP,RAT,epwr):
         """compute and return a LDP value thanks to a given method
@@ -173,6 +175,7 @@ class EMSolver(object):
                     P[:,1]=model.sigrss
                     T=np.outer(TOA,[1,1])
                     T[:,1]=self.sigmaTOA*0.3
+#                    v = P[:,0] < noisefl
                     return (P,T,d)
 
 

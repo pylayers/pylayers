@@ -16,6 +16,10 @@ S.tx.point([1.2,1,1.4])
 
 S.rx = RadioNode(typ='rx')
 S.rx.point([8,-1.2,1.5])
+S.rx.point([8,-1.21,1.5])
+S.rx.point([8,-1.22,1.5])
+S.rx.point([8,-1.23,1.5])
+S.rx.point([8,-1.24,1.5])
 
 S.save()
 
