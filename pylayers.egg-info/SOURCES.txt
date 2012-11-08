@@ -12,7 +12,6 @@ pylayers/antprop/antenna.py
 pylayers/antprop/channel.py
 pylayers/antprop/coverage.py
 pylayers/antprop/multiwall.py
-pylayers/antprop/packet.py
 pylayers/antprop/rays.py
 pylayers/antprop/signature.py
 pylayers/antprop/slab.py
@@ -27,9 +26,10 @@ pylayers/gis/selectl.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
-pylayers/location/simSQL.py
 pylayers/location/algebraic/__init__.py
-pylayers/location/algebraic/algebraic.pyr
+pylayers/location/algebraic/algebraic.py
+pylayers/location/algebraic/algebraic_old.py
+pylayers/location/algebraic/hdf_old.py
 pylayers/location/geometric/Scenario_base.py
 pylayers/location/geometric/__init__.py
 pylayers/location/geometric/exploit_CDF.py
@@ -75,9 +75,9 @@ pylayers/network/emsolver.py
 pylayers/network/model.py
 pylayers/network/net.py
 pylayers/network/network.py
+pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
-pylayers/pulsray/__init__.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
 pylayers/signal/waveform.py

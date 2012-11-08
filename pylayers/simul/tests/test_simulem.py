@@ -5,7 +5,7 @@ from pylayers.simul.simulem import *
 S = Simul()
 
 # loading a layout 
-filestr = 'siradel-cut'
+filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')
 # setting transmitter
 
