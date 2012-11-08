@@ -9,8 +9,9 @@ import scipy.interpolate as interp
 import numpy.fft as fft
 from copy import *
 import matplotlib.pylab as plt
+import matplotlib.gridspec as gridspec
 from pylayers.util.pyutil import *
-from scipy import io
+import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin
 
 
@@ -73,7 +74,7 @@ class Bsignal(object):
         d = {}
         d['x'] = self.x
         d['y'] = self.y
-        io.savemat(filename, d)
+        ios.savemat(filename, d)
 
     def load(self, filename):
         """ load a Bsignal saved in a Matlab File
@@ -83,7 +84,7 @@ class Bsignal(object):
         filename : string
 
         """
-        d = io.loadmat(filename)
+        d = ios.loadmat(filename)
         self.x = d['x'][:, 0]
         self.y = d['y'][:, 0]
 
@@ -696,7 +697,7 @@ class Usignal(Bsignal):
 
         Summary
         --------
-        This is a gatin between xmin and xmax
+        This is a gating between xmin and xmax
 
         Examples
         --------
@@ -742,19 +743,19 @@ class TBsignal(Bsignal):
     def __init__(self, x=np.array([]), y=np.array([])):
         Bsignal.__init__(self, x, y)
 
-    def plot(self, 
-             ix=0, 
-             col='black', 
-             vline=np.array([]), 
-             hline=np.array([]), 
-             showlabel=[True, True], 
-             unit1 = 'V', 
+    def plot(self,
+             ix=0,
+             col='black',
+             vline=np.array([]),
+             hline=np.array([]),
+             showlabel=[True, True],
+             unit1 = 'V',
              unit2 = 'V',
              ax=[],
              tmin = -1e5,
              tmax = +1e5,
-             dB = False, 
-             dist=False, 
+             dB = False,
+             dist=False,
              logx=False,
              logy=False):
         """ plot TBsignal
@@ -1097,25 +1098,54 @@ class TUsignal(TBsignal, Usignal):
         P.y = P.y / (R * Tpns)
         return(P)
 
-    def show(self):
+    def show(self,fig=[],ax=[],display=True,PRPns=100):
         """  show psd
+
+        Parameters
+        ----------
+        fig
+        ax
+        display
+
+        See Also
+        ---------
+
+        psd
+        zlr
         """
-        fig = gcf()
-        fig.add_subplot(121)
+        if fig == []:
+            fig = plt.gcf()
+
+        Y = self.psd(PRPns)
+        kboltzmann = 1.3806503e-23
+        T = 300
+        # +30 dBW/Hz -> dBm/MHz
+        N0dB = 10*np.log10(kboltzmann*T)+30
+
+        u      = np.nonzero(Y.y>N0dB)
+        Pnoise = sum(Y.y[u])*Y.dx()
+
+        ax1 = fig.add_subplot(121)
         self.plot()
-        grid()
-        fig.add_subplot(122)
-        self.zlr(0, 150)
-        Y = self.psd(100)
-        axis([1, 10, -120, -60])
-        plot(Y.x, 10 * np.log10(Y.y), 'k')
-        plt.xlabel('Frequency (GHz)')
-        plt.ylabel('PSD (dBm/MHz) PRP=100 ns')
+        ax1.axhline(3*np.sqrt(Pnoise),color='r',linewidth=2)
+        ax1.axhline(-3*np.sqrt(Pnoise),color='r',linewidth=2)
         plt.grid()
+        ax2 = fig.add_subplot(122)
+        #self.zlr(0,150)
+        # unilateral
+        plt.plot(Y.x, 10 * np.log10(Y.y), 'k')
+        plt.xlabel('Frequency (GHz)')
+        plt.xlim([1,10])
+        ax2.axhline(N0dB,color='r',linewidth=2)
+        plt.ylabel('PSD (dBm/MHz) assuming PRP='+str(PRPns)+' ns')
+        plt.grid()
+        if display:
+            plt.show()
+
+        return(fig,[ax1,ax2])
 
     def esd(self, mode='bilateral'):
         """  Calculate the energy spectral density of the U signal
-        
         Parameters
         ----------
         mode : string
@@ -1949,11 +1979,32 @@ class TUsignal(TBsignal, Usignal):
         toa = t[v[0]]
         return toa
 
+    def readcir(self,filename,outdir=[]):
+        """ read channel impulse response
+
+        Parameters
+        ----------
+        filename : string
+            long file name if outdir is []
+            short file name is outdir is <> []
+        outdir : string
+            output directory
+        """
+        if outdir <> []:
+            outdir = 'output/'+outdir
+            filename = getlong(filename, outdir)
+
+        cir = ios.loadmat(filename)
+        self.x = cir['t'].ravel()
+        self.y = cir['cir'].ravel()
+
+
     def readuwb(self, _filename):
         """ read  Waveform from Matlab file
         """
-        filename = getlong(_filename, 'wave')
-        wfm = io.loadmat(filename)
+        outdir = 'output/'+outdir
+        filename = getlong(_filename, outdir)
+        wfm = ios.loadmat(filename)
         d = wfm['data'][0][0]
         T0 = d.T0[0][0] / 1e-9
         Tres = d.Tres[0][0] / 1e-9
@@ -3376,8 +3427,6 @@ class EnImpulse(TUsignal):
         >>> errb  = Eip1-Eipb
         """
         pass
-
-
 
 class MaskImpulse(TUsignal):
     """
