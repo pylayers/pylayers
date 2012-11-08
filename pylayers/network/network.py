@@ -869,7 +869,7 @@ class Network(nx.MultiGraph):
 
             for i in range(len(pos)):
                 if self.node[pos[i][0]]['type'] =='ap':
-                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRSAVE']),'w')
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
                     config = ConfigParser.ConfigParser()
                     config.add_section('coordinates')
                     AP.append(pos[i][0])
@@ -888,7 +888,7 @@ class Network(nx.MultiGraph):
             simcfg = ConfigParser.ConfigParser()
             simcfg.read(pyu.getlong('simulnet.ini','ini'))
             
-            file2=open(pyu.getlong('pyray.ini',pstruc['DIRSAVE']),'w')
+            file2=open(pyu.getlong('pyray.ini',pstruc['DIRNETSAVE']),'w')
             config = ConfigParser.ConfigParser()
             config.add_section('nodes')
             config.add_section('layout')
@@ -905,11 +905,11 @@ class Network(nx.MultiGraph):
         for i in range(len(pos)):
             if self.node[pos[i][0]]['type'] !='ap':
                 if self.idx == 0:
-                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRSAVE']),'w')
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
                     file.write('[coordinates]')
                     file.write('\n')
                     file.close()
-                file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRSAVE']),'a')
+                file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'a')
                 file.write(str(self.idx+1) +' = ' + str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
                 file.write('\n')
                 file.close()

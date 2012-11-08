@@ -57,7 +57,7 @@ pstruc['DIRGEOM'] = 'geom'
 pstruc['DIRTRA'] = 'output'
 pstruc['DIRCIR'] = 'output'
 pstruc['DIRMES'] = 'meas'
-pstruc['DIRSAVE'] = 'savedata'
+pstruc['DIRNETSAVE'] = 'netsave'
 
 
 # if basename directory does not exit it is created 
