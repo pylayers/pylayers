@@ -19,6 +19,8 @@ uptime = eval(simcfg.get('simulation','updatetime'))
 S = Simul()
 S.layout(Lfilename,'matDB.ini','slabDB.ini')
 S.clean_project(verbose=True)
+
+#
 ### STEP 1 : all mobile node with all agent
 #
 
@@ -35,8 +37,8 @@ for apidx,ap in enumerate(AP):
         print ' Raytracing for :    '
         print ' AP #',AP[apidx-1] ,' / AG #',ag
         print '---------------------'
-        print ' Computed :'  
-        print 'AP:',apidx-1,'/',lap+1 
+        print ' Computed :'
+        print 'AP:',apidx-1,'/',lap+1
         print 'AG:',agidx,'/',lag
         print '---------------------'
         S.rx = RadioNode(typ='rx',name=ag)

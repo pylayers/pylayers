@@ -7,6 +7,7 @@
 """
 import doctest
 import os
+import re
 import getopt
 import sys
 import time
@@ -37,6 +38,28 @@ from pylayers.util.project import *
 # Handle UWB measurements
 from pylayers.measures import mesuwb as muwb
 import pdb
+
+
+def rename(_filename,itx,irx,rep='./'):
+    """ rename simulation file with proper itx/irx 
+    Parameters
+    ----------
+    _filmename : short file name
+    itx : transmitter index
+    irx : transmitter index
+    rep : directory
+
+    See Also
+    --------
+    tratotud
+
+    """
+    filename = pyu.getlong(_filename,rep)
+    f1  = re.sub('tx_[0-9]*','tx_'+str(itx),_filename)
+    new = re.sub('rx_[0-9]*','rx_'+str(irx),f1)
+    filenew = pyu.getlong(new,rep)
+    os.rename(filename,filenew)
+    return(new)
 
 def spafile(_filename, point, sdir):
     """
@@ -1464,8 +1487,8 @@ class Simul(object):
         fig,ax=self.show(itx, irx,fig=fig,ax=ax)
         ax=fig.add_subplot('212')
         if 'a' in format :
-            kxa = 'ta' + str(irx)
-            kya = 'cira' + str(irx)
+            kxa = 't'
+            kya = 'cir'
             ta = D[kxa]
             Tobs = ta[-1] - ta[0]
             te = ta[1] - ta[0]
@@ -1953,7 +1976,12 @@ class Simul(object):
                 if aux[i].find("filetraout") != -1:
                     aux[i] = aux[i].replace('filetraout : ', '')
                     filetra.append(pyu.getshort(aux[i]))
-                    self.dtra[itx][irx] = filetra[0]
+            #
+            # Warning : this is a bad fix - Need to get the true irx
+            #
+            for k,filename in enumerate(filetra) :
+                self.dtra[itx][k+1] = filename 
+
             if verbose:
                 print filetra
             #self.filetra.insert(ntx,filetra)
@@ -1992,6 +2020,7 @@ class Simul(object):
             " -purc " + purc + \
             " -num " + num +  \
             " -conf " + basename + '/' + self.fileconf
+        print 'DEBUG '+chaine
         self.ctratotud.append(chaine)
         if verbose:
             print chaine
@@ -2007,18 +2036,24 @@ class Simul(object):
             if aux[i].find("filetudout") != -1:
                 aux[i] = aux[i].replace('filetudout : ', '')
                 filename = pyu.getshort(aux[i])
+                # fix
+                #filename = rename(filename,itx,irx,'output')
                 if verbose:
                     print filename
                 self.dtud[itx][irx] = filename
             elif aux[i].find("filetangout") != -1:
                 aux[i] = aux[i].replace('filetangout : ', '')
                 filename = pyu.getshort(aux[i])
+                # fix
+                #filename = rename(filename,itx,irx,'output')
                 if verbose:
                     print filename
                 self.dtang[itx][irx] = filename
             elif aux[i].find("filerangout") != -1:
                 aux[i] = aux[i].replace('filerangout : ', '')
                 filename = pyu.getshort(aux[i])
+                # fix
+                #filename = rename(filename,itx,irx,'output')
                 if verbose:
                     print filename
                 self.drang[itx][irx] = filename
@@ -2068,10 +2103,14 @@ class Simul(object):
             if aux[i].find("filefieldout") != -1:
                 aux[i] = aux[i].replace('filefieldout : ', '')
                 filename = pyu.getshort(aux[i]).replace(' ', '')
+                # fix
+                # filename = rename(filename,itx,irx,'output')
                 self.dfield[itx][irx] = filename
             elif aux[i].find("filetaukout") != -1:
                 aux[i] = aux[i].replace('filetaukout : ', '')
                 filename = pyu.getshort(aux[i]).replace(' ', '')
+                # fix
+                # filename = rename(filename,itx,irx,'output')
                 self.dtauk[itx][irx] = filename
 
         _outfilename = self.config.get('output', str(itx))
@@ -2089,7 +2128,6 @@ class Simul(object):
 
     def run(self, itx, srx=[], cirforce=True,verbose=False):
         """ run the simulation for 1 tx and a set of rx
-
 
             Parameters
             ----------
@@ -2137,6 +2175,7 @@ class Simul(object):
         #
         # Loop over a set of rx
         #
+        #pdb.set_trace()
         for irx in srx:
             tracingabort = False
             if irx not in self.dtra[itx].keys():
@@ -2190,6 +2229,7 @@ class Simul(object):
 
                         self.wav = wvf.Waveform(self.wparam)
                         alpha = np.sqrt(1. / 30.0)
+                        print "run debug ",itx,irx
                         self.cir([itx], [irx],
                                  store_level=16 + 8 + 4 + 2 + 1, alpha=alpha)
                     else:
@@ -2338,11 +2378,11 @@ class Simul(object):
                     CIRa.append(cira)
                     D['Rx' + str(k)] = self.rx.points[int(k)]
                     if 'o' in format:
-                        D['to' + str(k)] = ciro.x
-                        D['ciro' + str(k)] = ciro.y
+                        D['to'] = ciro.x
+                        D['ciro'] = ciro.y
                     if 'a' in format:
-                        D['ta' + str(k)] = cira.x
-                        D['cira' + str(k)] = cira.y
+                        D['t'] = cira.x
+                        D['cir'] = cira.y
                     spio.savemat(filename, D)
                     self.output[l].set("cir", str(k), self.dcir[l][k])
                     fd = open(outfilename, "w")
