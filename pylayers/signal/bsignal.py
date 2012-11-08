@@ -1995,8 +1995,8 @@ class TUsignal(TBsignal, Usignal):
             filename = getlong(filename, outdir)
 
         cir = ios.loadmat(filename)
-        self.x = cir['ta1'].ravel()
-        self.y = cir['cira1'].ravel()
+        self.x = cir['t'].ravel()
+        self.y = cir['cir'].ravel()
 
 
     def readuwb(self, _filename):
