@@ -112,8 +112,9 @@ class Simul(Simulation):
             print 'Layout graphs are loaded from ',basename,'/struc'
         except:
         #self.L.sl = sl
-        #self.L.loadGr(G1)            
-            print 'First time your use the Layout.Graphs are curently build, it may take few minutes.'
+        #self.L.loadGr(G1)
+            print 'This is the first time your use this layout file.\
+            Layout graphs are curently being built, it may take few minutes.'
             self.L.buildGt()
             self.L.buildGr()
             self.L.buildGw()

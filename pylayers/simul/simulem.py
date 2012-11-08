@@ -675,15 +675,43 @@ class Simul(object):
         self.config.add_section("frequency")
         self.config.add_section("waveform")
         self.config.add_section("output")
-
+       
+        self.dout = {}
+        self.dlch = {}
+        self.dtra = {}
+        self.dtud = {}
+        self.dtang = {}
+        self.drang = {}
+        self.dtauk = {}
+        self.dfield = {}
+        self.dcir = {}
+        self.output = {}
+ 
+        #if os.path.isfile(pyu.getlong(_filesimul,'ini')):
         self.filematini = "matDB.ini"
         self.fileslabini = "slabDB.ini"
         self.filemat = self.filematini.replace('.ini','.mat')
         self.fileslab = self.fileslabini.replace('.ini','.slab')
         self.slab=SlabDB(self.filematini, self.fileslabini)
         self.filestr = 'defstr.str2'
-        self.tx = RadioNode('tx', 'radiotx.ini', 'defant.vsh3', self.filestr)
-        self.rx = RadioNode('rx', 'radiorx.ini', 'defant.vsh3', self.filestr)
+        #
+        # Here was a nasty bug : Rule for the future
+        #    "Always precise the key value of the passed argument"
+        #
+        # Mal nommer les choses, c'est ajouter au malheur du monde ( Albert Camus )
+        #
+        self.tx = RadioNode(name = 'tx',
+                            typ = 'tx',
+                            _fileini = 'radiotx.ini',
+                            _fileant = 'defant.vsh3',
+                            _filestr = self.filestr)
+
+        self.rx = RadioNode(name = 'rx',
+                            typ = 'rx',
+                            _fileini = 'radiorx.ini',
+                            _fileant = 'defant.vsh3',
+                            _filestr = self.filestr)
+
         self.filepatra = "def.patra"
         self.filepalch = "def.palch"
         self.filefreq = "def.freq"
@@ -707,19 +735,8 @@ class Simul(object):
         self.ctratotud = []
         self.fileconf = "project.conf"
         self.cfield = []
-        #
-        self.dout = {}
-        self.dlch = {}
-        self.dtra = {}
-        self.dtud = {}
-        self.dtang = {}
-        self.drang = {}
-        self.dtauk = {}
-        self.dfield = {}
-        self.dcir = {}
-        self.output = {}
-
         self.freq = np.linspace(2, 11, 181, endpoint=True)
+
         try:
             self.load(_filesimul)
         except:
@@ -1109,7 +1126,6 @@ class Simul(object):
         self.config.read(filesimul)
 
         sections = self.config.sections()
-    
         try:
             _filetx = self.config.get("files", "tx")
         except:
@@ -2405,7 +2421,5 @@ class Simul(object):
 
 
 
-if (__name__ == "__main__"):
-    doctest.testmod()
-
-
+#if (__name__ == "__main__"):
+#    doctest.testmod()
