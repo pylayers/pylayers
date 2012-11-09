@@ -700,13 +700,13 @@ class Simul(object):
         #
         # Mal nommer les choses, c'est ajouter au malheur du monde ( Albert Camus )
         #
-        self.tx = RadioNode(name = 'tx',
+        self.tx = RadioNode(name = '',
                             typ = 'tx',
                             _fileini = 'radiotx.ini',
                             _fileant = 'defant.vsh3',
                             _filestr = self.filestr)
 
-        self.rx = RadioNode(name = 'rx',
+        self.rx = RadioNode(name = '',
                             typ = 'rx',
                             _fileini = 'radiorx.ini',
                             _fileant = 'defant.vsh3',
@@ -1153,13 +1153,13 @@ class Simul(object):
             raise NameError('Error in section struc from '+ _filesimul)
 
         try:
-            self.tx = RadioNode(name = 'tx',
+            self.tx = RadioNode(name = '',
                                 typ = 'tx',
                                 _fileini = _filetx,
                                 _fileant = _fileanttx,
                                 _filestr = self.filestr)
 
-            self.rx = RadioNode(name = 'rx',
+            self.rx = RadioNode(name = '',
                                 typ = 'rx',
                                 _fileini = _filerx,
                                 _fileant = _fileantrx,
@@ -1985,7 +1985,7 @@ class Simul(object):
         if (self.progress >= 1):
             chaine = "tracing -lch " + self.dlch[itx] + \
                 " -patra " + self.filepatra + \
-                "  -spa " + self.rx.filespa + \
+                "  -spa " + self.filespaRx + \
                 " -conf " + basename + '/' + self.fileconf
             if verbose:
                 print chaine
