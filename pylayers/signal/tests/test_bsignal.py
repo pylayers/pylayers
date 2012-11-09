@@ -63,5 +63,3 @@ for k,cir in enumerate(tcir[1:]):
 
         tx = np.union1d(tx,x)
 
-#plt.pcolor(tx,np.arange(5),ty)
-#plt.axis('auto')
