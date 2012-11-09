@@ -19,7 +19,7 @@ import time
 
 # <codecell>
 
-C=Coverage()
+C = Coverage()
 C.L.filename
 
 # <markdowncell>

@@ -95,7 +95,7 @@ class Layout(object):
         self.display['ndlabel'] = False
         self.display['ndlblsize'] = 10
         self.display['edlblsize'] = 10
-        self.display['fonntsize'] = 10
+        self.display['fontsize'] = 10
         self.display['edlabel'] = False
         self.display['edges'] = True
         self.display['ednodes'] = False

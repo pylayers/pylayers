@@ -1153,8 +1153,17 @@ class Simul(object):
             raise NameError('Error in section struc from '+ _filesimul)
 
         try:
-            self.tx = RadioNode('tx', _filetx, _fileanttx, self.filestr)
-            self.rx = RadioNode('rx', _filerx, _fileantrx, self.filestr)
+            self.tx = RadioNode(name = 'tx',
+                                typ = 'tx',
+                                _fileini = _filetx,
+                                _fileant = _fileanttx,
+                                _filestr = self.filestr)
+
+            self.rx = RadioNode(name = 'rx',
+                                typ = 'rx',
+                                _fileini = _filerx,
+                                _fileant = _fileantrx,
+                                _filestr = self.filestr)
         except:
             raise NameError('Error during Radionode load')
 #
@@ -1470,7 +1479,7 @@ class Simul(object):
         return(cira, ciro)
 
     def pltcir(self, itx=1, irx=1, mode='linear', noise=False, color='b',format='a',fig=[],ax=[]):
-        """ plot Channel Impulse Reresponse
+        """ plot Channel Impulse Response
 
         Parameters
         ----------
@@ -1492,13 +1501,13 @@ class Simul(object):
 
         if fig ==[]:
             fig = plt.gcf()
-        if ax==[]:
-            ax = fig.gca()
+        #if ax==[]:
+        #    ax = fig.gca()
 
         _filecir = self.dcir[itx][irx] + '.mat'
         filecir = pyu.getlong(_filecir, pstruc['DIRCIR']+'/Tx' + str('%0.3d' % itx))
         D = spio.loadmat(filecir)
-        ax=fig.add_subplot('211')
+        ax = fig.add_subplot('211')
 
         fig,ax=self.show(itx, irx,fig=fig,ax=ax)
         ax=fig.add_subplot('212')
@@ -1528,6 +1537,8 @@ class Simul(object):
         if mode == 'linear':
             #plt.plot(ta,naf.y,color='k',label='Noise')
             plt.plot(ta, D[kya], label='Rx ' + str(irx), color=color)
+            plt.xlabel('Time (ns)')
+
             '''if noise:
                 naf.plot(col='k')
             cira.plot(col=color)'''
@@ -1535,8 +1546,8 @@ class Simul(object):
             '''if noise:
                 naf.plotdB(col='k')
             cira.plotdB()'''
-            plt.plot(ta, 20 * np.log10(
-                abs(D[kya])), label='Rx ' + str(irx), color=color)
+            plt.plot(ta, 20 * np.log10(abs(D[kya])), label='Rx ' + str(irx), color=color)
+            plt.xlabel('Time (ns)')
 #        plt.legend()
         plt.show()
         #plt.savefig('Tx'+str(itx),format=pdf,dpi=300)
@@ -2423,5 +2434,5 @@ class Simul(object):
 
 
 
-#if (__name__ == "__main__"):
-#    doctest.testmod()
+if (__name__ == "__main__"):
+    doctest.testmod()

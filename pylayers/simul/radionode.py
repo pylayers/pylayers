@@ -248,7 +248,7 @@ class RadioNode(object):
         pth = np.reshape(pth, (3, 1))
         pas = 1.0 / (npt - 1)
         k = np.arange(0.0, 1.0 + pas, pas)
-        pt = ptt + (1.0 - k) * (ptt - pth)
+        pt = ptt + k * (pth-ptt)
         if mode == 'subst':
             self.position = pt
         else:
