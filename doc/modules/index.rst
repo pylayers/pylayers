@@ -1,7 +1,7 @@
 .. _reference:
 
 ###################
-PYLAYERS references
+User references
 ###################
 
 :Release: |version|

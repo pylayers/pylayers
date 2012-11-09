@@ -3,8 +3,8 @@ PyLayers : Python radio propagation and  localization simulator
 ===============================================================
 
 Pylayers is a simulator designed to model mobile pedestrian radio propagation.
-Its purpose is to help the proper design of localization and tracking
-algorithms in advanced communications systems. Hopefully also useful for
+Its purpose is to help designing localization and tracking algorithms for advanced 
+communications systems. Hopefully, also useful for
 higher education on topics related to wireless communications. 
 
 
@@ -22,9 +22,9 @@ Example
 Features
 ========
 
-* Indoor layout description and edition
-* Extensive graph description of indoor layout  
-* Account for the full vector antenna patterns using a sparse spherical harmonics representation  
+* Layout edition
+* Extensive graph description of layout  
+* Full space vector antenna patterns using a sparse spherical harmonics representation  
 * Multi layers transmission coefficients 
 * Motley Keenan model 
 * Ray signature determination and analysis 
@@ -40,11 +40,25 @@ Features
 Context
 =======
 
-PyLayers has been developped to help with research into impulse radio
-propagation studies and  algorithms for
-localization, but it may be also useful to help with the development of
-characterization, Wireless Sensor Network, MANET, radio cooperation techniques, physical layer
-security ...
+PyLayers is beeing developped for research into radio localization exploiting impulse radio
+signals as being defined in the IEEE 802.15.4a and 802.15.6 standards.
+Pylayers could also evolved to help with studies related to channel characterization,
+Wireless Sensor Network, MANET, radio cooperation and relaying techniques, 
+physical layer security, WBAN applications, advanced home automation,
+connected sensito-cognitive environments ...
+
+Documentation
+=============
+
+.. toctree::
+    :maxdepth: 1 
+
+    manual/index.rst 
+
+    modules/index.rst
+    
+    bibliography.rst
+
 
 
 Third party packages 
@@ -52,27 +66,29 @@ Third party packages
 
 Pylayers is written in Python and tributes highly the following Python packages
 
-* numpy ( for the algebra in higher dimensions and just for the fun of using `einsum` function )  
-* scipy ( for the huge amount of science it contains )
-* simpy ( for elegant discrete events simulation ) 
-* matplotlib ( for the Art ) 
-* networkx ( for the elegance of graph theory ) 
-* shapely ( for the planar geometry )   
-* scikit-Learn ( for the cutting edge machine learning tools ) 
+* numpy ( for algebra in multi dimensions )  
+* scipy ( for scientific libraries )
+* simpy ( for discrete events simulation ) 
+* matplotlib ( for the graphical outputs ) 
+* networkx ( for graph description and algorithms ) 
+* shapely ( for planar geometry )   
+* scikit-learns( for cutting edge machine learning tools ) 
 * cvxopt ( for convex optimization ) 
+* spherepack (as spherical harmonics library)  
 * ipython ( to rule them all ... ) 
 
 
-In the future probably also :  
+In the near future probably for acceleration of critical part of the code :  
+
 * Cython 
 * numba 
 
 Pylayers relies also on the good old `geomview` tool for fast and simple interaction with 3D entities. 
 
 
-All those dependencies make the installation of pylayers somehow tricky. This
-is a good 
-`PYLAYERS` is modular and designed to be easily to extend, 
+All those dependencies make the installation of pylayers somehow tricky. 
+
+`Pylayers` is modular and designed to be easily to extend, 
 allowing it to evolve over the time as a tool for research and development in a wide range 
 of communications and localization topics.
 
@@ -85,47 +101,50 @@ new algorithms, models and other improvements back to the project.
 Developpers
 ===========
 
-Pylayers is driven by professor Bernard Uguen the `University of Rennes 1 <http://www.univ-rennes1.fr/>`_
-(`IETR laboratory <http://www.ietr.fr/>`_ and `ESIR school of engineering <http://esir.univ-rennes1.fr/>`_)
-The code is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
+Pylayers is driven by professor Bernard Uguen at `University of Rennes 1
+<http://www.univ-rennes1.fr/>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
+`ESIR school of engineering <http://esir.univ-rennes1.fr/>`_
+
+Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
 Laaraiedh and Meriem Mhedbhi, with the technical support of all the members from the
 Research Team of the Propagation and Localization team of IETR lab.    
 
-Early contributors : Yu Lei, Roxana Burghelea, Friedman Tchoffo Talom,  Stéphane Avrillon and Eric Plouhinec.
+Early contributors : Friedman Tchoffo Talom, Roxana Burghelea, Yu Lei, Taguhi
+Chaluyman, Stéphane Avrillon and Eric Plouhinec.
+
+Acknoledgments 
+==============
 
 This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR
 project AUBADE and CORMORAN and by the European projects `FP7 UCELLS <http://www.ist-ucells.org/>`_, 
 FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
+.. image:: _static/logoUR1.jpg 
+    :scale: 18%
+
 .. image:: _static/logoIETR.jpg 
+    :scale: 22%
+
+.. image:: _static/logoESIR.png 
     :scale: 20%
 
-.. image:: _static/bretagne.png 
+.. image:: _static/bretagnegd.jpg 
     :scale: 20%
 
 .. image::  _static/ucells.png 
+    :scale: 40%
+
+.. image:: _static/where1logo.jpg 
+    :scale: 30%
+
+.. image:: _static/WHERE2_Logo.jpg 
     :scale: 20%
 
-.. image:: Where1.png 
+.. image:: _static/logo_CORMORAN.png 
     :scale: 20%
 
-.. image:: Where2.png 
-    :scale: 20%
-
-.. image:: Cormoran.png 
-    :scale: 20%
-
-Documentation
--------------
-
-.. toctree::
-    :maxdepth: 1 
-
-    manual/index.rst 
-
-    modules/index.rst
-    
-    bibliography.rst
+.. image:: _static/IR.png 
+    :scale: 30%
 
 
 Download and Installation
