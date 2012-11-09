@@ -3,8 +3,9 @@ PyLayers : Python radio propagation and  localization simulator
 ===============================================================
 
 Pylayers is a simulator designed to model mobile pedestrian radio propagation.
-The purpose is to provide a tool helping the design of localization and tracking
-algorithms for advanced communications systems.
+Its purpose is to help the proper design of localization and tracking
+algorithms in advanced communications systems. Hopefully also useful for
+higher education on topics related to wireless communications. 
 
 
 Example 
@@ -12,13 +13,10 @@ Example
 
 .. ipython::
     
-    In [1]: import pylayers.simul.simulnet as snet
 
     In [1]: import pylayers.simul.simulem as sem
 
-    In [1]: Sn = snet.Simul()
-
-    In [1]: Se = sem.Simul()
+    In [1]: S = sem.Simul()
 
 
 Features
@@ -26,13 +24,13 @@ Features
 
 * Indoor layout description and edition
 * Extensive graph description of indoor layout  
+* Account for the full vector antenna patterns using a sparse spherical harmonics representation  
 * Multi layers transmission coefficients 
-* Account fot the full vector antenna pattern  
 * Motley Keenan model 
-* Ray Signature determination and analysis 
-* Embedded C coded modular ray tracing engine
+* Ray signature determination and analysis 
+* Embedded C coded UWB ray tracing engine
 * Handling of Impulse Radio Ultra Wideband Waveforms 
-* Mobile user mobility 
+* Mobile user mobility based on E 
 * Set Membership positoning algorithm toolbox
 * Heterogeneous positioning toolbox 
 * Various techniques exploiting heterogeneous Radio observables
@@ -52,33 +50,70 @@ security ...
 Third party packages 
 ====================
 
-The simulator is written mostly in Python and depends on the following packages
+Pylayers is written in Python and tributes highly the following Python packages
 
-* numpy
-* scipy
-* simpy
-* matplotlib
-* networkx   
-* shapely   
-* scikit-Learn
-* cvxopt
-  
-`PYLAYERS` is designed to be easy to extend with new functionalities, 
-allowing it to evolve over the time as a common
-tool for research and development in a wide range of communications and
-localization applications.
+* numpy ( for the algebra in higher dimensions and just for the fun of using `einsum` function )  
+* scipy ( for the huge amount of science it contains )
+* simpy ( for elegant discrete events simulation ) 
+* matplotlib ( for the Art ) 
+* networkx ( for the elegance of graph theory ) 
+* shapely ( for the planar geometry )   
+* scikit-Learn ( for the cutting edge machine learning tools ) 
+* cvxopt ( for convex optimization ) 
+* ipython ( to rule them all ... ) 
+
+
+In the future probably also :  
+* Cython 
+* numba 
+
+Pylayers relies also on the good old `geomview` tool for fast and simple interaction with 3D entities. 
+
+
+All those dependencies make the installation of pylayers somehow tricky. This
+is a good 
+`PYLAYERS` is modular and designed to be easily to extend, 
+allowing it to evolve over the time as a tool for research and development in a wide range 
+of communications and localization topics.
 
 We warmly encourage all users to contribute 
 new algorithms, models and other improvements back to the project.
 
-Just fork the github repository on github.
+**Just fork it !** on your github account.
 
-Pylayers was written by Bernard Uguen, Nicolas Amiot, Mohamed Laaraiedh, Yu Lei, Roxana Burghelea
-, Friedman Tchoffo Talom at the IETR, University of Rennes 1.
+
+Developpers
+===========
+
+Pylayers is driven by professor Bernard Uguen the `University of Rennes 1 <http://www.univ-rennes1.fr/>`_
+(`IETR laboratory <http://www.ietr.fr/>`_ and `ESIR school of engineering <http://esir.univ-rennes1.fr/>`_)
+The code is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
+Laaraiedh and Meriem Mhedbhi, with the technical support of all the members from the
+Research Team of the Propagation and Localization team of IETR lab.    
+
+Early contributors : Yu Lei, Roxana Burghelea, Friedman Tchoffo Talom,  Stéphane Avrillon and Eric Plouhinec.
 
 This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR
-project AUBADE and CORMORAN and by the European projects FP7 UCELLS, FP7 WHERE1, FP7 WHERE2.
+project AUBADE and CORMORAN and by the European projects `FP7 UCELLS <http://www.ist-ucells.org/>`_, 
+FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
+.. image:: _static/logoIETR.jpg 
+    :scale: 20%
+
+.. image:: _static/bretagne.png 
+    :scale: 20%
+
+.. image::  _static/ucells.png 
+    :scale: 20%
+
+.. image:: Where1.png 
+    :scale: 20%
+
+.. image:: Where2.png 
+    :scale: 20%
+
+.. image:: Cormoran.png 
+    :scale: 20%
 
 Documentation
 -------------
@@ -96,9 +131,10 @@ Documentation
 Download and Installation
 -------------------------
 
-The current version is tagged 0.1, released on 9 November 2012. Download the release in your preferred format:
+The current version is tagged 0.1, released on 9 November 2012. Download the
+release in your preferred format on github.
 
-.. topic::
+.. code-block:: bash
     
     $ git clone https://github.com/buguen/pylayers.git
 
