@@ -1,45 +1,67 @@
-PYLAYERS Overview
-=================
 
-Pylayers is a simulator designed to model mobile pedestrian radio propagation
-in indoor environments.
+PyLayers : Python radio propagation and  localization simulator 
+===============================================================
 
-
-Pylayers contains
-various functions which allows to estimate the position based a given number
-of Location Dependent Parameters (LDPs)
-
-Features included in the current development version are:
-
-+ Indoor layout description and edition
-+ Extensive graph description of indoor layout  
-+ Multi layers transmission coefficients 
-+ Account fot the full vector antenna pattern  
-+ Motley Keenan model 
-+ Ray Signature determination and analysis 
-+ Embedded C coded modular ray tracing engine
-+ Handling of Impulse Radio Ultra Wideband Waveforms 
-+ Mobile user mobility 
-+ Set Membership positoning algorithm toolbox
-+ Heterogeneous positioning toolbox 
-+ Various techniques exploiting heterogeneous Radio observables
+Pylayers is a simulator designed to model mobile pedestrian radio propagation.
+The purpose is to provide a tool helping the design of localization and tracking
+algorithms for advanced communications systems.
 
 
-Pylayers was developed over the time to help with research into impulse radio
+Example 
+=======
+
+.. ipython::
+    
+    In [1]: import pylayers.simul.simulnet as snet
+
+    In [1]: import pylayers.simul.simulem as sem
+
+    In [1]: Sn = snet.Simul()
+
+    In [1]: Se = sem.Simul()
+
+
+Features
+========
+
+* Indoor layout description and edition
+* Extensive graph description of indoor layout  
+* Multi layers transmission coefficients 
+* Account fot the full vector antenna pattern  
+* Motley Keenan model 
+* Ray Signature determination and analysis 
+* Embedded C coded modular ray tracing engine
+* Handling of Impulse Radio Ultra Wideband Waveforms 
+* Mobile user mobility 
+* Set Membership positoning algorithm toolbox
+* Heterogeneous positioning toolbox 
+* Various techniques exploiting heterogeneous Radio observables
+
+
+
+Context
+=======
+
+PyLayers has been developped to help with research into impulse radio
 propagation studies and  algorithms for
 localization, but it may be also useful to help with the development of
 characterization, Wireless Sensor Network, MANET, radio cooperation techniques, physical layer
 security ...
 
-The simulator is written mostly in Python making use of the following modules 
-+ numpy
-+ scipy
-+ simpy
-+ matplotlib
-+ networkx   
-+ shapely   
-+ scikit-Learn
-+ cvxopt
+
+Third party packages 
+====================
+
+The simulator is written mostly in Python and depends on the following packages
+
+* numpy
+* scipy
+* simpy
+* matplotlib
+* networkx   
+* shapely   
+* scikit-Learn
+* cvxopt
   
 `PYLAYERS` is designed to be easy to extend with new functionalities, 
 allowing it to evolve over the time as a common
@@ -64,29 +86,21 @@ Documentation
 .. toctree::
     :maxdepth: 1 
 
-    manual/manual.rst 
+    manual/index.rst 
 
     modules/index.rst
     
     bibliography.rst
 
-Publications
-------------
-
-If you publish work which makes use of PyLayers, please cite the following paper:
-
-
 
 Download and Installation
 -------------------------
 
-The current version is 0.1, released on 10 October 2011. Download the release in your preferred format:
+The current version is tagged 0.1, released on 9 November 2012. Download the release in your preferred format:
 
-Pylayers was developed on Linux and probably won't readily work on Windows platforms
-
-There list of python dependencies is 
-
-
+.. topic::
+    
+    $ git clone https://github.com/buguen/pylayers.git
 
 
 Mailing List
@@ -96,7 +110,6 @@ Mailing List
 There is a "http://groups.google.com/group/pylayers-users" mailing list for
 users of Pylayers on which you can get help with using or extending the
 software. New releases will also be announced on the mailing list. 
-
 
 
 License

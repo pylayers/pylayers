@@ -1,29 +1,36 @@
-How to buid a layout file  ? 
-============================
+User Manual 
+===========
+
+How to build a layout file  ? 
+----------------------------
 
 .. toctree::
     maxdepth:2
 
     layout.rst 
 
-How to launch a simulation  
-==========================
+How to use the mobile network simulator ? 
+-----------------------------------------
 
-.. toctree::
-    maxdepth:2
-
-    simulem.rst 
-
-How to use the mobility simulator ? 
-=======================================
 
 .. toctree::
     maxdepth:2
 
     simulnet.rst
 
+
+How to define and launch an electromagnetic  simulation  ? 
+---------------------------------------------------------
+
+
+
+.. toctree::
+    maxdepth:2
+
+    simulem.rst 
+
 How is implemented the Ray Tracing simulator ? 
-==============================================
+----------------------------------------------
 
 .. toctree::
     maxdepth:2
@@ -32,7 +39,7 @@ How is implemented the Ray Tracing simulator ?
 
 
 Antennas 
-========
+--------
 
 .. toctree:: 
     maxdepth:2
@@ -40,7 +47,7 @@ Antennas
     antenna.rst
 
 Propagation Channel 
-===================
+-------------------
 
 .. toctree:: 
     maxdepth:2
@@ -48,7 +55,7 @@ Propagation Channel
     channel.rst
 
 Slabs
-=====
+-----
 
 .. toctree:: 
     maxdepth:2
@@ -56,7 +63,7 @@ Slabs
     slab.rst
 
 Signals 
-===================
+-------------------
 
 .. toctree:: 
     maxdepth:2

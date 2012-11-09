@@ -109,7 +109,7 @@ class RadioNode(object):
             pass
 
         #
-        print _fileant
+        #print _fileant
         self.fileant = _fileant
         try:
             self.loadvsh()
