@@ -150,17 +150,27 @@ class Bsignal(object):
         else:
             plt.plot(self.x, self.y, color, linestyle='steps')
     
-    def imshow(self,interpolation=None,cmap=plt.cm.BrBG,aspect='auto'):
+    def imshow(self,interpolation=None,cmap=plt.cm.BrBG,aspect='auto',dB=False):
         """ imshow of y matrix
         """
         if self.y.ndim>1:
-            vmin = abs(self.y.min())
-            vmax = abs(self.y.max())
-            vm   = max(vmin,vmax)
-            plt.imshow(self.y,
+            if not dB:
+                vmin = abs(self.y.min())
+                vmax = abs(self.y.max())
+                vm   = max(vmin,vmax)
+                vmin = -vm
+                vmax = +vm
+                val  = self.y
+                cmap = plt.cm.BrBG
+            else:
+                vmin = -100
+                vmax = 10*np.log10(abs(self.y.max()))
+                val  = 10*np.log10(abs(self.y)+1e-10)
+                cmap = plt.cm.hot
+            plt.imshow(val,
                        origin = 'lower',
-                       vmin = -vm,
-                       vmax = vm,
+                       vmin = vmin,
+                       vmax = vmax,
                        aspect = aspect,
                        extent = (self.x[0],self.x[-1],0,self.y.shape[0]),
                        interpolation=interpolation,
@@ -616,20 +626,37 @@ class Usignal(Bsignal):
         >>> [u1,u2] = i1.align(i2)
 
         """
-        # copie de l'objet courant
+        # copy object
         u1 = self
         u1_start = u1.x[0]
         u1_stop = u1.x[-1]
         u2_start = u2.x[0]
         u2_stop = u2.x[-1]
+        # get dimensions
+        if u1.y.ndim>1:
+            N1 = self.y.shape[0]
+            M1 = self.y.shape[1]
+        else:
+            N1 = 1
+            M1 = len(u1.y)
+            u1.y = u1.y.reshape(1,M1)
+
+        if u2.y.ndim>1:
+            N2 = u2.y.shape[0]
+            M2 = u2.y.shape[1]
+        else:
+            N2 = 1
+            M2 = len(u2.y)
+            u2.y = u2.y.reshape(1,M2)
 
         bool1 = abs(u1_start - u2_start) < 1e-10
         bool2 = abs(u1_stop - u2_stop) < 1e-10
 
         bool = bool1 & bool2
+
         if (bool):
         # same x support
-            L = [u1, u2]
+            L = Usignal(u1.x, np.vstack(u1.y,u2.y))
         else:
         # different x support
             xstart = min(u1_start, u2_start)
@@ -646,16 +673,16 @@ class Usignal(Bsignal):
                 T = xstop - xstart
                 N = int(np.floor(T / dx))
                 x = xstart + dx * np.arange(N)
-                Y1 = np.zeros(N, dtype=float)
-                Y2 = np.zeros(N, dtype=float)
+                Y1 = np.zeros((N1,N), dtype=float)
+                Y2 = np.zeros((N2,N), dtype=float)
                 yleft = u1.y
                 yright = u2.y
-                Nleft = min(N, len(yleft))
-                Nright = min(N, len(yright))
-                Y1[0:Nleft] = yleft[0:Nleft]
-                Y2[-Nright:] = yright[0:Nright]
-                U1 = Usignal(x, Y1[0:N])
-                U2 = Usignal(x, Y2[0:N])
+                Nleft = min(N,M1)
+                Nright = min(N,M2)
+                Y1[:,0:Nleft] = yleft[:,0:Nleft]
+                Y2[:,-Nright:] = yright[:,0:Nright]
+                U1 = Usignal(x, Y1[:,0:N])
+                U2 = Usignal(x, Y2[:,0:N])
 
             if (b2i & b1f):
             # u2 is left u1 is right
@@ -663,32 +690,32 @@ class Usignal(Bsignal):
                 T = xstop - xstart
                 N = int(np.floor(T / dx))
                 x = xstart + dx * np.arange(N)
-                Y1 = np.zeros(N, dtype=float)
-                Y2 = np.zeros(N, dtype=float)
+                Y1 = np.zeros((N1,N), dtype=float)
+                Y2 = np.zeros((N2,N), dtype=float)
                 yleft = u2.y
                 yright = u1.y
-                Nleft = min(N, len(yleft))
-                Nright = min(N, len(yright))
-                Y1[0:Nleft] = yleft[0:Nleft]
-                Y2[-Nright:] = yright[0:Nright]
-                U1 = Usignal(x, Y1[0:N])
-                U2 = Usignal(x, Y2[0:N])
+                Nleft = min(N, M2)
+                Nright = min(N, M1)
+                Y2[:,0:Nleft] = yleft[:,0:Nleft]
+                Y1[:,-Nright:] = yright[:,0:Nright]
+                U1 = Usignal(x, Y1[:,0:N])
+                U2 = Usignal(x, Y2[:,0:N])
 
             if (b1i & b1f):
             # u2 is included in u1
                 U1 = u1
                 x = u1.x
                 indx = plt.find((x >= u2_start) & (x <= u2_stop))
-                U2 = Usignal(x, np.zeros(len(x)))
-                U2.y[indx] = u2.y
+                U2 = Usignal(x, np.zeros((N2,len(x))))
+                U2.y[:,indx] = u2.y
 
             if (b2i & b2f):
             # u1 is included in u2
                 U2 = u2
                 x = u2.x
                 indx = plt.find((x >= u1_start) & (x <= u1_stop))
-                U1 = Usignal(x, np.zeros(len(x)))
-                U1.y[indx] = u1.y
+                U1 = Usignal(x, np.zeros((N1,len(x))))
+                U1.y[:,indx] = u1.y
 
             #L = [U1, U2]
             L   = Usignal()
