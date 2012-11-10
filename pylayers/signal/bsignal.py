@@ -896,6 +896,11 @@ class TUsignal(TBsignal, Usignal):
         Usignal.__init__(self, x, y)
 
     def __add__(self, u):
+        """
+        Parameters
+        ----------
+        u : scalar value or array
+        """
 
         t = type(u).__name__
         if ((t == 'int') | (t == 'float')):
@@ -982,6 +987,12 @@ class TUsignal(TBsignal, Usignal):
     def fft(self, shift=False):
         """  forward fast Fourier transform
 
+
+        Parameters
+        ----------
+        shift : boolean
+            default False
+
         Warnings
         --------
 
@@ -995,8 +1006,8 @@ class TUsignal(TBsignal, Usignal):
         Examples
         --------
 
-            >>> e = EnImpulse()
-            >>> E = e.fft()
+        >>> e = EnImpulse()
+        >>> E = e.fft()
 
         """
         Np = len(self.x)
@@ -1023,7 +1034,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
-        FHsignal : Frequency signal with hermitian symmetry 
+        FHsignal : Frequency signal with hermitian symmetry
 
         """
         Np = len(self.x)
@@ -2864,7 +2875,7 @@ class FUsignal(FBsignal, Usignal):
     def align(self, u2):
         """
         align <=> intersection
-        align : align two Usignal on a same frequency base
+        align : align two Usignal on a same base
             return a list which contains the two aligned signals
 
         >>> i1 = EnImpulse()
