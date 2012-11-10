@@ -1,9 +1,9 @@
 
-PyLayers : Python radio propagation and  localization simulator 
-===============================================================
+PyLayers : Python mobile Localization rAY Electromagnetics Radio Simulator 
+=========================================================================
 
-Pylayers is a simulator designed to model mobile pedestrian radio propagation.
-Its purpose is to help designing localization and tracking algorithms for advanced 
+Pylayers is a mobile radio propagation simulator.
+Its purpose is to help designing localization and tracking solutions for advanced 
 communications systems. Hopefully, also useful for
 higher education on topics related to wireless communications. 
 
@@ -30,7 +30,7 @@ Features
 * Ray signature determination and analysis 
 * Embedded C coded UWB ray tracing engine
 * Handling of Impulse Radio Ultra Wideband Waveforms 
-* Mobile user mobility based on E 
+* Mobile user mobility based on `SimPy <http://simpy.sourceforge.net>`_
 * Set Membership positoning algorithm toolbox
 * Heterogeneous positioning toolbox 
 * Various techniques exploiting heterogeneous Radio observables
@@ -46,6 +46,12 @@ Pylayers could also evolved to help with studies related to channel characteriza
 Wireless Sensor Network, MANET, radio cooperation and relaying techniques, 
 physical layer security, WBAN applications, advanced home automation,
 connected sensito-cognitive environments ...
+
+Pylayers is modular and designed to be easily extended, 
+allowing it to evolve over the time as a tool for research and development in a wide range 
+of communications and localization topics.
+
+
 
 Documentation
 =============
@@ -68,7 +74,7 @@ Pylayers is written in Python and tributes highly the following Python packages
 
 * numpy ( for algebra in multi dimensions )  
 * scipy ( for scientific libraries )
-* simpy ( for discrete events simulation ) 
+* SimPy ( for discrete events simulation ) 
 * matplotlib ( for the graphical outputs ) 
 * networkx ( for graph description and algorithms ) 
 * shapely ( for planar geometry )   
@@ -86,17 +92,6 @@ In the near future probably for acceleration of critical part of the code :
 Pylayers relies also on the good old `geomview` tool for fast and simple interaction with 3D entities. 
 
 
-All those dependencies make the installation of pylayers somehow tricky. 
-
-`Pylayers` is modular and designed to be easily to extend, 
-allowing it to evolve over the time as a tool for research and development in a wide range 
-of communications and localization topics.
-
-We warmly encourage all users to contribute 
-new algorithms, models and other improvements back to the project.
-
-**Just fork it !** on your github account.
-
 
 Developpers
 ===========
@@ -112,8 +107,36 @@ Research Team of the Propagation and Localization team of IETR lab.
 Early contributors : Friedman Tchoffo Talom, Roxana Burghelea, Yu Lei, Taguhi
 Chaluyman, Stéphane Avrillon and Eric Plouhinec.
 
-Acknoledgments 
-==============
+
+
+Download and Installation
+=========================
+
+The current version is tagged 0.1, released on 9 November 2012. Download the
+last release in your preferred format on github.
+
+.. code-block:: bash
+    
+    $ git clone https://github.com/buguen/pylayers.git
+
+
+We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
+
+**Just fork it !** on your github account.
+
+
+
+Mailing List
+============
+
+
+There is a "http://groups.google.com/group/pylayers-users" mailing list for
+users of Pylayers on which you can get help with using or extending the
+software. New releases will also be announced on the mailing list. 
+
+
+Acknowledgements 
+================
 
 This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR
 project AUBADE and CORMORAN and by the European projects `FP7 UCELLS <http://www.ist-ucells.org/>`_, 
@@ -130,6 +153,7 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/bretagnegd.jpg 
     :scale: 20%
+    :target: http://www.louisbourdon.com/index.htm
 
 .. image::  _static/ucells.png 
     :scale: 40%
@@ -147,30 +171,11 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
     :scale: 30%
 
 
-Download and Installation
--------------------------
-
-The current version is tagged 0.1, released on 9 November 2012. Download the
-release in your preferred format on github.
-
-.. code-block:: bash
-    
-    $ git clone https://github.com/buguen/pylayers.git
-
-
-Mailing List
-------------
-
-
-There is a "http://groups.google.com/group/pylayers-users" mailing list for
-users of Pylayers on which you can get help with using or extending the
-software. New releases will also be announced on the mailing list. 
-
 
 License
--------
+=======
 
-Copyright © 2012 University of Rennes 1
+Copyright ©, 2012 University of Rennes 1
 
 Pylayers is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software

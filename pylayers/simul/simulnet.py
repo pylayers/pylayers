@@ -80,7 +80,7 @@ class Simul(Simulation):
         self.config.read(pyu.getlong('simulnet.ini','ini'))
         self.sim_opt = dict(self.config.items('Simulation'))
         self.lay_opt = dict(self.config.items('Layout'))
-        self.meca_opt = dict(self.config.items('Mecanic'))
+        self.meca_opt = dict(self.config.items('Mechanics'))
         self.net_opt = dict(self.config.items('Network'))
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))

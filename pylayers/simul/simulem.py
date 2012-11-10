@@ -1985,7 +1985,7 @@ class Simul(object):
         if (self.progress >= 1):
             chaine = "tracing -lch " + self.dlch[itx] + \
                 " -patra " + self.filepatra + \
-                "  -spa " + self.filespaRx + \
+                "  -spa " + self.rx.filespa + \
                 " -conf " + basename + '/' + self.fileconf
             if verbose:
                 print chaine

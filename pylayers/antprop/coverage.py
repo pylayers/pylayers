@@ -14,7 +14,7 @@ import ConfigParser
 import pdb
 
 class Coverage(object):
-    """ Simulation Class
+    """ Handle Layout Coverage 
 
         Methods
         -------
@@ -22,37 +22,29 @@ class Coverage(object):
         create grid()
             create a uniform grid for evaluating losses
         cover()
-            run the coverage 
-        showPr()
+            run the coverage calculation
+        showPower()
             display the map of received power
-        showLo()
-            display the map of loss from orthogonal field
-        showLp()
-            display the map of loss from parallel field
+        showLoss()
+            display the map of losses 
 
 
         Attributes
         ----------
-    
-        All attributes are read from fileini ino the ini director of projection
+        
+        All attributes are read from fileini ino the ini directory of the
+        current project
 
         _fileini
             default coverage.ini
 
-        L
-            a Layout
-        model
-            a pylayers.network.model object.
-        xstep
-            x step for grid
-        ystep
-            y step for grid
-        tx
-            transmitter position
-        txpe
-            transmitter power emmission level
-        show
-            Boolean to automatic display power map
+        L :  a Layout
+        model : a pylayers.network.model object.
+        xstep : x step for grid
+        ystep : y step for grid
+        tx    : transmitter position
+        txpe  : transmitter power emmission level
+        show  : boolean for automatic display power map
 
     """
 
@@ -128,19 +120,29 @@ class Coverage(object):
             :include-source:
 
             >>> from pylayers.antprop.coverage import *
-            >>> C=Coverage()
+            >>> C = Coverage()
             >>> C.cover()
             >>> C.showPr()
 
         """
-        self.Lwo,self.Lwp,self.Edo,self.Edp=Loss0_v2(self.L,self.grid,self.model.f,self.tx)
+        self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
         self.freespace = PL(self.grid,self.model.f,self.tx)
-        self.prdbm = self.ptdbm - self.freespace - self.Lwo
+        self.prdbmo = self.ptdbm - self.freespace - self.Lwo
+        self.prdbmp = self.ptdbm - self.freespace - self.Lwp
 
 
-    def showEdo(self):
-        """ show
-        map of excess of delays
+    def showEd(self,polarization='o'):
+        """ show excess of toa execess delay map
+
+        Examples
+        --------
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.cover()
+            >>> C.showEdo()
         """
 
         fig=plt.figure()
@@ -149,9 +151,20 @@ class Coverage(object):
         r=self.grid[-1,0]
         b=self.grid[0,1]
         t=self.grid[-1,-1]
-        cov=ax.imshow(self.Edo.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),origin='lower')
+        if polarization=='o':
+            cov=ax.imshow(self.Edo.reshape((self.xstep,self.ystep)).T,
+                      extent=(l,r,b,t),
+                      origin='lower')
+            titre = "Map of LOS excess delay, polar orthogonal"
+        if polarization=='p':
+            cov=ax.imshow(self.Edp.reshape((self.xstep,self.ystep)).T,
+                      extent=(l,r,b,t),
+                      origin='lower')
+            titre = "Map of LOS excess delay, polar parallel"
+
         ax.scatter(self.tx[0],self.tx[1],linewidth=0)
-        ax.set_title('Map of excess of delays')
+        ax.set_title(titre)
+
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         fig.colorbar(cov,cax)
@@ -159,16 +172,28 @@ class Coverage(object):
             plt.show()
 
 
-    def showPr(self,rxsens=True,nfl=True):
+    def showPower(self,rxsens=True,nfl=True,polarization='o'):
         """ show the map of received power
 
         Parameters
         ----------
 
-            rxsens : bool
-                clip the map with rx sensitivity set in self.rxsens
-            fnl : bool
-                clip the map with noise floor set in self.pndbm
+        rxsens : bool
+              clip the map with rx sensitivity set in self.rxsens
+        nfl : bool
+              clip the map with noise floor set in self.pndbm
+        polarization : string
+            'o'|'p'
+
+        Examples
+        --------
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.cover()
+            >>> C.showPower()
 
         """
 
@@ -179,7 +204,10 @@ class Coverage(object):
         b=self.grid[0,1]
         t=self.grid[-1,-1]
 
-
+        if polarization=='o':
+            prdbm=self.prdbmo
+        if polarization=='p':
+            prdbm=self.prdbmp
 
 #        tCM = plt.cm.get_cmap('jet')
 #        tCM._init()
@@ -200,37 +228,37 @@ class Coverage(object):
         if rxsens :
 
             ### values between the rx sensitivity and noise floor
-            mcPrf = np.ma.masked_where((self.prdbm > self.rxsens) 
-                                     & (self.prdbm < self.pndbm),self.prdbm)
+            mcPrf = np.ma.masked_where((prdbm > self.rxsens) 
+                                     & (prdbm < self.pndbm),prdbm)
             cov1 = ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,
                              extent=(l,r,b,t),cmap = my_cmap,
                              vmin=self.rxsens,origin='lower')
 
             ### values above the sensitivity
-            mcPrs = np.ma.masked_where(self.prdbm < self.rxsens,self.prdbm)
+            mcPrs = np.ma.masked_where(prdbm < self.rxsens,prdbm)
             cov = ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,
                             extent=(l,r,b,t),
                             cmap = 'jet',
                             vmin=self.rxsens,origin='lower')
-            title=title + '\n gray : PrdBm < rx sensitivity'
+            title=title + '\n gray : Pr (dBm) < %.2f' % self.rxsens + ' dBm'
 
         else :
-            cov=ax.imshow(self.prdbm.reshape((self.xstep,self.ystep)).T,
+            cov=ax.imshow(prdbm.reshape((self.xstep,self.ystep)).T,
                           extent=(l,r,b,t),
                           cmap = 'jet',
                           vmin=self.PndBm,origin='lower')
 
         if nfl:
             ### values under the noise floor 
-            ### we first clip the value below he noise fllor
-            cl = np.nonzero(self.prdbm<=self.pndbm)
-            cPr = self.prdbm
+            ### we first clip the value below he noise floor
+            cl = np.nonzero(prdbm<=self.pndbm)
+            cPr = prdbm
             cPr[cl] = self.pndbm
             mcPruf = np.ma.masked_where(cPr > self.pndbm,cPr)
             cov2 = ax.imshow(mcPruf.reshape((self.xstep,self.ystep)).T,
                              extent=(l,r,b,t),cmap = 'binary',
                              vmax=self.pndbm,origin='lower')
-            title=title + '\n white : PrdBm < ' + str(self.pndbm) + 'dBm'
+            title=title + '\n white : Pr (dBm) < %.2f' % self.pndbm + ' dBm'
 
 
         ax.scatter(self.tx[0],self.tx[1],linewidth=0)
@@ -243,12 +271,22 @@ class Coverage(object):
             plt.show()
 
 
-    def showTransistionRegion(self):
+    def showTransistionRegion(self,polarization='o'):
         """
         Notes
         -----
         See  : Analyzing the Transitional Region in Low Power Wireless Links
                   Marco Zuniga and Bhaskar Krishnamachari
+
+        Examples
+        --------
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.cover()
+            >>> C.showTransitionRegion()
 
         """
         frameLength = self.framelengthbytes
@@ -265,13 +303,18 @@ class Coverage(object):
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
-        zones = np.zeros(len(self.prdbm))
-        uconnected  = np.nonzero(self.prdbm>PrU)[0]
-        utransition = np.nonzero((self.prdbm < PrU)&(self.prdbm > PrL))[0]
-        udisconnected = np.nonzero(self.prdbm < PrL)[0]
+        if polarization=='o':
+            prdbm=self.prdbmo
+        if polarization=='p':
+            prdbm=self.prdbmp
+
+        zones = np.zeros(len(prdbm))
+        uconnected  = np.nonzero(prdbm>PrU)[0]
+        utransition = np.nonzero((prdbm < PrU)&(prdbm > PrL))[0]
+        udisconnected = np.nonzero(prdbm < PrL)[0]
 
         zones[uconnected] = 1
-        zones[utransition] = (self.prdbm[utransition]-PrL)/(PrU-PrL)
+        zones[utransition] = (prdbm[utransition]-PrL)/(PrU-PrL)
         cov = ax.imshow(zones.reshape((self.xstep,self.ystep)).T,
                              extent=(l,r,b,t),cmap = 'BuGn',origin='lower')
 
@@ -285,65 +328,65 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-    def showEdo(self):
-        """ show
-        map of Loss from orthogonal field
+    def showLoss(self,polarization='o'):
+        """ show losses map
 
+        Parameters
+        ----------
+        polarization : string 
+            'o'|'p'|'both'
+
+        Examples
+        --------
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.cover()
+            >>> C.showLoss(polarization='o')
+            >>> C.showLoss(polarization='p')
+            
         """
-
-        fig=plt.figure()
+        fig = plt.figure()
         fig,ax=self.L.showGs(fig=fig)
         l=self.grid[0,0]
         r=self.grid[-1,0]
         b=self.grid[0,1]
         t=self.grid[-1,-1]
-        cov=ax.imshow(self.Edo.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),origin='lower')
+
+        if polarization=='o':
+            cov = ax.imshow(self.Lwo.reshape((self.xstep,self.ystep)).T,
+                            extent=(l,r,b,t),
+                            origin='lower')
+            title = ('Map of losses, orthogonal (V) polarization') 
+        if polarization=='p':
+            cov = ax.imshow(self.Lwp.reshape((self.xstep,self.ystep)).T,
+                            extent=(l,r,b,t),
+                            origin='lower')
+            title = ('Map of losses, parallel (H) polarization') 
+
         ax.scatter(self.tx[0],self.tx[1],linewidth=0)
-        ax.set_title('Map of excess delay from orthogonal field')
-        fig.colorbar(cov)
-        if self.show:
-            plt.show()
+        ax.set_title(title)
 
-    def showLo(self):
-        """ map Losses for orthogonal field
-        """
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.05)
+        fig.colorbar(cov,cax)
 
-        fig=plt.figure()
-        fig,ax=self.L.showGs(fig=fig)
-        l=self.grid[0,0]
-        r=self.grid[-1,0]
-        b=self.grid[0,1]
-        t=self.grid[-1,-1]
-        cov=ax.imshow(self.Lwo.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),origin='lower')
-        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
-        ax.set_title('Map of Loss from orthogonal field')
-        fig.colorbar(cov)
-        if self.show:
-            plt.show()
-
-    def showLp(self):
-        """ map Losses for parallel field
-        """
-
-        fig=plt.figure()
-        fig,ax=self.L.showGs(fig=fig)
-        l=self.grid[0,0]
-        r=self.grid[-1,0]
-        b=self.grid[0,1]
-        t=self.grid[-1,-1]
-        cov=ax.imshow(self.Lwp.reshape((self.xstep,self.ystep)).T,extent=(l,r,b,t),origin='lower')
-        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
-        ax.set_title('Map of Loss from parallel field')
-        fig.colorbar(cov)
         if self.show:
             plt.show()
 
 
 
 if (__name__ == "__main__"):
+    plt.ion()
     C=Coverage()
     C.cover()
-    C.showPr()
-    C.L.dumpr()
-    sigar,sig=C.L.signature(C.grid[2],C.tx)
+    C.showPower()
+    C.showLoss(polarization='o')
+    C.showLoss(polarization='p')
+    C.showTransistionRegion(polarization='o')
+    C.showEd(polarization='o')
+#    C.L.dumpr()
+#    sigar,sig=C.L.signature(C.grid[2],C.tx)
 
