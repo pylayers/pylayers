@@ -2395,9 +2395,14 @@ class Simul(object):
                 VCl = channel.VectChannel(self, l, k, False)
                 CVC.append(VCl)
                 if not VCl.fail:
-                    SCO = VCl.vec2scal()
+                    #SCO = VCl.vec2scal()
+                    SCO = VCl.prop2tran(a='theta',b='theta')
                     CSCO.append(SCO)
-                    SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)
+                    #SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)
+                    #
+                    #  Appliquer le facteur alpha sur la forme d'onde !!!
+                    #
+                    SCA = VCl.prop2tran(a=self.tx.A,b=self.rx.A)
                     CSCA.append(SCA)
                     ciro = SCO.applywavB(self.wav.sfg)
                     CIRo.append(ciro)
