@@ -18,7 +18,7 @@ plt.ion()
 tc = tcir[1]
 for k,cir in enumerate(tcir[2:]):
     tc = tc.align(cir)
-tc.imshow(dB=True)
+tc.imshow(dB=False)
 plt.xlabel('ns')
 plt.ylabel('trajectory index')
 plt.title('CIR along a trajectory - crossing a wall')

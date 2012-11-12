@@ -32,7 +32,7 @@ import string
 
 class algloc(object):
     """
-    This class regroups all the algebraic localization sceanrios and
+    This class regroups all the algebraic localization scenarios and
     techniques
     Attributes
     ----------

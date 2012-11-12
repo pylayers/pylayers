@@ -407,7 +407,7 @@ class Ctilde(object):
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
 
-        H = TChannel(alpha.x,alpha.y,self.tauk,self.tang,self.rang)
+        H = Tchannel(alpha.x,alpha.y,self.tauk,self.tang,self.rang)
         return(H)
 
     def vec2scal(self):
@@ -847,7 +847,7 @@ def VCg2VCl(VCg, Tt, Tr):
     return VCl
 
 
-class TChannel(bs.FUDAsignal):
+class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel 
 
     The transmission channel TChannel is obtained from combination of the propagation
