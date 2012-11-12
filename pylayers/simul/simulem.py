@@ -1003,11 +1003,11 @@ class Simul(object):
 #        self.config.set("files", "mat", self.filemat)
 
 #        try:
-#            self.config.set("files", "tx", self.tx.filespa)
+#            self.config.set("files", "tx", self.filespaTx)
 #        except:
 #            pass
 #        try:
-#            self.config.set("files", "rx", self.rx.filespa)
+#            self.config.set("files", "rx", self.filespaRx)
 #        except:
 #            pass
 #        try:
@@ -1911,7 +1911,7 @@ class Simul(object):
         chaine = "launching -str  " + self.filestr + \
             " -slab " + self.fileslab + \
             " -palch " + self.filepalch + \
-            " -spa " + self.tx.filespa + \
+            " -spa " + self.filespaTx + \
             " -conf " + basename + '/' + self.fileconf
         if verbose:
             print chaine
@@ -1985,7 +1985,7 @@ class Simul(object):
         if (self.progress >= 1):
             chaine = "tracing -lch " + self.dlch[itx] + \
                 " -patra " + self.filepatra + \
-                "  -spa " + self.rx.filespa + \
+                "  -spa " + self.filespaRx + \
                 " -conf " + basename + '/' + self.fileconf
             if verbose:
                 print chaine
