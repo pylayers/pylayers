@@ -1981,7 +1981,18 @@ class Simul(object):
         itx  : tx index
         irx  : rx index
 
+        Notes
+        -----
+        This function should not be used for more than one rx.
+        .. todo extend properly this function in order to handle properly
+            multi-nodes in irx. The problem is to keep the association
+            between the index number of the rx in the ini file and the 
+            rx in dtra. 
+
         """
+        #
+        # Verify 
+        #
         if (self.progress >= 1):
             chaine = "tracing -lch " + self.dlch[itx] + \
                 " -patra " + self.filepatra + \
@@ -1998,16 +2009,21 @@ class Simul(object):
             self.recup = recup
             aux = recup.splitlines()
             len_aux = recup.count("\n")
-            filetra = []
+            #
+            # set list of .tra files empty 
+            #filetra = []
+            #for i in range(len_aux):
+            #    if aux[i].find("filetraout") != -1:
+            #        aux[i] = aux[i].replace('filetraout : ', '')
+            #        filetra.append(pyu.getshort(aux[i]))
+            #
+            # Warning : this is a bad fix  
+            #
+            #for filename in filetra:
             for i in range(len_aux):
                 if aux[i].find("filetraout") != -1:
                     aux[i] = aux[i].replace('filetraout : ', '')
-                    filetra.append(pyu.getshort(aux[i]))
-            #
-            # Warning : this is a bad fix - Need to get the true irx
-            #
-            for k,filename in enumerate(filetra) :
-                self.dtra[itx][k+1] = filename 
+                    self.dtra[itx][irx] = pyu.getshort(aux[i])
 
             if verbose:
                 print filetra

@@ -286,11 +286,11 @@ class Bsignal(object):
                     ax.plot(x, y, color=col)
             else:
                 if logx & logy:
-                    loglog(x, abs(y), color=col)
+                    plt.loglog(x, abs(y), color=col)
                 elif logx:
-                    semilogx(x, y, color=col)
+                    plt.semilogx(x, y, color=col)
                 elif logy:
-                    semilogy(x, abs(y), color=col)
+                    plt.semilogy(x, abs(y), color=col)
                 else:
                     plt.plot(x, y, color=col)
         #
@@ -3069,7 +3069,7 @@ class FUsignal(FBsignal, Usignal):
         >>> E  = e.fft()
         >>> EU = E.unrex()
         """
-        # forçage de symétrie Hermitienne
+        # forcage de symetrie Hermitienne
         if (Nz == -1):
             UH = self.symH(1)
         else:
@@ -3820,7 +3820,7 @@ def test():
     S12 = S1 * S1
     s12 = S12.ifft(1)
 
-# Nouveau signal moins échantillonné
+# Nouveau signal moins echantillonne
 
     dx2 = 0.01
     x2 = np.arange(-3, 3, dx2)

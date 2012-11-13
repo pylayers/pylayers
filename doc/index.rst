@@ -22,15 +22,38 @@ Example
 Features
 ========
 
+
+gis
+---
+
 * Layout edition
 * Extensive graph description of layout  
+
+Antenna & Propagation 
+----------------------
+
 * Full space vector antenna patterns using a sparse spherical harmonics representation  
 * Multi layers transmission coefficients 
 * Motley Keenan model 
 * Ray signature determination and analysis 
 * Embedded C coded UWB ray tracing engine
-* Handling of Impulse Radio Ultra Wideband Waveforms 
+
+
+Signal
+------
+
+* Impulse Radio Ultra Wideband Waveforms 
+* custom class for UWB signal processing 
+* Time of Arrival ranging estimation   
+
+Mobility 
+--------
+
 * Mobile user mobility based on `SimPy <http://simpy.sourceforge.net>`_
+
+Localization
+------------
+
 * Set Membership positoning algorithm toolbox
 * Heterogeneous positioning toolbox 
 * Various techniques exploiting heterogeneous Radio observables
@@ -78,9 +101,9 @@ Pylayers is written in Python and tributes highly the following Python packages
 * matplotlib ( for the graphical outputs ) 
 * networkx ( for graph description and algorithms ) 
 * shapely ( for planar geometry )   
-* scikit-learns( for cutting edge machine learning tools ) 
+* scikit-learns ( for cutting edge machine learning tools ) 
 * cvxopt ( for convex optimization ) 
-* spherepack (as spherical harmonics library)  
+* spherepack (for spherical harmonics library)  
 * ipython ( to rule them all ... ) 
 
 
@@ -104,7 +127,7 @@ Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohame
 Laaraiedh and Meriem Mhedbhi, with the technical support of all the members from the
 Research Team of the Propagation and Localization team of IETR lab.    
 
-Early contributors : Friedman Tchoffo Talom, Roxana Burghelea, Yu Lei, Taguhi
+Early contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi
 Chaluyman, Stéphane Avrillon and Eric Plouhinec.
 
 
@@ -112,7 +135,7 @@ Chaluyman, Stéphane Avrillon and Eric Plouhinec.
 Download and Installation
 =========================
 
-The current version is tagged 0.1, released on 9 November 2012. Download the
+The current version is tagged 0.1. Download the
 last release in your preferred format on github.
 
 .. code-block:: bash
