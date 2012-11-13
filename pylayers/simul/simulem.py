@@ -1003,11 +1003,11 @@ class Simul(object):
 #        self.config.set("files", "mat", self.filemat)
 
 #        try:
-#            self.config.set("files", "tx", self.filespaTx)
+#            self.config.set("files", "tx", self.tx.filespa)
 #        except:
 #            pass
 #        try:
-#            self.config.set("files", "rx", self.filespaRx)
+#            self.config.set("files", "rx", self.rx.filespa)
 #        except:
 #            pass
 #        try:
@@ -1911,7 +1911,7 @@ class Simul(object):
         chaine = "launching -str  " + self.filestr + \
             " -slab " + self.fileslab + \
             " -palch " + self.filepalch + \
-            " -spa " + self.filespaTx + \
+            " -spa " + self.tx.filespa + \
             " -conf " + basename + '/' + self.fileconf
         if verbose:
             print chaine
@@ -1985,7 +1985,7 @@ class Simul(object):
         if (self.progress >= 1):
             chaine = "tracing -lch " + self.dlch[itx] + \
                 " -patra " + self.filepatra + \
-                "  -spa " + self.filespaRx + \
+                "  -spa " + self.rx.filespa + \
                 " -conf " + basename + '/' + self.fileconf
             if verbose:
                 print chaine
@@ -2190,9 +2190,9 @@ class Simul(object):
 
         if itx not in self.dlch.keys():
             # launching itx does not exist
-            self.filespaTx = 'tx' + str(itx) + '.spa'
+            self.tx.filespa = 'tx' + str(itx) + '.spa'
             point = self.tx.points[itx]
-            spafile(self.filespaTx, point, pstruc['DIRLCH'])
+            spafile(self.tx.filespa, point, pstruc['DIRLCH'])
             if verbose:
                 print "---------------"
                 print "Start Launching Tx : " + str(itx)
@@ -2206,9 +2206,9 @@ class Simul(object):
         for irx in srx:
             tracingabort = False
             if irx not in self.dtra[itx].keys():
-                self.filespaRx = 'rx' + str(irx) + '.spa'
+                self.rx.filespa = 'rx' + str(irx) + '.spa'
                 point = self.rx.points[irx]
-                spafile(self.filespaRx, point, pstruc['DIRTRA'])
+                spafile(self.rx.filespa, point, pstruc['DIRTRA'])
                 if verbose:
                     print "--------------------"
                     print "Start tracing  Rx : " + str(irx)
