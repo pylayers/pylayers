@@ -714,7 +714,8 @@ class Usignal(Bsignal):
                 x = u1.x
                 indx = plt.find((x >= u2_start) & (x <= u2_stop))
                 U2 = Usignal(x, np.zeros((N2,len(x))))
-                U2.y[:,indx] = u2.y
+                #pdb.set_trace()
+                U2.y[:,indx] = u2.y[:, 0:np.shape(indx)[0]]
 
             if (b2i & b2f):
             # u1 is included in u2
