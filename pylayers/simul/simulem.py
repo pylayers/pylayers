@@ -10,6 +10,8 @@ import os
 import re
 import getopt
 import sys
+import shutil
+import Tkinter, tkFileDialog
 import time
 import ConfigParser
 import pdb
@@ -1092,6 +1094,41 @@ class Simul(object):
 
 #        self.config.write(fd)
 #        fd.close()
+
+    def save_project(self):
+        """ save Simulation files in a zipfile
+
+        Simulation files are .ini files which are saved in a dedicated
+        directory basename/ini in the Project tree
+
+        """
+        root = Tkinter.Tk()
+        zipfileName = tkFileDialog.asksaveasfilename(parent=root,
+                            filetypes = [("zipped file","zip")] ,
+                            title="Save Project",
+                            mustexist=0)
+        pyu.zipd(basename,zipfileName)
+        root.withdraw()
+        print "Current project saved in", zipfileName
+
+    def load_project(self):
+        """ load Simulation files from a zipfile
+
+        Simulation files are .ini files which are saved in a dedicated
+        directory basename/ini in the Project tree
+
+        """
+        root = Tkinter.Tk()
+        zipfileName= tkFileDialog.askopenfile(parent=root,
+                                            mode='rb',
+                                            title='Choose a project')
+        dirname = tkFileDialog.askdirectory(parent=root,
+                                    initialdir=basename,
+                                    title='Please select a directory',
+                                    mustexist=0)
+        pyu.unzipd(dirname,zipfileName)
+        root.withdraw()
+        print "Current project loaded in", dirname 
 
     def choose(self):
         """
@@ -2196,7 +2233,7 @@ class Simul(object):
 
 
         """
-        self.updcfg()
+        #self.updcfg()
         #t0 = time.clock()
         if type(srx) == int:
             srx = [srx]
