@@ -1103,7 +1103,10 @@ class Simul(object):
 
         """
         root = Tkinter.Tk()
-        zipfileName = tkFileDialog.asksaveasfilename(parent=root, filetypes = [("zipped file","zip")] ,title="Save Project")
+        zipfileName = tkFileDialog.asksaveasfilename(parent=root,
+                            filetypes = [("zipped file","zip")] ,
+                            title="Save Project",
+                            mustexist=0)
         pyu.zipd(basename,zipfileName)
         root.withdraw()
         print "Current project saved in", zipfileName
@@ -1116,10 +1119,16 @@ class Simul(object):
 
         """
         root = Tkinter.Tk()
-        zipfileName= tkFileDialog.askopenfile(parent=root,mode='rb',title='Choose a file')
-        pyu.unzipd(basename,zipfileName)
+        zipfileName= tkFileDialog.askopenfile(parent=root,
+                                            mode='rb',
+                                            title='Choose a project')
+        dirname = tkFileDialog.askdirectory(parent=root,
+                                    initialdir=basename,
+                                    title='Please select a directory',
+                                    mustexist=0)
+        pyu.unzipd(dirname,zipfileName)
         root.withdraw()
-        print "Current project loaded in", basename 
+        print "Current project loaded in", dirname 
 
     def choose(self):
         """
