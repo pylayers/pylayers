@@ -2233,7 +2233,7 @@ class Simul(object):
 
 
         """
-        self.updcfg()
+        #self.updcfg()
         #t0 = time.clock()
         if type(srx) == int:
             srx = [srx]
