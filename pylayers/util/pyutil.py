@@ -1472,10 +1472,14 @@ def zipd(path, zipfilename):
     """
     zip_file = zipfile.ZipFile(zipfilename, 'a')
     for (dirpath, dirnames, filenames) in os.walk(path):
+        for dirc in dirnames:
+            zip_file.write(os.path.join(dirpath, dirc),
+            os.path.join(os.path.basename(path),
+            os.path.join(dirpath, dirc)[len(path):]))
         for fil in filenames:
             zip_file.write(os.path.join(dirpath, fil),
             os.path.join(os.path.basename(path),
-            os.path.join(dirpath, fil)[len(path)+len(os.sep):]))
+            os.path.join(dirpath, fil)[len(path):]))
     zip_file.close()
 
 def unzipd(path, zipfilename):
