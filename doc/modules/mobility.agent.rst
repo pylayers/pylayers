@@ -1,6 +1,6 @@
 .. _agent:
 
-Agent
+agent
 =====
 
 
