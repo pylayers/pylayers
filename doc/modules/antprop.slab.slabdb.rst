@@ -1,5 +1,5 @@
-Module Slab
-===========
+slab
+====
 
 .. automodule:: pylayers.antprop.slab
     :members:

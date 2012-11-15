@@ -1,8 +1,8 @@
 .. _simulem:
 
 
-Module simulem
-==============
+simulem
+=======
 
 .. automodule:: simul.simulem
    :members:     

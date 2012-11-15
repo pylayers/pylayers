@@ -1,8 +1,8 @@
 .. _antprop:
 
 
-Module antprop
-==============
+antprop
+=======
 
 .. module:: pylayers.antprop
 
