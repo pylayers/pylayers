@@ -1,6 +1,6 @@
 .. _simul:
 
-Simul
+simul
 =====
 
 .. toctree::

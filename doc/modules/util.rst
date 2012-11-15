@@ -1,7 +1,7 @@
 .. _util:
 
 
-Util
+util
 ====
 
 .. toctree:: 

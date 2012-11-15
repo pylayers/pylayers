@@ -1,8 +1,11 @@
 .. _signal:
 
-###################
-Module signal 
-###################
+
+signal
+======
+
+.. module:: pylayers.signal
+
 
 .. toctree::
    :maxdepth: 2

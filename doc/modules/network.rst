@@ -1,7 +1,7 @@
 .. _network::
 
 
-Network
+network
 =======
 
 .. toctree::
@@ -10,4 +10,3 @@ Network
     network.emsolver.rst
     network.model.rst
     network.network.rst
-    network.show.rst 
