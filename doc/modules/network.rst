@@ -10,4 +10,3 @@ network
     network.emsolver.rst
     network.model.rst
     network.network.rst
-    network.show.rst 

@@ -12,7 +12,7 @@ User references
 This reference manual details functions, modules, and objects
 included in PyLayers, describing what they are and what they do.
 
-For learning how to use PyLayers, see also :ref:`usermanual`.
+For learning how to use PyLayers, see also :doc:`usermanual`.
 
 
 .. toctree::
@@ -31,8 +31,6 @@ For learning how to use PyLayers, see also :ref:`usermanual`.
    location.rst
    
    mobility.rst
-
-   measures.rst
 
    util.rst 
 

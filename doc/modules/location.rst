@@ -12,21 +12,8 @@ location
 
     location.locarule.rst
 
-
-algebraic methods
------------------
-
-.. toctree::
-    :maxdepth: 2
-
-    location.algebraic.algebraic.rst 
-
-    location.algebraic.pygraphtool.rst 
-
-    location.algebraic.pymathtool.rst
-
-
-geometric methods
------------------
+    location.algebraic.algebraic.rst
+    
+    location.geometric.rst
 
 
