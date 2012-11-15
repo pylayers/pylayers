@@ -1,7 +1,7 @@
 .. _network::
 
 
-Network
+network
 =======
 
 .. toctree::

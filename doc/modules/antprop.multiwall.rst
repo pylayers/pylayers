@@ -1,8 +1,8 @@
 .. _multiwall:
 
 
-Module MultiWall 
-================
+MultiWall 
+=========
 
 .. automodule:: pylayers.antprop.multiwall
     :members:

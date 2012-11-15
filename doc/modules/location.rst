@@ -1,8 +1,8 @@
 .. _location:
 
 
-Module location
-===============
+location
+========
 
 .. toctree::
     :maxdepth: 2

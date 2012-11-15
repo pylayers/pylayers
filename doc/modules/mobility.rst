@@ -1,8 +1,8 @@
 .. _mobility::
 
 
-Module Mobility
-===============
+mobility
+========
 
 
 .. toctree::

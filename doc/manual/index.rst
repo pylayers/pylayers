@@ -1,3 +1,4 @@
+.. _usermanual
 User Manual 
 ===========
 

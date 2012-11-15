@@ -1,5 +1,5 @@
-Module Signature
-================
+Signature
+=========
 
 .. automodule:: pylayers.antprop.signature
     :members:
