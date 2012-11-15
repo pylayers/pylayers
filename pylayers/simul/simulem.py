@@ -803,12 +803,12 @@ class Simul(object):
         #
         # waveform section
         #
-        self.config.set("waveform", "tw", '30')
-        self.config.set("waveform", "band", '0.499')
-        self.config.set("waveform", "fc", '4.493')
-        self.config.set("waveform", "thresh", '3')
-        self.config.set("waveform", "type", 'generic')
-        self.config.set("waveform", "fe", '50')
+        self.config.set("waveform", "tw", str(self.wav.parameters['tw']))
+        self.config.set("waveform", "band", str(self.wav.parameters['band']))
+        self.config.set("waveform", "fc", str(self.wav.parameters['fc']))
+        self.config.set("waveform", "thresh", str(self.wav.parameters['thresh']))
+        self.config.set("waveform", "type", str(self.wav.parameters['type']))
+        self.config.set("waveform", "fe", str(self.wav.parameters['fe']))
         #
         # output section
         #
@@ -1106,7 +1106,7 @@ class Simul(object):
         zipfileName = tkFileDialog.asksaveasfilename(parent=root,
                             filetypes = [("zipped file","zip")] ,
                             title="Save Project",
-                            mustexist=0)
+                            )
         pyu.zipd(basename,zipfileName)
         root.withdraw()
         print "Current project saved in", zipfileName
@@ -2233,7 +2233,7 @@ class Simul(object):
 
 
         """
-        #self.updcfg()
+        self.updcfg()
         #t0 = time.clock()
         if type(srx) == int:
             srx = [srx]
