@@ -50,7 +50,7 @@ C.tx = np.array((39,1))
 start = time.time()
 C.cover()
 finish = time.time()
-C.showPr()
+C.showPower()
 print 'Tx position: ',C.tx 
 print 'Coverage in %1.2f seconds' % (finish-start)
 
