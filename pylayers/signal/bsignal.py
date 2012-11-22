@@ -193,7 +193,9 @@ class Bsignal(object):
              dist = False, 
              display = True,
              logx = False, 
-             logy = False):
+             logy = False,
+             sharex = None
+            ):
         """ plot signal
 
         Parameters
@@ -251,22 +253,27 @@ class Bsignal(object):
 
                 if ax != []:
                     if logx & logy:
-                        ax.loglog(x, abs(y), color=col)
+                        ax.loglog(x, abs(y),
+                                  color=col,sharex=sharex)
                     elif logx:
-                        ax.semilogx(x, y, color=col)
+                        ax.semilogx(x, y,
+                                    color=col,sharex=sharex)
                     elif logy:
-                        ax.semilogy(x, abs(y), color=col)
+                        ax.semilogy(x, abs(y),
+                                    color=col,sharex=sharex)
                     else:
-                        ax.plot(x, y, color=col)
+                        ax.plot(x, y, color=col,sharex=sharex)
                 else:
                     if logx & logy:
-                        loglog(x, abs(y), color=col)
+                        loglog(x, abs(y),
+                               color=col,sharex=sharex)
                     elif logx:
-                        semilogx(x, y, color=col)
+                        semilogx(x, y, color=col,sharex=sharex)
                     elif logy:
-                        semilogy(x, abs(y), color=col)
+                        semilogy(x, abs(y),
+                                 color=col,sharex=sharex)
                     else:
-                        plt.plot(x, y, color=col)
+                        plt.plot(x, y, color=col,sharex=sharex)
         #
         # Only one y
         #
@@ -277,22 +284,25 @@ class Bsignal(object):
                 y = self.y[u] * conversion
             if ax != []:
                 if logx & logy:
-                    ax.loglog(x, abs(y), color=col)
+                    ax.loglog(x, abs(y), color=col,sharex=sharex)
                 elif logx:
-                    ax.semilogx(x, y, color=col)
+                    ax.semilogx(x, y, color=col,sharex=sharex)
                 elif logy:
-                    ax.semilogy(x, abs(y), color=col)
+                    ax.semilogy(x, abs(y),
+                                color=col,sharex=sharex)
                 else:
-                    ax.plot(x, y, color=col)
+                    ax.plot(x, y, color=col,sharex=sharex)
             else:
                 if logx & logy:
-                    plt.loglog(x, abs(y), color=col)
+                    plt.loglog(x, abs(y),
+                               color=col,sharex=sharex)
                 elif logx:
-                    plt.semilogx(x, y, color=col)
+                    plt.semilogx(x, y, color=col,sharex=sharex)
                 elif logy:
-                    plt.semilogy(x, abs(y), color=col)
+                    plt.semilogy(x, abs(y),
+                                 color=col,sharex=sharex)
                 else:
-                    plt.plot(x, y, color=col)
+                    plt.plot(x, y, color=col,sharex=sharex)
         #
         # Draw vertical and horizontal lines
         #
@@ -855,7 +865,9 @@ class TBsignal(Bsignal):
              dB = False,
              dist=False,
              logx=False,
-             logy=False):
+             logy=False,
+             sharex=None
+             ):
         """ plot TBsignal
 
         Parameters
@@ -888,7 +900,8 @@ class TBsignal(Bsignal):
         else:
             xmax = tmax
         Bsignal.plot(self, iy=iy, col=col, vline=vline, hline=hline, unit1=unit1, unit2=unit2,
-                     xmin=xmin, xmax=xmax, ax=ax, dB=dB, dist=dist, logx=logx, logy=logy)
+                     xmin=xmin, xmax=xmax, ax=ax, dB=dB, dist=dist, logx=logx,
+                     logy=logy,sharex=sharex)
         if showlabel[0]:
             if dist:
                 plt.xlabel('distance (m)')
@@ -2390,7 +2403,8 @@ class FBsignal(Bsignal):
             plt.xlabel('Frequency (GHz)')
             plt.ylabel('Imaginary part')
 
-    def plot(self, phase=True, dB=True, iy=np.array([0])):
+    def plot(self, phase=True, dB=True,
+             iy=np.array([0]),sharex=None):
         """ plot
 
         Parameters
@@ -2421,36 +2435,43 @@ class FBsignal(Bsignal):
                 if phase:
                     ax1 = plt.subplot(211)
                     if dB:
-                        plt.plot(self.x, 20 * np.log10(abs(self.y[k])))
+                        plt.plot(self.x, 20 *
+                                 np.log10(abs(self.y[k])),sharex=sharex)
                     else:
-                        plt.plot(self.x, abs(self.y[k]))
+                        plt.plot(self.x,
+                                 abs(self.y[k]),sharex=sharex)
                     plt.ylabel('Modulus')
                     ax2 = plt.subplot(212,sharex=ax1)
-                    plt.plot(self.x, np.unwrap(np.angle(self.y[k])))
+                    plt.plot(self.x,
+                             np.unwrap(np.angle(self.y[k])),sharex=sharex)
                     plt.xlabel('Frequency (GHz)')
                     plt.ylabel('Phase (rad)')
                 else:
                     if dB:
-                        plt.plot(self.x, 20 * np.log10(abs(self.y[k])))
+                        plt.plot(self.x, 20 *
+                                 np.log10(abs(self.y[k])),sharex=sharex)
                     else:
-                        plt.plot(self.x, abs(self.y[k]))
+                        plt.plot(self.x,
+                                 abs(self.y[k]),sharex=sharex)
                     plt.xlabel('Frequency (GHz)')
                     plt.ylabel('Modulus')
         else:
             if phase:
                 ax1 = plt.subplot(211)
                 if dB:
-                    plt.plot(self.x, 20 * np.log10(abs(self.y)))
+                    plt.plot(self.x, 20 *
+                             np.log10(abs(self.y)),sharex=sharex)
                 else:
-                    plt.plot(self.x, abs(self.y))
+                    plt.plot(self.x, abs(self.y),sharex=sharex)
                 plt.ylabel('Modulus')
                 ax2 = plt.subplot(212,sharex=ax1)
                 #plot(self.x,np.unwrap(angle(self.y)))
-                plt.plot(self.x, np.unwrap(np.angle(self.y)))
+                plt.plot(self.x,
+                         np.unwrap(np.angle(self.y)),sharex=sharex)
                 plt.xlabel('Frequency (GHz)')
                 plt.ylabel('Phase (rad)')
             else:
-                plt.plot(self.x, abs(self.y))
+                plt.plot(self.x, abs(self.y),sharex=sharex)
                 plt.xlabel('Frequency (GHz)')
                 plt.ylabel('Modulus')
 
