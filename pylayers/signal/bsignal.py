@@ -2398,7 +2398,7 @@ class FBsignal(Bsignal):
             plt.xlabel('Frequency (GHz)')
             plt.ylabel('Real part')
             subplot(212)
-            #plot(self.x,np.unwrap(angle(self.y)))
+            #plot(self.x,np.unwrap(np.angle(self.y)))
             plt.stem(self.x, np.imag(self.y))
             plt.xlabel('Frequency (GHz)')
             plt.ylabel('Imaginary part')
@@ -2628,6 +2628,15 @@ class FUsignal(FBsignal, Usignal):
         #rint shape(u.y)
         # =FUsignal(self.x,self.y*u.y)
         return(U)
+
+    def __div__(self, u):
+        L = self.align(u)
+        u1 = L[0]
+        u2 = L[1]
+        U = FUsignal(u1.x, u1.y / u2.y)
+        return(U)
+
+
 
     def window(self, win='hamming'):
         """ windowing of FU signal
@@ -3125,11 +3134,11 @@ class FUsignal(FBsignal, Usignal):
         N = np.shape(self.y)[0]
         tt = np.arange(N)
         plt.subplot(121)
-        plt.pcolor(self.x, tt, abs(self.y))
+        plt.pcolor(self.x, tt, np.abs(self.y))
         plt.title('modulus')
         plt.colorbar()
         plt.subplot(122)
-        plt.pcolor(self.x, tt, angle(self.y))
+        plt.pcolor(self.x, tt, np.angle(self.y))
         plt.title('Phase (rd)')
         plt. colorbar()
 #       def fig(self,N):
@@ -3213,7 +3222,7 @@ class FUDsignal(FUsignal):
 
         """
         f = self.x
-        phase = unwrap(angle(self.y))
+        phase = np.unwrap(np.angle(self.y))
         dphi = phase[:, -1] - phase[:, 0]
         df = self.x[-1] - self.x[0]
         slope = dphi / df
@@ -3405,7 +3414,7 @@ class FUDAsignal(FUsignal):
 
         """
         f = self.x
-        phase = unwrap(angle(self.y))
+        phase = np.unwrap(np.angle(self.y))
         dphi = phase[:, -1] - phase[:, 0]
         df = self.x[-1] - self.x[0]
         slope = dphi / df
