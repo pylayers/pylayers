@@ -60,7 +60,7 @@ class EMSolver(object):
         self.sigmaTOA      = float(self.toa_opt['sigmatoa']) # meters !!!!!!
 
         self.model={}
-        self.method     = self.rss_opt['method'] # mean, median , mode
+#        self.method     = self.rss_opt['method'] # mean, median , mode
 
         self.L=L
 
@@ -77,6 +77,7 @@ class EMSolver(object):
         nconfig.set(RAT+'_PLM','f', str(model.f))
         nconfig.set(RAT+'_PLM','rssnp', str(model.rssnp))
         nconfig.set(RAT+'_PLM','d0', str(model.d0))
+        nconfig.set(RAT+'_PLM','method', str(model.method))
         nconfig.write(fd)
         fd.close()
 
@@ -84,7 +85,7 @@ class EMSolver(object):
 
     def load_model(self,RAT):
         ratopt=dict(self.config.items(RAT+'_PLM'))
-        self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=self.method)
+        self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=eval(ratopt['method']))
 
 
 
@@ -173,7 +174,7 @@ class EMSolver(object):
                         TOA.extend(MW[2])
                     P=np.outer(Pr,[1,1])
                     P[:,1]=model.sigrss
-                    T=np.outer(TOA,[1,1])
+                    T=np.outer(TOA+d/0.3,[1,1])
                     T[:,1]=self.sigmaTOA*0.3
 #                    v = P[:,0] < noisefl
                     return (P,T,d)

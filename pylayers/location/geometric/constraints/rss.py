@@ -79,7 +79,7 @@ class RSS(Constraint):
 
     """
 
-    def __init__(self, id='0', value=0, std=0, vcw=3, model={}, p=np.array([]), origin={}):
+    def __init__(self, id='0', value=0, std=0, vcw=3, p=np.array([]), model={}, origin={}):
         Constraint.__init__(self, type='RSS', id=id, p=p, origin=origin)
 #               Constraint.C_id = Constraint.C_id+1   # constraint counter is incremented
         self.value = value  # attennation (dB)
@@ -88,16 +88,18 @@ class RSS(Constraint):
         if len(model) == 0:
             self.config = ConfigParser.ConfigParser()
             self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
-            self.param = dict(self.config.items('PL_MODEL'))
-            self.model = Model(f=eval(self.param['f']), RSSnp=eval(self.param['rssnp']), d0=eval(self.param['d0']), method=self.param['method'])
+            param = dict(self.config.items('rat1_PLM'))
+            self.model = Model(f=eval(param['f']), rssnp=eval(param['rssnp']), d0=eval(param['d0']), method=param['method'])
 #                       self.model={}
 #                       self.model['PL0'] =-34.7
 #                       self.model['d0']  = 1.0
 #                       self.model['RSSnp'] = 2.64
 #                       self.model['RSSStd'] = 4.34
 #                       self.model['Rest'] = 'mode'
+            self.param = self.model.param
         else:
             self.model = model
+            self.param = self.model.param
         self.update()
 
     def update(self):

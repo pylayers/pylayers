@@ -80,7 +80,7 @@ class Simul(Simulation):
         self.config.read(pyu.getlong('simulnet.ini','ini'))
         self.sim_opt = dict(self.config.items('Simulation'))
         self.lay_opt = dict(self.config.items('Layout'))
-        self.meca_opt = dict(self.config.items('Mecanic'))
+        self.meca_opt = dict(self.config.items('Mechanics'))
         self.net_opt = dict(self.config.items('Network'))
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
@@ -170,6 +170,7 @@ class Simul(Simulation):
                             meca_updt=float(self.meca_opt['mecanic_update_time']),
                             loc=str2bool(self.loc_opt['localization']),
                             loc_updt=float(self.loc_opt['localization_update_time']),
+                            loc_method=eval(self.loc_opt['method']),
                             Layout=self.L,
                             net=self.net,
                             epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),

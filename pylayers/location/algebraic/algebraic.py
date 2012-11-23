@@ -42,7 +42,7 @@ class algloc(object):
         
     """
 
-    def __init__(self, nodes, ldp):
+    def __init__(self, nodes={}, ldp={}):
         self.nodes = nodes
         self.ldp = ldp
         self.c = 0.3

@@ -44,7 +44,12 @@ class Model(object):
         self.sigrss=sigrss
         self.getPL0()
         self.method=method
-        
+        self.param = dict(f=self.f,
+                      d0=self.d0,
+                      rssnp=self.rssnp,
+                      sigrss=self.sigrss,
+                      PL0=self.PL0,
+                      method=self.method)
 
 
     def info(self):

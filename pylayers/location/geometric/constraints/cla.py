@@ -167,6 +167,32 @@ class CLA(object):
         """
         [c.update() for c in self.c if c.runable]
 
+
+    def compute(self,pe=True):
+        """
+        Compute the cla to estimate the postion
+    
+        Parameters
+        ----------
+            pe : boolean 
+               set to True to compute the position estimation store into self.pe
+
+        Returns
+        -------
+            boolean
+                True if the position estimation has been performed.
+
+        """
+        self.merge2()
+        self.refine(self.Nc)
+        if (sum(self.runable) >= 3) and (pe == True):
+            self.estpos2()
+            return True
+        else:
+            return False
+        self.Nc=len(self.c)
+
+
     def rescale(self, f_vcw, cid=None):
         """idem setvcw but update current vcw with a multiplier factor
 
@@ -178,11 +204,13 @@ class CLA(object):
 
                 Thing to PROPERLY merge with self.setvcw
 
-        :Parameters:
+        Parameters
+        ----------
                 f_vcw : a scale factor of the current vcw of the constraint.
                 cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None
 
-        :Returns:
+        Returns
+        -------
                 Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c.
         """
         #print "rescale",vcw
@@ -505,12 +533,12 @@ class CLA(object):
 
                 pb = np.nonzero(self.erro != 0)[0]
                 if len(pb) != 0:
-                    print "specific size up", pb
+#                    print "specific size up", pb
                     self.rescale(1.2, pb)
                     self.annulus_bound(pb)
                 else:
 
-                    print 'all contraints size up '
+#                    print 'all contraints size up '
                     self.rescale(1.2)
                     self.annulus_bound()
 
