@@ -175,6 +175,7 @@ class EMSolver(object):
                     P[:,1]=model.sigrss
                     T=np.outer(TOA+d/0.3,[1,1])
                     T[:,1]=self.sigmaTOA*0.3
+                    pdb.set_trace()
 #                    v = P[:,0] < noisefl
                     return (P,T,d)
 

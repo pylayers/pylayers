@@ -174,6 +174,7 @@ class Simul(Simulation):
                             Layout=self.L,
                             net=self.net,
                             epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
+                            sens=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
                             world=self.the_world,
                             RAT=eval(ag_opt['rat']),
                             save=eval(self.save_opt['save']),

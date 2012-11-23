@@ -83,7 +83,7 @@ class Node(nx.MultiGraph):
         RandomMac(): Generate a RAndom Mac adress    
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],epwr={},type='ag'):
+    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],epwr={},sens={},type='ag'):
         nx.MultiGraph.__init__(self)
 
         # Personnal Network init
@@ -92,12 +92,13 @@ class Node(nx.MultiGraph):
         self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
         # Network init
 
-        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,type=type))
+        self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,sens=sens,type=type))
         self.p    = self.node[self.ID]['p']
         self.pe    = self.PN.node[self.ID]['pe']
         self.t    = self.node[self.ID]['t']
         self.RAT = self.node[self.ID]['RAT']
         self.epwr = self.node[self.ID]['epwr']
+        self.sens = self.node[self.ID]['sens']
 
 
 
@@ -503,21 +504,7 @@ class Network(nx.MultiGraph):
 
         """
         
-        # update network LDP
         self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
-        # update each personnal LDP
-#        [self.PN.edge[self.ID][n][RAT].update({'TOA':self.net.edge[self.ID][n][RAT]['Pr'],'tPr':self.sim.now()}) for n in self.PN.SubNet[RAT].edge[self.ID].keys()]
-#        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edgs(nbunch=e,data=True,keys=True)) for e in self.SubNet[RAT].nodes_iter()]
-#        print "le probleme est le remplissage des directed graph dans netwrok x.\
-#                ici ajouter [1,2] donne la mauvaise direction (2,1) "        
-
-#        [self.SubNet[RAT].node[e]['PN'].add_edges_from(self.SubNet[RAT].edges(e,data=True,keys=True)) for e in self.SubNet[RAT].nodes()]
-#        for n in self.SubNet[RAT].nodes():
-#            Z=self.SubNet[RAT].edges(n,data=True,keys=True)
-#            self.SubNet[RAT].node[n]['PN'].add_edges_from(Z)
-
-
-
 
 
     def compute_LDPs(self,ln,RAT):
@@ -544,21 +531,7 @@ class Network(nx.MultiGraph):
         lp,lt, d= self.EMS.solve(p,e,'all',RAT,epwr)
         lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i]} for i in range(len(d))]
         self.update_LDPs(ln,RAT,lD)
-#        for it,ldp in enumerate (LDP):
-##            recuperer puissance emission et la passer a EMS pour correct mesure de Pr
-#            p=nx.get_node_attributes(self.SubNet[RAT],'p')
-#            epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
-#            e=self.SubNet[RAT].edges()
-#            pdb.set_trace()
-#            lv, d= self.EMS.solve(p,e,'all',RAT,epwr)
 
-#            if  it ==0:
-#                lD=[{ldp:lv[i],'d':d[i]} for i in range(len(lv))]
-#            else :
-#                [lD[i].update({ldp:lv[i],'d':d[i]} for i in range(len(lv)))]
-
-
-#        self.update_LDPs(ln,RAT,lD)
 
 
     def update_pos(self,n,p,p_pe='p'):
