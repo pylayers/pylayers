@@ -53,14 +53,13 @@ class EMSolver(object):
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
         self.ems_opt = dict(self.config.items('EMS_config'))
         self.toa_opt = dict(self.config.items('TOA'))
-        self.rss_opt = dict(self.config.items('RSS'))
+
 
 
         self.EMS_method = self.ems_opt['method']
         self.sigmaTOA      = float(self.toa_opt['sigmatoa']) # meters !!!!!!
 
         self.model={}
-#        self.method     = self.rss_opt['method'] # mean, median , mode
 
         self.L=L
 
@@ -85,7 +84,7 @@ class EMSolver(object):
 
     def load_model(self,RAT):
         ratopt=dict(self.config.items(RAT+'_PLM'))
-        self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=eval(ratopt['method']))
+        self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=ratopt['method'])
 
 
 

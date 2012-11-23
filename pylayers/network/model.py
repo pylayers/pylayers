@@ -37,7 +37,7 @@ class Model(object):
     method : used model
 
     """
-    def __init__(self,f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mean'):
+    def __init__(self,f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mode'):
         self.f  = f
         self.d0  = d0
         self.rssnp  = rssnp
