@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 
 
 
-M=UWBMesure(13)
-cir=TUsignal()
-cirf=TUsignal()
+M = UWBMesure(13)
+cir = TUsignal()
+cirf = TUsignal()
 cir.readcir("where2cir-tx002-rx012.mat","Tx002")
 cirf.readcir("where2-furcir-tx002-rx012.mat","Tx002")
 
