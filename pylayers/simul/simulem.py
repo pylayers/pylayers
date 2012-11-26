@@ -816,6 +816,7 @@ class Simul(object):
             self.config.set("output",str(k),self.dout[k])
 
         self.wav = wvf.Waveform()
+        self.wav.read(self.config)
         self.save()
 
     def clean(self, level=1):
