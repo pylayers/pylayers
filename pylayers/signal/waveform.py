@@ -129,39 +129,29 @@ class Waveform:
         thresh = self.parameters['thresh']
         fe     = self.parameters['fe']
         te     = 1.0/fe
-    
-        M = mesuwb.UWBMesure(1,1)
-
-        Tx=M.tdd.tx.y
-        timeTx=M.tdd.tx.x
-        tf=200.005
-        tp=0.005
-        u=np.where(Tx==max(Tx))[0][0]
-    
-        Tx3=Tx[u:u+int(tf/tp)]
-        t3=np.arange(0,tf,tp)
-    
-        Tx2=Tx[0:u]
-        t2=-timeTx[0:u][::-1]-tp
-    
-        Tx1=np.zeros(int(tf/tp)-len(Tx2))
-        t1=-timeTx[u:u+int(tf/tp)-len(t2)][::-1]-tp
-    
-        rTx=np.hstack((Tx1,np.hstack((Tx2,Tx3))))
-        rt=np.hstack((t1,np.hstack((t2,t3))))
-    
         self.parameters['te'] = te
         Np     = fe*Tw
         self.parameters['Np']=Np
-        x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
-        #x     = arange(-Tw,Tw,te)
-
-        w   = TUsignal()
+    
+        M = mesuwb.UWBMesure(1,1)
+        w   = bs.TUsignal()
+        timeTx = M.RAW_DATA.timetx[0]*1e9
+        timeI = timeTx[1]-timeTx[0]
+        Tx = M.RAW_DATA.tx[0]
+        u=np.where(Tx==max(Tx))[0][0]
+    
+        Tx3=Tx[u:]
+        Tx2=Tx[0:u]
+        Tx1=np.zeros(len(Tx3)-len(Tx2))
+        
+        t=np.arange(0,timeTx[-1]-timeTx[u]+0.5*timeI,timeI)
+        tm=np.arange(-(timeTx[-1]-timeTx[u]),0,timeI)
+    
+        rTx=np.hstack((Tx1,np.hstack((Tx2,Tx3))))
+        rt=np.hstack((tm,t))
         w.x=rt
-        w.y=rTx
+        w.y=rTx*(1/np.sqrt(30))
         W   = w.ftshift()
-        #print w.energy()
-        #fc=sum(abs(W.y)*W.x,axis=0)/sum(abs(W.y),axis=0)   # compute central frequency
         return (w,W)
 
     def read(self,config):

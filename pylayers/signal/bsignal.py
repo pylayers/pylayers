@@ -591,8 +591,10 @@ class Usignal(Bsignal):
             y_new = self.y[:, posmin:posmax]
         else:
             y_new = self.y[posmin:posmax]
-
+        
         if t == 'Usignal':
+            U = Usignal(x_new, y_new)
+        if t == 'Tchannel':
             U = Usignal(x_new, y_new)
         if t == 'TUsignal':
             U = TUsignal(x_new, y_new)
@@ -601,6 +603,8 @@ class Usignal(Bsignal):
         if t == 'FUDsignal':
             U = FUDsignal(x_new, y_new, self.tau0)
 
+        #if 'U' not in locals():
+            #pdb.set_trace()
         return(U)
 
     def align(self, u2):
