@@ -171,6 +171,7 @@ class Simul(Simulation):
                             meca_updt=float(self.meca_opt['mecanic_update_time']),
                             loc=str2bool(self.loc_opt['localization']),
                             loc_updt=float(self.loc_opt['localization_update_time']),
+                            loc_method=eval(self.loc_opt['method']),
                             Layout=self.L,
                             net=self.net,
                             epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),

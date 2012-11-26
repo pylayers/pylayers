@@ -816,6 +816,7 @@ class Simul(object):
             self.config.set("output",str(k),self.dout[k])
 
         self.wav = wvf.Waveform()
+        self.wav.read(self.config)
         self.save()
 
     def clean(self, level=1):
@@ -1427,8 +1428,8 @@ class Simul(object):
                             str(k), color='blue')
 
         if itx[0] == -1:
-            ax.scatter(self.tx.position[:, 0],
-                       self.tx.position[:, 1], c='r', s=s)
+            ax.scatter(self.tx.position[0,:],
+                       self.tx.position[1,:], c='r', s=s)
             if num:
                 for k in range(302):
                     ax.text(self.tx.position[0,k - 1],
