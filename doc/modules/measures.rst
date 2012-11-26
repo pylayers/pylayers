@@ -1,7 +1,7 @@
 .. _measures:
 
-Module measures
-===============
+measures
+========
 
 .. toctree::
     :maxdepth: 2 

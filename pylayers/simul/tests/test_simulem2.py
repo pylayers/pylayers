@@ -15,11 +15,7 @@ S.tx.point([1.2,1,1.4])
 # setting receiver
 
 S.rx = RadioNode(typ='rx')
-S.rx.point([8,-1.2,1.5])
-S.rx.point([8,-1.21,1.5],mode='append')
-S.rx.point([8,-1.22,1.5],mode='append')
-S.rx.point([8,-1.23,1.5],mode='append')
-S.rx.point([8,-1.24,1.5],mode='append')
+S.rx.line(100,ptt=[2,1.2,1.5],pth=[8.2,1.1,1.6])
 
 S.save()
 
@@ -52,4 +48,4 @@ S.pafreq.fghzmax=11
 S.pafreq.nf=181
 S.pafreq.save()
 
-S.run(1,[1,2],verbose=True)
+S.run(1,verbose=True)

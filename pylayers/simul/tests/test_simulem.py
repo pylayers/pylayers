@@ -94,5 +94,5 @@ print "Evalfield "
 print "-----------------"
 S.field(1,1)
 S.cir(1,1)
-f=plt.figure()
+f = plt.figure()
 S.pltcir(1,1,fig=f)

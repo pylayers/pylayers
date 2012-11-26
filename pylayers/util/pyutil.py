@@ -10,6 +10,8 @@ import datetime as dat
 from pylayers.util.project import *
 import shutil
 import pdb
+import sys
+import zipfile
 #
 # getlong 
 # getshort
@@ -1459,6 +1461,69 @@ def writeDetails(t,description='simulation', location ='Rennes'):
     file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/MeasurementsDetails.txt','a')
     file.write(data)
     file.close()
+
+def zipd(path, zipfilename):
+    """
+    add a folder to a zipfile
+    Parameters
+    ----------
+        filepath : string
+        zipfilename : string
+    """
+    zip_file = zipfile.ZipFile(zipfilename, 'a')
+    for (dirpath, dirnames, filenames) in os.walk(path):
+        for dirc in dirnames:
+            zip_file.write(os.path.join(dirpath, dirc),
+            os.path.join(os.path.basename(path),
+            os.path.join(dirpath, dirc)[len(path):]))
+        for fil in filenames:
+            zip_file.write(os.path.join(dirpath, fil),
+            os.path.join(os.path.basename(path),
+            os.path.join(dirpath, fil)[len(path):]))
+    zip_file.close()
+
+def unzipd(path, zipfilename):
+    """
+    unzip a zipfile to a folder
+    Parameters
+    ----------
+        filepath : string
+        zipfilename : string
+    """
+    zip_file = zipfile.ZipFile(zipfilename)
+    if not os.path.isdir(path):
+        os.makedirs(path)    
+
+    for each in zip_file.namelist():
+        print each
+        if not each.endswith('/'): 
+            root, name = os.path.split(each)
+            directory = os.path.normpath(os.path.join(path, root))
+            if not os.path.isdir(directory):
+                os.makedirs(directory)
+            file(os.path.join(directory, name),
+                'wb').write(zip_file.read(each))
+
+def unzipf(path, filepath, zipfilename):
+    """
+    unzip a file from zipfile to a folder
+    Parameters
+    ----------
+        filepath : string
+        zipfilename : string
+    """
+    zip_file = zipfile.ZipFile(zipfilename)
+    if not os.path.isdir(path):
+        os.makedirs(path)    
+
+    for each in zip_file.namelist():
+        if each == filepath and not each.endswith('/'): 
+            root, name = os.path.split(each)
+            directory = os.path.normpath(os.path.join(path, root))
+            if not os.path.isdir(directory):
+                os.makedirs(directory)
+            file(os.path.join(directory, name),
+                'wb').write(zip_file.read(each))
 
 
 if __name__ == "__main__":

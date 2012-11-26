@@ -10,6 +10,8 @@ import os
 import re
 import getopt
 import sys
+import shutil
+import Tkinter, tkFileDialog
 import time
 import ConfigParser
 import pdb
@@ -675,15 +677,43 @@ class Simul(object):
         self.config.add_section("frequency")
         self.config.add_section("waveform")
         self.config.add_section("output")
-
+       
+        self.dout = {}
+        self.dlch = {}
+        self.dtra = {}
+        self.dtud = {}
+        self.dtang = {}
+        self.drang = {}
+        self.dtauk = {}
+        self.dfield = {}
+        self.dcir = {}
+        self.output = {}
+ 
+        #if os.path.isfile(pyu.getlong(_filesimul,'ini')):
         self.filematini = "matDB.ini"
         self.fileslabini = "slabDB.ini"
         self.filemat = self.filematini.replace('.ini','.mat')
         self.fileslab = self.fileslabini.replace('.ini','.slab')
         self.slab=SlabDB(self.filematini, self.fileslabini)
         self.filestr = 'defstr.str2'
-        self.tx = RadioNode('tx', 'radiotx.ini', 'defant.vsh3', self.filestr)
-        self.rx = RadioNode('rx', 'radiorx.ini', 'defant.vsh3', self.filestr)
+        #
+        # Here was a nasty bug : Rule for the future
+        #    "Always precise the key value of the passed argument"
+        #
+        # Mal nommer les choses, c'est ajouter au malheur du monde ( Albert Camus )
+        #
+        self.tx = RadioNode(name = '',
+                            typ = 'tx',
+                            _fileini = 'radiotx.ini',
+                            _fileant = 'defant.vsh3',
+                            _filestr = self.filestr)
+
+        self.rx = RadioNode(name = '',
+                            typ = 'rx',
+                            _fileini = 'radiorx.ini',
+                            _fileant = 'defant.vsh3',
+                            _filestr = self.filestr)
+
         self.filepatra = "def.patra"
         self.filepalch = "def.palch"
         self.filefreq = "def.freq"
@@ -707,19 +737,8 @@ class Simul(object):
         self.ctratotud = []
         self.fileconf = "project.conf"
         self.cfield = []
-        #
-        self.dout = {}
-        self.dlch = {}
-        self.dtra = {}
-        self.dtud = {}
-        self.dtang = {}
-        self.drang = {}
-        self.dtauk = {}
-        self.dfield = {}
-        self.dcir = {}
-        self.output = {}
-
         self.freq = np.linspace(2, 11, 181, endpoint=True)
+
         try:
             self.load(_filesimul)
         except:
@@ -784,12 +803,12 @@ class Simul(object):
         #
         # waveform section
         #
-        self.config.set("waveform", "tw", '30')
-        self.config.set("waveform", "band", '0.499')
-        self.config.set("waveform", "fc", '4.493')
-        self.config.set("waveform", "thresh", '3')
-        self.config.set("waveform", "type", 'generic')
-        self.config.set("waveform", "fe", '50')
+        self.config.set("waveform", "tw", str(self.wav.parameters['tw']))
+        self.config.set("waveform", "band", str(self.wav.parameters['band']))
+        self.config.set("waveform", "fc", str(self.wav.parameters['fc']))
+        self.config.set("waveform", "thresh", str(self.wav.parameters['thresh']))
+        self.config.set("waveform", "type", str(self.wav.parameters['type']))
+        self.config.set("waveform", "fe", str(self.wav.parameters['fe']))
         #
         # output section
         #
@@ -1076,6 +1095,41 @@ class Simul(object):
 #        self.config.write(fd)
 #        fd.close()
 
+    def save_project(self):
+        """ save Simulation files in a zipfile
+
+        Simulation files are .ini files which are saved in a dedicated
+        directory basename/ini in the Project tree
+
+        """
+        root = Tkinter.Tk()
+        zipfileName = tkFileDialog.asksaveasfilename(parent=root,
+                            filetypes = [("zipped file","zip")] ,
+                            title="Save Project",
+                            )
+        pyu.zipd(basename,zipfileName)
+        root.withdraw()
+        print "Current project saved in", zipfileName
+
+    def load_project(self):
+        """ load Simulation files from a zipfile
+
+        Simulation files are .ini files which are saved in a dedicated
+        directory basename/ini in the Project tree
+
+        """
+        root = Tkinter.Tk()
+        zipfileName= tkFileDialog.askopenfile(parent=root,
+                                            mode='rb',
+                                            title='Choose a project')
+        dirname = tkFileDialog.askdirectory(parent=root,
+                                    initialdir=basename,
+                                    title='Please select a directory',
+                                    mustexist=0)
+        pyu.unzipd(dirname,zipfileName)
+        root.withdraw()
+        print "Current project loaded in", dirname 
+
     def choose(self):
         """
             Choose a simulation file in simuldir
@@ -1109,7 +1163,6 @@ class Simul(object):
         self.config.read(filesimul)
 
         sections = self.config.sections()
-    
         try:
             _filetx = self.config.get("files", "tx")
         except:
@@ -1137,8 +1190,17 @@ class Simul(object):
             raise NameError('Error in section struc from '+ _filesimul)
 
         try:
-            self.tx = RadioNode('tx', _filetx, _fileanttx, self.filestr)
-            self.rx = RadioNode('rx', _filerx, _fileantrx, self.filestr)
+            self.tx = RadioNode(name = '',
+                                typ = 'tx',
+                                _fileini = _filetx,
+                                _fileant = _fileanttx,
+                                _filestr = self.filestr)
+
+            self.rx = RadioNode(name = '',
+                                typ = 'rx',
+                                _fileini = _filerx,
+                                _fileant = _fileantrx,
+                                _filestr = self.filestr)
         except:
             raise NameError('Error during Radionode load')
 #
@@ -1147,11 +1209,13 @@ class Simul(object):
 
         try:
             self.palch = Palch(self.config.get("files", "palch"))
+            self.filepalch = self.config.get("files", "palch")
         except: 
             raise NameError('Error in section palch from '+ _filesimul)
 
         try:
             self.patra = Patra(self.config.get("files", "patra"))
+            self.filepatra = self.config.get("files", "patra")
         except: 
             raise NameError('Error in section patra from '+ _filesimul)
         #_outfilename = "out"+self.ntx+".ini"
@@ -1452,7 +1516,7 @@ class Simul(object):
         return(cira, ciro)
 
     def pltcir(self, itx=1, irx=1, mode='linear', noise=False, color='b',format='a',fig=[],ax=[]):
-        """ plot Channel Impulse Reresponse
+        """ plot Channel Impulse Response
 
         Parameters
         ----------
@@ -1474,13 +1538,13 @@ class Simul(object):
 
         if fig ==[]:
             fig = plt.gcf()
-        if ax==[]:
-            ax = fig.gca()
+        #if ax==[]:
+        #    ax = fig.gca()
 
         _filecir = self.dcir[itx][irx] + '.mat'
         filecir = pyu.getlong(_filecir, pstruc['DIRCIR']+'/Tx' + str('%0.3d' % itx))
         D = spio.loadmat(filecir)
-        ax=fig.add_subplot('211')
+        ax = fig.add_subplot('211')
 
         fig,ax=self.show(itx, irx,fig=fig,ax=ax)
         ax=fig.add_subplot('212')
@@ -1510,6 +1574,8 @@ class Simul(object):
         if mode == 'linear':
             #plt.plot(ta,naf.y,color='k',label='Noise')
             plt.plot(ta, D[kya], label='Rx ' + str(irx), color=color)
+            plt.xlabel('Time (ns)')
+
             '''if noise:
                 naf.plot(col='k')
             cira.plot(col=color)'''
@@ -1517,8 +1583,8 @@ class Simul(object):
             '''if noise:
                 naf.plotdB(col='k')
             cira.plotdB()'''
-            plt.plot(ta, 20 * np.log10(
-                abs(D[kya])), label='Rx ' + str(irx), color=color)
+            plt.plot(ta, 20 * np.log10(abs(D[kya])), label='Rx ' + str(irx), color=color)
+            plt.xlabel('Time (ns)')
 #        plt.legend()
         plt.show()
         #plt.savefig('Tx'+str(itx),format=pdf,dpi=300)
@@ -1952,7 +2018,18 @@ class Simul(object):
         itx  : tx index
         irx  : rx index
 
+        Notes
+        -----
+        This function should not be used for more than one rx.
+        .. todo extend properly this function in order to handle properly
+            multi-nodes in irx. The problem is to keep the association
+            between the index number of the rx in the ini file and the 
+            rx in dtra. 
+
         """
+        #
+        # Verify 
+        #
         if (self.progress >= 1):
             chaine = "tracing -lch " + self.dlch[itx] + \
                 " -patra " + self.filepatra + \
@@ -1969,16 +2046,21 @@ class Simul(object):
             self.recup = recup
             aux = recup.splitlines()
             len_aux = recup.count("\n")
-            filetra = []
+            #
+            # set list of .tra files empty 
+            #filetra = []
+            #for i in range(len_aux):
+            #    if aux[i].find("filetraout") != -1:
+            #        aux[i] = aux[i].replace('filetraout : ', '')
+            #        filetra.append(pyu.getshort(aux[i]))
+            #
+            # Warning : this is a bad fix  
+            #
+            #for filename in filetra:
             for i in range(len_aux):
                 if aux[i].find("filetraout") != -1:
                     aux[i] = aux[i].replace('filetraout : ', '')
-                    filetra.append(pyu.getshort(aux[i]))
-            #
-            # Warning : this is a bad fix - Need to get the true irx
-            #
-            for k,filename in enumerate(filetra) :
-                self.dtra[itx][k+1] = filename 
+                    self.dtra[itx][irx] = pyu.getshort(aux[i])
 
             if verbose:
                 print filetra
@@ -2161,9 +2243,9 @@ class Simul(object):
 
         if itx not in self.dlch.keys():
             # launching itx does not exist
-            self.filespaTx = 'tx' + str(itx) + '.spa'
+            self.tx.filespa = 'tx' + str(itx) + '.spa'
             point = self.tx.points[itx]
-            spafile(self.filespaTx, point, pstruc['DIRLCH'])
+            spafile(self.tx.filespa, point, pstruc['DIRLCH'])
             if verbose:
                 print "---------------"
                 print "Start Launching Tx : " + str(itx)
@@ -2177,9 +2259,9 @@ class Simul(object):
         for irx in srx:
             tracingabort = False
             if irx not in self.dtra[itx].keys():
-                self.filespaRx = 'rx' + str(irx) + '.spa'
+                self.rx.filespa = 'rx' + str(irx) + '.spa'
                 point = self.rx.points[irx]
-                spafile(self.filespaRx, point, pstruc['DIRTRA'])
+                spafile(self.rx.filespa, point, pstruc['DIRTRA'])
                 if verbose:
                     print "--------------------"
                     print "Start tracing  Rx : " + str(irx)
@@ -2366,9 +2448,14 @@ class Simul(object):
                 VCl = channel.VectChannel(self, l, k, False)
                 CVC.append(VCl)
                 if not VCl.fail:
-                    SCO = VCl.vec2scal()
+                    #SCO = VCl.vec2scal()
+                    SCO = VCl.prop2tran(a='theta',b='theta')
                     CSCO.append(SCO)
-                    SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)
+                    #SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)
+                    #
+                    #  Appliquer le facteur alpha sur la forme d'onde !!!
+                    #
+                    SCA = VCl.prop2tran(a=self.tx.A,b=self.rx.A)
                     CSCA.append(SCA)
                     ciro = SCO.applywavB(self.wav.sfg)
                     CIRo.append(ciro)
@@ -2407,5 +2494,3 @@ class Simul(object):
 
 if (__name__ == "__main__"):
     doctest.testmod()
-
-

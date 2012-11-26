@@ -1,5 +1,6 @@
 # -*- coding:Utf-8 -*-
 import doctest
+import pdb
 import numpy as np
 import scipy as sp
 import pylab as plt
@@ -112,6 +113,7 @@ class Ctilde(object):
         # Temporary freq --> read filefreq
         #
         freq = np.linspace(2, 11, nfreq)
+
         self.Ctt = bs.FUsignal(freq, c11)
         self.Ctp = bs.FUsignal(freq, c12)
         self.Cpt = bs.FUsignal(freq, c21)
@@ -340,6 +342,73 @@ class Ctilde(object):
         self.Cpp = self.Cpp[u, :]
         self.Ctp = self.Ctp[u, :]
         self.Cpt = self.Cpt[u, :]
+
+    def prop2tran(self,a='theta',b='theta'):
+        """ transform propagation channel into transmission channel
+        
+        Parameters
+        ----------
+
+        a : string or antenna array
+            polarization antenna a ( 'theta' | 'phi' | 'ant' ) 
+         : string or antenna array
+            polarization antenna b ( 'theta' | 'phi' | 'ant' ) 
+
+            0 : theta
+            1 : phi
+
+        Returns
+        -------
+
+        H : Tchannel(bs.FUDAsignal)
+
+
+        """
+        freq = self.freq
+        nfreq = self.nfreq
+        nray  = self.nray
+        sh = np.shape(self.Ctt.y)
+
+        if type(a)==str:
+            Fat = np.zeros(nray*nfreq).reshape((nray,nfreq))
+            Fap = np.zeros(nray*nfreq).reshape((nray,nfreq))
+            if a=='theta':
+                Fat = np.ones((nray,nfreq))
+            if a=='phi':
+                Fap = np.ones((nray,nfreq))
+            Fat = bs.FUsignal(self.freq,Fat)
+            Fap = bs.FUsignal(self.freq,Fap)
+        else:
+            Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1])
+            Fat = Fat.transpose()
+            Fap = Fap.transpose()
+            Fat = bs.FUsignal(a.fa,Fat)
+            Fap = bs.FUsignal(a.fa,Fap)
+
+        if type(b)==str:
+            Fbt = np.zeros(nray*nfreq).reshape((nray,nfreq))
+            Fbp = np.zeros(nray*nfreq).reshape((nray,nfreq))
+            if b=='theta':
+                Fbt = np.ones((nray,nfreq))
+            if b=='phi':
+                Fbp = np.ones((nray,nfreq))
+            Fbt = bs.FUsignal(self.freq,Fbt)
+            Fbp = bs.FUsignal(self.freq,Fbp)
+        else:
+            Fbt , Fbp = b.Fsynth3(self.rang[:, 0],self.rang[:,1])
+            # (nray,nfeq) needed
+            Fbt = Fbt.transpose()
+            Fbp = Fbp.transpose()
+            Fbt = bs.FUsignal(b.fa,Fbt)
+            Fbp = bs.FUsignal(b.fa,Fbp)
+
+        #pdb.set_trace()
+        t1 = self.Ctt * Fat + self.Cpt * Fap
+        t2 = self.Ctp * Fat + self.Cpp * Fap
+        alpha = t1 * Fbt + t2 * Fbp
+
+        H = Tchannel(alpha.x,alpha.y,self.tauk,self.tang,self.rang)
+        return(H)
 
     def vec2scal(self):
         """ calculate scalChannel from VectChannel and antenna
@@ -778,6 +847,277 @@ def VCg2VCl(VCg, Tt, Tr):
     return VCl
 
 
+class Tchannel(bs.FUDAsignal):
+    """ Handle the transmission channel 
+
+    The transmission channel TChannel is obtained from combination of the propagation
+    channel with the antenna transfer functions from both transmitter and
+    receiver.
+
+    Members
+    -------
+        ray transfer functions  (nray,nfreq)
+    dod  :
+        direction of depature (rad) [theta_t,phi_t]  nray x 2
+    doa  :
+        direction of arrival (rad)  [theta_r,phi_r]  nray x 2
+    tauk :
+        delay ray k in ns
+
+
+    """
+    def __init__(self,fGHz,alpha,tau,dod,doa):
+        """
+
+        Parameters
+        ----------
+
+        fGHz  :  1 x nfreq
+        alpha :  channel amplitude (nray x nfreq)
+        tau   :  delay (1 x nray)
+        dod   :  direction of departure (nray x 2)
+        doa   :  direction of arrival  (nray x 2)
+
+        """
+
+        bs.FUDAsignal.__init__(self,fGHz,alpha,tau,dod,doa)
+
+    def info(self):
+        """ display information
+
+        """
+        print 'Ftt,Ftp,Frt,Frp'
+        print 'dod,doa,tau'
+        print 'H - FUDsignal '
+        print 'tau min , tau max :', min(self.tau), max(self.tau)
+        self.H.info()
+
+    def imshow(self):
+        """ imshow vizualization of H
+
+        """
+        self.H
+        sh = shape(self.H.y)
+        itau = arange(len(self.tau))
+        plt.imshow(abs(self.H.y))
+        plt.show()
+
+    def apply(self, W):
+        """ Apply a FUsignal W to the ScalChannel.
+
+        Parameters
+        ----------
+        W :  Bsignal.FUsignal
+
+        It exploits multigrid convolution from Bsignal.
+
+        Notes
+        -----
+            + W may have a more important number of points and a smaller frequency band.
+            + If the frequency band of the waveform exceeds the one of the ScalChannei, a warning is sent.
+            + W is a FUsignal whose shape doesn't need to be homogeneous with FUDsignal H
+
+        """
+
+        #H = self.H
+        U = self * W
+        V = bs.FUDAsignal(U.x, U.y, self.tau0,self.dod,self.doa)
+
+        return(V)
+
+    def applywavC(self, w, dxw):
+        """ apply waveform method C
+
+        Parameters
+        ----------
+        w     :
+            waveform
+        dxw
+
+        Notes
+        -----
+        The overall received signal is built in time domain
+        w is apply on the overall CIR
+
+        """
+
+        H = self.H
+        h = H.ft1(500, 1)
+        dxh = h.dx()
+        if (abs(dxh - dxw) > 1e-10):
+            if (dxh < dxw):
+                # reinterpolate w
+                f = interp1d(w.x, w.y)
+                x_new = arange(w.x[0], w.x[-1], dxh)[0:-1]
+                y_new = f(x_new)
+                w = TUsignal(x_new, y_new)
+            else:
+                # reinterpolate h
+                f = interp1d(h.x, h.y)
+                x_new = arange(h.x[0], h.x[-1], dxw)[0:-1]
+                y_new = f(x_new)
+                h = TUsignal(x_new, y_new)
+
+        ri = h.convolve(w)
+        return(ri)
+
+    def applywavB(self, Wgam):
+        """ apply waveform method B (time domain )
+
+        Parameters
+        ----------
+        Wgam :
+            waveform including gamma factor
+
+        Returns
+        -------
+        ri  : TUDsignal
+            impulse response for each ray separately
+
+        Notes
+        ------
+
+            The overall received signal is built in time domain
+
+            Wgam is applied on each Ray Transfer function
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.TUDsignal.ft1
+
+        """
+        #
+        # return a FUDsignal
+        #
+        Y = self.apply(Wgam)
+        #ri      = Y.ft1(500,0)
+        # Le fftshift est activé
+        ri = Y.ft1(500, 1)
+        return(ri)
+
+    def applywavA(self, Wgam, Tw):
+        """ apply waveform method A
+
+        Parameters
+        ----------
+
+        Wgam :
+        Tw   :
+
+        The overall received signal is built in frequency domain
+
+        """
+        Hab = self.H.ft2(0.001)
+        HabW = Hab * Wgam
+        RI = HabW.symHz(10000)
+        ri = RI.ifft(0, 'natural')
+        ri.translate(-Tw)
+        return(ri)
+
+    def doddoa(self):
+        """ doddoa() : DoD / DoA diagram
+
+        """
+        dod = self.dod
+        doa = self.doa
+        #
+        #col  = 1 - (10*np.log10(Etot)-Emin)/(Emax-Emin)
+        Etot = self.H.energy()
+        Etot = Etot / max(Etot)
+        al = 180 / np.pi
+        col = 10 * np.log10(Etot)
+        print len(dod[:, 0]), len(dod[:, 1]), len(col[:])
+        plt.subplot(121)
+        plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=15, c=col,
+                    cmap=plt.cm.gray_r, edgecolors='none')
+        a = colorbar()
+        #a.set_label('dB')
+        plt.xlabel("$\\theta_t(\degree)$", fontsize=18)
+        plt.ylabel('$\phi_t(\degree)$', fontsize=18)
+        title('DoD')
+        plt.subplot(122)
+        plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=15, c=col,
+                    cmap=plt.cm.gray_r, edgecolors='none')
+        b = colorbar()
+        b.set_label('dB')
+        plt.title('DoA')
+        plt.xlabel("$\\theta_r(\degree)$", fontsize=18)
+        plt.ylabel("$\phi_r (\degree)$", fontsize=18)
+        plt.show()
+
+    def wavefig(self, w, Nray=5):
+        """ display
+
+        Parameters
+        ----------
+        w      :  waveform
+        Nray   :  int
+            number of rays to be displayed
+        """
+        # Construire W
+        W = w.ft()
+        # Appliquer W
+        Y = self.apply(W)
+        #r.require('graphics')
+        #r.postscript('fig.eps')
+        #r('par(mfrow=c(2,2))')
+        #Y.fig(Nray)
+        y = Y.iftd(100, 0, 50, 0)
+        y.fig(Nray)
+        #r.dev_off()
+        #os.system("gv fig.eps ")
+        #y.fidec()
+        # Sur le FUsignal retourn
+        # A gauche afficher le signal sur chaque rayon
+        # A droite le meme signal decal
+        # En bas a droite le signal resultant
+
+    def rayfig(self, k, W, col='red'):
+        """ build a figure with rays
+
+        Parameters
+        ----------
+            k : ray index
+            W : waveform    (FUsignal)
+
+        Notes
+        -----
+        W is apply on k-th ray and the received signal is built in time domain
+
+        """
+        # get the kth Ray  Transfer function
+        Hk = bs.FUDsignal(self.H.x, self.H.y[k, :])
+
+        dxh = Hk.dx()
+        dxw = W.dx()
+        w0 = W.x[0]    # fmin W
+        hk0 = Hk.x[0]   # fmin Hk
+
+        # on s'arrange pour que hk0 soit egal a w0 (ou hk0 soit legerement inferieur a w0)
+        if w0 < hk0:
+            np = ceil((hk0 - w0) / dxh)
+            hk0_new = hk0 - np * dxh
+            x = arange(hk0_new, hk0 + dxh, dxh)[0:-1]
+            Hk.x = hstack((x, Hk.x))
+            Hk.y = hstack((zeros(np), Hk.y))
+
+        if (abs(dxh - dxw) > 1e-10):
+            if (dxh < dxw):
+                # reinterpolate w
+                print " resampling w"
+                x_new = arange(W.x[0], W.x[-1] + dxh, dxh)[0:-1]
+                Wk = W.resample(x_new)
+                dx = dxh
+            else:
+                # reinterpolate h
+                print " resampling h"
+                x_new = arange(Hk.x[0], Hk.x[-1] + dxw, dxw)[0:-1]
+                Hk = Hk.resample(x_new)
+                dx = dxw
+                Wk = W
+
+        # on s'arrange que Hk.x[0]==Wk.x[0]
 class ScalChannel(object):
     """
     ScalChannel Class :
@@ -790,12 +1130,13 @@ class ScalChannel(object):
     -------
 
     H    : FUDSignal
-        Rays Transfer function  (nray,nfreq)
+        ray transfer functions  (nray,nfreq)
     dod  :
-        Direction of depature (rad) [theta_t,phi_t]  nrayx2
+        direction of depature (rad) [theta_t,phi_t]  nray x 2
     doa  :
-        Direction of arrival (rad)  [theta_r,phi_r]  nrayx2
-    tauk : Delay ray k
+        direction of arrival (rad)  [theta_r,phi_r]  nray x 2
+    tauk :
+        delay ray k in ns
 
 
     """
@@ -921,6 +1262,11 @@ class ScalChannel(object):
             The overall received signal is built in time domain
 
             Wgam is applied on each Ray Transfer function
+
+        See Also
+        --------
+
+        pylayers.signal.bsignal.TUDsignal.ft1
 
         """
         #

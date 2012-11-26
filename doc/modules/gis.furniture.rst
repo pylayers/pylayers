@@ -1,8 +1,8 @@
 
 .. _furniture:
 
-Class Furniture
-===============
+furniture
+=========
 
 .. automodule:: pylayers.gis.furniture
     :members:

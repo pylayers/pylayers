@@ -109,6 +109,7 @@ class RadioNode(object):
             pass
 
         #
+        #print _fileant
         self.fileant = _fileant
         try:
             self.loadvsh()
@@ -247,7 +248,7 @@ class RadioNode(object):
         pth = np.reshape(pth, (3, 1))
         pas = 1.0 / (npt - 1)
         k = np.arange(0.0, 1.0 + pas, pas)
-        pt = ptt + (1.0 - k) * (ptt - pth)
+        pt = ptt + k * (pth-ptt)
         if mode == 'subst':
             self.position = pt
         else:
@@ -632,14 +633,13 @@ class RadioNode(object):
         filename = pyu.getlong("strucRN.off", pstruc['DIRGEOM'])
         fo = open(filename, "w")
         filegeom = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
+
         # get .off filename from .str or .str2 filename
-        fileoff, ext = os.path.splitext(self.filestr)
-        fileoff = fileoff + '.off'
+        _fileoff, ext = os.path.splitext(self.filestr)
+        _fileoff = _fileoff + '.off'
         fo.write("LIST\n")
-        try:
+        if os.path.isfile(pyu.getlong(_fileoff,'geom')):
             fo.write("{<" + fileoff + "}\n")
-        except:
-            pass
         fo.write("{<" + self.filegeom + "}\n")
         fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
         fo.close()

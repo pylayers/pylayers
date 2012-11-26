@@ -1,7 +1,8 @@
 .. _agent:
 
-Module Agent
-------------
+agent
+=====
+
 
 .. automodule:: pylayers.mobility.agent
    :members:

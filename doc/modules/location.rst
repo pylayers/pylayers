@@ -1,8 +1,8 @@
 .. _location:
 
 
-Module location
-===============
+location
+========
 
 .. toctree::
     :maxdepth: 2
@@ -12,29 +12,8 @@ Module location
 
     location.locarule.rst
 
-
-algebraic methods
------------------
-
-.. toctree::
-    :maxdepth: 2
-
-    location.algebraic.crb.rst 
-
-    location.algebraic.hdf.rst 
-
-    location.algebraic.pygraphtool.rst 
-
-    location.algebraic.pymathtool.rst 
-
-    location.algebraic.toa.rst 
-
-    location.algebraic.tdoa.rst 
-
-    location.algebraic.rss.rst 
-
-
-geometric methods
------------------
+    location.algebraic.algebraic.rst
+    
+    location.geometric.rst
 
 

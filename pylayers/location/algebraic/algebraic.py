@@ -27,11 +27,12 @@ from scipy import optimize
 import numpy.linalg as nplg
 import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
+from pylayers.util.geomutil import dist
 import string
 
 class algloc(object):
     """
-    This class regroups all the algebraic localization sceanrios and
+    This class regroups all the algebraic localization scenarios and
     techniques
     Attributes
     ----------
@@ -121,59 +122,10 @@ class algloc(object):
         .. plot::
             :include-source:
             
-            >>> import numpy as np
-            >>> from pylayers.location.algebraic.algebraic import *
-            >>> from pylayers.util.geomutil import dist
-            >>> nRN = 4
-            >>> dim = 3 # 2 for 2D, 3 for 3D
-            >>> L = 20.
-            >>> c = 0.3
-            >>> BN = L*sp.rand(dim,1)
-            >>> BN0 = L*sp.rand(dim,1)
-            >>> RN_TOA = L*sp.rand(dim,nRN)
-            >>> RN_RSS = L*sp.rand(dim,nRN)
-            >>> RN_TDOA = L*sp.rand(dim,nRN)
-            
-            >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-            >>> TOF = d_TOA/c # actual TOA
-            >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-            >>> TOA = TOF + TOA_std
-
-            >>> RSS_std = 0.001 * np.ones(nRN)
-            >>> RSS_np = 2.645 * np.ones(nRN)
-            >>> PL0 = 34.7*np.ones(nRN)
-            >>> d0 = 1.
-            >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-            >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-            >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
-            >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-            >>> d = dist(RN_TDOA,BN,0)
-            >>> dr = dist(RNr_TDOA,BN,0)
-            >>> TDOF = (d-dr)/c # actual TDOA
-            >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-            >>> TDOA = TDOF + TDOA_std
-
-            >>> nodes={}
-            >>> nodes['BN']= BN
-            >>> nodes['RN_RSS']= RN_RSS
-            >>> nodes['RN_TOA']= RN_TOA
-            >>> nodes['RN_TDOA']= RN_TDOA
-            >>> nodes['RNr_TDOA']= RNr_TDOA
-
-            >>> ldp={}
-            >>> ldp['RSS'] = RSS
-            >>> ldp['RSS_std'] = RSS_std
-            >>> ldp['RSS_np'] = RSS_np
-            >>> ldp['d0'] = d0
-            >>> ldp['PL0'] = PL0
-            >>> ldp['TOA'] = TOA
-            >>> ldp['TOA_std'] = TOA_std
-            >>> ldp['TDOA'] = TDOA
-            >>> ldp['TDOA_std'] = TDOA_std
-            
+            >>> nodes, ldp, BN0 = scenario()
             >>> S = algloc(nodes, ldp)
             >>> S.show(1,1,1)
+            >>> plt.show()
         """
         self.plot(rss, toa, tdoa)
         plt.legend(numpoints=1)
@@ -195,57 +147,7 @@ class algloc(object):
         .. plot::
             :include-source:
             
-            >>> import numpy as np
-            >>> from pylayers.location.algebraic.algebraic import *
-            >>> from pylayers.util.geomutil import dist
-            >>> nRN = 4
-            >>> dim = 3 # 2 for 2D, 3 for 3D
-            >>> L = 20.
-            >>> c = 0.3
-            >>> BN = L*sp.rand(dim,1)
-            >>> BN0 = L*sp.rand(dim,1)
-            >>> RN_TOA = L*sp.rand(dim,nRN)
-            >>> RN_RSS = L*sp.rand(dim,nRN)
-            >>> RN_TDOA = L*sp.rand(dim,nRN)
-            
-            >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-            >>> TOF = d_TOA/c # actual TOA
-            >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-            >>> TOA = TOF + TOA_std
-
-            >>> RSS_std = 0.001 * np.ones(nRN)
-            >>> RSS_np = 2.645 * np.ones(nRN)
-            >>> PL0 = 34.7*np.ones(nRN)
-            >>> d0 = 1.
-            >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-            >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-            >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
-            >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-            >>> d = dist(RN_TDOA,BN,0)
-            >>> dr = dist(RNr_TDOA,BN,0)
-            >>> TDOF = (d-dr)/c # actual TDOA
-            >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-            >>> TDOA = TDOF + TDOA_std
-
-            >>> nodes={}
-            >>> nodes['BN']= BN
-            >>> nodes['RN_RSS']= RN_RSS
-            >>> nodes['RN_TOA']= RN_TOA
-            >>> nodes['RN_TDOA']= RN_TDOA
-            >>> nodes['RNr_TDOA']= RNr_TDOA
-
-            >>> ldp={}
-            >>> ldp['RSS'] = RSS
-            >>> ldp['RSS_std'] = RSS_std
-            >>> ldp['RSS_np'] = RSS_np
-            >>> ldp['d0'] = d0
-            >>> ldp['PL0'] = PL0
-            >>> ldp['TOA'] = TOA
-            >>> ldp['TOA_std'] = TOA_std
-            >>> ldp['TDOA'] = TDOA
-            >>> ldp['TDOA_std'] = TDOA_std
-            
+            >>> nodes, ldp, BN0 = scenario()
             >>> S = algloc(nodes, ldp)
             >>> r_mode = S.get_range('mode')
             >>> r_median = S.get_range('median')
@@ -284,57 +186,7 @@ class algloc(object):
         .. plot::
             :include-source:
             
-            >>> import numpy as np
-            >>> from pylayers.location.algebraic.algebraic import *
-            >>> from pylayers.util.geomutil import dist
-            >>> nRN = 4
-            >>> dim = 3 # 2 for 2D, 3 for 3D
-            >>> L = 20.
-            >>> c = 0.3
-            >>> BN = L*sp.rand(dim,1)
-            >>> BN0 = L*sp.rand(dim,1)
-            >>> RN_TOA = L*sp.rand(dim,nRN)
-            >>> RN_RSS = L*sp.rand(dim,nRN)
-            >>> RN_TDOA = L*sp.rand(dim,nRN)
-            
-            >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-            >>> TOF = d_TOA/c # actual TOA
-            >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-            >>> TOA = TOF + TOA_std
-
-            >>> RSS_std = 0.001 * np.ones(nRN)
-            >>> RSS_np = 2.645 * np.ones(nRN)
-            >>> PL0 = 34.7*np.ones(nRN)
-            >>> d0 = 1.
-            >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-            >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-            >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
-            >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-            >>> d = dist(RN_TDOA,BN,0)
-            >>> dr = dist(RNr_TDOA,BN,0)
-            >>> TDOF = (d-dr)/c # actual TDOA
-            >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-            >>> TDOA = TDOF + TDOA_std
-
-            >>> nodes={}
-            >>> nodes['BN']= BN
-            >>> nodes['RN_RSS']= RN_RSS
-            >>> nodes['RN_TOA']= RN_TOA
-            >>> nodes['RN_TDOA']= RN_TDOA
-            >>> nodes['RNr_TDOA']= RNr_TDOA
-
-            >>> ldp={}
-            >>> ldp['RSS'] = RSS
-            >>> ldp['RSS_std'] = RSS_std
-            >>> ldp['RSS_np'] = RSS_np
-            >>> ldp['d0'] = d0
-            >>> ldp['PL0'] = PL0
-            >>> ldp['TOA'] = TOA
-            >>> ldp['TOA_std'] = TOA_std
-            >>> ldp['TDOA'] = TDOA
-            >>> ldp['TDOA_std'] = TDOA_std
-            
+            >>> nodes, ldp, BN0 = scenario()
             >>> S = algloc(nodes, ldp)
             >>> rs_mode = S.get_range_std('mode')
             >>> rs_median = S.get_range_std('median')
@@ -376,57 +228,7 @@ class algloc(object):
         .. plot::
             :include-source:
             
-            >>> import numpy as np
-            >>> from pylayers.location.algebraic.algebraic import *
-            >>> from pylayers.util.geomutil import dist
-            >>> nRN = 4
-            >>> dim = 3 # 2 for 2D, 3 for 3D
-            >>> L = 20.
-            >>> c = 0.3
-            >>> BN = L*sp.rand(dim,1)
-            >>> BN0 = L*sp.rand(dim,1)
-            >>> RN_TOA = L*sp.rand(dim,nRN)
-            >>> RN_RSS = L*sp.rand(dim,nRN)
-            >>> RN_TDOA = L*sp.rand(dim,nRN)
-            
-            >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-            >>> TOF = d_TOA/c # actual TOA
-            >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-            >>> TOA = TOF + TOA_std
-
-            >>> RSS_std = 0.001 * np.ones(nRN)
-            >>> RSS_np = 2.645 * np.ones(nRN)
-            >>> PL0 = 34.7*np.ones(nRN)
-            >>> d0 = 1.
-            >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-            >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-            >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
-            >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-            >>> d = dist(RN_TDOA,BN,0)
-            >>> dr = dist(RNr_TDOA,BN,0)
-            >>> TDOF = (d-dr)/c # actual TDOA
-            >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-            >>> TDOA = TDOF + TDOA_std
-
-            >>> nodes={}
-            >>> nodes['BN']= BN
-            >>> nodes['RN_RSS']= RN_RSS
-            >>> nodes['RN_TOA']= RN_TOA
-            >>> nodes['RN_TDOA']= RN_TDOA
-            >>> nodes['RNr_TDOA']= RNr_TDOA
-
-            >>> ldp={}
-            >>> ldp['RSS'] = RSS
-            >>> ldp['RSS_std'] = RSS_std
-            >>> ldp['RSS_np'] = RSS_np
-            >>> ldp['d0'] = d0
-            >>> ldp['PL0'] = PL0
-            >>> ldp['TOA'] = TOA
-            >>> ldp['TOA_std'] = TOA_std
-            >>> ldp['TDOA'] = TDOA
-            >>> ldp['TDOA_std'] = TDOA_std
-            
+            >>> nodes, ldp, BN0 = scenario()
             >>> S = algloc(nodes, ldp)
             >>> P_rss = S.ls_locate(1, 0, 0, 'mode')
             >>> P_toa = S.ls_locate(0, 1, 0, 'mode')
@@ -435,6 +237,7 @@ class algloc(object):
             >>> P_rsstdoa = S.ls_locate(1, 0, 1, 'mode')
             >>> P_toatdoa = S.ls_locate(0, 1, 1, 'mode')
             >>> P_rsstoatdoa = S.ls_locate(1, 1, 1, 'mode')
+            
         """
         if rss==0 and toa==0 and tdoa==0:
             raise ValueError("inputs missed")
@@ -673,57 +476,7 @@ class algloc(object):
         .. plot::
             :include-source:
             
-            >>> import numpy as np
-            >>> from pylayers.location.algebraic.algebraic import *
-            >>> from pylayers.util.geomutil import dist
-            >>> nRN = 4
-            >>> dim = 3 # 2 for 2D, 3 for 3D
-            >>> L = 20.
-            >>> c = 0.3
-            >>> BN = L*sp.rand(dim,1)
-            >>> BN0 = L*sp.rand(dim,1)
-            >>> RN_TOA = L*sp.rand(dim,nRN)
-            >>> RN_RSS = L*sp.rand(dim,nRN)
-            >>> RN_TDOA = L*sp.rand(dim,nRN)
-            
-            >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-            >>> TOF = d_TOA/c # actual TOA
-            >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-            >>> TOA = TOF + TOA_std
-
-            >>> RSS_std = 0.001 * np.ones(nRN)
-            >>> RSS_np = 2.645 * np.ones(nRN)
-            >>> PL0 = 34.7*np.ones(nRN)
-            >>> d0 = 1.
-            >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-            >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-            >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
-            >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-            >>> d = dist(RN_TDOA,BN,0)
-            >>> dr = dist(RNr_TDOA,BN,0)
-            >>> TDOF = (d-dr)/c # actual TDOA
-            >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-            >>> TDOA = TDOF + TDOA_std
-
-            >>> nodes={}
-            >>> nodes['BN']= BN
-            >>> nodes['RN_RSS']= RN_RSS
-            >>> nodes['RN_TOA']= RN_TOA
-            >>> nodes['RN_TDOA']= RN_TDOA
-            >>> nodes['RNr_TDOA']= RNr_TDOA
-
-            >>> ldp={}
-            >>> ldp['RSS'] = RSS
-            >>> ldp['RSS_std'] = RSS_std
-            >>> ldp['RSS_np'] = RSS_np
-            >>> ldp['d0'] = d0
-            >>> ldp['PL0'] = PL0
-            >>> ldp['TOA'] = TOA
-            >>> ldp['TOA_std'] = TOA_std
-            >>> ldp['TDOA'] = TDOA
-            >>> ldp['TDOA_std'] = TDOA_std
-            
+            >>> nodes, ldp, BN0 = scenario()
             >>> S = algloc(nodes, ldp)
             >>> P_rss = S.wls_locate(1, 0, 0, 'mode')
             >>> P_toa = S.wls_locate(0, 1, 0, 'mode')
@@ -1085,57 +838,7 @@ class algloc(object):
         .. plot::
             :include-source:
             
-            >>> import numpy as np
-            >>> from pylayers.location.algebraic.algebraic import *
-            >>> from pylayers.util.geomutil import dist
-            >>> nRN = 4
-            >>> dim = 3 # 2 for 2D, 3 for 3D
-            >>> L = 20.
-            >>> c = 0.3
-            >>> BN = L*sp.rand(dim,1)
-            >>> BN0 = L*sp.rand(dim,1)
-            >>> RN_TOA = L*sp.rand(dim,nRN)
-            >>> RN_RSS = L*sp.rand(dim,nRN)
-            >>> RN_TDOA = L*sp.rand(dim,nRN)
-            
-            >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-            >>> TOF = d_TOA/c # actual TOA
-            >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-            >>> TOA = TOF + TOA_std
-
-            >>> RSS_std = 0.001 * np.ones(nRN)
-            >>> RSS_np = 2.645 * np.ones(nRN)
-            >>> PL0 = 34.7*np.ones(nRN)
-            >>> d0 = 1.
-            >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-            >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-            >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
-            >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-            >>> d = dist(RN_TDOA,BN,0)
-            >>> dr = dist(RNr_TDOA,BN,0)
-            >>> TDOF = (d-dr)/c # actual TDOA
-            >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-            >>> TDOA = TDOF + TDOA_std
-
-            >>> nodes={}
-            >>> nodes['BN']= BN
-            >>> nodes['RN_RSS']= RN_RSS
-            >>> nodes['RN_TOA']= RN_TOA
-            >>> nodes['RN_TDOA']= RN_TDOA
-            >>> nodes['RNr_TDOA']= RNr_TDOA
-
-            >>> ldp={}
-            >>> ldp['RSS'] = RSS
-            >>> ldp['RSS_std'] = RSS_std
-            >>> ldp['RSS_np'] = RSS_np
-            >>> ldp['d0'] = d0
-            >>> ldp['PL0'] = PL0
-            >>> ldp['TOA'] = TOA
-            >>> ldp['TOA_std'] = TOA_std
-            >>> ldp['TDOA'] = TDOA
-            >>> ldp['TDOA_std'] = TDOA_std
-            
+            >>> nodes, ldp, BN0 = scenario()
             >>> S = algloc(nodes, ldp)
             >>> P_rss = S.ml_locate(BN0, 1, 0, 0)
             >>> P_toa = S.ml_locate(BN0, 0, 1, 0)
@@ -1248,57 +951,7 @@ class algloc(object):
         .. plot::
             :include-source:
             
-            >>> import numpy as np
-            >>> from pylayers.location.algebraic.algebraic import *
-            >>> from pylayers.util.geomutil import dist
-            >>> nRN = 4
-            >>> dim = 3 # 2 for 2D, 3 for 3D
-            >>> L = 20.
-            >>> c = 0.3
-            >>> BN = L*sp.rand(dim,1)
-            >>> BN0 = L*sp.rand(dim,1)
-            >>> RN_TOA = L*sp.rand(dim,nRN)
-            >>> RN_RSS = L*sp.rand(dim,nRN)
-            >>> RN_TDOA = L*sp.rand(dim,nRN)
-            
-            >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
-            >>> TOF = d_TOA/c # actual TOA
-            >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
-            >>> TOA = TOF + TOA_std
-
-            >>> RSS_std = 0.001 * np.ones(nRN)
-            >>> RSS_np = 2.645 * np.ones(nRN)
-            >>> PL0 = 34.7*np.ones(nRN)
-            >>> d0 = 1.
-            >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-            >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-            >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
-    
-            >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
-            >>> d = dist(RN_TDOA,BN,0)
-            >>> dr = dist(RNr_TDOA,BN,0)
-            >>> TDOF = (d-dr)/c # actual TDOA
-            >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
-            >>> TDOA = TDOF + TDOA_std
-
-            >>> nodes={}
-            >>> nodes['BN']= BN
-            >>> nodes['RN_RSS']= RN_RSS
-            >>> nodes['RN_TOA']= RN_TOA
-            >>> nodes['RN_TDOA']= RN_TDOA
-            >>> nodes['RNr_TDOA']= RNr_TDOA
-
-            >>> ldp={}
-            >>> ldp['RSS'] = RSS
-            >>> ldp['RSS_std'] = RSS_std
-            >>> ldp['RSS_np'] = RSS_np
-            >>> ldp['d0'] = d0
-            >>> ldp['PL0'] = PL0
-            >>> ldp['TOA'] = TOA
-            >>> ldp['TOA_std'] = TOA_std
-            >>> ldp['TDOA'] = TDOA
-            >>> ldp['TDOA_std'] = TDOA_std
-            
+            >>> nodes, ldp, BN0 = scenario()
             >>> S = algloc(nodes, ldp)
             >>> crb_rss = S.crb(BN, 1, 0, 0)
             >>> crb_toa = S.crb(BN, 0, 1, 0)
@@ -1312,6 +965,126 @@ class algloc(object):
         FIM = self.fim(P, rss, toa, tdoa)
         CRB = np.sqrt(np.trace(nplg.inv(FIM)))
         return CRB
+
+def scenario():
+    """
+    This method is not a class member, it defines a sample scenario
+    Returns
+    -------
+        CRB : float
+
+    Examples
+    --------
+    .. plot::
+        :include-source:
+        
+        >>> nRN = 4
+        >>> dim = 3 # 2 for 2D, 3 for 3D
+        >>> L = 20.
+        >>> c = 0.3
+        >>> BN = L*sp.rand(dim,1)
+        >>> BN0 = L*sp.rand(dim,1)
+        >>> RN_TOA = L*sp.rand(dim,nRN)
+        >>> RN_RSS = L*sp.rand(dim,nRN)
+        >>> RN_TDOA = L*sp.rand(dim,nRN)
+            
+        >>> d_TOA = dist(RN_TOA,BN,0) # actual distances
+        >>> TOF = d_TOA/c # actual TOA
+        >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
+        >>> TOA = TOF + TOA_std
+
+        >>> RSS_std = 0.001 * np.ones(nRN)
+        >>> RSS_np = 2.645 * np.ones(nRN)
+        >>> PL0 = 34.7*np.ones(nRN)
+        >>> d0 = 1.
+        >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
+        >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
+        >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
+    
+        >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
+        >>> d = dist(RN_TDOA,BN,0)
+        >>> dr = dist(RNr_TDOA,BN,0)
+        >>> TDOF = (d-dr)/c # actual TDOA
+        >>> TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
+        >>> TDOA = TDOF + TDOA_std
+
+        >>> nodes={}
+        >>> nodes['BN']= BN
+        >>> nodes['RN_RSS']= RN_RSS
+        >>> nodes['RN_TOA']= RN_TOA
+        >>> nodes['RN_TDOA']= RN_TDOA
+        >>> nodes['RNr_TDOA']= RNr_TDOA
+
+        >>> ldp={}
+        >>> ldp['RSS'] = RSS
+        >>> ldp['RSS_std'] = RSS_std
+        >>> ldp['RSS_np'] = RSS_np
+        >>> ldp['d0'] = d0
+        >>> ldp['PL0'] = PL0
+        >>> ldp['TOA'] = TOA
+        >>> ldp['TOA_std'] = TOA_std
+        >>> ldp['TDOA'] = TDOA
+        >>> ldp['TDOA_std'] = TDOA_std
+            
+        >>> print 'Nodes'
+        >>> print nodes
+        >>> print 'LDPs'
+        >>> print ldp
+        >>> print 'BN0:initial guess for ML estimator'
+        >>> print BN0
+        """
+    nRN = 4
+    dim = 3 # 2 for 2D, 3 for 3D
+    L = 20.
+    c = 0.3
+    BN = L*sp.rand(dim,1)
+    BN0 = L*sp.rand(dim,1)
+    RN_TOA = L*sp.rand(dim,nRN)
+    RN_RSS = L*sp.rand(dim,nRN)
+    RN_TDOA = L*sp.rand(dim,nRN)
+            
+    d_TOA = dist(RN_TOA,BN,0) # actual distances
+    TOF = d_TOA/c # actual TOA
+    TOA_std = 0.001/c*np.ones(np.shape(TOF))
+    TOA = TOF + TOA_std
+
+    RSS_std = 0.001 * np.ones(nRN)
+    RSS_np = 2.645 * np.ones(nRN)
+    PL0 = 34.7*np.ones(nRN)
+    d0 = 1.
+    d_RSS = dist(RN_RSS,BN,0) # actual distances
+    X = RSS_std * np.random.randn(np.shape(PL0)[0])
+    RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
+    
+    RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
+    d = dist(RN_TDOA,BN,0)
+    dr = dist(RNr_TDOA,BN,0)
+    TDOF = (d-dr)/c # actual TDOA
+    TDOA_std = 0.001/c*np.ones(np.shape(TDOF))
+    TDOA = TDOF + TDOA_std
+
+    nodes={}
+    nodes['BN']= BN
+    nodes['RN_RSS']= RN_RSS
+    nodes['RN_TOA']= RN_TOA
+    nodes['RN_TDOA']= RN_TDOA
+    nodes['RNr_TDOA']= RNr_TDOA
+
+    ldp={}
+    ldp['RSS'] = RSS
+    ldp['RSS_std'] = RSS_std
+    ldp['RSS_np'] = RSS_np
+    ldp['d0'] = d0
+    ldp['PL0'] = PL0
+    ldp['TOA'] = TOA
+    ldp['TOA_std'] = TOA_std
+    ldp['TDOA'] = TDOA
+    ldp['TDOA_std'] = TDOA_std
+
+    return nodes, ldp, BN0
+
+        
+    
 
 if __name__ == "__main__":
     doctest.testmod()

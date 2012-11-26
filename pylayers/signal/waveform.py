@@ -156,7 +156,7 @@ class Waveform:
         x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
 
-        w   = EnImpulse(x,fc,band,thresh,fe)
+        w   = TUsignal()
         w.x=rt
         w.y=rTx
         W   = w.ftshift()

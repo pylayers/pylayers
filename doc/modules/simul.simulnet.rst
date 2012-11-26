@@ -1,8 +1,8 @@
 .. _simulnet:
 
 
-Module simulinet
-================
+simulinet
+=========
 
 .. automodule:: simul.simulnet
    :members:     
