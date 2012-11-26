@@ -88,7 +88,7 @@ class EMSolver(object):
 
 
 
-    def solve(self,p,e,LDP,RAT,epwr):
+    def solve(self,p,e,LDP,RAT,epwr,sens):
         """compute and return a LDP value thanks to a given method
 
         Attributes
@@ -158,12 +158,9 @@ class EMSolver(object):
 
                     pa = np.vstack(p.values())
                     lpa = len(pa)
-#                    MW=[]
-#                    frees=[]
-#                    lepwr=[]
                     Pr=[]
                     TOA=[]
-
+                    lsens=[]
                     for i in range(lpa-1):
                         MW=Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
 #                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
@@ -171,13 +168,13 @@ class EMSolver(object):
                         lepwr=epwr[i+1:lpa]
                         Pr.extend(lepwr - MW[0] - frees)
                         TOA.extend(MW[2])
+                        lsens.extend(sens[i+1:lpa])
                     P=np.outer(Pr,[1,1])
                     P[:,1]=model.sigrss
                     T=np.outer(TOA+d/0.3,[1,1])
                     T[:,1]=self.sigmaTOA*0.3
-                    pdb.set_trace()
-#                    v = P[:,0] < noisefl
-                    return (P,T,d)
+                    v = P[:,0] > lsens
+                    return (P,T,d,v)
 
 
 

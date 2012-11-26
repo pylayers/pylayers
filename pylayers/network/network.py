@@ -162,6 +162,7 @@ class Network(nx.MultiGraph):
 
 
 
+
     def combi(self,iterable,r,key,d=dict()):
         """ combi = itertools.combination(iterable,r) adapted 
     
@@ -373,6 +374,7 @@ class Network(nx.MultiGraph):
                 for n in self.SubNet[Rat].nodes():
                     try:
                         self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
+                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens'][Rat]
                     except: 
                         pass
 
@@ -390,6 +392,7 @@ class Network(nx.MultiGraph):
                 for n in self.SubNet[Rat].nodes():
                     try:
                         self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
+                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens'][Rat]
                     except: 
                         pass
 
@@ -527,9 +530,10 @@ class Network(nx.MultiGraph):
 
         p=nx.get_node_attributes(self.SubNet[RAT],'p')
         epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
+        sens=nx.get_node_attributes(self.SubNet[RAT],'sens').values()
         e=self.SubNet[RAT].edges()
-        lp,lt, d= self.EMS.solve(p,e,'all',RAT,epwr)
-        lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i]} for i in range(len(d))]
+        lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
+        lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i],'vis':v[i]} for i in range(len(d))]
         self.update_LDPs(ln,RAT,lD)
 
 
