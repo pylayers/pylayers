@@ -15,6 +15,7 @@ import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
 from   pylayers.util.project import *
 import pylayers.antprop.slab as slab
+import pdb
 #
 #  This file contains
 #
@@ -189,7 +190,8 @@ class Interaction(object):
 
     """
     def __init__(self, typ=0):
-        self.typ = [typ]
+#        self.typ = [typ]
+        self.typ = typ
         self.C   = np.eye(2,dtype=complex).reshape(1,1,2,2)
 
     def info(self):
@@ -683,7 +685,7 @@ class Ray3D(object):
             ax.plot(self.pt[:, 0], self.pt[:, 1], 'ok')
         return fig,ax
 
-    def show3(self, bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
+    def show3(self, _filestr='defstr',bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
         """ show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
 
         Parameters
@@ -733,7 +735,7 @@ class Ray3D(object):
         fo.write("{<" + filename_vect + "}\n")
         if (bstruc):
             #fo.write("{<strucTxRx.off}\n")
-            fo.write("{<struc.off}\n")
+            fo.write("{<" +_filestr +".off}\n")
         if (bbas):
             for i in range(self.nn - 1):
                 ptb = (self.pt[i + 1, :] + self.pt[i, :]) / 2
@@ -1109,7 +1111,7 @@ class GrRayTud(object):
         stop = start + 4
         dt = data[start:stop]
         self.nray = stru.unpack('i', dt)[0]
-
+        print self.nray
         self.rayTud = []
 
         for k in range(self.nray):
@@ -1260,7 +1262,7 @@ class GrRayTud(object):
                 self.rayTud.append(raytud)
                 delayold = delay
         nray = len(self.rayTud)
-        self.nray = nray
+#        self.nray = nray
         # decode the angular files (.tang and .rang)
 
         self.fail = False
