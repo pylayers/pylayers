@@ -89,8 +89,6 @@ Documentation
 
     modules/index.rst
     
-    bibliography.rst
-
 
 
 Third party packages 
