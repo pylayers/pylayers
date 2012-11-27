@@ -1,4 +1,4 @@
-from pylayers.gis.lirevrml import *
+from pylayers.gis.readvrml import *
 import pylayers.util.pyutil as pyu
 import matplotlib.pyplot as plt 
 import numpy as np 
