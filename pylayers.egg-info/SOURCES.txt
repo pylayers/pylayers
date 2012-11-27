@@ -14,6 +14,8 @@ pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/signature.py
 pylayers/antprop/slab.py
+pylayers/exploit/__init__.py
+pylayers/exploit/simnet.py
 pylayers/gis/__init__.py
 pylayers/gis/cycles.py
 pylayers/gis/furniture.py
@@ -67,12 +69,12 @@ pylayers/mobility/transit/Zones.py
 pylayers/mobility/transit/__init__.py
 pylayers/mobility/transit/vec3.py
 pylayers/network/__init__.py
-pylayers/network/brain.py
 pylayers/network/communication.py
 pylayers/network/emsolver.py
 pylayers/network/model.py
 pylayers/network/net.py
 pylayers/network/network.py
+pylayers/network/networktmp.py
 pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py

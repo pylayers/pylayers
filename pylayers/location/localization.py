@@ -145,9 +145,9 @@ class Localization(object):
 
         self.cla.update()
 
-    def savep(self,value,name='pe'):
+    def writep(self,value,name='pe'):
         """
-            Save an estimated position into self.net
+            write an estimated position into self.net
         """
         self.net.node[self.ID]['PN'].update_pos(self.ID,value,p_pe=name)
         self.net.update_pos(self.ID,value,p_pe=name)
@@ -161,8 +161,8 @@ class Localization(object):
         if sum(self.cla.runable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
-                self.savep(self.cla.pe,name='pe')
-                self.savep(self.cla.pe,name='pe_geo')
+                self.writep(self.cla.pe,name='pe')
+                self.writep(self.cla.pe,name='pe_geo')
 
 
     def compute_alg(self,rat='all',ldp='all',pe=True):
@@ -173,7 +173,19 @@ class Localization(object):
         if ldp == 'all':
             ldp=['Pr','TOA','TDOA']
         pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
-        self.savep(pe_alg.T,name='pe_alg')
+        self.writep(pe_alg.T,name='pe_alg')
+
+
+    def compute_crb(self,rat='all',ldp='all',pe=True):
+        """
+            Compute CramerRao bound
+        """
+        
+        if ldp == 'all':
+            ldp=['Pr','TOA','TDOA']
+        crb = self.algloc.crb(np.zeros((2,1)),'Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp)
+        self.writep(np.array(crb),name='crb')
+
 
 
 class PLocalization(Process):
@@ -192,5 +204,6 @@ class PLocalization(Process):
                 self.loc.compute_geo(ldp='TOA')
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
+                self.loc.compute_crb(ldp='TOA')
             print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
