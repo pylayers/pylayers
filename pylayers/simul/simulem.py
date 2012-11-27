@@ -739,11 +739,12 @@ class Simul(object):
         self.cfield = []
         self.freq = np.linspace(2, 11, 181, endpoint=True)
 
+        self.wav = wvf.Waveform()
         try:
             self.load(_filesimul)
         except:
             self.updcfg()
-            #self.load(self.filesimul)
+        #self.load(self.filesimul)
 
 
 
