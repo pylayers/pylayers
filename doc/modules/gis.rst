@@ -16,5 +16,7 @@ This module gathers all classes and functions related to geographical informatio
    gis.readvrml.rst 
 
    gis.furniture.rst 
+   
+   gis.cycles.rst 
 
    gis.selectl.rst 

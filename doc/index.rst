@@ -1,6 +1,6 @@
 
-PyLayers : Python mobile Localization rAY Electromagnetics Radio Simulator 
-=========================================================================
+PyLayers : Python mobile Localization Electromagnetics Radio Simulator 
+=======================================================================
 
 Pylayers is a mobile radio propagation simulator.
 Its purpose is to help designing localization and tracking solutions for advanced 
@@ -17,6 +17,9 @@ Example
     In [1]: import pylayers.simul.simulem as sem
 
     In [1]: S = sem.Simul()
+
+    @savefig example.png width=10in
+    In [1]: S.show()
 
 
 Features
@@ -86,14 +89,12 @@ Documentation
 
     modules/index.rst
     
-    bibliography.rst
-
 
 
 Third party packages 
 ====================
 
-Pylayers is written in Python and tributes highly the following Python packages
+Pylayers is written in Python and tributes highly the following Python packages:
 
 * numpy ( for algebra in multi dimensions )  
 * scipy ( for scientific libraries )
