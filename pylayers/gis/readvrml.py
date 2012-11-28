@@ -494,7 +494,8 @@ class VLayout(object):
         """
         Parameters
         ----------
-        filename
+        filename : str
+            
         """
         dg = parsevrml(filename)
         self.entity = {}
@@ -629,7 +630,7 @@ class VLayout(object):
             dwall[k]['zmax']=max(z)
             if len(z)==2:
                 dwall[k]['door']=False
-            else:    
+            else:
                 dwall[k]['door']  = True
                 dwall[k]['zdoor'] = z[1]
             #

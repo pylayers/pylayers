@@ -1,9 +1,9 @@
-from pylayers.gis.lirevrml import *
+from pylayers.gis.readvrml import *
 import pylayers.util.pyutil as pyu
 import matplotlib.pyplot as plt 
 import numpy as np 
 
-filename = pyu.getlong('B11D-R0.wrl','struc')
+filename = pyu.getlong('B11D-E1.wrl','struc')
 VL = VLayout()
 VL.load(filename)
 plt.figure(figsize=(15,5))
@@ -55,7 +55,8 @@ plt.axis('scaled')
 #
 #plt.axis('equal')
 ##doctest.testmod()
-rx  = np.array([[0,0,0,0,0,0,0,0],[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7],[1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5]])
-Orx = np.array([10.64-0.78,6.13,0])
+a = 0.07
+rx  = np.array([[0,0,0,0,0,0,0,0],[0,a,2*a,3*a,4*a,5*a,6*a,7*a],[1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5]])
+Orx = np.array([11.5,6.13,0])
 Rx  = rx + np.outer(Orx,np.ones(8))
 plt.plot(Rx[0,:],Rx[1,:],'or')

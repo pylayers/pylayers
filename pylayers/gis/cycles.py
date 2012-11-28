@@ -54,31 +54,31 @@ class Cycles(object):
         -----
 
         update cycle inclusion graph
-        L'inclusion n'est pas une relation réciproque c'est pourquoi on
-        boucle 2 fois sur l'intégralité des cycles
+        inclusion is not a reciprocal relation that is the reason why 
+        we loop twice over the entire cycles
 
         Algorithme :
             Pour tous les cycles
                 Ck
                 Pour tous les cycles
                       Cl
-                      Si c'est le même cycle on passe
+                      Si c'est le meme cycle on passe
                       Sinon
-                    On vérifie l'inclusion de Ck dans Cl
-                    Si Inclusion détectée
-                        Mise à jour du graphe
+                    check inclusion of Ck in Cl
+                    If Inclusion detected
+                        update graphe
                         d'inclusion Cl in Ck
 
         Attention :
             Le test d'inclusion de cycle de fonctionne que si les
             cycles ont un brin en commun. Si deux cycles ne
             partagent aucun brin le test d'inclusion renvoie False
-            même si ce n'est pas le cas
+            meme si ce n'est pas le cas
 
-        Les relations d'inclusion réelles sont retrouvées par
-        transitivité de la relation d'inclusion
+        Les relations d'inclusion reelles are recovered par
+        transitivity de la relation d'inclusion
 
-        Cette fonction met à jour un Digraph
+        Cette fonction met a jour un Digraph
         """
         self.Gi     = nx.DiGraph()
         self.contained_in = {}
@@ -148,13 +148,13 @@ class Cycles(object):
 
                 Si pas de voisins
                     Le cycle est simple ( non incluant)
-                    Mise à jour du graphe de topologie Gt
+                    Mise a jour du graphe de topologie Gt
                 Sinon
                     Le cycle est incluant
                     Construit la liste M de tous les cycles inclus dans Ck
 
                     Simplification de Ck avec M
-                    Mise à jour du graphe de topologie Gt
+                    Mise a jour du graphe de topologie Gt
 
         """
         self.Gt     = nx.Graph()

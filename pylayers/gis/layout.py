@@ -3112,6 +3112,9 @@ class Layout(object):
         if 'c' in graph:
             G = self.Gc
             nx.draw(G, self.Gs.pos, node_color='c', edge_color='c')
+        if 'i' in graph:
+            G = self.Gi
+            nx.draw(G,node_color='k', edge_color='k')
 
         for k, ncy in enumerate(self.Gt.node.keys()):
             self.Gt.node[ncy]['polyg'].plot()
@@ -3768,10 +3771,9 @@ class Layout(object):
 
         Parameters
         ----------
-        pTx  : np.array (2, 1)
-                ransmitter coordinates
-        pRx  : np.array (2, 1)
-                Receiver coordinates
+        iTx  : Transmitter room
+        iRx  :
+               Transmitter room
 
         Returns
         -------
@@ -3859,6 +3861,11 @@ class Layout(object):
 
     def get_Sg_pos(self, sigarr):
         """ return position of the signatures
+
+        Parameters
+        ----------
+
+        sigarr : signature
         """
         signature = sigarr[0]
         sposfull = np.zeros((len(signature), 2))

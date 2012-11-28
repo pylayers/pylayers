@@ -1,8 +1,8 @@
-
 .. _furniture:
 
 furniture
 =========
+
 
 .. automodule:: pylayers.gis.furniture
     :members:
