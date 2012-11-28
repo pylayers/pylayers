@@ -1102,11 +1102,10 @@ class Network(nx.MultiGraph):
                 if n[1]['type'] !='ap':
                     config = ConfigParser.ConfigParser()
                     config.read(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']))
+                    pdb.set_trace()
                     if 'alg' in self.method :
-
                         config.set('alg_est',str(self.idx+1),value = str(pe_alg[n[0]][0]) + ' ' + str(pe_alg[n[0]][1]) + ' '+str(height))
                     if 'geo' in self.method :
-                        pdb.set_trace()
                         config.set('geo_est',str(self.idx+1),value = str(pe_geo[n[0]][0]) + ' ' + str(pe_geo[n[0]][1]) + ' '+str(height))
                     file=open(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']),'w')
                     config.write(file)
@@ -1300,8 +1299,8 @@ class PNetwork(Process):
                 self.net.txt_save(self.sim)
 #            if 'ini' in self.save:
 #                self.net.ini_save(self.sim)
-            if 'loc' in self.save:
-                self.net.loc_save(self.sim)
+#            if 'loc' in self.save:
+#                self.net.loc_save(self.sim)
 
             self.net.pos=self.net.get_pos()
 

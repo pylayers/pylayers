@@ -173,7 +173,7 @@ class Localization(object):
         if ldp == 'all':
             ldp=['Pr','TOA','TDOA']
         pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
-        self.writep(pe_alg.T,name='pe_alg')
+        self.writep(pe_alg[:,0].T,name='pe_alg')
 
 
     def compute_crb(self,rat='all',ldp='all',pe=True):
@@ -205,5 +205,6 @@ class PLocalization(Process):
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
                 self.loc.compute_crb(ldp='TOA')
+                self.loc.net.loc_save(self.sim.now())
             print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
