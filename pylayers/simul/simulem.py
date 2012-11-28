@@ -2193,7 +2193,6 @@ class Simul(object):
                 # fix
                 # filename = rename(filename,itx,irx,'output')
                 self.dtauk[itx][irx] = filename
-
         _outfilename = self.config.get('output', str(itx))
         outfilename = pyu.getlong(_outfilename, pstruc['DIRLCH'])
         if irx in self.dtauk[itx].keys():
