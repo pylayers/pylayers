@@ -1082,7 +1082,7 @@ class Network(nx.MultiGraph):
                 file.close()
 
 
-    def loc_save(self,S,node='all'):
+    def loc_save(self,S,node='all',p=False):
         """
             save node estimated positions into ini file,
 
@@ -1106,7 +1106,7 @@ class Network(nx.MultiGraph):
 
         pe_alg = nx.get_node_attributes(self,'pe_alg')
         pe_geo = nx.get_node_attributes(self,'pe_geo')
-
+        p = nx.get_node_attributes(self,'p')
         ### save agent positions estimations
         for n in node:
             if self.node[n]['type'] !='ap':
@@ -1116,6 +1116,8 @@ class Network(nx.MultiGraph):
                     config.set('alg_est',str(self.idx+1),value = str(pe_alg[n[0]][0]) + ' ' + str(pe_alg[n[0]][1]) + ' '+str(height))
                 if pe_geo != {} :
                     config.set('geo_est',str(self.idx+1),value = str(pe_geo[n[0]][0]) + ' ' + str(pe_geo[n[0]][1]) + ' '+str(height))
+                if p:
+                    config.set('coordinates',str(self.idx+1),value = str(p[n[0]][0]) + ' ' + str(p[n[0]][1]) + ' '+str(height))
                 file=open(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']),'w')
                 config.write(file)
                 file.close()

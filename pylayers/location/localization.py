@@ -108,7 +108,6 @@ class Localization(object):
 
         self.algloc.nodes={}
         self.algloc.ldp={}
-
         for c in self.cla.c:
             crat,cldp,e,own=c.origin.values()
             if (crat in rat) and (cldp in ldp) :
@@ -142,7 +141,7 @@ class Localization(object):
             self.algloc.nodes['RN_TOA']=self.algloc.nodes['RN_TOA'].T
         except:
             pass
-
+        print self.cla.c[0].value
         self.cla.update()
 
     def writep(self,value,name='pe'):
@@ -206,6 +205,7 @@ class PLocalization(Process):
                 self.loc.compute_alg(ldp='TOA')
                 self.loc.compute_crb(ldp='TOA')
             if 'loc' in self.loc.save:
-                self.loc.net.loc_save(self.sim.now(),self.loc.ID)
+                p = ('pyray' not in self.loc.save)
+                self.loc.net.loc_save(self.sim.now(),self.loc.ID,p=p)
             print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
