@@ -8,9 +8,9 @@ S = Simul()
 # loading a layout 
 filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')
-S.L.dumpr()
-#S.L.build()
-#S.L.dumpw()
+#S.L.dumpr()
+S.L.build()
+S.L.dumpw()
 S.tx = RadioNode(typ='tx')
 S.tx.point([1.2,1,1.4])
 
