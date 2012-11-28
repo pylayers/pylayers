@@ -162,6 +162,7 @@ class Network(nx.MultiGraph):
         self.pos={}
         self.mat={}
         self.idx = 0
+        self.lidx = 0
 
     def perm(self,iterable,r,key,d=dict()):
         """ combi = itertools.permutation(iterable,r) adapted 
@@ -897,14 +898,14 @@ class Network(nx.MultiGraph):
         AG=[]
         api=1
         loc=False
+        method = []
         # get methods for localization
         simcfg = ConfigParser.ConfigParser()
         simcfg.read(pyu.getlong('simulnet.ini','ini'))
         save =eval(simcfg.get('Save','save'))
-        if str2bool(simcfg.get('Localization','localization')):
+        if 'loc' in save:
             loc = True
             method = eval(simcfg.get('Localization','method'))
-
 
         ## find Agent and Acces point
         for i in range(len(pos)):
@@ -922,13 +923,27 @@ class Network(nx.MultiGraph):
             else:
                 AG.append(pos[i][0])
                 config = ConfigParser.ConfigParser()
-                file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
-                config.add_section('coordinates')
-                if loc :
-                    if 'geo' in method:
+                if not os.path.isfile(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE'])):
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
+                    config.add_section('coordinates')
+                    if loc :
+                        if 'geo' in method:
+                            config.add_section('geo_est')
+                        if 'alg' in method:
+                            config.add_section('alg_est')
+                # if simulation has already been runed with localization, this
+                # ensure that localization section will be created
+
+                else :
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
+                    config.read(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']))
+                    if 'coordinates' not in config.sections():
+                        config.add_section('coordinates')
+                    if 'geo_est' not in config.sections() and 'geo' in method:
                         config.add_section('geo_est')
-                    if 'alg' in method:
+                    if 'alg_est' not in config.sections() and 'alg' in method:
                         config.add_section('alg_est')
+
                 config.write(file)
                 file.close()
 
@@ -1056,11 +1071,9 @@ class Network(nx.MultiGraph):
         ### create ini files
         if self.idx == 0:
             self.init_save(height=height)
-
         ### save agent positions
         for i in range(len(pos)):
             if self.node[pos[i][0]]['type'] !='ap':
-
                 config = ConfigParser.ConfigParser()
                 config.read(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']))
                 config.set('coordinates',str(self.idx+1),value = str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
@@ -1069,48 +1082,44 @@ class Network(nx.MultiGraph):
                 file.close()
 
 
-
-    def loc_save(self,S):
+    def loc_save(self,S,node='all'):
         """
             save node estimated positions into ini file,
 
         Attributes:
         ----------
         
-        filename : string 
-                   name of the pyray file
         S        : Simulation
                    Scipy.Simulation object
         """
 
-
+        if node  == 'all':
+            node = self.nodes()
+        elif not isinstance(node,list):
+            node = [node]
 
 
         height=1.5
         ### create ini files
-        if self.idx == 0:
-            self.method = self.init_save(height=height)
+        if self.lidx == 0:
+            self.init_save(height=height)
 
         pe_alg = nx.get_node_attributes(self,'pe_alg')
         pe_geo = nx.get_node_attributes(self,'pe_geo')
 
-
         ### save agent positions estimations
-#        for i in range(len(pos)):
-        if pe_geo !={}:
-            for n in self.nodes(data=True):
-                if n[1]['type'] !='ap':
-                    config = ConfigParser.ConfigParser()
-                    config.read(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']))
-                    pdb.set_trace()
-                    if 'alg' in self.method :
-                        config.set('alg_est',str(self.idx+1),value = str(pe_alg[n[0]][0]) + ' ' + str(pe_alg[n[0]][1]) + ' '+str(height))
-                    if 'geo' in self.method :
-                        config.set('geo_est',str(self.idx+1),value = str(pe_geo[n[0]][0]) + ' ' + str(pe_geo[n[0]][1]) + ' '+str(height))
-                    file=open(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']),'w')
-                    config.write(file)
-                    file.close()
-
+        for n in node:
+            if self.node[n]['type'] !='ap':
+                config = ConfigParser.ConfigParser()
+                config.read(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']))
+                if pe_alg != {} :
+                    config.set('alg_est',str(self.idx+1),value = str(pe_alg[n[0]][0]) + ' ' + str(pe_alg[n[0]][1]) + ' '+str(height))
+                if pe_geo != {} :
+                    config.set('geo_est',str(self.idx+1),value = str(pe_geo[n[0]][0]) + ' ' + str(pe_geo[n[0]][1]) + ' '+str(height))
+                file=open(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']),'w')
+                config.write(file)
+                file.close()
+        self.lidx=self.lidx+1
 
 
 

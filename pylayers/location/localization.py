@@ -24,7 +24,7 @@ class Localization(object):
 
     def __init__(self,**args):
         
-        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0'}
+        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0','save':[]}
 
         for key, value in defaults.items():
             if key in args:
@@ -205,6 +205,7 @@ class PLocalization(Process):
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
                 self.loc.compute_crb(ldp='TOA')
-                self.loc.net.loc_save(self.sim.now())
+            if 'loc' in self.loc.save:
+                self.loc.net.loc_save(self.sim.now(),self.loc.ID)
             print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
