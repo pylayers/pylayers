@@ -190,6 +190,9 @@ class Interaction(object):
 
     """
     def __init__(self, typ=0):
+        """
+        C : nray,nf,2,2
+        """
 #        self.typ = [typ]
         self.typ = typ
         self.C   = np.eye(2,dtype=complex).reshape(1,1,2,2)
@@ -245,7 +248,7 @@ class Interaction(object):
 #        print "Mat2 : sense <==> sense2 : ",self.Mat[7]
 
 class IntB(Interaction):
-    """ Local Basis interaction class
+    """ Local Basis int eraction class
 
     Notes
     ------
@@ -289,7 +292,7 @@ class IntL(Interaction):
         div = 1.0 / self.dist
         Co[:, 0, 0] = div
         Co[:, 1, 1] = div
-        return(Co)
+        return(Co) 
 
 
 class IntR(Interaction):
@@ -313,6 +316,7 @@ class IntR(Interaction):
         si = self.si
         sr = self.sr
         theta = self.theta
+        s1 = Slab()
 
 
 class IntT(Interaction):
@@ -839,8 +843,7 @@ class RayTud(object):
         return(d / 0.3)
 
     def signature(self):
-        """
-            return ray signature
+        """ returns ray signature
         """
         Signature = []
         for k in range(self.ni):
@@ -1197,7 +1200,8 @@ class GrRayTud(object):
                 if l1 not in sl.mat.di:
                     valerr = True
                     break
-
+                
+                # if reflexion / transmission or diffraction 
                 if ((caract == 1) | (caract == 2) | (caract == 3)):
                     inter.Mat1 = []
                     dim = sl.mat.di

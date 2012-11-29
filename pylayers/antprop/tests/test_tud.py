@@ -2,6 +2,7 @@ from pylayers.simul.simulem import *
 from pylayers.antprop.rays import *
 from pylayers.antprop.channel import *
 import pylayers.util.pyutil as pyu
+#import pylayers.antprop. as pyu
 # create a Simul object
 
 S = Simul()
@@ -35,16 +36,40 @@ G3.load(S.dtra[itx][irx],S.L)
 
 
 Gt=GrRayTud()
-Gt.load(S.dtud[itx][irx],S.dtang[itx][irx],S.drang[itx][irx],S.sl)
+Gt.load(S.dtud[itx][irx],S.dtang[itx][irx],S.drang[itx][irx],S.L.sl)
 
 r3=G3.ray3d[1]
 r3.locbas(S.L)
 #r3.show3()
 rt=Gt.rayTud[1]
 
+C = Ctilde()
+C.load(pyu.getlong(S.dfield[itx][irx],'output'))
 
+freq = C.Ctt.x
+#rt.eval(freq)
 
-
+ir = 1
+tang = C.tang[ir]
+rang = C.rang[ir]
+tauk = C.tauk[ir]
+Ctt  = C.Ctt.y[ir,:]
+Ctp  = C.Ctp.y[ir,:]
+Cpt  = C.Cpt.y[ir,:]
+Cpp  = C.Cpp.y[ir,:]
+plt.ion()
+ax1 = plt.subplot(221)
+plt.plot(freq,abs(Ctt))
+plt.title('Ctt')
+plt.subplot(222,sharex=ax1,sharey=ax1)
+plt.plot(freq,abs(Ctp))
+plt.title('Ctp')
+plt.subplot(223,sharex=ax1,sharey=ax1)
+plt.plot(freq,abs(Cpt))
+plt.title('Cpt')
+plt.subplot(224,sharex=ax1,sharey=ax1)
+plt.plot(freq,abs(Cpp))
+plt.title('Cpp')
 ## print launching parameters
 #S.palch.info()
 
