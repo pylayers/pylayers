@@ -93,6 +93,7 @@ class Interface(object):
         self.R = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
         self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
+
         self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
         self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
 
