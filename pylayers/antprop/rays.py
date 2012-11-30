@@ -15,6 +15,7 @@ import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
 from   pylayers.util.project import *
 import pylayers.antprop.slab as slab
+import ConfigParser
 import pdb
 #
 #  This file contains
@@ -100,99 +101,132 @@ import pdb
 #        #elif (typ==3):
 
 
-class  Interactions(object):
-    """ Interaction parameters
+class Inter(object):
 
-    Notes
-    -----
-    This class contains all the informations about a succection of Interaction
+    def __init__(self,typ=0,data=np.array(()),idx=[],_filesimul='default.ini'):
+    """
+        Meta class of specific interractions ( Interractions, IntB/IntL/IntT,....
 
-    type :  Interaction type
-            -1  -  Ray's local basis
-                   m11 m12
-                   m21 m22
-             0  -  Direct (LOS)
-                   LOS distance
-             1  -  Reflexion
-                   theta
-                   Si
-                   Sr
-             2  -  Transmission
-                   theta
-                   Si
-                   St
-             3  -  Difraction
-                   theta
-                   theta_d
-                   Si
-                   Sd
-                   beta0
-                   N
-                   typed
 
-    Mat  : ( Mav1 , Mslab1 , Map1 , sense1 , Mav2 , Mslab2 , Map2 , sense2 )
+    Attributes
+    ----------
+        typ : int
+            type of interaction
+        data: np.array
+            data for the interraction
+        idx:    
+            idx number of the interaction between 0 and (ray number * inter number)
+        f : np.array
+            frequency range
+        nf : int
+            number of step into freq range
+        olf : np.array
+            np.ones((nf)) used to broacasting
 
-    Methods
-    -------
-
-    info()
 
     """
+
+        self.typ=typ
+        self.data=data
+        self.idx=idx
+
+
+        ## The config parser load is done inorder to :
+        ## All IntB/IntL/IntR/IntT/... inherits of the correct 
+        ## self.frequency from the Interraction class !
+        ## It could be interesting to find another trick which 
+        ## avoid to give a filesimulname.
+        config = ConfigParser.ConfigParser() 
+        filesimul = pyu.getlong(_filesimul, "ini")
+        config.read(filesimul)
+
+        ## frequency
+        mi=eval(config.get("frequency", "fghzmin"))
+        ma =eval(config.get("frequency", "fghzmax"))
+        st=eval(config.get("frequency", "nf"))
+        self.f=np.linspace(mi,ma,st)
+        self.nf=len(self.f)
+        self.olf = np.ones(self.nf)
+
+        self.idx=[]
+        if idx != []:
+            self.idx.append(idx)
+
+
+class Interactions(Inter):
+    """ Interaction parameters
+        gather all interractions
+
+    Attributes
+    ----------
+        mapp : dict
+            mapping dictionary : link idx number of Inter to ray and inter
+                mapp = {'idx number': np.array(ray number, interaction number)}
+        di: dict:
+            the key is the interaction type, and the key contains all the index
+            corresponding of interactions
+             di = {'B'=[0,4,5,6],'L'=[1,3,4,8]}
+
+        ------------------------------------------------
+        self.mapp and self.di allows to link 
+        the Inter.idx to the correct ray and interaction
+        ------------------------------------------------
+
+
+    """
+
+    id = 0 # Global counter of interractions
+
     def __init__(self):
         """
-        C   : (nf,ni,2,2) 
-        typ : (ni,)
 
         """
-        self.typ = []
-        self.C   = np.eye(2,dtype=complex).reshape(1,1,2,2)
+        Inter.__init__(self)
+        self.mapp={}
+        self.di={}
+        self.di['B']=[]
+        self.di['L']=[]
+        self.di['R']=[]
+        self.di['T']=[]
+        self.di['D']=[]
 
-    def addB(self,M):
-        self.typ.insert(0,-1)
-        self.C = np.concatenate((M.reshape(1,1,2,2),self.C),axis=1) 
 
-class Interaction(object):
-    """ Interaction parameters
 
-    Notes
-    -----
-    This class contains all the informations about a succection of Interaction
 
-    type :  Interaction type
-            -1  -  Ray's local basis
-                   m11 m12
-                   m21 m22
-             0  -  Direct (LOS)
-                   LOS distance
-             1  -  Reflexion
-                   theta
-                   Si
-                   Sr
-             2  -  Transmission
-                   theta
-                   Si
-                   St
-             3  -  Difraction
-                   theta
-                   theta_d
-                   Si
-                   Sd
-                   beta0
-                   N
-                   typed
+#        self.A = array(( r, l , k , p ,q )
 
-    Mat  : ( Mav1 , Mslab1 , Map1 , sense1 , Mav2 , Mslab2 , Map2 , sense2 )
+    def addi(self,i):
+        """
+            Add interactions as a member of Interractions class
+        """
+        if i.typ == -1:
+            self.B = i
+            self.di['B']=i.idx
+        if i.typ == 0:
+            self.L = i
+            self.di['L']=i.idx
+        if i.typ == 1:
+            self.R = i
+            self.di['R']=i.idx
+        if i.typ == 2:
+            self.T = i
+            self.di['T']=i.idx
+        if i.typ == 3:
+            self.D = i
+            self.di['D']=i.idx
 
-    Methods
-    -------
+    def eval(self):
+        '''
+            evaluate all the interactions 
+            TODO
+        '''
+        self.B.eval()
+        self.L.eval()
+        self.R.eval()
+        self.T.eval()
+        self.D.eval()
 
-    info()
 
-    """
-    def __init__(self, typ=0):
-#        self.typ = [typ]
-        self.typ = typ
-        self.C   = np.eye(2,dtype=complex).reshape(1,1,2,2)
 
     def info(self):
         if (self.typ == -1):
@@ -244,111 +278,251 @@ class Interaction(object):
 #        print "Mat2 : right <=> Map2    : ",self.Mat[6]
 #        print "Mat2 : sense <==> sense2 : ",self.Mat[7]
 
-class IntB(Interaction):
+
+
+
+
+class IntB(Inter):
     """ Local Basis interaction class
 
-    Notes
-    ------
+        Basis interactions
+
+        Attribute
+            data : np.array:
+                WARNING np.shape(data) = (niter x 4)
+
+                the input matrix 2x2 is rehaped as 1x 4
+
+            idx : list
+                
 
     """
-    def __init__(self, typ, M):
-        Interaction.__init__(self, typ)
-        self.M = M
+    def __init__(self, data=np.array(()),idx=[]):
 
-    def eval(self, fGHz):
-        """ evaluate interaction
+        Inter.__init__(self,data=data,idx=idx,typ=-1)
 
-        Parameters
-        ----------
-        fGHz :  float
+    def stack(self,a,idx):
+        self.data=np.vstack((self.data,a))
+        self.idx.append(idx)
 
-        Notes
-        -----
-        repeat the M matrix along the frequency axis (axis = 0 )
 
-        .. todo::  consider using broadcasting
+    def eval(self):
         """
+            evaluation of B interractions
 
-        nf = len(fGHz)
-        Co = np.array([self.M])
-        return(Co.repeat(nf, axis=0))
+        >>> from pylayers.antprop.rays import *
+        >>> M = np.eye(2).reshape(4)
+        >>> B = IntB(M,0)
+        >>> nf = B.nf
+        >>> niter = len(B.idx)
+        >>> B.data
+        array([ 1.,  0.,  0.,  1.])
+        >>> B.stack(M,1)
+        >>> B.data
+        array([[ 1.,  0.,  0.,  1.],
+        [ 1.,  0.,  0.,  1.]])
+        >>> eB=B.eval()
+        >>> np.shape(eB)
+        (niter ,nf, 2, 2)
+        """
+        lidx=len(self.idx)
+        data=self.data.reshape(lidx,2,2)
+        pdb.set_trace()
+        return(self.olf[np.newaxis,:,np.newaxis,np.newaxis]*data[:,np.newaxis,:,:])
 
 
-class IntL(Interaction):
-    """ LOS interaction c lass
 
 
+class IntL(Inter):
     """
-    def __init__(self, typ, dist):
-        Interaction.__init__(self, typ)
-        self.dist = dist
-
-    def eval(self, f):
-        nf = len(f)
-        Co = np.array(np.zeros([nf, 2, 2]), dtype=complex)
-        div = 1.0 / self.dist
-        Co[:, 0, 0] = div
-        Co[:, 1, 1] = div
-        return(Co)
+        Loss interraction
+    """
+    def __init__(self, data=np.array(()),idx=[]):
+        Inter.__init__(self,data=data,idx=idx,typ=0)
 
 
-class IntR(Interaction):
+    def stack(self,a,idx):
+        self.data=np.vstack((self.data,a))
+        self.idx.append(idx)
+        self.E=np.eye(2)
+
+    def eval(self):
+        """
+            evaluation of B interractions
+
+        >>> from pylayers.antprop.rays import *
+        >>> d = np.array((5))
+        >>> L = IntL(d,0)
+        >>> nf = L.nf
+        >>> niter = len(L.idx)
+        >>> L.data
+        >>> L.stack(d,1)
+        >>> L.data
+        array([5,5])
+        >>> eL=L.eval()
+        >>> np.shape(eL)
+        (niter ,nf, 2, 2)
+        """
+        pdb.set_trace()
+        ## Friis formula
+        div = (0.3 / (4*np.pi*self.data[:,np.newaxis]*self.f[np.newaxis,:]))
+        return(div[:,:,np.newaxis,np.newaxis]
+               *self.E[np.newaxis,np.newaxis,:,:])
+
+
+class IntR(Inter):
     """ Reflexion interaction class
+        TODO
     """
-    def __init__(self, typ, data):
-        Interaction.__init__(self, typ)
-        self.theta = data[0]
-        self.si = data[1]
-        self.sr = data[2]
+    def __init__(self, data=np.array(()),idx=[] ):
+#        self.theta = data[0]
+#        self.si = data[1]
+#        self.sr = data[2]
+        Inter.__init__(self,data=data,idx=idx,typ=1)
 
-    def eval(self, fGHz):
-        """
-        Parameters
-        ----------
-        fGHz : float
-            frequency in GHz
 
+
+    def stack(self,a,idx):
+        self.data=np.hstack((self.data,a))
+        self.idx.append(idx)
+
+
+    def eval(self):
         """
+        """
+
         div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
         si = self.si
         sr = self.sr
         theta = self.theta
 
 
-class IntT(Interaction):
+class IntT(Inter):
     """ Transmission  interaction class
+        TODO
     """
-    def __init__(self, typ, data):
-        Interaction.__init__(self, typ)
-        self.theta = data[0]
-        self.si = data[1]
-        self.st = data[2]
+    def __init__(self, data=np.array(()),idx=[]):
+#        self.theta = data[0]
+#        self.si = data[1]
+#        self.st = data[2]
+        Inter.__init__(self,data=data,idx=idx,typ=2)
 
-    def eval(self, fGHz):
-        """
-        Parameters
-        ----------
-        fGHz : float
-            frequency in GHz
 
+
+    def stack(self,a,idx):
+        self.data=np.vstack((self.data,a))
+        self.idx.append(idx)
+
+    def eval(self):
         """
+        """
+        pdb.set_trace()
         div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
         si = self.si
         sr = self.sr
         theta = self.theta
 
-class IntD(Interaction):
+class IntD(Inter):
     """ Diffraction interaction class
+        TODO
     """
-    def __init__(self, typ, data1, data2):
-        Interaction.__init__(self, typ)
-        self.theta = data1[0]
-        self.thetad = data1[1]
-        self.si = data1[2]
-        self.sd = data1[3]
-        self.beta = data1[4]
-        self.N = data1[5]
-        self.typed = data2[0]
+    def __init__(self, data=np.array(()),idx=[]):
+#        self.theta = data1[0]
+#        self.thetad = data1[1]
+#        self.si = data1[2]
+#        self.sd = data1[3]
+#        self.beta = data1[4]
+#        self.N = data1[5]
+#        self.typed = data2[0]
+        Inter.__init__(self,data=data,idx=idx,typ=3)
+
+
+
+    def stack(self,a,idx):
+        self.data=np.vstack((self.data,a))
+        self.idx.append(idx)
+
+
+#    """ LOS interaction class
+
+#    Returns
+#    -------
+#        np.array(()) : shape : len(self.freq) x 2 x 2 
+
+#    Example
+#    -------
+
+#    >>> from pylayers.antprop.rays import *
+#    >>> dist = 10
+#    >>> I=IntL(dist)
+#    >>> L = I.eval()
+#    >>> nf = L.nf
+#    >>> np.shape(L)
+#    (nf, 2, 2)
+#    >>> L[0][0]
+#    array([[ 0.00119366+0.j,  0.00000000+0.j],
+#    [ 0.00000000+0.j,  0.00119366+0.j]])
+#    """
+
+
+#    def __init__(self, dist):
+#        self.dist = dist
+
+#    def eval(self):
+#        ## Friis formula
+#        div = (0.3 / (4*np.pi*self.dist*self.f))
+#        return(self.olf[:,np.newaxis,np.newaxis]
+#               *div[:,np.newaxis,np.newaxis]
+#               *self.C[np.newaxis,:,:])
+
+
+
+#class IntR(object):
+#    """ Reflexion interaction class
+#    """
+#    def __init__(self, data):
+#        self.theta = data[0]
+#        self.si = data[1]
+#        self.sr = data[2]
+
+#    def eval(self):
+#        """
+#        """
+
+#        div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
+#        si = self.si
+#        sr = self.sr
+#        theta = self.theta
+
+
+#class IntT(object):
+#    """ Transmission  interaction class
+#    """
+#    def __init__(self, data):
+#        self.theta = data[0]
+#        self.si = data[1]
+#        self.st = data[2]
+
+#    def eval(self):
+#        """
+#        """
+#        pdb.set_trace()
+#        div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
+#        si = self.si
+#        sr = self.sr
+#        theta = self.theta
+
+#class IntD(object):
+#    """ Diffraction interaction class
+#    """
+#    def __init__(self, data1, data2):
+#        self.theta = data1[0]
+#        self.thetad = data1[1]
+#        self.si = data1[2]
+#        self.sd = data1[3]
+#        self.beta = data1[4]
+#        self.N = data1[5]
+#        self.typed = data2[0]
 
 #    def eval(self,freq):
 #        """
@@ -380,6 +554,9 @@ class IntD(Interaction):
 #            beta0 = self.intpara[5]
 #            n = self.intpara[6]
 #            typd = self.intpara[7]
+
+
+
 
 
 class Ray2D(object):
@@ -605,13 +782,13 @@ class Ray3D(object):
                 theta = self.phii[l + 1]
                 siR = lsi[l]
                 srR = lsi[l + 1]
-                I = IntR(typ, [theta, siR, srR])
+                I = IntR([theta, siR, srR])
             if typ == 2:  # Transmission
                 #theta  = np.arccos(abs(ps))  'validated'
                 theta = self.phii[l + 1]
                 siT = lsi[l]
                 srT = lsi[l + 1]
-                I = IntT(typ, [theta, siT, srT])
+                I = IntT([theta, siT, srT])
             if typ == 3:  # Diffraction
                 theta = self.phii[l + 1]
                 thetad = self.phid[l + 1]
@@ -623,7 +800,7 @@ class Ray3D(object):
                 #
                 N = 0
                 typed = 0
-                I = IntD(typ, [theta, thetad, siD, sdD, beta, N], [typed])
+                I = IntD([theta, thetad, siD, sdD, beta, N], [typed])
             #
             # add a new interaction in raytud object
             #
@@ -635,7 +812,7 @@ class Ray3D(object):
         #gt.inter.append(I=[)
         for k in range(nn - 1):
             M = np.dot(self.Bo[k, :, 1::].T, self.Bi[k, :, 1::])
-            I = IntB(-1, M)
+            I = IntB(M)
             self.gt.inter.insert(2 * k, I)
             #M[k,:,:] = np.dot(self.Bo[k,:,1::].T,self.Bi[k,:,1::])
 
@@ -880,7 +1057,9 @@ class GrRayTud(object):
     ----------
     nray    : number of rayTud
     rayTud  : list of RayTud object
-
+    I : class interaction which contrinats all the interactiosn of The
+        GrRayTud ( see class Interactions help)
+    mapp : 
     Methods
     -------
 
@@ -890,6 +1069,10 @@ class GrRayTud(object):
     """
     def __init__(self):
         self.nray = 0
+        self.I = Interactions()
+
+
+
 
     def dir(self):
         """ list the available file in tuddir
@@ -1114,6 +1297,15 @@ class GrRayTud(object):
         print self.nray
         self.rayTud = []
 
+        index= 0
+        ## in order to inialize all type of interaction with the correct frequencies
+
+        L=IntL()
+        R=IntR()
+        T=IntT()
+        D=IntD()
+
+
         for k in range(self.nray):
             raytud = RayTud()
             start = stop
@@ -1127,8 +1319,8 @@ class GrRayTud(object):
             nbint = stru.unpack('i', dt)[0]
             raytud.ni = nbint
             Inter = []
-            #print "Nombre interactions : ",nbint
             for i in range(nbint):
+                self.I.mapp[index]=np.array((k,i))
                 start = stop
                 stop = start + 4
                 dt = data[start:stop]
@@ -1138,166 +1330,462 @@ class GrRayTud(object):
                     stop = start + 32
                     dt = data[start:stop]
                     m = stru.unpack('4d', dt)
-                    M = np.array([[m[0], m[1]], [m[2], m[3]]])
-                    inter = IntB(-1, M)
+                    M = np.array((m[0], m[1], m[2], m[3]))
+                    try:
+                        B.stack(M,index)#inter = IntB(M)
+                    except:
+                        B=IntB(data=M,idx=index)
+                    index=index+1
+#                   M = np.array([[m[0], m[1]], [m[2], m[3]]])
+#                    inter = IntB(M)
             #        inter.data = M
                 elif (caract == 0):
                     start = stop
                     stop = start + 8
                     dt = data[start:stop]
                     dist = stru.unpack('d', dt)
-                    inter = IntL(0, dist[0])
+                    try:
+                        L.stack(L,index)#inter = IntB(M)
+                    except:
+                        L=IntL(dist,index)
+                    index=index+1
+#                    inter = IntL(dist[0])
             #        inter.data = dist
+
+######################## TODO AFTER THIS POINT !!!!!!!!!!!!!!
                 elif (caract == 1):
                     start = stop
                     stop = start + 24
                     dt = data[start:stop]
                     datR = stru.unpack('3d', dt)
-                    inter = IntR(1, datR)
-            #        inter.data = datR
+#                    inter = IntR(datR)
+#            #        inter.data = datR
+                    index = index+1
                 elif (caract == 2):
                     start = stop
                     stop = start + 24
                     dt = data[start:stop]
                     datT = stru.unpack('3d', dt)
-                    inter = IntT(2, datT)
-            #        inter.data = datT
+                    index = index+1
+#                    inter = IntT(datT)
+#            #        inter.data = datT
                 elif (caract == 3):
             #        inter.data = []
                     start = stop
                     stop = start + 48
                     dt = data[start:stop]
                     datD = stru.unpack('6d', dt)
-            #        (inter.data).append(datD)
+#            #        (inter.data).append(datD)
                     start = stop
                     stop = start + 4
                     dt = data[start:stop]
                     typD = stru.unpack('i', dt)
-                    inter = IntD(3, datD, typD)
-            #        (inter.data).append(typD)
+                    index = index+1
+#                    inter = IntD(datD, typD)
+#            #        (inter.data).append(typD)
 
                 start = stop
                 stop = start + 32
                 dt = data[start:stop]
                 datMat = stru.unpack('8i', dt)
-                inter.datMat = datMat
-                l1 = datMat[0]
-                c1 = datMat[1]
-                r1 = datMat[2]
-                s1 = datMat[3]
+            self.I.addi(B)
+#                inter.datMat = datMat
+#                l1 = datMat[0]
+#                c1 = datMat[1]
+#                r1 = datMat[2]
+#                s1 = datMat[3]
 
-                l2 = datMat[4]
-                c2 = datMat[5]
-                r2 = datMat[6]
-                s2 = datMat[7]
+#                l2 = datMat[4]
+#                c2 = datMat[5]
+#                r2 = datMat[6]
+#                s2 = datMat[7]
 
-                # evalfield bug fix
-                # slab material inconsistency
-                #
-                if l1 not in sl.mat.di:
-                    valerr = True
-                    break
+#                # evalfield bug fix
+#                # slab material inconsistency
+#                #
+#                if l1 not in sl.mat.di:
+#                    valerr = True
+#                    break
 
-                if ((caract == 1) | (caract == 2) | (caract == 3)):
-                    inter.Mat1 = []
-                    dim = sl.mat.di
-                    #print dim.keys()
-                    #print l1
-                    #print r1
-                    dis = sl.di
-                    if s1 == 0:
-                        matl = sl.mat[dim[l1]]
-                        matr = sl.mat[dim[r1]]
-                    else:
-                        matl = sl.mat[dim[r1]]
-                        matr = sl.mat[dim[l1]]
+#                if ((caract == 1) | (caract == 2) | (caract == 3)):
+#                    inter.Mat1 = []
+#                    dim = sl.mat.di
+#                    #print dim.keys()
+#                    #print l1
+#                    #print r1
+#                    dis = sl.di
+#                    if s1 == 0:
+#                        matl = sl.mat[dim[l1]]
+#                        matr = sl.mat[dim[r1]]
+#                    else:
+#                        matl = sl.mat[dim[r1]]
+#                        matr = sl.mat[dim[l1]]
 
-                    inter.Mat1.append(matl)
-                    slab1 = sl[dis[c1]]
-                    for i in range(slab1['nbmat']):
-                        im = slab1['imat'][i]
-                        th = slab1['thickness'][i]
-                        matc = sl.mat[dim[im]]
-                        #matc.thick = th       # !!! thick existe plus
-                        inter.Mat1.append(matc)
+#                    inter.Mat1.append(matl)
+#                    slab1 = sl[dis[c1]]
+#                    for i in range(slab1['nbmat']):
+#                        im = slab1['imat'][i]
+#                        th = slab1['thickness'][i]
+#                        matc = sl.mat[dim[im]]
+#                        #matc.thick = th       # !!! thick existe plus
+#                        inter.Mat1.append(matc)
 
-                    inter.Mat1.append(matr)
-#
-#  Mat 2 is used only for diffraction
-#
-                if (caract == 3):
-                    inter.Mat2 = []
-                    if s2 == 0:
-                        matl = sl.mat[dim[l2]]
-                        matr = sl.mat[dim[r2]]
-                    else:
-                        matl = sl.mat[dim[r2]]
-                        matr = sl.mat[dim[l2]]
+#                    inter.Mat1.append(matr)
+##
+##  Mat 2 is used only for diffraction
+##
+#                if (caract == 3):
+#                    inter.Mat2 = []
+#                    if s2 == 0:
+#                        matl = sl.mat[dim[l2]]
+#                        matr = sl.mat[dim[r2]]
+#                    else:
+#                        matl = sl.mat[dim[r2]]
+#                        matr = sl.mat[dim[l2]]
 
-                    inter.Mat2.append(matl)
-                    slab2 = sl[dis[c2]]
-                    for i in range(slab2.nbmat):
-                        im = slab2.imat[i]
-                        th = slab2.thickness[i]
-                        matc = sl.mat[dim[im]]
-                        matc.thick = th
-                        inter.Mat2.append(matc)
+#                    inter.Mat2.append(matl)
+#                    slab2 = sl[dis[c2]]
+#                    for i in range(slab2.nbmat):
+#                        im = slab2.imat[i]
+#                        th = slab2.thickness[i]
+#                        matc = sl.mat[dim[im]]
+#                        matc.thick = th
+#                        inter.Mat2.append(matc)
 
-                    inter.Mat2.append(matr)
+#                    inter.Mat2.append(matr)
 
-                Inter.append(inter)
-            if valerr:
-                break
-            raytud.inter = Inter
-            delay = raytud.delay()
-            #
-            # this is fix of a bug in pulsray delay discontinuities²
-            #
-            # impose que les délais soient croissants
-            #
-            if k == 0:
-                self.rayTud.append(raytud)
-                delayold = delay
-            if (k > 0) & (delay > delayold):
-                self.rayTud.append(raytud)
-                delayold = delay
-        nray = len(self.rayTud)
-#        self.nray = nray
-        # decode the angular files (.tang and .rang)
+#                Inter.append(inter)
+#            if valerr:
+#                break
+#            raytud.inter = Inter
+#            delay = raytud.delay()
+#            #
+#            # this is fix of a bug in pulsray delay discontinuities²
+#            #
+#            # impose que les délais soient croissants
+#            #
+#            if k == 0:
+#                self.rayTud.append(raytud)
+#                delayold = delay
+#            if (k > 0) & (delay > delayold):
+#                self.rayTud.append(raytud)
+#                delayold = delay
+#        nray = len(self.rayTud)
+##        self.nray = nray
+#        # decode the angular files (.tang and .rang)
 
-        self.fail = False
-        try:
-            fo = open(filetang, "rb")
-        except:
-            self.fail = True
-            print "file ", filetang, " is unreachable"
-        if not self.fail:
-            nray_tang = stru.unpack('i', fo.read(4))[0]
-            buf = fo.read()
-            fo.close()
-            # coorectif Bug evalfield
-            tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
-            self.tang = tmp[0:nray, :]
-        try:
-            fo = open(filerang, "rb")
-        except:
-            self.fail = True
-            print "file ", filerang, " is unreachable"
+#        self.fail = False
+#        try:
+#            fo = open(filetang, "rb")
+#        except:
+#            self.fail = True
+#            print "file ", filetang, " is unreachable"
+#        if not self.fail:
+#            nray_tang = stru.unpack('i', fo.read(4))[0]
+#            buf = fo.read()
+#            fo.close()
+#            # coorectif Bug evalfield
+#            tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
+#            self.tang = tmp[0:nray, :]
+#        try:
+#            fo = open(filerang, "rb")
+#        except:
+#            self.fail = True
+#            print "file ", filerang, " is unreachable"
 
-        if not self.fail:
-            nray_rang = stru.unpack('i', fo.read(4))[0]
-            buf = fo.read()
-            fo.close()
-            # correctif Bug evalfield
-            tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
-            self.rang = tmp[0:nray, :]
+#        if not self.fail:
+#            nray_rang = stru.unpack('i', fo.read(4))[0]
+#            buf = fo.read()
+#            fo.close()
+#            # correctif Bug evalfield
+#            tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
+#            self.rang = tmp[0:nray, :]
 
-#    def info(self,num=0):
-#            r = self.ray[num]
-#        nbint = r[0]
-#        for l in range(nbint):
-#            interaction = r[l+1]
-#            print interaction[0]
+
+#    def load_old(self, _filetud, _filetang, _filerang, sl):
+#        """ Load a set of Ray from the PulsRay .tud file
+
+#        Parameters
+#        ----------
+#        _filename  : tud filename
+#        _filetang  : tang filename
+#        _filerang  : rang filename
+#        sl         : slab database object
+
+#        Notes
+#        -----
+#        a filename beginning with _ is a short filename
+
+#        Examples
+#        --------
+#        
+#        .. plot::
+#            :include-source:
+
+#            >>> from pylayers.gis.layout import *
+#            >>> from pylayers.antprop.rays import *
+#            >>> L = Layout()
+#            >>> g3 = GrRay3D()
+#            >>> l = g3.dir()
+#            >>> nr = 10
+#            >>> file0 = l[nr]
+#            >>> s1 = file0.split('_')
+#            >>> _filestr = s1[0]+'.str'
+#            >>> L.loadstr(_filestr)
+#            >>> g3.load(l[nr],L)
+#            >>> gt = GrRayTud()
+#            >>> l1,l2,l3,l4 = gt.dir()
+#            >>> gt.load(l1[nr],l2[nr],l3[nr],L.sl)
+#            >>> r30 = g3.ray3d[0]
+#            >>> rt0 = gt.rayTud[0]
+
+
+#        """
+
+#        valerr = False
+
+#        filetud = pyu.getlong(_filetud, pstruc['DIRTUD'])
+#        filetang = pyu.getlong(_filetang,pstruc['DIRTUD'])
+#        filerang = pyu.getlong(_filerang,pstruc['DIRTUD'])
+
+#        fo = open(filetud, "rb")
+#        data = fo.read()
+#        fo.close()
+#        print sl.mat.di
+
+#        start = 0
+#        stop = start + 4
+#        dt = data[start:stop]
+#        self.nray = stru.unpack('i', dt)[0]
+#        print self.nray
+#        self.rayTud = []
+
+#        ## in order to inialize all type of interaction with the correct frequencies
+#        Interaction()
+
+#        for k in range(self.nray):
+#            raytud = RayTud()
+#            start = stop
+#            stop = start + 4
+#            dt = data[start:stop]
+#            #
+#            # Interaction number over the ray
+#            #
+#            # if ni==0  : LOS case no interaction
+#            #
+#            nbint = stru.unpack('i', dt)[0]
+#            raytud.ni = nbint
+#            Inter = []
+#            #print "Nombre interactions : ",nbint
+#            for i in range(nbint):
+#                start = stop
+#                stop = start + 4
+#                dt = data[start:stop]
+#                caract = stru.unpack('i', dt)[0]
+#                if (caract == -1):
+#                    start = stop
+#                    stop = start + 32
+#                    dt = data[start:stop]
+#                    m = stru.unpack('4d', dt)
+#                    M = np.array([[m[0], m[1]], [m[2], m[3]]])
+#                    inter = IntB(M)
+#            #        inter.data = M
+#                elif (caract == 0):
+#                    start = stop
+#                    stop = start + 8
+#                    dt = data[start:stop]
+#                    dist = stru.unpack('d', dt)
+#                    inter = IntL(dist[0])
+#            #        inter.data = dist
+#                elif (caract == 1):
+#                    start = stop
+#                    stop = start + 24
+#                    dt = data[start:stop]
+#                    datR = stru.unpack('3d', dt)
+#                    inter = IntR(datR)
+#            #        inter.data = datR
+#                elif (caract == 2):
+#                    start = stop
+#                    stop = start + 24
+#                    dt = data[start:stop]
+#                    datT = stru.unpack('3d', dt)
+#                    inter = IntT(datT)
+#            #        inter.data = datT
+#                elif (caract == 3):
+#            #        inter.data = []
+#                    start = stop
+#                    stop = start + 48
+#                    dt = data[start:stop]
+#                    datD = stru.unpack('6d', dt)
+#            #        (inter.data).append(datD)
+#                    start = stop
+#                    stop = start + 4
+#                    dt = data[start:stop]
+#                    typD = stru.unpack('i', dt)
+#                    inter = IntD(datD, typD)
+#            #        (inter.data).append(typD)
+
+#                start = stop
+#                stop = start + 32
+#                dt = data[start:stop]
+#                datMat = stru.unpack('8i', dt)
+#                inter.datMat = datMat
+#                l1 = datMat[0]
+#                c1 = datMat[1]
+#                r1 = datMat[2]
+#                s1 = datMat[3]
+
+#                l2 = datMat[4]
+#                c2 = datMat[5]
+#                r2 = datMat[6]
+#                s2 = datMat[7]
+
+#                # evalfield bug fix
+#                # slab material inconsistency
+#                #
+#                if l1 not in sl.mat.di:
+#                    valerr = True
+#                    break
+
+#                if ((caract == 1) | (caract == 2) | (caract == 3)):
+#                    inter.Mat1 = []
+#                    dim = sl.mat.di
+#                    #print dim.keys()
+#                    #print l1
+#                    #print r1
+#                    dis = sl.di
+#                    if s1 == 0:
+#                        matl = sl.mat[dim[l1]]
+#                        matr = sl.mat[dim[r1]]
+#                    else:
+#                        matl = sl.mat[dim[r1]]
+#                        matr = sl.mat[dim[l1]]
+
+#                    inter.Mat1.append(matl)
+#                    slab1 = sl[dis[c1]]
+#                    for i in range(slab1['nbmat']):
+#                        im = slab1['imat'][i]
+#                        th = slab1['thickness'][i]
+#                        matc = sl.mat[dim[im]]
+#                        #matc.thick = th       # !!! thick existe plus
+#                        inter.Mat1.append(matc)
+
+#                    inter.Mat1.append(matr)
+##
+##  Mat 2 is used only for diffraction
+##
+#                if (caract == 3):
+#                    inter.Mat2 = []
+#                    if s2 == 0:
+#                        matl = sl.mat[dim[l2]]
+#                        matr = sl.mat[dim[r2]]
+#                    else:
+#                        matl = sl.mat[dim[r2]]
+#                        matr = sl.mat[dim[l2]]
+
+#                    inter.Mat2.append(matl)
+#                    slab2 = sl[dis[c2]]
+#                    for i in range(slab2.nbmat):
+#                        im = slab2.imat[i]
+#                        th = slab2.thickness[i]
+#                        matc = sl.mat[dim[im]]
+#                        matc.thick = th
+#                        inter.Mat2.append(matc)
+
+#                    inter.Mat2.append(matr)
+
+#                Inter.append(inter)
+#            if valerr:
+#                break
+#            raytud.inter = Inter
+#            delay = raytud.delay()
+#            #
+#            # this is fix of a bug in pulsray delay discontinuities²
+#            #
+#            # impose que les délais soient croissants
+#            #
+#            if k == 0:
+#                self.rayTud.append(raytud)
+#                delayold = delay
+#            if (k > 0) & (delay > delayold):
+#                self.rayTud.append(raytud)
+#                delayold = delay
+#        nray = len(self.rayTud)
+##        self.nray = nray
+#        # decode the angular files (.tang and .rang)
+
+#        self.fail = False
+#        try:
+#            fo = open(filetang, "rb")
+#        except:
+#            self.fail = True
+#            print "file ", filetang, " is unreachable"
+#        if not self.fail:
+#            nray_tang = stru.unpack('i', fo.read(4))[0]
+#            buf = fo.read()
+#            fo.close()
+#            # coorectif Bug evalfield
+#            tmp = np.ndarray(shape=(nray_tang, 2), buffer=buf)
+#            self.tang = tmp[0:nray, :]
+#        try:
+#            fo = open(filerang, "rb")
+#        except:
+#            self.fail = True
+#            print "file ", filerang, " is unreachable"
+
+#        if not self.fail:
+#            nray_rang = stru.unpack('i', fo.read(4))[0]
+#            buf = fo.read()
+#            fo.close()
+#            # correctif Bug evalfield
+#            tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
+#            self.rang = tmp[0:nray, :]
+
+
+##    def info(self,num=0):
+##            r = self.ray[num]
+##        nbint = r[0]
+##        for l in range(nbint):
+##            interaction = r[l+1]
+##            print interaction[0]
+
+    def get_thetas(self):
+        """
+        Get all thetas ( incidence anlge) from all computed Raytud
+
+        Return 
+        ------
+            np.array containg all incidence angles theta from all rays
+
+        """
+        th=[]
+        for r in self.rayTud:
+            for idx,i in enumerate(r.inter):
+                if not (isinstance(i,IntB) or isinstance(i,IntL)):
+                    th.append(r.inter[idx].theta)
+        return(np.unique(th))
+
+
+    def get_mat(self):
+        """
+        Get all used materials from all computed Raytud
+
+        Return 
+        ------
+            np.array containg all materials involved in raytracing
+        """
+        mat=[]
+        for r in self.rayTud:
+            for idx,i in enumerate(r.inter):
+                if not (isinstance(i,IntB) or isinstance(i,IntL)):
+                    for midx,m in enumerate(r.inter[idx].Mat1):
+                        mat.append(r.inter[idx].Mat1[midx]['name'])
+        return(np.unique(mat))
+
+
+    def eval(self):
+        
+        A 
 
     def info(self, n=-1):
         """ info
