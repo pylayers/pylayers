@@ -1200,7 +1200,6 @@ class GrRayTud(object):
                 if l1 not in sl.mat.di:
                     valerr = True
                     break
-                
                 # if reflexion / transmission or diffraction 
                 if ((caract == 1) | (caract == 2) | (caract == 3)):
                     inter.Mat1 = []

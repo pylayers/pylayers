@@ -51,9 +51,8 @@ class algloc(object):
 
     def info(self):
         """
-        Dispaly scenario information
+        Display scenario information
         """
-        print "Speed of light : ", self.c
         print "Nodes : ", self.nodes
         print "Location dependant parameters : ", self.ldp
 
