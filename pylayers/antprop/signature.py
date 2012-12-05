@@ -3,6 +3,7 @@ import doctest
 import numpy as np
 import scipy as sp
 import scipy.linalg as la
+import pdb
 #import GrRay3D
 #import Graph
 #import pylayers.antprop.slab
@@ -224,6 +225,7 @@ class Signature(object):
         dm1[kdm1] = b1
         # dm2 : Sous diagonale 2 : 2*(N-1)
         # -a a -a a -a a  ...
+        pdb.set_trace()
         dm2 = -np.kron(a1, np.array([1, 0])) + np.kron(a1, np.array([0, 1]))
         dm2 = dm2 + np.kron(a2, [1, 1])
         # annulation de la sous diganale 2 pour la diffraction

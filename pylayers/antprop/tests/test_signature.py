@@ -7,11 +7,12 @@ from pylayers.antprop.signature import *
 
 L = Layout()
 L.loadstr('exemple.str')
-L.buildGt()
-L.buildGr()
-
+#L.buildGt()
+#L.buildGr()
+L.build()
+s1,s2=L.signature(0,0)
 # define a sequence of interactions
-seq = [1,5,1]
+seq = [1]
 s = Signature(seq)
 tx = np.array([4,-1])
 rx = np.array([1,1])
@@ -55,3 +56,5 @@ xk = la.solve(T, yk)
 pkm1 = xk[0:2].reshape(2, 1)
 gk = xk[2::]
 beta = gk[1]
+
+"""
