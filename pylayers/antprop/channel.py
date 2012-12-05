@@ -92,7 +92,6 @@ class Ctilde(object):
         fo.close()
 
         CMat = np.ndarray(shape=(n,8),buffer=buf)
-
         c11 = CMat[:, 0] + CMat[:, 1]*1j
         c12 = CMat[:, 2] + CMat[:, 3]*1j
         c21 = CMat[:, 4] + CMat[:, 5]*1j
@@ -1120,6 +1119,7 @@ class Tchannel(bs.FUDAsignal):
         # on s'arrange que Hk.x[0]==Wk.x[0]
 class ScalChannel(object):
     """
+    DEPRECATED
     ScalChannel Class :
 
     The ScalChannel is obtained from combination of the propagation
