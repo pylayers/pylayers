@@ -12,7 +12,7 @@ import pdb
 import matplotlib.pyplot as plt
 
 
-class Signature(object):
+class Signew(object):
     """ class Signature
 
     A signature contains two lists
@@ -20,7 +20,7 @@ class Signature(object):
     seq : list of interaction numbers
     typ : list of interaction type
     """
-    def __init__(self, seq):
+    def __init__(self, sig):
         """
         pa  : tail point of intercation segment
         pb  : head point of intrcation segement
@@ -28,8 +28,8 @@ class Signature(object):
         typ : type of interaction 1-R 2-T 3-D
         seq : sequence of interaction point (edges (>0)  or vertices (<0)
         """
-        self.seq = seq
-        self.typ = []
+        self.seq = sig[0,:]
+        self.typ = sig[1,:]
 
     def info(self):
         """
@@ -58,7 +58,7 @@ class Signature(object):
         self.pa = np.zeros((2, N))  # tail
         self.pb = np.zeros((2, N))  # head
         self.pc = np.zeros((2, N))  # center
-        self.typ = np.zeros(N)
+        #self.typ = np.zeros(N)
         self.norm = np.zeros((2, N))
 
         for n in range(N):
@@ -71,7 +71,7 @@ class Signature(object):
                 self.pb[:, n] = np.array(L.Gs.pos[he])
                 self.pc[:, n] = np.array(L.Gs.pos[k])
                 self.norm[:, n] = norm
-                self.typ[n] = 1
+                #self.typ[n] = 1
             else:      # node
                 pa = np.array(L.Gs.pos[k])
                 norm = array([0, 0])
@@ -79,7 +79,7 @@ class Signature(object):
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
-                self.typ[n] = 3
+                #self.typ[n] = 3
         #
         #  vecteurs entre deux points adjascents de la signature
         #
@@ -343,9 +343,8 @@ class Signature(object):
 
         if ((k == N) & ((beta > 0) & (beta < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
-            return(Y)
-        else:
-            return(None)
+
+        return(Y)
 
 #pa    = np.array([[2,6],[8,7]])
 #pb    = np.array([[5,8],[8,2]])

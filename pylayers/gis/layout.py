@@ -3891,6 +3891,9 @@ class Layout(object):
         fig   : figure instance
         ax    : axes instance
         lines : lines instance
+        
+        Examples
+        --------
 
         """
         sig =sigarr[0]
