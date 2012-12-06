@@ -47,8 +47,8 @@ class Ctilde(object):
 
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
-    
-        Load the three files .tauk .tang .rang which contain  respectively 
+
+        Load the three files .tauk .tang .rang which contain  respectively
         delay , angle of departure , angle of arrival.
 
         Parameters
@@ -466,9 +466,12 @@ class Ctilde(object):
         """
         Info (Nf,Nray,shape(y))
         """
-        print "Nf   :", len(self.freq)
-        print "Nray :", len(self.tauk)
-        print "shape y :", shape(self.Ctt.y)
+        print "Nf   :", self.nfreq
+        print "Nray :", self.nray
+        print "shape Ctt :", np.shape(self.Ctt.y)
+        print "shape Ctp :", np.shape(self.Ctp.y)
+        print "shape Cpt :", np.shape(self.Cpt.y)
+        print "shape Cpp :", np.shape(self.Cpp.y)
 
 class VectChannel(Ctilde):
     """ container for a vector representation of the propagation channel
@@ -897,8 +900,8 @@ class Tchannel(bs.FUDAsignal):
 
         """
         self.H
-        sh = shape(self.H.y)
-        itau = arange(len(self.tau))
+        sh = np.shape(self.H.y)
+        itau = np.arange(len(self.tau))
         plt.imshow(abs(self.H.y))
         plt.show()
 
@@ -1179,8 +1182,8 @@ class ScalChannel(object):
 
         """
         self.H
-        sh = shape(self.H.y)
-        itau = arange(len(self.tau))
+        sh = np.shape(self.H.y)
+        itau = np.arange(len(self.tau))
         plt.imshow(abs(self.H.y))
         plt.show()
 

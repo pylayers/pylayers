@@ -2841,7 +2841,7 @@ class Layout(object):
         for n in self.Gv.node:
             if n < 0:
                 self.Gi.add_node(str(n))
-                self.Gi.pos[n] = self.Gs.pos[n]
+                self.Gi.pos[str(n)] = self.Gs.pos[n]
             if n > 0:
                 cy = self.Gs.node[n]['ncycles']
                 if len(cy) == 2:
@@ -2859,13 +2859,13 @@ class Layout(object):
                     nl = np.dot(l, l)
                     ln = l / nl
                     delta = nl / 10
-                    self.Gi.pos[n] = self.Gs.pos[n]
-                    self.Gi.pos[(n, cy0)] = self.Gs.pos[n] + ln * delta
-                    self.Gi.pos[(n, cy1)] = self.Gs.pos[n] - ln * delta
+                    self.Gi.pos[str(n)] = tuple(self.Gs.pos[n])
+                    self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
+                    self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
 
                 if len(cy) == 1:
                     self.Gi.add_node(str((n, cy[0])))
-                    self.Gi.pos[(n, cy[0])] = self.Gs.pos[n]
+                    self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
 
         #
         # Loop over interactions
@@ -3989,6 +3989,9 @@ class Layout(object):
         fig   : figure instance
         ax    : axes instance
         lines : lines instance
+        
+        Examples
+        --------
 
         """
         sig =sigarr[0]

@@ -190,6 +190,9 @@ class Interaction(object):
 
     """
     def __init__(self, typ=0):
+        """
+        C : nray,nf,2,2
+        """
 #        self.typ = [typ]
         self.typ = typ
         self.c = 0.3
@@ -246,7 +249,7 @@ class Interaction(object):
 #        print "Mat2 : sense <==> sense2 : ",self.Mat[7]
 
 class IntB(Interaction):
-    """ Local Basis interaction class
+    """ Local Basis int eraction class
 
     Notes
     ------
@@ -292,7 +295,7 @@ class IntL(Interaction):
         div = (self.c / (4*np.pi*fGHz*self.dist))**2
         Co[:, 0, 0] = div
         Co[:, 1, 1] = div
-        return(Co)
+        return(Co) 
 
 
 class IntR(Interaction):
@@ -313,24 +316,11 @@ class IntR(Interaction):
             frequency in GHz
 
         """
-        if type(fGHz) in [float,int]:
-            fGHz = [fGHz]
-        nf = len(fGHz)
-        Co = np.array(np.zeros([nf, 2, 2]), dtype=complex)
-        
-        a = np.cos(self.theta)
-        b = np.sqrt(self.epsilon-(np.sin(self.theta))**2)
-
-        div1 = (self.epsilon*a-b)/(self.epsilon*a+b)
-        div2 = (a-b)/(a+b)
-        
-        Co[:, 0, 0] = div1
-        Co[:, 1, 1] = div2
-        
-        #div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
-        #si = self.si
-        #sr = self.sr
-        #theta = self.theta
+        div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
+        si = self.si
+        sr = self.sr
+        theta = self.theta
+        s1 = Slab()
 
 
 class IntT(Interaction):
@@ -857,8 +847,7 @@ class RayTud(object):
         return(d / 0.3)
 
     def signature(self):
-        """
-            return ray signature
+        """ returns ray signature
         """
         Signature = []
         for k in range(self.ni):
@@ -1215,7 +1204,7 @@ class GrRayTud(object):
                 if l1 not in sl.mat.di:
                     valerr = True
                     break
-
+                # if reflexion / transmission or diffraction 
                 if ((caract == 1) | (caract == 2) | (caract == 3)):
                     inter.Mat1 = []
                     dim = sl.mat.di
