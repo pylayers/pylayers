@@ -67,12 +67,12 @@ pylayers/mobility/transit/Zones.py
 pylayers/mobility/transit/__init__.py
 pylayers/mobility/transit/vec3.py
 pylayers/network/__init__.py
-pylayers/network/brain.py
 pylayers/network/communication.py
 pylayers/network/emsolver.py
 pylayers/network/model.py
 pylayers/network/net.py
 pylayers/network/network.py
+pylayers/network/networktmp.py
 pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
@@ -85,6 +85,7 @@ pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
 pylayers/simul/tmp.py
+pylayers/simul/toto.py
 pylayers/util/__init__.py
 pylayers/util/easygui-olld.py
 pylayers/util/easygui.py

@@ -9,7 +9,6 @@ S = Simul()
 # loading a layout 
 filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')
-
 try:
     S.L.dumpr()
 except:
@@ -31,22 +30,20 @@ S.run(itx,irx)
 C=Ctilde()
 C.load(pyu.getlong(S.dfield[itx][irx],pstruc['DIRTRA']))
 
-G3=GrRay3D()
-G3.load(S.dtra[itx][irx],S.L)
-#fig,ax=S.L.showG('')
-#Gr3.show(fig=fig,ax=ax,rayset=[1,2])
-
+#G3=GrRay3D()
+#G3.load(S.dtra[itx][irx],S.L)
+##fig,ax=S.L.showG('')
+##Gr3.show(fig=fig,ax=ax,rayset=[1,2])
+#r3=G3.ray3d[1]
+#r3.locbas(S.L)
 
 Gt=GrRayTud()
 Gt.load(S.dtud[itx][irx],S.dtang[itx][irx],S.drang[itx][irx],S.L.sl)
 
-r3=G3.ray3d[1]
-r3.locbas(S.L)
-#r3.show3()
 rt=Gt.rayTud[1]
 
-C = Ctilde()
-C.load(pyu.getlong(S.dfield[itx][irx],'output'))
+#C = Ctilde()
+#C.load(pyu.getlong(S.dfield[itx][irx],'output'))
 
 #rt.eval(freq)
 
@@ -74,7 +71,6 @@ plt.plot(freq,abs(Cpp))
 plt.title('Cpp')
 ## print launching parameters
 #S.palch.info()
-
 
 #S2 = Simul()
 ## loading a layout 
@@ -279,3 +275,16 @@ plt.title('Cpp')
 ##S2.cir(1,1)
 ##f = plt.figure()
 ##S2.pltcir(1,1,fig=f)
+#thetas=Gt.get_thetas()
+#mat=Gt.get_mat()
+
+
+
+
+#B=rt.inter[0]
+#Be=B.eval()
+
+#T=rt.inter[3]
+#Te=T.eval()
+
+
