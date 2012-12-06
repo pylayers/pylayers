@@ -5,22 +5,27 @@ from pylayers.antprop.signature import *
 
 # load the layout graphs
 
-L = Layout()
-L.loadstr('exemple.str')
-L.buildGt()
-L.buildGr()
+L = Layout('defstr.str')
+#L.loadstr('defstr.str')
+#L.buildGt()
+#L.buildGr()
 L.build()
-s1,s2=L.signature(0,0)
+s1,s2 = L.signature(0,0)
 # define a sequence of interactions
-seq = [1,6,1]
-s = Signature(seq)
+
+sig = s1[:,1:2]
+
+s = Signature(sig)
+
+#L.showSig(s1)
+
+s.ev(L)
 tx = np.array([4,-1])
 rx = np.array([1,1])
+M, Y = s.sig2ray(L, tx, rx)
 
-# ev : evaluate the signature
-s.ev(L)
-M = s.image(tx)
-Y = s.backtrace(tx,rx,M)
+#M = s.image(tx)
+#Y = s.backtrace(tx,rx,M)
 fig = plt.figure()
 ax = fig.add_subplot(111)
 l1 = ax.plot(tx[0],tx[1],'or')

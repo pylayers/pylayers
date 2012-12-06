@@ -12,6 +12,7 @@ pylayers/antprop/coverage.py
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/signature.py
+pylayers/antprop/signew.py
 pylayers/antprop/slab.py
 pylayers/gis/__init__.py
 pylayers/gis/cycles.py

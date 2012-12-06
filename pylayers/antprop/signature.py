@@ -21,15 +21,16 @@ class Signature(object):
     seq : list of interaction numbers
     typ : list of interaction type
     """
-    def __init__(self, seq):
+    def __init__(self, sig):
         """
         pa  : tail point of intercation segment
         pb  : head point of intrcation segement
         pc  : middle point  of interaction segment
         typ : type of interaction 1-R 2-T 3-D
-        seq : sequence of interaction point (edges (>0) or vertices (<0)
+        seq : sequence of interaction point (edges (>0)  or vertices (<0)
         """
-        self.seq = seq
+        self.seq = sig[0,:]
+        self.typ = sig[1,:]
 
     def info(self):
         """
@@ -58,7 +59,7 @@ class Signature(object):
         self.pa = np.zeros((2, N))  # tail
         self.pb = np.zeros((2, N))  # head
         self.pc = np.zeros((2, N))  # center
-        self.typ = np.zeros(N)
+        #self.typ = np.zeros(N)
         self.norm = np.zeros((2, N))
 
         for n in range(N):
@@ -71,15 +72,15 @@ class Signature(object):
                 self.pb[:, n] = np.array(L.Gs.pos[he])
                 self.pc[:, n] = np.array(L.Gs.pos[k])
                 self.norm[:, n] = norm
-                self.typ[n] = 1
+                #self.typ[n] = 1
             else:      # node
                 pa = np.array(L.Gs.pos[k])
-                norm = np.array([0, 0])
+                norm = array([0, 0])
                 self.pa[:, n] = pa
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
-                self.typ[n] = 3
+                #self.typ[n] = 3
         #
         #  vecteurs entre deux points adjascents de la signature
         #
@@ -191,34 +192,7 @@ class Signature(object):
                             signature.append((it,2))
                     segseq.append(lseg)
                     typseq.append(ltyp)
-        return segseq, typseq
-
-    def sig2rays(self, L, pTx, pRx):
-        """
-        from signature to rays
-        Parameters
-        ----------
-            L : Layout
-            pTx : ndarray
-                2D transmitter position
-            pRx : ndarray
-                2D receiver position
-        Returns
-        -------
-            rays : list
-                list of rays
-        """
-        try:
-            L.Gr
-        except:
-            L.build()
-        rTx = L.pt2ro(pTx)
-        rRx = L.pt2ro(pRx)
-        segseq,typseq = self.get_sigarr(L, rTx, rRx)
-        segTx = L.room2segments(rTx)
-        segRx = L.room2segments(rRx)
-
-        return segTx, segRx, segseq,typseq
+        return sigarr
 
     def evtx(self, L, tx):
         """ evtx
@@ -354,7 +328,6 @@ class Signature(object):
         dm1[kdm1] = b1
         # dm2 : Sous diagonale 2 : 2*(N-1)
         # -a a -a a -a a  ...
-        pdb.set_trace()
         dm2 = -np.kron(a1, np.array([1, 0])) + np.kron(a1, np.array([0, 1]))
         dm2 = dm2 + np.kron(a2, [1, 1])
         # annulation de la sous diganale 2 pour la diffraction
@@ -474,6 +447,30 @@ class Signature(object):
             return(Y)
         else:
             return(None)
+
+    def sig2ray(self, L, pTx, pRx):
+        """
+        from signature to rays
+        Parameters
+        ----------
+            L : Layout
+            pTx : ndarray
+                2D transmitter position
+            pRx : ndarray
+                2D receiver position
+        Returns
+        -------
+            rays : 
+        """
+        try:
+            L.Gr
+        except:
+            L.build()
+
+        self.ev(L)
+        M = self.image(pTx)
+        Y = self.backtrace(pTx,pRx,M)
+        return M, Y
 
 
 if __name__ == "__main__":
