@@ -13,7 +13,7 @@ L.build()
 s1,s2 = L.signature(0,0)
 # define a sequence of interactions
 
-sig = s1[:,1:2]
+sig = s1[:,3:4]
 
 s = Signature(sig)
 

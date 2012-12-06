@@ -292,10 +292,12 @@ class Signature(object):
         a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
         b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
         c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
-                            pa[1, :] * (pa[1, :] - pb[1, :]) * (pb[0, :] - pa[0, :]))
+                            pa[1, :] * (pa[1, :] - pb[1, :]) *
+                            (pb[0, :] - pa[0, :]))
         d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
-                            pa[0, :] * (pa[1, :] - pb[1, :]) * (pb[0, :] - pa[0, :]))
-
+                            pa[0, :] * (pa[1, :] - pb[1, :]) *
+                            (pb[0, :] - pa[0, :]))
+        pdb.set_trace()
         I2 = np.eye(2)
         Z2 = np.zeros((2, 2))
         S = np.zeros((N, 2, 2))
@@ -306,47 +308,44 @@ class Signature(object):
         S[:, 0, 1] = b
         S[:, 1, 0] = b
         S[:, 1, 1] = a
-        #
-        # La matrice contient les termes à partir de l'interaction 1
-        #
-        a1 = a[1::] * rsig[1::]
-        a2 = -np.ones(N - 1) * (1 - rsig[1::])
-        b1 = b[1::] * rsig[1::]
-        c1 = c[1::] * rsig[1::]
-        d1 = d[1::] * rsig[1::]
-        #
-        # 1 sur la diagonale sauf pour les diffractions
-        #
         # N : Nombre d'interactions
         # A est une matrice 2*N x 2*N
         #
         A = np.diag(np.kron(dsig, [1, 1]))
-        # dm1  : Sous diagonale 1 : 2*N - 1
-        dm1 = np.zeros(2 * N - 1)
-        #  0 b 0 b 0 b
-        kdm1 = range(1, 2 * N - 1, 2)
-        dm1[kdm1] = b1
-        # dm2 : Sous diagonale 2 : 2*(N-1)
-        # -a a -a a -a a  ...
-        dm2 = -np.kron(a1, np.array([1, 0])) + np.kron(a1, np.array([0, 1]))
-        dm2 = dm2 + np.kron(a2, [1, 1])
-        # annulation de la sous diganale 2 pour la diffraction
-        # if diffraction
-        if len(usig) > 0:
-            v = np.kron(2 * usig, np.array(
-                [1, 0])) + np.kron(2 * usig + 1, np.array([0, 1]))
-            dm2[v] = 0
-        # dm3 : sous diagonale 3 : 2*N-3
-        #
-        dm3 = np.zeros(2 * N - 3)
-        kdm3 = range(0, 2 * N - 3, 2)
-        dm3[kdm3] = b1
-        #A     = np.eye(2*N)
-        Am1 = np.diagflat(dm1, -1)
-        Am2 = np.diagflat(dm2, -2)
-        Am3 = np.diagflat(dm3, -3)
-        A = A + Am1 + Am2 + Am3
-        #IA    = la.inv(A)
+        if N>1:
+            #
+            # La matrice contient les termes à partir de l'interaction 1
+            #
+            a1 = a[1::] * rsig[1::]
+            a2 = -np.ones(N - 1) * (1 - rsig[1::])
+            b1 = b[1::] * rsig[1::]
+            c1 = c[1::] * rsig[1::]
+            d1 = d[1::] * rsig[1::]
+            #
+            # 1 sur la diagonale sauf pour les diffractions
+            #
+            # dm1  : Sous diagonale 1 : 2*N - 1
+            dm1 = np.zeros(2 * N - 1)
+            #  0 b 0 b 0 b
+            kdm1 = range(1, 2 * N - 1, 2)
+            dm1[kdm1] = b1
+            # dm2 : Sous diagonale 2 : 2*(N-1)
+            # -a a -a a -a a  ...
+            dm2 = -np.kron(a1, np.array([1, 0])) + np.kron(a1, np.array([0, 1]))
+            dm2 = dm2 + np.kron(a2, [1, 1])
+            # annulation de la sous diganale 2 pour la diffraction
+            # if diffraction
+            if len(usig) > 0:
+                v = np.kron(2 * usig, np.array(
+                    [1, 0])) + np.kron(2 * usig + 1, np.array([0, 1]))
+                dm2[v] = 0
+            dm3 = np.zeros(2 * N - 3)
+            kdm3 = range(0, 2 * N - 3, 2)
+            dm3[kdm3] = b1
+            Am1 = np.diagflat(dm1, -1)
+            Am2 = np.diagflat(dm2, -2)
+            Am3 = np.diagflat(dm3, -3)
+            A = A + Am1 + Am2 + Am3
         #
         # Evaluate y
         #
@@ -357,20 +356,15 @@ class Signature(object):
             v0 = tx
         if typ[0] == 3:
             v0 = pa[:, 0]
-        #c0    = c[0]+tx[0]*a[0]-tx[1]*b[0]
-        #d0    = d[0]-tx[1]*a[0]-tx[0]*b[0]
 
-        #y    = np.hstack((np.array([c0,d0]),np.kron(c1,np.array([1,0]))+np.kron(d1,np.array([0,1]))))
-        y = np.hstack((v0, np.kron(
-            c1, np.array([1, 0])) + np.kron(d1, np.array([0, 1]))))
-        #v1   = np.hstack((0,0,y[0:-2]))
-        #v2   = np.hstack((0,0,np.kron(d[0:-1],np.array([1,0]))+np.kron(c[0:-1],np.array([0,1]))))
-        #alpha  = np.hstack((0,0,np.kron(a1,np.array([1,-1]))))
-        #beta   = np.hstack((0,0,np.kron(b1,np.array([1,1]))))
+        if N>1:
+            y = np.hstack((v0, np.kron(c1, np.array([1, 0])) +
+                            np.kron(d1, np.array([0, 1]))))
+        else:
+            y = v0
+            
         x = la.solve(A, y)
-        #xv   = x * np.kron(2./alpha,np.array([1,1]))
         M = np.vstack((x[0::2], x[1::2]))
-        #return(M,A,y,dm1,dm2,dm3,a1,b1,c1,d1)
         return(M)
 
     def backtrace(self, tx, rx, M):
