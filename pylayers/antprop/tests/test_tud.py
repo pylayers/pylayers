@@ -8,9 +8,9 @@ S = Simul()
 # loading a layout 
 filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')
-S.L.dumpr()
-#S.L.build()
-#S.L.dumpw()
+#S.L.dumpr()
+S.L.build()
+S.L.dumpw()
 S.tx = RadioNode(typ='tx')
 S.tx.point([1.2,1,1.4])
 
@@ -30,8 +30,8 @@ C.load(pyu.getlong(S.dfield[itx][irx],pstruc['DIRTRA']))
 
 G3=GrRay3D()
 G3.load(S.dtra[itx][irx],S.L)
-#fig,ax=S.L.showG('')
-#Gr3.show(fig=fig,ax=ax,rayset=[1,2])
+fig,ax=S.L.showG('')
+G3.show(fig=fig,ax=ax,rayset=[1,2])
 
 
 Gt=GrRayTud()

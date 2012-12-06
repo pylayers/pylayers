@@ -16,7 +16,7 @@ cirf=TUsignal()
 #cirf.readcir("where2-furcir-tx001-rx145.mat","Tx001")
 
 cir.readcir("where2cir-tx002-rx012.mat","Tx002")
-#cirf.readcir("where2-furcir-tx002-rx012.mat","Tx002")
+cirf.readcir("where2-furcir-tx002-rx012.mat","Tx002")
 
 #cir.readcir("where2cir-tx001-rx001.mat","Tx001")
 #cirf.readcir("where2-furcir-tx001-rx001.mat","Tx001")

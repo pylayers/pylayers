@@ -2042,8 +2042,8 @@ class Simul(object):
             self.ctracing.append(chaine)
             aux = os.popen(chaine, "r")
             recup = aux.read()
-            if verbose:
-                print recup
+            #if verbose:
+                #print recup
             aux.close()
             self.recup = recup
             aux = recup.splitlines()
@@ -2064,8 +2064,8 @@ class Simul(object):
                     aux[i] = aux[i].replace('filetraout : ', '')
                     self.dtra[itx][irx] = pyu.getshort(aux[i])
 
-            if verbose:
-                print filetra
+            #if verbose:
+                #print filetra
             #self.filetra.insert(ntx,filetra)
             self.progress = 2
         else:
@@ -2267,7 +2267,7 @@ class Simul(object):
                     print "--------------------"
                     print "Start tracing  Rx : " + str(irx)
                     print "--------------------"
-                tracingabort = self.tracing(itx, irx)
+                tracingabort = self.tracing(itx, irx,verbose)
 
             if not tracingabort:
                 if irx not in self.dtud[itx].keys():
@@ -2276,13 +2276,13 @@ class Simul(object):
                         print "Start tratotud ", irx
                         print "---------------"
 
-                    self.tratotud(itx, irx)
+                    self.tratotud(itx, irx,verbose)
                 if irx not in self.dfield[itx].keys():
                     if verbose:
                         print "---------------"
                         print "Start field  ", irx
                         print "---------------"
-                    self.field(itx, irx)
+                    self.field(itx, irx,verbose)
 
                 if ((irx not in self.dcir[itx].keys()) | cirforce):
                     if verbose:

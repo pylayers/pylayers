@@ -40,6 +40,7 @@ from pylayers.util.project import *
 from itertools import combinations
 import pdb
 import ast
+import pylayers.util.graphutil as gph
 #
 #
 
@@ -1212,7 +1213,7 @@ class Layout(object):
         self.add_edge(n2, n3, matname, zmin, zmin+height)
         self.add_edge(n3, n0, matname, zmin, zmin+height)
 
-    def add_furniture_file(self, _filefur):
+    def add_furniture_file(self, _filefur, typ=''):
         """  add pieces of furniture from .ini files
 
         Parameters
@@ -1239,8 +1240,13 @@ class Layout(object):
             #~ else:
                 #~ zmin=0.0
             zmin=0.0
-            if matname == 'METAL':
+            if typ=='':
                 self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
+            else:
+                try:
+                    self.add_furniture(name, matname, origin, zmin, height, width, length, angle)
+                except:
+                    raise NameError('No such furniture type - '+typ+'-') 
 
     def del_node(self, ln):
         """ delete node in list ln
@@ -1576,27 +1582,48 @@ class Layout(object):
             self.Gs.node[e1]['ss_ce2'] = 0
             self.Nss += 1
 
-    def add_window(self, e1):
+    def add_window(self, e1, zmin, zmax):
         """ add a window on segment 
 
         Parameters 
         ----------
         e1 : integer 
-            segment number 
+            segment number
+        zmin : float
+        zmax : float
 
         """
-        pass
+        if self.have_subseg(e1):
+            print "a subseg already exists"
+        else:
+            self.info_edge(e1)
+            self.Gs.node[e1]['ss_name'] = 'WINDOW'
+            self.Gs.node[e1]['ss_zmin'] = zmin
+            self.Gs.node[e1]['ss_zmax'] = zmax
+            self.Gs.node[e1]['ss_ce1'] = 0
+            self.Gs.node[e1]['ss_ce2'] = 0
+            self.Nss += 1
 
-    def add_door(self, e1):
+    def add_door(self, e1, zmin, zmax):
         """ add a door on segment 
 
         Parameters 
         ----------
         e1 : integer 
-            segment number 
-
+            segment number
+        zmin : float
+        zmax : float
         """
-        pass
+        if self.have_subseg(e1):
+            print "a subseg already exists"
+        else:
+            self.info_edge(e1)
+            self.Gs.node[e1]['ss_name'] = 'DOOR'
+            self.Gs.node[e1]['ss_zmin'] = zmin
+            self.Gs.node[e1]['ss_zmax'] = zmax
+            self.Gs.node[e1]['ss_ce1'] = 0
+            self.Gs.node[e1]['ss_ce2'] = 0
+            self.Nss += 1
 
     def find_edgelist(self, edgelist, nodelist):
         """
@@ -2275,12 +2302,14 @@ class Layout(object):
         show_edges(self,edlist=[],alpha=1,width=1,color='black')
 
         """
-        if type(ndlist) == ndarray:
-            ndlist = ndlist.tolist()
+        if type(edlist) == 'ndarray':
+            edlist = edlist.tolist()
+        elif type(edlist) == int:
+            edlist = [edlist]
 
         #print ndlist
         nx.draw_networkx_nodes(
-            self.Gs, self.Gs.pos, node_size=size, nodelist=ndlist)
+            self.Gs, self.Gs.pos, node_size=size, nodelist=edlist)
         if dlabels:
             dicopos = {}
             dicolab = {}
@@ -2844,8 +2873,8 @@ class Layout(object):
         for sn in self.Gi.node:
             n = eval(sn)
 #            print n
-            if n == (161, 53):
-                pass
+            #if n == (161, 53):
+                #pass
                 #pdb.set_trace()
             if isinstance(n, tuple):  # reflection
                 ns = n[0]
@@ -3326,9 +3355,78 @@ class Layout(object):
         """
 
         ptsh = sh.Point(pt[0], pt[1])
+        room_exists = False
         for nr in self.Gr.node.keys():
             if self.Gt.node[self.Gr.node[nr]['cycle']]['polyg'].contains(ptsh):
+                room_exists = True
                 return(nr)
+        if not room_exists:
+            raise NameError(str(pt)+" is not in any room")
+
+    def seg2ro(self, seg):
+        """ point to room
+
+        Parameters
+        ----------
+        seg : int
+
+        Returns
+        -------
+        nr : Room number
+
+        Notes
+        -----
+            If a room contains point pt this function returns the room number
+
+        """
+
+        rooms = []
+        for nr in self.Gr.node.keys():
+            if seg in self.Gt.node[self.Gr.node[nr]['cycle']]['vnodes']:
+                rooms.append(nr)
+        return rooms
+
+    def room2segments(self, room):
+        """ returns the segments of a room
+
+        Parameters
+        ----------
+        room : int
+
+        Returns
+        -------
+        seg : list
+
+        """
+
+        try:
+            seg = self.Gt.node[self.Gr.node[room]['cycle']]['vnodes']
+        except:
+            raise NameError(str(room)+" is not in not on Gr")
+        u = np.where(seg>=0)
+        seg = seg[u]
+        return np.sort(seg.tolist())
+
+    def room2nodes(self, room):
+        """ returns the nodes of a room
+
+        Parameters
+        ----------
+        room : int
+
+        Returns
+        -------
+        nod : list
+
+        """
+
+        try:
+            nod = self.Gt.node[self.Gr.node[room]['cycle']]['vnodes']
+        except:
+            raise NameError(str(room)+" is not in not on Gr")
+        u = np.where(nod<0)
+        nod = nod[u]
+        return np.sort(nod.tolist())
 
     def buildGr(self):
         """ build Graph of room
@@ -4271,6 +4369,24 @@ class Layout(object):
                 Tx_im.append((Tx_x_im, Tx_y_im))
 
         return(Tx_im, nodes_posi)
+
+
+    def get_paths(self,nd_in, nd_fin):
+        """
+        returns the possible paths of graph Gs between two nodes.
+        Parameters
+        ----------
+            nd_in: int
+                initial graph node (segment or point)
+            nd_fin: int
+                final graph node (segment or point)
+        Returns
+        -------
+            paths : list
+                paths between nd_in and nd_fin
+        """
+        paths = gph.find_all_paths(self.Gs, nd_in, nd_fin)
+        return paths
 
 
 if __name__ == "__main__":

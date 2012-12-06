@@ -192,6 +192,7 @@ class Interaction(object):
     def __init__(self, typ=0):
 #        self.typ = [typ]
         self.typ = typ
+        self.c = 0.3
         self.C   = np.eye(2,dtype=complex).reshape(1,1,2,2)
 
     def info(self):
@@ -275,28 +276,31 @@ class IntB(Interaction):
 
 
 class IntL(Interaction):
-    """ LOS interaction c lass
-
-
+    """
+    LOS interaction class
     """
     def __init__(self, typ, dist):
         Interaction.__init__(self, typ)
         self.dist = dist
 
-    def eval(self, f):
-        nf = len(f)
+    def eval(self, fGHz):
+        if type(fGHz) in [float,int]:
+            fGHz = [fGHz]
+        nf = len(fGHz)
         Co = np.array(np.zeros([nf, 2, 2]), dtype=complex)
-        div = 1.0 / self.dist
+        #div = 1.0 / self.dist
+        div = (self.c / (4*np.pi*fGHz*self.dist))**2
         Co[:, 0, 0] = div
         Co[:, 1, 1] = div
         return(Co)
 
 
 class IntR(Interaction):
-    """ Reflexion interaction class
     """
-    def __init__(self, typ, data):
-        Interaction.__init__(self, typ)
+    Reflexion interaction class
+    """
+    def __init__(self, data):
+        Interaction.__init__(self, 1)
         self.theta = data[0]
         self.si = data[1]
         self.sr = data[2]
@@ -309,10 +313,24 @@ class IntR(Interaction):
             frequency in GHz
 
         """
-        div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
-        si = self.si
-        sr = self.sr
-        theta = self.theta
+        if type(fGHz) in [float,int]:
+            fGHz = [fGHz]
+        nf = len(fGHz)
+        Co = np.array(np.zeros([nf, 2, 2]), dtype=complex)
+        
+        a = np.cos(self.theta)
+        b = np.sqrt(self.epsilon-(np.sin(self.theta))**2)
+
+        div1 = (self.epsilon*a-b)/(self.epsilon*a+b)
+        div2 = (a-b)/(a+b)
+        
+        Co[:, 0, 0] = div1
+        Co[:, 1, 1] = div2
+        
+        #div = np.sqrt((ro1 * ro2) / ((dr + ro1) * (dr + ro2)))
+        #si = self.si
+        #sr = self.sr
+        #theta = self.theta
 
 
 class IntT(Interaction):
@@ -605,7 +623,7 @@ class Ray3D(object):
                 theta = self.phii[l + 1]
                 siR = lsi[l]
                 srR = lsi[l + 1]
-                I = IntR(typ, [theta, siR, srR])
+                I = IntR([theta, siR, srR])
             if typ == 2:  # Transmission
                 #theta  = np.arccos(abs(ps))  'validated'
                 theta = self.phii[l + 1]
@@ -1153,7 +1171,7 @@ class GrRayTud(object):
                     stop = start + 24
                     dt = data[start:stop]
                     datR = stru.unpack('3d', dt)
-                    inter = IntR(1, datR)
+                    inter = IntR(datR)
             #        inter.data = datR
                 elif (caract == 2):
                     start = stop

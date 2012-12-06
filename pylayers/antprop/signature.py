@@ -3,11 +3,13 @@ import doctest
 import numpy as np
 import scipy as sp
 import scipy.linalg as la
+import networkx as nx
 #import GrRay3D
 #import Graph
 #import pylayers.antprop.slab
 #import pylayers.gis.layout
 #import pylayers.util.geomutil as geu
+import pylayers.util.graphutil as gph
 import matplotlib.pyplot as plt
 
 
@@ -25,10 +27,9 @@ class Signature(object):
         pb  : head point of intrcation segement
         pc  : middle point  of interaction segment
         typ : type of interaction 1-R 2-T 3-D
-        seq : sequence of interaction point (edges (>0)  or vertices (<0)
+        seq : sequence of interaction point (edges (>0) or vertices (<0)
         """
         self.seq = seq
-        self.typ = []
 
     def info(self):
         """
@@ -73,7 +74,7 @@ class Signature(object):
                 self.typ[n] = 1
             else:      # node
                 pa = np.array(L.Gs.pos[k])
-                norm = array([0, 0])
+                norm = np.array([0, 0])
                 self.pa[:, n] = pa
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
@@ -89,6 +90,135 @@ class Signature(object):
         #self.typ = sign(u1*u2)
         #return(vn)
         #return(typ)
+
+    def get_sigarr(self,L,iTx,iRx):
+        """
+        get signatures (in one array) between iTx and iRx
+        signatures are separated by zeros
+        Parameters
+        ----------
+            L : Layout
+            iTx : integer
+            iRx : integer
+        Returns
+        -------
+            sigarr = numpy.ndarray
+
+        Warnings
+        --------
+        This a temporary function
+            There is some algorithmic work to find the best way to determine signature
+            T4 : limit the ndt to only edges and nodes in visibility from Tx
+
+        """
+        # Here we take all the vnodes >0  from the room
+        #
+        # Practically those list of nodes should depend on pTx , pRx
+        #
+        try:
+            L.Gi
+        except:
+            L.build()
+            #raise NameError('Interaction graph layout.Gi must be build before signature computation')
+        if isinstance(iTx, np.ndarray):
+            NroomTx = L.pt2ro(iTx)
+        elif isinstance(iTx, int):
+            NroomTx = iTx
+        else:
+            raise NameError('iTx must be an array or a room number')
+        if isinstance(iRx, np.ndarray):
+            NroomRx = L.pt2ro(iRx)
+        elif isinstance(iRx, int):
+            NroomRx = iRx
+        else:
+            raise NameError('iRx must be an array or a room number')
+
+        if not L.Gr.has_node(NroomTx) or not L.Gr.has_node(NroomRx):
+            raise AttributeError('Tx or Rx is not in Gr')
+
+        #
+        # .. todo:: modifier inter afin de ne pas retenir les points non diffractants
+        #
+        ndt = L.Gt.node[L.Gr.node[NroomTx]['cycle']]['inter']
+        ndr = L.Gt.node[L.Gr.node[NroomRx]['cycle']]['inter']
+
+        signature = []
+        segseq=[]
+        typseq=[]
+        sigarr = np.array([]).reshape(2, 0)
+        for nt in ndt:
+            for nr in ndr:
+                addpath = False
+                if (type(nt) != type(nr)):
+                    try:
+                        path = nx.dijkstra_path(L.Gi, nt, nr)
+                        addpath = True
+                    except:
+                        pass
+                        #print 'no path between ',nt,nr
+                elif (nt != nr):
+                    try:
+                        path = nx.dijkstra_path(L.Gi, nt, nr)
+                        addpath = True
+                    except:
+                        pass
+                        #print 'no path between ',nt,nr
+                else:
+                    addpath = True
+                    path = [nt]
+                if addpath:
+                    lseg=[]
+                    ltyp=[] 
+                    sigarr = np.hstack((sigarr, np.array([[0], [0]])))
+                    for interaction in path:
+                        it = eval(interaction)
+                        if type(it) == tuple:
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]], [1]])))
+                            lseg.append(it[0])
+                            ltyp.append(1)
+                            signature.append((it[0],1))
+                        elif it < 0:
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it], [-1]])))
+                            lseg.append(it)
+                            ltyp.append(-1)
+                            signature.append((it,-1))
+                        else:
+                            sigarr = np.hstack((sigarr, np.array([[it], [2]])))
+                            lseg.append(it)
+                            ltyp.append(2)
+                            signature.append((it,2))
+                    segseq.append(lseg)
+                    typseq.append(ltyp)
+        return segseq, typseq
+
+    def sig2rays(self, L, pTx, pRx):
+        """
+        from signature to rays
+        Parameters
+        ----------
+            L : Layout
+            pTx : ndarray
+                2D transmitter position
+            pRx : ndarray
+                2D receiver position
+        Returns
+        -------
+            rays : list
+                list of rays
+        """
+        try:
+            L.Gr
+        except:
+            L.build()
+        rTx = L.pt2ro(pTx)
+        rRx = L.pt2ro(pRx)
+        segseq,typseq = self.get_sigarr(L, rTx, rRx)
+        segTx = L.room2segments(rTx)
+        segRx = L.room2segments(rRx)
+
+        return segTx, segRx, segseq,typseq
 
     def evtx(self, L, tx):
         """ evtx
@@ -291,7 +421,6 @@ class Signature(object):
             >>> from pylayers.gis.layout import *
             >>> from pylayers.antprop.signature import *
             >>> L = Layout()
-            >>> L.loadstr('exemple.str')
             >>> L.buildGt()
             >>> L.buildGr()
             >>> seq = [1,5,1]
@@ -344,7 +473,6 @@ class Signature(object):
 
         return(Y)
 
-#pa    = np.array([[2,6],[8,7]])
-#pb    = np.array([[5,8],[8,2]])
+
 if __name__ == "__main__":
     doctest.testmod()
