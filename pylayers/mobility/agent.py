@@ -43,7 +43,8 @@ class Agent(object):
            'world':world(),
            'save':[], 
            'sim':Simulation(),
-           'epwr':{}
+           'epwr':{},
+           'sens':{},
            'dcond':{},
            'gcom':Gcom()
         """
@@ -62,7 +63,7 @@ class Agent(object):
                     'world':world(),
                     'save':[],
                     'sim':Simulation(),
-                    'epwr':{},
+                    'sens':{},
                     'dcond':{},
                     'gcom':Gcom()}
 
@@ -97,7 +98,7 @@ class Agent(object):
             self.meca.steering_mind = queue_steering_mind
 #            self.meca.steering_mind = queue_steering_mind
         # filll in network
-            self.node = Node(ID=self.ID,p=conv_vecarr(self.meca.position),t=time.time(),RAT=args['RAT'],epwr=args['epwr'],type=self.type)
+            self.node = Node(ID=self.ID,p=conv_vecarr(self.meca.position),t=time.time(),RAT=args['RAT'],epwr=args['epwr'],sens=args['sens'],type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim=args['sim']
             self.sim.activate(self.meca, self.meca.move(),0.0)
@@ -111,10 +112,10 @@ class Agent(object):
 #            self.meca=Person3(ID=self.ID,roomId=args['roomId'],L=args['Layout'],net=self.net,interval=args['meca_updt'],sim=args['sim'],moving=False)
 #            self.meca.behaviors  = []
             if args['roomId'] == -1:
-                self.node = Node(ID=self.ID,p=self.args['pos'],t=time.time(),RAT=args['RAT'],epwr=args['epwr'],type=self.type)
+                self.node = Node(ID=self.ID,p=self.args['pos'],t=time.time(),RAT=args['RAT'],epwr=args['epwr'],sens=args['sens'],type=self.type)
             else:
                 pp = np.array(args['Layout'].Gr.pos[self.args['roomId']])
-                self.node = Node(ID=self.ID,p=pp,t=time.time(),RAT=args['RAT'],epwr=args['epwr'],type=self.type)
+                self.node = Node(ID=self.ID,p=pp,t=time.time(),RAT=args['RAT'],epwr=args['epwr'],sens=args['sens'],type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim=args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)

@@ -70,7 +70,7 @@ class Interface(object):
         self.Io = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         self.name = name
 
-    def RT(self, metalic=False):
+    def RT(self, metalic=False,RT='RT'):
         """ evaluate Reflection and Transmission matrix
 
             .. math::
@@ -90,13 +90,17 @@ class Interface(object):
         #
         # R and T matrices are diagonal
         #
-        self.R = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
-        self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
+        if 'R' in RT:
+            self.R = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
+        if 'T' in RT:
+            self.T = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
 
-        self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
-        self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
 
-        if not metalic:
+        if 'R' in RT:
+            self.R[:, :, 0, 0] = self.Io[:, :, 0, 1] / self.Io[:, :, 0, 0]
+            self.R[:, :, 1, 1] = self.Ip[:, :, 0, 1] / self.Ip[:, :, 0, 0]
+
+        if not metalic and 'T' in RT:
             self.T[:, :, 0, 0] = 1.0 / self.Io[:, :, 0, 0]
             self.T[:, :, 1, 1] = 1.0 / self.Ip[:, :, 0, 0]
 
@@ -1135,7 +1139,7 @@ class Slab(dict, Interface):
         #
         #self.thick.append(0.0)
 
-    def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False):
+    def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
         """ Evaluation of the slab
 
         Parameters
@@ -1172,10 +1176,14 @@ class Slab(dict, Interface):
         Co = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         Co[:, :, 0, 0] = 1
         Co[:, :, 1, 1] = 1
+#        _Co= np.eye(2,dtype=complex)
 
         Cp = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         Cp[:, :, 0, 0] = 1
         Cp[:, :, 1, 1] = 1
+#        _Cp = np.eye(2,dtype=complex)
+
+
         #
         # Boucle sur les n-1 matériaux
         #      lmat[0] est toujours l'air  (à modifier)
@@ -1193,9 +1201,11 @@ class Slab(dict, Interface):
                 Io = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Io[:, :, 0, 1] = -1
                 Io[:, :, 1, 0] = -1
+#                _Io=np.eye(2,dtype=complex)+np.eye(2)-1
                 Ip = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Ip[:, :, 0, 1] = -1
                 Ip[:, :, 1, 0] = -1
+#                _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
             else:
                 if i == self.n - 2:
                     II = MatInterface([ml, mr], 0, fGHz, theta)
@@ -1209,6 +1219,7 @@ class Slab(dict, Interface):
             # theta depends on frequency nf x nt
             #
                 #THETA = II.THETA
+
                 Io = II.Io
                 Ip = II.Ip
 
@@ -1235,7 +1246,7 @@ class Slab(dict, Interface):
         self.Io = Co
         self.Ip = Cp
 
-        self.RT(metalic)
+        self.RT(metalic,RT=RT)
         #pdb.set_trace()
         if compensate:
             fGHz  = fGHz.reshape(nf,1,1,1)

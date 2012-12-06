@@ -6,16 +6,9 @@ import pylayers.util.pyutil as pyu
 # create a Simul object
 
 S = Simul()
-# loading a layout 
+# loading a layout
 filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')
-#S.L.dumpr()
-S.L.build()
-S.L.dumpw()
-S.tx = RadioNode(typ='tx')
-S.tx.point([1.2,1,1.4])
-
-
 try:
     S.L.dumpr()
 except:
@@ -37,22 +30,20 @@ S.run(itx,irx)
 C=Ctilde()
 C.load(pyu.getlong(S.dfield[itx][irx],pstruc['DIRTRA']))
 
-G3=GrRay3D()
-G3.load(S.dtra[itx][irx],S.L)
-fig,ax=S.L.showG('')
-G3.show(fig=fig,ax=ax,rayset=[1,2])
-
+#G3=GrRay3D()
+#G3.load(S.dtra[itx][irx],S.L)
+##fig,ax=S.L.showG('')
+##Gr3.show(fig=fig,ax=ax,rayset=[1,2])
+#r3=G3.ray3d[1]
+#r3.locbas(S.L)
 
 Gt=GrRayTud()
 Gt.load(S.dtud[itx][irx],S.dtang[itx][irx],S.drang[itx][irx],S.L.sl)
 
-r3=G3.ray3d[1]
-r3.locbas(S.L)
-#r3.show3()
 rt=Gt.rayTud[1]
 
-C = Ctilde()
-C.load(pyu.getlong(S.dfield[itx][irx],'output'))
+#C = Ctilde()
+#C.load(pyu.getlong(S.dfield[itx][irx],'output'))
 
 #rt.eval(freq)
 
@@ -61,10 +52,10 @@ freq = C.Ctt.x
 tang = C.tang[ir]
 rang = C.rang[ir]
 tauk = C.tauk[ir]
-Ctt  = C.Ctt.y[ir,:]
-Ctp  = C.Ctp.y[ir,:]
-Cpt  = C.Cpt.y[ir,:]
-Cpp  = C.Cpp.y[ir,:]
+Ctt = C.Ctt.y[ir,:]
+Ctp = C.Ctp.y[ir,:]
+Cpt = C.Cpt.y[ir,:]
+Cpp = C.Cpp.y[ir,:]
 plt.ion()
 ax1 = plt.subplot(221)
 plt.plot(freq,abs(Ctt))
@@ -81,9 +72,8 @@ plt.title('Cpp')
 ## print launching parameters
 #S.palch.info()
 
-
 #S2 = Simul()
-## loading a layout 
+## loading a layout
 #filestr = 'defstr'
 #S2.layout(filestr+'.str','matDB.ini','slabDB.ini')
 #S2.tx = RadioNode(typ='tx')
@@ -124,10 +114,10 @@ plt.title('Cpp')
 #tang = C.tang[ir]
 #rang = C.rang[ir]
 #tauk = C.tauk[ir]
-#Ctt  = C.Ctt.y[ir,:]
-#Ctp  = C.Ctp.y[ir,:]
-#Cpt  = C.Cpt.y[ir,:]
-#Cpp  = C.Cpp.y[ir,:]
+#Ctt = C.Ctt.y[ir,:]
+#Ctp = C.Ctp.y[ir,:]
+#Cpt = C.Cpt.y[ir,:]
+#Cpp = C.Cpp.y[ir,:]
 #plt.ion()
 #plt.figure()
 #ax1 = plt.subplot(221)
@@ -146,31 +136,31 @@ plt.title('Cpp')
 ##S2.palch.info()
 #
 ### ang Tx : angular step from Tx
-##S2.palch.angTx  = 1
+##S2.palch.angTx = 1
 #
-### ISB ang Incident Shadow Boundary angle (degree) 
-##S2.palch.ISBang = 90  
+### ISB ang Incident Shadow Boundary angle (degree)
+##S2.palch.ISBang = 90
 #
-### ray elimination Threshold 
+### ray elimination Threshold
 ##S2.palch.ethreshold = 0.001
 #
 ### maximum depth
-##S2.palch.maxdeep  = 10
+##S2.palch.maxdeep = 10
 #
 ### typealgo = 0 (include diffraction) 1 (no diffraction)
 ##S2.palch.typalgo = 1
 ##title = str(S2.palch.angTx) + '-' +\
-##        str(S2.palch.ISBang) + '-' +\
-##        str(S2.palch.ethreshold) + '-' + \
-##        str(S2.palch.maxdeep) + '-' + \
-##        str(S2.palch.typalgo)
+## str(S2.palch.ISBang) + '-' +\
+## str(S2.palch.ethreshold) + '-' + \
+## str(S2.palch.maxdeep) + '-' + \
+## str(S2.palch.typalgo)
 #
 ##S2.palch.save()
 ##S2.pafreq.fghzmin=2
 ##S2.pafreq.fghzmax=11
 ##S2.pafreq.nf=181
 ##S2.pafreq.save()
-### showing the simulation 
+### showing the simulation
 ##print "Launching "
 ##print "-----------------"
 ##S2.launching(1)
@@ -188,10 +178,10 @@ plt.title('Cpp')
 ##M = N/2
 ###
 ##for k in range(N):
-##    ax = fig.add_subplot(M,2,k+1)
-##    fig,ax = L1.show(S2.L,k+1,f=fig)
+## ax = fig.add_subplot(M,2,k+1)
+## fig,ax = L1.show(S2.L,k+1,f=fig)
 #
-##fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')    
+##fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')
 ##print "Tracing "
 ##print "-----------------"
 ##print "purc :",S2.config.get('tud','purc')
@@ -207,7 +197,7 @@ plt.title('Cpp')
 ##print "purc :",S2.config.get('tud','purc')
 ##S2.tratotud(1,1)
 ##gt = GrRayTud()
-### loading rays in tud format 
+### loading rays in tud format
 ##gt.load(S2.dtud[1][1],S2.dtang[1][1],S2.drang[1][1],S2.L.sl)
 ##print "Evalfield "
 ##print "-----------------"
@@ -216,31 +206,31 @@ plt.title('Cpp')
 ##f = plt.figure()
 ##S2.pltcir(1,1,fig=f)
 ### ang Tx : angular step from Tx
-##S2.palch.angTx  = 1
+##S2.palch.angTx = 1
 #
-### ISB ang Incident Shadow Boundary angle (degree) 
-##S2.palch.ISBang = 90  
+### ISB ang Incident Shadow Boundary angle (degree)
+##S2.palch.ISBang = 90
 #
-### ray elimination Threshold 
+### ray elimination Threshold
 ##S2.palch.ethreshold = 0.001
 #
 ### maximum depth
-##S2.palch.maxdeep  = 10
+##S2.palch.maxdeep = 10
 #
 ### typealgo = 0 (include diffraction) 1 (no diffraction)
 ##S2.palch.typalgo = 1
 ##title = str(S2.palch.angTx) + '-' +\
-##        str(S2.palch.ISBang) + '-' +\
-##        str(S2.palch.ethreshold) + '-' + \
-##        str(S2.palch.maxdeep) + '-' + \
-##        str(S2.palch.typalgo)
+## str(S2.palch.ISBang) + '-' +\
+## str(S2.palch.ethreshold) + '-' + \
+## str(S2.palch.maxdeep) + '-' + \
+## str(S2.palch.typalgo)
 #
 ##S2.palch.save()
 ##S2.pafreq.fghzmin=2
 ##S2.pafreq.fghzmax=11
 ##S2.pafreq.nf=181
 ##S2.pafreq.save()
-### showing the simulation 
+### showing the simulation
 ##print "Launching "
 ##print "-----------------"
 ##S2.launching(1)
@@ -258,10 +248,10 @@ plt.title('Cpp')
 ##M = N/2
 ###
 ##for k in range(N):
-##    ax = fig.add_subplot(M,2,k+1)
-##    fig,ax = L1.show(S2.L,k+1,f=fig)
+## ax = fig.add_subplot(M,2,k+1)
+## fig,ax = L1.show(S2.L,k+1,f=fig)
 #
-##fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')    
+##fig.savefig(pylayersdir+'/doc/auto_examples/simul/'+filestr+'-launching.png')
 ##print "Tracing "
 ##print "-----------------"
 ##print "purc :",S2.config.get('tud','purc')
@@ -277,7 +267,7 @@ plt.title('Cpp')
 ##print "purc :",S2.config.get('tud','purc')
 ##S2.tratotud(1,1)
 ##gt = GrRayTud()
-### loading rays in tud format 
+### loading rays in tud format
 ##gt.load(S2.dtud[1][1],S2.dtang[1][1],S2.drang[1][1],S2.L.sl)
 ##print "Evalfield "
 ##print "-----------------"
@@ -285,3 +275,14 @@ plt.title('Cpp')
 ##S2.cir(1,1)
 ##f = plt.figure()
 ##S2.pltcir(1,1,fig=f)
+#thetas=Gt.get_thetas()
+#mat=Gt.get_mat()
+
+
+
+
+#B=rt.inter[0]
+#Be=B.eval()
+
+#T=rt.inter[3]
+#Te=T.eval()

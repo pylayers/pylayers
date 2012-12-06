@@ -165,9 +165,6 @@ class Localization(object):
                 self.savep(self.cla.pe,name='pe_geo')
 
 
-
-
-
     def compute_alg(self,rat='all',ldp='all',pe=True):
         """
             Compute postion with the algebraic algorithm
