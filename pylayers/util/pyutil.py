@@ -1525,6 +1525,23 @@ def unzipf(path, filepath, zipfilename):
             file(os.path.join(directory, name),
                 'wb').write(zip_file.read(each))
 
+def rotate_line(A,B,theta):
+    """
+    rotation of a line [AB] of an angle theta with A fixed
+    Parameters
+    ----------
+        A: ndarray
+        B: ndarray
+        theta: float
+    Returns
+    -------
+        Br: ndarry
+    """
+    if np.shape(B)!=(2,1):
+        B.reshape((2,1))
+    R = np.array([[np.cos(theta),-np.sin(theta)],[np.sin(theta), np.cos(theta)]])
+    Br=np.dot(R,B)
+    return Br
 
 if __name__ == "__main__":
     doctest.testmod()
