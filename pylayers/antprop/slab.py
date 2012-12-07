@@ -1159,6 +1159,9 @@ class Slab(dict, Interface):
         nt = len(theta)
         thetai = theta[0]
         thetaf = theta[-1]
+        ### WARNING thetas can be NOT sorted. 
+        ### thetai should be min(theta)
+        ### thetaf should be max(theta)
         th1  = np.linspace(thetai,thetaf,nt)
 
         metalic = False
@@ -1247,7 +1250,6 @@ class Slab(dict, Interface):
         self.Ip = Cp
 
         self.RT(metalic,RT=RT)
-        #pdb.set_trace()
         if compensate:
             fGHz  = fGHz.reshape(nf,1,1,1)
             th1   = th1.reshape(1,nt,1,1)
