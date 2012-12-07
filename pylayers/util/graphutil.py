@@ -36,6 +36,22 @@ def edgetype(G):
     return(ndnd,nded,eded)
 
 
+def find_all_paths(graph, start, end):
+    path  = []
+    paths = []
+    queue = [(start, end, path)]
+    while queue:
+        start, end, path = queue.pop()
+        #print 'PATH', path
+
+        path = path + [start]
+        if start == end:
+            paths.append(path)
+        for node in set(graph[start]).difference(path):
+            queue.append((node, end, path))
+    return paths
+
+
 if __name__=="__main__":
 
     doctest.testmod()
