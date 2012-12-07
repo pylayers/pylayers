@@ -3916,9 +3916,7 @@ class Layout(object):
         #
         ndt = self.Gt.node[self.Gr.node[NroomTx]['cycle']]['inter']
         ndr = self.Gt.node[self.Gr.node[NroomRx]['cycle']]['inter']
-
         signature = []
-
         sigarr = np.array([]).reshape(2, 0)
         for nt in ndt:
             for nr in ndr:
@@ -3940,7 +3938,6 @@ class Layout(object):
                 else:
                     addpath = True
                     path = [nt]
-
                 if addpath:
                     signature.append(path)
                     sigarr = np.hstack((sigarr, np.array([[0], [0]])))
