@@ -4,7 +4,6 @@
 mobility
 ========
 
-
 .. toctree::
     :maxdepth: 2
 

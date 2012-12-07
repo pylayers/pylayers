@@ -1,6 +1,6 @@
 import time
 from SimPy.Simulation import Process, hold
-from Transit.World import world
+from pylayers.mobility.transit.World import world
 import os
 
 PASSIVATE = True

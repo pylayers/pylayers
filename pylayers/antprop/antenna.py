@@ -14,7 +14,7 @@ from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
 #from spharm import Spharmt,getspecindx
 from pylayers.util.project import *
-from sphere import spherepack, Wrapec, mathtogeo
+#from sphere import spherepack, Wrapec, mathtogeo
 
 from matplotlib.font_manager import FontProperties
 from mpl_toolkits.mplot3d import axes3d
