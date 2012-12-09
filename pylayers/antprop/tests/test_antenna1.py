@@ -30,7 +30,8 @@ tl  = range(1,15)
 for l in tl:
     print 'l : ',l
     A.C.s1tos2(l)
-    errelTh,errelPh,errel = A.errel(l,20,dsf,typ='s2')
+    A.C.s2tos3()
+    errelTh,errelPh,errel = A.errel(l,20,dsf,typ='s3')
     tet.append(errelTh)
     tep.append(errelPh)
     te.append(errel)

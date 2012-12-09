@@ -1,4 +1,23 @@
 # -*- coding:Utf-8 -*-
+"""
+This is the module which handles antennas in pylayers
+
+To instantiate an antenna object : 
+
+A = Antenna(typ,_filename,directory,nf,ntheta,nphi)
+
+typ indicates the antenna file format to read 
+
+A = Antenna('mat','S1R1.mat','ant/UWBAN/Matfile')
+
+The antenna can be represented in various formats
+
+.vsh2
+.vsh3
+
+
+
+"""
 import doctest
 import subprocess
 import os
@@ -14,7 +33,7 @@ from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
 #from spharm import Spharmt,getspecindx
 from pylayers.util.project import *
-#from sphere import spherepack, Wrapec, mathtogeo
+from sphere import spherepack, Wrapec, mathtogeo
 
 from matplotlib.font_manager import FontProperties
 from mpl_toolkits.mplot3d import axes3d
@@ -695,11 +714,10 @@ class VSHCoeff(object):
         ----------
 
         threshold : float
-            default 1e-20 
+            default 1e-20
 
 
         Energy thresholded coefficients
-        
 
         """
 
@@ -940,7 +958,7 @@ class Antenna(object):
         self.StartTime = str(d.StartTime)
         self.AntennaName = str(d.AntennaName)
 
-        self.fa = d.freq
+        self.fa = d.freq/1.e9
         self.theta = d.theta
         self.phi = d.phi
         self.Ftheta = d.Ftheta
