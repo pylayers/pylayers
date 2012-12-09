@@ -45,7 +45,6 @@ from matplotlib import cm
 def indexvsh(N):
     """ indexvsh(N)
 
-   
     Parameters
     ----------
          N : degree max
@@ -759,7 +758,11 @@ class VSHCoeff(object):
         """ Thresholded coefficient conversion
 
         The s3 minimmum energy coefficient is deleted
-           return ind,ind3
+
+        Returns
+        -------
+           ind
+           ind3
         """
         EBr = sum(abs(self.Br.s3) ** 2, axis=0)
         EBi = sum(abs(self.Bi.s3) ** 2, axis=0)
@@ -769,7 +772,7 @@ class VSHCoeff(object):
         E = EBr + EBi + ECr + ECi
 
         Emin = min(E)
-        ind = find(E == Emin)
+        ind  = find(E == Emin)
         ind3 = self.Br.ind3[ind]
 
         self.Br.delete3(ind)
@@ -780,17 +783,24 @@ class VSHCoeff(object):
         return ind, ind3
 
     def ens3(self):
-        """ return the sorted energies from minimal to maximal value
+        """ return sorted energy values from minimal to maximal value
+
+        Returns
+        -------
+        Es
+            sorted energy values
+        u
+            index
         """
-        EBr = sum(abs(self.Br.s3) ** 2, axis=0)
-        EBi = sum(abs(self.Bi.s3) ** 2, axis=0)
-        ECr = sum(abs(self.Cr.s3) ** 2, axis=0)
-        ECi = sum(abs(self.Ci.s3) ** 2, axis=0)
+        EBr = np.sum(np.abs(self.Br.s3) ** 2, axis=0)
+        EBi = np.sum(np.abs(self.Bi.s3) ** 2, axis=0)
+        ECr = np.sum(np.abs(self.Cr.s3) ** 2, axis=0)
+        ECi = np.sum(np.abs(self.Ci.s3) ** 2, axis=0)
 
         E = EBr + EBi + ECr + ECi
-        u = argsort(E)
+        u = np.argsort(E)
         Es = E[u]
-        return(Es)
+        return(Es,u)
 
     def drag3(self, Emin):
         """ Thresholded coefficient conversion
@@ -1964,6 +1974,7 @@ class Antenna(object):
         # The - sign is necessary to get the good reconstruction
         #     deduced from observation
         #     May be it comes from a different definition of theta in SPHEREPACK
+
         x = -np.cos(theta)
 
         Pmm1n, Pmp1n = AFLegendre(N, M, x)
@@ -1976,9 +1987,9 @@ class Antenna(object):
 
 
         Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
-            np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
+              np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
         Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
-            np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
+              np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
         return Fth, Fph
 
@@ -2033,7 +2044,7 @@ class Antenna(object):
 
 
     def Fsynth3(self, theta, phi):
-        """ synthesis of a complex antenna pattern from VSH Coefficients (shape 3)
+        """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
 
         Parameters
@@ -2058,10 +2069,10 @@ class Antenna(object):
             >>> import numpy as np
             >>> import matplotlib.pylab as plt
             >>> A = Antenna('vsh3','defant.vsh3')
-            >>> theta   = np.linspace(0,np.pi,70)
-            >>> phi     = np.linspace(0,2*np.pi,180)
-            >>> th      = np.kron(theta,np.ones(len(phi)))
-            >>> ph      = np.kron(np.ones(len(theta)),phi)
+            >>> theta = np.linspace(0,np.pi,70)
+            >>> phi = np.linspace(0,2*np.pi,180)
+            >>> th = np.kron(theta,np.ones(len(phi)))
+            >>> ph = np.kron(np.ones(len(theta)),phi)
             >>> Fth,Fph = A.Fsynth3(th,ph)
 
         """
@@ -2631,11 +2642,11 @@ def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     ----------
     l    : ndarray (1 x K)
         level
-    m    : ndarray (1 x K) 
+    m    : ndarray (1 x K)
         mode
     x    :  ndarray (1 x Nray)
 
-    phi   : np.array (1 x Nray) 
+    phi   : np.array (1 x Nray)
 
     Pmm1l : Legendre Polynomial
 
@@ -2644,8 +2655,8 @@ def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     Returns
     -------
 
-    V  : ndarray (Nx,L,M)
-    W  : ndarray (Nx,L,M)
+    V  : ndarray (Nray , L, M)
+    W  : ndarray (Nray , L, M)
 
     See Also
     --------
@@ -2653,12 +2664,12 @@ def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     AFLegendre
 
     Nx x M x L
-    
+
     Examples
     --------
 
     """
-    
+
     K   = len(l)
     Nr  = len(x)
     l   = l.reshape(1,K)
