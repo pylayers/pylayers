@@ -173,6 +173,7 @@ class Inter(object):
         if self.typ in [1,2,3]: 
             self.si0 = self.data[:,1]/0.3
             self.delay = self.data[:,2]/0.3
+
         elif self.typ == 0:
             self.delay = self.data[:,0]/0.3
         elif self.typ == -1:
@@ -1730,6 +1731,7 @@ class GrRayTud(object):
 
 
                 ### fill slab index dictionnary for each type of interractions
+
                 if caract == 1:
                     ## read material index 
                     slidx = c1
@@ -2208,8 +2210,9 @@ class GrRayTud(object):
 
 #            self.Ctilde[:,self.dli[l]['rayidx']]=
             # delay computation:
-            
             self.dli[l]['delays']=self.I.si0[self.dli[l]['rays'][:,1]] + np.sum(self.I.delay[self.dli[l]['rays']],axis=1)
+            # Power losses due to distances
+            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=self.Ctilde[:,self.dli[l]['rayidx'],:,:]*1./(0.3*self.dli[l]['delays'][np.newaxis,:,np.newaxis,np.newaxis])
             self.delays[self.dli[l]['rayidx']]=self.dli[l]['delays']
 
 

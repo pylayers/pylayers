@@ -76,23 +76,24 @@ Cn.nfreq = Gt.I.nf
 Cn.nray = Gt.nray
 Cn.tauk=Gt.delays
 
-#plt.ion()
+plt.ion()
 
 
 
-plt.figure('1Cpp - Fried')
-C.Cpp.plot()
-plt.figure('1Cpp - new')
-Cn.Cpp.plot()
+fig=plt.figure('Cpp')
+C.Cpp.plot(fig=fig)
+Cn.Cpp.plot(fig=fig)
 
-plt.figure('1Ctt - Fried')
-C.Ctt.plot()
-plt.figure('1Ctt - new')
-Cn.Ctt.plot()
+fig2=plt.figure('Ctt')
+C.Ctt.plot(fig=fig2)
+Cn.Ctt.plot(fig=fig2)
 
 
 
+plt.show()
 
+raw_input('press any key to close figure')
+plt.close('all')
 
 
 
