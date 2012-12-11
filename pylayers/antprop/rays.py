@@ -171,8 +171,8 @@ class Inter(object):
         """
 
         if self.typ in [1,2,3]: 
-            self.delay = self.data[:,1]/0.3
-            self.si0 = self.data[:,2]/0.3
+            self.si0 = self.data[:,1]/0.3
+            self.delay = self.data[:,2]/0.3
         elif self.typ == 0:
             self.delay = self.data[:,0]/0.3
         elif self.typ == -1:
@@ -2208,6 +2208,7 @@ class GrRayTud(object):
 
 #            self.Ctilde[:,self.dli[l]['rayidx']]=
             # delay computation:
+            
             self.dli[l]['delays']=self.I.si0[self.dli[l]['rays'][:,1]] + np.sum(self.I.delay[self.dli[l]['rays']],axis=1)
             self.delays[self.dli[l]['rayidx']]=self.dli[l]['delays']
 
