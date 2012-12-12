@@ -1543,5 +1543,53 @@ def rotate_line(A,B,theta):
     Br=np.dot(R,B)
     return Br
 
+def extract_block_diag(A,M,k=0):
+    """Extracts blocks of size M from the kth diagonal
+    of square matrix A, whose size must be a multiple of M."""
+
+    # Check that the matrix can be block divided
+    if A.shape[0] != A.shape[1] or A.shape[0] % M != 0:
+        raise StandardError('Matrix must be square and a multiple of block size')
+
+    # Assign indices for offset from main diagonal
+    if abs(k) > M - 1:
+        raise StandardError('kth diagonal does not exist in matrix')
+    elif k > 0:
+        ro = 0
+        co = abs(k)*M 
+    elif k < 0:
+        ro = abs(k)*M
+        co = 0
+    else:
+        ro = 0
+        co = 0
+    blocks = np.array([A[i+ro:i+ro+M,i+co:i+co+M] 
+                       for i in range(0,len(A)-abs(k)*M,M)])
+    return blocks
+
+def fill_block_diag(A, blocks,M,k=0):
+    """fill A with blocks of size M from the kth diagonal
+    """
+
+    # Check that the matrix can be block divided
+    if A.shape[0] != A.shape[1] or A.shape[0] % M != 0:
+        raise StandardError('Matrix must be square and a multiple of block size')
+
+    # Assign indices for offset from main diagonal
+    if abs(k) > M - 1:
+        raise StandardError('kth diagonal does not exist in matrix')
+    elif k > 0:
+        ro = 0
+        co = abs(k)*M 
+    elif k < 0:
+        ro = abs(k)*M
+        co = 0
+    else:
+        ro = 0
+        co = 0
+    for i in range(0,len(A)-abs(k)*M,M):
+        A[i+ro:i+ro+M,i+co:i+co+M]=blocks[int(i/M),:,:] 
+    return A
+
 if __name__ == "__main__":
     doctest.testmod()
