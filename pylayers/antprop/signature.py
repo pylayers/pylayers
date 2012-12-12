@@ -109,7 +109,6 @@ class Signatures(object):
                     addpath = True
                     path = [nt]
                 if addpath:
-                    sigarr = np.hstack((sigarr, np.array([[0], [0]])))
                     for interaction in path:
                         it = eval(interaction)
                         if type(it) == tuple:
@@ -121,12 +120,12 @@ class Signatures(object):
                         else:
                             sigarr = np.hstack((sigarr,
                                     np.array([[it], [2]])))
-        sigarr = np.hstack((sigarr, np.array([[0], [0]])))
+                    sigarr = np.hstack((sigarr, np.array([[0], [0]])))
         return sigarr
 
     def sigs2rays(self, L, pTx, pRx, sig_arr):
         """
-        from signature arrays to rays
+        from signature arrays to 2D rays
         Parameters
         ----------
             L : Layout
@@ -137,27 +136,44 @@ class Signatures(object):
             sig_arr : ndarray
         Returns
         -------
-            M : numpy.ndarray
-            Y : numpy.ndarray
+            raysarr : numpy.ndarray
         """
         zsig = np.array(np.where(sig_arr[0,:]==0.))
-        fig=plt.figure()
-        ax = fig.add_subplot(111)
-        L.showGs(fig, ax)
+        raysarr = np.array([]).reshape(4, 0)
         for i in range(np.shape(zsig)[1]-1):
-            print i
             i1 = zsig[:,i][0]+1
             i2 = zsig[:,i+1][0]
             sig = sig_arr[:, i1:i2]
             s = Signature(sig)
-            print 'sig'
-            print sig
-            Mi, Yi = s.sig2ray(L, pTx, pRx)
-            print np.shape(Mi)
-            print np.shape(Yi)
+            Yi = s.sig2ray(L, pTx, pRx)
             if Yi is not None:
-                rayi = np.hstack((np.hstack((pTx.reshape(2, 1), Yi)), pRx.reshape(2, 1)))
-                ax.plot(rayi[0, :], rayi[1, :], alpha=0.6, linewidth=1.)
+                raysarr = np.hstack((raysarr,
+                          np.vstack((sig, Yi[:,1:-1]))))
+                raysarr = np.hstack((raysarr, np.zeros((4,1))))
+        return raysarr
+
+    def show_rays2D(self, L, raysarr, pTx, pRx):
+        """
+        plot 2D rays within the simulated environment
+        Parameters
+        ----------
+            raysarr: numpy.ndarray
+        """
+        zsig = np.array(np.where(raysarr[0,:]==0.))
+        fig=plt.figure()
+        ax = fig.add_subplot(111)
+        L.showGs(fig, ax)
+        ax.plot(pTx[0], pTx[1], 'or')
+        ax.plot(pRx[0], pRx[1], 'og')
+        for i in range(np.shape(zsig)[1]-1):
+            i1 = zsig[:,i][0]+1
+            i2 = zsig[:,i+1][0]
+            ray = np.hstack((pRx[0:2].reshape((2,1)),
+                  np.hstack((raysarr[2:, i1:i2],pTx[0:2].reshape((2,1))
+                  ))))
+            ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
+        
+        
             
 
 
@@ -556,29 +572,29 @@ class Signature(object):
         while (((beta <= 1) & (beta >= 0)) & (k < N)):
             if int(typ[k]) != 3:
                 # Formula (30) of paper Eucap 2012
-                l0 = np.hstack((I2, pkm1 - M[:, -(k + 1)].reshape(2, 1), z0
+                l0 = np.hstack((I2, pkm1 - M[:, N-(k + 1)].reshape(2, 1), z0
                               ))
                 l1 = np.hstack((I2, z0,
-                     pa[:, -(k + 1)].reshape(2, 1) -
-                     pb[:, -(k + 1)].reshape(2, 1)
+                     pa[:, N-(k + 1)].reshape(2, 1) -
+                     pb[:, N-(k + 1)].reshape(2, 1)
                      ))
                 
                 T = np.vstack((l0, l1))
-                yk = np.hstack((pkm1[:, 0].T, pa[:, -(k + 1)].T))
+                yk = np.hstack((pkm1[:, 0].T, pa[:, N-(k + 1)].T))
                 deT = np.linalg.det(T)
                 if abs(deT)<1e-15:
                     return(None)
                 xk = la.solve(T, yk)
                 pkm1 = xk[0:2].reshape(2, 1)
                 gk = xk[2::]
+                alpha = gk[0]
                 beta = gk[1]
                 Y = np.hstack((Y, pkm1))
             else:
                 Y = np.hstack((Y, pa[:,k].reshape((2,1))))
                 pkm1 = pa[:,k].reshape((2,1))
             k = k + 1
-
-        if ((k == N) & ((beta > 0) & (beta < 1))):
+        if ((k == N) & ((beta > 0) & (beta < 1)) & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
             return(Y)
         else:
@@ -607,7 +623,7 @@ class Signature(object):
         self.ev(L)
         M = self.image2(pTx)
         Y = self.backtrace(pTx, pRx, M)
-        return M, Y
+        return Y
         
 
 
