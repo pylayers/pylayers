@@ -2634,7 +2634,6 @@ def AFLegendre(N, M, x):
         Pmm1n[:, 0, :] = -Pmn[:, 1, :]
 
     return Pmm1n, Pmp1n
-
 def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     """ evaluate vector Spherical Harmonics basis functions
 
@@ -2690,6 +2689,76 @@ def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
     V[np.isinf(V) | np.isnan(V)] = 0
     return V, W
+
+def VW3(l, m, phi, theta):
+    """ evaluate vector Spherical Harmonics basis functions
+
+    Parameters
+    ----------
+    l    : ndarray (1 x K)
+        level
+    m    : ndarray (1 x K)
+        mode
+    phi   : np.array (1 x Nray)
+
+    theta : np.array (1 x Nray)
+
+    Returns
+    -------
+
+    V  : ndarray (Nray , L, M)
+    W  : ndarray (Nray , L, M)
+
+    See Also
+    --------
+
+    AFLegendre
+
+    Nray x M x L
+
+    Examples
+    --------
+
+    """
+
+    if type(l) == float:
+        l = np.array([l])
+    if type(m) == float:
+        m = np.array([m])
+
+    L = np.max(l)
+    M = np.max(m)
+
+    x = -np.cos(theta)
+
+    # The - sign is necessary to get the good reconstruction
+    #     deduced from observation
+    #     May be it comes from a different definition of theta in SPHEREPACK
+
+    Pmm1l, Pmp1l = AFLegendre(L, M, x)
+
+    K   = len(l)
+    Nr  = len(x)
+
+    l   = l.reshape(1,K)
+    m   = m.reshape(1,K)
+    phi = phi.reshape(Nr,1)
+    x   = x.reshape(Nr,1)
+
+    t1 = np.sqrt((l + m) * (l - m + 1))
+    t2 = np.sqrt((l - m) * (l + m + 1))
+
+    Ephi = np.exp(1j*m*phi)
+
+    Y1 = (t1 * Pmm1l[:,m,l] + t2 * Pmp1l[:,m,l]).reshape(Nr,K)
+    Y2 = (t1 * Pmm1l[:,m,l] - t2 * Pmp1l[:,m,l]).reshape(Nr,K)
+    #pdb.set_trace()
+    W = Y1 * (-1.0) ** l / (2 * x * np.sqrt(l * (l + 1))) * Ephi
+    W[np.isinf(W) | np.isnan(W)] = 0
+    V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
+    V[np.isinf(V) | np.isnan(V)] = 0
+    return V, W
+
 
 def VW(n, m, x, phi, Pmm1n, Pmp1n):
     """ evaluate vector Spherical Harmonics basis functions

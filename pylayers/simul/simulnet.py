@@ -46,7 +46,7 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.slab import Slab
 from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
-from pylayers.util.pymysqldb import Database as DB
+#from pylayers.util.pymysqldb import Database as DB
 from pylayers.util.project import *
 
 import pdb

@@ -39,7 +39,7 @@ import pdb
 import pylayers.util.pyutil as pyu
 from pylayers.network.emsolver import EMSolver
 from pylayers.network.show import ShowNet,ShowTable
-from pylayers.util.pymysqldb import Database 
+#from pylayers.util.pymysqldb import Database
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 import time
