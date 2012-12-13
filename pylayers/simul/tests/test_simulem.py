@@ -89,7 +89,7 @@ print "purc :",S.config.get('tud','purc')
 S.tratotud(1,1)
 gt = GrRayTud()
 # loading rays in tud format 
-gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
+#gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
 print "Evalfield "
 print "-----------------"
 S.field(1,1)

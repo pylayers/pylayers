@@ -286,6 +286,6 @@ class Simul(Simulation):
 
 if __name__ == '__main__':
 
-    seed(0)
+    seed(10)
     S = Simul()
     S.runsimul()

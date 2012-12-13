@@ -27,7 +27,7 @@ S.tx.point([1.2,1,1.4])
 itx=1
 irx=1
 S.rx = RadioNode(typ='rx')
-S.rx.point([8,-1.2,1.5])
+S.rx.point([3,-1.2,1.5])
 S.save()
 
 S.run(itx,irx)
@@ -58,49 +58,62 @@ freq=Gt.I.f
 nfreq=Gt.I.nf
 nray=np.array(([Gt.nray]))
 
-Cr=Gt.Ctilde.reshape(nray, nfreq,2,2)
-Cr=np.transpose(Gt.Ctilde,(1,0,2,3))
+
+Cr=np.swapaxes(Gt.Ctilde,1,0)
+#Cr=Gt.Ctilde.reshape(nray, nfreq,2,2)
+#Cr=np.transpose(Gt.Ctilde,(1,0,2,3))
 
 c11 = Cr[:,:,0,0]
 c12 = Cr[:,:,0,1]
 c21 = Cr[:,:,1,0]
 c22 = Cr[:,:,1,1]
 
-
 Cn=Ctilde()
-Cn.Ctt = bs.FUsignal(freq, c11)
+Cn.Cpp = bs.FUsignal(freq, c11)
 Cn.Ctp = bs.FUsignal(freq, c12)
 Cn.Cpt = bs.FUsignal(freq, c21)
-Cn.Cpp = bs.FUsignal(freq, c22)
+Cn.Ctt = bs.FUsignal(freq, c22)
 Cn.nfreq = Gt.I.nf
 Cn.nray = Gt.nray
 Cn.tauk=Gt.delays
 
 plt.ion()
 
-
+r=30
 
 fig=plt.figure('Cpp')
-C.Cpp.plot(fig=fig)
-Cn.Cpp.plot(fig=fig)
+f,a=C.Cpp.plot(fig=fig,iy=np.array(([r])))
+f,a,Cn.Cpp.plot(fig=fig,iy=np.array(([r])))
+
+a[0].legend(('Fried','new'))
 
 fig2=plt.figure('Ctt')
-C.Ctt.plot(fig=fig2)
-Cn.Ctt.plot(fig=fig2)
-
+f,a=C.Ctt.plot(fig=fig2)
+f,a=Cn.Ctt.plot(fig=fig2)
+a[0].legend(('Fried','new'))
 
 
 plt.show()
 
-raw_input('press any key to close figure')
-plt.close('all')
+#raw_input('press any key to close figure')
+#plt.close('all')
+
+#freq=Gt.I.f
+#th=Gt.I.R.data[0,0]
+#sl=S.sl['WALL']
+#sl.ev(fGHz=freq,theta=th,compensate=False)
 
 
 
+#F=(C.Cpp.y[r,:])*(C.tauk[r]*0.3)
+#N=(Cn.Cpp.y[r,:])*(Cn.tauk[r]*0.3)
 
-
-
-
+#f2=plt.figure('compar')
+#ax=f2.add_subplot(111)
+#ax.plot(freq,20*np.log10(abs(F)))
+#ax.plot(freq,20*np.log10(abs(N)))
+#ax.plot(freq,20*np.log10(sl.R[:,0,0,0]))
+#ax.legend(('fried','new','slab'))
 
 
 

@@ -738,7 +738,7 @@ class Simul(object):
         self.fileconf = "project.conf"
         self.cfield = []
 #        self.freq = np.linspace(2, 11, 181, endpoint=True)
-        self.freq = np.linspace(2, 11, 2, endpoint=True)
+        self.freq = np.linspace(2, 11, 181, endpoint=True)
         self.wav = wvf.Waveform()
         try:
             self.load(_filesimul)
