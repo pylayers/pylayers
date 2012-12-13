@@ -2438,6 +2438,7 @@ class FBsignal(Bsignal):
         else :
             nrow = 1
 
+
         if fig==[]:
             fig,axs=plt.subplots(nrows=nrow,ncols=1,sharex=True,num=name)
         elif ax== []:

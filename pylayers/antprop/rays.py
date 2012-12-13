@@ -171,13 +171,13 @@ class Inter(object):
         """
 
         if self.typ in [1,2,3]: 
-            self.si0 = self.data[:,1]/0.3
-            self.delay = self.data[:,2]/0.3
+            self.si0 = self.data[:,1]
+            self.dis = self.data[:,2]
 
         elif self.typ == 0:
-            self.delay = self.data[:,0]/0.3
+            self.dis = self.data[0]
         elif self.typ == -1:
-            self.delay = np.zeros((len(self.data[:,0])))
+            self.dis = np.zeros((len(self.data[:,0])))
 
 
 
@@ -383,32 +383,38 @@ class Interactions(Inter):
         # Instanciate the global I matrix which gathered all interactions   
         # into a single np.array
         self.I=np.zeros((self.nf,self.nimax,2,2),dtype=complex)
-        self.delay=np.zeros((self.nimax))
+        self.dis=np.zeros((self.nimax))
         self.si0=np.zeros((self.nimax))
+
+        self.alpha=np.ones((self.nimax),dtype=complex)
+        self.gamma=np.ones((self.nimax),dtype=complex)
+
+
         # evaluate B and fill I
         try:
             self.I[:,self.B.idx,:,:]=self.B.eval()
-            self.delay[self.B.idx]=self.B.delay
+            self.dis[self.B.idx]=self.B.dis
             self.si0[self.B.idx]=self.B.si0
+
         except:
             pass
 
         # evaluate L and fill I
         try:
             self.I[:,self.L.idx,:,:]=self.L.eval()
-            self.delay[self.L.idx]=self.L.delay
+            self.dis[self.L.idx]=self.L.dis
             self.si0[self.L.idx]=self.L.si0
 
         except:
             pass
 
-
         # evaluate R and fill I
         try:
             self.I[:,self.R.idx,:,:]=self.R.eval()
-            self.delay[self.R.idx]=self.R.delay
+            self.dis[self.R.idx]=self.R.dis
             self.si0[self.R.idx]=self.R.si0
-
+            self.alpha[self.R.idx]=self.R.alpha
+            self.gamma[self.R.idx]=self.R.gamma
         except:
             pass
 
@@ -416,8 +422,10 @@ class Interactions(Inter):
         # evaluate T and fill I
         try:
             self.I[:,self.T.idx,:,:]=self.T.eval()
-            self.delay[self.T.idx]=self.T.delay
+            self.dis[self.T.idx]=self.T.dis
             self.si0[self.T.idx]=self.T.si0
+            self.alpha[self.T.idx]=self.T.alpha
+            self.gamma[self.T.idx]=self.T.gamma
 
         except:
             pass
@@ -426,8 +434,10 @@ class Interactions(Inter):
         # evaluate D and fill I
         try:
             self.I[:,self.D.idx,:,:]=self.D.eval()
-            self.delay[self.D.idx]=self.D.delay
+            self.dis[self.D.idx]=self.D.dis
             self.si0[self.D.idx]=self.D.si0
+            self.alpha[self.D.idx]=self.D.alpha
+            self.gamma[self.D.idx]=self.D.gamma
 
         except:
             pass
@@ -522,7 +532,6 @@ class IntL(Inter):
         Inter.__init__(self,data=data,idx=idx,typ=0)
 
 
-
     def eval(self):
         """
             evaluation of B interactions
@@ -552,9 +561,11 @@ class IntL(Inter):
                 # it means that self.data is not a matrix but a number
                 self.data=self.data.reshape(1,1)
             ## Friis formula
-            self.data=self.data[:,0]
-            dis = (0.3 / (4*np.pi*self.data[np.newaxis,:]*self.f[:,np.newaxis]))
-            return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
+#            self.data=self.data[:,0]
+#            dis = (0.3 / (4*np.pi*self.data[np.newaxis,:]*self.f[:,np.newaxis]))
+#            return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
+#            dis = self.data
+            return(self.olf[:,np.newaxis,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
         else :
             print 'no L interaction to evaluate'
             return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
@@ -575,6 +586,8 @@ class IntR(Inter):
         # WARNING The index of this dictionnary referes to the idex of self.idx
         # not to the global indx
         self.dusl={}
+        self.alpha = [1]
+        self.gamma = [1]
 
 
     def eval(self):
@@ -631,6 +644,7 @@ class IntR(Inter):
         """
 
         self.delay()
+        self.A=np.zeros((self.nf,len(self.idx),2,2),dtype=complex)
         if len(self.data) != 0:
             mapp = []
             # loop on all type of materials used for reflexion
@@ -646,7 +660,9 @@ class IntR(Inter):
                     R=self.slab[m].R
                     mapp.extend(self.dusl[m])
             # replace in correct order the reflexion coeff
-            self.A=R[:,mapp,:,:]
+            self.A[:,np.array((mapp)),:,:]=R
+            self.alpha=self.alpha*len(self.idx)
+            self.gamma=self.gamma*len(self.idx)
             return(self.A)
         else :
             self.A=self.data[:,np.newaxis,np.newaxis,np.newaxis]
@@ -672,6 +688,8 @@ class IntT(Inter):
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
         self.dusl={}
+        self.alpha=[]
+        self.gamma=[]
 
     def eval(self):
         """
@@ -722,12 +740,29 @@ class IntT(Inter):
         """
 
         self.delay()
-
+        self.A=np.zeros((self.nf,len(self.idx),2,2),dtype=complex)
+        self.alpha=np.zeros((len(self.idx)),dtype=complex)
+        self.gamma=np.zeros((len(self.idx)),dtype=complex)
         if len(self.data) !=0:
             mapp = []
             for m in self.dusl.keys():
                 #used theta of the given slab
                 ut = self.data[self.dusl[m],0]
+
+                # get alpha and gamma for divergence factor
+                if len(self.slab[m]['lmat']) > 1:
+                    print 'Warning : IntR class only implemented for mat with 1 layer '
+
+                a = np.array((1./np.sqrt(np.array(([self.slab[m]['lmat'][0]['epr']])) *np.ones(len(ut)))))
+                g = (1.-np.sin(ut)**2)/(1-a*np.sin(ut)**2)
+                try:
+                    alpha=np.concatenate((alpha,a),axis=0)
+                    gamma=np.concatenate((gamma,g),axis=0)
+                except:
+#                    print 'Warning : alpha or gamma fail'
+                    alpha= a 
+                    gamma= g
+
                 # find the index of angles which satisfied the data
                 self.slab[m].ev(fGHz=self.f,theta=ut,RT='T',compensate = True)
                 try:
@@ -737,7 +772,9 @@ class IntT(Inter):
                     T=self.slab[m].T
                     mapp.extend(self.dusl[m])
             # replace in correct order the Transmission coeff
-            self.A=T[:,mapp,:,:]
+            self.A[:,np.array((mapp)),:,:]=T
+            self.alpha[np.array((mapp))]=alpha
+            self.gamma[np.array((mapp))]=gamma
             return(self.A)
 
         else :
@@ -1639,8 +1676,9 @@ class GrRayTud(object):
                     stop = start + 8
                     dt = data[start:stop]
                     dist = stru.unpack('d', dt)
+                    dist = np.array((dist))
                     try:
-                        L.stack(L,index)#inter = IntB(M)
+                        L.stack(dist,index)#inter = IntB(M)
                     except:
                         print 'except L'
                         L=IntL(dist,index)
@@ -1734,6 +1772,7 @@ class GrRayTud(object):
 
                 if caract == 1:
                     ## read material index 
+
                     slidx = c1
                     ## find corresponding name
                     slname = R.slab.di[slidx]
@@ -2130,6 +2169,7 @@ class GrRayTud(object):
             self.I.eval()
         self.Ctilde=np.zeros((self.I.nf,self.nray,2,2),dtype=complex)
         self.delays=np.zeros((self.nray))
+        self.dis=np.zeros((self.nray))
         nf = self.I.nf
         for l in self.dli.keys():
             # l stands for the number of interractions
@@ -2139,6 +2179,12 @@ class GrRayTud(object):
             rrl = self.dli[l]['rays'].reshape(r*l)
             # get the corresponding evaluated interactions
             A=self.I.I[:,rrl,:,:].reshape(self.I.nf,r,l,2,2)
+            alpha = self.I.alpha[rrl].reshape(r,l)
+            gamma = self.I.gamma[rrl].reshape(r,l)
+            dis = self.I.dis[rrl].reshape(r,l)
+            # get divergence factor matrix
+            
+            
             # compute the channel impulse response for each rays
             # marginalize on l
             #loop on interractions
@@ -2147,73 +2193,140 @@ class GrRayTud(object):
             except:
                 pass
 
-########## ALL MATRIX SOLUTION
-#            for i in range(l-1):
-#            # l-2 due to inverted loop !
-#            for i in range(l-2,-1,-1):
-#                print '#inter:',l,'/',i
-#                try:
-##                    Z=np.dot(Z[:,:,i,:,:],np.transpose(A[:,:,i+1,:,:],(0,1,3,2)))
-#                    Z=np.dot(Z[:,:,i,:,:],A[:,:,i+1,:,:])
-#                except:
-#                    Z = A[:,:,i,:,:]
-#                    Z=np.dot(Z,A[:,:,i+1,:,:])
-#                Z=Z[fa,:,:,fa,:,:]
-#                Z=Z[:,ra,:,ra,:]
-#                # reshape into nbfreq x nb ray x 1 interaction x 2 x 2 
-#                Z=np.transpose(Z,(1,0,2,3))
+#            for i in range(l-2,0,-2):
+
+#                X=A[:,:,i,:,:]
+#                Y=A[:,:,i+1,:,:]
+#                Atmp = np.sum(X[...,:,:,np.newaxis]*Y[...,np.newaxis,:,:], axis=-2)
+#                if i == l-2:
+#                    Z=Atmp
+#                else :
+#                    Z=np.sum(Atmp[...,:,:,np.newaxis]*Z[...,np.newaxis,:,:], axis=-2)
+
+#                if i == 1:
+#                    Bf=A[:,:,i-1,:,:]
+#                    Z=np.sum(Bf[...,:,:,np.newaxis]*Z[...,np.newaxis,:,:], axis=-2)
+
+##            pdb.set_trace()
+##            for i in range(0,l-1,2):
+
+##                X=A[:,:,i,:,:]
+##                Y=A[:,:,i+1,:,:]
+##                Atmp = np.sum(X[...,:,:,np.newaxis]*Y[...,np.newaxis,:,:], axis=-2)
+##                if i == 0:
+##                    Z=Atmp
+##                else :
+##                    Z=np.sum(Z[...,:,:,np.newaxis]*Atmp[...,np.newaxis,:,:], axis=-2)
+
+##                if i == l-3:
+##                    Z=A[:,:,i-1,:,:]*Z
+
+
+#            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=Z[:,:,:,:]
 
 
 
-#### LOOP SOLUTION
-#            for ri,rayidx in enumerate(self.dli[l]['rayidx']):
-##                print '#inter:',l,'/ ray',ri,'/',len(self.dli[l]['rayidx'])
-#                for i in range(l-2,-1,-1):
-#                    try:
-#    #                    Z=np.dot(Z[:,:,i,:,:],np.transpose(A[:,:,i+1,:,:],(0,1,3,2)))
-##                        Z=np.dot(Z,A[:,ri,i+1,:,:])
-#                        Z=np.dot(Z,np.transpose(A[:,ri,i+1,:,:],(0,2,1)))
-#                    except:
-#                        Z = A[:,ri,i,:,:]
-#                        Z=np.dot(Z,np.transpose(A[:,ri,i+1,:,:],(0,2,1)))
-#                    Z=Z[fa,:,fa,:]
-##                    Z=Z[:,ra,:,ra,:]
-#                    # reshape into nbfreq x nb ray x 1 interaction x 2 x 2 
-##                    Z=np.transpose(Z,(1,0,2,3))
-#                self.Ctilde[:,rayidx,:,:]=Z[:,:,:]
+
+
+#            pdb.set_trace()
+
+            for i in range(1,l-1,2):
+
+#                if i == 1:
+#                    rho1i=1.
+#                    rho2i=1.
+#                    D=np.sqrt((rho1i/(rho1i+alpha[:,i]*dis[:,i]-1.)) * (rho2i/(rho2i+alpha[:,i]*gamma[:,i]*dis[:,i]-1.)))
+
+#                rho1i=rho1i+alpha[:,i]*dis[:,i]
+#                rho2i=rho2i+alpha[:,i]*gamma[:,i]*dis[:,i]
+#                D=D*np.sqrt((rho1i/(rho1i+alpha[:,i]*dis[:,i])) * (rho2i/(rho2i+alpha[:,i]*gamma[:,i]*dis[:,i])))
 
 
 
-            ### all matrix Golub and Van Loan. 
-            # l-1 due to inverted loop !
-            for i in range(l-1,0,-1):
-                try:
-#                    Z=np.dot(Z[:,:,i,:,:],np.transpose(A[:,:,i+1,:,:],(0,1,3,2)))
-#                    Z=np.dot(Z[:,:,i,:,:],A[:,:,i+1,:,:])
-                    # reshape the matrix
-#                    A1=A[:,:,i-1,:,:].swapaxes(-1,-2)
-                    Z=np.sum(Z[...,:,:,np.newaxis]*A[:,:,np.newaxis,i-1,:,:].swapaxes(-1,-2), axis=-2)
-                except:
-                    Z = A[:,:,i,:,:]
-                    # The 2 following lines can replace the 
-                    # next operation
-#                    A1= A[:,:,i-1,:,:].swapaxes(-1,-2)
-#                    Z=np.sum(Z[...,:,:,np.newaxis]*A1[...,np.newaxis,:,:], axis=-2)
-                    Z=np.sum(Z[...,:,:,np.newaxis]*A[:,:,np.newaxis,i-1,:,:].swapaxes(-1,-2), axis=-2)
+
+                X=A[:,:,i,:,:]
+                Y=A[:,:,i+1,:,:]
+#                Y=np.zeros((nf,1,2,2))
+#                Y[:,:,0,0]=1
+#                Y[:,:,1,1]=1
+                ## Dot product interaction X Basis
+                Atmp = np.sum(X[...,:,:,np.newaxis]*Y[...,np.newaxis,:,:], axis=-2)#*D[np.newaxis,:,np.newaxis,np.newaxis]
+                if i == 1:
+                ## First Basis added
+                    A0=A[:,:,i-1,:,:]
+                    Z=np.sum(A0[...,:,:,np.newaxis]*Atmp[...,np.newaxis,:,:], axis=-2)
+                else :
+                    # dot product previous interaction with latest
+                    Z=np.sum(Z[...,:,:,np.newaxis]*Atmp[...,np.newaxis,:,:], axis=-2)
+
 
             self.Ctilde[:,self.dli[l]['rayidx'],:,:]=Z[:,:,:,:]
 
-            # choose wich storage is the best between the 2 following lines
-#            self.dli[l]['Ctilde']=np.prod(A,axis=2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#            for i in range(0,l-1):
+
+##                 to be sure to not be on a basis interatcion
+##                if i%2 == 1:
+
+##                    if i == 1:
+###                        D=np.sqrt(1./(1.+(alpha[:,i]*dis[:,i]-1.)) * 1./(1.+(alpha[:,i]*gamma[:,i]*dis[:,i]-1.)))
+##                        rho1t=1.
+##                        rho2t=1.
+
+##                    rdis = np.arange(1,i,2)
+###                        rho1 = rho1 + alpha[:,i]*gamma[:,i]*dis[:,i] np.sum(dis[:,rdis],axis=1)
+##                    rho1i=rho1t
+##                    rho2i=rho2t
+##                    rho1t=rho1i+alpha[:,i]*dis[:,i]
+##                    rho2t=rho2i+alpha[:,i]*gamma[:,i]*dis[:,i]
+##                    D=np.sqrt(rho1i/(rho1i+alpha[:,i]*dis[:,i]) * rho2i/(rho2i+alpha[:,i]*gamma[:,i]*dis[:,i]))
+###                        D=D*np.sqrt(rhoi/(rhoi+alpha[:,i]*dis[:,i]) * rhoi/(rhoi+alpha[:,i]*gamma[:,i]*dis[:,i]))
+#                try:
+##                    Z=np.dot(Z[:,:,i,:,:],np.transpose(A[:,:,i+1,:,:],(0,1,3,2)))
+##                    Z=np.dot(Z[:,:,i,:,:],A[:,:,i+1,:,:])
+#                    # reshape the matrix
+##                    A1=A[:,:,i-1,:,:].swapaxes(-1,-2)
+##                    Z=np.sum(Z[...,:,:,np.newaxis]*A[:,:,np.newaxis,i-1,:,:].swapaxes(-1,-2), axis=-2)#*D
+#                    if i%2 == 1:
+#                        Z=np.sum(Z[...,:,:,np.newaxis]*np.transpose(A[:,:,np.newaxis,i+1,:,:],(0,1,2,4,3)), axis=-2)#*D[np.newaxis,:,np.newaxis,np.newaxis]
+#                    else :
+#                        Z=np.sum(Z[...,:,:,np.newaxis]*np.transpose(A[:,:,np.newaxis,i+1,:,:],(0,1,2,4,3)), axis=-2)
+#                except:
+#                    pdb.set_trace()
+#                    Z = A[:,:,i,:,:]
+#                    # The 2 following lines can replace the 
+#                    # next operation
+##                    A1= A[:,:,i-1,:,:].swapaxes(-1,-2)
+##                    Z=np.sum(Z[...,:,:,np.newaxis]*A1[...,np.newaxis,:,:], axis=-2)
+##                    Z=np.sum(Z[...,:,:,np.newaxis]*A[:,:,np.newaxis,i-1,:,:].swapaxes(-1,-2), axis=-2)
+#                    Z=np.sum(Z[...,:,:,np.newaxis]*np.transpose(A[:,:,np.newaxis,i+1,:,:],(0,1,2,4,3)), axis=-2)
+
+
 
 
 
 #            self.Ctilde[:,self.dli[l]['rayidx']]=
             # delay computation:
-            self.dli[l]['delays']=self.I.si0[self.dli[l]['rays'][:,1]] + np.sum(self.I.delay[self.dli[l]['rays']],axis=1)
+
+            self.dli[l]['dis']=self.I.si0[self.dli[l]['rays'][:,1]] + np.sum(self.I.dis[self.dli[l]['rays']],axis=1)
+
             # Power losses due to distances
-            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=self.Ctilde[:,self.dli[l]['rayidx'],:,:]*1./(0.3*self.dli[l]['delays'][np.newaxis,:,np.newaxis,np.newaxis])
-            self.delays[self.dli[l]['rayidx']]=self.dli[l]['delays']
+            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=self.Ctilde[:,self.dli[l]['rayidx'],:,:]*1./(self.dli[l]['dis'][np.newaxis,:,np.newaxis,np.newaxis])
+            self.delays[self.dli[l]['rayidx']]=self.dli[l]['dis']/0.3
+            self.dis[self.dli[l]['rayidx']]=self.dli[l]['dis']
 
 
 
@@ -2229,24 +2342,29 @@ class GrRayTud(object):
         pray = np.nonzero(self.dli[nbinter]['rayidx']==r)
         # get the interaciton idx
         inter = self.dli[nbinter]['rays'][pray][0]
-        fig,axs=plt.subplots(nrows=2,ncols=nbinter,sharex=True)
+        fig,axs=plt.subplots(nrows=2,ncols=nbinter,sharex=True,sharey=True)
         for i,data in enumerate(self.I.I[f,inter]):
-            axs[0,i].imshow(np.imag(data))
-            axs[1,i].imshow(np.real(data))
+            axs[0,i].imshow(np.imag(data),interpolation='none')
+            axs[1,i].imshow(np.real(data),interpolation='none')
             axs[1,i].set_xlabel('inter'+self.I.typ[inter[i]])
             if i == 0:
                 axs[0,i].set_ylabel('imag')
                 axs[1,i].set_ylabel('real')
+            if i == nbinter-1:
+                axs[0,i].colorbar()
+
 
         if self.I.evaluated and evaluated:
-            fig2,axs2=plt.subplots(nrows=2,ncols=1,sharex=True)
+            fig2,axs2=plt.subplots(nrows=2,ncols=1,sharex=True,sharey=True)
             data=self.dli[nbinter]['Ctilde'][f,pray,:,:]
             data=data.reshape(2,2)
-            axs2[0].imshow(np.imag(data))
-            axs2[1].imshow(np.real(data))
+            axs2[0].imshow(np.imag(data),interpolation='none')
+            axs2[1].imshow(np.real(data),interpolation='none')
             axs2[1].set_xlabel('Ctilde ray number :' +str(r))
             axs2[0].set_ylabel('imag')
             axs2[1].set_ylabel('real')
+            if i == nbinter-1:
+                axs[0,i].colorbar()
 
         if show :
             plt.show()
