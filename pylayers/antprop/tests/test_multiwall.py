@@ -229,7 +229,7 @@
 #    Urx4nlos  = np.array([val for val in nu1234 if val in rx4nlos])
 #    Urx4nlos2 = np.array([val for val in nu1234 if val in rx4nlos2])
 ####
-#### Modèle MultiWALL Dans Le Batiment Siradel
+#### Modele MultiWALL Dans Le Batiment Siradel
 ####
 #
 #    Emax1 = Emax[0,:]

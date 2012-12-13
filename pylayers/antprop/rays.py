@@ -1739,7 +1739,6 @@ class GrRayTud(object):
             # in case of diffraction
                 if caract == 3:
                     pass
-                print index
 
         self.I.nimax=index
         self.I.add([B,L,R,T,D])
