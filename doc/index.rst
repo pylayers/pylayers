@@ -18,7 +18,7 @@ Example
 
     In [1]: S = sem.Simul()
 
-    @savefig example.png width=10in
+    @savefig example.png width=4in
     In [1]: S.show()
 
 

@@ -18,7 +18,7 @@ from pylayers.antprop.slab import *
 import ConfigParser
 import pdb
 from numpy.core.umath_tests import matrix_multiply
-from numba import autojit
+#from numba import autojit
 #
 #  This file contains
 #
