@@ -11,7 +11,8 @@ import networkx as nx
 #import pylayers.gis.layout
 #import pylayers.util.geomutil as geu
 #import pylayers.util.graphutil as gph
-#import matplotlib.pyplot as plt
+import pylayers.util.pyutil as pyu
+import matplotlib.pyplot as plt
 
 class Signatures(object):
     """
@@ -85,6 +86,7 @@ class Signatures(object):
         #
         ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
+        ntr = np.intersect1d(ndt,ndr)
         sigarr = np.array([]).reshape(2, 0)
         for nt in ndt:
             for nr in ndr:
@@ -107,7 +109,6 @@ class Signatures(object):
                     addpath = True
                     path = [nt]
                 if addpath:
-                    sigarr = np.hstack((sigarr, np.array([[0], [0]])))
                     for interaction in path:
                         it = eval(interaction)
                         if type(it) == tuple:
@@ -119,7 +120,61 @@ class Signatures(object):
                         else:
                             sigarr = np.hstack((sigarr,
                                     np.array([[it], [2]])))
+                    sigarr = np.hstack((sigarr, np.array([[0], [0]])))
         return sigarr
+
+    def sigs2rays(self, L, pTx, pRx, sig_arr):
+        """
+        from signature arrays to 2D rays
+        Parameters
+        ----------
+            L : Layout
+            pTx : ndarray
+                2D transmitter position
+            pRx : ndarray
+                2D receiver position
+            sig_arr : ndarray
+        Returns
+        -------
+            raysarr : numpy.ndarray
+        """
+        zsig = np.array(np.where(sig_arr[0,:]==0.))
+        raysarr = np.array([]).reshape(4, 0)
+        for i in range(np.shape(zsig)[1]-1):
+            i1 = zsig[:,i][0]+1
+            i2 = zsig[:,i+1][0]
+            sig = sig_arr[:, i1:i2]
+            s = Signature(sig)
+            Yi = s.sig2ray(L, pTx, pRx)
+            if Yi is not None:
+                raysarr = np.hstack((raysarr,
+                          np.vstack((sig, Yi[:,1:-1]))))
+                raysarr = np.hstack((raysarr, np.zeros((4,1))))
+        return raysarr
+
+    def show_rays2D(self, L, raysarr, pTx, pRx):
+        """
+        plot 2D rays within the simulated environment
+        Parameters
+        ----------
+            raysarr: numpy.ndarray
+        """
+        zsig = np.array(np.where(raysarr[0,:]==0.))
+        fig=plt.figure()
+        ax = fig.add_subplot(111)
+        L.showGs(fig, ax)
+        ax.plot(pTx[0], pTx[1], 'or')
+        ax.plot(pRx[0], pRx[1], 'og')
+        for i in range(np.shape(zsig)[1]-1):
+            i1 = zsig[:,i][0]+1
+            i2 = zsig[:,i+1][0]
+            ray = np.hstack((pRx[0:2].reshape((2,1)),
+                  np.hstack((raysarr[2:, i1:i2],pTx[0:2].reshape((2,1))
+                  ))))
+            ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
+        
+        
+            
 
 
 class Signature(object):
@@ -257,6 +312,74 @@ class Signature(object):
         #return(vn)
         #return(typ)
 
+    def image2(self, tx):
+        """
+        """
+        pa = self.pa
+        pb = self.pb
+        pab = pb - pa
+        alpha = np.sum(pab * pab, axis=0)
+        zalpha = np.where(alpha==0.)
+        alpha[zalpha] = 1.
+
+        a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+        b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+        c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+                            pa[1, :] * (pa[1, :] - pb[1, :]) *
+                            (pb[0, :] - pa[0, :]))
+        d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+                            pa[0, :] * (pa[1, :] - pb[1, :]) *
+                            (pb[0, :] - pa[0, :]))
+        
+        typ = self.typ
+        # number of interactions
+        N = np.shape(pa)[1]
+
+        S = np.zeros((N, 2, 2))
+        S[:, 0, 0] = -a
+        S[:, 0, 1] = b
+        S[:, 1, 0] = b
+        S[:, 1, 1] = a
+        blocks = np.zeros((N-1,2,2))
+        A = np.eye(N*2)
+        
+        # detect diffraction
+        usig = np.nonzero(typ[1:] == 3)[0]
+        if len(usig)>0:
+            blocks[usig,:,:] = np.zeros((2,2))
+        # detect transmission
+        tsig = np.nonzero(typ[1:] == 2)[0]
+        if len(tsig)>0:
+            blocks[tsig,:,:] = np.zeros((2,2))
+        # detect reflexion
+        rsig = np.nonzero(typ[1:] == 1)[0]
+        if len(rsig)>0:
+            blocks[rsig,:,:] = S[rsig+1,:,:]
+        A = pyu.fill_block_diag(A, blocks, 2, -1)
+
+        y = np.zeros(2*N)
+        if typ[0] == 1:
+            vc0 = np.array([c[0], d[0]])
+            v0 = np.dot(-S[0, :, :], tx) + vc0
+        if typ[0] == 2:
+            v0 = tx
+        if typ[0] == 3:
+            v0 = pa[:, 0]
+        y[0:2] = v0
+        for i in range(len(typ[1:])):
+            if typ[i+1] == 1:
+                y[2*(i+1):2*(i+1)+2] = np.array([c[i+1],d[i+1]])
+            if typ[i+1] == 2:
+                y[2*(i+1):2*(i+1)+2] = np.zeros(2)
+            if typ[i+1] == 3:
+                y[2*(i+1):2*(i+1)+2] = pa[:,i+1]
+
+
+        x = la.solve(A, y)
+        M = np.vstack((x[0::2], x[1::2]))
+        return M
+        
+
     def image(self, tx):
         """
 
@@ -333,8 +456,8 @@ class Signature(object):
             a1 = a[1::] * rsig[1::]
             a2 = -np.ones(N - 1) * (1 - rsig[1::])
             b1 = b[1::] * rsig[1::]
-            c1 = c[1::] #* rsig[1::]
-            d1 = d[1::] #* rsig[1::]
+            c1 = c[1::] * rsig[1::]
+            d1 = d[1::] * rsig[1::]
             #
             # 1 sur la diagonale sauf pour les diffractions
             #
@@ -449,27 +572,29 @@ class Signature(object):
         while (((beta <= 1) & (beta >= 0)) & (k < N)):
             if int(typ[k]) != 3:
                 # Formula (30) of paper Eucap 2012
-                l0 = np.hstack((I2, pkm1 - M[:, -(k + 1)].reshape(2, 1), z0
+                l0 = np.hstack((I2, pkm1 - M[:, N-(k + 1)].reshape(2, 1), z0
                               ))
                 l1 = np.hstack((I2, z0,
-                     pa[:, -(k + 1)].reshape(2, 1) -
-                     pb[:, -(k + 1)].reshape(2, 1)
+                     pa[:, N-(k + 1)].reshape(2, 1) -
+                     pb[:, N-(k + 1)].reshape(2, 1)
                      ))
                 
                 T = np.vstack((l0, l1))
-                yk = np.hstack((pkm1[:, 0].T, pa[:, -(k + 1)].T))
+                yk = np.hstack((pkm1[:, 0].T, pa[:, N-(k + 1)].T))
+                deT = np.linalg.det(T)
+                if abs(deT)<1e-15:
+                    return(None)
                 xk = la.solve(T, yk)
                 pkm1 = xk[0:2].reshape(2, 1)
                 gk = xk[2::]
+                alpha = gk[0]
                 beta = gk[1]
                 Y = np.hstack((Y, pkm1))
             else:
-                pdb.set_trace()
                 Y = np.hstack((Y, pa[:,k].reshape((2,1))))
                 pkm1 = pa[:,k].reshape((2,1))
             k = k + 1
-
-        if ((k == N) & ((beta > 0) & (beta < 1))):
+        if ((k == N) & ((beta > 0) & (beta < 1)) & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
             return(Y)
         else:
@@ -487,7 +612,8 @@ class Signature(object):
                 2D receiver position
         Returns
         -------
-            rays :
+            M : numpy.ndarray
+            Y : numpy.ndarray
         """
         try:
             L.Gr
@@ -495,9 +621,10 @@ class Signature(object):
             L.build()
 
         self.ev(L)
-        M = self.image(pTx)
+        M = self.image2(pTx)
         Y = self.backtrace(pTx, pRx, M)
-        return M, Y
+        return Y
+        
 
 
 if __name__ == "__main__":
