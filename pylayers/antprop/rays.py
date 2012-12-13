@@ -17,6 +17,8 @@ from   pylayers.util.project import *
 from pylayers.antprop.slab import *
 import ConfigParser
 import pdb
+from numpy.core.umath_tests import matrix_multiply
+from numba import autojit
 #
 #  This file contains
 #
@@ -167,8 +169,9 @@ class Inter(object):
         """
 
         if self.typ in [1,2,3]: 
-            self.delay = self.data[:,1]/0.3
-            self.si0 = self.data[:,2]/0.3
+            self.si0 = self.data[:,1]/0.3
+            self.delay = self.data[:,2]/0.3
+
         elif self.typ == 0:
             self.delay = self.data[:,0]/0.3
         elif self.typ == -1:
@@ -346,22 +349,28 @@ class Interactions(Inter):
             Add interactions as a member of Interactions class
         """
 
-
+        if not isinstance(self.typ,np.ndarray):
+            self.typ=np.zeros((self.nimax),dtype=str)
         if i.typ == -1:
             self.B = i
             self.di['B']=i.idx
+            self.typ[i.idx]='B'
         if i.typ == 0:
             self.L = i
             self.di['L']=i.idx
+            self.typ[i.idx]='L'
         if i.typ == 1:
             self.R = i
             self.di['R']=i.idx
+            self.typ[i.idx]='R'
         if i.typ == 2:
             self.T = i
             self.di['T']=i.idx
+            self.typ[i.idx]='T'
         if i.typ == 3:
             self.D = i
             self.di['D']=i.idx
+            self.typ[i.idx]='D'
 
 
     def eval(self):
@@ -369,12 +378,11 @@ class Interactions(Inter):
             evaluate all the interactions
 
         '''
-        # Instanciate the global I matrix which gathered all interactions   
+        # Instanciate the global I matrix which gathers all interactions   
         # into a single np.array
         self.I = np.zeros((self.nf,self.nimax,2,2),dtype=complex)
         self.delay = np.zeros((self.nimax))
         self.si0 = np.zeros((self.nimax))
-
         # evaluate B and fill I
         try:
             self.I[:,self.B.idx,:,:] = self.B.eval()
@@ -478,8 +486,9 @@ class IntB(Inter):
             data=self.data.reshape(lidx,2,2)
             return(self.olf[:,np.newaxis,np.newaxis,np.newaxis]*data[np.newaxis,:,:,:])
         else :
-            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
             print 'no B interraction to evaluate'
+            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
+
 
 
 
@@ -540,8 +549,9 @@ class IntL(Inter):
             dis = (0.3 / (4*np.pi*self.data[np.newaxis,:]*self.f[:,np.newaxis]))
             return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
         else :
-            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
             print 'no L interaction to evaluate'
+            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
+
 
 class IntR(Inter):
     """ Reflexion interaction class
@@ -613,14 +623,14 @@ class IntR(Inter):
         """
 
         self.delay()
-
         if len(self.data) != 0:
             mapp = []
+            # loop on all type of materials used for reflexion
             for m in self.dusl.keys():
                 #used theta of the given slab
                 ut = self.data[self.dusl[m],0]
                 # find the index of angles which satisfied the data
-                self.slab[m].ev(self.f,ut,'R')
+                self.slab[m].ev(fGHz=self.f,theta=ut,RT='R')
                 try:
                     R=np.concatenate((R,self.slab[m].R),axis=1)
                     mapp.extend(self.dusl[m])
@@ -632,8 +642,9 @@ class IntR(Inter):
             return(self.A)
         else :
             self.A=self.data[:,np.newaxis,np.newaxis,np.newaxis]
-            return(self.A)
             print 'no R interaction to evaluate'
+            return(self.A)
+
 
 
 
@@ -709,7 +720,7 @@ class IntT(Inter):
                 #used theta of the given slab
                 ut = self.data[self.dusl[m],0]
                 # find the index of angles which satisfied the data
-                self.slab[m].ev(self.f,ut,'T')
+                self.slab[m].ev(fGHz=self.f,theta=ut,RT='T',compensate = True)
                 try:
                     T=np.concatenate((T,self.slab[m].T),axis=1)
                     mapp.extend(self.dusl[m])
@@ -721,8 +732,9 @@ class IntT(Inter):
             return(self.A)
 
         else :
-            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
             print 'no T interaction to evaluate'
+            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
+
 
 
 
@@ -754,8 +766,9 @@ class IntD(Inter):
             print 'not yet implemented'
         else :
             self.A=self.data[:,np.newaxis,np.newaxis,np.newaxis]
-            return(self.A)
             print 'no D interraction to evaluate'
+            return(self.A)
+
 
 
 class Ray2D(object):
@@ -1263,6 +1276,9 @@ class GrRayTud(object):
     dli dictionnary of length of interraction.
         contains information about rays for a given interaction length
 
+    rayidx : np.array
+        rayidx[#ray]=dli.key
+
     Methods
     -------
 
@@ -1508,6 +1524,7 @@ class GrRayTud(object):
         index= 0
         ## in order to inialize all type of interaction with the correct frequencies
 
+        B=IntB()
         L=IntL()
         R=IntR()
         T=IntT()
@@ -1532,7 +1549,6 @@ class GrRayTud(object):
 
 
             for i in range(nbint):
-
                 start = stop
                 stop = start + 4
                 dt = data[start:stop]
@@ -1542,8 +1558,8 @@ class GrRayTud(object):
                     decal = False
                     if (caract != -1):
                         # check if first interaction is a IntB.
-                        # if not, it is supposed that this first interaction
-                        # is an identity matrix
+                        # if not, itthis first interaction is forced to be 
+                        # an identity matrix
                         M=np.array((1,0,0,1))
                         try:
                             B.stack(M,index)#inter = IntB(M)
@@ -1569,9 +1585,15 @@ class GrRayTud(object):
                         self.dli[nbi]['rayidx']=np.array(([k]))
 
 
+                    try:
+                        self.rayidx=np.hstack((self.rayidx,np.array((nbi))))
+                    except:
+                        self.rayidx=np.array((nbi))
+
+
                     if nbi != nbint:
                         self.dli[nbi]['rays'][-1][ii]=index
-                        self.mapp=np.vstack((self.mapp,np.array([index,k,caract])))
+                        self.mapp=np.vstack((self.mapp,np.array([index,k,-1])))
                         index=index+1
                         decal=True
 
@@ -1592,6 +1614,7 @@ class GrRayTud(object):
                     try:
                         B.stack(M,index)#inter = IntB(M)
                     except:
+                        print 'except B'
                         B=IntB(data=M,idx=index)
                     index=index+1
 #                   M = np.array([[m[0], m[1]], [m[2], m[3]]])
@@ -1607,6 +1630,7 @@ class GrRayTud(object):
                     try:
                         L.stack(L,index)#inter = IntB(M)
                     except:
+                        print 'except L'
                         L=IntL(dist,index)
                     index=index+1
 #                    inter = IntL(dist[0])
@@ -1622,6 +1646,7 @@ class GrRayTud(object):
                     try:
                         R.stack(dat,index)#inter = IntB(M)
                     except:
+                        print 'except R'
                         R=IntR(dat,index)
 #                    inter = IntR(datR)
 #            #        inter.data = datR
@@ -1637,6 +1662,7 @@ class GrRayTud(object):
                     try:
                         T.stack(dat,index)
                     except:
+                        print 'except T'
                         T=IntT(dat,index)
                     index = index+1
 #                    inter = IntT(datT)
@@ -1646,6 +1672,7 @@ class GrRayTud(object):
                 # Diffraction interaction
 ######################## TODO AFTER THIS POINT !!!!!!!!!!!!!!
                 elif (caract == 3):
+                    print 'catratct 3'
             #        inter.data = []
                     start = stop
                     stop = start + 48
@@ -1676,7 +1703,21 @@ class GrRayTud(object):
                 r2 = datMat[6]
                 s2 = datMat[7]
 
+#  if interaction is reflexion or transmission
+#                if caract == 1 or caract == 2 or caract == 3:
+
+
+                    ## find corresponding name
+#                    slname = self.I.slab.di[slidx]
+#                    # if the material hasn't be evaluated before 
+#                    if not self.I.slab[slname]['evaluated']:
+#                        # evaluate it
+#                        print "evaluate",slname
+#                        self.I.slab[slname].ev(fGHz=self.I.f, theta=self.I.t)
+
+
                 ### fill slab index dictionnary for each type of interractions
+
                 if caract == 1:
                     ## read material index 
                     slidx = c1
@@ -1698,7 +1739,7 @@ class GrRayTud(object):
             # in case of diffraction
                 if caract == 3:
                     pass
-
+                print index
 
         self.I.nimax=index
         self.I.add([B,L,R,T,D])
@@ -2058,10 +2099,24 @@ class GrRayTud(object):
 ##            interaction = r[l+1]
 ##            print interaction[0]
 
+    def ray(self,r):
+        """
+            Give the ray number and it retruns the index of its interractions
+        """
+        raypos=np.nonzero(self.dli[self.rayidx[r]]['rayidx']==r)
+        return(self.dli[self.rayidx[r]]['rays'][raypos][0])
+
+
+
+
+
     def eval(self):
+        print 'GrRayTUD evaluation'
         if not self.I.evaluated :
             self.I.eval()
         self.Ctilde=np.zeros((self.I.nf,self.nray,2,2),dtype=complex)
+        self.delays=np.zeros((self.nray))
+        nf = self.I.nf
         for l in self.dli.keys():
             # l stands for the number of interractions
             r = self.dli[l]['nbrays']
@@ -2072,15 +2127,115 @@ class GrRayTud(object):
             A=self.I.I[:,rrl,:,:].reshape(self.I.nf,r,l,2,2)
             # compute the channel impulse response for each rays
             # marginalize on l
+            #loop on interractions
+            try:
+                del Z
+            except:
+                pass
+
+########## ALL MATRIX SOLUTION
+#            for i in range(l-1):
+#            # l-2 due to inverted loop !
+#            for i in range(l-2,-1,-1):
+#                print '#inter:',l,'/',i
+#                try:
+##                    Z=np.dot(Z[:,:,i,:,:],np.transpose(A[:,:,i+1,:,:],(0,1,3,2)))
+#                    Z=np.dot(Z[:,:,i,:,:],A[:,:,i+1,:,:])
+#                except:
+#                    Z = A[:,:,i,:,:]
+#                    Z=np.dot(Z,A[:,:,i+1,:,:])
+#                Z=Z[fa,:,:,fa,:,:]
+#                Z=Z[:,ra,:,ra,:]
+#                # reshape into nbfreq x nb ray x 1 interaction x 2 x 2 
+#                Z=np.transpose(Z,(1,0,2,3))
+
+
+
+#### LOOP SOLUTION
+#            for ri,rayidx in enumerate(self.dli[l]['rayidx']):
+##                print '#inter:',l,'/ ray',ri,'/',len(self.dli[l]['rayidx'])
+#                for i in range(l-2,-1,-1):
+#                    try:
+#    #                    Z=np.dot(Z[:,:,i,:,:],np.transpose(A[:,:,i+1,:,:],(0,1,3,2)))
+##                        Z=np.dot(Z,A[:,ri,i+1,:,:])
+#                        Z=np.dot(Z,np.transpose(A[:,ri,i+1,:,:],(0,2,1)))
+#                    except:
+#                        Z = A[:,ri,i,:,:]
+#                        Z=np.dot(Z,np.transpose(A[:,ri,i+1,:,:],(0,2,1)))
+#                    Z=Z[fa,:,fa,:]
+##                    Z=Z[:,ra,:,ra,:]
+#                    # reshape into nbfreq x nb ray x 1 interaction x 2 x 2 
+##                    Z=np.transpose(Z,(1,0,2,3))
+#                self.Ctilde[:,rayidx,:,:]=Z[:,:,:]
+
+
+
+            ### all matrix Golub and Van Loan. 
+            # l-1 due to inverted loop !
+            for i in range(l-1,0,-1):
+                try:
+#                    Z=np.dot(Z[:,:,i,:,:],np.transpose(A[:,:,i+1,:,:],(0,1,3,2)))
+#                    Z=np.dot(Z[:,:,i,:,:],A[:,:,i+1,:,:])
+                    # reshape the matrix
+#                    A1=A[:,:,i-1,:,:].swapaxes(-1,-2)
+                    Z=np.sum(Z[...,:,:,np.newaxis]*A[:,:,np.newaxis,i-1,:,:].swapaxes(-1,-2), axis=-2)
+                except:
+                    Z = A[:,:,i,:,:]
+                    # The 2 following lines can replace the 
+                    # next operation
+#                    A1= A[:,:,i-1,:,:].swapaxes(-1,-2)
+#                    Z=np.sum(Z[...,:,:,np.newaxis]*A1[...,np.newaxis,:,:], axis=-2)
+                    Z=np.sum(Z[...,:,:,np.newaxis]*A[:,:,np.newaxis,i-1,:,:].swapaxes(-1,-2), axis=-2)
+
+            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=Z[:,:,:,:]
 
             # choose wich storage is the best between the 2 following lines
-            self.dli[l]['Ctilde']=np.prod(A,axis=2)
-            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=np.prod(A,axis=2)
+#            self.dli[l]['Ctilde']=np.prod(A,axis=2)
 
+
+
+#            self.Ctilde[:,self.dli[l]['rayidx']]=
             # delay computation:
             self.dli[l]['delays']=self.I.si0[self.dli[l]['rays'][:,1]] + np.sum(self.I.delay[self.dli[l]['rays']],axis=1)
+            # Power losses due to distances
+            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=self.Ctilde[:,self.dli[l]['rayidx'],:,:]*1./(0.3*self.dli[l]['delays'][np.newaxis,:,np.newaxis,np.newaxis])
+            self.delays[self.dli[l]['rayidx']]=self.dli[l]['delays']
 
 
+
+    def imshowinter(self,r,f,evaluated=False,show=True):
+        """
+            im show interactions for 
+            a given ray r and 
+            a given freq index f
+        """
+        plt.ion()
+        nbinter = self.rayidx[r]
+        # find the position of the ray into the dictionnary of legnth of interactions
+        pray = np.nonzero(self.dli[nbinter]['rayidx']==r)
+        # get the interaciton idx
+        inter = self.dli[nbinter]['rays'][pray][0]
+        fig,axs=plt.subplots(nrows=2,ncols=nbinter,sharex=True)
+        for i,data in enumerate(self.I.I[f,inter]):
+            axs[0,i].imshow(np.imag(data))
+            axs[1,i].imshow(np.real(data))
+            axs[1,i].set_xlabel('inter'+self.I.typ[inter[i]])
+            if i == 0:
+                axs[0,i].set_ylabel('imag')
+                axs[1,i].set_ylabel('real')
+
+        if self.I.evaluated and evaluated:
+            fig2,axs2=plt.subplots(nrows=2,ncols=1,sharex=True)
+            data=self.dli[nbinter]['Ctilde'][f,pray,:,:]
+            data=data.reshape(2,2)
+            axs2[0].imshow(np.imag(data))
+            axs2[1].imshow(np.real(data))
+            axs2[1].set_xlabel('Ctilde ray number :' +str(r))
+            axs2[0].set_ylabel('imag')
+            axs2[1].set_ylabel('real')
+
+        if show :
+            plt.show()
 
 
     def get_thetas(self):
