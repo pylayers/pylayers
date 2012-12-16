@@ -42,18 +42,18 @@ from matplotlib import rc
 from matplotlib import cm
 
 
-def indexvsh(N):
-    """ indexvsh(N)
+def indexvsh(L):
+    """ indexvsh(L)
 
     Parameters
     ----------
-         N : degree max
+         L : degree max
 
 
     Returns
     -------
-        t : ndarray ( (N+1)(N+2)/2 ,  2 ) 
-            tab for indexing the upper triangle 
+        t : ndarray ( (L+1)(L+2)/2 ,  2 )
+            tab for indexing the upper triangle
     Examples
     --------
 
@@ -71,46 +71,46 @@ def indexvsh(N):
                [3, 3]])
 
     """
-    Kmax = (N + 1) * (N + 2) / 2
+    Kmax = (L + 1) * (L + 2) / 2
+    #k = np.arange(Kmax)
     k = np.arange(Kmax)
-    n = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
-    m = k - n * (n + 1) / 2
-    #u = vstack((k,n,m)).T
-    u = np.vstack((n, m)).T
+    l = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
+    m = k - l * (l + 1) / 2
+    u = np.vstack((l, m)).T
     t = u.astype(int)
     return(t)
 
 
-def index_vsh(N, M):
+def index_vsh(L, M):
     """ vector sperical harmonics indexing
 
     Parameters
     ----------
-    N : int
-        degree max   sum(0..N)   N+1 points
+    L : int
+        degree max   sum(1..L)   L points
     M : int
         order max    sum(0..M)   M+1 points
 
-    M <=N
+    M <=L
 
     ind[0] = n
     ind[1] = m
 
     """
-    if M > N:
-        print "indexvsh error M>N"
+    if M > L:
+        print "indexvsh error M>L"
 
     Kmax1 = (M + 1) * (M + 2) / 2
     k = np.arange(Kmax1)
-    n = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
-    m = k - n * (n + 1) / 2
-    if (M < N):
-        n1 = np.outer(np.arange(N - M) + M + 1, np.ones(M + 1)).ravel()
-        m1 = np.outer(np.ones(N - M), np.arange(M + 1)).ravel()
-        n = np.hstack((n, n1))
+    l = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
+    m = k - l * (l + 1) / 2
+    if (M < L):
+        l1 = np.outer(np.arange(L - M) + M + 1, np.ones(M + 1)).ravel()
+        m1 = np.outer(np.ones(L - M), np.arange(M + 1)).ravel()
+        l = np.hstack((l, l1))
         m = np.hstack((m, m1))
 
-    u = np.vstack((n, m)).T
+    u = np.vstack((l, m)).T
     t = u.astype(int)
     return(t)
 
@@ -1908,7 +1908,7 @@ class Antenna(object):
         #     deduced from observation
         #     May be it comes from a different definition of theta in SPHEREPACK
         x = -np.cos(theta)
-        Pmm1n, Pmp1n = AFLegendre(N, M, x)
+        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
         ind = index_vsh(N, M)
         n = ind[:, 0]
         m = ind[:, 1]
@@ -1918,7 +1918,6 @@ class Antenna(object):
         #
         V = np.expand_dims(V,0)
         W = np.expand_dims(V,0)
-        pdb.set_trace()
         #
         #   k : frequency axis 
         #   l : coeff l 
@@ -1946,7 +1945,7 @@ class Antenna(object):
         return Fth, Fph
 
     def Fsynth2b(self, theta, phi):
-        """  pattern synthesis from shape 2 vsh coeff
+        """  pattern synthesis from shape 2 vsh coefficients
 
         Parameters
         ----------
@@ -1978,7 +1977,7 @@ class Antenna(object):
 
         x = -np.cos(theta)
 
-        Pmm1n, Pmp1n = AFLegendre(N, M, x)
+        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
         ind = index_vsh(N, M)
 
         n = ind[:, 0]
@@ -2027,7 +2026,7 @@ class Antenna(object):
         #     May be it comes from a different definition of theta in SPHEREPACK
         x = -np.cos(theta)
 
-        Pmm1n, Pmp1n = AFLegendre(N, M, x)
+        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
         ind = index_vsh(N, M)
 
         n = ind[:, 0]
@@ -2047,6 +2046,7 @@ class Antenna(object):
     def Fsynth3(self, theta, phi):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
+        Let Ndir be the number of directions
 
         Parameters
         ----------
@@ -2093,7 +2093,7 @@ class Antenna(object):
 
         x = -np.cos(theta)
 
-        Pmm1n, Pmp1n = AFLegendre(N, M, x)
+        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
 
         V, W = VW(nBr, mBr, x, phi, Pmm1n, Pmp1n)
 
@@ -2459,7 +2459,7 @@ def forcesympol(A):
     A.cart2pol(Fx0, Fy0, Fz0, 0)
     A.cart2pol(Fxp, Fyp, Fzp, -1)
 
-def AFLegendre2(L, M, x):
+def AFLegendre3(L, M, x):
     """ calculate Pmm1l and Pmp1l
 
     Parameters
@@ -2476,6 +2476,7 @@ def AFLegendre2(L, M, x):
 
     Pmm1l : ndarray (Nx , L , M )
         :math:`\\bar{P}_{l}^{(m-1)}(x)`
+
     Pmp1l : ndarray (Nx , L , M )
         :math:`\\bar{P}_{l}^{(m+1)}(x)`
 
@@ -2499,12 +2500,102 @@ def AFLegendre2(L, M, x):
     --------
 
 
-    >>> Pmm1n,Pmp1n = AFLegendre2(5,4,np.array([0,1]))
+    >>> Pmm1l,Pmp1l = AFLegendre3(5,4,np.array([0,1]))
 
     Notes
     -----
 
-    L shoud be greater or equal to M
+    L has to be greater or equal than M
+
+    See Also
+    --------
+
+    VW
+
+    """
+    PML = []
+    nx = len(x)
+
+    if M < L:
+        MM = np.arange(M + 2).reshape(M+2,1,1)
+        LL = np.arange(L + 1).reshape(1,L+1,1)
+    else:
+        MM = np.arange(M + 1).reshape(M+1,1,1)
+        LL = np.arange(L + 1).reshape(1,L+1,1)
+
+    x  = x.reshape(1,1,nx)
+
+    #
+    # Warning : this is a dangerous factorial ratio
+    # surprinsingly it works well
+    #
+    C1 = np.sqrt((LL + 0.5) * factorial(LL - MM) / factorial(LL + MM))
+    Pml = special.lpmv(MM,LL,x)*C1
+
+    Pml = np.swapaxes(Pml,0,2)
+    Pml = np.swapaxes(Pml,1,2)
+    if M < L:
+        Pmp1l = Pml[:, 1::1, :]
+    else:
+        Pmp1l = np.zeros((nx, M + 1, L + 1))
+        Pmp1l[:, 0:-1, :] = Pml[:, 1::1, :]
+
+    Pmm1l = np.zeros((nx, M + 1, L + 1))
+    if M < L:
+        Pmm1l[:, 1::1, :] = Pml[:, 0:-2, :]
+    else:
+        Pmm1l[:, 1::1, :] = Pml[:, 0:-1, :]
+        Pmm1l[:, 0, :] = -Pml[:, 1, :]
+
+    return Pmm1l, Pmp1l
+
+def AFLegendre2(L, M, x):
+    """ calculate Pmm1l and Pmp1l
+
+    Parameters
+    ----------
+        L : int
+            max order  (theta)   (also called l or level )
+        M : int
+            max degree (phi)
+        x : np.array
+            function argument
+
+    Returns
+    -------
+
+    Pmm1l : ndarray (Nx , L , M )
+        :math:`\\bar{P}_{l}^{(m-1)}(x)`
+
+    Pmp1l : ndarray (Nx , L , M )
+        :math:`\\bar{P}_{l}^{(m+1)}(x)`
+
+    Notes
+    -----
+
+    This function returns :
+        .. math::
+
+            \\bar{P}_{l}^{(m-1)}(x)
+
+            \\bar{P}_{l}^{(m+1)}(x)
+
+     Where
+
+        .. math::
+
+            P_l^{(m)}(x)= \\sqrt{ \\frac{2}{2 l+1} \\frac{(l+m)!}{(l-m)!} } \\bar{P}_{l}^{(m)}(x)
+
+    Examples
+    --------
+
+
+    >>> Pmm1l,Pmp1l = AFLegendre2(5,4,np.array([0,1]))
+
+    Notes
+    -----
+
+    L has to be greater or equal than M
 
     See Also
     --------
@@ -2635,6 +2726,7 @@ def AFLegendre(N, M, x):
         Pmm1n[:, 0, :] = -Pmn[:, 1, :]
 
     return Pmm1n, Pmp1n
+
 def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     """ evaluate vector Spherical Harmonics basis functions
 
@@ -2684,14 +2776,14 @@ def VW2(l, m, x, phi, Pmm1l, Pmp1l):
 
     Y1 = (t1 * Pmm1l[:,m,l] + t2 * Pmp1l[:,m,l]).reshape(Nr,K)
     Y2 = (t1 * Pmm1l[:,m,l] - t2 * Pmp1l[:,m,l]).reshape(Nr,K)
-    #pdb.set_trace()
+
     W = Y1 * (-1.0) ** l / (2 * x * np.sqrt(l * (l + 1))) * Ephi
     W[np.isinf(W) | np.isnan(W)] = 0
     V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
     V[np.isinf(V) | np.isnan(V)] = 0
     return V, W
 
-def VW3(l, m, phi, theta):
+def VW3(l, m, theta ,phi ):
     """ evaluate vector Spherical Harmonics basis functions
 
     Parameters
@@ -2700,9 +2792,10 @@ def VW3(l, m, phi, theta):
         level
     m    : ndarray (1 x K)
         mode
+    theta : np.array (1 x Nray)
+
     phi   : np.array (1 x Nray)
 
-    theta : np.array (1 x Nray)
 
     Returns
     -------
@@ -2753,11 +2846,16 @@ def VW3(l, m, phi, theta):
 
     Y1 = (t1 * Pmm1l[:,m,l] + t2 * Pmp1l[:,m,l]).reshape(Nr,K)
     Y2 = (t1 * Pmm1l[:,m,l] - t2 * Pmp1l[:,m,l]).reshape(Nr,K)
-    #pdb.set_trace()
-    W = Y1 * (-1.0) ** l / (2 * x * np.sqrt(l * (l + 1))) * Ephi
+
+    T =  (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
+    #W = Y1 * (-1.0) ** l / (2 * x * np.sqrt(l * (l + 1))) * Ephi
+    #V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
+    W = Y1 * T / x
+    V = Y2 * T
+
     W[np.isinf(W) | np.isnan(W)] = 0
-    V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
     V[np.isinf(V) | np.isnan(V)] = 0
+
     return V, W
 
 
