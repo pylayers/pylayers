@@ -8,7 +8,7 @@ filename = 'S1R1.mat'
 A = Antenna('mat',filename,'ant/UWBAN/Matfile')
 
 #plot(freq,angle(A.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]*exp(2j*pi*freq.reshape(len(freq))*electricalDelay)))
-freq = A.fa.reshape(104,1,1)/1e9
+freq = A.fa.reshape(104,1,1)
 delayCandidates = arange(-10,10,0.001)
 electricalDelay = A.getdelay(freq,delayCandidates)
 disp('Electrical Delay = ' + str(electricalDelay)+' ns') 

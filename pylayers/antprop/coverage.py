@@ -132,7 +132,7 @@ class Coverage(object):
 
 
     def showEd(self,polarization='o'):
-        """ show excess of toa execess delay map
+        """ show excess of toa excess delay map
 
         Examples
         --------

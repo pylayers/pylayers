@@ -717,6 +717,7 @@ class VSHCoeff(object):
 
 
         Energy thresholded coefficients
+        This thresholding doesn't work
 
         """
 
