@@ -1248,7 +1248,7 @@ class Slab(dict, Interface):
 #            Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
 
 
-            ### array broadcasing version , new incresed spped in regard of einsum
+            ### array broadcasing version , new increased spped in regard of einsum
             Co=np.sum(Co[...,:,:,np.newaxis]*Io[...,np.newaxis,:,:], axis=3)
             Cp=np.sum(Cp[...,:,:,np.newaxis]*Ip[...,np.newaxis,:,:], axis=3)
 
@@ -1271,7 +1271,6 @@ class Slab(dict, Interface):
 
         # Modification probably not compliant with coverage !!!!
         # TODO !!!
-
         if compensate:
             thickness = sum(self['lthick'])
             d = thickness*np.cos(theta)
@@ -1279,6 +1278,14 @@ class Slab(dict, Interface):
                                     fGHz[:,np.newaxis,np.newaxis,np.newaxis]
                                     *d[:,:,np.newaxis,np.newaxis]
                                     /0.3)
+#        if 'T' in RT:
+#            epr = [m['epr'] for m in self['lmat']]
+#            epr = sum(epr)
+#            # theta[0] just for 1 freq
+#            self.costt = np.sqrt((epr-1+np.cos(theta[0])**2)/epr)
+#            self.sm = sum(self['lthick'])/self.costt
+#            self.gamma = np.cos(theta[0])/self.costt
+#            self.alpha = np.array(([1./epr]),dtype=complex)
 
 
 
