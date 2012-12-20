@@ -9,10 +9,12 @@ import networkx as nx
 #import Graph
 #import pylayers.antprop.slab
 #import pylayers.gis.layout
-#import pylayers.util.geomutil as geu
+import pylayers.util.geomutil as geu
 #import pylayers.util.graphutil as gph
 import pylayers.util.pyutil as pyu
 import matplotlib.pyplot as plt
+from pylayers.util.project import *
+from mpl_toolkits.mplot3d import Axes3D
 
 class Signatures(object):
     """
@@ -44,50 +46,34 @@ class Signatures(object):
         print "Transmitter position: ", self.pTx
         print "Receiver position: ", self.pRx
 
-    def get_sigarr(self):
+    def get_sigslist(self, tx, rx):
         """
-        get signatures (in one array) between iTx and iRx
-        signatures are separated by zeros
+        get signatures (in one list of arrays) between tx and rx
         Parameters
         ----------
-            L : Layout
-            iTx : integer
-            iRx : integer
+            tx : numpy.ndarray
+            rx : numpy.ndarray
         Returns
         -------
-            sigarr = numpy.ndarray
-
-        Warnings
-        --------
-        This a temporary function
-            There is some algorithmic work to find the best way to determine
-            signature
-            T4 : limit the ndt to only edges and nodes in visibility from Tx
-
+            sigslist = numpy.ndarray
         """
-        # Here we take all the vnodes >0  from the room
-        #
-        # Practically those list of nodes should depend on pTx , pRx
-        #
         try:
             self.L.Gi
         except:
             self.L.build()
-
-        NroomTx = self.L.pt2ro(self.pTx)
-        NroomRx = self.L.pt2ro(self.pRx)
+        # Here we take all the vnodes >0  from the room
+        #
+        # Practically those list of nodes should depend on tx , rx
+        #
+        NroomTx = self.L.pt2ro(tx)
+        NroomRx = self.L.pt2ro(rx)
 
         if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
             raise AttributeError('Tx or Rx is not in Gr')
-
-        #
-        # .. todo:: modifier inter afin de ne pas retenir les points non
-        # diffractants
-        #
         ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
         ntr = np.intersect1d(ndt,ndr)
-        sigarr = np.array([]).reshape(2, 0)
+        sigslist=[]
         for nt in ndt:
             for nr in ndr:
                 addpath = False
@@ -109,6 +95,7 @@ class Signatures(object):
                     addpath = True
                     path = [nt]
                 if addpath:
+                    sigarr = np.array([]).reshape(2, 0)
                     for interaction in path:
                         it = eval(interaction)
                         if type(it) == tuple:
@@ -120,62 +107,396 @@ class Signatures(object):
                         else:
                             sigarr = np.hstack((sigarr,
                                     np.array([[it], [2]])))
-                    sigarr = np.hstack((sigarr, np.array([[0], [0]])))
-        return sigarr
+                    sigslist.append(sigarr)
+        
+        return sigslist
 
-    def sigs2rays(self, L, pTx, pRx, sig_arr):
+    def update_sigslist(self):
         """
-        from signature arrays to 2D rays
-        Parameters
-        ----------
-            L : Layout
-            pTx : ndarray
-                2D transmitter position
-            pRx : ndarray
-                2D receiver position
-            sig_arr : ndarray
+        get sigantures taking into account reverberations
         Returns
         -------
-            raysarr : numpy.ndarray
-        """
-        zsig = np.array(np.where(sig_arr[0,:]==0.))
-        raysarr = np.array([]).reshape(4, 0)
-        for i in range(np.shape(zsig)[1]-1):
-            i1 = zsig[:,i][0]+1
-            i2 = zsig[:,i+1][0]
-            sig = sig_arr[:, i1:i2]
-            s = Signature(sig)
-            Yi = s.sig2ray(L, pTx, pRx)
-            if Yi is not None:
-                raysarr = np.hstack((raysarr,
-                          np.vstack((sig, Yi[:,1:-1]))))
-                raysarr = np.hstack((raysarr, np.zeros((4,1))))
-        return raysarr
+            sigslist: numpy.ndarry
 
-    def show_rays2D(self, L, raysarr, pTx, pRx):
+        Notes
+        -----
+        This is a prelminary function need more investigations
+        """
+        pTx = self.pTx
+        pRx = self.pRx
+        NroomTx = self.L.pt2ro(pTx)
+        NroomRx = self.L.pt2ro(pRx)
+        if NroomTx == NroomRx:
+            sigslist = self.get_sigslist(pTx, pRx)
+        else:
+            sigslist=[]
+            sigtx = self.get_sigslist(pTx, pTx)
+            sigrx = self.get_sigslist(pRx, pRx)
+            sigtxrx = self.get_sigslist(pTx, pRx)
+            sigslist=sigslist+sigtxrx
+            for sigtr in sigtxrx:
+                for sigt in sigtx:
+                    if (sigt[:,-1] == sigtr[:,0]).all():
+                        if np.shape(sigtr)[1]==1 or np.shape(sigt)[1]==1:
+                            pass
+                        else:
+                            sigslist.append(np.hstack((sigt,sigtr[:,1:])))
+                for sigr in sigrx:
+                    if (sigr[:,0] == sigtr[:,-1]).all():
+                        if np.shape(sigtr)[1]==1 or np.shape(sigr)[1]==1:
+                            pass
+                        else:
+                            sigslist.append(np.hstack((sigtr,sigr[:,1:]))) 
+                 
+        return sigslist
+            
+    def image_ceilfloor(self, tx, pa, pb):
+        """
+        Compute the images of tx with respect to ceil or floor
+        Parameters
+        ----------
+            tx : numpy.ndarray
+            pa : numpy.ndarray
+            pb : numpy.ndarray
+        Returns
+        -------
+            M : numpy.ndarray
+        """
+        
+        pab = pb - pa
+        alpha = np.sum(pab * pab, axis=0)
+        zalpha = np.where(alpha==0.)
+        alpha[zalpha] = 1.
+
+        a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+        b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+        c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+                            pa[1, :] * (pa[1, :] - pb[1, :]) *
+                            (pb[0, :] - pa[0, :]))
+        d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+                            pa[0, :] * (pa[1, :] - pb[1, :]) *
+                            (pb[0, :] - pa[0, :]))
+
+        S = np.zeros((1, 2, 2))
+        S[:, 0, 0] = -a
+        S[:, 0, 1] = b
+        S[:, 1, 0] = b
+        S[:, 1, 1] = a
+        A = np.eye(2)
+
+        vc0 = np.array([c[0], d[0]])
+        y = np.dot(-S[0, :, :], tx) + vc0
+
+
+        x = la.solve(A, y)
+        M = np.vstack((x[0::2], x[1::2]))
+        return M
+
+    def backtrace_ceilfloor(self, tx, rx, pa, pb, M):
+        """
+        backtracing step: given the image, tx, and rx, this function
+        traces the 2D ray.
+
+        Parameters
+        ----------
+            tx :  numpy.ndarray
+                  transmitter
+            rx :  numpy.ndarray
+                  receiver
+            M  :  numpy.ndarray
+                  images obtained using image()
+                  
+        Returns
+        -------
+            Y : numpy.ndarray
+                2D ray
+
+
+        """
+        N = np.shape(pa)[1]
+        I2 = np.eye(2)
+        z0 = np.zeros((2, 1))
+
+        pkm1 = rx.reshape(2, 1)
+        Y = pkm1
+        k = 0
+        beta = .5
+        cpt = 0
+        while (((beta <= 1) & (beta >= 0)) & (k < N)):
+            l0 = np.hstack((I2, pkm1 - M[:, N-(k + 1)].reshape(2, 1), z0
+                          ))
+            l1 = np.hstack((I2, z0,
+                 pa[:, N-(k + 1)].reshape(2, 1) -
+                 pb[:, N-(k + 1)].reshape(2, 1)
+                 ))
+            
+            T = np.vstack((l0, l1))
+            yk = np.hstack((pkm1[:, 0].T, pa[:, N-(k + 1)].T))
+            deT = np.linalg.det(T)
+            if abs(deT)<1e-15:
+                return(None)
+            xk = la.solve(T, yk)
+            pkm1 = xk[0:2].reshape(2, 1)
+            gk = xk[2::]
+            alpha = gk[0]
+            beta = gk[1]
+            Y = np.hstack((Y, pkm1))
+            k+=1
+        if ((k == N) & ((beta > 0) & (beta < 1))):# & ((alpha > 0) & (alpha < 1))):
+            Y = np.hstack((Y, tx.reshape(2, 1)))
+            return(Y)
+        else:
+            return(None)
+        
+    def sigs2rays(self, sigslist):
+        """
+        from signatures list to 2D rays
+        Parameters
+        ----------
+            sigslist : list
+        Returns
+        -------
+            rays : dict
+        """
+        rays = {}
+        for sig in sigslist:
+            s = Signature(sig)
+            Yi = s.sig2ray(self.L, self.pTx[:2], self.pRx[:2])
+            if Yi is not None:
+                Yi = np.fliplr(Yi)
+                nint = len(sig[0,:])
+                if str(nint) in rays.keys():
+                    Yi3d = np.vstack((Yi[:,1:-1],np.zeros((1,nint))))
+                    Yi3d = Yi3d.reshape(3,nint,1)
+                    rays[str(nint)]['pt'] = np.dstack((
+                            rays[str(nint)]['pt'],Yi3d))
+                    rays[str(nint)]['sig'] = np.dstack((
+                            rays[str(nint)]['sig'],
+                            sig.reshape(2,nint,1)))
+                else:
+                    rays[str(nint)] = {'pt': np.zeros((3,nint,1)),
+                                       'sig': np.zeros((2,nint,1))}
+                    rays[str(nint)]['pt'][0:2,:,0] = Yi[:,1:-1]
+                    rays[str(nint)]['sig'][:,:,0] = sig
+        return rays
+
+    def show_rays2D(self, rays):
         """
         plot 2D rays within the simulated environment
         Parameters
         ----------
-            raysarr: numpy.ndarray
+            rays: dict
         """
-        zsig = np.array(np.where(raysarr[0,:]==0.))
+
         fig=plt.figure()
         ax = fig.add_subplot(111)
-        L.showGs(fig, ax)
-        ax.plot(pTx[0], pTx[1], 'or')
-        ax.plot(pRx[0], pRx[1], 'og')
-        for i in range(np.shape(zsig)[1]-1):
-            i1 = zsig[:,i][0]+1
-            i2 = zsig[:,i+1][0]
-            ray = np.hstack((pRx[0:2].reshape((2,1)),
-                  np.hstack((raysarr[2:, i1:i2],pTx[0:2].reshape((2,1))
-                  ))))
-            ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
-        
-        
-            
+        self.L.showGs(fig, ax)
+        ax.plot(self.pTx[0], self.pTx[1], 'or')
+        ax.plot(self.pRx[0], self.pRx[1], 'og')
+        for i in rays.keys():
+            for j in range(len(rays[i]['pt'][0,0,:])):
+                ray = np.hstack((self.pTx[0:2].reshape((2,1)),
+                                 np.hstack((rays[i]['pt'][0:2,:,j],
+                                          self.pRx[0:2].reshape((2,1))))
+                               ))
+                ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
 
+
+    def ray2D3D(self, rays):
+        """
+        transform 2D ray to 3D ray (no ceil no floor here)
+        Parameters
+        ----------
+            rays : dict
+        
+        Returns
+        -------
+            rays : dict
+        """
+        pTx = self.pTx
+        pRx = self.pRx
+        for i in rays.keys():
+            pts = rays[i]['pt'][0:2,:,:]
+            sig = rays[i]['sig']
+            t = self.pTx[0:2].reshape((2,1,1))*\
+                np.ones((1,1,len(pts[0,0,:])))
+            r = self.pRx[0:2].reshape((2,1,1))*\
+                np.ones((1,1,len(pts[0,0,:])))
+            pts1 = np.hstack((t,np.hstack((pts,r))))
+            si1 = pts1[:,1:,:]-pts1[:,:-1,:]
+            si = np.sqrt(np.sum(si1*si1,axis=0))
+            alpha = np.zeros(np.shape(si[:-1,:]))
+            for j in range(len(alpha[:,0])):
+                alpha[j,:] = np.sum(si[0:j+1,:],axis=0)/\
+                             np.sum(si,axis=0)
+                rays[i]['pt'][2,j,:]=  pTx[2]+alpha[j,:]*(pRx[2]-pTx[2])
+                
+        rays = self.ray_ceilfloor(rays=rays, nr=1)
+        return rays
+
+
+    def ray_ceilfloor(self, rays, nr=1):
+        """
+        compute 3D rays reflected nr times on ceil and floor
+        Parameters
+        ----------
+            rays : dict
+            nr : int
+        
+        Returns
+        -------
+            rays : dict
+        """
+        #
+        # Compute for floor
+        #
+        pax = np.array([[0.],[3.]])
+        pbx = np.array([[10.],[3.]])
+        pay = np.array([[-2.],[3.]])
+        pby = np.array([[2.],[3.]])
+
+        txx = np.array([self.pTx[0],self.pTx[2]])
+        txy = self.pTx[1:]
+
+        rxx = np.array([self.pRx[0],self.pRx[2]])
+        rxy = self.pRx[1:]
+        
+        Mx = self.image_ceilfloor(txx, pax, pbx)
+        My = self.image_ceilfloor(txy, pay, pby)
+
+        Yx = self.backtrace_ceilfloor(txx, rxx, pax, pbx, Mx)
+        Yy = self.backtrace_ceilfloor(txy, rxy, pax, pbx, My)
+
+        Yxy = np.vstack((Yx[0:1,:],Yy[0:1,:]))
+        pts = np.array([]).reshape(3,0)
+        sig = np.array([]).reshape(2,0)
+        Ii = []
+        for i in range(len(Yxy[0,:])-1):
+            p1 = Yxy[:,i]
+            p2 = Yxy[:,i+1]
+            I = self.L.seginline(p1,p2)
+            #I = np.hstack((I,it))
+            if np.shape(I)[1] != 0:
+                print np.shape(I)
+                Iz = np.nan*np.ones((1,np.shape(I)[1]))
+                I = np.vstack((I[1:,:],Iz))
+                print I 
+                pts = np.hstack((pts, I))
+                pts = np.hstack((pts, np.vstack((Yx[0:1,i],Yy[:,i]))))
+        print pts
+        rayf = np.vstack((Yx[0:1,1:-1],Yy[:,1:-1]))
+        #print rayf
+        rays[str(nr)]['pt'] = np.dstack((rays[str(nr)]['pt'],rayf))
+
+        return rays
+
+        
+        
+
+        
+
+    def show_ray3d(self, _filestr='defstr', ray = np.array([]), bdis=True
+            , bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0,
+            linewidth=1):
+        """
+        plot a 3D ray
+        Parameters
+        ----------
+
+        bdis :
+            display boolean - if False return .vect filename
+        bbas :
+            display local basis
+        bstruc :
+            display structure
+        col  :
+            color of the ray
+        id   :
+            id of the ray
+        linewidth :
+        """
+        
+        filerac = pyu.getlong("ray" + str(id), pstruc['DIRGEOM'])
+        _filerac = pyu.getshort(filerac)
+        filename_list = filerac + '.list'
+        filename_vect = filerac + '.vect'
+        try:
+            fo = open(filename_vect, "w")
+        except:
+            raise NameError(filename)
+
+        fo.write("appearance { linewidth %d }\n" % linewidth)
+
+        fo.write("VECT\n")
+
+        fo.write("1 %d 1\n\n" % len(ray[0,:]))
+        fo.write("%d\n" % len(ray[0,:]))
+        fo.write("1\n")
+        for i in range(len(ray[0,:])):
+            fo.write("%g %g %g\n" % (ray[0, i], ray[1,i],
+                                    ray[2, i]))
+        #fo.write("%d %d %d 0\n" % (col[0],col[1],col[2]))
+        fo.write("%g %g %g 0\n" % (col[0], col[1], col[2]))
+        fo.close()
+
+        #
+        # Ajout des bases locales
+        #
+
+        fo = open(filename_list, "w")
+        fo.write("LIST\n")
+        fo.write("{<" + filename_vect + "}\n")
+        if (bstruc):
+            #fo.write("{<strucTxRx.off}\n")
+            fo.write("{<" +_filestr +".off}\n")
+
+        filename = filename_list
+        fo.close()
+
+        if (bdis):
+        #
+        # Geomview Visualisation
+        #
+            chaine = "geomview -nopanel -b 1 1 1 " + filename + \
+                " 2>/dev/null &"
+            os.system(chaine)
+        else:
+            return(filename)
+
+        
+    def show3(self, rays={}, bdis=True, bstruc=True, id=0):
+        """
+        plot 3D rays within the simulated environment
+        Parameters
+        ----------
+            raysarr: numpy.ndarray
+        """
+        pTx = self.pTx.reshape((3,1))
+        pRx = self.pRx.reshape((3,1))
+        filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
+        fo = open(filename, "w")
+        fo.write("LIST\n")
+        if bstruc:
+            fo.write("{<defstr.off}\n")
+            #fo.write("{<strucTxRx.off}\n")
+            k = 0
+            for i in rays.keys():
+                for j in range(np.shape(rays[i]['pt'])[2]):
+                    ray = np.hstack((pTx,
+                            np.hstack((rays[i]['pt'][:,:,j],pRx))))
+                    #ray = rays[i]['pt'][:,:,j]
+                    col = np.array([2, 0, 1])
+                    fileray = self.show_ray3d(ray=ray, bdis=False, bstruc=False, col=col, id=k)
+                    k+=1
+                    fo.write("{< " + fileray + " }\n")
+        fo.close()
+        if (bdis):
+            chaine = "geomview " + filename + " 2>/dev/null &"
+            os.system(chaine)
+        else:
+            return(filename)
+        
+        
 
 class Signature(object):
     """ class Signature
@@ -312,9 +633,17 @@ class Signature(object):
         #return(vn)
         #return(typ)
 
-    def image2(self, tx):
+    def image(self, tx):
         """
+        Compute the images of tx with respect to the signature segments
+        Parameters
+        ----------
+            tx : numpy.ndarray
+        Returns
+        -------
+            M : numpy.ndarray
         """
+        
         pa = self.pa
         pb = self.pb
         pab = pb - pa
@@ -378,150 +707,25 @@ class Signature(object):
         x = la.solve(A, y)
         M = np.vstack((x[0::2], x[1::2]))
         return M
-        
-
-    def image(self, tx):
-        """
-
-        Parameters
-        ----------
-            tx : np.array (2xN)
-
-        Returns
-        -------
-            M : Matrix for ray calculation  (to be stored)
-        Notes
-        ------
-
-        pa  : first point of segment or diffraction point
-        pb  : last point of segment or diffraction point
-        typ :
-        """
-        pa = self.pa
-        pb = self.pb
-        typ = self.typ
-        # number of interactions
-        N = np.shape(pa)[1]
-        # detect diffraction
-        usig = np.nonzero(typ == 3)[0]
-        # detect transmission
-        vsig = np.nonzero(typ == 2)[0]
-
-        dsig = np.ones(N)
-        rsig = np.ones(N)
-        # dsig = 1 R|T
-        # dsig = 0 D
-        rsig[usig] = 0
-        rsig[vsig] = 0
-        dsig[usig] = 1
-
-        #Ntx = np.shape(tx)
-        pab = pb - pa
-        #pabo = np.array([pa[1, :] - pb[1, :], pb[0, :] - pa[0, :]])
-        alpha = np.sum(pab * pab, axis=0)
-        zalpha = np.where(alpha==0.)
-        alpha[zalpha] = 1.
-
-        a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
-        b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
-        c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
-                            pa[1, :] * (pa[1, :] - pb[1, :]) *
-                            (pb[0, :] - pa[0, :]))
-        d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
-                            pa[0, :] * (pa[1, :] - pb[1, :]) *
-                            (pb[0, :] - pa[0, :]))
-        #
-        # introduce the diffraction point coords in vk (using c and d)
-        #
-        c[zalpha] = pa[0,zalpha]
-        d[zalpha] = pa[1,zalpha]
-        #I2 = np.eye(2)
-        #Z2 = np.zeros((2, 2))
-        S = np.zeros((N, 2, 2))
-        D = np.zeros((N, 2, 2))
-        D[:, 0, 0] = 1
-        D[:, 1, 1] = 1
-        S[:, 0, 0] = -a
-        S[:, 0, 1] = b
-        S[:, 1, 0] = b
-        S[:, 1, 1] = a
-        # N : Nombre d'interactions
-        # A est une matrice 2*N x 2*N
-        #
-        A = np.diag(np.kron(dsig, [1, 1]))
-        if N > 1:
-            #
-            # La matrice contient les termes à partir de l'interaction 1
-            #
-            a1 = a[1::] * rsig[1::]
-            a2 = -np.ones(N - 1) * (1 - rsig[1::])
-            b1 = b[1::] * rsig[1::]
-            c1 = c[1::] * rsig[1::]
-            d1 = d[1::] * rsig[1::]
-            #
-            # 1 sur la diagonale sauf pour les diffractions
-            #
-            # dm1  : Sous diagonale 1 : 2*N - 1
-            dm1 = np.zeros(2 * N - 1)
-            #  0 b 0 b 0 b
-            kdm1 = range(1, 2 * N - 1, 2)
-            dm1[kdm1] = b1
-            # dm2 : Sous diagonale 2 : 2*(N-1)
-            # -a a -a a -a a  ...
-            dm2 = -np.kron(a1, np.array([1, 0])) \
-                  + np.kron(a1, np.array([0, 1]))
-            dm2 = dm2 + np.kron(a2, [1, 1])
-            # annulation de la sous diganale 2 pour la diffraction
-            # if diffraction
-            if len(usig) > 0:
-                v = np.kron(2 * (usig-1), np.array([1, 0])) +\
-                    np.kron(2 * usig -1, np.array([0, 1]))
-                dm2[v] = 0
-            dm3 = np.zeros(2 * N - 3)
-            kdm3 = range(0, 2 * N - 3, 2)
-            dm3[kdm3] = b1
-            Am1 = np.diagflat(dm1, -1)
-            Am2 = np.diagflat(dm2, -2)
-            Am3 = np.diagflat(dm3, -3)
-            A = A + Am1 + Am2 + Am3
-        #
-        # Evaluate y
-        #
-        # depending on the first interaction the 2 first terms of y are
-        #   1 - (R) the image of tx wrt first interaction segment  (far)
-        #   2 - (T) the transmitter tx itself                    (close)
-        #   3 - (D) the diffraction point itself                (middle)
-        if typ[0] == 1:
-            vc0 = np.array([c[0], d[0]])
-            v0 = np.dot(-S[0, :, :], tx) + vc0
-        if typ[0] == 2:
-            v0 = tx
-        if typ[0] == 3:
-            v0 = pa[:, 0]
-        # for following intercations
-        #  1 - (R)    vk
-        #  2 - (T)    z2
-        #  3 - (D)    the diffarction point itself
-        
-        if N > 1:
-            y = np.hstack((v0, np.kron(c1, np.array([1, 0])) +
-                               np.kron(d1, np.array([0, 1]))))
-        else:
-            y = v0
-        x = la.solve(A, y)
-        M = np.vstack((x[0::2], x[1::2]))
-        return(M)
 
     def backtrace(self, tx, rx, M):
-        """ backtracing step
+        """
+        backtracing step: given the image, tx, and rx, this function
+        traces the 2D ray.
 
         Parameters
         ----------
-        tx :  transmitter
-        rx :  receiver
-        M  :  M
-
+            tx :  numpy.ndarray
+                  transmitter
+            rx :  numpy.ndarray
+                  receiver
+            M  :  numpy.ndarray
+                  images obtained using image()
+                  
         Returns
+        -------
+            Y : numpy.ndarray
+                2D ray
 
         Examples
         --------
@@ -602,7 +806,7 @@ class Signature(object):
 
     def sig2ray(self, L, pTx, pRx):
         """
-        from signature to rays
+        convert a signature to a 2D ray
         Parameters
         ----------
             L : Layout
@@ -612,7 +816,6 @@ class Signature(object):
                 2D receiver position
         Returns
         -------
-            M : numpy.ndarray
             Y : numpy.ndarray
         """
         try:
@@ -621,11 +824,9 @@ class Signature(object):
             L.build()
 
         self.ev(L)
-        M = self.image2(pTx)
+        M = self.image(pTx)
         Y = self.backtrace(pTx, pRx, M)
         return Y
-        
-
 
 if __name__ == "__main__":
     doctest.testmod()
