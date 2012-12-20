@@ -2132,6 +2132,37 @@ class Layout(object):
                     p = grid[ix, iy, :]
                     seglist, theta = self.layeronlink(p, Tx)
 
+    def seginline(self, p1, p2):
+        """
+        Returns the intersection between a given line and all segments
+        Parameters
+        ----------
+            p1 : numpy.ndarray
+            p2 : numpy.ndarray
+        Returns
+        -------
+            I : numpy.ndarray
+        """
+        I = np.array([]).reshape(3,0)
+        line = sh.LineString((p1,p2))
+        for seg in self.Gs.nodes():
+            if seg>0:
+                ta, he = self.Gs.neighbors(seg)
+                pa = np.array(self.Gs.pos[ta])
+                pb = np.array(self.Gs.pos[he])
+            else:
+                pa = np.array(self.Gs.pos[seg])
+                pb = pa
+
+            segline = sh.LineString((pa,pb))
+            if line.intersects(segline):
+                psh = line.intersection(segline)
+                liseg = np.array([[psh.x],[psh.y]])
+                I = np.hstack((I, np.vstack(([[seg]],liseg))))
+        return I
+                
+        
+
     def checkvis(self, p, edgelist, nodelist):
         pass
 
@@ -3916,7 +3947,6 @@ class Layout(object):
         #
         ndt = self.Gt.node[self.Gr.node[NroomTx]['cycle']]['inter']
         ndr = self.Gt.node[self.Gr.node[NroomRx]['cycle']]['inter']
-        signature = []
         sigarr = np.array([]).reshape(2, 0)
         for nt in ndt:
             for nr in ndr:
@@ -3939,7 +3969,6 @@ class Layout(object):
                     addpath = True
                     path = [nt]
                 if addpath:
-                    signature.append(path)
                     sigarr = np.hstack((sigarr, np.array([[0], [0]])))
                     for interaction in path:
                         it = eval(interaction)
@@ -3952,7 +3981,7 @@ class Layout(object):
                         else:
                             sigarr = np.hstack((sigarr, np.array([[it], [2]])))
 
-        return(sigarr, signature)
+        return sigarr
 
     def get_Sg_pos(self, sigarr):
         """ return position of the signatures

@@ -7,17 +7,24 @@ from pylayers.antprop.signature import *
 
 L = Layout('defstr.str')
 L.build()
-tx = np.array([8, -1])
-rx = np.array([1, 1])
+tx = np.array([8., -1., 1.])
+rx = np.array([1., 1., 2.])
 
 #L = Layout('TA-Office.str')
 #L.build()
-#tx = np.array([20, 8])
-#rx = np.array([35, 6])
+#tx = np.array([20, 8, 1])
+#rx = np.array([35, 6, 2])
 
 
 S = Signatures(L, tx, rx)
-s1 = S.get_sigarr()
-rays = S.sigs2rays(L, tx, rx, s1)
-S.show_rays2D(L, rays, tx, rx)
-plt.show()
+
+s1 = S.get_sigslist(tx, rx)
+
+rays2d = S.sigs2rays(s1)
+
+rays3d = S.ray2D3D(rays2d)
+
+#S.show3(rays=rays3d)
+
+
+

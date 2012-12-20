@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
+import shapely.geometry as sh
 import pdb
 #! /usr/bin/python
 # geomutil.py
@@ -2629,6 +2630,48 @@ def dist(x,y,ax):
         """
         d = np.sqrt(np.sum((x-y)**2, axis=ax))
         return d
+
+def line_intersection(l1,l2):
+    """
+    intersection between two 2D lines using shapely
+    Parameters
+    ----------
+        l1: numpy.ndarray
+            coordinates of l1 points
+        l2: numpy.ndarray
+            coordinates of l2 points
+    Returns
+    -------
+        p: numpy.ndarray
+            coordinates of intersection point
+    """
+    shl1 = sh.LineString((l1[:,0],l1[:,1]))
+    shl2 = sh.LineString((l2[:,0],l2[:,1]))
+    if shl1.intersects(shl2):
+        psh = shl1.intersection(shl2)
+        return np.array([[psh.x],[psh.y]])
+    else:
+        return None
+
+def linepoly_intersection(l,poly):
+    """
+    intersection between a 2D line and a 2D polygon using shapely
+    Parameters
+    ----------
+        l: numpy.ndarray
+            coordinates of l points
+        poly: numpy.ndarray
+            coordinates of poly points
+    Returns
+    -------
+        p: numpy.ndarray
+            coordinates of intersection point
+    """
+    shl = sh.LineString((l[:,0],l[:,1]))
+    shpoly = sh.polygon((poly[:,0],poly[:,1],poly[:,2]))
+    psh = shl.intersection(shpoly)
+    return np.array([[psh.x],[psh.y]])
+    
 
 if __name__ == "__main__":
     doctest.testmod()
