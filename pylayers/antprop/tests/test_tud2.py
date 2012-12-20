@@ -6,8 +6,29 @@ import pylayers.signal.bsignal as bs
 import time
 # create a Simul object
 
+def plotray(r):
+
+    plt.ion()
+    plt.close('all')
+    fig=plt.figure('Cpp')
+    f,a=C.Cpp.plot(fig=fig,iy=np.array(([r])))
+    f,a,Cn.Cpp.plot(fig=fig,iy=np.array(([r])))
+    a[0].legend(('Fried','new'))
+
+    fig2=plt.figure('Ctt')
+    f,a=C.Ctt.plot(fig=fig2,iy=np.array(([r])))
+    f,a,Cn.Ctt.plot(fig=fig2,iy=np.array(([r])))
+    a[0].legend(('Fried','new'))
+
+    Gt.info(r)
+
+    plt.show()
 
 
+###################################
+#   Simulation creation 
+#
+#################################
 S = Simul()
 # loading a layout 
 filestr = 'defstr'
@@ -27,28 +48,31 @@ S.tx.point([1.2,1,1.4])
 itx=1
 irx=1
 S.rx = RadioNode(typ='rx')
-S.rx.point([3,-1.2,1.5])
+S.rx.point([8,-1.2,1.5])
 S.save()
 
 S.run(itx,irx)
+
+
+###################################
+#   New load function 
+#   load pulray tud file
+#
+#################################
+
 
 Gt=GrRayTud()
 Gt.load(S.dtud[itx][irx],S.dtang[itx][irx],S.drang[itx][irx],S.slab)
 
 
-# dictionnary of length of interactions
-# keys are the number of interactions.
-k=Gt.dli.keys()
-# Gt.dli is a dictionnary of dictionnary
-Gt.dli[k[0]].keys()
 
 a=time.time()
 print 'evaluation of all rays & interactions'
 Gt.eval()
 b=time.time()
 
-print 'memory size occupied by Interaction matrix = ',Gt.I.I.nbytes/1e6,'MB'
-print 'memory size occupied by Ctilde matrix = ',Gt.Ctilde.nbytes/1e6,'MB'
+#print 'memory size occupied by Interaction matrix = ',Gt.I.I.nbytes/1e6,'MB'
+#print 'memory size occupied by Ctilde matrix = ',Gt.Ctilde.nbytes/1e6,'MB'
 print 'evaluation in ',(b-a) ,'seconds'
 
 C=Ctilde()
@@ -62,6 +86,8 @@ nray=np.array(([Gt.nray]))
 Cr=np.swapaxes(Gt.Ctilde,1,0)
 #Cr=Gt.Ctilde.reshape(nray, nfreq,2,2)
 #Cr=np.transpose(Gt.Ctilde,(1,0,2,3))
+
+
 
 c11 = Cr[:,:,0,0]
 c12 = Cr[:,:,0,1]
@@ -77,43 +103,10 @@ Cn.nfreq = Gt.I.nf
 Cn.nray = Gt.nray
 Cn.tauk=Gt.delays
 
-plt.ion()
 
-r=30
+r=0
+plotray(r)
 
-fig=plt.figure('Cpp')
-f,a=C.Cpp.plot(fig=fig,iy=np.array(([r])))
-f,a,Cn.Cpp.plot(fig=fig,iy=np.array(([r])))
-
-a[0].legend(('Fried','new'))
-
-fig2=plt.figure('Ctt')
-f,a=C.Ctt.plot(fig=fig2)
-f,a=Cn.Ctt.plot(fig=fig2)
-a[0].legend(('Fried','new'))
-
-
-plt.show()
-
-#raw_input('press any key to close figure')
-#plt.close('all')
-
-#freq=Gt.I.f
-#th=Gt.I.R.data[0,0]
-#sl=S.sl['WALL']
-#sl.ev(fGHz=freq,theta=th,compensate=False)
-
-
-
-#F=(C.Cpp.y[r,:])*(C.tauk[r]*0.3)
-#N=(Cn.Cpp.y[r,:])*(Cn.tauk[r]*0.3)
-
-#f2=plt.figure('compar')
-#ax=f2.add_subplot(111)
-#ax.plot(freq,20*np.log10(abs(F)))
-#ax.plot(freq,20*np.log10(abs(N)))
-#ax.plot(freq,20*np.log10(sl.R[:,0,0,0]))
-#ax.legend(('fried','new','slab'))
 
 
 
