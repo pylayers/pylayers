@@ -135,7 +135,7 @@ class Inter(object):
 
         ## The config parser load is done in order to :
         ## All IntB/IntL/IntR/IntT/... inherits of the correct
-        ## self.frequency from the Interraction class !
+        ## self.frequency from the Interaction class !
         ## It could be interesting to find another trick which
         ## avoid to give a filesimulname.
         config = ConfigParser.ConfigParser()
@@ -235,14 +235,14 @@ class Inter(object):
 
 class Interactions(Inter):
     """ Interaction parameters
-        gather all basis interractions (IntB/L/R/T)
+        gather all basis interactions (IntB/L/R/T)
 
         Methods
         -------
         add(self,li): add a list of basis interatcions
         addi(self,i): add a single interaction
-        eval(self) : evaluate all the interractions added thanks to self.add or self.addi
-                     and create the self.I which gather all thoses interractions
+        eval(self) : evaluate all the interactions added thanks to self.add or self.addi
+                     and create the self.I which gather all thoses interactions
 
     """
 
@@ -320,9 +320,9 @@ class Interactions(Inter):
                  self.nimax : the total number of interaction ( of all rays)
 
         self.sout :
-            distance from interraction to the next one
+            distance from interaction to the next one
         self.si0 :
-            distance from the previous interraction to the the considered one
+            distance from the previous interaction to the the considered one
         self.alpha :
             alpha as described into Legendre Thesis
         self.gamma :
@@ -405,7 +405,7 @@ class IntB(Inter):
 
 
             idx : list
-                index of the corresponding ray and interraction
+                index of the corresponding ray and interaction
 
         Returns
         -------
@@ -421,7 +421,7 @@ class IntB(Inter):
 
     def eval(self):
         """
-            evaluation of B interractions
+            evaluation of B interactions
 
         >>> from pylayers.antprop.rays import *
         >>> M = np.eye(2).reshape(4)
@@ -448,7 +448,7 @@ class IntB(Inter):
             data=self.data.reshape(lidx,2,2)
             return(self.olf[:,np.newaxis,np.newaxis,np.newaxis]*data[np.newaxis,:,:,:])
         else :
-            print 'no B interraction to evaluate'
+            print 'no B interaction to evaluate'
             return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
 
 
@@ -759,7 +759,7 @@ class IntD(Inter):
             print 'not yet implemented'
         else :
             self.A=self.data[:,np.newaxis,np.newaxis,np.newaxis]
-            print 'no D interraction to evaluate'
+            print 'no D interaction to evaluate'
             return(self.A)
 
 
@@ -1266,7 +1266,7 @@ class GrRayTud(object):
     I : class interaction which contrinats all the interactionn of The
         GrRayTud ( see class Interactions help)
 
-    dli dictionnary of length of interraction.
+    dli dictionnary of length of interaction.
         contains information about rays for a given interaction length
 
 
@@ -1279,7 +1279,7 @@ class GrRayTud(object):
     """
     def __init__(self):
         self.nray = 0
-        # Interractions instance
+        # Interactions instance
         self.I = Interactions()
         # dictionnay of interaction legth
         self.dli={}
@@ -1574,7 +1574,7 @@ class GrRayTud(object):
                         decal=True
 
 
-                # decal = True if an extra B interraction is added at the begining
+                # decal = True if an extra B interaction is added at the begining
                 # of the ray
                 if decal :
                     ii = i + 1
@@ -1596,7 +1596,7 @@ class GrRayTud(object):
 #                    inter = IntB(M)
             #        inter.data = M
 
-                # Los Interraction
+                # Los Interaction
                 elif (caract == 0):
                     start = stop
                     stop = start + 8
@@ -1612,7 +1612,7 @@ class GrRayTud(object):
 #                    inter = IntL(dist[0])
             #        inter.data = dist
 
-                # Reflexion Interraction
+                # Reflexion Interaction
                 elif (caract == 1):
                     start = stop
                     stop = start + 24
@@ -1692,7 +1692,7 @@ class GrRayTud(object):
 #                        self.I.slab[slname].ev(fGHz=self.I.f, theta=self.I.t)
 
 
-                ### fill slab index dictionnary for each type of interractions
+                ### fill slab index dictionnary for each type of interactions
 
                 if caract == 1:
                     ## read material index 
@@ -1717,16 +1717,16 @@ class GrRayTud(object):
                 if caract == 3:
                     pass
 
-        ### the total number of interraction( for all rays)
+        ### the total number of interaction( for all rays)
         self.I.nimax=index
-        ### Add all type of interractions into the Interraction class
+        ### Add all type of interactions into the Interaction class
         self.I.add([B,L,R,T,D])
 
 
 
     def ray(self,r):
         """
-            Give the ray number and it retruns the index of its interractions
+            Give the ray number and it retruns the index of its interactions
         """
         raypos=np.nonzero(self.dli[self.rayidx[r]]['rayidx']==r)
         return(self.dli[self.rayidx[r]]['rays'][raypos][0])
@@ -1757,7 +1757,7 @@ class GrRayTud(object):
 
 
         for l in self.dli.keys():
-            # l stands for the number of interractions
+            # l stands for the number of interactions
             r = self.dli[l]['nbrays']
             # reshape in order to have a 1D list of insde
             # reshape ray index
