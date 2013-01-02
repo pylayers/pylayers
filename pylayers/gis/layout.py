@@ -2857,30 +2857,33 @@ class Layout(object):
             self.Gv = nx.compose(self.Gv, Gv)
 
     def buildGi(self):
-        """ Build graph of interaction
+        """ build graph of interactions
 
         Notes
         -----
 
         For each node > of graph Gs creates
-            3 different nodes associated to the same segment
-            R+ T R-
+            4 different nodes associated to the same segment
+            R+  R- T+ T-
 
         """
-        self.Gi = nx.Graph()
+        self.Gi = nx.DiGraph()
         self.Gi.pos = {}
+        #
+        # Create nodes
         for n in self.Gv.node:
-            if n < 0:
+            if n < 0: # D
                 self.Gi.add_node(str(n))
                 self.Gi.pos[str(n)] = self.Gs.pos[n]
-            if n > 0:
+            if n > 0: # R | T
                 cy = self.Gs.node[n]['ncycles']
-                if len(cy) == 2:
+                if len(cy) == 2: # 2 cycles means two rooms
                     cy0 = cy[0]
                     cy1 = cy[1]
-                    self.Gi.add_node(str((n, cy0)))
-                    self.Gi.add_node(str((n, cy1)))
-                    self.Gi.add_node(str(n))
+                    self.Gi.add_node(str((n,cy0)))
+                    self.Gi.add_node(str((n,cy1)))
+                    self.Gi.add_node(str((n,cy0,cy1)))
+                    self.Gi.add_node(str((n,cy1,cy0)))
                     nei = self.Gs.neighbors(n)
                     np1 = nei[0]
                     np2 = nei[1]
@@ -2890,111 +2893,84 @@ class Layout(object):
                     nl = np.dot(l, l)
                     ln = l / nl
                     delta = nl / 10
-                    self.Gi.pos[str(n)] = tuple(self.Gs.pos[n])
+                    self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
+                    self.Gi.pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
                     self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
                     self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
 
-                if len(cy) == 1:
+                if len(cy) == 1: # segment which is not a separation between rooms
                     self.Gi.add_node(str((n, cy[0])))
                     self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
 
         #
-        # Loop over interactions
+        # Loop over interactions list
         #
         for sn in self.Gi.node:
             n = eval(sn)
-#            print n
-            #if n == (161, 53):
-                #pass
-                #pdb.set_trace()
-            if isinstance(n, tuple):  # reflection
-                ns = n[0]
-                nc = n[1]
-                vnodes = self.Gt.node[nc]['vnodes']
-                neigh = self.Gv.neighbors(ns)  # find neighbors
-                for nb in neigh:
-                    if nb in vnodes:           # Si Voisin dans cycle reflexion
-                        if nb > 0:
-                            node1 = str(n)
-                            node2 = str((nb, nc))
-                            if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
-                                self.Gi.add_edge(node1, node2)
-                                    # R-R
-#                            else:
-#                                print node1, node2
-                                #pdb.set_trace()
-
-                            if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
+            if isinstance(n, tuple):  # reflection ou transmission
+                if len(n)==2: # reflection tuple (,2)
+                    ns = n[0]  # segment
+                    nc = n[1]  # cycle
+                    vnodes = self.Gt.node[nc]['vnodes']
+                    neigh = self.Gv.neighbors(ns)  # find neighbors
+                    for nb in neigh:
+                        if nb in vnodes:           # Si Voisin dans cycle reflexion
+                            if nb > 0:             # segment
+                                node1 = str(n)
+                                node2 = str((nb, nc))
+                                if ((node1 in self.Gi.node.keys())
+                                 &  (node2 in self.Gi.node.keys())):
+                                    self.Gi.add_edge(node1, node2)
+                                # retrieve the cycles of the segment
+                                cy = set(self.Gs.node[nb]['ncycles'])
+                                if len(cy) == 2: # R-T
+                                    node1 = str(n)
+                                    nc1   = list(cy.difference({nc}))[0]
+                                    node2 = str((nb,nc,nc1))
+                                    if ((node1 in self.Gi.node.keys())
+                                      & (node2 in self.Gi.node.keys())):
+                                        self.Gi.add_edge(node1, node2)
+    #                                else:
+    #                                    print node1, node2
+                                        #pdb_set_trace()
+                            else:                   # R-D
                                 node1 = str(n)
                                 node2 = str(nb)
-                                if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
+                                if ((node1 in self.Gi.node.keys())
+                                 & (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)
-#                                else:
-#                                    print node1, node2
+    #                            else:
+    #                                print node1, node2
                                     #pdb_set_trace()
-                        else:                                    # R-D
-                            node1 = str(n)
-                            node2 = str(nb)
-                            if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
-                                self.Gi.add_edge(node1, node2)
-#                            else:
-#                                print node1, node2
-                                #pdb_set_trace()
-            else:  # transmission or diffraction
-                if n > 0:  # transmission
-                    ns = n
-                    cy = self.Gs.node[n]['ncycles']
-                    cy0 = cy[0]
-                    cy1 = cy[1]
+                if len(n)==3: #transmission
+                    ns  = n[0]  # segment
+                    cy0 = n[1]
+                    cy1 = n[2]
                     vnodes0 = self.Gt.node[cy0]['vnodes']
                     vnodes1 = self.Gt.node[cy1]['vnodes']
                     neigh = self.Gv.neighbors(ns)  # find neighbors
                     for nb in neigh:
-                        if nb in vnodes0:    # Si Voisin dans cycle reflexion 0
-                            if nb > 0:
-                                node1 = str(n)
-                                node2 = str((nb, cy0))
-                                if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
-                                    self.Gi.add_edge(node1, node2)
-#                                else:
-#                                    #pdb.set_trace()
-                                if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
-                                    node1 = str(n)
-                                    node2 = str(nb)
-                                    if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
-                                        self.Gi.add_edge(node1, node2)
-#                                    else:
-#                                        print node1, node2
-                                        #pdb.set_trace()
-                            else:
-                                node1 = str(n)
-                                node2 = str(nb)
-                                if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
-                                    self.Gi.add_edge(str(n), str(nb))
-#                                else:
-#                                    print node1, node2
-                                    #pdb.set_trace()
-                        if nb in vnodes1:    # Si Voisin dans cycle reflexion 1
+                        if nb in vnodes1:    # If neighbors in cycle 1
                             if nb > 0:
                                 node1 = str(n)
                                 node2 = str((nb, cy1))
-                                if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
+                                if ((node1 in self.Gi.node.keys()) 
+                                 &  (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)
-#                                else:
-#                                    print node1, node2
-                                    #pdb.set_trace()
-                                if len(self.Gs.node[nb]['ncycles']) == 2:  # R-T
+                                cy = set(self.Gs.node[nb]['ncycles'])
+                                if len(cy) == 2: # R-T
                                     node1 = str(n)
-                                    node2 = str(nb)
-                                    if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
-                                        self.Gi.add_edge(node1, node2)
-#                                    else:
-#                                        print node1, node2
-                                        #pdb.set_trace()
+                                    nc1   = list(cy.difference({cy1}))[0]
+                                    if nc1<> cy0:
+                                        node2 = str((nb,cy1,nc1))
+                                        if ((node1 in self.Gi.node.keys())
+                                         & (node2 in self.Gi.node.keys())):
+                                            self.Gi.add_edge(node1, node2)
                             else:
                                 node1 = str(n)
                                 node2 = str(nb)
-                                if (node1 in self.Gi.node.keys()) & (node2 in self.Gi.node.keys()):
+                                if ((node1 in self.Gi.node.keys()) 
+                                 &  (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)
 #                                else:
 #                                    print node1, node2
@@ -3574,7 +3550,9 @@ class Layout(object):
             print "filegeom : ", self.filegeom
         except:
             print "geomfile (.off) has no been generated"
-
+        
+        self.boundary()
+        print "limites ",self.ax
         print "number of Nodes :", self.Nn
         print "number of Segments :", self.Ne
         print "number of Sub-Segments :", self.Nss

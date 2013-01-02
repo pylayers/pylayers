@@ -7,7 +7,6 @@ import pdb
 import networkx as nx
 #import GrRay3D
 #import Graph
-#import pylayers.antprop.slab
 #import pylayers.gis.layout
 import pylayers.util.geomutil as geu
 #import pylayers.util.graphutil as gph
@@ -15,6 +14,7 @@ import pylayers.util.pyutil as pyu
 import matplotlib.pyplot as plt
 from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
+from numba import autojit
 
 class Signatures(object):
     """
@@ -72,8 +72,10 @@ class Signatures(object):
             raise AttributeError('Tx or Rx is not in Gr')
         ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
-        ntr = np.intersect1d(ndt,ndr)
-        sigslist=[]
+        ntr = np.intersect1d(ndt, ndr)
+        pdb.set_trace()
+        sigslist = []
+
         for nt in ndt:
             for nr in ndr:
                 addpath = False
@@ -98,17 +100,17 @@ class Signatures(object):
                     sigarr = np.array([]).reshape(2, 0)
                     for interaction in path:
                         it = eval(interaction)
-                        if type(it) == tuple:
+                        if type(it) == tuple: #reflexion
                             sigarr = np.hstack((sigarr,
-                                    np.array([[it[0]], [1]])))
-                        elif it < 0:
+                                                np.array([[it[0]], [1]])))
+                        elif it < 0: #diffraction 
                             sigarr = np.hstack((sigarr,
-                                    np.array([[it], [3]])))
-                        else:
+                                                np.array([[it], [3]])))
+                        else: #transmission
                             sigarr = np.hstack((sigarr,
-                                    np.array([[it], [2]])))
+                                                np.array([[it], [2]])))
                     sigslist.append(sigarr)
-        
+
         return sigslist
 
     def update_sigslist(self):
@@ -129,27 +131,27 @@ class Signatures(object):
         if NroomTx == NroomRx:
             sigslist = self.get_sigslist(pTx, pRx)
         else:
-            sigslist=[]
+            sigslist = []
             sigtx = self.get_sigslist(pTx, pTx)
             sigrx = self.get_sigslist(pRx, pRx)
             sigtxrx = self.get_sigslist(pTx, pRx)
-            sigslist=sigslist+sigtxrx
+            sigslist = sigslist + sigtxrx
             for sigtr in sigtxrx:
                 for sigt in sigtx:
-                    if (sigt[:,-1] == sigtr[:,0]).all():
-                        if np.shape(sigtr)[1]==1 or np.shape(sigt)[1]==1:
+                    if (sigt[:, -1] == sigtr[:, 0]).all():
+                        if np.shape(sigtr)[1] == 1 or np.shape(sigt)[1] == 1:
                             pass
                         else:
-                            sigslist.append(np.hstack((sigt,sigtr[:,1:])))
+                            sigslist.append(np.hstack((sigt, sigtr[:, 1:])))
                 for sigr in sigrx:
-                    if (sigr[:,0] == sigtr[:,-1]).all():
-                        if np.shape(sigtr)[1]==1 or np.shape(sigr)[1]==1:
+                    if (sigr[:, 0] == sigtr[:, -1]).all():
+                        if np.shape(sigtr)[1] == 1 or np.shape(sigr)[1] == 1:
                             pass
                         else:
-                            sigslist.append(np.hstack((sigtr,sigr[:,1:]))) 
-                 
+                            sigslist.append(np.hstack((sigtr, sigr[:, 1:])))
+
         return sigslist
-            
+
     def image_ceilfloor(self, tx, pa, pb):
         """
         Compute the images of tx with respect to ceil or floor
@@ -162,10 +164,10 @@ class Signatures(object):
         -------
             M : numpy.ndarray
         """
-        
+
         pab = pb - pa
         alpha = np.sum(pab * pab, axis=0)
-        zalpha = np.where(alpha==0.)
+        zalpha = np.where(alpha == 0.)
         alpha[zalpha] = 1.
 
         a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
@@ -187,7 +189,6 @@ class Signatures(object):
         vc0 = np.array([c[0], d[0]])
         y = np.dot(-S[0, :, :], tx) + vc0
 
-
         x = la.solve(A, y)
         M = np.vstack((x[0::2], x[1::2]))
         return M
@@ -205,7 +206,7 @@ class Signatures(object):
                   receiver
             M  :  numpy.ndarray
                   images obtained using image()
-                  
+
         Returns
         -------
             Y : numpy.ndarray
@@ -223,17 +224,17 @@ class Signatures(object):
         beta = .5
         cpt = 0
         while (((beta <= 1) & (beta >= 0)) & (k < N)):
-            l0 = np.hstack((I2, pkm1 - M[:, N-(k + 1)].reshape(2, 1), z0
-                          ))
+            l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0
+                            ))
             l1 = np.hstack((I2, z0,
-                 pa[:, N-(k + 1)].reshape(2, 1) -
-                 pb[:, N-(k + 1)].reshape(2, 1)
-                 ))
-            
+                            pa[:, N - (k + 1)].reshape(2, 1) -
+                            pb[:, N - (k + 1)].reshape(2, 1)
+                            ))
+
             T = np.vstack((l0, l1))
-            yk = np.hstack((pkm1[:, 0].T, pa[:, N-(k + 1)].T))
+            yk = np.hstack((pkm1[:, 0].T, pa[:, N - (k + 1)].T))
             deT = np.linalg.det(T)
-            if abs(deT)<1e-15:
+            if abs(deT) < 1e-15:
                 return(None)
             xk = la.solve(T, yk)
             pkm1 = xk[0:2].reshape(2, 1)
@@ -241,13 +242,13 @@ class Signatures(object):
             alpha = gk[0]
             beta = gk[1]
             Y = np.hstack((Y, pkm1))
-            k+=1
-        if ((k == N) & ((beta > 0) & (beta < 1))):# & ((alpha > 0) & (alpha < 1))):
+            k += 1
+        if ((k == N) & ((beta > 0) & (beta < 1))):  # & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
             return(Y)
         else:
             return(None)
-        
+
     def sigs2rays(self, sigslist):
         """
         from signatures list to 2D rays
@@ -264,20 +265,20 @@ class Signatures(object):
             Yi = s.sig2ray(self.L, self.pTx[:2], self.pRx[:2])
             if Yi is not None:
                 Yi = np.fliplr(Yi)
-                nint = len(sig[0,:])
+                nint = len(sig[0, :])
                 if str(nint) in rays.keys():
-                    Yi3d = np.vstack((Yi[:,1:-1],np.zeros((1,nint))))
-                    Yi3d = Yi3d.reshape(3,nint,1)
+                    Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, nint))))
+                    Yi3d = Yi3d.reshape(3, nint, 1)
                     rays[str(nint)]['pt'] = np.dstack((
-                            rays[str(nint)]['pt'],Yi3d))
+                                                      rays[str(nint)]['pt'], Yi3d))
                     rays[str(nint)]['sig'] = np.dstack((
-                            rays[str(nint)]['sig'],
-                            sig.reshape(2,nint,1)))
+                                                       rays[str(nint)]['sig'],
+                                                       sig.reshape(2, nint, 1)))
                 else:
-                    rays[str(nint)] = {'pt': np.zeros((3,nint,1)),
-                                       'sig': np.zeros((2,nint,1))}
-                    rays[str(nint)]['pt'][0:2,:,0] = Yi[:,1:-1]
-                    rays[str(nint)]['sig'][:,:,0] = sig
+                    rays[str(nint)] = {'pt': np.zeros((3, nint, 1)),
+                                       'sig': np.zeros((2, nint, 1))}
+                    rays[str(nint)]['pt'][0:2, :, 0] = Yi[:, 1:-1]
+                    rays[str(nint)]['sig'][:, :, 0] = sig
         return rays
 
     def show_rays2D(self, rays):
@@ -288,19 +289,18 @@ class Signatures(object):
             rays: dict
         """
 
-        fig=plt.figure()
+        fig = plt.figure()
         ax = fig.add_subplot(111)
         self.L.showGs(fig, ax)
         ax.plot(self.pTx[0], self.pTx[1], 'or')
         ax.plot(self.pRx[0], self.pRx[1], 'og')
         for i in rays.keys():
-            for j in range(len(rays[i]['pt'][0,0,:])):
-                ray = np.hstack((self.pTx[0:2].reshape((2,1)),
-                                 np.hstack((rays[i]['pt'][0:2,:,j],
-                                          self.pRx[0:2].reshape((2,1))))
-                               ))
+            for j in range(len(rays[i]['pt'][0, 0, :])):
+                ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
+                                 np.hstack((rays[i]['pt'][0:2, :, j],
+                                            self.pRx[0:2].reshape((2, 1))))
+                                 ))
                 ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
-
 
     def ray2D3D(self, rays):
         """
@@ -308,7 +308,7 @@ class Signatures(object):
         Parameters
         ----------
             rays : dict
-        
+
         Returns
         -------
             rays : dict
@@ -316,24 +316,24 @@ class Signatures(object):
         pTx = self.pTx
         pRx = self.pRx
         for i in rays.keys():
-            pts = rays[i]['pt'][0:2,:,:]
+            pts = rays[i]['pt'][0:2, :, :]
             sig = rays[i]['sig']
-            t = self.pTx[0:2].reshape((2,1,1))*\
-                np.ones((1,1,len(pts[0,0,:])))
-            r = self.pRx[0:2].reshape((2,1,1))*\
-                np.ones((1,1,len(pts[0,0,:])))
-            pts1 = np.hstack((t,np.hstack((pts,r))))
-            si1 = pts1[:,1:,:]-pts1[:,:-1,:]
-            si = np.sqrt(np.sum(si1*si1,axis=0))
-            alpha = np.zeros(np.shape(si[:-1,:]))
-            for j in range(len(alpha[:,0])):
-                alpha[j,:] = np.sum(si[0:j+1,:],axis=0)/\
-                             np.sum(si,axis=0)
-                rays[i]['pt'][2,j,:]=  pTx[2]+alpha[j,:]*(pRx[2]-pTx[2])
-                
-        rays = self.ray_ceilfloor(rays=rays, nr=1)
-        return rays
+            t = self.pTx[0:2].reshape((2, 1, 1)) *\
+                np.ones((1, 1, len(pts[0, 0, :])))
+            r = self.pRx[0:2].reshape((2, 1, 1)) *\
+                np.ones((1, 1, len(pts[0, 0, :])))
+            pts1 = np.hstack((t, np.hstack((pts, r))))
+            si1  = pts1[:, 1:, :] - pts1[:, :-1, :]
+            si   = np.sqrt(np.sum(si1 * si1, axis=0))
+            al1  = np.cumsum(si,axis=0)
+            alpha = np.zeros(np.shape(si[:-1, :]))
+            for j in range(len(alpha[:, 0])):
+                alpha[j, :] = np.sum(si[0:j + 1, :], axis=0) /\
+                    np.sum(si, axis=0)
+                rays[i]['pt'][2, j, :] = pTx[2] + alpha[j,:] * (pRx[2] - pTx[2])
 
+        #rays = self.ray_ceilfloor(rays=rays, nr=1)
+        return rays
 
     def ray_ceilfloor(self, rays, nr=1):
         """
@@ -342,7 +342,7 @@ class Signatures(object):
         ----------
             rays : dict
             nr : int
-        
+
         Returns
         -------
             rays : dict
@@ -350,54 +350,48 @@ class Signatures(object):
         #
         # Compute for floor
         #
-        pax = np.array([[0.],[3.]])
-        pbx = np.array([[10.],[3.]])
-        pay = np.array([[-2.],[3.]])
-        pby = np.array([[2.],[3.]])
+        pax = np.array([[0.], [3.]])
+        pbx = np.array([[10.], [3.]])
+        pay = np.array([[-2.], [3.]])
+        pby = np.array([[2.], [3.]])
 
-        txx = np.array([self.pTx[0],self.pTx[2]])
+        txx = np.array([self.pTx[0], self.pTx[2]])
         txy = self.pTx[1:]
 
-        rxx = np.array([self.pRx[0],self.pRx[2]])
+        rxx = np.array([self.pRx[0], self.pRx[2]])
         rxy = self.pRx[1:]
-        
+
         Mx = self.image_ceilfloor(txx, pax, pbx)
         My = self.image_ceilfloor(txy, pay, pby)
 
         Yx = self.backtrace_ceilfloor(txx, rxx, pax, pbx, Mx)
         Yy = self.backtrace_ceilfloor(txy, rxy, pax, pbx, My)
 
-        Yxy = np.vstack((Yx[0:1,:],Yy[0:1,:]))
-        pts = np.array([]).reshape(3,0)
-        sig = np.array([]).reshape(2,0)
+        Yxy = np.vstack((Yx[0:1, :], Yy[0:1, :]))
+        pts = np.array([]).reshape(3, 0)
+        sig = np.array([]).reshape(2, 0)
         Ii = []
-        for i in range(len(Yxy[0,:])-1):
-            p1 = Yxy[:,i]
-            p2 = Yxy[:,i+1]
-            I = self.L.seginline(p1,p2)
+        for i in range(len(Yxy[0, :]) - 1):
+            p1 = Yxy[:, i]
+            p2 = Yxy[:, i + 1]
+            I = self.L.seginline(p1, p2)
             #I = np.hstack((I,it))
             if np.shape(I)[1] != 0:
                 print np.shape(I)
-                Iz = np.nan*np.ones((1,np.shape(I)[1]))
-                I = np.vstack((I[1:,:],Iz))
-                print I 
+                Iz = np.nan * np.ones((1, np.shape(I)[1]))
+                I = np.vstack((I[1:, :], Iz))
+                print I
                 pts = np.hstack((pts, I))
-                pts = np.hstack((pts, np.vstack((Yx[0:1,i],Yy[:,i]))))
+                pts = np.hstack((pts, np.vstack((Yx[0:1, i], Yy[:, i]))))
         print pts
-        rayf = np.vstack((Yx[0:1,1:-1],Yy[:,1:-1]))
+        rayf = np.vstack((Yx[0:1, 1:-1], Yy[:, 1:-1]))
         #print rayf
-        rays[str(nr)]['pt'] = np.dstack((rays[str(nr)]['pt'],rayf))
+        rays[str(nr)]['pt'] = np.dstack((rays[str(nr)]['pt'], rayf))
 
         return rays
 
-        
-        
-
-        
-
-    def show_ray3d(self, _filestr='defstr', ray = np.array([]), bdis=True
-            , bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0,
-            linewidth=1):
+    def show_ray3d(self, _filestr='defstr', ray=np.array([]), bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0,
+                   linewidth=1):
         """
         plot a 3D ray
         Parameters
@@ -415,7 +409,7 @@ class Signatures(object):
             id of the ray
         linewidth :
         """
-        
+
         filerac = pyu.getlong("ray" + str(id), pstruc['DIRGEOM'])
         _filerac = pyu.getshort(filerac)
         filename_list = filerac + '.list'
@@ -429,12 +423,12 @@ class Signatures(object):
 
         fo.write("VECT\n")
 
-        fo.write("1 %d 1\n\n" % len(ray[0,:]))
-        fo.write("%d\n" % len(ray[0,:]))
+        fo.write("1 %d 1\n\n" % len(ray[0, :]))
+        fo.write("%d\n" % len(ray[0, :]))
         fo.write("1\n")
-        for i in range(len(ray[0,:])):
-            fo.write("%g %g %g\n" % (ray[0, i], ray[1,i],
-                                    ray[2, i]))
+        for i in range(len(ray[0, :])):
+            fo.write("%g %g %g\n" % (ray[0, i], ray[1, i],
+                                     ray[2, i]))
         #fo.write("%d %d %d 0\n" % (col[0],col[1],col[2]))
         fo.write("%g %g %g 0\n" % (col[0], col[1], col[2]))
         fo.close()
@@ -448,7 +442,7 @@ class Signatures(object):
         fo.write("{<" + filename_vect + "}\n")
         if (bstruc):
             #fo.write("{<strucTxRx.off}\n")
-            fo.write("{<" +_filestr +".off}\n")
+            fo.write("{<" + _filestr + ".off}\n")
 
         filename = filename_list
         fo.close()
@@ -463,7 +457,6 @@ class Signatures(object):
         else:
             return(filename)
 
-        
     def show3(self, rays={}, bdis=True, bstruc=True, id=0):
         """
         plot 3D rays within the simulated environment
@@ -471,8 +464,8 @@ class Signatures(object):
         ----------
             raysarr: numpy.ndarray
         """
-        pTx = self.pTx.reshape((3,1))
-        pRx = self.pRx.reshape((3,1))
+        pTx = self.pTx.reshape((3, 1))
+        pRx = self.pRx.reshape((3, 1))
         filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
         fo = open(filename, "w")
         fo.write("LIST\n")
@@ -483,11 +476,13 @@ class Signatures(object):
             for i in rays.keys():
                 for j in range(np.shape(rays[i]['pt'])[2]):
                     ray = np.hstack((pTx,
-                            np.hstack((rays[i]['pt'][:,:,j],pRx))))
+                                     np.hstack((rays[i]['pt'][:, :, j], pRx))))
                     #ray = rays[i]['pt'][:,:,j]
                     col = np.array([2, 0, 1])
-                    fileray = self.show_ray3d(ray=ray, bdis=False, bstruc=False, col=col, id=k)
-                    k+=1
+                    print ray
+                    fileray = self.show_ray3d(ray=ray, bdis=False,
+                                              bstruc=False, col=col, id=k)
+                    k += 1
                     fo.write("{< " + fileray + " }\n")
         fo.close()
         if (bdis):
@@ -495,8 +490,7 @@ class Signatures(object):
             os.system(chaine)
         else:
             return(filename)
-        
-        
+
 
 class Signature(object):
     """ class Signature
@@ -643,12 +637,12 @@ class Signature(object):
         -------
             M : numpy.ndarray
         """
-        
+
         pa = self.pa
         pb = self.pb
         pab = pb - pa
         alpha = np.sum(pab * pab, axis=0)
-        zalpha = np.where(alpha==0.)
+        zalpha = np.where(alpha == 0.)
         alpha[zalpha] = 1.
 
         a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
@@ -659,7 +653,7 @@ class Signature(object):
         d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
                             pa[0, :] * (pa[1, :] - pb[1, :]) *
                             (pb[0, :] - pa[0, :]))
-        
+
         typ = self.typ
         # number of interactions
         N = np.shape(pa)[1]
@@ -669,24 +663,24 @@ class Signature(object):
         S[:, 0, 1] = b
         S[:, 1, 0] = b
         S[:, 1, 1] = a
-        blocks = np.zeros((N-1,2,2))
-        A = np.eye(N*2)
-        
+        blocks = np.zeros((N - 1, 2, 2))
+        A = np.eye(N * 2)
+
         # detect diffraction
         usig = np.nonzero(typ[1:] == 3)[0]
-        if len(usig)>0:
-            blocks[usig,:,:] = np.zeros((2,2))
+        if len(usig) > 0:
+            blocks[usig, :, :] = np.zeros((2, 2))
         # detect transmission
         tsig = np.nonzero(typ[1:] == 2)[0]
-        if len(tsig)>0:
-            blocks[tsig,:,:] = np.zeros((2,2))
+        if len(tsig) > 0:
+            blocks[tsig, :, :] = np.zeros((2, 2))
         # detect reflexion
         rsig = np.nonzero(typ[1:] == 1)[0]
-        if len(rsig)>0:
-            blocks[rsig,:,:] = S[rsig+1,:,:]
+        if len(rsig) > 0:
+            blocks[rsig, :, :] = S[rsig + 1, :, :]
         A = pyu.fill_block_diag(A, blocks, 2, -1)
 
-        y = np.zeros(2*N)
+        y = np.zeros(2 * N)
         if typ[0] == 1:
             vc0 = np.array([c[0], d[0]])
             v0 = np.dot(-S[0, :, :], tx) + vc0
@@ -696,13 +690,12 @@ class Signature(object):
             v0 = pa[:, 0]
         y[0:2] = v0
         for i in range(len(typ[1:])):
-            if typ[i+1] == 1:
-                y[2*(i+1):2*(i+1)+2] = np.array([c[i+1],d[i+1]])
-            if typ[i+1] == 2:
-                y[2*(i+1):2*(i+1)+2] = np.zeros(2)
-            if typ[i+1] == 3:
-                y[2*(i+1):2*(i+1)+2] = pa[:,i+1]
-
+            if typ[i + 1] == 1:
+                y[2 * (i + 1):2 * (i + 1) + 2] = np.array([c[i + 1], d[i + 1]])
+            if typ[i + 1] == 2:
+                y[2 * (i + 1):2 * (i + 1) + 2] = y[2*i:2*i+2]
+            if typ[i + 1] == 3:
+                y[2 * (i + 1):2 * (i + 1) + 2] = pa[:, i + 1]
 
         x = la.solve(A, y)
         M = np.vstack((x[0::2], x[1::2]))
@@ -721,7 +714,7 @@ class Signature(object):
                   receiver
             M  :  numpy.ndarray
                   images obtained using image()
-                  
+
         Returns
         -------
             Y : numpy.ndarray
@@ -776,17 +769,17 @@ class Signature(object):
         while (((beta <= 1) & (beta >= 0)) & (k < N)):
             if int(typ[k]) != 3:
                 # Formula (30) of paper Eucap 2012
-                l0 = np.hstack((I2, pkm1 - M[:, N-(k + 1)].reshape(2, 1), z0
-                              ))
+                l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0
+                                ))
                 l1 = np.hstack((I2, z0,
-                     pa[:, N-(k + 1)].reshape(2, 1) -
-                     pb[:, N-(k + 1)].reshape(2, 1)
-                     ))
-                
+                                pa[:, N - (k + 1)].reshape(2, 1) -
+                                pb[:, N - (k + 1)].reshape(2, 1)
+                                ))
+
                 T = np.vstack((l0, l1))
-                yk = np.hstack((pkm1[:, 0].T, pa[:, N-(k + 1)].T))
+                yk = np.hstack((pkm1[:, 0].T, pa[:, N - (k + 1)].T))
                 deT = np.linalg.det(T)
-                if abs(deT)<1e-15:
+                if abs(deT) < 1e-15:
                     return(None)
                 xk = la.solve(T, yk)
                 pkm1 = xk[0:2].reshape(2, 1)
@@ -795,8 +788,8 @@ class Signature(object):
                 beta = gk[1]
                 Y = np.hstack((Y, pkm1))
             else:
-                Y = np.hstack((Y, pa[:,k].reshape((2,1))))
-                pkm1 = pa[:,k].reshape((2,1))
+                Y = np.hstack((Y, pa[:, k].reshape((2, 1))))
+                pkm1 = pa[:, k].reshape((2, 1))
             k = k + 1
         if ((k == N) & ((beta > 0) & (beta < 1)) & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
