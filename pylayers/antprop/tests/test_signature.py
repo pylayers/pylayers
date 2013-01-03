@@ -52,7 +52,7 @@ def showsig(L,s,tx,rx):
 
 strucname = 'TA-Office'
 #strucname = 'defstr'
-L = Layout(strucname+'.str2')
+L = Layout(strucname+'.str')
 L.boundary()
 print L.ax
 #try:
@@ -60,7 +60,7 @@ print L.ax
 #except:
 L.build()
 L.dumpw()
-tx = np.array([8., 12., 1.])
+tx = np.array([8., 8., 1.])
 rx = np.array([30., 11., 2.])
 #tx = np.array([1., 0., 1.])
 #rx = np.array([8., 0., 2.])
@@ -75,12 +75,12 @@ S = Signatures(L, tx, rx)
 
 print "Calcul signatures"
 #s1 = S.get_sigslist(tx, rx)
-s1 = S.run(tx,rx,2)
+s1 = S.run(tx,rx,4)
 print "Fin calcul signatures"
 
 #print "signatures --> rayons "
 #r2d = S.sigs2rays(s1)
-#r2d = S.rays(s1)
+r2d = S.rays(s1)
 ##print "fin signatures --> rayons "
 ##
 #r22 = r2d['2']
@@ -101,7 +101,7 @@ print "Fin calcul signatures"
 #pt[:,2,1:]= tx[2]+alpha*(rx[2]-tx[2])
 #
 #
-#showr2d(L,r2d,tx,rx)
+showr2d(L,r2d,tx,rx)
 print "rayons 2D --> rayons3D "
 #rays3d = S.ray2D3D(r2d)
 #print "fin rayons 2D --> rayons3D "
@@ -137,5 +137,5 @@ print "rayons 2D --> rayons3D "
 #        if deg == 1:
 #            udeg1.append(index)    # warning not used
 #Gv = polyg8.buildGv(show=True,udeg2=udeg2)
-L.showGs()
-nx.draw_networkx_edges(L.dGv[8],L.Gs.pos,nx.edges(L.dGv[8],nbunch=[47]))
+#L.showGs()
+#nx.draw_networkx_edges(L.dGv[8],L.Gs.pos,nx.edges(L.dGv[8],nbunch=[47]))

@@ -2787,11 +2787,14 @@ class Layout(object):
             for inode in vnodes:
                 if inode > 0:
                     cy = set(self.Gs.node[inode]['ncycles'])
-                    ListInteractions.append(str((inode, k)))
+                    name = self.Gs.node[inode]['name']
+                    if (name<>'AIR') & (name<>'ABSORNENT'):
+                        ListInteractions.append(str((inode, k)))
                     if len(cy) == 2: # 2 cycles means two rooms
-                        ncy = list(cy.difference({k}))[0]
-                        ListInteractions.append(str((inode, k, ncy)))
-                        ListInteractions.append(str((inode, ncy, k)))
+                        if (name<>'METAL') & (name<>'ABSORNENT'):
+                            ncy = list(cy.difference({k}))[0]
+                            ListInteractions.append(str((inode, k, ncy)))
+                            ListInteractions.append(str((inode, ncy, k)))
             self.Gt.add_node(k, inter=ListInteractions)
 
     def buildGw(self):
@@ -2808,17 +2811,22 @@ class Layout(object):
         for e in self.Gr.edges_iter(): # iterator on Gr edges
             doors1 = self.Gr.node[e[0]]['doors']  # doors of room e[0]
             doors2 = self.Gr.node[e[1]]['doors']  # doors of room e[1]
-            doorId = np.intersect1d(doors1, doors2)[0]  # common door
+            try:
+                Id = np.intersect1d(doors1, doors2)[0]  # common door
+            except:
+                wall1 = self.Gr.node[e[0]]['airwall']  # airwall of room e[0]
+                wall2 = self.Gr.node[e[1]]['airwall']  # airwall of room e[1]
+                Id = np.intersect1d(wall1, wall2)[0]  # common airwall 
 
-            unode = self.Gs.neighbors(doorId) # get edge number of common door
+            unode = self.Gs.neighbors(Id) # get edge number of common door|airwall
             p1 = self.Gs.pos[unode[0]]
             p2 = self.Gs.pos[unode[1]]
             pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common door
 
-            self.Gw.add_node(doorId + d_id)      # new node
-            self.Gw.pos[doorId + d_id] = pdoor   # in the middle of the door
-            self.Gw.add_edges_from([(e[0], doorId + d_id),
-                                    (e[1], doorId + d_id)])
+            self.Gw.add_node(Id + d_id)     # new node
+            self.Gw.pos[Id + d_id] = pdoor  # in the middle of the door|airwall
+            self.Gw.add_edges_from([(e[0], Id + d_id),
+                                    (e[1], Id + d_id)])
             self.Gw.pos.update(self.Gr.pos)
 
         for n in self.Gr.nodes_iter():
@@ -3020,26 +3028,33 @@ class Layout(object):
                 self.Gi.pos[str(n)] = self.Gs.pos[n]
             if n > 0: # R | T
                 cy = self.Gs.node[n]['ncycles']
-                if len(cy) == 2: # 2 cycles means two rooms
+                name = self.Gs.node[n]['name']
+                if len(cy) == 2: # 2 cycles means generally two rooms 
                     cy0 = cy[0]
                     cy1 = cy[1]
-                    self.Gi.add_node(str((n,cy0)))
-                    self.Gi.add_node(str((n,cy1)))
-                    self.Gi.add_node(str((n,cy0,cy1)))
-                    self.Gi.add_node(str((n,cy1,cy0)))
+
                     nei = self.Gs.neighbors(n)
                     np1 = nei[0]
                     np2 = nei[1]
+
                     p1 = np.array(self.Gs.pos[np1])
                     p2 = np.array(self.Gs.pos[np2])
                     l = p1 - p2
                     nl = np.dot(l, l)
                     ln = l / nl
+
                     delta = nl / 10
-                    self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
-                    self.Gi.pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
-                    self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
-                    self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+                    if (name<>'AIR') & (name<>'ABSORBENT'):
+                        self.Gi.add_node(str((n,cy0)))
+                        self.Gi.add_node(str((n,cy1)))
+                        self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
+                        self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+
+                    if (name<>'METAL') & (name<>'ABSORBENT'):
+                        self.Gi.add_node(str((n,cy0,cy1)))
+                        self.Gi.add_node(str((n,cy1,cy0)))
+                        self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
+                        self.Gi.pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
                 if len(cy) == 1: # segment which is not a separation between rooms
                     self.Gi.add_node(str((n, cy[0])))
@@ -3293,7 +3308,7 @@ class Layout(object):
             nx.draw(G, self.Gs.pos, node_color='c', edge_color='c')
         if 'i' in graph:
             G = self.Gi
-            nx.draw(G,node_color='k', edge_color='k')
+            nx.draw(G,G.pos,node_color='k', edge_color='k')
 
         for k, ncy in enumerate(self.Gt.node.keys()):
             self.Gt.node[ncy]['polyg'].plot()
