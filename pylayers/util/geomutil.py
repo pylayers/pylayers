@@ -1032,7 +1032,7 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
     vn = v / L
     pi = p1 + vn * (1 - al) * L
     pf = p2 - vn * (1 - al) * L
-    ax.plot([pi[0], pf[0]], [pi[1], pf[1]], color=col, linewidth=linewidth)
+    ax.plot([pi[0], pf[0]], [pi[1], pf[1]], color=color, linewidth=linewidth)
 
     return(ax)
 

@@ -50,8 +50,8 @@ def showsig(L,s,tx,rx):
     L.display['edlabel']=False
     return fig,ax
 
-#strucname = 'TA-Office'
-strucname = 'defstr'
+strucname = 'TA-Office'
+#strucname = 'defstr'
 L = Layout(strucname+'.str')
 L.boundary()
 print L.ax
@@ -60,10 +60,10 @@ try:
 except:
     L.build()
     L.dumpw()
-#tx = np.array([8., 12., 1.])
-#rx = np.array([30., 11., 2.])
-tx = np.array([1., 0., 1.])
-rx = np.array([8., 0., 2.])
+tx = np.array([8., 12., 1.])
+rx = np.array([30., 11., 2.])
+#tx = np.array([1., 0., 1.])
+#rx = np.array([8., 0., 2.])
 
 #L = Layout('TA-Office.str')
 #L.build()
@@ -75,12 +75,12 @@ S = Signatures(L, tx, rx)
 
 print "Calcul signatures"
 #s1 = S.get_sigslist(tx, rx)
-s1 = S.run(tx,rx,3)
+s1 = S.run(tx,rx,2)
 print "Fin calcul signatures"
 
 #print "signatures --> rayons "
 #r2d = S.sigs2rays(s1)
-r2d = S.rays(s1)
+#r2d = S.rays(s1)
 ##print "fin signatures --> rayons "
 ##
 #r22 = r2d['2']
@@ -120,3 +120,7 @@ print "rayons 2D --> rayons3D "
 #plt.plot(Y[0,:],Y[1,:],'xk')
 #fig,ax = showr2(L,r2d,tx[0:2],rx[0:2],3,4)
 #plt.show()
+room8 = L.Gt.node[8]
+polyg8 = room8['polyg']
+vnodes8 = room8['vnodes']
+Gv = polyg8.buildGv(show=True)
