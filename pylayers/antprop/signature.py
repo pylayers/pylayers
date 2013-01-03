@@ -16,6 +16,18 @@ from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
 from numba import autojit
 
+def showsig(L,s,tx,rx):
+    L.display['thin']=True
+    fig,ax = L.showGs()
+    L.display['thin']=False
+    L.display['edlabel']=True
+    L.showGs(fig=fig,ax=ax,edlist=s,width=4)
+    plt.plot(tx[0],tx[1],'x')
+    plt.plot(rx[0],rx[1],'+')
+    plt.title(str(s))
+    plt.show()
+    L.display['edlabel']=False
+
 class Signatures(object):
     """
     gather all signatures from a layout given tx and rx
@@ -46,6 +58,85 @@ class Signatures(object):
         print "Transmitter position: ", self.pTx
         print "Receiver position: ", self.pRx
 
+
+    def run(self, tx, rx,cutoff=1):
+        """
+        get signatures (in one list of arrays) between tx and rx
+        Parameters
+        ----------
+            tx : numpy.ndarray
+            rx : numpy.ndarray
+        Returns
+        -------
+            sigslist = numpy.ndarray
+        """
+        try:
+            self.L.Gi
+        except:
+            self.L.build()
+        # all the vnodes >0  from the room
+        #
+        NroomTx = self.L.pt2ro(tx)
+        NroomRx = self.L.pt2ro(rx)
+        print NroomTx,NroomRx
+
+        if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
+            raise AttributeError('Tx or Rx is not in Gr')
+
+        #list of interaction 
+        ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
+        ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
+
+        ndt1 = filter(lambda l: len(eval(l))>2,ndt)
+        ndt2 = filter(lambda l: len(eval(l))<3,ndt)
+        ndr1 = filter(lambda l: len(eval(l))>2,ndr)
+        ndr2 = filter(lambda l: len(eval(l))<3,ndr)
+
+        # tx,rx : attaching rule
+        # tx attachs to out Transmisision point 
+        # rx attachs to in Transmission point
+        #
+        # WARNING : room number <> cycle number
+        #
+
+        ndt1 = filter(lambda l: eval(l)[2]<>NroomTx,ndt1)
+        ndr1 = filter(lambda l: eval(l)[1]<>NroomRx,ndr1)
+
+
+        ndt = ndt1 + ndt2
+        ndr = ndr1 + ndr2
+
+        ntr = np.intersect1d(ndt, ndr)
+        dsig = {}
+
+        for nt in ndt:
+            for nr in ndr:
+                if (nt != nr):
+                    paths = list(nx.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
+                else:
+                    paths = [[nt]]
+                for path in paths:
+                    sigarr = np.array([]).reshape(2, 0)
+                    #showsig(self.L,path,tx,rx)
+                    for interaction in path:
+                        it = eval(interaction)
+                        if type(it) == tuple:
+                            if len(it)==2: #reflexion
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]],[1]])))
+                            if len(it)==3: #transmission
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]], [2]])))
+                        elif it < 0: #diffraction
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it], [3]])))
+                    try:
+                        dsig[len(path)] = np.vstack((dsig[len(path)],sigarr))
+                    except:
+                        dsig[len(path)] = sigarr
+
+        return dsig
+
     def get_sigslist(self, tx, rx):
         """
         get signatures (in one list of arrays) between tx and rx
@@ -61,61 +152,69 @@ class Signatures(object):
             self.L.Gi
         except:
             self.L.build()
-        # Here we take all the vnodes >0  from the room
-        #
-        # Practically those list of nodes should depend on tx , rx
+        # all the vnodes >0  from the room
         #
         NroomTx = self.L.pt2ro(tx)
         NroomRx = self.L.pt2ro(rx)
+        print NroomTx,NroomRx
 
         if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
             raise AttributeError('Tx or Rx is not in Gr')
+
+        #list of interaction 
         ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
+
+        ndt1 = filter(lambda l: len(eval(l))>2,ndt)
+        ndt2 = filter(lambda l: len(eval(l))<3,ndt)
+        ndr1 = filter(lambda l: len(eval(l))>2,ndr)
+        ndr2 = filter(lambda l: len(eval(l))<3,ndr)
+
+        print ndt1
+        print ndr1
+        ndt1 = filter(lambda l: eval(l)[2]<>NroomTx,ndt1)
+        ndr1 = filter(lambda l: eval(l)[1]<>NroomRx,ndr1)
+
+        ndt = ndt1 + ndt2
+        ndr = ndr1 + ndr2
+
         ntr = np.intersect1d(ndt, ndr)
-        pdb.set_trace()
         sigslist = []
 
         for nt in ndt:
+            print nt
             for nr in ndr:
                 addpath = False
-                if (type(nt) != type(nr)):
+                print nr
+                if (nt != nr):
                     try:
                         path = nx.dijkstra_path(self.L.Gi, nt, nr)
+                        #paths = nx.all_simple_paths(self.L.Gi,source=nt,target=nr)
                         addpath = True
+                        showsig(self.L,path,tx,rx)
                     except:
                         pass
-                        #print 'no path between ',nt,nr
-                elif (nt != nr):
-                    try:
-                        path = nx.dijkstra_path(self.L.Gi, nt, nr)
-                        addpath = True
-                    except:
-                        pass
-                        #print 'no path between ',nt,nr
-                else:
-                    addpath = True
-                    path = [nt]
                 if addpath:
                     sigarr = np.array([]).reshape(2, 0)
                     for interaction in path:
                         it = eval(interaction)
-                        if type(it) == tuple: #reflexion
-                            sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]], [1]])))
-                        elif it < 0: #diffraction 
+                        if type(it) == tuple:
+                            if len(it)==2: #reflexion
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]],[1]])))
+                            if len(it)==3: #transmission
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]], [2]])))
+                        elif it < 0: #diffraction
                             sigarr = np.hstack((sigarr,
                                                 np.array([[it], [3]])))
-                        else: #transmission
-                            sigarr = np.hstack((sigarr,
-                                                np.array([[it], [2]])))
                     sigslist.append(sigarr)
 
         return sigslist
-
     def update_sigslist(self):
         """
-        get sigantures taking into account reverberations
+        get signatures taking into account reverberations
+
         Returns
         -------
             sigslist: numpy.ndarry
@@ -249,6 +348,45 @@ class Signatures(object):
         else:
             return(None)
 
+
+    def rays(self, dsig):
+        """
+        from signatures dict to 2D rays
+        Parameters
+        ----------
+            dsig : dict 
+
+        Returns
+        -------
+            rays : dict
+        """
+        rays = {}
+        for k in dsig:
+            tsig = dsig[k]
+            shsig = np.shape(tsig)
+            for l in range(shsig[0]/2):
+                sig = tsig[2*l:2*l+2,:]
+                s = Signature(sig)
+                Yi = s.sig2ray(self.L, self.pTx[:2], self.pRx[:2])
+                if Yi is not None:
+                    #pdb.set_trace()
+                    Yi = np.fliplr(Yi)
+                    nint = len(sig[0, :])
+                    if str(nint) in rays.keys():
+                        Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, nint))))
+                        Yi3d = Yi3d.reshape(3, nint, 1)
+                        rays[str(nint)]['pt'] = np.dstack((
+                                                          rays[str(nint)]['pt'], Yi3d))
+                        rays[str(nint)]['sig'] = np.dstack((
+                                                           rays[str(nint)]['sig'],
+                                                           sig.reshape(2, nint, 1)))
+                    else:
+                        rays[str(nint)] = {'pt': np.zeros((3, nint, 1)),
+                                           'sig': np.zeros((2, nint, 1))}
+                        rays[str(nint)]['pt'][0:2, :, 0] = Yi[:, 1:-1]
+                        rays[str(nint)]['sig'][:, :, 0] = sig
+        return rays
+
     def sigs2rays(self, sigslist):
         """
         from signatures list to 2D rays
@@ -264,6 +402,7 @@ class Signatures(object):
             s = Signature(sig)
             Yi = s.sig2ray(self.L, self.pTx[:2], self.pRx[:2])
             if Yi is not None:
+                #pdb.set_trace()
                 Yi = np.fliplr(Yi)
                 nint = len(sig[0, :])
                 if str(nint) in rays.keys():
@@ -280,7 +419,6 @@ class Signatures(object):
                     rays[str(nint)]['pt'][0:2, :, 0] = Yi[:, 1:-1]
                     rays[str(nint)]['sig'][:, :, 0] = sig
         return rays
-
     def show_rays2D(self, rays):
         """
         plot 2D rays within the simulated environment
@@ -457,7 +595,7 @@ class Signatures(object):
         else:
             return(filename)
 
-    def show3(self, rays={}, bdis=True, bstruc=True, id=0):
+    def show3(self, rays={}, bdis=True, bstruc=True, id=0, strucname='defstr'):
         """
         plot 3D rays within the simulated environment
         Parameters
@@ -470,7 +608,7 @@ class Signatures(object):
         fo = open(filename, "w")
         fo.write("LIST\n")
         if bstruc:
-            fo.write("{<defstr.off}\n")
+            fo.write("{<"+strucname+".off}\n")
             #fo.write("{<strucTxRx.off}\n")
             k = 0
             for i in rays.keys():
@@ -673,7 +811,8 @@ class Signature(object):
         # detect transmission
         tsig = np.nonzero(typ[1:] == 2)[0]
         if len(tsig) > 0:
-            blocks[tsig, :, :] = np.zeros((2, 2))
+            #blocks[tsig, :, :] = np.zeros((2, 2))
+            blocks[tsig, :, :] = -np.eye(2)
         # detect reflexion
         rsig = np.nonzero(typ[1:] == 1)[0]
         if len(rsig) > 0:
@@ -693,7 +832,8 @@ class Signature(object):
             if typ[i + 1] == 1:
                 y[2 * (i + 1):2 * (i + 1) + 2] = np.array([c[i + 1], d[i + 1]])
             if typ[i + 1] == 2:
-                y[2 * (i + 1):2 * (i + 1) + 2] = y[2*i:2*i+2]
+                #y[2 * (i + 1):2 * (i + 1) + 2] = y[2*i:2*i+2]
+                y[2 * (i + 1):2 * (i + 1) + 2] = np.array([0,0]) 
             if typ[i + 1] == 3:
                 y[2 * (i + 1):2 * (i + 1) + 2] = pa[:, i + 1]
 

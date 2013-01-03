@@ -94,9 +94,9 @@ class Layout(object):
         self.display['nodes'] = False
         self.display['ndsize'] = 10
         self.display['ndlabel'] = False
-        self.display['ndlblsize'] = 10
-        self.display['edlblsize'] = 10
-        self.display['fontsize'] = 10
+        self.display['ndlblsize'] = 20
+        self.display['edlblsize'] = 20
+        self.display['fontsize'] = 20
         self.display['edlabel'] = False
         self.display['edges'] = True
         self.display['ednodes'] = False
@@ -2383,7 +2383,7 @@ class Layout(object):
         if dnodes:
             self.show_nodes(ndlist=edlist, color='b')
 
-    def show_layer(self, name, edlist=[], alpha=1, width=1,
+    def show_layer(self, name, edlist=[], alpha=1, width=0,
                    color='black', dnodes=False, dthin=False,
                    dlabels=False, font_size=15):
         """ show layer
@@ -2391,15 +2391,19 @@ class Layout(object):
         Parameters
         ----------
         name : 
-        edlist :
+        edlist : []
         alpha : float 
             transparency 
         width : int
+            if width = 0 linewidth depends on slab property
         color : string
             default black'
-        dnodes
-        dthin
-        dlabels
+        dnodes : 
+            display nodes (False ) 
+        dthin :
+            display thin ( False )
+        dlabels :
+            display labels ( False ) 
         font_size
 
 
@@ -2417,7 +2421,10 @@ class Layout(object):
                             color=color, dlabels=dlabels, font_size=font_size)
         else:
             slab = self.sl[name]
-            linewidth = slab['linewidth'] / 3.
+            if width==0:   
+                linewidth = slab['linewidth'] / 3.
+            else:
+                linewidth = width
             color = slab['color']
             self.show_edges(edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
@@ -2453,7 +2460,7 @@ class Layout(object):
         ax.axis('scaled')
 
     def showGs(self,fig=[], ax=[], ndlist=[], edlist=[], show=False, furniture=False,
-               roomlist=[],axis=[]):
+               roomlist=[],axis=[],width=0):
         """ show structure graph Gs
 
         Parameters
@@ -2507,7 +2514,7 @@ class Layout(object):
             ndlist = tn[u]
         if edlist == []:
             tn = np.array(self.Gs.node.keys())
-            u = np.nonzero(tn > 0)[0]
+            u  = np.nonzero(tn > 0)[0]
             edlist = tn[u]
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
@@ -2522,11 +2529,12 @@ class Layout(object):
             for nameslab in self.display['layers']:
                 self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
-                                font_size=font_size)
+                                font_size=font_size,width=width)
         if self.display['subseg']:
             dico = self.subseg()
             for k in dico.keys():
-                edlist = dico[k]
+                edlist2 = set(dico[k])
+                edlist = list(edlist2.intersection(set(edlist)))
                 color = self.sl[k]['color']
                 self.show_edges(edlist=edlist, color='black', alpha=1)
 
@@ -2758,9 +2766,9 @@ class Layout(object):
         #   negative integer : Diffraction on point |ni|
         #   positive integer : Transmission through segment ni
         #   tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle
+        #         (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
         #
-        #
-        #    At that stage the diffraction point are not included
+        #    At that stage the diffraction points are not included
         #    not enough information available
         #
         for k in self.Gt.nodes():
@@ -2768,8 +2776,12 @@ class Layout(object):
             ListInteractions = []
             for inode in vnodes:
                 if inode > 0:
-                    ListInteractions.append(str(inode))
+                    cy = set(self.Gs.node[inode]['ncycles'])
                     ListInteractions.append(str((inode, k)))
+                    if len(cy) == 2: # 2 cycles means two rooms
+                        ncy = list(cy.difference({k}))[0]
+                        ListInteractions.append(str((inode, k, ncy)))
+                        ListInteractions.append(str((inode, ncy, k)))
             self.Gt.add_node(k, inter=ListInteractions)
 
     def buildGw(self):
