@@ -112,7 +112,8 @@ class Layout(object):
         self.display['overlay'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = "TA-Office.png"
-        self.display['box'] = (-11.4, 19.525, -8.58, 23.41)
+        #self.display['box'] = (-11.4, 19.525, -8.58, 23.41)
+        self.display['box'] = (-20, 20, -10, 10)
         self.display['layerset'] = self.sl.keys()
         self.name = {}
         for k in self.sl.keys():
@@ -818,7 +819,6 @@ class Layout(object):
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
             >>> L.load('Lstruc.str2')
-            
 
         """
 
@@ -831,8 +831,20 @@ class Layout(object):
         self.sl.mat = mat
         self.sl.load(_fileslabini)
 
+        self.labels = {}
+        self.name = {}
+        self.Gs.pos = {}
+
+        self.Nn = 0
+        self.Ne = 0
+        self.Nss = 0
+
         filename = pyu.getlong(_filename, pstruc['DIRSTRUC'])
-        fo = open(filename)
+        try:
+            fo = open(filename)
+        except:
+            print "no file named ",filename 
+            return
         lines = fo.readlines()
         fo.close()
         l1 = lines[0].split()
@@ -848,9 +860,6 @@ class Layout(object):
 
         lname = []
 
-        self.labels = {}
-        self.name = {}
-        self.Gs.pos = {}
 
         pt = np.array(np.zeros([2, Nn], dtype=np.float64))
         codep = np.array(np.zeros(Nn, dtype=int))
@@ -2588,6 +2597,7 @@ class Layout(object):
             self.buildGv()
         if 'i' in graph:
             self.buildGi()
+            self.buildGi2()
 
     def dumpw(self, graph='trwcvi'):
         """ write a dump of given Graph
@@ -2794,24 +2804,25 @@ class Layout(object):
         """
         self.Gw = nx.Graph()
         self.Gw.pos = {}
-        d_id = max(self.Gr.nodes())
-        for e in self.Gr.edges_iter():
-            doors1 = self.Gr.node[e[0]]['doors']
-            doors2 = self.Gr.node[e[1]]['doors']
-#            if len(doors1) > 1:
-#                pdb.set_trace()
-            doorId = np.intersect1d(doors1, doors2)[0]
-            unode = self.Gs.neighbors(doorId)
+        d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
+        for e in self.Gr.edges_iter(): # iterator on Gr edges
+            doors1 = self.Gr.node[e[0]]['doors']  # doors of room e[0]
+            doors2 = self.Gr.node[e[1]]['doors']  # doors of room e[1]
+            doorId = np.intersect1d(doors1, doors2)[0]  # common door
+
+            unode = self.Gs.neighbors(doorId) # get edge number of common door
             p1 = self.Gs.pos[unode[0]]
             p2 = self.Gs.pos[unode[1]]
-            pdoor = (np.array(p1) + np.array(p2)) / 2
-            self.Gw.add_node(doorId + d_id)
-            self.Gw.pos[doorId + d_id] = pdoor
-            self.Gw.add_edges_from(
-                [(e[0], doorId + d_id), (e[1], doorId + d_id)])
+            pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common door
+
+            self.Gw.add_node(doorId + d_id)      # new node
+            self.Gw.pos[doorId + d_id] = pdoor   # in the middle of the door
+            self.Gw.add_edges_from([(e[0], doorId + d_id),
+                                    (e[1], doorId + d_id)])
             self.Gw.pos.update(self.Gr.pos)
+
         for n in self.Gr.nodes_iter():
-            d = self.Gw.neighbors(n)
+            d = self.Gw.neighbors(n)   # neighbors of room n in Gw
             if len(d) > 1:
                 self.Gw.add_edges_from(combinations(d, 2))
 
@@ -2839,7 +2850,7 @@ class Layout(object):
         #
         # loop over rooms
         #
-
+        self.dGv = {}  # dict of Gv graph
         for nr in self.Gr.node:
             udeg2 = []
             udeg1 = []
@@ -2866,8 +2877,128 @@ class Layout(object):
             #
             # Graph Gv aggregation
             #
-            self.Gv = nx.compose(self.Gv, Gv)
+            self.Gv  = nx.compose(self.Gv, Gv)
+            self.dGv[nr] = Gv
 
+    def buildGi2(self):
+        """ build dictionnary of graph of interactions
+
+        Notes
+        -----
+
+        For each node > of graph Gs creates
+            4 different nodes associated to the same segment
+            R+  R- T+ T-
+
+        """
+        self.dGi = {}
+        #
+        # Create nodes
+        for k in self.dGv:
+            Gv = self.dGv[k]
+            self.dGi[k] = nx.DiGraph()
+            self.dGi[k].pos = {}
+            for n in Gv.node:
+                if n < 0: # D
+                    self.dGi[k].add_node(str(n))
+                    self.dGi[k].pos[str(n)] = self.Gs.pos[n]
+                if n > 0: # R | T
+                    cy = self.Gs.node[n]['ncycles']
+                    if len(cy) == 2: # 2 cycles means two rooms
+                        cy0 = cy[0]
+                        cy1 = cy[1]
+                        self.dGi[k].add_node(str((n,cy0)))
+                        self.dGi[k].add_node(str((n,cy1)))
+                        self.dGi[k].add_node(str((n,cy0,cy1)))
+                        self.dGi[k].add_node(str((n,cy1,cy0)))
+                        nei = self.Gs.neighbors(n)
+                        np1 = nei[0]
+                        np2 = nei[1]
+                        p1 = np.array(self.Gs.pos[np1])
+                        p2 = np.array(self.Gs.pos[np2])
+                        l = p1 - p2
+                        nl = np.dot(l, l)
+                        ln = l / nl
+                        delta = nl / 10
+                        self.dGi[k].pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
+                        self.dGi[k].pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
+                        self.dGi[k].pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
+                        self.dGi[k].pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+
+                    if len(cy) == 1: # segment which is not a separation between rooms
+                        self.dGi[k].add_node(str((n, cy[0])))
+                        self.dGi[k].pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
+
+            #
+            # Loop over interactions list
+            #
+            for sn in self.dGi[k].node:
+                n = eval(sn)
+                if isinstance(n, tuple):  # reflection ou transmission
+                    if len(n)==2: # reflection tuple (,2)
+                        ns = n[0]  # segment
+                        nc = n[1]  # cycle
+                        vnodes = self.Gt.node[nc]['vnodes']
+                        neigh = Gv.neighbors(ns)  # find neighbors
+                        for nb in neigh:
+                            if nb in vnodes:           # Si Voisin dans cycle reflexion
+                                if nb > 0:             # segment
+                                    node1 = str(n)
+                                    node2 = str((nb, nc))
+                                    if ((node1 in self.dGi[k].node.keys())
+                                     &  (node2 in self.dGi[k].node.keys())):
+                                        self.dGi[k].add_edge(node1, node2)
+                                    # retrieve the cycles of the segment
+                                    cy = set(self.Gs.node[nb]['ncycles'])
+                                    if len(cy) == 2: # R-T
+                                        node1 = str(n)
+                                        nc1   = list(cy.difference({nc}))[0]
+                                        node2 = str((nb,nc,nc1))
+                                        if ((node1 in self.dGi[k].node.keys())
+                                          & (node2 in self.dGi[k].node.keys())):
+                                            self.dGi[k].add_edge(node1, node2)
+        #                                else:
+        #                                    print node1, node2
+                                            #pdb_set_trace()
+                                else:                   # R-D
+                                    node1 = str(n)
+                                    node2 = str(nb)
+                                    if ((node1 in self.dGi[k].node.keys())
+                                     & (node2 in self.dGi[k].node.keys())):
+                                        self.dGi[k].add_edge(node1, node2)
+        #                            else:
+        #                                print node1, node2
+                                        #pdb_set_trace()
+                    if len(n)==3: #transmission
+                        ns  = n[0]  # segment
+                        cy0 = n[1]
+                        cy1 = n[2]
+                        vnodes0 = self.Gt.node[cy0]['vnodes']
+                        vnodes1 = self.Gt.node[cy1]['vnodes']
+                        neigh = Gv.neighbors(ns)  # find neighbors
+                        for nb in neigh:
+                            if nb in vnodes1:    # If neighbors in cycle 1
+                                if nb > 0:
+                                    node1 = str(n)
+                                    node2 = str((nb, cy1))
+                                    if ((node1 in self.dGi[k].node.keys()) 
+                                     &  (node2 in self.dGi[k].node.keys())):
+                                        self.dGi[k].add_edge(node1, node2)
+                                    cy = set(self.Gs.node[nb]['ncycles'])
+                                    if len(cy) == 2: # R-T
+                                        node1 = str(n)
+                                        nc1   = list(cy.difference({cy1}))[0]
+                                        if nc1<> cy0:
+                                            node2 = str((nb,cy1,nc1))
+                                            if ((node1 in self.dGi[k].node.keys())
+                                             & (node2 in self.dGi[k].node.keys())):
+                                                self.dGi[k].add_edge(node1, node2)
+                                else:
+                                    node1 = str(n)
+                                    node2 = str(nb)
+                                    if ((node1 in self.dGi[k].node.keys()) 
+                                     &  (node2 in self.dGi[k].node.keys())):
+                                        self.dGi[k].add_edge(node1, node2)
     def buildGi(self):
         """ build graph of interactions
 
@@ -3066,7 +3197,7 @@ class Layout(object):
         Parameters
         ----------
         graph : char 
-            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv 
+            't' : Gt 'r' : Gr 's' : Gs 'v' : Gv  'c': Gc 'i' : Gi
         show : boolean 
             False
         fig : matplotlib figure 
@@ -3230,7 +3361,7 @@ class Layout(object):
                     'eded': True,
                     'ndnd': True,
                     'nded': True,
-                    'linewidth': 2
+                    'linewidth': 2,
                     }
 
         for key, value in defaults.items():
@@ -3452,44 +3583,59 @@ class Layout(object):
 
         Summary
         -------
-            A room is a cycle with at least one door.
+            A room is a cycle with at least one door 
             This function requires graph Gt
         """
         self.Gr = nx.Graph()
         self.Gr.pos = {}
-        self.Door = {}
+        self.doors = {}
+        self.airwall = {}
         d = self.subseg()
         #ldoorseg    = np.array(d['WOOD'])
         #
         # .. todo::   avoid using slab to determine transition segments
         #
         ldoorseg = np.array(d['DOOR'])
+        lwallair = np.array(self.name['AIR'])
         j = 0
         #
-        # Pour tous les cycles
+        # For all cycles
         #
         for k in self.Gt.node:
             lseg = self.Gt.node[k]['vnodes']
             u = np.intersect1d(lseg, ldoorseg)
+            v = np.intersect1d(lseg, lwallair)
             #
-            # Si le cycle contient une porte, c'est une piece
+            # If cycle has a door create new room
             #
             if len(u) > 0:
                 self.Gr.add_node(j, cycle=k, doors=u)
                 self.Gr.pos[j] = self.Gt.pos[k]
                 for ku in u:
                     try:
-                        self.Door[ku].append(j)
+                        self.doors[ku].append(j)
                     except:
-                        self.Door[ku] = [j]
+                        self.doors[ku] = [j]
+                #
+                # If cycle has an air wall
+                #
+                if len(v) > 0:
+                    self.Gr.add_node(j, cycle=k, airwall=v)
+                    for kv in v:
+                        try:
+                            self.airwall[kv].append(j)
+                        except:
+                            self.airwall[kv] = [j]
                 j = j + 1
-        for k in self.Door:
-            room1room2 = self.Door[k]
-            #print room1room2
-            # Une porte d'entree separe une piece de l'exterieur du
-            # batiment
-            # On pourra ulterieurement creer un noeud exterieur pour
-            # l'inter indoor
+
+        for k in self.doors:
+            room1room2 = self.doors[k]
+            # create a door between interior and exterior of building
+            if len(room1room2) == 2:
+                self.Gr.add_edge(room1room2[0], room1room2[1])
+
+        for k in self.airwall:
+            room1room2 = self.airwall[k]
             if len(room1room2) == 2:
                 self.Gr.add_edge(room1room2[0], room1room2[1])
 
@@ -3543,8 +3689,9 @@ class Layout(object):
 
         """
         fig = plt.gcf()
-        self.af = SelectL(self, fig)
-        self.af.show()
+        ax  = fig.add_subplot(111)
+        self.af = SelectL(self,fig=fig,ax=ax)
+        fig,ax = self.af.show(fig,ax)
         self.cid1 = fig.canvas.mpl_connect('button_press_event',
                                            self.af.OnClick)
         self.cid2 = fig.canvas.mpl_connect('key_press_event',
@@ -4154,10 +4301,16 @@ class Layout(object):
         >>> L.boundary()
 
         """
-        xmax = max(p[0] for p in self.Gs.pos.values())
-        xmin = min(p[0] for p in self.Gs.pos.values())
-        ymax = max(p[1] for p in self.Gs.pos.values())
-        ymin = min(p[1] for p in self.Gs.pos.values())
+        if len(self.Gs.pos.values())<>0:
+            xmax = max(p[0] for p in self.Gs.pos.values())
+            xmin = min(p[0] for p in self.Gs.pos.values())
+            ymax = max(p[1] for p in self.Gs.pos.values())
+            ymin = min(p[1] for p in self.Gs.pos.values())
+        else:
+            xmin = -20.
+            xmax = 20.
+            ymin = -10.
+            ymax = 10.
 
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
 

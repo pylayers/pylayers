@@ -52,14 +52,14 @@ def showsig(L,s,tx,rx):
 
 strucname = 'TA-Office'
 #strucname = 'defstr'
-L = Layout(strucname+'.str')
+L = Layout(strucname+'.str2')
 L.boundary()
 print L.ax
-try:
-    L.dumpr()
-except:
-    L.build()
-    L.dumpw()
+#try:
+#    L.dumpr()
+#except:
+L.build()
+L.dumpw()
 tx = np.array([8., 12., 1.])
 rx = np.array([30., 11., 2.])
 #tx = np.array([1., 0., 1.])
@@ -120,7 +120,22 @@ print "rayons 2D --> rayons3D "
 #plt.plot(Y[0,:],Y[1,:],'xk')
 #fig,ax = showr2(L,r2d,tx[0:2],rx[0:2],3,4)
 #plt.show()
-room8 = L.Gt.node[8]
-polyg8 = room8['polyg']
-vnodes8 = room8['vnodes']
-Gv = polyg8.buildGv(show=True)
+#room8 = L.Gt.node[8]
+#polyg8 = room8['polyg']
+#vnodes8 = room8['vnodes']
+#udeg1 = []
+#udeg2 = []
+#for ik, inode in enumerate(vnodes8):
+#    deg = L.Gs.degree(inode)
+#    if vnodes8[0] < 0:
+#        index = ik / 2
+#    else:
+#        index = (ik - 1) / 2
+#    if inode < 0:
+#        if deg == 2:
+#            udeg2.append(index)
+#        if deg == 1:
+#            udeg1.append(index)    # warning not used
+#Gv = polyg8.buildGv(show=True,udeg2=udeg2)
+L.showGs()
+nx.draw_networkx_edges(L.dGv[8],L.Gs.pos,nx.edges(L.dGv[8],nbunch=[47]))

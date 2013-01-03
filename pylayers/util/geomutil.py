@@ -965,8 +965,7 @@ def displot(pt, ph, col='black'):
         >>> pt  = sp.rand(2,N)
         >>> ph  = sp.rand(2,N)
         >>> f,a = displot(pt,ph)
-        >>> plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
-        >>> plt.savefig('../../doc/auto_examples/util/displot.png')
+        >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
     fig = plt.gcf()
@@ -1016,14 +1015,14 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
         >>> import matplotlib.pyplot as plt
         >>> fig = plt.figure()
         >>> ax  = fig.gca()
-        >>> p1  =np.array([0,0])
-        >>> p2  =np.array([1,0])
-        >>> p1  =np.array([0,1])
-        >>> p1  =np.array([1,1])
-        >>> linet(ax,p1,p2,al=0.7,color='red',linewidth=3)
-        >>> linet(ax,p1,p2,al=0.8,color='blue',linewidth=2)
-        >>> linet(ax,p1,p2,al=0.9,color='green',linewidth=1)
-        >>> linet(ax,p1,p2,al=1,color='cyan',linewidth=0.2)
+        >>> p1 = np.array([0,0])
+        >>> p2 = np.array([1,0])
+        >>> p1 = np.array([0,1])
+        >>> p1 = np.array([1,1])
+        >>> ax = linet(ax,p1,p2,al=0.7,color='red',linewidth=3)
+        >>> ax = linet(ax,p1,p2,al=0.8,color='blue',linewidth=2)
+        >>> ax = linet(ax,p1,p2,al=0.9,color='green',linewidth=1)
+        >>> ax = linet(ax,p1,p2,al=1,color='cyan',linewidth=0.2)
 
 
     """
@@ -1875,12 +1874,12 @@ class Polygon(shg.Polygon):
             ax.add_patch(patch)
 
         #
-        #  1) Calculate node node visibilty
+        #  1) Calculate node node visibility
         #
 
         #
         #  Entre les combinaisons de points convexes
-        #  Il faut elargir aux portes point de degre 2
+        #  Il faut elargir aux portes points de degre 2
         #  eventuellement non convexes cross product nul
         #  et prelever les points dans
         #
@@ -1903,7 +1902,7 @@ class Polygon(shg.Polygon):
             nlk = np.sqrt(np.dot(lk, lk))
             lnk = lk / nlk
 
-            epsilonk = nlk / 1000
+            epsilonk = nlk / 1000.
 
             pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
             pcornerh = phk - lnk * epsilonk  # + n[:,nk]*epsilon
@@ -1935,7 +1934,7 @@ class Polygon(shg.Polygon):
                     ls = phs - pts
                     nls = np.sqrt(np.dot(ls, ls))
                     lns = ls / nls
-                    epsilons = nls / 1000
+                    epsilons = nls / 1000.
                     pte = pts + lns * epsilons  # + n[:,ns]*epsilon
                     phe = phs - lns * epsilons  # + n[:,ns]*epsilon
                     tbr = pyu.bitreverse(16, 5) / 16.
@@ -2116,11 +2115,11 @@ class Polygon(shg.Polygon):
             >>> tcc,n   = polyg.ptconvex()
             >>> k = 0
             >>> for p in points:
-            >>>    if tcc[k] == 1 :
-            >>>        plt.plot(p.x, p.y, 'o', color='red',alpha=1)
-            >>>    else:
-            >>>        plt.plot(p.x, p.y, 'o', color='blue',alpha=0.3)
-            >>>    k = k+1
+            >>>   if tcc[k] == 1 :
+            >>>       plt.plot(p.x, p.y, 'o', color='red',alpha=1)
+            >>>   else:
+            >>>       plt.plot(p.x, p.y, 'o', color='blue',alpha=0.3)
+            >>>   k = k+1
             >>> polyg.plot()
             >>> plt.figure()
             >>> points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])
@@ -2523,8 +2522,10 @@ def valid_wedge(ps, pw, p1, p2, grazing):
     >>> pw = np.array([0,0]).reshape(1,2)
     >>> ps1 = np.array([3,3]).reshape(1,2)
     >>> ps2 = np.array([0,-3]).reshape(1,2)
-    >>> assert valid_wedge(ps1,pw,p1,p2,0)[0][0]==1,"valid_wedge problem"
-    >>> assert valid_wedge(ps2,pw,p1,p2,0)[0][0]==0,"valid_wedge problem"
+    >>> valid_wedge(ps1,pw,p1,p2,0)[0][0]
+    1.0
+    >>> valid_wedge(ps2,pw,p1,p2,0)[0][0]
+    1.0
 
 
     Authors
