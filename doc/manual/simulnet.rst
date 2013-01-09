@@ -1,5 +1,5 @@
-How to goes from a simulnet to a Channel Impulse Response 
-==========================================================
+How to goes from a simulnet to a Channel Impulse Response ? 
+===========================================================
 
 Generate a mobile simulation with simulnet
 -------------------------------------------

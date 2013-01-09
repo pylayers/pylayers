@@ -1,6 +1,7 @@
 + Bernard Uguen 
+  bernard.uguen@univ-rennes1.fr
 + Mohamed Laaraiedh 
-+ Nicolas Amiot   
+   mohamedh.laaraiedh@univ-rennes1.fr
 + Meriem Mhedhbi  
 + Roxana Burghelea
 + Taguhi Chaluyman  
