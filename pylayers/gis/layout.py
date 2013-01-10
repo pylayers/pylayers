@@ -3309,6 +3309,10 @@ class Layout(object):
         if 'i' in graph:
             G = self.Gi
             nx.draw(G,G.pos,node_color='k', edge_color='k')
+        if 'w' in graph:
+            G = self.Gw
+            nx.draw(G,G.pos,node_color='k', edge_color='k')
+
 
         for k, ncy in enumerate(self.Gt.node.keys()):
             self.Gt.node[ncy]['polyg'].plot()
@@ -3610,8 +3614,16 @@ class Layout(object):
         #
         # .. todo::   avoid using slab to determine transition segments
         #
-        ldoorseg = np.array(d['DOOR'])
-        lwallair = np.array(self.name['AIR'])
+        try:
+            ldoorseg = np.array(d['DOOR'])
+        except:
+            ldoorseg = np.array(())
+
+        try:
+            lwallair = np.array(self.name['AIR'])
+        except:
+            lwallair = np.array(())
+
         j = 0
         #
         # For all cycles

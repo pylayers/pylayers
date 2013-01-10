@@ -18,7 +18,7 @@ from pylayers.location.geometric.constraints.exclude import *
 from pylayers.location.algebraic.algebraic import *
 
 from   pylayers.network.model import Model
-
+import networkx as nx
 
 class Localization(object):
 
@@ -38,7 +38,7 @@ class Localization(object):
 
         self.cla = CLA()
         self.algloc=algloc()
-
+        self.idx = 0
 #    def get_const(self, RAT=None, LDP=None):
 #        """ get constraints
 #
@@ -176,13 +176,16 @@ class Localization(object):
         self.savep(pe_alg.T,name='pe_alg')
 
 
+
+
+
 class PLocalization(Process):
     def __init__(self, loc=Localization(), loc_updt_time=.5, sim=None):
         Process.__init__(self, name='Location', sim=sim)
         self.loc = loc
         self.loc_updt_time = loc_updt_time
         self.method = self.loc.method
-
+        self.sim = sim
     def run(self):
 #        self.loc.get_const()
         self.loc.fill_cla()

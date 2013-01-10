@@ -928,19 +928,19 @@ class Network(nx.MultiGraph):
                    
         sp.io.savemat(pyu.getlong('mat.mat','save_data'),self.mat)
 
-    def sql_save(self,S):
-        """
-        save network state into mysqldatabase
+#    def sql_save(self,S):
+#        """
+#        save network state into mysqldatabase
 
 
-        Attributes:
-        ----------
-        
-        S        : Simulation
-                   Scipy.Simulation object
+#        Attributes:
+#        ----------
+#        
+#        S        : Simulation
+#                   Scipy.Simulation object
 
-        """
-        self.db.writenet(self,S.now())
+#        """
+#        self.db.writenet(self,S.now())
 
     def txt_save(self,S):
         """
@@ -956,6 +956,40 @@ class Network(nx.MultiGraph):
         """
         pyu.writenet(self,S)
 
+
+    def loc_save(self,S):
+        """
+        save network state into mysqldatabase
+
+
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
+
+        """
+
+        pos=nx.get_node_attributes(self,'p')
+        pe=nx.get_node_attributes(self,'pe_alg')
+        typ = nx.get_node_attributes(self,'type')
+
+        if self.idx == 0:
+            entete = 'NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp\n'
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','write')
+            file.write(entete)
+            file.close()
+
+        try:
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','a')
+            for n in self.nodes():
+                if typ[n] != 'ap':
+                    data = n + ',' + str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pe[n][0][0]) + ',' + str(pe[n][0][1]) + ',' +pyu.timestamp(S.now()) +',\n'
+                    file.write(data)
+            file.close()
+            self.idx = self.idx +1
+        except:
+            pass
 
 
 #    def ini_save(self,S,filename='simulnet_data.ini',height=1.5):
@@ -1115,7 +1149,8 @@ class PNetwork(Process):
                 self.net.txt_save(self.sim)
             if 'ini' in self.save:
                 self.net.ini_save(self.sim)
-
+            if 'loc' in self.save:
+                self.net.loc_save(self.sim)
 
             self.net.pos=self.net.get_pos()
 

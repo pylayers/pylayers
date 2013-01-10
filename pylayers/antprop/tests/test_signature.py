@@ -50,8 +50,8 @@ def showsig(L,s,tx,rx):
     L.display['edlabel']=False
     return fig,ax
 
-strucname = 'TA-Office'
-#strucname = 'defstr'
+#strucname = 'TA-Office'
+strucname = 'defstr'
 L = Layout(strucname+'.str')
 L.boundary()
 print L.ax
@@ -60,10 +60,10 @@ print L.ax
 #except:
 L.build()
 L.dumpw()
-tx = np.array([8., 8., 1.])
-rx = np.array([30., 11., 2.])
-#tx = np.array([1., 0., 1.])
-#rx = np.array([8., 0., 2.])
+#tx = np.array([8., 8., 1.])
+#rx = np.array([30., 11., 2.])
+tx = np.array([1., 0., 1.])
+rx = np.array([8., 0., 2.])
 
 #L = Layout('TA-Office.str')
 #L.build()
@@ -75,7 +75,7 @@ S = Signatures(L, tx, rx)
 
 print "Calcul signatures"
 #s1 = S.get_sigslist(tx, rx)
-s1 = S.run(tx,rx,4)
+s1 = S.run(tx,rx,5)
 print "Fin calcul signatures"
 
 #print "signatures --> rayons "

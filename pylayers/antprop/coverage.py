@@ -261,7 +261,7 @@ class Coverage(object):
             title=title + '\n white : Pr (dBm) < %.2f' % self.pndbm + ' dBm'
 
 
-        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
+        ax.scatter(self.tx[0],self.tx[1],s=10,linewidth=0)
 
         ax.set_title(title)
         divider = make_axes_locatable(ax)

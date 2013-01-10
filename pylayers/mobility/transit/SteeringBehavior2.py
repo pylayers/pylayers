@@ -77,7 +77,9 @@ class Separation:
             if in_front and local_position.length() < separation_distance:
                 separation = other.position - boid.position
                 force = separation.scale(-1 / separation.length() ** 2)
-                acceleration += force
+                # create orthogonal vector in order to make boids avoidance
+                force2 = vec3(-force[1],force[0],0)
+                acceleration += force2
         return acceleration
 
 class Queuing:
@@ -139,7 +141,7 @@ class Containment:
         d_no_influ = 0.1 # m
         repuls     = boid.velocity.length() #/ boid.max_speed
 #        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
-        speed = 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2))
+        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
        # speed = boid.velocity.length() / boid.max_speed
         if front_intersect:
             if front_direction == 'left':
@@ -305,6 +307,6 @@ def queue_steering_mind(boid):
 
     acceleration = vec3()
     for behavior in boid.behaviors:
-        if not isinstance(behavior, Separation) or acceleration.length() < 0.0001:
-            acceleration += behavior.calculate(boid)
+#        if not isinstance(behavior, Separation) or acceleration.length() < 0.0001:
+         acceleration += behavior.calculate(boid)
     return acceleration
