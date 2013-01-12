@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.geometric.constraints.constraint &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../../../../index.html"><img src="../../../../../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.location.geometric.constraints.constraint</h1><div class="highlight"><pre>
+<span class="c"># -*- coding:Utf-8 -*-</span>
+<span class="c">#####################################################################</span>
+<span class="c">#This file is part of RGPA.</span>
+
+<span class="c">#Foobar is free software: you can redistribute it and/or modify</span>
+<span class="c">#it under the terms of the GNU General Public License as published by</span>
+<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#(at your option) any later version.</span>
+
+<span class="c">#Foobar is distributed in the hope that it will be useful,</span>
+<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#GNU General Public License for more details.</span>
+
+<span class="c">#You should have received a copy of the GNU General Public License</span>
+<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c">#-------------------------------------------------------------------</span>
+<span class="c">#authors :</span>
+<span class="c">#Nicolas AMIOT          : nicolas.amiot@univ-rennes1.fr</span>
+<span class="c">#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr</span>
+<span class="c">#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr</span>
+<span class="c">#####################################################################</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pylayers.location.geometric.util.boxn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.location.geometric.util</span> <span class="kn">import</span> <span class="n">geomview</span> <span class="k">as</span> <span class="n">g</span>
+
+
+<div class="viewcode-block" id="Constraint"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.cdf.html#pylayers.location.geometric.constraints.constraint.Constraint">[docs]</a><span class="k">class</span> <span class="nc">Constraint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Constraint class</span>
+
+
+
+<span class="sd">    attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Constraint.C_Id : Contraint Identity automatically increased for new instanciation</span>
+
+<span class="sd">    type    : contraint type</span>
+<span class="sd">    time    : time stamp</span>
+<span class="sd">    lbox    : LBoxN intialisation</span>
+<span class="sd">    runable : boolean. information on constraint center ( TO DO)</span>
+<span class="sd">    p       : Constraint center</span>
+<span class="sd">    validity: validity duration ( not use yet)</span>
+<span class="sd">    self.Id : Constraint.C_Id</span>
+<span class="sd">    ndim    : Constraint dimension</span>
+
+
+<span class="sd">    parmsh : dictionary</span>
+<span class="sd">            keys :  [&#39;display&#39;]=True     # launch geomview interactively</span>
+<span class="sd">                    [&#39;mode&#39;]=&#39;Current&#39;   # display current box or full constraint</span>
+<span class="sd">                    [&#39;scene&#39;]=True      # display whole scene</span>
+<span class="sd">                    [&#39;point&#39;]=True       # display constraint point(s)</span>
+<span class="sd">                    [&#39;boxes&#39;]=True       # display constraint box</span>
+<span class="sd">                    [&#39;estimated&#39;]=True  # display estimated point</span>
+<span class="sd">                    [&#39;estimated_LS&#39;]=False # display estimated point with LS method</span>
+<span class="sd">                    [&#39;quadric&#39;]=True   # display sphere or hyperbola</span>
+<span class="sd">                    [&#39;grid&#39;]=True       # display grid</span>
+<span class="sd">                    [&#39;grav&#39;]=True</span>
+
+
+<span class="sd">    methods</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    info()     : Display information about constraint</span>
+<span class="sd">    show3()    : display constraint on Geomview. Parameters tahnks to self.parmsh</span>
+
+
+<span class="sd">    TODO</span>
+<span class="sd">    ----</span>
+<span class="sd">    ini file for geom view !</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span> <span class="n">origin</span><span class="o">=</span><span class="p">{}):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbox</span> <span class="o">=</span> <span class="n">LBoxN</span><span class="p">([])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runable</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runable</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validity</span> <span class="o">=</span> <span class="mi">20</span>                  <span class="c"># not used</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>  <span class="c"># Id of constraint is set to counter + 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ndim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="n">origin</span>
+        <span class="c">#</span>
+        <span class="c"># Parameters for show3 with geomview</span>
+        <span class="c">#</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>     <span class="c"># launch geomview interactively</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Current&#39;</span>   <span class="c"># display current box or full constraint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;scene&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>      <span class="c"># display whole scene</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;point&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>       <span class="c"># display constraint point(s)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;boxes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>       <span class="c"># display constraint box</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;estimated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c"># display estimated point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;estimated_LS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c"># display estimated point with LS method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;quadric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>   <span class="c"># display sphere or hyperbola</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>       <span class="c"># display grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;grav&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>       <span class="c"># display box gravity center</span>
+
+<div class="viewcode-block" id="Constraint.info"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.cdf.html#pylayers.location.geometric.constraints.constraint.Constraint.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; display info on constraint</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;Type         : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+        <span class="k">print</span> <span class="s">&quot;--------------------------&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;Time         : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
+        <span class="k">print</span> <span class="s">&quot;validity (s) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">validity</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">runable</span><span class="p">)):</span>
+            <span class="k">print</span> <span class="s">&quot;Origin : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+            <span class="n">Npts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">print</span> <span class="s">&quot;Nb valid points in volume    : &quot;</span><span class="p">,</span> <span class="n">Npts</span><span class="p">,</span> <span class="s">&quot; voxel&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Taille kO: &quot;</span><span class="p">,</span> <span class="n">Npts</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">10</span><span class="p">),</span> <span class="s">&quot; kO&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;TOA&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">estvol</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s">&quot;Volume Estimatif&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">estvlm</span>
+            <span class="k">print</span> <span class="s">&quot;Toa (ns)&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">print</span> <span class="s">&quot;std (ns)&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">std</span>
+            <span class="k">print</span> <span class="s">&quot;vcw     &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vcw</span>
+            <span class="k">print</span> <span class="s">&quot;Range(m)&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">range</span>
+            <span class="k">print</span> <span class="s">&quot;sstd (m)&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span>
+        <span class="k">print</span> <span class="s">&quot;-------------------&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbox</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&quot;-------------------&quot;</span>
+</div>
+<div class="viewcode-block" id="Constraint.show3"><a class="viewcode-back" href="../../../../../modules/pylayers.location.geometric.cdf.html#pylayers.location.geometric.constraints.constraint.Constraint.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; display constraint on Geomview</span>
+
+<span class="sd">        The filename is boxes{Id}.list</span>
+
+<span class="sd">        Id is the Id of the current constraint</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runable</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="s">&#39;boxes&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&quot;/geom/&quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s">&quot;.list&quot;</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;LIST</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+            <span class="c">#</span>
+            <span class="c"># Display scene</span>
+            <span class="c">#</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;scene&#39;</span><span class="p">]:</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&lt;scene.list}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+            <span class="c">#</span>
+            <span class="c"># Display boxes</span>
+            <span class="c">#</span>
+
+    <span class="c">#               if self.parmsh[&#39;mode&#39;]==&#39;Full&#39;:</span>
+    <span class="c">#                       H_Id=self.history[-1].Id+1</span>
+    <span class="c">#                       #</span>
+    <span class="c">#                       # Display all boxes</span>
+    <span class="c">#                       #</span>
+    <span class="c">#                       for k in range(len(self.history)):</span>
+    <span class="c">#                               cons = self.history[k]   # constraint k</span>
+    <span class="c">#                               lb   = cons.lbox</span>
+    <span class="c">#                               lb.parmsh[&#39;display&#39;]=False</span>
+    <span class="c">#                               filename2=lb.show3(Id=cons.Id)</span>
+    <span class="c">#                               fd.write(&quot;{&lt;&quot;+filename2+&quot;}\n&quot;)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;mode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;Current&#39;</span><span class="p">:</span>
+                <span class="c">#</span>
+                <span class="c"># Display current box</span>
+                <span class="c">#</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;orange&#39;</span><span class="p">,</span> <span class="s">&#39;skyblue&#39;</span><span class="p">]</span>
+                <span class="c">#color = [&#39;skyblue&#39;,&#39;skyblue&#39;,&#39;orange&#39;]</span>
+
+                <span class="n">lb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lbox</span>
+                <span class="n">lb</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">filename2</span> <span class="o">=</span> <span class="n">lb</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">Id</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;m&#39;</span><span class="p">)</span>  <span class="c"># )color[self.Id])</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&lt;&quot;</span> <span class="o">+</span> <span class="n">filename2</span> <span class="o">+</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+                <span class="c">#</span>
+                <span class="c"># Display Spherical Constraint</span>
+                <span class="c">#</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;quadric&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;TOA&#39;</span><span class="p">:</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">vcw</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span><span class="p">)</span>
+                        <span class="n">c2</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vcw</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sstd</span><span class="p">))</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">c3</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> \
+                                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="k">except</span><span class="p">:</span>
+                            <span class="n">c3</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">[</span>
+                                <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{appearance {-edge  patchdice 10 10 material {alpha 0.2}} {SPHERE &quot;</span> <span class="o">+</span> <span class="n">c1</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">c3</span> <span class="o">+</span> <span class="s">&quot; }}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+                        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{appearance {-edge  patchdice 10 10 material {alpha 0.2}} {SPHERE &quot;</span> <span class="o">+</span> <span class="n">c2</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">c3</span> <span class="o">+</span> <span class="s">&quot; }}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="c">#</span>
+            <span class="c"># Display points</span>
+            <span class="c">#</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;point&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;Fusion&#39;</span><span class="p">:</span>
+                    <span class="n">g</span><span class="o">.</span><span class="n">cloud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">,</span>
+                            <span class="n">dice</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;estimated&#39;</span><span class="p">]:</span>
+                    <span class="n">g</span><span class="o">.</span><span class="n">cloud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pe</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span>
+                            <span class="n">dice</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;estimated_LS&#39;</span><span class="p">]:</span>
+                    <span class="n">g</span><span class="o">.</span><span class="n">cloud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p_LS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span>
+                            <span class="n">dice</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;grid&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span><span class="p">:</span>
+                        <span class="n">g</span><span class="o">.</span><span class="n">cloud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">dice</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                <span class="n">R</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parmsh</span><span class="p">[</span><span class="s">&#39;display&#39;</span><span class="p">]:</span>
+                <span class="k">print</span> <span class="n">filename</span>
+                <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview  -nopanel  -b 1 1 1 &quot;</span> <span class="o">+</span> \
+                    <span class="n">filename</span> <span class="o">+</span> <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;constraint is not runnable. It can not be displayed&#39;</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

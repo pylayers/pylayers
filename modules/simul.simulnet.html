@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>simulinet &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
+    <link rel="up" title="simul" href="simul.html" />
+    <link rel="next" title="location" href="location.html" />
+    <link rel="prev" title="simulem" href="simul.simulem.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="location.html" title="location"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="simul.simulem.html" title="simulem"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="simul.html" accesskey="U">simul</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="simul.simulem.html"
+                        title="previous chapter">simulem</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="location.html"
+                        title="next chapter">location</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/simul.simulnet.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-simul.simulnet">
+<span id="simulinet"></span><span id="simulnet"></span><h1>simulinet<a class="headerlink" href="#module-simul.simulnet" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="simul.simulnet.Simul">
+<em class="property">class </em><tt class="descclassname">simul.simulnet.</tt><tt class="descname">Simul</tt><a class="reference internal" href="../_modules/simul/simulnet.html#Simul"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>config</strong> : config parser instance</p>
+<p><strong>sim_opt</strong> : dictionary of configuration option for simulation</p>
+<p><strong>ag_opt</strong> : dictionary of configuration option for agent</p>
+<p><strong>lay_opt</strong> : dictionary of  configuration option for layout</p>
+<p><strong>meca_opt</strong> : dictionary of  configuration option for mecanic</p>
+<p><strong>net_opt</strong> : dictionary of  configuration option for network</p>
+<p><strong>loc_opt</strong> : dictionary of  configuration option for localization</p>
+<p><strong>save_opt</strong> : dictionary of  configuration option for save</p>
+<p class="last"><strong>sql_opt</strong> : dictionary of  configuration option for sql</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>in the project directory</p>
+<dl class="method">
+<dt id="simul.simulnet.Simul.create">
+<tt class="descname">create</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulnet.html#Simul.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the simulation, to be ready to run</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="simul.simulnet.Simul.create_EMS">
+<tt class="descname">create_EMS</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulnet.html#Simul.create_EMS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul.create_EMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Electromagnetic Solver object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="simul.simulnet.Simul.create_agent">
+<tt class="descname">create_agent</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulnet.html#Simul.create_agent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul.create_agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>create simulation&#8217;s Agents</p>
+<p>..todo:: change lAg list to a dictionnary ( modification in show.py too)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="simul.simulnet.Simul.create_layout">
+<tt class="descname">create_layout</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulnet.html#Simul.create_layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul.create_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create Layout in Simpy the_world thantks to Tk backend</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="simul.simulnet.Simul.create_network">
+<tt class="descname">create_network</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulnet.html#Simul.create_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul.create_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the whole network</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="simul.simulnet.Simul.create_visual">
+<tt class="descname">create_visual</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulnet.html#Simul.create_visual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul.create_visual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create visual Tk process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="simul.simulnet.Simul.runsimul">
+<tt class="descname">runsimul</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulnet.html#Simul.runsimul"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulnet.Simul.runsimul" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run simulation</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="location.html" title="location"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="simul.simulem.html" title="simulem"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="simul.html" >simul</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>channel &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
+    <link rel="up" title="antprop" href="antprop.html" />
+    <link rel="next" title="rays" href="antprop.rays.html" />
+    <link rel="prev" title="antenna" href="antprop.antenna.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="antprop.rays.html" title="rays"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="antprop.antenna.html" title="antenna"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="antprop.html" accesskey="U">antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="antprop.antenna.html"
+                        title="previous chapter">antenna</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="antprop.rays.html"
+                        title="next chapter">rays</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/antprop.channel.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="channel">
+<span id="id1"></span><h1>channel<a class="headerlink" href="#channel" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-pylayers.antprop.channel"></span><dl class="class">
+<dt id="pylayers.antprop.channel.Ctilde">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">Ctilde</tt><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>container for the 4 components of the polarimetric ray channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>Ctt</strong> : FUsignal</p>
+<p><strong>Ctp</strong> : FUsignal</p>
+<p><strong>Cpt</strong> : FUsignal</p>
+<p><strong>Cpp</strong> : FUsignal</p>
+<p><strong>nfreq</strong> : int</p>
+<blockquote>
+<div><p>number of frequency point</p>
+</div></blockquote>
+<p><strong>nray</strong> : int</p>
+<blockquote class="last">
+<div><p>number of rays</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.choose">
+<tt class="descname">choose</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.choose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.choose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose a field file in tud directory</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.doadod">
+<tt class="descname">doadod</tt><big>(</big><em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0xa9c25ec&gt;</em>, <em>s=30</em>, <em>fontsize=12</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
+<dd><p>scatter plot of the DoA-DoD channel structure
+the energy is colorcoded over all couples of DoA-DoD</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cmap</strong> : color map</p>
+<p><strong>s</strong> : float</p>
+<blockquote>
+<div><p>size (default 30)</p>
+</div></blockquote>
+<p><strong>fontsize</strong> : integer</p>
+<blockquote class="last">
+<div><p>default 12</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.energy">
+<tt class="descname">energy</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate energy on co and cross channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Eco</strong> : Energy on co channel    tt + pp</p>
+<p class="last"><strong>Ecross</strong> : Energy on cross channel tp + pt</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="signal.bsignal.html#pylayers.signal.bsignal.FUsignal.energy" title="pylayers.signal.bsignal.FUsignal.energy"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.FUsignal.energy</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Info (Nf,Nray,shape(y))</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.load">
+<tt class="descname">load</tt><big>(</big><em>filefield</em>, <em>transpose=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a Ctilde from a .field file</p>
+<p>Load the three files .tauk .tang .rang which contain  respectively
+delay , angle of departure , angle of arrival.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filefield</strong> : string</p>
+<p><strong>transpose</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default False</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">=</span><span class="n">Simul</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span><span class="n">Ctilde</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dtud</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;output&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.prop2tran">
+<tt class="descname">prop2tran</tt><big>(</big><em>a='theta'</em>, <em>b='theta'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.prop2tran"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.prop2tran" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform propagation channel into transmission channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> : string or antenna array</p>
+<blockquote>
+<div><blockquote>
+<div><p>polarization antenna a ( &#8216;theta&#8217; | &#8216;phi&#8217; | &#8216;ant&#8217; )</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>: string or antenna array</dt>
+<dd><p class="first">polarization antenna b ( &#8216;theta&#8217; | &#8216;phi&#8217; | &#8216;ant&#8217; )</p>
+<p class="last">0 : theta
+1 : phi</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>H</strong> : Tchannel(bs.FUDAsignal)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.show">
+<tt class="descname">show</tt><big>(</big><em>display=False</em>, <em>mode='linear'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.show" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>display</strong> : True or False</p>
+<p class="last"><strong>mode</strong> : &#8216;linear&#8217;, &#8216;dB&#8217;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.sort">
+<tt class="descname">sort</tt><big>(</big><em>tauk</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>sort Ctilde with respect of tauk</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>tauk :</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.vec2scal">
+<tt class="descname">vec2scal</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.vec2scal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.vec2scal" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate scalChannel from VectChannel and antenna</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>slach</strong> : ScalChannel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Ctilde.vec2scalA">
+<tt class="descname">vec2scalA</tt><big>(</big><em>At</em>, <em>Ar</em>, <em>alpha=1.0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.vec2scalA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.vec2scalA" title="Permalink to this definition">¶</a></dt>
+<dd><p>vec2scalA(self,At,Ar,alpha=1.0):</p>
+<p>At = transmitter antenna
+Ar = receiver antenna</p>
+<p>Calculate ScalChannel by combining the propagation channel VectChannel
+with realistic antennas transfer function</p>
+<p>alpha : normalization factor</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.channel.ScalChannel">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">ScalChannel</tt><big>(</big><em>VC</em>, <em>Ftt</em>, <em>Ftp</em>, <em>Frt</em>, <em>Frp</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED
+ScalChannel Class :</p>
+<p>The ScalChannel is obtained from combination of the propagation
+channel and the antenna transfer function from both transmitting
+and receiving antennas</p>
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.apply">
+<tt class="descname">apply</tt><big>(</big><em>W</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a FUsignal W to the ScalChannel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>W</strong> :  Bsignal.FUsignal</p>
+<p class="last"><strong>It exploits multigrid convolution from Bsignal.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>W may have a more important number of points and a smaller frequency band.</li>
+<li>If the frequency band of the waveform exceeds the one of the ScalChannei, a warning is sent.</li>
+<li>W is a FUsignal whose shape doesn&#8217;t need to be homogeneous with FUDsignal H</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.applywavA">
+<tt class="descname">applywavA</tt><big>(</big><em>Wgam</em>, <em>Tw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.applywavA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.applywavA" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply waveform method A</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Wgam :</strong> :</p>
+<p><strong>Tw   :</strong> :</p>
+<p class="last"><strong>The overall received signal is built in frequency domain</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.applywavB">
+<tt class="descname">applywavB</tt><big>(</big><em>Wgam</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.applywavB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.applywavB" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply waveform method B (time domain )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Wgam :</strong> :</p>
+<blockquote>
+<div><p>waveform including gamma factor</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ri</strong> : TUDsignal</p>
+<blockquote class="last">
+<div><p>impulse response for each ray separately</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUDsignal.ft1</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The overall received signal is built in time domain</p>
+<p>Wgam is applied on each Ray Transfer function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.applywavC">
+<tt class="descname">applywavC</tt><big>(</big><em>w</em>, <em>dxw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.applywavC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.applywavC" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply waveform method C</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>w     :</strong> :</p>
+<blockquote>
+<div><p>waveform</p>
+</div></blockquote>
+<p class="last"><strong>dxw</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The overall received signal is built in time domain
+w is apply on the overall CIR</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.doddoa">
+<tt class="descname">doddoa</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.doddoa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.doddoa" title="Permalink to this definition">¶</a></dt>
+<dd><p>doddoa() : DoD / DoA diagram</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.imshow">
+<tt class="descname">imshow</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.imshow" title="Permalink to this definition">¶</a></dt>
+<dd><p>imshow vizualization of H</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>display information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.rayfig">
+<tt class="descname">rayfig</tt><big>(</big><em>k</em>, <em>W</em>, <em>col='red'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.rayfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.rayfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>build a figure with rays</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : ray index</p>
+<blockquote class="last">
+<div><p>W : waveform    (FUsignal)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>W is apply on k-th ray and the received signal is built in time domain</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.ScalChannel.wavefig">
+<tt class="descname">wavefig</tt><big>(</big><em>w</em>, <em>Nray=5</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#ScalChannel.wavefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.ScalChannel.wavefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>display</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>w</strong> :  waveform</p>
+<p><strong>Nray</strong> :  int</p>
+<blockquote class="last">
+<div><p>number of rays to be displayed</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.channel.Tchannel">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">Tchannel</tt><big>(</big><em>fGHz</em>, <em>alpha</em>, <em>tau</em>, <em>dod</em>, <em>doa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle the transmission channel</p>
+<p>The transmission channel TChannel is obtained from combination of the propagation
+channel with the antenna transfer functions from both transmitter and
+receiver.</p>
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.apply">
+<tt class="descname">apply</tt><big>(</big><em>W</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a FUsignal W to the ScalChannel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>W</strong> :  Bsignal.FUsignal</p>
+<p class="last"><strong>It exploits multigrid convolution from Bsignal.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>W may have a more important number of points and a smaller frequency band.</li>
+<li>If the frequency band of the waveform exceeds the one of the ScalChannei, a warning is sent.</li>
+<li>W is a FUsignal whose shape doesn&#8217;t need to be homogeneous with FUDsignal H</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.applywavA">
+<tt class="descname">applywavA</tt><big>(</big><em>Wgam</em>, <em>Tw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.applywavA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.applywavA" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply waveform method A</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Wgam :</strong> :</p>
+<p><strong>Tw   :</strong> :</p>
+<p class="last"><strong>The overall received signal is built in frequency domain</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.applywavB">
+<tt class="descname">applywavB</tt><big>(</big><em>Wgam</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.applywavB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.applywavB" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply waveform method B (time domain )</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Wgam :</strong> :</p>
+<blockquote>
+<div><p>waveform including gamma factor</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ri</strong> : TUDsignal</p>
+<blockquote class="last">
+<div><p>impulse response for each ray separately</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.TUDsignal.ft1</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<p>The overall received signal is built in time domain</p>
+<p>Wgam is applied on each Ray Transfer function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.applywavC">
+<tt class="descname">applywavC</tt><big>(</big><em>w</em>, <em>dxw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.applywavC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.applywavC" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply waveform method C</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>w     :</strong> :</p>
+<blockquote>
+<div><p>waveform</p>
+</div></blockquote>
+<p class="last"><strong>dxw</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The overall received signal is built in time domain
+w is apply on the overall CIR</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.doddoa">
+<tt class="descname">doddoa</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.doddoa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.doddoa" title="Permalink to this definition">¶</a></dt>
+<dd><p>doddoa() : DoD / DoA diagram</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.imshow">
+<tt class="descname">imshow</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.imshow" title="Permalink to this definition">¶</a></dt>
+<dd><p>imshow vizualization of H</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>display information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.rayfig">
+<tt class="descname">rayfig</tt><big>(</big><em>k</em>, <em>W</em>, <em>col='red'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.rayfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.rayfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>build a figure with rays</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : ray index</p>
+<blockquote class="last">
+<div><p>W : waveform    (FUsignal)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>W is apply on k-th ray and the received signal is built in time domain</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.wavefig">
+<tt class="descname">wavefig</tt><big>(</big><em>w</em>, <em>Nray=5</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.wavefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.wavefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>display</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>w</strong> :  waveform</p>
+<p><strong>Nray</strong> :  int</p>
+<blockquote class="last">
+<div><p>number of rays to be displayed</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.antprop.channel.VCg2VCl">
+<tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">VCg2VCl</tt><big>(</big><em>VCg</em>, <em>Tt</em>, <em>Tr</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#VCg2VCl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.VCg2VCl" title="Permalink to this definition">¶</a></dt>
+<dd><p>global reference frame to local reference frame</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>VCg</strong> : VectChannel global</p>
+<p><strong>Tt</strong> : Tx rotation matrix</p>
+<p><strong>Tr</strong> : Rx rotation matrix</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>VCl</strong> : VectChannel (local)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pylayers.antprop.channel.VectChannel">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">VectChannel</tt><big>(</big><em>S</em>, <em>itx</em>, <em>irx</em>, <em>transpose=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#VectChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.VectChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>container for a vector representation of the propagation channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>Ctt   FUsignal (Nray x Nf canal )</strong> :</p>
+<p><strong>Cpp</strong> :</p>
+<p><strong>Cpt</strong> :</p>
+<p><strong>Ctp</strong> :</p>
+<p><strong>built in vec2scal1</strong> :</p>
+<p><strong>Frt   Fusignal  (Nray x Nf antenna )</strong> :</p>
+<p><strong>Frp</strong> :</p>
+<p><strong>Ftt</strong> :</p>
+<p><strong>Ftp</strong> :</p>
+<p><strong>freq</strong> : frequency</p>
+<p><strong>tauk</strong> : delay</p>
+<p><strong>tang</strong> : dod</p>
+<p><strong>rang</strong> : doa</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>init(S,itx,irx)</strong> :</p>
+<blockquote>
+<div><p>S is a simulation object, itx and irx are index of tx and rx</p>
+</div></blockquote>
+<p><strong>show(display=False,mode=&#8217;linear&#8217;)</strong> :</p>
+<blockquote>
+<div><p>display vect channel</p>
+</div></blockquote>
+<p><strong>doadod()</strong> :</p>
+<blockquote>
+<div><p>scatter plot DoA - DoD</p>
+</div></blockquote>
+<p><strong>vec2scal(freq)</strong> :</p>
+<blockquote>
+<div><p>build scal channel without antenna</p>
+</div></blockquote>
+<p><strong>vec2scal1(freq)</strong> :</p>
+<blockquote class="last">
+<div><p>build scal channel with antenna</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pylayers.antprop.channel.VectChannel.filerang">
+<tt class="descname">filerang</tt><em class="property"> = None</em><a class="headerlink" href="#pylayers.antprop.channel.VectChannel.filerang" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Revoir Freq</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.VectChannel.mobility">
+<tt class="descname">mobility</tt><big>(</big><em>v</em>, <em>dt</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#VectChannel.mobility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.VectChannel.mobility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify channel for uniform mobility</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>v</strong> : float</p>
+<blockquote>
+<div><p>velocity (m/s)</p>
+</div></blockquote>
+<p><strong>dt</strong> : float</p>
+<blockquote>
+<div><p>delta t (s)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>VC</strong> : modified VectChannel</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate new channel field from the old one and v(terminal vitese) 
+and dt(time of deplacement)</p>
+<p>dt en s  (le temps d&#8217;observation entre deux position de Rx)
+v en m/s (vitesse de changement de Rx)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.VectChannel.show3">
+<tt class="descname">show3</tt><big>(</big><em>seuildb=100</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#VectChannel.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.VectChannel.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>geomview vizualization</p>
+<p>This function provides a complete ray tracing visualization 
+of the radio channel. Rays are color coded as a fonction of 
+their energy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>seuildb</strong> : float</p>
+<blockquote class="last">
+<div><p>default 100</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.channel.VectChannel.show3_old">
+<tt class="descname">show3_old</tt><big>(</big><em>id=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#VectChannel.show3_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.VectChannel.show3_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>geomview visualization old version</p>
+<p>This function provides a complete ray tracing vsualization
+of the channel structure. The rays are color coded as a fonction
+of their energy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>id</strong> : int</p>
+<blockquote class="last">
+<div><p>index of filetra</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="antprop.rays.html" title="rays"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="antprop.antenna.html" title="antenna"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="antprop.html" >antprop</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

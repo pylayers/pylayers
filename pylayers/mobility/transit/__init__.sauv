@@ -1,4 +1,0 @@
-from PyLayers.Mobility.Transit.World import world
-from PyLayers.Mobility.Transit.vec3 import vec3
-from PyLayers.Mobility.Transit.Person3 import Person3
-from PyLayers.Mobility.Transit.SteeringBehavior2 import *

@@ -1,0 +1,807 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.gis.readvrml &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../../index.html"><img src="../../../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.gis.readvrml</h1><div class="highlight"><pre>
+<span class="c">#-*- coding:Utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span> 
+<span class="kn">from</span> <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">geomutil</span> <span class="k">as</span> <span class="n">geo</span> 
+<span class="kn">from</span> <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">pyutil</span> <span class="k">as</span> <span class="n">pyu</span> 
+<span class="kn">from</span> <span class="nn">descartes.patch</span> <span class="kn">import</span> <span class="n">PolygonPatch</span>
+<span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span> 
+<span class="kn">import</span> <span class="nn">shapely.ops</span> <span class="kn">as</span> <span class="nn">sho</span> 
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+
+<div class="viewcode-block" id="savestr2"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.savestr2">[docs]</a><span class="k">def</span> <span class="nf">savestr2</span><span class="p">(</span><span class="n">dpt</span><span class="p">,</span><span class="n">dwall</span><span class="p">,</span><span class="n">_filename</span><span class="o">=</span><span class="s">&#39;struc.str2&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; save walls in str2 format </span>
+
+<span class="sd">    The default filename is struc.str2</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    dpt : </span>
+<span class="sd">    dwall:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;struc.str2&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dpt</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dwall</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="o">+</span><span class="s">&#39; 0</span><span class="se">\n</span><span class="s">&#39;</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ipt</span> <span class="ow">in</span> <span class="n">dpt</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">dpt</span><span class="p">[</span><span class="n">ipt</span><span class="p">]</span><span class="o">.</span><span class="n">xy</span>
+        <span class="n">s1</span>  <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; 0 0 0 0</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">iw</span> <span class="ow">in</span> <span class="n">dwall</span><span class="p">:</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="n">dwall</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="s">&#39;tail&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">dwall</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="s">&#39;head&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">zmin</span> <span class="o">=</span>  <span class="n">dwall</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="s">&#39;zmin&#39;</span><span class="p">]</span>
+        <span class="n">zmax</span> <span class="o">=</span>  <span class="n">dwall</span><span class="p">[</span><span class="n">iw</span><span class="p">][</span><span class="s">&#39;zmax&#39;</span><span class="p">]</span>
+        <span class="n">core</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">s1</span>   <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">head</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; 1 &#39;</span><span class="o">+</span><span class="n">core</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="s">&#39;1 0 &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">zmin</span><span class="p">)</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">zmax</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="stretch"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.stretch">[docs]</a><span class="k">def</span> <span class="nf">stretch</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">alphat</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">alphah</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; strech a LineString by a given perc on both terminations </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s      : LineString shapely </span>
+<span class="sd">        alphat : stretching coeff tail   </span>
+<span class="sd">        alphah : stretching coeff head   </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ss    : streched segment </span>
+<span class="sd">     </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; s1  = shg.LineString(((0,0),(1,0)))</span>
+<span class="sd">        &gt;&gt;&gt; ss1 = stretch(s1,0.1)</span>
+<span class="sd">        &gt;&gt;&gt; s2 = shg.LineString(((-0.1,0),(1.1,0)))</span>
+<span class="sd">        &gt;&gt;&gt; assert (ss1.equals(s2))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ls</span>  <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">xy</span>
+    <span class="n">u</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">un</span>  <span class="o">=</span> <span class="n">u</span><span class="o">/</span><span class="n">ls</span>
+    <span class="n">pt</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">ph</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="c">#ppt = pt - un*ls*alpha</span>
+    <span class="c">#pph = ph + un*ls*alpha</span>
+    <span class="n">ppt</span> <span class="o">=</span> <span class="n">pt</span> <span class="o">-</span> <span class="n">un</span><span class="o">*</span><span class="n">alphat</span>
+    <span class="n">pph</span> <span class="o">=</span> <span class="n">ph</span> <span class="o">+</span> <span class="n">un</span><span class="o">*</span><span class="n">alphah</span>
+    <span class="n">ss</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">ppt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ppt</span><span class="p">[</span><span class="mi">1</span><span class="p">]),(</span><span class="n">pph</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pph</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="segsplit"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.segsplit">[docs]</a><span class="k">def</span> <span class="nf">segsplit</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; split segment </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    s1    : shapely LineString</span>
+<span class="sd">    s2    : shapely LineString</span>
+<span class="sd">    tol   : tolerance for point equality test</span>
+<span class="sd">    alpha : stretching factor  </span>
+
+<span class="sd">    Returns </span>
+<span class="sd">    -------</span>
+<span class="sd">    ts   : list of segment </span>
+<span class="sd">    bks1 : boolean keep s1</span>
+<span class="sd">    bks2 : boolean keep s2</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; s1 = shg.LineString(((0,0),(1,0)))</span>
+<span class="sd">    &gt;&gt;&gt; s2 = shg.LineString(((1,0),(2,0)))</span>
+<span class="sd">    &gt;&gt;&gt; s3 = shg.LineString(((1,-10),(1,10)))</span>
+<span class="sd">    &gt;&gt;&gt; s4 = shg.LineString(((0.5,-10),(0.5,10)))</span>
+<span class="sd">    &gt;&gt;&gt; ts1 = segsplit(s1,s2)</span>
+<span class="sd">    &gt;&gt;&gt; ts2 = segsplit(s1,s3)</span>
+<span class="sd">    &gt;&gt;&gt; ts3 = segsplit(s1,s4)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ts1</span>   <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ts2</span>   <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">bks1</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">bks2</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">alpha</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">alpha</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s1</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span>
+        <span class="n">p1t</span><span class="p">,</span><span class="n">p1h</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">boundary</span>
+        <span class="n">p2t</span><span class="p">,</span><span class="n">p2h</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="n">boundary</span>
+        <span class="n">ls1</span>     <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">ls2</span>     <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">pi</span>      <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">s1</span><span class="o">.</span><span class="n">touches</span><span class="p">(</span><span class="n">s2</span><span class="p">):</span> <span class="c"># touching segments</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span> <span class="n">pi</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span><span class="n">p1t</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span> <span class="ow">or</span> <span class="n">pi</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span><span class="n">p1h</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span> <span class="p">):</span>
+                <span class="n">s11</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">p1t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p1t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="n">s12</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">p1h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p1h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="k">if</span> <span class="n">s11</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">s11</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;=</span><span class="n">alpha</span><span class="p">:</span>
+                    <span class="n">ts1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s11</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">s12</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">s12</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;=</span><span class="n">alpha</span><span class="p">:</span>
+                    <span class="n">ts1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s12</span><span class="p">)</span>
+                <span class="n">bks1</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span> <span class="n">pi</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span><span class="n">p2t</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span> <span class="ow">or</span> <span class="n">pi</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span><span class="n">p2t</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span> <span class="p">):</span> 
+                <span class="n">s21</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">p2t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p2t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="n">s22</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">p2h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p2h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="k">if</span> <span class="n">s21</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">s21</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;</span><span class="n">alpha</span><span class="p">:</span>
+                    <span class="n">ts2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s21</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">s22</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">s22</span><span class="o">.</span><span class="n">length</span><span class="o">&gt;=</span><span class="n">alpha</span><span class="p">:</span>
+                    <span class="n">ts2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s22</span><span class="p">)</span>
+                <span class="n">bks2</span> <span class="o">=</span> <span class="bp">False</span> 
+        <span class="k">else</span><span class="p">:</span>  <span class="c"># crossing segments</span>
+            <span class="n">s11</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">p1t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p1t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">s12</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">p1h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p1h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">s21</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">p2t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p2t</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">s22</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">pi</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),(</span><span class="n">p2h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">p2h</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">ls11</span> <span class="o">=</span> <span class="n">s11</span><span class="o">.</span><span class="n">length</span>
+            <span class="n">ls12</span> <span class="o">=</span> <span class="n">s12</span><span class="o">.</span><span class="n">length</span>
+            <span class="n">ls21</span> <span class="o">=</span> <span class="n">s21</span><span class="o">.</span><span class="n">length</span>
+            <span class="n">ls22</span> <span class="o">=</span> <span class="n">s22</span><span class="o">.</span><span class="n">length</span>
+
+            <span class="k">if</span> <span class="n">ls11</span> <span class="o">&gt;</span> <span class="n">ls12</span><span class="p">:</span>
+                <span class="n">ts1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s11</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ts1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s12</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">ls21</span> <span class="o">&gt;</span> <span class="n">ls22</span><span class="p">:</span>
+                <span class="n">ts2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s21</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ts2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s22</span><span class="p">)</span>
+            <span class="c">#if s11.length&gt;0 and s11.length&gt;=alpha:</span>
+            <span class="c">#    ts1.append(s11)</span>
+            <span class="c">#if s12.length&gt;0 and s12.length&gt;=alpha:</span>
+            <span class="c">#    ts1.append(s12)</span>
+            <span class="c">#if s21.length&gt;0 and s21.length&gt;=alpha:</span>
+            <span class="c">#    ts2.append(s21)</span>
+            <span class="c">#if s22.length&gt;0 and s21.length&gt;=alpha:</span>
+            <span class="c">#    ts2.append(s22)</span>
+            <span class="n">bks1</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">bks2</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ts1</span><span class="p">,</span><span class="n">ts2</span><span class="p">,</span><span class="n">bks1</span><span class="p">,</span><span class="n">bks2</span><span class="p">)</span>    
+</div>
+<div class="viewcode-block" id="extract"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.extract">[docs]</a><span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="n">vrmlstrg</span><span class="p">,</span><span class="n">dico</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; converts recursively a vrml string into a dictionnary </span>
+
+<span class="sd">     Parameters</span>
+<span class="sd">     ----------</span>
+
+<span class="sd">     vrmlstrg: </span>
+<span class="sd">     dico :</span>
+
+<span class="sd">     Returns</span>
+<span class="sd">     ------</span>
+<span class="sd">     dico : dictonnary associated with vrml string strg</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">vrmlstrg</span>
+    <span class="k">while</span>  <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">key</span><span class="p">,</span><span class="n">val</span>   <span class="o">=</span> <span class="n">inbracket</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">dico</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="n">dico</span> <span class="o">=</span> <span class="n">extract</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="n">dico</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">dico</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="inbracket"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.inbracket">[docs]</a><span class="k">def</span> <span class="nf">inbracket</span><span class="p">(</span><span class="n">strg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; extraction of bracket content </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    strg : a string with a bracket</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lbra : left part of the string </span>
+<span class="sd">    inbr : string inside the bracket </span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; strg =&#39;abcd{un texte}&#39;</span>
+<span class="sd">    &gt;&gt;&gt; lbra,inbr = inbracket(strg)</span>
+<span class="sd">    &gt;&gt;&gt; assert(lbra==&#39;abcd&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; assert(inbr==&#39;un texte&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strg</span> <span class="o">=</span> <span class="n">strg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\r</span><span class="s">&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">ssp</span>  <span class="o">=</span> <span class="n">strg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;{&#39;</span><span class="p">)</span>
+    <span class="n">lbra</span> <span class="o">=</span> <span class="n">ssp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rbra</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">inbr</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ssp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">rbra</span> <span class="o">=</span> <span class="n">rbra</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="s">&#39;{&#39;</span>
+    <span class="n">rsp</span> <span class="o">=</span> <span class="n">rbra</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;}&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">rsp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">inbr</span> <span class="o">=</span> <span class="n">inbr</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="s">&#39;}&#39;</span>
+    <span class="n">inbr</span> <span class="o">=</span> <span class="n">inbr</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;}&#39;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">lbra</span><span class="p">,</span><span class="n">inbr</span><span class="p">)</span>    </div>
+<div class="viewcode-block" id="incrochet"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.incrochet">[docs]</a><span class="k">def</span> <span class="nf">incrochet</span><span class="p">(</span><span class="n">strg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; get content inside crochet</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    strg : string </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lbra : left part of the string </span>
+<span class="sd">    inbr : string inside the bracket </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; strg =&#39;abcd[un texte]&#39;</span>
+<span class="sd">    &gt;&gt;&gt; lbra,inbr = incrochet(strg)</span>
+<span class="sd">    &gt;&gt;&gt; assert(lbra==&#39;abcd&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; assert(inbr==&#39;un texte&#39;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strg</span> <span class="o">=</span> <span class="n">strg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\r</span><span class="s">&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">ssp</span>  <span class="o">=</span> <span class="n">strg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">)</span>
+    <span class="n">lbra</span> <span class="o">=</span> <span class="n">ssp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rbra</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">inbr</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ssp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">rbra</span> <span class="o">=</span> <span class="n">rbra</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="s">&#39;[&#39;</span>
+    <span class="n">rsp</span> <span class="o">=</span> <span class="n">rbra</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">rsp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">inbr</span> <span class="o">=</span> <span class="n">inbr</span><span class="o">+</span><span class="n">k</span><span class="o">+</span><span class="s">&#39;]&#39;</span>
+    <span class="n">inbr</span> <span class="o">=</span> <span class="n">inbr</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">lbra</span><span class="p">,</span><span class="n">inbr</span><span class="p">)</span>    </div>
+<div class="viewcode-block" id="geomLine"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.geomLine">[docs]</a><span class="k">def</span> <span class="nf">geomLine</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; build a Line from string</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    st : string </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tabindex   : array of indexes</span>
+<span class="sd">    tcoord     : array of coordinates</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">st1</span>     <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;coordIndex&#39;</span><span class="p">)</span>
+    <span class="n">index</span>  <span class="o">=</span> <span class="n">st1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">index</span>  <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">index</span>  <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">index</span>  <span class="o">=</span>  <span class="n">index</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">tindex</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">tabindex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">tindex</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">tabindex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+    <span class="n">tabindex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tabindex</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tabindex</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">a</span> <span class="p">,</span> <span class="n">b</span>  <span class="o">=</span> <span class="n">inbracket</span><span class="p">(</span><span class="n">st1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">c</span>      <span class="o">=</span> <span class="n">incrochet</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span>      <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+
+    <span class="n">coord</span>  <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">c</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ic</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">:</span> 
+            <span class="n">coord</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span>
+    <span class="n">tcoord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">tabindex</span><span class="p">,</span><span class="n">tcoord</span><span class="p">)</span></div>
+<div class="viewcode-block" id="geomFace"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.geomFace">[docs]</a><span class="k">def</span> <span class="nf">geomFace</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; build a Face from string </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    st : string</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tabindex</span>
+<span class="sd">    tcoord : ndarray</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">st1</span>    <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;coordIndex&#39;</span><span class="p">)</span>
+    <span class="n">index</span>  <span class="o">=</span> <span class="n">st1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">index</span>  <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;[&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">index</span>  <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;]&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">index</span>  <span class="o">=</span>  <span class="n">index</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">tindex</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">tabindex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">tindex</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">tabindex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">st</span><span class="p">))</span>
+    <span class="n">tabindex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tabindex</span><span class="p">)</span>
+    <span class="n">a</span> <span class="p">,</span> <span class="n">b</span>  <span class="o">=</span> <span class="n">inbracket</span><span class="p">(</span><span class="n">st1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">c</span>      <span class="o">=</span> <span class="n">incrochet</span><span class="p">(</span><span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span>      <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+
+    <span class="n">coord</span>  <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">st</span> <span class="ow">in</span> <span class="n">c</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ic</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">:</span> 
+            <span class="n">coord</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span>
+    <span class="n">tcoord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">tabindex</span><span class="p">,</span><span class="n">tcoord</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ParseDirectionalLight"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.ParseDirectionalLight">[docs]</a><span class="k">def</span> <span class="nf">ParseDirectionalLight</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span>  <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;intensity&#39;</span><span class="p">)</span>
+    <span class="n">t</span>  <span class="o">=</span> <span class="n">s1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">st1</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;on&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">st1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">t</span>  <span class="o">=</span> <span class="n">s1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;ambientIntensity&#39;</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;intensity&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span>  <span class="n">s2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;color&#39;</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;ambientIntensity&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span>  <span class="n">s2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;direction&#39;</span><span class="p">)</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;direction&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">s2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> 
+    <span class="k">return</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ParseMaterial"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.ParseMaterial">[docs]</a><span class="k">def</span> <span class="nf">ParseMaterial</span><span class="p">(</span><span class="n">st</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;material&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;Material&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;{&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">dst</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">dst</span><span class="p">:</span>
+        <span class="c">#print s</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="c">#print u</span>
+    <span class="n">sp1</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;diffuseColor&#39;</span><span class="p">)</span>
+    <span class="n">t</span>   <span class="o">=</span> <span class="n">sp1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ts</span>  <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">ts</span>
+    <span class="n">d</span><span class="p">[</span><span class="s">&#39;diffuseColor&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="s">&#39;specularColor&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;specularColor&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s">&#39;shininess&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;shininess&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s">&#39;transparency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;transparency&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>    
+        <span class="n">d</span><span class="p">[</span><span class="s">&#39;specularColor&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;specularColor&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s">&#39;shininess&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;shininess&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s">&#39;transparency&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ts</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;transparency&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+<div class="viewcode-block" id="show"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.show">[docs]</a><span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">dico</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; show dico </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dico</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span><span class="o">!=</span><span class="s">&#39;name&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dico</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span><span class="n">dico</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][:,</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">dico</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    </div>
+<div class="viewcode-block" id="parsevrml"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.parsevrml">[docs]</a><span class="k">def</span> <span class="nf">parsevrml</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span> 
+    <span class="sd">&quot;&quot;&quot; parse a vrml file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : vrml filename</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dg : dictionnaries of group</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">lignes</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">tobj</span>   <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tnum</span>   <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">k</span>      <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> 
+    <span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="n">lignes</span><span class="p">:</span>
+        <span class="n">li</span>   <span class="o">=</span> <span class="n">li</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">li</span>   <span class="o">=</span> <span class="n">li</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\r</span><span class="s">,&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="c"># line finishing with a comma</span>
+        <span class="k">if</span> <span class="n">li</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;DEF&#39;</span><span class="p">)</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>      <span class="c"># if line contains DEF keyword new dictionnary entry </span>
+            <span class="n">k</span>    <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">tmp</span>  <span class="o">=</span> <span class="n">li</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>    <span class="c"># split with space the index 1 is the dictionnary entry name </span>
+            <span class="n">obid</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">tobj</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">li</span>
+            <span class="n">tnum</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">obid</span>            <span class="c"># name of the entry </span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tobj</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">tobj</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">li</span>  <span class="c"># concatenation of the line in the current dictionnary entry k </span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+    <span class="n">td</span> <span class="o">=</span> <span class="p">{}</span>        
+    <span class="n">dg</span> <span class="o">=</span> <span class="p">{}</span>                         <span class="c"># list of groups</span>
+    <span class="n">targetkey</span><span class="o">=</span><span class="s">&#39; geometry IndexedLineSet &#39;</span>
+    <span class="n">targetkey</span><span class="o">=</span><span class="s">&#39; geometry IndexedFaceSet &#39;</span>
+    <span class="k">for</span> <span class="n">on</span> <span class="ow">in</span> <span class="n">tnum</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">dico</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">ob</span>   <span class="o">=</span> <span class="n">tnum</span><span class="p">[</span><span class="n">on</span><span class="p">]</span>
+        <span class="n">val</span>  <span class="o">=</span> <span class="n">tobj</span><span class="p">[</span><span class="n">on</span><span class="p">]</span>    
+        <span class="n">dico</span> <span class="o">=</span> <span class="n">extract</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="n">dico</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ob</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;LIGHT&#39;</span><span class="p">)</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>    
+            <span class="n">td</span><span class="p">[</span><span class="n">ob</span><span class="p">]</span><span class="o">=</span><span class="n">ParseDirectionalLight</span><span class="p">(</span><span class="n">dico</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">ob</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;APPEARANCE&#39;</span><span class="p">)</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>    
+            <span class="n">td</span><span class="p">[</span><span class="n">ob</span><span class="p">]</span><span class="o">=</span><span class="n">ParseMaterial</span><span class="p">(</span><span class="n">dico</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;Group&#39;</span><span class="p">)</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c">#tg.append(g)    # save previous group </span>
+                <span class="n">dg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span> 
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">g</span><span class="o">=</span><span class="p">{}</span>
+            <span class="n">name</span>     <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;Group&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># name of the group</span>
+        <span class="k">if</span> <span class="n">ob</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;ID_&#39;</span><span class="p">)</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>    
+            <span class="n">st</span>    <span class="o">=</span> <span class="n">dico</span><span class="p">[</span><span class="n">targetkey</span><span class="p">]</span>
+            <span class="n">i</span><span class="p">,</span><span class="n">c</span>   <span class="o">=</span> <span class="n">geomFace</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+            <span class="n">g</span><span class="p">[</span><span class="n">tnum</span><span class="p">[</span><span class="n">on</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;index&#39;</span><span class="p">:</span><span class="n">i</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:</span><span class="n">c</span><span class="p">}</span>
+
+    <span class="n">dg</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="n">g</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">dg</span><span class="p">)</span></div>
+<div class="viewcode-block" id="vrml2sha"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.vrml2sha">[docs]</a><span class="k">def</span> <span class="nf">vrml2sha</span><span class="p">(</span><span class="n">tg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; convert vrml object into shapely polygons</span>
+<span class="sd">         </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tg   : list of objects</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">tg</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s">&#39;name&#39;</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">]</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+                <span class="n">tt</span>  <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">ltt</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">i</span> <span class="p">:</span> 
+                    <span class="k">if</span> <span class="n">u</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>  <span class="c"># -1 closure indicator</span>
+                        <span class="n">ltt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tt</span><span class="p">)</span>
+                        <span class="n">tt</span><span class="o">=</span><span class="p">[]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                <span class="n">P</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">c</span><span class="p">)</span></div>
+<div class="viewcode-block" id="vrml2geom"><a class="viewcode-back" href="../../../modules/gis.readvrml.html#pylayers.gis.readvrml.vrml2geom">[docs]</a><span class="k">def</span> <span class="nf">vrml2geom</span><span class="p">(</span><span class="n">tg</span><span class="p">,</span><span class="n">rac</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; convert vrml object into geomview files</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tg   : list of objects</span>
+<span class="sd">    rac  : filename prefix </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">tg</span><span class="p">:</span>
+        <span class="c"># prepare geomview file</span>
+        <span class="n">fi1</span>  <span class="o">=</span> <span class="n">rac</span><span class="o">+</span><span class="n">l</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">_fi1</span> <span class="o">=</span> <span class="n">fi1</span><span class="o">+</span><span class="s">&#39;.list&#39;</span>
+        <span class="n">fina</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fi1</span><span class="p">,</span><span class="s">&#39;geom&#39;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">fina</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;LIST&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s">&#39;name&#39;</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span>  <span class="n">fi1</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;{&lt;&#39;</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;.off}</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geomoff</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">]</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+                <span class="n">tt</span>  <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">ltt</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">i</span> <span class="p">:</span> 
+                    <span class="k">if</span> <span class="n">u</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">ltt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tt</span><span class="p">)</span>
+                        <span class="n">tt</span><span class="o">=</span><span class="p">[]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                <span class="c"># build a geomview list of polygons        </span>
+                <span class="n">G</span><span class="o">.</span><span class="n">polygons</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">ltt</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>           
+</div>
+<span class="k">class</span> <span class="nc">VLayout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dg</span> <span class="o">=</span> <span class="n">parsevrml</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">dg</span><span class="p">:</span>     <span class="c"># WALL, COLUMN, DOOR , STAIR , SPACE </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span> 
+            <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="n">dg</span><span class="p">[</span><span class="n">t</span><span class="p">]:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ID&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">ID</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">c</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+                <span class="n">dp</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">p</span>  <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">kk</span>  <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">il</span> <span class="ow">in</span> <span class="n">l</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">il</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">dp</span><span class="p">[</span><span class="n">kk</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+                        <span class="n">p</span>     <span class="o">=</span> <span class="p">[]</span>
+                        <span class="n">kk</span>     <span class="o">=</span> <span class="n">kk</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">il</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">t</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span>       
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c">#</span>
+        <span class="c"># Simplify Coord (Projection in 0xy plane)</span>
+        <span class="c">#</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
+                <span class="n">x</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">y</span>   <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][:,</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">z</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][:,</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">tp</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">Np</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">tp</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">tp2</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">already</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">iop</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">tp</span><span class="p">[:,</span><span class="n">ip</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">iold</span> <span class="ow">in</span> <span class="n">tp2</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">pold</span> <span class="o">=</span> <span class="n">tp2</span><span class="p">[</span><span class="n">iold</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pold</span><span class="p">)</span><span class="o">==</span><span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
+                            <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">p</span><span class="o">-</span><span class="n">pold</span><span class="p">,</span><span class="n">p</span><span class="o">-</span><span class="n">pold</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">dist</span><span class="o">&lt;</span><span class="mf">1e-15</span><span class="p">:</span>
+                                <span class="n">already</span> <span class="o">=</span> <span class="bp">True</span>
+                                <span class="n">tp2</span><span class="p">[</span><span class="n">iold</span><span class="p">][</span><span class="s">&#39;nump&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">already</span><span class="p">:</span>
+                        <span class="n">tp2</span><span class="p">[</span><span class="n">iop</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="n">tp2</span><span class="p">[</span><span class="n">iop</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
+                        <span class="n">tp2</span><span class="p">[</span><span class="n">iop</span><span class="p">][</span><span class="s">&#39;nump&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span>
+                        <span class="n">iop</span> <span class="o">=</span> <span class="n">iop</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">already</span> <span class="o">=</span> <span class="bp">False</span>    
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;c2d&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">tp2</span>
+
+        <span class="c">#</span>
+        <span class="c"># create a transcode between 3d index point and 2d index point </span>
+        <span class="c">#</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
+                <span class="n">tr</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">dr2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;c2d&#39;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dr2</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">dr2</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;nump&#39;</span><span class="p">]:</span>
+                        <span class="n">tr</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;tr&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">tr</span>
+        <span class="c">#</span>
+        <span class="c"># Create a new index for 2d points </span>
+        <span class="c">#</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
+                <span class="n">di</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+                <span class="n">di2</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">di</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span> <span class="c"># for all polygons </span>
+                    <span class="n">ti2</span>   <span class="o">=</span> <span class="p">[]</span>      <span class="c"># reserve a list= for 2d indexes</span>
+                    <span class="n">lpoly</span> <span class="o">=</span>  <span class="n">di</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>  <span class="c"># get sequence of 3d points </span>
+                    <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">lpoly</span><span class="p">:</span>
+                        <span class="n">ti2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;tr&#39;</span><span class="p">][</span><span class="n">ip</span><span class="p">])</span>
+                    <span class="k">if</span>  <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ti2</span><span class="p">))</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">ti2</span><span class="p">):</span>    
+                        <span class="n">di2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">ti2</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;index2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">di2</span> 
+
+        <span class="c">#</span>
+        <span class="c"># Create Polygon2D</span>
+        <span class="c">#</span>
+
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
+                <span class="n">dp</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;index2&#39;</span><span class="p">]:</span>
+                    <span class="n">lp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;index2&#39;</span><span class="p">][</span><span class="n">ip</span><span class="p">]</span>
+                    <span class="n">tp</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">ip</span>  <span class="ow">in</span> <span class="n">lp</span><span class="p">:</span>
+                        <span class="n">tp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;c2d&#39;</span><span class="p">][</span><span class="n">ip</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">])</span>
+                    <span class="n">poly</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
+                    <span class="n">dp</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span><span class="o">=</span><span class="n">poly</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;poly&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span>
+    <span class="c">#</span>
+    <span class="c"># </span>
+    <span class="c">#</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show entities </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        num : int </span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">num</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;poly&#39;</span><span class="p">]:</span>
+                    <span class="n">colrand</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="mi">2</span><span class="o">**</span><span class="mi">23</span><span class="p">)</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="mi">2</span><span class="o">**</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;poly&#39;</span><span class="p">][</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colrand</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;scaled&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">wallanalysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; walls analysis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">w</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="s">&#39;WALL&#39;</span><span class="p">]</span>
+        <span class="n">dwall</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">w</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ID&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">w</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;ID&#39;</span><span class="p">]</span>
+            <span class="c">#</span>
+            <span class="c"># height retrieval</span>
+            <span class="c">#</span>
+            <span class="n">z</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][:,</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;zmin&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;zmax&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;door&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;door&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;zdoor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c">#</span>
+            <span class="c"># Length,width retrieval</span>
+            <span class="c">#</span>
+            <span class="n">dp</span>     <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;poly&#39;</span><span class="p">]</span>
+            <span class="n">gxmin</span>  <span class="o">=</span> <span class="mf">1e15</span>
+            <span class="n">gymin</span>  <span class="o">=</span> <span class="mf">1e15</span>
+            <span class="n">gxmax</span>  <span class="o">=</span> <span class="o">-</span><span class="mf">1e15</span>
+            <span class="n">gymax</span>  <span class="o">=</span> <span class="o">-</span><span class="mf">1e15</span>
+            <span class="k">for</span> <span class="n">ik</span> <span class="ow">in</span> <span class="n">dp</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">pol</span>    <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">ik</span><span class="p">]</span>
+                <span class="n">bounds</span> <span class="o">=</span> <span class="n">pol</span><span class="o">.</span><span class="n">bounds</span> 
+                <span class="n">xmin</span>   <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ymin</span>   <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">xmax</span>   <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">ymax</span>   <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">gxmin</span>  <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gxmin</span><span class="p">,</span><span class="n">xmin</span><span class="p">)</span>
+                <span class="n">gymin</span>  <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gymin</span><span class="p">,</span><span class="n">ymin</span><span class="p">)</span>
+                <span class="n">gxmax</span>  <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gxmax</span><span class="p">,</span><span class="n">xmax</span><span class="p">)</span>
+                <span class="n">gymax</span>  <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gymax</span><span class="p">,</span><span class="n">ymax</span><span class="p">)</span>
+            <span class="n">dx</span>     <span class="o">=</span> <span class="n">gxmax</span><span class="o">-</span><span class="n">gxmin</span>
+            <span class="n">dy</span>     <span class="o">=</span> <span class="n">gymax</span><span class="o">-</span><span class="n">gymin</span> 
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="n">dy</span><span class="p">)</span>
+            <span class="n">width</span>  <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="n">dy</span><span class="p">)</span>
+            <span class="n">xmoy</span>   <span class="o">=</span> <span class="p">(</span><span class="n">gxmin</span><span class="o">+</span><span class="n">gxmax</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+            <span class="n">ymoy</span>   <span class="o">=</span> <span class="p">(</span><span class="n">gymin</span><span class="o">+</span><span class="n">gymax</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dx</span><span class="o">==</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">seg</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">xmoy</span><span class="p">,</span><span class="n">gymin</span><span class="p">),(</span><span class="n">xmoy</span><span class="p">,</span><span class="n">gymax</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">dy</span><span class="o">==</span><span class="n">width</span><span class="p">):</span>    
+                <span class="n">seg</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">(((</span><span class="n">gxmin</span><span class="p">,</span><span class="n">ymoy</span><span class="p">),(</span><span class="n">gxmax</span><span class="p">,</span><span class="n">ymoy</span><span class="p">)))</span>
+            <span class="c">#seg = stretch(seg,0.1)</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;bounds&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">bounds</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;thickness&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">width</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;length&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">length</span>
+            <span class="n">dwall</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;seg&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">seg</span>
+
+
+                
+        <span class="k">return</span><span class="p">(</span><span class="n">dwall</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">show3entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">group</span><span class="p">,</span><span class="n">IDs</span><span class="p">):</span>            
+        <span class="sd">&quot;&quot;&quot; geomview vizualisation of entity </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        group :</span>
+<span class="sd">        IDs :</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">te</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity</span><span class="p">[</span><span class="n">group</span><span class="p">]</span>
+        <span class="n">fi1</span>  <span class="o">=</span> <span class="s">&#39;entity&#39;</span> 
+        <span class="n">GL</span>  <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geomlist</span><span class="p">(</span><span class="n">fi1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">IDs</span><span class="p">:</span>
+            <span class="n">ID</span> <span class="o">=</span>  <span class="n">te</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">filename</span> <span class="o">=</span>  <span class="n">fi1</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">GL</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;{&lt;&#39;</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s">&#39;.off}</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">geo</span><span class="o">.</span><span class="n">Geomoff</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">te</span><span class="p">[</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">te</span><span class="p">[</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+            <span class="n">tt</span>  <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">ltt</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">print</span> <span class="n">i</span> 
+            <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">i</span> <span class="p">:</span> 
+                <span class="n">ltt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="n">u</span><span class="p">])</span>
+            <span class="c"># build a geomview list of polygons        </span>
+            <span class="k">print</span> <span class="n">ltt</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">polygons</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">ltt</span><span class="p">)</span>
+        <span class="n">GL</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>         
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

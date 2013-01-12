@@ -1,0 +1,23 @@
+.. _channel:
+
+channel
+--------------
+
+.. automodule:: pylayers.antprop.channel
+   :members:
+
+.. .. class:: pylayers.antprop.channel.Ctilde
+.. 
+.. .. autoattribute:: pylayers.antprop.channel.Ctilde
+.. 
+.. .. autosummary::
+..     :toctree: generated/
+.. 
+..     choose
+..     info 
+..     doadod
+..     energy
+..     sort 
+..     vec2scal 
+..     vec2scalA
+.. 

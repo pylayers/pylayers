@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>emsolver &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/network.show.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="emsolver">
+<span id="id1"></span><h1>emsolver<a class="headerlink" href="#emsolver" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-pylayers.network.emsolver"></span><dl class="class">
+<dt id="pylayers.network.emsolver.EMSolver">
+<em class="property">class </em><tt class="descclassname">pylayers.network.emsolver.</tt><tt class="descname">EMSolver</tt><big>(</big><em>L=&lt;pylayers.gis.layout.Layout object at 0xb84bd6c&gt;</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/emsolver.html#EMSolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.emsolver.EMSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invoque an electromagnetic solver</p>
+<dl class="method">
+<dt id="pylayers.network.emsolver.EMSolver.save_model">
+<tt class="descname">save_model</tt><big>(</big><em>RAT</em>, <em>model</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/emsolver.html#EMSolver.save_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.emsolver.EMSolver.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>save a RAT model</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.emsolver.EMSolver.solve">
+<tt class="descname">solve</tt><big>(</big><em>p</em>, <em>e</em>, <em>LDP</em>, <em>RAT</em>, <em>epwr</em>, <em>sens</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/emsolver.html#EMSolver.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.emsolver.EMSolver.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute and return a LDP value thanks to a given method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>n1p</strong> : np.array</p>
+<blockquote>
+<div><blockquote>
+<div><p>node 1 postion</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>n2p <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
+<dd><p class="first last">node 2 postion</p>
+</dd>
+<dt>LDP <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</p>
+</dd>
+</dl>
+<p>epwr : list of nodes emmited power</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote class="last">
+<div><blockquote>
+<div><dl class="docutils">
+<dt>A LDP value <span class="classifier-delimiter">:</span> <span class="classifier">* A time in ns for LDP =&#8217;TOA&#8217;</span></dt>
+<dd><ul class="first last simple">
+<li>A received power in dBm for LDP =&#8217;Pr&#8217;</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>std <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><dl class="first last docutils">
+<dt>A LDP value standard deviation:     * A time in ns for LDP =&#8217;TOA&#8217;</dt>
+<dd><ul class="first last simple">
+<li>A received power in dBm for LDP =&#8217;Pr&#8217;</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bsignal &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
+    <link rel="up" title="User Manual" href="index.html" />
+    <link rel="next" title="User references" href="../modules/index.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="slab.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../modules/index.html" title="User references"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="slab.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" accesskey="U">User Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bsignal</a><ul>
+<li><a class="reference internal" href="#generation-of-an-impulse-of-normalized-energy">Generation of an Impulse of normalized energy</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="slab.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../modules/index.html"
+                        title="next chapter">User references</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/manual/bsignal.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bsignal">
+<h1>Bsignal<a class="headerlink" href="#bsignal" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="generation-of-an-impulse-of-normalized-energy">
+<h2>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h2>
+<p>An energy normalized impulse can be defined as follows</p>
+<div class="math">
+<p><img src="../_images/math/83563fe93a809e8b65fd8cdaa6f82183bdd76bd6.png" alt="p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/></p>
+</div><p>with</p>
+<div class="math">
+<p><img src="../_images/math/a341a2168e26e7802fd182d8a03c52488f217399.png" alt="\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}"/></p>
+</div><p>where <img class="math" src="../_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/> is the bandwidth defined at <img class="math" src="../_images/math/29353fe0f6571b3f689f9bb4d39e7a764faae01e.png" alt="\gamma_{dB}"/> and
+<img class="math" src="../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/> is the central frequency of the pulse.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="gp">In [2]: </span><span class="n">fc</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="gp">In [3]: </span><span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [4]: </span><span class="n">thresh</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="gp">In [5]: </span><span class="n">fe</span>     <span class="o">=</span> <span class="mi">100</span>
+
+<span class="gp">In [6]: </span><span class="n">ip</span>  <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">([],</span><span class="n">fc</span><span class="p">,</span><span class="n">band</span><span class="p">,</span><span class="n">thresh</span><span class="p">,</span><span class="n">fe</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/simple_impulse.png" src="../_images/simple_impulse.png" style="width: 5in;" />
+<p><em>Verification of energy normalization in both domains</em></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">Et</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+
+<span class="gp">In [2]: </span><span class="k">print</span> <span class="s">&quot;Time integration&quot;</span><span class="p">,</span><span class="n">Et</span>
+<span class="go">Time integration 1.0</span>
+
+<span class="gp">In [3]: </span><span class="n">P</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
+
+<span class="gp">In [4]: </span><span class="n">Ef</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">P</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+
+<span class="gp">In [5]: </span><span class="k">print</span> <span class="s">&quot;Frequency integration&quot;</span><span class="p">,</span><span class="n">Ef</span>
+<span class="go">Frequency integration 1.0</span>
+</pre></div>
+</div>
+<p>A simulation file contains the description of an applied waveform.</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="gp">In [3]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+
+<span class="gp">In [4]: </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
+
+<span class="gp">In [6]: </span><span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
+
+<span class="gp">In [7]: </span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="go">tw  :  30.0</span>
+<span class="go">band  :  0.499</span>
+<span class="go">fc  :  4.493</span>
+<span class="go">thresh  :  3.0</span>
+<span class="go">fe  :  100.0</span>
+<span class="go">Np  :  3000.0</span>
+<span class="go">te  :  0.01</span>
+<span class="go">type  :  generic</span>
+
+<span class="gp">In [8]: </span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/default_wav.png" src="../_images/default_wav.png" style="width: 5in;" />
+<p><em>Construction of the VectChannel</em></p>
+<p><em class="xref std std-ref">pylayers.antprop.channel.VectChannel</em></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">nray :  500</span>
+<span class="go">nfreq :  181</span>
+<span class="go">nb rayons dans .tauk :  500</span>
+<span class="go">nb rayons 2:  500</span>
+
+<span class="gp">In [2]: </span><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/doadod.png" src="../_images/doadod.png" style="width: 8in;" />
+<p><em>Construction of the ScalChannel</em></p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">tran2prop</span><span class="p">()</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-1-37573399afd8&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 H = vc.tran2prop()</span>
+
+<span class="go">AttributeError: &#39;VectChannel&#39; object has no attribute &#39;tran2prop&#39;</span>
+</pre></div>
+</div>
+<p>Tchannel object is the container for the ray transfer function</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="go">defant.vsh3</span>
+<span class="go">type :  vsh3</span>
+<span class="go">--------------------------</span>
+<span class="go">fmin (GHz) : 2.0</span>
+<span class="go">fmax (GHz) : 8.0</span>
+<span class="go">Nf   : 121</span>
+<span class="go">Br</span>
+<span class="go">-------------</span>
+<span class="go">Nf   :  121</span>
+<span class="go">fmin (GHz) :  2.0</span>
+<span class="go">fmax (GHz) :  8.0</span>
+<span class="go">Ncoeff s3 :  18</span>
+<span class="go">Bi</span>
+<span class="go">-------------</span>
+<span class="go">Nf   :  121</span>
+<span class="go">fmin (GHz) :  2.0</span>
+<span class="go">fmax (GHz) :  8.0</span>
+<span class="go">Ncoeff s3 :  18</span>
+<span class="go">Cr</span>
+<span class="go">-------------</span>
+<span class="go">Nf   :  121</span>
+<span class="go">fmin (GHz) :  2.0</span>
+<span class="go">fmax (GHz) :  8.0</span>
+<span class="go">Ncoeff s3 :  18</span>
+<span class="go">Ci</span>
+<span class="go">-------------</span>
+<span class="go">Nf   :  121</span>
+<span class="go">fmin (GHz) :  2.0</span>
+<span class="go">fmax (GHz) :  8.0</span>
+<span class="go">Ncoeff s3 :  18</span>
+
+<span class="gp">In [2]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gr">Out[2]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0xca9330c</span><span class="o">&gt;</span>
+
+<span class="gp">In [3]: </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-3-595623b35632&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 H.plot(ix=np.arange(10))</span>
+
+<span class="go">NameError: name &#39;H&#39; is not defined</span>
+</pre></div>
+</div>
+<img alt="../_images/rayTF.png" src="../_images/rayTF.png" style="width: 6in;" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../modules/index.html" title="User references"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="slab.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="index.html" >User Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

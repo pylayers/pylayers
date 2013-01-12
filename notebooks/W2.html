@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Interactive session illustrating UWB Ray Tracing Simulation &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Interactive session illustrating UWB Ray Tracing Simulation</a><ul>
+<li><a class="reference internal" href="#starting-the-simulation">1 Starting the simulation</a><ul>
+<li><a class="reference internal" href="#list-of-tx-points">List of Tx points</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#list-of-rx-points">List of Rx points</a></li>
+<li><a class="reference internal" href="#vectorial-propagation-channel">Vectorial Propagation Channel</a></li>
+<li><a class="reference internal" href="#scalar-propagation-channel">Scalar Propagation Channel</a><ul>
+<li><a class="reference internal" href="#applying-an-uwb-waveform">Applying an UWB Waveform</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/notebooks/W2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="interactive-session-illustrating-uwb-ray-tracing-simulation">
+<h1>Interactive session illustrating UWB Ray Tracing Simulation<a class="headerlink" href="#interactive-session-illustrating-uwb-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
+<p>A set of UWB simulations has been performed in the environement of
+SIRADEL. This section describes some available features of the
+developped tool.</p>
+<p>In[*]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">Simul</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c"># Transmitter index</span>
+<span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c"># Receiver index</span>
+<span class="n">irx</span> <span class="o">=</span> <span class="mi">150</span>
+</pre></div>
+</div>
+<div class="section" id="starting-the-simulation">
+<h2>1 Starting the simulation<a class="headerlink" href="#starting-the-simulation" title="Permalink to this headline">¶</a></h2>
+<p>The simulation is loaded by reading a configuration file which contains
+all the required informations about the simulation parameters as well as
+the name of the data file which has already been simulated.</p>
+<p>The simulation is as follow :</p>
+<div class="highlight-python"><pre>[files]
+at = simul9.mat
+tx = w2tx.ini
+slab = simul9.slab
+txant = UWB_CEA.vsh3
+rx = w2rx.ini
+patra = simul9.patra
+conf = $HOME/Pyproject/project.conf
+palch = simul9.palch
+struc = Lstruc.str
+rxant = UWB_CEA.vsh3
+
+[tracing]
+maxdeep = 10
+distdiff = 5.0
+var2d3d = 1
+
+[waveform]
+tw = 30
+band = 0.499
+fc = 4.493
+thresh = 3
+fe = 50
+type = generic
+
+[frequency]
+fmax = 11
+nf = 181
+fmin = 2</pre>
+</div>
+<p>In[*]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span>  <span class="n">Simul</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;where2.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="list-of-tx-points">
+<h3>List of Tx points<a class="headerlink" href="#list-of-tx-points" title="Permalink to this headline">¶</a></h3>
+<p>51 Tx points hav beed defined. The coordinates list is as follows</p>
+<p>In[4]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">ipt</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&#39;Tx&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ipt</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; :&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">ipt</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Tx1 : [-27.66122067  14.99590106   1.5       ]
+Tx2 : [-25.59470359   8.01524871   1.5       ]
+Tx3 : [-25.64228047  13.01502235   1.5       ]
+Tx4 : [-23.56624801   5.03441528   1.5       ]
+Tx5 : [-23.60430951   9.03423419   1.5       ]
+Tx6 : [-23.62334026  11.03414365   1.5       ]
+Tx7 : [-23.66140176  15.03396256   1.5       ]
+Tx8 : [-20.58541458   7.06287086   1.5       ]
+Tx9 : [-20.60444533   9.06278032   1.5       ]
+Tx10 : [-19.59497522   8.07234096   1.5       ]
+Tx11 : [-18.66162812  15.08153943   1.5       ]
+Tx12 : [-16.59511104   8.10088709   1.5       ]
+Tx13 : [-15.60467169   9.11035719   1.5       ]
+Tx14 : [-14.56665546   5.12005366   1.5       ]
+Tx15 : [-14.63326308  12.11973675   1.5       ]
+Tx16 : [-13.59524686   8.12943321   1.5       ]
+Tx17 : [-12.65238438  14.13867696   1.5       ]
+Tx18 : [-11.60485278   9.14841869   1.5       ]
+Tx19 : [-10.6239288   11.15784352   1.5       ]
+Tx20 : [-9.56688182  5.16763053  1.5       ]
+Tx21 : [ -9.66203557  15.16717781   1.5       ]
+Tx22 : [-8.56692709  5.17714591  1.5       ]
+Tx23 : [-8.59547322  8.17701009  1.5       ]
+Tx24 : [-7.60503387  9.18648019  1.5       ]
+Tx25 : [ -6.64314064  13.19581448   1.5       ]
+Tx26 : [ -5.65270129  14.20528458   1.5       ]
+Tx27 : [-4.58613893  7.21511686  1.5       ]
+Tx28 : [ -4.63371581  12.2148905    1.5       ]
+Tx29 : [-3.57666883  6.22467751  1.5       ]
+Tx30 : [-3.59569958  8.22458697  1.5       ]
+Tx31 : [ -3.6623072   15.22427006   1.5       ]
+Tx32 : [-2.58622948  7.23414761  1.5       ]
+Tx33 : [ -2.62429098  11.23396652   1.5       ]
+Tx34 : [ 0.43266546  5.26278428  1.5       ]
+Tx35 : [  0.37557321  11.26251265   1.5       ]
+Tx36 : [  0.36605783  12.26246738   1.5       ]
+Tx37 : [  0.33751171  15.26233156   1.5       ]
+Tx38 : [ 1.40407406  8.27216384  1.5       ]
+Tx39 : [  1.38504331  10.2720733    1.5       ]
+Tx40 : [  1.34698181  14.27189221   1.5       ]
+Tx41 : [  1.33746643  15.27184694   1.5       ]
+Tx42 : [ 2.40402879  8.28167922  1.5       ]
+Tx43 : [  2.34693654  14.28140758   1.5       ]
+Tx44 : [ 3.42301427  6.29128514  1.5       ]
+Tx45 : [ 3.40398352  8.29119459  1.5       ]
+Tx46 : [  3.35640664  13.29096823   1.5       ]
+Tx47 : [  3.34689127  14.29092296   1.5       ]
+Tx48 : [ 4.43248437  5.30084578  1.5       ]
+Tx49 : [  4.37539212  11.30057415   1.5       ]
+Tx50 : [  4.36587674  12.30052888   1.5       ]
+Tx51 : [  4.33733062  15.30039306   1.5       ]</pre>
+</div>
+</div>
+</div>
+<div class="section" id="list-of-rx-points">
+<h2>List of Rx points<a class="headerlink" href="#list-of-rx-points" title="Permalink to this headline">¶</a></h2>
+<p>343 Rx points have been defined. The coordinates list is has follows :</p>
+<p>In[5]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#for ipt in S.rx.points.keys():</span>
+<span class="c">#    pass</span>
+<span class="c">#print &#39;Rx&#39;+str(ipt)+ &#39; :&#39;,S.rx.points[ipt]</span>
+</pre></div>
+</div>
+<p>The distibution of those points can be shown using the show method of
+the Simulation object</p>
+<p>In[1]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;span class="ansired"&gt;---------------------------------------------------------------------------&lt;/span&gt;
+&lt;span class="ansired"&gt;NameError&lt;/span&gt;                                 Traceback (most recent call last)
+&lt;span class="ansigreen"&gt;/private/staff/n/en/buguen/svn2/devel/simulator/pyray/&amp;lt;ipython-input-1-8d8f07ec1bba&amp;gt;&lt;/span&gt; in &lt;span class="ansicyan"&gt;&amp;lt;module&amp;gt;&lt;/span&gt;&lt;span class="ansiblue"&gt;()&lt;/span&gt;
+&lt;span class="ansigreen"&gt;----&amp;gt; 1&lt;/span&gt;&lt;span class="ansiyellow"&gt; &lt;/span&gt;S&lt;span class="ansiyellow"&gt;.&lt;/span&gt;show&lt;span class="ansiyellow"&gt;(&lt;/span&gt;&lt;span class="ansiyellow"&gt;)&lt;/span&gt;&lt;span class="ansiyellow"&gt;&lt;/span&gt;
+
+&lt;span class="ansired"&gt;NameError&lt;/span&gt;: name &amp;apos;S&amp;apos; is not defined</pre>
+</div>
+</div>
+<div class="section" id="vectorial-propagation-channel">
+<h2>Vectorial Propagation Channel<a class="headerlink" href="#vectorial-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<p>In[7]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">)</span>
+<span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>nray :  482
+nfreq :  181
+nb rayons dans .tauk :  482
+nb rayons 2:  482</pre>
+</div>
+<img alt="../_images/W2_fig_00.png" src="../_images/W2_fig_00.png" />
+</div>
+<div class="section" id="scalar-propagation-channel">
+<h2>Scalar Propagation Channel<a class="headerlink" href="#scalar-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="applying-an-uwb-waveform">
+<h3>Applying an UWB Waveform<a class="headerlink" href="#applying-an-uwb-waveform" title="Permalink to this headline">¶</a></h3>
+<p>The UWB simulation implies the convolution of the radio channel with an
+applied waveform</p>
+<p>In[8]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">show2</span><span class="p">(</span><span class="n">Tp</span><span class="o">=</span><span class="mi">520</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>False False</pre>
+</div>
+<img alt="../_images/W2_fig_01.png" src="../_images/W2_fig_01.png" />
+<p>In[26]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">irx</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">S</span><span class="o">.</span><span class="n">pltcir</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">)</span>
+
+<span class="n">S</span><span class="o">.</span><span class="n">showray</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">70</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="../_images/W2_fig_02.png" src="../_images/W2_fig_02.png" />
+<img alt="../_images/W2_fig_03.png" src="../_images/W2_fig_03.png" />
+<img alt="../_images/W2_fig_04.png" src="../_images/W2_fig_04.png" />
+<p>In[28]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">irx</span> <span class="o">=</span> <span class="mi">134</span>
+<span class="n">S</span><span class="o">.</span><span class="n">pltcir</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/W2_fig_05.png" src="../_images/W2_fig_05.png" />
+<img alt="../_images/W2_fig_06.png" src="../_images/W2_fig_06.png" />
+<p>In[11]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">irx</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">S</span><span class="o">.</span><span class="n">showray</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">,</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="../_images/W2_fig_07.png" src="../_images/W2_fig_07.png" />
+<p>In[12]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">itx</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;PATH LOSS vs distance Tx&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">itx</span><span class="p">))</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;distance&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">)</span>
+<span class="n">PL</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="n">itx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span>
+</pre></div>
+</div>
+<img alt="../_images/W2_fig_08.png" src="../_images/W2_fig_08.png" />
+<p>In[13]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="p">,</span><span class="n">ciro</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">loadcir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In[14]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>False False</pre>
+</div>
+<img alt="../_images/W2_fig_09.png" src="../_images/W2_fig_09.png" />
+<p>In[15]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">CIRA</span><span class="o">=</span><span class="n">cira</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In[16]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">CIRA</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/W2_fig_10.png" src="../_images/W2_fig_10.png" />
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

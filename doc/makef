@@ -1,6 +1,0 @@
-#!/bin/bash
-HOME=/private/staff/n/en/buguen
-PATH=/usr/local/sbin/:/usr/local/bin:/usr/bin/:/sbin:/bin
-cd /private/staff/n/en/buguen/svn2/devel/simulator/sphinx
-make clean
-make html 

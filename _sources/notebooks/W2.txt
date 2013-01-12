@@ -1,0 +1,318 @@
+Interactive session illustrating UWB Ray Tracing Simulation
+===========================================================
+
+A set of UWB simulations has been performed in the environement of
+SIRADEL. This section describes some available features of the
+developped tool.
+
+In[*]:
+
+.. code:: python
+
+    import os 
+    import sys
+    from Simul import *
+    # Transmitter index
+    itx = 1
+    # Receiver index
+    irx = 150
+
+1 Starting the simulation
+-------------------------
+
+The simulation is loaded by reading a configuration file which contains
+all the required informations about the simulation parameters as well as
+the name of the data file which has already been simulated.
+
+The simulation is as follow :
+
+::
+
+    [files]
+    at = simul9.mat
+    tx = w2tx.ini
+    slab = simul9.slab
+    txant = UWB_CEA.vsh3
+    rx = w2rx.ini
+    patra = simul9.patra
+    conf = $HOME/Pyproject/project.conf
+    palch = simul9.palch
+    struc = Lstruc.str
+    rxant = UWB_CEA.vsh3
+
+    [tracing]
+    maxdeep = 10
+    distdiff = 5.0
+    var2d3d = 1
+
+    [waveform]
+    tw = 30
+    band = 0.499
+    fc = 4.493
+    thresh = 3
+    fe = 50
+    type = generic
+
+    [frequency]
+    fmax = 11
+    nf = 181
+    fmin = 2
+
+
+In[*]:
+
+.. code:: python
+
+    S =  Simul()
+    S.load('where2.ini')
+
+List of Tx points
+~~~~~~~~~~~~~~~~~
+
+51 Tx points hav beed defined. The coordinates list is as follows
+
+In[4]:
+
+.. code:: python
+
+    for ipt in S.tx.points.keys():
+        print 'Tx'+str(ipt)+ ' :',S.tx.points[ipt] 
+
+.. parsed-literal::
+
+    Tx1 : [-27.66122067  14.99590106   1.5       ]
+    Tx2 : [-25.59470359   8.01524871   1.5       ]
+    Tx3 : [-25.64228047  13.01502235   1.5       ]
+    Tx4 : [-23.56624801   5.03441528   1.5       ]
+    Tx5 : [-23.60430951   9.03423419   1.5       ]
+    Tx6 : [-23.62334026  11.03414365   1.5       ]
+    Tx7 : [-23.66140176  15.03396256   1.5       ]
+    Tx8 : [-20.58541458   7.06287086   1.5       ]
+    Tx9 : [-20.60444533   9.06278032   1.5       ]
+    Tx10 : [-19.59497522   8.07234096   1.5       ]
+    Tx11 : [-18.66162812  15.08153943   1.5       ]
+    Tx12 : [-16.59511104   8.10088709   1.5       ]
+    Tx13 : [-15.60467169   9.11035719   1.5       ]
+    Tx14 : [-14.56665546   5.12005366   1.5       ]
+    Tx15 : [-14.63326308  12.11973675   1.5       ]
+    Tx16 : [-13.59524686   8.12943321   1.5       ]
+    Tx17 : [-12.65238438  14.13867696   1.5       ]
+    Tx18 : [-11.60485278   9.14841869   1.5       ]
+    Tx19 : [-10.6239288   11.15784352   1.5       ]
+    Tx20 : [-9.56688182  5.16763053  1.5       ]
+    Tx21 : [ -9.66203557  15.16717781   1.5       ]
+    Tx22 : [-8.56692709  5.17714591  1.5       ]
+    Tx23 : [-8.59547322  8.17701009  1.5       ]
+    Tx24 : [-7.60503387  9.18648019  1.5       ]
+    Tx25 : [ -6.64314064  13.19581448   1.5       ]
+    Tx26 : [ -5.65270129  14.20528458   1.5       ]
+    Tx27 : [-4.58613893  7.21511686  1.5       ]
+    Tx28 : [ -4.63371581  12.2148905    1.5       ]
+    Tx29 : [-3.57666883  6.22467751  1.5       ]
+    Tx30 : [-3.59569958  8.22458697  1.5       ]
+    Tx31 : [ -3.6623072   15.22427006   1.5       ]
+    Tx32 : [-2.58622948  7.23414761  1.5       ]
+    Tx33 : [ -2.62429098  11.23396652   1.5       ]
+    Tx34 : [ 0.43266546  5.26278428  1.5       ]
+    Tx35 : [  0.37557321  11.26251265   1.5       ]
+    Tx36 : [  0.36605783  12.26246738   1.5       ]
+    Tx37 : [  0.33751171  15.26233156   1.5       ]
+    Tx38 : [ 1.40407406  8.27216384  1.5       ]
+    Tx39 : [  1.38504331  10.2720733    1.5       ]
+    Tx40 : [  1.34698181  14.27189221   1.5       ]
+    Tx41 : [  1.33746643  15.27184694   1.5       ]
+    Tx42 : [ 2.40402879  8.28167922  1.5       ]
+    Tx43 : [  2.34693654  14.28140758   1.5       ]
+    Tx44 : [ 3.42301427  6.29128514  1.5       ]
+    Tx45 : [ 3.40398352  8.29119459  1.5       ]
+    Tx46 : [  3.35640664  13.29096823   1.5       ]
+    Tx47 : [  3.34689127  14.29092296   1.5       ]
+    Tx48 : [ 4.43248437  5.30084578  1.5       ]
+    Tx49 : [  4.37539212  11.30057415   1.5       ]
+    Tx50 : [  4.36587674  12.30052888   1.5       ]
+    Tx51 : [  4.33733062  15.30039306   1.5       ]
+
+List of Rx points
+-----------------
+
+343 Rx points have been defined. The coordinates list is has follows :
+
+In[5]:
+
+.. code:: python
+
+    #for ipt in S.rx.points.keys():
+    #    pass
+    #print 'Rx'+str(ipt)+ ' :',S.rx.points[ipt] 
+
+The distibution of those points can be shown using the show method of
+the Simulation object
+
+In[1]:
+
+.. code:: python
+
+    S.show()
+
+::
+
+    <span class="ansired">---------------------------------------------------------------------------</span>
+    <span class="ansired">NameError</span>                                 Traceback (most recent call last)
+    <span class="ansigreen">/private/staff/n/en/buguen/svn2/devel/simulator/pyray/&lt;ipython-input-1-8d8f07ec1bba&gt;</span> in <span class="ansicyan">&lt;module&gt;</span><span class="ansiblue">()</span>
+    <span class="ansigreen">----&gt; 1</span><span class="ansiyellow"> </span>S<span class="ansiyellow">.</span>show<span class="ansiyellow">(</span><span class="ansiyellow">)</span><span class="ansiyellow"></span>
+    
+    <span class="ansired">NameError</span>: name &apos;S&apos; is not defined
+
+Vectorial Propagation Channel
+-----------------------------
+
+
+In[7]:
+
+.. code:: python
+
+    vc = S.VC(itx,irx)
+    vc.doadod()
+
+.. parsed-literal::
+
+    nray :  482
+    nfreq :  181
+    nb rayons dans .tauk :  482
+    nb rayons 2:  482
+
+.. image:: W2_files/W2_fig_00.png
+
+Scalar Propagation Channel
+--------------------------
+
+
+Applying an UWB Waveform
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The UWB simulation implies the convolution of the radio channel with an
+applied waveform
+
+In[8]:
+
+.. code:: python
+
+    S.wav.show2(Tp=520)
+
+.. parsed-literal::
+
+    False False
+
+.. image:: W2_files/W2_fig_01.png
+
+In[26]:
+
+.. code:: python
+
+    itx = 1
+    irx = 18
+    S.pltcir(itx,irx)
+    
+    S.showray(1,18,arange(1,70))
+    
+    
+
+
+.. image:: W2_files/W2_fig_02.png
+
+.. image:: W2_files/W2_fig_03.png
+
+.. image:: W2_files/W2_fig_04.png
+
+In[28]:
+
+.. code:: python
+
+    itx = 1
+    irx = 134
+    S.pltcir(itx,irx)
+
+.. image:: W2_files/W2_fig_05.png
+
+.. image:: W2_files/W2_fig_06.png
+
+In[11]:
+
+.. code:: python
+
+    itx = 1
+    irx = 250
+    S.showray(itx,irx,arange(1,300))
+    
+    
+    
+    
+
+
+.. image:: W2_files/W2_fig_07.png
+
+In[12]:
+
+.. code:: python
+
+    print itx
+    title('PATH LOSS vs distance Tx'+str(itx))
+    xlabel('distance')
+    ylabel('dB')
+    PL=S.PL(itx)   
+
+.. parsed-literal::
+
+    1
+
+.. image:: W2_files/W2_fig_08.png
+
+In[13]:
+
+.. code:: python
+
+    cira,ciro = S.loadcir(1,1)
+
+In[14]:
+
+.. code:: python
+
+    cira.plot()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+.. parsed-literal::
+
+    False False
+
+.. image:: W2_files/W2_fig_09.png
+
+In[15]:
+
+.. code:: python
+
+    CIRA=cira.esd()
+
+In[16]:
+
+.. code:: python
+
+    CIRA.plot()
+
+.. image:: W2_files/W2_fig_10.png
+

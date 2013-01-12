@@ -1,0 +1,8 @@
+.. _channel:
+
+coverage 
+---------------
+
+.. automodule:: pylayers.antprop.coverage
+   :members:
+
