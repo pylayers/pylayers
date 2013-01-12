@@ -26,6 +26,8 @@ def copy(self):
 vec3.copy = copy
 
 class Person2(Process):
+    """ Person2 
+    """
         max_acceleration = 2.0 # m/s/s
         max_speed        = 1.2 # m/s
         #radius = 0.2106  # if one person takes 1.5 feet^2 of space, per traffic stds

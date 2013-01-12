@@ -1,4 +1,4 @@
-from Transit.World import world
+from pylayers.mobility.transit.World import world
 
 
 class Stairs:
