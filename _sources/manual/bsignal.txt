@@ -1,5 +1,5 @@
-Bsignal
-=======
+Utilization of objects from Bsignal class
+=========================================
 
 Generation of an Impulse of normalized energy 
 ---------------------------------------------
