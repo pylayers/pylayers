@@ -142,7 +142,7 @@ last release in your preferred format on github.
 
 .. code-block:: bash
     
-    $ git clone https://github.com/buguen/pylayers.git
+    $ git clone https://github.com/pylayers/pylayers.git
 
 
 We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
