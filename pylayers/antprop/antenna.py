@@ -1,14 +1,19 @@
 # -*- coding:Utf-8 -*-
 """
-This is the module which handles antennas in pylayers
+This module handles antennas in pylayers
 
 To instantiate an antenna object : 
 
-A = Antenna(typ,_filename,directory,nf,ntheta,nphi)
+.. python::
+
+    A = Antenna(typ,_filename,directory,nf,ntheta,nphi)
 
 typ indicates the antenna file format to read 
 
-A = Antenna('mat','S1R1.mat','ant/UWBAN/Matfile')
+Examples
+--------
+    >>> from pylayers.antprop.antenna import *
+    >>> A = Antenna('mat','S1R1.mat','ant/UWBAN/Matfile')
 
 The antenna can be represented in various formats
 

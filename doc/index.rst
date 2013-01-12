@@ -8,18 +8,34 @@ communications systems. Hopefully, also useful for
 higher education on topics related to wireless communications. 
 
 
-Example 
-=======
+.. Example 
+.. =======
 
-.. ipython::
+.. .. ipython::
     
 
-    In [1]: import pylayers.simul.simulem as sem
+..    In [1]: import pylayers.simul.simulem as sem
 
-    In [1]: S = sem.Simul()
+..    In [1]: S = sem.Simul()
 
-    @savefig example.png width=4in
-    In [1]: S.show()
+..    @savefig example.png width=4in
+..    In [1]: S.show()
+
+Context
+=======
+
+PyLayers is beeing developped for research into radio localization exploiting impulse radio
+signals as being defined in the IEEE 802.15.4a and 802.15.6 standards.
+Pylayers could also evolved to help with studies related to channel characterization,
+Wireless Sensor Network, MANET, radio cooperation and relaying techniques, 
+physical layer security, WBAN applications, advanced home automation,
+connected sensito-cognitive environments ...
+
+Pylayers is modular and designed to be easily extended, 
+allowing it to evolve over the time as a tool for research and development in a wide range 
+of communications and localization topics.
+
+
 
 
 Features
@@ -61,21 +77,6 @@ Localization
 * Heterogeneous positioning toolbox 
 * Various techniques exploiting heterogeneous Radio observables
 
-
-
-Context
-=======
-
-PyLayers is beeing developped for research into radio localization exploiting impulse radio
-signals as being defined in the IEEE 802.15.4a and 802.15.6 standards.
-Pylayers could also evolved to help with studies related to channel characterization,
-Wireless Sensor Network, MANET, radio cooperation and relaying techniques, 
-physical layer security, WBAN applications, advanced home automation,
-connected sensito-cognitive environments ...
-
-Pylayers is modular and designed to be easily extended, 
-allowing it to evolve over the time as a tool for research and development in a wide range 
-of communications and localization topics.
 
 
 
@@ -141,7 +142,7 @@ last release in your preferred format on github.
 
 .. code-block:: bash
     
-    $ git clone https://github.com/buguen/pylayers.git
+    $ git clone https://github.com/pylayers/pylayers.git
 
 
 We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
@@ -199,7 +200,7 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 License
 =======
 
-Copyright ©, 2012 University of Rennes 1
+Copyright ©, 2013 University of Rennes 1
 
 Pylayers is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
