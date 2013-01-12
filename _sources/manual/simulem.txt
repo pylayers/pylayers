@@ -1,5 +1,5 @@
 Simulation File        
-----------------
+---------------
 
 This example load a simulation file and shows the layout with the surimposed
 grid of tx and rx points which define the links of interest for the simulation 

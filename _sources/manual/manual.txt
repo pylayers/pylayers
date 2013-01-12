@@ -37,10 +37,10 @@ Overview of the simulation Workflow
 
 The following figure presents a summary of the different pylayers blocs:
 
-.. image:: _static/workflow1.png
+.. image:: ../_static/workflow1.png
     :scale: 50%
 
-.. image:: _static/workflow2.png
+.. image:: ../_static/workflow2.png
     :scale: 50%
 
 The parameter “progress” indicates the evolution of channel simulation. 
@@ -92,14 +92,14 @@ Ray Launching bloc
          the aim is to ibuild a tree which facilitates the futher calculation
          of rays.  The launching phase generates different rays the Tx using a
          precalculated visibility matrix. Note that this approach is currently 
-        being completely reinterpreted by using dedicated graph data structure. 
-        + Operating Base : geometric optic
-        + Layer: physical layer  
+         being completely reinterpreted by using dedicated graph data structure. 
+       + Operating Base : geometric optic
+       + Layer: physical layer  
 + Interfacing
        + Programming language : C
        + Operating system:  works on Linux and not tested on windows
        + Input/output list: 
-        The parameter of this module are given by the input files:
+         The parameter of this module are given by the input files:
                  + `filepalch`
                  + `filestr`
                  + `filetx.spa`  
@@ -133,7 +133,8 @@ Ray Tracing bloc
 ----------------------------   
 
 + Bloc Description
-        + Function: after ray launching and tracing, all we have is geometric models for rays between the Tx and Rx, on which we need to apply electromagnetic models. In order to have the 3D-TUD rays.
+        + Function: after ray launching and tracing, all we have is geometric models for rays between the Tx and Rx, 
+          on which we need to apply electromagnetic models. In order to have the 3D-TUD rays.
         + Operating Base : uniform theory of diffraction 
         + Layer: physical layer 
 
@@ -159,7 +160,8 @@ Electromagnetic field evaluation
 + Interfacing 
         + Programming language: Python and C
         + Operating system: on Linux  and not testes on windows
-        + Input/output list: input file: filefreq for the frequency range and the output file is filefield containing the relation the matrix connecting the transmitted and received field.   
+        + Input/output list: input file: filefreq for the frequency range and the output file is filefield
+          containing the relation the matrix connecting the transmitted and received field.   
         + Input/output format: both Input and Output  are ASCII files 
 
 

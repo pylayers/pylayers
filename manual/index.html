@@ -64,25 +64,25 @@
 <li><a class="reference internal" href="#how-to-build-a-layout-file">How to build a layout file  ?</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#how-to-use-the-mobile-network-simulator">How to use the mobile network simulator ?</a><ul>
+<li><a class="reference internal" href="#how-are-described-walls-and-doors-slabs">How are described walls and doors slabs ?</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#how-to-define-and-launch-an-electromagnetic-simulation">How to define and launch an electromagnetic  simulation  ?</a><ul>
+<li><a class="reference internal" href="#how-to-define-and-launch-an-electromagnetic-simulation">How to define and launch an electromagnetic simulation  ?</a><ul>
 </ul>
 </li>
 <li><a class="reference internal" href="#how-is-implemented-the-ray-tracing-simulator">How is implemented the Ray Tracing simulator ?</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#antennas">Antennas</a><ul>
+<li><a class="reference internal" href="#how-to-use-the-mobile-network-simulator">How to use the mobile network simulator ?</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#propagation-channel">Propagation Channel</a><ul>
+<li><a class="reference internal" href="#how-to-deal-with-antennas">How to deal with antennas</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#slabs">Slabs</a><ul>
+<li><a class="reference internal" href="#how-is-modeled-the-propagation-channel">How is modeled the propagation channel ?</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#signals">Signals</a><ul>
+<li><a class="reference internal" href="#how-are-time-frequency-domain-waveforms-described">How are time/frequency domain waveforms described  ?</a><ul>
 </ul>
 </li>
 </ul>
@@ -122,7 +122,7 @@
           <div class="body">
             
   <div class="section" id="user-manual">
-<h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
+<span id="usermanual"></span><h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="how-to-build-a-layout-file">
 <h2>How to build a layout file  ?<a class="headerlink" href="#how-to-build-a-layout-file" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -137,6 +137,47 @@
 <li class="toctree-l2"><a class="reference internal" href="layout.html#modification-of-display-parameters">Modification of display parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="layout.html#list-of-keyboard-shortcuts">List of keyboard shortcuts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="layout.html#using-graphs">Using graphs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-are-described-walls-and-doors-slabs">
+<h2>How are described walls and doors slabs ?<a class="headerlink" href="#how-are-described-walls-and-doors-slabs" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="slab.html">Slab and Materials</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-to-define-and-launch-an-electromagnetic-simulation">
+<h2>How to define and launch an electromagnetic simulation  ?<a class="headerlink" href="#how-to-define-and-launch-an-electromagnetic-simulation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simulem.html">Simulation File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulem.html#getting-started">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simulem.html#simulation-ini-file">Simulation <cite>.ini</cite>  file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simulem.html#output-section">Output Section</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-is-implemented-the-ray-tracing-simulator">
+<h2>How is implemented the Ray Tracing simulator ?<a class="headerlink" href="#how-is-implemented-the-ray-tracing-simulator" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pulsray.html">PulsRay Ray Trool  (to be deprecated soon)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pulsray.html#overview-of-the-simulation-workflow">Overview of the simulation Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsray.html#description-of-the-different-blocks">Description of the different blocks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pulsray.html#ray-launching-bloc">Ray Launching bloc</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pulsray.html#ray-tracing-bloc">Ray Tracing bloc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulsray.html#d-rays-computing-using-tud">3D rays computing using TUD</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pulsray.html#electromagnetic-field-evaluation">Electromagnetic field evaluation</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -163,60 +204,23 @@
 </ul>
 </div>
 </div>
-<div class="section" id="how-to-define-and-launch-an-electromagnetic-simulation">
-<h2>How to define and launch an electromagnetic  simulation  ?<a class="headerlink" href="#how-to-define-and-launch-an-electromagnetic-simulation" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="simulem.html">Simulation File</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simulem.html#getting-started">Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="simulem.html#simulation-ini-file">Simulation <cite>.ini</cite>  file</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="simulem.html#output-section">Output Section</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="how-is-implemented-the-ray-tracing-simulator">
-<h2>How is implemented the Ray Tracing simulator ?<a class="headerlink" href="#how-is-implemented-the-ray-tracing-simulator" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="pulsray.html">Overview of the simulation Workflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pulsray.html#description-of-the-different-blocks">Description of the different blocks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pulsray.html#ray-launching-bloc">Ray Launching bloc</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="pulsray.html#ray-tracing-bloc">Ray Tracing bloc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pulsray.html#d-rays-computing-using-tud">3D rays computing using TUD</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pulsray.html#electromagnetic-field-evaluation">Electromagnetic field evaluation</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="antennas">
-<h2>Antennas<a class="headerlink" href="#antennas" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-to-deal-with-antennas">
+<h2>How to deal with antennas<a class="headerlink" href="#how-to-deal-with-antennas" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="antenna.html">Antenna format</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="propagation-channel">
-<h2>Propagation Channel<a class="headerlink" href="#propagation-channel" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-is-modeled-the-propagation-channel">
+<h2>How is modeled the propagation channel ?<a class="headerlink" href="#how-is-modeled-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul class="simple">
 </ul>
 </div>
 </div>
-<div class="section" id="slabs">
-<h2>Slabs<a class="headerlink" href="#slabs" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul class="simple">
-</ul>
-</div>
-</div>
-<div class="section" id="signals">
-<h2>Signals<a class="headerlink" href="#signals" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-are-time-frequency-domain-waveforms-described">
+<h2>How are time/frequency domain waveforms described  ?<a class="headerlink" href="#how-are-time-frequency-domain-waveforms-described" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="bsignal.html">Bsignal</a><ul>

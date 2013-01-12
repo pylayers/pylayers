@@ -1,6 +1,4 @@
-
-Slab and Materials
-==================
+In[6]:
 
 .. code:: python
 
@@ -14,6 +12,7 @@ material which are used in the slab file should be avilable in the mat
 file. It could be intersting to check the consistency of those two
 files.
 
+In[9]:
 
 .. code:: python
 
@@ -123,7 +122,7 @@ In[37]:
     figsize(8,8)
     sl['placo'].plotwrta()
 
-.. image:: slab_files/slab_fig_00.png
+.. image:: SlabEtMateriaux_files/SlabEtMateriaux_fig_00.png
 
 In[38]:
 
@@ -132,7 +131,7 @@ In[38]:
     fGHz   = arange(0.4,8.3,0.1)
     sl['placo'].plotwrtf()
 
-.. image:: slab_files/slab_fig_01.png
+.. image:: SlabEtMateriaux_files/SlabEtMateriaux_fig_01.png
 
 In[39]:
 
@@ -140,7 +139,7 @@ In[39]:
 
     sl['placo'].pcolor()
 
-.. image:: slab_files/slab_fig_02.png
+.. image:: SlabEtMateriaux_files/SlabEtMateriaux_fig_02.png
 
 This example is in describe in page 90 of the thesis "Simulation du
 canal de propagation indoor " par Cyril Humbert
@@ -164,4 +163,4 @@ In[44]:
     sl['Humbert'].ev(fGHz,theta)
     sl['Humbert'].plotwrta()
 
-.. image:: slab_files/slab_fig_03.png
+.. image:: SlabEtMateriaux_files/SlabEtMateriaux_fig_03.png

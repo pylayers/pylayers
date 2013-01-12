@@ -61,6 +61,14 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">antenna</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="antprop.html"
                         title="previous chapter">antprop</a></p>
@@ -95,11 +103,15 @@
             
   <div class="section" id="antenna">
 <span id="id1"></span><h1>antenna<a class="headerlink" href="#antenna" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-pylayers.antprop.antenna"></span><p>This is the module which handles antennas in pylayers</p>
+<span class="target" id="module-pylayers.antprop.antenna"></span><p>This module handles antennas in pylayers</p>
 <p>To instantiate an antenna object :</p>
-<p>A = Antenna(typ,_filename,directory,nf,ntheta,nphi)</p>
 <p>typ indicates the antenna file format to read</p>
-<p>A = Antenna(&#8216;mat&#8217;,&#8217;S1R1.mat&#8217;,&#8217;ant/UWBAN/Matfile&#8217;)</p>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;mat&#39;</span><span class="p">,</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>The antenna can be represented in various formats</p>
 <p>.vsh2
 .vsh3</p>
@@ -1011,7 +1023,7 @@ s3  shape 3   array [ Nf x K     ] ind [ K x 2]</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.SHCoeff.show">
-<tt class="descname">show</tt><big>(</big><em>typ='s1'</em>, <em>k=0</em>, <em>N=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>titre='SHC'</em>, <em>xl=True</em>, <em>yl=True</em>, <em>fontsize=14</em>, <em>dB=True</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0xa9c25ec&gt;</em>, <em>anim=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#SHCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.SHCoeff.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>typ='s1'</em>, <em>k=0</em>, <em>N=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>titre='SHC'</em>, <em>xl=True</em>, <em>yl=True</em>, <em>fontsize=14</em>, <em>dB=True</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0xa36c5ec&gt;</em>, <em>anim=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#SHCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.SHCoeff.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show coeff</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1547,6 +1559,7 @@ len(phi) must be equal with shape(F)[2]</p>
 </div>
 </dd></dl>
 
+</div>
 </div>
 
 

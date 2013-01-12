@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Slab and Materials &mdash; PyLayers 0.1 documentation</title>
+    <title>&lt;no title&gt; &mdash; PyLayers 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -25,10 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
-    <link rel="up" title="User Manual" href="index.html" />
-    <link rel="next" title="Simulation File" href="simulem.html" />
-    <link rel="prev" title="How to edit a new structure ?" href="layout.html" /> 
+    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" /> 
   </head>
   <body>
 
@@ -45,30 +42,17 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="simulem.html" title="Simulation File"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="layout.html" title="How to edit a new structure ?"
-             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">home</a>|&nbsp;</li>
         <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" accesskey="U">User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="layout.html"
-                        title="previous chapter">How to edit a new structure ?</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="simulem.html"
-                        title="next chapter">Simulation File</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../_sources/manual/slab.txt"
+    <li><a href="../_sources/notebooks/SlabEtMateriaux.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -92,8 +76,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="slab-and-materials">
-<h1>Slab and Materials<a class="headerlink" href="#slab-and-materials" title="Permalink to this headline">¶</a></h1>
+  <p>In[6]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#import mplrc.ieee.transaction</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
@@ -104,6 +87,7 @@
 material which are used in the slab file should be avilable in the mat
 file. It could be intersting to check the consistency of those two
 files.</p>
+<p>In[9]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">=</span><span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -187,18 +171,18 @@ mat id and the material name.</p>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/slab_fig_00.png" src="../_images/slab_fig_00.png" />
+<img alt="../_images/SlabEtMateriaux_fig_00.png" src="../_images/SlabEtMateriaux_fig_00.png" />
 <p>In[38]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">8.3</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/slab_fig_01.png" src="../_images/slab_fig_01.png" />
+<img alt="../_images/SlabEtMateriaux_fig_01.png" src="../_images/SlabEtMateriaux_fig_01.png" />
 <p>In[39]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/slab_fig_02.png" src="../_images/slab_fig_02.png" />
+<img alt="../_images/SlabEtMateriaux_fig_02.png" src="../_images/SlabEtMateriaux_fig_02.png" />
 <p>This example is in describe in page 90 of the thesis &#8220;Simulation du
 canal de propagation indoor &#8221; par Cyril Humbert</p>
 <p>In[42]:</p>
@@ -215,8 +199,7 @@ humb03.pdf page 96</p>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;Humbert&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/slab_fig_03.png" src="../_images/slab_fig_03.png" />
-</div>
+<img alt="../_images/SlabEtMateriaux_fig_03.png" src="../_images/SlabEtMateriaux_fig_03.png" />
 
 
           </div>
@@ -233,16 +216,9 @@ humb03.pdf page 96</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="simulem.html" title="Simulation File"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="layout.html" title="How to edit a new structure ?"
-             >previous</a> |</li>
         <li><a href="../index.html">home</a>|&nbsp;</li>
         <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
     <div class="footer">

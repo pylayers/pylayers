@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Overview of the simulation Workflow &mdash; PyLayers 0.1 documentation</title>
+    <title>PulsRay Ray Trool (to be deprecated soon) &mdash; PyLayers 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
     <link rel="up" title="User Manual" href="index.html" />
-    <link rel="next" title="Antenna format" href="antenna.html" />
+    <link rel="next" title="How to goes from a simulnet to a Channel Impulse Response ?" href="simulnet.html" />
     <link rel="prev" title="Simulation File" href="simulem.html" /> 
   </head>
   <body>
@@ -46,7 +46,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="antenna.html" title="Antenna format"
+          <a href="simulnet.html" title="How to goes from a simulnet to a Channel Impulse Response ?"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="simulem.html" title="Simulation File"
@@ -62,7 +62,8 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Overview of the simulation Workflow</a></li>
+<li><a class="reference internal" href="#">PulsRay Ray Trool  (to be deprecated soon)</a><ul>
+<li><a class="reference internal" href="#overview-of-the-simulation-workflow">Overview of the simulation Workflow</a></li>
 <li><a class="reference internal" href="#description-of-the-different-blocks">Description of the different blocks</a><ul>
 <li><a class="reference internal" href="#ray-launching-bloc">Ray Launching bloc</a></li>
 </ul>
@@ -73,13 +74,15 @@
 </ul>
 </li>
 </ul>
+</li>
+</ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="simulem.html"
                         title="previous chapter">Simulation File</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="antenna.html"
-                        title="next chapter">Antenna format</a></p>
+  <p class="topless"><a href="simulnet.html"
+                        title="next chapter">How to goes from a simulnet to a Channel Impulse Response ?</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/manual/pulsray.txt"
@@ -106,7 +109,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>Pulsray is a set of commands written in C code which achieve deterministic channel simulation,
+  <div class="section" id="pulsray-ray-trool-to-be-deprecated-soon">
+<h1>PulsRay Ray Trool  (to be deprecated soon)<a class="headerlink" href="#pulsray-ray-trool-to-be-deprecated-soon" title="Permalink to this headline">¶</a></h1>
+<p>Pulsray is a set of commands written in C code which achieve deterministic channel simulation,
 using. Those commands allows the evaluation of
 the propagation channel conditions, in indoor environment, between radio nodes for
 different antenna directions and waveforms.</p>
@@ -133,7 +138,7 @@ one written and Python and which uses parsing of <cite>ini</cite> files.</p>
 <p><cite>ini</cite> files are simple Ascii files which can easily be parsed into Python dictionnary and which are human
 readable.  The order of the data which apppear in each section is not relevant.</p>
 <div class="section" id="overview-of-the-simulation-workflow">
-<h1>Overview of the simulation Workflow<a class="headerlink" href="#overview-of-the-simulation-workflow" title="Permalink to this headline">¶</a></h1>
+<h2>Overview of the simulation Workflow<a class="headerlink" href="#overview-of-the-simulation-workflow" title="Permalink to this headline">¶</a></h2>
 <p>The following figure presents a summary of the different pylayers blocs:</p>
 <a class="reference internal image-reference" href="manual/../_static/workflow1.png"><img alt="manual/../_static/workflow1.png" src="manual/../_static/workflow1.png" /></a>
 <a class="reference internal image-reference" href="manual/../_static/workflow2.png"><img alt="manual/../_static/workflow2.png" src="manual/../_static/workflow2.png" /></a>
@@ -171,9 +176,9 @@ the receiver and the transmitter.</p>
 </div></blockquote>
 </div>
 <div class="section" id="description-of-the-different-blocks">
-<h1>Description of the different blocks<a class="headerlink" href="#description-of-the-different-blocks" title="Permalink to this headline">¶</a></h1>
+<h2>Description of the different blocks<a class="headerlink" href="#description-of-the-different-blocks" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="ray-launching-bloc">
-<h2>Ray Launching bloc<a class="headerlink" href="#ray-launching-bloc" title="Permalink to this headline">¶</a></h2>
+<h3>Ray Launching bloc<a class="headerlink" href="#ray-launching-bloc" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><dl class="first docutils">
 <dt>Bloc Description</dt>
@@ -225,7 +230,7 @@ propagation heuristics.</li>
 </div>
 </div>
 <div class="section" id="ray-tracing-bloc">
-<h1>Ray Tracing bloc<a class="headerlink" href="#ray-tracing-bloc" title="Permalink to this headline">¶</a></h1>
+<h2>Ray Tracing bloc<a class="headerlink" href="#ray-tracing-bloc" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><dl class="first docutils">
 <dt>Bloc Description</dt>
@@ -254,7 +259,7 @@ filepatra, the filelch is used as input to determine the rays to the receivers. 
 </ul>
 </div>
 <div class="section" id="d-rays-computing-using-tud">
-<h1>3D rays computing using TUD<a class="headerlink" href="#d-rays-computing-using-tud" title="Permalink to this headline">¶</a></h1>
+<h2>3D rays computing using TUD<a class="headerlink" href="#d-rays-computing-using-tud" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><dl class="first docutils">
 <dt>Bloc Description</dt>
@@ -286,7 +291,7 @@ arrival angles for each ray.</li>
 </li>
 </ul>
 <div class="section" id="electromagnetic-field-evaluation">
-<h2>Electromagnetic field evaluation<a class="headerlink" href="#electromagnetic-field-evaluation" title="Permalink to this headline">¶</a></h2>
+<h3>Electromagnetic field evaluation<a class="headerlink" href="#electromagnetic-field-evaluation" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><dl class="first docutils">
 <dt>Bloc Description</dt>
@@ -315,6 +320,7 @@ number of rays...</p>
 </ul>
 </div>
 </div>
+</div>
 
 
           </div>
@@ -332,7 +338,7 @@ number of rays...</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="antenna.html" title="Antenna format"
+          <a href="simulnet.html" title="How to goes from a simulnet to a Channel Impulse Response ?"
              >next</a> |</li>
         <li class="right" >
           <a href="simulem.html" title="Simulation File"
