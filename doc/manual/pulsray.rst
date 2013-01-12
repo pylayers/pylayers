@@ -1,3 +1,5 @@
+PulsRay Ray Trool  (to be deprecated soon) 
+==========================================
 
 Pulsray is a set of commands written in C code which achieve deterministic channel simulation,
 using. Those commands allows the evaluation of

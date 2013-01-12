@@ -24,4 +24,4 @@ propagation channel description.
 
    antprop.signature.rst
 
-   antprop.slab.slabdb.rst
+   antprop.slab.rst

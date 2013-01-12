@@ -73,7 +73,7 @@ Agent Mobility Handling
 Localization Algorithms
 -----------------------
 
-* Set Membership positoning algorithm toolbox
+* Set Membership positioning algorithm toolbox
 * Heterogeneous radion positioning toolbox 
 
 
@@ -119,7 +119,8 @@ Pylayers is driven by professor Bernard Uguen at `University of Rennes 1
 
 Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
 Laaraiedh and Meriem Mhedbhi, with the technical support of all the members from the
-Research Team of the Propagation and Localization team of the `IETR <http://www.ietr.org>`_ lab.    
+Research Team of the Propagation and Localization team of the `IETR
+<http://www.ietr.fr>`_ lab.    
 
 Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi
 Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr Research center).
@@ -172,7 +173,7 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
     :target: http://www.louisbourdon.com/index.htm
 
 .. image::  _static/fp7.png 
-    :scale: 40%
+    :scale: 10%
 
 .. image::  _static/ucells.png 
     :scale: 40%

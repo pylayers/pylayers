@@ -1,29 +1,26 @@
-.. _usermanual
+.. _usermanual:
+
 User Manual 
 ===========
 
 How to build a layout file  ? 
-----------------------------
+-----------------------------
 
 .. toctree::
     maxdepth:2
 
     layout.rst 
 
-How to use the mobile network simulator ? 
------------------------------------------
+How are described walls and doors slabs ?  
+------------------------------------------
 
-
-.. toctree::
+.. toctree:: 
     maxdepth:2
 
-    simulnet.rst
+    slab.rst
 
-
-How to define and launch an electromagnetic  simulation  ? 
+How to define and launch an electromagnetic simulation  ? 
 ---------------------------------------------------------
-
-
 
 .. toctree::
     maxdepth:2
@@ -38,33 +35,35 @@ How is implemented the Ray Tracing simulator ?
 
     pulsray.rst
 
+How to use the mobile network simulator ? 
+-----------------------------------------
 
-Antennas 
---------
+
+.. toctree::
+    maxdepth:2
+
+    simulnet.rst
+
+
+
+How to deal with antennas 
+-------------------------
 
 .. toctree:: 
     maxdepth:2
     
     antenna.rst
 
-Propagation Channel 
--------------------
+How is modeled the propagation channel ?
+----------------------------------------
 
 .. toctree:: 
     maxdepth:2
     
     channel.rst
 
-Slabs
------
-
-.. toctree:: 
-    maxdepth:2
-
-    slab.rst
-
-Signals 
--------------------
+How are time/frequency domain waveforms described  ? 
+----------------------------------------------------
 
 .. toctree:: 
     maxdepth:2
