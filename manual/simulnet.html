@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>How to goes from a simulnet to a Channel Impulse Response ? &mdash; PyLayers 0.1 documentation</title>
+    <title>4.1. How to goes from a simulnet to a Channel Impulse Response ? &mdash; PyLayers 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,9 +26,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
-    <link rel="up" title="User Manual" href="index.html" />
-    <link rel="next" title="Antenna format" href="antenna.html" />
-    <link rel="prev" title="PulsRay Ray Trool (to be deprecated soon)" href="pulsray.html" />
+    <link rel="up" title="1. How to build a layout file ?" href="tocmanual.html" />
+    <link rel="next" title="5.1. Antenna format" href="antenna.html" />
+    <link rel="prev" title="3.1. Setting a first simulation file" href="simulem.html" />
 <script type="text/javascript">
     
       var _gaq = _gaq || [];
@@ -60,15 +60,16 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="antenna.html" title="Antenna format"
+          <a href="antenna.html" title="5.1. Antenna format"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pulsray.html" title="PulsRay Ray Trool (to be deprecated soon)"
+          <a href="simulem.html" title="3.1. Setting a first simulation file"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">home</a>|&nbsp;</li>
         <li><a href="../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="index.html" accesskey="U">User Manual</a> &raquo;</li> 
+          <li><a href="index.html" >User Manual</a> &raquo;</li>
+          <li><a href="tocmanual.html" accesskey="U">1. How to build a layout file  ?</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -76,28 +77,28 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">How to goes from a simulnet to a Channel Impulse Response ?</a><ul>
-<li><a class="reference internal" href="#generate-a-mobile-simulation-with-simulnet">Generate a mobile simulation with simulnet</a><ul>
-<li><a class="reference internal" href="#agent-ini">agent.ini</a></li>
+<li><a class="reference internal" href="#">4.1. How to goes from a simulnet to a Channel Impulse Response ?</a><ul>
+<li><a class="reference internal" href="#generate-a-mobile-simulation-with-simulnet">4.1.1. Generate a mobile simulation with simulnet</a><ul>
+<li><a class="reference internal" href="#agent-ini">4.1.1.1. agent.ini</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#save-section"><cite>[Save]</cite> section</a></li>
-<li><a class="reference internal" href="#layout-section"><cite>[Layout]</cite> section :</a></li>
-<li><a class="reference internal" href="#network-section"><cite>[Network]</cite> section</a></li>
-<li><a class="reference internal" href="#running-the-simulation">Running the simulation</a></li>
-<li><a class="reference internal" href="#compute-and-exploit-pyray-with-the-given-simulnet-files">Compute and exploit pyray with the given simulnet files</a></li>
-<li><a class="reference internal" href="#results">Results</a></li>
-<li><a class="reference internal" href="#exploitation">Exploitation</a></li>
+<li><a class="reference internal" href="#save-section">4.1.2. <cite>[Save]</cite> section</a></li>
+<li><a class="reference internal" href="#layout-section">4.1.3. <cite>[Layout]</cite> section :</a></li>
+<li><a class="reference internal" href="#network-section">4.1.4. <cite>[Network]</cite> section</a></li>
+<li><a class="reference internal" href="#running-the-simulation">4.1.5. Running the simulation</a></li>
+<li><a class="reference internal" href="#compute-and-exploit-pyray-with-the-given-simulnet-files">4.1.6. Compute and exploit pyray with the given simulnet files</a></li>
+<li><a class="reference internal" href="#results">4.1.7. Results</a></li>
+<li><a class="reference internal" href="#exploitation">4.1.8. Exploitation</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pulsray.html"
-                        title="previous chapter">PulsRay Ray Trool  (to be deprecated soon)</a></p>
+  <p class="topless"><a href="simulem.html"
+                        title="previous chapter">3.1. Setting a first simulation file</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="antenna.html"
-                        title="next chapter">Antenna format</a></p>
+                        title="next chapter">5.1. Antenna format</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/manual/simulnet.txt"
@@ -125,32 +126,32 @@
           <div class="body">
             
   <div class="section" id="how-to-goes-from-a-simulnet-to-a-channel-impulse-response">
-<h1>How to goes from a simulnet to a Channel Impulse Response ?<a class="headerlink" href="#how-to-goes-from-a-simulnet-to-a-channel-impulse-response" title="Permalink to this headline">¶</a></h1>
+<h1>4.1. How to goes from a simulnet to a Channel Impulse Response ?<a class="headerlink" href="#how-to-goes-from-a-simulnet-to-a-channel-impulse-response" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="generate-a-mobile-simulation-with-simulnet">
-<h2>Generate a mobile simulation with simulnet<a class="headerlink" href="#generate-a-mobile-simulation-with-simulnet" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.1. Generate a mobile simulation with simulnet<a class="headerlink" href="#generate-a-mobile-simulation-with-simulnet" title="Permalink to this headline">¶</a></h2>
 <p>You need first to have an <cite>agent.ini</cite> and <cite>simulnet.ini</cite> file in the  <cite>/ini</cite> directory
 of your current project.</p>
 <div class="section" id="agent-ini">
-<h3>agent.ini<a class="headerlink" href="#agent-ini" title="Permalink to this headline">¶</a></h3>
+<h3>4.1.1.1. agent.ini<a class="headerlink" href="#agent-ini" title="Permalink to this headline">¶</a></h3>
 <p>Below is an exemple of agent.ini file</p>
 <p>configure simulnet.ini file</p>
 </div>
 </div>
 <div class="section" id="save-section">
-<h2><cite>[Save]</cite> section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.2. <cite>[Save]</cite> section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><cite>pyray</cite> : use this option to generate outputs of the simulation compliant with pulsray</li>
 <li><cite>txt</cite> : use this option to generate outputs of the simulation compliant with the WHERE2 DB</li>
 </ul>
 </div>
 <div class="section" id="layout-section">
-<h2><cite>[Layout]</cite> section :<a class="headerlink" href="#layout-section" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.3. <cite>[Layout]</cite> section :<a class="headerlink" href="#layout-section" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><cite>filename</cite> option give the name ofd the file .str used for simulnet simulation</li>
 </ul>
 </div>
 <div class="section" id="network-section">
-<h2><cite>[Network]</cite> section<a class="headerlink" href="#network-section" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.4. <cite>[Network]</cite> section<a class="headerlink" href="#network-section" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>The network_update_time option give the sample rate of the output files.</li>
 </ul>
@@ -187,7 +188,7 @@ In Section [agentidentifier]:</p>
 + condition not used for now</p>
 </div>
 <div class="section" id="running-the-simulation">
-<h2>Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.5. Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this headline">¶</a></h2>
 <p>Illustration 1: terminal output after S.runsimul()</p>
 <ul class="simple">
 <li>would you like to erase previous txt files ?</li>
@@ -207,7 +208,7 @@ In Section [agentidentifier]:</p>
 <p>Illustration 3: exemple of contents of 1.ini file</p>
 </div>
 <div class="section" id="compute-and-exploit-pyray-with-the-given-simulnet-files">
-<h2>Compute and exploit pyray with the given simulnet files<a class="headerlink" href="#compute-and-exploit-pyray-with-the-given-simulnet-files" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.6. Compute and exploit pyray with the given simulnet files<a class="headerlink" href="#compute-and-exploit-pyray-with-the-given-simulnet-files" title="Permalink to this headline">¶</a></h2>
 <p>computation</p>
 <p>E.compute runs the pyray simulation for
 + all anchors nodes (ap) to all mobile nodes (ag)
@@ -215,7 +216,7 @@ In Section [agentidentifier]:</p>
 <p>This operation can take a while.....</p>
 </div>
 <div class="section" id="results">
-<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.7. Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
 <p>The simulation generates .mat files in directory <cite>ProjectDirectory/output/nodeid</cite></p>
 <p>Illustration 4: Contents of ProjectDirectory/output/1 and 6</p>
 <p>file name is build as follow : <cite>defaultcir-tx_node_id-rx_node_id-pposition_id</cite></p>
@@ -223,7 +224,7 @@ In Section [agentidentifier]:</p>
 <cite>ProjectDirectory/netsave/nodeid.ini</cite></p>
 </div>
 <div class="section" id="exploitation">
-<h2>Exploitation<a class="headerlink" href="#exploitation" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.8. Exploitation<a class="headerlink" href="#exploitation" title="Permalink to this headline">¶</a></h2>
 <p>either</p>
 <p>or</p>
 <p>Invocate pltciri for 2 nodes for instance 1 and 6:</p>
@@ -255,15 +256,16 @@ Press Enter to show the associated Channel impulse response (CIR)</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="antenna.html" title="Antenna format"
+          <a href="antenna.html" title="5.1. Antenna format"
              >next</a> |</li>
         <li class="right" >
-          <a href="pulsray.html" title="PulsRay Ray Trool (to be deprecated soon)"
+          <a href="simulem.html" title="3.1. Setting a first simulation file"
              >previous</a> |</li>
         <li><a href="../index.html">home</a>|&nbsp;</li>
         <li><a href="../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="index.html" >User Manual</a> &raquo;</li> 
+          <li><a href="index.html" >User Manual</a> &raquo;</li>
+          <li><a href="tocmanual.html" >1. How to build a layout file  ?</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

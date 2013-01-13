@@ -86,14 +86,17 @@ Documentation
 =============
 
 Pylayers is still in an early stage of its development. The code as well as the
-documentation are in a beta version. The user manual section is embrionary and 
-will be regularly populated with new examples of utilization. Pylayers is intented to used
-in association with `ipython <http://ipython.org>`_
+documentation are in a beta version. The user manual section is embryonary and 
+will be regularly populated with new examples of utilization. Pylayers is
+better used in association with `ipython <http://ipython.org>`_
 
 .. toctree::
     :maxdepth: 1 
 
     manual/index.rst 
+
+.. toctree::
+    :maxdepth: 1 
 
     modules/index.rst
     

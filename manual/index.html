@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
-    <link rel="next" title="How to edit a new structure ?" href="layout.html" />
+    <link rel="next" title="1. How to build a layout file ?" href="tocmanual.html" />
     <link rel="prev" title="PyLayers : Python mobile Localization Electromagnetics Radio Simulator" href="../index.html" />
 <script type="text/javascript">
     
@@ -59,7 +59,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="layout.html" title="How to edit a new structure ?"
+          <a href="tocmanual.html" title="1. How to build a layout file ?"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="PyLayers : Python mobile Localization Electromagnetics Radio Simulator"
@@ -72,40 +72,12 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">User Manual</a><ul>
-<li><a class="reference internal" href="#how-to-build-a-layout-file">How to build a layout file  ?</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#how-are-described-walls-and-doors-slabs">How are described walls and doors slabs ?</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#how-to-define-and-launch-an-electromagnetic-simulation">How to define and launch an electromagnetic simulation  ?</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#how-to-use-the-mobile-network-simulator">How to use the mobile network simulator ?</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#how-to-deal-with-antennas">How to deal with antennas</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#how-is-modeled-the-propagation-channel">How is modeled the propagation channel ?</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#how-are-time-frequency-domain-waveforms-described">How are time/frequency domain waveforms described  ?</a><ul>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
                         title="previous chapter">PyLayers : Python mobile Localization Electromagnetics Radio Simulator</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="layout.html"
-                        title="next chapter">How to edit a new structure ?</a></p>
+  <p class="topless"><a href="tocmanual.html"
+                        title="next chapter">1. How to build a layout file  ?</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/manual/index.txt"
@@ -134,91 +106,69 @@
             
   <div class="section" id="user-manual">
 <span id="usermanual"></span><h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="how-to-build-a-layout-file">
-<h2>How to build a layout file  ?<a class="headerlink" href="#how-to-build-a-layout-file" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="layout.html">How to edit a new structure ?</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#terminology">Terminology</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#the-str2-file">The <cite>.str2</cite> file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#creating-the-layout">Creating the layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#layout-editor-matplotlib-gui">Layout editor matplotlib GUI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#points-creation-mode">Points creation mode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#walls-edition-mode">Walls edition mode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#modification-of-display-parameters">Modification of display parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#list-of-keyboard-shortcuts">List of keyboard shortcuts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="layout.html#using-graphs">Using graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tocmanual.html">1. How to build a layout file  ?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">1.1. How to edit a new structure ?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#terminology">1.1.1. Terminology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#the-str2-file">1.1.2. The <cite>.str2</cite> file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#creating-the-layout">1.1.3. Creating the layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#layout-editor-matplotlib-gui">1.1.4. Layout editor matplotlib GUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#points-creation-mode">1.1.5. Points creation mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#walls-edition-mode">1.1.6. Walls edition mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#modification-of-display-parameters">1.1.7. Modification of display parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#list-of-keyboard-shortcuts">1.1.8. List of keyboard shortcuts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layout.html#using-graphs">1.1.9. Using graphs</a></li>
 </ul>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="how-are-described-walls-and-doors-slabs">
-<h2>How are described walls and doors slabs ?<a class="headerlink" href="#how-are-described-walls-and-doors-slabs" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="slab.html">Slab and Materials</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="how-to-define-and-launch-an-electromagnetic-simulation">
-<h2>How to define and launch an electromagnetic simulation  ?<a class="headerlink" href="#how-to-define-and-launch-an-electromagnetic-simulation" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="simulem.html">Setting a first simulation file</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="simulem.html#simulation-default-ini-file">Simulation <cite>default.ini</cite>  file</a></li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tocmanual.html#how-are-described-walls-and-doors-slabs">2. How are described walls and doors slabs ?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slab.html">2.1. Slab and Materials</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="simulem.html#output-section">Output Section</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="how-to-use-the-mobile-network-simulator">
-<h2>How to use the mobile network simulator ?<a class="headerlink" href="#how-to-use-the-mobile-network-simulator" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="simulnet.html">How to goes from a simulnet to a Channel Impulse Response ?</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#generate-a-mobile-simulation-with-simulnet">Generate a mobile simulation with simulnet</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="simulnet.html#agent-ini">agent.ini</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tocmanual.html#how-to-define-and-launch-an-electromagnetic-simulation">3. How to define and launch an electromagnetic simulation  ?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simulem.html">3.1. Setting a first simulation file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulem.html#simulation-default-ini-file">3.1.1. Simulation <cite>default.ini</cite>  file</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#save-section"><cite>[Save]</cite> section</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#layout-section"><cite>[Layout]</cite> section :</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#network-section"><cite>[Network]</cite> section</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#running-the-simulation">Running the simulation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#compute-and-exploit-pyray-with-the-given-simulnet-files">Compute and exploit pyray with the given simulnet files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#results">Results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulnet.html#exploitation">Exploitation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulem.html#output-section">3.2. Output Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coverage.html">3.3. Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="coverage.html#calulating-received-power-coverage">3.4. Calulating Received Power Coverage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tocmanual.html#how-to-use-the-mobile-network-simulator">4. How to use the mobile network simulator ?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simulnet.html">4.1. How to goes from a simulnet to a Channel Impulse Response ?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#generate-a-mobile-simulation-with-simulnet">4.1.1. Generate a mobile simulation with simulnet</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulnet.html#agent-ini">4.1.1.1. agent.ini</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#save-section">4.1.2. <cite>[Save]</cite> section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#layout-section">4.1.3. <cite>[Layout]</cite> section :</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#network-section">4.1.4. <cite>[Network]</cite> section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#running-the-simulation">4.1.5. Running the simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#compute-and-exploit-pyray-with-the-given-simulnet-files">4.1.6. Compute and exploit pyray with the given simulnet files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#results">4.1.7. Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulnet.html#exploitation">4.1.8. Exploitation</a></li>
 </ul>
 </li>
 </ul>
-</div>
-</div>
-<div class="section" id="how-to-deal-with-antennas">
-<h2>How to deal with antennas<a class="headerlink" href="#how-to-deal-with-antennas" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="antenna.html">Antenna format</a></li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tocmanual.html#how-to-describe-antennas">5. How to describe antennas ?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antenna.html">5.1. Antenna format</a></li>
 </ul>
-</div>
-</div>
-<div class="section" id="how-is-modeled-the-propagation-channel">
-<h2>How is modeled the propagation channel ?<a class="headerlink" href="#how-is-modeled-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul class="simple">
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tocmanual.html#how-is-modeled-the-propagation-channel">6. How is modeled the propagation channel ?</a><ul class="simple">
 </ul>
-</div>
-</div>
-<div class="section" id="how-are-time-frequency-domain-waveforms-described">
-<h2>How are time/frequency domain waveforms described  ?<a class="headerlink" href="#how-are-time-frequency-domain-waveforms-described" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="bsignal.html">Utilization of objects from Bsignal class</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bsignal.html#generation-of-an-impulse-of-normalized-energy">Generation of an Impulse of normalized energy</a></li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tocmanual.html#how-are-time-frequency-domain-waveforms-described">7. How are time/frequency domain waveforms described  ?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bsignal.html">7.1. Utilization of objects from Bsignal class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bsignal.html#generation-of-an-impulse-of-normalized-energy">7.1.1. Generation of an Impulse of normalized energy</a></li>
 </ul>
 </li>
 </ul>
-</div>
+</li>
+</ul>
 </div>
 </div>
 
@@ -238,7 +188,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="layout.html" title="How to edit a new structure ?"
+          <a href="tocmanual.html" title="1. How to build a layout file ?"
              >next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="PyLayers : Python mobile Localization Electromagnetics Radio Simulator"
