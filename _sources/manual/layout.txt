@@ -49,22 +49,22 @@ void structure is created.
 Layout editor matplotlib GUI 
 ----------------------------
 
-It exist a very simple structure editor based on matplotlib events handling. 
-This editor is simply as a particular method of the Layout object
+It exists a tiny structure editor based on matplotlib events handling. 
+This editor comes as a particular method of the Layout object.
 
 .. code:: python 
 
      L.editor()
 
-At that state a matplolib figure is opened which can interact either with
-mouse or keayboard events. 
+After that invocation  a matplolib figure is opened which can interact either with
+mouse or keyboard events. 
 
 
 Points creation mode  
 --------------------
 
 The point creation mode is reachable through the key `m`
-Once in point edition mode, the clouse click is used to create a new point in
+Once in point edition mode, the mouse click is used to create a new point in
 the layout.
 
 + left click : add a free point 
@@ -78,8 +78,8 @@ overlay. This is possible using the `o` key which toggle the current overlay
 image.  
 
 To delete a single point, select the point and type `d`. 
-To delete a group of point use the zoom to delimitate the region to delete and
-type the `Suppr` key. 
+To delete a group of point use the matplotlib zoom to delimit the region to delete and
+strike the `Suppr` key. 
 
 
 Walls edition mode
@@ -111,11 +111,11 @@ List of keyboard shortcuts
 Using graphs
 ------------
 
-The key design concept of the ray tracing tool is to pre-process
-the layout description exploiting the **graph** abstract data structure
-exploiting the `networkx <http:// >` package. z
+The key design concept of Pylayers is to pre-process
+the layout description exploiting  **graph** abstract data structure
+exploiting the `networkx <http://networkx.github.com>`_ package. 
 
 
-see :ref:`Uguen2012`_
+
 
 

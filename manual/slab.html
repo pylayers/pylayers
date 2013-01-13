@@ -28,7 +28,21 @@
     <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
     <link rel="up" title="User Manual" href="index.html" />
     <link rel="next" title="Simulation File" href="simulem.html" />
-    <link rel="prev" title="How to edit a new structure ?" href="layout.html" /> 
+    <link rel="prev" title="How to edit a new structure ?" href="layout.html" />
+<script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-34943220-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                   })();
+
+</script>
+
   </head>
   <body>
 
@@ -94,26 +108,44 @@
             
   <div class="section" id="slab-and-materials">
 <h1>Slab and Materials<a class="headerlink" href="#slab-and-materials" title="Permalink to this headline">¶</a></h1>
+<p>Handling of slabs and material is done in the <cite>slab.py</cite> module in section
+<cite>antprop</cite>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#import mplrc.ieee.transaction</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
-<p>We load both a slab file and the corresponding mat file. Be careful the
-material which are used in the slab file should be avilable in the mat
-file. It could be intersting to check the consistency of those two
-files.</p>
+<p>The module <cite>project.py</cite> handle the directory name of the <cite>Pylayers</cite>
+project structure.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A slab is a sandwich (list) of one or several material with an associated
+thickness</p>
+</div>
+<p>The material database is store in a simple ASCII .ini file as well as the slab
+database.</p>
+<p>To instantiate a Slab objet it is required to provide bath the information of
+the material database and the slab database. Those 2 database need to be
+consistent.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">check database consistency</p>
+</div>
+<p>The default name for those 2 databases are <cite>matDB.ini</cite> and  <cite>slabDB.ini</cite>.
+There exist adder and getter for populating this database and saving it in a
+new file. This make sense because each layout may have it&#8217;s own associated
+slab database.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">=</span><span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The correspondance between an integer and the name of the available
-slabs is available in sl.di dictionnary</p>
-<p>In[10]:</p>
+slabs is available in <cite>sl.di</cite> dictionnary. This association is required
+for compatibility with EM solver PulsRay which needs an associated
+numerical value for each slab.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">di</span>
 </pre></div>
 </div>
-<p>Out[10]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s">&#39;METALIC&#39;</span><span class="p">,</span>
  <span class="mi">0</span><span class="p">:</span> <span class="s">&#39;ABSORBENT&#39;</span><span class="p">,</span>
  <span class="mi">1</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
@@ -138,18 +170,13 @@ slabs is available in sl.di dictionnary</p>
  <span class="mi">20</span><span class="p">:</span> <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The material database is a member of the slab , and as precedently there
-is a dictionnary available in order to store the association between a
-mat id and the material name.</p>
-<p>In[11]:</p>
+<p>The material database becomes a member of the slab database, and as
+precedently said there is also an adhoc dictionnary available in order
+to keep the association between a material id and the material name.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">mat</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
+<span class="n">mat</span><span class="o">.</span><span class="n">di</span>
 </pre></div>
 </div>
-<p>In[12]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">mat</span><span class="o">.</span><span class="n">di</span>
-</pre></div>
-</div>
-<p>Out[12]:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s">&#39;METAL&#39;</span><span class="p">,</span>
  <span class="mi">0</span><span class="p">:</span> <span class="s">&#39;ABSORBENT&#39;</span><span class="p">,</span>
  <span class="mi">1</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
@@ -165,21 +192,16 @@ mat id and the material name.</p>
 </pre></div>
 </div>
 <p>It is posssible to easily define individual materials</p>
-<p>In[24]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">lmat</span>    <span class="o">=</span> <span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
 <span class="n">lthick</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;placo&#39;</span><span class="p">,</span><span class="n">lmat</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In[34]:</p>
+<p>Once a slab  is defined, it is possible to evaluate it over a range of angles
+and a range of frequencies.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">theta</span>  <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">float64</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>In[35]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;placo&#39;</span><span class="p">,</span><span class="n">lmat</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>In[36]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In[37]:</p>
@@ -188,7 +210,6 @@ mat id and the material name.</p>
 </pre></div>
 </div>
 <img alt="../_images/slab_fig_00.png" src="../_images/slab_fig_00.png" />
-<p>In[38]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">8.3</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">()</span>
 </pre></div>

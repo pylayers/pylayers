@@ -1,0 +1,11 @@
+
+.. _steeringbehavior:
+
+agent
+=====
+
+
+.. automodule:: pylayers.mobility.transit.SteeringBehavior.py
+   :members:
+   :special-members:
+

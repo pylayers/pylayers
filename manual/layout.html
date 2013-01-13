@@ -28,7 +28,21 @@
     <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
     <link rel="up" title="User Manual" href="index.html" />
     <link rel="next" title="Slab and Materials" href="slab.html" />
-    <link rel="prev" title="User Manual" href="index.html" /> 
+    <link rel="prev" title="User Manual" href="index.html" />
+<script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-34943220-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                   })();
+
+</script>
+
   </head>
   <body>
 
@@ -145,18 +159,18 @@ void structure is created.</p>
 </div>
 <div class="section" id="layout-editor-matplotlib-gui">
 <h2>Layout editor matplotlib GUI<a class="headerlink" href="#layout-editor-matplotlib-gui" title="Permalink to this headline">¶</a></h2>
-<p>It exist a very simple structure editor based on matplotlib events handling.
-This editor is simply as a particular method of the Layout object</p>
+<p>It exists a tiny structure editor based on matplotlib events handling.
+This editor comes as a particular method of the Layout object.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">editor</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>At that state a matplolib figure is opened which can interact either with
-mouse or keayboard events.</p>
+<p>After that invocation  a matplolib figure is opened which can interact either with
+mouse or keyboard events.</p>
 </div>
 <div class="section" id="points-creation-mode">
 <h2>Points creation mode<a class="headerlink" href="#points-creation-mode" title="Permalink to this headline">¶</a></h2>
 <p>The point creation mode is reachable through the key <cite>m</cite>
-Once in point edition mode, the clouse click is used to create a new point in
+Once in point edition mode, the mouse click is used to create a new point in
 the layout.</p>
 <ul class="simple">
 <li>left click : add a free point</li>
@@ -169,8 +183,8 @@ point</li>
 overlay. This is possible using the <cite>o</cite> key which toggle the current overlay
 image.</p>
 <p>To delete a single point, select the point and type <cite>d</cite>.
-To delete a group of point use the zoom to delimitate the region to delete and
-type the <cite>Suppr</cite> key.</p>
+To delete a group of point use the matplotlib zoom to delimit the region to delete and
+strike the <cite>Suppr</cite> key.</p>
 </div>
 <div class="section" id="walls-edition-mode">
 <h2>Walls edition mode<a class="headerlink" href="#walls-edition-mode" title="Permalink to this headline">¶</a></h2>
@@ -199,10 +213,9 @@ type the <cite>Suppr</cite> key.</p>
 </div>
 <div class="section" id="using-graphs">
 <h2>Using graphs<a class="headerlink" href="#using-graphs" title="Permalink to this headline">¶</a></h2>
-<p>The key design concept of the ray tracing tool is to pre-process
-the layout description exploiting the <strong>graph</strong> abstract data structure
-exploiting the <cite>networkx &lt;http:// &gt;</cite> package. z</p>
-<p>see <a href="#id1"><span class="problematic" id="id2">:ref:`Uguen2012`_</span></a></p>
+<p>The key design concept of Pylayers is to pre-process
+the layout description exploiting  <strong>graph</strong> abstract data structure
+exploiting the <a class="reference external" href="http://networkx.github.com">networkx</a> package.</p>
 </div>
 </div>
 
