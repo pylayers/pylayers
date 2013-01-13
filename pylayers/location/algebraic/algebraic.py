@@ -46,7 +46,7 @@ class algloc(object):
     This class regroup various implementation of location algorithms.
     The instantiated object owns : 
         + a dictionnary of nodes
-        + a dictionnary of location dependant parameters
+        + a dictionnary of location dependent parameters
 
 
     """
@@ -61,7 +61,7 @@ class algloc(object):
         Display scenario information
         """
         print "Nodes : ", self.nodes
-        print "Location dependant parameters : ", self.ldp
+        print "Location dependent parameters : ", self.ldp
 
     def plot(self, rss, toa, tdoa):
         """ Plot scenario
