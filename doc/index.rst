@@ -2,10 +2,14 @@
 PyLayers : Python mobile Localization Electromagnetics Radio Simulator 
 =======================================================================
 
-Pylayers is a mobile radio propagation simulator.
-Its purpose is to help designing localization and tracking solutions for advanced 
-communications systems. Hopefully, also useful for
-higher education on topics related to wireless communications. 
+Pylayers is a mobile radio propagation simulator and aims to become over time 
+a versatile PHY layer simulator.
+
+Its initial purpose is to help designing localization and tracking solutions for advanced 
+communications systems. 
+
+Hopefully, it will be also useful for illustrating various topics
+on wireless communications and localization for higher education. 
 
 
 .. Example 
@@ -24,12 +28,11 @@ higher education on topics related to wireless communications.
 Context
 =======
 
-PyLayers is beeing developped for research into radio localization exploiting impulse radio
+PyLayers is being developed for research into radio localization exploiting impulse radio
 signals as being defined in the IEEE 802.15.4a and 802.15.6 standards.
 Pylayers could also evolved to help with studies related to channel characterization,
 Wireless Sensor Network, MANET, radio cooperation and relaying techniques, 
-physical layer security, WBAN applications, advanced home automation,
-connected sensito-cognitive environments ...
+physical layer security, WBAN applications, advanced home automation, aware environments ...
 
 Pylayers is modular and designed to be easily extended, 
 allowing it to evolve over the time as a tool for research and development in a wide range 
@@ -82,6 +85,11 @@ Localization Algorithms
 Documentation
 =============
 
+Pylayers is still in an early stage of its development. The code as well as the
+documentation are in a beta version. The user manual section is embrionary and 
+will be regularly populated with new examples of utilization. Pylayers is intented to used
+in association with `ipython <http://ipython.org>`_
+
 .. toctree::
     :maxdepth: 1 
 
@@ -114,7 +122,7 @@ Developpers
 ===========
 
 Pylayers is driven by professor Bernard Uguen at `University of Rennes 1
-<http://www.univ-rennes1.fr/>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
+<http://www.univ-rennes1.fr/english>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
 `ESIR school of engineering <http://esir.univ-rennes1.fr/>`_
 
 Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
@@ -139,7 +147,8 @@ last release in your preferred format on github.
 
 We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
 
-**Just fork it !** on your github account.
+**Just fork it !** on your github account and get in touch on the mailing list
+if you get some interest or seek for applications.
 
 
 

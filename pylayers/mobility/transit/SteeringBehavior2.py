@@ -14,7 +14,7 @@ from math import *
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.vec3 import vec3
 from random import uniform,gauss
-import pdb 
+import pdb
 
 class Seek:
     def calculate(self, boid):

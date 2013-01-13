@@ -2,6 +2,10 @@
 Slab and Materials
 ==================
 
+Handling of slabs and material is done in the `slab.py` module in section
+`antprop`. 
+
+
 .. code:: python
 
     #import mplrc.ieee.transaction
@@ -9,10 +13,27 @@ Slab and Materials
     from pylayers.util.project import *
     import numpy as np
 
-We load both a slab file and the corresponding mat file. Be careful the
-material which are used in the slab file should be avilable in the mat
-file. It could be intersting to check the consistency of those two
-files.
+The module `project.py` handle the directory name of the `Pylayers`
+project structure. 
+
+.. note::
+    A slab is a sandwich (list) of one or several material with an associated
+    thickness
+
+The material database is store in a simple ASCII .ini file as well as the slab
+database. 
+
+To instantiate a Slab objet it is required to provide bath the information of
+the material database and the slab database. Those 2 database need to be
+consistent. 
+
+.. todo::
+    check database consistency 
+
+The default name for those 2 databases are `matDB.ini` and  `slabDB.ini`.
+There exist adder and getter for populating this database and saving it in a
+new file. This make sense because each layout may have it's own associated
+slab database.
 
 
 .. code:: python
@@ -20,15 +41,13 @@ files.
     sl=SlabDB('matDB.ini','slabDB.ini')
 
 The correspondance between an integer and the name of the available
-slabs is available in sl.di dictionnary
-
-In[10]:
+slabs is available in `sl.di` dictionnary. This association is required
+for compatibility with EM solver PulsRay which needs an associated
+numerical value for each slab. 
 
 .. code:: python
 
     sl.di
-
-Out[10]:
 
 .. parsed-literal::
 
@@ -55,23 +74,14 @@ Out[10]:
      19: 'PLASTERBOARD_14CM',
      20: 'PLASTERBOARD_7CM'}
 
-The material database is a member of the slab , and as precedently there
-is a dictionnary available in order to store the association between a
-mat id and the material name.
-
-In[11]:
+The material database becomes a member of the slab database, and as
+precedently said there is also an adhoc dictionnary available in order 
+to keep the association between a material id and the material name.
 
 .. code:: python
 
     mat = sl.mat
-
-In[12]:
-
-.. code:: python
-
     mat.di 
-
-Out[12]:
 
 .. parsed-literal::
 
@@ -90,29 +100,18 @@ Out[12]:
 
 It is posssible to easily define individual materials
 
-In[24]:
-
 .. code:: python
 
     lmat    = ['BRICK','AIR','BRICK']
     lthick = [0.01,0.1,0.01]
+    sl.add('placo',lmat,lthick)
 
-In[34]:
+Once a slab  is defined, it is possible to evaluate it over a range of angles
+and a range of frequencies. 
 
 .. code:: python
 
     theta  = arange(0,pi/2,0.01,dtype=float64)
-
-
-In[35]:
-
-.. code:: python
-
-    sl.add('placo',lmat,lthick)
-
-In[36]:
-
-.. code:: python
 
     sl['placo'].ev(fGHz,theta)
 
@@ -125,7 +124,6 @@ In[37]:
 
 .. image:: slab_files/slab_fig_00.png
 
-In[38]:
 
 .. code:: python
 
