@@ -2,10 +2,11 @@
 PyLayers : Python mobile Localization Electromagnetics Radio Simulator 
 =======================================================================
 
-Pylayers is a mobile radio propagation simulator.
+Pylayers is aiming to become a mobile radio propagation simulator.
 Its purpose is to help designing localization and tracking solutions for advanced 
 communications systems. Hopefully, also useful for
 higher education on topics related to wireless communications. 
+
 
 
 .. Example 
@@ -82,6 +83,11 @@ Localization Algorithms
 Documentation
 =============
 
+Pylayers is still in an early stage of its development. The code as well as the
+documentation are in a beta version. The user manual section is embrionary and 
+will be populated with examples of utilization. Pylayers is intented to used
+in association with `ipython <http://ipython.org>`_
+
 .. toctree::
     :maxdepth: 1 
 
@@ -114,7 +120,7 @@ Developpers
 ===========
 
 Pylayers is driven by professor Bernard Uguen at `University of Rennes 1
-<http://www.univ-rennes1.fr/>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
+<http://www.univ-rennes1.fr/english>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
 `ESIR school of engineering <http://esir.univ-rennes1.fr/>`_
 
 Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
