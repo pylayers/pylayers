@@ -1,7 +1,5 @@
 # -*- coding:Utf-8 -*-
 #####################################################################
-#This file is part of RGPA.
-
 #PYLAYERS is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation, either version 3 of the License, or
@@ -17,8 +15,8 @@
 
 #-------------------------------------------------------------------
 #authors :
-#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr
-#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr
+#Mohamed LAARAIEDH
+#Bernard Uguen
 #####################################################################
 
 import numpy as np
@@ -137,12 +135,14 @@ class algloc(object):
         Parameters
         ----------
             Rest : string
+
         Returns
         -------
             Range : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -151,6 +151,7 @@ class algloc(object):
             >>> r_mode = S.get_range('mode')
             >>> r_median = S.get_range('median')
             >>> r_mean = S.get_range('mean')
+
         """
         RSS = self.ldp['RSS']
         RSS_std = self.ldp['RSS_std']
@@ -173,15 +174,18 @@ class algloc(object):
         """
         Compute the RSS range standard deviation using the "Rest" \
         estimator
+
         Parameters
         ----------
             Rest : string
+
         Returns
         -------
             Range_std : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -215,12 +219,14 @@ class algloc(object):
         """
         This method applies least squares (LS) approximation to get
         position P.
+
         Parameters
         ----------
             rss : boolean
             toa : boolean
             tdoa : boolean
             Rest : string
+
         Returns
         -------
             P : numpy.ndarray
@@ -462,18 +468,21 @@ class algloc(object):
         """
         This method applies weighted least squares (WLS) approximation
         to get position P.
+
         Parameters
         ----------
             rss : boolean
             toa : boolean
             tdoa : boolean
             Rest : string
+
         Returns
         -------
             P : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -750,12 +759,14 @@ class algloc(object):
         """
         This defines the ML function to be minimized if ML estimator
         is used
+
         Parameters
         ----------
             P : numpy.ndarray
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             ML : numpy.ndarray
@@ -811,35 +822,39 @@ class algloc(object):
                 uk = tk / (2 * S ** 2)
                 ML = uk.sum(axis=0)
             elif rss == 0:
-                ML = self.ml_function(
-                    P, 0, 1, 0) + self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function(P, 0, 1, 0) +\
+                     self.ml_function(P, 0, 0, 1)
             elif toa == 0:
-                ML = self.ml_function(
-                    P, 1, 0, 0) + self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function(P, 1, 0, 0) +\
+                     self.ml_function(P, 0, 0, 1)
             elif tdoa == 0:
-                ML = self.ml_function(
-                    P, 1, 0, 0) + self.ml_function(P, 0, 1, 0)
+                ML = self.ml_function(P, 1, 0, 0) +\
+                     self.ml_function(P, 0, 1, 0)
             else:
-                ML = self.ml_function(P, 1, 0, 0) + self.ml_function(P, 0, 1, 0)\
-                    + self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function(P, 1, 0, 0) +\
+                     self.ml_function(P, 0, 1, 0) +\
+                     self.ml_function(P, 0, 0, 1)
 
             return ML
 
     def ml_locate(self, P0, rss, toa, tdoa):
         """
         This applies ML estimator to compute position P
+
         Parameters
         ----------
             P0 : numpy.ndarray
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             P : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -869,9 +884,11 @@ class algloc(object):
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             FIM : numpy.ndarray
+
         """
         if rss == 0 and toa == 0 and tdoa == 0:
             raise ValueError("inputs missed")
@@ -924,11 +941,9 @@ class algloc(object):
                                 np.shape(RN_RSS)[0]))
                 for i in range(np.shape(RN_RSS)[1]):
                     FIM += np.dot((P - RN_RSS[:, i:i + 1]),
-                                  (P - RN_RSS[:, i:i + 1]).T) / ((S[0] ** 2) *
-                                                                 (
-                                                                     np.dot(
-                                                                         (P - RN_RSS[:, i:i + 1]).T,
-                        (P - RN_RSS[:, i:i + 1]))) ** 2)
+                                  (P - RN_RSS[:, i:i + 1]).T) / ((S[0] ** 2) *\
+                                  (np.dot( (P - RN_RSS[:, i:i + 1]).T,\
+                                           (P - RN_RSS[:, i:i + 1]))) ** 2)
             elif rss == 0:
                 FIM = self.fim(P, 0, 1, 0) + self.fim(P, 0, 0, 1)
             elif toa == 0:
@@ -944,12 +959,14 @@ class algloc(object):
     def crb(self, P, rss, toa, tdoa):
         """
         This method compute the cramer rao bound (CRB) at position P.
+
         Parameters
         ----------
             P : numpy.ndarray
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             CRB : float
@@ -976,10 +993,11 @@ class algloc(object):
 
 
 def scenario():
-    """
-    This method is not a class member, it defines a sample scenario
+    """ Defines a sample scenario for testing
+
     Returns
     -------
+
         CRB : float
 
     Examples
@@ -1090,7 +1108,7 @@ def scenario():
     ldp['TDOA'] = TDOA
     ldp['TDOA_std'] = TDOA_std
 
-    return nodes, ldp, BN0
+    return n odes, ldp, BN0
 
 
 if __name__ == "__main__":
