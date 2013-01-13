@@ -1,7 +1,7 @@
 .. _cycles:
 
-furniture
-=========
+Cycles
+=======
 
 .. automodule:: pylayers.gis.cycles
     :members:

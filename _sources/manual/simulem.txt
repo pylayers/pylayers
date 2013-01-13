@@ -1,32 +1,16 @@
-Simulation File        
----------------
+Setting a first simulation file        
+--------------------------------
 
-This example load a simulation file and shows the layout with the surimposed
-grid of tx and rx points which define the links of interest for the simulation 
+An example simulation file is available in the directory which contains
+`pylayers/data/ini`
 
-.. ipython::
-    
-    In [1]: from pylayers.simul.simulem import *
-    In [1]: from pylayers.gis.layout import *
-    In [1]: from numpy import *
-    In [1]: import matplotlib.pylab as plt  
+This **.ini** file gathers informations required for starting a simulation. If no file 
+is present a default file is created. 
 
-    In [1]: S = Simul('default.ini')
+Simulation `default.ini`  file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    @savefig DefaultLayout.png width=8in 
-    In [1]: S.L.showGs()
-
-
-Getting started 
----------------
-
-First of all, it is necessary to fill an **.ini** file which gathers
-informations required for starting a simulation. If no file 
-
-Simulation `.ini`  file
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Below is presented an example of a simulation file `default.ini`::
+Below is an example of a simulation file `default.ini`::
 
 
     [files]
@@ -80,14 +64,14 @@ This file is composed of independant sections which are respectively ::
         [tud]
                 ray filtering parameters
         [output]
-                already calculated output files
+                list of calculated output files
 
 
 
 Output Section 
 --------------
 
-The output section is used to keep track of already calculated links. The key 
+The output section is used to keep track of calculated links. The key 
 is an integer which correspond to a radionode index and the corresponding
 associated value is a file which is stored in the `output` directory of the
 project. 
@@ -119,4 +103,24 @@ Below is an example of the content of an output `.ini` file ::
     [cir]
     1 = cir-tx001-rx001
 
+This example loads a simulation file and shows the layout with the surimposed
+tx and rx grid points which defines the links of interest for the simulation 
+
+.. ipython::
+    
+    In [1]: from pylayers.simul.simulem import *
+    In [1]: from pylayers.gis.layout import *
+    In [1]: from numpy import *
+    In [1]: import matplotlib.pylab as plt  
+
+    In [1]: S = Simul('def.ini')
+
+    @savefig DefaultSimul.png width=8in 
+    In [1]: S.show()
+
+
+.. ipython::
+
+    @savefig DefaultLayout.png width=8in 
+    In [1]: S.L.showGs()
 

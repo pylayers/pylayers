@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Simulation File &mdash; PyLayers 0.1 documentation</title>
+    <title>Setting a first simulation file &mdash; PyLayers 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
     <link rel="up" title="User Manual" href="index.html" />
-    <link rel="next" title="PulsRay Ray Trool (to be deprecated soon)" href="pulsray.html" />
+    <link rel="next" title="How to goes from a simulnet to a Channel Impulse Response ?" href="simulnet.html" />
     <link rel="prev" title="Slab and Materials" href="slab.html" />
 <script type="text/javascript">
     
@@ -60,7 +60,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pulsray.html" title="PulsRay Ray Trool (to be deprecated soon)"
+          <a href="simulnet.html" title="How to goes from a simulnet to a Channel Impulse Response ?"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="slab.html" title="Slab and Materials"
@@ -76,9 +76,8 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Simulation File</a></li>
-<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
-<li><a class="reference internal" href="#simulation-ini-file">Simulation <cite>.ini</cite>  file</a></li>
+<li><a class="reference internal" href="#">Setting a first simulation file</a><ul>
+<li><a class="reference internal" href="#simulation-default-ini-file">Simulation <cite>default.ini</cite>  file</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#output-section">Output Section</a></li>
@@ -88,8 +87,8 @@
   <p class="topless"><a href="slab.html"
                         title="previous chapter">Slab and Materials</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pulsray.html"
-                        title="next chapter">PulsRay Ray Trool  (to be deprecated soon)</a></p>
+  <p class="topless"><a href="simulnet.html"
+                        title="next chapter">How to goes from a simulnet to a Channel Impulse Response ?</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/manual/simulem.txt"
@@ -116,29 +115,15 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="simulation-file">
-<h1>Simulation File<a class="headerlink" href="#simulation-file" title="Permalink to this headline">¶</a></h1>
-<p>This example load a simulation file and shows the layout with the surimposed
-grid of tx and rx points which define the links of interest for the simulation</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="gp">In [2]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
-
-<span class="gp">In [3]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-<span class="gr">Out[3]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0xc40bd0c&gt;,</span>
-<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0xc40bacc&gt;)</span>
-</pre></div>
-</div>
-<img alt="../_images/DefaultLayout.png" src="../_images/DefaultLayout.png" style="width: 8in;" />
-</div>
-<div class="section" id="getting-started">
-<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<p>First of all, it is necessary to fill an <strong>.ini</strong> file which gathers
-informations required for starting a simulation. If no file</p>
-<div class="section" id="simulation-ini-file">
-<h2>Simulation <cite>.ini</cite>  file<a class="headerlink" href="#simulation-ini-file" title="Permalink to this headline">¶</a></h2>
-<p>Below is presented an example of a simulation file <cite>default.ini</cite>:</p>
+  <div class="section" id="setting-a-first-simulation-file">
+<h1>Setting a first simulation file<a class="headerlink" href="#setting-a-first-simulation-file" title="Permalink to this headline">¶</a></h1>
+<p>An example simulation file is available in the directory which contains
+<cite>pylayers/data/ini</cite></p>
+<p>This <strong>.ini</strong> file gathers informations required for starting a simulation. If no file
+is present a default file is created.</p>
+<div class="section" id="simulation-default-ini-file">
+<h2>Simulation <cite>default.ini</cite>  file<a class="headerlink" href="#simulation-default-ini-file" title="Permalink to this headline">¶</a></h2>
+<p>Below is an example of a simulation file <cite>default.ini</cite>:</p>
 <div class="highlight-python"><pre>[files]
 mat = matDB.ini
 tx = radiotx.ini
@@ -187,13 +172,13 @@ nrmax = 500
 [tud]
         ray filtering parameters
 [output]
-        already calculated output files</pre>
+        list of calculated output files</pre>
 </div>
 </div>
 </div>
 <div class="section" id="output-section">
 <h1>Output Section<a class="headerlink" href="#output-section" title="Permalink to this headline">¶</a></h1>
-<p>The output section is used to keep track of already calculated links. The key
+<p>The output section is used to keep track of calculated links. The key
 is an integer which correspond to a radionode index and the corresponding
 associated value is a file which is stored in the <cite>output</cite> directory of the
 project.</p>
@@ -223,6 +208,39 @@ project.</p>
 <span class="mi">1</span> <span class="o">=</span> <span class="n">cir</span><span class="o">-</span><span class="n">tx001</span><span class="o">-</span><span class="n">rx001</span>
 </pre></div>
 </div>
+<p>This example loads a simulation file and shows the layout with the surimposed
+tx and rx grid points which defines the links of interest for the simulation</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="gp">In [2]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;def.ini&#39;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-3-8d8f07ec1bba&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S.show()</span>
+
+<span class="go">/private/staff/n/en/buguen/Documents/rch/devel/pylayers/pylayers/simul/simulem.pyc in show(self, itx, irx, furniture, s, c, traj, num, fig, ax)</span>
+<span class="go">   1403 </span>
+<span class="go">   1404         #self.L.display[&#39;scaled&#39;]=False</span>
+<span class="go">-&gt; 1405         fig,ax=self.L.showGs(fig=fig,ax=ax, show=False)</span>
+<span class="go">   1406         #</span>
+<span class="go">   1407         if furniture:</span>
+
+<span class="go">AttributeError: &#39;Simul&#39; object has no attribute &#39;L&#39;</span>
+</pre></div>
+</div>
+<img alt="../_images/DefaultSimul.png" src="../_images/DefaultSimul.png" style="width: 8in;" />
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [4]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-4-c4521b4645d7&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S.L.showGs()</span>
+
+<span class="go">AttributeError: &#39;Simul&#39; object has no attribute &#39;L&#39;</span>
+</pre></div>
+</div>
+<img alt="../_images/DefaultLayout.png" src="../_images/DefaultLayout.png" style="width: 8in;" />
 </div>
 
 
@@ -241,7 +259,7 @@ project.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pulsray.html" title="PulsRay Ray Trool (to be deprecated soon)"
+          <a href="simulnet.html" title="How to goes from a simulnet to a Channel Impulse Response ?"
              >next</a> |</li>
         <li class="right" >
           <a href="slab.html" title="Slab and Materials"

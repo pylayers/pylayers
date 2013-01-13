@@ -24,16 +24,10 @@ How to define and launch an electromagnetic simulation  ?
 
 .. toctree::
     maxdepth:2
+    numbered:
 
     simulem.rst 
 
-How is implemented the Ray Tracing simulator ? 
-----------------------------------------------
-
-.. toctree::
-    maxdepth:2
-
-    pulsray.rst
 
 How to use the mobile network simulator ? 
 -----------------------------------------
