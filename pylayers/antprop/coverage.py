@@ -132,7 +132,7 @@ class Coverage(object):
 
 
     def showEd(self,polarization='o'):
-        """ show excess of toa excess delay map
+        """ show direct path excess of delay map
 
         Examples
         --------
@@ -167,7 +167,8 @@ class Coverage(object):
 
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
-        fig.colorbar(cov,cax)
+        clb = fig.colorbar(cov,cax)
+        clb.add_label('excess delay (ns)')
         if self.show:
             plt.show()
 

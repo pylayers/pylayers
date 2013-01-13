@@ -11,10 +11,11 @@ location
 
     location.locarule.rst
     
-    location.simsql.rst
-
     location.algebraic.algebraic.rst
     
     location.geometric.rst
+
+    location.learning.loclearn.rst
+
 
 
