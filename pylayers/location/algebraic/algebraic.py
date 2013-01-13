@@ -20,6 +20,7 @@
 #####################################################################
 
 import numpy as np
+import doctest
 import scipy as sp
 from scipy import optimize
 import numpy.linalg as nplg
@@ -33,19 +34,27 @@ class algloc(object):
     """
     This class regroups all the algebraic localization scenarios and
     techniques
+
     Attributes
     ----------
+
         nodes : dictionnary
         ldp : dictionnary
-        c : speed of light
-          float
+
+    Notes
+    -----
+    This class regroup various implementation of location algorithms.
+    The instantiated object owns : 
+        + a dictionnary of nodes
+        + a dictionnary of location dependant parameters
+
 
     """
 
     def __init__(self, nodes={}, ldp={}):
         self.nodes = nodes
         self.ldp = ldp
-        self.c = 0.3
+        self.c = 0.2997924583
 
     def info(self):
         """
@@ -1108,7 +1117,7 @@ def scenario():
     ldp['TDOA'] = TDOA
     ldp['TDOA_std'] = TDOA_std
 
-    return n odes, ldp, BN0
+    return nodes, ldp, BN0
 
 
 if __name__ == "__main__":
