@@ -113,29 +113,49 @@
 <dt id="pylayers.location.algebraic.algebraic.algloc">
 <em class="property">class </em><tt class="descclassname">pylayers.location.algebraic.algebraic.</tt><tt class="descname">algloc</tt><big>(</big><em>nodes={}</em>, <em>ldp={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class regroups all the algebraic localization scenarios and
-techniques
-Attributes
-&#8212;&#8212;&#8212;-</p>
+techniques</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>nodes</strong> : dictionnary</p>
+<blockquote class="last">
+<div><p>ldp : dictionnary</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This class regroup various implementation of location algorithms.
+The instantiated object owns :</p>
 <blockquote>
-<div><p>nodes : dictionnary
-ldp : dictionnary
-c : speed of light</p>
-<blockquote>
-<div>float</div></blockquote>
+<div><ul class="simple">
+<li>a dictionnary of nodes</li>
+<li>a dictionnary of location dependent parameters</li>
+</ul>
 </div></blockquote>
 <dl class="method">
 <dt id="pylayers.location.algebraic.algebraic.algloc.crb">
 <tt class="descname">crb</tt><big>(</big><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.crb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.crb" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method compute the cramer rao bound (CRB) at position P.
-Parameters
-&#8212;&#8212;&#8212;-</p>
+<dd><p>This method compute the cramer rao bound (CRB) at position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>P</strong> : numpy.ndarray</p>
 <blockquote>
-<div>P : numpy.ndarray
-rss : boolean
+<div><p>rss : boolean
 toa : boolean
-tdoa : boolean</div></blockquote>
-<blockquote>
-<div>CRB : float</div></blockquote>
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>CRB</strong> : float</p>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
@@ -162,8 +182,14 @@ Parameters
 rss : boolean
 toa : boolean
 tdoa : boolean</div></blockquote>
-<blockquote>
-<div>FIM : numpy.ndarray</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>FIM</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -174,13 +200,9 @@ tdoa : boolean</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Rest</strong> : string</p>
-<p><strong>Returns</strong> :</p>
-<p><strong>&#8212;&#8212;-</strong> :</p>
-<blockquote class="last">
-<div><p>Range : numpy.ndarray</p>
-</div></blockquote>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>Rest</strong> : string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>Range</strong> : numpy.ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -198,13 +220,17 @@ tdoa : boolean</div></blockquote>
 <dl class="method">
 <dt id="pylayers.location.algebraic.algebraic.algloc.get_range_std">
 <tt class="descname">get_range_std</tt><big>(</big><em>Rest='mode'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.get_range_std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.get_range_std" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the RSS range standard deviation using the &#8220;Rest&#8221;         estimator
-Parameters
-&#8212;&#8212;&#8212;-</p>
-<blockquote>
-<div>Rest : string</div></blockquote>
-<blockquote>
-<div>Range_std : numpy.ndarray</div></blockquote>
+<dd><p>Compute the RSS range standard deviation using the &#8220;Rest&#8221;         estimator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>Rest</strong> : string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>Range_std</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
@@ -226,16 +252,24 @@ Parameters
 <dt id="pylayers.location.algebraic.algebraic.algloc.ls_locate">
 <tt class="descname">ls_locate</tt><big>(</big><em>rss</em>, <em>toa</em>, <em>tdoa</em>, <em>Rest</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ls_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ls_locate" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method applies least squares (LS) approximation to get
-position P.
-Parameters
-&#8212;&#8212;&#8212;-</p>
+position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
 <blockquote>
-<div>rss : boolean
-toa : boolean
+<div><p>toa : boolean
 tdoa : boolean
-Rest : string</div></blockquote>
-<blockquote>
-<div>P : numpy.ndarray</div></blockquote>
+Rest : string</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
@@ -255,31 +289,47 @@ Rest : string</div></blockquote>
 <dt id="pylayers.location.algebraic.algebraic.algloc.ml_function">
 <tt class="descname">ml_function</tt><big>(</big><em>P</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ml_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ml_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>This defines the ML function to be minimized if ML estimator
-is used
-Parameters
-&#8212;&#8212;&#8212;-</p>
+is used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>P</strong> : numpy.ndarray</p>
 <blockquote>
-<div>P : numpy.ndarray
-rss : boolean
+<div><p>rss : boolean
 toa : boolean
-tdoa : boolean</div></blockquote>
-<blockquote>
-<div>ML : numpy.ndarray</div></blockquote>
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>ML</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.location.algebraic.algebraic.algloc.ml_locate">
 <tt class="descname">ml_locate</tt><big>(</big><em>P0</em>, <em>rss</em>, <em>toa</em>, <em>tdoa</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.ml_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.ml_locate" title="Permalink to this definition">¶</a></dt>
-<dd><p>This applies ML estimator to compute position P
-Parameters
-&#8212;&#8212;&#8212;-</p>
+<dd><p>This applies ML estimator to compute position P</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>P0</strong> : numpy.ndarray</p>
 <blockquote>
-<div>P0 : numpy.ndarray
-rss : boolean
+<div><p>rss : boolean
 toa : boolean
-tdoa : boolean</div></blockquote>
-<blockquote>
-<div>P : numpy.ndarray</div></blockquote>
+tdoa : boolean</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
@@ -345,16 +395,24 @@ tdoa : boolean</p>
 <dt id="pylayers.location.algebraic.algebraic.algloc.wls_locate">
 <tt class="descname">wls_locate</tt><big>(</big><em>rss</em>, <em>toa</em>, <em>tdoa</em>, <em>Rest</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#algloc.wls_locate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.algloc.wls_locate" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method applies weighted least squares (WLS) approximation
-to get position P.
-Parameters
-&#8212;&#8212;&#8212;-</p>
+to get position P.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
 <blockquote>
-<div>rss : boolean
-toa : boolean
+<div><p>toa : boolean
 tdoa : boolean
-Rest : string</div></blockquote>
-<blockquote>
-<div>P : numpy.ndarray</div></blockquote>
+Rest : string</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">,</span> <span class="n">BN0</span> <span class="o">=</span> <span class="n">scenario</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ldp</span><span class="p">)</span>
@@ -375,11 +433,15 @@ Rest : string</div></blockquote>
 <dl class="function">
 <dt id="pylayers.location.algebraic.algebraic.scenario">
 <tt class="descclassname">pylayers.location.algebraic.algebraic.</tt><tt class="descname">scenario</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.scenario" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method is not a class member, it defines a sample scenario
-Returns
-&#8212;&#8212;-</p>
-<blockquote>
-<div>CRB : float</div></blockquote>
+<dd><p>Defines a sample scenario for testing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>CRB</strong> : float</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">nRN</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dim</span> <span class="o">=</span> <span class="mi">3</span> <span class="c"># 2 for 2D, 3 for 3D</span>

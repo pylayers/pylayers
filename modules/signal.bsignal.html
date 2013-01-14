@@ -183,7 +183,7 @@ else y is smashed</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.imshow">
-<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0xa9fc2ec&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x9afe6ac&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>imshow of y matrix</p>
 </dd></dl>
 
@@ -552,10 +552,13 @@ tau1 : additional delay</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> : number of zeros for zero padding</p>
 <p><strong>ffts</strong> : fftshift indicator</p>
-<blockquote class="last">
+<blockquote>
 <div><p>0  no fftshift
 1  apply fftshift</p>
 </div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>r</strong> : TUsignal</p>
 </td>
 </tr>
 </tbody>
@@ -724,21 +727,24 @@ tau1 : additional delay</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>df</strong> : float</p>
-<blockquote>
-<div><p>frequency step (dafault 0.01)</p>
+<blockquote class="last">
+<div><p>frequency step (default 0.01)</p>
 </div></blockquote>
-<p><strong>1. get  fmin and fmax</strong> :</p>
-<p><strong>2. build a new base with frequency step df</strong> :</p>
-<p><strong>3. Initialize a FUsignal with the new frequency base</strong> :</p>
-<p><strong>4. build  matrix tau * f  (Nray x Nf)</strong> :</p>
-<p><strong>5. buildl matrix E= exp(-2 j pi f tau)</strong> :</p>
-<p><strong>6. resampling of FUDsignal according to f &#8211;&gt; S</strong> :</p>
-<p><strong>7. apply the element wise product E .* S</strong> :</p>
-<p class="last"><strong>8. add all rays</strong> :</p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li>get  fmin and fmax</li>
+<li>build a new base with frequency step df</li>
+<li>Initialize a FUsignal with the new frequency base</li>
+<li>build  matrix tau * f  (Nray x Nf)</li>
+<li>buildl matrix E= exp(-2 j pi f tau)</li>
+<li>resampling of FUDsignal according to f &#8211;&gt; S</li>
+<li>apply the element wise product E .* S</li>
+<li>add all rays</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -1267,7 +1273,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 </table>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">Once translated original signal and translated signal might be not on the same grid</p>
+<p class="last">Once translated original signal and translated signal might not be on the same grid</p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1299,7 +1305,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <p><strong>tau</strong> : float or ndarray</p>
 <p><strong>.. todo::</strong> :</p>
 <blockquote class="last">
-<div><p>methode tunfold restitution en temps du tableau avec retard</p>
+<div><p>build a tunfold time restitution of delays</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2093,21 +2099,14 @@ This function can be improved regarding time granularity</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>u2</strong> : TUsignal</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>u2</strong> : TUsignal</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>TUsignal y extended TU signal, x bases are adjusted</strong> :</p>
-<p><strong>.. plot::</strong> :</p>
-<blockquote class="last">
-<div><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">include-source:</th><td class="field-body"></td>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>TUsignal y extended TU signal, x bases are adjusted</strong> :</td>
 </tr>
 </tbody>
 </table>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span> 
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i1</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i2</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
@@ -2117,11 +2116,10 @@ This function can be improved regarding time granularity</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>(<a class="reference external" href="../modules/signal-bsignal-6.py">Source code</a>, <a class="reference external" href="../modules/signal-bsignal-6.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-6.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-6.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/signal-bsignal-6.png" src="../_images/signal-bsignal-6.png" />
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -2295,6 +2293,7 @@ This function can be improved regarding time granularity</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>(<a class="reference external" href="../modules/signal-bsignal-7.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="method">
