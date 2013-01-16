@@ -126,7 +126,7 @@ thickness</p>
 </div>
 <p>The material database is store in a simple ASCII .ini file as well as the slab
 database.</p>
-<p>To instantiate a Slab objet it is required to provide bath the information of
+<p>To instantiate a Slab object it is required to provide both the information of
 the material database and the slab database. Those 2 database need to be
 consistent.</p>
 <div class="admonition-todo admonition" id="index-0">
@@ -140,8 +140,8 @@ slab database.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">=</span><span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The correspondance between an integer and the name of the available
-slabs is available in <cite>sl.di</cite> dictionnary. This association is required
+<p>The correspondence between an integer and the name of the available
+slabs is available in <cite>sl.di</cite> dictionary. This association is required
 for compatibility with EM solver PulsRay which needs an associated
 numerical value for each slab.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">di</span>
@@ -172,7 +172,7 @@ numerical value for each slab.</p>
 </pre></div>
 </div>
 <p>The material database becomes a member of the slab database, and as
-precedently said there is also an adhoc dictionnary available in order
+previously said there is also an ad hoc dictionary available in order
 to keep the association between a material id and the material name.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">mat</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
 <span class="n">mat</span><span class="o">.</span><span class="n">di</span>
@@ -192,7 +192,7 @@ to keep the association between a material id and the material name.</p>
  <span class="mi">10</span><span class="p">:</span> <span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>It is posssible to easily define individual materials</p>
+<p>It is possible to easily define individual materials</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">lmat</span>    <span class="o">=</span> <span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
 <span class="n">lthick</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;placo&#39;</span><span class="p">,</span><span class="n">lmat</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
