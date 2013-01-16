@@ -75,6 +75,20 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3.1. module simulem</a><ul>
+<li><a class="reference internal" href="#simulation-file">3.1.1. Simulation File</a></li>
+<li><a class="reference internal" href="#getting-started">3.1.2. Getting started</a><ul>
+<li><a class="reference internal" href="#structure-of-the-simulation-description-file">3.1.2.1. structure of the simulation description file</a></li>
+<li><a class="reference internal" href="#output-section">3.1.2.2. Output Section</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example">3.1.3. Example</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="slab.html"
                         title="previous chapter">2.1. Slab and Materials</a></p>
@@ -112,109 +126,130 @@
 <p>The module simulem is in charge of calculating the received UWB waveform for a
 given radio link. This section is built from the file test_simulem.py in the
 tests sub-directory of antprop directory.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="section" id="simulation-file">
+<h2>3.1.1. Simulation File<a class="headerlink" href="#simulation-file" title="Permalink to this headline">¶</a></h2>
+<p>This example load a simulation file and shows the layout with the surimposed
+grid of tx and rx points which define the links of interest for the simulation</p>
+</div>
+<div class="section" id="getting-started">
+<h2>3.1.2. Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>First of all, it is necessary to fill an <strong>.ini</strong> file which gathers
+informations required for starting a simulation. If no file exists one
+is default file is created.</p>
+<div class="section" id="structure-of-the-simulation-description-file">
+<h3>3.1.2.1. structure of the simulation description file<a class="headerlink" href="#structure-of-the-simulation-description-file" title="Permalink to this headline">¶</a></h3>
+<p>Below is presented an example a <cite>default.ini</cite> simulation file</p>
+<div class="highlight-python"><pre>[files]
+mat = matDB.ini
+tx = radiotx.ini
+slab = slabDB.ini
+txant = defant.vsh3
+rx = radiorx.ini
+patra = def.patra
+conf = project.conf
+palch = def.palch
+struc = Lstruc.str
+rxant = defant.vsh3
+
+[waveform]
+tw = 30
+band = 0.499
+fc = 4.493
+thresh = 3
+fe = 50
+type = generic
+
+[frequency]
+fghzmin = 2.0
+fghzmax = 11.0
+nf = 181
+
+[tud]
+purc = 100
+num = -1
+nrmax = 500
+
+[output]
+1 = default1.ini</pre>
+</div>
+<p>This file is composed of independant sections which are respectively</p>
+<div class="highlight-python"><pre>[files]
+        This section contains the short name of the required input file
+        for high level commands
+[launching]
+        various parameters for the launching phase
+[tracing]
+        various parameters for the tracing phase
+[waveform]
+        parameters defining the applied waveform
+[frequency]
+        electromagnetic frequency range
+[tud]
+        ray filtering parameters
+[output]
+        already calculated output files</pre>
+</div>
+</div>
+<div class="section" id="output-section">
+<h3>3.1.2.2. Output Section<a class="headerlink" href="#output-section" title="Permalink to this headline">¶</a></h3>
+<p>The output section is used to keep track of already calculated links. The key
+is an integer which correspond to a radionode index and the corresponding
+associated value is a file which is stored in the <cite>output</cite> directory of the
+project.</p>
+<p>Below is an example of the content of an output <cite>.ini</cite> file</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">rang</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500</span><span class="o">.</span><span class="n">rang</span>
+
+<span class="p">[</span><span class="n">trace</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">defstr_slabDB_def_radiotx_1_def_radiorx_1</span><span class="o">.</span><span class="n">tra</span>
+
+<span class="p">[</span><span class="n">launch</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">defstr_slabDB_def_radiotx_1</span><span class="o">.</span><span class="n">lch</span>
+
+<span class="p">[</span><span class="n">tang</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500</span><span class="o">.</span><span class="n">tang</span>
+
+<span class="p">[</span><span class="n">tauk</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500</span><span class="o">.</span><span class="n">tauk</span>
+
+<span class="p">[</span><span class="n">field</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500</span><span class="o">.</span><span class="n">field</span>
+
+<span class="p">[</span><span class="n">tud</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">defstr_slabDB_def_radiotx_1_def_radiorx_1_0_500</span><span class="o">.</span><span class="n">tud</span>
+
+<span class="p">[</span><span class="n">cir</span><span class="p">]</span>
+<span class="mi">1</span> <span class="o">=</span> <span class="n">cir</span><span class="o">-</span><span class="n">tx001</span><span class="o">-</span><span class="n">rx001</span>
 </pre></div>
 </div>
-<p>A simulation is created</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
-<span class="c"># loading a layout</span>
+</div>
+</div>
+<div class="section" id="example">
+<h2>3.1.3. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Modules are loded</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>A layout file is associated to the lay</p>
+<p>A simulation is loaded from file &#8216;default.ini&#8217;</p>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+
+<span class="gp">In [2]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-2-c4521b4645d7&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 S.L.showGs()</span>
+
+<span class="go">AttributeError: &#39;Simul&#39; object has no attribute &#39;L&#39;</span>
+</pre></div>
+</div>
+<img alt="../_images/DefaultLayout.png" src="../_images/DefaultLayout.png" style="width: 8in;" />
+<p>A layout file is associated to simulation and loaded and displayed.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;defstr&#39;</span>
 <span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.str&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="c"># setting transmitter</span>
-<span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;tx&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.4</span><span class="p">])</span>
-
-<span class="c"># setting receiver</span>
-
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.21</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.22</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.23</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.24</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
-
-<span class="c"># saving simulation</span>
-
-<span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-
-<span class="c"># print launching parameters</span>
-<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-
-<span class="c"># ang Tx : angular step from Tx</span>
-<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">angTx</span>  <span class="o">=</span> <span class="mi">1</span>
-
-<span class="c"># ISB ang Incident Shadow Boundary angle (degree)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ISBang</span> <span class="o">=</span> <span class="mi">90</span>
-
-<span class="c"># ray elimination Threshold</span>
-<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ethreshold</span> <span class="o">=</span> <span class="mf">0.001</span>
-
-<span class="c"># maximum depth</span>
-<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">maxdeep</span>  <span class="o">=</span> <span class="mi">10</span>
-
-<span class="c"># typealgo = 0 (include diffraction) 1 (no diffraction)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">typalgo</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">angTx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span>\
-        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ISBang</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span>\
-        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ethreshold</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span> \
-        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">maxdeep</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span> \
-        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">typalgo</span><span class="p">)</span>
-
-<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">fghzmin</span><span class="o">=</span><span class="mi">2</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">fghzmax</span><span class="o">=</span><span class="mi">11</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">nf</span><span class="o">=</span><span class="mi">181</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-<span class="c"># showing the simulation</span>
-<span class="k">print</span> <span class="s">&quot;Launching &quot;</span>
-<span class="k">print</span> <span class="s">&quot;-----------------&quot;</span>
-<span class="n">S</span><span class="o">.</span><span class="n">launching</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c"># retrieve the launching tree</span>
-
-<span class="n">L1</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">getlaunch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="c"># display the launching tree for different depths</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;launching parameters &#39;</span><span class="o">+</span><span class="n">title</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="n">filestr</span> <span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">N</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">maxdeep</span>
-<span class="n">M</span> <span class="o">=</span> <span class="n">N</span><span class="o">/</span><span class="mi">2</span>
-<span class="c">#</span>
-<span class="c">#for k in range(N):</span>
-<span class="c">#    ax = fig.add_subplot(M,2,k+1)</span>
-<span class="c">#    fig,ax = L1.show(S.L,k+1,f=fig)</span>
-
-<span class="c">#    fig.savefig(pylayersdir+&#39;/doc/auto_examples/simul/&#39;+filestr+&#39;-launching.png&#39;)</span>
-<span class="k">print</span> <span class="s">&quot;Tracing &quot;</span>
-<span class="k">print</span> <span class="s">&quot;-----------------&quot;</span>
-<span class="k">print</span> <span class="s">&quot;purc :&quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;tud&#39;</span><span class="p">,</span><span class="s">&#39;purc&#39;</span><span class="p">)</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">S</span><span class="o">.</span><span class="n">tracing</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">gr</span> <span class="o">=</span> <span class="n">GrRay3D</span><span class="p">()</span>
-<span class="n">gr</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">dtra</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
-<span class="c">#f,a = S.L.showGs(fig=fig)</span>
-<span class="c">#plt.axis(&#39;on&#39;)</span>
-<span class="c">#gr.show(fig=f,ax=a,rayset=np.arange(100))</span>
-<span class="k">print</span> <span class="s">&quot;Tratotud &quot;</span>
-<span class="k">print</span> <span class="s">&quot;-----------------&quot;</span>
-<span class="k">print</span> <span class="s">&quot;purc :&quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;tud&#39;</span><span class="p">,</span><span class="s">&#39;purc&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">tratotud</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">gt</span> <span class="o">=</span> <span class="n">GrRayTud</span><span class="p">()</span>
-<span class="c"># loading rays in tud format</span>
-<span class="c">#gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)</span>
-<span class="c">#print &quot;Evalfield &quot;</span>
-<span class="c">#print &quot;-----------------&quot;</span>
-<span class="n">S</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">cir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pltcir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
+</div>
 </div>
 </div>
 
