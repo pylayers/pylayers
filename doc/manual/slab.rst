@@ -23,7 +23,7 @@ project structure.
 The material database is store in a simple ASCII .ini file as well as the slab
 database. 
 
-To instantiate a Slab objet it is required to provide bath the information of
+To instantiate a Slab object it is required to provide both the information of
 the material database and the slab database. Those 2 database need to be
 consistent. 
 
@@ -40,8 +40,8 @@ slab database.
 
     sl=SlabDB('matDB.ini','slabDB.ini')
 
-The correspondance between an integer and the name of the available
-slabs is available in `sl.di` dictionnary. This association is required
+The correspondence between an integer and the name of the available
+slabs is available in `sl.di` dictionary. This association is required
 for compatibility with EM solver PulsRay which needs an associated
 numerical value for each slab. 
 
@@ -75,7 +75,7 @@ numerical value for each slab.
      20: 'PLASTERBOARD_7CM'}
 
 The material database becomes a member of the slab database, and as
-precedently said there is also an adhoc dictionnary available in order 
+previously said there is also an ad hoc dictionary available in order 
 to keep the association between a material id and the material name.
 
 .. code:: python
@@ -98,7 +98,7 @@ to keep the association between a material id and the material name.
      9: 'SEA_WATER',
      10: 'PLATRE-57GHz'}
 
-It is posssible to easily define individual materials
+It is possible to easily define individual materials
 
 .. code:: python
 
