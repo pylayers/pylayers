@@ -5,8 +5,8 @@ PyLayers : Python mobile Localization Electromagnetics Radio Simulator
 Pylayers is a mobile radio propagation simulator. Its purpose is to help
 designing localization and tracking algorithms for advanced communications
 systems. It might be hopefully useful for illustrating various topics
-on wireless communications and localization for higher education in
-wireless systems. 
+on wireless communications and localization systems in higher
+education.
 
 
 Example 
@@ -144,14 +144,15 @@ Research Team of the Propagation and Localization team of the `IETR
 <http://www.ietr.fr>`_ lab.    
 
 Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi
-Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr Research center).
+Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr CREC research center).
 
 
 Download and Installation
 =========================
 
-The current version is tagged 0.1. Download the
-last release in your preferred format on github.
+The current version is tagged 0.1. 
+
+Download the last release in your preferred format on github.
 
 .. code-block:: bash
     
@@ -161,7 +162,7 @@ last release in your preferred format on github.
 We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
 
 **Just fork it !** on your github account and get in touch on the mailing list
-if you get some interest or seek for applications.
+if you get some interest or see practical applications.
 
 
 
