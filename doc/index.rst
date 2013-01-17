@@ -5,8 +5,8 @@ PyLayers : Python mobile Localization Electromagnetics Radio Simulator
 Pylayers is a mobile radio propagation simulator. Its purpose is to help
 designing localization and tracking algorithms for advanced communications
 systems. It might be hopefully useful for illustrating various topics
-on wireless communications and localization for higher education in
-wireless systems. 
+on wireless communications and localization systems in higher
+education.
 
 
 Example 
@@ -87,7 +87,7 @@ Localization Algorithms
 -----------------------
 
 * Set Membership positioning algorithm toolbox
-* Heterogeneous radion positioning toolbox 
+* Heterogeneous positioning toolbox 
 
 
 
@@ -115,7 +115,8 @@ better used in association with `ipython <http://ipython.org>`_
 Third party packages 
 ====================
 
-Pylayers is written in Python and tributes highly the following Python packages:
+Pylayers is written in Python and is standing on the shoulders of the
+following giant Python packages:
 
 * numpy ( for algebra in multi dimensions )  
 * scipy ( for scientific libraries )
@@ -123,7 +124,6 @@ Pylayers is written in Python and tributes highly the following Python packages:
 * matplotlib ( for the graphical outputs ) 
 * networkx ( for graph description and algorithms ) 
 * shapely ( for planar geometry )   
-* spherepack (for spherical harmonics library)  
 * ipython ( to rule them all ... ) 
 
 
@@ -144,14 +144,15 @@ Research Team of the Propagation and Localization team of the `IETR
 <http://www.ietr.fr>`_ lab.    
 
 Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi
-Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr Research center).
+Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr CREC research center).
 
 
 Download and Installation
 =========================
 
-The current version is tagged 0.1. Download the
-last release in your preferred format on github.
+The current version is tagged 0.1. 
+
+Download the last release in your preferred format on github.
 
 .. code-block:: bash
     
@@ -161,7 +162,7 @@ last release in your preferred format on github.
 We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
 
 **Just fork it !** on your github account and get in touch on the mailing list
-if you get some interest or seek for applications.
+if you get some interest or see practical applications.
 
 
 
@@ -183,12 +184,15 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/logoUR1.jpg 
     :scale: 18%
+    :target: http://www.univ-rennes1.fr/english 
 
 .. image:: _static/logoIETR.jpg 
     :scale: 22%
+    :target: http://www.ietr.fr/ 
 
 .. image:: _static/logoESIR.png 
     :scale: 20%
+    :target: http://esir.univ-rennes1.fr/ 
 
 .. image:: _static/bretagnegd.jpg 
     :scale: 20%
@@ -205,6 +209,7 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/WHERE2_Logo.jpg 
     :scale: 20%
+    :target: http://www.ict-where.eu/ 
 
 .. image:: _static/logo_CORMORAN.png 
     :scale: 20%

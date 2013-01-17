@@ -1,7 +1,8 @@
 # -*- coding:Utf-8 -*-
 #
 # Class Layout
-#
+# 
+# This class handle the description of buildings
 #
 import pdb
 import os
@@ -1313,6 +1314,7 @@ class Layout(object):
 
         for e in le:
             if e > 0:
+                self.del_subseg(e)
                 name = self.Gs.node[e]['name']
                 self.Gs.remove_node(e)
                 self.labels.pop(e)
