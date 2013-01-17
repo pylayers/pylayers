@@ -87,7 +87,7 @@ Localization Algorithms
 -----------------------
 
 * Set Membership positioning algorithm toolbox
-* Heterogeneous radion positioning toolbox 
+* Heterogeneous positioning toolbox 
 
 
 
@@ -115,7 +115,8 @@ better used in association with `ipython <http://ipython.org>`_
 Third party packages 
 ====================
 
-Pylayers is written in Python and tributes highly the following Python packages:
+Pylayers is written in Python and is standing on the shoulders of the
+following giant Python packages:
 
 * numpy ( for algebra in multi dimensions )  
 * scipy ( for scientific libraries )
@@ -123,7 +124,6 @@ Pylayers is written in Python and tributes highly the following Python packages:
 * matplotlib ( for the graphical outputs ) 
 * networkx ( for graph description and algorithms ) 
 * shapely ( for planar geometry )   
-* spherepack (for spherical harmonics library)  
 * ipython ( to rule them all ... ) 
 
 
@@ -184,12 +184,15 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/logoUR1.jpg 
     :scale: 18%
+    :target: http://www.univ-rennes1.fr/english 
 
 .. image:: _static/logoIETR.jpg 
     :scale: 22%
+    :target: http://www.ietr.fr/ 
 
 .. image:: _static/logoESIR.png 
     :scale: 20%
+    :target: http://esir.univ-rennes1.fr/ 
 
 .. image:: _static/bretagnegd.jpg 
     :scale: 20%
@@ -206,6 +209,7 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/WHERE2_Logo.jpg 
     :scale: 20%
+    :target: http://www.ict-where.eu/ 
 
 .. image:: _static/logo_CORMORAN.png 
     :scale: 20%
