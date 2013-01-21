@@ -799,14 +799,13 @@ class Layout(object):
 
             Notes
             -----
-            .. sourcecode::
 
                 str2 format is as follow
 
                 Np Ns Nss
-                xp_1 yp_1 codep_1
+                xp_1 yp_1 zp_1 codep_1
                 ...
-                xp_Np yp_Np codep_Np
+                xp_Np yp_Np zp_Np codep_Np
                 tail_1 head_1 left_1 core_1 right_1 zmin_1 zmax_1
                 ...
                 tail_Ns head_Ns left_Ns core_Ns right_Ns zmin_Ns zmax_Ns
