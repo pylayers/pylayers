@@ -91,7 +91,8 @@
 <span class="c"># -*- coding:Utf-8 -*-</span>
 <span class="c">#</span>
 <span class="c"># Class Layout</span>
-<span class="c">#</span>
+<span class="c"># </span>
+<span class="c"># This class handle the description of buildings</span>
 <span class="c">#</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -888,14 +889,13 @@
 
 <span class="sd">            Notes</span>
 <span class="sd">            -----</span>
-<span class="sd">            .. sourcecode::</span>
 
 <span class="sd">                str2 format is as follow</span>
 
 <span class="sd">                Np Ns Nss</span>
-<span class="sd">                xp_1 yp_1 codep_1</span>
+<span class="sd">                xp_1 yp_1 zp_1 codep_1</span>
 <span class="sd">                ...</span>
-<span class="sd">                xp_Np yp_Np codep_Np</span>
+<span class="sd">                xp_Np yp_Np zp_Np codep_Np</span>
 <span class="sd">                tail_1 head_1 left_1 core_1 right_1 zmin_1 zmax_1</span>
 <span class="sd">                ...</span>
 <span class="sd">                tail_Ns head_Ns left_Ns core_Ns right_Ns zmin_Ns zmax_Ns</span>
@@ -1403,6 +1403,7 @@
 
         <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">le</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">del_subseg</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
@@ -2115,7 +2116,7 @@
         <span class="c">#print &#39;n :&#39;,n</span>
         <span class="c">#print &#39;un : &#39;,unn</span>
         <span class="c">#print &#39;theta (deg)&#39;,the*180./pi</span>
-
+        <span class="n">seglist</span> <span class="o">=</span> <span class="n">seglist</span><span class="o">+</span><span class="mi">1</span>
         <span class="k">return</span><span class="p">(</span><span class="n">seglist</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Layout.layeronlink"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.layeronlink">[docs]</a>    <span class="k">def</span> <span class="nf">layeronlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>

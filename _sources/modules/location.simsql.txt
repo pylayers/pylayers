@@ -1,7 +1,0 @@
-.. _simsq:
-
-simsql
-=========
-
-.. automodule:: pylayers.location.simsql
-    :members:

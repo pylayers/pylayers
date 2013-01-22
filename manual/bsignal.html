@@ -144,33 +144,33 @@
 </div>
 <img alt="../_images/simple_impulse.png" src="../_images/simple_impulse.png" style="width: 5in;" />
 <p><em>Verification of energy normalization in both domains</em></p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [8]: </span><span class="n">Et</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">Et</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
 
-<span class="gp">In [9]: </span><span class="k">print</span> <span class="s">&quot;Time integration&quot;</span><span class="p">,</span><span class="n">Et</span>
+<span class="gp">In [2]: </span><span class="k">print</span> <span class="s">&quot;Time integration&quot;</span><span class="p">,</span><span class="n">Et</span>
 <span class="go">Time integration 1.0</span>
 
-<span class="gp">In [10]: </span><span class="n">P</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
+<span class="gp">In [3]: </span><span class="n">P</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
 
-<span class="gp">In [11]: </span><span class="n">Ef</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">P</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+<span class="gp">In [4]: </span><span class="n">Ef</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">P</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
 
-<span class="gp">In [12]: </span><span class="k">print</span> <span class="s">&quot;Frequency integration&quot;</span><span class="p">,</span><span class="n">Ef</span>
+<span class="gp">In [5]: </span><span class="k">print</span> <span class="s">&quot;Frequency integration&quot;</span><span class="p">,</span><span class="n">Ef</span>
 <span class="go">Frequency integration 1.0</span>
 </pre></div>
 </div>
 <p>A simulation file contains the description of an applied waveform.</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [13]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="gp">In [14]: </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="gp">In [15]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="gp">In [3]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 
-<span class="gp">In [16]: </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
+<span class="gp">In [4]: </span><span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;default.ini&#39;</span><span class="p">)</span>
 
-<span class="gp">In [17]: </span><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
+<span class="gp">In [5]: </span><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
 
-<span class="gp">In [18]: </span><span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
+<span class="gp">In [6]: </span><span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
 
-<span class="gp">In [19]: </span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="gp">In [7]: </span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 <span class="go">tw  :  30.0</span>
 <span class="go">band  :  0.499</span>
 <span class="go">fc  :  4.493</span>
@@ -180,34 +180,34 @@
 <span class="go">te  :  0.01</span>
 <span class="go">type  :  generic</span>
 
-<span class="gp">In [20]: </span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">In [8]: </span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../_images/default_wav.png" src="../_images/default_wav.png" style="width: 5in;" />
 <p><em>Construction of the VectChannel</em></p>
 <p><em class="xref std std-ref">pylayers.antprop.channel.VectChannel</em></p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">nray :  500</span>
 <span class="go">nfreq :  181</span>
 <span class="go">nb rayons dans .tauk :  500</span>
 <span class="go">nb rayons 2:  500</span>
 
-<span class="gp">In [22]: </span><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
+<span class="gp">In [2]: </span><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
 </pre></div>
 </div>
 <img alt="../_images/doadod.png" src="../_images/doadod.png" style="width: 8in;" />
 <p><em>Construction of the ScalChannel</em></p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [23]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">tran2prop</span><span class="p">()</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">tran2prop</span><span class="p">()</span>
 <span class="go">---------------------------------------------------------------------------</span>
 <span class="go">AttributeError                            Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-23-37573399afd8&gt; in &lt;module&gt;()</span>
+<span class="go">&lt;ipython-input-1-37573399afd8&gt; in &lt;module&gt;()</span>
 <span class="go">----&gt; 1 H = vc.tran2prop()</span>
 
 <span class="go">AttributeError: &#39;VectChannel&#39; object has no attribute &#39;tran2prop&#39;</span>
 </pre></div>
 </div>
 <p>Tchannel object is the container for the ray transfer function</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [24]: </span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 <span class="go">defant.vsh3</span>
 <span class="go">type :  vsh3</span>
 <span class="go">--------------------------</span>
@@ -239,13 +239,13 @@
 <span class="go">fmax (GHz) :  8.0</span>
 <span class="go">Ncoeff s3 :  18</span>
 
-<span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0xcd67fec</span><span class="o">&gt;</span>
+<span class="gp">In [2]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gr">Out[2]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0xb481d0c</span><span class="o">&gt;</span>
 
-<span class="gp">In [26]: </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">In [3]: </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="go">---------------------------------------------------------------------------</span>
 <span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-26-595623b35632&gt; in &lt;module&gt;()</span>
+<span class="go">&lt;ipython-input-3-595623b35632&gt; in &lt;module&gt;()</span>
 <span class="go">----&gt; 1 H.plot(ix=np.arange(10))</span>
 
 <span class="go">NameError: name &#39;H&#39; is not defined</span>

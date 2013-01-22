@@ -723,6 +723,9 @@
 <span class="sd">        -------</span>
 <span class="sd">        TUsignal y extended TU signal, x bases are adjusted</span>
 
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
@@ -903,13 +906,16 @@
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        &gt;&gt;&gt; from pylayers.signal import *</span>
-<span class="sd">        &gt;&gt;&gt; from matplotlib.pylab import *</span>
-<span class="sd">        &gt;&gt;&gt; ip = EnImpulse()</span>
-<span class="sd">        &gt;&gt;&gt; ip.plot()</span>
-<span class="sd">        &gt;&gt;&gt; ip.zlr(-10,10)</span>
-<span class="sd">        &gt;&gt;&gt; ip.plot()</span>
-<span class="sd">        &gt;&gt;&gt; show()</span>
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.signal import *</span>
+<span class="sd">            &gt;&gt;&gt; from matplotlib.pylab import *</span>
+<span class="sd">            &gt;&gt;&gt; ip = EnImpulse()</span>
+<span class="sd">            &gt;&gt;&gt; ip.plot()</span>
+<span class="sd">            &gt;&gt;&gt; ip.zlr(-10,10)</span>
+<span class="sd">            &gt;&gt;&gt; ip.plot()</span>
+<span class="sd">            &gt;&gt;&gt; show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
@@ -1022,7 +1028,7 @@
 <span class="sd">        Warnings</span>
 <span class="sd">        --------</span>
 
-<span class="sd">        Once translated original signal and translated signal might be not on the same grid</span>
+<span class="sd">        Once translated original signal and translated signal might not be on the same grid</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -2404,8 +2410,10 @@
 <span class="sd">    y   : ndarray</span>
 <span class="sd">    tau : float or ndarray</span>
 
+
 <span class="sd">    .. todo::</span>
-<span class="sd">        methode tunfold restitution en temps du tableau avec retard</span>
+<span class="sd">        build a tunfold time restitution of delays  </span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span> <span class="n">tau</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])):</span>
         <span class="n">TUsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -3438,16 +3446,19 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        df : float </span>
-<span class="sd">            frequency step (dafault 0.01)</span>
-<span class="sd">        </span>
-<span class="sd">        1. get  fmin and fmax</span>
-<span class="sd">        2. build a new base with frequency step df</span>
-<span class="sd">        3. Initialize a FUsignal with the new frequency base </span>
-<span class="sd">        4. build  matrix tau * f  (Nray x Nf)</span>
-<span class="sd">        5. buildl matrix E= exp(-2 j pi f tau)</span>
-<span class="sd">        6. resampling of FUDsignal according to f --&gt; S</span>
-<span class="sd">        7. apply the element wise product E .* S</span>
-<span class="sd">        8. add all rays </span>
+<span class="sd">            frequency step (default 0.01)</span>
+<span class="sd">       </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">            1. get  fmin and fmax</span>
+<span class="sd">            2. build a new base with frequency step df</span>
+<span class="sd">            3. Initialize a FUsignal with the new frequency base </span>
+<span class="sd">            4. build  matrix tau * f  (Nray x Nf)</span>
+<span class="sd">            5. buildl matrix E= exp(-2 j pi f tau)</span>
+<span class="sd">            6. resampling of FUDsignal according to f --&gt; S</span>
+<span class="sd">            7. apply the element wise product E .* S</span>
+<span class="sd">            8. add all rays </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -3585,6 +3596,10 @@
 <span class="sd">        ffts : fftshift indicator</span>
 <span class="sd">            0  no fftshift</span>
 <span class="sd">            1  apply fftshift</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        r : TUsignal</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau0</span>

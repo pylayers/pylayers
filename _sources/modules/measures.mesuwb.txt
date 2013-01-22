@@ -1,8 +1,0 @@
-.. _measures:
-
-Module mesuwb 
----------------
-
-.. automodule:: pylayers.measures.mesuwb
-   :members:
-

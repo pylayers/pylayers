@@ -1,9 +1,0 @@
-.. _cycles:
-
-Cycles
-=======
-
-.. automodule:: pylayers.gis.cycles
-    :members:
-    
-

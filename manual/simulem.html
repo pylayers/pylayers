@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
     <link rel="up" title="1. How to build a layout file ?" href="tocmanual.html" />
-    <link rel="next" title="3.2. Initialization" href="coverage.html" />
+    <link rel="next" title="4.1. How to goes from a simulnet to a Channel Impulse Response ?" href="simulnet.html" />
     <link rel="prev" title="2.1. Slab and Materials" href="slab.html" />
 <script type="text/javascript">
     
@@ -60,7 +60,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="coverage.html" title="3.2. Initialization"
+          <a href="simulnet.html" title="4.1. How to goes from a simulnet to a Channel Impulse Response ?"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="slab.html" title="2.1. Slab and Materials"
@@ -93,8 +93,8 @@
   <p class="topless"><a href="slab.html"
                         title="previous chapter">2.1. Slab and Materials</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="coverage.html"
-                        title="next chapter">3.2. Initialization</a></p>
+  <p class="topless"><a href="simulnet.html"
+                        title="next chapter">4.1. How to goes from a simulnet to a Channel Impulse Response ?</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/manual/simulem.txt"
@@ -231,15 +231,12 @@ project.</p>
 </pre></div>
 </div>
 <p>A simulation is loaded from file &#8216;default.ini&#8217;</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [2]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
 
-<span class="gp">In [2]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">AttributeError                            Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-2-c4521b4645d7&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 S.L.showGs()</span>
-
-<span class="go">AttributeError: &#39;Simul&#39; object has no attribute &#39;L&#39;</span>
+<span class="gp">In [3]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+<span class="gr">Out[3]: </span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0xbcbabac&gt;,</span>
+<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0xbd0114c&gt;)</span>
 </pre></div>
 </div>
 <img alt="../_images/DefaultLayout.png" src="../_images/DefaultLayout.png" style="width: 8in;" />
@@ -269,7 +266,7 @@ project.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="coverage.html" title="3.2. Initialization"
+          <a href="simulnet.html" title="4.1. How to goes from a simulnet to a Channel Impulse Response ?"
              >next</a> |</li>
         <li class="right" >
           <a href="slab.html" title="2.1. Slab and Materials"

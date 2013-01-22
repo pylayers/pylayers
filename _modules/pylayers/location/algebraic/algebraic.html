@@ -90,8 +90,6 @@
   <h1>Source code for pylayers.location.algebraic.algebraic</h1><div class="highlight"><pre>
 <span class="c"># -*- coding:Utf-8 -*-</span>
 <span class="c">#####################################################################</span>
-<span class="c">#This file is part of RGPA.</span>
-
 <span class="c">#PYLAYERS is free software: you can redistribute it and/or modify</span>
 <span class="c">#it under the terms of the GNU General Public License as published by</span>
 <span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
@@ -107,11 +105,12 @@
 
 <span class="c">#-------------------------------------------------------------------</span>
 <span class="c">#authors :</span>
-<span class="c">#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr</span>
-<span class="c">#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr</span>
+<span class="c">#Mohamed LAARAIEDH</span>
+<span class="c">#Bernard Uguen</span>
 <span class="c">#####################################################################</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">optimize</span>
 <span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="kn">as</span> <span class="nn">nplg</span>
@@ -125,26 +124,34 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class regroups all the algebraic localization scenarios and</span>
 <span class="sd">    techniques</span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">        nodes : dictionnary</span>
 <span class="sd">        ldp : dictionnary</span>
-<span class="sd">        c : speed of light</span>
-<span class="sd">          float</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    This class regroup various implementation of location algorithms.</span>
+<span class="sd">    The instantiated object owns : </span>
+<span class="sd">        + a dictionnary of nodes</span>
+<span class="sd">        + a dictionnary of location dependent parameters</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="p">{},</span> <span class="n">ldp</span><span class="o">=</span><span class="p">{}):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ldp</span> <span class="o">=</span> <span class="n">ldp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mf">0.3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="mf">0.2997924583</span>
 
 <div class="viewcode-block" id="algloc.info"><a class="viewcode-back" href="../../../../modules/location.algebraic.algebraic.html#pylayers.location.algebraic.algebraic.algloc.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Display scenario information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s">&quot;Nodes : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span>
-        <span class="k">print</span> <span class="s">&quot;Location dependant parameters : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldp</span>
+        <span class="k">print</span> <span class="s">&quot;Location dependent parameters : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldp</span>
 </div>
 <div class="viewcode-block" id="algloc.plot"><a class="viewcode-back" href="../../../../modules/location.algebraic.algebraic.html#pylayers.location.algebraic.algebraic.algloc.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rss</span><span class="p">,</span> <span class="n">toa</span><span class="p">,</span> <span class="n">tdoa</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Plot scenario</span>
@@ -227,12 +234,14 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            Rest : string</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            Range : numpy.ndarray</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
@@ -241,6 +250,7 @@
 <span class="sd">            &gt;&gt;&gt; r_mode = S.get_range(&#39;mode&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; r_median = S.get_range(&#39;median&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; r_mean = S.get_range(&#39;mean&#39;)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">RSS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS&#39;</span><span class="p">]</span>
         <span class="n">RSS_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_std&#39;</span><span class="p">]</span>
@@ -263,15 +273,18 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the RSS range standard deviation using the &quot;Rest&quot; \</span>
 <span class="sd">        estimator</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            Rest : string</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            Range_std : numpy.ndarray</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
@@ -305,12 +318,14 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method applies least squares (LS) approximation to get</span>
 <span class="sd">        position P.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            rss : boolean</span>
 <span class="sd">            toa : boolean</span>
 <span class="sd">            tdoa : boolean</span>
 <span class="sd">            Rest : string</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            P : numpy.ndarray</span>
@@ -552,18 +567,21 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method applies weighted least squares (WLS) approximation</span>
 <span class="sd">        to get position P.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            rss : boolean</span>
 <span class="sd">            toa : boolean</span>
 <span class="sd">            tdoa : boolean</span>
 <span class="sd">            Rest : string</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            P : numpy.ndarray</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
@@ -840,12 +858,14 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This defines the ML function to be minimized if ML estimator</span>
 <span class="sd">        is used</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            P : numpy.ndarray</span>
 <span class="sd">            rss : boolean</span>
 <span class="sd">            toa : boolean</span>
 <span class="sd">            tdoa : boolean</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            ML : numpy.ndarray</span>
@@ -901,35 +921,39 @@
                 <span class="n">uk</span> <span class="o">=</span> <span class="n">tk</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">S</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
                 <span class="n">ML</span> <span class="o">=</span> <span class="n">uk</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">rss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span>
-                    <span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span>\
+                     <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">toa</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span>
-                    <span class="n">P</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span>\
+                     <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">tdoa</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span>
-                    <span class="n">P</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span>\
+                     <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>\
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">ML</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span>\
+                     <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span>\
+                     <span class="bp">self</span><span class="o">.</span><span class="n">ml_function</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">ML</span>
 </div>
 <div class="viewcode-block" id="algloc.ml_locate"><a class="viewcode-back" href="../../../../modules/location.algebraic.algebraic.html#pylayers.location.algebraic.algebraic.algloc.ml_locate">[docs]</a>    <span class="k">def</span> <span class="nf">ml_locate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P0</span><span class="p">,</span> <span class="n">rss</span><span class="p">,</span> <span class="n">toa</span><span class="p">,</span> <span class="n">tdoa</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This applies ML estimator to compute position P</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            P0 : numpy.ndarray</span>
 <span class="sd">            rss : boolean</span>
 <span class="sd">            toa : boolean</span>
 <span class="sd">            tdoa : boolean</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            P : numpy.ndarray</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        .. plot::</span>
 <span class="sd">            :include-source:</span>
 
@@ -959,9 +983,11 @@
 <span class="sd">            rss : boolean</span>
 <span class="sd">            toa : boolean</span>
 <span class="sd">            tdoa : boolean</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            FIM : numpy.ndarray</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">rss</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">toa</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">tdoa</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;inputs missed&quot;</span><span class="p">)</span>
@@ -1014,11 +1040,9 @@
                                 <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">RN_RSS</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">RN_RSS</span><span class="p">)[</span><span class="mi">1</span><span class="p">]):</span>
                     <span class="n">FIM</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">P</span> <span class="o">-</span> <span class="n">RN_RSS</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]),</span>
-                                  <span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">RN_RSS</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span>
-                                                                 <span class="p">(</span>
-                                                                     <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
-                                                                         <span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">RN_RSS</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
-                        <span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">RN_RSS</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                                  <span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">RN_RSS</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span>\
+                                  <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span> <span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">RN_RSS</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>\
+                                           <span class="p">(</span><span class="n">P</span> <span class="o">-</span> <span class="n">RN_RSS</span><span class="p">[:,</span> <span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">rss</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">FIM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fim</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">fim</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">toa</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1034,12 +1058,14 @@
 <div class="viewcode-block" id="algloc.crb"><a class="viewcode-back" href="../../../../modules/location.algebraic.algebraic.html#pylayers.location.algebraic.algebraic.algloc.crb">[docs]</a>    <span class="k">def</span> <span class="nf">crb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">rss</span><span class="p">,</span> <span class="n">toa</span><span class="p">,</span> <span class="n">tdoa</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This method compute the cramer rao bound (CRB) at position P.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            P : numpy.ndarray</span>
 <span class="sd">            rss : boolean</span>
 <span class="sd">            toa : boolean</span>
 <span class="sd">            tdoa : boolean</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            CRB : float</span>
@@ -1066,10 +1092,11 @@
 
 </div></div>
 <div class="viewcode-block" id="scenario"><a class="viewcode-back" href="../../../../modules/location.algebraic.algebraic.html#pylayers.location.algebraic.algebraic.scenario">[docs]</a><span class="k">def</span> <span class="nf">scenario</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This method is not a class member, it defines a sample scenario</span>
+    <span class="sd">&quot;&quot;&quot; Defines a sample scenario for testing</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+
 <span class="sd">        CRB : float</span>
 
 <span class="sd">    Examples</span>

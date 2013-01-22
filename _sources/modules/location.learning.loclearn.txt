@@ -1,7 +1,0 @@
-
-
-Learning algorithms
-===================
-
-.. automodule:: pylayers.location.learning.loclearn
-    :members:
