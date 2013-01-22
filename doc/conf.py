@@ -198,7 +198,7 @@ htmlhelp_basename = 'PyLayersdoc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'PyLayers.tex', u'PyLayers Documentation',
-   u'Bernard Uguen,Mohamed Laaraiedh,Nicolas Amiot,Lei Yu', 'manual'),
+   u'Bernard Uguen,Mohamed Laaraiedh,Nicolas Amiot', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -231,7 +231,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'pyray', u'PyLayers Documentation',
-     [u'Bernard Uguen,Mohamed Laaraiedh,Nicolas Amiot,Lei Yu'], 1)
+     [u'Bernard Uguen,Mohamed Laaraiedh,Nicolas Amiot'], 1)
 ]
 
 

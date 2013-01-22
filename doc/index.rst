@@ -87,7 +87,7 @@ Documentation
 
     manual/index.rst 
 
-    modules/index.rst
+..    modules/index.rst
     
 
 

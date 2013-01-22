@@ -2025,7 +2025,7 @@ class Layout(object):
         #print 'n :',n
         #print 'un : ',unn
         #print 'theta (deg)',the*180./pi
-
+        seglist = seglist+1
         return(seglist, theta)
 
     def layeronlink(self, p1, p2):
