@@ -2,18 +2,32 @@
 PyLayers : Python mobile Localization Electromagnetics Radio Simulator 
 =======================================================================
 
-Pylayers is a mobile radio propagation simulator.
-Its purpose is to help designing localization and tracking solutions for advanced 
-communications systems. Hopefully, also useful for
-higher education on topics related to wireless communications. 
+Pylayers is a mobile radio propagation simulator. Its purpose is to help
+designing localization and tracking algorithms for advanced communications
+systems. It might be hopefully useful for illustrating various topics
+on wireless communications and localization systems in higher
+education.
 
 
-.. Example 
-.. =======
+Example 
+=======
 
-.. .. ipython::
+.. ipython::
     
 
+      In [1]: from pylayers.antprop.coverage import *
+
+      In [2]: C = Coverage()
+
+      In [2]: C.tx = np.array((30,12))
+
+      In [3]: C.cover()
+
+      @savefig coverexampleo.png width=5in
+      In [4]: C.showPower(polarization='o')
+      
+      @savefig coverexamplep.png width=5in
+      In [4]: C.showPower(polarization='p')
 ..    In [1]: import pylayers.simul.simulem as sem
 
 ..    In [1]: S = sem.Simul()
@@ -24,12 +38,11 @@ higher education on topics related to wireless communications.
 Context
 =======
 
-PyLayers is beeing developped for research into radio localization exploiting impulse radio
+PyLayers is being developed for research into radio localization exploiting impulse radio
 signals as being defined in the IEEE 802.15.4a and 802.15.6 standards.
 Pylayers could also evolved to help with studies related to channel characterization,
 Wireless Sensor Network, MANET, radio cooperation and relaying techniques, 
-physical layer security, WBAN applications, advanced home automation,
-connected sensito-cognitive environments ...
+physical layer security, WBAN applications, advanced home automation, aware environments ...
 
 Pylayers is modular and designed to be easily extended, 
 allowing it to evolve over the time as a tool for research and development in a wide range 
@@ -74,7 +87,7 @@ Localization Algorithms
 -----------------------
 
 * Set Membership positioning algorithm toolbox
-* Heterogeneous radion positioning toolbox 
+* Heterogeneous positioning toolbox 
 
 
 
@@ -82,19 +95,24 @@ Localization Algorithms
 Documentation
 =============
 
+Pylayers is still in an early stage of its development. The code as well as the
+documentation are in a beta version. The user manual section is embryonary and 
+will be regularly populated with new examples of utilization. Pylayers is
+better used in association with `ipython <http://ipython.org>`_
+
 .. toctree::
     :maxdepth: 1 
 
     manual/index.rst 
 
-..    modules/index.rst
-    
+    modules/index.rst
 
 
 Third party packages 
 ====================
 
-Pylayers is written in Python and tributes highly the following Python packages:
+Pylayers is written in Python and is standing on the shoulders of the
+following giant Python packages:
 
 * numpy ( for algebra in multi dimensions )  
 * scipy ( for scientific libraries )
@@ -102,7 +120,6 @@ Pylayers is written in Python and tributes highly the following Python packages:
 * matplotlib ( for the graphical outputs ) 
 * networkx ( for graph description and algorithms ) 
 * shapely ( for planar geometry )   
-* spherepack (for spherical harmonics library)  
 * ipython ( to rule them all ... ) 
 
 
@@ -114,7 +131,7 @@ Developpers
 ===========
 
 Pylayers is driven by professor Bernard Uguen at `University of Rennes 1
-<http://www.univ-rennes1.fr/>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
+<http://www.univ-rennes1.fr/english>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
 `ESIR school of engineering <http://esir.univ-rennes1.fr/>`_
 
 Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
@@ -123,14 +140,15 @@ Research Team of the Propagation and Localization team of the `IETR
 <http://www.ietr.fr>`_ lab.    
 
 Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi
-Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr Research center).
+Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr CREC research center).
 
 
 Download and Installation
 =========================
 
-The current version is tagged 0.1. Download the
-last release in your preferred format on github.
+The current version is tagged 0.1. 
+
+Download the last release in your preferred format on github.
 
 .. code-block:: bash
     
@@ -139,7 +157,8 @@ last release in your preferred format on github.
 
 We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
 
-**Just fork it !** on your github account.
+**Just fork it !** on your github account and get in touch on the mailing list
+if you get some interest or see practical applications.
 
 
 
@@ -161,12 +180,15 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/logoUR1.jpg 
     :scale: 18%
+    :target: http://www.univ-rennes1.fr/english 
 
 .. image:: _static/logoIETR.jpg 
     :scale: 22%
+    :target: http://www.ietr.fr/ 
 
 .. image:: _static/logoESIR.png 
     :scale: 20%
+    :target: http://esir.univ-rennes1.fr/ 
 
 .. image:: _static/bretagnegd.jpg 
     :scale: 20%
@@ -183,6 +205,7 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/WHERE2_Logo.jpg 
     :scale: 20%
+    :target: http://www.ict-where.eu/ 
 
 .. image:: _static/logo_CORMORAN.png 
     :scale: 20%

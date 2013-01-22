@@ -344,7 +344,7 @@ class Ctilde(object):
 
     def prop2tran(self,a='theta',b='theta'):
         """ transform propagation channel into transmission channel
-        
+
         Parameters
         ----------
 
@@ -968,12 +968,12 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
-        Wgam :
-            waveform including gamma factor
+        Wgam : waveform including gamma factor
 
         Returns
         -------
         ri  : TUDsignal
+
             impulse response for each ray separately
 
         Notes
