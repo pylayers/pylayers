@@ -34,7 +34,6 @@ How to use the mobile network simulator ?
     simulnet.rst
 
 
-
 How to describe antennas ?  
 ---------------------------
 
