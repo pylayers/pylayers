@@ -200,8 +200,8 @@ to keep the association between a material id and the material name.</p>
 </div>
 <p>Once a slab  is defined, it is possible to evaluate it over a range of angles
 and a range of frequencies.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">theta</span>  <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">float64</span><span class="p">)</span>
-
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">theta</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">fGHz</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">2.4</span><span class="p">]</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -210,24 +210,24 @@ and a range of frequencies.</p>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="manual/slab_files/slab_fig_00.png" src="manual/slab_files/slab_fig_00.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">8.3</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<img alt="../_images/slab_fig_00.png" src="../_images/slab_fig_00.png" />
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">8.3</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="manual/slab_files/slab_fig_01.png" src="manual/slab_files/slab_fig_01.png" />
+<img alt="../_images/slab_fig_01.png" src="../_images/slab_fig_01.png" />
 <p>In[39]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="manual/slab_files/slab_fig_02.png" src="manual/slab_files/slab_fig_02.png" />
+<img alt="../_images/slab_fig_02.png" src="../_images/slab_fig_02.png" />
 <p>This example is in describe in page 90 of the thesis &#8220;Simulation du
 canal de propagation indoor &#8221; par Cyril Humbert</p>
 <p>In[42]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">lmat</span>    <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">]</span>
 <span class="n">lthick</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.018</span><span class="p">,</span><span class="mf">0.03</span><span class="p">,</span><span class="mf">0.018</span><span class="p">]</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;Humbert&#39;</span><span class="p">,</span><span class="n">lmat</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
-<span class="n">fGHz</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">57.5</span><span class="p">])</span>
+<span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">57.5</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>This example can be found in the PhD Thesis document of Cyril Humbert
@@ -237,7 +237,7 @@ humb03.pdf page 96</p>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;Humbert&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="manual/slab_files/slab_fig_03.png" src="manual/slab_files/slab_fig_03.png" />
+<img alt="../_images/slab_fig_03.png" src="../_images/slab_fig_03.png" />
 </div>
 
 
