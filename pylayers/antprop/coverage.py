@@ -168,7 +168,7 @@ class Coverage(object):
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
         clb = fig.colorbar(cov,cax)
-        clb.add_label('excess delay (ns)')
+        clb.set_label('excess delay (ns)')
         if self.show:
             plt.show()
 

@@ -105,11 +105,7 @@ better used in association with `ipython <http://ipython.org>`_
 
     manual/index.rst 
 
-.. toctree::
-    :maxdepth: 1 
-
     modules/index.rst
-    
 
 
 Third party packages 

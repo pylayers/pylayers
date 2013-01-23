@@ -1,3 +1,4 @@
+README
 setup.py
 pylayers/__init__.py
 pylayers/clean_pyproject.py
@@ -7,12 +8,9 @@ pylayers.egg-info/dependency_links.txt
 pylayers.egg-info/top_level.txt
 pylayers/antprop/__init__.py
 pylayers/antprop/antenna.py
-pylayers/antprop/channel-chantier.py
-pylayers/antprop/channel-sauv.py
 pylayers/antprop/channel.py
 pylayers/antprop/coverage.py
 pylayers/antprop/multiwall.py
-pylayers/antprop/packet.py
 pylayers/antprop/rays.py
 pylayers/antprop/signature.py
 pylayers/antprop/signew.py
@@ -28,7 +26,6 @@ pylayers/gis/selectl.py
 pylayers/location/__init__.py
 pylayers/location/localization.py
 pylayers/location/locarule.py
-pylayers/location/simsql.py
 pylayers/location/algebraic/__init__.py
 pylayers/location/algebraic/algebraic.py
 pylayers/location/geometric/Scenario_base.py
@@ -50,7 +47,6 @@ pylayers/location/geometric/util/scene.py
 pylayers/location/learning/__init__.py
 pylayers/location/learning/loclearn.py
 pylayers/measures/__init__.py
-pylayers/measures/messimo.py
 pylayers/measures/mesuwb.py
 pylayers/mobility/__init__.py
 pylayers/mobility/agent.py
@@ -68,9 +64,9 @@ pylayers/mobility/transit/SteeringBehavior.py
 pylayers/mobility/transit/SteeringBehavior2.py
 pylayers/mobility/transit/World.py
 pylayers/mobility/transit/World2.py
-pylayers/mobility/transit/Zones.py
 pylayers/mobility/transit/__init__.py
 pylayers/mobility/transit/vec3.py
+pylayers/mobility/transit/zones.py
 pylayers/network/__init__.py
 pylayers/network/communication.py
 pylayers/network/emsolver.py
@@ -80,19 +76,14 @@ pylayers/network/network.py
 pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
-pylayers/pulsray/__init__.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
 pylayers/signal/waveform.py
 pylayers/simul/__init__.py
-pylayers/simul/essai.py
 pylayers/simul/exploit.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
-pylayers/util/PyGraphTool.py
-pylayers/util/PyMathTool.py
-pylayers/util/Util_net.py
 pylayers/util/__init__.py
 pylayers/util/easygui-olld.py
 pylayers/util/easygui.py
