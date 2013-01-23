@@ -3790,7 +3790,7 @@ class Layout(object):
         else -1 is return
 
         """
-        print "ispoint : pt ", pt
+        #print "ispoint : pt ", pt
         pts = np.array(self.Gs.pos.values()).T
         ke = np.array(self.Gs.pos.keys())
         u = pts - pt.reshape(2, 1)
