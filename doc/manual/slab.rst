@@ -111,8 +111,8 @@ and a range of frequencies.
 
 .. code:: python
 
-    theta  = arange(0,pi/2,0.01,dtype=float64)
-
+    theta  = np.arange(0,np.pi/2,0.01,dtype=np.float64)
+    fGHz   = [2.4]
     sl['placo'].ev(fGHz,theta)
 
 In[37]:
@@ -127,7 +127,7 @@ In[37]:
 
 .. code:: python
 
-    fGHz   = arange(0.4,8.3,0.1)
+    fGHz   = np.arange(0.4,8.3,0.1)
     sl['placo'].plotwrtf()
 
 .. image:: slab_files/slab_fig_01.png
@@ -150,7 +150,7 @@ In[42]:
     lmat    = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
     lthick = [0.018,0.03,0.018]
     sl.add('Humbert',lmat,lthick)
-    fGHz = array([57.5])
+    fGHz = np.array([57.5])
 
 This example can be found in the PhD Thesis document of Cyril Humbert
 humb03.pdf page 96
