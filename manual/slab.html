@@ -109,7 +109,7 @@
             
   <div class="section" id="slab-and-materials">
 <h1>2.1. Slab and Materials<a class="headerlink" href="#slab-and-materials" title="Permalink to this headline">¶</a></h1>
-<p>Handling of slabs and material is done in the <cite>slab.py</cite> module in section
+<p>Handling of slabs and materials is done in the <cite>slab.py</cite> module in section
 <cite>antprop</cite>.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="c">#import mplrc.ieee.transaction</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
@@ -171,8 +171,8 @@ numerical value for each slab.</p>
  <span class="mi">20</span><span class="p">:</span> <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>The material database becomes a member of the slab database, and as
-previously said there is also an ad hoc dictionary available in order
+<p>The materials database becomes a member of the slab database, and
+there is also an ad-hoc dictionary available in order
 to keep the association between a material id and the material name.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">mat</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
 <span class="n">mat</span><span class="o">.</span><span class="n">di</span>
@@ -192,14 +192,14 @@ to keep the association between a material id and the material name.</p>
  <span class="mi">10</span><span class="p">:</span> <span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>It is possible to easily define individual materials</p>
+<p>It is possible to define individual materials</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">lmat</span>    <span class="o">=</span> <span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
 <span class="n">lthick</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;placo&#39;</span><span class="p">,</span><span class="n">lmat</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Once a slab  is defined, it is possible to evaluate it over a range of angles
-and a range of frequencies.</p>
+and frequencies.</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">theta</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 <span class="n">fGHz</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">2.4</span><span class="p">]</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
@@ -221,7 +221,7 @@ and a range of frequencies.</p>
 </pre></div>
 </div>
 <img alt="../_images/slab_fig_02.png" src="../_images/slab_fig_02.png" />
-<p>This example is in describe in page 90 of the thesis &#8220;Simulation du
+<p>This example is described in page 90 of the thesis &#8220;Simulation du
 canal de propagation indoor &#8221; par Cyril Humbert</p>
 <p>In[42]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">lmat</span>    <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">]</span>
@@ -230,8 +230,6 @@ canal de propagation indoor &#8221; par Cyril Humbert</p>
 <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">57.5</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>This example can be found in the PhD Thesis document of Cyril Humbert
-humb03.pdf page 96</p>
 <p>In[44]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;Humbert&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;Humbert&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>

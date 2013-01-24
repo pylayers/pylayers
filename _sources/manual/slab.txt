@@ -2,7 +2,7 @@
 Slab and Materials
 ==================
 
-Handling of slabs and material is done in the `slab.py` module in section
+Handling of slabs and materials is done in the `slab.py` module in section
 `antprop`. 
 
 
@@ -74,8 +74,8 @@ numerical value for each slab.
      19: 'PLASTERBOARD_14CM',
      20: 'PLASTERBOARD_7CM'}
 
-The material database becomes a member of the slab database, and as
-previously said there is also an ad hoc dictionary available in order 
+The materials database becomes a member of the slab database, and 
+there is also an ad-hoc dictionary available in order 
 to keep the association between a material id and the material name.
 
 .. code:: python
@@ -98,7 +98,7 @@ to keep the association between a material id and the material name.
      9: 'SEA_WATER',
      10: 'PLATRE-57GHz'}
 
-It is possible to easily define individual materials
+It is possible to define individual materials
 
 .. code:: python
 
@@ -107,7 +107,7 @@ It is possible to easily define individual materials
     sl.add('placo',lmat,lthick)
 
 Once a slab  is defined, it is possible to evaluate it over a range of angles
-and a range of frequencies. 
+and frequencies. 
 
 .. code:: python
 
@@ -140,7 +140,7 @@ In[39]:
 
 .. image:: slab_files/slab_fig_02.png
 
-This example is in describe in page 90 of the thesis "Simulation du
+This example is described in page 90 of the thesis "Simulation du
 canal de propagation indoor " par Cyril Humbert
 
 In[42]:
@@ -152,8 +152,6 @@ In[42]:
     sl.add('Humbert',lmat,lthick)
     fGHz = np.array([57.5])
 
-This example can be found in the PhD Thesis document of Cyril Humbert
-humb03.pdf page 96
 
 In[44]:
 

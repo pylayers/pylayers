@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Layout ploting &mdash; PyLayers 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
+    <link rel="up" title="notebooks" href="notebook.html" />
+    <link rel="next" title="Multi-wall model" href="2. Multiwall_and_coverage.html" />
+    <link rel="prev" title="notebooks" href="notebook.html" />
+<script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-34943220-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                   })();
+
+</script>
+
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0" alt="pylayers"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2. Multiwall_and_coverage.html" title="Multi-wall model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="notebook.html" title="notebooks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="notebook.html" accesskey="U">notebooks</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Layout ploting</a><ul>
+<li><a class="reference internal" href="#slab-name">Slab name</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slab-dictionnary">Slab dictionnary</a></li>
+<li><a class="reference internal" href="#slab-information">Slab Information</a></li>
+<li><a class="reference internal" href="#slab-evaluation">Slab evaluation</a></li>
+<li><a class="reference internal" href="#transmission-and-reflexion-coefficient">Transmission and Reflexion coefficient</a></li>
+<li><a class="reference internal" href="#ploting-coefficients">Ploting Coefficients</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="notebook.html"
+                        title="previous chapter">notebooks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="2. Multiwall_and_coverage.html"
+                        title="next chapter">Multi-wall model</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/manual/1. Slab_and_Materials.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <p>This section explains some features of the class <strong>Layout</strong>. Layout are
+handled by the module <strong>pylayers.gis.layout</strong></p>
+<p>In[72]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span>  <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="section" id="layout-ploting">
+<h1>Layout ploting<a class="headerlink" href="#layout-ploting" title="Permalink to this headline">¶</a></h1>
+<p>The layout ploting expoits vizaulization function of networkx. The
+method showG allows to display the different graphs which constitute the
+layout. option graph <img class="math" src="../_images/math/380563156beb92b82d5c515bdcb64a2e8a48174d.png" alt="$\in$"/> {&#8216;s&#8217;,&#8217;t&#8217;,&#8217;i&#8217;,&#8217;r&#8217;,&#8217;v&#8217;}</p>
+<p>In[73]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.str&#39;</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Out[73]:</p>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xac4a02c&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xa848aec&gt;)</pre>
+</div>
+<img alt="../_images/1__Slab_and_Materials_fig_00.png" src="../_images/1__Slab_and_Materials_fig_00.png" />
+<div class="section" id="slab-name">
+<h2>Slab name<a class="headerlink" href="#slab-name" title="Permalink to this headline">¶</a></h2>
+<p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
+<p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
+to a segment (Wall,door,window,...).</p>
+<p>Each edge has a <strong>name</strong> attribute, which contains the name entry of its
+constitutive Slab.</p>
+<p>In[74]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">20</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[74]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;PARTITION&#39;</span>
+</pre></div>
+</div>
+<p>In the example above the node +20 of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> is a
+segment of nature &#8216;PARTITION&#8217;.</p>
+<p>&#8216;PARTITION&#8217; is a key entry of the Slab dictionnary.</p>
+</div>
+</div>
+<div class="section" id="slab-dictionnary">
+<h1>Slab dictionnary<a class="headerlink" href="#slab-dictionnary" title="Permalink to this headline">¶</a></h1>
+<p>The layout L has a <strong>sl</strong> (slab dictionnary) attribute. Inside are
+placed all the available slabs for building the layout.</p>
+<p>In[75]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Out[75]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
+ <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
+ <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+ <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
+ <span class="s">&#39;WINDOW&#39;</span><span class="p">,</span>
+ <span class="s">&#39;METALIC&#39;</span><span class="p">,</span>
+ <span class="s">&#39;PLASTERBOARD_14CM&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DOOR&#39;</span><span class="p">,</span>
+ <span class="s">&#39;FLOOR&#39;</span><span class="p">,</span>
+ <span class="s">&#39;METAL&#39;</span><span class="p">,</span>
+ <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span>
+ <span class="s">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
+ <span class="s">&#39;PLASTERBOARD_10CM&#39;</span><span class="p">,</span>
+ <span class="s">&#39;CEIL&#39;</span><span class="p">,</span>
+ <span class="s">&#39;CONCRETE_6CM3D&#39;</span><span class="p">,</span>
+ <span class="s">&#39;CONCRETE_15CM3D&#39;</span><span class="p">,</span>
+ <span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">,</span>
+ <span class="s">&#39;WALLS&#39;</span><span class="p">,</span>
+ <span class="s">&#39;WOOD&#39;</span><span class="p">,</span>
+ <span class="s">&#39;CONCRETE_7CM3D&#39;</span><span class="p">,</span>
+ <span class="s">&#39;PILLAR&#39;</span><span class="p">,</span>
+ <span class="s">&#39;ABSORBENT&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="slab-information">
+<h1>Slab Information<a class="headerlink" href="#slab-information" title="Permalink to this headline">¶</a></h1>
+<p>Each slab contains various information about their constitutive
+materials and on electromagnetic propreties.</p>
+<p>Below an example for a simple slab, constituted with a single material.
+The slab &#8216;WOOD&#8217; is made of material &#8216;WOOD&#8217;</p>
+<p>In[76]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[76]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In[77]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;thickness&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[77]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Until now the thickness attribute is a tuple with 8 values. This is for
+backward compatibility with pulsray. In future</p>
+<p>pure python version their will remains no reason to maintain this
+limitation.</p>
+<p>Notice that in thickness the unit is centimeter, lthick is in SI unit
+i.e meters.</p>
+<p>Ignore the existence of this attribute, use &#8216;lthick&#8217; attribute instead.</p>
+<p>In[78]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[78]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mf">0.04</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In[79]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[79]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;maroon&#39;</span>
+</pre></div>
+</div>
+<p>In[80]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">][</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[80]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">2</span>
+</pre></div>
+</div>
+<p>More complex Slab, using different stacks of materials can be considered</p>
+<p>In[81]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[81]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;GLASS&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;GLASS&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In[82]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[82]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>For each material, the electromagnetic propreties can be listed.</p>
+<p>In[83]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmat&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Out[83]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
+  <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
+  <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
+  <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+ <span class="p">{</span><span class="s">&#39;epr&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3.79999995232</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
+  <span class="s">&#39;index&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+  <span class="s">&#39;mur&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">0j</span><span class="p">),</span>
+  <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;GLASS&#39;</span><span class="p">,</span>
+  <span class="s">&#39;roughness&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="s">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="slab-evaluation">
+<h1>Slab evaluation<a class="headerlink" href="#slab-evaluation" title="Permalink to this headline">¶</a></h1>
+<p>Each Slab can be evaluated to obtain the Transmission and Reflexion
+coefficients for</p>
+<ul class="simple">
+<li>a given frequency range</li>
+<li>a given incidence angle range (<img class="math" src="../_images/math/77375b78a9e3285bb5338b7abdda4ac01b7d0d59.png" alt="$0\le\theta&lt;\frac{\pi}{2}$"/>)</li>
+</ul>
+<p>In[84]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Here, we have evluated the slab for&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;frequency(ies)&#39;</span><span class="p">,</span> <span class="s">&#39;and&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;angle(s)</span><span class="se">\n</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Here, we have evluated the slab for 80 frequency(ies) and 158 angle(s)</pre>
+</div>
+</div>
+<div class="section" id="transmission-and-reflexion-coefficient">
+<h1>Transmission and Reflexion coefficient<a class="headerlink" href="#transmission-and-reflexion-coefficient" title="Permalink to this headline">¶</a></h1>
+<p>From the evaluation reflexion and tramsmission coeffcient are computed
+for the given frequency range and theta range</p>
+<p>In[85]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">ithet</span><span class="o">=</span><span class="mi">10</span>
+
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Reflection coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> R=&#39;</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Transmission coefficient @&#39;</span><span class="p">,</span><span class="n">fGHz</span><span class="p">[</span><span class="n">ifreq</span><span class="p">],</span><span class="s">&#39;GHz and theta=&#39;</span><span class="p">,</span><span class="n">theta</span><span class="p">[</span><span class="n">ithet</span><span class="p">],</span><span class="s">&#39;:</span><span class="se">\n\n</span><span class="s"> T=&#39;</span><span class="p">,</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Reflection coefficient @ 1.05 GHz and theta= 0.1 :
+
+ R= [[-0.46812931-0.06286165j  0.00000000+0.j        ]
+ [ 0.00000000+0.j          0.46812931+0.06286165j]]
+
+Transmission coefficient @ 1.05 GHz and theta= 0.1 :
+
+ T= [[ 0.72738249-0.48850885j  0.00000000+0.j        ]
+ [ 0.00000000+0.j          0.72738249-0.48850885j]]</pre>
+</div>
+</div>
+<div class="section" id="ploting-coefficients">
+<h1>Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>with respect to  frequency</div></blockquote>
+<hr class="docutils" />
+<p>In[86]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;mod&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;phase&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/1__Slab_and_Materials_fig_01.png" src="../_images/1__Slab_and_Materials_fig_01.png" />
+<img alt="../_images/1__Slab_and_Materials_fig_02.png" src="../_images/1__Slab_and_Materials_fig_02.png" />
+<p>In[87]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/1__Slab_and_Materials_fig_03.png" src="../_images/1__Slab_and_Materials_fig_03.png" />
+<p>In[91]:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/1__Slab_and_Materials_fig_04.png" src="../_images/1__Slab_and_Materials_fig_04.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="2. Multiwall_and_coverage.html" title="Multi-wall model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="notebook.html" title="notebooks"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="notebook.html" >notebooks</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
