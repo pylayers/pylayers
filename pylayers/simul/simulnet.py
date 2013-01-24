@@ -85,6 +85,7 @@ class Simul(Simulation):
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
+        self.roomlist=[]
 
     def create_layout(self):
         """
@@ -286,6 +287,6 @@ class Simul(Simulation):
 
 if __name__ == '__main__':
 
-    seed(10)
     S = Simul()
+    seed(eval(S.sim_opt['seed']))
     S.runsimul()

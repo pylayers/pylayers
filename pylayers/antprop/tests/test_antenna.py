@@ -1,7 +1,7 @@
 import time
 
 FD = tkFileDialog
-      filename = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
+filename = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
       ("All", "*")],
        title="Please choose a vsh3 antenna file",
        initialdir=antdir)
@@ -91,16 +91,16 @@ toc       = time.time()
 Err       = A.mse(Fth3,Fph3,0)
 nk        = shape(A.C.Br.s3)[1]
 
-      MSE    = np.hstack((MSE,Err[0]))
-       MSEth  = np.hstack((MSEth,Err[1]))
-       MSEph  = np.hstack((MSEph,Err[2]))
-      TI     = np.hstack((TI,toc-tic))
-     K      = np.hstack((K,nk))
+MSE    = np.hstack((MSE,Err[0]))
+MSEth  = np.hstack((MSEth,Err[1]))
+MSEph  = np.hstack((MSEph,Err[2]))
+TI     = np.hstack((TI,toc-tic))
+K      = np.hstack((K,nk))
 
-      Enc  = A.C.ens3()
-     n    = len(Enc)
+Enc  = A.C.ens3()
+n    = len(Enc)
 
-      pos=0
+pos=0
       #while (pos<n)&(Err[0]<0.1):
 lim=0.1
 #lim=0.05

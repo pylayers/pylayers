@@ -381,6 +381,10 @@ class CLA(object):
                         pass
                 else:
                     ex = c
+            try:
+                tlb = tlb.intersect(ex.lbox)
+            except:
+                pass
 
             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
                 vcw1 = vcw1 + step
@@ -390,15 +394,17 @@ class CLA(object):
                 vcw1 = max(vcw1 - step / 2., vcwmin)  # vcw > vcwmin
                 step = step / 4.
 #                print step, vcw1
-
-        if (np.diff(tlb.box[0].bd, axis=0)[0][0] == 0) | (np.diff(tlb.box[0].bd, axis=0)[0][1] == 0):
-            self.setvcw(vcw1 + 1.0)
-
         try:
-            tlb = tlb.intersect(ex.lbox)
-
+            if (np.diff(tlb.box[0].bd, axis=0)[0][0] == 0) | (np.diff(tlb.box[0].bd, axis=0)[0][1] == 0):
+                self.setvcw(vcw1 + 1.0)
         except:
             pass
+#        try:
+#            tlb = tlb.intersect(ex.lbox)
+
+#        except:
+#            pass
+#        pdb.set_trace()
         self.vcw_init = vcw_init
         self.dlayer[Nc] = [LBoxN([]), tlb]
         self.dlayer[Nc][1].volume()
@@ -528,6 +534,7 @@ class CLA(object):
 #        print nboxamb
         # if all boxes are out of the VA...
 #               if  ((nboxamb==0)&(nbox==0)) and len(self.dlayer[l][0].box) == 0:
+
         if  ((nboxamb == 0) & (nbox == 0)) and len(self.dlayer[l][0].box) == 0:
             if self.iter < 25:
 
@@ -632,13 +639,13 @@ class CLA(object):
                 else:
                     try:
                         for vsc in sc:
-                            if vsc.runable:
+                            if self.c[vsc].runable:
                                 self.c[vsc].parmsh['display'] = False
                                 self.c[vsc].parmsh['scene'] = False
                                 fname = self.c[vsc].show3()
                                 fd.write("{<" + fname + ".list}\n")
                     except:
-                        if sc.runable:
+                        if self.c[sc].runable:
                             self.c[sc].parmsh['display'] = False
                             self.c[sc].parmsh['scene'] = False
                             fname = self.c[sc].show3()
@@ -689,6 +696,7 @@ class CLA(object):
                     fd.write("{<" + fname + "}\n")
 
         fd.close()
+        
         chaine = "geomview  -nopanel  -b 1 1 1 " + filename + " 2>/dev/null &"
 
         os.system(chaine)
@@ -721,9 +729,9 @@ class CLA(object):
 #
 #                       v = (1/(((self.c[c].sstd)*self.c[c].vcw)*np.sqrt(2*np.pi)))*np.exp(-(d-self.c[c].value*0.3)**2/(2*(self.c[c].sstd)*self.c[c].vcw)**2)
 #                       v=v[0]
-            S = (-self.c[c].sstd * np.log(10)) / (-10 * self.c[c].model.RSSnp)
+            S = (-self.c[c].sstd * np.log(10)) / (-10 * self.c[c].model.rssnp)
             M = ((self.c[c].model.PL0 - self.c[c].value) *
-                 np.log(10)) / (10 * self.c[c].model.RSSnp)
+                 np.log(10)) / (10 * self.c[c].model.rssnp)
             v = 1 / (d * S * np.sqrt(2 * np.pi)) * np.exp(
                 -(((np.log(d) - M) ** 2) / (2. * (S ** 2))))
 
@@ -933,8 +941,10 @@ class CLA(object):
                 if clust_vol != 0:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
-                    dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
-
+                    try:
+                        dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
+                    except:
+                        dd.append(np.sqrt(np.sum((pc - self.c[1].p) ** 2)))
 #                       try:
 #                               vmax=[]
 #                               for i in range(len(lclust)):

@@ -973,7 +973,6 @@ class Network(nx.MultiGraph):
         pos=nx.get_node_attributes(self,'p')
         pe=nx.get_node_attributes(self,'pe_alg')
         typ = nx.get_node_attributes(self,'type')
-
         if self.idx == 0:
             entete = 'NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp\n'
             file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','write')

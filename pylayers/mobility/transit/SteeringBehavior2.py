@@ -13,7 +13,7 @@ created by Craig Reynolds and expanded upon by many.
 from math import *
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.vec3 import vec3
-from random import uniform,gauss
+from random import uniform,gauss,randint
 import pdb 
 
 class Seek:
@@ -78,7 +78,8 @@ class Separation:
                 separation = other.position - boid.position
                 force = separation.scale(-1 / separation.length() ** 2)
                 # create orthogonal vector in order to make boids avoidance
-                force2 = vec3(-force[1],force[0],0)
+                force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
+#                force2 = vec3(-force[1],force[0],0)
                 acceleration += force2
         return acceleration
 

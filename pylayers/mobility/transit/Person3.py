@@ -65,13 +65,14 @@ class Person3(Process):
         self.waypoints = []
         self.moving=moving
         self.roomId    = roomId
-        self.forbidroomId = [3,27,26,25,16,28,24,18,17,23,22,21,19,20]
+        self.forbidroomId = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
         self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-        while self.nextroomId == self.roomId or (self.nextroomId == 20 ) or (self.nextroomId == 5) or (self.nextroomId in self.forbidroomId): # test destination different de l'arrive
+        while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+        self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         self.wp       =  self.L.waypoint(roomId,self.nextroomId)
         for tup in self.wp[1:]:
-            self.waypoints.append(vec3(tup)) 
+                self.waypoints.append(vec3(tup)  ) 
         try:
             self.position = vec3(L.Gr.pos[roomId][0],L.Gr.pos[roomId][1])
         except:     
@@ -157,7 +158,10 @@ class Person3(Process):
                     self.arrived = False
                     if self.endpoint:
                         self.endpoint=False
+                        pr = self.sim.roomlist.index(self.nextroomId)
+                        self.sim.roomlist.pop(pr)
                         self.roomId = self.nextroomId
+
                     #
                     # Si porte on continue
                     #
@@ -168,12 +172,12 @@ class Person3(Process):
                     #Nadjroom = len(adjroom)
                         self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
 #                        while self.nextroomId == self.roomId or (self.nextroomId == 20 ) or (self.nextroomId == 5) : # test destination different de l'arrive
-                        while self.nextroomId == self.roomId or (self.nextroomId == 20 ) or (self.nextroomId == 5) or (self.nextroomId in self.forbidroomId):
-
+                        while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist):
                             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                        self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
                         wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
-                            self.waypoints.append(vec3(tup)) 
+                            self.waypoints.append(vec3(tup)  ) 
                     #nextroom = adjroom[k]
                     #    print "room : ",self.roomId
                     #    print "nextroom : ",self.nextroomId
@@ -201,7 +205,7 @@ class Person3(Process):
 
                         self.wait=abs(gauss(50,50))
                         print 'wait',self.wait*self.interval    
-                        yield hold, self, self.wait
+                        yield hold, self, self.wait 
 
                     else:    
                         del self.waypoints[0]

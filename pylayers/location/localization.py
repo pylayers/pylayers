@@ -158,6 +158,7 @@ class Localization(object):
         """
             Compute postion with the geometric algorithm
         """
+
         if sum(self.cla.runable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
@@ -169,11 +170,11 @@ class Localization(object):
         """
             Compute postion with the algebraic algorithm
         """
-        
-        if ldp == 'all':
-            ldp=['Pr','TOA','TDOA']
-        pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
-        self.savep(pe_alg.T,name='pe_alg')
+        if len(self.cla.c) !=0:
+            if ldp == 'all':
+                ldp=['Pr','TOA','TDOA']
+            pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
+            self.savep(pe_alg.T,name='pe_alg')
 
 
 

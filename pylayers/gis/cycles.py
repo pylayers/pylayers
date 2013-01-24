@@ -10,6 +10,8 @@ import networkx as nx
 import numpy as np 
 from  pylayers.util import geomutil as geu
 from  pylayers.util import pyutil as pyu
+import matplotlib.pyplot as plt
+import pdb
 
 class Cycles(object):
     """ List of cycles
@@ -198,7 +200,11 @@ class Cycles(object):
                     # simplification cycles inclus multiples
                     for nl in l:
                         cl = self.LC[nl]
+#                        if (j == 16) and (k ==48) and (nl == 52):
+#                            pdb.set_trace()
                         C  = C.untie(self.Gs,cl)
+
+
                     MC.append(C)
                     self.Gt.add_node(k,vnodes=C.cycle)
                     self.Gt.pos[k]=C.g

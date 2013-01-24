@@ -151,4 +151,4 @@ class Agent(object):
                                     method=args['loc_method'])
             self.Ploc = PLocalization(loc=self.loc,
                                       loc_updt_time=args['loc_updt'], sim=args['sim'])
-            self.sim.activate(self.Ploc, self.Ploc.run(), 1.0)
+            self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)

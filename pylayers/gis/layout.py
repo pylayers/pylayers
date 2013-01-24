@@ -208,7 +208,7 @@ class Layout(object):
 
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
-
+            DEPRECATED
          .. todo this is wrong
 
          Parameters
@@ -1313,6 +1313,7 @@ class Layout(object):
 
         for e in le:
             if e > 0:
+                self.del_subseg(e)
                 name = self.Gs.node[e]['name']
                 self.Gs.remove_node(e)
                 self.labels.pop(e)
@@ -1320,6 +1321,9 @@ class Layout(object):
                 # update slab name <-> edge number dictionnary
                 self.name[name].remove(e)
                 # delete subseg if required
+
+
+
 
     def del_cycle(self, lnc):
         """ delete a cycle
@@ -2025,7 +2029,7 @@ class Layout(object):
         #print 'n :',n
         #print 'un : ',unn
         #print 'theta (deg)',the*180./pi
-
+        seglist=seglist+1
         return(seglist, theta)
 
     def layeronlink(self, p1, p2):
@@ -2078,7 +2082,6 @@ class Layout(object):
             uv = np.nonzero(self.tahe[1, :] == i)[0]
             seglist = np.hstack((seglist, ut, uv))
         seglist = np.unique(seglist)
-
         return(seglist)
 
     def seginframe(self, p1, p2):
@@ -2097,6 +2100,7 @@ class Layout(object):
 
             seglist
                 list of segment number inside a planar region defined by p1 an p2
+
 
             Examples
             --------
@@ -2126,6 +2130,7 @@ class Layout(object):
                 1, :] > min_y))[0]
 
         seglist = self.segpt(up)
+
         return(seglist)
 
         def layerongrid(self, grid, Tx):
@@ -2709,11 +2714,11 @@ class Layout(object):
 
         """
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
+
         LC = []
         for c in C:
             Cy = Cycls.Cycle(self.Gs, c)
             LC.append(Cy)
-
         Cys = Cycls.Cycles(LC, self.Gs)
         self.Gt = Cys.Gt
 
@@ -3291,28 +3296,49 @@ class Layout(object):
         else:
             ax = kwargs['ax']
 
+#        if 't' in graph:
+#            G = self.Gt
+#            nx.draw(G, G.pos, node_color='r', edge_color='r')
+#        if 'r' in graph:
+#            G = self.Gr
+#            nx.draw(G, G.pos, node_color='g', edge_color='g')
+#        if 's' in graph:
+#            G = self.Gs
+#            nx.draw(G, G.pos, node_color='b', edge_color='b')
+#        if 'v' in graph:
+#            G = self.Gv
+#            nx.draw(G, self.Gs.pos, node_color='m', edge_color='m')
+#        if 'c' in graph:
+#            G = self.Gc
+#            nx.draw(G, self.Gs.pos, node_color='c', edge_color='c')
+#        if 'i' in graph:
+#            G = self.Gi
+#            nx.draw(G,G.pos,node_color='k', edge_color='k')
+#        if 'w' in graph:
+#            G = self.Gw
+#            nx.draw(G,G.pos,node_color='w', edge_color='k')
+
         if 't' in graph:
             G = self.Gt
-            nx.draw(G, G.pos, node_color='r', edge_color='r')
+            nx.draw(G, G.pos, node_color='w', edge_color='r',node_size= 200,fontsize=30)
         if 'r' in graph:
             G = self.Gr
-            nx.draw(G, G.pos, node_color='g', edge_color='g')
+            nx.draw(G, G.pos, node_color='w', edge_color='g',node_size= 200,fontsize=30)
         if 's' in graph:
             G = self.Gs
-            nx.draw(G, G.pos, node_color='b', edge_color='b')
+            nx.draw(G, G.pos, node_color='w', edge_color='b',node_size= 250,fontsize=30)
         if 'v' in graph:
             G = self.Gv
-            nx.draw(G, self.Gs.pos, node_color='m', edge_color='m')
+            nx.draw(G, self.Gs.pos, node_color='w', edge_color='m')
         if 'c' in graph:
             G = self.Gc
-            nx.draw(G, self.Gs.pos, node_color='c', edge_color='c')
+            nx.draw(G, self.Gs.pos, node_color='w', edge_color='c')
         if 'i' in graph:
             G = self.Gi
-            nx.draw(G,G.pos,node_color='k', edge_color='k')
+            nx.draw(G,G.pos,node_color='w', edge_color='k', node_size= 1, fontsize=0.1)
         if 'w' in graph:
             G = self.Gw
-            nx.draw(G,G.pos,node_color='k', edge_color='k')
-
+            nx.draw(G,G.pos,node_color='w', edge_color='k')
 
         for k, ncy in enumerate(self.Gt.node.keys()):
             self.Gt.node[ncy]['polyg'].plot()
