@@ -1,7 +1,7 @@
 .. _algebraic:
 
-algebraic
-=========
+algebraic algorithms
+====================
 
 .. automodule:: pylayers.location.algebraic.algebraic
     :members:

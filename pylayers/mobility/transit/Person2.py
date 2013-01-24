@@ -26,51 +26,53 @@ def copy(self):
 vec3.copy = copy
 
 class Person2(Process):
-        max_acceleration = 2.0 # m/s/s
-        max_speed        = 1.2 # m/s
-        #radius = 0.2106  # if one person takes 1.5 feet^2 of space, per traffic stds
-        # 2r = 0.5 to 0.7 for "sports fans", per the Helbing, Farkas, Vicsek paper
-        radius           = 2.85   # per the Teknomo, et al, paper 
-        mass             = 80 # kg
-        average_radius   = 0.6
-        npers            = 0
-	#GeomNet          = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-        def __init__(self, interval=0.5,roomId=0, L=[],sim=None):
-                """
-                boid is initialized in a room of Layout L 
-                """                
-                #GeomNetType = np.dtype([('Id',int), 
-	        #                ('time',int), 
-		#		('p',float,(1,3)),
-		#		('v',float,(1,3)),
-		#		('a',float,(1,3))])
-                Person2.npers +=1
-                Process.__init__(self,sim=sim)
-	        self.L = L 
-                self.world = world()
-                self.interval = interval
-                self.manager = None
-                self.manager_args = []
-                self.waypoints = []
-	        self.roomId    = roomId
-                self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-		while self.nextroomId == self.roomId : # test destination different de l'arrive
-                	self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-                print "nextroom : ", self.nextroomId
-                self.wp           =  self.L.waypoint(roomId,self.nextroomId)
-                for tup in self.wp[1:]:
-                        self.waypoints.append(vec3(tup)) 
-                try:
-                        self.position = vec3(L.Gr.pos[roomId])
-                except:         
-                        self.position = vec3()
+    """ Person2 
+    """
+    max_acceleration = 2.0 # m/s/s
+    max_speed        = 1.2 # m/s
+    #radius = 0.2106  # if one person takes 1.5 feet^2 of space, per traffic stds
+    # 2r = 0.5 to 0.7 for "sports fans", per the Helbing, Farkas, Vicsek paper
+    radius           = 2.85   # per the Teknomo, et al, paper 
+    mass             = 80 # kg
+    average_radius   = 0.6
+    npers            = 0
+#GeomNet          = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
+    def __init__(self, interval=0.5,roomId=0, L=[],sim=None):
+        """
+        boid is initialized in a room of Layout L 
+        """                
+        #GeomNetType = np.dtype([('Id',int), 
+        #                ('time',int), 
+        #		('p',float,(1,3)),
+        #		('v',float,(1,3)),
+        #		('a',float,(1,3))])
+        Person2.npers +=1
+        Process.__init__(self,sim=sim)
+        self.L = L 
+        self.world = world()
+        self.interval = interval
+        self.manager = None
+        self.manager_args = []
+        self.waypoints = []
+        self.roomId    = roomId
+        self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+        while self.nextroomId == self.roomId : # test destination different de l'arrive
+            self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+            print "nextroom : ", self.nextroomId
+            self.wp           =  self.L.waypoint(roomId,self.nextroomId)
+            for tup in self.wp[1:]:
+                self.waypoints.append(vec3(tup)) 
+            try:
+                self.position = vec3(L.Gr.pos[roomId])
+            except:         
+                self.position = vec3()
 #		self.old_pos = vec3()
-		self.stuck = 0               
-                self.destination = self.waypoints[0]
-                self.velocity = vec3()
-                self.localx = vec3(1, 0)
-                self.localy = vec3(0, 1)
-                self.world.add_boid(self)
+		    self.stuck = 0               
+            self.destination = self.waypoints[0]
+            self.velocity = vec3()
+            self.localx = vec3(1, 0)
+            self.localy = vec3(0, 1)
+            self.world.add_boid(self)
                
                 #        GeomNet = np.vstack((GeomNet,np.array((Nnodes,0,[list(self.position)],[list(self.velocity)],[list(self.velocity)]),dtype=GeomNetType)))
 

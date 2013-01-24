@@ -1,6 +1,6 @@
 from   pylayers.mobility.transit.vec3 import vec3
 import numpy as np
-import MySQLdb as msql
+#import MySQLdb as msql
 
 
 def conv_vecarr(vin,dim=2):

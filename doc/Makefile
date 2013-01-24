@@ -5,7 +5,9 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
-BUILDDIR      = _build
+BUILDDIR      = ../../website
+PDFBUILDDIR   = /tmp
+PDF           = ../PyLayersManual.pdf
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -33,8 +35,10 @@ help:
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 
-clean:
-	-rm -Rf $(BUILDDIR)/*
+# Dangerous options when used on a git directory
+# suppress .git 
+#clean:    
+#	-rm -Rf $(BUILDDIR)/*
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
@@ -98,9 +102,10 @@ latex:
 	      "(use \`make latexpdf' here to do that automatically)."
 
 latexpdf:
-	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
+	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(PDFBUILDDIR)/latex
 	@echo "Running LaTeX files through pdflatex..."
-	make -C $(BUILDDIR)/latex all-pdf
+	make -C $(PDFBUILDDIR)/latex all-pdf
+	cp $(PDFBUILDIR)/latex/*.pdf $(PDF)
 	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
 
 text:

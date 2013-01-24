@@ -1,7 +1,7 @@
 .. _geometric:
 
-geometric
-=========
+geometric algorithms
+====================
 
 .. automodule:: pylayers.location.geometric.exploit_CDF
     :members:

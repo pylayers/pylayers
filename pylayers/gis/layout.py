@@ -1,7 +1,8 @@
 # -*- coding:Utf-8 -*-
 #
 # Class Layout
-#
+# 
+# This class handle the description of buildings
 #
 import pdb
 import os
@@ -798,14 +799,13 @@ class Layout(object):
 
             Notes
             -----
-            .. sourcecode::
 
                 str2 format is as follow
 
                 Np Ns Nss
-                xp_1 yp_1 codep_1
+                xp_1 yp_1 zp_1 codep_1
                 ...
-                xp_Np yp_Np codep_Np
+                xp_Np yp_Np zp_Np codep_Np
                 tail_1 head_1 left_1 core_1 right_1 zmin_1 zmax_1
                 ...
                 tail_Ns head_Ns left_Ns core_Ns right_Ns zmin_Ns zmax_Ns
@@ -2029,7 +2029,7 @@ class Layout(object):
         #print 'n :',n
         #print 'un : ',unn
         #print 'theta (deg)',the*180./pi
-        seglist=seglist+1
+        seglist = seglist+1
         return(seglist, theta)
 
     def layeronlink(self, p1, p2):
@@ -3296,27 +3296,6 @@ class Layout(object):
         else:
             ax = kwargs['ax']
 
-#        if 't' in graph:
-#            G = self.Gt
-#            nx.draw(G, G.pos, node_color='r', edge_color='r')
-#        if 'r' in graph:
-#            G = self.Gr
-#            nx.draw(G, G.pos, node_color='g', edge_color='g')
-#        if 's' in graph:
-#            G = self.Gs
-#            nx.draw(G, G.pos, node_color='b', edge_color='b')
-#        if 'v' in graph:
-#            G = self.Gv
-#            nx.draw(G, self.Gs.pos, node_color='m', edge_color='m')
-#        if 'c' in graph:
-#            G = self.Gc
-#            nx.draw(G, self.Gs.pos, node_color='c', edge_color='c')
-#        if 'i' in graph:
-#            G = self.Gi
-#            nx.draw(G,G.pos,node_color='k', edge_color='k')
-#        if 'w' in graph:
-#            G = self.Gw
-#            nx.draw(G,G.pos,node_color='w', edge_color='k')
 
         if 't' in graph:
             G = self.Gt
@@ -3823,7 +3802,7 @@ class Layout(object):
         else -1 is return
 
         """
-        print "ispoint : pt ", pt
+        #print "ispoint : pt ", pt
         pts = np.array(self.Gs.pos.values()).T
         ke = np.array(self.Gs.pos.keys())
         u = pts - pt.reshape(2, 1)

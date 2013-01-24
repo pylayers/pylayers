@@ -633,6 +633,9 @@ class Usignal(Bsignal):
         -------
         TUsignal y extended TU signal, x bases are adjusted
 
+        Examples
+        --------
+
         .. plot::
             :include-source:
 
@@ -813,13 +816,16 @@ class Usignal(Bsignal):
         Examples
         --------
 
-        >>> from pylayers.signal import *
-        >>> from matplotlib.pylab import *
-        >>> ip = EnImpulse()
-        >>> ip.plot()
-        >>> ip.zlr(-10,10)
-        >>> ip.plot()
-        >>> show()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal import *
+            >>> from matplotlib.pylab import *
+            >>> ip = EnImpulse()
+            >>> ip.plot()
+            >>> ip.zlr(-10,10)
+            >>> ip.plot()
+            >>> show()
 
         """
         dx = self.dx()
@@ -932,7 +938,7 @@ class TBsignal(Bsignal):
         Warnings
         --------
 
-        Once translated original signal and translated signal might be not on the same grid
+        Once translated original signal and translated signal might not be on the same grid
 
         Examples
         --------
@@ -2314,8 +2320,10 @@ class TUDsignal(TUsignal):
     y   : ndarray
     tau : float or ndarray
 
+
     .. todo::
-        methode tunfold restitution en temps du tableau avec retard
+        build a tunfold time restitution of delays  
+
     """
     def __init__(self, x=np.array([]), y=np.array([]), tau=np.array([])):
         TUsignal.__init__(self, x, y)
@@ -3348,16 +3356,19 @@ class FUDsignal(FUsignal):
         Parameters
         ----------
         df : float 
-            frequency step (dafault 0.01)
-        
-        1. get  fmin and fmax
-        2. build a new base with frequency step df
-        3. Initialize a FUsignal with the new frequency base 
-        4. build  matrix tau * f  (Nray x Nf)
-        5. buildl matrix E= exp(-2 j pi f tau)
-        6. resampling of FUDsignal according to f --> S
-        7. apply the element wise product E .* S
-        8. add all rays 
+            frequency step (default 0.01)
+       
+        Notes
+        -----
+
+            1. get  fmin and fmax
+            2. build a new base with frequency step df
+            3. Initialize a FUsignal with the new frequency base 
+            4. build  matrix tau * f  (Nray x Nf)
+            5. buildl matrix E= exp(-2 j pi f tau)
+            6. resampling of FUDsignal according to f --> S
+            7. apply the element wise product E .* S
+            8. add all rays 
 
         """
         fmin = self.x[0]
@@ -3495,6 +3506,10 @@ class FUDAsignal(FUsignal):
         ffts : fftshift indicator
             0  no fftshift
             1  apply fftshift
+
+        Returns
+        -------
+        r : TUsignal
 
         """
         tau = self.tau0

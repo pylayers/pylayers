@@ -1,3 +1,4 @@
+README
 setup.py
 pylayers/__init__.py
 pylayers/clean_pyproject.py
@@ -64,9 +65,9 @@ pylayers/mobility/transit/SteeringBehavior.py
 pylayers/mobility/transit/SteeringBehavior2.py
 pylayers/mobility/transit/World.py
 pylayers/mobility/transit/World2.py
-pylayers/mobility/transit/Zones.py
 pylayers/mobility/transit/__init__.py
 pylayers/mobility/transit/vec3.py
+pylayers/mobility/transit/zones.py
 pylayers/network/__init__.py
 pylayers/network/communication.py
 pylayers/network/emsolver.py
@@ -85,8 +86,11 @@ pylayers/simul/exploit.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
+<<<<<<< HEAD
 pylayers/simul/tmp.py
 pylayers/simul/toto.py
+=======
+>>>>>>> bernard/master
 pylayers/util/__init__.py
 pylayers/util/easygui-olld.py
 pylayers/util/easygui.py

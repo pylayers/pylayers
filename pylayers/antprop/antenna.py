@@ -1,14 +1,19 @@
 # -*- coding:Utf-8 -*-
 """
-This is the module which handles antennas in pylayers
+This module handles antennas in pylayers
 
 To instantiate an antenna object : 
 
-A = Antenna(typ,_filename,directory,nf,ntheta,nphi)
+.. python::
+
+    A = Antenna(typ,_filename,directory,nf,ntheta,nphi)
 
 typ indicates the antenna file format to read 
 
-A = Antenna('mat','S1R1.mat','ant/UWBAN/Matfile')
+Examples
+--------
+    >>> from pylayers.antprop.antenna import *
+    >>> A = Antenna('mat','S1R1.mat','ant/UWBAN/Matfile')
 
 The antenna can be represented in various formats
 
@@ -196,6 +201,7 @@ class SHCoeff(object):
 
     Attributes
     ----------
+
     s1  shape 1   np.array [ Nf x (N+1) x (M+1) ]
     s2  shape 2   np.array [ Nf x (N+1)*(M+1)   ]
     s3  shape 3   np.array [ Nf x K     ]
@@ -328,6 +334,7 @@ class SHCoeff(object):
 
         Parameters
         ----------
+
         ind   : int
         typ   : int
                 2  shape 2  (Nf , N*M   )
@@ -445,12 +452,31 @@ class SHCoeff(object):
     def s3tos2(self):
         """ transform shape3 to shape 2
 
-        s2  shape 2   array [ Nf x (N+1)*(M+1)   ]
+        s2  shape 2   array [ Nf x (L+1)*(M+1) ]
         s3  shape 3   array [ Nf x K     ] ind [ K x 2]
 
+        Notes
+        -----
+
+        The shape of s2 is (Lmax+1)*(Lmax+2)/2
+
+        k2  : is the list of conserved indices in shape 3
+        ind3 : np.array (K3, 2) are the conserved (l,m) indices 
+
+        ind3 and k2 have one common dimension
+
         """
-        self.s2[:, :] = 0
-        self.s2[:, self.ind3] = self.s3
+        # retrieve Nf and Lmax to build a void s2 structure
+        Nf   = np.shape(self.s3)[0]
+        Lmax = max(self.ind3[:,0])
+        K2   = (Lmax+1)*(Lmax+2)/2
+        self.s2 = np.zeros((Nf,K2),dtype=complex)
+
+        # fill s2 with s3 at proper coefficient location
+        self.s2[:,self.k2] = self.s3
+        self.N2 = Lmax
+        self.M2 = Lmax
+        self.ind2 = indexvsh(Lmax)
 
     def info(self):
         """ info about SHCoeff
@@ -508,11 +534,11 @@ class SHCoeff(object):
         """
 
         fa = np.linspace(self.fmin, self.fmax, self.Nf)
-        if N == -1:
-            N = self.N1
-        if M == -1:
-            M = self.M1
         if typ == 's1':
+            if N == -1:
+                N = self.N1
+            if M == -1:
+                M = self.M1
             Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
             if anim:
                 fig = plt.gcf()
@@ -2278,14 +2304,18 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
+            # .. Warning    
+            # Warning modification take only one dimension for k 
+            # if the .vsh3 format evolve it may not work anymore 
+            #
             Br = SHCoeff('s3', fmin, fmax, coeff['Br.s3'],
-                         coeff['Br.ind'], coeff['Br.k'])
+                         coeff['Br.ind'], coeff['Br.k'][0])
             Bi = SHCoeff('s3', fmin, fmax, coeff['Bi.s3'],
-                         coeff['Bi.ind'], coeff['Bi.k'])
+                         coeff['Bi.ind'], coeff['Bi.k'][0])
             Cr = SHCoeff('s3', fmin, fmax, coeff['Cr.s3'],
-                         coeff['Cr.ind'], coeff['Cr.k'])
+                         coeff['Cr.ind'], coeff['Cr.k'][0])
             Ci = SHCoeff('s3', fmin, fmax, coeff['Ci.s3'],
-                         coeff['Ci.ind'], coeff['Ci.k'])
+                         coeff['Ci.ind'], coeff['Ci.k'][0])
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
             Nf = np.shape(Br.s3)[0]
             self.fa = np.linspace(fmin, fmax, Nf)

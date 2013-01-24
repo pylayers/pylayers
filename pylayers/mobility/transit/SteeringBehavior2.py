@@ -16,6 +16,7 @@ from pylayers.mobility.transit.vec3 import vec3
 from random import uniform,gauss,randint
 import pdb 
 
+
 class Seek:
     def calculate(self, boid):
         displacement = boid.destination - boid.position

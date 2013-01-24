@@ -17,6 +17,7 @@ class SelectL(object):
     p : create point
     x : save graph in .str2 file
     w : show all layers
+    z : change display parameter (GUI)
 
 
     """
