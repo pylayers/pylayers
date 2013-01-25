@@ -12,16 +12,17 @@ Generation of an Impulse of normalized energy
 One possible manner to define an ernergy normalized short UWB impulse is
 as follows.
 
-\\[ p(t)= (2 f\_c t) e\ :sup:`{-()`\ 2} \\] with
+:math:`p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}`
 
-\\[ = \\]
+:math:`\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}`
 
-where \\(B\\) is the desired bandwidth defined at \\(\_{dB}\\) below the
-spectrum maximum and \\(f\_c\\) is the central frequency of the pulse.
+where :math:`B` is the desired bandwidth defined at
+:math:`\gamma_{dB}` below the spectrum maximum and :math:`f_c` is
+the central frequency of the pulse.
 
 This waveform is a gaussian windowing of a sine wave of frequency
-:math:`$f_c$`. The normalization term depends on the exponential scaling
-factor :math:`$\tau$`.
+:math:`f_c`. The normalization term depends on the exponential scaling
+factor :math:`\tau`.
 
 In[30]:
 

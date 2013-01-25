@@ -132,13 +132,14 @@
 <h1>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h1>
 <p>One possible manner to define an ernergy normalized short UWB impulse is
 as follows.</p>
-<p>\[ p(t)= (2 f_c t) e<sup>{-()</sup>2} \] with</p>
-<p>\[ = \]</p>
-<p>where \(B\) is the desired bandwidth defined at \(_{dB}\) below the
-spectrum maximum and \(f_c\) is the central frequency of the pulse.</p>
+<p><img class="math" src="../_images/math/f803a11deebcbb42ad4227624bb8bb4b52c28ff6.png" alt="p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/></p>
+<p><img class="math" src="../_images/math/491345c98120d863f6e2ba488e86c55a33595d9a.png" alt="\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}"/></p>
+<p>where <img class="math" src="../_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/> is the desired bandwidth defined at
+<img class="math" src="../_images/math/29353fe0f6571b3f689f9bb4d39e7a764faae01e.png" alt="\gamma_{dB}"/> below the spectrum maximum and <img class="math" src="../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/> is
+the central frequency of the pulse.</p>
 <p>This waveform is a gaussian windowing of a sine wave of frequency
-<img class="math" src="../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/>. The normalization term depends on the exponential scaling
-factor <img class="math" src="../_images/math/d4946ec46154b310da1d30f828360388c4231983.png" alt="$\tau$"/>.</p>
+<img class="math" src="../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/>. The normalization term depends on the exponential scaling
+factor <img class="math" src="../_images/math/1dc1c0119a604b91be9142370dc3159b6a9bbcb9.png" alt="\tau"/>.</p>
 <p>In[30]:</p>
 <div class="code python highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
 <span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
