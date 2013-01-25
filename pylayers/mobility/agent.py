@@ -16,7 +16,7 @@ from pylayers.network.communication import Gcom, TX, RX
 from pylayers.location.localization import Localization, PLocalization
 from pylayers.gis.layout import Layout
 from pylayers.util.utilnet import *
-from pylayers.util.pymysqldb import Database
+#from pylayers.util.pymysqldb import Database
 import pdb
 
 
