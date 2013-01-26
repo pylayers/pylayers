@@ -134,6 +134,11 @@ def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
     maxr  : radius of maximum
     ilog  : True (log) False (linear)
 
+    Returns
+    -------
+
+    filename
+
 
     """
     Nt = len(theta)
@@ -159,10 +164,10 @@ def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
     #
     # Colormap
     #
-    colmap = get_cmap()
+    colmap = plt.get_cmap()
     Ncol = colmap.N
     cmap = colmap(np.arange(Ncol))
-    g = round((R - minr) * (Ncol - 1) / (maxr - minr))
+    g = np.round((R - minr) * (Ncol - 1) / (maxr - minr))
 
     _filename = racine + str(1000 + f)[1:] + '.off'
     filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
@@ -184,14 +189,15 @@ def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
     for ii in range(Nt - 1):
         for jj in range(Np):
             p1 = ii * Np + jj
-            p2 = ii * Np + mod(jj + 1, Np)
+            p2 = ii * Np + np.mod(jj + 1, Np)
             p3 = (ii + 1) * Np + jj
-            p4 = (ii + 1) * Np + mod(jj + 1, Np)
+            p4 = (ii + 1) * Np + np.mod(jj + 1, Np)
             chaine = '4 ' + str(p1) + ' ' + str(p2) + ' ' + \
                 str(p4) + ' ' + str(p3) + ' 0.5\n'
             fd.write(chaine)
 
     fd.close()
+    return(filename)
 
 
 class SHCoeff(object):
@@ -928,12 +934,16 @@ class Antenna(object):
 
         Ant = Antenna(typ,_filename)
 
-        if typ=='vsh3':
-            Ant.loadvsh3()
-        if typ=='vsh2':
-            Ant.loadvsh2()
-        if typ=='trx':
-            Ant.loadtrx()
+        Notes
+        -----
+
+        There are various supported data format for reading antenna patterns
+
+        'mat': Matlab File
+        'vsh2': un thresholdes vector spherical coefficients
+        'vsh3': thresholded vector spherical cpoefficients
+        'trx' : Satimo NFC raw data
+        'trx1' : Satimo NFC raw data  (deprecated)
 
 
         """
@@ -943,9 +953,9 @@ class Antenna(object):
             self.loadvsh3()
         if typ == 'vsh2':
             self.loadvsh2()
-        if typ == 'trx':
-            self.load_trx(directory, nf, ntheta, nphi)
         if typ == 'trx1':
+            self.load_trx(directory, nf, ntheta, nphi)
+        if typ == 'trx':
             self.loadtrx(directory)
         if typ == 'mat':
             self.loadmat(directory)
@@ -1173,14 +1183,26 @@ class Antenna(object):
         return(errelTh, errelPh, errel)
 
     def loadtrx(self, directory):
-        """
-        load trx file
+        """ load trx file (SATIMO Near Field Chamber raw data)
+
+        Parameters
+        ----------
+        
+        directory
 
         self._filename: short name of the antenna file
 
-        the file is seek in the $PyProject/ant directory
+        the file is seek in the $BASENAME/ant directory
 
+        .. todo:
+            consider using an ini file for the header
 
+        Trx header structure
+
+        fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay
+        0     1   2   3       4       5       6        7        8       9
+        1     10  121 0       6.19    72      0        3.14     37      0
+        
         """
 
         _filetrx = self._filename
@@ -1188,22 +1210,40 @@ class Antenna(object):
         _headtrx = _headtrx.replace('trx', 'txt')
         headtrx = pyu.getlong(_headtrx, directory)
         filename = pyu.getlong(_filetrx, directory)
-        #
-        # Header
-        #
+    #
+    # Trx header structure
+    #
+    # fmin fmax Nf  phmin   phmax   Nphi    thmin    thmax    Ntheta  #EDelay 
+    # 0     1   2   3       4       5       6        7        8       9
+    # 1     10  121 0       6.19    72      0        3.14     37      0
+    #
+    #
         foh = open(headtrx)
         ligh = foh.read()
         foh.close()
-        nf = eval(ligh.split()[2])
+        fmin = eval(ligh.split()[0])
+        fmax = eval(ligh.split()[1])
+        nf   = eval(ligh.split()[2])
+        phmin = eval(ligh.split()[3])
+        phmax = eval(ligh.split()[4])
         nphi = eval(ligh.split()[5])
+        thmin = eval(ligh.split()[6])
+        thmax = eval(ligh.split()[7])
         ntheta = eval(ligh.split()[8])
+        #
+        # The electrical delay in column 9 is optional
+        #
         try:
             tau = eval(ligh.split()[9])  # tau : delay (ns)
         except:
             tau = 0
 
         #
-        # Data
+        # Data are stored in 7 columns
+        #
+        # 0  1   2     3        4       5       6
+        # f  phi th    ReFph   ImFphi  ReFth    ImFth
+        #
         #
         fi = open(filename)
         d = np.array(fi.read().split())
@@ -1215,10 +1255,14 @@ class Antenna(object):
         f = d[:, 0]
         if f[0] == 0:
             print "error : frequency cannot be zero"
-        if (f[0] > 200):
+        # detect frequency unit
+        # if values are above 2000 its means frequency is not expressed
+        # in GHz
+        #
+        if (f[0] > 2000):
             f = f / 1.0e9
 
-        phi = d[:, 1]
+        phi   = d[:, 1]
         theta = d[:, 2]
         #
         # type : refers to the way the angular values are stored in the file
@@ -1230,7 +1274,10 @@ class Antenna(object):
         # Natural
         #    f  phi theta
         #    2    0    1
-
+ 
+        #
+        # auto detect storage mode looping 
+        #
         dphi = abs(phi[0] - phi[1])
         dtheta = abs(theta[0] - theta[1])
 
@@ -1240,7 +1287,7 @@ class Antenna(object):
             typ = 'natural'
 
         self.typ = typ
-        Fphi = d[:, 3] + d[:, 4] * 1j
+        Fphi   = d[:, 3] + d[:, 4] * 1j
         Ftheta = d[:, 5] + d[:, 6] * 1j
         #
         # Normalization
@@ -1258,33 +1305,40 @@ class Antenna(object):
             self.Fphi = Fphi.reshape((nf, ntheta, nphi))
             self.Ftheta = Ftheta.reshape((nf, ntheta, nphi))
             self.SqG = SqG.reshape((nf, ntheta, nphi))
-            self.Ttheta = theta.reshape((nf, ntheta, nphi))
-            self.Tphi = phi.reshape((nf, ntheta, nphi))
-            self.Tf = f.reshape((nf, ntheta, nphi))
+            Ttheta = theta.reshape((nf, ntheta, nphi))
+            Tphi = phi.reshape((nf, ntheta, nphi))
+            Tf = f.reshape((nf, ntheta, nphi))
         if typ == 'bcp':
             self.Fphi = Fphi.reshape((nf, nphi, ntheta))
             self.Ftheta = Ftheta.reshape((nf, nphi, ntheta))
             self.SqG = SqG.reshape((nf, nphi, ntheta))
-            self.Ttheta = theta.reshape((nf, nphi, ntheta))
-            self.Tphi = phi.reshape((nf, nphi, ntheta))
-            self.Tf = f.reshape((nf, nphi, ntheta))
+            Ttheta = theta.reshape((nf, nphi, ntheta))
+            Tphi = phi.reshape((nf, nphi, ntheta))
+            Tf = f.reshape((nf, nphi, ntheta))
         #
         # Force natural order (f,theta,phi)
         # This is not the order of the satimo nfc which is  (f,phi,theta)
-        #
-        #  .. todo::  May be it is not necessary to load Ttheta and Tphi
         #
 
             self.Fphi = self.Fphi.swapaxes(1, 2)
             self.Ftheta = self.Ftheta.swapaxes(1, 2)
             self.SqG = self.SqG.swapaxes(1, 2)
-            self.Ttheta = self.Ttheta.swapaxes(1, 2)
-            self.Tphi = self.Tphi.swapaxes(1, 2)
-            self.Tf = self.Tf.swapaxes(1, 2)
+            Ttheta = Ttheta.swapaxes(1, 2)
+            Tphi = Tphi.swapaxes(1, 2)
+            Tf = Tf.swapaxes(1, 2)
 
-        self.fa = self.Tf[:, 0, 0]
-        self.theta = self.Ttheta[0, :, 0]
-        self.phi = self.Tphi[0, 0, :]
+        self.fa = Tf[:, 0, 0]
+        self.theta = Ttheta[0, :, 0]
+        self.phi = Tphi[0, 0, :]
+        #
+        # check header consistency 
+        #
+        np.testing.assert_almost_equal(self.fa[0],fmin,6)
+        np.testing.assert_almost_equal(self.fa[-1],fmax,6)
+        np.testing.assert_almost_equal(self.theta[0],thmin,3)
+        np.testing.assert_almost_equal(self.theta[-1],thmax,3)
+        np.testing.assert_almost_equal(self.phi[0],phmin,3)
+        np.testing.assert_almost_equal(self.phi[-1],phmax,3)
 
         self.Nf = nf
         self.Nt = ntheta
@@ -1331,7 +1385,7 @@ class Antenna(object):
     def info(self):
         """ gives info about antenna object
 
-           >>> A1 = Antenna('trx1','defant.trx')
+           >>> A1 = Antenna('trx','defant.trx')
            >>> A2 = Antenna('vsh3','defant.vsh3')
            >>> A3 = Antenna('mat','S1R1.mat','ant/UWBAN/Matfile')
 
@@ -1348,10 +1402,17 @@ class Antenna(object):
             print self.Run
             print "Nb theta (lat) :", self.Nt
             print "Nb phi (lon) :", self.Np
-        print "--------------------------"
-        print "fmin (GHz) :", self.fa[0]
-        print "fmax (GHz) :", self.fa[-1]
-        print "Nf   :", len(self.fa)
+        if self.typ =='bcp':
+            print "--------------------------"
+            print "fmin (GHz) :", self.fa[0]
+            print "fmax (GHz) :", self.fa[-1]
+            print "Nf   :", self.Nf
+            print "thmin (rad) :", self.theta[0]
+            print "thmax (rad) :", self.theta[-1]
+            print "Nth  :", self.Nt
+            print "phmin (rad) :", self.phi[0]
+            print "phmax (rad) :", self.phi[-1]
+            print "Nph  :", self.Np
         try:
             self.C.info()
         except:
@@ -1479,10 +1540,6 @@ class Antenna(object):
         silent = True    | False
         """
 
-        nt = self.Nt
-        np = self.Np
-        th = self.theta
-        ph = self.phi
         f = self.fa[k]
 
         if typ == 'Gain':
@@ -1497,10 +1554,7 @@ class Antenna(object):
 
         po = np.array([0, 0, 0])
 
-        geom_pattern(th, ph, V, k, po, minr, maxr, typ)
-
-        _filename = typ + str(k) + '.off'
-        filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
+        filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
 
         if not silent:
             chaine = "geomview -nopanel -b 1 1 1 " + filename + \
@@ -1521,10 +1575,6 @@ class Antenna(object):
         else    -> simple plot3D
         """
 
-        nt = self.Nt
-        np = self.Np
-        th = self.theta
-        ph = self.phi
 
         fig = plt.figure()
         ax = axes3d.Axes3D(fig)
@@ -1536,10 +1586,10 @@ class Antenna(object):
         if typ == 'Fphi':
             V = self.Fphi[k, :, :]
 
-        vt = np.ones(nt)
-        vp = np.ones(np)
-        Th = np.outer(th, vp)
-        Ph = np.outer(vt, ph)
+        vt = np.ones(self.Nt)
+        vp = np.ones(self.Np)
+        Th = np.outer(self.theta, vp)
+        Ph = np.outer(vt, self.phi)
 
         X = abs(V) * np.cos(Ph) * np.sin(Th)
         Y = abs(V) * np.sin(Ph) * np.sin(Th)
