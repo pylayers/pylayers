@@ -78,7 +78,7 @@ gv.points([0,0,0])
 ##
 ## On calcule les angles a partir de sa_Ra
 ##
-#a_new = AngleDir(sa_Ra)
+#a_new = angledir(sa_Ra)
 #K     = SphericalBasis(a_new)
 #tha2  = K[0,:,:]
 #pha2  = K[1,:,:]

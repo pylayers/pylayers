@@ -29,19 +29,23 @@ import zipfile
 ##############
 def delay(p1,p2):
     """ delay in ns between 2 point 
+
     Parameters
     ----------
-    p1
-        point 1 coordinates np.array(2)
-    p2
-        point 2 coordinates np.array(2)
+
+    p1  ndarray (1x2)
+        point 1 coordinates 
+    p2  ndarray (1x2)
+        point 2 coordinates
 
     Examples
     --------
+
     >>> p1 = np.array([0,0])
     >>> p2 = np.array([0,0.3])
     >>> tau = delay(p1,p2)
     >>> assert tau==1.,"Warning : speed of light has changed"
+
     """
     v   = p1-p2
     d2  = np.dot(v,v)
