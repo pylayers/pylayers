@@ -35,15 +35,18 @@ class SelectL(object):
         plt.title('Init')
         self.text = ax.text(0.05, 0.95, 'Selected : none',
                                  transform=ax.transAxes, va='top')
+        self.set_origin = False
+        self.set_x = False
+        self.set_y = False
         self.pt = []
         self.seg = []
         self.coseg = []
         self.pt1 = np.array([])
         self.pt2 = np.array([])
         self.selected_pt1 = 0
-        self.selected_pt2 = 0  
-        self.selected_edge1 = 0  
-        self.selected_edge2 = 0  
+        self.selected_pt2 = 0
+        self.selected_edge1 = 0
+        self.selected_edge2 = 0
         self.current_layer = self.L.display['activelayer']
         self.npsel = 0
         self.nedge_sel = 0
@@ -323,7 +326,16 @@ class SelectL(object):
         #
         # Choose layers to visualized
         #
-        if self.evt == "l":
+        if self.evt == 'v':
+            for n in self.L.Gs.pos:
+                self.L.Gs.pos[n]=(self.L.Gs.pos[n][0],-self.L.Gs.pos[n][1])
+
+        if self.evt == 't':
+            offx,offy = offsetbox() 
+            for n in self.L.Gs.pos:
+                self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]+offx,self.L.Gs.pos[n][1]+offy)
+
+        if self.evt == 'l':
             listchoices = self.L.name.keys()
             self.L.display['layers'] = multchoicebox('message',
                                                      'titre', listchoices)
@@ -357,6 +369,17 @@ class SelectL(object):
             return
 
         if self.evt == 'e':
+            if (self.state == 'Init'):
+                x1 = ax.get_xbound()
+                y1 = ax.get_ybound()
+                ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
+                for k,nd in enumerate(ndlist):
+                    try:
+                        tp = np.vstack((tp,np.array(self.Gs.pos[nd])))
+                    except:
+                        tp = np.array(self.Gs.pos[nd])
+                mtp = np.sum(tp,axis=0)/k
+
             if (self.state == 'SS') | (self.state =='SSS'):
                 self.L.edit_edge(self.selected_edge1)
                 self.state = 'Init'
@@ -365,9 +388,29 @@ class SelectL(object):
             if self.state == 'SP1':
                 print "Write edit_node"
         #
-        # h : add subsegment
+        # h : add subsegment (SS) 
+        # j,h : vertical / horizontal scaling (Init)
         #
+        if self.evt == 'j':
+            if self.state == 'Init':
+                vscale = eval(enterbox('vertical scaling factor'))
+                for n in self.L.Gs.pos:
+                    self.L.Gs.pos[n]=(self.L.Gs.pos[n][0],self.L.Gs.pos[n][1]*vscale)
+                plt.axis('tight')
+                fig,ax = self.show(fig,ax,clear=True)
+                self.update_state()
+                return()
+
         if self.evt == 'h':
+            if self.state == 'Init':
+                hscale = eval(enterbox('horizontal scaling factor'))
+                for n in self.L.Gs.pos:
+                    self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]*hscale,self.L.Gs.pos[n][1])
+                plt.axis('tight')
+                fig,ax = self.show(fig,ax,clear=True)
+                self.update_state()
+                return()
+
             if self.state == 'SS':
                 self.L.add_subseg(self.selected_edge1,self.current_layer)
                 self.state = 'SSS'
@@ -419,13 +462,17 @@ class SelectL(object):
         # o : Toggle overlay
         #
         if self.evt == 'o':
-            if self.L.display['overlay']:
-                self.L.display['overlay'] = False
-                self.update_state()
+            if self.state <> 'CP':
+                if self.L.display['overlay']:
+                    self.L.display['overlay'] = False
+                    self.update_state()
+                else:
+                    self.L.display['overlay'] = True
+                    self.update_state()
+                return 
             else:
-                self.L.display['overlay'] = True
-                self.update_state()
-            return 
+                self.set_origin = True
+
 
         #
         # m : Toggle mode edition Point | Segment 
@@ -453,7 +500,9 @@ class SelectL(object):
         # save structure
             racine, ext = os.path.splitext(self.L.filename)
             filename = racine + '.str2'
+            fileini = racine + '.ini'
             self.L.savestr2(filename)
+            self.L.saveini(fileini)
             print "structure saved in ", filename
             return 
 
@@ -546,10 +595,50 @@ class SelectL(object):
         #
         if (self.evt == 'lclic'):
             # add free node
+            # or set origin
             if self.state == 'CP':
-                self.L.add_fnod(self.ptsel)
-                self.pt_previous = self.ptsel
-                self.update_state()
+                if self.set_origin:
+                    offx = self.ptsel[0]
+                    offy = self.ptsel[1]
+                    print offx,offy
+                    xmin,xmax,ymin,ymax = self.L.display['box']
+                    self.L.display['box'] = [xmin-offx,xmax-offx,ymin-offy,ymax-offy]
+                    self.set_origin=False
+                    self.set_x=True
+                    plt.axis('tight')
+                    fig,ax = self.show(fig,ax,clear=True)
+                    self.update_state()
+                    return
+                if self.set_x:
+                    offx = self.ptsel[0]
+                    val  = eval(enterbox('enter x value'))
+                    ratio = val/offx
+                    print ratio
+                    xmin,xmax,ymin,ymax = self.L.display['box']
+                    self.L.display['box'] = [ratio*xmin,ratio*xmax,ymin,ymax]
+                    self.set_x=False
+                    self.set_y=True
+                    plt.axis('tight')
+                    fig,ax = self.show(fig,ax,clear=True)
+                    self.update_state()
+                    return
+                if self.set_y:
+                    offx = self.ptsel[1]
+                    val  = eval(enterbox('enter y value'))
+                    ratio = val/offx
+                    print ratio
+                    xmin,xmax,ymin,ymax = self.L.display['box']
+                    self.L.display['box'] = [xmin,xmax,ratio*ymin,ratio*ymax]
+                    self.set_y=False
+                    plt.axis('tight')
+                    fig,ax = self.show(fig,ax,clear=True)
+                    self.update_state()
+                    return
+                else:
+                    self.L.add_fnod(self.ptsel)
+                    self.pt_previous = self.ptsel
+                    self.update_state()
+
                 return 
            
             if self.state == 'SP2':
