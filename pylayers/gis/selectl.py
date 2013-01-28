@@ -375,10 +375,23 @@ class SelectL(object):
                 ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
                 for k,nd in enumerate(ndlist):
                     try:
-                        tp = np.vstack((tp,np.array(self.Gs.pos[nd])))
+                        tp = np.vstack((tp,np.array(self.L.Gs.pos[nd])))
                     except:
-                        tp = np.array(self.Gs.pos[nd])
-                mtp = np.sum(tp,axis=0)/k
+                        tp = np.array(self.L.Gs.pos[nd])
+                mtp = np.sum(tp,axis=0)/(k+1)
+                stp = np.sqrt(np.sum((tp-mtp)*(tp-mtp),axis=0))/(k+1)
+                ind = np.where(stp==min(stp))[0][0]
+                for nd in ndlist:
+                    x = self.L.Gs.pos[nd][0]
+                    y = self.L.Gs.pos[nd][1]
+                    if ind ==0:
+                        self.L.Gs.pos[nd]=(mtp[0],y)
+                    if ind ==1:
+                        self.L.Gs.pos[nd]=(x,mtp[1])
+                plt.axis('tight')
+                fig,ax = self.show(fig,ax,clear=True)
+                self.update_state()
+                return()
 
             if (self.state == 'SS') | (self.state =='SSS'):
                 self.L.edit_edge(self.selected_edge1)
