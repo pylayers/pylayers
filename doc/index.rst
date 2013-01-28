@@ -105,6 +105,8 @@ better used in association with `ipython <http://ipython.org>`_
 
     manual/index.rst 
 
+    manual/notebook.rst
+
     modules/index.rst
 
 

@@ -78,6 +78,7 @@ pylayers/network/show.py
 pylayers/network/wsn.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
+pylayers/signal/invfreqz.py
 pylayers/signal/waveform.py
 pylayers/simul/__init__.py
 pylayers/simul/exploit.py

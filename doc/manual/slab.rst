@@ -2,7 +2,7 @@
 Slab and Materials
 ==================
 
-Handling of slabs and material is done in the `slab.py` module in section
+Handling of slabs and materials is done in the `slab.py` module in section
 `antprop`. 
 
 
@@ -20,7 +20,7 @@ project structure.
     A slab is a sandwich (list) of one or several material with an associated
     thickness
 
-The material database is store in a simple ASCII .ini file as well as the slab
+The material database is stored in a simple ASCII .ini file as well as the slab
 database. 
 
 To instantiate a Slab object it is required to provide both the information of
@@ -31,16 +31,13 @@ consistent.
     check database consistency 
 
 The default name for those 2 databases are `matDB.ini` and  `slabDB.ini`.
-There exist adder and getter for populating this database and saving it in a
-new file. This make sense because each layout may have it's own associated
-slab database.
 
 
 .. code:: python
 
     sl=SlabDB('matDB.ini','slabDB.ini')
 
-The correspondence between an integer and the name of the available
+The association between an integer and the name of the available
 slabs is available in `sl.di` dictionary. This association is required
 for compatibility with EM solver PulsRay which needs an associated
 numerical value for each slab. 
@@ -74,9 +71,9 @@ numerical value for each slab.
      19: 'PLASTERBOARD_14CM',
      20: 'PLASTERBOARD_7CM'}
 
-The material database becomes a member of the slab database, and as
-previously said there is also an ad hoc dictionary available in order 
-to keep the association between a material id and the material name.
+The materials database becomes a member of the slab database, and 
+there is also an other dictionary for keeping the association between a
+material id and a material name.
 
 .. code:: python
 
@@ -98,7 +95,7 @@ to keep the association between a material id and the material name.
      9: 'SEA_WATER',
      10: 'PLATRE-57GHz'}
 
-It is possible to easily define individual materials
+It is possible to define individual materials
 
 .. code:: python
 
@@ -107,7 +104,7 @@ It is possible to easily define individual materials
     sl.add('placo',lmat,lthick)
 
 Once a slab  is defined, it is possible to evaluate it over a range of angles
-and a range of frequencies. 
+and frequencies. 
 
 .. code:: python
 
@@ -140,7 +137,7 @@ In[39]:
 
 .. image:: slab_files/slab_fig_02.png
 
-This example is in describe in page 90 of the thesis "Simulation du
+This example is described in page 90 of the thesis "Simulation du
 canal de propagation indoor " par Cyril Humbert
 
 In[42]:
@@ -152,8 +149,6 @@ In[42]:
     sl.add('Humbert',lmat,lthick)
     fGHz = np.array([57.5])
 
-This example can be found in the PhD Thesis document of Cyril Humbert
-humb03.pdf page 96
 
 In[44]:
 

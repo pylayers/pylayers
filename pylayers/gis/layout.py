@@ -892,7 +892,6 @@ class Layout(object):
             #ag[0:i]=float(dt[3])
             #ag[1:i]=float(dt[4])
             #ag[2:i]=float(dt[5])
-
         ind1 = i + 2
         #--------------------------------------------
         # Node labelling (structure nodes)
@@ -3615,8 +3614,14 @@ class Layout(object):
         #
         # .. todo::   avoid using slab to determine transition segments
         #
-        ldoorseg = np.array(d['DOOR'])
-        lwallair = np.array(self.name['AIR'])
+        try:
+            ldoorseg = np.array(d['DOOR'])
+        except:
+            ldoorseg = np.array([])
+        try:
+            lwallair = np.array(self.name['AIR'])
+        except:
+            lwallair = np.array([])
         j = 0
         #
         # For all cycles

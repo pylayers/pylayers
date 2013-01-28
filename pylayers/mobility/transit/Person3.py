@@ -13,7 +13,7 @@ from pylayers.network.network import Network
 from pylayers.util.utilnet import conv_vecarr
 
 import matplotlib.pylab as plt
-from pylayers.util.pymysqldb import Database 
+#from pylayers.util.pymysqldb import Database 
 import pylayers.util.pyutil as pyu
 
 import pdb
