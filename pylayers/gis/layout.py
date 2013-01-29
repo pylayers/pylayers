@@ -24,6 +24,7 @@ from networkx.readwrite import write_gpickle,read_gpickle
 import shapely.geometry as sh
 from   shapely.ops import cascaded_union
 from   descartes.patch import PolygonPatch
+from numpy import array
 import Image
 
 from pylayers.antprop import slab as sb
@@ -311,6 +312,7 @@ class Layout(object):
         self.Nss = eval(di['info']['nsubsegments'])
         self.Gs = nx.Graph()
         self.Gs.pos = {}
+        self.labels = {}
         
         # update display section 
         for k in di['display']:
@@ -323,6 +325,7 @@ class Layout(object):
         # update points section 
         for nn in di['points']:
             self.Gs.pos[eval(nn)] = eval(di['points'][nn])
+            self.labels[eval(nn)] = nn
 
         # update segments section 
         for ns in di['segments']:
@@ -337,6 +340,7 @@ class Layout(object):
             self.Gs.add_edge(eval(ns),nhe)
             if name not in self.display['layers']:
                 self.display['layers'].append(name)
+            self.labels[eval(ns)] = ns
             if name in self.name:
                 self.name[name].append(eval(ns))
             else:
@@ -2809,6 +2813,7 @@ class Layout(object):
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
         LC = []
         for c in C:
+            print c
             Cy = Cycls.Cycle(self.Gs, c)
             LC.append(Cy)
 
@@ -3425,6 +3430,8 @@ class Layout(object):
                 color = 'blue'
             if ss == 'WINDOW_GLASS':
                 color = 'cyan'
+            else:
+                color= 'black'
             for ns in d[ss]:
                 np1, np2 = self.Gs.neighbors(ns)
                 x = [self.Gs.pos[np1][0], self.Gs.pos[np2][0]]
