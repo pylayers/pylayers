@@ -608,8 +608,9 @@ def Centroid(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
 
     """
     A = SignedArea(p)
-    T = p[0, :] * np.hstack((p[1, 1::], p[1, 0:1])) - np.hstack((p[0,
-                                                                   1::], p[0, 0:1])) * p[1, :]
+    assert(A<>0)
+    T = p[0, :] * np.hstack((p[1, 1::], p[1, 0:1])) - \
+        p[1, :] * np.hstack((p[0, 1::], p[0, 0:1])) 
     Cx = sum(T * (p[0, :] + np.hstack((p[0, 1::], p[0, 0:1])))) / (6 * A)
     Cy = sum(T * (p[1, :] + np.hstack((p[1, 1::], p[1, 0:1])))) / (6 * A)
     pc = np.array([Cx, Cy])

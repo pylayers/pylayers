@@ -24,6 +24,7 @@ from networkx.readwrite import write_gpickle,read_gpickle
 import shapely.geometry as sh
 from   shapely.ops import cascaded_union
 from   descartes.patch import PolygonPatch
+from numpy import array
 import Image
 
 from pylayers.antprop import slab as sb
@@ -79,7 +80,7 @@ class Layout(object):
 
         self.Gs = nx.Graph()
         self.Gc = nx.Graph()
-        #self.Gt=nx.Graph()
+        self.Gt = nx.Graph()
         self.Gm = nx.Graph()
         self.labels = {}
         self.Gs.pos = {}
@@ -254,6 +255,98 @@ class Layout(object):
         print "L.showGs(clear=True)"
         print "L.showGs(edlist=L.subseg()['WOOD'],dthin=False,dlabels=True)"
 
+    def saveini(self, _fileini):
+        """ save structure in an ini file 
+
+        """
+        config = ConfigParser.ConfigParser()
+        config.add_section("info")
+        config.add_section("points")
+        config.add_section("segments")
+        config.add_section("display")
+        config.set("info",'Npoints',self.Nn)
+        config.set("info",'Nsegments',self.Ne)
+        config.set("info",'Nsubsegments',self.Nss)
+        for k in self.display:
+            config.set("display",k,self.display[k])
+        for n in self.Gs.pos:
+            if n <0:
+                config.set("points",str(n),self.Gs.pos[n])
+        for n in self.Gs.pos:
+            if n >0:
+                d = self.Gs.node[n]
+                d['connect'] = nx.neighbors(self.Gs,n)
+                config.set("segments",str(n),d)
+
+        fileini = pyu.getlong(_fileini,'struc')
+        fd = open(fileini,"w")
+        config.write(fd)
+        fd.close()
+
+
+    def loadini(self, _fileini):
+        """ load a structure file in .ini format 
+
+        Parameters
+        ----------
+        _fileini : string 
+            file name extension .ini
+
+        """
+        di = {}
+        config = ConfigParser.ConfigParser()
+        fileini = pyu.getlong(_fileini,"struc")
+        config.read(fileini)
+        sections = config.sections()
+        for section in sections:
+            di[section]={}
+            options = config.options(section)
+            for option in options:
+                try:
+                    di[section][option] = config.get(section,option)
+                except:
+                    print section, option
+
+        self.Nn = eval(di['info']['npoints'])
+        self.Ne = eval(di['info']['nsegments'])
+        self.Nss = eval(di['info']['nsubsegments'])
+        self.Gs = nx.Graph()
+        self.Gs.pos = {}
+        self.labels = {}
+        
+        # update display section 
+        for k in di['display']:
+            try:
+                self.display[k]=eval(di['display'][k])
+            except:
+                self.display[k]=di['display'][k]
+
+
+        # update points section 
+        for nn in di['points']:
+            self.Gs.pos[eval(nn)] = eval(di['points'][nn])
+            self.labels[eval(nn)] = nn
+
+        # update segments section 
+        for ns in di['segments']:
+            self.Gs.add_node(eval(ns))
+            d = eval(di['segments'][ns])
+            name = d['name']
+            nta = d['connect'][0]
+            nhe = d['connect'][1]
+            self.Gs.pos[eval(ns)]=tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
+            self.Gs.node[eval(ns)] = d
+            self.Gs.add_edge(nta,eval(ns))
+            self.Gs.add_edge(eval(ns),nhe)
+            if name not in self.display['layers']:
+                self.display['layers'].append(name)
+            self.labels[eval(ns)] = ns
+            if name in self.name:
+                self.name[name].append(eval(ns))
+            else:
+                self.name[name] = [eval(ns)]
+
+       
     def loadfur(self, _filefur):
         """ loadfur load a furniture file
 
@@ -303,6 +396,11 @@ class Layout(object):
         ----------
         _filename
 
+        Notes
+        -----
+
+        Available format are .ini , .str2 , .str
+
         """
         self.filestr=_filename
         filename,ext=os.path.splitext(_filename)
@@ -311,6 +409,8 @@ class Layout(object):
         elif ext=='.str2':
             self.loadstr2(_filename,self.filematini,self.fileslabini)
             self.geomfile
+        elif ext=='.ini':
+            self.loadini(_filename)
         else:
             raise NameError('layout filename extension not recognized')
 
@@ -1489,7 +1589,8 @@ class Layout(object):
             print 'subseg zmax (m) : ', de1['ss_zmax']
         except:
             pass
-
+    
+    
     def edit_edge(self, e1):
         """ edit edge
 
@@ -2516,7 +2617,8 @@ class Layout(object):
         # display overlay image    
         if self.display['overlay']:
             image = Image.open(strdir + '/' + self.display['fileoverlay'])
-            ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.3)
+            #ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.5)
+            ax.imshow(image, extent=self.display['box'], alpha=0.5)
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
@@ -2711,6 +2813,7 @@ class Layout(object):
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
         LC = []
         for c in C:
+            print c
             Cy = Cycls.Cycle(self.Gs, c)
             LC.append(Cy)
 
@@ -3327,6 +3430,8 @@ class Layout(object):
                 color = 'blue'
             if ss == 'WINDOW_GLASS':
                 color = 'cyan'
+            else:
+                color= 'black'
             for ns in d[ss]:
                 np1, np2 = self.Gs.neighbors(ns)
                 x = [self.Gs.pos[np1][0], self.Gs.pos[np2][0]]
