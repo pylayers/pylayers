@@ -294,10 +294,11 @@ class Network(nx.MultiGraph):
 
         """
 #        if Rat !='None' :
+
         for no in self.nodes():
             for r in self.node[no]['RAT']:
                 try:
-                    self.RAT[r].extend(no)
+                    self.RAT[r].append(no)
                 except :
                     self.RAT[r]=[no]
 #        else :
@@ -959,7 +960,8 @@ class Network(nx.MultiGraph):
 
     def loc_save(self,S):
         """
-        save network state into mysqldatabase
+        save txt 
+        node ID , True pos x , True pos y , est pos x , est pos y , timestamp
 
 
         Attributes:
@@ -989,6 +991,65 @@ class Network(nx.MultiGraph):
             self.idx = self.idx +1
         except:
             pass
+
+
+    def dual_save(self,S):
+        """
+        save txt 
+
+
+
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
+
+        """
+
+        pos=nx.get_node_attributes(self,'p')
+        pclust = nx.get_node_attributes(self,'pe_clust')
+        typ = nx.get_node_attributes(self,'type')
+        if self.idx == 0:
+            entete = 'Timestamp, True Position x, True Position y, Est Position1 x, Est Position1 y,Est Position2 x, Est Position2 y\n'
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','write')
+            file.write(entete)
+            file.close()
+            file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','write')
+            entete2 = 'Timestamp, link, linkid, Pr, Prstd\n'
+            file2.write(entete2)
+            file2.close()
+            file3=open(basename+'/' + pstruc['DIRNETSAVE'] +'/anchorposition.txt','write')
+            data3 = 'node,pos x, pos y\n'
+            file3.write(data3)
+            for n in self.nodes():
+                data3= n + ',' + str(self.node[n]['p'][0]) + ',' + str(self.node[n]['p'][1]) + '\n'
+                file3.write(data3)
+            file3.close()
+
+        try:
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','a')
+            file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','a')
+            for n in self.nodes():
+                if n == '1':
+                    data =  pyu.timestamp(S.now()) +','+ str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pclust[n][0,0]) + ',' + str(pclust[n][0,1]) + ',' + str(pclust[n][1,0]) + ',' + str(pclust[n][1,1]) +'\n'
+                    for e in self.edge[n].keys():
+                        if e != '6' and e !='7':
+                            try:
+                                data2 = data2 +',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(self.edge[n][e]['rat1']['Pr'][1]) 
+                            except:
+                                data2 = pyu.timestamp(S.now()) + ',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(self.edge[n][e]['rat1']['Pr'][1]) 
+
+            data2=data2 + '\n'
+            file.write(data)
+            file2.write(data2)
+            
+            file.close()
+            file2.close()
+            self.idx = self.idx +1
+        except:
+            pass
+
 
 
 #    def ini_save(self,S,filename='simulnet_data.ini',height=1.5):
@@ -1150,6 +1211,8 @@ class PNetwork(Process):
                 self.net.ini_save(self.sim)
             if 'loc' in self.save:
                 self.net.loc_save(self.sim)
+            if 'dual' in self.save:
+                self.net.dual_save(self.sim)
 
             self.net.pos=self.net.get_pos()
 

@@ -47,7 +47,8 @@ class Person3(Process):
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True,save=[]):
+    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),
+        wld = world(),sim=None,moving=True,froom=[],wait=1.0,save=[]):
         """
         boid is initialized in a room of Layout L 
         """        
@@ -67,7 +68,7 @@ class Person3(Process):
         self.waypoints = []
         self.moving=moving
         self.roomId    = roomId
-        self.forbidroomId = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+        self.forbidroomId = froom 
         self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
         while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
@@ -100,7 +101,7 @@ class Person3(Process):
         self.steering_mind = default_steering_mind
         self.cancelled = 0
         self.net=net
-        self.wait=0.0
+        self.wait=wait
         self.save=save
 
 
@@ -205,7 +206,8 @@ class Person3(Process):
                     #else:
                     #    yield hold, self , waittime 
 
-                        self.wait=abs(gauss(50,50))
+#                        self.wait=abs(gauss(50,50))
+                        self.wait=abs(gauss(1,1))
                         print 'wait',self.wait*self.interval    
                         yield hold, self, self.wait 
 

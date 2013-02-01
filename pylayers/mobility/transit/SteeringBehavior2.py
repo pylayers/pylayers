@@ -143,8 +143,9 @@ class Containment:
         d_no_influ = 0.1 # m
         repuls     = boid.velocity.length() #/ boid.max_speed
 #        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed
-        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
-       # speed = boid.velocity.length() / boid.max_speed
+#        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))
+        speed = max (boid.max_speed, 3.0/max(0.0001,(1.*repuls)))
+       # speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE
         if front_intersect:
             if front_direction == 'left':
                 acceleration = -boid.localx.scale(speed) 

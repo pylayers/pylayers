@@ -79,14 +79,15 @@ class Localization(object):
                     pass
 
                 try:
-                    self.cla.append(
-                        TOA(id = rat+'-TOA-'+self.ID+'-'+e,
-                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0],
-                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1],
-                            p= self.net.node[self.ID]['PN'].node[e]['pe'],
-                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
-                            )
-                                    )
+                    if e in ['6','7']:
+                        self.cla.append(
+                            TOA(id = rat+'-TOA-'+self.ID+'-'+e,
+                                value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0],
+                                std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1],
+                                p= self.net.node[self.ID]['PN'].node[e]['pe'],
+                                origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
+                                )
+                                        )
                 except:
                     pass
 
@@ -165,6 +166,12 @@ class Localization(object):
                 self.savep(self.cla.pe,name='pe')
                 self.savep(self.cla.pe,name='pe_geo')
 
+        # in case of lack of observables
+        if sum(self.cla.runable) >= 1:
+            cpe = self.cla.compute_amb(pe=pe)
+            if cpe:
+                print self.cla.pecluster
+                self.savep(np.array(self.cla.pecluster),name='pe_clust')
 
     def compute_alg(self,rat='all',ldp='all',pe=True):
         """
@@ -196,5 +203,6 @@ class PLocalization(Process):
                 self.loc.compute_geo(ldp='TOA')
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
+
             print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time

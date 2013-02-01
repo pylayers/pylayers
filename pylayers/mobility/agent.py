@@ -50,6 +50,8 @@ class Agent(object):
                     'type': 'ag',
                     'pos': np.array([]),
                     'roomId': 0,
+                    'froom':[],
+                    'wait':[],
                     'meca_updt': 0.1,
                     'loc': False,
                     'loc_updt': 0.5,
@@ -91,6 +93,8 @@ class Agent(object):
                                 wld=args['world'],
                                 sim=args['sim'],
                                 moving=True,
+                                froom=args['froom'],
+                                wait=args['wait'],
                                 save=args['save'])
             self.meca.behaviors = [Queuing(),Seek(), Containment(
             ), Separation(), InterpenetrationConstraint()]
