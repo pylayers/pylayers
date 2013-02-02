@@ -78,6 +78,8 @@ pylayers/network/show.py
 pylayers/network/wsn.py
 pylayers/signal/__init__.py
 pylayers/signal/bsignal.py
+pylayers/signal/invfreq.py
+pylayers/signal/invfreqs.py
 pylayers/signal/invfreqz.py
 pylayers/signal/waveform.py
 pylayers/simul/__init__.py
@@ -86,7 +88,6 @@ pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
 pylayers/util/__init__.py
-pylayers/util/easygui-olld.py
 pylayers/util/easygui.py
 pylayers/util/geomutil.py
 pylayers/util/graphutil.py

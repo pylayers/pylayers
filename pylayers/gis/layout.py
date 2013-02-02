@@ -1,7 +1,7 @@
-# -*- coding:Utf-8 -*-
+#-*- coding:Utf-8 -*-
 #
 # Class Layout
-# 
+#
 # This class handle the description of buildings
 #
 import pdb
@@ -2813,7 +2813,6 @@ class Layout(object):
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
         LC = []
         for c in C:
-            print c
             Cy = Cycls.Cycle(self.Gs, c)
             LC.append(Cy)
 
