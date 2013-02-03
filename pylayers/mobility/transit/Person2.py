@@ -86,7 +86,7 @@ class Person2(Process):
                 self.behaviors = []
                 self.steering_mind = default_steering_mind
                 self.cancelled = 0
-		
+
 
         def move(self):
                 """
@@ -133,7 +133,7 @@ class Person2(Process):
                                 #adjroom  = self.L.Gr.neighbors(self.roomId)
                                 #Nadjroom = len(adjroom)
 				        self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-					while self.nextroomId == self.roomId : # test destination different de l'arrive
+					while (self.nextroomId == self.roomId) or (self.nextroomId in self.forbid) : # test destination different de l'arrive
 	                                        self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
 				        wp                =  self.L.waypoint(self.roomId,self.nextroomId)
                                         for tup in wp[1:]:

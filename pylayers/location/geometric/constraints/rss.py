@@ -85,7 +85,7 @@ class RSS(Constraint):
         self.value = value  # attennation (dB)
         self.std = std
         self.vcw = vcw
-        if len(model) == 0:
+        if model == {}:
             self.config = ConfigParser.ConfigParser()
             self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
             param = dict(self.config.items('rat1_PLM'))

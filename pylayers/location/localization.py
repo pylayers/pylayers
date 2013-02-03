@@ -18,7 +18,7 @@ from pylayers.location.geometric.constraints.exclude import *
 from pylayers.location.algebraic.algebraic import *
 
 from   pylayers.network.model import Model
-
+import networkx as nx
 
 class Localization(object):
 
@@ -38,7 +38,7 @@ class Localization(object):
 
         self.cla = CLA()
         self.algloc=algloc()
-
+        self.idx = 0
 #    def get_const(self, RAT=None, LDP=None):
 #        """ get constraints
 #
@@ -79,14 +79,15 @@ class Localization(object):
                     pass
 
                 try:
-                    self.cla.append(
-                        TOA(id = rat+'-TOA-'+self.ID+'-'+e,
-                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0],
-                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1],
-                            p= self.net.node[self.ID]['PN'].node[e]['pe'],
-                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
-                            )
-                                    )
+                    if e in ['6','7']:
+                        self.cla.append(
+                            TOA(id = rat+'-TOA-'+self.ID+'-'+e,
+                                value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0],
+                                std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1],
+                                p= self.net.node[self.ID]['PN'].node[e]['pe'],
+                                origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
+                                )
+                                        )
                 except:
                     pass
 
@@ -158,22 +159,32 @@ class Localization(object):
         """
             Compute postion with the geometric algorithm
         """
+
         if sum(self.cla.runable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
                 self.savep(self.cla.pe,name='pe')
                 self.savep(self.cla.pe,name='pe_geo')
 
+        # in case of lack of observables
+        if sum(self.cla.runable) >= 1:
+            cpe = self.cla.compute_amb(pe=pe)
+            if cpe:
+                print self.cla.pecluster
+                self.savep(np.array(self.cla.pecluster),name='pe_clust')
 
     def compute_alg(self,rat='all',ldp='all',pe=True):
         """
             Compute postion with the algebraic algorithm
         """
-        
-        if ldp == 'all':
-            ldp=['Pr','TOA','TDOA']
-        pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
-        self.savep(pe_alg.T,name='pe_alg')
+        if len(self.cla.c) !=0:
+            if ldp == 'all':
+                ldp=['Pr','TOA','TDOA']
+            pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
+            self.savep(pe_alg.T,name='pe_alg')
+
+
+
 
 
 class PLocalization(Process):
@@ -182,7 +193,7 @@ class PLocalization(Process):
         self.loc = loc
         self.loc_updt_time = loc_updt_time
         self.method = self.loc.method
-
+        self.sim = sim
     def run(self):
 #        self.loc.get_const()
         self.loc.fill_cla()
@@ -192,5 +203,6 @@ class PLocalization(Process):
                 self.loc.compute_geo(ldp='TOA')
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
+
             print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
