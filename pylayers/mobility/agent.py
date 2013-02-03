@@ -50,6 +50,8 @@ class Agent(object):
                     'type': 'ag',
                     'pos': np.array([]),
                     'roomId': 0,
+                    'froom':[],
+                    'wait':[],
                     'meca_updt': 0.1,
                     'loc': False,
                     'loc_updt': 0.5,
@@ -91,8 +93,10 @@ class Agent(object):
                                 wld=args['world'],
                                 sim=args['sim'],
                                 moving=True,
+                                froom=args['froom'],
+                                wait=args['wait'],
                                 save=args['save'])
-            self.meca.behaviors = [Seek(), Containment(
+            self.meca.behaviors = [Queuing(),Seek(), Containment(
             ), Separation(), InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
 #            self.meca.steering_mind = queue_steering_mind
@@ -151,4 +155,4 @@ class Agent(object):
                                     method=args['loc_method'])
             self.Ploc = PLocalization(loc=self.loc,
                                       loc_updt_time=args['loc_updt'], sim=args['sim'])
-            self.sim.activate(self.Ploc, self.Ploc.run(), 1.0)
+            self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)

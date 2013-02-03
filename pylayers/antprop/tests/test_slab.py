@@ -2,14 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pylayers.antprop.slab import *
 sl  = SlabDB('matDB.ini','slabDB.ini')
-lname  = ['WOOD']
+lname  = ['BRICK']
 lthick = [0.5]
 sl.add('test',lname,lthick)
 df = 0.01
 fGHz   = np.arange(1,5,df)
 theta = 1
 plt.ion()
-sl['test'].ev(fGHz,theta,compensate=False)
+sl['test'].ev(fGHz,theta,compensate=True)
 sl['test'].plotwrtf(typ='mod')
 plt.figure()
 sl['test'].plotwrtf(typ='angle')

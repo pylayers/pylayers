@@ -16,7 +16,7 @@ cirf=TUsignal()
 #cirf.readcir("where2-furcir-tx001-rx145.mat","Tx001")
 
 cir.readcir("where2cir-tx002-rx012.mat","Tx002")
-cirf.readcir("where2-furcir-tx002-rx012.mat","Tx002")
+#cirf.readcir("where2-furcir-tx002-rx012.mat","Tx002")
 
 #cir.readcir("where2cir-tx001-rx001.mat","Tx001")
 #cirf.readcir("where2-furcir-tx001-rx001.mat","Tx001")
@@ -37,10 +37,10 @@ ax1.plot(M.rx[2][0],M.rx[2][1],'ob')
 ax2 = fig.add_subplot(412,title="Measurement")
 M.tdd.ch2.plot()
 
-ax3 = fig.add_subplot(413,title="Simulation with furniture",sharex=ax2,sharey=ax2)
-cirf.plot(col='red')
+#ax3 = fig.add_subplot(413,title="Simulation with furniture",sharex=ax2,sharey=ax2)
+#cirf.plot(col='red')
 
-ax4 = fig.add_subplot(414,title="Simulation without furniture",sharex=ax2,sharey=ax2)
+ax4 = fig.add_subplot(414,title="Simulation",sharex=ax2,sharey=ax2)
 cir.plot(col='blue')
 
 plt.show()

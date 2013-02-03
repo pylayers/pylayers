@@ -85,6 +85,7 @@ class Simul(Simulation):
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
+        self.roomlist=[]
 
     def create_layout(self):
         """
@@ -168,7 +169,9 @@ class Simul(Simulation):
                             type=ag_opt['type'],
                             pos=np.array(eval(ag_opt['pos'])),
                             roomId=int(ag_opt['roomid']),
+                            froom=eval(ag_opt['froom']),
                             meca_updt=float(self.meca_opt['mecanic_update_time']),
+                            wait=float(ag_opt['wait']),
                             loc=str2bool(self.loc_opt['localization']),
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
@@ -286,6 +289,6 @@ class Simul(Simulation):
 
 if __name__ == '__main__':
 
-    seed(10)
     S = Simul()
+    seed(eval(S.sim_opt['seed']))
     S.runsimul()

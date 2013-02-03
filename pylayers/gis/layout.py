@@ -210,7 +210,7 @@ class Layout(object):
 
     def clip(self, xmin, xmax, ymin, ymax):
         """ return the list of edges which cross or belong to the clipping zone
-
+            DEPRECATED
          .. todo this is wrong
 
          Parameters
@@ -1422,6 +1422,9 @@ class Layout(object):
                 self.name[name].remove(e)
                 # delete subseg if required
 
+
+
+
     def del_cycle(self, lnc):
         """ delete a cycle
 
@@ -2180,7 +2183,6 @@ class Layout(object):
             uv = np.nonzero(self.tahe[1, :] == i)[0]
             seglist = np.hstack((seglist, ut, uv))
         seglist = np.unique(seglist)
-
         return(seglist)
 
     def seginframe(self, p1, p2):
@@ -2199,6 +2201,7 @@ class Layout(object):
 
             seglist
                 list of segment number inside a planar region defined by p1 an p2
+
 
             Examples
             --------
@@ -2228,6 +2231,7 @@ class Layout(object):
                 1, :] > min_y))[0]
 
         seglist = self.segpt(up)
+
         return(seglist)
 
         def layerongrid(self, grid, Tx):
@@ -2812,11 +2816,11 @@ class Layout(object):
 
         """
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
+
         LC = []
         for c in C:
             Cy = Cycls.Cycle(self.Gs, c)
             LC.append(Cy)
-
         Cys = Cycls.Cycles(LC, self.Gs)
         self.Gt = Cys.Gt
 
@@ -3401,14 +3405,14 @@ class Layout(object):
         if 'r' in graph:
             G = self.Gr
             nx.draw(G, G.pos, node_color='w', edge_color='g',node_size= 200,fontsize=30)
-        if 's' in graph: 
-            G = self.Gs 
+        if 's' in graph:
+            G = self.Gs
             nx.draw(G, G.pos, node_color='w', edge_color='b',node_size= 250,fontsize=30)
         if 'v' in graph:
-            G = self.Gv 
+            G = self.Gv
             nx.draw(G, self.Gs.pos, node_color='w', edge_color='m')
         if 'c' in graph:
-            G = self.Gc 
+            G = self.Gc
             nx.draw(G, self.Gs.pos, node_color='w', edge_color='c')
         if 'i' in graph:
             G = self.Gi
@@ -3722,11 +3726,13 @@ class Layout(object):
         try:
             ldoorseg = np.array(d['DOOR'])
         except:
-            ldoorseg = np.array([])
+            ldoorseg = np.array(())
+
         try:
             lwallair = np.array(self.name['AIR'])
         except:
-            lwallair = np.array([])
+            lwallair = np.array(())
+
         j = 0
         #
         # For all cycles
