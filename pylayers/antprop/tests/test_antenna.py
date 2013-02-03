@@ -7,3 +7,4 @@ A1 = Antenna('trx','defant.trx',directory='ant',nf=121,ntheta=37,nphi=72)
 #A.C.show(typ='s1')
 #plt.show()
 #A.C.s3tos2()
+

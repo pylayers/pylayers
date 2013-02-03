@@ -47,7 +47,8 @@ class Person3(Process):
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),wld = world(),sim=None,moving=True,save=[]):
+    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),
+        wld = world(),sim=None,moving=True,froom=[],wait=1.0,save=[]):
         """
         boid is initialized in a room of Layout L 
         """        
@@ -67,12 +68,14 @@ class Person3(Process):
         self.waypoints = []
         self.moving=moving
         self.roomId    = roomId
+        self.forbidroomId = froom 
         self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-        while self.nextroomId == self.roomId or (self.nextroomId == 20 ) or (self.nextroomId == 5): # test destination different de l'arrive
+        while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+        self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         self.wp       =  self.L.waypoint(roomId,self.nextroomId)
         for tup in self.wp[1:]:
-            self.waypoints.append(vec3(tup)) 
+                self.waypoints.append(vec3(tup)  ) 
         try:
             self.position = vec3(L.Gr.pos[roomId][0],L.Gr.pos[roomId][1])
         except:     
@@ -88,7 +91,7 @@ class Person3(Process):
         #    GeomNet = np.vstack((GeomNet,np.array((Nnodes,0,[list(self.position)],[list(self.velocity)],[list(self.velocity)]),dtype=GeomNetType)))
 
         # from Helbing, et al "Self-organizing pedestrian movement"
-        self.max_speed = normalvariate(1.36, 0.26)
+        self.max_speed = 1.2#normalvariate(1.0, 0.26)
         self.desired_speed = self.max_speed
         self.radius = normalvariate(self.average_radius, 0.025) / 2
         self.intersection = vec3()
@@ -98,15 +101,18 @@ class Person3(Process):
         self.steering_mind = default_steering_mind
         self.cancelled = 0
         self.net=net
-        self.wait=0.0
-        
+        self.wait=wait
         self.save=save
+
+
+
         if 'mysql' in self.save:
            config = ConfigParser.ConfigParser()
            config.read(pyu.getlong('simulnet.ini','ini'))
            sql_opt = dict(config.items('Mysql'))
            self.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
            self.date = datetime.datetime.now()
+
 
     def move(self):
         """
@@ -140,7 +146,6 @@ class Person3(Process):
                 self.update()
                 self.world.update_boid(self)
 
-
                 self.net.update_pos(self.ID,conv_vecarr(self.position))
                 if len(self.save)!=0:
                     p=conv_vecarr(self.position)
@@ -156,7 +161,10 @@ class Person3(Process):
                     self.arrived = False
                     if self.endpoint:
                         self.endpoint=False
+                        pr = self.sim.roomlist.index(self.nextroomId)
+                        self.sim.roomlist.pop(pr)
                         self.roomId = self.nextroomId
+
                     #
                     # Si porte on continue
                     #
@@ -166,11 +174,13 @@ class Person3(Process):
                     #adjroom  = self.L.Gr.neighbors(self.roomId)
                     #Nadjroom = len(adjroom)
                         self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-                        while self.nextroomId == self.roomId or (self.nextroomId == 20 ) or (self.nextroomId == 5): # test destination different de l'arrive
+#                        while self.nextroomId == self.roomId or (self.nextroomId == 20 ) or (self.nextroomId == 5) : # test destination different de l'arrive
+                        while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist):
                             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                        self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
                         wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
-                            self.waypoints.append(vec3(tup)) 
+                            self.waypoints.append(vec3(tup)  ) 
                     #nextroom = adjroom[k]
                     #    print "room : ",self.roomId
                     #    print "nextroom : ",self.nextroomId
@@ -196,9 +206,10 @@ class Person3(Process):
                     #else:
                     #    yield hold, self , waittime 
 
-                        self.wait=abs(gauss(50,50))
+#                        self.wait=abs(gauss(50,50))
+                        self.wait=abs(gauss(1,1))
                         print 'wait',self.wait*self.interval    
-                        yield hold, self, self.wait
+                        yield hold, self, self.wait 
 
                     else:    
                         del self.waypoints[0]
