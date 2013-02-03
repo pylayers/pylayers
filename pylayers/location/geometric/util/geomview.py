@@ -41,7 +41,7 @@ def cloud(p, name="cloud", display=False, color='r', dice=2, R=0.5, access='new'
 
 	"""
     sh = np.shape(p)
-    if len(sh) == 1:
+    if len(sh) == 1 :
         p = p.reshape((1, len(p)))
     Np = np.shape(p)[0]
     filename = basename + '/geom/' + name + '.list'
@@ -69,6 +69,7 @@ def cloud(p, name="cloud", display=False, color='r', dice=2, R=0.5, access='new'
     else:
         col = color
     for k in range(Np):
+
         try:
             c1 = str(p[k, 0]) + " " + str(p[k, 1]) + " " + str(p[k, 2])
         except:
@@ -77,7 +78,9 @@ def cloud(p, name="cloud", display=False, color='r', dice=2, R=0.5, access='new'
         fd.write(chaine)
 
     fd.close()
+
     if display:
+        
         chaine = "geomview  -nopanel  -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(chaine)
 
