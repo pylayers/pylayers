@@ -1414,6 +1414,7 @@ class Layout(object):
             if e > 0:
                 self.del_subseg(e)
                 name = self.Gs.node[e]['name']
+                del self.Gs.pos[e] # delete edge position
                 self.Gs.remove_node(e)
                 self.labels.pop(e)
                 self.Ne = self.Ne - 1
