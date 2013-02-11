@@ -1,8 +1,8 @@
 from pylayers.util.project import *
 import sys
 
-import SimPy.Simulation
-from SimPy.Simulation import Process,hold
+
+from SimPy.SimulationRT import Process,hold
 
 from pylayers.util import utilnet
 from pylayers.network.network import Network, Node

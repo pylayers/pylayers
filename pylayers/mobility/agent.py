@@ -1,8 +1,8 @@
-from SimPy.Simulation import Process, Simulation
-from pylayers.mobility.transit.Person3 import Person3
+from SimPy.SimulationRT import Process, Simulation
+from pylayers.mobility.transit.Person import Person
 from pylayers.mobility.transit.vec3 import vec3
 from pylayers.mobility.transit.World import world
-from pylayers.mobility.transit.SteeringBehavior2 import Seek, Wander, Queuing, FollowWaypoints, Separation, Containment, InterpenetrationConstraint, queue_steering_mind, default_steering_mind
+from pylayers.mobility.transit.SteeringBehavior import Seek, Wander, Queuing, FollowWaypoints, Separation, Containment, InterpenetrationConstraint, queue_steering_mind, default_steering_mind
 
 
 from random import normalvariate, uniform, gauss
@@ -52,6 +52,7 @@ class Agent(object):
                     'roomId': 0,
                     'froom':[],
                     'wait':[],
+                    'cdest':'random',
                     'meca_updt': 0.1,
                     'loc': False,
                     'loc_updt': 0.5,
@@ -85,7 +86,7 @@ class Agent(object):
             pass
         # mecanique
         if self.type == 'ag':
-            self.meca = Person3(ID=self.ID,
+            self.meca = Person(ID=self.ID,
                                 roomId=args['roomId'],
                                 L=args['Layout'],
                                 net=self.net,
@@ -95,6 +96,7 @@ class Agent(object):
                                 moving=True,
                                 froom=args['froom'],
                                 wait=args['wait'],
+                                cdest=args['cdest'],
                                 save=args['save'])
             self.meca.behaviors = [Queuing(),Seek(), Containment(
             ), Separation(), InterpenetrationConstraint()]

@@ -21,8 +21,8 @@
 #Bernard UGUEN        : bernard.uguen@univ-rennes1.fr
 #####################################################################
 
-import SimPy.Simulation
-from SimPy.Simulation import Process, hold
+
+from SimPy.SimulationRT import Process, hold
 import numpy as np
 import scipy as sp
 import networkx as nx
