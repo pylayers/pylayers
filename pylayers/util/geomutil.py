@@ -2,6 +2,7 @@
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 import shapely.geometry as sh
+import scipy.linalg as la
 import pdb
 #! /usr/bin/python
 # geomutil.py
@@ -2529,7 +2530,7 @@ def angle_fix(al):
 
 
 def plot_coords2(ax, ob):
-    """
+    """  plot point from coordinates
     References
     ----------
     http://pypi.python.org/pypi/Shapely
@@ -2739,8 +2740,8 @@ def dist(x,y,ax):
         return d
 
 def line_intersection(l1,l2):
-    """
-    intersection between two 2D lines using shapely
+    """ intersection between two 2D lines using shapely
+
     Parameters
     ----------
         l1: numpy.ndarray
@@ -2761,8 +2762,7 @@ def line_intersection(l1,l2):
         return None
 
 def linepoly_intersection(l,poly):
-    """
-    intersection between a 2D line and a 2D polygon using shapely
+    """ intersection between a 2D line and a 2D polygon using shapely
     Parameters
     ----------
         l: numpy.ndarray
@@ -2779,6 +2779,61 @@ def linepoly_intersection(l,poly):
     psh = shl.intersection(shpoly)
     return np.array([[psh.x],[psh.y]])
     
+def mirror(p,pa,pb):
+    """ Compute the mirror of p with respect to the segment pa pb
+
+    Parameters
+    ----------
+        p : numpy.ndarray
+            point to image
+        pa : numpy.ndarray
+            segment tail
+        pb : numpy.ndarray
+            segment head 
+
+    Returns
+    -------
+        M : numpy.ndarray
+
+    Example
+    -------
+
+        >>> p = np.array([0,-1])
+        >>> pa  = np.array([-1,0])
+        >>> pb  = np.array([1,0])
+        >>> M = mirror(p,pa,pb) 
+    """
+
+    if np.shape(pa)==(2,):
+        pa = pa.reshape(2,1)
+    if np.shape(pb)==(2,):
+        pb = pb.reshape(2,1)
+    pab = pb - pa
+    alpha = np.sum(pab * pab, axis=0)
+    zalpha = np.where(alpha == 0.)
+    alpha[zalpha] = 1.
+
+    a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+    b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+    c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+                        pa[1, :] * (pa[1, :] - pb[1, :]) *
+                        (pb[0, :] - pa[0, :]))
+    d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+                        pa[0, :] * (pa[1, :] - pb[1, :]) *
+                        (pb[0, :] - pa[0, :]))
+
+    N = 1
+    S = np.zeros((2, 2))
+    S[0, 0] = -a
+    S[0, 1] = b
+    S[1, 0] = b
+    S[1, 1] = a
+    A = np.eye(2)
+    y = np.zeros(2)
+    vc0 = np.array([c[0], d[0]])
+    v0 = np.dot(-S, p) + vc0
+    x = la.solve(A, v0)
+    return x
 
 if __name__ == "__main__":
     doctest.testmod()

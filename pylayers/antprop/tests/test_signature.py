@@ -51,8 +51,8 @@ def showsig(L,s,tx,rx):
     return fig,ax
 
 #strucname = 'TA-Office'
-strucname = 'defstr'
-L = Layout(strucname+'.str')
+strucname = 'DLR'
+L = Layout(strucname+'.ini')
 L.boundary()
 print L.ax
 #try:

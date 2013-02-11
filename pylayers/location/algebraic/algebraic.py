@@ -28,12 +28,12 @@ import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.util.geomutil import dist
 import string
+import pdb
 
 
 class algloc(object):
     """
-    This class regroups all the algebraic localization scenarios and
-    techniques
+    This class regroups algebraic localization algorithms
 
     Attributes
     ----------
@@ -44,7 +44,7 @@ class algloc(object):
     Notes
     -----
     This class regroup various implementation of location algorithms.
-    The instantiated object owns : 
+    The instantiated object has :
         + a dictionnary of nodes
         + a dictionnary of location dependent parameters
 
@@ -63,8 +63,9 @@ class algloc(object):
         print "Nodes : ", self.nodes
         print "Location dependent parameters : ", self.ldp
 
-    def plot(self, rss, toa, tdoa):
-        """ Plot scenario
+    def plot(self, rss = False , toa = True, tdoa = False):
+
+        """ plot scenario
 
         Parameters
         ----------
@@ -73,7 +74,7 @@ class algloc(object):
             tdoa : boolean
         """
 
-        if rss == 0 and toa == 0 and tdoa == 0:
+        if not rss and not toa and not tdoa:
             raise ValueError("inputs missed")
         else:
             fig = plt.figure()
@@ -84,7 +85,7 @@ class algloc(object):
                         label='blind node')
             except:
                 plt.plot(BN[0, :], BN[1, :], 'r*', label='blind node')
-            if rss != 0:
+            if rss:
                 RN_RSS = self.nodes['RN_RSS']
                 try:
                     ax.plot(RN_RSS[0, :], RN_RSS[1, :], RN_RSS[2, :], 'ro',
@@ -92,7 +93,7 @@ class algloc(object):
                 except:
                     plt.plot(RN_RSS[0, :], RN_RSS[1, :], 'ro',
                              label='RSS node')
-            if toa != 0:
+            if toa:
                 RN_TOA = self.nodes['RN_TOA']
                 try:
                     ax.plot(RN_TOA[0, :], RN_TOA[1, :], RN_TOA[2, :], 'gs',
@@ -101,7 +102,7 @@ class algloc(object):
                     plt.plot(RN_TOA[0, :], RN_TOA[1, :], 'gs',
                              label='TOA node')
 
-            if toa != 0:
+            if tdoa:
                 RN_TDOA = self.nodes['RN_TDOA']
                 RNr_TDOA = self.nodes['RNr_TDOA']
                 try:
@@ -115,7 +116,7 @@ class algloc(object):
                     plt.plot(RNr_TDOA[0, :], RNr_TDOA[1, :], 'kD',
                              label='Ref TDOA node')
 
-    def show(self, rss, toa, tdoa):
+    def show(self, rss=False, toa=True, tdoa=False):
         """ Plot scenario
 
         Parameters
@@ -224,7 +225,7 @@ class algloc(object):
             raise ValueError(Rest + ": no such ranging estimator")
         return Range_std
 
-    def ls_locate(self, rss, toa, tdoa, Rest):
+    def ls_locate(self, rss=False, toa=True, tdoa=False, Rest='mode'):
         """
         This method applies least squares (LS) approximation to get
         position P.
@@ -473,7 +474,7 @@ class algloc(object):
 
             return P
 
-    def wls_locate(self, rss, toa, tdoa, Rest):
+    def wls_locate(self, rss=False, toa=True, tdoa=False, Rest='mode'):
         """
         This method applies weighted least squares (WLS) approximation
         to get position P.
