@@ -4,8 +4,9 @@ How to goes from a simulnet to a Channel Impulse Response ?
 Generate a mobile simulation with simulnet
 -------------------------------------------
 
-You need first to have an `agent.ini` and `simulnet.ini` file in the  `/ini` directory
-of your current project. 
+Before any simulation it is necessary to fill the two main configuartion file
+: `agent.ini` and `simulnet.ini` file in the  `/ini` directory
+of the current project. 
 
 agent.ini 
 ~~~~~~~~~
@@ -200,7 +201,7 @@ configure simulnet.ini file
 
 
 `[Save]` section 
------------------
+----------------
 
 + `pyray` : use this option to generate outputs of the simulation compliant with pulsray  
 + `txt` : use this option to generate outputs of the simulation compliant with the WHERE2 DB
@@ -214,22 +215,27 @@ configure simulnet.ini file
 -------------------
 
 + The network_update_time option give the sample rate of the output files.
-( ! For a correct output GIVE THE SAME VALUE TO
-mecanic_update_time option in the [Mecanic] section)
-+ The show option allow to display with matplotlib the simulation trace.( True
-or False)
-In section [Localization] :
-+ localization : boolean True/false for each mobile node (agent) compute their
+    ( ! For a correct output GIVE THE SAME VALUE TO mecanic_update_time option in the [Mechanic] section)
++ The show option allow to display with matplotlib the simulation trace.( True or False)
+
+`[Localization]` section 
+------------------------
+
++ *localization* : boolean True/false for each mobile node (agent) compute their
 position
-+ localization_update_time : refresh time for localization
-In Section [Simulation]:
+
++ *localization_update_time* : refresh time for localization
+
+`[Simulation]` section 
+-----------------------
+
 + The duration option set up the simulation duration
 
-configure agent.ini file
+    configure agent.ini file
 
-Before running the simulation you can select the involved agents into the
-simuation.
-Go to ProjectDirectory/ini/agent.ini
+Before running the simulation it is necessary to select involved agents. This
+is done in the /ini/agent.ini file from the project directory. 
+
 In Section [used_agent]:
 + append the list option with the list of available agent in the following of
 the file . Ex: list=['A1','A2','BS1','BS2']
@@ -294,6 +300,7 @@ computation
 
 
 E.compute runs the pyray simulation for
+
 + all anchors nodes (ap) to all mobile nodes (ag)
 + all mobile nodes (ag) a time 't' all mobile nodes (ag) at the same time 't'
 
@@ -311,8 +318,8 @@ file name is build as follow : `defaultcir-tx_node_id-rx_node_id-pposition_id`
 The position_id is related to the position number into
 `ProjectDirectory/netsave/nodeid.ini`
 
-Exploitation
-------------
+Data exploitation
+-----------------
 
 either
 
@@ -325,7 +332,7 @@ or
 
     >>> E.pltciri( nodeid1 , nodeid2)
 
- With pltciri you can interract with the plot to display the desired CIR.
+pltciri allows to interact with the plot to display the desired CIR.
 
 Invocate pltciri for 2 nodes for instance 1 and 6:
 

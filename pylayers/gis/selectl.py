@@ -394,7 +394,7 @@ class SelectL(object):
                 return()
 
             if (self.state == 'SS') | (self.state =='SSS'):
-                self.L.edit_edge(self.selected_edge1)
+                self.L.edit_segment(self.selected_edge1)
                 self.state = 'Init'
                 self.update_state()
                 return 

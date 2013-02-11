@@ -765,6 +765,7 @@ class Signature(object):
         #return(vn)
         #return(typ)
 
+
     def image(self, tx):
         """
         Compute the images of tx with respect to the signature segments
@@ -840,7 +841,6 @@ class Signature(object):
         x = la.solve(A, y)
         M = np.vstack((x[0::2], x[1::2]))
         return M
-
     def backtrace(self, tx, rx, M):
         """
         backtracing step: given the image, tx, and rx, this function

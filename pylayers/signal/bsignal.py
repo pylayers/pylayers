@@ -3355,20 +3355,21 @@ class FUDsignal(FUsignal):
 
         Parameters
         ----------
+
         df : float 
             frequency step (default 0.01)
        
         Notes
         -----
 
-            1. get  fmin and fmax
-            2. build a new base with frequency step df
-            3. Initialize a FUsignal with the new frequency base 
-            4. build  matrix tau * f  (Nray x Nf)
-            5. buildl matrix E= exp(-2 j pi f tau)
-            6. resampling of FUDsignal according to f --> S
-            7. apply the element wise product E .* S
-            8. add all rays 
+        1. get  fmin and fmax
+        2. build a new base with frequency step df
+        3. Initialize a FUsignal with the new frequency base 
+        4. build  matrix tau * f  (Nray x Nf)
+        5. buildl matrix E= exp(-2 j pi f tau)
+        6. resampling of FUDsignal according to f --> S
+        7. apply the element wise product E .* S
+        8. add all rays 
 
         """
         fmin = self.x[0]
