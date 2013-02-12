@@ -896,6 +896,12 @@ class Network(nx.MultiGraph):
 
     def mat_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
             save node positions into a matlab structure file
 
 
@@ -944,6 +950,14 @@ class Network(nx.MultiGraph):
 
     def txt_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
+
+
         save network state into mysqldatabase
 
 
@@ -959,6 +973,13 @@ class Network(nx.MultiGraph):
 
     def loc_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
+
         save txt 
         node ID , True pos x , True pos y , est pos x , est pos y , timestamp
 
@@ -994,6 +1015,14 @@ class Network(nx.MultiGraph):
 
     def dual_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
+
+
         save txt 
 
 
@@ -1211,23 +1240,24 @@ class PNetwork(Process):
 
 
 
-            ############# save network
-            if 'csv' in self.save:
-                self.net.csv_save(self.filename,self.sim)
-            if 'pyray' in self.save:
-                self.net.pyray_save(self.sim)
-            if 'matlab' in self.save:
-                self.net.mat_save(self.sim)
-            if 'msql' in self.save:
-                self.net.sql_save(self.sim)
-            if 'txt' in self.save:
-                self.net.txt_save(self.sim)
-            if 'ini' in self.save:
-                self.net.ini_save(self.sim)
-            if 'loc' in self.save:
-                self.net.loc_save(self.sim)
-            if 'dual' in self.save:
-                self.net.dual_save(self.sim)
+#            ############# save network
+#            REPLACED BY A SAVE PROCESS
+#            if 'csv' in self.save:
+#                self.net.csv_save(self.filename,self.sim)
+#            if 'pyray' in self.save:
+#                self.net.pyray_save(self.sim)
+#            if 'matlab' in self.save:
+#                self.net.mat_save(self.sim)
+#            if 'msql' in self.save:
+#                self.net.sql_save(self.sim)
+#            if 'txt' in self.save:
+#                self.net.txt_save(self.sim)
+#            if 'ini' in self.save:
+#                self.net.ini_save(self.sim)
+#            if 'loc' in self.save:
+#                self.net.loc_save(self.sim)
+#            if 'dual' in self.save:
+#                self.net.dual_save(self.sim)
 
             self.net.pos=self.net.get_pos()
 

@@ -48,7 +48,7 @@ from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
 #from pylayers.util.pymysqldb import Database as DB
 from pylayers.util.project import *
-#from pylayers.util.save import *
+from pylayers.util.save import *
 
 import pdb
 import os
@@ -269,7 +269,9 @@ class Simul(SimulationRT):
             self.create_visual()
         self.create_show()
 
-
+        if str2bool(self.save_opt['savep']):
+            self.save=Save(net=self.net,sim=self)
+            self.activate(self.save,self.save.run(),0.0)
 #        if str2bool(self.save_opt['savep']):
 #            self.save=Save(net=self.net,
 #                    L= self.L,
@@ -305,3 +307,6 @@ if __name__ == '__main__':
     S = Simul()
     seed(eval(S.sim_opt['seed']))
     S.runsimul()
+    if S.save_opt['savep']:
+        S.save.export('matlab')
+        S.save.export('python')
