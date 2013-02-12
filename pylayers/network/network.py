@@ -45,8 +45,7 @@ from pylayers.util.project import *
 import time
 
 
-import SimPy.Simulation
-from SimPy.Simulation import Process,hold
+from SimPy.SimulationRT import Process,hold
 import pprint
 import select
 import sys
@@ -897,6 +896,12 @@ class Network(nx.MultiGraph):
 
     def mat_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
             save node positions into a matlab structure file
 
 
@@ -945,6 +950,14 @@ class Network(nx.MultiGraph):
 
     def txt_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
+
+
         save network state into mysqldatabase
 
 
@@ -960,6 +973,13 @@ class Network(nx.MultiGraph):
 
     def loc_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
+
         save txt 
         node ID , True pos x , True pos y , est pos x , est pos y , timestamp
 
@@ -995,6 +1015,14 @@ class Network(nx.MultiGraph):
 
     def dual_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
+
+
         save txt 
 
 
@@ -1012,11 +1040,11 @@ class Network(nx.MultiGraph):
         typ = nx.get_node_attributes(self,'type')
         if self.idx == 0:
             entete = 'Timestamp, True Position x, True Position y, Est Position1 x, Est Position1 y,Est Position2 x, Est Position2 y\n'
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','write')
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','write')
             file.write(entete)
             file.close()
             file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','write')
-            entete2 = 'Timestamp, link, linkid, Pr, Prstd\n'
+            entete2 = 'Timestamp, link, linkid, Pr, distance\n'
             file2.write(entete2)
             file2.close()
             file3=open(basename+'/' + pstruc['DIRNETSAVE'] +'/anchorposition.txt','write')
@@ -1026,26 +1054,42 @@ class Network(nx.MultiGraph):
                 data3= n + ',' + str(self.node[n]['p'][0]) + ',' + str(self.node[n]['p'][1]) + '\n'
                 file3.write(data3)
             file3.close()
+            file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','w')
+            entete4 = 'Timestamp, type, toaid, toa,distance\n'
+            file4.write(entete4)
+            file4.close()
 
         try:
-            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','a')
+
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','a')
             file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','a')
+            file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','a')
             for n in self.nodes():
                 if n == '1':
                     data =  pyu.timestamp(S.now()) +','+ str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pclust[n][0,0]) + ',' + str(pclust[n][0,1]) + ',' + str(pclust[n][1,0]) + ',' + str(pclust[n][1,1]) +'\n'
                     for e in self.edge[n].keys():
                         if e != '6' and e !='7':
                             try:
-                                data2 = data2 +',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(self.edge[n][e]['rat1']['Pr'][1]) 
+                                data2 = data2 +',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
                             except:
-                                data2 = pyu.timestamp(S.now()) + ',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(self.edge[n][e]['rat1']['Pr'][1]) 
+                                data2 = pyu.timestamp(S.now()) + ',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+                        else :
+                            try:
+                                data4 = data4 +',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+                            except:
+
+                                data4 = pyu.timestamp(S.now()) + ',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' +str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
 
             data2=data2 + '\n'
+            data4=data4 + '\n'
             file.write(data)
             file2.write(data2)
-            
+            file4.write(data4)
+
+
             file.close()
             file2.close()
+            file4.close()
             self.idx = self.idx +1
         except:
             pass
@@ -1196,23 +1240,24 @@ class PNetwork(Process):
 
 
 
-            ############# save network
-            if 'csv' in self.save:
-                self.net.csv_save(self.filename,self.sim)
-            if 'pyray' in self.save:
-                self.net.pyray_save(self.sim)
-            if 'matlab' in self.save:
-                self.net.mat_save(self.sim)
-            if 'msql' in self.save:
-                self.net.sql_save(self.sim)
-            if 'txt' in self.save:
-                self.net.txt_save(self.sim)
-            if 'ini' in self.save:
-                self.net.ini_save(self.sim)
-            if 'loc' in self.save:
-                self.net.loc_save(self.sim)
-            if 'dual' in self.save:
-                self.net.dual_save(self.sim)
+#            ############# save network
+#            REPLACED BY A SAVE PROCESS
+#            if 'csv' in self.save:
+#                self.net.csv_save(self.filename,self.sim)
+#            if 'pyray' in self.save:
+#                self.net.pyray_save(self.sim)
+#            if 'matlab' in self.save:
+#                self.net.mat_save(self.sim)
+#            if 'msql' in self.save:
+#                self.net.sql_save(self.sim)
+#            if 'txt' in self.save:
+#                self.net.txt_save(self.sim)
+#            if 'ini' in self.save:
+#                self.net.ini_save(self.sim)
+#            if 'loc' in self.save:
+#                self.net.loc_save(self.sim)
+#            if 'dual' in self.save:
+#                self.net.dual_save(self.sim)
 
             self.net.pos=self.net.get_pos()
 

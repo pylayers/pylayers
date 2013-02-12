@@ -1,4 +1,4 @@
-from SimPy.Simulation import *
+from SimPy.SimulationRT import *
 from Tkinter import *
 from math import pi, sin, cos
 import os
