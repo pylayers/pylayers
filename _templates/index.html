@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% set title = 'Overview' %}
+{% set script_files = script_files + ["_static/force/d3js/d3.min.js"] %}
+{% set script_files = script_files + ["_static/force/d3js/d3.geom.min.js"] %}
+{% set script_files = script_files + ["_static/force/d3js/d3.layout.min.js"] %}
+{% set css_files = css_files + ["_static/force/force.css"] %}
+{% block body %}
+
+
+<h2>High-productivity software for complex networks</h2>
+
+<table align="left" style="margin-left: 0px">
+<tr>
+  <td width="60%">
+<blockquote>
+<p>NetworkX is a Python language software package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks.</p>
+</blockquote>
+  </td>
+    <td width="40%">
+    <div id="chart"></div>
+    <script type="text/javascript" src="_static/force/force.js"></script>
+</td></tr>
+</table>
+
+<table class="contentstable" align="center" style="margin-left: 30px"><tr>
+  <td width="33%">
+    <p class="biglink"><a class="biglink" href="{{ pathto("documentation") }}">Documentation</a><br/>
+       <span class="linkdescr">all documentation</span></p>
+  </td>
+  <td width="33%">
+    <p class="biglink"><a class="biglink" href="{{ pathto("examples") }}">Examples</a><br/>
+       <span class="linkdescr">using the library</span></p>
+  </td>
+  <td width="33%">
+    <p class="biglink"><a class="biglink" href="http://networkx.github.com/documentation/latest/reference/index.html">Reference</a><br/>
+       <span class="linkdescr">all functions and methods</span></p>
+  </td></tr>
+</table>
+
+<h2>Features</h2>
+<ul class="simple">
+<li> Python language data structures for graphs, digraphs, and multigraphs.
+<li> Nodes can be &quot;anything&quot; (e.g. text, images, XML records)</li>
+<li> Edges can hold arbitrary data (e.g. weights, time-series) 
+<li> Generators for classic graphs, random graphs, and synthetic networks</li>
+<li> Standard graph algorithms</li>
+<li> Network structure and analysis measures</li>
+<li> Basic graph drawing</li>
+<li> Open source <a href="documentation/latest/reference/legal.html">BSD license</a> </li>
+<li> Well tested: more than 1500 unit tests</li>
+<li> Additional benefits from Python: fast prototyping, easy to teach, multi-platform</li>
+</ul>
+
+
+{% endblock %}
