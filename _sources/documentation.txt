@@ -1,0 +1,15 @@
+=============
+Documentation
+=============
+
+.. If you are new to NetworkX take a look at the
+.. `tutorial <http://pylayers.github.com/documentation/latest/tutorial/>`_.
+
+The `examples <http://pylayers.github.com/documentation/latest/examples/>`_
+show some use case of PyLayers.
+
+Full Documentation Versions
+---------------------------
+
+* `Latest <http://pylayers.github.com/documentation/latest/>`_
+* `Development <http://pylayers.github.com/documentation/development/>`_

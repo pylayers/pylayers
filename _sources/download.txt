@@ -1,0 +1,17 @@
+~~~~~~~~
+Download
+~~~~~~~~
+
+Source and binary releases
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. http://pypi.python.org/pypi/pylayers/
+
+.. http://pylayers.lanl.gov/download/pylayers/
+
+Documentation
+~~~~~~~~~~~~~
+*PDF*
+
+.. http://pylayers.lanl.gov/pylayers_reference.pdf
+.. http://pylayers.lanl.gov/pylayers_tutorial.pdf
+

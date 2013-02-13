@@ -1,0 +1,29 @@
+Example of Indoor Multi Wall simulation
+---------------------------------------
+
+
+.. ipython::
+    
+
+    In [1]: from pylayers.antprop.coverage import *
+      
+    In [2]: C = Coverage()
+            
+    In [2]: C.tx = np.array((30,12))
+                  
+    In [3]: C.cover()
+                        
+    @savefig coverexampleo.png width=5in
+    In [4]: C.showPower(polarization='o')
+                                          
+    @savefig coverexamplep.png width=5in
+    In [4]: C.showPower(polarization='p')
+    
+..    In [1]: import pylayers.simul.simulem as sem
+..    In [1]: S = sem.Simul()
+                                            
+..    @savefig example.png width=4in
+..    In [1]: S.show()
+
+.. See more `simple and complicated examples <http://pylayers.github.com/documentation/latest/examples/>`_, or
+..  a `gallery <http://pylayers.github.com/documentation/latest/gallery.html>`_.  of pylayers use cases.

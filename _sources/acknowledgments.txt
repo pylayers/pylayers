@@ -1,0 +1,111 @@
+
+Third party packages 
+====================
+
+Pylayers is written in Python and is standing on the shoulders of the
+following giant Python packages:
+
+* numpy ( for algebra in multi dimensions )  
+* scipy ( for scientific libraries )
+* SimPy ( for discrete events simulation ) 
+* matplotlib ( for the graphical outputs ) 
+* networkx ( for graph description and algorithms ) 
+* shapely ( for planar geometry )   
+* ipython ( to rule them all ... ) 
+
+
+Pylayers relies also on the interactive 3D viewing program `geomview <http://www.geomview.org>`_ tool for fast and simple interaction with 3D entities. 
+
+
+
+Developpers
+===========
+
+Pylayers is driven by professor Bernard Uguen at `University of Rennes 1
+<http://www.univ-rennes1.fr/english>`_, `IETR laboratory <http://www.ietr.fr/>`_ and 
+`ESIR school of engineering <http://esir.univ-rennes1.fr/>`_
+
+Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
+Laaraiedh and Meriem Mhedbhi, with the technical support of all the members from the
+Research Team of the Propagation and Localization team of the `IETR
+<http://www.ietr.fr>`_ lab.    
+
+Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi
+Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr CREC research center).
+
+
+Download and Installation
+=========================
+
+The current version is tagged 0.1. 
+
+Download the last release in your preferred format on github.
+
+.. code-block:: bash
+    
+    $ git clone https://github.com/pylayers/pylayers.git
+
+
+We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
+
+**Just fork it !** on your github account and get in touch on the mailing list
+if you get some interest or see practical applications.
+
+
+
+Acknowledgements 
+================
+
+This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR
+project AUBADE and CORMORAN and by the European projects `FP7 UCELLS <http://www.ist-ucells.org/>`_, 
+FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
+
+.. image:: _static/logoUR1.jpg 
+    :scale: 18%
+    :target: http://www.univ-rennes1.fr/english 
+
+.. image:: _static/logoIETR.jpg 
+    :scale: 22%
+    :target: http://www.ietr.fr/ 
+
+.. image:: _static/logoESIR.png 
+    :scale: 20%
+    :target: http://esir.univ-rennes1.fr/ 
+
+.. image:: _static/bretagnegd.jpg 
+    :scale: 20%
+    :target: http://www.louisbourdon.com/index.htm
+
+.. image::  _static/fp7.png 
+    :scale: 10%
+
+.. image::  _static/ucells.png 
+    :scale: 40%
+
+.. image:: _static/where1logo.jpg 
+    :scale: 30%
+
+.. image:: _static/WHERE2_Logo.jpg 
+    :scale: 20%
+    :target: http://www.ict-where.eu/ 
+
+.. image:: _static/logo_CORMORAN.png 
+    :scale: 20%
+
+.. image:: _static/IR.png 
+    :scale: 30%
+
+
+
+License
+=======
+
+Copyright ©, 2013 University of Rennes 1
+
+Pylayers is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+Pylayers is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+
