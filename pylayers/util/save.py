@@ -152,12 +152,15 @@ class Save(Process):
                 dkey=n
             self.savemat[dkey]={}
             self.savemat[dkey]['type']=savecfg['type'][n]
+            self.savemat[dkey]['sens']=savecfg['sens'][n]
+            self.savemat[dkey]['epwr']=savecfg['epwr'][n]
             for p in savecfg['lpos']:
                 self.savemat[dkey][p]=[]
             for r in savecfg['lrat']:
-                self.savemat[dkey][r]={}
-                for l in savecfg['lldp']:
-                    self.savemat[dkey][r][l]={}
+                if n in savecfg['subnet'][r]:
+                    self.savemat[dkey][r]={}
+                    for l in savecfg['lldp']:
+                        self.savemat[dkey][r][l]={}
 
     
         ### fill in dict
@@ -211,7 +214,7 @@ class Save(Process):
                                     self.savemat[dkey][r][l]['node_'+ii[0]]=d[t][r][l][ii]
 
 
-
+        pdb.set_trace()
         if  etype == 'matlab':
             spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
         if  etype == 'python':
@@ -228,6 +231,12 @@ class Save(Process):
             Run the save Result process
         """
         self.save['saveopt']['type']=nx.get_node_attributes(self.net,'type')
+        self.save['saveopt']['epwr']=nx.get_node_attributes(self.net,'epwr')
+        self.save['saveopt']['sens']=nx.get_node_attributes(self.net,'sens')
+        self.save['saveopt']['subnet']={}
+        for rat in self.lrat:
+            self.save['saveopt']['subnet'][rat]=self.net.SubNet[rat].nodes()
+
         while True:
             self.save[self.sim.now()]={}
             for position in self.lpos:
