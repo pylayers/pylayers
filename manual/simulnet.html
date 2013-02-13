@@ -8,15 +8,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>4.1. How to goes from a simulnet to a Channel Impulse Response ? &mdash; PyLayers 0.1 documentation</title>
+    <title>4.1. How to goes from a simulnet to a Channel Impulse Response ? &mdash; PyLayers</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,51 +25,22 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
-    <link rel="up" title="1. How to build a layout file ?" href="tocmanual.html" />
-    <link rel="next" title="5.1. Antenna format" href="antenna.html" />
-    <link rel="prev" title="3.1. module simulem" href="simulem.html" />
-<script type="text/javascript">
-    
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34943220-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                   })();
-
-</script>
-
+    <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/logo.png" height="200" border="0" alt="pylayers"/></a>
+%<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
 </div>
 
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="antenna.html" title="5.1. Antenna format"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="simulem.html" title="3.1. module simulem"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User Manual</a> &raquo;</li>
-          <li><a href="tocmanual.html" accesskey="U">1. How to build a layout file  ?</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
 
@@ -85,25 +56,16 @@
 <li><a class="reference internal" href="#save-section">4.1.2. <cite>[Save]</cite> section</a></li>
 <li><a class="reference internal" href="#layout-section">4.1.3. <cite>[Layout]</cite> section :</a></li>
 <li><a class="reference internal" href="#network-section">4.1.4. <cite>[Network]</cite> section</a></li>
-<li><a class="reference internal" href="#running-the-simulation">4.1.5. Running the simulation</a></li>
-<li><a class="reference internal" href="#compute-and-exploit-pyray-with-the-given-simulnet-files">4.1.6. Compute and exploit pyray with the given simulnet files</a></li>
-<li><a class="reference internal" href="#results">4.1.7. Results</a></li>
-<li><a class="reference internal" href="#exploitation">4.1.8. Exploitation</a></li>
+<li><a class="reference internal" href="#localization-section">4.1.5. <cite>[Localization]</cite> section</a></li>
+<li><a class="reference internal" href="#simulation-section">4.1.6. <cite>[Simulation]</cite> section</a></li>
+<li><a class="reference internal" href="#running-the-simulation">4.1.7. Running the simulation</a></li>
+<li><a class="reference internal" href="#compute-and-exploit-pyray-with-the-given-simulnet-files">4.1.8. Compute and exploit pyray with the given simulnet files</a></li>
+<li><a class="reference internal" href="#results">4.1.9. Results</a></li>
+<li><a class="reference internal" href="#data-exploitation">4.1.10. Data exploitation</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="simulem.html"
-                        title="previous chapter">3.1. module simulem</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="antenna.html"
-                        title="next chapter">5.1. Antenna format</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/manual/simulnet.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -129,8 +91,9 @@
 <h1>4.1. How to goes from a simulnet to a Channel Impulse Response ?<a class="headerlink" href="#how-to-goes-from-a-simulnet-to-a-channel-impulse-response" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="generate-a-mobile-simulation-with-simulnet">
 <h2>4.1.1. Generate a mobile simulation with simulnet<a class="headerlink" href="#generate-a-mobile-simulation-with-simulnet" title="Permalink to this headline">¶</a></h2>
-<p>You need first to have an <cite>agent.ini</cite> and <cite>simulnet.ini</cite> file in the  <cite>/ini</cite> directory
-of your current project.</p>
+<p>Before any simulation it is necessary to fill the two main configuartion file
+: <cite>agent.ini</cite> and <cite>simulnet.ini</cite> file in the  <cite>/ini</cite> directory
+of the current project.</p>
 <div class="section" id="agent-ini">
 <h3>4.1.1.1. agent.ini<a class="headerlink" href="#agent-ini" title="Permalink to this headline">¶</a></h3>
 <p>Below is an exemple of agent.ini file</p>
@@ -152,24 +115,39 @@ of your current project.</p>
 </div>
 <div class="section" id="network-section">
 <h2>4.1.4. <cite>[Network]</cite> section<a class="headerlink" href="#network-section" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>The network_update_time option give the sample rate of the output files.</li>
+<ul>
+<li><dl class="first docutils">
+<dt>The network_update_time option give the sample rate of the output files.</dt>
+<dd><p class="first last">( ! For a correct output GIVE THE SAME VALUE TO mecanic_update_time option in the [Mechanic] section)</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">The show option allow to display with matplotlib the simulation trace.( True or False)</p>
+</li>
 </ul>
-<p>( ! For a correct output GIVE THE SAME VALUE TO
-mecanic_update_time option in the [Mecanic] section)
-+ The show option allow to display with matplotlib the simulation trace.( True
-or False)
-In section [Localization] :
-+ localization : boolean True/false for each mobile node (agent) compute their
-position
-+ localization_update_time : refresh time for localization
-In Section [Simulation]:
-+ The duration option set up the simulation duration</p>
-<p>configure agent.ini file</p>
-<p>Before running the simulation you can select the involved agents into the
-simuation.
-Go to ProjectDirectory/ini/agent.ini
-In Section [used_agent]:
+</div>
+<div class="section" id="localization-section">
+<h2>4.1.5. <cite>[Localization]</cite> section<a class="headerlink" href="#localization-section" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><em>localization</em> : boolean True/false for each mobile node (agent) compute their</li>
+</ul>
+<p>position</p>
+<ul class="simple">
+<li><em>localization_update_time</em> : refresh time for localization</li>
+</ul>
+</div>
+<div class="section" id="simulation-section">
+<h2>4.1.6. <cite>[Simulation]</cite> section<a class="headerlink" href="#simulation-section" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">The duration option set up the simulation duration</p>
+<blockquote>
+<div><p>configure agent.ini file</p>
+</div></blockquote>
+</li>
+</ul>
+<p>Before running the simulation it is necessary to select involved agents. This
+is done in the /ini/agent.ini file from the project directory.</p>
+<p>In Section [used_agent]:
 + append the list option with the list of available agent in the following of
 the file . Ex: list=[&#8216;A1&#8217;,&#8217;A2&#8217;,&#8217;BS1&#8217;,&#8217;BS2&#8217;]
 In Section [agentidentifier]:</p>
@@ -188,7 +166,7 @@ In Section [agentidentifier]:</p>
 + condition not used for now</p>
 </div>
 <div class="section" id="running-the-simulation">
-<h2>4.1.5. Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.7. Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this headline">¶</a></h2>
 <p>Illustration 1: terminal output after S.runsimul()</p>
 <ul class="simple">
 <li>would you like to erase previous txt files ?</li>
@@ -208,25 +186,28 @@ In Section [agentidentifier]:</p>
 <p>Illustration 3: exemple of contents of 1.ini file</p>
 </div>
 <div class="section" id="compute-and-exploit-pyray-with-the-given-simulnet-files">
-<h2>4.1.6. Compute and exploit pyray with the given simulnet files<a class="headerlink" href="#compute-and-exploit-pyray-with-the-given-simulnet-files" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.8. Compute and exploit pyray with the given simulnet files<a class="headerlink" href="#compute-and-exploit-pyray-with-the-given-simulnet-files" title="Permalink to this headline">¶</a></h2>
 <p>computation</p>
-<p>E.compute runs the pyray simulation for
-+ all anchors nodes (ap) to all mobile nodes (ag)
-+ all mobile nodes (ag) a time &#8216;t&#8217; all mobile nodes (ag) at the same time &#8216;t&#8217;</p>
+<p>E.compute runs the pyray simulation for</p>
+<ul class="simple">
+<li>all anchors nodes (ap) to all mobile nodes (ag)</li>
+<li>all mobile nodes (ag) a time &#8216;t&#8217; all mobile nodes (ag) at the same time &#8216;t&#8217;</li>
+</ul>
 <p>This operation can take a while.....</p>
 </div>
 <div class="section" id="results">
-<h2>4.1.7. Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<h2>4.1.9. Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
 <p>The simulation generates .mat files in directory <cite>ProjectDirectory/output/nodeid</cite></p>
 <p>Illustration 4: Contents of ProjectDirectory/output/1 and 6</p>
 <p>file name is build as follow : <cite>defaultcir-tx_node_id-rx_node_id-pposition_id</cite></p>
 <p>The position_id is related to the position number into
 <cite>ProjectDirectory/netsave/nodeid.ini</cite></p>
 </div>
-<div class="section" id="exploitation">
-<h2>4.1.8. Exploitation<a class="headerlink" href="#exploitation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="data-exploitation">
+<h2>4.1.10. Data exploitation<a class="headerlink" href="#data-exploitation" title="Permalink to this headline">¶</a></h2>
 <p>either</p>
 <p>or</p>
+<p>pltciri allows to interact with the plot to display the desired CIR.</p>
 <p>Invocate pltciri for 2 nodes for instance 1 and 6:</p>
 <p>The Layout and the nodes tracjectories are diplayed:</p>
 <p>On the figure press &#8216;t&#8217; and then click a point of the node trajectory ( for instance the
@@ -249,27 +230,15 @@ Press Enter to show the associated Channel impulse response (CIR)</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="antenna.html" title="5.1. Antenna format"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="simulem.html" title="3.1. module simulem"
-             >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User Manual</a> &raquo;</li>
-          <li><a href="tocmanual.html" >1. How to build a layout file  ?</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+        &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

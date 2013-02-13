@@ -8,15 +8,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>geomutil &mdash; PyLayers 0.1 documentation</title>
+    <title>geomutil &mdash; PyLayers</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,67 +25,27 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
-    <link rel="up" title="util" href="util.html" />
-    <link rel="next" title="graphutil" href="util.graphutil.html" />
-    <link rel="prev" title="util" href="util.html" />
-<script type="text/javascript">
-    
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34943220-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                   })();
-
-</script>
-
+    <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/logo.png" height="200" border="0" alt="pylayers"/></a>
+%<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
 </div>
 
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="util.graphutil.html" title="graphutil"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="util.html" title="util"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="util.html" accesskey="U">util</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="util.html"
-                        title="previous chapter">util</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="util.graphutil.html"
-                        title="next chapter">graphutil</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/modules/util.geomutil.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -110,32 +70,6 @@
   <div class="section" id="geomutil">
 <span id="id1"></span><h1>geomutil<a class="headerlink" href="#geomutil" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-pylayers.util.geomutil"></span><dl class="function">
-<dt id="pylayers.util.geomutil.AngleDir">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">AngleDir</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#AngleDir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.AngleDir" title="Permalink to this definition">¶</a></dt>
-<dd><p>evaluate (theta,phi) from direction vector</p>
-<div class="math">
-<p><img src="../_images/math/ca2fa66b2c7c19edea832340f66f03e50c179450.png" alt="\theta = \arccos{(\frac{\mathbf{s}}/\hat{\mathbf{z}})}"/></p>
-</div><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s</strong> :  ndarray</p>
-<blockquote>
-<div><p>direction (3 x N (sx,sy,sz) )</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>a</strong> : ndarray</p>
-<blockquote class="last">
-<div><p>angle    (2 x N (theta,phi) )</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="pylayers.util.geomutil.BTB_rx">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">BTB_rx</tt><big>(</big><em>a_g</em>, <em>T</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#BTB_rx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.BTB_rx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Produce a set of rotation matrices for passage between global and local frame</p>
@@ -145,7 +79,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a_g  :</strong> :</p>
 <blockquote>
-<div><p>angle in global reference frame      2 x N  :  (theta,phi) x N</p>
+<div><p>angle in global reference frame   2 x N  :  (theta,phi) x N</p>
 </div></blockquote>
 <p><strong>T    :</strong> :</p>
 <blockquote class="last">
@@ -157,7 +91,7 @@
 </table>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#pylayers.util.geomutil.AngleDir" title="pylayers.util.geomutil.AngleDir"><tt class="xref py py-obj docutils literal"><span class="pre">AngleDir</span></tt></a>, <a class="reference internal" href="#pylayers.util.geomutil.SphericalBasis" title="pylayers.util.geomutil.SphericalBasis"><tt class="xref py py-obj docutils literal"><span class="pre">SphericalBasis</span></tt></a></p>
+<p class="last"><a class="reference internal" href="#pylayers.util.geomutil.angledir" title="pylayers.util.geomutil.angledir"><tt class="xref py py-obj docutils literal"><span class="pre">angledir</span></tt></a>, <a class="reference internal" href="#pylayers.util.geomutil.SphericalBasis" title="pylayers.util.geomutil.SphericalBasis"><tt class="xref py py-obj docutils literal"><span class="pre">SphericalBasis</span></tt></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>N is the number or rays</p>
@@ -348,10 +282,6 @@ by default the geomview filename is base0.vect</p>
 </tr>
 </tbody>
 </table>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">colorbar depending of a value associated with point</p>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -422,35 +352,61 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 # 3 or 4 integers RGB[A] values 0..255
 #</p>
 <dl class="method">
-<dt id="pylayers.util.geomutil.Geomoff.parallepiped">
-<tt class="descname">parallepiped</tt><big>(</big><em>extrem</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomoff.parallepiped"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.parallepiped" title="Permalink to this definition">¶</a></dt>
-<dd><p>Geomview file for a parallepiped
-Parameters
-&#8212;&#8212;&#8212;-
-extrem : np.array(1x6)</p>
-<blockquote>
-<div>[xmin,xmax,ymin,ymax,zmin,zmax]</div></blockquote>
+<dt id="pylayers.util.geomutil.Geomoff.box">
+<tt class="descname">box</tt><big>(</big><em>extrem=array([-1</em>, <em>1</em>, <em>-1</em>, <em>1</em>, <em>-3</em>, <em>3])</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Geomview file for creating a box</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>extrem</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>(1x6) [xmin,xmax,ymin,ymax,zmin,zmax]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.util.geomutil.Geomoff.polygon">
 <tt class="descname">polygon</tt><big>(</big><em>p</em>, <em>poly</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomoff.polygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.polygon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create geomview off for polygon
-Parameters
-&#8212;&#8212;&#8212;-
-p    :
-poly :</p>
+<dd><p>create geomview off for polygon</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> : nparray</p>
+<blockquote>
+<div><p>sequence of points</p>
+</div></blockquote>
+<p><strong>poly</strong> : list</p>
+<blockquote class="last">
+<div><p>point numbers (index starting in 0)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.util.geomutil.Geomoff.polygons">
 <tt class="descname">polygons</tt><big>(</big><em>p</em>, <em>polys</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomoff.polygons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.polygons" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>create a gemoff file for a list of polygons</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p           :</strong> :</p>
-<p class="last"><strong>polys   :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> : nparray</p>
+<blockquote>
+<div><p>sequence of points</p>
+</div></blockquote>
+<p><strong>poly</strong> : list</p>
+<blockquote class="last">
+<div><p>point numbers (index starting in 0)</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -617,8 +573,8 @@ Author : Martin Laloux 2010</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.util.geomutil.Plot_shapely.plot_polygone">
-<tt class="descname">plot_polygone</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Plot_shapely.plot_polygone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Plot_shapely.plot_polygone" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.util.geomutil.Plot_shapely.plot_polygon">
+<tt class="descname">plot_polygon</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.Plot_shapely.plot_polygon" title="Permalink to this definition">¶</a></dt>
 <dd><p>polygons</p>
 </dd></dl>
 
@@ -797,19 +753,19 @@ We have Nx &gt;= Nc</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tcc</span><span class="p">,</span><span class="n">n</span>   <span class="o">=</span> <span class="n">polyg</span><span class="o">.</span><span class="n">ptconvex</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>  <span class="k">if</span> <span class="n">tcc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>  <span class="k">else</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>      <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>  <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">polyg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span>    <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tcc</span><span class="p">,</span><span class="n">n</span>   <span class="o">=</span> <span class="n">polyg</span><span class="o">.</span><span class="n">ptconvex</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poly</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#k = 0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#for p in points:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#  if tcc[k] == 1 :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;red&#39;,alpha=1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#  else:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#      plt.plot(p.x, p.y, &#39;o&#39;, color=&#39;blue&#39;,alpha=0.3)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#  k = k+1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#polyg.plot()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#plt.figure()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#poly    = Polygon(points)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#tcc,n   = polyg.ptconvex()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#poly.plot()</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/util-geomutil-3.py">Source code</a>)</p>
@@ -949,6 +905,37 @@ and its neighbors o 0/0.5*Pi/Pi/1.5*Pi/2*Pi.</p>
 </pre></div>
 </div>
 </dd></dl>
+
+<dl class="function">
+<dt id="pylayers.util.geomutil.angledir">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">angledir</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.angledir" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate (theta,phi) from direction vector</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s</strong> : ndarray N x 3</p>
+<blockquote>
+<div><p>N direction vector</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>a</strong> : ndarray 2xN</p>
+<blockquote class="last">
+<div><p>N angle (theta,phi)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">BTB_Rx</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">BTB_Tx</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<div class="math">
+<p><img src="../_images/math/13d7af59d92f9c67375166914e76b1fae555c0c9.png" alt="\theta = \arccos{(\frac{\mathbf{s}}{\hat{\mathbf{z}})}}"/></p>
+</div></dd></dl>
 
 <dl class="function">
 <dt id="pylayers.util.geomutil.angular">
@@ -1109,22 +1096,34 @@ ax : integer (0,1)</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ps</strong> : ndim x p</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ps</strong> : ndim x Np</p>
+<blockquote>
+<div><p>array of Np points</p>
+</div></blockquote>
 <p><strong>pt</strong> : ndim x 1</p>
-<p class="last"><strong>ph</strong> : ndim x 1</p>
+<blockquote>
+<div><p>tail coordinates of segment</p>
+</div></blockquote>
+<p><strong>ph</strong> : ndim x 1</p>
+<blockquote>
+<div><p>head coordinates of segment</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>d1</strong> : 1 x Np</p>
+<blockquote>
+<div><p>distance between pt and ortho projection of ps</p>
+</div></blockquote>
+<p><strong>d2</strong> : 1 x Np</p>
+<blockquote>
+<div><p>distance between ph and ortho projection of ps</p>
+</div></blockquote>
+<p class="last"><strong>h</strong> : distance between ps and ortho projection of ps</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">11</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">,</span><span class="n">h</span> <span class="o">=</span> <span class="n">dptseg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="function">
@@ -1202,23 +1201,35 @@ N     : descretization step</p>
 <dl class="function">
 <dt id="pylayers.util.geomutil.line_intersection">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">line_intersection</tt><big>(</big><em>l1</em>, <em>l2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#line_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.line_intersection" title="Permalink to this definition">¶</a></dt>
-<dd><p>intersection between two 2D lines using shapely
-Parameters
-&#8212;&#8212;&#8212;-</p>
+<dd><p>intersection between two 2D lines using shapely</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>l1: numpy.ndarray</strong> :</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>l1: numpy.ndarray</dt>
-<dd>coordinates of l1 points</dd>
+<div><blockquote>
+<div><p>coordinates of l1 points</p>
+</div></blockquote>
+<dl class="docutils">
 <dt>l2: numpy.ndarray</dt>
-<dd>coordinates of l2 points</dd>
+<dd><p class="first last">coordinates of l2 points</p>
+</dd>
 </dl>
 </div></blockquote>
-<blockquote>
+<p><strong>Returns</strong> :</p>
+<p><strong>&#8212;&#8212;-</strong> :</p>
+<blockquote class="last">
 <div><dl class="docutils">
 <dt>p: numpy.ndarray</dt>
-<dd>coordinates of intersection point</dd>
+<dd><p class="first last">coordinates of intersection point</p>
+</dd>
 </dl>
 </div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1246,7 +1257,7 @@ Parameters
 <dl class="function">
 <dt id="pylayers.util.geomutil.linet">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">linet</tt><big>(</big><em>ax</em>, <em>p1</em>, <em>p2</em>, <em>al=0.9</em>, <em>color='blue'</em>, <em>linewidth=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#linet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.linet" title="Permalink to this definition">¶</a></dt>
-<dd><p>draw a short line segment (not including extremities)</p>
+<dd><p>draw a short line segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1286,18 +1297,49 @@ Parameters
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span>  <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">p3</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p3</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/util-geomutil-6.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-6.png">png</a>, <a class="reference external" href="../modules/util-geomutil-6.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-6.pdf">pdf</a>)</p>
 <div class="figure">
 <img alt="../_images/util-geomutil-6.png" src="../_images/util-geomutil-6.png" />
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.util.geomutil.mirror">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">mirror</tt><big>(</big><em>p</em>, <em>pa</em>, <em>pb</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.mirror" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the mirror of p with respect to the segment pa pb</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> : numpy.ndarray</p>
+<blockquote>
+<div><blockquote>
+<div><p>point to image</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>pa <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
+<dd><p class="first last">segment tail</p>
+</dd>
+<dt>pb <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
+<dd><p class="first last">segment head</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>M</strong> : numpy.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1319,15 +1361,43 @@ Parameters
 </dd></dl>
 
 <dl class="function">
-<dt id="pylayers.util.geomutil.plotPolygon">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">plotPolygon</tt><big>(</big><em>poly</em>, <em>color='#abcdef'</em>, <em>alpha=0.8</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#plotPolygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.plotPolygon" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dt id="pylayers.util.geomutil.normalize">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">normalize</tt><big>(</big><em>vec</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>normalize an array of N ndim  vectors</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>poly</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>vec</strong> : ndarray (N x ndim)</p>
+<blockquote>
+<div><p>N ndim vectors</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>vecn</strong> : ndarray (N x ndim)</p>
+<blockquote class="last">
+<div><p>N normalized ndim vectors</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.util.geomutil.plotPolygon">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">plotPolygon</tt><big>(</big><em>poly</em>, <em>color='#abcdef'</em>, <em>alpha=0.8</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#plotPolygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.plotPolygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot a shapely Polygon</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>poly</strong> : shapely poligon</p>
 <p><strong>color</strong> : defauld #abcdef&#8221;</p>
-<p class="last"><strong>alpha</strong> : trnsparency   (default 0.8)</p>
+<p><strong>alpha</strong> : float</p>
+<blockquote class="last">
+<div><p>transparency   (default 0.8)</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -1394,8 +1464,10 @@ Parameters
 <dl class="function">
 <dt id="pylayers.util.geomutil.plot_coords2">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">plot_coords2</tt><big>(</big><em>ax</em>, <em>ob</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#plot_coords2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.plot_coords2" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">References</p>
-<p><a class="reference external" href="http://pypi.python.org/pypi/Shapely">http://pypi.python.org/pypi/Shapely</a></p>
+<dd><p>plot point from coordinates
+References
+&#8212;&#8212;&#8212;-
+<a class="reference external" href="http://pypi.python.org/pypi/Shapely">http://pypi.python.org/pypi/Shapely</a></p>
 </dd></dl>
 
 <dl class="function">
@@ -1455,8 +1527,21 @@ Parameters
 <dl class="function">
 <dt id="pylayers.util.geomutil.ptonseg">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">ptonseg</tt><big>(</big><em>pta</em>, <em>phe</em>, <em>pt</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#ptonseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.ptonseg" title="Permalink to this definition">¶</a></dt>
-<dd><p>ptonseg(pta,phe,pt):
-Return a point on the segment pta pte</p>
+<dd><p>Return a point on the segment pta pte</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pta</strong> : ndarray</p>
+<p><strong>phe</strong> : ndarray</p>
+<p><strong>pt</strong> : ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>p</strong> : ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1546,12 +1631,19 @@ Return a point on the segment pta pte</p>
 <dl class="function">
 <dt id="pylayers.util.geomutil.shrinkPolygon">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">shrinkPolygon</tt><big>(</big><em>poly</em>, <em>d=0.1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#shrinkPolygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.shrinkPolygon" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>shrink polygon</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>poly  :</strong> :</p>
-<p class="last"><strong>d</strong> : 0.1</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>poly</strong> : shapely polygon</p>
+<p><strong>d</strong> : float</p>
+<blockquote>
+<div><p>0.1</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>poly</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -1722,27 +1814,15 @@ tolerance length are identified.</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="util.graphutil.html" title="graphutil"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="util.html" title="util"
-             >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="util.html" >util</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+        &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

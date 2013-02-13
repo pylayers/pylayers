@@ -8,15 +8,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>network &mdash; PyLayers 0.1 documentation</title>
+    <title>network &mdash; PyLayers</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,67 +25,27 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
-    <link rel="up" title="network" href="network.html" />
-    <link rel="next" title="simul" href="simul.html" />
-    <link rel="prev" title="model" href="network.model.html" />
-<script type="text/javascript">
-    
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34943220-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                   })();
-
-</script>
-
+    <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/logo.png" height="200" border="0" alt="pylayers"/></a>
+%<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
 </div>
 
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="simul.html" title="simul"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="network.model.html" title="model"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="network.html" accesskey="U">network</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="network.model.html"
-                        title="previous chapter">model</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="simul.html"
-                        title="next chapter">simul</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/modules/network.network.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -111,7 +71,7 @@
 <span id="network"></span><span id="network-network"></span><h1>network<a class="headerlink" href="#module-pylayers.network.network" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.network.network.Network">
-<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0xb944dec&gt;</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0xef56c0c&gt;</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Network class
 inherit of networkx.Graph()</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -304,6 +264,16 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.network.network.Network.dual_save">
+<tt class="descname">dual_save</tt><big>(</big><em>S</em><big>)</big><a class="headerlink" href="#pylayers.network.network.Network.dual_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save txt</p>
+<dl class="docutils">
+<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
+<dd>Scipy.Simulation object</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.network.network.Network.get_RAT">
 <tt class="descname">get_RAT</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.get_RAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.get_RAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>get rat from nodes of the network</p>
@@ -424,6 +394,17 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.network.network.Network.loc_save">
+<tt class="descname">loc_save</tt><big>(</big><em>S</em><big>)</big><a class="headerlink" href="#pylayers.network.network.Network.loc_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save txt 
+node ID , True pos x , True pos y , est pos x , est pos y , timestamp</p>
+<dl class="docutils">
+<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
+<dd>Scipy.Simulation object</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.network.network.Network.mat_save">
 <tt class="descname">mat_save</tt><big>(</big><em>S</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.mat_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.mat_save" title="Permalink to this definition">¶</a></dt>
 <dd><p>save node positions into a matlab structure file</p>
@@ -457,7 +438,7 @@ OBSOLETE</p>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.show">
-<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xb95a3ac&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xe9818ec&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the network</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -474,16 +455,6 @@ OBSOLETE</p>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.network.Network.sql_save">
-<tt class="descname">sql_save</tt><big>(</big><em>S</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.sql_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.sql_save" title="Permalink to this definition">¶</a></dt>
-<dd><p>save network state into mysqldatabase</p>
-<dl class="docutils">
-<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
-<dd>Scipy.Simulation object</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
@@ -563,7 +534,7 @@ OBSOLETE</p>
 
 <dl class="class">
 <dt id="pylayers.network.network.Node">
-<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Node</tt><big>(</big><em>ID=0</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>t=1358873910.386856</em>, <em>pe=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>te=1358873910.386864</em>, <em>RAT=</em><span class="optional">[</span><span class="optional">]</span>, <em>epwr={}</em>, <em>sens={}</em>, <em>type='ag'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Node" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Node</tt><big>(</big><em>ID=0</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>t=1360693166.891773</em>, <em>pe=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>te=1360693166.891781</em>, <em>RAT=</em><span class="optional">[</span><span class="optional">]</span>, <em>epwr={}</em>, <em>sens={}</em>, <em>type='ag'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class Node
 inherit of networkx.Graph()</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -616,27 +587,15 @@ inherit of networkx.Graph()</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="simul.html" title="simul"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="network.model.html" title="model"
-             >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="network.html" >network</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+        &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

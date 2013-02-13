@@ -8,15 +8,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>layout &mdash; PyLayers 0.1 documentation</title>
+    <title>layout &mdash; PyLayers</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,67 +25,27 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers 0.1 documentation" href="../index.html" />
-    <link rel="up" title="gis" href="gis.html" />
-    <link rel="next" title="readvrml" href="gis.readvrml.html" />
-    <link rel="prev" title="gis" href="gis.html" />
-<script type="text/javascript">
-    
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34943220-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                   })();
-
-</script>
-
+    <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="../index.html"><img src="../_static/logo.png" height="200" border="0" alt="pylayers"/></a>
+%<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
 </div>
 
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="gis.readvrml.html" title="readvrml"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="gis.html" title="gis"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="gis.html" accesskey="U">gis</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="gis.html"
-                        title="previous chapter">gis</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="gis.readvrml.html"
-                        title="next chapter">readvrml</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/modules/gis.layout.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -406,7 +366,10 @@ create 2 segments with same properties</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> : list</p>
+<blockquote>
+<div><p>list of segment number on the link</p>
+</div></blockquote>
 <p class="last"><strong>theta</strong> :</p>
 </td>
 </tr>
@@ -414,8 +377,7 @@ create 2 segments with same properties</p>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;office.str&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">seglist</span><span class="p">,</span><span class="n">theta</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
@@ -650,7 +612,9 @@ This function requires graph Gt</div></blockquote>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.clip">
 <tt class="descname">clip</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>ymin</em>, <em>ymax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.clip" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the list of edges which cross or belong to the clipping zone</p>
+<dd><p>return the list of edges which cross or belong to the clipping zone
+DEPRECATED
+.. todo this is wrong</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -732,7 +696,19 @@ the AAS (Allowed Angular Sector)</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.del_subseg">
 <tt class="descname">del_subseg</tt><big>(</big><em>e1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.del_subseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.del_subseg" title="Permalink to this definition">¶</a></dt>
-<dd><p>del subseg information on e1</p>
+<dd><p>delete sub subsegent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<blockquote class="last">
+<div><p>segment number</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -866,9 +842,9 @@ al2</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.gis.layout.Layout.edit_edge">
-<tt class="descname">edit_edge</tt><big>(</big><em>e1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.edit_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_edge" title="Permalink to this definition">¶</a></dt>
-<dd><p>edit edge</p>
+<dt id="pylayers.gis.layout.Layout.edit_segment">
+<tt class="descname">edit_segment</tt><big>(</big><em>e1</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>edit segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -881,6 +857,26 @@ al2</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>A segment has the following compulsory properties :</dt>
+<dd><ul class="first last simple">
+<li>name  : string</li>
+<li>zmin  : float (meters)</li>
+<li>zmax  : float (meters)</li>
+<li>transition : boolean (default FALSE)</li>
+</ul>
+</dd>
+</dl>
+<p>If a segment has subsegments attached the following properties are
+added :</p>
+<blockquote>
+<div><ul class="simple">
+<li>ss_name : string</li>
+<li>ss_zmin : subsegment min height (meters)</li>
+<li>ss_zmax : subsegment max height (meters)</li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -1053,6 +1049,8 @@ p2 : (1 x 2 )</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>Available format are .ini , .str2 , .str</p>
 </dd></dl>
 
 <dl class="method">
@@ -1158,6 +1156,24 @@ Those file are placed in the layout directory</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.gis.layout.Layout.loadini">
+<tt class="descname">loadini</tt><big>(</big><em>_fileini</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.loadini" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a structure file in .ini format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
+<blockquote class="last">
+<div><p>file name extension .ini</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.gis.layout.Layout.loadlay">
 <tt class="descname">loadlay</tt><big>(</big><em>_filelay</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.loadlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.loadlay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads Layout&#8217;s lay file which contains graphs values.</p>
@@ -1187,8 +1203,6 @@ Those file are placed in the layout directory</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ncoin</span><span class="p">,</span><span class="n">ndiff</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">buildGc</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGr</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_filelay</span> <span class="o">=</span> <span class="s">&#39;exemple.lay&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data_graph</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">loadlay</span><span class="p">(</span><span class="n">_filelay</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1295,7 +1309,8 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_filename</span> <span class="ow">in</span> <span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fillist</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">ls</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">_filename</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>   <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span>   <span class="n">L</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>   <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
@@ -1567,6 +1582,24 @@ tol = 0.01      tolerance</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.gis.layout.Layout.saveini">
+<tt class="descname">saveini</tt><big>(</big><em>_fileini</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.saveini" title="Permalink to this definition">¶</a></dt>
+<dd><p>save structure in an ini file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
+<blockquote class="last">
+<div><p>short filnemame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.gis.layout.Layout.savelay">
 <tt class="descname">savelay</tt><big>(</big><em>_fileGv</em>, <em>_filelay</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.savelay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.savelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates Layout&#8217;s lay file which contains graphs values.</p>
@@ -1626,10 +1659,6 @@ furniture :  boolean</p>
 <p>To produce the .str file</p>
 <blockquote>
 <div>&gt; newstruc -str2 file.str2 -conf ../project.conf</div></blockquote>
-<div class="admonition-todo admonition" id="index-0">
-<p class="first admonition-title">Todo</p>
-<p class="last">Create a savestr from the Layout Class requires Gv</p>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -1824,7 +1853,10 @@ p2 : numpy.ndarray</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/gis-layout-3.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/gis-layout-3.py">Source code</a>, <a class="reference external" href="../modules/gis-layout-3.png">png</a>, <a class="reference external" href="../modules/gis-layout-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-3.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/gis-layout-3.png" src="../_images/gis-layout-3.png" />
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1930,7 +1962,7 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xbdfae6c&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xcbc356c&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2212,27 +2244,15 @@ Occultation 8  situations
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="gis.readvrml.html" title="readvrml"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="gis.html" title="gis"
-             >previous</a> |</li>
-        <li><a href="../index.html">home</a>|&nbsp;</li>
-        <li><a href="../search.html">search</a>|&nbsp;</li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="gis.html" >gis</a> &raquo;</li> 
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+        &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

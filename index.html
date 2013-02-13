@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,15 +7,16 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>PyLayers : Python mobile Localization Electromagnetics Radio Simulator &mdash; PyLayers 0.1 documentation</title>
+    <title>Overview &mdash; PyLayers</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/force/force.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,94 +25,73 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyLayers 0.1 documentation" href="#" />
-    <link rel="next" title="User Manual" href="manual/index.html" />
-<script type="text/javascript">
-    
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34943220-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                   })();
-
-</script>
-
+    <script type="text/javascript" src="_static/force/d3js/d3.min.js"></script>
+    <script type="text/javascript" src="_static/force/d3js/d3.geom.min.js"></script>
+    <script type="text/javascript" src="_static/force/d3js/d3.layout.min.js"></script>
+    <link rel="top" title="PyLayers" href="#" /> 
   </head>
   <body>
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="#"><img src="_static/logo.png" height="200" border="0" alt="pylayers"/></a>
+%<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+<a href="#"><img src="_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
 </div>
 
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="manual/index.html" title="User Manual"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
+        <li><a href="#">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
  
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">PyLayers : Python mobile Localization Electromagnetics Radio Simulator</a></li>
-<li><a class="reference internal" href="#example">Example</a></li>
-<li><a class="reference internal" href="#context">Context</a></li>
-<li><a class="reference internal" href="#features">Features</a><ul>
-<li><a class="reference internal" href="#indoor-layout">Indoor Layout</a></li>
-<li><a class="reference internal" href="#antenna-propagation-modeling">Antenna &amp; Propagation Modeling</a></li>
-<li><a class="reference internal" href="#signal-processing">Signal Processing</a></li>
-<li><a class="reference internal" href="#agent-mobility-handling">Agent Mobility Handling</a></li>
-<li><a class="reference internal" href="#localization-algorithms">Localization Algorithms</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#documentation">Documentation</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#third-party-packages">Third party packages</a></li>
-<li><a class="reference internal" href="#developpers">Developpers</a></li>
-<li><a class="reference internal" href="#download-and-installation">Download and Installation</a></li>
-<li><a class="reference internal" href="#mailing-list">Mailing List</a></li>
-<li><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
-<li><a class="reference internal" href="#license">License</a></li>
-</ul>
+<div class="sidebarblock">
+        <h3>Versions</h3>
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="manual/index.html"
-                        title="next chapter">User Manual</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+        <div class="tile">
+                <h4>Latest Release</h4>
+        0.1 &ndash; February 2013<br/>
+        <a href="http://pypi.python.org/pypi/networkx/">downloads</a> | <a
+            href="http://pylayers.github.com/pylayers/documentation/latest/">docs</a>
+        | <a href="http://pylayers.github.com/documentation/latest/_downloads/pylayers_reference.pdf">pdf</a>
+        </div>
+
+        <div class="tile">
+                <h4>Development</h4>
+        0.1dev<br/>
+        <a href="https://github.com/pylayers/pylayers">github</a> | <a 
+href="http://pylayers.github.com/documentation/development/">docs</a> | <a
+href="http://pylayers.github.com/documentation/development/_downloads/networkx_reference.pdf">pdf</a>
+        </br>
+    </div>
+
+    
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<div class="sidebarblock">
+<h3>Contact</h3>
+  <ul class="simple">
+    <li>
+        <a class="reference external"
+            href="http://groups.google.com/group/pylayers-users/">
+            User mailing list</a> 
+        </li>
+
+    <li><a class="reference external" href="https://github.com/pylayers/pylayers/issues">
+            Issue tracker</a></li>
+
+    <li><a class="reference external" href="http://pylayers.github.com/documentation/development/developer">
+            Developer guide</a></li>
+
+  </ul>
+<a href="https://github.com/pylayers/pylayers"> 
+<img src='_static/github.jpg' alt='octocat' width=96>
+</a>
+
+</div>
         </div>
       </div>
 
@@ -121,165 +100,54 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pylayers-python-mobile-localization-electromagnetics-radio-simulator">
-<h1>PyLayers : Python mobile Localization Electromagnetics Radio Simulator<a class="headerlink" href="#pylayers-python-mobile-localization-electromagnetics-radio-simulator" title="Permalink to this headline">¶</a></h1>
-<p>Pylayers is a mobile radio propagation simulator. Its purpose is to help
+<h2>Python Propagation Simulator for Mobile Localisation </h2>
+
+<table align="left" style="margin-left: 0px">
+<tr>
+  <td width="60%">
+<blockquote>
+<p>PyLayers is a mobile radio propagation simulator. Its purpose is to help
 designing localization and tracking algorithms for advanced communications
-systems. It might be hopefully useful for illustrating various topics
-on wireless communications and localization systems in higher
-education.</p>
-</div>
-<div class="section" id="example">
-<h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+systems </p>
+</blockquote>
+  </td>
+    <td width="40%">
+</td></tr>
+</table>
 
-<span class="gp">In [2]: </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<table class="contentstable" align="center" style="margin-left: 30px"><tr>
+  <td width="20%">
+    <p class="biglink"><a class="biglink" href="manual/notebook.html">Documentation</a><br/>
+       <span class="linkdescr">all documentation</span></p>
+  </td>
+  <td width="20%">
+    <p class="biglink"><a class="biglink" href="examples.html">Examples</a><br/>
+       <span class="linkdescr">using the library</span></p>
+  </td>
+  <td width="20%">
+      <p class="biglink"><a class="biglink" href="modules/index.html">Reference</a><br/>
+       <span class="linkdescr">all functions and methods</span></p>
+  </td></tr>
+  <td width="20%">
+    <p class="biglink"><a class="biglink"
+        href="acknowledgments.html">Acknowledgements</a><br/>
+       <span class="linkdescr"></span></p>
+  </td></tr>
+</table>
 
-<span class="gp">In [3]: </span><span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+<h2>Features</h2>
+<ul class="simple">
+<li> Indoor layout edition  
+<li> Sepate modules for handling material,slab,antennas,channel, mobility
+<li> Handling of UWB waveforms
+<li> Motley Keenan multiwall model
+<li> Ray tracing tool based on layout graph extraction and evaluation of ray signatures 
+<li> Agent mobility based on SimPy
+<li> Localization algorithms toolbox
+<li> Open source <a href="documentation/latest/reference/legal.html">GPL license</a> </li>
+<li> Additional benefits from Python: fast prototyping, easy to teach, multi-platform</li>
+</ul>
 
-<span class="gp">In [4]: </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-
-<span class="gp">In [5]: </span><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
-
-<span class="gp">In [6]: </span><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="_images/coverexampleo.png" src="_images/coverexampleo.png" style="width: 5in;" />
-<img alt="_images/coverexamplep.png" src="_images/coverexamplep.png" style="width: 5in;" />
-</div>
-<div class="section" id="context">
-<h1>Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h1>
-<p>PyLayers is being developed for research into radio localization exploiting impulse radio
-signals as being defined in the IEEE 802.15.4a and 802.15.6 standards.
-Pylayers could also evolved to help with studies related to channel characterization,
-Wireless Sensor Network, MANET, radio cooperation and relaying techniques,
-physical layer security, WBAN applications, advanced home automation, aware environments ...</p>
-<p>Pylayers is modular and designed to be easily extended,
-allowing it to evolve over the time as a tool for research and development in a wide range
-of communications and localization topics.</p>
-</div>
-<div class="section" id="features">
-<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="indoor-layout">
-<h2>Indoor Layout<a class="headerlink" href="#indoor-layout" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Layout edition</li>
-<li>Extensive graph description of layout</li>
-</ul>
-</div>
-<div class="section" id="antenna-propagation-modeling">
-<h2>Antenna &amp; Propagation Modeling<a class="headerlink" href="#antenna-propagation-modeling" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Full space vector antenna patterns using a sparse spherical harmonics representation</li>
-<li>Multi layers transmission coefficients</li>
-<li>Motley Keenan model</li>
-<li>Ray signature determination and analysis</li>
-<li>Embedded C coded UWB ray tracing engine</li>
-</ul>
-</div>
-<div class="section" id="signal-processing">
-<h2>Signal Processing<a class="headerlink" href="#signal-processing" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Impulse Radio Ultra Wideband Waveforms</li>
-<li>custom class for UWB signal processing</li>
-<li>Time of Arrival ranging estimation</li>
-</ul>
-</div>
-<div class="section" id="agent-mobility-handling">
-<h2>Agent Mobility Handling<a class="headerlink" href="#agent-mobility-handling" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Mobile user mobility based on <a class="reference external" href="http://simpy.sourceforge.net">SimPy</a></li>
-</ul>
-</div>
-<div class="section" id="localization-algorithms">
-<h2>Localization Algorithms<a class="headerlink" href="#localization-algorithms" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Set Membership positioning algorithm toolbox</li>
-<li>Heterogeneous positioning toolbox</li>
-</ul>
-</div>
-</div>
-<div class="section" id="documentation">
-<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
-<p>Pylayers is still in an early stage of its development. The code as well as the
-documentation are in a beta version. The user manual section is embryonary and
-will be regularly populated with new examples of utilization. Pylayers is
-better used in association with <a class="reference external" href="http://ipython.org">ipython</a></p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="manual/index.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual/notebook.html">notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/index.html">User references</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="third-party-packages">
-<h1>Third party packages<a class="headerlink" href="#third-party-packages" title="Permalink to this headline">¶</a></h1>
-<p>Pylayers is written in Python and is standing on the shoulders of the
-following giant Python packages:</p>
-<ul class="simple">
-<li>numpy ( for algebra in multi dimensions )</li>
-<li>scipy ( for scientific libraries )</li>
-<li>SimPy ( for discrete events simulation )</li>
-<li>matplotlib ( for the graphical outputs )</li>
-<li>networkx ( for graph description and algorithms )</li>
-<li>shapely ( for planar geometry )</li>
-<li>ipython ( to rule them all ... )</li>
-</ul>
-<p>Pylayers relies also on the interactive 3D viewing program <a class="reference external" href="http://www.geomview.org">geomview</a> tool for fast and simple interaction with 3D entities.</p>
-</div>
-<div class="section" id="developpers">
-<h1>Developpers<a class="headerlink" href="#developpers" title="Permalink to this headline">¶</a></h1>
-<p>Pylayers is driven by professor Bernard Uguen at <a class="reference external" href="http://www.univ-rennes1.fr/english">University of Rennes 1</a>, <a class="reference external" href="http://www.ietr.fr/">IETR laboratory</a> and
-<a class="reference external" href="http://esir.univ-rennes1.fr/">ESIR school of engineering</a></p>
-<p>Pylayers is currently developed at IETR  by Bernard Uguen, Nicolas Amiot, Mohamed
-Laaraiedh and Meriem Mhedbhi, with the technical support of all the members from the
-Research Team of the Propagation and Localization team of the <a class="reference external" href="http://www.ietr.fr">IETR</a> lab.</p>
-<p>Among early pylayers contributors : Friedman Tchoffo Talom, Louis Marie Aubert, Roxana Burghelea, Yu Lei, Taguhi
-Chaluyman, Stéphane Avrillon and Eric Plouhinec (Saint-Cyr CREC research center).</p>
-</div>
-<div class="section" id="download-and-installation">
-<h1>Download and Installation<a class="headerlink" href="#download-and-installation" title="Permalink to this headline">¶</a></h1>
-<p>The current version is tagged 0.1.</p>
-<p>Download the last release in your preferred format on github.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git clone https://github.com/pylayers/pylayers.git
-</pre></div>
-</div>
-<p>We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project</p>
-<p><strong>Just fork it !</strong> on your github account and get in touch on the mailing list
-if you get some interest or see practical applications.</p>
-</div>
-<div class="section" id="mailing-list">
-<h1>Mailing List<a class="headerlink" href="#mailing-list" title="Permalink to this headline">¶</a></h1>
-<p>There is a &#8220;<a class="reference external" href="http://groups.google.com/group/pylayers-users">http://groups.google.com/group/pylayers-users</a>&#8221; mailing list for
-users of Pylayers on which you can get help with using or extending the
-software. New releases will also be announced on the mailing list.</p>
-</div>
-<div class="section" id="acknowledgements">
-<h1>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h1>
-<p>This work has been supported by the Bretagne Region council (Project LOCUS), by the french ANR
-project AUBADE and CORMORAN and by the European projects <a class="reference external" href="http://www.ist-ucells.org/">FP7 UCELLS</a>,
-FP7 WHERE1, <a class="reference external" href="http://www.ict-where.eu/">FP7 WHERE2</a>.</p>
-<a class="reference external image-reference" href="http://www.univ-rennes1.fr/english"><img alt="_images/logoUR1.jpg" src="_images/logoUR1.jpg" /></a>
-<a class="reference external image-reference" href="http://www.ietr.fr/"><img alt="_images/logoIETR.jpg" src="_images/logoIETR.jpg" /></a>
-<a class="reference external image-reference" href="http://esir.univ-rennes1.fr/"><img alt="_images/logoESIR.png" src="_images/logoESIR.png" /></a>
-<a class="reference external image-reference" href="http://www.louisbourdon.com/index.htm"><img alt="_images/bretagnegd.jpg" src="_images/bretagnegd.jpg" /></a>
-<a class="reference internal image-reference" href="_images/fp7.png"><img alt="_images/fp7.png" src="_images/fp7.png" /></a>
-<a class="reference internal image-reference" href="_images/ucells.png"><img alt="_images/ucells.png" src="_images/ucells.png" /></a>
-<a class="reference internal image-reference" href="_images/where1logo.jpg"><img alt="_images/where1logo.jpg" src="_images/where1logo.jpg" /></a>
-<a class="reference external image-reference" href="http://www.ict-where.eu/"><img alt="_images/WHERE2_Logo.jpg" src="_images/WHERE2_Logo.jpg" /></a>
-<a class="reference internal image-reference" href="_images/logo_CORMORAN.png"><img alt="_images/logo_CORMORAN.png" src="_images/logo_CORMORAN.png" /></a>
-<a class="reference internal image-reference" href="_images/IR.png"><img alt="_images/IR.png" src="_images/IR.png" /></a>
-</div>
-<div class="section" id="license">
-<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
-<p>Copyright ©, 2013 University of Rennes 1</p>
-<p>Pylayers is free software: you can redistribute it and/or modify it under the
-terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.</p>
-<p>Pylayers is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</p>
-</div>
 
 
           </div>
@@ -290,22 +158,15 @@ version.</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="manual/index.html" title="User Manual"
-             >next</a> |</li>
-        <li><a href="#">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
+        <li><a href="#">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
  
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Bernard Uguen,Mohamedh Laaraiedh,Nicolas Amiot.
+        &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

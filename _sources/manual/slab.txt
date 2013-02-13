@@ -20,7 +20,7 @@ project structure.
     A slab is a sandwich (list) of one or several material with an associated
     thickness
 
-The material database is store in a simple ASCII .ini file as well as the slab
+The material database is stored in a simple ASCII .ini file as well as the slab
 database. 
 
 To instantiate a Slab object it is required to provide both the information of
@@ -31,16 +31,13 @@ consistent.
     check database consistency 
 
 The default name for those 2 databases are `matDB.ini` and  `slabDB.ini`.
-There exist adder and getter for populating this database and saving it in a
-new file. This make sense because each layout may have it's own associated
-slab database.
 
 
 .. code:: python
 
     sl=SlabDB('matDB.ini','slabDB.ini')
 
-The correspondence between an integer and the name of the available
+The association between an integer and the name of the available
 slabs is available in `sl.di` dictionary. This association is required
 for compatibility with EM solver PulsRay which needs an associated
 numerical value for each slab. 
@@ -75,8 +72,8 @@ numerical value for each slab.
      20: 'PLASTERBOARD_7CM'}
 
 The materials database becomes a member of the slab database, and 
-there is also an ad-hoc dictionary available in order 
-to keep the association between a material id and the material name.
+there is also an other dictionary for keeping the association between a
+material id and a material name.
 
 .. code:: python
 
