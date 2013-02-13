@@ -140,8 +140,14 @@ class Save(Process):
 
 
         savecfg,d=self.load(self.filename+'.tmp')
+        pdb.set_trace()
+        # need to sort the time stamp 
+        TS = np.array((d.keys()))
+        sTSi=np.argsort(TS)
+        sTS=np.sort(TS)
+
         self.savemat={}
-        self.savemat['timestamp']=np.array((d.keys()))
+        self.savemat['timestamp']=sTS
 
 
         ##### init
@@ -164,7 +170,7 @@ class Save(Process):
 
     
         ### fill in dict
-        for t in d.keys():
+        for t in sTS:
             for p in savecfg['lpos']:
                 for n in d[t][p].keys():
                     # handle matlab struct name cannot be a number
@@ -191,7 +197,7 @@ class Save(Process):
 #                            self.savemat[dkey][p]=d[t][p][n]
 
                    ############### links
-        for t in d.keys():
+        for t in sTS:
             for r in savecfg['lrat']:
                 for l in savecfg['lldp']:
                     for ii in d[t][r][l].keys():
@@ -214,7 +220,6 @@ class Save(Process):
                                     self.savemat[dkey][r][l]['node_'+ii[0]]=d[t][r][l][ii]
 
 
-        pdb.set_trace()
         if  etype == 'matlab':
             spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
         if  etype == 'python':
@@ -248,8 +253,6 @@ class Save(Process):
             self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename+'.tmp','a')
             pickle.dump(self.save, self.file)
             self.file.close()
-#            pdb.set_trace()
-#            spio.savemat('test',{'save':self.save})
             yield hold, self, eval(self.opt['save_update_time'])
 
 
