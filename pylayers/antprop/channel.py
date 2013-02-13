@@ -627,8 +627,10 @@ class VectChannel(Ctilde):
 
         Parameters
         ----------
+
         id : int
             index of filetra
+
         """
         E = self.Ctt.energy() + self.Ctp.energy() + \
             self.Cpt.energy() + self.Cpp.energy()

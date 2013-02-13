@@ -2,36 +2,17 @@
 
 
 {% block rootrellink %}
-        <li><a href="{{ pathto('index') }}">home</a>|&nbsp;</li>
-        <li><a href="{{ pathto('search') }}">search</a>|&nbsp;</li>
+        <li><a href="{{ pathto('index') }}">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="{{ pathto('documentation') }}">Documentation </a> |&nbsp;</li>
+        <li><a href="{{ pathto('download') }}">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 {% endblock %}
-
 
 {% block relbar1 %}
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+%<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
 <a href="{{ pathto('index') }}"><img src="{{
-pathto("_static/logo.png", 1) }}" height="200" border="0" alt="pylayers"/></a>
+    pathto("_static/logo.png", 1) }}" height="200" border="0"
+    alt="pylayers"/></a>
 </div>
 {{ super() }}
-{% endblock %}
-
-{# put the sidebar before the body #}
-{% block sidebar1 %}{{ sidebar() }}{% endblock %}
-{% block sidebar2 %}{% endblock %}
-
-{% block extrahead %}
-<script type="text/javascript">
-    
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-34943220-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-       ga.src = ('https:' == document.location.protocol ?  'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                   })();
-
-</script>
 {% endblock %}

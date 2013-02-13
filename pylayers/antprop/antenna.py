@@ -38,7 +38,7 @@ from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
 #from spharm import Spharmt,getspecindx
 from pylayers.util.project import *
-from sphere import spherepack, Wrapec, mathtogeo
+#from sphere import spherepack, Wrapec, mathtogeo
 
 from matplotlib.font_manager import FontProperties
 from mpl_toolkits.mplot3d import axes3d
@@ -87,7 +87,7 @@ def indexvsh(L):
 
 
 def index_vsh(L, M):
-    """ vector sperical harmonics indexing
+    """ vector spherical harmonics indexing
 
     Parameters
     ----------
@@ -1120,11 +1120,11 @@ class Antenna(object):
         .. math::
 
             \epsilon_r^{\\theta} =
-            \\frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta)(\phi)|^2}
+            \\frac{|F_{\\theta}(\\theta,\phi)-\hat{F}_{\\theta}(\\theta,\phi)|^2}
                  {|F_{\\theta}(\\theta,\phi)|^2}
 
             \epsilon_r^{\phi} =
-            \\frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta)(\phi)|^2}
+            \\frac{|F_{\phi}(\\theta,\phi)-\hat{F}_{\phi}(\\theta,\phi)|^2}
                  {|F_{\\theta}(\\theta,\phi)|^2}
 
 
@@ -1766,181 +1766,182 @@ class Antenna(object):
         EFph = Fph * E
         self.Fphi = EFph.reshape(sh[0], sh[1], sh[2])
 
-    def vshd(self, dsf=1):
-        """
-
-        Parameters
-        ----------
-        dsf :  int
-            down sampling factor  'default 1'
-
-        Summary
-        -------
-
-        This function calculates the Vector Spherical Harmonics coefficients
-        It makes use of the spherepack function vha
-
-            m : phi    longitude
-            n : theta  latitude
-
-        Antenna pattern are stored       (f theta phi)
-        Coeff are stored with this order (f , n , m )
-
-        The vsh coefficient are organized differently
-        should be better for compression along frequency axis
-
-
-        """
-
-        th = self.theta[::dsf]
-        ph = self.phi[::dsf]
-
-        nth = len(th)
-        nph = len(ph)
-        nf = self.Nf
-
-        if (nph % 2) == 1:
-            mdab = min(nth, (nph + 1) / 2)
-        else:
-            mdab = min(nth, nph / 2)
-
-        ndab = nth
-
-        Br = 1j * np.zeros((nf, ndab, mdab))
-        Bi = 1j * np.zeros((nf, ndab, mdab))
-        Cr = 1j * np.zeros((nf, ndab, mdab))
-        Ci = 1j * np.zeros((nf, ndab, mdab))
-
-        gridComp = Wrapec()
-        wvha, lvha = gridComp.vhai(nth, nph)
-
-        for k in range(nf):
-            #
-            # Real part
-            #
-            Fpr = self.Fphi[k][::dsf, ::dsf].real
-            Ftr = self.Ftheta[k][::dsf, ::dsf].real
-            #
-            # Fpr     Ntheta,Nphi
-            #
-            brr, bir, crr, cir = gridComp.vha(nth, nph, 1,
-                                              lvha, wvha,
-                                              np.transpose(Fpr),
-                                              np.transpose(Ftr))
-            #
-            # Imaginary part
-            #
-            Fpi = self.Fphi[k][::dsf, ::dsf].imag
-            Fti = self.Ftheta[k][::dsf, ::dsf].imag
-            bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
-                                              lvha, wvha,
-                                              np.transpose(Fpi),
-                                              np.transpose(Fti))
-
-            Br[k, :, :] = brr + 1j * bri
-            Bi[k, :, :] = bir + 1j * bii
-            Cr[k, :, :] = crr + 1j * cri
-            Ci[k, :, :] = cir + 1j * cii
-
-        #
-        # m=0 row is multiplied by 0.5
-        #
-
-        Br[:, :, 0] = 0.5 * Br[:, :, 0]
-        Bi[:, :, 0] = 0.5 * Bi[:, :, 0]
-        Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
-        Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
-
-        #print "self.fa[0] = ",self.fa[0]
-        #print "self.fa[-1] = ",self.fa[-1]
-
-        Br = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Br)
-        Bi = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Bi)
-        Cr = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Cr)
-        Ci = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Ci)
-
-        self.C = VSHCoeff(Br, Bi, Cr, Ci)
-
-    def vsh(self):
-        """ calculates the Vector Spherical Harmonics coefficients
-
-        Summary
-        -------
-
-        It makes use of the spherepack function vha
-
-            m : phi    longitude
-            n : theta  latitude
-
-        Antenna pattern are stored       (f theta phi)
-        Coeff are stored with this order (f , n , m )
-
-        The vsh coefficient are organized differently
-        should be better for compression along frequency axis
-
-        """
-
-        nt = self.Nt
-        np = self.Np
-        nf = self.Nf
-
-        if np % 2:
-            mdab = min(nt, (np + 1) / 2)
-        else:
-            mdab = min(nt, np / 2)
-
-        ndab = nt
-
-        Br = 1j * np.zeros((nf, ndab, mdab))
-        Bi = 1j * np.zeros((nf, ndab, mdab))
-        Cr = 1j * np.zeros((nf, ndab, mdab))
-        Ci = 1j * np.zeros((nf, ndab, mdab))
-
-        gridComp = Wrapec()
-        wvha, lvha = gridComp.vhai(nt, np)
-
-        for k in range(nf):
-            #
-            # Real part
-            #
-            Fpr = self.Fphi[k].real
-            Ftr = self.Ftheta[k].real
-            #
-            # Fpr     Ntheta,Nphi
-            #
-            brr, bir, crr, cir = gridComp.vha(nt, np, 1, lvha,
-                                              wvha, transpose(Fpr), transpose(Ftr))
-            #
-            # Imaginary part
-            #
-            Fpi = self.Fphi[k].imag
-            Fti = self.Ftheta[k].imag
-            bri, bii, cri, cii = gridComp.vha(nt, np, 1, lvha,
-                                              wvha, transpose(Fpi), transpose(Fti))
-
-            Br[k, :, :] = brr + 1j * bri
-            Bi[k, :, :] = bir + 1j * bii
-            Cr[k, :, :] = crr + 1j * cri
-            Ci[k, :, :] = cir + 1j * cii
-
-        #
-        # m=0 row is multiplied by 0.5
-        #
-
-        Br[:, :, 0] = 0.5 * Br[:, :, 0]
-        Bi[:, :, 0] = 0.5 * Bi[:, :, 0]
-        Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
-        Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
-
-        #print "self.fa[0] = ",self.fa[0]
-        #print "self.fa[-1] = ",self.fa[-1]
-
-        Br = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Br)
-        Bi = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Bi)
-        Cr = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Cr)
-        Ci = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Ci)
-
-        self.C = VSHCoeff(Br, Bi, Cr, Ci)
+#    def vshd(self, dsf=1):
+#        """
+#
+#        Parameters
+#        ----------
+#        dsf :  int
+#            down sampling factor  'default 1'
+#
+#        Summary
+#        -------
+#
+#        This function calculates the Vector Spherical Harmonics coefficients
+#        It makes use of the spherepack function vha
+#
+#            m : phi    longitude
+#            n : theta  latitude
+#
+#        Antenna pattern are stored       (f theta phi)
+#        Coeff are stored with this order (f , n , m )
+#
+#        The vsh coefficient are organized differently
+#        should be better for compression along frequency axis
+#
+#
+#        """
+#
+#        th = self.theta[::dsf]
+#        ph = self.phi[::dsf]
+#
+#        nth = len(th)
+#        nph = len(ph)
+#        nf = self.Nf
+#
+#        if (nph % 2) == 1:
+#            mdab = min(nth, (nph + 1) / 2)
+#        else:
+#            mdab = min(nth, nph / 2)
+#
+#        ndab = nth
+#
+#        Br = 1j * np.zeros((nf, ndab, mdab))
+#        Bi = 1j * np.zeros((nf, ndab, mdab))
+#        Cr = 1j * np.zeros((nf, ndab, mdab))
+#        Ci = 1j * np.zeros((nf, ndab, mdab))
+#
+#        gridComp = Wrapec()
+#        wvha, lvha = gridComp.vhai(nth, nph)
+#
+#        for k in range(nf):
+#            #
+#            # Real part
+#            #
+#            Fpr = self.Fphi[k][::dsf, ::dsf].real
+#            Ftr = self.Ftheta[k][::dsf, ::dsf].real
+#            #
+#            # Fpr     Ntheta,Nphi
+#            #
+#            brr, bir, crr, cir = gridComp.vha(nth, nph, 1,
+#                                              lvha, wvha,
+#                                              np.transpose(Fpr),
+#                                              np.transpose(Ftr))
+#            #
+#            # Imaginary part
+#            #
+#            Fpi = self.Fphi[k][::dsf, ::dsf].imag
+#            Fti = self.Ftheta[k][::dsf, ::dsf].imag
+#            bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
+#                                              lvha, wvha,
+#                                              np.transpose(Fpi),
+#                                              np.transpose(Fti))
+#
+#            Br[k, :, :] = brr + 1j * bri
+#            Bi[k, :, :] = bir + 1j * bii
+#            Cr[k, :, :] = crr + 1j * cri
+#            Ci[k, :, :] = cir + 1j * cii
+#
+#        #
+#        # m=0 row is multiplied by 0.5
+#        #
+#
+#        Br[:, :, 0] = 0.5 * Br[:, :, 0]
+#        Bi[:, :, 0] = 0.5 * Bi[:, :, 0]
+#        Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
+#        Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
+#
+#        #print "self.fa[0] = ",self.fa[0]
+#        #print "self.fa[-1] = ",self.fa[-1]
+#
+#        Br = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Br)
+#        Bi = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Bi)
+#        Cr = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Cr)
+#        Ci = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Ci)
+#
+#        self.C = VSHCoeff(Br, Bi, Cr, Ci)
+#
+#    def vsh(self):
+#        """ calculates the Vector Spherical Harmonics coefficients
+#
+#        Summary
+#        -------
+#
+#        It makes use of the spherepack function vha
+#
+#            m : phi    longitude
+#            n : theta  latitude
+#
+#        Antenna pattern are stored       (f theta phi)
+#        Coeff are stored with this order (f , n , m )
+#
+#        The vsh coefficient are organized differently
+#        should be better for compression along frequency axis
+#
+#        """
+#
+#        nt = self.Nt
+#        np = self.Np
+#        nf = self.Nf
+#
+#        if np % 2:
+#            mdab = min(nt, (np + 1) / 2)
+#        else:
+#            mdab = min(nt, np / 2)
+#
+#        ndab = nt
+#
+#        Br = 1j * np.zeros((nf, ndab, mdab))
+#        Bi = 1j * np.zeros((nf, ndab, mdab))
+#        Cr = 1j * np.zeros((nf, ndab, mdab))
+#        Ci = 1j * np.zeros((nf, ndab, mdab))
+#
+#        gridComp = Wrapec()
+#        wvha, lvha = gridComp.vhai(nt, np)
+#
+#        for k in range(nf):
+#            #
+#            # Real part
+#            #
+#            Fpr = self.Fphi[k].real
+#            Ftr = self.Ftheta[k].real
+#            #
+#            # Fpr     Ntheta,Nphi
+#            #
+#            brr, bir, crr, cir = gridComp.vha(nt, np, 1, lvha,
+#                                              wvha, transpose(Fpr), transpose(Ftr))
+#            #
+#            # Imaginary part
+#            #
+#            Fpi = self.Fphi[k].imag
+#            Fti = self.Ftheta[k].imag
+#            bri, bii, cri, cii = gridComp.vha(nt, np, 1, lvha,
+#                                              wvha, transpose(Fpi), transpose(Fti))
+#
+#            Br[k, :, :] = brr + 1j * bri
+#            Bi[k, :, :] = bir + 1j * bii
+#            Cr[k, :, :] = crr + 1j * cri
+#            Ci[k, :, :] = cir + 1j * cii
+#
+#        #
+#        # m=0 row is multiplied by 0.5
+#        #
+#
+#        Br[:, :, 0] = 0.5 * Br[:, :, 0]
+#        Bi[:, :, 0] = 0.5 * Bi[:, :, 0]
+#        Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
+#        Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
+#
+#        #print "self.fa[0] = ",self.fa[0]
+#        #print "self.fa[-1] = ",self.fa[-1]
+#
+#        Br = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Br)
+#        Bi = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Bi)
+#        Cr = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Cr)
+#        Ci = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Ci)
+#
+#        self.C = VSHCoeff(Br, Bi, Cr, Ci)
+#
 
     def demo(self):
         """ display few commands for executing little demo
@@ -2576,6 +2577,7 @@ def AFLegendre3(L, M, x):
 
             P_l^{(m)}(x)= \\sqrt{ \\frac{2}{2 l+1} \\frac{(l+m)!}{(l-m)!} } \\bar{P}_{l}^{(m)}(x)
 
+    
     Examples
     --------
 
@@ -2962,8 +2964,8 @@ def VW(n, m, x, phi, Pmm1n, Pmp1n):
     W
 
 
-    Example
-    -------
+    Examples
+    --------
 
     >>> from pylayers.antprop.antenna import *
     >>> N = 2
