@@ -205,9 +205,10 @@ class Network(nx.MultiGraph):
         (0, 2, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
 
         """
-        for l in self.LDP:
-            d[l]=[]
+#        for l in self.LDP:
+#            d[l]=[]
             
+
         pool = iterable
         n = len(pool)
         if r > n:
@@ -321,10 +322,15 @@ class Network(nx.MultiGraph):
 
         """
         
-    
+        edge_dict={}
+        for l in self.LDP:
+            edge_dict[l]=[]
+        edge_dict['vis']=False
+        
+
 
         for ratnb,Rat in enumerate(self.RAT.keys()):
-            edges=self.combi(self.RAT[Rat],2,Rat)
+            edges=self.combi(self.RAT[Rat],2,Rat,d=edge_dict)
             self.add_edges_from(edges)    
             self.get_SubNet(Rat)
 
@@ -447,7 +453,6 @@ class Network(nx.MultiGraph):
         
         
         """
-
         self.get_RAT()
         self.connect()
         self.init_PN()

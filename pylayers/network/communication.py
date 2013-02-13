@@ -289,8 +289,8 @@ class RX(Process):
         while 1:
             for rat in self.PN.SubNet.keys():
                 [self.PN.edge[self.ID][n][rat].update(
-                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
+                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
 #            print 'refresh RSS node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshRSS
 
@@ -300,7 +300,7 @@ class RX(Process):
             for rat in self.PN.SubNet.keys():
                 [self.PN.edge[self.ID][n][rat].update(
                 {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
 #            print 'refresh TOA node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshTOA
 
