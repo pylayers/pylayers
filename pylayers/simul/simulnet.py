@@ -23,8 +23,8 @@
 
 import pkgutil
 
-import SimPy.Simulation
-from SimPy.Simulation import Simulation, Process, hold
+#import SimPy.Simulation
+from SimPy.SimulationRT import SimulationRT, Process, hold
 import numpy as np
 import scipy as sp
 import networkx as nx
@@ -48,11 +48,12 @@ from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
 #from pylayers.util.pymysqldb import Database as DB
 from pylayers.util.project import *
+from pylayers.util.save import *
 
 import pdb
 import os
 
-class Simul(Simulation):
+class Simul(SimulationRT):
     """
 
     Attributes
@@ -74,7 +75,7 @@ class Simul(Simulation):
 
     """
     def __init__(self):
-        Simulation.__init__(self)
+        SimulationRT.__init__(self)
         self.initialize()
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong('simulnet.ini','ini'))
@@ -172,6 +173,7 @@ class Simul(Simulation):
                             froom=eval(ag_opt['froom']),
                             meca_updt=float(self.meca_opt['mecanic_update_time']),
                             wait=float(ag_opt['wait']),
+                            cdest=self.meca_opt['choose_destination'],
                             loc=str2bool(self.loc_opt['localization']),
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
@@ -206,6 +208,7 @@ class Simul(Simulation):
         # create network
 
         self.net.create()
+
         # create All Personnal networks
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
@@ -258,13 +261,24 @@ class Simul(Simulation):
                         
 
 
+
         self.create_layout()
         self.create_EMS()
         self.create_network()
         if str2bool(self.sim_opt['showtk']):
             self.create_visual()
         self.create_show()
-        
+
+        if str2bool(self.save_opt['savep']):
+            self.save=Save(net=self.net,sim=self)
+            self.activate(self.save,self.save.run(),0.0)
+#        if str2bool(self.save_opt['savep']):
+#            self.save=Save(net=self.net,
+#                    L= self.L,
+#                    sim = self)
+#            self.activate(self.save, self.save.run(), 0.0)
+
+
 
     def create_show(self):
         plt.ion()
@@ -284,7 +298,8 @@ class Simul(Simulation):
         """ Run simulation
         """
         self.create()
-        self.simulate(until=float(self.sim_opt['duration']))
+        self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
+#        self.simulate(until=float(self.sim_opt['duration']))
 
 
 if __name__ == '__main__':
@@ -292,3 +307,6 @@ if __name__ == '__main__':
     S = Simul()
     seed(eval(S.sim_opt['seed']))
     S.runsimul()
+    if S.save_opt['savep']:
+        S.save.export('matlab')
+        S.save.export('python')

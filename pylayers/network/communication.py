@@ -49,8 +49,7 @@ from pylayers.gis.layout import Layout
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import ConfigParser
-import SimPy.Simulation
-from SimPy.Simulation import Process,hold,SimEvent,Simulation,waitevent
+from SimPy.SimulationRT import Process,hold,SimEvent,Simulation,waitevent
 from random import uniform,gauss
 from pylayers.network.network import  Node,Network
 import networkx as nx
@@ -91,6 +90,15 @@ class dcond(dict):
 
 
 class TX(Process):
+    """
+       TX process ( not used for now)
+        Each agent use the TX process for query LDP/information/message passing data
+        to other agent
+
+
+
+
+    """
     def __init__(self,**args):
         defaults={'sim':None,
                   'net': Network(),
@@ -203,6 +211,19 @@ class TX(Process):
 
 
 class RX(Process):
+    """
+        RX process
+
+        Each agent has a RX process to receive information asynchronously.
+
+        for now the information of TOA or RSS is received 
+        regularly with a specified time slot.
+        
+        Further improvement : RX is activated on the TX signal + delay ( delay
+            can depends on the activity, TER/BER/ .... )
+
+    """
+
     def __init__(self,**args):
         defaults={'sim':None,
                   'ID':'1',
@@ -268,8 +289,8 @@ class RX(Process):
         while 1:
             for rat in self.PN.SubNet.keys():
                 [self.PN.edge[self.ID][n][rat].update(
-                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
+                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
 #            print 'refresh RSS node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshRSS
 
@@ -279,7 +300,7 @@ class RX(Process):
             for rat in self.PN.SubNet.keys():
                 [self.PN.edge[self.ID][n][rat].update(
                 {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
 #            print 'refresh TOA node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshTOA
 
@@ -290,7 +311,14 @@ class RX(Process):
 
 
 class Gcom(nx.MultiDiGraph):
+    """
+        Communication graph
+        This graph is own by an agent and is the support for 
+        communication with other agent/acces points.
 
+        
+
+    """
 
     def __init__(self,net=Network(),sim=Simulation()):
         nx.MultiDiGraph.__init__(self)
