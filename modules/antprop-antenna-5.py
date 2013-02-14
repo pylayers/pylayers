@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from pylayers.antprop.antenna import *
 ifreq = 0
-A     = Antenna('vsh3','defant.vsh3')
+A     = Antenna('defant.vsh3')
 A.Nt  = 30
 A.Np  = 60
 A.Nf  = len(A.fa)
