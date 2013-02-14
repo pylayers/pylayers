@@ -173,7 +173,7 @@ class Simul(SimulationRT):
                             froom=eval(ag_opt['froom']),
                             meca_updt=float(self.meca_opt['mecanic_update_time']),
                             wait=float(ag_opt['wait']),
-                            cdest=self.meca_opt['choose_destination'],
+                            cdest=eval(self.meca_opt['choose_destination']),
                             loc=str2bool(self.loc_opt['localization']),
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
@@ -185,6 +185,7 @@ class Simul(SimulationRT):
                             RAT=eval(ag_opt['rat']),
                             save=eval(self.save_opt['save']),
                             gcom=self.gcom,
+                            comm_mode=eval(self.net_opt['communication_mode']),
                             sim=self))
 #                            
             if self.lAg[i].type == 'ag':

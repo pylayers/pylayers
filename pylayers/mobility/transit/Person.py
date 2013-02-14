@@ -111,7 +111,7 @@ class Person(Process):
         self.moving=moving
         self.roomId    = roomId
         self.forbidroomId = froom 
-        self.cdest = eval(cdest) # choose tdestination type
+        self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive

@@ -314,7 +314,6 @@ class Network(nx.MultiGraph):
             self.RAT[Rat]    = {}.fromkeys(self.RAT[Rat]).keys()
         
 
-        
 
     def connect(self):
         """ 

@@ -140,7 +140,6 @@ class Save(Process):
 
 
         savecfg,d=self.load(self.filename+'.tmp')
-        pdb.set_trace()
         # need to sort the time stamp 
         TS = np.array((d.keys()))
         sTSi=np.argsort(TS)
