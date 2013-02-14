@@ -281,6 +281,16 @@ class Layout(object):
             if n >0:
                 d = self.Gs.node[n]
                 d['connect'] = nx.neighbors(self.Gs,n)
+                try:
+                    if d['transition']:
+                        pass
+                except:
+                    d['transition']=False
+                    try:
+                        if d['ss_name']=='DOOR':
+                            d['transition']=True
+                    except:
+                        pass
                 config.set("segments",str(n),d)
 
         fileini = pyu.getlong(_fileini,'struc')
@@ -3745,8 +3755,10 @@ class Layout(object):
 
         Summary
         -------
+
             A room is a cycle with at least one door 
             This function requires graph Gt
+
         """
         self.Gr = nx.Graph()
         self.Gr.pos = {}
