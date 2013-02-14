@@ -198,8 +198,10 @@ class Agent(object):
         if 'txt' in args['save']:
             pyu.writenode(self)
         if args['loc'] and self.type != 'ap':
+
             self.loc = Localization(net=self.net, ID=self.ID,
                                     method=args['loc_method'])
             self.Ploc = PLocalization(loc=self.loc,
                                       loc_updt_time=args['loc_updt'], sim=args['sim'])
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+

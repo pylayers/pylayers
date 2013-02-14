@@ -24,7 +24,7 @@ class Localization(object):
 
     def __init__(self,**args):
         
-        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0'}
+        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0','save':[]}
 
         for key, value in defaults.items():
             if key in args:
@@ -109,7 +109,6 @@ class Localization(object):
 
         self.algloc.nodes={}
         self.algloc.ldp={}
-
         for c in self.cla.c:
             crat,cldp,e,own=c.origin.values()
             if (crat in rat) and (cldp in ldp) :
@@ -143,12 +142,11 @@ class Localization(object):
             self.algloc.nodes['RN_TOA']=self.algloc.nodes['RN_TOA'].T
         except:
             pass
-
         self.cla.update()
 
     def savep(self,value,name='pe'):
         """
-            Save an estimated position into self.net
+            write an estimated position into self.net
         """
         self.net.node[self.ID]['PN'].update_pos(self.ID,value,p_pe=name)
         self.net.update_pos(self.ID,value,p_pe=name)
@@ -163,8 +161,8 @@ class Localization(object):
         if sum(self.cla.runable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
-                self.savep(self.cla.pe,name='pe')
-                self.savep(self.cla.pe,name='pe_geo')
+                self.writep(self.cla.pe,name='pe')
+                self.writep(self.cla.pe,name='pe_geo')
 
         # in case of lack of observables
         if sum(self.cla.runable) >= 1:
@@ -177,12 +175,25 @@ class Localization(object):
         """
             Compute postion with the algebraic algorithm
         """
+
         if len(self.cla.c) !=0:
             if ldp == 'all':
                 ldp=['Pr','TOA','TDOA']
             pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
             self.savep(pe_alg.T,name='pe_alg')
 
+
+
+
+    def compute_crb(self,rat='all',ldp='all',pe=True):
+        """
+            Compute CramerRao bound
+        """
+        
+        if ldp == 'all':
+            ldp=['Pr','TOA','TDOA']
+        crb = self.algloc.crb(np.zeros((2,1)),'Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp)
+        self.savep(np.array(crb),name='crb')
 
 
 

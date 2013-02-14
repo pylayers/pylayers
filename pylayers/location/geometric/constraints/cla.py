@@ -187,10 +187,12 @@ class CLA(object):
         self.refine(self.Nc)
         if (sum(self.runable) >= 3) and (pe == True):
             self.estpos2()
+            self.Nc=len(self.c)
             return True
         else:
+            self.Nc=len(self.c)
             return False
-        self.Nc=len(self.c)
+
 
 
     def compute_amb(self,pe=True):

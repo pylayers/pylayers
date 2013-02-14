@@ -88,7 +88,9 @@ class EMSolver(object):
 
 
 
-    def solve(self,p,e,LDP,RAT,epwr,sens):
+
+
+    def solve(self,p,e,LDP,RAT,epwr):
         """compute and return a LDP value thanks to a given method
 
         Attributes
@@ -149,10 +151,12 @@ class EMSolver(object):
 
 
         if self.EMS_method == 'multiwall':
+
             dd={} # distance dictionnary
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
+                epwr=[e[RAT] for e in epwr]
 
                 if LDP=='all':
 
@@ -168,13 +172,12 @@ class EMSolver(object):
                         lepwr=epwr[i+1:lpa]
                         Pr.extend(lepwr - MW[0] - frees)
                         TOA.extend(MW[2])
-                        lsens.extend(sens[i+1:lpa])
+#                        lsens.extend(sens[i+1:lpa])
                     P=np.outer(Pr,[1,1])
                     P[:,1]=model.sigrss
                     T=np.outer(TOA+d/0.3,[1,1])
                     T[:,1]=self.sigmaTOA*0.3
-                    v = P[:,0] > lsens
-                    return (P,T,d,v)
+                    return (P,T,d)
 
 
 

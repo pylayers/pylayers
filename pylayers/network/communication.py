@@ -316,6 +316,7 @@ class RX(Process):
                     self.refreshRSS=eval(d['refreshrss'])
                     self.refreshTOA=eval(d['refreshtoa'])
                     break
+
             except:
                 pass
 
@@ -383,9 +384,17 @@ class RX(Process):
         while 1:
             for rat in self.PN.SubNet.keys():
                 [self.PN.edge[self.ID][n][rat].update(
-                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
-#            print 'refresh RSS node', self.ID, ' @',self.sim.now()
+                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],
+                'tPr':self.sim.now(),
+                'vis':self.net.edge[self.ID][n][rat]['Pr'][0]>self.net.node[self.ID]['sens'][rat]})
+                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+
+#                [self.PN.edge[self.ID][n][rat].update(
+
+#                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
+#                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
+            print 'refresh RSS node', self.ID, ' @',self.sim.now()
+
             yield hold, self, self.refreshRSS
 
 
