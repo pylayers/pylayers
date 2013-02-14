@@ -49,8 +49,7 @@ from pylayers.gis.layout import Layout
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import ConfigParser
-import SimPy.Simulation
-from SimPy.Simulation import Process,hold,SimEvent,Simulation,waitevent
+from SimPy.SimulationRT import Process,hold,SimEvent,Simulation,waitevent
 from random import uniform,gauss
 from pylayers.network.network import  Node,Network
 import networkx as nx
@@ -91,6 +90,11 @@ class dcond(dict):
 
 
 class TX(Process):
+    """
+       TX process ( not used for now)
+        Each agent use the TX process for query LDP/information/message passing data
+        to other agent
+    """
     def __init__(self,**args):
         defaults={'sim':None,
                   'net': Network(),
@@ -109,12 +113,25 @@ class TX(Process):
                 setattr(self, key, value)
                 args[key]=value  
         self.args=args
-        self.PN=self.net.node[self.ID]['PN']
-        self.evt_create()
-        self.c_init()
+        try:
+            self.PN=self.net.node[self.ID]['PN']
+        except:
+            self.PN=Network()
+
+        self.create_evt()
+
+#        self.c_init()
         Process.__init__(self,name='Tx'+str(self.ID),sim=self.sim)
-
-
+        Cf = ConfigParser.ConfigParser()
+        Cf.read(pyu.getlong('agent.ini','ini'))
+        for s in Cf.sections():
+            try:
+                d= dict(Cf.items(s))
+                if d['id']==self.ID:
+                    self.refreshTOA=eval(d['refreshtoa'])
+                    break
+            except:
+                pass
 
 
     def run(self):
@@ -127,75 +144,109 @@ class TX(Process):
             yield hold, self, self.refresh
 
 
-    def evt_create(self):
-#        for e in self.gcom.edges(self.ID,keys=True):
-        for e in self.PN.edges(self.ID,keys=True):
-            self.devt[e]=self.gcom.devt[e]
+    def create_evt(self):
+        """
+        Create simpy events from communication gaph
+
+        The available reception event for the given id are pickup into the
+        communication graph to fill self.devt.
+
+        Examples
+        --------
+
+        >>> from pylayers.network.communication import *
+        >>> T = TX()
+        >>> T.create_evt()
+        """
+
+    def request_TOA(self):
+        """
+        Request TOA
 
 
-    def c_init(self):
-        for dk in self.dcond.keys():
-            d=self.dcond[dk]
-            ### Rat
-            if d['rat']=='all':
-                lr=self.PN.SubNet.keys()
-            else:
-                try:
-                    lr=d['rat'] # d['rat'] mustr contain a list of
-                               # rat to be processed
-                except: 
-                    raise NameError('rat constraints must be a list of \
-                    rat available in the personnal network of node' \
-                    +str(self.ID) +'Please modify our agent.ini')
+        Every self.refreshTOA time interval, send a devent signal to nodes 
+        in visibility torefresh the TOA information
 
-
-            ### Node
-            ie =[]
-            if d['node']=='all':
-                if not isinstance(lr,list):
-                    lr=[lr]
-                for r in lr:
-                    dg = nx.DiGraph(self.PN.SubNet[r])
-                    ie.append(dg.edges_iter(self.ID))
-            else:
-                try:
-                    for r in lr:
-                        dg = nx.DiGraph(self.PN.SubNet[r])
-                        iet.append(dg.edges(self.ID))
-                        for i in iet:
-                            for j in d['node']:
-                                if j in i :
-                                    ie.append(i)
-                      # d['node'] must contain a list of node to be processed
-                except:
-                    raise NameError('node constraints must be a list of \
-                    node available in the personnal network of node' \
-                    +str(self.ID) +'Please modify our agent.ini')
-
-
-            lmess = []
-            di={}
-            [di.update({it:[]}) for it in d['message'] ]
-            for r in lr:
-                if d['node']=='all':
-                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges()))
-                else:
-                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges(d['node'])))
-
-            self.gcom.fill_edge(ie,lr,lmess)
+        """
+        self.create_evt()
+        while 1:
+            print 'request TOA', self.ID
+            for rat in self.PN.SubNet.keys():
+                for n in self.PN.SubNet[rat].edge[self.ID].keys():
+                    # check nodes in visibility
+                    if self.net.edge[self.ID][n][rat]['vis']:
+                        key='(\''+self.ID+'\', \''+n+'\', \''+rat+'\')'
+                        self.devt[eval(key)].signal()
+            yield hold, self, self.refreshTOA
+#                    devt[]
+#                [self.PN.edge[self.ID][n][rat].update(
+#                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
+#                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
+#            print 'refresh TOA node', self.ID, ' @',self.sim.now()
 
 
 
+#    def c_init(self):
+#        for dk in self.dcond.keys():
+#            d=self.dcond[dk]
+#            ### Rat
+#            if d['rat']=='all':
+#                lr=self.PN.SubNet.keys()
+#            else:
+#                try:
+#                    lr=d['rat'] # d['rat'] mustr contain a list of
+#                               # rat to be processed
+#                except: 
+#                    raise NameError('rat constraints must be a list of \
+#                    rat available in the personnal network of node' \
+#                    +str(self.ID) +'Please modify our agent.ini')
 
-    def c_interpret(self,d):
 
-        # first great criteria
-        if 'distance' in d.keys():
-            pass
-        elif 'topology' in d.keys():
-            pass
-        else: 
-            NameError('Type of mp constraint not yet taking into account')
+#            ### Node
+#            ie =[]
+#            if d['node']=='all':
+#                if not isinstance(lr,list):
+#                    lr=[lr]
+#                for r in lr:
+#                    dg = nx.DiGraph(self.PN.SubNet[r])
+#                    ie.append(dg.edges_iter(self.ID))
+#            else:
+#                try:
+#                    for r in lr:
+#                        dg = nx.DiGraph(self.PN.SubNet[r])
+#                        iet.append(dg.edges(self.ID))
+#                        for i in iet:
+#                            for j in d['node']:
+#                                if j in i :
+#                                    ie.append(i)
+#                      # d['node'] must contain a list of node to be processed
+#                except:
+#                    raise NameError('node constraints must be a list of \
+#                    node available in the personnal network of node' \
+#                    +str(self.ID) +'Please modify our agent.ini')
+
+
+#            lmess = []
+#            di={}
+#            [di.update({it:[]}) for it in d['message'] ]
+#            for r in lr:
+#                if d['node']=='all':
+#                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges()))
+#                else:
+#                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges(d['node'])))
+
+#            self.gcom.fill_edge(ie,lr,lmess)
+
+
+#    def c_interpret(self,d):
+
+#        # first great criteria
+#        if 'distance' in d.keys():
+#            pass
+#        elif 'topology' in d.keys():
+#            pass
+#        else: 
+#            NameError('Type of mp constraint not yet taking into account')
 
 
 
@@ -203,6 +254,29 @@ class TX(Process):
 
 
 class RX(Process):
+    """
+    RX process
+
+    Each agent has a RX process to receive information asynchronously.
+
+    Attributes
+    ----------
+    sim : SimPy.SimulationRT()
+    ID : string
+        id of the agent
+    net : pylayers.network.network()
+    gcom : pylayers.network.communication()
+        a graph a communication
+    devt : dictionary
+        dictionnary of event
+    refreshRSS : float
+        time interval where RSS are refreshed
+    refreshTOA : float
+        time interval where TOA are refresh (if agent.comm_mode =='syncho')
+    mp : bool
+        message passing [Not yet implemented]
+    """
+
     def __init__(self,**args):
         defaults={'sim':None,
                   'ID':'1',
@@ -222,7 +296,10 @@ class RX(Process):
                 setattr(self, key, value)
                 args[key]=value  
         self.args=args
-        self.PN=self.net.node[self.ID]['PN']
+        try:
+            self.PN = self.net.node[self.ID]['PN']
+        except:
+            self.PN = Network()
         self.create_evt()
 
         Process.__init__(self,name='Rx-'+str(self.ID),sim=self.sim)
@@ -235,7 +312,7 @@ class RX(Process):
                 if d['id']==self.ID:
                     self.refreshRSS=eval(d['refreshrss'])
                     self.refreshTOA=eval(d['refreshtoa'])
-                break
+                    break
             except:
                 pass
 
@@ -243,7 +320,21 @@ class RX(Process):
 
     def swap_lt(self,lt):
         """
-        swap edge tuple node number 
+        For a list of tuple if the first element is self.ID,
+        it is swapped with the second element
+   
+        
+        Examples
+        --------
+
+        >>> from pylayers.network.communication import *
+        >>> R = RX()
+        >>> R.ID
+        '1'
+        >>> lt= [('1','0','tuple1'),('10','5','tuple2')]
+        >>> R.swap_lt(lt) # only first tuple is swapped because R.ID='1'
+        [('0', '1', 'tuple1'), ('10', '5', 'tuple2')]
+
         """
         lto=[]
         for t in lt :
@@ -256,6 +347,20 @@ class RX(Process):
 
 
     def create_evt(self):
+        """
+        Create simpy events from communication gaph
+
+        The available reception event for the given id are pickup into the
+        communication graph to fill self.devt.
+
+        Examples
+        --------
+
+        >>> from pylayers.network.communication import *
+        >>> R = RX()
+        >>> R.create_evt()
+
+        """
         rPNe = self.swap_lt(self.PN.edges(keys=True))
         for e in rPNe:
             self.devt[e]=self.gcom.devt[e]
@@ -265,23 +370,61 @@ class RX(Process):
 
 
     def refresh_RSS(self):
+        """
+            Refresh RSS process
+
+            The RSS values on the edges of the Personnal Network of node self.ID 
+            are refreshed every self.refreshRSS
+        """
+        self.create_evt()
         while 1:
             for rat in self.PN.SubNet.keys():
                 [self.PN.edge[self.ID][n][rat].update(
-                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
+                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
 #            print 'refresh RSS node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshRSS
 
 
     def refresh_TOA(self):
+        """
+            Refresh TOA process
+
+            The TOA values on the edges of the Personnal Network of node self.ID
+            are refreshed every self.refreshTOA
+        """
+        self.create_evt()
         while 1:
             for rat in self.PN.SubNet.keys():
                 [self.PN.edge[self.ID][n][rat].update(
                 {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
 #            print 'refresh TOA node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshTOA
+
+
+    def wait_TOArq(self):
+        """
+            Wait TOA request
+
+            The self.ID node wait a TOA request from another node of its Personal network.
+            Once the request is recieved, self.ID reply to the requester node 
+            and fill the PN edge with the measured TOA.
+        """
+        self.create_evt()
+        while 1:
+            yield waitevent,self,self.devt.values()
+            for evt in self.devt.values():
+                if evt.occurred:
+                    # evt.name[0] = requester
+                    # evt.name[1] = requested ( = self.ID)
+                    # evt.name[2] = rat
+                    self.PN.edge[evt.name[1]][evt.name[0]][evt.name[2]].update(
+                    {'TOA':self.net.edge[evt.name[1]][evt.name[0]][evt.name[2]]['TOA'],'tTOA':self.sim.now()})
+#                    print 'TOA requested by',evt.name[0],'to',evt.name[1],'has been updated'
+                    break
+
+
 
 #                [[self.SubNet[RAT].node[e]['PN'].edge[e][f][RAT].update(
 #         {'TOA':self.SubNet[RAT].edge[e][f][RAT]['TOA'],'tTOA':self.sim.now()}) 
@@ -290,7 +433,33 @@ class RX(Process):
 
 
 class Gcom(nx.MultiDiGraph):
+    """
+    Communication graph
 
+
+
+        
+    Attributes
+    ----------
+    net : pylayers.network.network()
+    sim : SimPy.SimulationRT()
+    devt : dictionary
+        dictionnary of event
+
+    Notes
+    -----
+    That class inherits of networkx.MultiDiGraph().
+    Its nodes are the nodes of the passing Network object.
+    Its edge represents all the possbile communication bridge between thoses nodes.
+    On the edge, timestamped message can be passed between nodes 
+
+    Contrary to pylayers.network, which is an undirected graph, here edge are directed.
+
+    Hence the dictionnary of simpy events (devt) can be created.
+    The keys of devt are a tuple (nodeid#1, nodeid#2 , rat).
+    
+
+    """
 
     def __init__(self,net=Network(),sim=Simulation()):
         nx.MultiDiGraph.__init__(self)
@@ -299,10 +468,24 @@ class Gcom(nx.MultiDiGraph):
 
 
     def create(self):
+        """
+            Create the communication graph and the dictionnary of simpy events
+
+        Examples
+        --------
+
+        >>> from pylayers.network.communication import *
+        >>> G=Gcom()
+        >>> G.create()
+
+        """
         self.create_graph()
         self.create_evt()
 
     def create_graph(self):
+        """
+            Create the communication graph from the Network graph
+        """
         for rat in self.net.SubNet:
             for n in self.net.SubNet[rat].nodes():
                 G=nx.DiGraph(self.net.SubNet[rat])
@@ -318,15 +501,22 @@ class Gcom(nx.MultiDiGraph):
 
 
     def create_evt(self):
+        """
+            Create the dictionnary of simpy event.
+            Hence each node of communication graph can send signal to others
+        """
+
         self.devt={}
         for e in self.edges(keys=True):
             self.devt[e]=(SimEvent(e,sim=self.sim))
 
 
-    def fill_edge(self,le,rat,mess):
+#    def fill_edge(self,le,rat,mess):
 
-        for i,r in enumerate(rat):
-            self.add_edges_from(self.net.Gen_tuple(le[i],r,mess[i]))
+#        for i,r in enumerate(rat):
+#            self.add_edges_from(self.net.Gen_tuple(le[i],r,mess[i]))
+
+
 #        Z=self.dcond['1']['message']*len(le[1])
 #        self.gmp.add_edges_from(self.net.Gen_tuple(le,'rat1',Z))
 
