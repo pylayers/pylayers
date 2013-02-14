@@ -28,7 +28,7 @@
     <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
-%<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
 <a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
     alt="pylayers"/></a>
 </div>
@@ -460,12 +460,12 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 </table>
 <p class="rubric">Notes</p>
 <div class="math">
-<p><img src="../_images/math/3b925f21ced5547d8a2d0a6e8cd124a8032cae1a.png" alt="\epsilon_r^{\theta} =
-\frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta)(\phi)|^2}
+<p><img src="../_images/math/d7449d2450cae83db5e38438236a530e4b62cb7a.png" alt="\epsilon_r^{\theta} =
+\frac{|F_{\theta}(\theta,\phi)-\hat{F}_{\theta}(\theta,\phi)|^2}
      {|F_{\theta}(\theta,\phi)|^2}
 
 \epsilon_r^{\phi} =
-\frac{|F_{\phi}(\theta,\phi)-\hat{F}_{\phi}(\theta)(\phi)|^2}
+\frac{|F_{\phi}(\theta,\phi)-\hat{F}_{\phi}(\theta,\phi)|^2}
      {|F_{\theta}(\theta,\phi)|^2}"/></p>
 </div></dd></dl>
 
@@ -555,7 +555,10 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/antprop-antenna-2.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/antprop-antenna-2.py">Source code</a>, <a class="reference external" href="../modules/antprop-antenna-2.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-2.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-2.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/antprop-antenna-2.png" src="../_images/antprop-antenna-2.png" />
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -977,7 +980,7 @@ ind3 : np.array (K3, 2) are the conserved (l,m) indices</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.SHCoeff.show">
-<tt class="descname">show</tt><big>(</big><em>typ='s1'</em>, <em>k=0</em>, <em>N=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>titre='SHC'</em>, <em>xl=True</em>, <em>yl=True</em>, <em>fontsize=14</em>, <em>dB=True</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0xa60ff8c&gt;</em>, <em>anim=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#SHCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.SHCoeff.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>typ='s1'</em>, <em>k=0</em>, <em>N=-1</em>, <em>M=-1</em>, <em>kmax=1000</em>, <em>seuildb=50</em>, <em>titre='SHC'</em>, <em>xl=True</em>, <em>yl=True</em>, <em>fontsize=14</em>, <em>dB=True</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0xab2af8c&gt;</em>, <em>anim=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#SHCoeff.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.SHCoeff.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>show coeff</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1204,6 +1207,11 @@ C  = VSHCoeff(Br,Bi,Cr,Ci)</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#pylayers.antprop.antenna.AFLegendre" title="pylayers.antprop.antenna.AFLegendre"><tt class="xref py py-obj docutils literal"><span class="pre">AFLegendre</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
 </div>
 </dd></dl>
 
