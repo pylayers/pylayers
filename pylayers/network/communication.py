@@ -397,12 +397,16 @@ class RX(Process):
             are refreshed every self.refreshTOA
         """
         self.create_evt()
+
         while 1:
             for rat in self.PN.SubNet.keys():
+#                [self.PN.edge[self.ID][n][rat].update(
+#                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
+#                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
                 [self.PN.edge[self.ID][n][rat].update(
                 {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
-#            print 'refresh TOA node', self.ID, ' @',self.sim.now()
+                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
+            print 'refresh TOA node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshTOA
 
 

@@ -199,7 +199,7 @@ class EMSolver(object):
 
 
             else :
-                return (np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)))
+                return (np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)))
 
 
         elif self.method == 'Pyray':

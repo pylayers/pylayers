@@ -187,16 +187,18 @@ class CLA(object):
         self.refine(self.Nc)
         if (sum(self.runable) >= 3) and (pe == True):
             self.estpos2()
+            self.Nc=len(self.c)
             return True
         else:
             return False
-        self.Nc=len(self.c)
+
 
 
     def compute_amb(self,pe=True):
         self.merge2()
         self.refine(self.Nc)
         self.estpos2()
+        self.Nc=len(self.c)
         return True
 
     def rescale(self, f_vcw, cid=None):
@@ -947,6 +949,7 @@ class CLA(object):
                 if clust_vol != 0:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
+                    pdb.set_trace()
                     try:
                         dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
                     except:
