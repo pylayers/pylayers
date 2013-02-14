@@ -158,6 +158,9 @@ class TX(Process):
         >>> T = TX()
         >>> T.create_evt()
         """
+        for e in self.PN.edges(self.ID,keys=True):
+            self.devt[e]=self.gcom.devt[e]
+
 
     def request_TOA(self):
         """
