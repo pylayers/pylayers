@@ -8,7 +8,9 @@ To instantiate an antenna object :
 
     A = Antenna(typ,_filename,directory,nf,ntheta,nphi)
 
-typ indicates the antenna file format to read 
+typ indicates the antenna file format to read among 
+
+
 
 Examples
 --------
