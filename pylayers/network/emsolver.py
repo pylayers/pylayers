@@ -90,7 +90,7 @@ class EMSolver(object):
 
 
 
-    def solve(self,p,e,LDP,RAT,epwr):
+    def solve(self,p,e,LDP,RAT,epwr,sens):
         """compute and return a LDP value thanks to a given method
 
         Attributes
@@ -156,7 +156,10 @@ class EMSolver(object):
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
-                epwr=[e[RAT] for e in epwr]
+                slp=np.shape(lp)[1]
+                epwra = [epwr[i][RAT] for i in epwr.keys()]
+                sensa = [sens[i][RAT] for i in sens.keys()]
+
 
                 if LDP=='all':
 
@@ -169,40 +172,41 @@ class EMSolver(object):
                         MW=Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
 #                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
                         frees=PL(pa[i+1:lpa],model.f,pa[i],model.rssnp)
-                        lepwr=epwr[i+1:lpa]
+                        lepwr=epwra[i+1:lpa]
                         Pr.extend(lepwr - MW[0] - frees)
                         TOA.extend(MW[2])
-#                        lsens.extend(sens[i+1:lpa])
+                        lsens.extend(sensa[i+1:lpa])
                     P=np.outer(Pr,[1,1])
                     P[:,1]=model.sigrss
                     T=np.outer(TOA+d/0.3,[1,1])
                     T[:,1]=self.sigmaTOA*0.3
-                    return (P,T,d)
+                    v = P[:,0] > lsens
+                    return (P,T,d,v)
 
 
 
 
-                elif LDP == 'Pr':
-                    pa = np.vstack(p.values())
-                    pn = p.keys()
-                    lpa = len(pa)
-                    Lwo = []
-                    frees=[]
-                    lepwr=[]
-                    for i in range(lpa-1):
-                        MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
-                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
-                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
-                        lepwr.extend(epwr[i+1:lpa])
-                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
-            
-                elif LDP == 'TOA': #### NOT CORRECT !
-                    std = self.sigmaTOA*sp.randn(len(d))
-                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
+#                elif LDP == 'Pr':
+#                    pa = np.vstack(p.values())
+#                    pn = p.keys()
+#                    lpa = len(pa)
+#                    Lwo = []
+#                    frees=[]
+#                    lepwr=[]
+#                    for i in range(lpa-1):
+#                        MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))
+#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
+#                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))
+#                        lepwr.extend(epwr[i+1:lpa])
+#                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)
+#            
+#                elif LDP == 'TOA': #### NOT CORRECT !
+#                    std = self.sigmaTOA*sp.randn(len(d))
+#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)
 
 
             else :
-                return (np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)))
+                return (np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)))
 
 
         elif self.method == 'Pyray':

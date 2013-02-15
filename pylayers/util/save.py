@@ -162,7 +162,8 @@ class Save(Process):
             for p in savecfg['lpos']:
                 self.savemat[dkey][p]=[]
             for r in savecfg['lrat']:
-                if n in savecfg['subnet'][r]:
+                # test if node has the rat and if it is not the only one on that rat
+                if (n in savecfg['subnet'][r]) and  (len(savecfg['subnet'][r]) > 1):
                     self.savemat[dkey][r]={}
                     for l in savecfg['lldp']:
                         self.savemat[dkey][r][l]={}
@@ -207,17 +208,28 @@ class Save(Process):
                             else :
                                 dkey=n
                             if n in ii[0]:
+                                if etype == 'matlab':
+                                    dkey2='node_'+ii[1]
+                                else :
+                                    dkey2=ii[1]
+
                                 try:
-                                    self.savemat[dkey][r][l]['node_'+ii[1]]=np.vstack((self.savemat[dkey][r][l]['node_'+ii[1]],d[t][r][l][ii]))
+                                    self.savemat[dkey][r][l][dkey2]=np.vstack((self.savemat[dkey][r][l][dkey2],d[t][r][l][ii]))
                                 except:
-                                    self.savemat[dkey][r][l]['node_'+ii[1]]=d[t][r][l][ii]
+                                    self.savemat[dkey][r][l][dkey2]=d[t][r][l][ii]
+
                             # if n == node2
                             elif n in ii[1]:
-                                try:
-                                    self.savemat[dkey][r][l]['node_'+ii[0]]=np.vstack((self.savemat[dkey][r][l]['node_'+ii[0]],d[t][r][l][ii]))
-                                except:
-                                    self.savemat[dkey][r][l]['node_'+ii[0]]=d[t][r][l][ii]
+                                if etype == 'matlab':
+                                    dkey2='node_'+ii[0]
+                                else :
+                                    dkey2=ii[0]
 
+                                try:
+                                    self.savemat[dkey][r][l][dkey2]=np.vstack((self.savemat[dkey][r][l][dkey2],d[t][r][l][ii]))
+                                except:
+                                    self.savemat[dkey][r][l][dkey2]=d[t][r][l][ii]
+                    
 
         if  etype == 'matlab':
             spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
