@@ -162,7 +162,8 @@ class Save(Process):
             for p in savecfg['lpos']:
                 self.savemat[dkey][p]=[]
             for r in savecfg['lrat']:
-                if n in savecfg['subnet'][r]:
+                # test if node has the rat and if it is not the only one on that rat
+                if (n in savecfg['subnet'][r]) and  (len(savecfg['subnet'][r]) > 1):
                     self.savemat[dkey][r]={}
                     for l in savecfg['lldp']:
                         self.savemat[dkey][r][l]={}

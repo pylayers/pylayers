@@ -538,6 +538,7 @@ class Network(nx.MultiGraph):
         e=self.SubNet[RAT].edges()
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
         lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i],'vis':v[i]} for i in range(len(d))]
+
         self.update_LDPs(ln,RAT,lD)
 
 

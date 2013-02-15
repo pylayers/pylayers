@@ -382,10 +382,21 @@ class RX(Process):
         self.create_evt()
         while 1:
             for rat in self.PN.SubNet.keys():
+
+            # 2 approach to determine visibility
+            ##  1) test visibility during the refresh
+#                [self.PN.edge[self.ID][n][rat].update(
+#                {'Pr':self.net.edge[self.ID][n][rat]['Pr'],
+#                'tPr':self.sim.now(),
+#                'vis':self.net.edge[self.ID][n][rat]['Pr'][0]>self.net.node[self.ID]['sens'][rat]})
+#                for n in self.PN.SubNet[rat].edge[self.ID].keys()]
+
+            #  2) copy the visibility information from network layer
                 [self.PN.edge[self.ID][n][rat].update(
                 {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
                 for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
-#            print 'refresh RSS node', self.ID, ' @',self.sim.now()
+            print 'refresh RSS node', self.ID, ' @',self.sim.now()
+
             yield hold, self, self.refreshRSS
 
 
@@ -400,13 +411,20 @@ class RX(Process):
 
         while 1:
             for rat in self.PN.SubNet.keys():
+
+                # 2 approaches :
+                ## 1) that commented code allow refresh TOA only when visibility
 #                [self.PN.edge[self.ID][n][rat].update(
 #                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
 #                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
+
+                # 2 refresj TOa whatever visibility or not
                 [self.PN.edge[self.ID][n][rat].update(
                 {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
                 for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
-            print 'refresh TOA node', self.ID, ' @',self.sim.now()
+
+#            print 'refresh TOA node', self.ID, ' @',self.sim.now()
+
             yield hold, self, self.refreshTOA
 
 
