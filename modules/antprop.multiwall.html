@@ -81,22 +81,50 @@
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.Dgrid_points">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">Dgrid_points</tt><big>(</big><em>points</em>, <em>Px</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#Dgrid_points"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.Dgrid_points" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dgrid_points(points,Px):
-points : Np x 2 array
-Px     : 2 x 1  array</p>
+<dd><p>distance point to grid</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>points</strong> : np.array</p>
+<blockquote>
+<div><p>grid Np x 2 array</p>
+</div></blockquote>
+<p><strong>Px</strong> : np.array</p>
+<blockquote class="last">
+<div><p>point 2 x 1  array</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.Dgrid_zone">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">Dgrid_zone</tt><big>(</big><em>zone</em>, <em>Px</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#Dgrid_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.Dgrid_zone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dgrid_zone(zone,Px):</p>
+<dd><p>Distance point to zone</p>
 <p>A zone is a quadrilateral zone.</p>
-<dl class="docutils">
-<dt>Zone dictionnary :</dt>
-<dd>xmin xmax Nx
-ymin ymax Ny</dd>
-</dl>
-<p>Build the distance matrix between Tx and the zone points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>zone</strong> : dictionnary</p>
+<blockquote>
+<div><p>xmin xmax Nx
+ymin ymax Ny</p>
+</div></blockquote>
+<p><strong>Px</strong> : np.array</p>
+<blockquote>
+<div><p>point</p>
+</div></blockquote>
+<p class="last"><strong>Build the distance matrix between Tx and points in the zone</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>use broadcasting instead</p>
 </dd></dl>
 
 <dl class="function">
@@ -179,8 +207,7 @@ segment 1 :</p>
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.LOSS_furniture">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">LOSS_furniture</tt><big>(</big><em>Tx</em>, <em>Rx</em>, <em>furn</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#LOSS_furniture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.LOSS_furniture" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yu Lei 
-Not used</p>
+<dd><p>Not used</p>
 </dd></dl>
 
 <dl class="function">
@@ -202,19 +229,19 @@ S</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
 <blockquote>
 <div><p>Layout object</p>
 </div></blockquote>
-<p><strong>Pts</strong> :</p>
+<p><strong>Pts</strong> : observation grid</p>
 <blockquote>
 <div><p>(Np x 2) array</p>
 </div></blockquote>
-<p><strong>f</strong> :</p>
+<p><strong>fGHz</strong> : np.array</p>
 <blockquote>
-<div><p>frequency (GHz)</p>
+<div><p>frequency</p>
 </div></blockquote>
-<p><strong>p</strong> :</p>
+<p><strong>p</strong> : point</p>
 <blockquote class="last">
 <div><p>source points</p>
 </div></blockquote>
@@ -287,21 +314,28 @@ S</p>
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.OneSlopeMdl">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">OneSlopeMdl</tt><big>(</big><em>D</em>, <em>n</em>, <em>fGHz</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#OneSlopeMdl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.OneSlopeMdl" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>one slope model</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>D</strong> : np.array</p>
+<blockquote>
+<div><p>distance array</p>
+</div></blockquote>
+<p><strong>n</strong> : float</p>
 <blockquote>
 <div><p>path loss exponent</p>
 </div></blockquote>
-<p><strong>D</strong> : array</p>
+<p><strong>fGHz</strong> : np.array</p>
 <blockquote>
-<div><p>Distance array</p>
-</div></blockquote>
-<p><strong>fGHz</strong> : array</p>
-<blockquote class="last">
 <div><p>frequency  GHz</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>PL</strong> : np.array</p>
+<blockquote class="last">
+<div><p>path loss as a function of distance</p>
 </div></blockquote>
 </td>
 </tr>
@@ -317,10 +351,25 @@ S</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pts</strong> : array (2xNp)</p>
-<p><strong>fGHz</strong> : frequency (GHz)</p>
-<p><strong>p</strong> : array (2x1)</p>
-<p class="last"><strong>n</strong> : path loss exponent</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pts</strong> : np.array (2xNp)</p>
+<blockquote>
+<div><p>points</p>
+</div></blockquote>
+<p><strong>fGHz</strong> : float</p>
+<blockquote>
+<div><p>frequency (GHz)</p>
+</div></blockquote>
+<p><strong>p</strong> : np.array (2x1)</p>
+<p><strong>n</strong> : float</p>
+<blockquote>
+<div><p>path loss exponent (default = 2)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>PL</strong> : np.array</p>
+<blockquote class="last">
+<div><p>path loss w.r.t distance and frequency</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -335,17 +384,23 @@ S</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz:</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz: float</strong> :</p>
 <blockquote>
 <div><p>frequency GHz</p>
 </div></blockquote>
-<p><strong>GtdB:</strong> :</p>
+<p><strong>GtdB: float</strong> :</p>
 <blockquote>
 <div><p>transmitting antenna gain dB (default 0 dB)</p>
 </div></blockquote>
-<p><strong>GrdB:</strong> :</p>
-<blockquote class="last">
+<p><strong>GrdB: float</strong> :</p>
+<blockquote>
 <div><p>receiving antenna gain dB (default 0 dB)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>PL0</strong> : float</p>
+<blockquote class="last">
+<div><p>path &#64; 1m</p>
 </div></blockquote>
 </td>
 </tr>

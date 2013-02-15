@@ -288,6 +288,7 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <div><p>frequency index</p>
 </div></blockquote>
 <p><strong>dsf</strong> : down sampling factor</p>
+<p><strong>typ :</strong> :</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>errelTh</strong> : float</p>
@@ -359,14 +360,26 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.load_trx">
 <tt class="descname">load_trx</tt><big>(</big><em>directory='ant'</em>, <em>nf=104</em>, <em>ntheta=181</em>, <em>nphi=90</em>, <em>ncol=6</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.load_trx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.load_trx" title="Permalink to this definition">¶</a></dt>
-<dd><p>load a trx file</p>
+<dd><p>load a trx file (deprecated)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>directory</strong> : str</p>
+<blockquote>
+<div><p>directory where is located the trx file (default : ant)</p>
+</div></blockquote>
+<p><strong>nf</strong> : float</p>
+<blockquote>
+<div><p>number of frequency points</p>
+</div></blockquote>
+<p><strong>ntheta</strong> : float</p>
+<blockquote>
+<div><p>number of theta</p>
+</div></blockquote>
+<p><strong>nphi</strong> : float</p>
 <blockquote class="last">
-<div><p>directory where to find the file</p>
+<div><p>number of phi</p>
 </div></blockquote>
 </td>
 </tr>
@@ -597,7 +610,10 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/antprop-antenna-3.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/antprop-antenna-3.py">Source code</a>, <a class="reference external" href="../modules/antprop-antenna-3.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-3.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/antprop-antenna-3.png" src="../_images/antprop-antenna-3.png" />
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -634,9 +650,19 @@ else    -&gt; simple plot3D</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>k</strong> : frequency index</p>
-<p><strong>typ   = &#8216;Gain&#8217; | &#8216;Ftheta&#8217; | &#8216;Fphi&#8217;</strong> :</p>
-<p><strong>mode   = &#8216;linear&#8217;| &#8216;not implemented&#8217;</strong> :</p>
-<p class="last"><strong>silent = True    | False</strong> :</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>typ <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">&#8216;Gain&#8217; | &#8216;Ftheta&#8217; | &#8216;Fphi&#8217;</p>
+</dd>
+<dt>mode <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first last">&#8216;linear&#8217;| &#8216;not implemented&#8217;</p>
+</dd>
+<dt>silent <span class="classifier-delimiter">:</span> <span class="classifier">boolean </span></dt>
+<dd><p class="first last">True    | False</p>
+</dd>
+</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
