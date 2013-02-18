@@ -1,8 +1,8 @@
 from pylayers.util.project import *
 import sys
 
-import SimPy.Simulation
-from SimPy.Simulation import Process,hold
+
+from SimPy.SimulationRT import Process,hold
 
 from pylayers.util import utilnet
 from pylayers.network.network import Network, Node
@@ -70,7 +70,7 @@ class Localization(object):
                         R=RSS(id = rat+'-Pr-'+self.ID+'-'+e,
                             value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][0],
                             std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][1],
-                            model=Model(f=eval(param['f']), RSSnp=eval(param['rssnp']), d0=eval(param['d0']), method=param['method']),
+                            model=Model(f=eval(param['f']), rssnp=eval(param['rssnp']), d0=eval(param['d0']), method=param['method']),
                             p = self.net.node[self.ID]['PN'].node[e]['pe'],
                             origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
                             )
@@ -79,15 +79,14 @@ class Localization(object):
                     pass
 
                 try:
-                    if e in ['6','7']:
-                        self.cla.append(
-                            TOA(id = rat+'-TOA-'+self.ID+'-'+e,
-                                value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0],
-                                std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1],
-                                p= self.net.node[self.ID]['PN'].node[e]['pe'],
-                                origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
-                                )
-                                        )
+                    self.cla.append(
+                        TOA(id = rat+'-TOA-'+self.ID+'-'+e,
+                            value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][0],
+                            std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['TOA'][1],
+                            p= self.net.node[self.ID]['PN'].node[e]['pe'],
+                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
+                            )
+                                    )
                 except:
                     pass
 
@@ -167,7 +166,7 @@ class Localization(object):
                 self.savep(self.cla.pe,name='pe_geo')
 
         # in case of lack of observables
-        if sum(self.cla.runable) >= 1:
+        elif sum(self.cla.runable) >= 1:
             cpe = self.cla.compute_amb(pe=pe)
             if cpe:
                 print self.cla.pecluster
