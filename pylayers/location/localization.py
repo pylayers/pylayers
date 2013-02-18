@@ -235,5 +235,6 @@ class PLocalization(Process):
                 self.loc.compute_geo(ldp='TOA')
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
-            print 'localization node',self.loc.ID, ' update @',self.sim.now()
+            if self.sim.verbose:
+                print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time

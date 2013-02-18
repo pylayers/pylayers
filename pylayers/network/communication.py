@@ -173,7 +173,8 @@ class TX(Process):
         """
         self.create_evt()
         while 1:
-            print 'request TOA', self.ID
+            if self.sim.verbose:
+                print 'request TOA', self.ID
             for rat in self.PN.SubNet.keys():
                 for n in self.PN.SubNet[rat].edge[self.ID].keys():
                     # check nodes in visibility
@@ -395,7 +396,8 @@ class RX(Process):
                 [self.PN.edge[self.ID][n][rat].update(
                 {'Pr':self.net.edge[self.ID][n][rat]['Pr'],'tPr':self.sim.now(),'vis':self.net.edge[self.ID][n][rat]['vis']})
                 for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
-            print 'refresh RSS node', self.ID, ' @',self.sim.now()
+            if self.sim.verbose:
+                print 'refresh RSS node', self.ID, ' @',self.sim.now()
 
             yield hold, self, self.refreshRSS
 
@@ -420,8 +422,8 @@ class RX(Process):
                 [self.PN.edge[self.ID][n][rat].update(
                 {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
                 for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
-
-#            print 'refresh TOA node', self.ID, ' @',self.sim.now()
+            if self.sim.verbose:
+                print 'refresh TOA node', self.ID, ' @',self.sim.now()
             yield hold, self, self.refreshTOA
 
 
@@ -443,7 +445,8 @@ class RX(Process):
                     # evt.name[2] = rat
                     self.PN.edge[evt.name[1]][evt.name[0]][evt.name[2]].update(
                     {'TOA':self.net.edge[evt.name[1]][evt.name[0]][evt.name[2]]['TOA'],'tTOA':self.sim.now()})
-#                    print 'TOA requested by',evt.name[0],'to',evt.name[1],'has been updated'
+                    if self.sim.verbose:
+                        print 'TOA requested by',evt.name[0],'to',evt.name[1],'has been updated'
                     break
 
 

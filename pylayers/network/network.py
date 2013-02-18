@@ -1465,8 +1465,8 @@ class PNetwork(Process):
 
 
             self.net.pos=self.net.get_pos()
-
-            print 'network updated @',self.sim.now()
+            if self.sim.verbose:
+                print 'network updated @',self.sim.now()
 
             self.net.idx=self.net.idx+1
             yield hold, self, self.net_updt_time

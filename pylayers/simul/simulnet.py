@@ -22,7 +22,8 @@
 #####################################################################
 
 import pkgutil
-
+import warnings
+warnings.filterwarnings('ignore')
 
 #import SimPy.Simulation
 from SimPy.SimulationRT import SimulationRT, Process, hold
@@ -87,6 +88,10 @@ class Simul(SimulationRT):
         self.loc_opt = dict(self.config.items('Localization'))
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
+
+        self.verbose = str2bool(self.sim_opt['verbose'])
+        if str2bool(self.net_opt['ipython_nb_show']):
+            self.verbose = False
         self.roomlist=[]
 
     def create_layout(self):
@@ -288,7 +293,11 @@ class Simul(SimulationRT):
         fig_table = 'table'
 
         if str2bool(self.net_opt['show']):
-            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,)
+            if str2bool(self.net_opt['ipython_nb_show']):
+                notebook=True
+            else:
+                notebook =False
+            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,notebook=notebook)
             self.activate(self.sh,self.sh.run(),1.0)
 
         if str2bool(self.net_opt['show_table']):
