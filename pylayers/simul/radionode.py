@@ -112,7 +112,7 @@ class RadioNode(object):
         #print _fileant
         self.fileant = _fileant
         try:
-            self.loadvsh()
+            self.loadvsh() # is it still necessary ? 
         except:
             raise NameError('antenna file does not exist')
         self.save()
@@ -714,7 +714,7 @@ class RadioNode(object):
 
         """
         #print self.fileant
-        A = Antenna('vsh3', self.fileant)
+        A = Antenna(self.fileant)
         self.A = A
 
     def gantenna(self, mode='subst'):
