@@ -150,6 +150,7 @@ class EMSolver(object):
 
 
         if self.EMS_method == 'multiwall':
+
             dd={} # distance dictionnary
             if len(e) > 0:
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
