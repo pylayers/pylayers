@@ -952,7 +952,6 @@ class CLA(object):
                 if clust_vol != 0:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
-                    pdb.set_trace()
                     try:
                         dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
                     except:
