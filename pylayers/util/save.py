@@ -148,7 +148,6 @@ class Save(Process):
         self.savemat={}
         self.savemat['timestamp']=sTS
 
-
         ##### init
         for n in savecfg['type'].keys():
             if etype == 'matlab':
@@ -160,7 +159,10 @@ class Save(Process):
             self.savemat[dkey]['sens']=savecfg['sens'][n]
             self.savemat[dkey]['epwr']=savecfg['epwr'][n]
             for p in savecfg['lpos']:
-                self.savemat[dkey][p]=[]
+                if p != 'pe_clust':
+                    self.savemat[dkey][p]=np.zeros((len(sTS),2))*np.nan
+                else :
+                    self.savemat[dkey][p]=np.zeros((len(sTS),2,2))*np.nan
             for r in savecfg['lrat']:
                 # test if node has the rat and if it is not the only one on that rat
                 if (n in savecfg['subnet'][r]) and  (len(savecfg['subnet'][r]) > 1):
@@ -170,7 +172,7 @@ class Save(Process):
 
     
         ### fill in dict
-        for t in sTS:
+        for it,t in enumerate(sTS):
             for p in savecfg['lpos']:
                 for n in d[t][p].keys():
                     # handle matlab struct name cannot be a number
@@ -181,13 +183,19 @@ class Save(Process):
 
 
                     ########### Position
-                    try :
-                        if p != 'pe_clust':
-                            self.savemat[dkey][p]=np.vstack((self.savemat[dkey][p],d[t][p][n]))
-                        else :
-                            self.savemat[dkey][p]=np.dstack((self.savemat[dkey][p],d[t][p][n]))
-                    except:
-                        self.savemat[dkey][p]=d[t][p][n]
+#                    try :
+                    if p != 'pe_clust':
+                        try:
+                            self.savemat[dkey][p][it]=d[t][p][n]#np.vstack((self.savemat[dkey][p],d[t][p][n]))
+                        except:
+                            pass
+                    else :
+                        try:
+                            self.savemat[dkey][p][it]=d[t][p][n]#np.dstack((self.savemat[dkey][p],d[t][p][n]))
+                        except:
+                            pass
+#                    except:
+#                        self.savemat[dkey][p]=d[t][p][n]
 #                        except:
 #                            self.savemat[dkey]={}
 #                            for r in savecfg['lrat']:
