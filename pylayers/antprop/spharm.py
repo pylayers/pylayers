@@ -3,18 +3,6 @@
 This module handles spherical harmonics in PyLayers
 
 
-Examples
---------
-    >>> from pylayers.antprop.antenna import *
-    >>> A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
-
-The antenna can be represented in various formats
-
-.vsh2
-.vsh3
-
-
-
 """
 import doctest
 import subprocess
@@ -29,16 +17,12 @@ from scipy import io
 import matplotlib.pylab as plt
 from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
-#from spharm import Spharmt,getspecindx
 from pylayers.util.project import *
-#from sphere import spherepack, Wrapec, mathtogeo
-
 from matplotlib.font_manager import FontProperties
 from mpl_toolkits.mplot3d import axes3d
 from scipy import sparse
 from matplotlib import rc
 from matplotlib import cm
-
 
 def indexvsh(L):
     """ indexvsh(L)
@@ -78,7 +62,6 @@ def indexvsh(L):
     t = u.astype(int)
     return(t)
 
-
 def index_vsh(L, M):
     """ vector spherical harmonics indexing
 
@@ -111,86 +94,6 @@ def index_vsh(L, M):
     u = np.vstack((l, m)).T
     t = u.astype(int)
     return(t)
-
-
-def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
-    """ export antenna pattern in geomview format
-
-    Parameters
-    ----------
-    theta : np.array (1 x Ntheta)
-    phi   : np.array (1 x Nphi)
-    E     : np.array complex  (Ntheta,Nphi)
-    f     : frequency
-    po    : origin (1x3)
-    minr  : radius of minimum
-    maxr  : radius of maximum
-    ilog  : True (log) False (linear)
-
-    Returns
-    -------
-
-    filename
-
-
-    """
-    Nt = len(theta)
-    Np = len(phi)
-
-    if ilog:
-        R = 10 * np.log10(abs(E))
-    else:
-        R = abs(E)
-
-    Th = np.outer(theta, np.ones(Np))
-    Ph = np.outer(np.ones(Nt), phi)
-
-    T = (R - minr) / (maxr - minr)
-    Ry = 5 + 2 * T
-    x = Ry * np.sin(Th) * np.cos(Ph) + p[0]
-    y = Ry * np.sin(Th) * np.sin(Ph) + p[1]
-    z = Ry * np.cos(Th) + p[2]
-
-    Npoints = Nt * Np
-    Nfaces = (Nt - 1) * Np
-    Nedge = 0
-    #
-    # Colormap
-    #
-    colmap = plt.get_cmap()
-    Ncol = colmap.N
-    cmap = colmap(np.arange(Ncol))
-    g = np.round((R - minr) * (Ncol - 1) / (maxr - minr))
-
-    _filename = racine + str(1000 + f)[1:] + '.off'
-    filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
-    fd = open(filename, 'w')
-    fd.write('COFF\n')
-    chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
-    fd.write(chaine)
-
-    for ii in range(Nt):
-        for jj in range(Np):
-            cpos = str(x[ii, jj]) + ' ' + str(y[ii, jj]) + ' ' + str(z[ii, jj])
-            cpos = cpos.replace(',', '.')
-            ik = g[ii, jj]
-            ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
-                ' ' + str(cmap[ik, 2])
-            ccol = ccol.replace(',', '.')
-            fd.write(cpos + ' ' + ccol + ' 0.8\n')
-
-    for ii in range(Nt - 1):
-        for jj in range(Np):
-            p1 = ii * Np + jj
-            p2 = ii * Np + np.mod(jj + 1, Np)
-            p3 = (ii + 1) * Np + jj
-            p4 = (ii + 1) * Np + np.mod(jj + 1, Np)
-            chaine = '4 ' + str(p1) + ' ' + str(p2) + ' ' + \
-                str(p4) + ' ' + str(p3) + ' 0.5\n'
-            fd.write(chaine)
-
-    fd.close()
-    return(filename)
 
 class SHCoeff(object):
     """ Spherical Harmonics Coefficient
@@ -616,7 +519,6 @@ class SHCoeff(object):
             plt.yticks(fontsize=fontsize)
             plt.title(titre, fontsize=fontsize + 2)
 
-
 class VSHCoeff(object):
     """ Vector Spherical Harmonics Coefficients class
 
@@ -859,38 +761,6 @@ class VSHCoeff(object):
         self.Bi.put3(i, i3)
         self.Cr.put3(i, i3)
         self.Ci.put3(i, i3)
-
-def forcesympol(A):
-    """
-        calculate A.Ftheta and A.Fphi in order to obtain A.SqG continuous at poles
-        (theta=0,pi) for each frequency values
-
-        Parameters
-        ----------
-        A : Antenna object
-
-    """
-    (Fx0, Fy0, Fz0) = A.pol2cart(0)
-    (Fxp, Fyp, Fzp) = A.pol2cart(-1)
-
-    for i in range(A.Nf):
-        aux0 = mean(Fx0[i, :])
-        auxp = mean(Fxp[i, :])
-        Fx0[i, :] = aux0
-        Fxp[i, :] = auxp
-
-        aux0 = mean(Fy0[i, :])
-        auxp = mean(Fyp[i, :])
-        Fy0[i, :] = aux0
-        Fyp[i, :] = auxp
-
-        aux0 = mean(Fz0[i, :])
-        auxp = mean(Fzp[i, :])
-        Fz0[i, :] = aux0
-        Fzp[i, :] = auxp
-
-    A.cart2pol(Fx0, Fy0, Fz0, 0)
-    A.cart2pol(Fxp, Fyp, Fzp, -1)
 
 def AFLegendre3(L, M, x):
     """ calculate Pmm1l and Pmp1l
@@ -1292,7 +1162,6 @@ def VW3(l, m, theta ,phi ):
 
     return V, W
 
-
 def VW(n, m, x, phi, Pmm1n, Pmp1n):
     """ evaluate vector Spherical Harmonics basis functions
 
@@ -1348,7 +1217,6 @@ def VW(n, m, x, phi, Pmm1n, Pmp1n):
     V[np.isinf(V) | np.isnan(V)] = 0
     del Y2
     return V, W
-
 
 def plotVW(n, m, theta, phi, sf=False):
     """ plot VSH transform vsh basis in 3D plot
