@@ -311,13 +311,14 @@ class Simul(SimulationRT):
         self.create()
         self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
 #        self.simulate(until=float(self.sim_opt['duration']))
-
+        if self..save_opt['savep']:
+            print 'Processing save results, please wait'
+            self..save.export('matlab')
+            self..save.export('python')
 
 if __name__ == '__main__':
 
     S = Simul()
     seed(eval(S.sim_opt['seed']))
     S.runsimul()
-    if S.save_opt['savep']:
-        S.save.export('matlab')
-        S.save.export('python')
+
