@@ -106,8 +106,12 @@ class Simul(SimulationRT):
         self.L = Layout()
         if _filename.split('.')[1] == 'str':
             self.L.loadstr(_filename)
-        else:
+        elif _filename.split('.')[1] == 'str2':
             self.L.loadstr2(_filename)
+        elif _filename.split('.')[1] == 'ini':
+            self.L.loadini(_filename)
+
+
 
         try:
             self.L.dumpr()

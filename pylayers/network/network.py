@@ -90,7 +90,6 @@ class Node(nx.MultiGraph):
         self.PN = Network(owner=self.ID)
         self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
         # Network init
-
         self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,sens=sens,type=type))
         self.p    = self.node[self.ID]['p']
         self.pe    = self.PN.node[self.ID]['pe']
@@ -365,7 +364,6 @@ class Network(nx.MultiGraph):
 
 
         """
-
         if Rat == None:
         #    pdb.set_trace()
             for Rat in self.RAT:            
@@ -378,8 +376,8 @@ class Network(nx.MultiGraph):
                         self.SubNet[Rat].remove_edge(e[0],e[1],e[2])
                 for n in self.SubNet[Rat].nodes():
                     try:
-                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
-                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens'][Rat]
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr']
+                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens']
                     except: 
                         pass
 
@@ -396,8 +394,8 @@ class Network(nx.MultiGraph):
                         pass
                 for n in self.SubNet[Rat].nodes():
                     try:
-                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
-                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens'][Rat]
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr']
+                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens']
                     except: 
                         pass
 
@@ -452,6 +450,7 @@ class Network(nx.MultiGraph):
         
         
         """
+
         self.get_RAT()
         self.connect()
         self.init_PN()
@@ -533,8 +532,8 @@ class Network(nx.MultiGraph):
         """
 
         p=nx.get_node_attributes(self.SubNet[RAT],'p')
-        epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
-        sens=nx.get_node_attributes(self.SubNet[RAT],'sens').values()
+        epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr')
+        sens=nx.get_node_attributes(self.SubNet[RAT],'sens')
         e=self.SubNet[RAT].edges()
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
         lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i],'vis':v[i]} for i in range(len(d))]
@@ -1225,6 +1224,7 @@ class PNetwork(Process):
 
 
         while True:
+
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
                 self.net.compute_LDPs(self.net.nodes(),rat)

@@ -88,11 +88,7 @@ class EMSolver(object):
 
 
 
-<<<<<<< Updated upstream
-=======
 
-
->>>>>>> Stashed changes
     def solve(self,p,e,LDP,RAT,epwr,sens):
         """compute and return a LDP value thanks to a given method
 
