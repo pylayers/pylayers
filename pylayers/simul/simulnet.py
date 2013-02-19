@@ -118,7 +118,6 @@ class Simul(SimulationRT):
             self.L.loadini(_filename)
 
 
-
         try:
             self.L.dumpr()
             print 'Layout graphs are loaded from ',basename,'/struc'

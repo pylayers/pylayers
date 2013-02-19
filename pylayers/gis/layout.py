@@ -2134,7 +2134,6 @@ class Layout(object):
         seglist = self.seginframe(p1, p2)
         npta = self.tahe[0, seglist]
         nphe = self.tahe[1, seglist]
-
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
@@ -2945,7 +2944,9 @@ class Layout(object):
         """
         self.Gw = nx.Graph()
         self.Gw.pos = {}
+        pdb.set_trace()
         d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
+
         for e in self.Gr.edges_iter(): # iterator on Gr edges
             #doors1 = self.Gr.node[e[0]]['doors']  # doors of room e[0]
             #doors2 = self.Gr.node[e[1]]['doors']  # doors of room e[1]

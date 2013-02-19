@@ -186,7 +186,6 @@ class Localization(object):
         elif sum(self.cla.runable) >= 1:
             cpe = self.cla.compute_amb(pe=pe)
             if cpe:
-                print self.cla.pecluster
                 self.savep(np.array(self.cla.pecluster),name='pe_clust')
 
     def compute_alg(self,rat='all',ldp='all',pe=True):
