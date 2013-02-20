@@ -68,7 +68,7 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filename='defstr.str2',_filematini='matDB.ini',_fileslabini='slabDB.ini'):
+    def __init__(self,_filename='defstr.str',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
 
 
         mat = sb.MatDB()
@@ -90,6 +90,7 @@ class Layout(object):
         self.filename = _filename
         self.fileslabini = _fileslabini
         self.filematini = _filematini
+        self.filefur = _filefur
         self.display = {}
         self.display['title'] = ''
         self.display['ticksoff'] = True
@@ -256,6 +257,30 @@ class Layout(object):
         print "L.showGs(clear=True)"
         print "L.showGs(edlist=L.subseg()['WOOD'],dthin=False,dlabels=True)"
 
+
+    def g2npy(self):
+        """
+            graph to numpy conversion
+
+            This fucntion updates from Gs:
+            sefl.tahe (2xNn)
+            self.pt (2xNe)
+        """
+
+
+        self.pt = np.array(np.zeros([2, self.Nn]), dtype=float)
+        self.tahe = np.array(np.zeros([2, self.Ne]), dtype=int)
+
+        for k in range(self.Nn):
+            self.pt[0,k]=self.Gs.pos[-(k+1)][0]
+            self.pt[1,k]=self.Gs.pos[-(k+1)][1]
+
+
+        for k in range(self.Ne):
+            self.tahe[0,k]=-nx.neighbors(self.Gs,k+1)[0]-1
+            self.tahe[1,k]=-nx.neighbors(self.Gs,k+1)[1]-1
+
+
     def saveini(self, _fileini):
         """ save structure in an ini file 
 
@@ -269,6 +294,7 @@ class Layout(object):
         config.add_section("points")
         config.add_section("segments")
         config.add_section("display")
+        config.add_section("files")
         config.set("info",'Npoints',self.Nn)
         config.set("info",'Nsegments',self.Ne)
         config.set("info",'Nsubsegments',self.Nss)
@@ -292,11 +318,17 @@ class Layout(object):
                     except:
                         pass
                 config.set("segments",str(n),d)
-
+        config.set("files",'materials',self.filematini)
+        config.set("files",'slab',self.fileslabini)
+        config.set("files",'furniture',self.filefur)
         fileini = pyu.getlong(_fileini,'struc')
         fd = open(fileini,"w")
         config.write(fd)
         fd.close()
+
+        # convert graph Gs to numpy arrays for speed up post processing
+        # ideally an edited Layout should be locked while not saved.
+        self.g2npy()
 
 
     def loadini(self, _fileini):
@@ -308,6 +340,7 @@ class Layout(object):
             file name extension .ini
 
         """
+        self.filename=_fileini
         di = {}
         config = ConfigParser.ConfigParser()
         fileini = pyu.getlong(_fileini,"struc")
@@ -328,7 +361,7 @@ class Layout(object):
         self.Gs = nx.Graph()
         self.Gs.pos = {}
         self.labels = {}
-        
+
         # update display section 
         for k in di['display']:
             try:
@@ -361,7 +394,17 @@ class Layout(object):
             else:
                 self.name[name] = [eval(ns)]
 
-       
+        # compliant with config file without  material/slab information
+        if config.has_section('files'):
+            self.filematini=config.get('files','materials')
+            self.fileslabini=config.get('files','slab')
+            self.filefur=config.get('files','furniture')
+
+
+        # convert graph Gs to numpy arrays for speed up post processing
+        self.g2npy()
+
+
     def loadfur(self, _filefur):
         """ loadfur load a furniture file
 
@@ -403,7 +446,8 @@ class Layout(object):
             F = fur.Furniture()
             F.load(_filefur, name)
             self.lfur.append(F)
-        
+        self.filefur=_filefur
+
     def load(self,_filename):
         """ load a Layout in different formats
 
@@ -2144,7 +2188,6 @@ class Layout(object):
         seglist = self.seginframe(p1, p2)
         npta = self.tahe[0, seglist]
         nphe = self.tahe[1, seglist]
-
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
 
@@ -2955,7 +2998,9 @@ class Layout(object):
         """
         self.Gw = nx.Graph()
         self.Gw.pos = {}
+
         d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
+
         for e in self.Gr.edges_iter(): # iterator on Gr edges
             #doors1 = self.Gr.node[e[0]]['doors']  # doors of room e[0]
             #doors2 = self.Gr.node[e[1]]['doors']  # doors of room e[1]

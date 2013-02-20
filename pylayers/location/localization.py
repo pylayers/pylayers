@@ -24,7 +24,7 @@ class Localization(object):
 
     def __init__(self,**args):
         
-        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0'}
+        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0','save':[]}
 
         for key, value in defaults.items():
             if key in args:
@@ -67,7 +67,7 @@ class Localization(object):
                 try:
                     param = dict(self.config.items(rat+'_PLM'))
                     self.cla.append(
-                        R=RSS(id = rat+'-Pr-'+self.ID+'-'+e,
+                        RSS(id = rat+'-Pr-'+self.ID+'-'+e,
                             value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][0],
                             std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][1],
                             model=Model(f=eval(param['f']), rssnp=eval(param['rssnp']), d0=eval(param['d0']), method=param['method']),
@@ -76,7 +76,13 @@ class Localization(object):
                             )
                                     )
                 except:
-                    pass
+                    param = dict(self.config.items(rat+'_PLM'))
+                    self.cla.append(
+                        RSS(id = rat+'-Pr-'+self.ID+'-'+e,
+                            p = self.net.node[self.ID]['PN'].node[e]['pe'],
+                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
+                            )
+                                    )
 
                 try:
                     self.cla.append(
@@ -88,7 +94,13 @@ class Localization(object):
                             )
                                     )
                 except:
-                    pass
+                    self.cla.append(
+                        TOA(id = rat+'-TOA-'+self.ID+'-'+e,
+                            p= self.net.node[self.ID]['PN'].node[e]['pe'],
+                            origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'TOA'}
+                            )
+                                    )
+
 
 #                 elif ldp == 'TDOA':
 #                    pass
@@ -105,10 +117,12 @@ class Localization(object):
             rat=self.net.node[self.ID]['PN'].SubNet.keys()
         if ldp == 'all':
             ldp=['Pr','TOA','TDOA']
+        else:
+            if not isinstance(ldp,list):
+                ldp =[ldp]
 
         self.algloc.nodes={}
         self.algloc.ldp={}
-
         for c in self.cla.c:
             crat,cldp,e,own=c.origin.values()
             if (crat in rat) and (cldp in ldp) :
@@ -138,16 +152,18 @@ class Localization(object):
                             self.algloc.ldp['d0'] = c.param['d0']
                             ####### -pl0 from alg loc ############
                             self.algloc.ldp['PL0'] = -c.param['PL0']
+            else:
+                c.runable = False
+
         try:
             self.algloc.nodes['RN_TOA']=self.algloc.nodes['RN_TOA'].T
         except:
             pass
-
         self.cla.update()
 
     def savep(self,value,name='pe'):
         """
-            Save an estimated position into self.net
+            write an estimated position into self.net
         """
         self.net.node[self.ID]['PN'].update_pos(self.ID,value,p_pe=name)
         self.net.update_pos(self.ID,value,p_pe=name)
@@ -159,6 +175,7 @@ class Localization(object):
             Compute postion with the geometric algorithm
         """
 
+
         if sum(self.cla.runable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
@@ -169,19 +186,34 @@ class Localization(object):
         elif sum(self.cla.runable) >= 1:
             cpe = self.cla.compute_amb(pe=pe)
             if cpe:
-                print self.cla.pecluster
                 self.savep(np.array(self.cla.pecluster),name='pe_clust')
 
     def compute_alg(self,rat='all',ldp='all',pe=True):
         """
             Compute postion with the algebraic algorithm
         """
+
         if len(self.cla.c) !=0:
             if ldp == 'all':
                 ldp=['Pr','TOA','TDOA']
+            elif not isinstance(ldp,list):
+                ldp=[ldp]
+
             pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
             self.savep(pe_alg.T,name='pe_alg')
 
+
+
+
+    def compute_crb(self,rat='all',ldp='all',pe=True):
+        """
+            Compute CramerRao bound
+        """
+        
+        if ldp == 'all':
+            ldp=['Pr','TOA','TDOA']
+        crb = self.algloc.crb(np.zeros((2,1)),'Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp)
+        self.savep(np.array(crb),name='crb')
 
 
 
@@ -197,11 +229,11 @@ class PLocalization(Process):
 #        self.loc.get_const()
         self.loc.fill_cla()
         while True:
-            self.loc.update()
+            self.loc.update(ldp='TOA')
             if 'geo'in self.method :
                 self.loc.compute_geo(ldp='TOA')
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
-
-            print 'localization node',self.loc.ID, ' update @',self.sim.now()
+            if self.sim.verbose:
+                print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
