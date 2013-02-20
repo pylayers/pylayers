@@ -21,7 +21,7 @@
 #Bernard UGUEN        : bernard.uguen@univ-rennes1.fr
 #####################################################################
 
-
+from IPython.display import clear_output, display
 from SimPy.SimulationRT import Process, hold
 import numpy as np
 import scipy as sp
@@ -60,6 +60,7 @@ class ShowNet(Process):
                     'fname': 'network',
                     'fig': None,
                     'ax': None,
+                    'notebook':False,
                     'sim': None}
 
 ##       initialize attributes
@@ -97,57 +98,112 @@ class ShowNet(Process):
 
         """
 
-        while True:
-            plt.figure(self.fname)
-            self.ax.axis('scaled')
+        if self.args['notebook']:
+            while True:
 
-            try:
-                self.coll_plot['node'][1] = []
-                self.coll_plot['label'][1] = []
-                self.coll_plot['edge'][1] = []
-                Cl = []
-            except:
-                self.coll_plot['node'] = [[]]
-                self.coll_plot['node'].append([])
-                self.coll_plot['label'] = [[]]
-                self.coll_plot['label'].append([])
-                self.coll_plot['edge'] = [[]]
-                self.coll_plot['edge'].append([])
-                Cl = []
-            rloop = self.net.RAT.keys()
-            for ii, rl in enumerate(rloop):
-                pos = self.net.get_pos(rl)
-                self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pos, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='r'))
-#                if self.option['estimate']:
-#                    try:
-#                        pose = self.net.get_pos_est(rl)
-#                        pdb.set_trace()
-#                        self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pose, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='b',alpha=0.5))
-#                    except:
-#                        pass
-                Cl = nx.draw_networkx_labels(self.net.SubNet[rl], pos=pos, font_size=10)
-                self.coll_plot['label'][1].extend(Cl.values())
-                self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, edge_color=self.RATcolor[rl], style=self.RATes[rl])))
-
-            if self.legend:
-                self.ax.legend((self.coll_plot['edge'][1]), (rloop), loc=3)
-            if self.info:
-                L = nx.get_edge_attributes(self.net, 'TOA')
-
-            if self.ion:
                 try:
-                    [jj.remove() for jj in self.coll_plot['node'][0]]
-                    [jj.remove() for jj in self.coll_plot[
-                        'edge'][0] if jj is not None]
-                    [jj.remove() for jj in self.coll_plot['label'][0]]
+                    self.coll_plot['node'][1] = []
+                    self.coll_plot['label'][1] = []
+                    self.coll_plot['edge'][1] = []
+                    Cl = []
                 except:
-                    pass
-                plt.draw()
-                self.coll_plot['node'][0] = self.coll_plot['node'][1]
-                self.coll_plot['edge'][0] = self.coll_plot['edge'][1]
-                self.coll_plot['label'][0] = self.coll_plot['label'][1]
+                    self.coll_plot['node'] = [[]]
+                    self.coll_plot['node'].append([])
+                    self.coll_plot['label'] = [[]]
+                    self.coll_plot['label'].append([])
+                    self.coll_plot['edge'] = [[]]
+                    self.coll_plot['edge'].append([])
+                    Cl = []
+                rloop = self.net.RAT.keys()
+                for ii, rl in enumerate(rloop):
+                    pos = self.net.get_pos(rl)
+                    self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pos, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='r'))
+    #                if self.option['estimate']:
+    #                    try:
+    #                        pose = self.net.get_pos_est(rl)
+    #                        pdb.set_trace()
+    #                        self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pose, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='b',alpha=0.5))
+    #                    except:
+    #                        pass
+                    Cl = nx.draw_networkx_labels(self.net.SubNet[rl], pos=pos, font_size=10)
+                    self.coll_plot['label'][1].extend(Cl.values())
+                    self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, edge_color=self.RATcolor[rl], style=self.RATes[rl])))
 
-                yield hold, self, float(self.update['meca'])
+                if self.legend:
+                    self.ax.legend((self.coll_plot['edge'][1]), (rloop), loc=3)
+                if self.info:
+                    L = nx.get_edge_attributes(self.net, 'TOA')
+
+                if self.ion:
+                    try:
+                        [jj.remove() for jj in self.coll_plot['node'][0]]
+                        [jj.remove() for jj in self.coll_plot[
+                            'edge'][0] if jj is not None]
+                        [jj.remove() for jj in self.coll_plot['label'][0]]
+                    except:
+                        pass
+
+                    self.coll_plot['node'][0] = self.coll_plot['node'][1]
+                    self.coll_plot['edge'][0] = self.coll_plot['edge'][1]
+                    self.coll_plot['label'][0] = self.coll_plot['label'][1]
+                    clear_output()
+                    display(self.fig)
+                    yield hold, self, float(self.update['meca'])
+
+
+        else :
+
+            while True:
+                plt.figure(self.fname)
+                self.ax.axis('scaled')
+
+                try:
+                    self.coll_plot['node'][1] = []
+                    self.coll_plot['label'][1] = []
+                    self.coll_plot['edge'][1] = []
+                    Cl = []
+                except:
+                    self.coll_plot['node'] = [[]]
+                    self.coll_plot['node'].append([])
+                    self.coll_plot['label'] = [[]]
+                    self.coll_plot['label'].append([])
+                    self.coll_plot['edge'] = [[]]
+                    self.coll_plot['edge'].append([])
+                    Cl = []
+                rloop = self.net.RAT.keys()
+                for ii, rl in enumerate(rloop):
+                    pos = self.net.get_pos(rl)
+                    self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pos, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='r'))
+    #                if self.option['estimate']:
+    #                    try:
+    #                        pose = self.net.get_pos_est(rl)
+    #                        pdb.set_trace()
+    #                        self.coll_plot['node'][1].append(nx.draw_networkx_nodes(self.net, pos=pose, nodelist=self.net.SubNet[rl].nodes(), node_size=100., node_color='b',alpha=0.5))
+    #                    except:
+    #                        pass
+                    Cl = nx.draw_networkx_labels(self.net.SubNet[rl], pos=pos, font_size=10)
+                    self.coll_plot['label'][1].extend(Cl.values())
+                    self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, edge_color=self.RATcolor[rl], style=self.RATes[rl])))
+
+                if self.legend:
+                    self.ax.legend((self.coll_plot['edge'][1]), (rloop), loc=3)
+                if self.info:
+                    L = nx.get_edge_attributes(self.net, 'TOA')
+
+                if self.ion:
+                    try:
+                        [jj.remove() for jj in self.coll_plot['node'][0]]
+                        [jj.remove() for jj in self.coll_plot[
+                            'edge'][0] if jj is not None]
+                        [jj.remove() for jj in self.coll_plot['label'][0]]
+                    except:
+                        pass
+                    plt.draw()
+                    self.coll_plot['node'][0] = self.coll_plot['node'][1]
+                    self.coll_plot['edge'][0] = self.coll_plot['edge'][1]
+                    self.coll_plot['label'][0] = self.coll_plot['label'][1]
+
+                    yield hold, self, float(self.update['meca'])
 
 
 class ShowTable(Process):
