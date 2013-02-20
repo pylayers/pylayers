@@ -166,7 +166,7 @@ class CLA(object):
                 update all constraints of the CLA
         """
         [c.update() for c in self.c if c.runable]
-
+        self.runable=[c.runable for c in self.c]
 
     def compute(self,pe=True):
         """
@@ -190,6 +190,7 @@ class CLA(object):
             self.Nc=len(self.c)
             return True
         else:
+            self.Nc=len(self.c)
             return False
 
 
@@ -351,7 +352,8 @@ class CLA(object):
                 Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints
         """
 
-        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
+#        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
+        Nc = self.Nc - len(np.nonzero(np.array(self.runable) == False)[0]) 
         self.Nc = Nc
         vcwmin = 1.0  # max(self.vcw)
         step = 1.0
@@ -515,7 +517,6 @@ class CLA(object):
         """
 
         self.iter = self.iter + 1
-
         Nc = self.Nc
         if self.iter == 1:
             #print NBOXMAX
@@ -946,10 +947,11 @@ class CLA(object):
                         mps = mp
                         estclu = clusters
 
+
+
                 if clust_vol != 0:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
-                    pdb.set_trace()
                     try:
                         dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
                     except:
