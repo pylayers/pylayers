@@ -10,7 +10,6 @@ import pdb
 
 def LOSS_furniture(Tx,Rx,furn):
     """
-      Yu Lei 
       Not used
     """
     for i in range(1,5):
@@ -29,12 +28,19 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     Parameters
     ----------
-    fGHz:
-        frequency GHz
-    GtdB:
-        transmitting antenna gain dB (default 0 dB)
-    GrdB:
-        receiving antenna gain dB (default 0 dB)
+
+    fGHz: float
+          frequency GHz
+    GtdB: float
+          transmitting antenna gain dB (default 0 dB)
+    GrdB: float
+          receiving antenna gain dB (default 0 dB)
+
+    Returns
+    -------
+
+    PL0 : float
+          path @ 1m
 
     Notes
     -----
@@ -49,59 +55,91 @@ def PL0(fGHz,GtdB=0,GrdB=0):
     >>> assert (PL<41)&(PL>40),"something wrong"
 
     """
-    ld  = 0.3/fGHz
+
+    ld = 0.3/fGHz
     PL0 = -20*np.log10(ld/(4.0*np.pi))-GtdB-GrdB
+
     return PL0
 
 def Dgrid_points(points,Px):
+    """ distance point to grid
+
+    Parameters
+    ----------
+
+    points : np.array
+             grid Np x 2 array
+
+    Px     : np.array
+             point 2 x 1  array
+
     """
-    Dgrid_points(points,Px):
-    points : Np x 2 array
-    Px     : 2 x 1  array
-    """
-  
-    Dx = points[:,0]-Px[0]
-    Dy = points[:,1]-Px[1]
-    D  = np.sqrt( Dx*Dx + Dy*Dy )
+
+    Dx = points[:,0] - Px[0]
+    Dy = points[:,1] - Px[1]
+
+    D = np.sqrt( Dx*Dx + Dy*Dy )
 
     return(D)
 
 def Dgrid_zone(zone,Px):
-    """
-    Dgrid_zone(zone,Px):
+    """ Distance point to zone
 
     A zone is a quadrilateral zone.
 
-    Zone dictionnary :
-        xmin xmax Nx
-        ymin ymax Ny
+    Parameters
+    ----------
 
-    Build the distance matrix between Tx and the zone points
+    zone : dictionnary
+           xmin xmax Nx
+           ymin ymax Ny
+
+    Px : np.array
+         point
+
+    Build the distance matrix between Tx and points in the zone
+
+    Notes
+    -----
+
+    use broadcasting instead
 
     """
 
     rx = np.linspace(zone['xmin'],zone['xmax'],zone['Nx'])
     ry = np.linspace(zone['ymin'],zone['ymax'],zone['Ny'])
+
     R_x = np.outer(np.ones(len(ry)),rx)
     R_y = np.outer(ry,np.ones(len(rx)))
+
     Dx = R_x - Px[0]
     Dy = R_y - Px[1]
-    D  = np.sqrt(Dx*Dx+Dy*Dy)
+    D = np.sqrt(Dx*Dx+Dy*Dy)
     return (D)
 
 def OneSlopeMdl(D,n,fGHz):
-    """
+    """ one slope model
+
     Parameters
     ----------
-    n : float
-        path loss exponent
-    D : array
-        Distance array
-    fGHz : array
-        frequency  GHz
+
+    D   : np.array
+          distance array
+    n   : float
+          path loss exponent
+    fGHz : np.array
+           frequency  GHz
+
+    Returns
+    -------
+
+    PL : np.array
+          path loss as a function of distance
 
     """
+
     PL = PL0(fGHz)+10*n*np.log10(D)
+
     return(PL)
 
 def PL(pts,fGHz,p,n=2.0):
@@ -109,31 +147,49 @@ def PL(pts,fGHz,p,n=2.0):
 
     Parameters
     ----------
-    pts    : array (2xNp)
-    fGHz   : frequency (GHz)
-    p      : array (2x1)
-    n      : path loss exponent
+
+    pts    : np.array (2xNp)
+             points
+    fGHz   : float
+             frequency (GHz)
+    p      : np.array (2x1)
+    n      : float
+            path loss exponent (default = 2)
+
+    Returns
+    -------
+
+    PL : np.array
+         path loss w.r.t distance and frequency
 
     """
+
     D = np.sqrt(np.sum((pts-p)**2,axis=1))
-    return(PL0(fGHz)+10*n*np.log10(D))
+
+    PL = PL0(fGHz) + 10*n*np.log10(D)
+
+    return(PL)
 
 def Loss0_v2(L,Pts,f,p):
-    """
+    """ 
+
     Parameters
     ----------
-    L
-        Layout object
-    Pts
+
+    L   : Layout
+          Layout object
+
+    Pts : observation grid 
         (Np x 2) array
-    f
-        frequency (GHz)
-    p
+
+    fGHz : np.array
+           frequency 
+    p  : point
         source points
 
     Examples
     --------
-    
+
     .. plot::
         :include-source:
 
@@ -151,8 +207,6 @@ def Loss0_v2(L,Pts,f,p):
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
         >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
         >>> plt.show()
-
-
 
     """
     N   = np.shape(Pts)[0]
