@@ -951,182 +951,6 @@ class Antenna(object):
         EFph = Fph * E
         self.Fphi = EFph.reshape(sh[0], sh[1], sh[2])
 
-    def vshd(self, dsf=1):
-        """
-
-        Parameters
-        ----------
-        dsf :  int
-            down sampling factor  'default 1'
-
-        Summary
-        -------
-
-        This function calculates the Vector Spherical Harmonics coefficients
-        It makes use of the spherepack function vha
-
-            m : phi    longitude
-            n : theta  latitude
-
-        Antenna pattern are stored       (f theta phi)
-        Coeff are stored with this order (f , n , m )
-
-        The vsh coefficient are organized differently
-        should be better for compression along frequency axis
-
-
-        """
-
-        th = self.theta[::dsf]
-        ph = self.phi[::dsf]
-
-        nth = len(th)
-        nph = len(ph)
-        nf = self.Nf
-
-        if (nph % 2) == 1:
-            mdab = min(nth, (nph + 1) / 2)
-        else:
-            mdab = min(nth, nph / 2)
-
-        ndab = nth
-
-        Br = 1j * np.zeros((nf, ndab, mdab))
-        Bi = 1j * np.zeros((nf, ndab, mdab))
-        Cr = 1j * np.zeros((nf, ndab, mdab))
-        Ci = 1j * np.zeros((nf, ndab, mdab))
-
-        gridComp = Wrapec()
-        wvha, lvha = gridComp.vhai(nth, nph)
-
-        for k in range(nf):
-            #
-            # Real part
-            #
-            Fpr = self.Fphi[k][::dsf, ::dsf].real
-            Ftr = self.Ftheta[k][::dsf, ::dsf].real
-            #
-            # Fpr     Ntheta,Nphi
-            #
-            brr, bir, crr, cir = gridComp.vha(nth, nph, 1,
-                                              lvha, wvha,
-                                              np.transpose(Fpr),
-                                              np.transpose(Ftr))
-            #
-            # Imaginary part
-            #
-            Fpi = self.Fphi[k][::dsf, ::dsf].imag
-            Fti = self.Ftheta[k][::dsf, ::dsf].imag
-            bri, bii, cri, cii = gridComp.vha(nth, nph, 1,
-                                              lvha, wvha,
-                                              np.transpose(Fpi),
-                                              np.transpose(Fti))
-
-            Br[k, :, :] = brr + 1j * bri
-            Bi[k, :, :] = bir + 1j * bii
-            Cr[k, :, :] = crr + 1j * cri
-            Ci[k, :, :] = cir + 1j * cii
-
-        #
-        # m=0 row is multiplied by 0.5
-        #
-
-        Br[:, :, 0] = 0.5 * Br[:, :, 0]
-        Bi[:, :, 0] = 0.5 * Bi[:, :, 0]
-        Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
-        Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
-
-        #print "self.fa[0] = ",self.fa[0]
-        #print "self.fa[-1] = ",self.fa[-1]
-
-        Br = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Br)
-        Bi = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Bi)
-        Cr = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Cr)
-        Ci = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Ci)
-
-        self.C = VSHCoeff(Br, Bi, Cr, Ci)
-
-    def vsh(self):
-        """ calculates the Vector Spherical Harmonics coefficients
-
-        Summary
-        -------
-
-        It makes use of the spherepack function vha
-
-            m : phi    longitude
-            n : theta  latitude
-
-        Antenna pattern are stored       (f theta phi)
-        Coeff are stored with this order (f , n , m )
-
-        The vsh coefficient are organized differently
-        should be better for compression along frequency axis
-
-        """
-
-        nt = self.Nt
-        np = self.Np
-        nf = self.Nf
-
-        if np % 2:
-            mdab = min(nt, (np + 1) / 2)
-        else:
-            mdab = min(nt, np / 2)
-
-        ndab = nt
-
-        Br = 1j * np.zeros((nf, ndab, mdab))
-        Bi = 1j * np.zeros((nf, ndab, mdab))
-        Cr = 1j * np.zeros((nf, ndab, mdab))
-        Ci = 1j * np.zeros((nf, ndab, mdab))
-
-        gridComp = Wrapec()
-        wvha, lvha = gridComp.vhai(nt, np)
-
-        for k in range(nf):
-            #
-            # Real part
-            #
-            Fpr = self.Fphi[k].real
-            Ftr = self.Ftheta[k].real
-            #
-            # Fpr     Ntheta,Nphi
-            #
-            brr, bir, crr, cir = gridComp.vha(nt, np, 1, lvha,
-                                              wvha, transpose(Fpr), transpose(Ftr))
-            #
-            # Imaginary part
-            #
-            Fpi = self.Fphi[k].imag
-            Fti = self.Ftheta[k].imag
-            bri, bii, cri, cii = gridComp.vha(nt, np, 1, lvha,
-                                              wvha, transpose(Fpi), transpose(Fti))
-
-            Br[k, :, :] = brr + 1j * bri
-            Bi[k, :, :] = bir + 1j * bii
-            Cr[k, :, :] = crr + 1j * cri
-            Ci[k, :, :] = cir + 1j * cii
-
-        #
-        # m=0 row is multiplied by 0.5
-        #
-
-        Br[:, :, 0] = 0.5 * Br[:, :, 0]
-        Bi[:, :, 0] = 0.5 * Bi[:, :, 0]
-        Cr[:, :, 0] = 0.5 * Cr[:, :, 0]
-        Ci[:, :, 0] = 0.5 * Ci[:, :, 0]
-
-        #print "self.fa[0] = ",self.fa[0]
-        #print "self.fa[-1] = ",self.fa[-1]
-
-        Br = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Br)
-        Bi = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Bi)
-        Cr = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Cr)
-        Ci = SHCoeff(typ='s1', fmin=self.fa[0], fmax=self.fa[-1], data=Ci)
-
-        self.C = VSHCoeff(Br, Bi, Cr, Ci)
-
     def demo(self):
         """ display few commands for executing little demo
         """
@@ -2232,6 +2056,84 @@ def show3D(F, theta, phi, k, col=True):
     else:
         ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
 
+def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
+    """ export antenna pattern in geomview format
+
+    Parameters
+    ----------
+    theta : np.array (1 x Ntheta)
+    phi   : np.array (1 x Nphi)
+    E     : np.array complex  (Ntheta,Nphi)
+    f     : frequency
+    po    : origin (1x3)
+    minr  : radius of minimum
+    maxr  : radius of maximum
+    ilog  : True (log) False (linear)
+
+    Returns
+    -------
+
+    filename
+
+
+    """
+    Nt = len(theta)
+    Np = len(phi)
+
+    if ilog:
+        R = 10 * np.log10(abs(E))
+    else:
+        R = abs(E)
+
+    Th = np.outer(theta, np.ones(Np))
+    Ph = np.outer(np.ones(Nt), phi)
+
+    T = (R - minr) / (maxr - minr)
+    Ry = 5 + 2 * T
+    x = Ry * np.sin(Th) * np.cos(Ph) + p[0]
+    y = Ry * np.sin(Th) * np.sin(Ph) + p[1]
+    z = Ry * np.cos(Th) + p[2]
+
+    Npoints = Nt * Np
+    Nfaces = (Nt - 1) * Np
+    Nedge = 0
+    #
+    # Colormap
+    #
+    colmap = plt.get_cmap()
+    Ncol = colmap.N
+    cmap = colmap(np.arange(Ncol))
+    g = np.round((R - minr) * (Ncol - 1) / (maxr - minr))
+
+    _filename = racine + str(1000 + f)[1:] + '.off'
+    filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
+    fd = open(filename, 'w')
+    fd.write('COFF\n')
+    chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
+    fd.write(chaine)
+
+    for ii in range(Nt):
+        for jj in range(Np):
+            cpos = str(x[ii, jj]) + ' ' + str(y[ii, jj]) + ' ' + str(z[ii, jj])
+            cpos = cpos.replace(',', '.')
+            ik = g[ii, jj]
+            ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
+                ' ' + str(cmap[ik, 2])
+            ccol = ccol.replace(',', '.')
+            fd.write(cpos + ' ' + ccol + ' 0.8\n')
+
+    for ii in range(Nt - 1):
+        for jj in range(Np):
+            p1 = ii * Np + jj
+            p2 = ii * Np + np.mod(jj + 1, Np)
+            p3 = (ii + 1) * Np + jj
+            p4 = (ii + 1) * Np + np.mod(jj + 1, Np)
+            chaine = '4 ' + str(p1) + ' ' + str(p2) + ' ' + \
+                str(p4) + ' ' + str(p3) + ' 0.5\n'
+            fd.write(chaine)
+
+    fd.close()
+    return(filename)
 
 if (__name__ == "__main__"):
     doctest.testmod()
