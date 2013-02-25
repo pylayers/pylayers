@@ -1286,8 +1286,8 @@ class Antenna(object):
 
         x = -np.cos(theta)
 
-        Pmm1n, Pmp1n = AFLegendre3(20, 20, x)
-        #Pmm1n, Pmp1n = AFLegendre3(L, M, x)
+        #Pmm1n, Pmp1n = AFLegendre3(20, 20, x)
+        Pmm1n, Pmp1n = AFLegendre3(L, L, x)
 
         V, W = VW(lBr, mBr, x, phi, Pmm1n, Pmp1n)
 

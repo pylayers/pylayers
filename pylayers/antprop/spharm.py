@@ -691,7 +691,7 @@ class VSHCoeff(object):
         return E[ib[k-1]]
     
     def s2tos3(self, threshold=1e-20):
-        """ convert vector spherical coefficient from shape 2 to shape 3
+        """ convert vector spherical coefficients from shape 2 to shape 3
 
         Parameters
         ----------
@@ -699,9 +699,7 @@ class VSHCoeff(object):
         threshold : float
             default 1e-20
 
-
         Energy thresholded coefficients
-        This thresholding doesn't work
 
         """
 

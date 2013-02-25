@@ -15,7 +15,7 @@ This test :
 """
 
 
-filename = 'S1R1.mat'
+filename = 'S1R6.mat'
 
 A = Antenna(filename,'ant/UWBAN/Matfile')
 
@@ -38,28 +38,26 @@ tet = []
 tep = []
 te  = []
 tmse = []
-tl  = range(1,15)
-A.C.s1tos2(15)
-A.C.s2tos3(1e-20)
-errelTh,errelPh,errel = A.errel(14,20,dsf,typ='s3')
-print errel
-for l in tl:
-    A.C.s1tos2(l)
-    print 'l : ',l
-    A.C.s2tos3(1e-20)
-    errelTh,errelPh,errel = A.errel(l,20,dsf,typ='s3')
-    print errel
-    tet.append(errelTh)
-    tep.append(errelPh)
-    te.append(errel)
-
-line1 = plt.plot(array(tl),10*log10(array(tep)),'b')
-line2 = plt.plot(array(tl),10*log10(array(tet)),'r')
-line3 = plt.plot(array(tl),10*log10(array(te)),'g')
-plt.xlabel('order l')
-plt.ylabel(u'$\epsilon_{rel}$  (dB)',fontsize=18)
-plt.title('Evolution of reconstruction relative error wrt order')
-plt.legend((u'$\epsilon_{rel}^{\phi}$',u'$\epsilon_{rel}^{\\theta}$',u'$\epsilon_{rel}^{total}$'))
-#plt.legend((line1,line2,line3),('a','b','c'))
-plt.show()
-#legend(('errel_phi','errel_theta','errel'))
+Lmax = 20 
+A.C.s1tos2(20)
+A.C.s2tos3(1e-5)
+#tl = arange(1,6,0.01)
+#for l in tl:
+#    thresh = 10**(-l)
+#    A.C.s2tos3(thresh)
+#    errelTh,errelPh,errel = A.errel(l,20,dsf,typ='s3')
+#    print errel
+#    tet.append(errelTh)
+#    tep.append(errelPh)
+#    te.append(errel)
+#
+#line1 = plt.plot(array(tl),10*log10(array(tep)),'b')
+#line2 = plt.plot(array(tl),10*log10(array(tet)),'r')
+#line3 = plt.plot(array(tl),10*log10(array(te)),'g')
+#plt.xlabel('threshold')
+#plt.ylabel(u'$\epsilon_{rel}$  (dB)',fontsize=18)
+#plt.title('Evolution of reconstruction relative error wrt order')
+#plt.legend((u'$\epsilon_{rel}^{\phi}$',u'$\epsilon_{rel}^{\\theta}$',u'$\epsilon_{rel}^{total}$'))
+##plt.legend((line1,line2,line3),('a','b','c'))
+#plt.show()
+##legend(('errel_phi','errel_theta','errel'))
