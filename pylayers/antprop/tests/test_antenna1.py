@@ -1,11 +1,23 @@
 from pylayers.antprop.antenna import *
-import matplotlib.pylab as plt 
+from pylayers.antprop.antvsh import *
+import matplotlib.pylab as plt
 from numpy import *
 import pdb
+"""
+This test : 
+    
+    1 : loads a measured antenna
+    2 : applies an electrical delay obtained from data with getdelay method
+    3 : evaluate the antenna vsh coefficient with a downsampling factor of 2
+    4 : evaluates the relative error of reconstruction (vsh3) for various values of order l
+    5 : display the results
+
+"""
+
 
 filename = 'S1R1.mat'
 
-A = Antenna('mat',filename,'ant/UWBAN/Matfile')
+A = Antenna(filename,'ant/UWBAN/Matfile')
 
 #plot(freq,angle(A.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]*exp(2j*pi*freq.reshape(len(freq))*electricalDelay)))
 freq = A.fa.reshape(104,1,1)
@@ -19,7 +31,7 @@ A.Fphi   = A.Fphi*exp(2*1j*pi*freq*electricalDelay)
 
 
 dsf = 2
-A.vshd(dsf)
+A = vsh(A,dsf)
 
 tn  = []
 tet = []
@@ -27,11 +39,16 @@ tep = []
 te  = []
 tmse = []
 tl  = range(1,15)
+A.C.s1tos2(15)
+A.C.s2tos3(1e-20)
+errelTh,errelPh,errel = A.errel(14,20,dsf,typ='s3')
+print errel
 for l in tl:
-    print 'l : ',l
     A.C.s1tos2(l)
+    print 'l : ',l
     A.C.s2tos3(1e-20)
     errelTh,errelPh,errel = A.errel(l,20,dsf,typ='s3')
+    print errel
     tet.append(errelTh)
     tep.append(errelPh)
     te.append(errel)

@@ -1,5 +1,6 @@
 # -*- coding:Utf-8 -*-
 """
+
 This module handles spherical harmonics in PyLayers
 
 
@@ -29,13 +30,16 @@ def indexvsh(L):
 
     Parameters
     ----------
-         L : degree max
+         L : int
+             degree max
 
 
     Returns
     -------
+
         t : ndarray ( (L+1)(L+2)/2 ,  2 )
             tab for indexing the upper triangle
+
     Examples
     --------
 
@@ -55,7 +59,8 @@ def indexvsh(L):
     """
     Kmax = (L + 1) * (L + 2) / 2
     #k = np.arange(Kmax)
-    k = np.arange(Kmax)
+    #k = np.arange(Kmax)
+    k = np.arange(1,Kmax)
     l = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
     m = k - l * (l + 1) / 2
     u = np.vstack((l, m)).T
@@ -82,7 +87,8 @@ def index_vsh(L, M):
         print "indexvsh error M>L"
 
     Kmax1 = (M + 1) * (M + 2) / 2
-    k = np.arange(Kmax1)
+    #k = np.arange(Kmax1)
+    k = np.arange(1,Kmax1)
     l = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
     m = k - l * (l + 1) / 2
     if (M < L):
@@ -199,8 +205,8 @@ class SHCoeff(object):
     def s1tos2(self, N2=-1):
         """ convert shape 1 --> shape 2
 
-        shape 1   array [ Nf x (N+1) x (M+1) ]
-        shape 2   array [ Nf x (N+1)*(M+1)   ]
+        shape 1   array [ Nf x (L+1) x (M+1) ]
+        shape 2   array [ Nf x (L+1)*(M+1)   ]
 
         n = 0...N2
         m = 0...N2
@@ -487,7 +493,7 @@ class SHCoeff(object):
             #
             plt.pcolor(np.arange(K + 1)[0:kmax], fa, col, cmap=plt.cm.hot, vmin=0.0, vmax=1.0)
             if xl:
-                plt.xlabel('index', fontsize=26)
+                plt.xlabel('index', fontsize=fontsize)
             if yl:
                 plt.ylabel('Frequency (GHz)', fontsize=fontsize)
 
@@ -508,6 +514,8 @@ class SHCoeff(object):
                 plt.ylabel('Frequency (GHz)', fontsize=fontsize)
 
                 #echelle=[str(0), str(-10), str(-20), str(-30), str(-40), str(-50)]
+        if (typ == 's2') | (typ =='s3') :
+
             echelle = [str(0), str(-seuildb + 40), str(-seuildb + 30), 
                        str(-seuildb + 20), str(-seuildb + 10), str(-seuildb)]
             cbar = plt.colorbar(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1])
@@ -571,7 +579,8 @@ class VSHCoeff(object):
         print "-------------"
         self.Ci.info()
 
-    def show(self, typ='s1', k=1, N=-1, M=-1, kmax = 1000, seuildb=50, animate=False):
+    def show(self, typ='s1', k=1, N=-1, M=-1, kmax = 1000, seuildb=50,
+             animate=False,titre=''):
         """ show VSH coeff
 
         Parameters
@@ -590,48 +599,97 @@ class VSHCoeff(object):
         """
         plt.figure()
         if not animate:
+            fa = np.linspace(self.Br.fmin,self.Br.fmax,self.Br.Nf)
+            st = titre+'  shape : '+typ
+            plt.suptitle(st,fontsize=14)
             plt.subplot(221)
             titre = '$|Br_{n}^{(m)}|$'
-            self.Br.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=True)
+            self.Br.show(typ=typ,titre=titre, xl=False, yl=True)
             plt.subplot(222)
             titre = '$|Bi_{n}^{(m)}|$'
-            self.Bi.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=False)
+            self.Bi.show(typ=typ,titre=titre, xl=False, yl=False)
             plt.subplot(223)
             titre = '$|Cr_{n}^{(m)}|$'
-            self.Cr.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=True)
+            self.Cr.show(typ=typ,titre=titre, xl=True, yl=True)
             plt.subplot(224)
             titre = '$|Ci_{n}^{(m)}|$'
-            self.Ci.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=False)
+            self.Ci.show(typ=typ, titre = titre, xl=True, yl=False)
         else:
             for k in np.arange(self.Br.Nf):
                 plt.subplot(221)
                 titre = '$|Br_{n}^{(m)}|$'
-                self.Br.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=True)
+                self.Br.show(typ, titre = titre, xl=False, yl=True)
                 plt.subplot(222)
                 titre = '$|Bi_{n}^{(m)}|$'
-                self.Bi.show(typ, k, N, M, kmax, seuildb, titre, xl=False, yl=False)
+                self.Bi.show(typ, titre = titre, xl=False, yl=False)
                 plt.subplot(223)
                 titre = '$|Cr_{n}^{(m)}|$'
-                self.Cr.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=True)
+                self.Cr.show(typ, titre = titre , xl=True, yl=True)
                 plt.subplot(224)
                 titre = '$|Ci_{n}^{(m)}|$'
-                self.Ci.show(typ, k, N, M, kmax, seuildb, titre, xl=True, yl=False)
+                self.Ci.show(typ, titre = titre , xl=True, yl=False)
     #    show()
 
     def s1tos2(self, N2=-1):
         """ convert shape 1 to shape 2
 
+        shape 1   array [ Nf x (L+1) x (M+1) ]
+        shape 2   array [ Nf x (L+1)*(M+1)   ]
+
         Parameters
         ----------
+
         N2 : max level
             default (-1 means all values)
 
+        s1 : 
         """
         self.Bi.s1tos2(N2)
         self.Br.s1tos2(N2)
         self.Ci.s1tos2(N2)
         self.Cr.s1tos2(N2)
+    
+    def s2tos3_new(self, k):
+        """ convert vector spherical coefficient from shape 2 to shape 3
 
+        Parameters
+        ----------
+
+        k : number of coeff
+
+        """
+
+        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0)
+        EBi = np.sum(np.abs(self.Bi.s2) ** 2, axis=0)
+        ECr = np.sum(np.abs(self.Cr.s2) ** 2, axis=0)
+        ECi = np.sum(np.abs(self.Ci.s2) ** 2, axis=0)
+
+        E  = EBr + EBi + ECr + ECi
+
+        ib = np.argsort(E)[::-1]
+        
+        print self.Br.ind2[ib[k-1]]
+        print self.Cr.ind2[ib[k-1]]
+        print self.Ci.ind2[ib[k-1]]
+        print self.Bi.ind2[ib[k-1]]
+        #ind = np.nonzero(E > (E.max() * threshold))[0]
+        self.Br.ind3 = self.Br.ind2[ib[range(k)]]
+        self.Br.s3 = self.Br.s2[:, ib[range(k)]]
+        self.Br.k2 = ib[range(k)]
+
+        self.Bi.ind3 = self.Bi.ind2[ib[range(k)]]
+        self.Bi.s3 = self.Bi.s2[:, ib[range(k)]]
+        self.Bi.k2 = ib[range(k)]
+
+        self.Cr.ind3 = self.Cr.ind2[ib[range(k)]]
+        self.Cr.s3 = self.Cr.s2[:, ib[range(k)]]
+        self.Cr.k2 = ib[range(k)]
+
+        self.Ci.ind3 = self.Ci.ind2[ib[range(k)]]
+        self.Ci.s3 = self.Ci.s2[:, ib[range(k)]]
+        self.Ci.k2 = ib[range(k)]
+        return E[ib[k-1]]
+    
     def s2tos3(self, threshold=1e-20):
         """ convert vector spherical coefficient from shape 2 to shape 3
 
@@ -671,6 +729,8 @@ class VSHCoeff(object):
         self.Ci.ind3 = self.Ci.ind2[ind]
         self.Ci.s3 = self.Ci.s2[:, ind]
         self.Ci.k2 = ind
+
+
 
     def s3tos2(self):
         """
@@ -838,6 +898,7 @@ def AFLegendre3(L, M, x):
 
     Pml = np.swapaxes(Pml,0,2)
     Pml = np.swapaxes(Pml,1,2)
+
     if M < L:
         Pmp1l = Pml[:, 1::1, :]
     else:
