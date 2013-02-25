@@ -184,6 +184,9 @@ class Antenna(object):
         self.phi = d.phi
         self.Ftheta = d.Ftheta
         self.Fphi = d.Fphi
+        Gr = np.real(self.Fphi * np.conj(self.Fphi) + \
+                     self.Ftheta * np.conj(self.Ftheta))
+        self.SqG = np.sqrt(Gr)
         self.Nt = len(self.theta)
         self.Np = len(self.phi)
         self.Nf = len(self.fa)
@@ -272,7 +275,7 @@ class Antenna(object):
         self.Np = 180
         self.Nf = 104
 
-    def errel(self, lmax, kf, dsf, typ='s3'):
+    def errel(self,kf, dsf, typ='s3'):
         """ calculates error between antenna pattern and reference pattern
 
         This function works for a single frequency point
@@ -280,8 +283,6 @@ class Antenna(object):
         Parameters
         ----------
 
-        lmax : integer
-            maximum order
         kf  : integer
             frequency index
         dsf : down sampling factor
@@ -1414,16 +1415,16 @@ class Antenna(object):
             pos = pos + 1
 
     def savevsh3(self):
-        """
-        A.savevsh3()
+        """ sauv antenna in vsh3 format
 
         Create a .vsh3 antenna file
+
 
         """
 
         # create vsh3 file
 
-        _filevsh3 = self._filename.replace('.trx', '.vsh3')
+        _filevsh3 = os.path.splitext(self._filename)[0]+'.vsh3'
         filevsh3 = pyu.getlong(_filevsh3, pstruc['DIRANT'])
 
         #filevsh3 = pyu.getlong(self._filename,'ant')

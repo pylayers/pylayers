@@ -38,14 +38,15 @@ tet = []
 tep = []
 te  = []
 tmse = []
-Lmax = 20 
-A.C.s1tos2(20)
+Lmax = 40
+A.C.s1tos2(40)
 A.C.s2tos3(1e-5)
+errelTh,errelPh,errel = A.errel(20,dsf,typ='s3')
+
 #tl = arange(1,6,0.01)
 #for l in tl:
 #    thresh = 10**(-l)
 #    A.C.s2tos3(thresh)
-#    errelTh,errelPh,errel = A.errel(l,20,dsf,typ='s3')
 #    print errel
 #    tet.append(errelTh)
 #    tep.append(errelPh)
