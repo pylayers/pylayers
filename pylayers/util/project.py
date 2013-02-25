@@ -24,7 +24,7 @@ if len(pylayersdir) == 1:
 try:
     basename = os.environ['BASENAME']
 except:
-    raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
+    raise EnvironmentError('Please position an environement variable $BASENAME where your pylayers project will be hosted')
 
 try:
     mesdir = os.environ['MESDIR']

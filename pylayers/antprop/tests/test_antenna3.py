@@ -1,4 +1,5 @@
 from pylayers.antprop.antenna import *
+from pylayers.antprop.antvsh import *
 import matplotlib.pylab as plt 
 from numpy import *
 import pdb
@@ -7,7 +8,7 @@ import pdb
 #
 filename = 'S1R1.mat'
 
-A = Antenna('mat',filename,'ant/UWBAN/Matfile')
+A = Antenna(filename,'ant/UWBAN/Matfile')
 
 #plot(freq,angle(A.Ftheta[:,maxPowerInd[1],maxPowerInd[2]]*exp(2j*pi*freq.reshape(len(freq))*electricalDelay)))
 freq = A.fa.reshape(104,1,1)/1e9
@@ -23,13 +24,14 @@ dsf = 2
 #
 # Calculate Vector Spherical Harmonics
 #
-A.vshd(dsf)
+A = vsh(A,dsf)
+plt.ion()
 A.C.info()
 A.C.s1tos2(15)
 A.C.info()
 A.C.s2tos3(1e-2)
 A.C.info()
-A.C.show(typ='s2')
+A.C.show(typ='s2',titre=filename)
 plt.show()
-A.C.show(typ='s3')
+A.C.show(typ='s3',titre=filename)
 plt.show()
