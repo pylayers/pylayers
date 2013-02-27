@@ -271,14 +271,31 @@ class Layout(object):
         self.pt = np.array(np.zeros([2, self.Nn]), dtype=float)
         self.tahe = np.array(np.zeros([2, self.Ne]), dtype=int)
 
-        for k in range(self.Nn):
-            self.pt[0,k]=self.Gs.pos[-(k+1)][0]
-            self.pt[1,k]=self.Gs.pos[-(k+1)][1]
+        kp = 0 # points
+        dp = {}
+        for node in self.Gs.node:
+            if node < 0:
+                self.pt[0,kp]=self.Gs.pos[node][0]
+                self.pt[1,kp]=self.Gs.pos[node][1]
+                dp[node] = kp
+                kp = kp + 1
+
+        ks = 0 # segments
+        for node in self.Gs.node:
+            if node > 0:
+                self.tahe[0,ks]=dp[nx.neighbors(self.Gs,node)[0]]
+                self.tahe[1,ks]=dp[nx.neighbors(self.Gs,node)[1]]
+                ks = ks+1
 
 
-        for k in range(self.Ne):
-            self.tahe[0,k]=-nx.neighbors(self.Gs,k+1)[0]-1
-            self.tahe[1,k]=-nx.neighbors(self.Gs,k+1)[1]-1
+        #for k in range(self.Nn):
+        #    self.pt[0,k]=self.Gs.pos[-(k+1)][0]
+        #    self.pt[1,k]=self.Gs.pos[-(k+1)][1]
+
+
+        #for k in range(self.Ne):
+        #    self.tahe[0,k]=-nx.neighbors(self.Gs,k+1)[0]-1
+        #    self.tahe[1,k]=-nx.neighbors(self.Gs,k+1)[1]-1
 
 
     def saveini(self, _fileini):
