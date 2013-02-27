@@ -184,6 +184,9 @@ class Antenna(object):
         self.phi = d.phi
         self.Ftheta = d.Ftheta
         self.Fphi = d.Fphi
+        Gr = np.real(self.Fphi * np.conj(self.Fphi) + \
+                     self.Ftheta * np.conj(self.Ftheta))
+        self.SqG = np.sqrt(Gr)
         self.Nt = len(self.theta)
         self.Np = len(self.phi)
         self.Nf = len(self.fa)
@@ -272,7 +275,7 @@ class Antenna(object):
         self.Np = 180
         self.Nf = 104
 
-    def errel(self, lmax, kf, dsf, typ='s3'):
+    def errel(self,kf, dsf, typ='s3'):
         """ calculates error between antenna pattern and reference pattern
 
         This function works for a single frequency point
@@ -280,8 +283,6 @@ class Antenna(object):
         Parameters
         ----------
 
-        lmax : integer
-            maximum order
         kf  : integer
             frequency index
         dsf : down sampling factor
@@ -1029,6 +1030,109 @@ class Antenna(object):
 
         return Fth, Fph
 
+
+    def Fsynth2s(self,dsf=1):
+        """  pattern synthesis from shape 2 vsh coefficients
+
+        Parameters
+        ----------
+         
+        phi
+
+        Notes
+        -----
+
+        Calculate complex antenna pattern from VSH Coefficients (shape 2)
+        for the specified directions (theta,phi)
+        theta and phi arrays needs to have the same size
+
+        """
+        theta = self.theta[::dsf]
+        phi = self.phi[::dsf]
+        Nt = len(theta)
+        Np = len(phi)
+        theta = np.kron(theta, np.ones(Np))
+        phi = np.kron(np.ones(Nt), phi)
+
+        Ndir = len(theta)
+
+        Br = self.C.Br.s2 # Nf x K2
+        Bi = self.C.Bi.s2 # Nf x K2
+        Cr = self.C.Cr.s2 # Nf x K2
+        Ci = self.C.Ci.s2 # Nf x K2
+        
+        Nf = np.shape(self.C.Br.s2)[0]
+        K2 = np.shape(self.C.Br.s2)[1]
+
+        L = self.C.Br.N2 # int
+        M = self.C.Br.M2 # int
+
+        #print "N,M",N,M
+        #
+        # The - sign is necessary to get the good reconstruction
+        #     deduced from observation
+        #     May be it comes from a different definition of theta in SPHEREPACK
+
+        x = -np.cos(theta)
+
+        Pmm1n, Pmp1n = AFLegendre3(L, M, x)
+        ind = index_vsh(L, M)
+
+        l = ind[:, 0]
+        m = ind[:, 1]
+
+        V, W = VW2(l, m, x, phi, Pmm1n, Pmp1n)  # K2 x Ndir
+
+        # Fth , Fph are Nf x Ndir
+        
+        tEBr = []
+        tEBi = []
+        tECr = []
+        tECi = []
+
+        for k in range(K2):
+            BrVr = np.dot(Br[:,k].reshape(Nf,1),
+                          np.real(V.T)[k,:].reshape(1,Ndir))
+            BiVi = np.dot(Bi[:,k].reshape(Nf,1),
+                          np.imag(V.T)[k,:].reshape(1,Ndir))
+            CiWr = np.dot(Ci[:,k].reshape(Nf,1),
+                          np.real(W.T)[k,:].reshape(1,Ndir))
+            CrWi = np.dot(Cr[:,k].reshape(Nf,1),
+                          np.imag(W.T)[k,:].reshape(1,Ndir))
+
+            CrVr = np.dot(Cr[:,k].reshape(Nf,1),
+                          np.real(V.T)[k,:].reshape(1,Ndir))
+            CiVi = np.dot(Ci[:,k].reshape(Nf,1),
+                          np.imag(V.T)[k,:].reshape(1,Ndir))
+            BiWr = np.dot(Bi[:,k].reshape(Nf,1),
+                          np.real(W.T)[k,:].reshape(1,Ndir))
+            BrWi = np.dot(Br[:,k].reshape(Nf,1),
+                          np.imag(W.T)[k,:].reshape(1,Ndir))
+
+            EBr = np.sum(BrVr*np.conj(BrVr)*np.sin(theta)) + \
+                  np.sum(BrWi*np.conj(BrWi)*np.sin(theta))
+
+            EBi = np.sum(BiVi*np.conj(BiVi)*np.sin(theta)) + \
+                  np.sum(BiWr*np.conj(BiWr)*np.sin(theta))
+
+            ECr = np.sum(CrWi*np.conj(CrWi)*np.sin(theta)) + \
+                + np.sum(CrVr*np.conj(CrVr)*np.sin(theta))
+
+            ECi = np.sum(CiWr*np.conj(CiWr)*np.sin(theta)) + \
+                + np.sum(CiVi*np.conj(CiVi)*np.sin(theta))
+
+            tEBr.append(EBr)
+            tEBi.append(EBi)
+            tECr.append(ECr)
+            tECi.append(ECi)
+
+        #Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
+        #      np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
+        #Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
+        #      np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
+
+        return np.array(tEBr),np.array(tEBi),np.array(tECr),np.array(tECi)
+
     def Fsynth2b(self, theta, phi):
         """  pattern synthesis from shape 2 vsh coefficients
 
@@ -1046,13 +1150,13 @@ class Antenna(object):
 
         """
 
-        Br = self.C.Br.s2
-        Bi = self.C.Bi.s2
-        Cr = self.C.Cr.s2
-        Ci = self.C.Ci.s2
+        Br = self.C.Br.s2 # Nf x K2
+        Bi = self.C.Bi.s2 # Nf x K2
+        Cr = self.C.Cr.s2 # Nf x K2
+        Ci = self.C.Ci.s2 # Nf x K2
 
-        N = self.C.Br.N2
-        M = self.C.Br.M2
+        L = self.C.Br.N2 # int
+        M = self.C.Br.M2 # int
 
         #print "N,M",N,M
         #
@@ -1062,22 +1166,22 @@ class Antenna(object):
 
         x = -np.cos(theta)
 
-        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
-        ind = index_vsh(N, M)
+        Pmm1n, Pmp1n = AFLegendre3(L, M, x)
+        ind = index_vsh(L, M)
 
-        n = ind[:, 0]
+        l = ind[:, 0]
         m = ind[:, 1]
 
-        V, W = VW2(n, m, x, phi, Pmm1n, Pmp1n)
+        V, W = VW2(l, m, x, phi, Pmm1n, Pmp1n)  # K2 x Ndir
 
-
+        # Fth , Fph are Nf x Ndir
         Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
-              np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
+              np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))        
+   
         Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
               np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
         return Fth, Fph
-
 
     def Fsynth2(self, theta, phi):
         """  pattern synthesis from shape 2 vsh coeff
@@ -1161,26 +1265,32 @@ class Antenna(object):
             >>> ph = np.kron(np.ones(len(theta)),phi)
             >>> Fth,Fph = A.Fsynth3(th,ph)
 
+        All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
+        once the V,W function
+
         """
 
         nray = len(theta)
 
-        Br = self.C.Br.s3
-        nBr = self.C.Br.ind3[:, 0]
+        Br  = self.C.Br.s3
+        lBr = self.C.Br.ind3[:, 0]
         mBr = self.C.Br.ind3[:, 1]
 
-        Bi = self.C.Bi.s3
-        Cr = self.C.Cr.s3
-        Ci = self.C.Ci.s3
+        Bi  = self.C.Bi.s3
 
+        Cr  = self.C.Cr.s3
+
+        Ci  = self.C.Ci.s3
+
+        L = lBr.max()
         M = mBr.max()
-        N = nBr.max()
 
         x = -np.cos(theta)
 
-        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
+        #Pmm1n, Pmp1n = AFLegendre3(20, 20, x)
+        Pmm1n, Pmp1n = AFLegendre3(L, L, x)
 
-        V, W = VW(nBr, mBr, x, phi, Pmm1n, Pmp1n)
+        V, W = VW(lBr, mBr, x, phi, Pmm1n, Pmp1n)
 
         Fth = np.dot(Br, np.real(V.T)) - \
             np.dot(Bi, np.imag(V.T)) + \
@@ -1305,16 +1415,16 @@ class Antenna(object):
             pos = pos + 1
 
     def savevsh3(self):
-        """
-        A.savevsh3()
+        """ sauv antenna in vsh3 format
 
         Create a .vsh3 antenna file
+
 
         """
 
         # create vsh3 file
 
-        _filevsh3 = self._filename.replace('.trx', '.vsh3')
+        _filevsh3 = os.path.splitext(self._filename)[0]+'.vsh3'
         filevsh3 = pyu.getlong(_filevsh3, pstruc['DIRANT'])
 
         #filevsh3 = pyu.getlong(self._filename,'ant')
