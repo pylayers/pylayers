@@ -275,7 +275,7 @@ class Antenna(object):
         self.Np = 180
         self.Nf = 104
 
-    def errel(self,kf, dsf, typ='s3'):
+    def errel(self,kf=0, dsf=1, typ='s3'):
         """ calculates error between antenna pattern and reference pattern
 
         This function works for a single frequency point
@@ -1415,7 +1415,7 @@ class Antenna(object):
             pos = pos + 1
 
     def savevsh3(self):
-        """ sauv antenna in vsh3 format
+        """ save antenna in vsh3 format
 
         Create a .vsh3 antenna file
 
