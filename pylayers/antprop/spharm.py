@@ -45,8 +45,7 @@ def indexvsh(L):
 
         >>> from pylayers.antprop.antenna import *
         >>> indexvsh(3)
-        array([[0, 0],
-               [1, 0],
+        array([[1, 0],
                [1, 1],
                [2, 0],
                [2, 1],
@@ -58,8 +57,7 @@ def indexvsh(L):
 
     """
     Kmax = (L + 1) * (L + 2) / 2
-    #k = np.arange(Kmax)
-    #k = np.arange(Kmax)
+    #k = np.arange(Kmax) # old version with 0,0
     k = np.arange(1,Kmax)
     l = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
     m = k - l * (l + 1) / 2
@@ -205,8 +203,8 @@ class SHCoeff(object):
     def s1tos2(self, N2=-1):
         """ convert shape 1 --> shape 2
 
-        shape 1   array [ Nf x (L+1) x (M+1) ]
-        shape 2   array [ Nf x (L+1)*(M+1)   ]
+        shape 1   array [ Nf , (L+1) , (M+1) ]
+        shape 2   array [ Nf , (L+1) * (M+1) ]
 
         n = 0...N2
         m = 0...N2
@@ -690,7 +688,7 @@ class VSHCoeff(object):
         self.Ci.k2 = ib[range(k)]
         return E[ib[k-1]]
     
-    def s2tos3(self, threshold=1e-20):
+    def s2tos3(self, threshold=1e-5):
         """ convert vector spherical coefficients from shape 2 to shape 3
 
         Parameters
@@ -703,7 +701,7 @@ class VSHCoeff(object):
 
         """
 
-        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0)
+        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0) # integrates energy over freq axis = 0 
         EBi = np.sum(np.abs(self.Bi.s2) ** 2, axis=0)
         ECr = np.sum(np.abs(self.Cr.s2) ** 2, axis=0)
         ECi = np.sum(np.abs(self.Ci.s2) ** 2, axis=0)
