@@ -1146,7 +1146,7 @@ def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     V[np.isinf(V) | np.isnan(V)] = 0
     return V, W
 
-def VW3(l, m, theta ,phi ):
+def VW(l, m, theta ,phi):
     """ evaluate vector Spherical Harmonics basis functions
 
     Parameters
@@ -1175,6 +1175,8 @@ def VW3(l, m, theta ,phi ):
 
     Examples
     --------
+   
+        >>> a = 1
 
     """
 
@@ -1185,14 +1187,16 @@ def VW3(l, m, theta ,phi ):
 
     L = np.max(l)
     M = np.max(m)
-
+ 
+    theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
     x = -np.cos(theta)
 
     # The - sign is necessary to get the good reconstruction
     #     deduced from observation
     #     May be it comes from a different definition of theta in SPHEREPACK
 
-    Pmm1l, Pmp1l = AFLegendre(L, M, x)
+    #Pmm1l, Pmp1l = AFLegendre(L, M, x)
+    Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
     Nr  = len(x)
@@ -1215,13 +1219,15 @@ def VW3(l, m, theta ,phi ):
     #V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
     W = Y1 * T / x
     V = Y2 * T
-
-    W[np.isinf(W) | np.isnan(W)] = 0
-    V[np.isinf(V) | np.isnan(V)] = 0
+    #
+    # dirty fix
+    #
+    #W[np.isinf(W) | np.isnan(W)] = 0
+    #V[np.isinf(V) | np.isnan(V)] = 0
 
     return V, W
 
-def VW(n, m, x, phi, Pmm1n, Pmp1n):
+def VW0(n, m, x, phi, Pmm1n, Pmp1n):
     """ evaluate vector Spherical Harmonics basis functions
 
     Parameters
