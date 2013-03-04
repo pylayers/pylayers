@@ -2,7 +2,6 @@
 Documentation
 =============
 
-.. If you are new to NetworkX take a look at the
 .. `tutorial <http://pylayers.github.com/documentation/latest/tutorial/>`_.
 
 The `examples <http://pylayers.github.com/documentation/latest/examples/>`_

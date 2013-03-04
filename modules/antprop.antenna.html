@@ -192,6 +192,24 @@ theta and phi arrays needs to have the same size</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.Fsynth2s">
+<tt class="descname">Fsynth2s</tt><big>(</big><em>dsf=1</em><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth2s" title="Permalink to this definition">¶</a></dt>
+<dd><p>pattern synthesis from shape 2 vsh coefficients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>phi</strong> :</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Calculate complex antenna pattern from VSH Coefficients (shape 2)
+for the specified directions (theta,phi)
+theta and phi arrays needs to have the same size</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.Fsynth3">
 <tt class="descname">Fsynth3</tt><big>(</big><em>theta</em>, <em>phi</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.Fsynth3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.Fsynth3" title="Permalink to this definition">¶</a></dt>
 <dd><p>synthesis of a complex antenna pattern from VSH coefficients (shape 3)</p>
@@ -223,6 +241,8 @@ theta and phi arrays needs to have the same size</p>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/antprop-antenna-1.py">Source code</a>)</p>
+<p>All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
+once the V,W function</p>
 </dd></dl>
 
 <dl class="method">
@@ -272,18 +292,14 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.errel">
-<tt class="descname">errel</tt><big>(</big><em>lmax</em>, <em>kf</em>, <em>dsf</em>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.errel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.errel" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">errel</tt><big>(</big><em>kf=0</em>, <em>dsf=1</em>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.errel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.errel" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates error between antenna pattern and reference pattern</p>
 <p>This function works for a single frequency point</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>lmax</strong> : integer</p>
-<blockquote>
-<div><p>maximum order</p>
-</div></blockquote>
-<p><strong>kf</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>kf</strong> : integer</p>
 <blockquote>
 <div><p>frequency index</p>
 </div></blockquote>
@@ -625,7 +641,8 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.savevsh3">
 <tt class="descname">savevsh3</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.savevsh3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.savevsh3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a .vsh3 antenna file</p>
+<dd><p>save antenna in vsh3 format</p>
+<p>Create a .vsh3 antenna file</p>
 </dd></dl>
 
 <dl class="method">
@@ -662,45 +679,6 @@ else    -&gt; simple plot3D</p>
 <dd><p class="first last">True    | False</p>
 </dd>
 </dl>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.antenna.Antenna.vsh">
-<tt class="descname">vsh</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.vsh" title="Permalink to this definition">¶</a></dt>
-<dd><p>It makes use of the spherepack function vha</p>
-<blockquote>
-<div>m : phi    longitude
-n : theta  latitude</div></blockquote>
-<p>Antenna pattern are stored       (f theta phi)
-Coeff are stored with this order (f , n , m )</p>
-<p>The vsh coefficient are organized differently
-should be better for compression along frequency axis</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.antenna.Antenna.vshd">
-<tt class="descname">vshd</tt><big>(</big><em>dsf=1</em><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.vshd" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function calculates the Vector Spherical Harmonics coefficients
-It makes use of the spherepack function vha</p>
-<blockquote>
-<div>m : phi    longitude
-n : theta  latitude</div></blockquote>
-<p>Antenna pattern are stored       (f theta phi)
-Coeff are stored with this order (f , n , m )</p>
-<p>The vsh coefficient are organized differently
-should be better for compression along frequency axis</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dsf</strong> :  int</p>
-<blockquote class="last">
-<div><p>down sampling factor  &#8216;default 1&#8217;</p>
 </div></blockquote>
 </td>
 </tr>
@@ -788,6 +766,31 @@ else  : plotted figures aren&#8217;t saved</div></blockquote>
 <img alt="../_images/antprop-antenna-4_06.png" src="../_images/antprop-antenna-4_06.png" />
 <p class="caption">(<a class="reference external" href="../modules/antprop-antenna-4_06.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-4_06.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-4_06.pdf">pdf</a>)</p>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.antprop.antenna.geom_pattern">
+<tt class="descclassname">pylayers.antprop.antenna.</tt><tt class="descname">geom_pattern</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>E</em>, <em>f</em>, <em>p</em>, <em>minr</em>, <em>maxr</em>, <em>racine</em>, <em>ilog=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#geom_pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.geom_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>export antenna pattern in geomview format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : np.array (1 x Ntheta)</p>
+<p><strong>phi</strong> : np.array (1 x Nphi)</p>
+<p><strong>E</strong> : np.array complex  (Ntheta,Nphi)</p>
+<p><strong>f</strong> : frequency</p>
+<p><strong>po</strong> : origin (1x3)</p>
+<p><strong>minr</strong> : radius of minimum</p>
+<p><strong>maxr</strong> : radius of maximum</p>
+<p><strong>ilog</strong> : True (log) False (linear)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>filename</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">

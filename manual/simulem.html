@@ -89,6 +89,11 @@
 <p>The module simulem is in charge of calculating the received UWB waveform for a
 given radio link. This section is built from the file test_simulem.py in the
 tests sub-directory of antprop directory.</p>
+<blockquote>
+<div>This demo works only on LInux
+platform. It relies on exec files (launching, tracing,tratotud,evalfield) in the <cite>bin</cite>
+directory of the project. It is foreseen to replace soon those dependencies by
+pure python equivalent.</div></blockquote>
 <div class="section" id="simulation-file">
 <h2>3.1.1. Simulation File<a class="headerlink" href="#simulation-file" title="Permalink to this headline">¶</a></h2>
 <p>This example load a simulation file and shows the layout with the surimposed
@@ -194,12 +199,12 @@ project.</p>
 </pre></div>
 </div>
 <p>A simulation is loaded from file &#8216;default.ini&#8217;</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [2]: </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
 
-<span class="gp">In [2]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
-<span class="gr">Out[2]: </span>
-<span class="go">(&lt;matplotlib.figure.Figure at 0xd83d62c&gt;,</span>
-<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0xd4fffac&gt;)</span>
+<span class="gp">In [3]: </span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+<span class="gr">Out[3]: </span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0xb63718c&gt;,</span>
+<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0xb6389ac&gt;)</span>
 </pre></div>
 </div>
 <img alt="../_images/DefaultLayout.png" src="../_images/DefaultLayout.png" style="width: 8in;" />

@@ -1,4 +1,8 @@
-In[1]:
+.. warning::
+    This demo works only on Linux platform
+    platform. It relies on exec files (launching, tracing,tratotud,evalfield) in the `bin` 
+    directory of the project. It is foreseen to replace soon those dependencies by
+    pure python equivalents. 
 
 .. code:: python
 
@@ -7,8 +11,6 @@ In[1]:
 Ray-tracing
 -----------
 
-
-In[2]:
 
 .. code:: python
 
@@ -22,8 +24,6 @@ Setting the transmitter
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 
-In[3]:
-
 .. code:: python
 
     S.tx = RadioNode(typ='tx')
@@ -33,7 +33,6 @@ Setting receiver
 ~~~~~~~~~~~~~~~~
 
 
-In[4]:
 
 .. code:: python
 
@@ -50,7 +49,6 @@ Adjust simulation parameter (optional)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-In[5]:
 
 .. code:: python
 
@@ -100,7 +98,6 @@ Run the ray tracing
 ~~~~~~~~~~~~~~~~~~~
 
 
-In[6]:
 
 .. code:: python
 
@@ -129,7 +126,6 @@ In[6]:
       oned_as=oned_as)
 
 
-Out[6]:
 
 .. parsed-literal::
 
@@ -139,7 +135,6 @@ Plot CIR
 ~~~~~~~~
 
 
-In[7]:
 
 .. code:: python
 
