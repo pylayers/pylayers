@@ -3,7 +3,14 @@ module simulem
 
 The module simulem is in charge of calculating the received UWB waveform for a
 given radio link. This section is built from the file test_simulem.py in the
-tests sub-directory of antprop directory.
+tests sub-directory of antprop directory. 
+
+
+.. warning:
+    This demo works only on LInux
+    platform. It relies on exec files (launching, tracing,tratotud,evalfield) in the `bin` 
+    directory of the project. It is foreseen to replace soon those dependencies by
+    pure python equivalent. 
 
 Simulation File        
 ---------------
