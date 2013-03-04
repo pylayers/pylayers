@@ -6,7 +6,6 @@ given radio link. This section is built from the file test_simulem.py in the
 tests sub-directory of antprop directory. 
 
 
-.. warning:
     This demo works only on LInux
     platform. It relies on exec files (launching, tracing,tratotud,evalfield) in the `bin` 
     directory of the project. It is foreseen to replace soon those dependencies by
