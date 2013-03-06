@@ -3,6 +3,7 @@ import os
 import sys
 import shutil
 import pkgutil
+import pdb
 #class Project(object)
 #       """
 #       Création d'une arborescence de projet 

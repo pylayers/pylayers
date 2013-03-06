@@ -2,8 +2,8 @@ from pylayers.gis.layout import *
 import matplotlib.pylab as plt
 
 L = Layout()
-# L.load('TA-Office.str')
-L.load('defstr.str')
+#L.load('TA-Office.ini')
+L.load('defstr.ini')
 L.buildGt()
 L.buildGr()
 L.buildGv()
