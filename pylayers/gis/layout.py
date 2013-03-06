@@ -304,7 +304,7 @@ class Layout(object):
         Parameters
         ----------
         _fileini : string 
-                   short filnemame
+                   short filemame with extension
         """
         config = ConfigParser.ConfigParser()
         config.add_section("info")
@@ -2936,15 +2936,17 @@ class Layout(object):
         Ncycles = len(self.Gt.nodes())
 
         #
-        #  Update graph Gs with cycle number information
+        #  Update graph Gs with cycle information
         #
+        for k in self.Gs.node:
+            if k>0:
+                self.Gs.node[k]['ncycles']=[]
         for k in range(Ncycles):
             vnodes = np.array(self.Gt.node[k]['vnodes'])
             for n in vnodes:
-                try:
-                    self.Gs.node[n]['ncycles'].append(k)
-                except:
-                    self.Gs.node[n]['ncycles'] = [k]
+                if n>0:
+                    if k not in self.Gs.node[n]['ncycles']:
+                        self.Gs.node[n]['ncycles'].append(k)
 
         #
         #  Seek for Cycle inter connectivity
@@ -3107,9 +3109,11 @@ class Layout(object):
         Notes
         -----
 
-        For each node > of graph Gs creates
+        For each node > 0 of graph Gs creates
             4 different nodes associated to the same segment
             R+  R- T+ T-
+
+        A subgraph
 
         """
         self.dGi = {}
@@ -3246,7 +3250,7 @@ class Layout(object):
                     cy0 = cy[0]
                     cy1 = cy[1]
 
-                    nei = self.Gs.neighbors(n)
+                    nei = self.Gs.neighbors(n)  # get neigbor
                     np1 = nei[0]
                     np2 = nei[1]
 
@@ -3726,7 +3730,7 @@ class Layout(object):
 
         Parameters
         ----------
-        pt : point (ndarray)
+        pt : point (ndarray) 
 
         Returns
         -------
