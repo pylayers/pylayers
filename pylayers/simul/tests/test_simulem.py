@@ -8,7 +8,6 @@ S = Simul()
 filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')
 # setting transmitter
-
 S.tx = RadioNode(typ='tx')
 S.tx.point([1.2,1,1.4])
 
