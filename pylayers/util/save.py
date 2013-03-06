@@ -242,7 +242,6 @@ class Save(Process):
         if  etype == 'matlab':
             spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
         if  etype == 'python':
-
             self.savemat['saveopt']=savecfg
             self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename+'.pck','w')
             pickle.dump(self.savemat, self.file)
