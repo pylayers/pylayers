@@ -271,6 +271,7 @@ class Layout(object):
         self.pt = np.array(np.zeros([2, self.Nn]), dtype=float)
         self.tahe = np.array(np.zeros([2, self.Ne]), dtype=int)
 
+
         kp = 0 # points
         dp = {}
         for node in self.Gs.node:
@@ -281,21 +282,31 @@ class Layout(object):
                 kp = kp + 1
 
         ks = 0 # segments
+        ds = {}
         for node in self.Gs.node:
             if node > 0:
                 self.tahe[0,ks]=dp[nx.neighbors(self.Gs,node)[0]]
                 self.tahe[1,ks]=dp[nx.neighbors(self.Gs,node)[1]]
+                ds[node] = ks
                 ks = ks+1
 
+        #
+        # calculate normal to segment ta-he
+        #
+        # This could becomes obsolete when the normal will be calculated at 
+        # creation of the segment
+        #
 
-        #for k in range(self.Nn):
-        #    self.pt[0,k]=self.Gs.pos[-(k+1)][0]
-        #    self.pt[1,k]=self.Gs.pos[-(k+1)][1]
+        X = np.vstack((self.pt[0,self.tahe[0,:]],self.pt[0,self.tahe[1,:]]))
+        Y = np.vstack((self.pt[1,self.tahe[0,:]],self.pt[1,self.tahe[1,:]]))
+        normx = Y[0,:]-Y[1,:]
+        normy = X[1,:]-X[0,:]
+        scale = np.sqrt(normx*normx+normy*normy)
+        normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
 
-
-        #for k in range(self.Ne):
-        #    self.tahe[0,k]=-nx.neighbors(self.Gs,k+1)[0]-1
-        #    self.tahe[1,k]=-nx.neighbors(self.Gs,k+1)[1]-1
+        for ks in ds:
+            k = ds[ks]
+            self.Gs.node[ks]['norm'] = normal[:,k]
 
 
     def saveini(self, _fileini):
