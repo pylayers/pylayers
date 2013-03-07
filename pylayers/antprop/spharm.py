@@ -59,8 +59,8 @@ def indexvsh(L):
     """
     Kmax = (L + 1) * (L + 2) / 2
     #k = np.arange(Kmax)
-    #k = np.arange(Kmax)
-    k = np.arange(1,Kmax)
+    k = np.arange(Kmax)
+    #k = np.arange(1,Kmax)
     l = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
     m = k - l * (l + 1) / 2
     u = np.vstack((l, m)).T
