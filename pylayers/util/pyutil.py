@@ -1260,7 +1260,7 @@ def foo(var1, var2, long_var_name='hi') :
     pass
     
 
-def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF"):
+def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
     """ plot the cumulative density function of x
 
     Parameters
@@ -1295,7 +1295,10 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF"):
     n  = len(x)
     x2 = np.repeat(x, 2)
     y2 = np.hstack([0.0, np.repeat(np.arange(1,n) / float(n), 2), 1.0])
-    plt.plot(x2,y2,color=color,label=label,linewidth=lw)
+    if logx:
+        plt.semilogx(x2,y2,color=color,label=label,linewidth=lw)
+    else:
+        plt.plot(x2,y2,color=color,label=label,linewidth=lw)
     plt.legend()
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
