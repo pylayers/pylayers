@@ -59,6 +59,9 @@ import pdb
 
 
 class dcond(dict):
+    """
+    may be obsolete
+    """
 
     def __init__(self,ID=0):
         Cf = ConfigParser.ConfigParser()
@@ -92,7 +95,7 @@ class dcond(dict):
 class TX(Process):
     """
        TX process ( not used for now)
-        Each agent use the TX process for query LDP/information/message passing data
+        Each agent use the TX process for querying LDP/information/message passing data
         to other agent
     """
     def __init__(self,**args):
@@ -438,7 +441,7 @@ class RX(Process):
             Wait TOA request
 
             The self.ID node wait a TOA request from another node of its Personal network.
-            Once the request is recieved, self.ID reply to the requester node 
+            Once the request is received, self.ID reply to the requester node 
             and fill the PN edge with the measured TOA.
         """
         self.create_evt()
@@ -449,6 +452,7 @@ class RX(Process):
                     # evt.name[0] = requester
                     # evt.name[1] = requested ( = self.ID)
                     # evt.name[2] = rat
+                    # update personal network TOA value
                     self.PN.edge[evt.name[1]][evt.name[0]][evt.name[2]].update(
                     {'TOA':self.net.edge[evt.name[1]][evt.name[0]][evt.name[2]]['TOA'],'tTOA':self.sim.now()})
                     if self.sim.verbose:
@@ -468,8 +472,6 @@ class Gcom(nx.MultiDiGraph):
     Communication graph
 
 
-
-        
     Attributes
     ----------
     net : pylayers.network.network()
@@ -488,7 +490,6 @@ class Gcom(nx.MultiDiGraph):
 
     Hence the dictionnary of simpy events (devt) can be created.
     The keys of devt are a tuple (nodeid#1, nodeid#2 , rat).
-    
 
     """
 

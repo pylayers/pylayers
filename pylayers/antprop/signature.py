@@ -14,7 +14,7 @@ import pylayers.util.pyutil as pyu
 import matplotlib.pyplot as plt
 from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
-from numba import autojit
+#from numba import autojit
 
 def showsig(L,s,tx,rx):
     L.display['thin']=True

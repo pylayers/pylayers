@@ -10,5 +10,5 @@ find ./ -iname "*.pyc" -exec rm {} \;
 echo '-------------'
 echo 'install'
 echo '-------------'
-sudo python2.7 setup.py develop
+sudo python setup.py develop
 #sudo python setup.py install 
