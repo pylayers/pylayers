@@ -36,7 +36,7 @@ def copy(self):
 vec3.copy = copy
 
 class Person(Process):
-    """ 
+    """
         Person Process
         handle the mobility of the agent
     """
@@ -44,16 +44,15 @@ class Person(Process):
     max_speed    = 1.2 # m/s
     #radius = 0.2106  # if one person takes 1.5 feet^2 of space, per traffic stds
     # 2r = 0.5 to 0.7 for "sports fans", per the Helbing, Farkas, Vicsek paper
-    radius       = 2.85   # per the Teknomo, et al, paper 
+    radius       = 2.85   # per the Teknomo, et al, paper
     mass         = 80 # kg
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
     def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),
         wld = world(),sim=None,moving=True,froom=[],wait=1.0,cdest='random',save=[]):
-        """ Class Personn
+        """ Class Person
             inherits of Simpy.SimulationRT
-        
         Attributes
         ----------
             ID    : float/hex/str/...
@@ -114,9 +113,9 @@ class Person(Process):
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
             self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-            while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
+            while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId): # or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
                 self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-            self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
+            #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         elif self.cdest == 'file':
            cfg = ConfigParser.ConfigParser()
            cfg.read(pyu.getlong('nodes_destination.ini','ini'))
@@ -130,7 +129,7 @@ class Person(Process):
            self.roomId=self.room_seq[0]
            self.nextroomId=self.room_seq[self.room_counter]
            self.wait=self.room_wait[self.room_counter]
-        self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
+        #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         self.wp       =  self.L.waypointGw(self.roomId,self.nextroomId)
         for tup in self.wp[1:]:
                 self.waypoints.append(vec3(tup)  ) 
@@ -217,8 +216,8 @@ class Person(Process):
                     self.arrived = False
                     if self.endpoint:
                         self.endpoint=False
-                        pr = self.sim.roomlist.index(self.nextroomId)
-                        self.sim.roomlist.pop(pr)
+                        #pr = self.sim.roomlist.index(self.nextroomId)
+                        #self.sim.roomlist.pop(pr)
                         self.roomId = self.nextroomId
 
                     #
@@ -234,7 +233,7 @@ class Person(Process):
                             # test 1 ) next != actualroom
                             #      2 ) nextroom != fordiden room
                             #      3 ) room not share without another agent
-                            while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId) or (self.nextroomId in self.sim.roomlist):
+                            while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId):# or (self.nextroomId in self.sim.roomlist):
                                 self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
                         elif self.cdest == 'file':
                            self.room_counter=self.room_counter+1
@@ -242,7 +241,7 @@ class Person(Process):
                                 self.room_counter=0
                            self.nextroomId=self.room_seq[self.room_counter]
                            self.wait=self.room_wait[self.room_counter]
-                        self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
+                        #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
                         wp        =  self.L.waypointGw(self.roomId,self.nextroomId)
                         for tup in wp[1:]:
                             self.waypoints.append(vec3(tup)  ) 
