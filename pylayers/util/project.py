@@ -16,7 +16,7 @@ currentdir = os.getcwd()
 try:
     pylayersdir = os.environ['PYLAYERS']
 except:
-    pylayersdir = currentdir.split('pylayers')[0] + '/pylayers/'
+    pylayersdir = currentdir.split('pylayers')[0] + 'pylayers/'
 
 
 if len(pylayersdir) == 1:
@@ -111,12 +111,12 @@ for nm in pstruc.keys():
 dirlist=['ini','struc','ant','output','geom']
 
 for dl in dirlist:
-    filelist = os.listdir(pylayersdir+'/data/' + dl)
+    filelist = os.listdir(pylayersdir+'data/' + dl)
     for fi in filelist:
-        if os.path.isfile(basename+'/' + dl +'/' +fi):
+        if os.path.isfile(basename+  dl +'/' +fi):
             pass
         else:
-            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+            shutil.copy(pylayersdir+'data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 
 
 os.chdir(currentdir)
