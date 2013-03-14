@@ -280,7 +280,7 @@ class Simul(SimulationRT):
         self.create_show()
 
         if str2bool(self.save_opt['savep']):
-            self.save=Save(net=self.net,sim=self)
+            self.save=Save(L=self.L,net=self.net,sim=self)
             self.activate(self.save,self.save.run(),0.0)
 #        if str2bool(self.save_opt['savep']):
 #            self.save=Save(net=self.net,
@@ -316,8 +316,8 @@ class Simul(SimulationRT):
 #        self.simulate(until=float(self.sim_opt['duration']))
         if self.save_opt['savep']:
             print 'Processing save results, please wait'
-            self.save.export('matlab')
-            self.save.export('python')
+            self.save.mat_export()
+
 
 if __name__ == '__main__':
 
