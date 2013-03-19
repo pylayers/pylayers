@@ -10,7 +10,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import Network, Node, PNetwork
 from pylayers.gis.layout import Layout
-
+import copy
 
 
 import pickle
@@ -133,11 +133,11 @@ class Save(Process):
         >>> S.mat_export()
 
         """
-
+        pdb.set_trace()
         self.save=self.load()
-        self.savemat=self.save.copy()
+        self.savemat=copy.deepcopy(self.save)
         nodes=self.save['saveopt']['type'].keys()
-        for n in nodes:
+        for inn,n in enumerate(nodes):
             self.savemat['node_'+n]=self.save[n]
             for n2 in nodes:
                 if n2 != n:
@@ -146,10 +146,10 @@ class Save(Process):
             del self.savemat[n]
 
             for o in self.save['saveopt']:
-                if o =='subnet':
+                if o =='subnet' and inn == 0:
                     for r in self.save['saveopt']['lrat']:
                         li=self.save['saveopt'][o][r]
-                        self.save['saveopt'][o][r]=['node_'+l for l in li]
+                        self.savemat['saveopt'][o][r]=['node_'+l for l in li]
                 
                 else :
                     try:
