@@ -109,16 +109,16 @@ for nm in pstruc.keys():
 # copy files from /data/ini in project directory 
 #
 
-pdb.set_trace()
+
 dirlist=['ini','struc','ant','output','geom']
 
 for dl in dirlist:
-    filelist = os.listdir(pylayersdir+'data/' + dl)
+    filelist = os.listdir(pylayersdir+'/data/' + dl)
     for fi in filelist:
         if os.path.isfile(basename+  dl +'/' +fi):
             pass
         else:
-            shutil.copy(pylayersdir+'data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 
 
 os.chdir(currentdir)
