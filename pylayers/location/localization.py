@@ -6,7 +6,7 @@ from SimPy.SimulationRT import Process,hold
 
 from pylayers.util import utilnet
 from pylayers.network.network import Network, Node
-from pylayers.location.locarule import Take_all,  merge_rules
+#from pylayers.location.locarule import Take_all,  merge_rules
 
 import pdb
 
@@ -24,7 +24,7 @@ class Localization(object):
 
     def __init__(self,**args):
         
-        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0','save':[]}
+        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'ID':'0','save':[]}
 
         for key, value in defaults.items():
             if key in args:
@@ -229,6 +229,9 @@ class PLocalization(Process):
 #        self.loc.get_const()
         self.loc.fill_cla()
         while True:
+
+            
+
             self.loc.update(ldp='TOA')
             if 'geo'in self.method :
                 self.loc.compute_geo(ldp='TOA')
