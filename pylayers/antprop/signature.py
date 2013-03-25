@@ -30,7 +30,8 @@ def showsig(L,s,tx,rx):
 
 class Signatures(object):
     """
-    gather all signatures from a layout given tx and rx
+    gathers all signatures from a layout given tx and rx
+
     Attributes
     ----------
         L : gis.Layout
@@ -47,6 +48,7 @@ class Signatures(object):
         self.pTx = pTx
         self.pRx = pRx
 
+
     def info(self):
         """
         """
@@ -60,15 +62,20 @@ class Signatures(object):
 
 
     def run(self, tx, rx,cutoff=1):
-        """
-        get signatures (in one list of arrays) between tx and rx
+        """ get signatures (in one list of arrays) between tx and rx
+
         Parameters
         ----------
+
             tx : numpy.ndarray
             rx : numpy.ndarray
+            cutoff :
+
         Returns
         -------
+
             sigslist = numpy.ndarray
+
         """
         try:
             self.L.Gi
@@ -78,39 +85,50 @@ class Signatures(object):
         #
         NroomTx = self.L.pt2ro(tx)
         NroomRx = self.L.pt2ro(rx)
-        print NroomTx,NroomRx
+        #print NroomTx,NroomRx
 
         if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
             raise AttributeError('Tx or Rx is not in Gr')
 
-        #list of interaction 
+        # list of interaction in roomTx 
+        # list of interaction in roomRx
         ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
         ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
 
-        ndt1 = filter(lambda l: len(eval(l))>2,ndt)
-        ndt2 = filter(lambda l: len(eval(l))<3,ndt)
-        ndr1 = filter(lambda l: len(eval(l))>2,ndr)
-        ndr2 = filter(lambda l: len(eval(l))<3,ndr)
+        # transmitter
+        ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
+        ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
+
+        # receiver
+        ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
+        ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
 
         # tx,rx : attaching rule
-        # tx attachs to out Transmisision point 
-        # rx attachs to in Transmission point
+        #
+        # tx attachs to out transmisision point 
+        # rx attachs to in transmission point
+
         #
         # WARNING : room number <> cycle number
         #
 
-        ndt1 = filter(lambda l: eval(l)[2]<>NroomTx,ndt1)
-        ndr1 = filter(lambda l: eval(l)[1]<>NroomRx,ndr1)
+        ncytx = self.L.Gr.node[NroomTx]['cycle']
+        ncyrx = self.L.Gr.node[NroomRx]['cycle']
+
+        ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
+        ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
 
 
         ndt = ndt1 + ndt2
         ndr = ndr1 + ndr2
-
+        print ndt
+        print ndr
         ntr = np.intersect1d(ndt, ndr)
-        dsig = {}
 
+        dsig = {}
         for nt in ndt:
             for nr in ndr:
+
                 if (nt != nr):
                     paths = list(nx.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
                 else:
@@ -130,6 +148,7 @@ class Signatures(object):
                         elif it < 0: #diffraction
                             sigarr = np.hstack((sigarr,
                                                 np.array([[it], [3]])))
+                    #print sigarr
                     try:
                         dsig[len(path)] = np.vstack((dsig[len(path)],sigarr))
                     except:
@@ -211,6 +230,7 @@ class Signatures(object):
                     sigslist.append(sigarr)
 
         return sigslist
+
     def update_sigslist(self):
         """
         get signatures taking into account reverberations
@@ -221,7 +241,8 @@ class Signatures(object):
 
         Notes
         -----
-        This is a prelminary function need more investigations
+        This is a preliminary function need more investigations
+
         """
         pTx = self.pTx
         pRx = self.pRx
@@ -350,15 +371,18 @@ class Signatures(object):
 
 
     def rays(self, dsig):
-        """
-        from signatures dict to 2D rays
+        """ from signatures dict to 2D rays
+
         Parameters
         ----------
+
             dsig : dict 
 
         Returns
         -------
+
             rays : dict
+
         """
         rays = {}
         for k in dsig:
@@ -366,10 +390,9 @@ class Signatures(object):
             shsig = np.shape(tsig)
             for l in range(shsig[0]/2):
                 sig = tsig[2*l:2*l+2,:]
-                s = Signature(sig)
-                Yi = s.sig2ray(self.L, self.pTx[:2], self.pRx[:2])
+                s   = Signature(sig)
+                Yi  = s.sig2ray(self.L, self.pTx[:2], self.pRx[:2])
                 if Yi is not None:
-                    #pdb.set_trace()
                     Yi = np.fliplr(Yi)
                     nint = len(sig[0, :])
                     if str(nint) in rays.keys():
@@ -388,14 +411,18 @@ class Signatures(object):
         return rays
 
     def sigs2rays(self, sigslist):
-        """
-        from signatures list to 2D rays
+        """ from signatures list to 2D rays
+
         Parameters
         ----------
+
             sigslist : list
+
         Returns
         -------
+
             rays : dict
+
         """
         rays = {}
         for sig in sigslist:
@@ -640,9 +667,9 @@ class Signature(object):
     """
     def __init__(self, sig):
         """
-        pa  : tail point of intercation segment
-        pb  : head point of intrcation segement
-        pc  : middle point  of interaction segment
+        pa  : tail point of interaction segment
+        pb  : head point of interaction segment
+        pc  : center point of interaction segment
         typ : type of interaction 1-R 2-T 3-D
         seq : sequence of interaction point (edges (>0)  or vertices (<0)
         """

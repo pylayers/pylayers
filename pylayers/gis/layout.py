@@ -1277,11 +1277,11 @@ class Layout(object):
         b = np.array([xP - xA, yP - yA])
         x = sp.linalg.solve(A, b)
         if ((x[0] > 0.) & (x[0] < 1.0)):
-            self.add_none(e1, 1 - x[0])
+            self.add_pons(e1, 1 - x[0])
         #print x
 
-    def add_none(self, ns, alpha=0.5):
-        """ add node on edge 
+    def add_pons(self, ns, alpha=0.5):
+        """ add point on segment 
 
         Parameters
         ----------
@@ -1306,38 +1306,52 @@ class Layout(object):
         p = tuple(alpha * p1 + (1 - alpha) * p2)
         num = self.add_fnod(p)
         # delete old edge ns
-        self.del_edge(ns)
+        self.del_segment(ns)
         # add new edge np[0] num
-        self.add_edge(nop[0], num, name=namens, zmin=zminns, zmax=zmaxns)
+        self.add_segment(nop[0], num, name=namens, zmin=zminns, zmax=zmaxns)
         # add new edge num np[1]
-        self.add_edge(num, nop[1], name=namens, zmin=zminns, zmax=zmaxns)
+        self.add_segment(num, nop[1], name=namens, zmin=zminns, zmax=zmaxns)
 
-    def add_edge(self, n1, n2, name='PARTITION', zmin=0, zmax=3.0):
-        """  add edge between n1 and n2
-        
+    def add_segment(self, n1, n2, name='PARTITION', zmin=0, zmax=3.0):
+        """  add edge between node n1 and node n2
+
         Parameters
         ----------
-        n1  : integer < 0  
+        n1  : integer < 0
         n2  : integer < 0
-        name : string 
+        name : string
             layer name 'PARTITION'
-        zmin : float 
-            default = 0 
-        zmax : float    
-            default 3.0 
-        
+        zmin : float
+            default = 0
+        zmax : float
+            default 3.0
+
         Returns
         -------
-        num : segment number (>0) 
+        neum : segment number (>0)
+
+        Notes
+        -----
+        A segment dictionnary has the following mandatory attributes
+
+        name : slab name associated with segment 
+        zmin : float  (meters)
+        zmax : float  (meters)
+        norm : array  (1x3)  segment normal
+        transition : boolean
+        ncycles : list of involved cycles
+        connect : list of point number
+
         """
+
         if ((n1 < 0) & (n2 < 0)):
-            nn = np.array(self.Gs.node.keys())
-            up = np.nonzero(nn > 0)[0]
-            lp = len(up)
-            e1 = np.arange(lp) + 1
-            e2 = nn[up]
-            c = ~np.in1d(e1, e2)
-            tn = e1[c]
+            nn = np.array(self.Gs.node.keys())  ## nn : node list array
+            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)
+            lp = len(up)                        ## lp : number of segment
+            e1 = np.arange(lp) + 1              ## e1 : ordered list of segment number
+            e2 = nn[up]                         ## e2 : current list of of segment number
+            c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
+            tn = e1[c]                          ## tn[c] free segment number 
             #print tn
             try:
                 num = tn[0]
@@ -1346,19 +1360,25 @@ class Layout(object):
                 if num == 0:
                     num = 1
         else:
-            print "add_edge : error not a node", n1, n2
+            print "add_segment : error not a node", n1, n2
             return
+
+        transition = False
+        if name == 'AIR':
+            transition=True
         p1 = np.array(self.Gs.pos[n1])
         p2 = np.array(self.Gs.pos[n2])
         p2mp1 = p2 - p1
         t = p2mp1 / np.sqrt(np.dot(p2mp1, p2mp1))
         #
         # n = t x z
+        #
         norm = np.array([t[1], -t[0], 0])
         self.Gs.add_node(num, name=name)
         self.Gs.add_node(num, zmin=zmin)
         self.Gs.add_node(num, zmax=zmax)
         self.Gs.add_node(num, norm=norm)
+        self.Gs.add_node(num, transition=transition)
         self.Gs.pos[num] = tuple((p1 + p2) / 2.)
         self.Gs.add_edge(n1, num)
         self.Gs.add_edge(n2, num)
@@ -1410,10 +1430,10 @@ class Layout(object):
         n2 = self.add_fnod(p2)
         n3 = self.add_fnod(p3)
         # adding segments
-        self.add_edge(n0, n1, matname, zmin, zmin+height)
-        self.add_edge(n1, n2, matname, zmin, zmin+height)
-        self.add_edge(n2, n3, matname, zmin, zmin+height)
-        self.add_edge(n3, n0, matname, zmin, zmin+height)
+        self.add_segment(n0, n1, matname, zmin, zmin+height)
+        self.add_segment(n1, n2, matname, zmin, zmin+height)
+        self.add_segment(n2, n3, matname, zmin, zmin+height)
+        self.add_segment(n3, n0, matname, zmin, zmin+height)
 
     def add_furniture_file(self, _filefur, typ=''):
         """  add pieces of furniture from .ini files
@@ -1477,18 +1497,19 @@ class Layout(object):
             except:
                 print "No Gc node",n1
             for k in nbrs:
-                self.del_edge(k)
+                self.del_segment(k)
             #
             # .. todo :: del_node Layout.py :  Attention Graph Gc non mis a jour
             #
             self.labels.pop(n1)
             self.Nn = self.Nn - 1
 
-    def del_edge(self,le):
-        """ delete edge e
+    def del_segment(self,le):
+        """ delete segment e
 
         Parameters
         ----------
+
         le : list of segment number
 
         Notes
@@ -1500,7 +1521,7 @@ class Layout(object):
 
         if (type(le) == np.int32):
             le = [le]
-        
+
         if (type(le) == int):
             le = [le]
 
@@ -1552,7 +1573,7 @@ class Layout(object):
             # delete cycle
             self.Gt.remove_node(nc)
             # delete nodes in udel
-            self.del_edge(udel)
+            self.del_segment(udel)
 
     def check2(self):
         """ Layout checking
@@ -1719,8 +1740,7 @@ class Layout(object):
         de1 = self.Gs.node[e1]
         title = "Segment (" + str(n1) + ',' + str(n2) + ")"
         message = str(self.sl.keys())
-        N = len(de1.keys())
-        if N == 6:
+        if 'ss_name' not in de1.keys():
             de1k = ['name', 'zmin', 'zmax','transition']
             de1v = [de1['name'], de1['zmin'], de1['zmax'],de1['transition']]
         else:
@@ -2800,8 +2820,8 @@ class Layout(object):
             't' : Gt
             'r' : Gr
             's' : Gs
-            'v' : Gv 
-            'i' : Gi 
+            'v' : Gv
+            'i' : Gi
         """
 
         if 't' in graph:
@@ -3272,12 +3292,14 @@ class Layout(object):
                     ln = l / nl
 
                     delta = nl / 10
+                    # On AIR or ABSORBENT there is no reflection 
                     if (name<>'AIR') & (name<>'ABSORBENT'):
                         self.Gi.add_node(str((n,cy0)))
                         self.Gi.add_node(str((n,cy1)))
                         self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
                         self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
 
+                    # Throgh METAL or ABSORBENT there is no transmission 
                     if (name<>'METAL') & (name<>'ABSORBENT'):
                         self.Gi.add_node(str((n,cy0,cy1)))
                         self.Gi.add_node(str((n,cy1,cy0)))

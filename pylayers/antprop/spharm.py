@@ -1249,7 +1249,7 @@ def VW(l, m, theta ,phi):
     L = np.max(l)
     M = np.max(m)
  
-    theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
+    #theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
     x = -np.cos(theta)
 
     # The - sign is necessary to get the good reconstruction
