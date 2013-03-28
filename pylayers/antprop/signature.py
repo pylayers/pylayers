@@ -57,23 +57,48 @@ class Rays(dict):
                 ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
 
 
-    def mirror(self,H=3,N=2):
+    def mirror(self,H=3,N=1):
         """ mirror 
         """
-        k  = np.arange(-N,N,1)
+        km  = np.arange(-N+1,N+1,1)
+        kp  = np.arange(-N,N+1,1)
         ht = self.pTx[2]
         hr = self.pRx[2]
-        zkp = 2*k*H + ht
-        zkm = 2*k*H - ht
+        zkp = 2*kp*H + ht
+        zkm = 2*km*H - ht
+        print zkp
+        print zkm
         d   = {}
         for zm in zkm:
-            km   = int(np.ceil(zm/H))
-            thrm = np.arange(km*H,0,-np.sign(km)*H)
+            if  zm<0:
+                bup = H
+                pas = H
+                km   = int(np.ceil(zm/H))
+            else:
+                bup = 0
+                pas = -H
+                km   = int(np.floor(zm/H))
+            thrm = np.arange(km*H,bup,pas)
             d[zm] = abs(thrm-zm)/abs(hr-zm)
+            #print "zm",zm
+            #print "km",km
+            #print "thrm",thrm
+            #print "alpham",d[zm]
         for zp in zkp:
-            kp   = int(np.ceil(zp/H))
-            thrp = np.arange(kp*H,0,-np.sign(kp)*H)
+            if  zp<0:
+                bup = H
+                pas = H
+                kp   = int(np.ceil(zp/H))
+            else:
+                bup = 0
+                pas = -H
+                kp   = int(np.floor(zp/H))
+            thrp = np.arange(kp*H,bup,pas)
             d[zp] = alphap = abs(thrp-zp)/abs(hr-zp)
+            #print "zp",zp
+            #print "kp",kp
+            #print "thrp",thrp
+            #print "alphap",d[zp]
 
         return(d)
 
