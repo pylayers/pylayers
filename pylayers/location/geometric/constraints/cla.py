@@ -30,7 +30,10 @@ from pylayers.location.geometric.util import geomview as g
 from pylayers.location.geometric.util.scene import *
 import os
 import sys
+<<<<<<< HEAD
 #import numpydoc
+=======
+>>>>>>> e60ea848aa9256c412c8e31f5a34ad53b9dc607b
 
 #__docformat__ = 'reStructuredText'
 
@@ -134,6 +137,7 @@ class CLA(object):
         self.id = []
         self.origin = []
         self.runable = []
+        self.used=[]
 
         if len(parmsh) == 0:
             self.parmsh = parmsh
@@ -269,6 +273,8 @@ class CLA(object):
         self.origin.append(c.origin)
         self.type.append(c.type)
         self.runable.append(c.runable)
+        # by default, if a constraint is runable, it will be used
+        self.used.append(c.runable)
         self.std.append(c.std)
         self.Nc = self.Nc + 1
         self.vcw.append(c.vcw)
@@ -353,7 +359,8 @@ class CLA(object):
         """
 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
-        Nc = self.Nc - len(np.nonzero(np.array(self.runable) == False)[0]) 
+#        Nc = self.Nc - len(np.nonzero(np.array(self.runable) == False)[0]) 
+        Nc = self.Nc - len(np.nonzero(np.array(self.used) == False)[0]) 
         self.Nc = Nc
         vcwmin = 1.0  # max(self.vcw)
         step = 1.0

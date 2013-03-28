@@ -35,26 +35,16 @@ class Rays(dict):
         self.pTx = pTx
         self.pRx = pRx
 
-    def show(self,L):
+    def info(self):
         """
-        plot 2D rays within the simulated environment
-        Parameters
-        ----------
-            rays: dict
         """
-
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        L.showGs(fig, ax)
-        ax.plot(self.pTx[0], self.pTx[1], 'or')
-        ax.plot(self.pRx[0], self.pRx[1], 'og')
-        for i in self.keys():
-            for j in range(len(self[i]['pt'][0, 0, :])):
-                ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
-                                 np.hstack((self[i]['pt'][0:2, :, j],
-                                            self.pRx[0:2].reshape((2, 1))))
-                                 ))
-                ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
+        print "Signatures for scenario defined by :"
+        print "Layout"
+        print "======"
+        self.L.info()
+        print "================================"
+        print "Transmitter position: ", self.pTx
+        print "Receiver position: ", self.pRx
 
 
     def mirror(self,H=3,N=1):
