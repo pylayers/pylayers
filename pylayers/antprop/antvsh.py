@@ -1,6 +1,7 @@
 import pdb
 import doctest
 import pylayers.antprop.antenna as ant
+from pylayers.antprop.spharm import *
 from sphere import spherepack, Wrapec, mathtogeo
 import numpy as np
 

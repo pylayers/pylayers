@@ -542,7 +542,7 @@ class Network(nx.MultiGraph):
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
         for rat in self.RAT.iterkeys():
             for ldp in self.LDP:
-                self.compute_LDPs(self.nodes(),rat,ldp,method='direct')
+                self.compute_LDPs(self.nodes(),rat)
         for n in self.nodes():
             self.node[n]['PN'].get_RAT()
             self.node[n]['PN'].get_SubNet()
