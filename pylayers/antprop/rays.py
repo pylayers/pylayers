@@ -263,7 +263,7 @@ class Interactions(Inter):
         self.di['T']=[]
         self.di['D']=[]
         self.evaluated=False
-
+        self.nimax=0
 
 
     def add(self,li):
@@ -275,6 +275,10 @@ class Interactions(Inter):
             list of interactions
 
         """
+        # look for the total number of interraction 
+        
+        for i in li:
+            self.nimax=self.nimax+len(i.data)
         for i in li:
             self.addi(i)
 
@@ -1718,7 +1722,7 @@ class GrRayTud(object):
                     pass
 
         ### the total number of interaction( for all rays)
-        self.I.nimax=index
+#        self.I.nimax=index
         ### Add all type of interactions into the Interaction class
         self.I.add([B,L,R,T,D])
 
@@ -1824,7 +1828,7 @@ class GrRayTud(object):
                 ## Dot product interaction X Basis
                 Atmp = np.sum(X[...,:,:,np.newaxis]*Y[...,np.newaxis,:,:], axis=-2)#*D[np.newaxis,:,np.newaxis,np.newaxis]
                 if i == 1:
-                ## First Basis added
+                ## First Baspdis added
                     A0=A[:,:,i-1,:,:]
                     Z=np.sum(A0[...,:,:,np.newaxis]*Atmp[...,np.newaxis,:,:], axis=-2)
                 else :

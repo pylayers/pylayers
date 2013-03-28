@@ -59,6 +59,43 @@ class Signatures(object):
         print "Receiver position: ", self.pRx
 
 
+    def all_simple_paths(self,G, source, target, cutoff=None):
+        if cutoff < 1:
+            return
+        visited = [source]
+        stack = [iter(G[source])]
+
+        while stack:
+            children = stack[-1]
+            child = next(children, None)
+#            if child != None:
+#                try:
+#                    lc=list(eval(child))
+#                except:
+#                    lc=list(child)
+#                if len(visited[-1])>11: # previous inter is a transmission
+#                    if len(lc)>11: # if child transmission
+#                        if list(eval(visited[-1])[:2]).reverse() ==  lc[:2]:
+#                            # if transmission into the same room reject signature
+#                            stack.pop()
+#                            visited.pop()
+
+            if child is None:
+                stack.pop()
+                visited.pop()
+            elif len(visited) < cutoff:
+                if child == target:
+                    yield visited + [target]
+                elif child not in visited:
+                    visited.append(child)
+                    stack.append(iter(G[child]))
+            else: #len(visited) == cutoff:
+                if child == target or target in children:
+                    yield visited + [target]
+                stack.pop()
+                visited.pop()
+
+
     def run(self, tx, rx,cutoff=1):
         """
         get signatures (in one list of arrays) between tx and rx

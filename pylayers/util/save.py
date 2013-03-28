@@ -158,7 +158,7 @@ class Save(Process):
                         pass
 
         spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
-
+        self.save=self.load()
 
     def run(self):
         """
