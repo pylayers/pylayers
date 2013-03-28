@@ -10,7 +10,7 @@ from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 from pylayers.network.network import Network, Node, PNetwork
 from pylayers.gis.layout import Layout
-
+import copy
 
 
 import pickle
@@ -51,7 +51,8 @@ class Save(Process):
 
     """
     def __init__(self, **args):
-        defaults = {'net': None,
+        defaults = {'L': None,
+                    'net': None,
                     'sim': None}
 
 
@@ -91,7 +92,7 @@ class Save(Process):
         self.save['saveopt']['lrat']=self.lrat
         pickle.dump(self.save, self.file)
         self.file.close()
-
+        self.idx=0
 
     def load(self,filename=[]):
         """
@@ -118,160 +119,111 @@ class Save(Process):
             out.pop(0)
         infile.close()
         dout= dict(out[-1])
-        saveopt=dout['saveopt']
-        dout.pop('saveopt')
-        return saveopt,dout
+        return dout
 
-    def export(self,etype='python'):
+
+    def mat_export(self):
         """
-        Export simulation results into a given extension
-
-        Parameters
-        ----------
-        etype:
-            'python' or ''matlab
+            export save simulation to a matlab file
 
         Examples
         --------
         >>> from pylayers.util.save import *
         >>> S=Save()
-        >>> S.export('matlab')
+        >>> S.mat_export()
+
         """
+        self.save=self.load()
+        self.savemat=copy.deepcopy(self.save)
+        nodes=self.save['saveopt']['type'].keys()
+        for inn,n in enumerate(nodes):
+            self.savemat['node_'+n]=self.save[n]
+            for n2 in nodes:
+                if n2 != n:
+                    self.savemat['node_'+n]['node_'+n2]=self.save[n][n2]
+                    del self.savemat[n][n2]
+            del self.savemat[n]
 
-
-        savecfg,d=self.load(self.filename+'.tmp')
-        # need to sort the time stamp 
-        TS = np.array((d.keys()))
-        sTSi=np.argsort(TS)
-        sTS=np.sort(TS)
-
-        self.savemat={}
-        self.savemat['timestamp']=sTS
-
-        ##### init
-        for n in savecfg['type'].keys():
-            if etype == 'matlab':
-                dkey='node_'+n
-            else :
-                dkey=n
-            self.savemat[dkey]={}
-            self.savemat[dkey]['type']=savecfg['type'][n]
-            self.savemat[dkey]['sens']=savecfg['sens'][n]
-            self.savemat[dkey]['epwr']=savecfg['epwr'][n]
-            for p in savecfg['lpos']:
-                if p != 'pe_clust':
-                    self.savemat[dkey][p]=np.zeros((len(sTS),2))*np.nan
+            for o in self.save['saveopt']:
+                if o =='subnet' and inn == 0:
+                    for r in self.save['saveopt']['lrat']:
+                        li=self.save['saveopt'][o][r]
+                        self.savemat['saveopt'][o][r]=['node_'+l for l in li]
+                
                 else :
-                    self.savemat[dkey][p]=np.zeros((len(sTS),2,2))*np.nan
-            for r in savecfg['lrat']:
-                # test if node has the rat and if it is not the only one on that rat
-                if (n in savecfg['subnet'][r]) and  (len(savecfg['subnet'][r]) > 1):
-                    self.savemat[dkey][r]={}
-                    for l in savecfg['lldp']:
-                        self.savemat[dkey][r][l]={}
+                    try:
+                        self.savemat['saveopt'][o]['node_'+n]=self.save['saveopt'][o][n]
+                        del self.savemat['saveopt'][o][n]
+                    except:
+                        pass
 
-    
-        ### fill in dict
-        for it,t in enumerate(sTS):
-            for p in savecfg['lpos']:
-                for n in d[t][p].keys():
-                    # handle matlab struct name cannot be a number
-                    if etype == 'matlab':
-                        dkey='node_'+n
-                    else :
-                        dkey=n
-
-
-                    ########### Position
-#                    try :
-                    if p != 'pe_clust':
-                        try:
-                            self.savemat[dkey][p][it]=d[t][p][n]#np.vstack((self.savemat[dkey][p],d[t][p][n]))
-                        except:
-                            pass
-                    else :
-                        try:
-                            self.savemat[dkey][p][it]=d[t][p][n]#np.dstack((self.savemat[dkey][p],d[t][p][n]))
-                        except:
-                            pass
-#                    except:
-#                        self.savemat[dkey][p]=d[t][p][n]
-#                        except:
-#                            self.savemat[dkey]={}
-#                            for r in savecfg['lrat']:
-#                                self.savemat[dkey][r]={}
-#                                for l in savecfg['lldp']:
-#                                    self.savemat[dkey][r][l]={}
-#                            self.savemat[dkey][p]=d[t][p][n]
-
-                   ############### links
-        for t in sTS:
-            for r in savecfg['lrat']:
-                for l in savecfg['lldp']:
-                    for ii in d[t][r][l].keys():
-                        for n in savecfg['type'].keys():
-                            # edge value (node1,node2) if n == node1
-                            if etype == 'matlab':
-                                dkey='node_'+n
-                            else :
-                                dkey=n
-                            if n in ii[0]:
-                                if etype == 'matlab':
-                                    dkey2='node_'+ii[1]
-                                else :
-                                    dkey2=ii[1]
-
-                                try:
-                                    self.savemat[dkey][r][l][dkey2]=np.vstack((self.savemat[dkey][r][l][dkey2],d[t][r][l][ii]))
-                                except:
-                                    self.savemat[dkey][r][l][dkey2]=d[t][r][l][ii]
-
-                            # if n == node2
-                            elif n in ii[1]:
-                                if etype == 'matlab':
-                                    dkey2='node_'+ii[0]
-                                else :
-                                    dkey2=ii[0]
-
-                                try:
-                                    self.savemat[dkey][r][l][dkey2]=np.vstack((self.savemat[dkey][r][l][dkey2],d[t][r][l][ii]))
-                                except:
-                                    self.savemat[dkey][r][l][dkey2]=d[t][r][l][ii]
-                    
-
-        if  etype == 'matlab':
-            spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
-        if  etype == 'python':
-
-            self.savemat['saveopt']=savecfg
-            self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename+'.pck','w')
-            pickle.dump(self.savemat, self.file)
-            self.file.close()
-
-
+        spio.savemat(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,self.savemat)
+        self.save=self.load()
 
     def run(self):
         """
             Run the save Result process
         """
+
+
+        ### init save dictionnary
+        self.save['saveopt']['Layout'] = self.L.filename
         self.save['saveopt']['type']=nx.get_node_attributes(self.net,'type')
         self.save['saveopt']['epwr']=nx.get_node_attributes(self.net,'epwr')
         self.save['saveopt']['sens']=nx.get_node_attributes(self.net,'sens')
+
+
         self.save['saveopt']['subnet']={}
         for rat in self.lrat:
             self.save['saveopt']['subnet'][rat]=self.net.SubNet[rat].nodes()
 
-        while True:
-            self.save[self.sim.now()]={}
+        [self.save.update({n:{}}) for n in self.net.nodes()]
+
+        # find the size of save array regarding the simulation duration and the save sample time
+        nb_sample=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
+
+
+        # create void array to be fill with simulation data
+        for n in self.net.nodes():
             for position in self.lpos:
-                self.save[self.sim.now()][position]=nx.get_node_attributes(self.net,position)
+                self.save[n][position]=np.zeros((nb_sample,2))*np.nan
+
+
+        for e in self.net.edges():
+            self.save[e[0]][e[1]]={}
+            self.save[e[1]][e[0]]={}
             for rat in self.lrat:
-                self.save[self.sim.now()][rat]={}
+                self.save[e[0]][e[1]][rat]={}
+                self.save[e[1]][e[0]][rat]={}
                 for ldp in self.lldp:
-                    self.save[self.sim.now()][rat][ldp]=nx.get_edge_attributes(self.net.SubNet[rat],ldp)
-            self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename+'.tmp','a')
+                    self.save[e[0]][e[1]][rat][ldp]=np.zeros((nb_sample,2))*np.nan
+                    self.save[e[1]][e[0]][rat][ldp]=np.zeros((nb_sample,2))*np.nan
+
+
+        while True:
+            rl={}
+            for rat in self.lrat:
+                for ldp in self.lldp:
+                    rl[rat+ldp]=nx.get_edge_attributes(self.net.SubNet[rat],ldp)
+
+            for n in self.net.nodes():
+                for position in self.lpos:
+                    try:
+                        p = nx.get_node_attributes(self.net,position)
+                        self.save[n][position][self.idx]=p[n]
+                    except:
+                        pass
+
+            for e in self.net.edges():
+                for rat in self.lrat:
+                    for ldp in self.lldp:
+                        self.save[e[0]][e[1]][rat][ldp][self.idx]=rl[rat+ldp][e]
+                        self.save[e[1]][e[0]][rat][ldp][self.idx]=rl[rat+ldp][e]
+
+            self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'a')
             pickle.dump(self.save, self.file)
             self.file.close()
+            self.idx=self.idx+1
             yield hold, self, eval(self.opt['save_update_time'])
 
 

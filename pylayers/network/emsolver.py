@@ -153,11 +153,12 @@ class EMSolver(object):
 
             dd={} # distance dictionnary
             if len(e) > 0:
+
                 lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
                 d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
                 slp=np.shape(lp)[1]
-                epwra = [epwr[i][RAT] for i in epwr.keys()]
-                sensa = [sens[i][RAT] for i in sens.keys()]
+
+
 
 
                 if LDP=='all':
@@ -166,20 +167,39 @@ class EMSolver(object):
                     lpa = len(pa)
                     Pr=[]
                     TOA=[]
-                    lsens=[]
+                    lsens=np.array(())
+                    loss=np.array(())
+                    frees=np.array(())
+                    lepwr=np.array(())
                     for i in range(lpa-1):
-                        MW=Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])
-#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])
-                        frees=PL(pa[i+1:lpa],model.f,pa[i],model.rssnp)
-                        lepwr=epwra[i+1:lpa]
-                        Pr.extend(lepwr - MW[0] - frees)
-                        TOA.extend(MW[2])
-                        lsens.extend(sensa[i+1:lpa])
+
+                        # excess time of flight + losses computation
+                        MW=Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) 
+                        # loss free space
+                        frees=np.hstack((frees,PL(pa[i+1:lpa],model.f,pa[i],model.rssnp) ))
+#                        Pr.extend(lepwr - MW[0] - frees)
+                        # save losses computation 
+                        loss=np.hstack((loss,MW[0]))
+                        # save excess tof computation 
+                        TOA=np.hstack((TOA,MW[2]))
+
+                    # emmited power for the first nodes of computed edges 
+                    lepwr1 = [epwr[i[0]][RAT] for i in e]
+                    lepwr2 = [epwr[i[1]][RAT] for i in e]
+                    Pr = lepwr1 - loss - frees
+                    # concatenate reverse link
+                    Pr = np.hstack((Pr, lepwr2 - loss - frees))
                     P=np.outer(Pr,[1,1])
                     P[:,1]=model.sigrss
-                    T=np.outer(TOA+d/0.3,[1,1])
-                    T[:,1]=self.sigmaTOA*0.3
+                    lsens = [sens[i[0]][RAT] for i in e] + [sens[i[1]][RAT] for i in e]
+                    # visibility or not 
                     v = P[:,0] > lsens
+
+                    # same toa for link and reverse link
+                    T = np.hstack((TOA+d/0.3,TOA+d/0.3))
+                    T=np.outer(T,[1,1])
+                    T[:,1]=self.sigmaTOA*0.3
+                    d=np.hstack((d,d))
                     return (P,T,d,v)
 
 
