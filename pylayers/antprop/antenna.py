@@ -275,18 +275,35 @@ class Antenna(object):
         self.Np = 180
         self.Nf = 104
 
-    def errel(self,kf=0, dsf=1, typ='s3'):
-        """ calculates error between antenna pattern and reference pattern
+    def pattern(self,theta,phi,typ='s3'):
+        """
+        """
+        Nt = len(theta)
+        Np = len(phi)
+        Nf = len(self.fa)
 
-        This function works for a single frequency point
+        Th = np.kron(theta, np.ones(Np))
+        Ph = np.kron(np.ones(Nt), phi)
+        if typ =='s1':
+            Fth, Fph = self.Fsynth1(Th, Ph)
+        if typ =='s2':
+            Fth, Fph = self.Fsynth2b(Th, Ph)
+        if typ =='s3':
+            Fth, Fph = self.Fsynth3(Th, Ph)
+        FTh = Fth.reshape(Nf, Nt, Np)
+        FPh = Fph.reshape(Nf, Nt, Np)
+        return(FTh,FPh)
+
+    def errel(self,kf=-1, dsf=1, typ='s3'):
+        """ calculates error between antenna pattern and reference pattern
 
         Parameters
         ----------
 
         kf  : integer
-            frequency index
+            frequency index. If k=-1 integration over all frequency
         dsf : down sampling factor
-        typ : 
+        typ :
 
         Returns
         -------
@@ -340,24 +357,44 @@ class Antenna(object):
         #
         # Construct difference between reference and reconstructed
         #
-        dTh = (FTh[kf, :, :] - self.Ftheta[kf, ::dsf, ::dsf])
-        dPh = (FPh[kf, :, :] - self.Fphi[kf, ::dsf, ::dsf])
-        #
-        # squaring  + Jacobian
-        #
-        dTh2 = np.real(dTh * np.conj(dTh)) * st
-        dPh2 = np.real(dPh * np.conj(dPh)) * st
+        if kf<>-1:
+            dTh = (FTh[kf, :, :] - self.Ftheta[kf, ::dsf, ::dsf])
+            dPh = (FPh[kf, :, :] - self.Fphi[kf, ::dsf, ::dsf])
+            #
+            # squaring  + Jacobian
+            #
+            dTh2 = np.real(dTh * np.conj(dTh)) * st
+            dPh2 = np.real(dPh * np.conj(dPh)) * st
 
-        vTh2 = np.real(self.Ftheta[kf, ::dsf, ::dsf] \
-             * np.conj(self.Ftheta[kf, ::dsf, ::dsf])) * st
-        vPh2 = np.real(self.Fphi[kf, ::dsf, ::dsf] \
-             * np.conj(self.Fphi[kf, ::dsf, ::dsf])) * st
+            vTh2 = np.real(self.Ftheta[kf, ::dsf, ::dsf] \
+                 * np.conj(self.Ftheta[kf, ::dsf, ::dsf])) * st
+            vPh2 = np.real(self.Fphi[kf, ::dsf, ::dsf] \
+                 * np.conj(self.Fphi[kf, ::dsf, ::dsf])) * st
 
-        mvTh2 = np.sum(vTh2)
-        mvPh2 = np.sum(vPh2)
+            mvTh2 = np.sum(vTh2)
+            mvPh2 = np.sum(vPh2)
 
-        errTh = np.sum(dTh2)
-        errPh = np.sum(dPh2)
+            errTh = np.sum(dTh2)
+            errPh = np.sum(dPh2)
+        else:
+            dTh = (FTh[:, :, :] - self.Ftheta[:, ::dsf, ::dsf])
+            dPh = (FPh[:, :, :] - self.Fphi[:, ::dsf, ::dsf])
+            #
+            # squaring  + Jacobian
+            #
+            dTh2 = np.real(dTh * np.conj(dTh)) * st
+            dPh2 = np.real(dPh * np.conj(dPh)) * st
+
+            vTh2 = np.real(self.Ftheta[:, ::dsf, ::dsf] \
+                 * np.conj(self.Ftheta[:, ::dsf, ::dsf])) * st
+            vPh2 = np.real(self.Fphi[:, ::dsf, ::dsf] \
+                 * np.conj(self.Fphi[:, ::dsf, ::dsf])) * st
+
+            mvTh2 = np.sum(vTh2)
+            mvPh2 = np.sum(vPh2)
+
+            errTh = np.sum(dTh2)
+            errPh = np.sum(dPh2)
 
         errelTh = errTh / mvTh2
         errelPh = errPh / mvPh2
@@ -1285,12 +1322,12 @@ class Antenna(object):
         L = lBr.max()
         M = mBr.max()
 
-        x = -np.cos(theta)
+        #x = -np.cos(theta)
 
         #Pmm1n, Pmp1n = AFLegendre3(20, 20, x)
-        Pmm1n, Pmp1n = AFLegendre3(L, L, x)
-
-        V, W = VW(lBr, mBr, x, phi, Pmm1n, Pmp1n)
+        #Pmm1n, Pmp1n = AFLegendre3(L, L, x)
+        #V, W = VW0(lBr, mBr, x, phi, Pmm1n, Pmp1n)
+        V, W = VW(lBr, mBr, theta, phi)
 
         Fth = np.dot(Br, np.real(V.T)) - \
             np.dot(Bi, np.imag(V.T)) + \
