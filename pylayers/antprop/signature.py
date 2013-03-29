@@ -36,6 +36,7 @@ class Rays(dict):
         self.pRx = pRx
 
 
+
     def show(self,L):
         """
         plot 2D rays within the simulated environment
@@ -56,6 +57,7 @@ class Rays(dict):
                                             self.pRx[0:2].reshape((2, 1))))
                                  ))
                 ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
+
 
 
     def mirror(self,H=3,N=1):
