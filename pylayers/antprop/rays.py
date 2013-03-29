@@ -911,7 +911,7 @@ class Ray3D(object):
         #
         # Repere d'entree du Rx
         #
-        # On impose que le vecteur unitaire d'entree sur
+        # input unitary vector  impose que le vecteur unitaire d'entree sur
         # le recepteur soit confondu avec le vecteur unitaire
         # de sortie de la derniere interaction
         #

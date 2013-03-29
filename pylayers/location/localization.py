@@ -171,7 +171,7 @@ class Localization(object):
 
     def compute_geo(self,rat='all',ldp='all',pe=True):
         """
-            Compute postion with the geometric algorithm
+            Compute position with the geometric algorithm
         """
 
 
@@ -189,7 +189,7 @@ class Localization(object):
 
     def compute_alg(self,rat='all',ldp='all',pe=True):
         """
-            Compute postion with the algebraic algorithm
+            Compute position with the algebraic algorithm
         """
 
         if len(self.cla.c) !=0:
