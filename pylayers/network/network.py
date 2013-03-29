@@ -85,7 +85,7 @@ class Node(nx.MultiGraph):
         RandomMac(): Generate a RAndom Mac adress    
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],epwr={},sens={},type='ag'):
+    def __init__(self,ID=0,p=np.array(()),t=0.,pe=np.array(()),te=0.,RAT=[],epwr={},sens={},type='ag'):
         nx.MultiGraph.__init__(self)
 
         # Personnal Network init
@@ -115,7 +115,7 @@ class Node(nx.MultiGraph):
 
 
 
-class Network(nx.MultiGraph):
+class Network(nx.MultiDiGraph):
     """Network class
     inherit of networkx.Graph()
 
@@ -150,7 +150,7 @@ class Network(nx.MultiGraph):
 
 
     def __init__(self,owner='sim',EMS=EMSolver(),PN=False):
-        nx.MultiGraph.__init__(self)
+        nx.MultiDiGraph.__init__(self)
         self.owner=owner
         self.RAT={}
         self.LDP = ['TOA','Pr'] 
@@ -159,6 +159,8 @@ class Network(nx.MultiGraph):
         self.coll_plot={}
         self.pos={}
         self.mat={}
+        self.link={}
+        self.relink={}
         self.idx = 0
         self.lidx = 0
 
@@ -235,6 +237,8 @@ class Network(nx.MultiGraph):
                     break
             else:
                 return
+
+
 
     def combi(self,iterable,r,key,d=dict()):
         """ combi = itertools.combination(iterable,r) adapted 
@@ -405,10 +409,15 @@ class Network(nx.MultiGraph):
 
 
         for ratnb,Rat in enumerate(self.RAT.keys()):
-            edges=self.combi(self.RAT[Rat],2,Rat,d=edge_dict)
+#            edges=self.combi(self.RAT[Rat],2,Rat,d=edge_dict)
+            edges=self.perm(self.RAT[Rat],2,Rat,d=edge_dict)
             self.add_edges_from(edges)    
             self.get_SubNet(Rat)
-
+            self.link[Rat]=[]
+            self.relink[Rat]=[]
+            for i in itertools.combinations(self.RAT[Rat],2):
+                self.link[Rat].append(i)
+            self.relink[Rat]=[(i[1],i[0]) for i in self.link[Rat]]
     def get_SubNet(self,Rat=None):
         """
         get SubNetworks of a network
@@ -504,7 +513,7 @@ class Network(nx.MultiGraph):
                         try:
                             Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
                         except:
-                            Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type'])
+                            Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=0.),type=Sn[1].node[nn]['type'])
 #                pdb.set_trace()
 
                 ### init edge of PN
@@ -588,7 +597,8 @@ class Network(nx.MultiGraph):
 
         """
         
-        self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
+        self.SubNet[RAT].add_edges_from(self.Gen_tuple(ln,RAT,lD))
+
 
 
     def compute_LDPs(self,ln,RAT):
@@ -608,15 +618,15 @@ class Network(nx.MultiGraph):
 
 
         """
-
         p=nx.get_node_attributes(self.SubNet[RAT],'p')
         epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr')
         sens=nx.get_node_attributes(self.SubNet[RAT],'sens')
-        e=self.SubNet[RAT].edges()
+        e=self.link[RAT]#self.SubNet[RAT].edges()
+        re=self.relink[RAT] # reverse link aka other direction of link
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
-        lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i],'vis':v[i]} for i in range(len(d))]
+        lD=[{'Pr':lp[i],'TOA':np.mod(lt[i],len(e)) ,'d':np.mod(d[i],len(e)),'vis':v[i]} for i in range(len(d))]
 
-        self.update_LDPs(ln,RAT,lD)
+        self.update_LDPs(iter(e+re),RAT,lD)
 
 
 
@@ -1467,7 +1477,6 @@ class PNetwork(Process):
             self.net.pos=self.net.get_pos()
             if self.sim.verbose:
                 print 'network updated @',self.sim.now()
-
             self.net.idx=self.net.idx+1
             yield hold, self, self.net_updt_time
 

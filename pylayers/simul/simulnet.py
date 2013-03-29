@@ -102,9 +102,9 @@ class Simul(SimulationRT):
 
         self.the_world = world(width=float(self.lay_opt['the_world_width']), height=float(self.lay_opt['the_world_height']), scale=float(self.lay_opt['the_world_scale']))
 
-        tk = self.the_world.tk
-        canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
-        canvas.create_rectangle(x_(-1), y_(-1), x_(100), y_(100), fill='white')
+        # tk = self.the_world.tk
+        # canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
+        # canvas.create_rectangle(x_(-1), y_(-1), x_(100), y_(100), fill='white')
 
         _filename = self.lay_opt['filename']
         #sl=Slab.SlabDB(self.lay_opt['slab'],self.lay_opt['slabmat'])
@@ -150,10 +150,10 @@ class Simul(SimulationRT):
         walls = self.L.thwall(0, 0)
         for wall in walls:
             points = []
-            for point in wall:
-                points.append(x_(point[0]))
-                points.append(y_(point[1]))
-            canvas.create_polygon(points, fill='maroon', outline='black')
+            # for point in wall:
+            #          points.append(x_(point[0]))
+            #          points.append(y_(point[1]))
+            #      canvas.create_polygon(points, fill='maroon', outline='black')
             for ii in range(0, len(wall) - 1):
                 self.the_world.add_wall(wall[ii], wall[ii + 1])
 
@@ -280,7 +280,7 @@ class Simul(SimulationRT):
         self.create_show()
 
         if str2bool(self.save_opt['savep']):
-            self.save=Save(net=self.net,sim=self)
+            self.save=Save(L=self.L,net=self.net,sim=self)
             self.activate(self.save,self.save.run(),0.0)
 #        if str2bool(self.save_opt['savep']):
 #            self.save=Save(net=self.net,
@@ -316,8 +316,8 @@ class Simul(SimulationRT):
 #        self.simulate(until=float(self.sim_opt['duration']))
         if self.save_opt['savep']:
             print 'Processing save results, please wait'
-            self.save.export('matlab')
-            self.save.export('python')
+            self.save.mat_export()
+
 
 if __name__ == '__main__':
 
