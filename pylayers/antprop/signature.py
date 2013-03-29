@@ -109,7 +109,9 @@ class Rays(dict):
         """ transform 2D ray to 3D ray (no ceil no floor here)
 
         pts : Ndim x Nint x Nray   
-
+        
+       
+        
         """
         pTx = self.pTx
         pRx = self.pRx
@@ -127,6 +129,91 @@ class Rays(dict):
                 self[i]['alpha'][j, :] = np.sum(si[0:j+1,:], axis=0)/np.sum(si, axis=0)
                 self[i]['pt'][2, j, :] = pTx[2] + self[i]['alpha'][j,:] * (pRx[2] - pTx[2])
 
+    def to3D2(self,H=3,N=1):
+        """ transform 2D ray to 3D ray
+        
+        Parameters
+        ----------
+        
+        H : float 
+            ceil height (default 3m)
+            
+        N : int 
+            handle the number of mirror reflexions     
+            
+        Notes
+        -----
+        
+            
+        """
+        self.to3D()
+        tx = self.pTx
+        rx = self.pRx
+        d  = self.mirror(H=H,N=N)
+        r3d = Rays(tx,rx)
+        
+        for k in self:   # for all interaction group k 
+            k = int(k)
+            Nrayk = np.shape(self[str(k)]['alpha'])[1]  # Number of rays in interaction group k 
+            a1  = self[str(k)]['alpha']             # get  2D parameterization 
+            sig = self[str(k)]['sig']               # get  2D signature
+            a1  = np.concatenate((np.zeros((1,Nrayk)),a1,np.ones((1,Nrayk))))    # add parameterization of tx and rx (0,1)
+            sig = np.hstack((np.zeros((2,1,Nrayk)),sig,np.zeros((2,1,Nrayk)))) # add signature of Tx and Rx (0,0)
+            Tx = tx.reshape(3,1,1)*np.ones((1,1,Nrayk))
+            Rx = rx.reshape(3,1,1)*np.ones((1,1,Nrayk))
+            pte = self[str(k)]['pt']                  # ndim x k x Nrayk
+            pte = np.hstack((Tx,pte,Rx))             # ndim x k+2 x Nrayk
+            for l in d:                              # for each vertical pattern (C,F,CF,FC,....)
+                Nint = len(d[l])                     # number of additional interaction 
+                
+                if Nint>0:                           # if new interaction ==> need extension
+                    a1e    = np.concatenate((a1,d[l].reshape(len(d[l]),1)*np.ones((1,Nrayk))))  # extended old parameterization 
+                    ks     = np.argsort(a1e,axis=0)                                             # get sorted indices 
+                    a1es   = np.sort(a1e,axis=0)                                                # sorted extended parameterization 
+                    ptee   = np.hstack((pte,np.zeros((3,Nint,Nrayk))))                          # ndim x (Nint+k+2) x Nrayk 
+                    if l< 0 : 
+                        u = np.mod(range(Nint),2)
+                    else:
+                        u = 1 - np.mod(range(Nint),2)
+                    esigs = np.zeros((1,Nint,Nrayk)) 
+                    esigi = (u+4).reshape(1,Nint,1)*np.ones((1,1,Nrayk))
+                    esig  = np.vstack((esigs,esigi))
+                    #sige   = np.hstack((sig,np.zeros((2,Nint,Nrayk))))                         # 2 x (Nint+k+2) x Nrayk 
+                    sige   = np.hstack((sig,esig))                                              # 2 x (Nint+k+2) x Nrayk 
+                    ptees  = ptee[:,ks,range(Nrayk)]                                            # sorted points
+                    siges  = sige[:,ks,range(Nrayk)]                                            # sorted signature
+                    iint_f,iray_f = np.where(siges[1,:]==4)                             # floor interaction
+                    iint_c,iray_c = np.where(siges[1,:]==5)                             # ceil interaction
+                    
+                    
+                    coeff_f = (a1es[iint_f,iray_f]-a1es[iint_f-1,iray_f])/(a1es[iint_f+1,iray_f]-a1es[iint_f-1,iray_f])
+                    coeff_c = (a1es[iint_c,iray_c]-a1es[iint_c-1,iray_c])/(a1es[iint_c+1,iray_c]-a1es[iint_c-1,iray_c])
+                    ptees[0:2,iint_f,iray_f] = ptees[0:2,iint_f-1,iray_f] + coeff_f*(ptees[0:2,iint_f+1,iray_f]-ptees[0:2,iint_f-1,iray_f])
+                    #ptees[2,iint_f,iray_f]   = 0
+                    ptees[0:2,iint_c,iray_c] = ptees[0:2,iint_c-1,iray_c] + coeff_c*(ptees[0:2,iint_c+1,iray_c]-ptees[0:2,iint_c-1,iray_c])
+                    #ptees[2,iint_c,iray_c]   = H
+                    z = np.mod(l+a1es*(rx[2]-l),2*H)
+                    pz=np.where(z>H)
+                    z[pz]=2*H-z[pz]
+                    ptees[2,:]=z
+                else:
+                    a1es  = a1                        # recopy old 2D parameterization (no extension)
+                    ks    = np.argsort(a1es,axis=0)
+                    ptees = pte 
+                    siges = sig
+                try:
+                    #r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
+                    #r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
+                    r3d[k+Nint]['pt'] = np.dstack((r3d[k+Nint]['pt'],ptees))
+                    r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'],siges))
+                except:
+                    r3d[k+Nint]={}
+                    #r3d[k+Nint]['alpha'] = a1es
+                    #r3d[k+Nint]['ks'] = ks
+                    r3d[k+Nint]['pt'] = ptees
+                    r3d[k+Nint]['sig'] = siges
+        return(r3d)           
+                    
     def signature(self,L):
         """
         """
