@@ -630,7 +630,7 @@ class Network(nx.MultiDiGraph):
 
 
 
-    def update_pos(self,n,p,p_pe='p'):
+    def update_pos(self,n,p,now=0.,p_pe='p'):
         """ 
         Update Position of a node
 
@@ -651,11 +651,14 @@ class Network(nx.MultiDiGraph):
                 p=[p]
             if len(n) == len(p):    
                 d=dict(zip(n,p))    # transform data to be complient with nx.set_node_attributes            
+                nowd=dict(zip(n,[now]*len(n)))
             else :
                 raise TypeError('n and p must have the same length')
             # update position
             nx.set_node_attributes(self,p_pe,d)        
-
+            # update time of ground truth position
+            if p_pe=='p':
+                nx.set_node_attributes(self,'t',nowd)
         else :
             raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
 

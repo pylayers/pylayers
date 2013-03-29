@@ -100,6 +100,7 @@ class Agent(object):
         self.net = args['net']
         self.epwr = args['epwr']
         self.gcom = args['gcom']
+        self.sim = args['sim']
         try:
             self.dcond = args['dcond']
         except:
@@ -127,10 +128,10 @@ class Agent(object):
 
             ## Network init
             self.node = Node(ID=self.ID, p=conv_vecarr(self.meca.position),
-                             t=time.time(), RAT=args['RAT'],
+                             t=self.sim.now(), RAT=args['RAT'],
                              epwr=args['epwr'], sens=args['sens'], type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
-            self.sim = args['sim']
+
             self.sim.activate(self.meca, self.meca.move(), 0.0)
             self.PN = self.net.node[self.ID]['PN']
 
@@ -167,11 +168,11 @@ class Agent(object):
         elif self.type == 'ap':
             if args['roomId'] == -1:
                 self.node = Node(ID=self.ID, p=self.args['pos'],
-                                 t=time.time(), RAT=args['RAT'],
+                                 t=self.sim.now(), RAT=args['RAT'],
                                  epwr=args['epwr'], sens=args['sens'], type=self.type)
             else:
                 pp = np.array(args['Layout'].Gr.pos[self.args['roomId']])
-                self.node = Node(ID=self.ID, p=pp, t=time.time(), RAT=args['RAT'],
+                self.node = Node(ID=self.ID, p=pp, t=self.sim.now(), RAT=args['RAT'],
                                  epwr=args['epwr'], sens=args['sens'], type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim = args['sim']

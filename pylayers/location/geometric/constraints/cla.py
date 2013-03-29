@@ -133,8 +133,11 @@ class CLA(object):
         self.erronous = []
         self.id = []
         self.origin = []
-        self.runable = []
-        self.used=[]
+        self.runable = [] # does pe is known ?
+        self.visible = [] # does link physically exist ? aka 2 nodes are in visiblity ?
+        self.usable=[] # constraints are usable = runable + visible
+
+
 
         if len(parmsh) == 0:
             self.parmsh = parmsh
@@ -168,6 +171,7 @@ class CLA(object):
         """
         [c.update() for c in self.c if c.runable]
         self.runable=[c.runable for c in self.c]
+
 
     def compute(self,pe=True):
         """
@@ -270,8 +274,9 @@ class CLA(object):
         self.origin.append(c.origin)
         self.type.append(c.type)
         self.runable.append(c.runable)
+        self.visible.append(c.runable)
         # by default, if a constraint is runable, it will be used
-        self.used.append(c.runable)
+        self.usable.append(c.runable and c.visible)
         self.std.append(c.std)
         self.Nc = self.Nc + 1
         self.vcw.append(c.vcw)
@@ -357,7 +362,7 @@ class CLA(object):
 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.runable) == False)[0]) 
-        Nc = self.Nc - len(np.nonzero(np.array(self.used) == False)[0]) 
+        Nc = self.Nc - len(np.nonzero(np.array(self.usable) == False)[0]) 
         self.Nc = Nc
         vcwmin = 1.0  # max(self.vcw)
         step = 1.0

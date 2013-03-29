@@ -100,6 +100,7 @@ class RSS(Constraint):
         else:
             self.model = model
             self.param = self.model.param
+        self.visible = True
         self.update()
 
     def update(self):
