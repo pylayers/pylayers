@@ -107,9 +107,9 @@ except:
     L.build()
     L.dumpw()
 L.showG('r')
-path = '/private/staff/n/en/buguen/Bureau/WHERE2/WHERE2-DLR-Simulations/'
-ZigbeeNode = np.loadtxt(path+'Coord_Zigbee_Nodes.csv',delimiter=',')
-Dongle = np.loadtxt(path+'Coord_dongle.csv',delimiter=',')
+#path = '/private/staff/n/en/buguen/Bureau/WHERE2/WHERE2-DLR-Simulations/'
+#ZigbeeNode = np.loadtxt(path+'Coord_Zigbee_Nodes.csv',delimiter=',')
+#Dongle = np.loadtxt(path+'Coord_dongle.csv',delimiter=',')
 
 #
 # Reading Anchor Nodes and Mobile Nodes
@@ -150,9 +150,10 @@ r2d = Si.rays()
 r2d.to3D()
 r2d.show3(strucname='DLR')
 H = 3 
-d = r2d.mirror()
+d = r2d.mirror(N=2)
 r3d = Rays(tx,rx)
-
+print "start"
+a=time.time()
 for k in r2d:   # for all interaction group k 
     k = int(k)
     Nrayk = np.shape(r2d[str(k)]['alpha'])[1]  # Number of rays in interaction group k 
@@ -170,7 +171,7 @@ for k in r2d:   # for all interaction group k
         if Nint>0:                           # if new interaction ==> need extension
             a1e    = np.concatenate((a1,d[l].reshape(len(d[l]),1)*np.ones((1,Nrayk))))  # extended old parameterization 
             ks     = np.argsort(a1e,axis=0)                                             # get sorted indices 
-            a1ee   = np.sort(a1e,axis=0)                                                # sorted extended parameterization 
+            a1es   = np.sort(a1e,axis=0)                                                # sorted extended parameterization 
             ptee   = np.hstack((pte,np.zeros((3,Nint,Nrayk))))                          # ndim x (Nint+k+2) x Nrayk 
             if l< 0 : 
                 u = np.mod(range(Nint),2)
@@ -186,28 +187,37 @@ for k in r2d:   # for all interaction group k
             iint_f,iray_f = np.where(siges[1,:]==4)                             # floor interaction
             iint_c,iray_c = np.where(siges[1,:]==5)                             # ceil interaction
             
-            coeff_f = (a1ee[iint_f,iray_f]-a1ee[iint_f-1,iray_f])/(a1ee[iint_f+1,iray_f]-a1ee[iint_f-1,iray_f])
-            coeff_c = (a1ee[iint_c,iray_c]-a1ee[iint_c-1,iray_c])/(a1ee[iint_c+1,iray_c]-a1ee[iint_c-1,iray_c])
+            
+            coeff_f = (a1es[iint_f,iray_f]-a1es[iint_f-1,iray_f])/(a1es[iint_f+1,iray_f]-a1es[iint_f-1,iray_f])
+            coeff_c = (a1es[iint_c,iray_c]-a1es[iint_c-1,iray_c])/(a1es[iint_c+1,iray_c]-a1es[iint_c-1,iray_c])
             ptees[0:2,iint_f,iray_f] = ptees[0:2,iint_f-1,iray_f] + coeff_f*(ptees[0:2,iint_f+1,iray_f]-ptees[0:2,iint_f-1,iray_f])
-            ptees[2,iint_f,iray_f]   = 0
+            #ptees[2,iint_f,iray_f]   = 0
             ptees[0:2,iint_c,iray_c] = ptees[0:2,iint_c-1,iray_c] + coeff_c*(ptees[0:2,iint_c+1,iray_c]-ptees[0:2,iint_c-1,iray_c])
-            ptees[2,iint_c,iray_c]   = H
+            #ptees[2,iint_c,iray_c]   = H
+            z = np.mod(l+a1es*(rx[2]-l),2*H)
+            pz=np.where(z>H)
+            z[pz]=2*H-z[pz]
+            ptees[2,:]=z
         else:
-            a1ee  = a1                        # recopy old 2D parameterization (no extension)
-            ks    = np.argsort(a1ee,axis=0)
+            a1es  = a1                        # recopy old 2D parameterization (no extension)
+            ks    = np.argsort(a1es,axis=0)
             ptees = pte 
             siges = sig
         try:
-            r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1ee))
+            r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
             r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
             r3d[k+Nint]['pt'] = np.dstack((r3d[k+Nint]['pt'],ptees))
             r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'],siges))
         except:
             r3d[k+Nint]={}
-            r3d[k+Nint]['alpha'] = a1ee
+            r3d[k+Nint]['alpha'] = a1es
             r3d[k+Nint]['ks'] = ks
             r3d[k+Nint]['pt'] = ptees
             r3d[k+Nint]['sig'] = siges
+b=time.time()
+print "stop"
+print b-a
+
 #showr(L,r2d,tx,rx,3,0)
 
 

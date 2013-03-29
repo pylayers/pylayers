@@ -30,7 +30,6 @@ from pylayers.location.geometric.util import geomview as g
 from pylayers.location.geometric.util.scene import *
 import os
 import sys
-#import numpydoc
 
 #__docformat__ = 'reStructuredText'
 
