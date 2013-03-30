@@ -148,7 +148,7 @@ Si = Signatures(S.L,tx,rx)
 Si.run(tx,rx,4)
 r2d = Si.rays()
 a=time.time()
-r3d = r2d.to3D2()
+r3d = r2d.to3D()
 #for k in r2d:   # for all interaction group k 
 #    k = int(k)
 #    Nrayk = np.shape(r2d[str(k)]['alpha'])[1]  # Number of rays in interaction group k 

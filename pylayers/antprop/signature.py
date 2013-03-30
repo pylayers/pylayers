@@ -38,11 +38,13 @@ class Rays(dict):
 
 
     def show(self,L):
-        """
-        plot 2D rays within the simulated environment
+        """  plot 2D rays within the simulated environment
+        
         Parameters
         ----------
-            rays: dict
+        
+            L : Layout
+            
         """
 
         fig = plt.figure()
@@ -61,7 +63,17 @@ class Rays(dict):
 
 
     def mirror(self,H=3,N=1):
-        """ mirror 
+        """ mirror
+         
+        Parameters
+        ----------
+        
+        H : float 
+            ceil height (default 3m)
+            
+        N : int 
+            handle the number of mirror reflexions     
+        
         """
         km  = np.arange(-N+1,N+1,1)
         kp  = np.arange(-N,N+1,1)
@@ -69,9 +81,9 @@ class Rays(dict):
         hr = self.pRx[2]
         zkp = 2*kp*H + ht
         zkm = 2*km*H - ht
-        print zkp
-        print zkm
+     
         d   = {}
+        
         for zm in zkm:
             if  zm<0:
                 bup = H
@@ -83,10 +95,7 @@ class Rays(dict):
                 km   = int(np.floor(zm/H))
             thrm = np.arange(km*H,bup,pas)
             d[zm] = abs(thrm-zm)/abs(hr-zm)
-            #print "zm",zm
-            #print "km",km
-            #print "thrm",thrm
-            #print "alpham",d[zm]
+           
         for zp in zkp:
             if  zp<0:
                 bup = H
@@ -105,31 +114,10 @@ class Rays(dict):
 
         return(d)
 
-    def to3D(self):
-        """ transform 2D ray to 3D ray (no ceil no floor here)
-
-        pts : Ndim x Nint x Nray   
+  
         
-       
-        
-        """
-        pTx = self.pTx
-        pRx = self.pRx
-        for i in self.keys():
-            pts = self[i]['pt'][0:2, :, :]
-            sig = self[i]['sig']
-            t = self.pTx[0:2].reshape((2,1,1)) * np.ones((1,1,len(pts[0, 0,:])))
-            r = self.pRx[0:2].reshape((2,1,1)) * np.ones((1,1,len(pts[0, 0,:])))
-            pts1 = np.hstack((t, np.hstack((pts, r))))
-            si1  = pts1[:, 1:, :] - pts1[:, :-1, :]
-            si   = np.sqrt(np.sum(si1 * si1, axis=0))
-            al1  = np.cumsum(si,axis=0)
-            self[i]['alpha'] = np.zeros(np.shape(si[:-1, :]))
-            for j in range(len(self[i]['alpha'][:, 0])):
-                self[i]['alpha'][j, :] = np.sum(si[0:j+1,:], axis=0)/np.sum(si, axis=0)
-                self[i]['pt'][2, j, :] = pTx[2] + self[i]['alpha'][j,:] * (pRx[2] - pTx[2])
 
-    def to3D2(self,H=3,N=1):
+    def to3D(self,H=3,N=1):
         """ transform 2D ray to 3D ray
         
         Parameters
@@ -146,12 +134,52 @@ class Rays(dict):
         
             
         """
-        self.to3D()
+        
         tx = self.pTx
         rx = self.pRx
+        #
+        # Phase 1 : calculate Tx images height and vertical parameterization
+        #
+        
         d  = self.mirror(H=H,N=N)
+        
+        #
+        # Phase 2 : calculate 2D parameterization
+        #
+        
+        for i in self:
+            pts = self[i]['pt'][0:2, :, :]
+            sig = self[i]['sig']
+            t = self.pTx[0:2].reshape((2,1,1)) * np.ones((1,1,len(pts[0, 0,:])))
+            r = self.pRx[0:2].reshape((2,1,1)) * np.ones((1,1,len(pts[0, 0,:])))
+            pts1 = np.hstack((t, np.hstack((pts, r))))
+            si1  = pts1[:, 1:, :] - pts1[:, :-1, :]
+            si   = np.sqrt(np.sum(si1 * si1, axis=0))
+            al1  = np.cumsum(si,axis=0)
+            self[i]['alpha'] = np.zeros(np.shape(si[:-1, :]))
+            for j in range(len(self[i]['alpha'][:, 0])):
+                self[i]['alpha'][j, :] = np.sum(si[0:j+1,:], axis=0)/np.sum(si, axis=0)
+                #self[i]['pt'][2, j, :] = pTx[2] + self[i]['alpha'][j,:] * (pRx[2] - pTx[2])
+        
+       
+        
+        #
+        #  Phase 3 : Initialize 3D rays dictionnary
+        #
         r3d = Rays(tx,rx)
         
+        
+        #
+        # Phase 4 : Fill 3D rays information 
+        #
+        # Two nested loops
+        #
+        #      for all interaction group 
+        #          for all type of 3D rays 
+        #             extension 
+        #             sort
+        #             coordinates as a function of parameter
+        #
         for k in self:   # for all interaction group k 
             k = int(k)
             Nrayk = np.shape(self[str(k)]['alpha'])[1]  # Number of rays in interaction group k 
