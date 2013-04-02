@@ -74,7 +74,7 @@ class SelectL(object):
         #xmin,xmax,ymin,ymax = self.g.ax
         #ax = plt.axis('tight')
         axis = ax.axis()
-        print('show : axis',axis) 
+        #print('show : axis',axis) 
         #plt.axis(ax)
         self.L.display['clear'] = clear
         self.L.display['nodes'] = dnodes
@@ -132,7 +132,7 @@ class SelectL(object):
             self.nsel = self.L.ispoint(self.ptsel, dd / 100)
 
         #print "Selected point coord : ", self.ptsel
-        print "Selected point number: ", self.nsel
+        #print "Selected point number: ", self.nsel
         if self.nsel > 0:
             print "Selected Edge : ", self.nsel
 
@@ -321,8 +321,8 @@ class SelectL(object):
         ax  = plt.gca()
         sl = self.L.sl
         cold = pyu.coldict()
-        print "In State ",self.state
-        print "In Event ",self.evt
+        #print "In State ",self.state
+        #print "In Event ",self.evt
         #
         # Choose layers to visualized
         #
