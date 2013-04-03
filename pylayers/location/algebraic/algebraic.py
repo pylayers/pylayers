@@ -249,6 +249,7 @@ class algloc(object):
                 RNr_TDOA = self.nodes['RNr_TDOA']
                 TDOA = self.ldp['TDOA']
                 shRN = np.shape(RN_TDOA)
+                
                 # Construct the vector K (see theory)
                 k1 = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
                       axis=0))
@@ -977,7 +978,8 @@ class algloc(object):
 
 def scenario():
     """
-    This method is not a class member, it defines a sample scenario
+    This method is not a class member, it defines a sample scenario.
+    
     Returns
     -------
         CRB : float
@@ -1071,7 +1073,7 @@ def scenario():
     TDOF = (d - dr) / c  # actual TDOA
     TDOA_std = 0.001 / c * np.ones(np.shape(TDOF))
     TDOA = TDOF + TDOA_std
-
+    
     nodes = {}
     nodes['BN'] = BN
     nodes['RN_RSS'] = RN_RSS

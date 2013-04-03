@@ -9,10 +9,10 @@ pylayers/antprop/__init__.py
 pylayers/antprop/antenna.py
 pylayers/antprop/channel.py
 pylayers/antprop/coverage.py
-pylayers/antprop/loadTMP.py
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/signature.py
+pylayers/antprop/signew.py
 pylayers/antprop/slab.py
 pylayers/gis/__init__.py
 pylayers/gis/cycles.py
@@ -72,7 +72,6 @@ pylayers/network/emsolver.py
 pylayers/network/model.py
 pylayers/network/net.py
 pylayers/network/network.py
-pylayers/network/networktmp.py
 pylayers/network/prioritydict.py
 pylayers/network/show.py
 pylayers/network/wsn.py
@@ -84,8 +83,6 @@ pylayers/simul/exploit.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
-pylayers/simul/tmp.py
-pylayers/simul/toto.py
 pylayers/util/__init__.py
 pylayers/util/easygui-olld.py
 pylayers/util/easygui.py
