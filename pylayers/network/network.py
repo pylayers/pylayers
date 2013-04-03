@@ -1201,7 +1201,7 @@ class Network(nx.MultiDiGraph):
             self.idx = self.idx +1
         except:
             pass
-
+    
 
     def pyray_save(self,S):
         """
@@ -1413,7 +1413,7 @@ class PNetwork(Process):
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
             # Add access point position in each personal network (PN)
-            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
+#            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
                 
         ####################################################################################
         self.pos=self.net.get_pos()

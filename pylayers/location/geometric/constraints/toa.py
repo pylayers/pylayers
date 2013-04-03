@@ -75,6 +75,7 @@ class TOA(Constraint):
         self.range = self.value * 0.3
         self.sstd = self.std * 0.3
         self.visible = True
+        self.obsolete = False
         self.update()
 #               self.rescale(vcw)
 #               self.runable = False

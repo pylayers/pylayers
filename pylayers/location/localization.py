@@ -177,6 +177,10 @@ class Localization(object):
     def compute_geo(self,rat='all',ldp='all',now=0.,pe=True):
         """
             Compute position with the geometric algorithm
+
+        Returns
+        -------
+            True if estimated position has been computed
         """
 
 
@@ -185,17 +189,26 @@ class Localization(object):
             if cpe:
                 self.savep(self.cla.pe,name='pe')
                 self.savep(self.cla.pe,name='pe_geo')
-
+                self.net.node[self.ID]['PN'].node[self.ID]['te']=now # estimated time
+                return True
+            return False
         # in case of lack of observables
         elif sum(self.cla.usable) >= 1:
             cpe = self.cla.compute_amb(pe=pe)
             if cpe:
                 self.savep(np.array(self.cla.pecluster),now=now,name='pe_clust')
-        self.net.node[self.ID]['PN'].node[self.ID]['te']=now
+                self.net.node[self.ID]['PN'].node[self.ID]['te']=now # estimated time
+                return True
+            return False
+        else :
+            return False
 
     def compute_alg(self,rat='all',ldp='all',now=0.,pe=True):
         """
             Compute position with the algebraic algorithm
+        Returns
+        -------
+            True if estimatited position has been computed
         """
 
         if sum(self.cla.usable) >= 2 :
@@ -206,19 +219,22 @@ class Localization(object):
 
             pe_alg = self.algloc.wls_locate('Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp, 'mode')
             self.savep(pe_alg.T,now=now,name='pe_alg')
-        self.net.node[self.ID]['PN'].node[self.ID]['te']=now
+            self.net.node[self.ID]['PN'].node[self.ID]['te']=now
+            return True
+        else:
+            return False
 
 
 
-    def compute_crb(self,rat='all',ldp='all',now=0.,pe=True):
-        """
-            Compute CramerRao bound
-        """
-        
-        if ldp == 'all':
-            ldp=['Pr','TOA','TDOA']
-        crb = self.algloc.crb(np.zeros((2,1)),'Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp)
-        self.savep(np.array(crb),now=now,name='crb')
+#    def compute_crb(self,rat='all',ldp='all',now=0.,pe=True):
+#        """
+#            Compute CramerRao bound
+#        """
+#        
+#        if ldp == 'all':
+#            ldp=['Pr','TOA','TDOA']
+#        crb = self.algloc.crb(np.zeros((2,1)),'Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp)
+#        self.savep(np.array(crb),now=now,name='crb')
 
 
 
@@ -235,15 +251,18 @@ class PLocalization(Process):
         self.loc.fill_cla()
         while True:
 
+            # if no previous position have been computed or if position is obsolete
             if self.loc.net.node[self.loc.ID]['pe'].size == 0 \
                 or self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node['te']>self.loc_updt_time:
                     print 'lets go'
 
-            self.loc.update(ldp='all')
-            if 'geo'in self.method :
-                self.loc.compute_geo(ldp='TOA',now=self.sim.now())
-            if 'alg'in self.method :
-                self.loc.compute_alg(ldp='TOA',now=self.sim.now())
+                    if 'geo' in self.method :
+                        bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
+                    if 'alg' in self.method and bep:
+                        bep = self.loc.compute_alg(ldp='TOA',now=self.sim.now())
+                    if not bep : # is localization has been computed ?
+                        self.loc.update(ldp='all')
+
 
             if self.sim.verbose:
                 print 'localization node',self.loc.ID, ' update @',self.sim.now()

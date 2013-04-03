@@ -154,14 +154,14 @@ class Agent(object):
 
                 self.rxr = RX(net=self.net, ID=self.ID,
                               dcond=self.dcond, gcom=self.gcom, sim=self.sim)
-                self.rxt = RX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
-                self.txt = TX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
+#                self.rxt = RX(net=self.net, ID=self.ID,
+#                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
+#                self.txt = TX(net=self.net, ID=self.ID,
+#                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
 
                 self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
-                self.sim.activate(self.rxt, self.rxt.wait_TOArq(), 0.0)
-                self.sim.activate(self.txt, self.txt.request_TOA(), 0.0)
+#                self.sim.activate(self.rxt, self.rxt.wait_TOArq(), 0.0)
+#                self.sim.activate(self.txt, self.txt.request_TOA(), 0.0)
 
 
 

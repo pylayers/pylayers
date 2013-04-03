@@ -101,6 +101,7 @@ class RSS(Constraint):
             self.model = model
             self.param = self.model.param
         self.visible = True
+        self.obsolete = False
         self.update()
 
     def update(self):

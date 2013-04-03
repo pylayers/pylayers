@@ -135,6 +135,7 @@ class CLA(object):
         self.origin = []
         self.runable = [] # does pe is known ?
         self.visible = [] # does link physically exist ? aka 2 nodes are in visiblity ?
+        self.obsolete = [] # is the ldp has been obtain a long time ago
         self.usable=[] # constraints are usable = runable + visible
 
 
@@ -171,6 +172,7 @@ class CLA(object):
         """
         [c.update() for c in self.c if c.runable]
         self.runable=[c.runable for c in self.c]
+        self.obsolete=[c.obsolete for c in self.c]
 
 
     def compute(self,pe=True):
@@ -275,8 +277,9 @@ class CLA(object):
         self.type.append(c.type)
         self.runable.append(c.runable)
         self.visible.append(c.runable)
+        self.obsolete.append(c.obsolete)
         # by default, if a constraint is runable, it will be used
-        self.usable.append(c.runable and c.visible)
+        self.usable.append(c.runable and c.visible and not c.obsolete)
         self.std.append(c.std)
         self.Nc = self.Nc + 1
         self.vcw.append(c.vcw)
