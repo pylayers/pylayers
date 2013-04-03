@@ -72,7 +72,7 @@ class TOA(Constraint):
         self.vcw = vcw
         self.value = value
         self.std = std
-        self.range = value * 0.3
+        self.range = self.value * 0.3
         self.sstd = self.std * 0.3
         self.update()
 #               self.rescale(vcw)
@@ -88,6 +88,7 @@ class TOA(Constraint):
             self.runable = True
         else:
             self.runable = False
+        self.range=self.value *0.3
         self.rescale(self.vcw)
         self.evaluated = False
         self.annulus_bound()

@@ -112,7 +112,7 @@ class RadioNode(object):
         #print _fileant
         self.fileant = _fileant
         try:
-            self.loadvsh()
+            self.loadvsh() # is it still necessary ? 
         except:
             raise NameError('antenna file does not exist')
         self.save()
@@ -142,6 +142,13 @@ class RadioNode(object):
             print "filestr    : ", self.filestr
         except:
             pass
+    
+    def clear(self):
+        """ clear positions
+        """
+        self.position = np.array([], dtype=float)
+        self.position = np.array([0, 0, 0]).reshape(3, 1)
+        self.N = 1
 
     def points(self, pt=np.array([[0], [0], [0]])):
         """ add a set of points to RadioNode
@@ -714,7 +721,7 @@ class RadioNode(object):
 
         """
         #print self.fileant
-        A = Antenna('vsh3', self.fileant)
+        A = Antenna(self.fileant)
         self.A = A
 
     def gantenna(self, mode='subst'):

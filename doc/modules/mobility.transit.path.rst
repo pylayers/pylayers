@@ -1,4 +1,4 @@
 .. _mobility.transit.path.rst:
 
-.. automodule:: mobility.transit.path
+.. automodule:: mobility.transit.Path
     :members:

@@ -2,20 +2,19 @@
 
 
 {% block rootrellink %}
-        <li><a href="{{ pathto('index') }}">home</a>|&nbsp;</li>
-        <li><a href="{{ pathto('search') }}">search</a>|&nbsp;</li>
+        <li><a href="{{ pathto('index') }}">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="{{ pathto('documentation') }}">Documentation </a> |&nbsp;</li>
+        <li><a href="{{ pathto('download') }}">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 {% endblock %}
 
-
 {% block relbar1 %}
-
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="{{ pathto('index') }}"><img src="{{
-pathto("_static/logo.png", 1) }}" border="0" alt="py4sci"/></a>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="{{ pathto('index') }}"><img src="{{ pathto("_static/logo.png", 1) }}" height="200" border="0"
+    alt="pylayers"/></a>
+-->
 </div>
 {{ super() }}
 {% endblock %}
-
-{# put the sidebar before the body #}
-{% block sidebar1 %}{{ sidebar() }}{% endblock %}
-{% block sidebar2 %}{% endblock %}

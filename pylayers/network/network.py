@@ -27,6 +27,8 @@ import networkx as nx
 import itertools
 import pickle as pk
 import pkgutil
+from copy import deepcopy
+
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
@@ -39,14 +41,14 @@ import pdb
 import pylayers.util.pyutil as pyu
 from pylayers.network.emsolver import EMSolver
 from pylayers.network.show import ShowNet,ShowTable
-from pylayers.util.pymysqldb import Database 
+#from pylayers.util.pymysqldb import Database
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
+from pylayers.util.utilnet import str2bool
 import time
 
 
-import SimPy.Simulation
-from SimPy.Simulation import Process,hold
+from SimPy.SimulationRT import Process,hold
 import pprint
 import select
 import sys
@@ -83,15 +85,14 @@ class Node(nx.MultiGraph):
         RandomMac(): Generate a RAndom Mac adress    
 
     """
-    def __init__(self,ID=0,p=np.array(()),t=time.time(),pe=np.array(()),te=time.time(),RAT=[],epwr={},sens={},type='ag'):
+    def __init__(self,ID=0,p=np.array(()),t=0.,pe=np.array(()),te=0.,RAT=[],epwr={},sens={},type='ag'):
         nx.MultiGraph.__init__(self)
 
         # Personnal Network init
         self.ID=ID
-        self.PN = Network(owner=self.ID)
+        self.PN = Network(owner=self.ID,PN=True)
         self.PN.add_node(self.ID,dict(pe=pe,te=te,RAT=RAT,type=type))
         # Network init
-
         self.add_node(ID,dict(PN=self.PN,p=p,pe=self.PN.node[self.ID]['pe'],t=t,RAT=RAT,epwr=epwr,sens=sens,type=type))
         self.p    = self.node[self.ID]['p']
         self.pe    = self.PN.node[self.ID]['pe']
@@ -114,7 +115,7 @@ class Node(nx.MultiGraph):
 
 
 
-class Network(nx.MultiGraph):
+class Network(nx.MultiDiGraph):
     """Network class
     inherit of networkx.Graph()
 
@@ -148,8 +149,8 @@ class Network(nx.MultiGraph):
 
 
 
-    def __init__(self,owner='sim',EMS=EMSolver()):
-        nx.MultiGraph.__init__(self)
+    def __init__(self,owner='sim',EMS=EMSolver(),PN=False):
+        nx.MultiDiGraph.__init__(self)
         self.owner=owner
         self.RAT={}
         self.LDP = ['TOA','Pr'] 
@@ -158,8 +159,84 @@ class Network(nx.MultiGraph):
         self.coll_plot={}
         self.pos={}
         self.mat={}
+        self.link={}
+        self.relink={}
         self.idx = 0
+        self.lidx = 0
 
+    def perm(self,iterable,r,key,d=dict()):
+        """ combi = itertools.permutation(iterable,r) adapted 
+    
+        This is an adapted version of itertools.permutations in order to be complient with the networkx.add_edges_from method.
+        itertools.permutations(range(4), 3) --> 012 013 021 023 031 302 102 103 ...
+    
+        self.perm([10,11],2,'wifi') -->     (10, 11, 'wifi', {'Pr': [], 'TOA': []}) 
+                                (11, 10, 'wifi', {'Pr': [], 'TOA': []})
+
+        Attributes
+        ----------
+        iterable : list
+            list of node
+        r     : int
+            number of node gathered in the output tuple ( always set 2 ! )
+
+
+        Returns
+        ------     
+
+        out : tuple(node_list,r,RAT,d):
+        node_list    : list of node1        
+        r        : gather r node in the tuple
+        RAT        : the specified RAT
+        d        : dictionnary of RAT attribute
+
+        Examples
+        --------
+
+
+        >>> from pylayers.network.network import *
+        >>> N=Network()
+        >>> l= [0,1,2]
+        >>> key='toto'
+        >>> d=dict(key1=1,key2=2) 
+        >>> perm=N.perm(l,2,key,d)
+        >>> perm.next()        
+        (0, 1, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
+        >>> perm.next()        
+        (0, 2, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})        for l in self.LDP:
+        >>> perm.next()
+        (1, 0, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
+        >>> perm.next()
+        (1, 2, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
+        >>> perm.next()
+        (2, 0, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
+        >>> perm.next()
+        (2, 1, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
+        """
+
+        for l in self.LDP:
+            d[l]=[]
+        pool = tuple(iterable)
+        n = len(pool)
+        r = n if r is None else r
+        if r > n:
+            return
+        indices = range(n)
+        cycles = range(n, n-r, -1)
+        yield tuple((pool[indices[0]],pool[indices[1]],key,d))
+        while n:
+            for i in reversed(range(r)):
+                cycles[i] -= 1
+                if cycles[i] == 0:
+                    indices[i:] = indices[i+1:] + indices[i:i+1]
+                    cycles[i] = n - i
+                else:
+                    j = cycles[i]
+                    indices[i], indices[-j] = indices[-j], indices[i]
+                    yield tuple((pool[indices[0]],pool[indices[1]],key,d))
+                    break
+            else:
+                return
 
 
 
@@ -206,9 +283,12 @@ class Network(nx.MultiGraph):
         (0, 2, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
 
         """
-        for l in self.LDP:
-            d[l]=[]
+
+#        for l in self.LDP:
+#            d[l]=[]
+
             
+
         pool = iterable
         n = len(pool)
         if r > n:
@@ -294,10 +374,11 @@ class Network(nx.MultiGraph):
 
         """
 #        if Rat !='None' :
+
         for no in self.nodes():
             for r in self.node[no]['RAT']:
                 try:
-                    self.RAT[r].extend(no)
+                    self.RAT[r].append(no)
                 except :
                     self.RAT[r]=[no]
 #        else :
@@ -313,7 +394,6 @@ class Network(nx.MultiGraph):
             self.RAT[Rat]    = {}.fromkeys(self.RAT[Rat]).keys()
         
 
-        
 
     def connect(self):
         """ 
@@ -321,13 +401,23 @@ class Network(nx.MultiGraph):
 
         """
         
-    
+        edge_dict={}
+        for l in self.LDP:
+            edge_dict[l]=np.array((np.nan,np.nan))
+        edge_dict['vis']=False
+        
+
 
         for ratnb,Rat in enumerate(self.RAT.keys()):
-            edges=self.combi(self.RAT[Rat],2,Rat)
+#            edges=self.combi(self.RAT[Rat],2,Rat,d=edge_dict)
+            edges=self.perm(self.RAT[Rat],2,Rat,d=edge_dict)
             self.add_edges_from(edges)    
             self.get_SubNet(Rat)
-
+            self.link[Rat]=[]
+            self.relink[Rat]=[]
+            for i in itertools.combinations(self.RAT[Rat],2):
+                self.link[Rat].append(i)
+            self.relink[Rat]=[(i[1],i[0]) for i in self.link[Rat]]
     def get_SubNet(self,Rat=None):
         """
         get SubNetworks of a network
@@ -360,7 +450,6 @@ class Network(nx.MultiGraph):
 
 
         """
-
         if Rat == None:
         #    pdb.set_trace()
             for Rat in self.RAT:            
@@ -373,8 +462,8 @@ class Network(nx.MultiGraph):
                         self.SubNet[Rat].remove_edge(e[0],e[1],e[2])
                 for n in self.SubNet[Rat].nodes():
                     try:
-                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
-                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens'][Rat]
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr']
+                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens']
                     except: 
                         pass
 
@@ -391,8 +480,8 @@ class Network(nx.MultiGraph):
                         pass
                 for n in self.SubNet[Rat].nodes():
                     try:
-                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr'][Rat]
-                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens'][Rat]
+                        self.SubNet[Rat].node[n]['epwr']=self.SubNet[Rat].node[n]['epwr']
+                        self.SubNet[Rat].node[n]['sens']=self.SubNet[Rat].node[n]['sens']
                     except: 
                         pass
 
@@ -424,7 +513,7 @@ class Network(nx.MultiGraph):
                         try:
                             Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
                         except:
-                            Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type'])
+                            Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=0.),type=Sn[1].node[nn]['type'])
 #                pdb.set_trace()
 
                 ### init edge of PN
@@ -462,7 +551,7 @@ class Network(nx.MultiGraph):
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
         for rat in self.RAT.iterkeys():
             for ldp in self.LDP:
-                self.compute_LDPs(self.nodes(),rat,ldp,method='direct')
+                self.compute_LDPs(self.nodes(),rat)
         for n in self.nodes():
             self.node[n]['PN'].get_RAT()
             self.node[n]['PN'].get_SubNet()
@@ -479,7 +568,8 @@ class Network(nx.MultiGraph):
 #            print 'decorator',a
 #            return func(*args, **kwargs)
 #        return wrapper
-
+    def dist_edge(self,e,dp):
+        return(np.array([np.sqrt(np.sum((dp[i[0]]-dp[i[1]])**2)) for i in e]))
 
 
     def update_LDPs(self,ln,RAT,lD):
@@ -507,7 +597,8 @@ class Network(nx.MultiGraph):
 
         """
         
-        self.SubNet[RAT].add_edges_from(self.Gen_tuple(self.SubNet[RAT].edges_iter(),RAT,lD))
+        self.SubNet[RAT].add_edges_from(self.Gen_tuple(ln,RAT,lD))
+
 
 
     def compute_LDPs(self,ln,RAT):
@@ -527,14 +618,15 @@ class Network(nx.MultiGraph):
 
 
         """
-
         p=nx.get_node_attributes(self.SubNet[RAT],'p')
-        epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr').values()
-        sens=nx.get_node_attributes(self.SubNet[RAT],'sens').values()
-        e=self.SubNet[RAT].edges()
+        epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr')
+        sens=nx.get_node_attributes(self.SubNet[RAT],'sens')
+        e=self.link[RAT]#self.SubNet[RAT].edges()
+        re=self.relink[RAT] # reverse link aka other direction of link
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
-        lD=[{'Pr':lp[i],'TOA':lt[i] ,'d':d[i],'vis':v[i]} for i in range(len(d))]
-        self.update_LDPs(ln,RAT,lD)
+        lD=[{'Pr':lp[i],'TOA':np.mod(lt[i],len(e)) ,'d':np.mod(d[i],len(e)),'vis':v[i]} for i in range(len(d))]
+
+        self.update_LDPs(iter(e+re),RAT,lD)
 
 
 
@@ -814,57 +906,67 @@ class Network(nx.MultiGraph):
         file.close()
 
 
-    def pyray_save(self,S):
-        """
-            save node positions into ini file, compliant with pyray standard
+    def init_save(self,height=1.5):
 
-        Attributes:
-        ----------
-        
-        filename : string 
-                   name of the pyray file
-        S        : Simulation
-                   Scipy.Simulation object
-        """
-
-
-        assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
-        is used , only 1 rat must be involved in the Network.\
-        Please modify agent.ini')
-
-
-        height=1.5
         pos=nx.get_node_attributes(self,'p').items()
 
+        AP=[]
+        AG=[]
+        api=1
+        loc=False
+        method = []
+        # get methods for localization
+        simcfg = ConfigParser.ConfigParser()
+        simcfg.read(pyu.getlong('simulnet.ini','ini'))
+        save =eval(simcfg.get('Save','save'))
+        if 'loc' in save:
+            loc = True
+            method = eval(simcfg.get('Localization','method'))
 
-        ### save acces point positions
-        if self.idx == 0:
-
-            AP=[]
-            AG=[]
-            api=1
-
-            for i in range(len(pos)):
-                if self.node[pos[i][0]]['type'] =='ap':
+        ## find Agent and Acces point
+        for i in range(len(pos)):
+            if self.node[pos[i][0]]['type'] =='ap':
+                AP.append(pos[i][0])
+                if not os.path.isfile(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE'])):
                     file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
                     config = ConfigParser.ConfigParser()
                     config.add_section('coordinates')
-                    AP.append(pos[i][0])
-                    config.set('coordinates',str(api), str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
+#                    config.set('coordinates',str(api), str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
+                    config.set('coordinates','1', str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
                     api=api+1
                     config.write(file)
                     file.close()
-                else:
-                    AG.append(pos[i][0])
+            else:
+                AG.append(pos[i][0])
+                config = ConfigParser.ConfigParser()
+                if not os.path.isfile(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE'])):
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
+                    config.add_section('coordinates')
+                    if loc :
+                        if 'geo' in method:
+                            config.add_section('geo_est')
+                        if 'alg' in method:
+                            config.add_section('alg_est')
+                # if simulation has already been runed with localization, this
+                # ensure that localization section will be created
+
+                else :
+                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
+                    config.read(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']))
+                    if 'coordinates' not in config.sections():
+                        config.add_section('coordinates')
+                    if 'geo_est' not in config.sections() and 'geo' in method:
+                        config.add_section('geo_est')
+                    if 'alg_est' not in config.sections() and 'alg' in method:
+                        config.add_section('alg_est')
+
+                config.write(file)
+                file.close()
 
 
 
+        if 'pyray' in save :
 
-
-
-            simcfg = ConfigParser.ConfigParser()
-            simcfg.read(pyu.getlong('simulnet.ini','ini'))
-            
             file2=open(pyu.getlong('pyray.ini',pstruc['DIRNETSAVE']),'w')
             config = ConfigParser.ConfigParser()
             config.add_section('nodes')
@@ -877,25 +979,34 @@ class Network(nx.MultiGraph):
             config.write(file2)
             file2.close()
 
+        if 'loc' in save :
 
-        ### save agent positions
-        for i in range(len(pos)):
-            if self.node[pos[i][0]]['type'] !='ap':
-                if self.idx == 0:
-                    file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
-                    file.write('[coordinates]')
-                    file.write('\n')
-                    file.close()
-                file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'a')
-                file.write(str(self.idx+1) +' = ' + str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
-                file.write('\n')
-                file.close()
+            file2=open(pyu.getlong('loc.ini',pstruc['DIRNETSAVE']),'w')
+            config = ConfigParser.ConfigParser()
+            config.add_section('nodes')
+            config.add_section('simulation')
+            config.set('nodes','AG',str(AG))
+            config.set('nodes','AP',str(AP))
+            config.set('simulation','loc_updatetime',str(simcfg.get('Localization','localization_update_time')))
+            config.set('simulation','method',str(simcfg.get('Localization','method')))
+            config.set('simulation','duration',str(simcfg.get('Simulation','duration')))
+            config.write(file2)
+            file2.close()
 
-        self.idx=self.idx+1
+        return method
+
+
+
 
 
     def mat_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
             save node positions into a matlab structure file
 
 
@@ -928,22 +1039,30 @@ class Network(nx.MultiGraph):
                    
         sp.io.savemat(pyu.getlong('mat.mat','save_data'),self.mat)
 
-    def sql_save(self,S):
-        """
-        save network state into mysqldatabase
+#    def sql_save(self,S):
+#        """
+#        save network state into mysqldatabase
 
 
-        Attributes:
-        ----------
-        
-        S        : Simulation
-                   Scipy.Simulation object
+#        Attributes:
+#        ----------
+#        
+#        S        : Simulation
+#                   Scipy.Simulation object
 
-        """
-        self.db.writenet(self,S.now())
+#        """
+#        self.db.writenet(self,S.now())
 
     def txt_save(self,S):
         """
+        DEPRECATED 
+
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
+
+
+
         save network state into mysqldatabase
 
 
@@ -957,63 +1076,293 @@ class Network(nx.MultiGraph):
         pyu.writenet(self,S)
 
 
+    def loc_save(self,S):
+        """
+        DEPRECATED 
 
-#    def ini_save(self,S,filename='simulnet_data.ini',height=1.5):
-#        """
-#        save an .ini file of node position . 
-#        Only links  which involve mobile nodes (type 'ag') are kept.
+        REPLACED BY pylayers.util.save
 
-#        The produced init file is filled as follow:
-
-#            [timestamp]
-#            nodeID1_nodeID2 = x1,y1,z1,x2,y2,z2
-#            nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4
-#            ....
+        DEPRECATED 
 
 
-#        Attributes:
-#        ----------
-#        
-#        S        : Simulation
-#                   Scipy.Simulation object
-
-#        filename  : string
-#                   name of the saved ini file
-
-#        height    : float
-#                   height of the nodes
+        save txt 
+        node ID , True pos x , True pos y , est pos x , est pos y , timestamp
 
 
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
+
+        """
+
+        pos=nx.get_node_attributes(self,'p')
+        pe=nx.get_node_attributes(self,'pe_alg')
+        typ = nx.get_node_attributes(self,'type')
+        if self.idx == 0:
+            entete = 'NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp\n'
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','write')
+            file.write(entete)
+            file.close()
+
+        try:
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/simulation.txt','a')
+            for n in self.nodes():
+                if typ[n] != 'ap':
+                    data = n + ',' + str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pe[n][0][0]) + ',' + str(pe[n][0][1]) + ',' +pyu.timestamp(S.now()) +',\n'
+                    file.write(data)
+            file.close()
+            self.idx = self.idx +1
+        except:
+            pass
 
 
-#    
-#        """
+    def dual_save(self,S):
+        """
+        DEPRECATED 
 
-#        assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
-#        is used , only 1 rat must be involved in the Network.\
-#        Please modify agent.ini')
+        REPLACED BY pylayers.util.save
+
+        DEPRECATED 
 
 
-#        if self.idx == 0:
-#            file=open(pyu.getlong(filename ,'output'),'w')
-#        else:
-#            file=open(pyu.getlong(filename ,'output'),'a')
 
-#        config = ConfigParser.ConfigParser()
-#        timestamp = pyu.timestamp(S.now())
-#        config.add_section(timestamp)
-#        for e in self.edges():
-#            if not ((self.node[e[0][0]]['type'] == 'ap') and  (self.node[e[1][0]]['type'] == 'ap')):
-##                    key=str(self.node[e[0][0]]['type'])+str(e[0])+ '_' +str(self.node[e[1][0]]['type'])+str(e[1])
-#                key=str(e[0]) +'_' +str(e[1])
-#                value1 = str(self.node[e[0][0]]['p'][0])+ ',' +str(self.node[e[0][0]]['p'][1])+','+str(height)
-#                value2 = str(self.node[e[1][0]]['p'][0])+ ',' +str(self.node[e[1][0]]['p'][1])+','+str(height)
-#                config.set(timestamp, key, value1 + ' , ' + value2)
+        save txt 
 
-#        config.write(file)
-#        file.close()
 
-#        self.idx=self.idx+1
+
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
+
+        """
+
+        pos=nx.get_node_attributes(self,'p')
+        pclust = nx.get_node_attributes(self,'pe_clust')
+        typ = nx.get_node_attributes(self,'type')
+        if self.idx == 0:
+            entete = 'Timestamp, True Position x, True Position y, Est Position1 x, Est Position1 y,Est Position2 x, Est Position2 y\n'
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','write')
+            file.write(entete)
+            file.close()
+            file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','write')
+            entete2 = 'Timestamp, link, linkid, Pr, distance\n'
+            file2.write(entete2)
+            file2.close()
+            file3=open(basename+'/' + pstruc['DIRNETSAVE'] +'/anchorposition.txt','write')
+            data3 = 'node,pos x, pos y\n'
+            file3.write(data3)
+            for n in self.nodes():
+                data3= n + ',' + str(self.node[n]['p'][0]) + ',' + str(self.node[n]['p'][1]) + '\n'
+                file3.write(data3)
+            file3.close()
+            file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','w')
+            entete4 = 'Timestamp, type, toaid, toa,distance\n'
+            file4.write(entete4)
+            file4.close()
+
+        try:
+
+            file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/pos.txt','a')
+            file2=open(basename+'/' + pstruc['DIRNETSAVE'] +'/rsslink.txt','a')
+            file4=open(basename+'/' + pstruc['DIRNETSAVE'] +'/toa.txt','a')
+            for n in self.nodes():
+                if n == '1':
+                    data =  pyu.timestamp(S.now()) +','+ str(pos[n][0]) + ',' + str(pos[n][1]) + ',' + str(pclust[n][0,0]) + ',' + str(pclust[n][0,1]) + ',' + str(pclust[n][1,0]) + ',' + str(pclust[n][1,1]) +'\n'
+                    for e in self.edge[n].keys():
+                        if e != '6' and e !='7':
+                            try:
+                                data2 = data2 +',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+                            except:
+                                data2 = pyu.timestamp(S.now()) + ',link,' + str(e) + ',' + str(self.edge[n][e]['rat1']['Pr'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+                        else :
+                            try:
+                                data4 = data4 +',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' + str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+                            except:
+
+                                data4 = pyu.timestamp(S.now()) + ',toa,' + str(e) + ',' + str(self.edge[n][e]['rat1']['TOA'][0]) +',' +str(np.sqrt(np.sum((pos[n]-pos[e])**2)))
+
+            data2=data2 + '\n'
+            data4=data4 + '\n'
+            file.write(data)
+            file2.write(data2)
+            file4.write(data4)
+
+
+            file.close()
+            file2.close()
+            file4.close()
+            self.idx = self.idx +1
+        except:
+            pass
+
+
+    def pyray_save(self,S):
+        """
+            save node positions into ini file, compliant with pyray standard
+
+        Attributes:
+        ----------
+        
+        filename : string 
+                   name of the pyray file
+        S        : Simulation
+                   Scipy.Simulation object
+        """
+
+
+        assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
+        is used , only 1 rat must be involved in the Network.\
+        Please modify agent.ini')
+
+
+        height= 1.5
+        pos=nx.get_node_attributes(self,'p').items()
+
+        ### create ini files
+        if self.idx == 0:
+            self.init_save(height=height)
+        ### save agent positions
+        for i in range(len(pos)):
+            if self.node[pos[i][0]]['type'] !='ap':
+                config = ConfigParser.ConfigParser()
+                config.read(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']))
+                config.set('coordinates',str(self.idx+1),value = str(pos[i][1][0]) + ' ' + str(pos[i][1][1]) + ' '+str(height))
+                file=open(pyu.getlong(str(pos[i][0]) + '.ini',pstruc['DIRNETSAVE']),'w')
+                config.write(file)
+                file.close()
+
+
+    def loc_save(self,S,node='all',p=False):
+        """
+            save node estimated positions into ini file,
+
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
+        """
+
+        if node  == 'all':
+            node = self.nodes()
+        elif not isinstance(node,list):
+            node = [node]
+
+
+        height=1.5
+        ### create ini files
+        if self.lidx == 0:
+            self.init_save(height=height)
+
+        pe_alg = nx.get_node_attributes(self,'pe_alg')
+        pe_geo = nx.get_node_attributes(self,'pe_geo')
+        p = nx.get_node_attributes(self,'p')
+        ### save agent positions estimations
+        for n in node:
+            if self.node[n]['type'] !='ap':
+                config = ConfigParser.ConfigParser()
+                config.read(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']))
+                if pe_alg != {} :
+                    config.set('alg_est',str(self.idx+1),value = str(pe_alg[n[0]][0]) + ' ' + str(pe_alg[n[0]][1]) + ' '+str(height))
+                if pe_geo != {} :
+                    config.set('geo_est',str(self.idx+1),value = str(pe_geo[n[0]][0]) + ' ' + str(pe_geo[n[0]][1]) + ' '+str(height))
+                if p:
+                    config.set('coordinates',str(self.idx+1),value = str(p[n[0]][0]) + ' ' + str(p[n[0]][1]) + ' '+str(height))
+                file=open(pyu.getlong(str(n[0]) + '.ini',pstruc['DIRNETSAVE']),'w')
+                config.write(file)
+                file.close()
+        self.lidx=self.lidx+1
+
+
+
+    def ini_save(self,S,filename='simulnet_data.ini',height=1.5):
+        """
+        ----------
+        DEPRECATED
+        ----------
+        Save an .ini file of node position . 
+        Only links  which involve mobile nodes (type 'ag') are kept.
+
+        The produced init file is filled as follow:
+
+            [timestamp]
+            nodeID1_nodeID2 = x1,y1,z1,x2,y2,z2
+            nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4
+            ....
+
+
+        Attributes:
+        ----------
+        
+        S        : Simulation
+                   Scipy.Simulation object
+
+        filename  : string
+                   name of the saved ini file
+
+        height    : float
+                   height of the nodes
+
+
+
+
+
+        """
+
+        assert len(self.SubNet.keys()) == 1 , NameError('when network.ini_save() \
+        is used , only 1 rat must be involved in the Network.\
+        Please modify agent.ini')
+
+
+        if self.idx == 0:
+            file=open(pyu.getlong(filename ,'output'),'w')
+        else:
+            file=open(pyu.getlong(filename ,'output'),'a')
+
+        config = ConfigParser.ConfigParser()
+        timestamp = pyu.timestamp(S.now())
+        config.add_section(timestamp)
+        for e in self.edges():
+            if not ((self.node[e[0][0]]['type'] == 'ap') and  (self.node[e[1][0]]['type'] == 'ap')):
+                key=str(e[0]) +'_' +str(e[1])
+                value1 = str(self.node[e[0][0]]['p'][0])+ ',' +str(self.node[e[0][0]]['p'][1])+','+str(height)
+                value2 = str(self.node[e[1][0]]['p'][0])+ ',' +str(self.node[e[1][0]]['p'][1])+','+str(height)
+                config.set(timestamp, key, value1 + ' , ' + value2)
+
+        config.write(file)
+        file.close()
+
+        self.idx=self.idx+1
+
+
+
+#class PN(nx.MultiDiGraph):
+
+#    def __init__(self,N):
+#        nx.MultiDiGraph.__init__(self)
+#        self.add_nodes_from(N)
+#        pdb.set_trace()
+#        self.add_edges_from( (u,v,key,deepcopy(datadict))
+#                           for u,nbrs in self.adjacency_iter()
+#                           for v,keydict in nbrs.items()
+#                           for key,datadict in keydict.items() ) 
+#        pdb.set_trace()
+#        self.node=N.node
+
+
+
+
+
+
+
+
+
+
+
 
 class PNetwork(Process):
     """
@@ -1082,6 +1431,7 @@ class PNetwork(Process):
 
 
         while True:
+
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
                 self.net.compute_LDPs(self.net.nodes(),rat)
@@ -1102,24 +1452,32 @@ class PNetwork(Process):
 
 
 
-            ############# save network
-            if 'csv' in self.save:
-                self.net.csv_save(self.filename,self.sim)
-            if 'pyray' in self.save:
-                self.net.pyray_save(self.sim)
-            if 'matlab' in self.save:
-                self.net.mat_save(self.sim)
-            if 'msql' in self.save:
-                self.net.sql_save(self.sim)
-            if 'txt' in self.save:
-                self.net.txt_save(self.sim)
-            if 'ini' in self.save:
-                self.net.ini_save(self.sim)
+
+#            ############# save network
+#            REPLACED BY A SAVE PROCESS
+#            if 'csv' in self.save:
+#                self.net.csv_save(self.filename,self.sim)
+#            if 'pyray' in self.save:
+#                self.net.pyray_save(self.sim)
+#            if 'matlab' in self.save:
+#                self.net.mat_save(self.sim)
+#            if 'msql' in self.save:
+#                self.net.sql_save(self.sim)
+#            if 'txt' in self.save:
+#                self.net.txt_save(self.sim)
+
+#            if 'ini' in self.save:
+#                self.net.ini_save(self.sim)
+#            if 'loc' in self.save:
+#                self.net.loc_save(self.sim)
+#            if 'dual' in self.save:
+#                self.net.dual_save(self.sim)
 
 
             self.net.pos=self.net.get_pos()
-
-            print 'network updated @',self.sim.now()
+            if self.sim.verbose:
+                print 'network updated @',self.sim.now()
+            self.net.idx=self.net.idx+1
             yield hold, self, self.net_updt_time
 
 

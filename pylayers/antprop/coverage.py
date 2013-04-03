@@ -132,7 +132,7 @@ class Coverage(object):
 
 
     def showEd(self,polarization='o'):
-        """ show excess of toa execess delay map
+        """ show direct path excess of delay map
 
         Examples
         --------
@@ -167,7 +167,8 @@ class Coverage(object):
 
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
-        fig.colorbar(cov,cax)
+        clb = fig.colorbar(cov,cax)
+        clb.set_label('excess delay (ns)')
         if self.show:
             plt.show()
 
@@ -213,7 +214,7 @@ class Coverage(object):
 #        tCM._init()
 #        alphas = np.abs(np.linspace(.0,1.0, tCM.N))
 #        tCM._lut[:-3,-1] = alphas
-        title='Map of received power'
+        title='Map of received power - Pt = '+str(self.ptdbm)+' dBm'
 
         cdict = {
         'red'  :  ((0., 0.5, 0.5), (1., 1., 1.)),
@@ -261,12 +262,13 @@ class Coverage(object):
             title=title + '\n white : Pr (dBm) < %.2f' % self.pndbm + ' dBm'
 
 
-        ax.scatter(self.tx[0],self.tx[1],linewidth=0)
+        ax.scatter(self.tx[0],self.tx[1],s=10,linewidth=0)
 
         ax.set_title(title)
         divider = make_axes_locatable(ax)
         cax = divider.append_axes("right", size="5%", pad=0.05)
-        fig.colorbar(cov,cax)
+        clb = fig.colorbar(cov,cax)
+        clb.set_label('Power (dBm)')
         if self.show:
             plt.show()
 

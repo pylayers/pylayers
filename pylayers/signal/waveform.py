@@ -39,6 +39,8 @@ class Waveform:
     def eval(self):
         """ evaluate waveform 
 
+            The lambda/4*pi factor which is necessary to get the proper budget 
+            link ( from the fris formula) is introduced in this function.
         """
 
         if self.parameters['type']  == 'generic':

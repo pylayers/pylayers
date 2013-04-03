@@ -22,9 +22,11 @@
 #####################################################################
 
 import pkgutil
+import warnings
+warnings.filterwarnings('ignore')
 
-import SimPy.Simulation
-from SimPy.Simulation import Simulation, Process, hold
+#import SimPy.Simulation
+from SimPy.SimulationRT import SimulationRT, Process, hold
 import numpy as np
 import scipy as sp
 import networkx as nx
@@ -46,13 +48,14 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.slab import Slab
 from pylayers.util.utilnet import str2bool
 from pylayers.mobility.transit.World import world
-from pylayers.util.pymysqldb import Database as DB
+#from pylayers.util.pymysqldb import Database as DB
 from pylayers.util.project import *
+from pylayers.util.save import *
 
 import pdb
 import os
 
-class Simul(Simulation):
+class Simul(SimulationRT):
     """
 
     Attributes
@@ -74,7 +77,7 @@ class Simul(Simulation):
 
     """
     def __init__(self):
-        Simulation.__init__(self)
+        SimulationRT.__init__(self)
         self.initialize()
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong('simulnet.ini','ini'))
@@ -86,6 +89,11 @@ class Simul(Simulation):
         self.save_opt = dict(self.config.items('Save'))
         self.sql_opt = dict(self.config.items('Mysql'))
 
+        self.verbose = str2bool(self.sim_opt['verbose'])
+        if str2bool(self.net_opt['ipython_nb_show']):
+            self.verbose = False
+        self.roomlist=[]
+
     def create_layout(self):
         """
         Create Layout in Simpy the_world thantks to Tk backend
@@ -94,9 +102,9 @@ class Simul(Simulation):
 
         self.the_world = world(width=float(self.lay_opt['the_world_width']), height=float(self.lay_opt['the_world_height']), scale=float(self.lay_opt['the_world_scale']))
 
-        tk = self.the_world.tk
-        canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
-        canvas.create_rectangle(x_(-1), y_(-1), x_(100), y_(100), fill='white')
+        # tk = self.the_world.tk
+        # canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
+        # canvas.create_rectangle(x_(-1), y_(-1), x_(100), y_(100), fill='white')
 
         _filename = self.lay_opt['filename']
         #sl=Slab.SlabDB(self.lay_opt['slab'],self.lay_opt['slabmat'])
@@ -104,8 +112,11 @@ class Simul(Simulation):
         self.L = Layout()
         if _filename.split('.')[1] == 'str':
             self.L.loadstr(_filename)
-        else:
+        elif _filename.split('.')[1] == 'str2':
             self.L.loadstr2(_filename)
+        elif _filename.split('.')[1] == 'ini':
+            self.L.loadini(_filename)
+
 
         try:
             self.L.dumpr()
@@ -139,10 +150,10 @@ class Simul(Simulation):
         walls = self.L.thwall(0, 0)
         for wall in walls:
             points = []
-            for point in wall:
-                points.append(x_(point[0]))
-                points.append(y_(point[1]))
-            canvas.create_polygon(points, fill='maroon', outline='black')
+            # for point in wall:
+            #          points.append(x_(point[0]))
+            #          points.append(y_(point[1]))
+            #      canvas.create_polygon(points, fill='maroon', outline='black')
             for ii in range(0, len(wall) - 1):
                 self.the_world.add_wall(wall[ii], wall[ii + 1])
 
@@ -168,7 +179,10 @@ class Simul(Simulation):
                             type=ag_opt['type'],
                             pos=np.array(eval(ag_opt['pos'])),
                             roomId=int(ag_opt['roomid']),
+                            froom=eval(ag_opt['froom']),
                             meca_updt=float(self.meca_opt['mecanic_update_time']),
+                            wait=float(ag_opt['wait']),
+                            cdest=eval(self.meca_opt['choose_destination']),
                             loc=str2bool(self.loc_opt['localization']),
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
@@ -180,6 +194,7 @@ class Simul(Simulation):
                             RAT=eval(ag_opt['rat']),
                             save=eval(self.save_opt['save']),
                             gcom=self.gcom,
+                            comm_mode=eval(self.net_opt['communication_mode']),
                             sim=self))
 #                            
             if self.lAg[i].type == 'ag':
@@ -203,6 +218,7 @@ class Simul(Simulation):
         # create network
 
         self.net.create()
+
         # create All Personnal networks
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
@@ -255,13 +271,24 @@ class Simul(Simulation):
                         
 
 
+
         self.create_layout()
         self.create_EMS()
         self.create_network()
         if str2bool(self.sim_opt['showtk']):
             self.create_visual()
         self.create_show()
-        
+
+        if str2bool(self.save_opt['savep']):
+            self.save=Save(L=self.L,net=self.net,sim=self)
+            self.activate(self.save,self.save.run(),0.0)
+#        if str2bool(self.save_opt['savep']):
+#            self.save=Save(net=self.net,
+#                    L= self.L,
+#                    sim = self)
+#            self.activate(self.save, self.save.run(), 0.0)
+
+
 
     def create_show(self):
         plt.ion()
@@ -269,7 +296,11 @@ class Simul(Simulation):
         fig_table = 'table'
 
         if str2bool(self.net_opt['show']):
-            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,)
+            if str2bool(self.net_opt['ipython_nb_show']):
+                notebook=True
+            else:
+                notebook =False
+            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,notebook=notebook)
             self.activate(self.sh,self.sh.run(),1.0)
 
         if str2bool(self.net_opt['show_table']):
@@ -281,11 +312,16 @@ class Simul(Simulation):
         """ Run simulation
         """
         self.create()
-        self.simulate(until=float(self.sim_opt['duration']))
+        self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
+#        self.simulate(until=float(self.sim_opt['duration']))
+        if self.save_opt['savep']:
+            print 'Processing save results, please wait'
+            self.save.mat_export()
 
 
 if __name__ == '__main__':
 
-    seed(0)
     S = Simul()
+    seed(eval(S.sim_opt['seed']))
     S.runsimul()
+

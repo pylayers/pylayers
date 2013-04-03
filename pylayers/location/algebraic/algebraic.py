@@ -1,7 +1,5 @@
 # -*- coding:Utf-8 -*-
 #####################################################################
-#This file is part of RGPA.
-
 #PYLAYERS is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation, either version 3 of the License, or
@@ -17,11 +15,12 @@
 
 #-------------------------------------------------------------------
 #authors :
-#Bernard UGUEN          : bernard.uguen@univ-rennes1.fr
-#Mohamed LAARAIEDH      : mohamed.laaraiedh@univ-rennes1.fr
+#Mohamed LAARAIEDH
+#Bernard Uguen
 #####################################################################
 
 import numpy as np
+import doctest
 import scipy as sp
 from scipy import optimize
 import numpy.linalg as nplg
@@ -29,35 +28,44 @@ import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.util.geomutil import dist
 import string
+import pdb
 
 
 class algloc(object):
     """
-    This class regroups all the algebraic localization scenarios and
-    techniques
+    This class regroups algebraic localization algorithms
+
     Attributes
     ----------
+
         nodes : dictionnary
         ldp : dictionnary
-        c : speed of light
-          float
+
+    Notes
+    -----
+    This class regroup various implementation of location algorithms.
+    The instantiated object has :
+        + a dictionnary of nodes
+        + a dictionnary of location dependent parameters
+
 
     """
 
     def __init__(self, nodes={}, ldp={}):
         self.nodes = nodes
         self.ldp = ldp
-        self.c = 0.3
+        self.c = 0.2997924583
 
     def info(self):
         """
         Display scenario information
         """
         print "Nodes : ", self.nodes
-        print "Location dependant parameters : ", self.ldp
+        print "Location dependent parameters : ", self.ldp
 
-    def plot(self, rss, toa, tdoa):
-        """ Plot scenario
+    def plot(self, rss = False , toa = True, tdoa = False):
+
+        """ plot scenario
 
         Parameters
         ----------
@@ -66,7 +74,7 @@ class algloc(object):
             tdoa : boolean
         """
 
-        if rss == 0 and toa == 0 and tdoa == 0:
+        if not rss and not toa and not tdoa:
             raise ValueError("inputs missed")
         else:
             fig = plt.figure()
@@ -77,7 +85,7 @@ class algloc(object):
                         label='blind node')
             except:
                 plt.plot(BN[0, :], BN[1, :], 'r*', label='blind node')
-            if rss != 0:
+            if rss:
                 RN_RSS = self.nodes['RN_RSS']
                 try:
                     ax.plot(RN_RSS[0, :], RN_RSS[1, :], RN_RSS[2, :], 'ro',
@@ -85,7 +93,7 @@ class algloc(object):
                 except:
                     plt.plot(RN_RSS[0, :], RN_RSS[1, :], 'ro',
                              label='RSS node')
-            if toa != 0:
+            if toa:
                 RN_TOA = self.nodes['RN_TOA']
                 try:
                     ax.plot(RN_TOA[0, :], RN_TOA[1, :], RN_TOA[2, :], 'gs',
@@ -94,7 +102,7 @@ class algloc(object):
                     plt.plot(RN_TOA[0, :], RN_TOA[1, :], 'gs',
                              label='TOA node')
 
-            if toa != 0:
+            if tdoa:
                 RN_TDOA = self.nodes['RN_TDOA']
                 RNr_TDOA = self.nodes['RNr_TDOA']
                 try:
@@ -108,7 +116,7 @@ class algloc(object):
                     plt.plot(RNr_TDOA[0, :], RNr_TDOA[1, :], 'kD',
                              label='Ref TDOA node')
 
-    def show(self, rss, toa, tdoa):
+    def show(self, rss=False, toa=True, tdoa=False):
         """ Plot scenario
 
         Parameters
@@ -137,12 +145,14 @@ class algloc(object):
         Parameters
         ----------
             Rest : string
+
         Returns
         -------
             Range : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -151,6 +161,7 @@ class algloc(object):
             >>> r_mode = S.get_range('mode')
             >>> r_median = S.get_range('median')
             >>> r_mean = S.get_range('mean')
+
         """
         RSS = self.ldp['RSS']
         RSS_std = self.ldp['RSS_std']
@@ -173,15 +184,18 @@ class algloc(object):
         """
         Compute the RSS range standard deviation using the "Rest" \
         estimator
+
         Parameters
         ----------
             Rest : string
+
         Returns
         -------
             Range_std : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -211,16 +225,18 @@ class algloc(object):
             raise ValueError(Rest + ": no such ranging estimator")
         return Range_std
 
-    def ls_locate(self, rss, toa, tdoa, Rest):
+    def ls_locate(self, rss=False, toa=True, tdoa=False, Rest='mode'):
         """
         This method applies least squares (LS) approximation to get
         position P.
+
         Parameters
         ----------
             rss : boolean
             toa : boolean
             tdoa : boolean
             Rest : string
+
         Returns
         -------
             P : numpy.ndarray
@@ -459,22 +475,25 @@ class algloc(object):
 
             return P
 
-    def wls_locate(self, rss, toa, tdoa, Rest):
+    def wls_locate(self, rss=False, toa=True, tdoa=False, Rest='mode'):
         """
         This method applies weighted least squares (WLS) approximation
         to get position P.
+
         Parameters
         ----------
             rss : boolean
             toa : boolean
             tdoa : boolean
             Rest : string
+
         Returns
         -------
             P : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -751,12 +770,14 @@ class algloc(object):
         """
         This defines the ML function to be minimized if ML estimator
         is used
+
         Parameters
         ----------
             P : numpy.ndarray
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             ML : numpy.ndarray
@@ -812,35 +833,39 @@ class algloc(object):
                 uk = tk / (2 * S ** 2)
                 ML = uk.sum(axis=0)
             elif rss == 0:
-                ML = self.ml_function(
-                    P, 0, 1, 0) + self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function(P, 0, 1, 0) +\
+                     self.ml_function(P, 0, 0, 1)
             elif toa == 0:
-                ML = self.ml_function(
-                    P, 1, 0, 0) + self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function(P, 1, 0, 0) +\
+                     self.ml_function(P, 0, 0, 1)
             elif tdoa == 0:
-                ML = self.ml_function(
-                    P, 1, 0, 0) + self.ml_function(P, 0, 1, 0)
+                ML = self.ml_function(P, 1, 0, 0) +\
+                     self.ml_function(P, 0, 1, 0)
             else:
-                ML = self.ml_function(P, 1, 0, 0) + self.ml_function(P, 0, 1, 0)\
-                    + self.ml_function(P, 0, 0, 1)
+                ML = self.ml_function(P, 1, 0, 0) +\
+                     self.ml_function(P, 0, 1, 0) +\
+                     self.ml_function(P, 0, 0, 1)
 
             return ML
 
     def ml_locate(self, P0, rss, toa, tdoa):
         """
         This applies ML estimator to compute position P
+
         Parameters
         ----------
             P0 : numpy.ndarray
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             P : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -870,9 +895,11 @@ class algloc(object):
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             FIM : numpy.ndarray
+
         """
         if rss == 0 and toa == 0 and tdoa == 0:
             raise ValueError("inputs missed")
@@ -925,11 +952,9 @@ class algloc(object):
                                 np.shape(RN_RSS)[0]))
                 for i in range(np.shape(RN_RSS)[1]):
                     FIM += np.dot((P - RN_RSS[:, i:i + 1]),
-                                  (P - RN_RSS[:, i:i + 1]).T) / ((S[0] ** 2) *
-                                                                 (
-                                                                     np.dot(
-                                                                         (P - RN_RSS[:, i:i + 1]).T,
-                        (P - RN_RSS[:, i:i + 1]))) ** 2)
+                                  (P - RN_RSS[:, i:i + 1]).T) / ((S[0] ** 2) *\
+                                  (np.dot( (P - RN_RSS[:, i:i + 1]).T,\
+                                           (P - RN_RSS[:, i:i + 1]))) ** 2)
             elif rss == 0:
                 FIM = self.fim(P, 0, 1, 0) + self.fim(P, 0, 0, 1)
             elif toa == 0:
@@ -945,12 +970,14 @@ class algloc(object):
     def crb(self, P, rss, toa, tdoa):
         """
         This method compute the cramer rao bound (CRB) at position P.
+
         Parameters
         ----------
             P : numpy.ndarray
             rss : boolean
             toa : boolean
             tdoa : boolean
+
         Returns
         -------
             CRB : float
@@ -979,9 +1006,13 @@ class algloc(object):
 def scenario():
     """
     This method is not a class member, it defines a sample scenario.
-    
+    Defines a sample scenario for testing
+    """
+
+
     Returns
     -------
+
         CRB : float
 
     Examples

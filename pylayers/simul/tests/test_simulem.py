@@ -8,7 +8,6 @@ S = Simul()
 filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')
 # setting transmitter
-
 S.tx = RadioNode(typ='tx')
 S.tx.point([1.2,1,1.4])
 
@@ -89,7 +88,7 @@ print "purc :",S.config.get('tud','purc')
 S.tratotud(1,1)
 gt = GrRayTud()
 # loading rays in tud format 
-gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
+#gt.load(S.dtud[1][1],S.dtang[1][1],S.drang[1][1],S.L.sl)
 print "Evalfield "
 print "-----------------"
 S.field(1,1)

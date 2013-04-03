@@ -1,5 +1,5 @@
-from SimPy.Simulation import *
-from Tkinter import *
+from SimPy.SimulationRT import *
+# from Tkinter import *
 from math import pi, sin, cos
 import os
 from pylayers.mobility.transit.vec3 import vec3
@@ -39,7 +39,7 @@ def near(boid, items, distance):
 
 class World:
     def __init__(self, **args):
-        self.tk = TkWorld(**args)
+        # self.tk = TkWorld(**args)
         self._boids = {}
         self._obstacles = {}
         self._zones = {}
@@ -115,31 +115,31 @@ class World:
         return vec3(boid.localy.y * xx - boid.localy.x * yy,
                     -boid.localx.y * xx + boid.localx.x * yy)
 
-
-class TkWorld:
-    def __init__(self, **args):
-        defaults = {'width': 100, 'height': 200, 'geometry': '-20-90', 'scale': 2.5,
-                    'x_offset': 0, 'y_offset': 0, 'vectors': 0, 'collision_vectors': 0}
-        self.main = Tk()
-        for key, value in defaults.items():
-            if key.upper() in os.environ:
-                setattr(self, key, float(os.environ[key.upper()]))
-            elif key in args:
-                setattr(self, key, args[key])
-            else:
-                setattr(self, key, value)
-        self.main.geometry(self.geometry)
-        self.canvas = Canvas(width=self.width * self.scale,
-                             height=self.height * self.scale)
-        self.canvas.pack(side='left')
-        # Tk has (0.0) in upper left, we need (0,0) in lower left
-        self.y_offset = self.height - self.y_offset
-
-    def x_(self, xx):
-        return (xx + self.x_offset) * self.scale
-
-    def y_(self, yy):
-        return (self.y_offset - yy) * self.scale
-
-    def s_(self, ss):
-        return ss * self.scale
+# 
+# class TkWorld:
+#     def __init__(self, **args):
+#         defaults = {'width': 100, 'height': 200, 'geometry': '-20-90', 'scale': 2.5,
+#                     'x_offset': 0, 'y_offset': 0, 'vectors': 0, 'collision_vectors': 0}
+#         self.main = Tk()
+#         for key, value in defaults.items():
+#             if key.upper() in os.environ:
+#                 setattr(self, key, float(os.environ[key.upper()]))
+#             elif key in args:
+#                 setattr(self, key, args[key])
+#             else:
+#                 setattr(self, key, value)
+#         self.main.geometry(self.geometry)
+#         self.canvas = Canvas(width=self.width * self.scale,
+#                              height=self.height * self.scale)
+#         self.canvas.pack(side='left')
+#         # Tk has (0.0) in upper left, we need (0,0) in lower left
+#         self.y_offset = self.height - self.y_offset
+# 
+#     def x_(self, xx):
+#         return (xx + self.x_offset) * self.scale
+# 
+#     def y_(self, yy):
+#         return (self.y_offset - yy) * self.scale
+# 
+#     def s_(self, ss):
+#         return ss * self.scale

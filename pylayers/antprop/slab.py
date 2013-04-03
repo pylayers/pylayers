@@ -1159,6 +1159,9 @@ class Slab(dict, Interface):
         nt = len(theta)
         thetai = theta[0]
         thetaf = theta[-1]
+        ### WARNING thetas can be NOT sorted. 
+        ### thetai should be min(theta)
+        ### thetaf should be max(theta)
         th1  = np.linspace(thetai,thetaf,nt)
 
         metalic = False
@@ -1178,10 +1181,13 @@ class Slab(dict, Interface):
         Co[:, :, 1, 1] = 1
 #        _Co= np.eye(2,dtype=complex)
 
+
+
         Cp = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         Cp[:, :, 0, 0] = 1
         Cp[:, :, 1, 1] = 1
 #        _Cp = np.eye(2,dtype=complex)
+
 
 
         #
@@ -1237,8 +1243,16 @@ class Slab(dict, Interface):
             #
             # Using Einstein summation instead of a for loop increases speed by an order of magnitude
             #
-            Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
-            Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
+
+#            Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
+#            Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
+
+
+            ### array broadcasing version , new increased spped in regard of einsum
+            Co=np.sum(Co[...,:,:,np.newaxis]*Io[...,np.newaxis,:,:], axis=3)
+            Cp=np.sum(Cp[...,:,:,np.newaxis]*Ip[...,np.newaxis,:,:], axis=3)
+
+
             if mr['name'] == 'METAL':
                 metalic = True
                 break
@@ -1247,13 +1261,33 @@ class Slab(dict, Interface):
         self.Ip = Cp
 
         self.RT(metalic,RT=RT)
-        #pdb.set_trace()
+#        if compensate:
+#            fGHz  = fGHz.reshape(nf,1,1,1)
+#            th1   = th1.reshape(1,nt,1,1)
+#            thickness = sum(self['lthick'])
+#            d = thickness*np.cos(th1)
+#            self.T = self.T*np.exp(1j*2*np.pi*fGHz*d/0.3)
+
+
+        # Modification probably not compliant with coverage !!!!
+        # TODO !!!
         if compensate:
-            fGHz  = fGHz.reshape(nf,1,1,1)
-            th1   = th1.reshape(1,nt,1,1)
             thickness = sum(self['lthick'])
-            d = thickness*np.cos(th1)
-            self.T = self.T*np.exp(1j*2*np.pi*fGHz*d/0.3)
+            d = thickness*np.cos(theta)
+            self.T = self.T*np.exp(1j*2*np.pi*
+                                    fGHz[:,np.newaxis,np.newaxis,np.newaxis]
+                                    *d[:,:,np.newaxis,np.newaxis]
+                                    /0.3)
+#        if 'T' in RT:
+#            epr = [m['epr'] for m in self['lmat']]
+#            epr = sum(epr)
+#            # theta[0] just for 1 freq
+#            self.costt = np.sqrt((epr-1+np.cos(theta[0])**2)/epr)
+#            self.sm = sum(self['lthick'])/self.costt
+#            self.gamma = np.cos(theta[0])/self.costt
+#            self.alpha = np.array(([1./epr]),dtype=complex)
+
+
 
         self['evaluated'] = True
 

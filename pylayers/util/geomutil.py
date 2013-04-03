@@ -2,6 +2,7 @@
 from pylayers.util import easygui
 from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 import shapely.geometry as sh
+import scipy.linalg as la
 import pdb
 #! /usr/bin/python
 # geomutil.py
@@ -44,7 +45,7 @@ import pdb
 
      SphericalBasis(a)
 
-     AngleDir(s)
+     angledir(s)
 
      BTB_rx(a_g,T)
 
@@ -246,9 +247,9 @@ class GeomVect(Geomview):
         >>> v2 = np.array([0,1,0])
         >>> v3 = np.array([0,0,1])
         >>> M  = np.vstack((v1,v2,v3))
-        >>> gv = GeomVect('test')
-        >>> gv.geomBase(M)
-        >>> gv.show3()
+        >>> #gv = GeomVect('test')
+        >>> #gv.geomBase(M)
+        >>> #gv.show3()
 
         """
         fo = open(self.filename, "w")
@@ -291,10 +292,10 @@ class GeomVect(Geomview):
             >>> pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}
             >>> gv1 = GeomVect('test1')
             >>> gv1.points(pt1)
-            >>> gv1.show3()
+            >>> #gv1.show3()
             >>> gv2 = GeomVect('test2')
             >>> gv2.points(pt2)
-            >>> gv2.show3()
+            >>> #gv2.show3()
 
         .. todo::
             colorbar depending of a value associated with point
@@ -353,6 +354,7 @@ class Geomoff(Geomview):
 
     Notes
     -----
+
     Class Geomview OFF File (Object File Format)
     [ST][C][N][4][n]OFF  #header keyword
     [Ndim] # spac dimension of vertices, present only if nOFF
@@ -389,11 +391,14 @@ class Geomoff(Geomview):
         Geomview.__init__(self, _filename)
 
     def polygon(self, p, poly):
-        """  Create geomview off for polygon
+        """  create geomview off for polygon
+
         Parameters
         ----------
-        p    :
-        poly :
+        p    : nparray
+               sequence of points
+        poly : list
+               point numbers (index starting in 0) 
 
         """
         fo = open(self.filename, 'w')
@@ -412,11 +417,17 @@ class Geomoff(Geomview):
         fo.close()
 
     def polygons(self, p, polys):
-        """
+        """ create a gemoff file for a list of polygons
+
         Parameters
         ----------
-        p           :
-        polys   :
+        p    : nparray
+               sequence of points
+        poly : list
+               point numbers (index starting in 0) 
+
+        Examples
+        --------
 
 
         """
@@ -439,12 +450,21 @@ class Geomoff(Geomview):
             fo.write("1.0 0.0 1.0 0.4\n")
         fo.close()
 
-    def parallepiped(self, extrem):
-        """ Geomview file for a parallepiped
+    def box(self, extrem = np.array([-1,1,-1,1,-3,3])):
+        """ Geomview file for creating a box
+
         Parameters
         ----------
-        extrem : np.array(1x6)
-            [xmin,xmax,ymin,ymax,zmin,zmax]
+
+        extrem : ndarray
+                 (1x6) [xmin,xmax,ymin,ymax,zmin,zmax]
+
+        Example
+        -------
+
+            >>> geo = Geomoff('test')
+            >>> geo.box()
+
         """
         xmin = extrem[0]
         xmax = extrem[1]
@@ -589,8 +609,9 @@ def Centroid(p=np.array([[0, 10, 10, 0], [0, 0, -2, -2]])):
 
     """
     A = SignedArea(p)
-    T = p[0, :] * np.hstack((p[1, 1::], p[1, 0:1])) - np.hstack((p[0,
-                                                                   1::], p[0, 0:1])) * p[1, :]
+    assert(A<>0)
+    T = p[0, :] * np.hstack((p[1, 1::], p[1, 0:1])) - \
+        p[1, :] * np.hstack((p[0, 1::], p[0, 0:1])) 
     Cx = sum(T * (p[0, :] + np.hstack((p[0, 1::], p[0, 0:1])))) / (6 * A)
     Cy = sum(T * (p[1, :] + np.hstack((p[1, 1::], p[1, 0:1])))) / (6 * A)
     pc = np.array([Cx, Cy])
@@ -870,33 +891,66 @@ def ellipse(fd, p, vth, vph, Eth, Eph, N):
         v = float(i - 1) / N
         fd.write("%g %g %g %g\n" % (v, v, v, 1))
 
+def normalize(vec):
+    """ normalize an array of N ndim  vectors
+
+    Parameters
+    ----------
+    vec : ndarray (N x ndim)
+        N ndim vectors
+
+    Returns
+    -------
+    vecn : ndarray (N x ndim)
+        N normalized ndim vectors
+
+    Example
+    -------
+
+    >>> from pylayers.util.geomutil import *
+    >>> vec = np.array([[1,1,0],[1,1,0],[1,0,1],[1,1,1]])
+    >>> normalize(vec)
+    array([[ 0.70710678,  0.70710678,  0.        ],
+           [ 0.70710678,  0.70710678,  0.        ],
+           [ 0.70710678,  0.        ,  0.70710678],
+           [ 0.57735027,  0.57735027,  0.57735027]])
+
+    Notes
+    -----
+
+    """
+    N = np.shape(vec)[0]
+    m = np.sqrt(np.sum(vec*vec,axis=1)).reshape(N,1)
+    vecn = vec/m
+    return(vecn)
 
 def ptonseg(pta, phe, pt):
-    """
-     ptonseg(pta,phe,pt):
-    Return a point on the segment pta pte
+    """ Return a point on the segment pta pte
+
+    Parameters
+    ----------
+    pta : ndarray
+    phe : ndarray
+    pt  : ndarray
+
+    Returns
+    -------
+    p   : ndarray
+
+    Example
+    -------
+
     """
     v = phe - pta
     u = pt - pta
     Lv = np.sqrt(np.dot(v, v))
     Lu = np.sqrt(np.dot(u, u))
+    assert(Lv<>0)
+    assert(Lu<>0)
     vn = v / Lv
     un = u / Lu
     ctheta = np.dot(un, vn)
     alpha = ctheta * Lu
-    #print "pta : ",pta
-    #print "phe : ",phe
-    #print "pt : ",pt
-    #print "u : ",u
-    #print "v : ",v
-    #print "vn : ",vn
-    #print "norm(vn) : ",np.dot(vn,vn)
-    #print "un : ",un
-    #print "norm(un) : ",np.dot(un,un)
-    #print "ctheta : ",ctheta
-    #print "Lv : ",Lv
-    #print "Lu : ",Lu
-    #print "alpha :",alpha
     if (alpha > 0) & (alpha < Lv):
         p = pta + alpha * vn
     else:
@@ -908,18 +962,33 @@ def dptseg(p,pt,ph):
 
     Parameters
     ----------
-    ps  : ndim x p
+    ps  : ndim x Np
+          array of Np points
     pt  : ndim x 1 
+          tail coordinates of segment
     ph  : ndim x 1
+          head coordinates of segment
+
+    Returns
+    -------
+    d1 : 1 x Np
+        distance between pt and ortho projection of ps 
+    d2 : 1 x Np
+        distance between ph and ortho projection of ps 
+    h  : distance between ps and ortho projection of ps 
 
     Examples
     --------
-    >>> import numpy as np
-    >>> from pylayers.util.geomutil import *
-    >>> pt = np.array([0,0])
-    >>> ph = np.array([10,0])
-    >>> p  = np.array([[-1,1 ,3,4,11],[8,1,2,3,3]])
-    >>> d1,d2,h = dptseg(p,pt,ph)
+    
+    .. plot::
+        :include-source:
+        >>> import numpy as np
+        >>> from pylayers.util.geomutil import *
+        >>> pt = np.array([0,0])
+        >>> ph = np.array([10,0])
+        >>> p  = np.array([[-1,1 ,3,4,11],[8,1,2,3,3]])
+        >>> d1,d2,h = dptseg(p,pt,ph)
+
     """
     ndim = len(pt)
     l = ph.reshape(ndim,1)-pt.reshape(ndim,1)
@@ -965,8 +1034,7 @@ def displot(pt, ph, col='black'):
         >>> pt  = sp.rand(2,N)
         >>> ph  = sp.rand(2,N)
         >>> f,a = displot(pt,ph)
-        >>> plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
-        >>> plt.savefig('../../doc/auto_examples/util/displot.png')
+        >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
     fig = plt.gcf()
@@ -987,10 +1055,11 @@ def displot(pt, ph, col='black'):
 
 
 def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
-    """  draw a short line segment (not including extremities)
+    """  draw a short line segment
 
     Parameters
     ----------
+
     ax : axes
     p1 : np.array
         start point
@@ -1005,10 +1074,12 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
 
     Returns
     -------
+
     ax  : Axes instance
 
     Examples
     --------
+
     .. plot::
         :include-source:
 
@@ -1016,14 +1087,14 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
         >>> import matplotlib.pyplot as plt
         >>> fig = plt.figure()
         >>> ax  = fig.gca()
-        >>> p1  =np.array([0,0])
-        >>> p2  =np.array([1,0])
-        >>> p1  =np.array([0,1])
-        >>> p1  =np.array([1,1])
-        >>> linet(ax,p1,p2,al=0.7,color='red',linewidth=3)
-        >>> linet(ax,p1,p2,al=0.8,color='blue',linewidth=2)
-        >>> linet(ax,p1,p2,al=0.9,color='green',linewidth=1)
-        >>> linet(ax,p1,p2,al=1,color='cyan',linewidth=0.2)
+        >>> p1 = np.array([0,0])
+        >>> p2 = np.array([1,0])
+        >>> p3 = np.array([0,1])
+        >>> p4 = np.array([1,1])
+        >>> ax = linet(ax,p1,p2,al=0.7,color='red',linewidth=3)
+        >>> ax = linet(ax,p2,p3,al=0.8,color='blue',linewidth=2)
+        >>> ax = linet(ax,p3,p4,al=0.9,color='green',linewidth=1)
+        >>> ax = linet(ax,p4,p1,al=1,color='cyan',linewidth=0.2)
 
 
     """
@@ -1032,7 +1103,7 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
     vn = v / L
     pi = p1 + vn * (1 - al) * L
     pf = p2 - vn * (1 - al) * L
-    ax.plot([pi[0], pf[0]], [pi[1], pf[1]], color=col, linewidth=linewidth)
+    ax.plot([pi[0], pf[0]], [pi[1], pf[1]], color=color, linewidth=linewidth)
 
     return(ax)
 
@@ -1246,44 +1317,69 @@ def SphericalBasis(a):
     return M
 
 
-def AngleDir(s):
+def angledir(s):
     """ evaluate (theta,phi) from direction vector
 
-    .. math:: 
-
-        \\theta = \\arccos{(\\frac{\\mathbf{s}}/\\hat{\mathbf{z}})}
 
     Parameters
     ----------
 
-    s  :  ndarray
-         direction (3 x N (sx,sy,sz) )
+    s  : ndarray N x 3
+         N direction vector
 
     Returns
     -------
 
-      a  : ndarray
-          angle    (2 x N (theta,phi) )
-    
+      a  : ndarray 2xN
+           N angle (theta,phi)
+
+    Notes
+    -----
+
+    .. math:: 
+
+        \\theta = \\arccos{(\\frac{\\mathbf{s}}{\\hat{\mathbf{z}})}}
+
     Example
     -------
 
-        
+    .. plot::
+        :include-source:
+
+        >>> import numpy as np
+        >>> s = np.array([[2,0,0],[0,2,0],[0,0,1],[1,1,1]])    
+        >>> angledir(s)*180/np.pi
+        array([[ 90.        ,   0.        ],
+               [ 90.        ,  90.        ],
+               [  0.        ,   0.        ],
+               [ 54.73561032,  45.        ]])
+
+
+    See Also
+    --------
+
+    BTB_Rx
+    BTB_Tx
 
     """
+    s = normalize(s)
     N = np.shape(s)[0]
-    x = np.array((1, 0, 0))
-    y = np.array((0, 1, 0))
-    z = np.array((0, 0, 1))
-    u = np.dot(s, z)
+    x = np.array((1, 0, 0)).reshape(1,3)
+    y = np.array((0, 1, 0)).reshape(1,3)
+    z = np.array((0, 0, 1)).reshape(1,3)
+    u = np.dot(s,z.T)
     theta = np.arccos(u)
-    v = s - outer(z, ones(N)).T
-    n = outer(np.sqrt(sum(v * v, axis=1)), ones(3))
+    v = s - z
+    n = np.sqrt(np.sum(v * v, axis=1)).reshape(N,1)
+    inull = np.where(n==0)[0]
+    n[inull] = 1
     vn = v / n
-    vnx = np.dot(vn, x)
-    vny = np.dot(vn, y)
+    vnx = np.dot(vn, x.T)
+    vny = np.dot(vn, y.T)
     phi = np.arctan2(vny, vnx)
-    a_new = np.vstack((theta, phi)).T
+    a_new = np.hstack((theta, phi))
+    a_new[inull,0]=0
+    a_new[inull,1]=0
     return(a_new)
 
 
@@ -1294,19 +1390,20 @@ def BTB_rx(a_g, T):
     ----------
 
     a_g  :
-        angle in global reference frame      2 x N  :  (theta,phi) x N
+        angle in global reference frame   2 x N  :  (theta,phi) x N
     T    :
         Rx rotation matrix     3 x 3
 
     See Also
     --------
 
-    AngleDir
+    angledir
     SphericalBasis
 
 
     Notes
     -----
+
     N is the number or rays
 
     """
@@ -1315,7 +1412,7 @@ def BTB_rx(a_g, T):
     ph_g = G[1, :, :]
     B_g = dstack((th_g, ph_g)).transpose((0, 2, 1))
     s_l = np.dot(T.T, G[2, :, :]).T
-    al = AngleDir(s_l)
+    al = angledir(s_l)
     L = SphericalBasis(al)
     th_l = L[0, :, :]
     ph_l = L[1, :, :]
@@ -1342,7 +1439,7 @@ def BTB_tx(a_g, T):
     ph_g = G[1, :, :]
     B_gT = dstack((th_g, ph_g)).transpose((2, 0, 1))
     s_l = np.dot(T.T, G[2, :, :]).T
-    al = AngleDir(s_l)
+    al = angledir(s_l)
     L = SphericalBasis(al)
     th_l = L[0, :, :]
     ph_l = L[1, :, :]
@@ -1351,8 +1448,6 @@ def BTB_tx(a_g, T):
 
     return R, al
 
-"""
-"""
 
 
 class Plot_shapely(object):
@@ -1402,7 +1497,7 @@ class Plot_shapely(object):
         x, y = self.obj.xy
         self.ax.plot(x, y, color=self.coul, alpha=self.alph, linewidth=3)
 
-    def plot_polygone(self):
+    def plot_polygon(self):
         """polygons"""
         patch = PolygonPatch(self.obj, facecolor=self.coul,
                              edgecolor='#000000', alpha=self.alph)
@@ -1419,7 +1514,7 @@ class Plot_shapely(object):
         if self.type == 'Point':
             self.plot_coords()
         elif self.type == 'Polygon':
-            self.plot_polygone()
+            self.plot_polygon()
         elif self.type == 'LineString':
             self.plot_ligne()
         elif "Multi" in self.type:
@@ -1781,6 +1876,9 @@ class Polygon(shg.Polygon):
         #
         x, y = lring.xy
         p = np.array([x[0:-1], y[0:-1]])
+        #
+        # determine convex points
+        #
         tcc, n = self.ptconvex()
         Np = self.Np
         #
@@ -1875,14 +1973,13 @@ class Polygon(shg.Polygon):
             ax.add_patch(patch)
 
         #
-        #  1) Calculate node node visibilty
+        #  1) Calculate node node visibility
         #
 
         #
         #  Entre les combinaisons de points convexes
-        #  Il faut elargir aux portes point de degre 2
+        #  Il faut elargir aux portes points de degre 2
         #  eventuellement non convexes cross product nul
-        #  et prelever les points dans
         #
         for nk in combinations(udiff, 2):
             p1 = p[:, nk[0]]
@@ -1903,7 +2000,7 @@ class Polygon(shg.Polygon):
             nlk = np.sqrt(np.dot(lk, lk))
             lnk = lk / nlk
 
-            epsilonk = nlk / 1000
+            epsilonk = nlk / 1000.
 
             pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
             pcornerh = phk - lnk * epsilonk  # + n[:,nk]*epsilon
@@ -1935,7 +2032,7 @@ class Polygon(shg.Polygon):
                     ls = phs - pts
                     nls = np.sqrt(np.dot(ls, ls))
                     lns = ls / nls
-                    epsilons = nls / 1000
+                    epsilons = nls / 1000.
                     pte = pts + lns * epsilons  # + n[:,ns]*epsilon
                     phe = phs - lns * epsilons  # + n[:,ns]*epsilon
                     tbr = pyu.bitreverse(16, 5) / 16.
@@ -2114,19 +2211,19 @@ class Polygon(shg.Polygon):
             >>> N = len(points)
             >>> polyg   = Polygon(points)
             >>> tcc,n   = polyg.ptconvex()
-            >>> k = 0
-            >>> for p in points:
-            >>>    if tcc[k] == 1 :
-            >>>        plt.plot(p.x, p.y, 'o', color='red',alpha=1)
-            >>>    else:
-            >>>        plt.plot(p.x, p.y, 'o', color='blue',alpha=0.3)
-            >>>    k = k+1
-            >>> polyg.plot()
-            >>> plt.figure()
-            >>> points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])
-            >>> poly    = Polygon(points)
-            >>> tcc,n   = polyg.ptconvex()
-            >>> poly.plot()
+            >>> #k = 0
+            >>> #for p in points:
+            >>> #  if tcc[k] == 1 :
+            >>> #      plt.plot(p.x, p.y, 'o', color='red',alpha=1)
+            >>> #  else:
+            >>> #      plt.plot(p.x, p.y, 'o', color='blue',alpha=0.3)
+            >>> #  k = k+1
+            >>> #polyg.plot()
+            >>> #plt.figure()
+            >>> #points  = shg.MultiPoint([(0, 0), (1, 1), (2, 0), (1, 0)])
+            >>> #poly    = Polygon(points)
+            >>> #tcc,n   = polyg.ptconvex()
+            >>> #poly.plot()
 
 
         Notes
@@ -2190,13 +2287,14 @@ class Polygon(shg.Polygon):
 
 #def createPolygons(
 def plotPolygon(poly, color="#abcdef", alpha=0.8):
-    """
-    plotPolygon
+    """ plot a shapely Polygon
+
     Parameters
     ----------
-    poly
+    poly  : shapely poligon 
     color : defauld #abcdef"
-    alpha : trnsparency   (default 0.8)
+    alpha : float 
+           transparency   (default 0.8)
     """
     fig = plt.gcf()
     gax = fig.get_axes()
@@ -2210,12 +2308,20 @@ def plotPolygon(poly, color="#abcdef", alpha=0.8):
 
 
 def shrinkPolygon(poly, d=0.1):
-    """
+    """ shrink polygon
+
     Parameters
     ----------
 
-    poly  :
-    d     : 0.1
+    poly  : shapely polygon
+    d     : float
+        0.1
+
+    Returns
+    -------
+
+    poly
+
     """
     poly1 = simplifyPolygon(poly)
     A1 = poly1.area
@@ -2424,7 +2530,7 @@ def angle_fix(al):
 
 
 def plot_coords2(ax, ob):
-    """
+    """  plot point from coordinates
     References
     ----------
     http://pypi.python.org/pypi/Shapely
@@ -2523,8 +2629,10 @@ def valid_wedge(ps, pw, p1, p2, grazing):
     >>> pw = np.array([0,0]).reshape(1,2)
     >>> ps1 = np.array([3,3]).reshape(1,2)
     >>> ps2 = np.array([0,-3]).reshape(1,2)
-    >>> assert valid_wedge(ps1,pw,p1,p2,0)[0][0]==1,"valid_wedge problem"
-    >>> assert valid_wedge(ps2,pw,p1,p2,0)[0][0]==0,"valid_wedge problem"
+    >>> valid_wedge(ps1,pw,p1,p2,0)[0][0]
+    1.0
+    >>> valid_wedge(ps2,pw,p1,p2,0)[0][0]
+    1.0
 
 
     Authors
@@ -2632,8 +2740,8 @@ def dist(x,y,ax):
         return d
 
 def line_intersection(l1,l2):
-    """
-    intersection between two 2D lines using shapely
+    """ intersection between two 2D lines using shapely
+
     Parameters
     ----------
         l1: numpy.ndarray
@@ -2654,8 +2762,7 @@ def line_intersection(l1,l2):
         return None
 
 def linepoly_intersection(l,poly):
-    """
-    intersection between a 2D line and a 2D polygon using shapely
+    """ intersection between a 2D line and a 2D polygon using shapely
     Parameters
     ----------
         l: numpy.ndarray
@@ -2672,6 +2779,61 @@ def linepoly_intersection(l,poly):
     psh = shl.intersection(shpoly)
     return np.array([[psh.x],[psh.y]])
     
+def mirror(p,pa,pb):
+    """ Compute the mirror of p with respect to the segment pa pb
+
+    Parameters
+    ----------
+        p : numpy.ndarray
+            point to image
+        pa : numpy.ndarray
+            segment tail
+        pb : numpy.ndarray
+            segment head 
+
+    Returns
+    -------
+        M : numpy.ndarray
+
+    Example
+    -------
+
+        >>> p = np.array([0,-1])
+        >>> pa  = np.array([-1,0])
+        >>> pb  = np.array([1,0])
+        >>> M = mirror(p,pa,pb) 
+    """
+
+    if np.shape(pa)==(2,):
+        pa = pa.reshape(2,1)
+    if np.shape(pb)==(2,):
+        pb = pb.reshape(2,1)
+    pab = pb - pa
+    alpha = np.sum(pab * pab, axis=0)
+    zalpha = np.where(alpha == 0.)
+    alpha[zalpha] = 1.
+
+    a = 1 - (2. / alpha) * (pa[1, :] - pb[1, :]) ** 2
+    b = (2. / alpha) * (pb[0, :] - pa[0, :]) * (pa[1, :] - pb[1, :])
+    c = (2. / alpha) * (pa[0, :] * (pa[1, :] - pb[1, :]) ** 2 +
+                        pa[1, :] * (pa[1, :] - pb[1, :]) *
+                        (pb[0, :] - pa[0, :]))
+    d = (2. / alpha) * (pa[1, :] * (pb[0, :] - pa[0, :]) ** 2 +
+                        pa[0, :] * (pa[1, :] - pb[1, :]) *
+                        (pb[0, :] - pa[0, :]))
+
+    N = 1
+    S = np.zeros((2, 2))
+    S[0, 0] = -a
+    S[0, 1] = b
+    S[1, 0] = b
+    S[1, 1] = a
+    A = np.eye(2)
+    y = np.zeros(2)
+    vc0 = np.array([c[0], d[0]])
+    v0 = np.dot(-S, p) + vc0
+    x = la.solve(A, v0)
+    return x
 
 if __name__ == "__main__":
     doctest.testmod()

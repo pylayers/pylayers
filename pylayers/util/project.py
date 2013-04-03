@@ -3,6 +3,7 @@ import os
 import sys
 import shutil
 import pkgutil
+import pdb
 #class Project(object)
 #       """
 #       Création d'une arborescence de projet 
@@ -15,8 +16,10 @@ currentdir = os.getcwd()
 try:
     pylayersdir = os.environ['PYLAYERS']
 except:
-    pylayersdir = currentdir.split('pylayers')[0] + '/pylayers/'
+    pylayersdir = currentdir.split('pylayers')[0] + 'pylayers/'
 
+if pylayersdir[-1] == '/':
+    pylayersdir = pylayersdir[:-1]
 
 if len(pylayersdir) == 1:
     raise EnvironmentError('Please verify that pylayers sources are into the "pylayers/" directory')
@@ -24,7 +27,7 @@ if len(pylayersdir) == 1:
 try:
     basename = os.environ['BASENAME']
 except:
-    raise EnvironmentError('Please position an environement variable $BASENAME where your all your pylayers project will be hosted')
+    raise EnvironmentError('Please position an environement variable $BASENAME where your pylayers project will be hosted')
 
 try:
     mesdir = os.environ['MESDIR']

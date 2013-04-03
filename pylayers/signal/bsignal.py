@@ -633,6 +633,9 @@ class Usignal(Bsignal):
         -------
         TUsignal y extended TU signal, x bases are adjusted
 
+        Examples
+        --------
+
         .. plot::
             :include-source:
 
@@ -813,13 +816,16 @@ class Usignal(Bsignal):
         Examples
         --------
 
-        >>> from pylayers.signal import *
-        >>> from matplotlib.pylab import *
-        >>> ip = EnImpulse()
-        >>> ip.plot()
-        >>> ip.zlr(-10,10)
-        >>> ip.plot()
-        >>> show()
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.signal import *
+            >>> from matplotlib.pylab import *
+            >>> ip = EnImpulse()
+            >>> ip.plot()
+            >>> ip.zlr(-10,10)
+            >>> ip.plot()
+            >>> show()
 
         """
         dx = self.dx()
@@ -932,7 +938,7 @@ class TBsignal(Bsignal):
         Warnings
         --------
 
-        Once translated original signal and translated signal might be not on the same grid
+        Once translated original signal and translated signal might not be on the same grid
 
         Examples
         --------
@@ -2314,8 +2320,10 @@ class TUDsignal(TUsignal):
     y   : ndarray
     tau : float or ndarray
 
+
     .. todo::
-        methode tunfold restitution en temps du tableau avec retard
+        build a tunfold time restitution of delays  
+
     """
     def __init__(self, x=np.array([]), y=np.array([]), tau=np.array([])):
         TUsignal.__init__(self, x, y)
@@ -2406,7 +2414,8 @@ class FBsignal(Bsignal):
             plt.ylabel('Imaginary part')
 
     def plot(self, phase=True, dB=True,
-             iy=np.array([0])):
+             iy=np.array([0]),
+             ax=[],fig=[],name=''):
         """ plot
 
         Parameters
@@ -2431,46 +2440,59 @@ class FBsignal(Bsignal):
         >>> plt.show()
 
         """
+        
+        if phase :
+            nrow = 2
+        else :
+            nrow = 1
+
+
+        if fig==[]:
+            fig,axs=plt.subplots(nrows=nrow,ncols=1,sharex=True,num=name)
+        elif ax== []:
+            axs=[]
+            axs.append(fig.add_subplot(2,1,1))
+            axs.append(fig.add_subplot(2,1,2))
+#            ff,axs=plt.subplots(nrows=nrow,ncols=1,sharex=True,num=name)
+
         ndim = self.y.ndim
         if ndim > 1:
             for k in iy:
                 if phase:
-                    ax1 = plt.subplot(211)
                     if dB:
-                        plt.plot(self.x, 20 *
+                        axs[0].plot(self.x, 20 *
                                  np.log10(abs(self.y[k])))
                     else:
-                        plt.plot(self.x,
+                        axs[0].plot(self.x,
                                  abs(self.y[k]))
-                    plt.ylabel('Modulus')
-                    ax2 = plt.subplot(212,sharex=ax1)
-                    plt.plot(self.x,np.unwrap(np.angle(self.y[k])))
-                    plt.xlabel('Frequency (GHz)')
-                    plt.ylabel('Phase (rad)')
+                    axs[0].set_ylabel('Modulus')
+                    axs[1].plot(self.x,np.unwrap(np.angle(self.y[k])))
+                    axs[1].set_xlabel('Frequency (GHz)')
+                    axs[1].set_ylabel('Phase (rad)')
                 else:
                     if dB:
-                        plt.plot(self.x, 20 * np.log10(abs(self.y[k])))
+                        axs.plot(self.x, 20 * np.log10(abs(self.y[k])))
                     else:
-                        plt.plot(self.x, abs(self.y[k]))
-                    plt.xlabel('Frequency (GHz)')
-                    plt.ylabel('Modulus')
+                        axs.plot(self.x, abs(self.y[k]))
+                    axs.set_xlabel('Frequency (GHz)')
+                    axs.set_ylabel('Modulus')
         else:
             if phase:
-                ax1 = plt.subplot(211)
                 if dB:
-                    plt.plot(self.x, 20 * np.log10(abs(self.y)))
+                    axs[0].plot(self.x, 20 * np.log10(abs(self.y)))
                 else:
-                    plt.plot(self.x, abs(self.y))
-                plt.ylabel('Modulus')
-                ax2 = plt.subplot(212,sharex=ax1)
+                    axs[0].plot(self.x, abs(self.y))
+                axs[0].set_ylabel('Modulus')
                 #plot(self.x,np.unwrap(angle(self.y)))
-                plt.plot(self.x,np.unwrap(np.angle(self.y)))
-                plt.xlabel('Frequency (GHz)')
-                plt.ylabel('Phase (rad)')
+                axs[1].plot(self.x,np.unwrap(np.angle(self.y)))
+                axs[1].set_xlabel('Frequency (GHz)')
+                axs[1].set_ylabel('Phase (rad)')
             else:
-                plt.plot(self.x, abs(self.y))
-                plt.xlabel('Frequency (GHz)')
-                plt.ylabel('Modulus')
+                axs.plot(self.x, abs(self.y))
+                axs.set_xlabel('Frequency (GHz)')
+                axs.set_ylabel('Modulus')
+        
+        return (fig,axs)
 
     def plotdB(self, mask=False, n=2, phase=True):
         """ usage : plotdB()
@@ -3333,9 +3355,13 @@ class FUDsignal(FUsignal):
 
         Parameters
         ----------
+
         df : float 
-            frequency step (dafault 0.01)
-        
+            frequency step (default 0.01)
+       
+        Notes
+        -----
+
         1. get  fmin and fmax
         2. build a new base with frequency step df
         3. Initialize a FUsignal with the new frequency base 
@@ -3481,6 +3507,10 @@ class FUDAsignal(FUsignal):
         ffts : fftshift indicator
             0  no fftshift
             1  apply fftshift
+
+        Returns
+        -------
+        r : TUsignal
 
         """
         tau = self.tau0
