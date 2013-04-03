@@ -5,6 +5,7 @@ import os
 import pdb
 import glob
 import doctest
+import networkx as nx
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -2081,34 +2082,32 @@ class Rays(dict):
         #             coordinates as a function of parameter
         #
         for k in self:   # for all interaction group k
-            k = int(k)
-            Nrayk = np.shape(self[str(k)]['alpha'])[
-                             1]  # Number of rays in interaction group k
-            a1 = self[str(k)]['alpha']             # get  2D parameterization
-            sig = self[str(k)]['sig']               # get  2D signature
+            #k = int(k)
+            Nrayk = np.shape(self[k]['alpha'])[1]  # Number of rays in interaction group k
+            a1 = self[k]['alpha']           # get  2D parameterization
+            sig = self[k]['sig']            # get  2D signature
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1,Nrayk))))    # add parameterization of tx and rx (0,1)
-            sig = np.hstack((np.zeros((2, 1, Nrayk)), sig, np.zeros((2,1,Nrayk))))  # add signature of Tx and Rx (0,0)
+            sig = np.hstack((np.zeros((2, 1, Nrayk),dtype=int),
+                             sig,
+                             np.zeros((2,1,Nrayk),dtype=int)))  # add signature of Tx and Rx (0,0))
             Tx = tx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
             Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
-            pte = self[str(k)]['pt']                  # ndim x k x Nrayk
-            pte = np.hstack((Tx, pte, Rx))             # ndim x k+2 x Nrayk
-            for l in d:                              # for each vertical pattern (C,F,CF,FC,....)
-                Nint = len(d[l])                     # number of additional interaction
-                if Nint > 0:                           # if new interaction ==> need extension
-                    a1e = np.concatenate((a1, d[l].reshape(len(d[
-                                            l]), 1)*np.ones((1, Nrayk))))  # extended old parameterization
-                    ks = np.argsort(a1e, axis=0)
-                                        # get sorted indices
-                    a1es = np.sort(a1e, axis=0)
-                                     # sorted extended parameterization
-                    ptee = np.hstack((pte, np.zeros((
-                        3, Nint, Nrayk))))                          # ndim x (Nint+k+2) x Nrayk
+            pte = self[k]['pt']             # ndim x k x Nrayk
+            pte = np.hstack((Tx, pte, Rx))       # ndim x k+2 x Nrayk
+            for l in d:                          # for each vertical pattern (C,F,CF,FC,....)
+                Nint = len(d[l])                 # number of additional interaction
+                if Nint > 0:                     # if new interaction ==> need extension
+                    a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*np.ones((1, Nrayk))))  # extended old parameterization
+                    ks = np.argsort(a1e, axis=0) # get sorted indices
+                    a1es = np.sort(a1e, axis=0)  # sorted extended parameterization
+                    ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))     # ndim x (Nint+k+2) x Nrayk
                     if l < 0:
                         u = np.mod(range(Nint), 2)
                     else:
                         u = 1 - np.mod(range(Nint), 2)
-                    esigs = np.zeros((1, Nint, Nrayk))
-                    esigi = (u+4).reshape(1, Nint, 1)*np.ones((1, 1, Nrayk))
+
+                    esigs = np.zeros((1, Nint, Nrayk),dtype=int)
+                    esigi = (u+4).reshape(1, Nint, 1)*np.ones((1, 1, Nrayk),dtype=int)
                     esig = np.vstack((esigs, esigi))
                     # sige   = np.hstack((sig,np.zeros((2,Nint,Nrayk))))
                     # # 2 x (Nint+k+2) x Nrayk
@@ -2151,15 +2150,68 @@ class Rays(dict):
                     r3d[k+Nint]['sig'] = siges
         return(r3d)
 
-    def locbas(self):
+    def locbas(self,L):
         """
+
         """
+
+        #
+        # extract normal in np.array
+        #
+        norm = np.array(nx.get_node_attributes(L.Gs,'norm').values())
+        key = np.array(nx.get_node_attributes(L.Gs,'norm').keys())
+
         for k in self:
+
+            nstr = self[k]['sig'][0,1:-1,:]      # nint x nray
+            ityp = self[k]['sig'][1,1:-1,:]      # nint x nray
+
+            nray = np.shape(nstr)[1]
+
+            uwall = np.where((ityp==1)|(ityp==2))
+            udiff = np.where((ityp==3))
+            ufloor = np.where((ityp==4))
+            uceil = np.where((ityp==5))
+
+            nstrwall = nstr[uwall[0],uwall[1]]   #
+            self[k]['nstrwall'] = nstrwall
+
+            self[k]['norm'] = np.zeros((3,k,nray))   # 2 x nray
+            pdb.set_trace()
+            #self[k]['norm'][:,uwall[0],uwall[1]] = norm[:,nstrwall]
+
             v = self[k]['pt'][:,1:,:]-self[k]['pt'][:,0:-1,:]
             lsi = np.sqrt(np.sum(v*v,axis=0))
+            si  = v/lsi             # ndim , nint - 1 , nray
             self[k]['si'] = v/lsi
-
-
+            #
+            # AOD (rad)
+            #
+            th = np.arccos(si[2,0,:])
+            ph = np.arctan2(si[1,0,:],si[0,0,:])
+            self[k]['aod'] = np.vstack((th,ph))   # 2 x nray
+            eth = np.array([np.cos(th) * np.cos(ph),
+                           np.cos(th) * np.sin(ph),
+                          -np.sin(th)])
+            eph = np.array([-np.sin(ph),
+                            np.cos(ph),
+                            np.zeros(len(ph))])
+            Bo0 = np.array([si[:,0,:], eth, eph])    # ndim x 3 x Nray
+            self[k]['Bo0']=Bo0
+            #
+            # AOA (rad)
+            #
+            th = np.arccos(si[2,-1,:])
+            ph = np.arctan2(si[1,-1,:],si[0,-1,:])
+            self[k]['aoa'] = np.vstack((th,ph))   # 2 x nray
+            eth = np.array([np.cos(th) * np.cos(ph),
+                           np.cos(th) * np.sin(ph),
+                          -np.sin(th)])
+            eph = np.array([-np.sin(ph),
+                            np.cos(ph),
+                            np.zeros(len(ph))])
+            BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
+            self[k]['BiN']=BiN
 
 
     def signature(self, L):

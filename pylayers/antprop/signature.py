@@ -136,19 +136,19 @@ class Signatures(dict):
                 else:
                     paths = [[nt]]
                 for path in paths:
-                    sigarr = np.array([]).reshape(2, 0)
+                    sigarr = np.array([],dtype=int).reshape(2, 0)
                     for interaction in path:
                         it = eval(interaction)
                         if type(it) == tuple:
                             if len(it)==2: #reflexion
                                 sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]],[1]])))
+                                                np.array([[it[0]],[1]],dtype=int)))
                             if len(it)==3: #transmission
                                 sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]], [2]])))
+                                                np.array([[it[0]],[2]],dtype=int)))
                         elif it < 0: #diffraction
                             sigarr = np.hstack((sigarr,
-                                                np.array([[it], [3]])))
+                                                np.array([[it],[3]],dtype=int)))
                     #print sigarr
                     try:
                         self[len(path)] = np.vstack((self[len(path)],sigarr))
@@ -181,19 +181,17 @@ class Signatures(dict):
                 if Yi is not None:
                     Yi = np.fliplr(Yi)
                     nint = len(sig[0, :])
-                    if str(nint) in rays.keys():
+                    if nint in rays.keys():
                         Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, nint))))
                         Yi3d = Yi3d.reshape(3, nint, 1)
-                        rays[str(nint)]['pt'] = np.dstack((
-                                                          rays[str(nint)]['pt'], Yi3d))
-                        rays[str(nint)]['sig'] = np.dstack((
-                                                           rays[str(nint)]['sig'],
-                                                           sig.reshape(2, nint, 1)))
+                        rays[nint]['pt'] = np.dstack(( rays[nint]['pt'], Yi3d))
+                        rays[nint]['sig'] = np.dstack(( rays[nint]['sig'], sig.reshape(2, nint, 1)))
                     else:
-                        rays[str(nint)] = {'pt': np.zeros((3, nint, 1)),
-                                           'sig': np.zeros((2, nint, 1))}
-                        rays[str(nint)]['pt'][0:2, :, 0] = Yi[:, 1:-1]
-                        rays[str(nint)]['sig'][:, :, 0] = sig
+                        rays[nint] = {'pt': np.zeros((3, nint, 1)),
+                                      'sig': np.zeros((2, nint,
+                                                            1),dtype=int)}
+                        rays[nint]['pt'][0:2, :, 0] = Yi[:, 1:-1]
+                        rays[nint]['sig'][:, :, 0] = sig
         return rays
 
 class Signature(object):
