@@ -17,6 +17,8 @@ from pylayers.location.geometric.constraints.tdoa import *
 from pylayers.location.geometric.constraints.exclude import *
 from pylayers.location.algebraic.algebraic import *
 
+from pylayers.network.communication import Gcom, TX, RX
+
 from   pylayers.network.model import Model
 import networkx as nx
 
@@ -54,6 +56,9 @@ class Localization(object):
 #        
 #        """
 #        self.dc= merge_rules(self,RAT=RAT,LDP=LDP)
+
+
+
 
     def fill_cla(self):
         """
@@ -156,8 +161,7 @@ class Localization(object):
                                 self.algloc.ldp['PL0'] = -c.param['PL0']
                 else : 
                     c.visible = False
-            else:
-                c.runable = False
+
 
         try:
             self.algloc.nodes['RN_TOA']=self.algloc.nodes['RN_TOA'].T
@@ -240,12 +244,18 @@ class Localization(object):
 
 
 class PLocalization(Process):
-    def __init__(self, loc=Localization(), loc_updt_time=.5, sim=None):
+    def __init__(self, loc=Localization(), tx=TX() ,loc_updt_time=.5, sim=None):
         Process.__init__(self, name='Location', sim=sim)
         self.loc = loc
+        self.tx=tx
         self.loc_updt_time = loc_updt_time
         self.method = self.loc.method
         self.sim = sim
+
+
+
+        
+
     def run(self):
 #        self.loc.get_const()
         self.loc.fill_cla()
@@ -254,14 +264,18 @@ class PLocalization(Process):
             # if no previous position have been computed or if position is obsolete
             if self.loc.net.node[self.loc.ID]['pe'].size == 0 \
                 or self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node['te']>self.loc_updt_time:
-                    print 'lets go'
-
+                    
+                    # try to obtain an estimated position
                     if 'geo' in self.method :
                         bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
                     if 'alg' in self.method and bep:
                         bep = self.loc.compute_alg(ldp='TOA',now=self.sim.now())
-                    if not bep : # is localization has been computed ?
-                        self.loc.update(ldp='all')
+
+                    # if no position has been computed 
+                    if not bep : 
+                        self.tx.cmdrq.signal()
+
+#                        self.loc.update(ldp='all')
 
 
             if self.sim.verbose:

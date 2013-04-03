@@ -153,13 +153,16 @@ class Agent(object):
                 ## The TOA requests are made by node only when they are in visibility of pairs.
 
                 self.rxr = RX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
+                              gcom=self.gcom, sim=self.sim)
+                self.tx = TX(net=self.net, ID=self.ID,
+                              gcom=self.gcom, sim=self.sim)
 #                self.rxt = RX(net=self.net, ID=self.ID,
 #                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
 #                self.txt = TX(net=self.net, ID=self.ID,
 #                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
 
                 self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
+                self.sim.activate(self.tx, self.tx.request(), 0.0)
 #                self.sim.activate(self.rxt, self.rxt.wait_TOArq(), 0.0)
 #                self.sim.activate(self.txt, self.txt.request_TOA(), 0.0)
 
@@ -203,6 +206,8 @@ class Agent(object):
             self.loc = Localization(net=self.net, ID=self.ID,
                                     method=args['loc_method'])
             self.Ploc = PLocalization(loc=self.loc,
-                                      loc_updt_time=args['loc_updt'], sim=args['sim'])
+                                      loc_updt_time=args['loc_updt'],
+                                      tx=self.tx,
+                                      sim=args['sim'])
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 

@@ -173,7 +173,7 @@ class CLA(object):
         [c.update() for c in self.c if c.runable]
         self.runable=[c.runable for c in self.c]
         self.obsolete=[c.obsolete for c in self.c]
-
+        self.visible=[c.visible for c in self.c]
 
     def compute(self,pe=True):
         """

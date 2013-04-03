@@ -103,7 +103,7 @@ class TX(Process):
                   'net': Network(),
                   'gcom': Gcom(),
                   'ID': 0,
-                  'dcond':{},
+                  'dec':{},
                   'devt': {},
                   'lcst': []
                   }
@@ -116,12 +116,17 @@ class TX(Process):
                 setattr(self, key, value)
                 args[key]=value  
         self.args=args
+        self.gcom=self.args['gcom']
+
+
+        self.cmdrq=SimEvent('RQ'+str(self.ID),sim=self.sim) # command request
+
         try:
             self.PN=self.net.node[self.ID]['PN']
         except:
             self.PN=Network()
 
-        self.create_evt()
+#        self.create_evt()
 
 #        self.c_init()
         Process.__init__(self,name='Tx'+str(self.ID),sim=self.sim)
@@ -165,6 +170,7 @@ class TX(Process):
             self.devt[e]=self.gcom.devt[e]
 
 
+
     def request_TOA(self):
         """
         Request TOA
@@ -190,6 +196,26 @@ class TX(Process):
 #                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
 #                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
 #            print 'refresh TOA node', self.ID, ' @',self.sim.now()
+
+
+
+
+
+
+    def request(self):
+        """ request a transmission command by localizaiton
+        """
+
+        while 1:
+            yield waitevent,self,self.cmdrq 
+            if self.sim.verbose:
+                print "communication requested by node ",self.ID
+            pdb.set_trace()
+
+
+
+
+
 
 
 
@@ -387,7 +413,6 @@ class RX(Process):
         self.create_evt()
         while 1:
             for rat in self.PN.SubNet.keys():
-
             # 2 approach to determine visibility
             ##  1) test visibility during the refresh
 #                [self.PN.edge[self.ID][n][rat].update(
@@ -497,6 +522,27 @@ class Gcom(nx.MultiDiGraph):
         nx.MultiDiGraph.__init__(self)
         self.net=net
         self.sim=sim
+        self.fileini='communication.ini'
+        self.dec={}
+
+    def load_dec_file(self):
+
+        self.config     = ConfigParser.ConfigParser()
+        self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
+        nodes=self.config.sections()
+
+        ntype=nx.get_node_attributes(self.net,'type')
+        for n in self:
+            try:
+                if ntype[n]=='ag':
+                    self.dec[n]={}
+                    di = self.config.items(n)
+                    self.dec[n]['rat']=eval(dict(self.config.items(n))['rat'])
+                    self.dec[n]['action']=eval(dict(self.config.items(n))['action'])
+                    self.dec[n]['rule']=eval(dict(self.config.items(n))['rule'])
+            except: 
+                raise NameError('no decision in communcation.ini for node' +n)
+
 
 
     def create(self):
@@ -513,6 +559,7 @@ class Gcom(nx.MultiDiGraph):
         """
         self.create_graph()
         self.create_evt()
+        self.load_dec_file()
 
     def create_graph(self):
         """
@@ -532,6 +579,7 @@ class Gcom(nx.MultiDiGraph):
                     print 'WARNING : no edge on rat',rat
 
 
+
     def create_evt(self):
         """
             Create the dictionnary of simpy event.
@@ -543,6 +591,9 @@ class Gcom(nx.MultiDiGraph):
             self.devt[e]=(SimEvent(e,sim=self.sim))
 
 
+
+
+        
 #    def fill_edge(self,le,rat,mess):
 
 #        for i,r in enumerate(rat):
