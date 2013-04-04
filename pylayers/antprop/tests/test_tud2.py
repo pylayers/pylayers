@@ -31,8 +31,8 @@ def plotray(r):
 #################################
 S = Simul()
 # loading a layout 
-filestr = 'defstr'
-S.layout(filestr+'.str','matDB.ini','slabDB.ini')
+filestr = 'TA-Office'
+S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
 try:
     S.L.dumpr()
 except:

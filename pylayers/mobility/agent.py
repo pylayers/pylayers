@@ -119,8 +119,8 @@ class Agent(object):
                                 wait=args['wait'],
                                 cdest=args['cdest'],
                                 save=args['save'])
-            self.meca.behaviors = [Queuing(),Seek(), Containment(
-            ), Separation(), InterpenetrationConstraint()]
+            self.meca.behaviors = [Queuing(),Seek(), Containment(),\
+                                   Separation(), InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
 #            self.meca.steering_mind = queue_steering_mind
         # filll in network

@@ -447,6 +447,32 @@ class SHCoeff(object):
         if sh3[0] != 0:
             print "Ncoeff s3 : ", len(self.ind3)
 
+    def plot(self,typ='s3',title='',xl=False,yl=False,log=False,stem=True,color='b'):
+        """
+        """
+        if typ=='s3':
+            indices = self.ind3
+            tl = indices[:,0]
+            C =[]
+            for l in np.unique(tl):
+                k = np.where(tl==l)
+                a = np.real(np.sum(self.s3[:,k]*np.conj(self.s3[:,k])))
+                C.append(a)
+            C = np.real(np.array(C))
+            Cs = np.sqrt(C)
+            if log:
+                Cs = 20*log10(Cs)
+            if stem:
+                plt.stem(np.unique(tl),Cs,markerfmt=color+'o')
+            else:
+                plt.plot(np.unique(tl),Cs,color=color)
+            #plt.axis([0,max(tl),0,5])
+            plt.title(title)
+            if xl:
+                plt.xlabel('degree l')
+            if yl:
+                plt.ylabel('Integrated Module of coeff')
+
     def show(self,
              typ='s1',
              k = 0,
@@ -617,6 +643,42 @@ class VSHCoeff(object):
         print "Ci"
         print "-------------"
         self.Ci.info()
+    
+    def plot(self,typ='s3',titre='titre',log=False,stem=True,subp=True):
+        """
+        """
+        fa = np.linspace(self.Br.fmin,self.Br.fmax,self.Br.Nf)
+        st = titre+'  shape : '+typ
+        plt.suptitle(st,fontsize=14)
+        if subp:
+            plt.subplot(221)
+            titre = '$\sum_f \sum_m |Br_{l}^{(m)}(f)|$'
+            self.Br.plot(typ=typ,title=titre, yl=True,color='r',stem=stem,log=log)
+        else:
+            self.Br.plot(typ=typ,color='r',stem=stem,log=log)
+        if subp:
+            plt.subplot(222)
+            titre = '$\sum_f \sum_m |Bi_{l}^{(m)}(f)|$'
+            self.Bi.plot(typ=typ,title=titrei,color='m',stem=stem,log=log)
+        else:
+            self.Bi.plot(typ=typ,color='m',stem=stem,log=log)
+        if subp:
+            plt.subplot(223)
+            titre = '$\sum_f \sum_m |Cr_{l}^{(m)}(f)|$'
+            self.Cr.plot(typ=typ,title=titre, xl=True, yl=True,color='b',stem=stem,log=log)
+        else:
+            self.Cr.plot(typ=typ,color='b',stem=stem,log=log)
+        if subp:
+            plt.subplot(224)
+            titre = '$\sum_f \sum_m |Ci_{l}^{(m)}(f)|$'
+            self.Ci.plot(typ=typ, title = titre, xl=True,color='c',stem=stem,log=log)
+        else:
+            self.Ci.plot(typ=typ,xl=True,yl=True,color='c',stem=stem,log=log)
+        if not subp:
+            plt.legend(('$\sum_f \sum_m |Br_{l}^{(m)}(f)|$',
+                        '$\sum_f \sum_m |Bi_{l}^{(m)}(f)|$',
+                        '$\sum_f \sum_m |Cr_{l}^{(m)}(f)|$',
+                        '$\sum_f \sum_m |Ci_{l}^{(m)}(f)|$'))
 
     def show(self, typ='s1', k=1, N=-1, M=-1, kmax = 1000, seuildb=50,
              animate=False,titre=''):
@@ -636,7 +698,6 @@ class VSHCoeff(object):
         animate : boolean
                 default False
         """
-        plt.figure()
         if not animate:
             fa = np.linspace(self.Br.fmin,self.Br.fmax,self.Br.Nf)
             st = titre+'  shape : '+typ
@@ -1185,7 +1246,7 @@ def VW2(l, m, x, phi, Pmm1l, Pmp1l):
     V[np.isinf(V) | np.isnan(V)] = 0
     return V, W
 
-def VW3(l, m, theta ,phi ):
+def VW(l, m, theta ,phi):
     """ evaluate vector Spherical Harmonics basis functions
 
     Parameters
@@ -1214,6 +1275,8 @@ def VW3(l, m, theta ,phi ):
 
     Examples
     --------
+   
+        >>> a = 1
 
     """
 
@@ -1224,7 +1287,8 @@ def VW3(l, m, theta ,phi ):
 
     L = np.max(l)
     M = np.max(m)
-
+ 
+    #theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
     x = -np.cos(theta)
 
     # The - sign is necessary to get the good reconstruction
@@ -1232,7 +1296,10 @@ def VW3(l, m, theta ,phi ):
     #     May be it comes from a different definition of theta in SPHEREPACK
 
     #Pmm1l, Pmp1l = AFLegendre(L, M, x)
+<<<<<<< HEAD
 
+=======
+>>>>>>> pylayers/master
     Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
@@ -1256,13 +1323,15 @@ def VW3(l, m, theta ,phi ):
     #V = Y2 * (-1.0) ** l / (2 * np.sqrt(l * (l + 1))) * Ephi
     W = Y1 * T / x
     V = Y2 * T
-
-    W[np.isinf(W) | np.isnan(W)] = 0
-    V[np.isinf(V) | np.isnan(V)] = 0
+    #
+    # dirty fix
+    #
+    #W[np.isinf(W) | np.isnan(W)] = 0
+    #V[np.isinf(V) | np.isnan(V)] = 0
 
     return V, W
 
-def VW(n, m, x, phi, Pmm1n, Pmp1n):
+def VW0(n, m, x, phi, Pmm1n, Pmp1n):
     """ evaluate vector Spherical Harmonics basis functions
 
     Parameters

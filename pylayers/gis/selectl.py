@@ -74,7 +74,7 @@ class SelectL(object):
         #xmin,xmax,ymin,ymax = self.g.ax
         #ax = plt.axis('tight')
         axis = ax.axis()
-        print('show : axis',axis) 
+        #print('show : axis',axis) 
         #plt.axis(ax)
         self.L.display['clear'] = clear
         self.L.display['nodes'] = dnodes
@@ -132,7 +132,7 @@ class SelectL(object):
             self.nsel = self.L.ispoint(self.ptsel, dd / 100)
 
         #print "Selected point coord : ", self.ptsel
-        print "Selected point number: ", self.nsel
+        #print "Selected point number: ", self.nsel
         if self.nsel > 0:
             print "Selected Edge : ", self.nsel
 
@@ -321,8 +321,8 @@ class SelectL(object):
         ax  = plt.gca()
         sl = self.L.sl
         cold = pyu.coldict()
-        print "In State ",self.state
-        print "In Event ",self.evt
+        #print "In State ",self.state
+        #print "In Event ",self.evt
         #
         # Choose layers to visualized
         #
@@ -439,7 +439,7 @@ class SelectL(object):
                 self.update_state()
                 return
             if self.state == 'SS':
-                self.L.del_edge(self.selected_edge1)
+                self.L.del_segment(self.selected_edge1)
                 self.state = 'Init'
                 self.update_state()
                 return
@@ -508,7 +508,7 @@ class SelectL(object):
         # quit interactive mode
             fig.canvas.mpl_disconnect(self.L.cid1)
             fig.canvas.mpl_disconnect(self.L.cid2)
-            return 
+            return
         if self.evt == 'x':
         # save structure
             racine, ext = os.path.splitext(self.L.filename)
@@ -517,14 +517,15 @@ class SelectL(object):
             self.L.savestr2(filename)
             self.L.saveini(fileini)
             print "structure saved in ", filename
-            return 
+            print "structure saved in ", fileini
+            return
 
         if self.evt == 'n':
-            self.L.display['ndlabel'] = not self.L.display['ndlabel']  
-            self.L.display['edlabel'] = not self.L.display['edlabel']  
+            self.L.display['ndlabel'] = not self.L.display['ndlabel']
+            self.L.display['edlabel'] = not self.L.display['edlabel']
             fig,ax = self.show(fig=fig,ax=ax,clear=True, title=self.L.display['activelayer'])
             fig.canvas.draw()
-            return 
+            return
 
         if self.evt == 'w':
         # display all layer
@@ -657,7 +658,7 @@ class SelectL(object):
             if self.state == 'SP2':
                 ta = self.selected_pt1
                 he = self.selected_pt2
-                self.nsel  = self.L.add_edge(ta, he,name=self.current_layer)
+                self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
                 self.state = 'Init'
                 self.update_state()
                 return 
@@ -670,7 +671,7 @@ class SelectL(object):
                 alpha = np.sqrt(np.dot(pd1, pd1)) / np.sqrt(np.dot(pd2, pd2))
                 if (pt_new != []):
                     # calculate alpha
-                    self.L.add_none(self.selected_edge1, 1. - alpha)
+                    self.L.add_pons(self.selected_edge1, 1. - alpha)
                     self.current_layer = self.L.Gs.node[self.selected_edge1]['name']
                     self.state = 'Init'
                 self.update_state()

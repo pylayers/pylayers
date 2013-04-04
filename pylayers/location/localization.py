@@ -6,7 +6,7 @@ from SimPy.SimulationRT import Process,hold
 
 from pylayers.util import utilnet
 from pylayers.network.network import Network, Node
-from pylayers.location.locarule import Take_all,  merge_rules
+#from pylayers.location.locarule import Take_all,  merge_rules
 
 import pdb
 
@@ -24,7 +24,7 @@ class Localization(object):
 
     def __init__(self,**args):
         
-        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'rule':[Take_all()],'dc':[],'ID':'0','save':[]}
+        defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'ID':'0','save':[]}
 
         for key, value in defaults.items():
             if key in args:
@@ -35,7 +35,6 @@ class Localization(object):
         self.args = args
         self.config = ConfigParser.ConfigParser()
         self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
-
         self.cla = CLA()
         self.algloc=algloc()
         self.idx = 0
@@ -172,7 +171,7 @@ class Localization(object):
 
     def compute_geo(self,rat='all',ldp='all',pe=True):
         """
-            Compute postion with the geometric algorithm
+            Compute position with the geometric algorithm
         """
 
 
@@ -190,7 +189,7 @@ class Localization(object):
 
     def compute_alg(self,rat='all',ldp='all',pe=True):
         """
-            Compute postion with the algebraic algorithm
+            Compute position with the algebraic algorithm
         """
 
         if len(self.cla.c) !=0:
@@ -229,11 +228,13 @@ class PLocalization(Process):
 #        self.loc.get_const()
         self.loc.fill_cla()
         while True:
+
             self.loc.update(ldp='TOA')
             if 'geo'in self.method :
                 self.loc.compute_geo(ldp='TOA')
             if 'alg'in self.method :
                 self.loc.compute_alg(ldp='TOA')
+
             if self.sim.verbose:
                 print 'localization node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
