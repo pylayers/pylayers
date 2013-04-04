@@ -5,20 +5,21 @@ import os
 import pdb
 import glob
 import doctest
+import networkx as nx
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import struct as stru
-#from math import *
-#from Indoor import *
+# from math import *
+# from Indoor import *
 import pylayers.util.geomutil as geu
 import pylayers.util.pyutil as pyu
-from   pylayers.util.project import *
+from pylayers.util.project import *
 from pylayers.antprop.slab import *
 import ConfigParser
 import pdb
 from numpy.core.umath_tests import matrix_multiply
-#from numba import autojit
+# from numba import autojit
 #
 #  This file contains
 #
@@ -42,7 +43,7 @@ from numpy.core.umath_tests import matrix_multiply
 #
 #       class RayTud
 #           info()
-#           delay()  compliqué !!
+#           delay()  compliquÃ© !!
 #           eval(f)
 #
 #       class GrRayTud
@@ -63,17 +64,17 @@ from numpy.core.umath_tests import matrix_multiply
 #
 # A Faire :
 #
-#    Finir de coder les évaluations d'interaction
+#    Finir de coder les Ã©valuations d'interaction
 #    Construire le pont entre Ray3D et RayTud  ( Validation )
 #        equivalent de tra2tud
 #               CreateRays_TudFile2 dans Tud/Tud_rayon.c
 #               GetRayonsParam()
 #
-#    1 ) Lire simultanément .tra .tud .field et visualiser le tout
+#    1 ) Lire simultanÃ©ment .tra .tud .field et visualiser le tout
 #    2 ) Passer de .tra --> .tud
 #    3 ) Passer de .tud --> .field
 #
-#class Interaction(object):
+# class Interaction(object):
 #    """
 #       Interaction coefficient
 #       """
@@ -105,9 +106,9 @@ from numpy.core.umath_tests import matrix_multiply
 
 class Inter(object):
 
-    def __init__(self,typ=0,data=np.array(()),idx=[],_filesimul='default.ini'):
+    def __init__(self, typ=0, data=np.array(()), idx=[], _filesimul='default.ini'):
         """
-        Meta class of specific interactions ( Interactions, IntB/IntL/IntT/intR/intD) 
+        Meta class of specific interactions ( Interactions, IntB/IntL/IntT/intR/intD)
 
 
         Attributes
@@ -128,10 +129,9 @@ class Inter(object):
 
         """
 
-        self.typ=typ
-        self.data=data
-        self.idx=idx
-
+        self.typ = typ
+        self.data = data
+        self.idx = idx
 
         ## The config parser load is done in order to :
         ## All IntB/IntL/IntR/IntT/... inherits of the correct
@@ -143,42 +143,35 @@ class Inter(object):
         config.read(filesimul)
 
         ## frequency load
-        self.f=np.linspace(eval(config.get("frequency", "fghzmin"))
-                          ,eval(config.get("frequency", "fghzmax"))
-                          ,eval(config.get("frequency", "nf")))
-        self.nf=len(self.f)
+        self.f = np.linspace(eval(config.get("frequency", "fghzmin")), eval(
+            config.get("frequency", "fghzmax")), eval(config.get("frequency", "nf")))
+        self.nf = len(self.f)
         self.olf = np.ones(self.nf)
 
         ## slabDB load
-        self.slab=SlabDB(filemat=config.get("files", "mat"),
+        self.slab = SlabDB(filemat=config.get("files", "mat"),
                     fileslabini=config.get("files", "slab"))
 
-
-
-
-        self.idx=[]
+        self.idx = []
         if idx != []:
             self.idx.append(idx)
 
-        self.E=np.eye(2)
-
+        self.E = np.eye(2)
 
     def delay(self):
         """
             calculate delays of a given basis Interaction
         """
 
-        if self.typ in [1,2,3]: 
-            self.si0 = self.data[:,1]
-            self.sout = self.data[:,2]
+        if self.typ in [1, 2, 3]:
+            self.si0 = self.data[:, 1]
+            self.sout = self.data[:, 2]
         elif self.typ == 0:
             self.sout = self.data[0]
         elif self.typ == -1:
-            self.sout = np.zeros((len(self.data[:,0])))
+            self.sout = np.zeros((len(self.data[:, 0])))
 
-
-
-    def stack(self,a=np.array(()),idx=0,data=True):
+    def stack(self, a=np.array(()), idx=0, data=True):
         """
         stack data and the associated idx
 
@@ -186,7 +179,7 @@ class Inter(object):
         ----------
             a : np.array()
                 data to stack
-            idx : 
+            idx :
                 index to stack
             data: bool
                 False if you just want to stack idx (only used for intE class )
@@ -212,25 +205,24 @@ class Inter(object):
         [0, 1, 2]
         """
 
-        if isinstance(idx,int):
+        if isinstance(idx, int):
             try:
                 if data:
-                    self.data=np.vstack((self.data,a))
+                    self.data = np.vstack((self.data, a))
                 self.idx.append(idx)
-            except: 
+            except:
                 if self.idx == []:
                     if data:
-                        self.data=a
-                    self.idx=[idx]
-                else :
+                        self.data = a
+                    self.idx = [idx]
+                else:
                     raise NameError('Issue in Inter.stack')
 
-        elif isinstance(idx,list) or isinstance(idx,np.ndarray):
-            for ii,idx in enumerate(idx):
+        elif isinstance(idx, list) or isinstance(idx, np.ndarray):
+            for ii, idx in enumerate(idx):
                 if data:
-                    self.data=np.vstack((self.data,a[ii]))
+                    self.data = np.vstack((self.data, a[ii]))
                 self.idx.append(idx)
-
 
 
 class Interactions(Inter):
@@ -256,17 +248,16 @@ class Interactions(Inter):
         D : Diffraction
         """
         Inter.__init__(self)
-        self.di={}
-        self.di['B']=[]
-        self.di['L']=[]
-        self.di['R']=[]
-        self.di['T']=[]
-        self.di['D']=[]
-        self.evaluated=False
-        self.nimax=0
+        self.di = {}
+        self.di['B'] = []
+        self.di['L'] = []
+        self.di['R'] = []
+        self.di['T'] = []
+        self.di['D'] = []
+        self.evaluated = False
+        self.nimax = 0
 
-
-    def add(self,li):
+    def add(self, li):
         """ add a list of interactions
 
         Parameters
@@ -275,43 +266,40 @@ class Interactions(Inter):
             list of interactions
 
         """
-        # look for the total number of interraction 
-        
+        # look for the total number of interraction
+
         for i in li:
-            self.nimax=self.nimax+len(i.data)
+            self.nimax = self.nimax+len(i.data)
         for i in li:
             self.addi(i)
 
-
-
-    def addi(self,i):
+    def addi(self, i):
         """
             Add interactions as a member of Interactions class
         """
 
-        if not isinstance(self.typ,np.ndarray):
-            self.typ=np.zeros((self.nimax),dtype=str)
+        if not isinstance(self.typ, np.ndarray):
+            self.typ = np.zeros((self.nimax), dtype=str)
         if i.typ == -1:
             self.B = i
-            self.di['B']=i.idx
-            self.typ[i.idx]='B'
+            self.di['B'] = i.idx
+            self.typ[i.idx] = 'B'
         if i.typ == 0:
             self.L = i
-            self.di['L']=i.idx
-            self.typ[i.idx]='L'
+            self.di['L'] = i.idx
+            self.typ[i.idx] = 'L'
         if i.typ == 1:
             self.R = i
-            self.di['R']=i.idx
-            self.typ[i.idx]='R'
+            self.di['R'] = i.idx
+            self.typ[i.idx] = 'R'
         if i.typ == 2:
             self.T = i
-            self.di['T']=i.idx
-            self.typ[i.idx]='T'
+            self.di['T'] = i.idx
+            self.typ[i.idx] = 'T'
         if i.typ == 3:
             self.D = i
-            self.di['D']=i.idx
-            self.typ[i.idx]='D'
-
+            self.di['D'] = i.idx
+            self.typ[i.idx] = 'D'
 
     def eval(self):
         '''
@@ -336,63 +324,62 @@ class Interactions(Inter):
 
         # Instanciate the global I matrix which gathered all interactions
         # into a single np.array
-        self.I=np.zeros((self.nf,self.nimax,2,2),dtype=complex)
-        self.sout=np.zeros((self.nimax))
-        self.si0=np.zeros((self.nimax))
-        self.alpha=np.ones((self.nimax),dtype=complex)
-        self.gamma=np.ones((self.nimax),dtype=complex)
-
+        self.I = np.zeros((self.nf, self.nimax, 2, 2), dtype=complex)
+        self.sout = np.zeros((self.nimax))
+        self.si0 = np.zeros((self.nimax))
+        self.alpha = np.ones((self.nimax), dtype=complex)
+        self.gamma = np.ones((self.nimax), dtype=complex)
 
         # evaluate B and fill I
         try:
-            self.I[:,self.B.idx,:,:]=self.B.eval()
-            self.sout[self.B.idx]=self.B.sout
-            self.si0[self.B.idx]=self.B.si0
+            self.I[:, self.B.idx, :, :] = self.B.eval()
+            self.sout[self.B.idx] = self.B.sout
+            self.si0[self.B.idx] = self.B.si0
 
         except:
             pass
 
         # evaluate L and fill I
         try:
-            self.I[:,self.L.idx,:,:]=self.L.eval()
-            self.sout[self.L.idx]=self.L.sout
-            self.si0[self.L.idx]=self.L.si0
+            self.I[:, self.L.idx, :, :] = self.L.eval()
+            self.sout[self.L.idx] = self.L.sout
+            self.si0[self.L.idx] = self.L.si0
 
         except:
             pass
 
         # evaluate R and fill I
         try:
-            self.I[:,self.R.idx,:,:]=self.R.eval()
-            self.sout[self.R.idx]=self.R.sout
-            self.si0[self.R.idx]=self.R.si0
-            self.alpha[self.R.idx]=self.R.alpha
-            self.gamma[self.R.idx]=self.R.gamma
+            self.I[:, self.R.idx, :, :] = self.R.eval()
+            self.sout[self.R.idx] = self.R.sout
+            self.si0[self.R.idx] = self.R.si0
+            self.alpha[self.R.idx] = self.R.alpha
+            self.gamma[self.R.idx] = self.R.gamma
         except:
             pass
 
         # evaluate T and fill I
         try:
-            self.I[:,self.T.idx,:,:]=self.T.eval()
-            self.sout[self.T.idx]=self.T.sout
-            self.si0[self.T.idx]=self.T.si0
-            self.alpha[self.T.idx]=self.T.alpha
-            self.gamma[self.T.idx]=self.T.gamma
+            self.I[:, self.T.idx, :, :] = self.T.eval()
+            self.sout[self.T.idx] = self.T.sout
+            self.si0[self.T.idx] = self.T.si0
+            self.alpha[self.T.idx] = self.T.alpha
+            self.gamma[self.T.idx] = self.T.gamma
 
         except:
             pass
         # .. todo
         # evaluate D and fill I
         try:
-            self.I[:,self.D.idx,:,:]=self.D.eval()
-            self.sout[self.D.idx]=self.D.sout
-            self.si0[self.D.idx]=self.D.si0
-            self.alpha[self.D.idx]=self.D.alpha
-            self.gamma[self.D.idx]=self.D.gamma
+            self.I[:, self.D.idx, :, :] = self.D.eval()
+            self.sout[self.D.idx] = self.D.sout
+            self.si0[self.D.idx] = self.D.si0
+            self.alpha[self.D.idx] = self.D.alpha
+            self.gamma[self.D.idx] = self.D.gamma
         except:
             pass
 
-        self.evaluated=True
+        self.evaluated = True
 
 
 class IntB(Inter):
@@ -418,10 +405,9 @@ class IntB(Inter):
             (nf,ninter 2, 2)
 
     """
-    def __init__(self, data=np.array(()),idx=[]):
+    def __init__(self, data=np.array(()), idx=[]):
 
-        Inter.__init__(self,data=data,idx=idx,typ=-1)
-
+        Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def eval(self):
         """
@@ -448,15 +434,12 @@ class IntB(Inter):
 
         self.delay()
         if len(self.data) != 0:
-            lidx=len(self.idx)
-            data=self.data.reshape(lidx,2,2)
-            return(self.olf[:,np.newaxis,np.newaxis,np.newaxis]*data[np.newaxis,:,:,:])
-        else :
+            lidx = len(self.idx)
+            data = self.data.reshape(lidx, 2, 2)
+            return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
+        else:
             print 'no B interaction to evaluate'
-            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
-
-
-
+            return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
 
 
 class IntL(Inter):
@@ -475,9 +458,8 @@ class IntL(Inter):
         np.array:
             (nf ,ninter, 2, 2)
     """
-    def __init__(self, data=np.array(()),idx=[]):
-        Inter.__init__(self,data=data,idx=idx,typ=0)
-
+    def __init__(self, data=np.array(()), idx=[]):
+        Inter.__init__(self, data=data, idx=idx, typ=0)
 
     def eval(self):
         """
@@ -508,37 +490,35 @@ class IntL(Inter):
                 np.shape(self.data)[1]
             except:
                 # it means that self.data is not a matrix but a number
-                self.data=self.data.reshape(1,1)
+                self.data = self.data.reshape(1, 1)
             ## Friis formula
 #            self.data=self.data[:,0]
 #            dis = (0.3 / (4*np.pi*self.data[np.newaxis,:]*self.f[:,np.newaxis]))
 #            return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
 #            dis = self.data
-            return(self.olf[:,np.newaxis,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
-        else :
+            return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*self.E[np.newaxis, np.newaxis, :, :])
+        else:
             print 'no L interaction to evaluate'
-            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
+            return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
 
 
 class IntR(Inter):
     """ Reflexion interaction class
 
     """
-    def __init__(self, data=np.array(()),idx=[] ):
+    def __init__(self, data=np.array(()), idx=[]):
 #        self.theta = data[0]
 #        self.si = data[1]
 #        self.sr = data[2]
-        Inter.__init__(self,data=data,idx=idx,typ=1)
+        Inter.__init__(self, data=data, idx=idx, typ=1)
         ## index for used slab
         self.uslidx = 0
-        # dictionnary of used slab key = slab value = index of self.idx 
+        # dictionnary of used slab key = slab value = index of self.idx
         # WARNING The index of this dictionnary referes to the idex of self.idx
         # not to the global indx
-        self.dusl={}
+        self.dusl = {}
         self.alpha = [1]
         self.gamma = [1]
-
-
 
     def eval(self):
         """
@@ -593,33 +573,30 @@ class IntR(Inter):
         """
 
         self.delay()
-        self.A=np.zeros((self.nf,len(self.idx),2,2),dtype=complex)
+        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
         if len(self.data) != 0:
             mapp = []
             # loop on all type of materials used for reflexion
             for m in self.dusl.keys():
-                #used theta of the given slab
-                ut = self.data[self.dusl[m],0]
+                # used theta of the given slab
+                ut = self.data[self.dusl[m], 0]
                 # find the index of angles which satisfied the data
-                self.slab[m].ev(fGHz=self.f,theta=ut,RT='R')
+                self.slab[m].ev(fGHz=self.f, theta=ut, RT='R')
                 try:
-                    R=np.concatenate((R,self.slab[m].R),axis=1)
+                    R = np.concatenate((R, self.slab[m].R), axis=1)
                     mapp.extend(self.dusl[m])
                 except:
-                    R=self.slab[m].R
+                    R = self.slab[m].R
                     mapp.extend(self.dusl[m])
             # replace in correct order the reflexion coeff
-            self.A[:,np.array((mapp)),:,:]=R
-            self.alpha=np.array(self.alpha*len(self.idx),dtype=complex)
-            self.gamma=np.array(self.gamma*len(self.idx),dtype=complex)
+            self.A[:, np.array((mapp)), :, :] = R
+            self.alpha = np.array(self.alpha*len(self.idx), dtype=complex)
+            self.gamma = np.array(self.gamma*len(self.idx), dtype=complex)
             return(self.A)
-        else :
-            self.A=self.data[:,np.newaxis,np.newaxis,np.newaxis]
+        else:
+            self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]
             print 'no R interaction to evaluate'
             return(self.A)
-
-
-
 
 
 class IntT(Inter):
@@ -630,19 +607,19 @@ class IntT(Inter):
         data = np.array((ninter x [theta,si,st]))
 
     """
-    def __init__(self, data=np.array(()),idx=[]):
+    def __init__(self, data=np.array(()), idx=[]):
 
-        Inter.__init__(self,data=data,idx=idx,typ=2)
+        Inter.__init__(self, data=data, idx=idx, typ=2)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
-        self.dusl={}
-        self.alpha=[]
-        self.gamma=[]
+        self.dusl = {}
+        self.alpha = []
+        self.gamma = []
 
     def eval(self):
         """
-        example given for 
+        example given for
 
 
         Examples
@@ -688,61 +665,58 @@ class IntT(Inter):
         """
 
         self.delay()
-        self.A=np.zeros((self.nf,len(self.idx),2,2),dtype=complex)
-        self.alpha=np.zeros((len(self.idx)),dtype=complex)
-        self.gamma=np.zeros((len(self.idx)),dtype=complex)
-        self.sm=np.zeros((len(self.idx)),dtype=complex)
-        if len(self.data) !=0:
+        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
+        self.alpha = np.zeros((len(self.idx)), dtype=complex)
+        self.gamma = np.zeros((len(self.idx)), dtype=complex)
+        self.sm = np.zeros((len(self.idx)), dtype=complex)
+        if len(self.data) != 0:
             mapp = []
             for m in self.dusl.keys():
-                #used theta of the given slab
-                ut = self.data[self.dusl[m],0]
+                # used theta of the given slab
+                ut = self.data[self.dusl[m], 0]
 
                 # get alpha and gamma for divergence factor
                 if len(self.slab[m]['lmat']) > 1:
                     print 'Warning : IntR class implemented for mat with only 1 layer '
-                a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][0]['epr']])) *np.ones(len(ut),dtype=complex))
+                a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][
+                               0]['epr']])) * np.ones(len(ut), dtype=complex))
                 g = (1.-np.sin(ut)**2)/(1.-a*np.sin(ut)**2)
 
                 try:
-                    alpha=np.concatenate((alpha,a),axis=0)
-                    gamma=np.concatenate((gamma,g),axis=0)
+                    alpha = np.concatenate((alpha, a), axis=0)
+                    gamma = np.concatenate((gamma, g), axis=0)
                 except:
 #                    print 'Warning : alpha or gamma fail'
-                    alpha= a 
-                    gamma= g
+                    alpha = a
+                    gamma = g
 
                 # find the index of angles which satisfied the data
-                self.slab[m].ev(fGHz=self.f,theta=ut,RT='T',compensate = False)
-                
+                self.slab[m].ev(
+                    fGHz=self.f, theta=ut, RT='T', compensate=False)
+
                 try:
-                    T=np.concatenate((T,self.slab[m].T),axis=1)
+                    T = np.concatenate((T, self.slab[m].T), axis=1)
                     mapp.extend(self.dusl[m])
                 except:
-                    T=self.slab[m].T
+                    T = self.slab[m].T
                     mapp.extend(self.dusl[m])
             # replace in correct order the Transmission coeff
-            self.A[:,np.array((mapp)),:,:]=T
-            self.alpha[np.array((mapp))]=alpha
-            self.gamma[np.array((mapp))]=gamma
+            self.A[:, np.array((mapp)), :, :] = T
+            self.alpha[np.array((mapp))] = alpha
+            self.gamma[np.array((mapp))] = gamma
 #            self.sm[np.array((mapp))]=sm
             return(self.A)
 
-        else :
+        else:
             print 'no T interaction to evaluate'
-            return(self.data[:,np.newaxis,np.newaxis,np.newaxis])
-
-
-
-
-
+            return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
 
 
 class IntD(Inter):
     """ Diffraction interaction class
         .. todo to be implemented
     """
-    def __init__(self, data=np.array(()),idx=[]):
+    def __init__(self, data=np.array(()), idx=[]):
 #        self.theta = data1[0]
 #        self.thetad = data1[1]
 #        self.si = data1[2]
@@ -750,22 +724,20 @@ class IntD(Inter):
 #        self.beta = data1[4]
 #        self.N = data1[5]
 #        self.typed = data2[0]
-        Inter.__init__(self,data=data,idx=idx,typ=3)
-
+        Inter.__init__(self, data=data, idx=idx, typ=3)
 
     def eval(self):
 
         self.delay()
 
-        if len(self.data) !=0:
-            self.A=self.data[:,np.newaxis,np.newaxis,np.newaxis]
+        if len(self.data) != 0:
+            self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]
             return(self.A)
             print 'not yet implemented'
-        else :
-            self.A=self.data[:,np.newaxis,np.newaxis,np.newaxis]
+        else:
+            self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]
             print 'no D interaction to evaluate'
             return(self.A)
-
 
 
 class Ray2D(object):
@@ -861,8 +833,8 @@ class Ray3D(object):
         #
         # si : (N-1,3)
         #
-        #si  = np.array(np.zeros([nn-1,3],dtype=np.float64))
-        #lsi = np.array(np.zeros(nn-1,dtype=np.float64))
+        # si  = np.array(np.zeros([nn-1,3],dtype=np.float64))
+        # lsi = np.array(np.zeros(nn-1,dtype=np.float64))
         #
         # Calcul des vecteurs unitaires si
         # .. todo:: remove this for loop
@@ -873,7 +845,7 @@ class Ray3D(object):
         # reshape is required for broadcasting
         lsir = lsi.reshape(nn - 1, 1)
         si = v / lsir
-        #for k in range(nn-1):
+        # for k in range(nn-1):
         #    v  = self.pt[k+1,:]-self.pt[k,:]
         #    nv = np.sqrt(np.dot(v,v))
         #    try:
@@ -897,8 +869,8 @@ class Ray3D(object):
         eth = np.array([np.cos(th) * np.cos(ph),
                         np.cos(th) * np.sin(ph),
                         -np.sin(th)])
-        eph = np.array([-np.sin(ph), 
-                        np.cos(ph), 
+        eph = np.array([-np.sin(ph),
+                        np.cos(ph),
                         0.0])
         Bo0 = np.array([si[0, :], eth, eph]).transpose()
 
@@ -955,9 +927,9 @@ class Ray3D(object):
                 vn = np.array([0., 0., -1.0])
 
             # .. todo:: regler le proble de nstr sur rayon 358 : sircut.str
-            #try:
+            # try:
             #    ps = np.dot(vn,si[l,:])
-            #except:
+            # except:
             #    pdb.set_trace()
             #
             ps = np.dot(vn, si[l, :])
@@ -987,13 +959,13 @@ class Ray3D(object):
             # see GetRayonPram de tratotud.c
             #
             if typ == 1:  # Reflexion
-                #theta  = np.arccos(abs(ps))  'validated'
+                # theta  = np.arccos(abs(ps))  'validated'
                 theta = self.phii[l + 1]
                 siR = lsi[l]
                 srR = lsi[l + 1]
                 I = IntR([theta, siR, srR])
             if typ == 2:  # Transmission
-                #theta  = np.arccos(abs(ps))  'validated'
+                # theta  = np.arccos(abs(ps))  'validated'
                 theta = self.phii[l + 1]
                 siT = lsi[l]
                 srT = lsi[l + 1]
@@ -1018,15 +990,15 @@ class Ray3D(object):
         # Insert rotation matrices between interaction
         #
         # M = np.zeros((nn-1,2,2))
-        #gt.inter.append(I=[)
+        # gt.inter.append(I=[)
         for k in range(nn - 1):
             M = np.dot(self.Bo[k, :, 1::].T, self.Bi[k, :, 1::])
             I = IntB(M)
             self.gt.inter.insert(2 * k, I)
-            #M[k,:,:] = np.dot(self.Bo[k,:,1::].T,self.Bi[k,:,1::])
+            # M[k,:,:] = np.dot(self.Bo[k,:,1::].T,self.Bi[k,:,1::])
 
         self.gt.ni = 2 * nn - 3
-    #def show3(self,bdis=True,bbas=False,col=np.array([1,0,1]),id=0):
+    # def show3(self,bdis=True,bbas=False,col=np.array([1,0,1]),id=0):
 
     def delay(self):
         """ delay
@@ -1049,11 +1021,10 @@ class Ray3D(object):
         """ show a Ray projection in 2D
 
         """
-        if fig ==[]:
+        if fig == []:
             fig = plt.gcf()
-        if ax==[]:
+        if ax == []:
             ax = fig.gca()
-
 
         Nseg = self.nn - 1
         pt = self.pt[0:-1, 0:2].T
@@ -1069,9 +1040,9 @@ class Ray3D(object):
         ax.plot(vertices[0, :], vertices[1, :], color=col)
         if node:
             ax.plot(self.pt[:, 0], self.pt[:, 1], 'ok')
-        return fig,ax
+        return fig, ax
 
-    def show3(self, _filestr='defstr',bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
+    def show3(self, _filestr='defstr', bdis=True, bbas=False, bstruc=True, col=np.array([1, 0, 1]), id=0, linewidth=1):
         """ show3(bdis=True,bbas=False,bstruc=True,col=np.array([1,0,1]),id=0)
 
         Parameters
@@ -1108,7 +1079,7 @@ class Ray3D(object):
         for i in range(self.nn):
             fo.write("%g %g %g\n" % (self.pt[i, 0], self.pt[i,
                                                             1], self.pt[i, 2]))
-        #fo.write("%d %d %d 0\n" % (col[0],col[1],col[2]))
+        # fo.write("%d %d %d 0\n" % (col[0],col[1],col[2]))
         fo.write("%g %g %g 0\n" % (col[0], col[1], col[2]))
         fo.close()
 
@@ -1120,8 +1091,8 @@ class Ray3D(object):
         fo.write("LIST\n")
         fo.write("{<" + filename_vect + "}\n")
         if (bstruc):
-            #fo.write("{<strucTxRx.off}\n")
-            fo.write("{<" +_filestr +".off}\n")
+            # fo.write("{<strucTxRx.off}\n")
+            fo.write("{<" + _filestr + ".off}\n")
         if (bbas):
             for i in range(self.nn - 1):
                 ptb = (self.pt[i + 1, :] + self.pt[i, :]) / 2
@@ -1242,24 +1213,24 @@ class RayTud(object):
 
 
         """
-        nf     = len(fGHz)
-        self.C = np.zeros((2,2),dtype=complex).reshape(1,2,2)
-        Co     = np.eye(2,2,dtype=complex).reshape(1,2,2)
+        nf = len(fGHz)
+        self.C = np.zeros((2, 2), dtype=complex).reshape(1, 2, 2)
+        Co = np.eye(2, 2, dtype=complex).reshape(1, 2, 2)
         #
         # Loop over all the ray interactions
         #   + left matrix multiplication
         #   + broadcasting along frequency axis
         #
         for i in range(self.ni):
-            I  = self.inter[i]
+            I = self.inter[i]
             Ci = I.eval(fGHz)
-            Co = np.einsum('kpq,kqr->kpr',Ci,Co)
+            Co = np.einsum('kpq,kqr->kpr', Ci, Co)
         self.nf = nf
         self.C = Co
 
 
 class GrRayTud(object):
-    """  a cluster of Rays in Tud format 
+    """  a cluster of Rays in Tud format
 
     Attributes
     ----------
@@ -1286,9 +1257,7 @@ class GrRayTud(object):
         # Interactions instance
         self.I = Interactions()
         # dictionnay of interaction legth
-        self.dli={}
-
-
+        self.dli = {}
 
     def dir(self):
         """ list the available file in tuddir
@@ -1379,7 +1348,7 @@ class GrRayTud(object):
         sl.mat = Slab.MatDB()
         sl.mat.load(_filemat)
         sl.load(_fileslab)
-        #indoor = Indoor(sl,_filestr)
+        # indoor = Indoor(sl,_filestr)
         self.load(_filetud, sl)
 
     def save(self, _filetud='ftud', _filetang='ftang', _filerang='frang'):
@@ -1396,8 +1365,8 @@ class GrRayTud(object):
         """
 
         filetud = pyu.getlong(_filetud, pstruc['DIRTUD'])
-        filetang = pyu.getlong(_filetang,pstruc['DIRTUD'] )
-        filerang = pyu.getlong(_filerang,pstruc['DIRTUD'])
+        filetang = pyu.getlong(_filetang, pstruc['DIRTUD'])
+        filerang = pyu.getlong(_filerang, pstruc['DIRTUD'])
 
         fo = open(filetud, "wb")
         data = stru.pack('i', self.nray)
@@ -1437,7 +1406,9 @@ class GrRayTud(object):
                     data = data + dt
                     dt = stru.pack('i', it.typed)
                     data = data + dt
-                dt = stru.pack('8i', it.datMat[0], it.datMat[1], it.datMat[2], it.datMat[3],
+                dt = stru.pack(
+                    '8i', it.datMat[0], it.datMat[
+                        1], it.datMat[2], it.datMat[3],
                                it.datMat[4], it.datMat[5], it.datMat[6], it.datMat[7])
                 data = data + dt
         fo.write(data)
@@ -1455,8 +1426,6 @@ class GrRayTud(object):
             fo.write(stru.pack('2d', ag[0], ag[1]))
         fo.close()
 
-
-
     def load(self, _filetud, _filetang, _filerang, sl):
         """ Load a set of Ray from the PulsRay .tud file
 
@@ -1473,7 +1442,7 @@ class GrRayTud(object):
 
         Examples
         --------
-        
+
         .. plot::
             :include-source:
 
@@ -1487,8 +1456,8 @@ class GrRayTud(object):
         valerr = False
 
         filetud = pyu.getlong(_filetud, pstruc['DIRTUD'])
-        filetang = pyu.getlong(_filetang,pstruc['DIRTUD'])
-        filerang = pyu.getlong(_filerang,pstruc['DIRTUD'])
+        filetang = pyu.getlong(_filetang, pstruc['DIRTUD'])
+        filerang = pyu.getlong(_filerang, pstruc['DIRTUD'])
 
         fo = open(filetud, "rb")
         data = fo.read()
@@ -1500,17 +1469,18 @@ class GrRayTud(object):
         self.nray = stru.unpack('i', dt)[0]
         self.rayTud = []
 
-        nimax= 0
-        index= 0
-        ## in order to inialize all type of interaction with the correct frequencies
+        nimax = 0
+        index = 0
+        # in order to inialize all type of interaction with the correct
+        # frequencies
 
-        B=IntB()
-        L=IntL()
-        R=IntR()
-        T=IntT()
-        D=IntD()
+        B = IntB()
+        L = IntL()
+        R = IntR()
+        T = IntT()
+        D = IntD()
 
-        self.mapp=np.zeros((3))
+        self.mapp = np.zeros((3))
         for k in range(self.nray):
             nir = 0
             raytud = RayTud()
@@ -1523,10 +1493,9 @@ class GrRayTud(object):
             # if ni==0  : LOS case no interaction
             #
             nbint = stru.unpack('i', dt)[0]
-            nbi=nbint
+            nbi = nbint
 #            raytud.ni = nbint
 #            Inter = []
-
 
             for i in range(nbint):
                 start = stop
@@ -1538,51 +1507,51 @@ class GrRayTud(object):
                     decal = False
                     if (caract != -1):
                         # check if first interaction is a IntB.
-                        # if not, itthis first interaction is forced to be 
+                        # if not, itthis first interaction is forced to be
                         # an identity matrix
-                        M=np.array((1,0,0,1))
+                        M = np.array((1, 0, 0, 1))
                         try:
-                            B.stack(M,index)#inter = IntB(M)
+                            B.stack(M, index)  # inter = IntB(M)
                         except:
-                            B=IntB(data=M,idx=index)
+                            B = IntB(data=M, idx=index)
                         # because this id matrix, the ray has 1 extra interaction
-                        # so we need to 
-                        # 1.create the correct key dictionnary 
+                        # so we need to
+                        # 1.create the correct key dictionnary
                         # 2.remap the index
-                        # 3. use another varaible loop (ii) incremented 
+                        # 3. use another varaible loop (ii) incremented
 
-                        nbi=nbi+1
-
-                    try:
-                        self.dli[nbi]['rays']=np.vstack((self.dli[nbi]['rays'],np.zeros((1,nbi),dtype=int)))
-                        self.dli[nbi]['nbrays']=self.dli[nbi]['nbrays']+1
-                        self.dli[nbi]['rayidx']=np.hstack((self.dli[nbi]['rayidx'],np.array(([k]))))
-
-                    except:
-                        self.dli[nbi]={}
-                        self.dli[nbi]['rays']=np.zeros((1,nbi),dtype=int)
-                        self.dli[nbi]['nbrays']=1
-                        self.dli[nbi]['rayidx']=np.array(([k]))
-
+                        nbi = nbi+1
 
                     try:
-                        self.rayidx=np.hstack((self.rayidx,np.array((nbi))))
-                    except:
-                        self.rayidx=np.array((nbi))
+                        self.dli[nbi]['rays'] = np.vstack((self.dli[
+                                                          nbi]['rays'], np.zeros((1, nbi), dtype=int)))
+                        self.dli[nbi]['nbrays'] = self.dli[nbi]['nbrays']+1
+                        self.dli[nbi]['rayidx'] = np.hstack((
+                            self.dli[nbi]['rayidx'], np.array(([k]))))
 
+                    except:
+                        self.dli[nbi] = {}
+                        self.dli[nbi]['rays'] = np.zeros((1, nbi), dtype=int)
+                        self.dli[nbi]['nbrays'] = 1
+                        self.dli[nbi]['rayidx'] = np.array(([k]))
+
+                    try:
+                        self.rayidx = np.hstack((self.rayidx, np.array((nbi))))
+                    except:
+                        self.rayidx = np.array((nbi))
 
                     if nbi != nbint:
-                        self.dli[nbi]['rays'][-1][ii]=index
-                        self.mapp=np.vstack((self.mapp,np.array([index,k,-1])))
-                        index=index+1
-                        decal=True
-
+                        self.dli[nbi]['rays'][-1][ii] = index
+                        self.mapp = np.vstack((
+                            self.mapp, np.array([index, k, -1])))
+                        index = index+1
+                        decal = True
 
                 # decal = True if an extra B interaction is added at the begining
                 # of the ray
-                if decal :
+                if decal:
                     ii = i + 1
-                self.dli[nbi]['rays'][-1][ii]=index
+                self.dli[nbi]['rays'][-1][ii] = index
                 # B interaction
                 if (caract == -1):
                     start = stop
@@ -1591,11 +1560,11 @@ class GrRayTud(object):
                     m = stru.unpack('4d', dt)
                     M = np.array((m[0], m[1], m[2], m[3]))
                     try:
-                        B.stack(M,index)#inter = IntB(M)
+                        B.stack(M, index)  # inter = IntB(M)
                     except:
                         print 'except B'
-                        B=IntB(data=M,idx=index)
-                    index=index+1
+                        B = IntB(data=M, idx=index)
+                    index = index+1
 #                   M = np.array([[m[0], m[1]], [m[2], m[3]]])
 #                    inter = IntB(M)
             #        inter.data = M
@@ -1608,11 +1577,11 @@ class GrRayTud(object):
                     dist = stru.unpack('d', dt)
                     dist = np.array((dist))
                     try:
-                        L.stack(dist,index)#inter = IntB(M)
+                        L.stack(dist, index)  # inter = IntB(M)
                     except:
                         print 'except L'
-                        L=IntL(dist,index)
-                    index=index+1
+                        L = IntL(dist, index)
+                    index = index+1
 #                    inter = IntL(dist[0])
             #        inter.data = dist
 
@@ -1622,12 +1591,12 @@ class GrRayTud(object):
                     stop = start + 24
                     dt = data[start:stop]
                     datR = stru.unpack('3d', dt)
-                    dat=np.array((datR[0],datR[1],datR[2]))
+                    dat = np.array((datR[0], datR[1], datR[2]))
                     try:
-                        R.stack(dat,index)#inter = IntB(M)
+                        R.stack(dat, index)  # inter = IntB(M)
                     except:
                         print 'except R'
-                        R=IntR(dat,index)
+                        R = IntR(dat, index)
 #                    inter = IntR(datR)
 #            #        inter.data = datR
                     index = index+1
@@ -1638,16 +1607,15 @@ class GrRayTud(object):
                     stop = start + 24
                     dt = data[start:stop]
                     datT = stru.unpack('3d', dt)
-                    dat = np.array((datT[0],datT[1],datT[2]))
+                    dat = np.array((datT[0], datT[1], datT[2]))
                     try:
-                        T.stack(dat,index)
+                        T.stack(dat, index)
                     except:
                         print 'except T'
-                        T=IntT(dat,index)
+                        T = IntT(dat, index)
                     index = index+1
 #                    inter = IntT(datT)
 #            #        inter.data = datT
-
 
                 # Diffraction interaction
 ######################## TODO AFTER THIS POINT !!!!!!!!!!!!!!
@@ -1667,7 +1635,6 @@ class GrRayTud(object):
 #                    inter = IntD(datD, typD)
 #            #        (inter.data).append(typD)
 
-
                 nir = nir+1
                 start = stop
                 stop = start + 32
@@ -1686,20 +1653,16 @@ class GrRayTud(object):
 #  if interaction is reflexion or transmission
 #                if caract == 1 or caract == 2 or caract == 3:
 
-
                     ## find corresponding name
 #                    slname = self.I.slab.di[slidx]
-#                    # if the material hasn't be evaluated before 
+#                    # if the material hasn't be evaluated before
 #                    if not self.I.slab[slname]['evaluated']:
 #                        # evaluate it
 #                        print "evaluate",slname
 #                        self.I.slab[slname].ev(fGHz=self.I.f, theta=self.I.t)
-
-
                 ### fill slab index dictionnary for each type of interactions
-
                 if caract == 1:
-                    ## read material index 
+                    ## read material index
 
                     slidx = c1
                     ## find corresponding name
@@ -1707,7 +1670,7 @@ class GrRayTud(object):
                     try:
                         R.dusl[slname].append(R.uslidx)
                     except:
-                        R.dusl[slname]=[R.uslidx]
+                        R.dusl[slname] = [R.uslidx]
                     R.uslidx = R.uslidx + 1
                 if caract == 2:
                     slidx = c1
@@ -1715,7 +1678,7 @@ class GrRayTud(object):
                     try:
                         T.dusl[slname].append(T.uslidx)
                     except:
-                        T.dusl[slname]=[T.uslidx]
+                        T.dusl[slname] = [T.uslidx]
                     T.uslidx = T.uslidx + 1
             # in case of diffraction
                 if caract == 3:
@@ -1724,18 +1687,16 @@ class GrRayTud(object):
         ### the total number of interaction( for all rays)
 #        self.I.nimax=index
         ### Add all type of interactions into the Interaction class
-        self.I.add([B,L,R,T,D])
+        self.I.add([B, L, R, T, D])
 
-
-
-    def ray(self,r):
+    def ray(self, r):
         """
             Give the ray number and it retruns the index of its interactions
         """
-        raypos=np.nonzero(self.dli[self.rayidx[r]]['rayidx']==r)
+        raypos = np.nonzero(self.dli[self.rayidx[r]]['rayidx'] == r)
         return(self.dli[self.rayidx[r]]['rays'][raypos][0])
 
-    def typ(self,r):
+    def typ(self, r):
         """
             return the list of interaction type of a given ray
         """
@@ -1743,22 +1704,18 @@ class GrRayTud(object):
         a = self.ray(r)
         return(self.I.typ[a])
 
-
-
-
     def eval(self):
         """
         evaluation of Ctilde
         """
         print 'GrRayTUD evaluation'
-        if not self.I.evaluated :
+        if not self.I.evaluated:
             self.I.eval()
 
-        self.Ctilde=np.zeros((self.I.nf,self.nray,2,2),dtype=complex)
-        self.delays=np.zeros((self.nray))
-        self.dis=np.zeros((self.nray))
-        nf = self.I.nf # number of frequence
-
+        self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
+        self.delays = np.zeros((self.nray))
+        self.dis = np.zeros((self.nray))
+        nf = self.I.nf  # number of frequence
 
         for l in self.dli.keys():
             # l stands for the number of interactions
@@ -1767,21 +1724,19 @@ class GrRayTud(object):
             # reshape ray index
             rrl = self.dli[l]['rays'].reshape(r*l)
             # get the corresponding evaluated interactions
-            A=self.I.I[:,rrl,:,:].reshape(self.I.nf,r,l,2,2)
-            alpha = self.I.alpha[rrl].reshape(r,l)
-            gamma = self.I.gamma[rrl].reshape(r,l)
-            si0 = self.I.si0[rrl].reshape(r,l)
-            sout = self.I.sout[rrl].reshape(r,l)
+            A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+            alpha = self.I.alpha[rrl].reshape(r, l)
+            gamma = self.I.gamma[rrl].reshape(r, l)
+            si0 = self.I.si0[rrl].reshape(r, l)
+            sout = self.I.sout[rrl].reshape(r, l)
 
             try:
                 del Z
             except:
                 pass
 
-
-
             ## loop on the all the interactions of ray with l interactions
-            for i in range(1,l-1,2):
+            for i in range(1, l-1, 2):
 
 ###########################################
 #                # Divergence factor D
@@ -1810,12 +1765,12 @@ class GrRayTud(object):
 #                    rho1=rho1+(sout[:,i]*alpha[:,i])
 #                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
 ###########################################
-                    
+
                 #  A0  (X dot Y)
                 #  |    |     |
                 #  v    v     v
                 ##########################
-                ## B  # I  # B  # I  # B # 
+                ## B  # I  # B  # I  # B #
                 ##########################
                 #      \_____/   \______/
                 #         |         |
@@ -1823,114 +1778,114 @@ class GrRayTud(object):
                 #
                 # Z=Atmp(i) dot Atmp(i+1)
 
-                X=A[:,:,i,:,:]
-                Y=A[:,:,i+1,:,:]
+                X = A[:, :, i, :, :]
+                Y = A[:, :, i+1, :, :]
                 ## Dot product interaction X Basis
-                Atmp = np.sum(X[...,:,:,np.newaxis]*Y[...,np.newaxis,:,:], axis=-2)#*D[np.newaxis,:,np.newaxis,np.newaxis]
+                Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
+                              ..., np.newaxis, :, :], axis=-2)  # *D[np.newaxis,:,np.newaxis,np.newaxis]
                 if i == 1:
                 ## First Baspdis added
-                    A0=A[:,:,i-1,:,:]
-                    Z=np.sum(A0[...,:,:,np.newaxis]*Atmp[...,np.newaxis,:,:], axis=-2)
-                else :
+                    A0 = A[:, :, i-1, :, :]
+                    Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
+                               ..., np.newaxis, :, :], axis=-2)
+                else:
                     # dot product previous interaction with latest
-                    Z=np.sum(Z[...,:,:,np.newaxis]*Atmp[...,np.newaxis,:,:], axis=-2)
+                    Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
+                               ..., np.newaxis, :, :], axis=-2)
 
             # fill the C tilde
-            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=Z[:,:,:,:]
-            
-
+            self.Ctilde[:, self.dli[l]['rayidx'], :, :] = Z[:, :, :, :]
 
             # delay computation:
-            self.dli[l]['dis']=self.I.si0[self.dli[l]['rays'][:,1]] + np.sum(self.I.sout[self.dli[l]['rays']],axis=1)
-
+            self.dli[l]['dis'] = self.I.si0[self.dli[l]['rays'][
+                :, 1]] + np.sum(self.I.sout[self.dli[l]['rays']], axis=1)
 
             # Power losses due to distances
             # will be removed once the divergence factor will be implemented
-            self.Ctilde[:,self.dli[l]['rayidx'],:,:]=self.Ctilde[:,self.dli[l]['rayidx'],:,:]*1./(self.dli[l]['dis'][np.newaxis,:,np.newaxis,np.newaxis])
-            self.delays[self.dli[l]['rayidx']]=self.dli[l]['dis']/0.3
-            self.dis[self.dli[l]['rayidx']]=self.dli[l]['dis']
+            self.Ctilde[:, self.dli[l]['rayidx'], :, :] = self.Ctilde[:, self.dli[l][
+                'rayidx'], :, :]*1./(self.dli[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+            self.delays[self.dli[l]['rayidx']] = self.dli[l]['dis']/0.3
+            self.dis[self.dli[l]['rayidx']] = self.dli[l]['dis']
 
-
-
-    def info(self,r):
+    def info(self, r):
         '''
-            information for a given ray r 
+            information for a given ray r
 
         Attributes
         ----------
         r : a ray number
-        
+
         '''
         print '-------------------------'
-        print 'Informations of ray #',r
+        print 'Informations of ray #', r
         print '-------------------------\n'
 
-
-        ray=self.ray(r)
+        ray = self.ray(r)
         typ = self.typ(r)
-        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index','type','material','th(rad)','alpha','gamma2')
-        for iidx,i in enumerate(typ):
+        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index', 'type', 'material', 'th(rad)', 'alpha', 'gamma2')
+        for iidx, i in enumerate(typ):
             if i == 'T' or i == 'R':
-                I=getattr(self.I,i)
+                I = getattr(self.I, i)
                 for m in I.dusl.keys():
-                    midx=I.dusl[m]
-                    Iidx=np.array((I.idx))[midx]
-                    th = I.data[I.dusl[m],0]
+                    midx = I.dusl[m]
+                    Iidx = np.array((I.idx))[midx]
+                    th = I.data[I.dusl[m], 0]
                     gamma = I.gamma[midx]
                     alpha = I.alpha[midx]
-                    for ii,Ii in enumerate(Iidx):
+                    for ii, Ii in enumerate(Iidx):
                         if Ii in ray:
-                            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii,i,m,th[ii],alpha[ii],gamma[ii] )
-            else :
-                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx],i,'-','-','-','-')
+                            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, m, th[ii], alpha[ii], gamma[ii])
+            else:
+                print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
         print '\n----------------------------------------'
-        print ' Matrix of ray #',r, 'at f=',self.I.f[0]
+        print ' Matrix of ray #', r, 'at f=', self.I.f[0]
         print '----------------------------------------'
 
-        for iidx,i in enumerate(typ):
-            print 'interaction #',ray[iidx],'type:',i
-            print self.I.I[0,ray[iidx],:,:]
+        for iidx, i in enumerate(typ):
+            print 'interaction #', ray[iidx], 'type:', i
+            print self.I.I[0, ray[iidx], :, :]
 
-    def imshowinter(self,r,f,evaluated=False,show=True):
+    def imshowinter(self, r, f, evaluated=False, show=True):
         """
-            im show interactions for 
-            a given ray r and 
+            im show interactions for
+            a given ray r and
             a given freq index f
         """
         plt.ion()
         nbinter = self.rayidx[r]
-        # find the position of the ray into the dictionnary of legnth of interactions
-        pray = np.nonzero(self.dli[nbinter]['rayidx']==r)
+        # find the position of the ray into the dictionnary of legnth of
+        # interactions
+        pray = np.nonzero(self.dli[nbinter]['rayidx'] == r)
         # get the interaciton idx
         inter = self.dli[nbinter]['rays'][pray][0]
-        fig,axs=plt.subplots(nrows=2,ncols=nbinter,sharex=True,sharey=True)
-        for i,data in enumerate(self.I.I[f,inter]):
-            axs[0,i].imshow(np.imag(data),interpolation='none')
-            axs[1,i].imshow(np.real(data),interpolation='none')
-            axs[1,i].set_xlabel('inter'+self.I.typ[inter[i]])
+        fig, axs = plt.subplots(
+            nrows=2, ncols=nbinter, sharex=True, sharey=True)
+        for i, data in enumerate(self.I.I[f, inter]):
+            axs[0, i].imshow(np.imag(data), interpolation='none')
+            axs[1, i].imshow(np.real(data), interpolation='none')
+            axs[1, i].set_xlabel('inter'+self.I.typ[inter[i]])
             if i == 0:
-                axs[0,i].set_ylabel('imag')
-                axs[1,i].set_ylabel('real')
+                axs[0, i].set_ylabel('imag')
+                axs[1, i].set_ylabel('real')
             if i == nbinter-1:
-                axs[0,i].colorbar()
-
+                axs[0, i].colorbar()
 
         if self.I.evaluated and evaluated:
-            fig2,axs2=plt.subplots(nrows=2,ncols=1,sharex=True,sharey=True)
-            data=self.dli[nbinter]['Ctilde'][f,pray,:,:]
-            data=data.reshape(2,2)
-            axs2[0].imshow(np.imag(data),interpolation='none')
-            axs2[1].imshow(np.real(data),interpolation='none')
-            axs2[1].set_xlabel('Ctilde ray number :' +str(r))
+            fig2, axs2 = plt.subplots(
+                nrows=2, ncols=1, sharex=True, sharey=True)
+            data = self.dli[nbinter]['Ctilde'][f, pray, :, :]
+            data = data.reshape(2, 2)
+            axs2[0].imshow(np.imag(data), interpolation='none')
+            axs2[1].imshow(np.real(data), interpolation='none')
+            axs2[1].set_xlabel('Ctilde ray number :' + str(r))
             axs2[0].set_ylabel('imag')
             axs2[1].set_ylabel('real')
             if i == nbinter-1:
-                axs[0,i].colorbar()
+                axs[0, i].colorbar()
 
-        if show :
+        if show:
             plt.show()
-
 
     def get_thetas(self):
         """
@@ -1941,13 +1896,12 @@ class GrRayTud(object):
             np.array containg all incidence angles theta from all rays
 
         """
-        th=[]
+        th = []
         for r in self.rayTud:
-            for idx,i in enumerate(r.inter):
-                if not (isinstance(i,IntB) or isinstance(i,IntL)):
+            for idx, i in enumerate(r.inter):
+                if not (isinstance(i, IntB) or isinstance(i, IntL)):
                     th.append(r.inter[idx].theta)
         return(np.unique(th))
-
 
     def get_mat(self):
         """
@@ -1958,24 +1912,21 @@ class GrRayTud(object):
             np.array containg all materials involved in raytracing
 
         """
-        mat=[]
+        mat = []
         for r in self.rayTud:
-            for idx,i in enumerate(r.inter):
-                if not (isinstance(i,IntB) or isinstance(i,IntL)):
-                    for midx,m in enumerate(r.inter[idx].Mat1):
+            for idx, i in enumerate(r.inter):
+                if not (isinstance(i, IntB) or isinstance(i, IntL)):
+                    for midx, m in enumerate(r.inter[idx].Mat1):
                         mat.append(r.inter[idx].Mat1[midx]['name'])
         return(np.unique(mat))
-
 
 
 #    def info(self, n=-1):
 #        """ info
 #        Parameters
 #        ----------
-
 #        n : int
 #            ray index (default = -1 all rays)
-
 #        """
 #        print "Nb rayons : ", self.nray
 #        if n == -1:
@@ -1986,6 +1937,457 @@ class GrRayTud(object):
 #        else:
 #            print "rayon no : ", n
 #            self.rayTud[n].info()
+class Rays(dict):
+    def __init__(self, pTx, pRx):
+        self.pTx = pTx
+        self.pRx = pRx
+
+    def show(self, L):
+        """  plot 2D rays within the simulated environment
+
+        Parameters
+        ----------
+
+            L : Layout
+
+        """
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        L.showGs(fig, ax)
+        ax.plot(self.pTx[0], self.pTx[1], 'or')
+        ax.plot(self.pRx[0], self.pRx[1], 'og')
+        for i in self.keys():
+            for j in range(len(self[i]['pt'][0, 0, :])):
+                ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
+                                 np.hstack((self[i]['pt'][0:2, :, j],
+                                            self.pRx[0:2].reshape((2, 1))))
+                                 ))
+                ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
+
+    def mirror(self, H=3, N=1):
+        """ mirror
+
+        Parameters
+        ----------
+
+        H : float
+            ceil height (default 3m)
+
+        N : int
+            handle the number of mirror reflexions
+
+        """
+        km = np.arange(-N+1, N+1, 1)
+        kp = np.arange(-N, N+1, 1)
+        ht = self.pTx[2]
+        hr = self.pRx[2]
+        zkp = 2*kp*H + ht
+        zkm = 2*km*H - ht
+
+        d = {}
+
+        for zm in zkm:
+            if zm < 0:
+                bup = H
+                pas = H
+                km = int(np.ceil(zm/H))
+            else:
+                bup = 0
+                pas = -H
+                km = int(np.floor(zm/H))
+            thrm = np.arange(km*H, bup, pas)
+            d[zm] = abs(thrm-zm)/abs(hr-zm)
+
+        for zp in zkp:
+            if zp < 0:
+                bup = H
+                pas = H
+                kp = int(np.ceil(zp/H))
+            else:
+                bup = 0
+                pas = -H
+                kp = int(np.floor(zp/H))
+            thrp = np.arange(kp*H, bup, pas)
+            d[zp] = alphap = abs(thrp-zp)/abs(hr-zp)
+            # print "zp",zp
+            # print "kp",kp
+            # print "thrp",thrp
+            # print "alphap",d[zp]
+
+        return(d)
+
+    def to3D(self, H=3, N=1):
+        """ transform 2D ray to 3D ray
+
+        Parameters
+        ----------
+
+        H : float
+            ceil height (default 3m)
+
+        N : int
+            handle the number of mirror reflexions
+
+        Notes
+        -----
+
+
+        """
+
+        tx = self.pTx
+        rx = self.pRx
+        #
+        # Phase 1 : calculate Tx images height and vertical parameterization
+        #
+
+        d = self.mirror(H=H, N=N)
+
+        #
+        # Phase 2 : calculate 2D parameterization
+        #
+
+        for i in self:
+            pts = self[i]['pt'][0:2, :, :]
+            sig = self[i]['sig']
+            t = self.pTx[0:2].reshape((
+                2, 1, 1)) * np.ones((1, 1, len(pts[0, 0, :])))
+            r = self.pRx[0:2].reshape((
+                2, 1, 1)) * np.ones((1, 1, len(pts[0, 0, :])))
+            pts1 = np.hstack((t, np.hstack((pts, r))))
+            si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
+            si = np.sqrt(np.sum(si1 * si1, axis=0))
+            al1 = np.cumsum(si, axis=0)
+            self[i]['alpha'] = np.zeros(np.shape(si[:-1, :]))
+
+            for j in range(len(self[i]['alpha'][:, 0])):
+                self[i]['alpha'][j, :] = np.sum(si[0:j+1, :], axis=0)/np.sum(si, axis=0)
+                self[i]['pt'][2, j, :] = tx[2] + self[i]['alpha'][j,:] * (rx[2] - tx[2])
+
+        #
+        #  Phase 3 : Initialize 3D rays dictionnary
+        #
+        r3d = Rays(tx, rx)
+        r3d.is3D = True
+
+        #
+        # Phase 4 : Fill 3D rays information
+        #
+        # Two nested loops
+        #
+        #      for all interaction group
+        #          for all type of 3D rays
+        #             extension
+        #             sort
+        #             coordinates as a function of parameter
+        #
+        for k in self:   # for all interaction group k
+            #k = int(k)
+            Nrayk = np.shape(self[k]['alpha'])[1]  # Number of rays in interaction group k
+            a1 = self[k]['alpha']           # get  2D parameterization
+            sig = self[k]['sig']            # get  2D signature
+            a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1,Nrayk))))    # add parameterization of tx and rx (0,1)
+            sig = np.hstack((np.zeros((2, 1, Nrayk),dtype=int),
+                             sig,
+                             np.zeros((2,1,Nrayk),dtype=int)))  # add signature of Tx and Rx (0,0))
+            Tx = tx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
+            Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
+            pte = self[k]['pt']             # ndim x k x Nrayk
+            pte = np.hstack((Tx, pte, Rx))       # ndim x k+2 x Nrayk
+            for l in d:                          # for each vertical pattern (C,F,CF,FC,....)
+                Nint = len(d[l])                 # number of additional interaction
+                if Nint > 0:                     # if new interaction ==> need extension
+                    a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*np.ones((1, Nrayk))))  # extended old parameterization
+                    ks = np.argsort(a1e, axis=0) # get sorted indices
+                    a1es = np.sort(a1e, axis=0)  # sorted extended parameterization
+                    ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))     # ndim x (Nint+k+2) x Nrayk
+                    if l < 0:
+                        u = np.mod(range(Nint), 2)
+                    else:
+                        u = 1 - np.mod(range(Nint), 2)
+
+                    esigs = np.zeros((1, Nint, Nrayk),dtype=int)
+                    esigi = (u+4).reshape(1, Nint, 1)*np.ones((1, 1, Nrayk),dtype=int)
+                    esig = np.vstack((esigs, esigi))
+                    # sige   = np.hstack((sig,np.zeros((2,Nint,Nrayk))))
+                    # # 2 x (Nint+k+2) x Nrayk
+                    sige = np.hstack((sig, esig))
+                                       # 2 x (Nint+k+2) x Nrayk
+                    ptees = ptee[:, ks, range( Nrayk)]     # sorted points
+                    siges = sige[:, ks, range( Nrayk)]     # sorted signature
+                    iint_f, iray_f = np.where(siges[1,:] == 4) # floor interaction
+                    iint_c, iray_c = np.where(siges[1,:] == 5) # ceil interaction
+
+                    coeff_f = (a1es[iint_f, iray_f]-a1es[iint_f-1, iray_f])/(
+                        a1es[iint_f+1, iray_f]-a1es[iint_f-1, iray_f])
+                    coeff_c = (a1es[iint_c, iray_c]-a1es[iint_c-1, iray_c])/(
+                        a1es[iint_c+1, iray_c]-a1es[iint_c-1, iray_c])
+                    ptees[0:2, iint_f, iray_f] = ptees[0:2, iint_f-1, iray_f] + coeff_f*(
+                        ptees[0:2, iint_f+1, iray_f]-ptees[0:2, iint_f-1, iray_f])
+                    # ptees[2,iint_f,iray_f]   = 0
+                    ptees[0:2, iint_c, iray_c] = ptees[0:2, iint_c-1, iray_c] + coeff_c*(
+                        ptees[0:2, iint_c+1, iray_c]-ptees[0:2, iint_c-1, iray_c])
+                    # ptees[2,iint_c,iray_c]   = H
+                    z  = np.mod(l+a1es*(rx[2]-l), 2*H)
+                    pz = np.where(z > H)
+                    z[pz] = 2*H-z[pz]
+                    ptees[2, :] = z
+                else:
+                    a1es = a1                        # recopy old 2D parameterization (no extension)
+                    ks = np.argsort(a1es, axis=0)
+                    ptees = pte
+                    siges = sig
+                try:
+                    # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
+                    # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
+                    r3d[k+Nint]['pt'] = np.dstack((r3d[k+Nint]['pt'], ptees))
+                    r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
+                except:
+                    r3d[k+Nint] = {}
+                    # r3d[k+Nint]['alpha'] = a1es
+                    # r3d[k+Nint]['ks'] = ks
+                    r3d[k+Nint]['pt'] = ptees
+                    r3d[k+Nint]['sig'] = siges
+        return(r3d)
+
+    def locbas(self,L):
+        """
+
+        """
+
+        #
+        # extract normal in np.array
+        #
+        norm = np.array(nx.get_node_attributes(L.Gs,'norm').values()) # nsegment x 3
+        key = np.array(nx.get_node_attributes(L.Gs,'norm').keys()) # nsegment x k
+        nmax = max(L.Gs.node.keys())
+        mapping = np.zeros(nmax+1,dtype=int)
+        mapping[key] = np.arange(len(key),dtype=int)
+
+        for k in self:
+
+            nstr = self[k]['sig'][0,1:-1,:]      # nint x nray
+            ityp = self[k]['sig'][1,1:-1,:]      # nint x nray
+
+            nray = np.shape(nstr)[1]
+
+            uwall = np.where((ityp==1)|(ityp==2))
+            udiff = np.where((ityp==3))
+            ufloor = np.where((ityp==4))
+            uceil = np.where((ityp==5))
+
+            nstrwall = nstr[uwall[0],uwall[1]]   # nstr of walls
+            self[k]['nstrwall'] = nstrwall       # store 
+
+            self[k]['norm'] = np.zeros((3,k,nray))   # 3 x int x nray
+
+            #
+            # Warning : The following commented line assumes that all the segment number are contiguous
+            # self[k]['norm'][:,uwall[0],uwall[1]] = norm[nstrwall-1,:].T
+            #
+
+            self[k]['norm'][:,uwall[0],uwall[1]] = norm[mapping[nstrwall],:].T
+            self[k]['norm'][2,ufloor[0],ufloor[1]] = np.ones(len(ufloor[0]))
+            self[k]['norm'][2,uceil[0],uceil[1]] = -np.ones(len(uceil[0]))
+
+            v = self[k]['pt'][:,1:,:]-self[k]['pt'][:,0:-1,:]
+            lsi = np.sqrt(np.sum(v*v,axis=0))
+            si  = v/lsi             # ndim , nint - 1 , nray
+            self[k]['si'] = si
+
+
+            vn    = self[k]['norm']
+            s_in  = si[:,0:-1,:]
+            s_out = si[:,1:,:]
+
+            #
+            # scalar product si . norm
+            #
+
+            scpr  = np.sum(vn*s_in,axis=0)
+            self[k]['scpr'] = scpr
+            self[k]['theta'] = np.arccos(abs(scpr))*180/np.pi
+            
+            #
+            # Warning need to handle singular case when s_in//vn
+            #
+            w = np.cross(s_in,vn,axisa=0,axisb=0,axisc=0)
+            wn = w/np.sqrt(np.sum(w*w,axis=0))
+            v = np.cross(wn,s_in,axisa=0,axisb=0,axisc=0)
+
+            es_in = np.expand_dims(s_in,axis=1)
+            ew = np.expand_dims(wn,axis=1)
+            ev = np.expand_dims(v,axis=1)
+
+            self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
+
+            w = np.cross(s_out,vn,axisa=0,axisb=0,axisc=0)
+            wn = w/np.sqrt(np.sum(w*w,axis=0))
+            v = np.cross(wn,s_out,axisa=0,axisb=0,axisc=0)
+
+            es_out = np.expand_dims(s_out,axis=1)
+            ew = np.expand_dims(wn,axis=1)
+            ev = np.expand_dims(v,axis=1)
+
+            self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
+
+            #
+            # AOD (rad)
+            #
+
+            th = np.arccos(si[2,0,:])
+            ph = np.arctan2(si[1,0,:],si[0,0,:])
+
+            self[k]['aod'] = np.vstack((th,ph))   # 2 x nray
+            eth = np.array([np.cos(th) * np.cos(ph),
+                           np.cos(th) * np.sin(ph),
+                          -np.sin(th)])
+            eph = np.array([-np.sin(ph),
+                            np.cos(ph),
+                            np.zeros(len(ph))])
+            Bo0 = np.array([si[:,0,:], eth, eph])    # ndim x 3 x Nray
+            self[k]['Bo0']=Bo0
+
+            #
+            # AOA (rad)
+            #
+
+            th = np.arccos(si[2,-1,:])
+            ph = np.arctan2(si[1,-1,:],si[0,-1,:])
+            self[k]['aoa'] = np.vstack((th,ph))   # 2 x nray
+            eth = np.array([np.cos(th) * np.cos(ph),
+                           np.cos(th) * np.sin(ph),
+                          -np.sin(th)])
+            eph = np.array([-np.sin(ph),
+                            np.cos(ph),
+                            np.zeros(len(ph))])
+            BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
+            self[k]['BiN']=BiN
+
+
+    def signature(self, L):
+        """
+        """
+        sig = Signatures(L, self.pTx, self.pRx)
+        for k in self:
+            sig[k] = self[k]['sig']
+        return(sig)
+
+    def show3d(self,
+              ray,
+              bdis=True,
+              bbas=False,
+              bstruc=True,
+              col=np.array([1, 0, 1]),
+              id=0,
+              linewidth=1):
+        """
+        plot a 3D ray
+        Parameters
+        ----------
+
+        bdis :
+            display boolean - if False return .vect filename
+        bbas :
+            display local basis
+        bstruc :
+            display structure
+        col  :
+            color of the ray
+        id   :
+            id of the ray
+        linewidth :
+        """
+
+        filerac = pyu.getlong("ray" + str(id), pstruc['DIRGEOM'])
+        _filerac = pyu.getshort(filerac)
+        filename_list = filerac + '.list'
+        filename_vect = filerac + '.vect'
+        try:
+            fo = open(filename_vect, "w")
+        except:
+            raise NameError(filename)
+
+        fo.write("appearance { linewidth %d }\n" % linewidth)
+
+        fo.write("VECT\n")
+
+        fo.write("1 %d 1\n\n" % len(ray[0, :]))
+        fo.write("%d\n" % len(ray[0, :]))
+        fo.write("1\n")
+        for i in range(len(ray[0, :])):
+            fo.write("%g %g %g\n" % (ray[0, i], ray[1, i],
+                                     ray[2, i]))
+        # fo.write("%d %d %d 0\n" % (col[0],col[1],col[2]))
+        fo.write("%g %g %g 0\n" % (col[0], col[1], col[2]))
+        fo.close()
+
+        #
+        # Ajout des bases locales
+        #
+
+        fo = open(filename_list, "w")
+        fo.write("LIST\n")
+        fo.write("{<" + filename_vect + "}\n")
+        if (bstruc):
+            # fo.write("{<strucTxRx.off}\n")
+            fo.write("{<" + _filestr + ".off}\n")
+
+        filename = filename_list
+        fo.close()
+
+        if (bdis):
+        #
+        # Geomview Visualisation
+        #
+            chaine = "geomview -nopanel -b 1 1 1 " + filename + \
+                " 2>/dev/null &"
+            os.system(chaine)
+        else:
+            return(filename)
+
+    def show3(self, bdis=True, bstruc=True, id=0,
+              strucname='defstr',ilist=[],raylist=[]):
+        """ plot 3D rays within the simulated environment
+
+        Parameters
+        ----------
+
+            raysarr: numpy.ndarray
+
+        """
+        if ilist ==[]:
+            ilist = self.keys()
+        pTx = self.pTx.reshape((3, 1))
+        pRx = self.pRx.reshape((3, 1))
+        filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
+        fo = open(filename, "w")
+        fo.write("LIST\n")
+        if bstruc:
+            fo.write("{<"+strucname+".off}\n")
+            # fo.write("{<strucTxRx.off}\n")
+            k = 0
+            for i in ilist:
+                if raylist ==[]:
+                    rlist = range(np.shape(self[i]['pt'])[2])
+                else:
+                    rlist = raylist
+                for j in rlist:
+                    ray = np.hstack((pTx,
+                                     np.hstack((self[i]['pt'][:, :, j], pRx))))
+                    # ray = rays[i]['pt'][:,:,j]
+                    col = np.array([2, 0, 1])
+                    #print ray
+                    fileray = self.show3d(ray=ray, bdis=False,
+                                              bstruc=False, col=col, id=k)
+                    k += 1
+                    fo.write("{< " + fileray + " }\n")
+        fo.close()
+        if (bdis):
+            chaine = "geomview " + filename + " 2>/dev/null &"
+            os.system(chaine)
+        else:
+             return(filename)
 
 
 class GrRay3D(object):
@@ -2190,7 +2592,7 @@ class GrRay3D(object):
             self.ray3d = []
 
             for i in range(self.n):
-                #print "Rayon N° : ",i
+                # print "Rayon NÂ° : ",i
                 ray3D = Ray3D()
                 start = stop
                 stop = start + 4
@@ -2271,7 +2673,7 @@ class GrRay3D(object):
                 # local basis creation
                 #
                 # DEBUG
-                #if i < 410:
+                # if i < 410:
                 #    print ray3D.nstr
                 #    n1 = []
                 #    for kk in range(len(ray3D.nstr)-2):
@@ -2286,14 +2688,14 @@ class GrRay3D(object):
                 iz = np.nonzero(ray3D.nstr == 0)
                 niz = len(iz[0])
                 self.ray3d.append(ray3D)
-                #if niz==2:
+                # if niz==2:
                 #    ray3D.locbas(L)
                 #    self.ray3d.append(ray3D)
-                #else:
+                # else:
                 #    self.n = self.n-1
-                    #print "Problem with ray : ",i
-                    #print ray3D.nstr
-                    #print ray3D.pt
+                    # print "Problem with ray : ",i
+                    # print ray3D.nstr
+                    # print ray3D.pt
         fo.close()
 #           except:
 #               print "Le fichier", filename, "est introuvable"
@@ -2303,8 +2705,10 @@ class GrRay3D(object):
 
         Returns
         -------
+
         td  : np.array
             delays
+
         """
         td = np.array([])
         for n in range(self.n):
@@ -2524,7 +2928,7 @@ class GrRay3D(object):
         fo.write("LIST\n")
         if bstruc:
             fo.write("{<defstr.off}\n")
-            #fo.write("{<strucTxRx.off}\n")
+            # fo.write("{<strucTxRx.off}\n")
             for i in rayset:
                 r = self.ray3d[i]
                 col = np.array([0, 0, 1])
