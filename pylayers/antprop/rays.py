@@ -2158,8 +2158,11 @@ class Rays(dict):
         #
         # extract normal in np.array
         #
-        norm = np.array(nx.get_node_attributes(L.Gs,'norm').values())
-        key = np.array(nx.get_node_attributes(L.Gs,'norm').keys())
+        norm = np.array(nx.get_node_attributes(L.Gs,'norm').values()) # nsegment x 3
+        key = np.array(nx.get_node_attributes(L.Gs,'norm').keys()) # nsegment x k
+        nmax = max(L.Gs.node.keys())
+        mapping = np.zeros(nmax+1,dtype=int)
+        mapping[key] = np.arange(len(key),dtype=int)
 
         for k in self:
 
@@ -2173,22 +2176,68 @@ class Rays(dict):
             ufloor = np.where((ityp==4))
             uceil = np.where((ityp==5))
 
-            nstrwall = nstr[uwall[0],uwall[1]]   #
-            self[k]['nstrwall'] = nstrwall
+            nstrwall = nstr[uwall[0],uwall[1]]   # nstr of walls
+            self[k]['nstrwall'] = nstrwall       # store 
 
-            self[k]['norm'] = np.zeros((3,k,nray))   # 2 x nray
-            pdb.set_trace()
-            #self[k]['norm'][:,uwall[0],uwall[1]] = norm[:,nstrwall]
+            self[k]['norm'] = np.zeros((3,k,nray))   # 3 x int x nray
+
+            #
+            # Warning : The following commented line assumes that all the segment number are contiguous
+            # self[k]['norm'][:,uwall[0],uwall[1]] = norm[nstrwall-1,:].T
+            #
+
+            self[k]['norm'][:,uwall[0],uwall[1]] = norm[mapping[nstrwall],:].T
+            self[k]['norm'][2,ufloor[0],ufloor[1]] = np.ones(len(ufloor[0]))
+            self[k]['norm'][2,uceil[0],uceil[1]] = -np.ones(len(uceil[0]))
 
             v = self[k]['pt'][:,1:,:]-self[k]['pt'][:,0:-1,:]
             lsi = np.sqrt(np.sum(v*v,axis=0))
             si  = v/lsi             # ndim , nint - 1 , nray
-            self[k]['si'] = v/lsi
+            self[k]['si'] = si
+
+
+            vn    = self[k]['norm']
+            s_in  = si[:,0:-1,:]
+            s_out = si[:,1:,:]
+
+            #
+            # scalar product si . norm
+            #
+
+            scpr  = np.sum(vn*s_in,axis=0)
+            self[k]['scpr'] = scpr
+            self[k]['theta'] = np.arccos(abs(scpr))*180/np.pi
+            
+            #
+            # Warning need to handle singular case when s_in//vn
+            #
+            w = np.cross(s_in,vn,axisa=0,axisb=0,axisc=0)
+            wn = w/np.sqrt(np.sum(w*w,axis=0))
+            v = np.cross(wn,s_in,axisa=0,axisb=0,axisc=0)
+
+            es_in = np.expand_dims(s_in,axis=1)
+            ew = np.expand_dims(wn,axis=1)
+            ev = np.expand_dims(v,axis=1)
+
+            self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
+
+            w = np.cross(s_out,vn,axisa=0,axisb=0,axisc=0)
+            wn = w/np.sqrt(np.sum(w*w,axis=0))
+            v = np.cross(wn,s_out,axisa=0,axisb=0,axisc=0)
+
+            es_out = np.expand_dims(s_out,axis=1)
+            ew = np.expand_dims(wn,axis=1)
+            ev = np.expand_dims(v,axis=1)
+
+            self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
+
             #
             # AOD (rad)
             #
+
             th = np.arccos(si[2,0,:])
             ph = np.arctan2(si[1,0,:],si[0,0,:])
+
             self[k]['aod'] = np.vstack((th,ph))   # 2 x nray
             eth = np.array([np.cos(th) * np.cos(ph),
                            np.cos(th) * np.sin(ph),
@@ -2198,9 +2247,11 @@ class Rays(dict):
                             np.zeros(len(ph))])
             Bo0 = np.array([si[:,0,:], eth, eph])    # ndim x 3 x Nray
             self[k]['Bo0']=Bo0
+
             #
             # AOA (rad)
             #
+
             th = np.arccos(si[2,-1,:])
             ph = np.arctan2(si[1,-1,:],si[0,-1,:])
             self[k]['aoa'] = np.vstack((th,ph))   # 2 x nray
