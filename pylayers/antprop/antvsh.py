@@ -97,7 +97,6 @@ def vsh(A, dsf=1):
     Bi = ant.SHCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Bi)
     Cr = ant.SHCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Cr)
     Ci = ant.SHCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Ci)
-
     A.C = ant.VSHCoeff(Br, Bi, Cr, Ci)
     return(A)
 

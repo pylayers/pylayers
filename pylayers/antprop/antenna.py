@@ -1285,11 +1285,11 @@ class Antenna(object):
         L = lBr.max()
         M = mBr.max()
 
-        x = -np.cos(theta)
+        #x = -np.cos(theta)  
+        #Pmm1n, Pmp1n = AFLegendre3(L, L, x)
 
-        Pmm1n, Pmp1n = AFLegendre3(L, L, x)
-
-        V, W = VW(lBr, mBr, x, phi, Pmm1n, Pmp1n)
+        #V, W = VW(lBr, mBr, x, phi, Pmm1n, Pmp1n) works
+        V, W = VW3(lBr, mBr, theta, phi)
 
         Fth = np.dot(Br, np.real(V.T)) - \
             np.dot(Bi, np.imag(V.T)) + \

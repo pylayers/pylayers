@@ -101,6 +101,44 @@ def index_vsh(L, M):
     u = np.vstack((l, m)).T
     t = u.astype(int)
     return(t)
+    
+    
+class VectorCoeff(object):
+	
+	def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
+                 ind=np.array([]), k=np.array([])):
+
+		self.s1 = np.array([])
+		self.s2 = np.array([])
+		self.s3 = np.array([])
+		self.fmin = fmin
+		self.fmax = fmax
+
+		if typ == 's1':
+			self.inits1(data,ind)
+	
+	def inits1(self, data, ind):
+		
+		sh = np.shape(data)
+		self.s1 = data
+		self.ind_s1 = ind
+		self.Nf = sh[0]
+	
+class SSHCoeff(object):
+   
+    def __init__(self, Ax,Ay,Az):
+        """
+        Parameters
+        ----------
+            Br
+            Bi
+            Cr
+            Ci
+        """
+        self.Ax = Ax
+        self.Ay = Ay
+        self.Az = Az
+        	
 
 class SHCoeff(object):
     """ Spherical Harmonics Coefficient
@@ -1193,7 +1231,9 @@ def VW3(l, m, theta ,phi ):
     #     deduced from observation
     #     May be it comes from a different definition of theta in SPHEREPACK
 
-    Pmm1l, Pmp1l = AFLegendre(L, M, x)
+    #Pmm1l, Pmp1l = AFLegendre(L, M, x)
+
+    Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
     Nr  = len(x)
