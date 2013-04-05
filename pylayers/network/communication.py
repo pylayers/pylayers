@@ -199,13 +199,50 @@ class TX(Process):
 
 
 
+    def interpret_dec(self):
+        """ interprete decision rule from self.dec
+        """
 
+
+        n=[]
+        # loop on rat
+        for rat in self.dec['rat']:
+            # get all nodes connecteed to self.ID on subnetwork rat
+            n=np.array(self.net.PN.SubNet[rat].edges())[:,1]
+            # loop on condition
+            rn = [True]*len(n)
+
+
+            for r in self.dec['rule']:
+
+                if r == 'always':
+                    pass
+
+            # mettre boolean dans variable pour condition a plus d41 regle 
+                if 'rssth' in r:
+                    # rssth<100
+                    rntmp = np.array(nx.get_edge_attributes(self.net.PN.SubNet[rat],'Pr').values())
+                    if len(r.split('<')) > 1:
+                        rn = rn and ( rntmp  < eval(r.split('<')[1]) )
+                    elif len(r.split('>')) > 1:
+                        rn = rn and ( rntmp  > eval(r.split('>')[1]) )
+
+#                elif 'distance' in r :
+#                    # distance < 10
+#                    rntmp = np.array(nx.get_edge_attributes(self.net.SubNet[rat],'d').values())
+#                    if len(r.split('<')) > 1:
+#                        rn = rn and ( rntmp  < eval(r.split('<')[1]) )
+#                    elif len(r.split('>')) > 1:
+#                        rn = rn and ( rntmp  > eval(r.split('<')[1]) )
+
+
+        return (n)
 
 
     def request(self):
         """ request a transmission command by localizaiton
         """
-
+        self.dec = self.gcom.dec[self.ID]
         while 1:
             yield waitevent,self,self.cmdrq 
             if self.sim.verbose:
