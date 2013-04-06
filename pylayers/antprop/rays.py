@@ -2265,6 +2265,36 @@ class Rays(dict):
             self[k]['BiN']=BiN
 
 
+    def fillinter(self):
+        """docstring for fillinter"""
+        I = Interactions()
+        B = IntB()
+        L = IntL()
+        R = IntR()
+        T = IntT()
+        D = IntD()
+        idx = np.array(())
+        idxts = 0
+        
+        for k in self:
+
+            nstr = self[k]['sig'][0,1:-1,:]      # nint x nray
+            ityp = self[k]['sig'][1,1:-1,:]      # nint x nray
+            theta = self[k]['theta']
+            si = self[k]['si']
+            idxts = idxts + idx.size #total size idx
+            idx =  idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T # create index for retrieve interactions
+            nray = np.shape(nstr)[1]
+
+            uR = np.where((ityp==1))
+            uT = np.where((ityp==2))
+            uD = np.where((ityp==3))
+            uRf = np.where((ityp==4))
+            uRc = np.where((ityp==5))
+            pdb.set_trace()
+            # R.stack(data=, index=idx[uR[1],uR[0]])
+        
+        
     def signature(self, L):
         """
         """
