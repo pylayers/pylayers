@@ -14,6 +14,7 @@ import pylayers.util.pyutil as pyu
 import matplotlib.pyplot as plt
 from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
+from pylayers.antprop.rays import Rays
 #from numba import autojit
 
 def showsig(L,s,tx,rx):
@@ -29,275 +30,6 @@ def showsig(L,s,tx,rx):
     plt.title(str(s))
     plt.show()
     L.display['edlabel']=False
-
-class Rays(dict):
-    def __init__(self,pTx,pRx):
-        self.pTx = pTx
-        self.pRx = pRx
-
-
-
-    def show(self,L):
-        """
-        plot 2D rays within the simulated environment
-        Parameters
-        ----------
-            rays: dict
-        """
-
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        L.showGs(fig, ax)
-        ax.plot(self.pTx[0], self.pTx[1], 'or')
-        ax.plot(self.pRx[0], self.pRx[1], 'og')
-        for i in self.keys():
-            for j in range(len(self[i]['pt'][0, 0, :])):
-                ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
-                                 np.hstack((self[i]['pt'][0:2, :, j],
-                                            self.pRx[0:2].reshape((2, 1))))
-                                 ))
-                ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
-
-
-
-    def mirror(self,H=3,N=1):
-        """ mirror 
-        """
-        km  = np.arange(-N+1,N+1,1)
-        kp  = np.arange(-N,N+1,1)
-        ht = self.pTx[2]
-        hr = self.pRx[2]
-        zkp = 2*kp*H + ht
-        zkm = 2*km*H - ht
-        print zkp
-        print zkm
-        d   = {}
-        for zm in zkm:
-            if  zm<0:
-                bup = H
-                pas = H
-                km   = int(np.ceil(zm/H))
-            else:
-                bup = 0
-                pas = -H
-                km   = int(np.floor(zm/H))
-            thrm = np.arange(km*H,bup,pas)
-            d[zm] = abs(thrm-zm)/abs(hr-zm)
-            #print "zm",zm
-            #print "km",km
-            #print "thrm",thrm
-            #print "alpham",d[zm]
-        for zp in zkp:
-            if  zp<0:
-                bup = H
-                pas = H
-                kp   = int(np.ceil(zp/H))
-            else:
-                bup = 0
-                pas = -H
-                kp   = int(np.floor(zp/H))
-            thrp = np.arange(kp*H,bup,pas)
-            d[zp] = alphap = abs(thrp-zp)/abs(hr-zp)
-            #print "zp",zp
-            #print "kp",kp
-            #print "thrp",thrp
-            #print "alphap",d[zp]
-
-        return(d)
-
-    def to3D(self):
-        """ transform 2D ray to 3D ray (no ceil no floor here)
-
-        pts : Ndim x Nint x Nray   
-
-        """
-        pTx = self.pTx
-        pRx = self.pRx
-        for i in self.keys():
-            pts = self[i]['pt'][0:2, :, :]
-            sig = self[i]['sig']
-            t = self.pTx[0:2].reshape((2,1,1)) * np.ones((1,1,len(pts[0, 0,:])))
-            r = self.pRx[0:2].reshape((2,1,1)) * np.ones((1,1,len(pts[0, 0,:])))
-            pts1 = np.hstack((t, np.hstack((pts, r))))
-            si1  = pts1[:, 1:, :] - pts1[:, :-1, :]
-            si   = np.sqrt(np.sum(si1 * si1, axis=0))
-            al1  = np.cumsum(si,axis=0)
-            self[i]['alpha'] = np.zeros(np.shape(si[:-1, :]))
-            for j in range(len(self[i]['alpha'][:, 0])):
-                self[i]['alpha'][j, :] = np.sum(si[0:j+1,:], axis=0)/np.sum(si, axis=0)
-                self[i]['pt'][2, j, :] = pTx[2] + self[i]['alpha'][j,:] * (pRx[2] - pTx[2])
-
-    def signature(self,L):
-        """
-        """
-        sig = Signatures(L,self.pTx,self.pRx)
-        for k in self:
-            sig[k] = self[k]['sig']
-        return(sig)
-
-    def ceilfloor(self, nr=1):
-        """ compute 3D rays reflected nr times on ceil and floor
-
-        Parameters
-        ----------
-            rays : dict
-            nr : int
-
-        Returns
-        -------
-            rays : dict
-
-        """
-        #
-        # Compute for floor
-        #
-        pax = np.array([[0.], [3.]])
-        pbx = np.array([[10.], [3.]])
-        pay = np.array([[-2.], [3.]])
-        pby = np.array([[2.], [3.]])
-
-        txx = np.array([self.pTx[0], self.pTx[2]])
-        txy = self.pTx[1:]
-
-        rxx = np.array([self.pRx[0], self.pRx[2]])
-        rxy = self.pRx[1:]
-
-        Mx = self.image_ceilfloor(txx, pax, pbx)
-        My = self.image_ceilfloor(txy, pay, pby)
-
-        Yx = self.backtrace_ceilfloor(txx, rxx, pax, pbx, Mx)
-        Yy = self.backtrace_ceilfloor(txy, rxy, pax, pbx, My)
-
-        Yxy = np.vstack((Yx[0:1, :], Yy[0:1, :]))
-        pts = np.array([]).reshape(3, 0)
-        sig = np.array([]).reshape(2, 0)
-        Ii = []
-        for i in range(len(Yxy[0, :]) - 1):
-            p1 = Yxy[:, i]
-            p2 = Yxy[:, i + 1]
-            I = self.L.seginline(p1, p2)
-            #I = np.hstack((I,it))
-            if np.shape(I)[1] != 0:
-                print np.shape(I)
-                Iz = np.nan * np.ones((1, np.shape(I)[1]))
-                I = np.vstack((I[1:, :], Iz))
-                print I
-                pts = np.hstack((pts, I))
-                pts = np.hstack((pts, np.vstack((Yx[0:1, i], Yy[:, i]))))
-        print pts
-        rayf = np.vstack((Yx[0:1, 1:-1], Yy[:, 1:-1]))
-        #print rayf
-        rays[str(nr)]['pt'] = np.dstack((rays[str(nr)]['pt'], rayf))
-
-        return rays
-
-    def show3d(self,
-              ray ,
-              bdis = True,
-              bbas = False,
-              bstruc = True,
-              col=np.array([1, 0, 1]),
-              id=0 ,
-              linewidth=1):
-        """
-        plot a 3D ray
-        Parameters
-        ----------
-
-        bdis :
-            display boolean - if False return .vect filename
-        bbas :
-            display local basis
-        bstruc :
-            display structure
-        col  :
-            color of the ray
-        id   :
-            id of the ray
-        linewidth :
-        """
-
-        filerac = pyu.getlong("ray" + str(id), pstruc['DIRGEOM'])
-        _filerac = pyu.getshort(filerac)
-        filename_list = filerac + '.list'
-        filename_vect = filerac + '.vect'
-        try:
-            fo = open(filename_vect, "w")
-        except:
-            raise NameError(filename)
-
-        fo.write("appearance { linewidth %d }\n" % linewidth)
-
-        fo.write("VECT\n")
-
-        fo.write("1 %d 1\n\n" % len(ray[0, :]))
-        fo.write("%d\n" % len(ray[0, :]))
-        fo.write("1\n")
-        for i in range(len(ray[0, :])):
-            fo.write("%g %g %g\n" % (ray[0, i], ray[1, i],
-                                     ray[2, i]))
-        #fo.write("%d %d %d 0\n" % (col[0],col[1],col[2]))
-        fo.write("%g %g %g 0\n" % (col[0], col[1], col[2]))
-        fo.close()
-
-        #
-        # Ajout des bases locales
-        #
-
-        fo = open(filename_list, "w")
-        fo.write("LIST\n")
-        fo.write("{<" + filename_vect + "}\n")
-        if (bstruc):
-            #fo.write("{<strucTxRx.off}\n")
-            fo.write("{<" + _filestr + ".off}\n")
-
-        filename = filename_list
-        fo.close()
-
-        if (bdis):
-        #
-        # Geomview Visualisation
-        #
-            chaine = "geomview -nopanel -b 1 1 1 " + filename + \
-                " 2>/dev/null &"
-            os.system(chaine)
-        else:
-            return(filename)
-
-    def show3(self, bdis=True, bstruc=True, id=0, strucname='defstr'):
-        """ plot 3D rays within the simulated environment
-
-        Parameters
-        ----------
-            raysarr: numpy.ndarray
-
-        """
-        pTx = self.pTx.reshape((3, 1))
-        pRx = self.pRx.reshape((3, 1))
-        filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
-        fo = open(filename, "w")
-        fo.write("LIST\n")
-        if bstruc:
-            fo.write("{<"+strucname+".off}\n")
-            #fo.write("{<strucTxRx.off}\n")
-            k = 0
-            for i in self:
-                for j in range(np.shape(self[i]['pt'])[2]):
-                    ray = np.hstack((pTx,
-                                     np.hstack((self[i]['pt'][:, :, j], pRx))))
-                    #ray = rays[i]['pt'][:,:,j]
-                    col = np.array([2, 0, 1])
-                    print ray
-                    fileray = self.show3d(ray=ray, bdis=False,
-                                              bstruc=False, col=col, id=k)
-                    k += 1
-                    fo.write("{< " + fileray + " }\n")
-        fo.close()
-        if (bdis):
-            chaine = "geomview " + filename + " 2>/dev/null &"
-            os.system(chaine)
-        else:
-             return(filename)
 
 class Signatures(dict):
     """
@@ -404,19 +136,19 @@ class Signatures(dict):
                 else:
                     paths = [[nt]]
                 for path in paths:
-                    sigarr = np.array([]).reshape(2, 0)
+                    sigarr = np.array([],dtype=int).reshape(2, 0)
                     for interaction in path:
                         it = eval(interaction)
                         if type(it) == tuple:
                             if len(it)==2: #reflexion
                                 sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]],[1]])))
+                                                np.array([[it[0]],[1]],dtype=int)))
                             if len(it)==3: #transmission
                                 sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]], [2]])))
+                                                np.array([[it[0]],[2]],dtype=int)))
                         elif it < 0: #diffraction
                             sigarr = np.hstack((sigarr,
-                                                np.array([[it], [3]])))
+                                                np.array([[it],[3]],dtype=int)))
                     #print sigarr
                     try:
                         self[len(path)] = np.vstack((self[len(path)],sigarr))
@@ -449,19 +181,17 @@ class Signatures(dict):
                 if Yi is not None:
                     Yi = np.fliplr(Yi)
                     nint = len(sig[0, :])
-                    if str(nint) in rays.keys():
+                    if nint in rays.keys():
                         Yi3d = np.vstack((Yi[:, 1:-1], np.zeros((1, nint))))
                         Yi3d = Yi3d.reshape(3, nint, 1)
-                        rays[str(nint)]['pt'] = np.dstack((
-                                                          rays[str(nint)]['pt'], Yi3d))
-                        rays[str(nint)]['sig'] = np.dstack((
-                                                           rays[str(nint)]['sig'],
-                                                           sig.reshape(2, nint, 1)))
+                        rays[nint]['pt'] = np.dstack(( rays[nint]['pt'], Yi3d))
+                        rays[nint]['sig'] = np.dstack(( rays[nint]['sig'], sig.reshape(2, nint, 1)))
                     else:
-                        rays[str(nint)] = {'pt': np.zeros((3, nint, 1)),
-                                           'sig': np.zeros((2, nint, 1))}
-                        rays[str(nint)]['pt'][0:2, :, 0] = Yi[:, 1:-1]
-                        rays[str(nint)]['sig'][:, :, 0] = sig
+                        rays[nint] = {'pt': np.zeros((3, nint, 1)),
+                                      'sig': np.zeros((2, nint,
+                                                            1),dtype=int)}
+                        rays[nint]['pt'][0:2, :, 0] = Yi[:, 1:-1]
+                        rays[nint]['sig'][:, :, 0] = sig
         return rays
 
 class Signature(object):
