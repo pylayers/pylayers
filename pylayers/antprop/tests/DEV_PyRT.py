@@ -158,7 +158,7 @@ else:
     r2d = pickle.load(file)
 r3d = r2d.to3D()
 r3d.locbas(L)
-r3d.fillinter()
+r3d.fillinter(L)
 #for k in r2d:   # for all interaction group k 
 #    k = int(k)
 #    Nrayk = np.shape(r2d[str(k)]['alpha'])[1]  # Number of rays in interaction group k 

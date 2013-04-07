@@ -2265,16 +2265,26 @@ class Rays(dict):
             self[k]['BiN']=BiN
 
 
-    def fillinter(self):
+    def fillinter(self,L):
         """docstring for fillinter"""
         I = Interactions()
         B = IntB()
-        L = IntL()
+        Los = IntL()
         R = IntR()
         T = IntT()
         D = IntD()
         idx = np.array(())
         idxts = 0
+        # Transform dictionnary of slab name to array
+        slv = nx.get_node_attributes(L.Gs,"name").values()
+        slk = nx.get_node_attributes(L.Gs,"name").keys()
+        nmax = max(L.Gs.node.keys())
+        sla=np.empty((nmax+1),dtype='S15') # aray type str with more than  1 character
+        pdb.set_trace()
+        # slab is now an array of string.
+        # each value of Gs node is the index of the coresponding slab
+
+        sla[slk]=np.array(slv) 
         
         for k in self:
 
@@ -2282,8 +2292,17 @@ class Rays(dict):
             ityp = self[k]['sig'][1,1:-1,:]      # nint x nray
             theta = self[k]['theta']
             si = self[k]['si']
+            
+            # create index for retrieve interactions
             idxts = idxts + idx.size #total size idx
-            idx =  idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T # create index for retrieve interactions
+            # idx is an abolute index of the interaction position 
+            idx =  idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T 
+            
+            # reshape nstr in order to be 1 dimension
+            rnstr= np.reshape(nstr,nstr.size)
+            # find slab type for the rnstr
+            sl = sla[rnstr]
+            
             nray = np.shape(nstr)[1]
 
             uR = np.where((ityp==1))
