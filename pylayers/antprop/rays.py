@@ -158,6 +158,19 @@ class Inter(object):
 
         self.E = np.eye(2)
 
+    def create_dusl(self,a):
+        """ reate dictionnary of used slab.
+
+        Attributes 
+        ----------
+        a : np.array of string which contains ordred interactions 
+            ordered as in self.idx/self.data
+        """
+        for s in self.dusl:
+            self.dusl[s]=np.where(a==s)[0]
+
+
+
     def delay(self):
         """
             calculate delays of a given basis Interaction
@@ -171,17 +184,17 @@ class Inter(object):
         elif self.typ == -1:
             self.sout = np.zeros((len(self.data[:, 0])))
 
-    def stack(self, a=np.array(()), idx=0, data=True):
+    def stack(self, data=np.array(()), idx=0, isdata=True):
         """
         stack data and the associated idx
 
         Attributes:
         ----------
-            a : np.array()
+            data : np.array()
                 data to stack
             idx :
                 index to stack
-            data: bool
+            isdata: bool
                 False if you just want to stack idx (only used for intE class )
 
         >>> from pylayers.antprop.rays import *
@@ -207,22 +220,31 @@ class Inter(object):
 
         if isinstance(idx, int):
             try:
-                if data:
-                    self.data = np.vstack((self.data, a))
+                if isdata:
+                    self.data = np.vstack((self.data, data))
                 self.idx.append(idx)
             except:
                 if self.idx == []:
-                    if data:
-                        self.data = a
+                    if isdata:
+                        self.data = data
                     self.idx = [idx]
                 else:
                     raise NameError('Issue in Inter.stack')
 
         elif isinstance(idx, list) or isinstance(idx, np.ndarray):
-            for ii, idx in enumerate(idx):
-                if data:
-                    self.data = np.vstack((self.data, a[ii]))
-                self.idx.append(idx)
+            try:
+                self.data=np.vstack((self.data,data))
+            except:
+                self.data=data
+            self.idx.extend(idx)
+
+#            for ii, idx in enumerate(idx):
+#                if isdata:
+#                    try:
+#                        self.data = np.vstack((self.data, data[ii]))
+#                    except:
+#                        self.data = data[ii]
+#                self.idx.append(idx)
 
 
 class Interactions(Inter):
@@ -269,7 +291,8 @@ class Interactions(Inter):
         # look for the total number of interraction
 
         for i in li:
-            self.nimax = self.nimax+len(i.data)
+            if i.idx != []:
+                self.nimax = max(self.nimax,max((i.idx)))+1
         for i in li:
             self.addi(i)
 
@@ -277,6 +300,7 @@ class Interactions(Inter):
         """
             Add interactions as a member of Interactions class
         """
+
 
         if not isinstance(self.typ, np.ndarray):
             self.typ = np.zeros((self.nimax), dtype=str)
@@ -517,6 +541,8 @@ class IntR(Inter):
         # WARNING The index of this dictionnary referes to the idex of self.idx
         # not to the global indx
         self.dusl = {}
+#        self.dusl=dict.fromkeys(self.slab,np.array((),dtype=int))
+
         self.alpha = [1]
         self.gamma = [1]
 
@@ -574,20 +600,25 @@ class IntR(Inter):
 
         self.delay()
         self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
+
+        if np.shape(self.data)[0]!=len(self.idx):
+            self.data=self.data.T 
+
         if len(self.data) != 0:
             mapp = []
             # loop on all type of materials used for reflexion
             for m in self.dusl.keys():
                 # used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
-                # find the index of angles which satisfied the data
-                self.slab[m].ev(fGHz=self.f, theta=ut, RT='R')
-                try:
-                    R = np.concatenate((R, self.slab[m].R), axis=1)
-                    mapp.extend(self.dusl[m])
-                except:
-                    R = self.slab[m].R
-                    mapp.extend(self.dusl[m])
+                if not ut.size == 0:
+                    # find the index of angles which satisfied the data
+                    self.slab[m].ev(fGHz=self.f, theta=ut, RT='R')
+                    try:
+                        R = np.concatenate((R, self.slab[m].R), axis=1)
+                        mapp.extend(self.dusl[m])
+                    except:
+                        R = self.slab[m].R
+                        mapp.extend(self.dusl[m])
             # replace in correct order the reflexion coeff
             self.A[:, np.array((mapp)), :, :] = R
             self.alpha = np.array(self.alpha*len(self.idx), dtype=complex)
@@ -614,8 +645,11 @@ class IntT(Inter):
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
         self.dusl = {}
+#        self.dusl=dict.fromkeys(self.slab,np.array((),dtype=int))
         self.alpha = []
         self.gamma = []
+
+
 
     def eval(self):
         """
@@ -669,37 +703,40 @@ class IntT(Inter):
         self.alpha = np.zeros((len(self.idx)), dtype=complex)
         self.gamma = np.zeros((len(self.idx)), dtype=complex)
         self.sm = np.zeros((len(self.idx)), dtype=complex)
+
+        if np.shape(self.data)[0]!=len(self.idx):
+            self.data=self.data.T 
+
         if len(self.data) != 0:
             mapp = []
             for m in self.dusl.keys():
                 # used theta of the given slab
                 ut = self.data[self.dusl[m], 0]
+                if ut.size != 0:
+                    # get alpha and gamma for divergence factor
+                    if len(self.slab[m]['lmat']) > 1:
+                        print 'Warning : IntR class implemented for mat with only 1 layer '
+                    a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][
+                                   0]['epr']])) * np.ones(len(ut), dtype=complex))
+                    g = (1.-np.sin(ut)**2)/(1.-a*np.sin(ut)**2)
+                    try:
+                        alpha = np.concatenate((alpha, a), axis=0)
+                        gamma = np.concatenate((gamma, g), axis=0)
+                    except:
+    #                    print 'Warning : alpha or gamma fail'
+                        alpha = a
+                        gamma = g
 
-                # get alpha and gamma for divergence factor
-                if len(self.slab[m]['lmat']) > 1:
-                    print 'Warning : IntR class implemented for mat with only 1 layer '
-                a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][
-                               0]['epr']])) * np.ones(len(ut), dtype=complex))
-                g = (1.-np.sin(ut)**2)/(1.-a*np.sin(ut)**2)
+                    # find the index of angles which satisfied the data
+                    self.slab[m].ev(
+                        fGHz=self.f, theta=ut, RT='T', compensate=False)
 
-                try:
-                    alpha = np.concatenate((alpha, a), axis=0)
-                    gamma = np.concatenate((gamma, g), axis=0)
-                except:
-#                    print 'Warning : alpha or gamma fail'
-                    alpha = a
-                    gamma = g
-
-                # find the index of angles which satisfied the data
-                self.slab[m].ev(
-                    fGHz=self.f, theta=ut, RT='T', compensate=False)
-
-                try:
-                    T = np.concatenate((T, self.slab[m].T), axis=1)
-                    mapp.extend(self.dusl[m])
-                except:
-                    T = self.slab[m].T
-                    mapp.extend(self.dusl[m])
+                    try:
+                        T = np.concatenate((T, self.slab[m].T), axis=1)
+                        mapp.extend(self.dusl[m])
+                    except:
+                        T = self.slab[m].T
+                        mapp.extend(self.dusl[m])
             # replace in correct order the Transmission coeff
             self.A[:, np.array((mapp)), :, :] = T
             self.alpha[np.array((mapp))] = alpha
@@ -1560,7 +1597,7 @@ class GrRayTud(object):
                     m = stru.unpack('4d', dt)
                     M = np.array((m[0], m[1], m[2], m[3]))
                     try:
-                        B.stack(M, index)  # inter = IntB(M)
+                        B.stack(data=M, idx=index)  # inter = IntB(M)
                     except:
                         print 'except B'
                         B = IntB(data=M, idx=index)
@@ -1577,7 +1614,7 @@ class GrRayTud(object):
                     dist = stru.unpack('d', dt)
                     dist = np.array((dist))
                     try:
-                        L.stack(dist, index)  # inter = IntB(M)
+                        L.stack(data=dist, idx=index)  # inter = IntB(M)
                     except:
                         print 'except L'
                         L = IntL(dist, index)
@@ -1593,10 +1630,10 @@ class GrRayTud(object):
                     datR = stru.unpack('3d', dt)
                     dat = np.array((datR[0], datR[1], datR[2]))
                     try:
-                        R.stack(dat, index)  # inter = IntB(M)
+                        R.stack(data=dat, idx=index)  # inter = IntB(M)
                     except:
                         print 'except R'
-                        R = IntR(dat, index)
+                        R = IntR(data=dat, idx=index)
 #                    inter = IntR(datR)
 #            #        inter.data = datR
                     index = index+1
@@ -1609,10 +1646,10 @@ class GrRayTud(object):
                     datT = stru.unpack('3d', dt)
                     dat = np.array((datT[0], datT[1], datT[2]))
                     try:
-                        T.stack(dat, index)
+                        T.stack(data=dat, idx=index)
                     except:
                         print 'except T'
-                        T = IntT(dat, index)
+                        T = IntT(data=dat, idx=index)
                     index = index+1
 #                    inter = IntT(datT)
 #            #        inter.data = datT
@@ -2278,40 +2315,161 @@ class Rays(dict):
         # Transform dictionnary of slab name to array
         slv = nx.get_node_attributes(L.Gs,"name").values()
         slk = nx.get_node_attributes(L.Gs,"name").keys()
+
+        # find all aterial used in simulation
+        uslv = np.unique(slv)
+        uslv = np.hstack((uslv,np.array(('CEIL','FLOOR'))))
+
+#        create reverse dictionnary with all material as a key 
+#         and associated point/segment as a value
+
+        dsla={}
+        for s in uslv:
+            dsla[s]=np.where(s==np.array(slv))[0]
+
+
         nmax = max(L.Gs.node.keys())
-        sla=np.empty((nmax+1),dtype='S15') # aray type str with more than  1 character
-        pdb.set_trace()
+        sla=np.zeros((nmax+1),dtype='S20') # aray type str with more than  1 character
+        # warning use zeros instead of empty because slab zero is virtually used before assigning 
+        # correct slab to ceil and floor
+
         # slab is now an array of string.
         # each value of Gs node is the index of the coresponding slab
-
         sla[slk]=np.array(slv) 
-        
+
+
+        R.dusl=dict.fromkeys(uslv,np.array((),dtype=int))
+        T.dusl=dict.fromkeys(uslv,np.array((),dtype=int))
+
+        tsl=np.array(())
+        rsl=np.array(())
         for k in self:
 
+            uR = uT = uD = uRf = uRc =0.
             nstr = self[k]['sig'][0,1:-1,:]      # nint x nray
             ityp = self[k]['sig'][1,1:-1,:]      # nint x nray
             theta = self[k]['theta']
             si = self[k]['si']
             
+            ## flatten information
+            ######################
+            # reshape nstr in order to be flat (1 dimension)
+            nstrf= np.reshape(nstr,nstr.size)
+            # flatten ityp
+            itypf = ityp.reshape(ityp.size)
+            thetaf = theta.reshape(theta.size)
+            sif = si[0,:,:].reshape(si[0,:,:].size)
+
+
+            ## index creation
+            ##################
             # create index for retrieve interactions
             idxts = idxts + idx.size #total size idx
             # idx is an abolute index of the interaction position 
             idx =  idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T 
-            
-            # reshape nstr in order to be 1 dimension
-            rnstr= np.reshape(nstr,nstr.size)
-            # find slab type for the rnstr
-            sl = sla[rnstr]
-            
-            nray = np.shape(nstr)[1]
+            idxf = idx.reshape(idx.size)
+            ## find used slab
+            ##################
 
-            uR = np.where((ityp==1))
-            uT = np.where((ityp==2))
-            uD = np.where((ityp==3))
-            uRf = np.where((ityp==4))
-            uRc = np.where((ityp==5))
-            pdb.set_trace()
+            # find slab type for the rnstr
+            sl = sla[nstrf]
+
+
+            # seek interactions position
+            ############################
+            uR = np.where((itypf==1))[0]
+            uT = np.where((itypf==2))[0]
+            uD = np.where((itypf==3))[0]
+            uRf = np.where((itypf==4))[0]
+            uRc = np.where((itypf==5))[0]
+
+            # assign floor and ceil slab
+            ############################
+
+            # WARNING 
+            # in futur version floor and ceil could be different for each cycle.
+            # this information would be directly obtained from L.Gs
+            # then the two following lines would have to be  modified
+            sl[uRf]='FLOOR'
+            sl[uRc]='CEIL'
+
+#            # Fill the used slab
+#            ####################
+
+            tsl=np.hstack((tsl,sl[uT]))
+            rsl=np.hstack((rsl,sl[uR],sl[uRf],sl[uRc]))
+##            for s in uslv:
+##                
+##                T.dusl[s]=np.hstack((T.dusl[s],len(T.idx) + np.where(sl[uT]==s)[0]))
+##                R.dusl[s]=np.hstack((R.dusl[s],len(R.idx) + np.where(sl[uR]==s)[0]))
+##            R.dusl['FLOOR']=np.hstack((R.dusl['FLOOR'],len(R.idx)+len(uR) + np.where(sl[uRf]=='FLOOR')[0]))
+##            R.dusl['CEIL']=np.hstack((R.dusl['CEIL'],len(R.idx)+len(uR)+len(uRf) + np.where(sl[uRc]=='CEIL')[0]))
+
+
+
+##            #Reflexion
+##            ##########
+
+
+##            # reflexion
+            R.stack(data=np.array((thetaf[uR],sif[uR],sif[uR+1])).T,idx=idxf[uR])
+            # floor reflexion
+            R.stack(data=np.array((thetaf[uRf],sif[uRf],sif[uRf+1])).T,idx=idxf[uRf])
+            # ceil reflexion
+            R.stack(data=np.array((thetaf[uRc],sif[uRc],sif[uRc+1])).T,idx=idxf[uRc])
+
+###            sl[idxf[uT]]
+
+
+
+
+            #Transmision
+            ##########
+            T.stack(data=np.array((thetaf[uT],sif[uT],sif[uT+1])).T,idx=idxf[uT])
+
+
+
+        T.create_dusl(tsl)
+        R.create_dusl(rsl)
+#        I.add([T,R])
+        self.T=T
+        self.R=R
+#            nray = np.shape(nstr)[1]
+
+#            uR = np.where((ityp==1))
+#            uT = np.where((ityp==2))
+#            uD = np.where((ityp==3))
+#            uRf = np.where((ityp==4))
+#            uRc = np.where((ityp==5))
+
             # R.stack(data=, index=idx[uR[1],uR[0]])
+
+
+
+#                ### fill slab index dictionnary for each type of interactions
+#                if caract == 1:
+#                    ## read material index
+
+#                    slidx = c1
+#                    ## find corresponding name
+#                    slname = R.slab.di[slidx]
+#                    try:
+#                        R.dusl[slname].append(R.uslidx)
+#                    except:
+#                        R.dusl[slname] = [R.uslidx]
+#                    R.uslidx = .uslidx + 1
+#                if caract == 2:
+#                    slidx = c1
+#                    slname = T.slab.di[slidx]
+#                    try:
+#                        T.dusl[slname].append(T.uslidx)
+#                    except:
+#                        T.dusl[slname] = [T.uslidx]
+#                    T.uslidx = T.uslidx + 1
+#            # in case of diffraction
+#                if caract == 3:
+#                    pass
+
         
         
     def signature(self, L):
