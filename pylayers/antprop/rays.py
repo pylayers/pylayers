@@ -2300,7 +2300,7 @@ class Rays(dict):
                             np.zeros(len(ph))])
             BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
             self[k]['BiN']=BiN
-
+            self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
 
     def fillinter(self,L):
         """docstring for fillinter"""
@@ -2359,7 +2359,7 @@ class Rays(dict):
             itypf = ityp.reshape(ityp.size)
             thetaf = theta.reshape(theta.size)
             sif = si[0,:,:].reshape(si[0,:,:].size)
-
+            b = self[k]['B'].reshape(2,2,ityp.size)
 
             ## index creation
             ##################
@@ -2406,12 +2406,19 @@ class Rays(dict):
 ##            R.dusl['CEIL']=np.hstack((R.dusl['CEIL'],len(R.idx)+len(uR)+len(uRf) + np.where(sl[uRc]=='CEIL')[0]))
 
 
+            #Basis
+            # Hugr issue with B index
+            # Friedman version Bs was entering in the index
+            # maybe B can have the same index that interactions
+            # but this must be manage when evaluation of CIR is made
+            B.stack(data=b.T,idx=idxf)
+
 
 ##            #Reflexion
 ##            ##########
 
 
-##            # reflexion
+#            # reflexion
             R.stack(data=np.array((thetaf[uR],sif[uR],sif[uR+1])).T,idx=idxf[uR])
             # floor reflexion
             R.stack(data=np.array((thetaf[uRf],sif[uRf],sif[uRf+1])).T,idx=idxf[uRf])
@@ -2431,9 +2438,9 @@ class Rays(dict):
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
-#        I.add([T,R])
-        self.T=T
-        self.R=R
+        self.I=I
+        self.I.add([T,R])
+        self.B=B
 #            nray = np.shape(nstr)[1]
 
 #            uR = np.where((ityp==1))
