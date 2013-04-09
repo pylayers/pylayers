@@ -183,7 +183,7 @@ class ShowNet(Process):
     #                        pass
                     Cl = nx.draw_networkx_labels(self.net.SubNet[rl], pos=pos, font_size=10)
                     self.coll_plot['label'][1].extend(Cl.values())
-                    self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, edge_color=self.RATcolor[rl], style=self.RATes[rl])))
+                    self.coll_plot['edge'][1].append((nx.draw_networkx_edges(self.net, pos=pos, edgelist=self.net.SubNet[rl].edges(), width=2., alpha=0.9, arrows=False, edge_color=self.RATcolor[rl], style=self.RATes[rl])))
 
                 if self.legend:
                     self.ax.legend((self.coll_plot['edge'][1]), (rloop), loc=3)

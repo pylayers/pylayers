@@ -9,6 +9,7 @@ from pylayers.gis.layout import *
 import pylayers.signal.bsignal as bs
 from datetime import datetime
 import time
+import pickle
 def showr2d(L,r2d,tx,rx):
     """
     r2d['pt'] : nd,ni,nr
@@ -143,12 +144,21 @@ print "mobile node :",rx," is in room ",Rrx
 
 print tx
 print rx
-
-Si = Signatures(S.L,tx,rx)
-Si.run(tx,rx,4)
-r2d = Si.rays()
 a=time.time()
+
+if not os.path.exists('r2d.pickle'):
+    Si = Signatures(S.L,tx,rx)
+    Si.run(tx,rx,4)
+    r2d = Si.rays()
+    file=open("r2d.pickle","w")
+    pickle.dump(r2d,file)
+    file.close()
+else:
+    file = open("r2d.pickle","r")
+    r2d = pickle.load(file)
 r3d = r2d.to3D()
+r3d.locbas(L)
+r3d.fillinter(L)
 #for k in r2d:   # for all interaction group k 
 #    k = int(k)
 #    Nrayk = np.shape(r2d[str(k)]['alpha'])[1]  # Number of rays in interaction group k 
