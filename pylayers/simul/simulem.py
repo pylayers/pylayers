@@ -31,7 +31,7 @@ from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 # Handle Layout
 from pylayers.gis.layout import Layout
 # Handle Rays
-from pylayers.antprop.rays import GrRay3D, GrRayTud
+from pylayers.antprop.raysc import GrRay3D, GrRayTud
 # Handle VectChannel and ScalChannel
 from pylayers.antprop import channel
 #from   Channel import *

@@ -2,13 +2,13 @@
 """
 This module handles antennas in pylayers
 
-To instantiate an antenna object : 
+To instantiate an antenna object :
 
 .. python::
 
     A = Antenna(_filename,directory,nf,ntheta,nphi)
 
-typ indicates the antenna file format to read 
+typ indicates the antenna file format to read
 
 Examples
 --------
