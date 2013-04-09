@@ -740,24 +740,6 @@ class IntD(Inter):
             return(self.A)
 
 
-class Ray2D(object):
-    """ 2D Ray class
-
-    Attributes
-    ----------
-    nn      :
-        number of nodes (number of interactions + 2)
-    pt      :
-        point coordinates
-    signature   :
-        (new name for nstr)
-    """
-    def __init__(self):
-        pass
-
-    def eval(self, L, signature):
-        pass
-
 
 class Ray3D(object):
     """ Ray3D class
