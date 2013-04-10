@@ -286,6 +286,35 @@ class Rays(dict):
             s_out = si[:,1:,:]
 
             #
+            # AOD (rad)
+            #
+
+
+            # th : ,r
+            th = np.arccos(si[2,0,:])
+            # ph : ,r
+            ph = np.arctan2(si[1,0,:],si[0,0,:])
+
+            # aod : 2 x r  (radians)
+            self[k]['aod'] = np.vstack((th,ph))
+
+            # eth : 3 x r
+            eth = np.array([np.cos(th) * np.cos(ph),
+                           np.cos(th) * np.sin(ph),
+                          -np.sin(th)])
+            # eph : 3 x r
+            eph = np.array([-np.sin(ph),
+                            np.cos(ph),
+                            np.zeros(len(ph))])
+
+            # Bo0 : 3 x 2 x r
+            Bo0  = np.concatenate((eth[:,np.newaxis,:],
+                                   eph[:,np.newaxis,:]),axis=1)
+
+            self[k]['Bo0'] = np.concatenate((si[:,0,np.newaxis,:],eth[:,np.newaxis,:],
+                                                eph[:,np.newaxis,:]),axis=1)
+
+            #
             # scalar product si . norm
             #
 
@@ -304,8 +333,9 @@ class Rays(dict):
             ew = np.expand_dims(wn,axis=1)
             ev = np.expand_dims(v,axis=1)
 
-            Bi = np.concatenate((ew,ev),axis=1)   #  x v r i / 3 2 r i
-            self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
+            #  Bi 3 x 2 x i x r
+            Bi = np.concatenate((ew,ev),axis=1)   
+            #self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)  
 
             w = np.cross(s_out,vn,axisa=0,axisb=0,axisc=0)
             wn = w/np.sqrt(np.sum(w*w,axis=0))
@@ -315,28 +345,9 @@ class Rays(dict):
             ew = np.expand_dims(wn,axis=1)
             ev = np.expand_dims(v,axis=1)
 
-            Bo = np.concatenate((ew,ev),axis=1) #  x v r i / 3 2 r i
-            self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
-
-            self[k]['M']  = np.einsum('xv...,xw...->vw...',Bi,Bo)
-
-            #
-            # AOD (rad)
-            #
-
-            th = np.arccos(si[2,0,:])
-            ph = np.arctan2(si[1,0,:],si[0,0,:])
-
-            self[k]['aod'] = np.vstack((th,ph))   # 2 x nray
-            eth = np.array([np.cos(th) * np.cos(ph),
-                           np.cos(th) * np.sin(ph),
-                          -np.sin(th)])
-            eph = np.array([-np.sin(ph),
-                            np.cos(ph),
-                            np.zeros(len(ph))])
-            Bo0 = np.array([si[:,0,:], eth, eph])    # ndim x 3 x Nray
-            self[k]['Bo0']=Bo0
-
+            #  Bi 3 x 2 x i x r
+            Bo = np.concatenate((ew,ev),axis=1)
+            #self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)  
             #
             # AOA (rad)
             #
@@ -350,8 +361,24 @@ class Rays(dict):
             eph = np.array([-np.sin(ph),
                             np.cos(ph),
                             np.zeros(len(ph))])
-            BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
-            self[k]['BiN']=BiN
+            # Bo0 : 3 x 2 x r
+            BiN  = np.concatenate((eth[:,np.newaxis,:],
+                                   eph[:,np.newaxis,:]),axis=1)
+
+            #self[k]['BiN'] = np.concatenate((si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
+            #                                    eph[:,np.newaxis,:]),axis=1)
+
+            #
+            # pasting (Bo0,B,BiN)
+            #
+            # B : 3 x 2 x i x r
+
+            Bo  = np.concatenate((Bo0[:,:,np.newaxis,:],Bo),axis=2)
+            Bi  = np.concatenate((Bi,BiN[:,:,np.newaxis,:]),axis=2)
+
+            # M : 2 x 2 x i x r
+
+            self[k]['M']  = np.einsum('xv...,xw...->vw...',Bo,Bi)
 
 
     def fillinter(self,L):
