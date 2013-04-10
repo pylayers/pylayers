@@ -488,7 +488,7 @@ class Rays(dict):
             ######################
 
             # reshape nstr in order to be flat (1 dimension)
-            # nstr.size = i x r 
+            # size1 = i x r
             size1 = nstr.size
             # flatten ityp (method faster than np.ravel() ) 
             nstrf = np.reshape(nstr,size1)
@@ -565,7 +565,15 @@ class Rays(dict):
             # Hugr issue with B index
             # Friedman version Bs was entering in the index
             # maybe B can have the same index that interactions
-            # but this must be manage when evaluation of CIR is made
+            # but this must be managed when evaluation of CIR is made
+
+            # BU 10/4/2013
+            # .. todo:  This is no longer idxf the good index
+            # why the transposition b is first 2x2x(i+1)xr 
+            #                             idxf is (ixr)
+            #
+            # need to check how B is used in eval()
+            #
             B.stack(data=b.T, idx=idxf)
 
 ##            #Reflexion
@@ -595,15 +603,24 @@ class Rays(dict):
     def eval(self):
         """docstring for eval"""
 
-        print 'GrRayTUD evaluation'
+        print 'Rays evaluation'
+
         if not self.I.evaluated:
             self.I.eval()
             self.B.eval()
 
+        # Ctilde : f x r x 2 x 2
         self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
+
+        # delays : ,r
         self.delays = np.zeros((self.nray))
+
+        # dis : ,r
         self.dis = np.zeros((self.nray))
-        nf = self.I.nf  # number of frequence
+
+        # inf : number of frequency point
+        nf = self.I.nf
+        
         # loop on interations
         for l in self:
             # l stands for the number of interactions
@@ -622,7 +639,7 @@ class Rays(dict):
             except:
                 pass
 
-            ## loop on the all the interactions of ray with l interactions
+            ## loop on all the interactions of ray with l interactions
             for i in range(1, l-1, 2):
 
 ###########################################
@@ -694,7 +711,7 @@ class Rays(dict):
             self.delays[self[l]['rayidx']] = self[l]['dis']/0.3
             self.dis[self[l]['rayidx']] = self[l]['dis']
 
-        # To be corrected in a futeur version
+        # To be corrected in a future version
         self.Ctilde = np.swapaxes(self.Ctilde, 1, 0)
 
     def signature(self, L):
