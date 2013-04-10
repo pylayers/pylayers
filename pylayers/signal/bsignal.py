@@ -51,6 +51,15 @@ class Bsignal(object):
                 print "x : ", lx
                 print "y : ", shy
 
+    def __repr__(self):
+        return '%s :  %s  %s' % (
+                            self.__class__.__name__,
+                            str(np.shape(self.x)),
+                            str(np.shape(self.y)))
+
+
+
+
     def save(self, filename):
         """
         Save Bsignal in Matlab File Format
@@ -421,6 +430,10 @@ class Usignal(Bsignal):
 
     def __init__(self, x=np.array([]), y=np.array([])):
         Bsignal.__init__(self, x, y)
+
+    def __repr__(self):
+        s = Bsignal.__repr__(self)
+        return(s)
 
     def __add__(self, u):
         t = type(u).__name__
@@ -860,6 +873,10 @@ class TBsignal(Bsignal):
     def __init__(self, x=np.array([]), y=np.array([])):
         Bsignal.__init__(self, x, y)
 
+    def __repr__(self):
+        s = Bsignal.__repr__(self)
+        return(s)
+
     def plot(self,
              iy=0,
              col='black',
@@ -1013,6 +1030,10 @@ class TUsignal(TBsignal, Usignal):
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         Usignal.__init__(self, x, y)
+
+    def __repr__(self):
+        s = Usignal.__repr__(self)
+        return(s)
 
     def diff(self):
         """ numerical differentiation
@@ -2329,6 +2350,10 @@ class TUDsignal(TUsignal):
         TUsignal.__init__(self, x, y)
         self.tau = tau
 
+    def __repr__(self):
+        s = TUsignal.__repr__(self)
+        return(s)
+
     def fig(self, N):
         """ plot a figure of the N first signals
 
@@ -2369,6 +2394,10 @@ class FBsignal(Bsignal):
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         Bsignal.__init__(self, x, y)
+    
+    def __repr__(self):
+        s = Bsignal.__repr__(self)
+        return(s)
 
     def plotri(self, nb=-1):
         """ plot real and imaginary part
@@ -2617,6 +2646,10 @@ class FUsignal(FBsignal, Usignal):
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         FBsignal.__init__(self, x, y)
+
+    def __repr__(self):
+        s = FBsignal.__repr__(self)
+        return(s)
 
     def __add__(self, u):
         L = self.align(u)
@@ -3228,6 +3261,10 @@ class FUDsignal(FUsignal):
         self.tau0 = tau0
         self.tau1 = 0.0
 
+    def __repr__(self):
+        s = FUsignal.__repr__(self)
+        return(s)
+
     def minphas(self):
         """ construct a minimal phase FUsignal
 
@@ -3424,6 +3461,10 @@ class FUDAsignal(FUsignal):
         self.doa  = doa
         self.tau1 = 0.0
 
+    def __repr__(self):
+        s = FUDsignal.__repr__(self)
+        return(s)
+
     def minphas(self):
         """ construct a minimal phase FUsignal
 
@@ -3595,6 +3636,10 @@ class FHsignal(FUsignal):
     """
     def __init__(self, x=np.array([]), y=np.array([])):
         FUsignal.__init__(self, x, y)
+
+    def __repr__(self):
+        s = FUsignal.__repr__(self)
+        return(s)
 
     def __mul__(self, u):
         x = self.x

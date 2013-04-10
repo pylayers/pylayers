@@ -71,6 +71,12 @@ class Inter(object):
 
         self.E = np.eye(2)
 
+    def __repr__(self):
+        return '%s :  %s  %s' % (
+                self.__class__.__name__,
+                str(np.shape(self.data)),
+                str(np.shape(self.idx)))
+
     def create_dusl(self,a):
         """ reate dictionnary of used slab.
 
@@ -98,8 +104,7 @@ class Inter(object):
             self.sout = np.zeros((len(self.data[:, 0])))
 
     def stack(self, data=np.array(()), idx=0, isdata=True):
-        """
-        stack data and the associated idx
+        """ stack data and the associated idx
 
         Attributes:
         ----------
@@ -346,10 +351,8 @@ class IntB(Inter):
         Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def __repr__(self):
-        return '%s :  %s  %s' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        s = Inter.__repr__(self)
+        return(s)
 
     def eval(self):
         """
@@ -404,10 +407,8 @@ class IntL(Inter):
         Inter.__init__(self, data=data, idx=idx, typ=0)
     
     def __repr__(self):
-        return '%s :  %s  %s' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        s = Inter.__repr__(self)
+        return(s)
 
     def eval(self):
         """
@@ -471,10 +472,8 @@ class IntR(Inter):
         self.gamma = [1]
 
     def __repr__(self):
-        return '%s :  %s  %s' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        s = Inter.__repr__(self)
+        return(s)
 
     def eval(self):
         """
@@ -563,11 +562,13 @@ class IntR(Inter):
 class IntT(Inter):
     """ Transmission  interaction class
 
-        self.d        Attribute
-        ---------
-        data = np.array((ninter x [theta,si,st]))
+        Attributes
+        ----------
+
+        data = np.array(( i x [theta,si,st]))
 
     """
+
     def __init__(self, data=np.array(()), idx=[]):
 
         Inter.__init__(self, data=data, idx=idx, typ=2)
@@ -581,10 +582,8 @@ class IntT(Inter):
 
 
     def __repr__(self):
-        return '%s :  %s  %s' % (
-                self.__class__.__name__,
-                str(np.shape(self.data)),
-                str(np.shape(self.idx)))
+        s = Inter.__repr__(self)
+        return(s)
 
     def eval(self):
         """
