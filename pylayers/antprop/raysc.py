@@ -485,7 +485,7 @@ class RayTud(object):
         self.nf = nf
         self.C = Co
 
-class GrRayTud(object):
+class GrRayTud(dict):
     """  a cluster of Rays in Tud format
 
     Attributes
@@ -496,10 +496,6 @@ class GrRayTud(object):
 
     I : class interaction which contrinats all the interactionn of The
         GrRayTud ( see class Interactions help)
-
-    dli dictionnary of length of interaction.
-        contains information about rays for a given interaction length
-
 
     Methods
     -------
@@ -513,7 +509,21 @@ class GrRayTud(object):
         # Interactions instance
         self.I = Interactions()
         # dictionnay of interaction legth
-        self.dli = {}
+
+    def __repr__(self):
+        s = ''
+        ni = 0
+        nl = 0
+        for k in self:
+            r = self[k]['rayidx']
+            nr = len(r)
+            s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
+            ni = ni + nr*k
+            nl = nl + nr*(2*k+1)
+        s = s + '-----'+'\n'
+        s = s+'ni : '+str(ni)+'\n'
+        s = s+'nl : '+str(nl)+'\n'
+        return(s)
 
     def dir(self):
         """ list the available file in tuddir
@@ -773,22 +783,22 @@ class GrRayTud(object):
                         # so we need to
                         # 1.create the correct key dictionnary
                         # 2.remap the index
-                        # 3. use another varaible loop (ii) incremented
+                        # 3. use another variable loop (ii) incremented
 
                         nbi = nbi+1
 
                     try:
-                        self.dli[nbi]['rays'] = np.vstack((self.dli[
-                                                          nbi]['rays'], np.zeros((1, nbi), dtype=int)))
-                        self.dli[nbi]['nbrays'] = self.dli[nbi]['nbrays']+1
-                        self.dli[nbi]['rayidx'] = np.hstack((
-                            self.dli[nbi]['rayidx'], np.array(([k]))))
+                        self[nbi]['rays'] = np.vstack((self[nbi]['rays'],
+                                                       np.zeros((1, nbi), dtype=int)))
+                        self[nbi]['nbrays'] = self[nbi]['nbrays']+1
+                        self[nbi]['rayidx'] = np.hstack((
+                            self[nbi]['rayidx'], np.array(([k]))))
 
                     except:
-                        self.dli[nbi] = {}
-                        self.dli[nbi]['rays'] = np.zeros((1, nbi), dtype=int)
-                        self.dli[nbi]['nbrays'] = 1
-                        self.dli[nbi]['rayidx'] = np.array(([k]))
+                        self[nbi] = {}
+                        self[nbi]['rays'] = np.zeros((1, nbi), dtype=int)
+                        self[nbi]['nbrays'] = 1
+                        self[nbi]['rayidx'] = np.array(([k]))
 
                     try:
                         self.rayidx = np.hstack((self.rayidx, np.array((nbi))))
@@ -796,7 +806,7 @@ class GrRayTud(object):
                         self.rayidx = np.array((nbi))
 
                     if nbi != nbint:
-                        self.dli[nbi]['rays'][-1][ii] = index
+                        self[nbi]['rays'][-1][ii] = index
                         self.mapp = np.vstack((
                             self.mapp, np.array([index, k, -1])))
                         index = index+1
@@ -806,7 +816,7 @@ class GrRayTud(object):
                 # of the ray
                 if decal:
                     ii = i + 1
-                self.dli[nbi]['rays'][-1][ii] = index
+                self[nbi]['rays'][-1][ii] = index
                 # B interaction
                 if (caract == -1):
                     start = stop
@@ -946,10 +956,10 @@ class GrRayTud(object):
 
     def ray(self, r):
         """
-            Give the ray number and it retruns the index of its interactions
+            Give the ray number and it returns the index of its interactions
         """
-        raypos = np.nonzero(self.dli[self.rayidx[r]]['rayidx'] == r)
-        return(self.dli[self.rayidx[r]]['rays'][raypos][0])
+        raypos = np.nonzero(self[self.rayidx[r]]['rayidx'] == r)
+        return(self[self.rayidx[r]]['rays'][raypos][0])
 
     def typ(self, r):
         """
@@ -972,12 +982,12 @@ class GrRayTud(object):
         self.dis = np.zeros((self.nray))
         nf = self.I.nf  # number of frequence
 
-        for l in self.dli.keys():
+        for l in self.keys():
             # l stands for the number of interactions
-            r = self.dli[l]['nbrays']
+            r = self[l]['nbrays']
             # reshape in order to have a 1D list of insde
             # reshape ray index
-            rrl = self.dli[l]['rays'].reshape(r*l)
+            rrl = self[l]['rays'].reshape(r*l)
             # get the corresponding evaluated interactions
             A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
             alpha = self.I.alpha[rrl].reshape(r, l)
@@ -1049,18 +1059,18 @@ class GrRayTud(object):
                                ..., np.newaxis, :, :], axis=-2)
 
             # fill the C tilde
-            self.Ctilde[:, self.dli[l]['rayidx'], :, :] = Z[:, :, :, :]
+            self.Ctilde[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
 
             # delay computation:
-            self.dli[l]['dis'] = self.I.si0[self.dli[l]['rays'][
-                :, 1]] + np.sum(self.I.sout[self.dli[l]['rays']], axis=1)
+            self[l]['dis'] = self.I.si0[self[l]['rays'][
+                :, 1]] + np.sum(self.I.sout[self[l]['rays']], axis=1)
 
             # Power losses due to distances
             # will be removed once the divergence factor will be implemented
-            self.Ctilde[:, self.dli[l]['rayidx'], :, :] = self.Ctilde[:, self.dli[l][
-                'rayidx'], :, :]*1./(self.dli[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
-            self.delays[self.dli[l]['rayidx']] = self.dli[l]['dis']/0.3
-            self.dis[self.dli[l]['rayidx']] = self.dli[l]['dis']
+            self.Ctilde[:, self[l]['rayidx'], :, :] = self.Ctilde[:, self[l][
+                'rayidx'], :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+            self.delays[self[l]['rayidx']] = self[l]['dis']/0.3
+            self.dis[self[l]['rayidx']] = self[l]['dis']
 
     def info(self, r):
         '''
@@ -1111,9 +1121,9 @@ class GrRayTud(object):
         nbinter = self.rayidx[r]
         # find the position of the ray into the dictionnary of legnth of
         # interactions
-        pray = np.nonzero(self.dli[nbinter]['rayidx'] == r)
+        pray = np.nonzero(self[nbinter]['rayidx'] == r)
         # get the interaciton idx
-        inter = self.dli[nbinter]['rays'][pray][0]
+        inter = self[nbinter]['rays'][pray][0]
         fig, axs = plt.subplots(
             nrows=2, ncols=nbinter, sharex=True, sharey=True)
         for i, data in enumerate(self.I.I[f, inter]):
@@ -1129,7 +1139,7 @@ class GrRayTud(object):
         if self.I.evaluated and evaluated:
             fig2, axs2 = plt.subplots(
                 nrows=2, ncols=1, sharex=True, sharey=True)
-            data = self.dli[nbinter]['Ctilde'][f, pray, :, :]
+            data = self[nbinter]['Ctilde'][f, pray, :, :]
             data = data.reshape(2, 2)
             axs2[0].imshow(np.imag(data), interpolation='none')
             axs2[1].imshow(np.real(data), interpolation='none')

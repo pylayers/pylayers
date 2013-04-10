@@ -19,6 +19,12 @@ from pylayers.antprop.slab import *
 
 
 class Rays(dict):
+    """ A set af rays
+
+    Methods
+    -------
+
+    """
     def __init__(self, pTx, pRx):
         self.pTx = pTx
         self.pRx = pRx
@@ -26,8 +32,17 @@ class Rays(dict):
 
     def __repr__(self):
         s = ''
+        ni = 0
+        nl = 0
         for k in self:
-            s = s + str(k)+' : '+str(self[k]['rayidx'])+'\n'
+            r = self[k]['rayidx']
+            nr = len(r)
+            s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
+            ni = ni + nr*k
+            nl = nl + nr*(2*k+1)
+        s = s + '-----'+'\n'
+        s = s+'ni : '+str(ni)+'\n'
+        s = s+'nl : '+str(nl)+'\n'
         return(s)
 
     def show(self, L):
@@ -417,7 +432,7 @@ class Rays(dict):
             Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
             Bi = np.concatenate((Bi, BiN[:, :, np.newaxis, :]), axis=2)
 
-            # M : 2 x 2 x i x r
+            # B : 2 x 2 x i x r
 
             self[k]['B'] = np.einsum('xv...,xw...->vw...', Bo, Bi)
 
