@@ -24,6 +24,12 @@ class Rays(dict):
         self.pRx = pRx
         self.nray = 0
 
+    def __repr__(self):
+        s = ''
+        for k in self:
+            s = s + str(k)+' : '+str(self[k]['rayidx'])+'\n'
+        return(s)
+
     def show(self, L):
         """  plot 2D rays within the simulated environment
 
@@ -427,12 +433,25 @@ class Rays(dict):
 
         L : Layout
         """
+
+        # stacked interactions
         I = Interactions()
+
+        # rotation basis
         B = IntB()
+
+        # LOS Interaction
         Los = IntL()
+
+        # Reflexion
         R = IntR()
+
+        # transmission
         T = IntT()
+
+        # Diffraction
         D = IntD()
+
         idx = np.array(())
         idxts = 0
         nbrayt = 0
@@ -604,7 +623,11 @@ class Rays(dict):
         """docstring for eval"""
 
         print 'Rays evaluation'
-
+        
+        #
+        # A terme on voudra reevaluer le canal pour differentes bande de
+        # frequence - prevoir la reevaluation 
+        #
         if not self.I.evaluated:
             self.I.eval()
             self.B.eval()
@@ -618,16 +641,20 @@ class Rays(dict):
         # dis : ,r
         self.dis = np.zeros((self.nray))
 
-        # inf : number of frequency point
+        #nf : number of frequency point
         nf = self.I.nf
-        
-        # loop on interations
+
+
+
+        # loop on interaction blocks
         for l in self:
             # l stands for the number of interactions
             r = self[l]['nbrays']
-            # reshape in order to have a 1D list of insde
+
+            # reshape in order to have a 1D list of index
             # reshape ray index
             rrl = self[l]['rays'].reshape(r*l)
+
             # get the corresponding evaluated interactions
             A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
             alpha = self.I.alpha[rrl].reshape(r, l)

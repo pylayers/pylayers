@@ -167,11 +167,12 @@ class Inter(object):
 
 class Interactions(Inter,dict):
     """ Interaction parameters
-        gather all basis interactions (IntB/L/R/T)
+
+        gather all type of interactions (IntB/L/R/T)
 
         Methods
         -------
-        add(self,li): add a list of basis interatcions
+        add(self,li): add a list of basis interactions
         addi(self,i): add a single interaction
         eval(self) : evaluate all the interactions added thanks to self.add or self.addi
                      and create the self.I which gather all thoses interactions
@@ -205,11 +206,12 @@ class Interactions(Inter,dict):
             list of interactions
 
         """
-        # look for the total number of interraction
+        # determine the total number of interactions
 
         for i in li:
             if i.idx != []:
                 self.nimax = max(self.nimax,max((i.idx)))+1
+
         for i in li:
             self.addi(i)
 
@@ -243,15 +245,14 @@ class Interactions(Inter,dict):
             self.typ[i.idx] = 'D'
 
     def eval(self):
-        '''
-            evaluate all the interactions
+        ''' evaluate all the interactions
 
-        Outputs:
-        --------
-        self.I :np.shape(self.I) = self.nf,self.nimax,2,2
-            with self.nf = number of frequences
-                 self.nimax : the total number of interaction ( of all rays)
+        Notes
+        -----
 
+        self.I : np.shape(self.I) = (self.nf,self.nimax,2,2)
+            with self.nf :  number of frequences
+            self.nimax : the total number of interactions ( of all rays)
         self.sout :
             distance from interaction to the next one
         self.si0 :
@@ -263,8 +264,10 @@ class Interactions(Inter,dict):
 
         '''
 
-        # Instanciate the global I matrix which gathered all interactions
+        # Initialize the global I matrix which gathered all interactions
         # into a single np.array
+
+        # f x i x 2 x 2
         self.I = np.zeros((self.nf, self.nimax, 2, 2), dtype=complex)
         self.sout = np.zeros((self.nimax))
         self.si0 = np.zeros((self.nimax))
@@ -405,7 +408,7 @@ class IntL(Inter):
     """
     def __init__(self, data=np.array(()), idx=[]):
         Inter.__init__(self, data=data, idx=idx, typ=0)
-    
+
     def __repr__(self):
         s = Inter.__repr__(self)
         return(s)
