@@ -22,7 +22,7 @@ class Rays(dict):
     def __init__(self, pTx, pRx):
         self.pTx = pTx
         self.pRx = pRx
-
+        self.nray=0
     def show(self, L):
         """  plot 2D rays within the simulated environment
 
@@ -352,7 +352,7 @@ class Rays(dict):
                             np.zeros(len(ph))])
             BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
             self[k]['BiN']=BiN
-            self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
+            # self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
 
     def fillinter(self,L):
         """  docstring for fillinter
@@ -370,6 +370,8 @@ class Rays(dict):
         D = IntD()
         idx = np.array(())
         idxts = 0
+        nbrayt = 0
+        
         # Transform dictionnary of slab name to array
         slv = nx.get_node_attributes(L.Gs,"name").values()
         slk = nx.get_node_attributes(L.Gs,"name").keys()
@@ -420,18 +422,26 @@ class Rays(dict):
             itypf = ityp.reshape(ityp.size)
             thetaf = theta.reshape(theta.size)
             sif = si[0,:,:].reshape(si[0,:,:].size)
-            b = self[k]['B'].reshape(2,2,ityp.size)
+            b = self[k]['M'].reshape(2,2,ityp.size)
 
             ## index creation
             ##################
-
             # create index for retrieve interactions
 
             idxts = idxts + idx.size #total size idx
-
+            
             # idx is an abolute index of the interaction position 
-
             idx =  idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T 
+            
+            nbray = np.shape(idx)[0]
+            
+            self[k]['rays']=idx
+            self[k]['nbrays']=nbray
+            self[k]['rayidx']=nbrayt +np.arange(nbray)
+            nbrayt = nbrayt + nbray
+            
+            
+            self.nray=self.nray + self[k]['nbrays']
             idxf = idx.reshape(idx.size)
 
             ## find used slab
@@ -515,41 +525,113 @@ class Rays(dict):
         self.I=I
         self.I.add([T,R])
         self.B=B
-#            nray = np.shape(nstr)[1]
 
-#            uR = np.where((ityp==1))
-#            uT = np.where((ityp==2))
-#            uD = np.where((ityp==3))
-#            uRf = np.where((ityp==4))
-#            uRc = np.where((ityp==5))
+    def eval(self):
+        """docstring for eval"""
+        
+        print 'GrRayTUD evaluation'
+        if not self.I.evaluated:
+            self.I.eval()
+            self.B.eval()
+            
+        self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
+        self.delays = np.zeros((self.nray))
+        self.dis = np.zeros((self.nray))
+        nf = self.I.nf  # number of frequence    
+        #loop on interations 
+        for l in self:
+             # l stands for the number of interactions
+             r = self[l]['nbrays']
+             # reshape in order to have a 1D list of insde
+             # reshape ray index
+             rrl = self[l]['rays'].reshape(r*l)
+             # get the corresponding evaluated interactions
+             A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+             alpha = self.I.alpha[rrl].reshape(r, l)
+             gamma = self.I.gamma[rrl].reshape(r, l)
+             si0 = self.I.si0[rrl].reshape(r, l)
+             sout = self.I.sout[rrl].reshape(r, l)
+             try:
+                 del Z
+             except:
+                 pass
 
-            # R.stack(data=, index=idx[uR[1],uR[0]])
+             ## loop on the all the interactions of ray with l interactions
+             for i in range(1, l-1, 2):
 
+ ###########################################
+ #                # Divergence factor D
+ ##                 not yet implementented
+ ###########################################
+ #                if i == 1:
+ #                    D0=1./si0[:,1]
+ #                    rho1=si0[:,1]*alpha[:,i]
+ #                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
+ #                    D=np.sqrt(
+ #                     ( (rho1 ) / (rho1 + sout[:,i]) )
+ #                     *( (rho2) / (rho2 + sout[:,i])))
+ #                    D=D*D0
+ #                    rho1=rho1+(sout[:,i]*alpha[:,i])
+ #                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+ #                    pdb.set_trace()
+ ##                     gerer le loss
+ #                    if np.isnan(D).any():
+ #                        p=np.nonzero(np.isnan(D))[0]
+ #                        D[p]=1./sout[p,1]
+ #                else :
+ #                    D=np.sqrt(
+ #                     ( (rho1 ) / (rho1 + sout[:,i]) )
+ #                     *( (rho2) / (rho2 + sout[:,i])))
 
+ #                    rho1=rho1+(sout[:,i]*alpha[:,i])
+ #                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+ ###########################################
 
-#                ### fill slab index dictionnary for each type of interactions
-#                if caract == 1:
-#                    ## read material index
+                 #  A0  (X dot Y)
+                 #  |    |     |
+                 #  v    v     v
+                 ##########################
+                 ## B  # I  # B  # I  # B #
+                 ##########################
+                 #      \_____/   \______/
+                 #         |         |
+                 #       Atmp(i)   Atmp(i+1)
+                 #
+                 # Z=Atmp(i) dot Atmp(i+1)
 
-#                    slidx = c1
-#                    ## find corresponding name
-#                    slname = R.slab.di[slidx]
-#                    try:
-#                        R.dusl[slname].append(R.uslidx)
-#                    except:
-#                        R.dusl[slname] = [R.uslidx]
-#                    R.uslidx = .uslidx + 1
-#                if caract == 2:
-#                    slidx = c1
-#                    slname = T.slab.di[slidx]
-#                    try:
-#                        T.dusl[slname].append(T.uslidx)
-#                    except:
-#                        T.dusl[slname] = [T.uslidx]
-#                    T.uslidx = T.uslidx + 1
-#            # in case of diffraction
-#                if caract == 3:
-#                    pass
+                 X = A[:, :, i, :, :]
+                 Y = A[:, :, i+1, :, :]
+                 ## Dot product interaction X Basis
+                 Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
+                               ..., np.newaxis, :, :], axis=-2)  # *D[np.newaxis,:,np.newaxis,np.newaxis]
+                 if i == 1:
+                 ## First Baspdis added
+                     A0 = A[:, :, i-1, :, :]
+                     Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
+                                ..., np.newaxis, :, :], axis=-2)
+                 else:
+                     # dot product previous interaction with latest
+                     Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
+                                ..., np.newaxis, :, :], axis=-2)
+
+             # fill the C tilde
+             self.Ctilde[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
+
+             # delay computation:
+             self[l]['dis'] = self.I.si0[self[l]['rays'][
+                 :, 1]] + np.sum(self.I.sout[self[l]['rays']], axis=1)
+
+             # Power losses due to distances
+             # will be removed once the divergence factor will be implemented
+             self.Ctilde[:, self[l]['rayidx'], :, :] = self.Ctilde[:, self[l][
+                 'rayidx'], :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+             self.delays[self[l]['rayidx']] = self[l]['dis']/0.3
+             self.dis[self[l]['rayidx']] = self[l]['dis']
+             
+        # To be corrected in a futeur version
+        self.Ctilde=np.swapaxes(self.Ctilde,1,0)
+             
+
     def signature(self, L):
         """
         """
