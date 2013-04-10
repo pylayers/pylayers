@@ -290,18 +290,27 @@ class Rays(dict):
             # self[k]['norm'][:,uwall[0],uwall[1]] = norm[nstrwall-1,:].T
             #
 
-            self[k]['norm'][:, uwall[0], uwall[
-                1]] = norm[mapping[nstrwall], :].T
+            # norm : 3 x i x r
+            self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrwall],:].T
             self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
             self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
 
             v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
             lsi = np.sqrt(np.sum(v*v, axis=0))
             si = v/lsi             # ndim , nint - 1 , nray
-            self[k]['si'] = si
+
+            # vsi : 3 x (i+1) x r
+            self[k]['vsi'] = si
+
+            # si : (i+1) x r
+            self[k]['si'] = lsi
 
             vn = self[k]['norm']
+
+            # s_in : 3 x i x r
             s_in = si[:, 0:-1, :]
+
+            # s_out : 3 x i x r
             s_out = si[:, 1:, :]
 
             #
@@ -404,7 +413,7 @@ class Rays(dict):
 
             # M : 2 x 2 x i x r
 
-            self[k]['M'] = np.einsum('xv...,xw...->vw...', Bo, Bi)
+            self[k]['B'] = np.einsum('xv...,xw...->vw...', Bo, Bi)
 
             # BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
             # self[k]['BiN']=BiN
@@ -450,8 +459,8 @@ class Rays(dict):
         # warning use zeros instead of empty because slab zero
         # is virtually used before assigning correct slab to ceil and floor
 
-        # slab is now an array of string.
-        # each value of Gs node is the index of the coresponding slab
+        # sla is an array of string.
+        # each value of Gs node is the index of the corresponding slab
         sla[slk] = np.array(slv)
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
@@ -462,21 +471,37 @@ class Rays(dict):
         for k in self:
 
             uR = uT = uD = uRf = uRc = 0.
-            nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
-            ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
+
+            # nstr : i x r
+            nstr = self[k]['sig'][0, 1:-1, :]
+
+            # ityp : i x r
+            ityp = self[k]['sig'][1, 1:-1, :]
+
+            # theta : i x r   ( related to interaction )
             theta = self[k]['theta']
+
+            # (i+1) x r
             si = self[k]['si']
 
             ## flatten information
             ######################
 
             # reshape nstr in order to be flat (1 dimension)
-            nstrf = np.reshape(nstr, nstr.size)
-            # flatten ityp
-            itypf = ityp.reshape(ityp.size)
-            thetaf = theta.reshape(theta.size)
-            sif = si[0, :, :].reshape(si[0, :, :].size)
-            b = self[k]['M'].reshape(2, 2, ityp.size)
+            # nstr.size = i x r 
+            size1 = nstr.size
+            # flatten ityp (method faster than np.ravel() ) 
+            nstrf = np.reshape(nstr,size1)
+            itypf = ityp.reshape(size1)
+            thetaf = theta.reshape(size1)
+            #sif = si[0, :, :].reshape(si[0, :, :].size)
+
+            #  (i+1)xr
+            size2 = si[:, :].size
+            #  ,(i+1)xr
+            sif = si[:, :].reshape(size2)
+            # 2x2,(i+1)xr
+            b = self[k]['B'].reshape(2, 2, size2)
 
             ## index creation
             ##################
@@ -559,8 +584,7 @@ class Rays(dict):
 
             # Transmision
             ############
-            T.stack(data=np.array((thetaf[uT], sif[
-                    uT], sif[uT+1])).T, idx=idxf[uT])
+            T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
