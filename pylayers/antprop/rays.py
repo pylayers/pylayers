@@ -541,9 +541,10 @@ class Rays(dict):
             ##################
             # create index for retrieve interactions
 
-            idxts = idxts + idx.size  # total size idx
+            # integer offset : total size idx
+            idxts = idxts + idx.size
 
-            # idx is an abolute index of the interaction position
+            # idx is an absolute index of the interaction position
             idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T
 
             nbray = np.shape(idx)[0]

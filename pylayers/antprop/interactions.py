@@ -78,12 +78,13 @@ class Inter(object):
                 str(np.shape(self.idx)))
 
     def create_dusl(self,a):
-        """ reate dictionnary of used slab.
+        """ create dictionnary of used slab.
 
-        Attributes 
+        Attributes
         ----------
-        a : np.array of string which contains ordred interactions 
+        a : np.array of string which contains ordered interactions
             ordered as in self.idx/self.data
+
         """
         for s in self.dusl:
             self.dusl[s]=np.where(a==s)[0]
@@ -181,12 +182,15 @@ class Interactions(Inter,dict):
 
     def __init__(self):
         """
-        5 types of interactions
+
+        There are 5 types of interactions
+
         B : local basis transformation matrix (unitary)
         L : LOS case
         R : Reflection
         T : Transmission
         D : Diffraction
+
         """
         Inter.__init__(self)
         self['B'] = []
@@ -216,13 +220,19 @@ class Interactions(Inter,dict):
             self.addi(i)
 
     def addi(self, i):
-        """
-            Add interactions as a member of Interactions class
+        """ Add interactions as a member of Interactions class
+
+        Parameters
+        ----------
+
+        i : Inter object
+
         """
 
 
         if not isinstance(self.typ, np.ndarray):
             self.typ = np.zeros((self.nimax), dtype=str)
+
         if i.typ == -1:
             self.B = i
             self['B'] = i.idx

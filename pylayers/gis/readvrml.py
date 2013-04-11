@@ -20,7 +20,7 @@ def savestr2(dpt,dwall,_filename='struc.str2'):
     Parameters
     ----------
 
-    dpt : 
+    dpt :
     dwall:
 
     """
@@ -284,6 +284,7 @@ def geomLine(st):
             coord.append(float(ic))
     tcoord = np.array(coord).reshape(len(coord)/3,3)
     return(tabindex,tcoord)
+
 def geomFace(st):
     """ build a Face from string 
 
@@ -293,6 +294,7 @@ def geomFace(st):
 
     Returns
     -------
+
     tabindex
     tcoord : ndarray
 

@@ -508,7 +508,6 @@ class GrRayTud(dict):
         self.nray = 0
         # Interactions instance
         self.I = Interactions()
-        # dictionnay of interaction legth
 
     def __repr__(self):
         s = ''
@@ -736,7 +735,8 @@ class GrRayTud(dict):
 
         nimax = 0
         index = 0
-        # in order to inialize all type of interaction with the correct
+        #
+        # in order to initialize all type of interaction with the correct
         # frequencies
 
         B = IntB()
@@ -772,7 +772,7 @@ class GrRayTud(dict):
                     decal = False
                     if (caract != -1):
                         # check if first interaction is a IntB.
-                        # if not, itthis first interaction is forced to be
+                        # if not, this first interaction is forced to be
                         # an identity matrix
                         M = np.array((1, 0, 0, 1))
                         try:
@@ -885,7 +885,7 @@ class GrRayTud(dict):
                 # Diffraction interaction
 ######################## TODO AFTER THIS POINT !!!!!!!!!!!!!!
                 elif (caract == 3):
-                    print 'catratct 3'
+                    print 'caract 3'
             #        inter.data = []
                     start = stop
                     stop = start + 48
