@@ -531,7 +531,6 @@ class Rays(dict):
             thetaf = theta.reshape(size1)
             #sif = si[0, :, :].reshape(si[0, :, :].size)
 
-       
             ## index creation
             ##################
             # create index for retrieve interactions
@@ -546,22 +545,17 @@ class Rays(dict):
             self[k]['rays'] = idx
             self[k]['nbrays'] = nbray
             self[k]['rayidx'] = nbrayt + np.arange(nbray)
-            
-            
             # create a numpy array to link ray index to ites correponding niuber of interactions
-            
             ray2nbi=np.ones((nbray))
             try:
                 self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
             except:
                 self.ray2nbi=ray2nbi
-            self.ray2nbi[self[k]['rayidx']]  = k  
-                
+
+            self.ray2nbi[self[k]['rayidx']]  = k
             nbrayt = nbrayt + nbray
 
             self.nray = self.nray + self[k]['nbrays']
-            
-            
             idxf = idx.reshape(idx.size)
 
             #  (i+1)xr
@@ -570,7 +564,7 @@ class Rays(dict):
             sif = si[:, :].reshape(size2)
             # 2x2,(i+1)xr
             b0 = self[k]['B'][:,:,0,:]
-            b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray)
+            b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray)
 
 
 
@@ -626,8 +620,7 @@ class Rays(dict):
             #
             # need to check how B is used in eval()
             #
-            
-            # Warning 
+            # Warning
             # B.idx refers to an interaction index
             # whereas B0.idx refers to a ray number
             B.stack(data=b.T, idx=idxf)
@@ -661,16 +654,14 @@ class Rays(dict):
         """docstring for eval"""
 
         print 'Rays evaluation'
-        
         #
         # A terme on voudra reevaluer le canal pour differentes bande de
-        # frequence - prevoir la reevaluation 
+        # frequence - prevoir la reevaluation
         #
         if not self.I.evaluated:
             self.I.eval()
             B=self.B.eval()
             B0=self.B0.eval()
-            
 
         # Ctilde : f x r x 2 x 2
         self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
@@ -696,7 +687,7 @@ class Rays(dict):
             rrl = self[l]['rays'].reshape(r*l)
 
             # get the corresponding evaluated interactions
-            A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+            A  = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
             Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
             B0l = B0[:, self[l]['rayidx'], :, :]
             alpha = self.I.alpha[rrl].reshape(r, l)
@@ -751,7 +742,7 @@ class Rays(dict):
                 #
                 # Z=Atmp(i) dot Atmp(i+1)
 
-                X = A[:, :, i, :, :]
+                X = A [:, :, i, :, :]
                 Y = Bl[:, :, i, :, :]
                 ## Dot product interaction X Basis
                 Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
@@ -836,6 +827,7 @@ class Rays(dict):
 
         for iidx, i in enumerate(typ):
             print 'interaction #', ray[iidx], 'type:', i
+            # f x l x 2 x 2
             print self.I.I[0, ray[iidx], :, :]
 
 

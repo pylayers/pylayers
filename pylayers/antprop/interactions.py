@@ -264,7 +264,7 @@ class Interactions(Inter,dict):
 
         '''
 
-        # Initialize the global I matrix which gathered all interactions
+        # Initialize the global I matrix which gathers all interactions
         # into a single np.array
 
         # f x i x 2 x 2
