@@ -123,12 +123,12 @@ for c,k in enumerate(AnchorNodes):
     pta = array([AnchorNodes[k]['coord'][0],AnchorNodes[k]['coord'][1],AnchorNodes[k]['coord'][2]]).reshape(3,1)
     S.tx.point(pta,mode="add")
     da[c]=k
-    plt.plot(pta[0,:],pta[1,:],'or')
+    # plt.plot(pta[0,:],pta[1,:],'or')
 for c,k in enumerate(MT_DLR_RDTMaster):
     ptm = array([MT_DLR_RDTMaster[k][0],MT_DLR_RDTMaster[k][1],MT_DLR_RDTMaster[k][2]]).reshape(3,1)
     dm[c]=k
     S.rx.point(ptm,mode="add")
-    plt.plot(ptm[0,:],ptm[1,:],'ob')
+    # plt.plot(ptm[0,:],ptm[1,:],'ob')
 
 #
 # Select a link 
@@ -159,29 +159,32 @@ else:
 r3d = r2d.to3D()
 r3d.locbas(L)
 r3d.fillinter(L)
-#r3d.eval()
-#
-#c11 = r3d.Ctilde[:,:,0,0]
-#c12 = r3d.Ctilde[:,:,0,1]
-#c21 = r3d.Ctilde[:,:,1,0]
-#c22 = r3d.Ctilde[:,:,1,1]
-#
-#
-#
-#Cn=Ctilde()
-#Cn.Cpp = bs.FUsignal(r3d.I.f, c11)
-#Cn.Ctp = bs.FUsignal(r3d.I.f, c12)
-#Cn.Cpt = bs.FUsignal(r3d.I.f, c21)
-#Cn.Ctt = bs.FUsignal(r3d.I.f, c22)
-#Cn.nfreq = r3d.I.nf
-#Cn.nray = r3d.nray
-#Cn.tauk=r3d.delays
-#
-#raynumber = 4
-#
-#fig=plt.figure('Cpp')
-#f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
-#
+r3d.eval()
+
+c11 = r3d.Ctilde[:,:,0,0]
+c12 = r3d.Ctilde[:,:,0,1]
+c21 = r3d.Ctilde[:,:,1,0]
+c22 = r3d.Ctilde[:,:,1,1]
+
+
+
+Cn=Ctilde()
+Cn.Cpp = bs.FUsignal(r3d.I.f, c11)
+Cn.Ctp = bs.FUsignal(r3d.I.f, c12)
+Cn.Cpt = bs.FUsignal(r3d.I.f, c21)
+Cn.Ctt = bs.FUsignal(r3d.I.f, c22)
+Cn.nfreq = r3d.I.nf
+Cn.nray = r3d.nray
+Cn.tauk=r3d.delays
+
+raynumber = 4
+
+fig=plt.figure('Cpp')
+f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
+
+r3d.info(raynumber)
+# plt.show()
+
 ##for k in r2d:   # for all interaction group k 
 ##    k = int(k)
 ##    Nrayk = np.shape(r2d[str(k)]['alpha'])[1]  # Number of rays in interaction group k 

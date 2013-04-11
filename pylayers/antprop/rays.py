@@ -454,6 +454,7 @@ class Rays(dict):
 
         # rotation basis
         B = IntB()
+        B0 = IntB()
 
         # LOS Interaction
         Los = IntL()
@@ -530,13 +531,7 @@ class Rays(dict):
             thetaf = theta.reshape(size1)
             #sif = si[0, :, :].reshape(si[0, :, :].size)
 
-            #  (i+1)xr
-            size2 = si[:, :].size
-            #  ,(i+1)xr
-            sif = si[:, :].reshape(size2)
-            # 2x2,(i+1)xr
-            b = self[k]['B'].reshape(2, 2, size2)
-
+       
             ## index creation
             ##################
             # create index for retrieve interactions
@@ -551,10 +546,33 @@ class Rays(dict):
             self[k]['rays'] = idx
             self[k]['nbrays'] = nbray
             self[k]['rayidx'] = nbrayt + np.arange(nbray)
+            
+            
+            # create a numpy array to link ray index to ites correponding niuber of interactions
+            
+            ray2nbi=np.ones((nbray))
+            try:
+                self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
+            except:
+                self.ray2nbi=ray2nbi
+            self.ray2nbi[self[k]['rayidx']]  = k  
+                
             nbrayt = nbrayt + nbray
 
             self.nray = self.nray + self[k]['nbrays']
+            
+            
             idxf = idx.reshape(idx.size)
+
+            #  (i+1)xr
+            size2 = si[:, :].size
+            #  ,(i+1)xr
+            sif = si[:, :].reshape(size2)
+            # 2x2,(i+1)xr
+            b0 = self[k]['B'][:,:,0,:]
+            b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray)
+
+
 
             ## find used slab
             ##################
@@ -608,8 +626,12 @@ class Rays(dict):
             #
             # need to check how B is used in eval()
             #
+            
+            # Warning 
+            # B.idx refers to an interaction index
+            # whereas B0.idx refers to a ray number
             B.stack(data=b.T, idx=idxf)
-
+            B0.stack(data=b0.T,idx=self[k]['rayidx'])
 ##            #Reflexion
 ##            ##########
 ##          # wall reflexion
@@ -633,6 +655,7 @@ class Rays(dict):
         self.I = I
         self.I.add([T, R])
         self.B = B
+        self.B0 = B0
 
     def eval(self):
         """docstring for eval"""
@@ -645,7 +668,9 @@ class Rays(dict):
         #
         if not self.I.evaluated:
             self.I.eval()
-            self.B.eval()
+            B=self.B.eval()
+            B0=self.B0.eval()
+            
 
         # Ctilde : f x r x 2 x 2
         self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
@@ -672,6 +697,8 @@ class Rays(dict):
 
             # get the corresponding evaluated interactions
             A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+            Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+            B0l = B0[:, self[l]['rayidx'], :, :]
             alpha = self.I.alpha[rrl].reshape(r, l)
             gamma = self.I.gamma[rrl].reshape(r, l)
             si0 = self.I.si0[rrl].reshape(r, l)
@@ -725,13 +752,13 @@ class Rays(dict):
                 # Z=Atmp(i) dot Atmp(i+1)
 
                 X = A[:, :, i, :, :]
-                Y = A[:, :, i+1, :, :]
+                Y = Bl[:, :, i, :, :]
                 ## Dot product interaction X Basis
                 Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
                               ..., np.newaxis, :, :], axis=-2)  # *D[np.newaxis,:,np.newaxis,np.newaxis]
                 if i == 1:
                 ## First Baspdis added
-                    A0 = A[:, :, i-1, :, :]
+                    A0 = B0l[:, :,  :, :]
                     Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
                                ..., np.newaxis, :, :], axis=-2)
                 else:
@@ -755,6 +782,64 @@ class Rays(dict):
 
         # To be corrected in a future version
         self.Ctilde = np.swapaxes(self.Ctilde, 1, 0)
+
+
+    def ray(self, r):
+        """
+            Give the ray number and it returns the index of its interactions
+        """
+        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)
+        return(self[self.ray2nbi[r]]['rays'][raypos][0])
+
+    def typ(self, r):
+        """
+            return the list of interaction type of a given ray
+        """
+
+        a = self.ray(r)
+        return(self.I.typ[a])
+
+    def info(self, r):
+        '''
+            information for a given ray r
+
+        Attributes
+        ----------
+        r : a ray number
+
+        '''
+        print '-------------------------'
+        print 'Informations of ray #', r
+        print '-------------------------\n'
+
+        ray = self.ray(r)
+        typ = self.typ(r)
+        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index', 'type', 'material', 'th(rad)', 'alpha', 'gamma2')
+        for iidx, i in enumerate(typ):
+            if i == 'T' or i == 'R':
+                I = getattr(self.I, i)
+                for m in I.dusl.keys():
+                    midx = I.dusl[m]
+                    Iidx = np.array((I.idx))[midx]
+                    th = I.data[I.dusl[m], 0]
+                    gamma = I.gamma[midx]
+                    alpha = I.alpha[midx]
+                    for ii, Ii in enumerate(Iidx):
+                        if Ii == ray[iidx]:
+                            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, m, th[ii], alpha[ii], gamma[ii])
+            # else:
+            #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
+
+        print '\n----------------------------------------'
+        print ' Matrix of ray #', r, 'at f=', self.I.f[0]
+        print '----------------------------------------'
+
+        for iidx, i in enumerate(typ):
+            print 'interaction #', ray[iidx], 'type:', i
+            print self.I.I[0, ray[iidx], :, :]
+
+
+
 
     def signature(self, L):
         """
