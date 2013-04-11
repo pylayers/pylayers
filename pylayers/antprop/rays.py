@@ -709,8 +709,8 @@ class Rays(dict):
                 pass
 
             ## loop on all the interactions of ray with l interactions
-            for i in range(1, l-1, 2):
-
+            for i in range(1, l-1, 1):
+                print i
 ###########################################
 #                # Divergence factor D
 ##                 not yet implementented
