@@ -526,9 +526,9 @@ class Rays(dict):
             # size1 = i x r
             size1 = nstr.size
             # flatten ityp (method faster than np.ravel() ) 
-            nstrf = np.reshape(nstr,size1)
-            itypf = ityp.reshape(size1)
-            thetaf = theta.reshape(size1)
+            nstrf = np.reshape(nstr,size1,order='F')
+            itypf = ityp.reshape(size1,order='F')
+            thetaf = theta.reshape(size1,order='F')
             #sif = si[0, :, :].reshape(si[0, :, :].size)
 
        
@@ -539,14 +539,13 @@ class Rays(dict):
             idxts = idxts + idx.size  # total size idx
 
             # idx is an abolute index of the interaction position
-            idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T
+            idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
 
-            nbray = np.shape(idx)[0]
+            nbray = np.shape(idx)[1]
 
             self[k]['rays'] = idx
             self[k]['nbrays'] = nbray
             self[k]['rayidx'] = nbrayt + np.arange(nbray)
-            
             
             # create a numpy array to link ray index to ites correponding niuber of interactions
             
@@ -562,18 +561,18 @@ class Rays(dict):
             self.nray = self.nray + self[k]['nbrays']
             
             
-            idxf = idx.reshape(idx.size)
+            idxf = idx.reshape(idx.size,order='F')
 
             #  (i+1)xr
             size2 = si[:, :].size
             #  ,(i+1)xr
-            sif = si[:, :].reshape(size2)
+            sif = si[:, :].reshape(size2,order='F')
             # 2x2,(i+1)xr
             b0 = self[k]['B'][:,:,0,:]
-            b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray)
+            b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
 
 
-
+    
             ## find used slab
             ##################
 
@@ -649,7 +648,6 @@ class Rays(dict):
             # Transmision
             ############
             T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
-
         T.create_dusl(tsl)
         R.create_dusl(rsl)
         self.I = I
@@ -693,16 +691,16 @@ class Rays(dict):
 
             # reshape in order to have a 1D list of index
             # reshape ray index
-            rrl = self[l]['rays'].reshape(r*l)
+            rrl = self[l]['rays'].reshape(r*l,order='F')
 
             # get the corresponding evaluated interactions
-            A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
-            Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+            A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+            Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
             B0l = B0[:, self[l]['rayidx'], :, :]
-            alpha = self.I.alpha[rrl].reshape(r, l)
-            gamma = self.I.gamma[rrl].reshape(r, l)
-            si0 = self.I.si0[rrl].reshape(r, l)
-            sout = self.I.sout[rrl].reshape(r, l)
+            alpha = self.I.alpha[rrl].reshape(r, l,order='F')
+            gamma = self.I.gamma[rrl].reshape(r, l,order='F')
+            si0 = self.I.si0[rrl].reshape(r, l,order='F')
+            sout = self.I.sout[rrl].reshape(r, l,order='F')
             try:
                 del Z
             except:
@@ -768,10 +766,9 @@ class Rays(dict):
 
             # fill the C tilde
             self.Ctilde[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
-
             # delay computation:
             self[l]['dis'] = self.I.si0[self[l]['rays'][
-                :, 1]] + np.sum(self.I.sout[self[l]['rays']], axis=1)
+                0,:]] + np.sum(self.I.sout[self[l]['rays']], axis=0)
 
             # Power losses due to distances
             # will be removed once the divergence factor will be implemented
@@ -788,8 +785,9 @@ class Rays(dict):
         """
             Give the ray number and it returns the index of its interactions
         """
-        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)
-        return(self[self.ray2nbi[r]]['rays'][raypos][0])
+        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
+        return(self[self.ray2nbi[r]]['rays'][:,raypos][:,0])
+
 
     def typ(self, r):
         """
@@ -815,6 +813,7 @@ class Rays(dict):
         ray = self.ray(r)
         typ = self.typ(r)
         print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index', 'type', 'material', 'th(rad)', 'alpha', 'gamma2')
+        print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
         for iidx, i in enumerate(typ):
             if i == 'T' or i == 'R':
                 I = getattr(self.I, i)
@@ -827,18 +826,22 @@ class Rays(dict):
                     for ii, Ii in enumerate(Iidx):
                         if Ii == ray[iidx]:
                             print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, m, th[ii], alpha[ii], gamma[ii])
+
             # else:
+            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
             #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
         print '\n----------------------------------------'
         print ' Matrix of ray #', r, 'at f=', self.I.f[0]
         print '----------------------------------------'
 
+        print 'rotation matrix#', 'type: B0'
+        print self.B0.data[r,:,:]
         for iidx, i in enumerate(typ):
             print 'interaction #', ray[iidx], 'type:', i
             print self.I.I[0, ray[iidx], :, :]
-
-
+            print 'rotation matrix#',[ray[iidx]], 'type: B'
+            print self.B.data[ray[iidx], :, :]
 
 
     def signature(self, L):
