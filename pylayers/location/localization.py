@@ -25,7 +25,7 @@ import networkx as nx
 class Localization(object):
 
     def __init__(self,**args):
-        
+
         defaults={'PN':Network(),'net':Network(),'method':['geo','alg'],'model':{},'ID':'0','save':[]}
 
         for key, value in defaults.items():
@@ -46,14 +46,14 @@ class Localization(object):
 #   get the constraint of the networl followinf rule given in self.rule list.
 #            These rules are defined in Loca_Rule
 #
-#                args[key]=value  
+#                args[key]=value
 #
 #    def get_const(self,RAT=None,LDP=None):
 #        """ get constraints
-#            
+#
 #            get the constraint of the network following rule given in self.rule list.
 #            These rules are defined in Loca_Rule
-#        
+#
 #        """
 #        self.dc= merge_rules(self,RAT=RAT,LDP=LDP)
 
@@ -114,7 +114,7 @@ class Localization(object):
 
     def update(self,rat='all',ldp='all'):
         """
-            update constraints information (anchor position, value and std) 
+            update constraints information (anchor position, value and std)
             from the network graph
         """
         if rat == 'all':
@@ -129,6 +129,7 @@ class Localization(object):
         self.algloc.ldp={}
         for c in self.cla.c:
             crat,cldp,e,own=c.origin.values()
+
             if (crat in rat) and (cldp in ldp) :
                 if self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat]['vis']:
                     c.visible = True
@@ -136,9 +137,11 @@ class Localization(object):
                     value = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat][cldp][0]
                     std = self.net.node[self.ID]['PN'].edge[self.ID][e[0]][crat][cldp][1]
                     if 'geo' in self.method :
-                        c.p = pos
-                        c.value = value
-                        c.std = std
+                        # methods from constraint.py
+                        c.updc('p',pos)
+                        c.updc('value',value)
+                        c.updc('std',std)
+
 
                     if 'alg' in self.method :
                         if c.runable:
@@ -159,9 +162,10 @@ class Localization(object):
                                 self.algloc.ldp['d0'] = c.param['d0']
                                 ####### -pl0 from alg loc ############
                                 self.algloc.ldp['PL0'] = -c.param['PL0']
-                else : 
+                else :
                     c.visible = False
-
+            else :
+                c.usable = False
 
         try:
             self.algloc.nodes['RN_TOA']=self.algloc.nodes['RN_TOA'].T
@@ -234,7 +238,7 @@ class Localization(object):
 #        """
 #            Compute CramerRao bound
 #        """
-#        
+#
 #        if ldp == 'all':
 #            ldp=['Pr','TOA','TDOA']
 #        crb = self.algloc.crb(np.zeros((2,1)),'Pr' in ldp, 'TOA' in ldp, 'TDOA' in ldp)
@@ -254,28 +258,29 @@ class PLocalization(Process):
 
 
 
-        
+
 
     def run(self):
 #        self.loc.get_const()
         self.loc.fill_cla()
         while True:
-
+            self.loc.update(ldp='TOA')
+            pdb.set_trace()
             # if no previous position have been computed or if position is obsolete
             if self.loc.net.node[self.loc.ID]['pe'].size == 0 \
                 or self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node['te']>self.loc_updt_time:
-                    
-                    # try to obtain an estimated position
-                    if 'geo' in self.method :
-                        bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
-                    if 'alg' in self.method and bep:
-                        bep = self.loc.compute_alg(ldp='TOA',now=self.sim.now())
 
-                    # if no position has been computed 
-                    if not bep : 
+                    # try to obtain an estimated position
+#                    if 'geo' in self.method :
+#                        bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
+#                    if 'alg' in self.method and bep:
+#                        bep = self.loc.compute_alg(ldp='TOA',now=self.sim.now())
+#                     if no position has been computed
+                    bep=False
+                    if not bep :
                         self.tx.cmdrq.signal()
 
-#                        self.loc.update(ldp='all')
+                        self.loc.update(ldp='TOA')
 
 
             if self.sim.verbose:

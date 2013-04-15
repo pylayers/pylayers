@@ -214,8 +214,8 @@ class Network(nx.MultiDiGraph):
         (2, 1, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
         """
 
-        for l in self.LDP:
-            d[l]=[]
+#        for l in self.LDP:
+#            d[l]=[]
         pool = tuple(iterable)
         n = len(pool)
         r = n if r is None else r
@@ -418,6 +418,8 @@ class Network(nx.MultiDiGraph):
             for i in itertools.combinations(self.RAT[Rat],2):
                 self.link[Rat].append(i)
             self.relink[Rat]=[(i[1],i[0]) for i in self.link[Rat]]
+
+
     def get_SubNet(self,Rat=None):
         """
         get SubNetworks of a network
@@ -1413,7 +1415,7 @@ class PNetwork(Process):
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
             # Add access point position in each personal network (PN)
-#            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
+            [self.net.node[n]['PN'].node[n2].update({'pe':self.net.node[n2]['p']}) for n2 in self.net.node[n]['PN'].node.iterkeys() if self.net.node[n]['PN'].node[n2]['type'] == 'ap']
                 
         ####################################################################################
         self.pos=self.net.get_pos()

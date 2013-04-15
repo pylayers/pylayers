@@ -105,6 +105,35 @@ class Constraint(object):
         self.parmsh['grid'] = True       # display grid
         self.parmsh['grav'] = True       # display box gravity center
 
+    def updc(self,name='p',value=np.array(())):
+        """ update values of a constraint
+
+        Example :
+        -------
+        >>> from pylayers.location.geometric.constraints.toa import *
+        >>> T=TOA()
+        >>> T.usable
+        True
+        >>> T.p
+        array([], dtype=float64)
+
+
+        >>> T.updc('p',np.array((10,3)))
+        >>> T.p
+        array([10,  3])
+        >>> T.updc('value',[np.nan])
+        >>> T.usable
+        False
+        """
+        if np.sum(np.isnan(value))<1:
+            setattr(self,name,value)
+        else :
+            if name =='p':
+                self.runable = False
+            elif name =='value' or name =='std':
+                self.usable = False
+
+
     def info(self):
         """ display info on constraint
         """

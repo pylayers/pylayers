@@ -60,9 +60,9 @@ class Agent(object):
            'gcom':pylayers.communication.Gcom()
                 Communication graph
            'comm_mod': string
-                Communication between nodes mode: 
+                Communication between nodes mode:
                 'autonomous': all TOAs are refreshed regulary
-                'synchro' : only visilbe TOAs are refreshed 
+                'synchro' : only visilbe TOAs are refreshed
         """
         defaults = {'ID': 0,
                     'name': 'johndoe',
@@ -150,21 +150,22 @@ class Agent(object):
 
 
             elif args['comm_mode'] == 'autonomous':
-                ## The TOA requests are made by node only when they are in visibility of pairs.
+                ## The requests are made by node only when they are in visibility of pairs.
 
+                # self.rxr only manage a refresh RSS process
                 self.rxr = RX(net=self.net, ID=self.ID,
                               gcom=self.gcom, sim=self.sim)
+                # self.tx manage all requests to other nodes
                 self.tx = TX(net=self.net, ID=self.ID,
                               gcom=self.gcom, sim=self.sim)
-#                self.rxt = RX(net=self.net, ID=self.ID,
-#                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
-#                self.txt = TX(net=self.net, ID=self.ID,
-#                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
+                # self.tx replies to  requests from self.tx
+                self.rx = RX(net=self.net, ID=self.ID,
+                              gcom=self.gcom, sim=self.sim)
 
                 self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
                 self.sim.activate(self.tx, self.tx.request(), 0.0)
-#                self.sim.activate(self.rxt, self.rxt.wait_TOArq(), 0.0)
-#                self.sim.activate(self.txt, self.txt.request_TOA(), 0.0)
+                self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
+
 
 
 
@@ -182,7 +183,10 @@ class Agent(object):
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN = self.net.node[self.ID]['PN']
             self.PN.node[self.ID]['pe'] = self.net.node[self.ID]['p']
-
+            if args['comm_mode'] == 'autonomous':
+                self.rx = RX(net=self.net, ID=self.ID,
+                              gcom=self.gcom, sim=self.sim)
+                self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
         else:
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')
 
@@ -210,4 +214,3 @@ class Agent(object):
                                       tx=self.tx,
                                       sim=args['sim'])
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
-

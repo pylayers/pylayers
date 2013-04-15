@@ -174,6 +174,7 @@ class CLA(object):
         self.runable=[c.runable for c in self.c]
         self.obsolete=[c.obsolete for c in self.c]
         self.visible=[c.visible for c in self.c]
+        self.usable=[c.usable for c in self.c]
 
     def compute(self,pe=True):
         """
@@ -365,6 +366,7 @@ class CLA(object):
 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.runable) == False)[0]) 
+
         Nc = self.Nc - len(np.nonzero(np.array(self.usable) == False)[0]) 
         self.Nc = Nc
         vcwmin = 1.0  # max(self.vcw)
@@ -381,7 +383,7 @@ class CLA(object):
                     onlyRSS = True
 
         while (step > 0.05) | (vcw1 == vcwmin):
-
+            pdb.set_trace()
             self.setvcw(vcw1)
                 #constraints vcw set to current value
 
@@ -407,14 +409,15 @@ class CLA(object):
                 tlb = tlb.intersect(ex.lbox)
             except:
                 pass
+            pdb.set_trace()
             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
                 vcw1 = vcw1 + step
                 step = step * 1.2
-#                print step, vcw1
+                print step, vcw1
             else:                           # if the list is not empty (intersection exist) vcw1 is decreased
                 vcw1 = max(vcw1 - step / 2., vcwmin)  # vcw > vcwmin
                 step = step / 4.
-#                print step, vcw1
+                print step, vcw1
         try:
             if (np.diff(tlb.box[0].bd, axis=0)[0][0] == 0) | (np.diff(tlb.box[0].bd, axis=0)[0][1] == 0):
                 self.setvcw(vcw1 + 1.0)

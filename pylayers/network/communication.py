@@ -22,7 +22,7 @@
 #####################################################################
 
 import numpy as np
-#import scipy as sp 
+#import scipy as sp
 #import networkx as nx
 #import itertools
 #import pickle as pk
@@ -39,7 +39,7 @@ import numpy as np
 #import pylayers.util.pyutil as pyu
 #from pylayers.network.emsolver import EMSolver
 #from pylayers.network.show import ShowNet,ShowTable
-#from pylayers.util.pymysqldb import Database 
+#from pylayers.util.pymysqldb import Database
 #import pylayers.util.pyutil as pyu
 
 #import time
@@ -85,8 +85,8 @@ class dcond(dict):
                     self[str(cit)]['and_or']=it[:-1]
                 else:
                     try:
-                        self[str(cit)][it.split(':')[0]]=it.split(':')[1][1:-1] 
-                    except: 
+                        self[str(cit)][it.split(':')[0]]=it.split(':')[1][1:-1]
+                    except:
                         pass
 
 
@@ -114,7 +114,7 @@ class TX(Process):
                 setattr(self, key, args[key])
             else:
                 setattr(self, key, value)
-                args[key]=value  
+                args[key]=value
         self.args=args
         self.gcom=self.args['gcom']
 
@@ -171,31 +171,31 @@ class TX(Process):
 
 
 
-    def request_TOA(self):
-        """
-        Request TOA
+#    def request_TOA(self):
+#        """
+#        Request TOA
 
 
-        Every self.refreshTOA time interval, send a devent signal to nodes 
-        in visibility torefresh the TOA information
+#        Every self.refreshTOA time interval, send a devent signal to nodes
+#        in visibility torefresh the TOA information
 
-        """
-        self.create_evt()
-        while 1:
-            if self.sim.verbose:
-                print 'request TOA', self.ID
-            for rat in self.PN.SubNet.keys():
-                for n in self.PN.SubNet[rat].edge[self.ID].keys():
-                    # check nodes in visibility
-                    if self.net.edge[self.ID][n][rat]['vis']:
-                        key='(\''+self.ID+'\', \''+n+'\', \''+rat+'\')'
-                        self.devt[eval(key)].signal()
-            yield hold, self, self.refreshTOA
-#                    devt[]
-#                [self.PN.edge[self.ID][n][rat].update(
-#                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-#                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
-#            print 'refresh TOA node', self.ID, ' @',self.sim.now()
+#        """
+#        self.create_evt()
+#        while 1:
+#            if self.sim.verbose:
+#                print 'request TOA', self.ID
+#            for rat in self.PN.SubNet.keys():
+#                for n in self.PN.SubNet[rat].edge[self.ID].keys():
+#                    # check nodes in visibility
+#                    if self.net.edge[self.ID][n][rat]['vis']:
+#                        key='(\''+self.ID+'\', \''+n+'\', \''+rat+'\')'
+#                        self.devt[eval(key)].signal()
+#            yield hold, self, self.refreshTOA
+##                    devt[]
+##                [self.PN.edge[self.ID][n][rat].update(
+##                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
+##                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
+##            print 'refresh TOA node', self.ID, ' @',self.sim.now()
 
 
 
@@ -203,25 +203,25 @@ class TX(Process):
         """ interprete decision rule from self.dec
         """
 
-
-        n=[]
+        # n dict{rat:np.array([node ids])}
+        n={}
         # loop on rat
         for rat in self.dec['rat']:
             # get all nodes connecteed to self.ID on subnetwork rat
-            n=np.array(self.net.PN.SubNet[rat].edges())[:,1]
+            n[rat]=np.array(self.PN.SubNet[rat].edges())[:,1]
+            # initialize remained nodes to True
+            rn = [True]*len(n[rat])
+
             # loop on condition
-            rn = [True]*len(n)
-
-
             for r in self.dec['rule']:
 
                 if r == 'always':
                     pass
 
-            # mettre boolean dans variable pour condition a plus d41 regle 
+            # mettre boolean dans variable pour condition a plus d41 regle
                 if 'rssth' in r:
                     # rssth<100
-                    rntmp = np.array(nx.get_edge_attributes(self.net.PN.SubNet[rat],'Pr').values())
+                    rntmp = np.array(nx.get_edge_attributes(self.PN.SubNet[rat],'Pr').values())
                     if len(r.split('<')) > 1:
                         rn = rn and ( rntmp  < eval(r.split('<')[1]) )
                     elif len(r.split('>')) > 1:
@@ -235,88 +235,42 @@ class TX(Process):
 #                    elif len(r.split('>')) > 1:
 #                        rn = rn and ( rntmp  > eval(r.split('<')[1]) )
 
-
+            n[rat][np.where(rn)]
+        # retrun only node id which are compliant with rules
         return (n)
 
 
     def request(self):
-        """ request a transmission command by localizaiton
+        """ request a transmission commanded by localizaiton
         """
         self.dec = self.gcom.dec[self.ID]
+        self.create_evt()
         while 1:
-            yield waitevent,self,self.cmdrq 
+            # wait request localization from localization layer
+            yield waitevent,self,self.cmdrq
             if self.sim.verbose:
                 print "communication requested by node ",self.ID
-            pdb.set_trace()
+
+            # n = nodes compliant with the rules given in communication.py
+            #     and in self.gcom.dec[self.ID]
+            rn = self.interpret_dec()
+
+
+            # send a signal (a.k.a. request transmission) to nodes in n
+            for rat in rn.keys():
+                for n in rn[rat]:
+                    # check if nodes in visibility
+                    if self.net.edge[self.ID][n][rat]['vis']:
+                        key='(\''+self.ID+'\', \''+n+'\', \''+rat+'\')'
+                        # WARNING : PLEASE LEAVE THE 2 FOLLOWING LINES
+                        # this is not a bad copy paste. It is required
+                        # to force signalization ( probably a SimPy bug)
+                        self.devt[eval(key)].signal()
+                        self.devt[eval(key)].signal()
 
 
 
 
-
-
-
-
-#    def c_init(self):
-#        for dk in self.dcond.keys():
-#            d=self.dcond[dk]
-#            ### Rat
-#            if d['rat']=='all':
-#                lr=self.PN.SubNet.keys()
-#            else:
-#                try:
-#                    lr=d['rat'] # d['rat'] mustr contain a list of
-#                               # rat to be processed
-#                except: 
-#                    raise NameError('rat constraints must be a list of \
-#                    rat available in the personnal network of node' \
-#                    +str(self.ID) +'Please modify our agent.ini')
-
-
-#            ### Node
-#            ie =[]
-#            if d['node']=='all':
-#                if not isinstance(lr,list):
-#                    lr=[lr]
-#                for r in lr:
-#                    dg = nx.DiGraph(self.PN.SubNet[r])
-#                    ie.append(dg.edges_iter(self.ID))
-#            else:
-#                try:
-#                    for r in lr:
-#                        dg = nx.DiGraph(self.PN.SubNet[r])
-#                        iet.append(dg.edges(self.ID))
-#                        for i in iet:
-#                            for j in d['node']:
-#                                if j in i :
-#                                    ie.append(i)
-#                      # d['node'] must contain a list of node to be processed
-#                except:
-#                    raise NameError('node constraints must be a list of \
-#                    node available in the personnal network of node' \
-#                    +str(self.ID) +'Please modify our agent.ini')
-
-
-#            lmess = []
-#            di={}
-#            [di.update({it:[]}) for it in d['message'] ]
-#            for r in lr:
-#                if d['node']=='all':
-#                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges()))
-#                else:
-#                    lmess.append([{'message':di}] * len(self.PN.SubNet[r].edges(d['node'])))
-
-#            self.gcom.fill_edge(ie,lr,lmess)
-
-
-#    def c_interpret(self,d):
-
-#        # first great criteria
-#        if 'distance' in d.keys():
-#            pass
-#        elif 'topology' in d.keys():
-#            pass
-#        else: 
-#            NameError('Type of mp constraint not yet taking into account')
 
 
 
@@ -364,7 +318,7 @@ class RX(Process):
                 setattr(self, key, args[key])
             else:
                 setattr(self, key, value)
-                args[key]=value  
+                args[key]=value
         self.args=args
         try:
             self.PN = self.net.node[self.ID]['PN']
@@ -389,32 +343,31 @@ class RX(Process):
 
 
 
-    def swap_lt(self,lt):
-        """
-        For a list of tuple if the first element is self.ID,
-        it is swapped with the second element
-   
-        
-        Examples
-        --------
+#    def swap_lt(self,lt):
+#        """
+#        For a list of tuple if the first element is self.ID,
+#        it is swapped with the second element
+#
+#
+#        Examples
+#        --------
 
-        >>> from pylayers.network.communication import *
-        >>> R = RX()
-        >>> R.ID
-        '1'
-        >>> lt= [('1','0','tuple1'),('10','5','tuple2')]
-        >>> R.swap_lt(lt) # only first tuple is swapped because R.ID='1'
-        [('0', '1', 'tuple1'), ('10', '5', 'tuple2')]
+#        >>> from pylayers.network.communication import *
+#        >>> R = RX()
+#        >>> R.ID
+#        '1'
+#        >>> lt= [('1','0','tuple1'),('10','5','tuple2')]
+#        >>> R.swap_lt(lt) # only first tuple is swapped because R.ID='1'
+#        [('0', '1', 'tuple1'), ('10', '5', 'tuple2')]
 
-        """
-        lto=[]
-        for t in lt :
-            if t[0] == self.ID:
-                lto.append((t[1],t[0],t[2]))
-            else :
-                lto.append((t[0],t[1],t[2]))
-        return lto
-
+#        """
+#        lto=[]
+#        for t in lt :
+#            if t[0] == self.ID:
+#                lto.append((t[1],t[0],t[2]))
+#            else :
+#                lto.append((t[0],t[1],t[2]))
+#        return lto
 
 
     def create_evt(self):
@@ -428,23 +381,45 @@ class RX(Process):
         --------
 
         >>> from pylayers.network.communication import *
-        >>> R = RX()
-        >>> R.create_evt()
-
+        >>> T = TX()
+        >>> T.create_evt()
         """
-        rPNe = self.swap_lt(self.PN.edges(keys=True))
-        for e in rPNe:
+        lev=[]
+        for ev in self.gcom.devt:
+            # check if self.ID  is implied as a receiver in evt
+            if ev[1]==self.ID:
+                lev.append(ev)
+        for e in lev:
             self.devt[e]=self.gcom.devt[e]
-        if self.mp :
-            for e in rPNe:
-                self.devt[e]=self.gcom.devt[e+str(mp)]
+
+#    def create_evt(self):
+#        """
+#        Create simpy events from communication gaph
+
+#        The available reception event for the given id are pickup into the
+#        communication graph to fill self.devt.
+
+#        Examples
+#        --------
+
+#        >>> from pylayers.network.communication import *
+#        >>> R = RX()
+#        >>> R.create_evt()
+
+#        """
+#        rPNe = self.swap_lt(self.PN.edges(keys=True))
+#        for e in rPNe:
+#            self.devt[e]=self.gcom.devt[e]
+#        if self.mp :
+#            for e in rPNe:
+#                self.devt[e]=self.gcom.devt[e+str(mp)]
 
 
     def refresh_RSS(self):
         """
             Refresh RSS process
 
-            The RSS values on the edges of the Personnal Network of node self.ID 
+            The RSS values on the edges of the Personnal Network of node self.ID
             are refreshed every self.refreshRSS
         """
         self.create_evt()
@@ -469,42 +444,76 @@ class RX(Process):
             yield hold, self, self.refreshRSS
 
 
-    def refresh_TOA(self):
-        """
-            Refresh TOA process
+#    def refresh_TOA(self):
+#        """
 
-            The TOA values on the edges of the Personnal Network of node self.ID
-            are refreshed every self.refreshTOA
-        """
-        self.create_evt()
+#            Refresh TOA process
 
-        while 1:
-            for rat in self.PN.SubNet.keys():
+#            The TOA values on the edges of the Personnal Network of node self.ID
+#            are refreshed every self.refreshTOA
+#        """
+#        self.create_evt()
 
-                # 2 approaches :
-                ## 1) that commented code allow refresh TOA only when visibility
+#        while 1:
+#            for rat in self.PN.SubNet.keys():
+
+#                # 2 approaches :
+#                ## 1) that commented code allow refresh TOA only when visibility
+##                [self.PN.edge[self.ID][n][rat].update(
+##                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
+##                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
+
+#                # 2 refresj TOa whatever visibility or not
 #                [self.PN.edge[self.ID][n][rat].update(
 #                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-#                for n in self.PN.SubNet[rat].edge[self.ID].keys() if self.net.edge[self.ID][n][rat]['vis']]
+#                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
 
-                # 2 refresj TOa whatever visibility or not
-                [self.PN.edge[self.ID][n][rat].update(
-                {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
-                for n in self.PN.SubNet[rat].edge[self.ID].keys() ]
+#            if self.sim.verbose:
+#                print 'refresh TOA node', self.ID, ' @',self.sim.now()
 
-            if self.sim.verbose:
-                print 'refresh TOA node', self.ID, ' @',self.sim.now()
-
-            yield hold, self, self.refreshTOA
+#            yield hold, self, self.refreshTOA
 
 
-    def wait_TOArq(self):
+    def fill_req(self,n,rat):
+        """ update values of the personnal network of a requester in regard
+             with the action define in self.gcom.dec[requester.id]
+
+            Attributes
+            ----------
+                n   : id of the requester
+                rat : used rat
         """
-            Wait TOA request
 
-            The self.ID node wait a TOA request from another node of its Personal network.
-            Once the request is received, self.ID reply to the requester node 
-            and fill the PN edge with the measured TOA.
+
+
+        # a is a list of action
+        a=self.gcom.dec[n]['action']
+
+        # WARNING HERE self.ID send information to the requester.
+        # fillin is reverse
+
+        # update range
+        if 'range' in a:
+            # WARNING here, the PN of the requester is filled
+            self.net.node[n]['PN'].edge[n][self.ID][rat].update(
+            {'TOA':self.net.edge[self.ID][n][rat]['TOA'],'tTOA':self.sim.now()})
+        # get position estimation from the requester
+        if 'pe' in a:
+            self.net.node[n]['PN'].node[self.ID]['pe']=self.PN.node[self.ID]['pe']
+            self.net.node[n]['PN'].node[self.ID]['te']=self.sim.now()
+
+        # ADD MORE ACTIONS HERE
+
+
+
+    def wait_request(self):
+        """
+            Wait request
+
+            The self.ID node wait a request from another node of its Personal network.
+            Once the request is received, self.ID reply to the requester node
+            and fill the PN of the requester in regards with the action define in
+            self.gcom.dec[requester.id]
         """
         self.create_evt()
         while 1:
@@ -514,19 +523,37 @@ class RX(Process):
                     # evt.name[0] = requester
                     # evt.name[1] = requested ( = self.ID)
                     # evt.name[2] = rat
-                    # update personal network TOA value
-                    self.PN.edge[evt.name[1]][evt.name[0]][evt.name[2]].update(
-                    {'TOA':self.net.edge[evt.name[1]][evt.name[0]][evt.name[2]]['TOA'],'tTOA':self.sim.now()})
+                    # update personal network
+                    self.fill_req(evt.name[0],evt.name[2])
                     if self.sim.verbose:
-                        print 'TOA requested by',evt.name[0],'to',evt.name[1],'has been updated'
-                    break
+                        print 'Done request from',evt.name[0],'to',evt.name[1], 'on rat', evt.name[2]
 
 
 
-#                [[self.SubNet[RAT].node[e]['PN'].edge[e][f][RAT].update(
-#         {'TOA':self.SubNet[RAT].edge[e][f][RAT]['TOA'],'tTOA':self.sim.now()}) 
-#         for f in self.SubNet[RAT].edge[e].keys()]
-#         for e in self.SubNet[RAT].nodes()]
+#    def wait_TOArq(self):
+#        """
+#            Wait TOA request
+
+#            The self.ID node wait a TOA request from another node of its Personal network.
+#            Once the request is received, self.ID reply to the requester node
+#            and fill the PN edge with the measured TOA.
+#        """
+#        self.create_evt()
+#        while 1:
+#            yield waitevent,self,self.devt.values()
+#            for evt in self.devt.values():
+#                if evt.occurred:
+#                    # evt.name[0] = requester
+#                    # evt.name[1] = requested ( = self.ID)
+#                    # evt.name[2] = rat
+#                    # update personal network TOA value
+#                    self.PN.edge[evt.name[1]][evt.name[0]][evt.name[2]].update(
+#                    {'TOA':self.net.edge[evt.name[1]][evt.name[0]][evt.name[2]]['TOA'],'tTOA':self.sim.now()})
+#                    if self.sim.verbose:
+#                        print 'TOA requested by',evt.name[0],'to',evt.name[1],'has been updated'
+#                    break
+
+
 
 
 class Gcom(nx.MultiDiGraph):
@@ -546,7 +573,7 @@ class Gcom(nx.MultiDiGraph):
     That class inherits of networkx.MultiDiGraph().
     Its nodes are the nodes of the passing Network object.
     Its edge represents all the possbile communication bridge between thoses nodes.
-    On the edge, timestamped message can be passed between nodes 
+    On the edge, timestamped message can be passed between nodes
 
     Contrary to pylayers.network, which is an undirected graph, here edge are directed.
 
@@ -561,7 +588,7 @@ class Gcom(nx.MultiDiGraph):
         self.sim=sim
         self.fileini='communication.ini'
         self.dec={}
-
+        self.devt={}
     def load_dec_file(self):
 
         self.config     = ConfigParser.ConfigParser()
@@ -577,7 +604,7 @@ class Gcom(nx.MultiDiGraph):
                     self.dec[n]['rat']=eval(dict(self.config.items(n))['rat'])
                     self.dec[n]['action']=eval(dict(self.config.items(n))['action'])
                     self.dec[n]['rule']=eval(dict(self.config.items(n))['rule'])
-            except: 
+            except:
                 raise NameError('no decision in communcation.ini for node' +n)
 
 
@@ -630,7 +657,7 @@ class Gcom(nx.MultiDiGraph):
 
 
 
-        
+
 #    def fill_edge(self,le,rat,mess):
 
 #        for i,r in enumerate(rat):
@@ -709,8 +736,7 @@ class Gcom(nx.MultiDiGraph):
 ###        b.append(Brain(ID=t,sim=sim,evt=evt[t]))
 ####        sim.activate (tx[t], tx[t].run(),0.0)
 ###        sim.activate (b[t], b[t].run(),0.0)
-###    
+###
 ###    T=TX(ID=t,sim=sim,evt=evt)
 ###    sim.activate (T, T.run(),0.0)
 ###    sim.simulate(until=10)
-
