@@ -1296,10 +1296,7 @@ def VW(l, m, theta ,phi):
     #     May be it comes from a different definition of theta in SPHEREPACK
 
     #Pmm1l, Pmp1l = AFLegendre(L, M, x)
-<<<<<<< HEAD
 
-=======
->>>>>>> pylayers/master
     Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
