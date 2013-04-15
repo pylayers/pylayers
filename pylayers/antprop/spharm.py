@@ -45,8 +45,7 @@ def indexvsh(L):
 
         >>> from pylayers.antprop.antenna import *
         >>> indexvsh(3)
-        array([[0, 0],
-               [1, 0],
+        array([[1, 0],
                [1, 1],
                [2, 0],
                [2, 1],
@@ -58,8 +57,10 @@ def indexvsh(L):
 
     """
     Kmax = (L + 1) * (L + 2) / 2
+    #k = np.arange(Kmax) # old version with 0,0
+    k = np.arange(1,Kmax)
     #k = np.arange(Kmax)
-    k = np.arange(Kmax)
+    #k = np.arange(Kmax)
     #k = np.arange(1,Kmax)
     l = np.ceil((-1 + np.sqrt(1 + 8 * (k + 1))) / 2) - 1
     m = k - l * (l + 1) / 2
@@ -100,6 +101,42 @@ def index_vsh(L, M):
     u = np.vstack((l, m)).T
     t = u.astype(int)
     return(t)
+
+class VectorCoeff(object):
+	
+	def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
+                 ind=np.array([]), k=np.array([])):
+
+		self.s1 = np.array([])
+		self.s2 = np.array([])
+		self.s3 = np.array([])
+		self.fmin = fmin
+		self.fmax = fmax
+
+		if typ == 's1':
+			self.inits1(data,ind)
+	
+	def inits1(self, data, ind):
+		
+		sh = np.shape(data)
+		self.s1 = data
+		self.ind_s1 = ind
+		self.Nf = sh[0]
+
+class SSHCoeff(object):
+   
+    def __init__(self, Ax,Ay,Az):
+        """
+        Parameters
+        ----------
+            Br
+            Bi
+            Cr
+            Ci
+        """
+        self.Ax = Ax
+        self.Ay = Ay
+        self.Az = Az
 
 class SHCoeff(object):
     """ Spherical Harmonics Coefficient
@@ -205,8 +242,8 @@ class SHCoeff(object):
     def s1tos2(self, N2=-1):
         """ convert shape 1 --> shape 2
 
-        shape 1   array [ Nf x (L+1) x (M+1) ]
-        shape 2   array [ Nf x (L+1)*(M+1)   ]
+        shape 1   array [ Nf , (L+1) , (M+1) ]
+        shape 2   array [ Nf , (L+1) * (M+1) ]
 
         n = 0...N2
         m = 0...N2
@@ -751,7 +788,7 @@ class VSHCoeff(object):
         self.Ci.k2 = ib[range(k)]
         return E[ib[k-1]]
     
-    def s2tos3(self, threshold=1e-20):
+    def s2tos3(self, threshold=1e-5):
         """ convert vector spherical coefficients from shape 2 to shape 3
 
         Parameters
@@ -764,7 +801,7 @@ class VSHCoeff(object):
 
         """
 
-        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0)
+        EBr = np.sum(np.abs(self.Br.s2) ** 2, axis=0) # integrates energy over freq axis = 0 
         EBi = np.sum(np.abs(self.Bi.s2) ** 2, axis=0)
         ECr = np.sum(np.abs(self.Cr.s2) ** 2, axis=0)
         ECi = np.sum(np.abs(self.Ci.s2) ** 2, axis=0)
@@ -918,7 +955,6 @@ def AFLegendre3(L, M, x):
 
             P_l^{(m)}(x)= \\sqrt{ \\frac{2}{2 l+1} \\frac{(l+m)!}{(l-m)!} } \\bar{P}_{l}^{(m)}(x)
 
-    
     Examples
     --------
 
@@ -1257,6 +1293,7 @@ def VW(l, m, theta ,phi):
     #     May be it comes from a different definition of theta in SPHEREPACK
 
     #Pmm1l, Pmp1l = AFLegendre(L, M, x)
+
     Pmm1l, Pmp1l = AFLegendre(L, L, x)
 
     K   = len(l)
@@ -1344,7 +1381,7 @@ def VW0(n, m, x, phi, Pmm1n, Pmp1n):
     del Y2
     return V, W
 
-def plotVW(n, m, theta, phi, sf=False):
+def plotVW(l, m, theta, phi, sf=False):
     """ plot VSH transform vsh basis in 3D plot
         (V in fig1 and W in fig2)
     Parameters
@@ -1372,16 +1409,15 @@ def plotVW(n, m, theta, phi, sf=False):
 
     """
     # calculate v and w
-    if m <= n:
-        theta[np.where(theta == np.pi / 2)[0]] = np.pi / 2 + \
-            1e-10  # .. todo :: not clean
+    if m <= l:
+        theta[np.where(theta == np.pi / 2)[0]] = np.pi / 2 +  1e-10  # .. todo :: not clean
         x = -np.cos(theta)
-        Pmm1n, Pmp1n = AFLegendre(n, m, x)
+        Pll1n, Plp1n = AFLegendre(l, m, x)
 
-        t1 = np.sqrt((n + m) * (n - m + 1))
-        t2 = np.sqrt((n - m) * (n + m + 1))
-        y1 = t1 * Pmm1n[:, m, n] - t2 * Pmp1n[:, m, n]
-        y2 = t1 * Pmm1n[:, m, n] + t2 * Pmp1n[:, m, n]
+        t1 = np.sqrt((l + m) * (l - m + 1))
+        t2 = np.sqrt((l - m) * (l + m + 1))
+        y1 = t1 * Pmm1l[:, m, l] - t2 * Pmp1l[:, m, l]
+        y2 = t1 * Pmm1l[:, m, l] + t2 * Pmp1l[:, m, l]
 
         Ephi = np.exp(1j * m * phi)
         cphi = np.cos(m * phi)
@@ -1398,7 +1434,7 @@ def plotVW(n, m, theta, phi, sf=False):
         Y2 = np.outer(y2, ve)
         EPh = np.outer(vy, Ephi)
 
-        const = (-1.0) ** n / (2 * np.sqrt(n * (n + 1)))
+        const = (-1.0) ** l / (2 * np.sqrt(l * (l + 1)))
         V = const * Y1 * EPh
         #V[np.isinf(V)|isnan(V)]=0
         Vcos = cphi * V
@@ -1428,6 +1464,7 @@ def plotVW(n, m, theta, phi, sf=False):
         ext2 = '.eps'
         ext3 = '.png'
 
+
         fig = plt.figure()
         ax = axes3d.Axes3D(fig)
         X = abs(V) * np.cos(Phi) * np.sin(Theta)
@@ -1447,7 +1484,6 @@ def plotVW(n, m, theta, phi, sf=False):
             fig.savefig(figname + ext1, orientation='portrait')
             fig.savefig(figname + ext2, orientation='portrait')
             fig.savefig(figname + ext3, orientation='portrait')
-
         fig = plt.figure()
         ax = axes3d.Axes3D(fig)
         X = abs(Vcos) * np.cos(Phi) * np.sin(Theta)
@@ -1531,11 +1567,6 @@ def plotVW(n, m, theta, phi, sf=False):
             fig.savefig(figname + ext1, orientation='portrait')
             fig.savefig(figname + ext2, orientation='portrait')
             fig.savefig(figname + ext3, orientation='portrait')
-
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(Wsin) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(Wsin) * np.sin(Phi) * np.sin(Theta)
 
         fig = plt.figure()
         ax = axes3d.Axes3D(fig)
