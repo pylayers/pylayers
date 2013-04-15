@@ -635,7 +635,7 @@ class Rays(dict):
         self.I.add([T, R])
         self.B = B
 
-    def eval(self,f):
+    def eval(self,fGHz):
         """docstring for eval"""
 
         print 'Rays evaluation'
@@ -644,8 +644,8 @@ class Rays(dict):
         # frequence - prevoir la reevaluation 
         #
         if not self.I.evaluated:
-            self.I.eval()
-            self.B.eval()
+            self.I.eval(fGHz)
+            self.B.eval(fGHz)
 
         # Ctilde : f x r x 2 x 2
         self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)

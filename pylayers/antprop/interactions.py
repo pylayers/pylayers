@@ -65,8 +65,9 @@ class Inter(object):
         self.olf = np.ones(self.nf)
 
         ## slabDB load
-        self.slab = SlabDB(filemat=config.get("files", "mat"),
-                    fileslabini=config.get("files", "slab"))
+        #self.slab = SlabDB(filemat=config.get("files", "mat"),
+        #            fileslabini=config.get("files", "slab"))
+        self.slab = SlabDB(filemat=_filemat, fileslabini=_fileslab)
 
         self.idx = []
         if idx != []:
@@ -362,9 +363,8 @@ class IntB(Inter):
             (nf,ninter 2, 2)
 
     """
-    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
-
-        Inter.__init__(self, data=data, idx=idx, typ=-1,fGHz)
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])): 
+        Inter.__init__(self, data=data, idx=idx, typ=-1,fGHz=fGHz)
 
     def __repr__(self):
         s = Inter.__repr__(self)
@@ -419,8 +419,8 @@ class IntL(Inter):
         np.array:
             (nf ,ninter, 2, 2)
     """
-    def __init__(self, data=np.array(()), idx=[]i,fGHz=np.array([2.4])):
-        Inter.__init__(self, data=data, idx=idx, typ=0,fGHZ)
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
+        Inter.__init__(self, data=data, idx=idx, typ=0,fGHZ=fGHz)
 
     def __repr__(self):
         s = Inter.__repr__(self)
@@ -475,7 +475,7 @@ class IntR(Inter):
 #        self.theta = data[0]
 #        self.si = data[1]
 #        self.sr = data[2]
-        Inter.__init__(self, data=data, idx=idx, typ=1,fGHz)
+        Inter.__init__(self, data=data, idx=idx, typ=1,fGHz=fGHz)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index of self.idx
@@ -557,7 +557,7 @@ class IntR(Inter):
                 ut = self.data[self.dusl[m], 0]
                 if not ut.size == 0:
                     # find the index of angles which satisfied the data
-                    self.slab[m].ev(fGHz=self.f, theta=ut, RT='R')
+                    self.slab[m].ev(fGHz=self.fGHz, theta=ut, RT='R')
                     try:
                         R = np.concatenate((R, self.slab[m].R), axis=1)
                         mapp.extend(self.dusl[m])
@@ -587,7 +587,7 @@ class IntT(Inter):
 
     def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 
-        Inter.__init__(self, data=data, idx=idx, typ=2,fGHz)
+        Inter.__init__(self, data=data, idx=idx, typ=2,fGHz=fGHz)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
@@ -711,7 +711,7 @@ class IntD(Inter):
 #        self.beta = data1[4]
 #        self.N = data1[5]
 #        self.typed = data2[0]
-        Inter.__init__(self, data=data, idx=idx, typ=3,fGHz)
+        Inter.__init__(self, data=data, idx=idx, typ=3,fGHz=fGHz)
 
     def __repr__(self):
         return '%s :  %s  %s ' % (

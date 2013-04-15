@@ -9,6 +9,7 @@ from pylayers.gis.layout import *
 import pylayers.signal.bsignal as bs
 from datetime import datetime
 import time
+import ConfigParser
 import pickle
 def showr2d(L,r2d,tx,rx):
     """
@@ -161,12 +162,14 @@ r3d.locbas(L)
 r3d.fillinter(L)
 
 config = ConfigParser.ConfigParser()
+_filesimul = 'default.ini'
 filesimul = pyu.getlong(_filesimul, "ini")
 config.read(filesimul)
 fGHz = np.linspace(eval(config.get("frequency", "fghzmin")), 
                      eval(config.get("frequency", "fghzmax")), 
                      eval(config.get("frequency", "nf")))
 
+pdb.set_trace()
 r3d.eval(fGHz)
 #
 #c11 = r3d.Ctilde[:,:,0,0]
