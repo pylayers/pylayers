@@ -19,7 +19,7 @@ from pylayers.antprop.slab import *
 
 class Inter(object):
 
-    def __init__(self, typ=0, data=np.array(()), idx=[], _filesimul='default.ini'):
+    def __init__(self, typ=0, data=np.array(()), idx=[], fGHz = np.array([2.4])):
         """
         Meta class of specific interactions ( Interactions, IntB/IntL/IntT/intR/intD)
 
@@ -32,12 +32,12 @@ class Inter(object):
             data for the interaction
         idx:
             idx number of the interaction between 0 and (ray number * inter number)
-        f : np.array
-            frequency range
+        fGHz : np.array
+            frequency range in GHz
         nf : int
             number of step into freq range
         olf : np.array
-            np.ones((nf)) used to broacasting
+            np.ones((nf)) used for broadcasting
 
 
         """
@@ -51,14 +51,17 @@ class Inter(object):
         ## self.frequency from the Interaction class !
         ## It could be interesting to find another trick which
         ## avoid to give a filesimulname.
-        config = ConfigParser.ConfigParser()
-        filesimul = pyu.getlong(_filesimul, "ini")
-        config.read(filesimul)
+
+        #config = ConfigParser.ConfigParser()
+        #filesimul = pyu.getlong(_filesimul, "ini")
+        #config.read(filesimul)
 
         ## frequency load
-        self.f = np.linspace(eval(config.get("frequency", "fghzmin")), eval(
-            config.get("frequency", "fghzmax")), eval(config.get("frequency", "nf")))
-        self.nf = len(self.f)
+        #self.f = np.linspace(eval(config.get("frequency", "fghzmin")), eval(
+        #    config.get("frequency", "fghzmax")), eval(config.get("frequency", "nf")))
+
+        self.fGHz = fGHz
+        self.nf = len(self.fGHz)
         self.olf = np.ones(self.nf)
 
         ## slabDB load
@@ -359,9 +362,9 @@ class IntB(Inter):
             (nf,ninter 2, 2)
 
     """
-    def __init__(self, data=np.array(()), idx=[]):
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 
-        Inter.__init__(self, data=data, idx=idx, typ=-1)
+        Inter.__init__(self, data=data, idx=idx, typ=-1,fGHz)
 
     def __repr__(self):
         s = Inter.__repr__(self)
@@ -416,8 +419,8 @@ class IntL(Inter):
         np.array:
             (nf ,ninter, 2, 2)
     """
-    def __init__(self, data=np.array(()), idx=[]):
-        Inter.__init__(self, data=data, idx=idx, typ=0)
+    def __init__(self, data=np.array(()), idx=[]i,fGHz=np.array([2.4])):
+        Inter.__init__(self, data=data, idx=idx, typ=0,fGHZ)
 
     def __repr__(self):
         s = Inter.__repr__(self)
@@ -468,11 +471,11 @@ class IntR(Inter):
     """ Reflexion interaction class
 
     """
-    def __init__(self, data=np.array(()), idx=[]):
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 #        self.theta = data[0]
 #        self.si = data[1]
 #        self.sr = data[2]
-        Inter.__init__(self, data=data, idx=idx, typ=1)
+        Inter.__init__(self, data=data, idx=idx, typ=1,fGHz)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index of self.idx
@@ -582,9 +585,9 @@ class IntT(Inter):
 
     """
 
-    def __init__(self, data=np.array(()), idx=[]):
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 
-        Inter.__init__(self, data=data, idx=idx, typ=2)
+        Inter.__init__(self, data=data, idx=idx, typ=2,fGHz)
         ## index for used slab
         self.uslidx = 0
         # dictionnary of used slab key = slab value = index
@@ -700,7 +703,7 @@ class IntD(Inter):
     """ Diffraction interaction class
         .. todo to be implemented
     """
-    def __init__(self, data=np.array(()), idx=[]):
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 #        self.theta = data1[0]
 #        self.thetad = data1[1]
 #        self.si = data1[2]
@@ -708,7 +711,7 @@ class IntD(Inter):
 #        self.beta = data1[4]
 #        self.N = data1[5]
 #        self.typed = data2[0]
-        Inter.__init__(self, data=data, idx=idx, typ=3)
+        Inter.__init__(self, data=data, idx=idx, typ=3,fGHz)
 
     def __repr__(self):
         return '%s :  %s  %s ' % (

@@ -159,7 +159,15 @@ else:
 r3d = r2d.to3D()
 r3d.locbas(L)
 r3d.fillinter(L)
-#r3d.eval()
+
+config = ConfigParser.ConfigParser()
+filesimul = pyu.getlong(_filesimul, "ini")
+config.read(filesimul)
+fGHz = np.linspace(eval(config.get("frequency", "fghzmin")), 
+                     eval(config.get("frequency", "fghzmax")), 
+                     eval(config.get("frequency", "nf")))
+
+r3d.eval(fGHz)
 #
 #c11 = r3d.Ctilde[:,:,0,0]
 #c12 = r3d.Ctilde[:,:,0,1]

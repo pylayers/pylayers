@@ -635,11 +635,10 @@ class Rays(dict):
         self.I.add([T, R])
         self.B = B
 
-    def eval(self):
+    def eval(self,f):
         """docstring for eval"""
 
         print 'Rays evaluation'
-        
         #
         # A terme on voudra reevaluer le canal pour differentes bande de
         # frequence - prevoir la reevaluation 

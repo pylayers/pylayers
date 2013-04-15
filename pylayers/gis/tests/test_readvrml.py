@@ -17,18 +17,32 @@ dwall = VL.wallanalysis()
 #
 # Visualization
 #
+dpt = {}
+k=0
 for iw in dwall:
     seg = dwall[iw]['seg']
     thick = dwall[iw]['thickness']
     bdoor = dwall[iw]['door']
     x,y = seg.xy
+    pt = np.array((x[0],y[0]))
+    ph = np.array((x[1],y[1]))
+    dpt[2*k]=pt
+    dpt[2*k+1]=ph+1
+    k = k+2
+    dwall[iw]['tail']=2*k
+    dwall[iw]['head']=2*k+1
+    try:
+        tpt = np.vstack((tpt,pt,ph))
+    except:
+        tpt = np.vstack((pt,ph))
+
     if bdoor:
         plt.plot(x,y,color='r',linewidth=thick*10,alpha=1)
     else:
         plt.plot(x,y,color='k',linewidth=thick*10,alpha=1)
 
 plt.axis('scaled')
-#savestr2(dpt,dwall,_filename='struc.str2')
+savestr2(dpt,dwall,_filename='struc.str2')
 #vrml2geom(tg,'11DE1')
 #lfi = glob.glob('/private/staff/n/en/buguen/Pyproject/struc/bat11/*BAT11D*E1.wrl')
 #for fi in lfi:
