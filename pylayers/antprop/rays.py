@@ -635,7 +635,7 @@ class Rays(dict):
         self.I.add([T, R])
         self.B = B
 
-    def eval(self,fGHz):
+    def eval(self,fGHz=np.array([2.4])):
         """docstring for eval"""
 
         print 'Rays evaluation'

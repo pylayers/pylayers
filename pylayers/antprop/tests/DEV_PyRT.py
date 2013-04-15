@@ -169,7 +169,6 @@ fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
                      eval(config.get("frequency", "fghzmax")), 
                      eval(config.get("frequency", "nf")))
 
-pdb.set_trace()
 r3d.eval(fGHz)
 #
 #c11 = r3d.Ctilde[:,:,0,0]
