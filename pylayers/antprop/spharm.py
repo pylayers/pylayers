@@ -101,8 +101,7 @@ def index_vsh(L, M):
     u = np.vstack((l, m)).T
     t = u.astype(int)
     return(t)
-    
-    
+
 class VectorCoeff(object):
 	
 	def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
@@ -123,7 +122,7 @@ class VectorCoeff(object):
 		self.s1 = data
 		self.ind_s1 = ind
 		self.Nf = sh[0]
-	
+
 class SSHCoeff(object):
    
     def __init__(self, Ax,Ay,Az):
@@ -138,7 +137,6 @@ class SSHCoeff(object):
         self.Ax = Ax
         self.Ay = Ay
         self.Az = Az
-        	
 
 class SHCoeff(object):
     """ Spherical Harmonics Coefficient
@@ -957,7 +955,6 @@ def AFLegendre3(L, M, x):
 
             P_l^{(m)}(x)= \\sqrt{ \\frac{2}{2 l+1} \\frac{(l+m)!}{(l-m)!} } \\bar{P}_{l}^{(m)}(x)
 
-    
     Examples
     --------
 
@@ -1384,7 +1381,7 @@ def VW0(n, m, x, phi, Pmm1n, Pmp1n):
     del Y2
     return V, W
 
-def plotVW(n, m, theta, phi, sf=False):
+def plotVW(l, m, theta, phi, sf=False):
     """ plot VSH transform vsh basis in 3D plot
         (V in fig1 and W in fig2)
     Parameters
@@ -1412,16 +1409,15 @@ def plotVW(n, m, theta, phi, sf=False):
 
     """
     # calculate v and w
-    if m <= n:
-        theta[np.where(theta == np.pi / 2)[0]] = np.pi / 2 + \
-            1e-10  # .. todo :: not clean
+    if m <= l:
+        theta[np.where(theta == np.pi / 2)[0]] = np.pi / 2 +  1e-10  # .. todo :: not clean
         x = -np.cos(theta)
-        Pmm1n, Pmp1n = AFLegendre(n, m, x)
+        Pll1n, Plp1n = AFLegendre(l, m, x)
 
-        t1 = np.sqrt((n + m) * (n - m + 1))
-        t2 = np.sqrt((n - m) * (n + m + 1))
-        y1 = t1 * Pmm1n[:, m, n] - t2 * Pmp1n[:, m, n]
-        y2 = t1 * Pmm1n[:, m, n] + t2 * Pmp1n[:, m, n]
+        t1 = np.sqrt((l + m) * (l - m + 1))
+        t2 = np.sqrt((l - m) * (l + m + 1))
+        y1 = t1 * Pmm1l[:, m, l] - t2 * Pmp1l[:, m, l]
+        y2 = t1 * Pmm1l[:, m, l] + t2 * Pmp1l[:, m, l]
 
         Ephi = np.exp(1j * m * phi)
         cphi = np.cos(m * phi)
@@ -1438,7 +1434,7 @@ def plotVW(n, m, theta, phi, sf=False):
         Y2 = np.outer(y2, ve)
         EPh = np.outer(vy, Ephi)
 
-        const = (-1.0) ** n / (2 * np.sqrt(n * (n + 1)))
+        const = (-1.0) ** l / (2 * np.sqrt(l * (l + 1)))
         V = const * Y1 * EPh
         #V[np.isinf(V)|isnan(V)]=0
         Vcos = cphi * V
@@ -1468,6 +1464,7 @@ def plotVW(n, m, theta, phi, sf=False):
         ext2 = '.eps'
         ext3 = '.png'
 
+
         fig = plt.figure()
         ax = axes3d.Axes3D(fig)
         X = abs(V) * np.cos(Phi) * np.sin(Theta)
@@ -1487,7 +1484,6 @@ def plotVW(n, m, theta, phi, sf=False):
             fig.savefig(figname + ext1, orientation='portrait')
             fig.savefig(figname + ext2, orientation='portrait')
             fig.savefig(figname + ext3, orientation='portrait')
-
         fig = plt.figure()
         ax = axes3d.Axes3D(fig)
         X = abs(Vcos) * np.cos(Phi) * np.sin(Theta)
@@ -1571,11 +1567,6 @@ def plotVW(n, m, theta, phi, sf=False):
             fig.savefig(figname + ext1, orientation='portrait')
             fig.savefig(figname + ext2, orientation='portrait')
             fig.savefig(figname + ext3, orientation='portrait')
-
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(Wsin) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(Wsin) * np.sin(Phi) * np.sin(Theta)
 
         fig = plt.figure()
         ax = axes3d.Axes3D(fig)
