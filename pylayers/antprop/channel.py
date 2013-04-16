@@ -30,10 +30,15 @@ class Ctilde(object):
     """
     def __init__(self):
         """
-            transpose == False   (nray,nfreq)
-            transpose == True    (nfreq,nray)
+            transpose == False   (r,f)
+            transpose == True    (f,r)
         """
         self.fail = False
+
+    def __repr__(self):
+        s = 'Ctilde'
+        return(s)
+
 
     def choose(self):
         """ Choose a field file in tud directory
@@ -164,6 +169,53 @@ class Ctilde(object):
             # coorectif Bug evalfield
             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
             self.rang = tmp[0:nray, :]
+
+    def mobility(self, v, dt):
+        """ Modify channel for uniform mobility
+
+        NOT FINISHED
+
+        Parameters
+        ----------
+        v  : float
+            velocity (m/s)
+        dt : float
+            delta t (s)
+
+        Notes
+        -----
+
+        Calculate new channel field from the old one and v(terminal vitese)
+        and dt(time of deplacement)
+
+        dt en s  (observation time between 2 Rx position)
+        v en m/s (vitesse de changement de Rx)
+
+        Returns
+        -------
+
+        VC : modified VectChannel
+
+        """
+
+        c = 0.3  # m/ns celerity of light 
+        tauk = self.tauk
+        tang = self.tang
+        rang = self.rang
+
+        rk = tauk * c
+        rk_mod = abs(rk)
+        sk_ch = rk / rk_mod
+
+        #cos_alph =dot(v/abs(v),sk_ch)
+
+        cos_alph = (v * sk_ch) / abs(v)
+        self.cos_alph = cos_alph
+        rk_ch = rk_mod * cos_alph * abs(v) * dt
+        sk_ch_ch = (rk + v * dt) / (rk_ch + cos_alph * abs(v) * dt)
+        tauk_ch = (abs(rk_ch) * sk_ch_ch) / c
+
+        return(tauk_ch)
 
     def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12):
         """ doadod scatter plot

@@ -286,50 +286,7 @@ class VectChannel(Ctilde):
         chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(chaine)
 
-    def mobility(self, v, dt):
-        """ Modify channel for uniform mobility
-
-        Parameters
-        ----------
-        v  : float
-            velocity (m/s)
-        dt : float
-            delta t (s)
-
-        Notes
-        ------
-        Calculate new channel field from the old one and v(terminal vitese) 
-        and dt(time of deplacement)
-
-        dt en s  (le temps d'observation entre deux position de Rx)
-        v en m/s (vitesse de changement de Rx)
-
-        Returns
-        -------
-
-        VC : modified VectChannel
-
-        """
-
-        c = 0.3  # m/ns vitesse de lumiere
-        tauk = self.tauk
-        tang = self.tang
-        rang = self.rang
-
-        rk = tauk * c
-        rk_mod = abs(rk)
-        sk_ch = rk / rk_mod
-
-        #cos_alph =dot(v/abs(v),sk_ch)
-
-        cos_alph = (v * sk_ch) / abs(v)
-        self.cos_alph = cos_alph
-        rk_ch = rk_mod * cos_alph * abs(v) * dt
-        sk_ch_ch = (rk + v * dt) / (rk_ch + cos_alph * abs(v) * dt)
-        tauk_ch = (abs(rk_ch) * sk_ch_ch) / c
-
-        return(tauk_ch)
-
+    
 class ScalChannel(object):
     """
     DEPRECATED
