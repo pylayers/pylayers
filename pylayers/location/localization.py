@@ -191,7 +191,7 @@ class Localization(object):
             True if estimated position has been computed
         """
 
-        pdb.set_trace()
+
         if sum(self.cla.usable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
@@ -263,24 +263,27 @@ class PLocalization(Process):
     def run(self):
 #        self.loc.get_const()
         self.loc.fill_cla()
+        self.loc.update(ldp='TOA')
         while True:
-            self.loc.update(ldp='TOA')
+
 
             # if no previous position have been computed or if position is obsolete
-            if self.loc.net.node[self.loc.ID]['pe'].size == 0 \
-                or self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node['te']>self.loc_updt_time:
-
-                    # try to obtain an estimated position
-                    if 'geo' in self.method :
-                        bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
+            if self.loc.net.node[self.loc.ID]['pe'].size == 0 :
+                self.tx.cmdrq.signal()
+                self.loc.update(ldp='TOA')
+            # try to obtain an estimated position
+            if 'geo' in self.method :
+                bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
 #                    if 'alg' in self.method and bep:
 #                        bep = self.loc.compute_alg(ldp='TOA',now=self.sim.now())
+
 #                     if no position has been computed
-                    if not bep :
-                        self.tx.cmdrq.signal()
 
-                        self.loc.update(ldp='TOA')
-
+#            if not bep or (self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node[self.loc.ID]['te']>self.loc_updt_time):
+            print 'comm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+            self.tx.cmdrq.signal()
+            self.loc.update(ldp='TOA')
+            
 
             if self.sim.verbose:
                 print 'localization node',self.loc.ID, ' update @',self.sim.now()

@@ -92,6 +92,7 @@ class TOA(Constraint):
         else:
             self.runable = False
 
+        self.sstd=self.std * 0.3
         self.range=self.value *0.3
         self.rescale(self.vcw)
         self.evaluated = False

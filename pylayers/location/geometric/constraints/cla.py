@@ -181,6 +181,9 @@ class CLA(object):
             print "Constraint N° ", k
             self.c[k].info()
 
+    def info2(self):
+        for c in self.c:
+            c.info2()
 
 
     def update(self):
@@ -384,7 +387,7 @@ class CLA(object):
 #        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.runable) == False)[0]) 
 
-        Nc = self.Nc - len(np.nonzero(np.array(self.usable) == False)[0]) 
+        Nc = len(np.where(self.usable)[0])#self.Nc - len(np.nonzero(np.array(self.usable) == False)[0]) 
         self.Nc = Nc
         vcwmin = 1.0  # max(self.vcw)
         step = 1.0
@@ -482,7 +485,6 @@ class CLA(object):
         Ds = []
 
         for c in self.c:                # for each constraints
-
             if (c.type != 'RSS') & (c.type != 'Exclude') & (c.usable):
 
                 DDB, TB = c.valid_v(
@@ -985,6 +987,8 @@ class CLA(object):
                 if clust_vol != 0:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
+                    # verifier que les contraintes utilisées sont les bonne ( ce n'est pas le cas)
+                    # ne marche que si 2 constriantes genere le cluster ( a robustifier)   
                     try:
                         dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
                     except:
