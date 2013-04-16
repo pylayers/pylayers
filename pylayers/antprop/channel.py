@@ -22,18 +22,28 @@ class Ctilde(object):
     Ctp : FUsignal
     Cpt : FUsignal
     Cpp : FUsignal
-    nf : int
+    nfreq : int
         number of frequency point
-    nr  : int
+    nray  : int
         number of rays
 
     """
     def __init__(self):
         """
-            transpose == False    r x f
-            transpose == True     f x r
+            transpose == False   (nray,nfreq)
+            transpose == True    (nfreq,nray)
         """
         self.fail = False
+
+    def choose(self):
+        """ Choose a field file in tud directory
+        """
+        import tkFileDialog as FD
+        filefield = FD.askopenfilename(filetypes=[("Files field  ", "*.field"),
+                                                  ("All", "*")],
+                                       title="Please choose a .field file",
+                                       initialdir=tuddir)
+        self.load(filefield, transpose=False)
 
     def load(self, filefield, transpose=False):
         """ load a Ctilde from a .field file
@@ -842,7 +852,7 @@ def VCg2VCl(VCg, Tt, Tr):
 
 
 class Tchannel(bs.FUDAsignal):
-    """ Handle the transmission channel
+    """ Handle the transmission channel 
 
     The transmission channel TChannel is obtained from combination of the propagation
     channel with the antenna transfer functions from both transmitter and
@@ -850,7 +860,7 @@ class Tchannel(bs.FUDAsignal):
 
     Members
     -------
-        ray transfer functions  r x  f
+        ray transfer functions  (nray,nfreq)
     dod  :
         direction of depature (rad) [theta_t,phi_t]  nray x 2
     doa  :
