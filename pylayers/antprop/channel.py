@@ -842,7 +842,7 @@ def VCg2VCl(VCg, Tt, Tr):
 
 
 class Tchannel(bs.FUDAsignal):
-    """ Handle the transmission channel 
+    """ Handle the transmission channel
 
     The transmission channel TChannel is obtained from combination of the propagation
     channel with the antenna transfer functions from both transmitter and
@@ -850,7 +850,7 @@ class Tchannel(bs.FUDAsignal):
 
     Members
     -------
-        ray transfer functions  (nray,nfreq)
+        ray transfer functions  r x  f
     dod  :
         direction of depature (rad) [theta_t,phi_t]  nray x 2
     doa  :
