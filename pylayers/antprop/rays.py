@@ -536,10 +536,16 @@ class Rays(dict):
             ##################
             # create index for retrieve interactions
 
-            idxts = idxts + idx.size  # total size idx
+            # integer offset : total size idx
+            idxts = idxts + idx.size
 
+#<<<<<<< HEAD
             # idx is an abolute index of the interaction position
             idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
+#=======
+#            # idx is an absolute index of the interaction position
+#            idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T
+#>>>>>>> bernard/devel
 
             nbray = np.shape(idx)[1]
 
@@ -655,20 +661,24 @@ class Rays(dict):
         self.B = B
         self.B0 = B0
 
-    def eval(self):
+    def eval(self,fGHz=np.array([2.4])):
         """docstring for eval"""
 
         print 'Rays evaluation'
-        
         #
         # A terme on voudra reevaluer le canal pour differentes bande de
         # frequence - prevoir la reevaluation 
         #
         if not self.I.evaluated:
-            self.I.eval()
-            B=self.B.eval()
-            B0=self.B0.eval()
-            
+#<<<<<<< HEAD
+#            self.I.eval()
+#            B=self.B.eval()
+#            B0=self.B0.eval()
+#            
+#=======
+            self.I.eval(fGHz)
+            self.B.eval(fGHz)
+
 
         # Ctilde : f x r x 2 x 2
         self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)

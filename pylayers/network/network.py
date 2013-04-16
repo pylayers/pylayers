@@ -32,7 +32,7 @@ from copy import deepcopy
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-import Tkinter as tk
+#import Tkinter as tk
 
 import ConfigParser
 import copy
