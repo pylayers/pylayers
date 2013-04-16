@@ -1004,55 +1004,6 @@ def dptseg(p,pt,ph):
 
     return(d1,d2,h)
 
-def displot(pt, ph, col='black'):
-    """ discontinuous plot
-
-    Parameters
-    ----------
-    pt:
-        tail points array (2 x (2*Nseg))
-    ph :
-        head points array (2 x (2*Nseg))
-    col : string 
-        color name
-
-    Returns
-    -------
-    f,a
-        fig and ax
-
-    Examples
-    --------
-
-    .. plot::
-        :include-source:
-
-        >>> import scipy as sp
-        >>> import matplotlib.pyplot as plt
-        >>> from pylayers.util.geomutil import *
-        >>> N   = 10
-        >>> pt  = sp.rand(2,N)
-        >>> ph  = sp.rand(2,N)
-        >>> f,a = displot(pt,ph)
-        >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
-
-    """
-    fig = plt.gcf()
-    ax  = fig.gca()
-    Nseg = np.shape(pt)[1]
-    pz = np.empty((2,))
-    pn = np.zeros((2,))
-
-    for i in range(Nseg):
-        pz = np.vstack((pz, pt[:, i], ph[:, i], pn))
-
-    m1 = np.array([0, 0, 1])
-    mask = np.kron(np.ones((2, Nseg)), m1)
-    pzz = pz[1:, :].T
-    vertices = np.ma.masked_array(pzz, mask)
-    ax.plot(vertices[0, :], vertices[1, :], color=col)
-    return fig, ax
-
 
 def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
     """  draw a short line segment

@@ -1463,7 +1463,7 @@ class SlabDB(dict):
         DB : slab dictionnary
 
     """
-    def __init__(self, filemat='matDB.ini', fileslabini='slabDB.ini'):
+    def __init__(self, filemat='matDB.ini', fileslab='slabDB.ini'):
         """
 
         Parameters
@@ -1472,13 +1472,13 @@ class SlabDB(dict):
         fileslab : string
 
         """
-        self.fileslabini = fileslabini
-        self.fileslab=self.fileslabini.replace('.ini','.slab')
+        self.fileslab = fileslab
+        self.fileslab = self.fileslab.replace('.ini','.slab') # WARNING !!!  deprecated in new verion 
         self.mat = MatDB()
         if (filemat != ''):
             self.mat.load(filemat)
-        if (fileslabini != ''):
-            self.load(fileslabini)
+        if (fileslab != ''):
+            self.load(fileslab)
             self.dass()
 
     def showall(self):

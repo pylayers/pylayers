@@ -19,7 +19,8 @@ from pylayers.antprop.slab import *
 
 class Inter(object):
 
-    def __init__(self, typ=0, data=np.array(()), idx=[], _filesimul='default.ini'):
+    def __init__(self, typ=0, data=np.array(()), idx=[],
+                 _filemat='matDB.ini',_fileslab='slabDB.ini'):
         """
         Meta class of specific interactions ( Interactions, IntB/IntL/IntT/intR/intD)
 
@@ -32,12 +33,12 @@ class Inter(object):
             data for the interaction
         idx:
             idx number of the interaction between 0 and (ray number * inter number)
-        f : np.array
-            frequency range
+        fGHz : np.array
+            frequency range in GHz
         nf : int
             number of step into freq range
         olf : np.array
-            np.ones((nf)) used to broacasting
+            np.ones((nf)) used for broadcasting
 
 
         """
@@ -46,24 +47,7 @@ class Inter(object):
         self.data = data
         self.idx = idx
 
-        ## The config parser load is done in order to :
-        ## All IntB/IntL/IntR/IntT/... inherits of the correct
-        ## self.frequency from the Interaction class !
-        ## It could be interesting to find another trick which
-        ## avoid to give a filesimulname.
-        config = ConfigParser.ConfigParser()
-        filesimul = pyu.getlong(_filesimul, "ini")
-        config.read(filesimul)
-
-        ## frequency load
-        self.f = np.linspace(eval(config.get("frequency", "fghzmin")), eval(
-            config.get("frequency", "fghzmax")), eval(config.get("frequency", "nf")))
-        self.nf = len(self.f)
-        self.olf = np.ones(self.nf)
-
-        ## slabDB load
-        self.slab = SlabDB(filemat=config.get("files", "mat"),
-                    fileslabini=config.get("files", "slab"))
+        self.slab = SlabDB(filemat=_filemat, fileslab=_fileslab)
 
         self.idx = []
         if idx != []:
@@ -78,12 +62,13 @@ class Inter(object):
                 str(np.shape(self.idx)))
 
     def create_dusl(self,a):
-        """ reate dictionnary of used slab.
+        """ create dictionnary of used slab.
 
-        Attributes 
+        Attributes
         ----------
-        a : np.array of string which contains ordred interactions 
+        a : np.array of string which contains ordered interactions
             ordered as in self.idx/self.data
+
         """
         for s in self.dusl:
             self.dusl[s]=np.where(a==s)[0]
@@ -181,12 +166,15 @@ class Interactions(Inter,dict):
 
     def __init__(self):
         """
-        5 types of interactions
+
+        There are 5 types of interactions
+
         B : local basis transformation matrix (unitary)
         L : LOS case
         R : Reflection
         T : Transmission
         D : Diffraction
+
         """
         Inter.__init__(self)
         self['B'] = []
@@ -216,13 +204,19 @@ class Interactions(Inter,dict):
             self.addi(i)
 
     def addi(self, i):
-        """
-            Add interactions as a member of Interactions class
+        """ Add interactions as a member of Interactions class
+
+        Parameters
+        ----------
+
+        i : Inter object
+
         """
 
 
         if not isinstance(self.typ, np.ndarray):
             self.typ = np.zeros((self.nimax), dtype=str)
+
         if i.typ == -1:
             self.B = i
             self['B'] = i.idx
@@ -244,7 +238,7 @@ class Interactions(Inter,dict):
             self['D'] = i.idx
             self.typ[i.idx] = 'D'
 
-    def eval(self):
+    def eval(self,fGHz=np.array([2.4])):
         ''' evaluate all the interactions
 
         Notes
@@ -268,6 +262,10 @@ class Interactions(Inter,dict):
         # into a single np.array
 
         # f x i x 2 x 2
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
         self.I = np.zeros((self.nf, self.nimax, 2, 2), dtype=complex)
         self.sout = np.zeros((self.nimax))
         self.si0 = np.zeros((self.nimax))
@@ -276,7 +274,7 @@ class Interactions(Inter,dict):
 
         # evaluate B and fill I
         try:
-            self.I[:, self.B.idx, :, :] = self.B.eval()
+            self.I[:, self.B.idx, :, :] = self.B.eval(fGHz=fGHz)
             self.sout[self.B.idx] = self.B.sout
             self.si0[self.B.idx] = self.B.si0
 
@@ -285,7 +283,7 @@ class Interactions(Inter,dict):
 
         # evaluate L and fill I
         try:
-            self.I[:, self.L.idx, :, :] = self.L.eval()
+            self.I[:, self.L.idx, :, :] = self.L.eval(fGHz=fGHz)
             self.sout[self.L.idx] = self.L.sout
             self.si0[self.L.idx] = self.L.si0
 
@@ -294,7 +292,7 @@ class Interactions(Inter,dict):
 
         # evaluate R and fill I
         try:
-            self.I[:, self.R.idx, :, :] = self.R.eval()
+            self.I[:, self.R.idx, :, :] = self.R.eval(fGHz=fGHz)
             self.sout[self.R.idx] = self.R.sout
             self.si0[self.R.idx] = self.R.si0
             self.alpha[self.R.idx] = self.R.alpha
@@ -304,7 +302,7 @@ class Interactions(Inter,dict):
 
         # evaluate T and fill I
         try:
-            self.I[:, self.T.idx, :, :] = self.T.eval()
+            self.I[:, self.T.idx, :, :] = self.T.eval(fGHz=fGHz)
             self.sout[self.T.idx] = self.T.sout
             self.si0[self.T.idx] = self.T.si0
             self.alpha[self.T.idx] = self.T.alpha
@@ -315,7 +313,7 @@ class Interactions(Inter,dict):
         # .. todo
         # evaluate D and fill I
         try:
-            self.I[:, self.D.idx, :, :] = self.D.eval()
+            self.I[:, self.D.idx, :, :] = self.D.eval(fGHz=fGHz)
             self.sout[self.D.idx] = self.D.sout
             self.si0[self.D.idx] = self.D.si0
             self.alpha[self.D.idx] = self.D.alpha
@@ -349,17 +347,15 @@ class IntB(Inter):
             (nf,ninter 2, 2)
 
     """
-    def __init__(self, data=np.array(()), idx=[]):
-
+    def __init__(self, data=np.array(()), idx=[]): 
         Inter.__init__(self, data=data, idx=idx, typ=-1)
 
     def __repr__(self):
         s = Inter.__repr__(self)
         return(s)
 
-    def eval(self):
-        """
-            evaluation of B interactions
+    def eval(self,fGHz=np.array([2.4])):
+        """ evaluation of B interactions
 
         >>> from pylayers.antprop.rays import *
         >>> M = np.eye(2).reshape(4)
@@ -380,11 +376,16 @@ class IntB(Inter):
 
         """
 
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
+
         self.delay()
         if len(self.data) != 0:
             lidx = len(self.idx)
             data = self.data.reshape(lidx, 2, 2)
-            return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
+            #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
+            return(np.ones((len(fGHz),1,1,1))*data[np.newaxis, :, :, :])
         else:
             print 'no B interaction to evaluate'
             return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
@@ -413,7 +414,7 @@ class IntL(Inter):
         s = Inter.__repr__(self)
         return(s)
 
-    def eval(self):
+    def eval(self,fGHz=np.array([2.4])):
         """
             evaluation of B interactions
 
@@ -435,6 +436,10 @@ class IntL(Inter):
         array([ 10.,  20.])
         """
 
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
         self.delay()
 
         if len(self.data != 0):
@@ -448,7 +453,8 @@ class IntL(Inter):
 #            dis = (0.3 / (4*np.pi*self.data[np.newaxis,:]*self.f[:,np.newaxis]))
 #            return(dis[:,:,np.newaxis,np.newaxis]*self.E[np.newaxis,np.newaxis,:,:])
 #            dis = self.data
-            return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*self.E[np.newaxis, np.newaxis, :, :])
+            #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*self.E[np.newaxis, np.newaxis, :, :])
+            return(np.ones((len(fGHz),1,1,1))*self.E[np.newaxis, np.newaxis, :, :])
         else:
             print 'no L interaction to evaluate'
             return(self.data[:, np.newaxis, np.newaxis, np.newaxis])
@@ -478,14 +484,12 @@ class IntR(Inter):
         s = Inter.__repr__(self)
         return(s)
 
-    def eval(self):
-        """
-        evaluation of Reflexion interactions
+    def eval(self,fGHz=np.array([2.4])):
+        """ evaluation of reflexion interactions
 
         Attributes
         ----------
 
-        data = np.array((ninter x [theta,si,st]))
 
 
         Examples
@@ -528,13 +532,28 @@ class IntR(Inter):
         >>> R.delay
         array([ 13.33333333,   2.        ])
 
+        Notes
+        -----
+
+        data = np.array((ninter x [theta,si,st]))
         """
 
+
+
         self.delay()
+
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
+
+
+        # A : f ri 2 2
+
         self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
 
         if np.shape(self.data)[0]!=len(self.idx):
-            self.data=self.data.T 
+            self.data=self.data.T
 
         if len(self.data) != 0:
             mapp = []
@@ -544,13 +563,14 @@ class IntR(Inter):
                 ut = self.data[self.dusl[m], 0]
                 if not ut.size == 0:
                     # find the index of angles which satisfied the data
-                    self.slab[m].ev(fGHz=self.f, theta=ut, RT='R')
+                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='R')
                     try:
                         R = np.concatenate((R, self.slab[m].R), axis=1)
                         mapp.extend(self.dusl[m])
                     except:
                         R = self.slab[m].R
                         mapp.extend(self.dusl[m])
+
             # replace in correct order the reflexion coeff
             self.A[:, np.array((mapp)), :, :] = R
             self.alpha = np.array(self.alpha*len(self.idx), dtype=complex)
@@ -588,7 +608,7 @@ class IntT(Inter):
         s = Inter.__repr__(self)
         return(s)
 
-    def eval(self):
+    def eval(self,fGHz=np.array([2.4])):
         """
         example given for
 
@@ -636,6 +656,13 @@ class IntT(Inter):
         """
 
         self.delay()
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
+
+
+
         self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
         self.alpha = np.zeros((len(self.idx)), dtype=complex)
         self.gamma = np.zeros((len(self.idx)), dtype=complex)
@@ -653,8 +680,8 @@ class IntT(Inter):
                     # get alpha and gamma for divergence factor
                     if len(self.slab[m]['lmat']) > 1:
                         print 'Warning : IntR class implemented for mat with only 1 layer '
-                    a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][
-                                   0]['epr']])) * np.ones(len(ut), dtype=complex))
+                    a = 1./np.sqrt(np.array(([self.slab[m]['lmat'][0]['epr']])) \
+                               * np.ones(len(ut), dtype=complex))
                     g = (1.-np.sin(ut)**2)/(1.-a*np.sin(ut)**2)
                     try:
                         alpha = np.concatenate((alpha, a), axis=0)
@@ -665,8 +692,7 @@ class IntT(Inter):
                         gamma = g
 
                     # find the index of angles which satisfied the data
-                    self.slab[m].ev(
-                        fGHz=self.f, theta=ut, RT='T', compensate=False)
+                    self.slab[m].ev(fGHz=fGHz, theta=ut, RT='T', compensate=False)
 
                     try:
                         T = np.concatenate((T, self.slab[m].T), axis=1)
@@ -690,7 +716,7 @@ class IntD(Inter):
     """ Diffraction interaction class
         .. todo to be implemented
     """
-    def __init__(self, data=np.array(()), idx=[]):
+    def __init__(self, data=np.array(()), idx=[],fGHz=np.array([2.4])):
 #        self.theta = data1[0]
 #        self.thetad = data1[1]
 #        self.si = data1[2]
@@ -706,7 +732,10 @@ class IntD(Inter):
                 str(np.shape(self.data)),
                 str(np.shape(self.idx)))
 
-    def eval(self):
+    def eval(self,fGHz=np.array([2.4])):
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
 
         self.delay()
 

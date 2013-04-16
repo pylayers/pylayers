@@ -16,7 +16,8 @@ import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
 from pylayers.antprop.interactions import *
 from pylayers.antprop.slab import *
-
+from pylayers.antprop.channel import Ctilde
+import pylayers.signal.bsignal as bs
 
 class Rays(dict):
     """ A set af rays
@@ -526,21 +527,21 @@ class Rays(dict):
             # size1 = i x r
             size1 = nstr.size
             # flatten ityp (method faster than np.ravel() ) 
-            nstrf = np.reshape(nstr,size1)
-            itypf = ityp.reshape(size1)
-            thetaf = theta.reshape(size1)
+            nstrf = np.reshape(nstr,size1,order='F')
+            itypf = ityp.reshape(size1,order='F')
+            thetaf = theta.reshape(size1,order='F')
             #sif = si[0, :, :].reshape(si[0, :, :].size)
 
             ## index creation
             ##################
             # create index for retrieve interactions
 
-            idxts = idxts + idx.size  # total size idx
+            # integer offset : total size idx
+            idxts = idxts + idx.size
 
-            # idx is an abolute index of the interaction position
-            idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp)).T
+            idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
 
-            nbray = np.shape(idx)[0]
+            nbray = np.shape(idx)[1]
 
             self[k]['rays'] = idx
             self[k]['nbrays'] = nbray
@@ -556,18 +557,14 @@ class Rays(dict):
             nbrayt = nbrayt + nbray
 
             self.nray = self.nray + self[k]['nbrays']
-            idxf = idx.reshape(idx.size)
-
+            idxf = idx.reshape(idx.size,order='F')
             #  (i+1)xr
             size2 = si[:, :].size
             #  ,(i+1)xr
-            sif = si[:, :].reshape(size2)
+            sif = si[:, :].reshape(size2,order='F')
             # 2x2,(i+1)xr
             b0 = self[k]['B'][:,:,0,:]
-            b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray)
-
-
-
+            b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
             ## find used slab
             ##################
 
@@ -642,7 +639,6 @@ class Rays(dict):
             # Transmision
             ############
             T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
-
         T.create_dusl(tsl)
         R.create_dusl(rsl)
         self.I = I
@@ -650,21 +646,17 @@ class Rays(dict):
         self.B = B
         self.B0 = B0
 
-    def eval(self):
+    def eval(self,fGHz=np.array([2.4])):
         """docstring for eval"""
 
         print 'Rays evaluation'
-        #
-        # A terme on voudra reevaluer le canal pour differentes bande de
-        # frequence - prevoir la reevaluation
-        #
-        if not self.I.evaluated:
-            self.I.eval()
-            B=self.B.eval()
-            B0=self.B0.eval()
 
-        # Ctilde : f x r x 2 x 2
-        self.Ctilde = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
+        self.I.eval(fGHz)
+        B=self.B.eval(fGHz)
+        B0=self.B0.eval(fGHz)
+
+        # Ct : f x r x 2 x 2
+        Ct = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
 
         # delays : ,r
         self.delays = np.zeros((self.nray))
@@ -675,7 +667,8 @@ class Rays(dict):
         #nf : number of frequency point
         nf = self.I.nf
 
-
+        aod= np.empty((2,self.nray))
+        aoa= np.empty((2,self.nray))
 
         # loop on interaction blocks
         for l in self:
@@ -684,50 +677,58 @@ class Rays(dict):
 
             # reshape in order to have a 1D list of index
             # reshape ray index
-            rrl = self[l]['rays'].reshape(r*l)
+            rrl = self[l]['rays'].reshape(r*l,order='F')
 
             # get the corresponding evaluated interactions
-            A  = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
-            Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+            A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+            Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
             B0l = B0[:, self[l]['rayidx'], :, :]
-            alpha = self.I.alpha[rrl].reshape(r, l)
-            gamma = self.I.gamma[rrl].reshape(r, l)
-            si0 = self.I.si0[rrl].reshape(r, l)
-            sout = self.I.sout[rrl].reshape(r, l)
+            alpha = self.I.alpha[rrl].reshape(r, l,order='F')
+            gamma = self.I.gamma[rrl].reshape(r, l,order='F')
+            si0 = self.I.si0[rrl].reshape(r, l,order='F')
+            sout = self.I.sout[rrl].reshape(r, l,order='F')
+
+
+            aoa[:,self[l]['rayidx']]=self[l]['aoa']
+            aod[:,self[l]['rayidx']]=self[l]['aod']
+
             try:
                 del Z
             except:
                 pass
 
+
+
             ## loop on all the interactions of ray with l interactions
-            for i in range(1, l-1, 2):
+            for i in range(1, l-1, 1):
+
 
 ###########################################
 #                # Divergence factor D
 ##                 not yet implementented
 ###########################################
-#                if i == 1:
-#                    D0=1./si0[:,1]
-#                    rho1=si0[:,1]*alpha[:,i]
-#                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
-#                    D=np.sqrt(
-#                     ( (rho1 ) / (rho1 + sout[:,i]) )
-#                     *( (rho2) / (rho2 + sout[:,i])))
-#                    D=D*D0
-#                    rho1=rho1+(sout[:,i]*alpha[:,i])
-#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
-#                    pdb.set_trace()
-##                     gerer le loss
-#                    if np.isnan(D).any():
-#                        p=np.nonzero(np.isnan(D))[0]
-#                        D[p]=1./sout[p,1]
-#                else :
-#                    D=np.sqrt(
-#                     ( (rho1 ) / (rho1 + sout[:,i]) )
-#                     *( (rho2) / (rho2 + sout[:,i])))
+                if i == 1:
+                    D0=1./si0[:,1]
+                    rho1=si0[:,1]*alpha[:,i]
+                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
+                    D=np.sqrt(
+                     ( (rho1 ) / (rho1 + sout[:,i]) )
+                     *( (rho2) / (rho2 + sout[:,i])))
+                    D=D*D0
+                    rho1=rho1+(sout[:,i]*alpha[:,i])
+                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
 
-#                    rho1=rho1+(sout[:,i]*alpha[:,i])
-#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+#                     gerer le loss
+                    if np.isnan(D).any():
+                        p=np.nonzero(np.isnan(D))[0]
+                        D[p]=1./sout[p,1]
+                else :
+                    D=np.sqrt(
+                     ( (rho1 ) / (rho1 + sout[:,i]) )
+                     *( (rho2) / (rho2 + sout[:,i])))
+
+                    rho1=rho1+(sout[:,i]*alpha[:,i])
+                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
 ###########################################
 
                 #  A0  (X dot Y)
@@ -746,7 +747,7 @@ class Rays(dict):
                 Y = Bl[:, :, i, :, :]
                 ## Dot product interaction X Basis
                 Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
-                              ..., np.newaxis, :, :], axis=-2)  # *D[np.newaxis,:,np.newaxis,np.newaxis]
+                              ..., np.newaxis, :, :], axis=-2)   *D[np.newaxis,:,np.newaxis,np.newaxis]
                 if i == 1:
                 ## First Baspdis added
                     A0 = B0l[:, :,  :, :]
@@ -758,29 +759,50 @@ class Rays(dict):
                                ..., np.newaxis, :, :], axis=-2)
 
             # fill the C tilde
-            self.Ctilde[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
-
+            Ct[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
             # delay computation:
             self[l]['dis'] = self.I.si0[self[l]['rays'][
-                :, 1]] + np.sum(self.I.sout[self[l]['rays']], axis=1)
+                0,:]] + np.sum(self.I.sout[self[l]['rays']], axis=0)
 
             # Power losses due to distances
             # will be removed once the divergence factor will be implemented
-            self.Ctilde[:, self[l]['rayidx'], :, :] = self.Ctilde[:, self[l][
+            Ct[:, self[l]['rayidx'], :, :] = Ct[:, self[l][
                 'rayidx'], :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
             self.delays[self[l]['rayidx']] = self[l]['dis']/0.3
             self.dis[self[l]['rayidx']] = self[l]['dis']
 
         # To be corrected in a future version
-        self.Ctilde = np.swapaxes(self.Ctilde, 1, 0)
+        Ct = np.swapaxes(Ct, 1, 0)
+
+        c11 = Ct[:,:,0,0]
+        c12 = Ct[:,:,0,1]
+        c21 = Ct[:,:,1,0]
+        c22 = Ct[:,:,1,1]
+
+
+
+        Cn=Ctilde()
+        Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
+        Cn.Ctp = bs.FUsignal(self.I.fGHz, c12)
+        Cn.Cpt = bs.FUsignal(self.I.fGHz, c21)
+        Cn.Ctt = bs.FUsignal(self.I.fGHz, c22)
+        Cn.nfreq = self.I.nf
+        Cn.nray = self.nray
+        Cn.tauk=self.delays
+        Cn.fGHz = self.I.fGHz
+        Cn.tang = aod
+        Cn.rang = aoa
+        # add aoa and aod 
+        return(Cn)
 
 
     def ray(self, r):
         """
             Give the ray number and it returns the index of its interactions
         """
-        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)
-        return(self[self.ray2nbi[r]]['rays'][raypos][0])
+        raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
+        return(self[self.ray2nbi[r]]['rays'][:,raypos][:,0])
+
 
     def typ(self, r):
         """
@@ -806,6 +828,7 @@ class Rays(dict):
         ray = self.ray(r)
         typ = self.typ(r)
         print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index', 'type', 'material', 'th(rad)', 'alpha', 'gamma2')
+        print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
         for iidx, i in enumerate(typ):
             if i == 'T' or i == 'R':
                 I = getattr(self.I, i)
@@ -818,19 +841,23 @@ class Rays(dict):
                     for ii, Ii in enumerate(Iidx):
                         if Ii == ray[iidx]:
                             print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, m, th[ii], alpha[ii], gamma[ii])
+
             # else:
+            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
             #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
         print '\n----------------------------------------'
-        print ' Matrix of ray #', r, 'at f=', self.I.f[0]
+        print ' Matrix of ray #', r, 'at f=', self.I.fGHz[0]
         print '----------------------------------------'
 
+        print 'rotation matrix#', 'type: B0'
+        print self.B0.data[r,:,:]
         for iidx, i in enumerate(typ):
             print 'interaction #', ray[iidx], 'type:', i
             # f x l x 2 x 2
             print self.I.I[0, ray[iidx], :, :]
-
-
+            print 'rotation matrix#',[ray[iidx]], 'type: B'
+            print self.B.data[ray[iidx], :, :]
 
 
     def signature(self, L):
