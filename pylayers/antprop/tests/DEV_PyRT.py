@@ -7,6 +7,7 @@ from pylayers.antprop.signature import *
 import pylayers.util.pyutil as pyu
 from pylayers.gis.layout import *
 import pylayers.signal.bsignal as bs
+import pylayers.signal.waveform as wvf
 from datetime import datetime
 import time
 import ConfigParser
@@ -160,34 +161,6 @@ else:
 r3d = r2d.to3D()
 r3d.locbas(L)
 r3d.fillinter(L)
-#<<<<<<< HEAD
-#r3d.eval()
-
-#c11 = r3d.Ctilde[:,:,0,0]
-#c12 = r3d.Ctilde[:,:,0,1]
-#c21 = r3d.Ctilde[:,:,1,0]
-#c22 = r3d.Ctilde[:,:,1,1]
-
-
-
-#Cn=Ctilde()
-#Cn.Cpp = bs.FUsignal(r3d.I.f, c11)
-#Cn.Ctp = bs.FUsignal(r3d.I.f, c12)
-#Cn.Cpt = bs.FUsignal(r3d.I.f, c21)
-#Cn.Ctt = bs.FUsignal(r3d.I.f, c22)
-#Cn.nfreq = r3d.I.nf
-#Cn.nray = r3d.nray
-#Cn.tauk=r3d.delays
-
-#raynumber = 4
-
-#fig=plt.figure('Cpp')
-#f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
-
-#r3d.info(raynumber)
-## plt.show()
-
-#=======
 
 config = ConfigParser.ConfigParser()
 _filesimul = 'default.ini'
@@ -197,7 +170,24 @@ fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
                      eval(config.get("frequency", "fghzmax")), 
                      eval(config.get("frequency", "nf")))
 
-r3d.eval(fGHz)
+Cn=r3d.eval(fGHz)
+
+Cn.freq=Cn.fGHz
+sco=Cn.prop2tran(a='theta',b='theta')
+wav = wvf.Waveform()
+ciro = sco.applywavB(wav.sfg)
+
+#raynumber = 4
+
+#fig=plt.figure('Cpp')
+#f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
+
+#r3d.info(raynumber)
+# plt.show()
+
+#=======
+
+
 #
 #c11 = r3d.Ctilde[:,:,0,0]
 #c12 = r3d.Ctilde[:,:,0,1]

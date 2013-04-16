@@ -47,27 +47,6 @@ class Inter(object):
         self.data = data
         self.idx = idx
 
-        ## The config parser load is done in order to :
-        ## All IntB/IntL/IntR/IntT/... inherits of the correct
-        ## self.frequency from the Interaction class !
-        ## It could be interesting to find another trick which
-        ## avoid to give a filesimulname.
-
-        #config = ConfigParser.ConfigParser()
-        #filesimul = pyu.getlong(_filesimul, "ini")
-        #config.read(filesimul)
-
-        ## frequency load
-        #self.f = np.linspace(eval(config.get("frequency", "fghzmin")), eval(
-        #    config.get("frequency", "fghzmax")), eval(config.get("frequency", "nf")))
-
-        #self.fGHz = fGHz
-        #self.nf = len(self.fGHz)
-        #self.olf = np.ones(self.nf)
-
-        ## slabDB load
-        #self.slab = SlabDB(filemat=config.get("files", "mat"),
-        #            fileslab=config.get("files", "slab"))
         self.slab = SlabDB(filemat=_filemat, fileslab=_fileslab)
 
         self.idx = []
@@ -283,8 +262,11 @@ class Interactions(Inter,dict):
         # into a single np.array
 
         # f x i x 2 x 2
-        nf = len(fGHz)
-        self.I = np.zeros((nf, self.nimax, 2, 2), dtype=complex)
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
+        self.I = np.zeros((self.nf, self.nimax, 2, 2), dtype=complex)
         self.sout = np.zeros((self.nimax))
         self.si0 = np.zeros((self.nimax))
         self.alpha = np.ones((self.nimax), dtype=complex)
@@ -394,10 +376,13 @@ class IntB(Inter):
 
         """
 
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
+
         self.delay()
         if len(self.data) != 0:
             lidx = len(self.idx)
-            pdb.set_trace()
             data = self.data.reshape(lidx, 2, 2)
             #return(self.olf[:, np.newaxis, np.newaxis, np.newaxis]*data[np.newaxis, :, :, :])
             return(np.ones((len(fGHz),1,1,1))*data[np.newaxis, :, :, :])
@@ -450,6 +435,10 @@ class IntL(Inter):
         >>> L.delay
         array([ 10.,  20.])
         """
+
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
 
         self.delay()
 
@@ -549,12 +538,19 @@ class IntR(Inter):
         data = np.array((ninter x [theta,si,st]))
         """
 
+
+
         self.delay()
-        nf = len(fGHz)
+
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
+
 
         # A : f ri 2 2
 
-        self.A = np.zeros((nf, len(self.idx), 2, 2), dtype=complex)
+        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
 
         if np.shape(self.data)[0]!=len(self.idx):
             self.data=self.data.T
@@ -660,8 +656,14 @@ class IntT(Inter):
         """
 
         self.delay()
-        nf = len(fGHz)
-        self.A = np.zeros((nf, len(self.idx), 2, 2), dtype=complex)
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
+
+
+
+
+        self.A = np.zeros((self.nf, len(self.idx), 2, 2), dtype=complex)
         self.alpha = np.zeros((len(self.idx)), dtype=complex)
         self.gamma = np.zeros((len(self.idx)), dtype=complex)
         self.sm = np.zeros((len(self.idx)), dtype=complex)
@@ -731,6 +733,9 @@ class IntD(Inter):
                 str(np.shape(self.idx)))
 
     def eval(self,fGHz=np.array([2.4])):
+
+        self.fGHz=fGHz
+        self.nf=len(fGHz)
 
         self.delay()
 
