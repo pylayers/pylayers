@@ -151,6 +151,21 @@ class CLA(object):
         else:
             self.parmsh = parmsh
 
+#    def info(self):
+#        """gives info on the CLA
+
+#        .. todo::
+
+#                improve info
+
+#        """
+#        N = len(self.c)
+#        print "CLA : ", N, " constraints"
+#        print "-----------------------"
+#        for k in range(N):
+#            print "Constraint N° ", k
+#            self.c[k].info()
+
     def info(self):
         """gives info on the CLA
 
@@ -165,6 +180,8 @@ class CLA(object):
         for k in range(N):
             print "Constraint N° ", k
             self.c[k].info()
+
+
 
     def update(self):
         """update
@@ -193,12 +210,12 @@ class CLA(object):
         """
         self.merge2()
         self.refine(self.Nc)
-        if (sum(self.runable) >= 3) and (pe == True):
+        if (sum(self.usable) >= 3) and (pe == True):
             self.estpos2()
-            self.Nc=len(self.c)
+            self.Nc=len(np.where(self.usable)[0])
             return True
         else:
-            self.Nc=len(self.c)
+            self.Nc=len(np.where(self.usable)[0])
             return False
 
 
@@ -207,7 +224,7 @@ class CLA(object):
         self.merge2()
         self.refine(self.Nc)
         self.estpos2()
-        self.Nc=len(self.c)
+        self.Nc=len(np.where(self.usable)[0])
         return True
 
     def rescale(self, f_vcw, cid=None):
@@ -383,7 +400,7 @@ class CLA(object):
                     onlyRSS = True
 
         while (step > 0.05) | (vcw1 == vcwmin):
-            pdb.set_trace()
+
             self.setvcw(vcw1)
                 #constraints vcw set to current value
 
@@ -395,7 +412,7 @@ class CLA(object):
             for c in self.c:                # find intersection between all constraints for the current vcw
                 if (c.type != 'Exclude'):
 #                    if (c.type != 'RSS') or onlyRSS:
-                    if c.runable:
+                    if c.usable:
                         lb = c.lbox
                         try:
                             tlb = tlb.intersect(lb)
@@ -409,7 +426,7 @@ class CLA(object):
                 tlb = tlb.intersect(ex.lbox)
             except:
                 pass
-            pdb.set_trace()
+
             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
                 vcw1 = vcw1 + step
                 step = step * 1.2
@@ -466,7 +483,7 @@ class CLA(object):
 
         for c in self.c:                # for each constraints
 
-            if (c.type != 'RSS') & (c.type != 'Exclude') & (c.runable):
+            if (c.type != 'RSS') & (c.type != 'Exclude') & (c.usable):
 
                 DDB, TB = c.valid_v(
                     lv)  # .reshape(2,len(lv)/4,pow(2,self.ndim))
@@ -892,10 +909,11 @@ class CLA(object):
         clust, axis = self.gapdetect(l, dlindx)
 
         box_center = self.dlayer[l][dlindx].ctr
+        uc = np.where(self.usable)[0]
 
-        for j in range(len(self.c)):
+        for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
-            if (self.c[j].type != 'Exclude') & (self.c[j].runable):
+            if (self.c[j].type != 'Exclude') & (self.c[j].usable):
                 # compute distance between contraint center and all vertexes
                 if self.c[j].type == 'TOA' or self.c[j].type == 'RSS':
                     d = np.sqrt(np.sum((box_center - self.c[j].p * np.ones((len(box_center), 1))) ** 2, axis=1))
@@ -1106,10 +1124,11 @@ class CLA(object):
         clust, axis = self.gapdetect(l, dlindx)
 
         box_center = self.dlayer[l][dlindx].ctr
-
-        for j in range(len(self.c)):
+        
+        uc = np.where(self.c.usable)[0]
+        for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
-            if (self.c[j].type != 'Exclude') & (self.c[j].runable):
+            if (self.c[j].type != 'Exclude') & (self.c[j].usable):
                 # compute distance between contraint center and all vertexes
                 if self.c[j].type == 'TOA' or self.c[j].type == 'RSS':
                     d = np.sqrt(np.sum((box_center - self.c[j].p * np.ones((len(box_center), 1))) ** 2, axis=1))

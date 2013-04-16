@@ -626,8 +626,7 @@ class Network(nx.MultiDiGraph):
         e=self.link[RAT]#self.SubNet[RAT].edges()
         re=self.relink[RAT] # reverse link aka other direction of link
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
-        lD=[{'Pr':lp[i],'TOA':np.mod(lt[i],len(e)) ,'d':np.mod(d[i],len(e)),'vis':v[i]} for i in range(len(d))]
-
+        lD=[{'Pr':lp[i],'TOA':lt[np.mod(i,len(e))] ,'d':d[np.mod(i,len(e))],'vis':v[i]} for i in range(len(d))]
         self.update_LDPs(iter(e+re),RAT,lD)
 
 

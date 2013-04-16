@@ -191,7 +191,7 @@ class Localization(object):
             True if estimated position has been computed
         """
 
-
+        pdb.set_trace()
         if sum(self.cla.usable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
@@ -265,18 +265,17 @@ class PLocalization(Process):
         self.loc.fill_cla()
         while True:
             self.loc.update(ldp='TOA')
-            pdb.set_trace()
+
             # if no previous position have been computed or if position is obsolete
             if self.loc.net.node[self.loc.ID]['pe'].size == 0 \
                 or self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node['te']>self.loc_updt_time:
 
                     # try to obtain an estimated position
-#                    if 'geo' in self.method :
-#                        bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
+                    if 'geo' in self.method :
+                        bep = self.loc.compute_geo(ldp='TOA',now=self.sim.now())
 #                    if 'alg' in self.method and bep:
 #                        bep = self.loc.compute_alg(ldp='TOA',now=self.sim.now())
 #                     if no position has been computed
-                    bep=False
                     if not bep :
                         self.tx.cmdrq.signal()
 
