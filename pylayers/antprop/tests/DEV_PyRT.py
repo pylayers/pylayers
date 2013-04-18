@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+Si# -*- coding: utf-8 -*-
 
 from pylayers.simul.simulem import *
 from pylayers.antprop.rays import *

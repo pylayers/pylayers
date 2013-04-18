@@ -156,6 +156,93 @@ class Signatures(dict):
                         self[len(path)] = sigarr
 
 
+    def showi(self):
+        """ interactive show
+        
+        press n to visit rays
+
+        Attributes
+        ----------
+            ni : number of interaction
+            us : signature index
+        """
+        plt.ion()
+        fig=plt.figure()
+        ax=fig.add_subplot(111)
+#        fig,ax=self.L.showG(fig=fig,ax=ax,graph='s')
+#        plt.draw()
+
+        nit = self.keys()
+        uni = 0
+        ni = nit[uni]
+        
+        ust = len(self[ni])/2
+        us = 0
+
+        st='a'
+        while st != 'q':
+            inter=[]
+            ax=fig.add_subplot(111)
+            fig,ax=self.L.showG(fig=fig,ax=ax,graph='s')
+            title = '# interaction :', ni, 'signature #',us,'/',ust
+             
+            ax.set_title(title)
+
+            line = self.pTx[:2]
+            ax.plot(self.pRx[0],self.pRx[1],'xb')
+            ax.plot(self.pTx[0],self.pTx[1],'xr')
+
+            if ni not in self.keys():
+                print "incorrect number of interactions"
+                
+            pos={}
+
+            try:
+                for u in self[ni][us*2]:
+                    pos.update({u:self.L.Gs.pos[u]})
+                    line = np.vstack((line,np.array((self.L.Gs.pos[u]))))
+                nx.draw_networkx_nodes(self.L.Gs,pos=pos,nodelist=pos.keys(),node_color='r',ax=ax)
+
+                for ii in self[ni][(us*2)+1]:
+                    if ii == 1:
+                        inter.append('R')
+                    if ii == 2:
+                        inter.append('T')
+
+
+
+
+            except:
+                print "signature index out of bounds of signature"
+            line = np.vstack((line,self.pRx[:2]))
+            ax.plot(line[:,0],line[:,1])
+            
+            plt.draw()
+            print inter
+            st = raw_input()
+            ax.cla()
+            if st == 'n':
+                if us+2 <= ust:
+                    us=us+2
+
+                else:
+                    uni = uni+1
+                    try:
+                        ni = nit[uni]
+                        ust = len(self[ni])/2
+                        us=0
+                    except:
+                        uni=0
+                        ni=nit[uni]
+                        us = 0
+                
+
+
+            else:
+                print 'press n for next signature'    
+    
+
+
     def rays(self):
         """ from signatures dict to 2D rays
 
