@@ -1,5 +1,5 @@
 from pylayers.simul.simulem import *
-from pylayers.antprop.rays import *
+from pylayers.antprop.raysc import *
 from pylayers.antprop.channel import *
 import pylayers.util.pyutil as pyu
 import pylayers.signal.bsignal as bs

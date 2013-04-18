@@ -19,6 +19,7 @@ import matplotlib.pylab as plt
 from scipy.misc import factorial
 import pylayers.util.pyutil as pyu
 from pylayers.util.project import *
+from pylayers.util.plotutil import *
 from matplotlib.font_manager import FontProperties
 from mpl_toolkits.mplot3d import axes3d
 from scipy import sparse
@@ -1412,7 +1413,8 @@ def plotVW(l, m, theta, phi, sf=False):
     if m <= l:
         theta[np.where(theta == np.pi / 2)[0]] = np.pi / 2 +  1e-10  # .. todo :: not clean
         x = -np.cos(theta)
-        Pll1n, Plp1n = AFLegendre(l, m, x)
+
+        Pmm1l, Pmp1l = AFLegendre(l, m, x)
 
         t1 = np.sqrt((l + m) * (l - m + 1))
         t2 = np.sqrt((l - m) * (l + m + 1))
@@ -1447,147 +1449,28 @@ def plotVW(l, m, theta, phi, sf=False):
             Waux = Y2 * EPh
             x1 = 1.0 / x
             W = np.outer(x1, const) * Waux
+
         Wcos = cphi * W
         Wsin = sphi * W
-
-        # plot V and W
-        Ntheta = np.size(theta)
-        vt = np.ones(Ntheta)
-        Nphi = np.size(phi)
-        vp = np.ones(Nphi)
-        Phi = np.outer(vt, phi)
-        Theta = np.outer(theta, vp)
 
         #figdirV='/home/rburghel/Bureau/bases_decomposition_VW/base_V_Vsin_Vcos/'
         figdirV = './'
         ext1 = '.pdf'
         ext2 = '.eps'
         ext3 = '.png'
-
-
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(V) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(V) * np.sin(Phi) * np.sin(Theta)
-        Z = abs(V) * np.cos(Theta)
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.hot_r)
-        ax.set_xlim3d([-1, 1])
-        ax.set_ylim3d([-1, 1])
-        ax.set_zlim3d([-1, 1])
-        if sf:
-            sz = fig.get_size_inches()
-            fig.set_size_inches(sz * 1.8)
-            figname = figdirV + 'V' + str(n) + str(m)
-            fig.savefig(figname + ext1, orientation='portrait')
-            fig.savefig(figname + ext2, orientation='portrait')
-            fig.savefig(figname + ext3, orientation='portrait')
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(Vcos) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(Vcos) * np.sin(Phi) * np.sin(Theta)
-        Z = abs(Vcos) * np.cos(Theta)
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.hot_r)
-        ax.set_xlim3d([-1, 1])
-        ax.set_ylim3d([-1, 1])
-        ax.set_zlim3d([-1, 1])
-
-        if sf:
-            sz = fig.get_size_inches()
-            fig.set_size_inches(sz * 1.8)
-            figname = figdirV + 'Vcos' + str(n) + str(m) + '.jpg'
-            fig.savefig(figname + ext1, orientation='portrait')
-            fig.savefig(figname + ext2, orientation='portrait')
-            fig.savefig(figname + ext3, orientation='portrait')
-
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(Vsin) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(Vsin) * np.sin(Phi) * np.sin(Theta)
-        Z = abs(Vsin) * np.cos(Theta)
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.hot_r)
-        ax.set_xlim3d([-1, 1])
-        ax.set_ylim3d([-1, 1])
-        ax.set_zlim3d([-1, 1])
-        if sf:
-            sz = fig.get_size_inches()
-            fig.set_size_inches(sz * 1.8)
-            figname = figdirV + 'Vsin' + str(n) + str(m) + '.jpg'
-            fig.savefig(figname + ext1, orientation='portrait')
-            fig.savefig(figname + ext2, orientation='portrait')
-            fig.savefig(figname + ext3, orientation='portrait')
-
-        #figdirW='/home/rburghel/Bureau/bases_decomposition_VW/base_W_Wsin_Wcos/'
-        figdirW = './'
-
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(W) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(W) * np.sin(Phi) * np.sin(Theta)
-        Z = abs(W) * np.cos(Theta)
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.hot_r)
-        ax.set_xlim3d([-1, 1])
-        ax.set_ylim3d([-1, 1])
-        ax.set_zlim3d([-1, 1])
-        if sf:
-            sz = fig.get_size_inches()
-            fig.set_size_inches(sz * 1.8)
-            figname = figdirW + 'W' + str(n) + str(m)
-            fig.savefig(figname + ext1, orientation='portrait')
-            fig.savefig(figname + ext2, orientation='portrait')
-            fig.savefig(figname + ext3, orientation='portrait')
-
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(Wcos) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(Wcos) * np.sin(Phi) * np.sin(Theta)
-        Z = abs(Wcos) * np.cos(Theta)
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.hot_r)
-        ax.set_xlim3d([-1, 1])
-        ax.set_ylim3d([-1, 1])
-        ax.set_zlim3d([-1, 1])
-        if sf:
-            sz = fig.get_size_inches()
-            fig.set_size_inches(sz * 1.8)
-            figname = figdirW + 'Wcos' + str(n) + str(m)
-            fig.savefig(figname + ext1, orientation='portrait')
-            fig.savefig(figname + ext2, orientation='portrait')
-            fig.savefig(figname + ext3, orientation='portrait')
-
-        fig = plt.figure()
-        ax = axes3d.Axes3D(fig)
-        X = abs(Wsin) * np.cos(Phi) * np.sin(Theta)
-        Y = abs(Wsin) * np.sin(Phi) * np.sin(Theta)
-        Z = abs(Wsin) * np.cos(Theta)
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.hot_r)
-        ax.set_xlim3d([-1, 1])
-        ax.set_ylim3d([-1, 1])
-        ax.set_zlim3d([-1, 1])
-        if sf:
-            sz = fig.get_size_inches()
-            fig.set_size_inches(sz * 1.8)
-            figname = figdirW + 'Wsin' + str(n) + str(m)
-            fig.savefig(figname + ext1, orientation='portrait')
-            fig.savefig(figname + ext2, orientation='portrait')
-            fig.savefig(figname + ext3, orientation='portrait')
-
+        slm = ' l = '+str(l)+' m = '+str(m)
+        fig1 = plt.figure()
+        pol3D(fig1,abs(V),theta,phi,title='$|V|$'+slm)
+        fig2 = plt.figure()
+        pol3D(fig2,abs(Vcos),theta,phi,title='$\Re V$'+slm)
+        fig3 = plt.figure()
+        pol3D(fig3,abs(Vsin),theta,phi,title='$\Im V$'+slm)
+        fig4 = plt.figure()
+        pol3D(fig4,abs(W),theta,phi,title='$|W|$'+slm)
+        fig5 = plt.figure()
+        pol3D(fig5,abs(Wcos),theta,phi,title='$\Re W'+slm)
+        fig6 = plt.figure()
+        pol3D(fig6,abs(Wsin),theta,phi,title='$\Im W$'+slm)
         plt.show()
 
     else:
