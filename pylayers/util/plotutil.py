@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import cm
 import doctest
+import pdb
 
 
 def displot(pt, ph, col='black'):
@@ -57,7 +58,7 @@ def displot(pt, ph, col='black'):
     return fig, ax
 
 def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
-    """ polar 3D surface plot
+    """ polar 3D  surface plot
 
     Parameters
     ----------
@@ -106,6 +107,54 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
         fig.savefig(figname + ext1, orientation='portrait')
         fig.savefig(figname + ext2, orientation='portrait')
         fig.savefig(figname + ext3, orientation='portrait')
+
+def cylinder(fig,pa,pb,R):
+    """ plot a cylinder
+    pa : 3 x nc 
+    pb : 3 x nc 
+    R  : 1 x Nc
+
+    >>> from pylayers.util.plotutil import *
+    >>> import numpy as np
+    >>> pa = np.array([0,0,0])
+    >>> pb = np.array([0,0,10])
+    >>> fig = plt.figure()
+    >>> cylinder(fig,pa,pb,3)
+    >>> plt.show()
+
+    """
+    try:
+        nc = np.shape(pa)[1]
+    except:
+        nc = 1
+        pa = pa.reshape(3,1)
+        pb = pb.reshape(3,1)
+    ax = fig.gca(projection='3d') 
+    theta = np.linspace(0, 2 * np.pi, 40)
+    # 3 x nc
+    v = (pb-pa)
+    mv = np.sqrt(np.sum(v*v,axis=0)).reshape(1,nc)
+    vn = v/mv
+    if nc>1:
+        pr = sp.rand(3,nc)
+    else:
+        pr = sp.rand(3,1)
+    pp = pr - np.sum(pr*vn,axis=0)
+    mpp = np.sum(pp*pp,axis=0)
+    pn = pp/mpp
+    qn = np.cross(pn,vn,axisa=0,axisb=0,axisc=0)
+    # 3 x nc x ntheta
+    p = pa[:,:,np.newaxis] + \
+            R*(np.cos(theta[np.newaxis,np.newaxis,:])*pn[:,:,np.newaxis] + \
+               np.sin(theta[np.newaxis,np.newaxis,:])*qn[:,:,np.newaxis])
+    ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
+    p = pb[:,:,np.newaxis] + \
+            R*(np.cos(theta[np.newaxis,np.newaxis,:])*pn[:,:,np.newaxis] + \
+               np.sin(theta[np.newaxis,np.newaxis,:])*qn[:,:,np.newaxis])
+    ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
+    t = np.arange(0,1,0.05)
+    p = pa[:,:,np.newaxis]+t[np.newaxis,np.newaxis,:]*(pb[:,:,np.newaxis]-pa[:,:,np.newaxis])
+    ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
 
 if (__name__ == "__main__"):
     doctest.testmod()

@@ -1104,7 +1104,7 @@ class GrRayTud(dict):
                 print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
         print '\n----------------------------------------'
-        print ' Matrix of ray #', r, 'at f=', self.I.f[0]
+        print ' Matrix of ray #', r, 'at f=', self.I.fGHz[0]
         print '----------------------------------------'
 
         for iidx, i in enumerate(typ):
