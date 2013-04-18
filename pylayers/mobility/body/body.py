@@ -8,6 +8,16 @@ from visual import *
 import  pdb as pdb
 
 
+
+def dist (A,B):
+	"""
+	evaluate the distance between two points 1 and B
+	"""
+	
+	d  = sqrt((A[0] -B[0])**2 +(A[1] -B[1])**2+ (A[2] -B[2])**2)
+	return d 
+	
+
 class Body(object):
     """
        Class to manage c3d files
@@ -50,9 +60,79 @@ class Body(object):
         for i in range(15):
             self.g.pos[i]=(self.d[1,i,0],self.d[2,i,0])
 
-    def CylinderModel(self):
+    def CylinderModel(self, nc=10, frameID  = 0 ):
+		
+		"""
+		
+		nc  =  cylinder number 
+		c : array(shape  =  (nc,4)), Cylinder Id , A coordiante, B Coordinate , cylinder radius 
+		
+		"""
+		
+		self.c  = np.ndarray(shape = (nc,8))
+		i = 0
+		self.c[i,0] = i
+		self.c[i,1:4] = list((self.d[:,9,frameID] +self.d[:,10,frameID])/2 )
+		self.c[i,4:7] = (self.d[:,3,frameID] +self.d[:,4,frameID])/2
+		self.c[i,7] = dist(self.d[:,3,frameID],self.d[:,4,frameID])/2
+		
+		i = 1
+		self.c[i,0] = i
+		self.c[i,1:4] = (self.d[:,3,frameID] +self.d[:,4,frameID])/2
+		self.c[i,4:6] = self.c[0,4:6]
+		self.c[i,6] = self.d[2,2,frameID]
+		self.c[i,7] = 5
+		
+		i = 2 
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,6,frameID]
+		self.c[i,4:7] = self.d[:,4,frameID]
+		self.c[i,7] = 5
+		
+		i = 3
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,5,frameID]
+		self.c[i,4:7] = self.d[:,3,frameID]
+		self.c[i,7] = 5
+		
+		i = 4
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,8,frameID]
+		self.c[i,4:7] = self.d[:,6,frameID]
+		self.c[i,7] = 5
+		
+		i = 5 
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,7,frameID]
+		self.c[i,4:7] = self.d[:,5,frameID]
+		self.c[i,7] = 5
+			 
+			 
+		i = 6
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,12,frameID]
+		self.c[i,4:7] = self.d[:,10,frameID]
+		self.c[i,7] = 5
+		
+		i = 7 
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,11,frameID]
+		self.c[i,4:7] = self.d[:,9,frameID]
+		self.c[i,7] = 5
+		
+		i = 8
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,14,frameID]
+		self.c[i,4:7] = self.d[:,12,frameID]
+		self.c[i,7] = 5
+		
+		i = 9
+		self.c[i,0] = i
+		self.c[i,1:4] = self.d[:,13,frameID]
+		self.c[i,4:7] = self.d[:,11,frameID]
+		self.c[i,7] = 5
 
-        return 0
+       
 
 
 if __name__ == '__main__':
@@ -66,15 +146,8 @@ if __name__ == '__main__':
 
     ax = fig.add_subplot(111, projection='3d')
     frameID = 30
-    ax.scatter(
-        c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
+    ax.scatter(c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
     ax.axis('scaled')
-    #ax.scatter(c10_15[frameID,:,0],c10_15[frameID,:,1],c10_15[frameID,:,2] )
-    pointID = 13
-    plt.figure()
-    plt.plot(c10_15[0, pointID].T, '*--', label='x')
-    plt.plot(c10_15[1, pointID].T, '*--', label='y')
-    plt.plot(c10_15[2, pointID].T, '*--', label='z')
-    plt.legend()
+    B.CylinderModel()
 
     plt.show()
