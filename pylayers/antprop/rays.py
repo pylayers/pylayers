@@ -790,8 +790,10 @@ class Rays(dict):
         Cn.nray = self.nray
         Cn.tauk=self.delays
         Cn.fGHz = self.I.fGHz
-        Cn.tang = aod
-        Cn.rang = aoa
+        # r x 2
+        Cn.tang = aod.T
+        # r x 2
+        Cn.rang = aoa.T
         # add aoa and aod 
         return(Cn)
 

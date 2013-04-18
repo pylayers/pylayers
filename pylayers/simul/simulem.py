@@ -23,6 +23,7 @@ import matplotlib.pylab as plt
 import struct as stru
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geu
+import pylayers.util.plotutil as plu
 import pylayers.signal.waveform as wvf
 import pylayers.signal.bsignal as bs
 from pylayers.simul.radionode import RadioNode
@@ -33,7 +34,7 @@ from pylayers.gis.layout import Layout
 # Handle Rays
 from pylayers.antprop.raysc import GrRay3D, GrRayTud
 # Handle VectChannel and ScalChannel
-from pylayers.antprop import channel
+from pylayers.antprop import channelc
 #from   Channel import *
 # Handle directory hierarchy
 from pylayers.util.project import *
@@ -540,7 +541,7 @@ class Launch(object):
                 ihek = ihe[u[0]]
                 pt = np.vstack((self.x[itak], self.y[itak]))
                 ph = np.vstack((self.x[ihek], self.y[ihek]))
-                fig, ax = geu.displot(pt, ph, str(k / (1.0 * Mdeep)))
+                fig, ax = plu.displot(pt, ph, str(k / (1.0 * Mdeep)))
         return fig, ax
         """
         pz   =  empty((2,))
@@ -2359,7 +2360,7 @@ class Simul(object):
             return Vect Channel for link itx irx
         """
 
-        VCl = channel.VectChannel(self, itx, irx, False)
+        VCl = channelc.VectChannel(self, itx, irx, False)
         return(VCl)
 
     def cir(self, itx, irx, store_level=0, alpha=1.0, ext='', rep=pstruc['DIRCIR'],format='a'):
@@ -2446,7 +2447,7 @@ class Simul(object):
 
 
                 filename = pyu.getlong(_filename, rep)
-                VCl = channel.VectChannel(self, l, k, False)
+                VCl = channelc.VectChannel(self, l, k, False)
                 CVC.append(VCl)
                 if not VCl.fail:
                     #SCO = VCl.vec2scal()
