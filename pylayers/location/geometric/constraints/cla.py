@@ -984,15 +984,16 @@ class CLA(object):
 
 
 
-                if clust_vol != 0:
+                if clust_vol != 0 and len(np.where(self.usable)[0]) == 2:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
                     # verifier que les contraintes utilisées sont les bonne ( ce n'est pas le cas)
                     # ne marche que si 2 constriantes genere le cluster ( a robustifier)   
+                    pu = np.where(self.usable)[0]
                     try:
-                        dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
+                        dd.append(np.sqrt(np.sum((pc - self.c[pu[0]].p) ** 2)))
                     except:
-                        dd.append(np.sqrt(np.sum((pc - self.c[1].p) ** 2)))
+                        dd.append(np.sqrt(np.sum((pc - self.c[pu[1]].p) ** 2)))
 #                       try:
 #                               vmax=[]
 #                               for i in range(len(lclust)):
