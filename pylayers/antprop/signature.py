@@ -64,6 +64,35 @@ class Signatures(dict):
         print "Receiver position: ", self.pRx
 
 
+    def all_simple_paths(self,G, source, target, cutoff=None):
+        if cutoff < 1:
+            return
+
+        visited = [source]
+        stack = [iter(G[source])]
+        while stack:
+            # stack is a list of iterators
+
+            children = stack[-1]
+            child = next(children, None)
+            if child is None:
+                stack.pop()
+                visited.pop()
+            elif len(visited) < cutoff:
+                if child == target:
+                    yield visited + [target]
+                elif child not in visited:
+                    visited.append(child)
+                    # explore all child connexion
+                    # TODO : limit the explorable childs
+                    stack.append(iter(G[child]))
+            else: #len(visited) == cutoff:
+                if child == target or target in children:
+                    yield visited + [target]
+                stack.pop()
+                visited.pop()
+
+
     def run(self, tx, rx,cutoff=1):
         """ get signatures (in one list of arrays) between tx and rx
 
@@ -132,12 +161,14 @@ class Signatures(dict):
             for nr in ndr:
 
                 if (nt != nr):
-                    paths = list(nx.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
+                    paths = list(self.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
                 else:
                     paths = [[nt]]
+                ### supress the followinfg loops .
                 for path in paths:
                     sigarr = np.array([],dtype=int).reshape(2, 0)
                     for interaction in path:
+
                         it = eval(interaction)
                         if type(it) == tuple:
                             if len(it)==2: #reflexion

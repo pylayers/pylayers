@@ -34,5 +34,5 @@ print "mobile node :",rx," is in room ",Rrx
 
 
 Si = Signatures(S.L,tx,rx)
-Si.run(tx,rx,2)
+Si.run(tx,rx,4)
 Si.showi()
