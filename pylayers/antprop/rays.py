@@ -700,36 +700,36 @@ class Rays(dict):
 
 
             ## loop on all the interactions of ray with l interactions
-            for i in range(1, l-1, 1):
+            for i in range(0, l):
 
 
-###########################################
-#                # Divergence factor D
-##                 not yet implementented
-###########################################
-                if i == 1:
-                    D0=1./si0[:,1]
-                    rho1=si0[:,1]*alpha[:,i]
-                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
-                    D=np.sqrt(
-                     ( (rho1 ) / (rho1 + sout[:,i]) )
-                     *( (rho2) / (rho2 + sout[:,i])))
-                    D=D*D0
-                    rho1=rho1+(sout[:,i]*alpha[:,i])
-                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+############################################
+##                # Divergence factor D
+###                 not yet implementented
+############################################
+#                if i == 0:
+#                    D0=1./si0[:,1]
+#                    rho1=si0[:,1]*alpha[:,i]
+#                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
+#                    D=np.sqrt(
+#                     ( (rho1 ) / (rho1 + sout[:,i]) )
+#                     *( (rho2) / (rho2 + sout[:,i])))
+#                    D=D*D0
+#                    rho1=rho1+(sout[:,i]*alpha[:,i])
+#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
 
-#                     gerer le loss
-                    if np.isnan(D).any():
-                        p=np.nonzero(np.isnan(D))[0]
-                        D[p]=1./sout[p,1]
-                else :
-                    D=np.sqrt(
-                     ( (rho1 ) / (rho1 + sout[:,i]) )
-                     *( (rho2) / (rho2 + sout[:,i])))
+##                     gerer le loss
+#                    if np.isnan(D).any():
+#                        p=np.nonzero(np.isnan(D))[0]
+#                        D[p]=1./sout[p,1]
+#                else :
+#                    D=np.sqrt(
+#                     ( (rho1 ) / (rho1 + sout[:,i]) )
+#                     *( (rho2) / (rho2 + sout[:,i])))
 
-                    rho1=rho1+(sout[:,i]*alpha[:,i])
-                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
-###########################################
+#                    rho1=rho1+(sout[:,i]*alpha[:,i])
+#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+############################################
 
                 #  A0  (X dot Y)
                 #  |    |     |
@@ -747,8 +747,8 @@ class Rays(dict):
                 Y = Bl[:, :, i, :, :]
                 ## Dot product interaction X Basis
                 Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
-                              ..., np.newaxis, :, :], axis=-2)   *D[np.newaxis,:,np.newaxis,np.newaxis]
-                if i == 1:
+                              ..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
+                if i == 0:
                 ## First Baspdis added
                     A0 = B0l[:, :,  :, :]
                     Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[

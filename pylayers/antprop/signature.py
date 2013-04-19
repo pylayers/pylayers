@@ -56,9 +56,9 @@ class Signatures(dict):
         self.pTx = pTx
         self.pRx = pRx
 
-    def __repr__(self):
-        s = 
-        return(s)
+#    def __repr__(self):
+#        s = 
+#        return(s)
     def info(self):
         """
         """
@@ -69,6 +69,35 @@ class Signatures(dict):
         print "================================"
         print "Transmitter position: ", self.pTx
         print "Receiver position: ", self.pRx
+
+
+    def all_simple_paths(self,G, source, target, cutoff=None):
+        if cutoff < 1:
+            return
+
+        visited = [source]
+        stack = [iter(G[source])]
+        while stack:
+            # stack is a list of iterators
+
+            children = stack[-1]
+            child = next(children, None)
+            if child is None:
+                stack.pop()
+                visited.pop()
+            elif len(visited) < cutoff:
+                if child == target:
+                    yield visited + [target]
+                elif child not in visited:
+                    visited.append(child)
+                    # explore all child connexion
+                    # TODO : limit the explorable childs
+                    stack.append(iter(G[child]))
+            else: #len(visited) == cutoff:
+                if child == target or target in children:
+                    yield visited + [target]
+                stack.pop()
+                visited.pop()
 
 
     def run(self, tx, rx,cutoff=1):
@@ -139,12 +168,14 @@ class Signatures(dict):
             for nr in ndr:
 
                 if (nt != nr):
-                    paths = list(nx.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
+                    paths = list(self.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
                 else:
                     paths = [[nt]]
+                ### supress the followinfg loops .
                 for path in paths:
                     sigarr = np.array([],dtype=int).reshape(2, 0)
                     for interaction in path:
+
                         it = eval(interaction)
                         if type(it) == tuple:
                             if len(it)==2: #reflexion
@@ -161,6 +192,93 @@ class Signatures(dict):
                         self[len(path)] = np.vstack((self[len(path)],sigarr))
                     except:
                         self[len(path)] = sigarr
+
+
+    def showi(self):
+        """ interactive show
+        
+        press n to visit rays
+
+        Attributes
+        ----------
+            ni : number of interaction
+            us : signature index
+        """
+        plt.ion()
+        fig=plt.figure()
+        ax=fig.add_subplot(111)
+#        fig,ax=self.L.showG(fig=fig,ax=ax,graph='s')
+#        plt.draw()
+
+        nit = self.keys()
+        uni = 0
+        ni = nit[uni]
+        
+        ust = len(self[ni])/2
+        us = 0
+
+        st='a'
+        while st != 'q':
+            inter=[]
+            ax=fig.add_subplot(111)
+            fig,ax=self.L.showG(fig=fig,ax=ax,graph='s')
+            title = '# interaction :', ni, 'signature #',us,'/',ust
+             
+            ax.set_title(title)
+
+            line = self.pTx[:2]
+            ax.plot(self.pRx[0],self.pRx[1],'xb')
+            ax.plot(self.pTx[0],self.pTx[1],'xr')
+
+            if ni not in self.keys():
+                print "incorrect number of interactions"
+                
+            pos={}
+
+            try:
+                for u in self[ni][us*2]:
+                    pos.update({u:self.L.Gs.pos[u]})
+                    line = np.vstack((line,np.array((self.L.Gs.pos[u]))))
+                nx.draw_networkx_nodes(self.L.Gs,pos=pos,nodelist=pos.keys(),node_color='r',ax=ax)
+
+                for ii in self[ni][(us*2)+1]:
+                    if ii == 1:
+                        inter.append('R')
+                    if ii == 2:
+                        inter.append('T')
+
+
+
+
+            except:
+                print "signature index out of bounds of signature"
+            line = np.vstack((line,self.pRx[:2]))
+            ax.plot(line[:,0],line[:,1])
+            
+            plt.draw()
+            print inter
+            st = raw_input()
+            ax.cla()
+            if st == 'n':
+                if us+2 <= ust:
+                    us=us+2
+
+                else:
+                    uni = uni+1
+                    try:
+                        ni = nit[uni]
+                        ust = len(self[ni])/2
+                        us=0
+                    except:
+                        uni=0
+                        ni=nit[uni]
+                        us = 0
+                
+
+
+            else:
+                print 'press n for next signature'    
+    
 
 
     def rays(self):
