@@ -60,14 +60,19 @@ class Interface(object):
             theta = theta.reshape(1, len(theta))
         self.nf = len(fGHz)
         self.nt = np.shape(theta)[1]
+        # f x 1
         self.fGHz = fGHz.reshape(self.nf, 1)
-        #self.theta = np.outer(np.ones(nf),theta).astype('complex')
+        # 1 x q
+        self.thi = theta
         self.theta = theta
         #
-        # Initialize Io and Ip  (nf,nt,2,2)
+        # Io : f x q x 2 x 2
+        # Ip : f x q x 2 x 2
         #
         self.Ip = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
+
         self.Io = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
+
         self.name = name
 
     def RT(self, metalic=False,RT='RT'):
@@ -80,8 +85,8 @@ class Interface(object):
 
         Notes
         -----
-        R : np.array   (nf , nt , 2, 2)
-        T : np.array   (nf , nt , 2, 2)
+        R : np.array   (f , th , 2, 2)
+        T : np.array   (f , th , 2, 2)
         """
         sh = np.shape(self.Io)
         nf = sh[0]
@@ -324,7 +329,6 @@ class Interface(object):
         rtd = 180 / np.pi
 
         plt.subplot(211)
-
         modRo = abs(self.R[:, :, 0, 0])
         modRp = abs(self.R[:, :, 1, 1])
         modTo = abs(self.T[:, :, 0, 0])
@@ -336,17 +340,25 @@ class Interface(object):
         angleTp = np.angle(self.T[:, :, 1, 1])
 
         if display == 'phase':
-            plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
-            plt.plot(self.theta[0, :] * rtd, angleRp[k, :] * rtd, 'r')
+            #plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
+            #plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
+            plt.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
+            plt.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
         else:
             if dB:
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modRo[k, :]), 'b')
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modRp[k, :]), 'r')
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modRo[k, :]), 'b')
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modRp[k, :]), 'r')
             else:
-                plt.plot(self.theta[0, :] * rtd, modRo[k, :], 'b')
-                plt.plot(self.theta[0, :] * rtd, modRp[k, :], 'r')
+                #plt.plot(self.theta[0, :] * rtd, modRo[k, :], 'b')
+                #plt.plot(self.theta[0, :] * rtd, modRp[k, :], 'r')
+                plt.plot(self.thi[0,:] * rtd, modRo[k, :], 'b')
+                plt.plot(self.thi[0,:] * rtd, modRp[k, :], 'r')
         plt.legend(('R _|_', 'R //'), loc='upper left')
         plt.xlabel('theta (degrees)')
         #nom = self.m1.name+'|'+self.m2.name+' '+str(f[k])+'GHz'
@@ -357,17 +369,25 @@ class Interface(object):
             plt.title(self.name + nom)
         plt.subplot(212)
         if display == 'phase':
-            plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, 'b')
-            plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, 'r')
+            plt.plot(self.thi[0,:] * rtd, angleTo[k, :] * rtd, 'b')
+            plt.plot(self.thi[0,:] * rtd, angleTp[k, :] * rtd, 'r')
+            #plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, 'b')
+            #plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, 'r')
         else:
             if dB:
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modTo[k, :]), 'b')
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modTp[k, :]), 'r')
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modTo[k, :]), 'b')
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modTp[k, :]), 'r')
             else:
-                plt.plot(self.theta[0, :] * rtd, modTo[k, :], 'b')
-                plt.plot(self.theta[0, :] * rtd, modTp[k, :], 'r')
+                #plt.plot(self.theta[0, :] * rtd, modTo[k, :], 'b')
+                #plt.plot(self.theta[0, :] * rtd, modTp[k, :], 'r')
+                plt.plot(self.thi[0,:] * rtd, modTo[k, :], 'b')
+                plt.plot(self.thi[0,:] * rtd, modTp[k, :], 'r')
         plt.legend(('T _|_', 'T //'), loc='upper right')
         plt.xlabel('theta (degrees)')
         plt.show()
@@ -442,9 +462,10 @@ class MatInterface(Interface):
         n2 = np.sqrt(epr2 / mur2)
 
         ct = np.cos(self.theta)
-
-        nT1p = n1 / ct         # //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
-        nT1o = n1 * ct         # _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        # //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        nT1p = n1 / ct
+        # _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        nT1o = n1 * ct
 
         #print np.shape(n1)
         #print np.shape(ct)
@@ -1187,9 +1208,6 @@ class Slab(dict, Interface):
         Cp[:, :, 0, 0] = 1
         Cp[:, :, 1, 1] = 1
 #        _Cp = np.eye(2,dtype=complex)
-
-
-
         #
         # Boucle sur les n-1 matériaux
         #      lmat[0] est toujours l'air  (à modifier)
@@ -1218,13 +1236,13 @@ class Slab(dict, Interface):
                 else:
                     II = MatInterface([ml, mr], self['lthick'][i], fGHz, theta)
             #
-            # chain the angle
+            # chains the angle
             #
                 theta = II.theta
             #
-            # theta depends on frequency nf x nt
+            # theta depends on frequency f x th
             #
-                #THETA = II.THETA
+            # THETA = II.THETA
 
                 Io = II.Io
                 Ip = II.Ip
@@ -1244,11 +1262,11 @@ class Slab(dict, Interface):
             # Using Einstein summation instead of a for loop increases speed by an order of magnitude
             #
 
-#            Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
-#            Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
+            #    Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
+            #    Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
 
 
-            ### array broadcasing version , new increased spped in regard of einsum
+            ### array broadcasing version , new increased speed in regard of einsum
             Co=np.sum(Co[...,:,:,np.newaxis]*Io[...,np.newaxis,:,:], axis=3)
             Cp=np.sum(Cp[...,:,:,np.newaxis]*Ip[...,np.newaxis,:,:], axis=3)
 
@@ -1460,6 +1478,7 @@ class SlabDB(dict):
 
     Attributes
     ----------
+
         DB : slab dictionnary
 
     """
@@ -1468,6 +1487,7 @@ class SlabDB(dict):
 
         Parameters
         ----------
+
         filemat : string
         fileslab : string
 
