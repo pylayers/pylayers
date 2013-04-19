@@ -79,42 +79,33 @@ class algloc(object):
         else:
             fig = plt.figure()
             ax = Axes3D(fig)
-            BN = self.nodes['BN']
+            bn = self.nodes['BN']
             try:
-                ax.plot(BN[0, :], BN[1, :], BN[2, :], 'r*', zdir='z',
-                        label='blind node')
+                ax.plot(bn[0, :], bn[1, :], bn[2, :], 'r*', zdir='z', label='blind node')
             except:
-                plt.plot(BN[0, :], BN[1, :], 'r*', label='blind node')
+                plt.plot(bn[0, :], bn[1, :], 'r*', label='blind node')
             if rss:
-                RN_RSS = self.nodes['RN_RSS']
+                rn = self.nodes['RN_RSS']
                 try:
-                    ax.plot(RN_RSS[0, :], RN_RSS[1, :], RN_RSS[2, :], 'ro',
-                            zdir='z', label='RSS node')
+                    ax.plot(rn[0, :], rn[1, :], rn[2, :], 'ro', zdir='z', label='RSS node')
                 except:
-                    plt.plot(RN_RSS[0, :], RN_RSS[1, :], 'ro',
-                             label='RSS node')
+                    plt.plot(rn[0, :], rn[1, :], 'ro', label='RSS node')
             if toa:
-                RN_TOA = self.nodes['RN_TOA']
+                rn = self.nodes['RN_TOA']
                 try:
-                    ax.plot(RN_TOA[0, :], RN_TOA[1, :], RN_TOA[2, :], 'gs',
-                            zdir='z', label='TOA node')
+                    ax.plot(rn[0, :], rn[1, :], rn[2, :], 'gs', zdir='z', label='TOA node')
                 except:
-                    plt.plot(RN_TOA[0, :], RN_TOA[1, :], 'gs',
-                             label='TOA node')
+                    plt.plot(rn[0, :], rn[1, :], 'gs', label='TOA node')
 
             if tdoa:
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
+                rn= self.nodes['RN_TDOA']
+                rnr = self.nodes['RNr_TDOA']
                 try:
-                    ax.plot(RN_TDOA[0, :], RN_TDOA[1, :], RN_TDOA[2, :], 'bD',
-                            zdir='z', label='TDOA node')
-                    ax.plot(RNr_TDOA[0, :], RNr_TDOA[1, :], RNr_TDOA[2, :],
-                            'kD', zdir='z', label='Ref TDOA node')
+                    ax.plot(rn[0, :], rn[1, :], rn[2, :], 'bD', zdir='z', label='TDOA node')
+                    ax.plot(rnr[0, :], rnr[1, :], rnr[2, :], 'kD', zdir='z', label='Ref TDOA node')
                 except:
-                    plt.plot(RN_TDOA[0, :], RN_TDOA[1, :], 'bD',
-                             label='TDOA node')
-                    plt.plot(RNr_TDOA[0, :], RNr_TDOA[1, :], 'kD',
-                             label='Ref TDOA node')
+                    plt.plot(rn[0, :], rn[1, :], 'bD', label='TDOA node')
+                    plt.plot(rnr[0, :], rnr[1, :], 'kD', label='Ref TDOA node')
 
     def show(self, rss=False, toa=True, tdoa=False):
         """ Plot scenario
@@ -148,7 +139,7 @@ class algloc(object):
 
         Returns
         -------
-            Range : numpy.ndarray
+            rg : numpy.ndarray
 
         Examples
         --------
@@ -163,22 +154,22 @@ class algloc(object):
             >>> r_mean = S.get_range('mean')
 
         """
-        RSS = self.ldp['RSS']
-        RSS_std = self.ldp['RSS_std']
-        RSS_np = self.ldp['RSS_np']
+        rss_db = self.ldp['RSS']
+        rss_std = self.ldp['RSS_std']
+        rss_np = self.ldp['RSS_np']
         d0 = self.ldp['d0']
-        PL0 = self.ldp['PL0']
-        S = (np.log(10) / 10) * RSS_std / RSS_np
-        M = (np.log(10) / 10) * (PL0 - RSS) / RSS_np + np.log(d0)
+        pl0 = self.ldp['PL0']
+        s = (np.log(10) / 10) * rss_std / rss_np
+        m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
         if string.lower(Rest) == 'mode':
-            Range = np.exp(M - S ** 2)
+            rg = np.exp(m - s**2)
         elif string.lower(Rest) == 'median':
-            Range = np.exp(M)
+            rg = np.exp(m)
         elif string.lower(Rest) == 'mean':
-            Range = np.exp(M + 0.5 * S ** 2)
+            rg = np.exp(m + 0.5*s**2)
         else:
             raise ValueError(Rest + ": no such ranging estimator")
-        return Range
+        return rg
 
     def get_range_std(self, Rest='mode'):
         """
@@ -191,7 +182,7 @@ class algloc(object):
 
         Returns
         -------
-            Range_std : numpy.ndarray
+            rg_std : numpy.ndarray
 
         Examples
         --------
@@ -205,25 +196,23 @@ class algloc(object):
             >>> rs_median = S.get_range_std('median')
             >>> rs_mean = S.get_range_std('mean')
         """
-        RSS = self.ldp['RSS']
-        RSS_std = self.ldp['RSS_std']
-        RSS_np = self.ldp['RSS_np']
+        rss_db = self.ldp['RSS']
+        rss_std = self.ldp['RSS_std']
+        rss_np = self.ldp['RSS_np']
         d0 = self.ldp['d0']
-        PL0 = self.ldp['PL0']
-        S = (np.log(10) / 10) * RSS_std / RSS_np
-        M = (np.log(10) / 10) * (PL0 - RSS) / RSS_np + np.log(d0)
+        pl0 = self.ldp['PL0']
+        s = (np.log(10) / 10) * rss_std / rss_np
+        m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
         if string.lower(Rest) == 'mode':
-            Range_std = np.sqrt((np.exp(
-                2 * M - 2 * S ** 2)) * (1 - np.exp(-S ** 2)))
+            rg_std = np.sqrt((np.exp(2*m - 2*s**2))*(1 - np.exp(-s**2)))
         elif string.lower(Rest) == 'median':
-            Range_std = np.sqrt(
-                (np.exp(2 * M + S ** 2)) * (np.exp(S ** 2) - 1))
+            rg_std = np.sqrt(
+                (np.exp(2*m + s**2)) * (np.exp(s**2) - 1))
         elif string.lower(Rest) == 'mean':
-            Range_std = np.sqrt((np.exp(
-                2 * M + 3 * S ** 2)) * (np.exp(S ** 2) - 1))
+            rg_std = np.sqrt((np.exp(2*m + 3*s**2))*(np.exp(s**2) - 1))
         else:
             raise ValueError(Rest + ": no such ranging estimator")
-        return Range_std
+        return rg_std
 
     def ls_locate(self, rss=False, toa=True, tdoa=False, Rest='mode'):
         """
@@ -261,216 +250,256 @@ class algloc(object):
             raise ValueError("inputs missed")
         else:
             if rss == 0 and toa == 0:
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K (see theory)
-                k1 = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                      axis=0))
-                RDOA = self.c * TDOA
-                RDOA2 = RDOA * RDOA
-                k2 = RDOA2
-                K = k1 - k2
-                # Construct the matrix A (see theory)
-                A = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                               RDOA.reshape(np.shape(TDOA)[0], 1)))
-                # Apply LS operator
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                sh = np.shape(rn_tdoa)
+
+                if sh[1] >= sh[0]:
+                    # Construct the vector K (see theory)
+                    k1 = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa),
+                          axis=0))
+                    drg = self.c * tdoa_ns
+                    k2 = drg*drg
+                    K = k1 - k2
+                    # Construct the matrix A (see theory)
+                    A = np.hstack((rn_tdoa.T-rnr_tdoa.T,drg.reshape(np.shape(tdoa_ns)[0],1)))
+                    # Apply LS operator
+                    Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = Pr[:sh[0]].reshape(sh[0], 1)
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
 
             elif rss == 0 and tdoa == 0:
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                # Construct the vector K (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1 = RN2[1:] - RN2[0:1]
-                ROA = self.c * TOA
-                ROA2 = ROA * ROA
-                k2 = ROA2[0:1] - ROA2[1:]
-                K = k1 + k2
-                # Construct the matrix A (see theory)
-                A = RN_TOA[:, 1:].T - RN_TOA[:, 0]
-                # Apply LS operator
-                P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-                P = P.reshape(np.shape(RN_TOA[:, 0:1]))
-
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                sh = np.shape(rn_toa)
+                if sh[1] > sh[0]:
+                    # Construct the vector K (see theory)
+                    rn2 = (np.sum(rn_toa * rn_toa, axis=0))
+                    k1 = rn2[1:] - rn2[0:1]
+                    rg = self.c * toa_ns
+                    rg2 = rg * rg
+                    k2 = rg2[0:1] - rg2[1:]
+                    K = k1 + k2
+                    # Construct the matrix A (see theory)
+                    A = rn_toa[:, 1:].T - rn_toa[:, 0]
+                    # Apply LS operator
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = P.reshape(np.shape(rn_toa[:, 0:1]))
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
+                    
             elif toa == 0 and tdoa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                # Construct the vector K (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1 = RN2[1:] - RN2[0:1]
-                ROA = self.get_range(Rest)
-                ROA2 = ROA * ROA
-                k2 = ROA2[0:1] - ROA2[1:]
-                K = k1 + k2
-                # Construct the matrix A (see theory)
-                A = RN_RSS[:, 1:].T - RN_RSS[:, 0]
-                # Apply LS operator
-                P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-                P = P.reshape(np.shape(RN_RSS[:, 0:1]))
+                pl0 = self.ldp['PL0']
+                sh = np.shape(rn_rss)
+                if sh[1] > sh[0]:
+                    # Construct the vector K (see theory)
+                    rn2 = np.sum(rn_rss * rn_rss, axis=0)
+                    k1 = rn2[1:] - rn2[0:1]
+                    rg = self.get_range(Rest)
+                    rg2 = rg * rg
+                    k2 = rg2[0:1] - rg2[1:]
+                    K = k1 + k2
+                    # Construct the matrix A (see theory)
+                    A = rn_rss[:, 1:].T - rn_rss[:, 0]
+                    # Apply LS operator
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = P.reshape(np.shape(rn_rss[:, 0:1]))
+
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
 
             elif tdoa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                # Construct the vector K_RSS (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1_RSS = RN2[1:] - RN2[0:1]
-                ROA_RSS = self.get_range(Rest)
-                ROA2_RSS = ROA_RSS * ROA_RSS
-                k2_RSS = ROA2_RSS[0:1] - ROA2_RSS[1:]
-                K_RSS = k1_RSS + k2_RSS
-                # Construct the matrix A_RSS (see theory)
-                A_RSS = RN_RSS[:, 1:].T - RN_RSS[:, 0]
-                # Construct the vector K_TOA (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1_TOA = RN2[1:] - RN2[0:1]
-                ROA_TOA = self.c * TOA
-                ROA2_TOA = ROA_TOA * ROA_TOA
-                k2_TOA = ROA2_TOA[0:1] - ROA2_TOA[1:]
-                K_TOA = k1_TOA + k2_TOA
-                # Construct the matrix A_TOA (see theory)
-                A_TOA = RN_TOA[:, 1:].T - RN_TOA[:, 0]
-                # Apply LS operator
-                K = np.vstack((K_RSS.reshape(np.shape(K_RSS)[0], 1),
-                               K_TOA.reshape(np.shape(K_RSS)[0], 1)))
-                A = np.vstack((A_RSS, A_TOA))
-                P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-                P = P.reshape(np.shape(RN_RSS[:, 0:1]))
+                pl0 = self.ldp['PL0']
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                sh1 = np.shape(rn_rss)
+                sh2 = np.shape(rn_toa)
+                if sh1[1] > 1 and sh1[1]+sh2[1] > sh1[0]:
+                    # Construct the vector K_rss (see theory)
+                    rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
+                    k1_rss = rn2_rss[1:] - rn2_rss[0:1]
+                    rg_rss = self.get_range(Rest)
+                    rg2_rss = rg_rss * rg_rss
+                    k2_rss = rg2_rss[0:1] - rg2_rss[1:]
+                    K_rss = k1_rss + k2_rss
+                    # Construct the matrix A_rss (see theory)
+                    A_rss = rn_rss[:, 1:].T - rn_rss[:, 0]
+                    # Construct the vector K_toa (see theory)
+                    rn2_toa = (np.sum(rn_toa * rn_toa, axis=0))
+                    k1_toa = rn2_toa[:] - rn2_rss[0:1]
+                    rg_toa = self.c * toa_ns
+                    rg2_toa = rg_toa * rg_toa
+                    k2_toa = rg2_rss[0:1] - rg2_toa[:]
+                    K_toa = k1_toa + k2_toa
+                    # Construct the matrix A_toa (see theory)
+                    A_toa = rn_toa[:, :].T - rn_rss[:, 0]
+                    # Apply LS operator
+                    sh3 = np.shape(K_rss)[0]
+                    sh4 = np.shape(K_toa)[0]
+                    K = np.vstack((K_rss.reshape(sh3, 1),K_toa.reshape(sh4, 1)))
+                    A = np.vstack((A_rss, A_toa))
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = P.reshape(np.shape(rn_rss[:, 0:1]))
+                elif sh2[1] > 1 and sh1[1]+sh2[1] > sh1[0]:
+                    # Construct the vector K_toa (see theory)
+                    rn2_toa = (np.sum(rn_toa * rn_toa, axis=0))
+                    k1_toa = rn2_toa[1:] - rn2_toa[0:1]
+                    rg_toa = self.c * toa_ns
+                    rg2_toa = rg_toa * rg_toa
+                    k2_toa = rg2_toa[0:1] - rg2_toa[1:]
+                    K_toa = k1_toa + k2_toa
+                    # Construct the matrix A_toa (see theory)
+                    A_toa = rn_toa[:, 1:].T - rn_toa[:, 0]
+                    # Construct the vector K_rss (see theory)
+                    rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
+                    k1_rss = rn2_rss[:] - rn2_toa[0:1]
+                    rg_rss = self.get_range(Rest)
+                    rg2_rss = rg_rss * rg_rss
+                    k2_rss = rg2_toa[0:1] - rg2_rss[:]
+                    K_rss = k1_rss + k2_rss
+                    # Construct the matrix A_rss (see theory)
+                    A_rss = rn_rss[:, :].T - rn_toa[:, 0]
+                    # Apply LS operator
+                    sh3 = np.shape(K_rss)[0]
+                    sh4 = np.shape(K_toa)[0]
+                    K = np.vstack((K_rss.reshape(sh3, 1),K_toa.reshape(sh4, 1)))
+                    A = np.vstack((A_rss, A_toa))
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    P = P.reshape(np.shape(rn_rss[:, 0:1]))
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
+                    
 
             elif rss == 0:
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K_TOA (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1 = RN2[1:] - RN2[0:1]
-                ROA_TOA = self.c * TOA
-                ROA2_TOA = ROA_TOA * ROA_TOA
-                k2 = ROA2_TOA[0:1] - ROA2_TOA[1:]
-                K_TOA = k1 + k2
-                # Construct the matrix A_TOA (see theory)
-                A_TOA = np.hstack((RN_TOA[:, 1:].T - RN_TOA[:, 0],
-                                   np.zeros((np.shape(RN_TOA)[1] - 1, 1))))
-                # Construct the vector K_TDOA (see theory)
-                k1_TOA = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                                 axis=0))
-                RDOA = self.c * TDOA
-                RDOA2 = RDOA * RDOA
-                k2_TOA = RDOA2
-                K_TDOA = k1_TOA - k2_TOA
-                # Construct the matrix A (see theory)
-                A_TDOA = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                                    RDOA.reshape(np.shape(TDOA)[0], 1)))
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                sh1 = np.shape(rn_toa)
+                sh2 = np.shape(rn_tdoa)
+                # Construct the vector K_Ttoa (see theory)
+                rn2 = (np.sum(rn_toa * rn_toa, axis=0))
+                k1_toa = rn2[1:] - rn2[0:1]
+                rg_toa = self.c * toa_ns
+                rg2_toa = rg_toa * rg_toa
+                k2_toa = rg2_toa[0:1] - rg2_toa[1:]
+                K_toa = k1_toa + k2_toa
+                # Construct the matrix A_toa (see theory)
+                A_toa = np.hstack((rn_toa[:, 1:].T - rn_toa[:, 0],
+                                   np.zeros((sh1[1] - 1, 1))))
+                # Construct the vector K_tdoa (see theory)
+                k1_tdoa = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa),axis=0))
+                drg = self.c * tdoa_ns
+                k2_tdoa = drg * drg
+                K_tdoa = k1_tdoa - k2_tdoa
+                # Construct the matrix A_tdoa (see theory)
+                A_tdoa = np.hstack((rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh2[1], 1)))
                 # Apply LS operator
-                K = np.vstack((K_TOA.reshape(np.shape(K_TOA)[0], 1),
-                               K_TDOA.reshape(np.shape(K_TDOA)[0], 1)))
-                A = np.vstack((A_TOA, A_TDOA))
+                sh3 = np.shape(K_toa)[0]
+                sh4 = np.shape(K_tdoa)[0]
+                K = np.vstack((K_toa.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
+                A = np.vstack((A_toa, A_tdoa))
                 Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             elif toa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K_RSS (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1_RSS = RN2[1:] - RN2[0:1]
-                ROA_RSS = self.get_range(Rest)
-                ROA2_RSS = ROA_RSS * ROA_RSS
-                k2_RSS = ROA2_RSS[0:1] - ROA2_RSS[1:]
-                K_RSS = k1_RSS + k2_RSS
-                # Construct the matrix A_RSS (see theory)
-                A_RSS = np.hstack((RN_RSS[:, 1:].T - RN_RSS[:, 0],
-                                   np.zeros((np.shape(RN_RSS)[1] - 1, 1))))
-                # Construct the vector K_TDOA (see theory)
-                k1 = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                      axis=0))
-                RDOA = self.c * TDOA
-                RDOA2 = RDOA * RDOA
-                k2 = RDOA2
-                K_TDOA = k1 - k2
-                # Construct the matrix A (see theory)
-                A_TDOA = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                                    RDOA.reshape(np.shape(TDOA)[0], 1)))
+                pl0 = self.ldp['PL0']
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                sh1 = np.shape(rn_rss)
+                sh2 = np.shape(rn_tdoa)
+                # Construct the vector K_rss (see theory)
+                rn2 = np.sum(rn_rss * rn_rss, axis=0)
+                k1_rss = rn2[1:] - rn2[0:1]
+                rg = self.get_range(Rest)
+                rg2 = rg * rg
+                k2_rss = rg2[0:1] - rg2[1:]
+                K_rss = k1_rss + k2_rss
+                # Construct the matrix A_rss (see theory)
+                A_rss = np.hstack((rn_rss[:, 1:].T - rn_rss[:, 0], np.zeros((sh1[1] - 1, 1))))
+                # Construct the vector K_tdoa (see theory)
+                k1_tdoa = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa), axis=0))
+                drg = self.c * tdoa_ns
+                k2_tdoa = drg * drg
+                K_tdoa= k1_tdoa - k2_tdoa
+                # Construct the matrix A_tdoa (see theory)
+                A_tdoa = np.hstack((rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh2[1], 1)))
                 # Apply LS operator
-                K = np.vstack((K_RSS.reshape(np.shape(K_RSS)[0], 1),
-                               K_TDOA.reshape(np.shape(K_TDOA)[0], 1)))
-                A = np.vstack((A_RSS, A_TDOA))
+                sh3 = np.shape(K_rss)[0]
+                sh4 = np.shape(K_tdoa)[0]
+                K = np.vstack((K_rss.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
+                A = np.vstack((A_rss, A_tdoa))
                 Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             else:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K_RSS (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1_RSS = RN2[1:] - RN2[0:1]
-                ROA_RSS = self.get_range(Rest)
-                ROA2_RSS = ROA_RSS * ROA_RSS
-                k2_RSS = ROA2_RSS[0:1] - ROA2_RSS[1:]
-                K_RSS = k1_RSS + k2_RSS
-                # Construct the matrix A_RSS (see theory)
-                A_RSS = np.hstack((RN_RSS[:, 1:].T - RN_RSS[:, 0],
-                                   np.zeros((np.shape(RN_RSS)[1] - 1, 1))))
-                # Construct the vector K_TOA (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1 = RN2[1:] - RN2[0:1]
-                ROA_TOA = self.c * TOA
-                ROA2_TOA = ROA_TOA * ROA_TOA
-                k2 = ROA2_TOA[0:1] - ROA2_TOA[1:]
-                K_TOA = k1 + k2
-                # Construct the matrix A_TOA (see theory)
-                A_TOA = np.hstack((RN_TOA[:, 1:].T - RN_TOA[:, 0],
-                                   np.zeros((np.shape(RN_TOA)[1] - 1, 1))))
-                # Construct the vector K_TDOA (see theory)
-                k1_TOA = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                                 axis=0))
-                RDOA = self.c * TDOA
-                RDOA2 = RDOA * RDOA
-                k2_TOA = RDOA2
-                K_TDOA = k1_TOA - k2_TOA
-                # Construct the matrix A (see theory)
-                A_TDOA = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                                    RDOA.reshape(np.shape(TDOA)[0], 1)))
+                pl0 = self.ldp['PL0']
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                sh1 = np.shape(rn_toa)
+                sh2 = np.shape(rn_rss)
+                sh3 = np.shape(rn_tdoa)
+                # Construct the vector K_rss (see theory)
+                rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
+                k1_rss = rn2_rss[1:] - rn2_rss[0:1]
+                rg_rss = self.get_range(Rest)
+                rg2_rss = rg_rss * rg_rss
+                k2_rss = rg2_rss[0:1] - rg2_rss[1:]
+                K_rss = k1_rss + k2_rss
+                # Construct the matrix A_rss (see theory)
+                A_rss = np.hstack((rn_rss[:, 1:].T - rn_rss[:, 0], np.zeros((sh2[1] - 1, 1))))
+                # Construct the vector K_toa (see theory)
+                rn2_toa = (np.sum(rn_toa * rn_toa, axis=0))
+                k1_toa = rn2_toa[1:] - rn2_toa[0:1]
+                rg_toa = self.c * toa_ns
+                rg2_toa = rg_toa * rg_toa
+                k2_toa = rg2_toa[0:1] - rg2_toa[1:]
+                K_toa = k1_toa + k2_toa
+                # Construct the matrix A_toa (see theory)
+                A_toa = np.hstack((rn_toa[:, 1:].T - rn_toa[:, 0], np.zeros((sh1[1] - 1, 1))))
+                # Construct the vector K_tdoa (see theory)
+                k1_tdoa = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa), axis=0))
+                drg = self.c * tdoa_ns
+                drg2 = drg * drg
+                k2_tdoa = drg2
+                K_tdoa = k1_tdoa - k2_tdoa
+                # Construct the matrix A_tdoa (see theory)
+                A_tdoa = np.hstack((rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh3[1], 1)))
                 # Apply LS operator
-                K = np.vstack((np.vstack((K_RSS.reshape(np.shape(K_RSS)
-                                                        [0], 1), K_TOA.reshape(np.shape(K_TOA)[0], 1))),
-                               K_TDOA.reshape(np.shape(K_TDOA)[0], 1)))
-                A = np.vstack((np.vstack((A_RSS, A_TOA)), A_TDOA))
+                sh4 = np.shape(K_rss)[0]
+                sh5 = np.shape(K_toa)[0]
+                sh6 = np.shape(K_tdoa)[0]
+                K = np.vstack((np.vstack((K_rss.reshape(sh4, 1), K_toa.reshape(sh5, 1))),K_tdoa.reshape(sh6, 1)))
+                A = np.vstack((np.vstack((A_rss, A_toa)), A_tdoa))
                 Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                P = Pr[:sh3[0]].reshape(sh3[0], 1)
 
             return P
 
@@ -511,257 +540,290 @@ class algloc(object):
             raise ValueError("inputs missed")
         else:
             if rss == 0 and toa == 0:
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                TDOA_std = self.ldp['TDOA_std']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K (see theory)
-                k1 = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                      axis=0))
-                RDOA = self.c * TDOA
-                RDOA_std = self.c * TDOA_std
-                RDOA2 = RDOA * RDOA
-                k2 = RDOA2
-                K = k1 - k2
-                # Construct the matrix A (see theory)
-                A = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                               RDOA.reshape(np.shape(TDOA)[0], 1)))
-                # Construct the Covariance Matrix
-                C = np.diag(RDOA_std[:] ** 2)
-                # Apply LS operator
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),
-                                                              A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                tdoa_std = self.ldp['TDOA_std']
+                sh = np.shape(rn_tdoa)
+                if sh[1] >= sh[0]:
+                    # Construct the vector K (see theory)
+                    k1 = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa), axis=0))
+                    drg = self.c * tdoa_ns
+                    drg_std = self.c * tdoa_std
+                    k2 = drg * drg
+                    K = k1 - k2
+                    # Construct the matrix A (see theory)
+                    A = np.hstack((rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh[1], 1)))
+                    # Construct the Covariance Matrix
+                    C = np.diag(drg_std[:] ** 2)
+                    # Apply LS operator
+                    Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = Pr[:sh[0]].reshape(sh[0], 1)
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
+                
 
             elif rss == 0 and tdoa == 0:
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                TOA_std = self.ldp['TOA_std']
-                # Construct the vector K (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1 = RN2[1:] - RN2[0:1]
-                ROA = self.c * TOA
-                ROA_std = self.c * TOA_std
-                ROA2 = ROA * ROA
-                k2 = ROA2[0:1] - ROA2[1:]
-                K = k1 + k2
-                # Construct the matrix A (see theory)
-                A = RN_TOA[:, 1:].T - RN_TOA[:, 0]
-                # Construct the Covariance Matrix
-                C = np.diag(ROA_std[1:] ** 2)
-                # Apply LS operator
-                P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),
-                                                             A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
-                P = P.reshape(np.shape(RN_TOA[:, 0:1]))
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                toa_std = self.ldp['TOA_std']
+                sh = np.shape(rn_toa)
+                if sh[1] > sh[0]:
+                    # Construct the vector K (see theory)
+                    rn2 = (np.sum(rn_toa * rn_toa, axis=0))
+                    k1 = rn2[1:] - rn2[0:1]
+                    rg = self.c * toa_ns
+                    rg_std = self.c * toa_std
+                    rg2 = rg * rg
+                    k2 = rg2[0:1] - rg2[1:]
+                    K = k1 + k2
+                    # Construct the matrix A (see theory)
+                    A = rn_toa[:, 1:].T - rn_toa[:, 0]
+                    # Construct the Covariance Matrix
+                    C = np.diag(rg_std[1:] ** 2)
+                    # Apply LS operator
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = P.reshape(np.shape(rn_toa[:, 0:1]))
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
+                
 
             elif toa == 0 and tdoa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                # Construct the vector K (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1 = RN2[1:] - RN2[0:1]
-                ROA = self.get_range(Rest)
-                ROA_std = self.get_range_std(Rest)
-                ROA2 = ROA * ROA
-                k2 = ROA2[0:1] - ROA2[1:]
-                K = k1 + k2
-                # Construct the matrix A (see theory)
-                A = RN_RSS[:, 1:].T - RN_RSS[:, 0]
-                # Construct the Covariance Matrix
-                C = np.diag((ROA_std[1:]) ** 2)
-                # Apply LS operator
-                P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),
-                                                             A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
-                P = P.reshape(np.shape(RN_RSS[:, 0:1]))
+                pl0 = self.ldp['PL0']
+                sh = np.shape(rn_rss)
+                if sh[1] > sh[0]:
+                    # Construct the vector K (see theory)
+                    rn2 = np.sum(rn_rss * rn_rss, axis=0)
+                    k1 = rn2[1:] - rn2[0:1]
+                    rg = self.get_range(Rest)
+                    rg_std = self.get_range_std(Rest)
+                    rg2 = rg * rg
+                    k2 = rg2[0:1] - rg2[1:]
+                    K = k1 + k2
+                    # Construct the matrix A (see theory)
+                    A = rn_rss[:, 1:].T - rn_rss[:, 0]
+                    # Construct the Covariance Matrix
+                    C = np.diag((rg_std[1:]) ** 2)
+                    # Apply LS operator
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = P.reshape(np.shape(rn_rss[:, 0:1]))
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
 
             elif tdoa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                TOA_std = self.ldp['TOA_std']
-                # Construct the vector K_RSS (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1_RSS = RN2[1:] - RN2[0:1]
-                ROA_RSS = self.get_range(Rest)
-                ROA_RSS_std = self.get_range_std(Rest)
-                ROA2_RSS = ROA_RSS * ROA_RSS
-                k2_RSS = ROA2_RSS[0:1] - ROA2_RSS[1:]
-                K_RSS = k1_RSS + k2_RSS
-                # Construct the matrix A_RSS (see theory)
-                A_RSS = RN_RSS[:, 1:].T - RN_RSS[:, 0]
-                # Construct the vector K_TOA (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1_TOA = RN2[1:] - RN2[0:1]
-                ROA_TOA = self.c * TOA
-                ROA_TOA_std = self.c * TOA_std
-                ROA2_TOA = ROA_TOA * ROA_TOA
-                k2_TOA = ROA2_TOA[0:1] - ROA2_TOA[1:]
-                K_TOA = k1_TOA + k2_TOA
-                # Construct the matrix A_TOA (see theory)
-                A_TOA = RN_TOA[:, 1:].T - RN_TOA[:, 0]
-                # Apply LS operator
-                K = np.vstack((K_RSS.reshape(np.shape(K_RSS)[0], 1),
-                               K_TOA.reshape(np.shape(K_RSS)[0], 1)))
-                A = np.vstack((A_RSS, A_TOA))
-                C = np.diag(np.hstack((ROA_RSS_std[1:] ** 2,
-                                       ROA_TOA_std[1:] ** 2)))
-                P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),
-                                                             A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
-                P = P.reshape(np.shape(RN_RSS[:, 0:1]))
+                pl0 = self.ldp['PL0']
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                toa_std = self.ldp['TOA_std']
+                sh1 = np.shape(rn_rss)
+                sh2 = np.shape(rn_toa)
+                if sh1[1] > 1 and sh1[1]+sh2[1] > sh1[0]:
+                    # Construct the vector K_rss (see theory)
+                    rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
+                    k1_rss = rn2_rss[1:] - rn2_rss[0:1]
+                    rg_rss = self.get_range(Rest)
+                    rg_rss_std = self.get_range_std(Rest)
+                    rg2_rss = rg_rss * rg_rss
+                    k2_rss = rg2_rss[0:1] - rg2_rss[1:]
+                    K_rss = k1_rss + k2_rss
+                    # Construct the matrix A_rss (see theory)
+                    A_rss = rn_rss[:, 1:].T - rn_rss[:, 0]
+                    # Construct the vector K_toa (see theory)
+                    rn2_toa = (np.sum(rn_toa * rn_toa, axis=0))
+                    k1_toa = rn2_toa[:] - rn2_rss[0:1]
+                    rg_toa = self.c * toa_ns
+                    rg_toa_std = self.c * toa_std
+                    rg2_toa = rg_toa * rg_toa
+                    k2_toa = rg2_rss[0:1] - rg2_toa[:]
+                    K_toa = k1_toa + k2_toa
+                    # Construct the matrix A_toa (see theory)
+                    A_toa = rn_toa[:, :].T - rn_rss[:, 0]
+                    # Apply LS operator
+                    sh3 = np.shape(K_toa)[0]
+                    sh4 = np.shape(K_rss)[0]
+                    K = np.vstack((K_rss.reshape(sh4, 1),
+                                   K_toa.reshape(sh3, 1)))
+                    A = np.vstack((A_rss, A_toa))
+                    C = np.diag(np.hstack((rg_rss_std[1:] ** 2,
+                                           rg_toa_std[:] ** 2)))
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = P.reshape(np.shape(rn_rss[:, 0:1]))
+                elif sh2[1] > 1 and sh1[1]+sh2[1] > sh1[0]:
+                    # Construct the vector K_toa (see theory)
+                    rn2_toa = (np.sum(rn_toa * rn_toa, axis=0))
+                    k1_toa = rn2_toa[1:] - rn2_toa[0:1]
+                    rg_toa = self.c * toa_ns
+                    rg_toa_std = self.c * toa_std
+                    rg2_toa = rg_toa * rg_toa
+                    k2_toa = rg2_toa[0:1] - rg2_toa[1:]
+                    K_toa = k1_toa + k2_toa
+                    # Construct the matrix A_toa (see theory)
+                    A_toa = rn_toa[:, 1:].T - rn_toa[:, 0]
+                    # Construct the vector K_rss (see theory)
+                    rn2_rss = np.sum(rn_rss * rn_rss, axis=0)
+                    k1_rss = rn2_rss[:] - rn2_toa[0:1]
+                    rg_rss = self.get_range(Rest)
+                    rg_rss_std = self.get_range_std(Rest)
+                    rg2_rss = rg_rss * rg_rss
+                    k2_rss = rg2_toa[0:1] - rg2_rss[:]
+                    K_rss = k1_rss + k2_rss
+                    # Construct the matrix A_rss (see theory)
+                    A_rss = rn_rss[:, :].T - rn_toa[:, 0]
+                    # Apply LS operator
+                    sh3 = np.shape(K_toa)[0]
+                    sh4 = np.shape(K_rss)[0]
+                    K = np.vstack((K_rss.reshape(sh4, 1),
+                                   K_toa.reshape(sh3, 1)))
+                    A = np.vstack((A_rss, A_toa))
+                    C = np.diag(np.hstack((rg_rss_std[:] ** 2,
+                                           rg_toa_std[1:] ** 2)))
+                    P = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                    P = P.reshape(np.shape(rn_rss[:, 0:1]))
+                else:
+                    raise ValueError("Data are not sufficient to perform localization")
+                
 
             elif rss == 0:
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                TOA_std = self.ldp['TOA_std']
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                TDOA_std = self.ldp['TDOA_std']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K_TOA (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1_TOA = RN2[1:] - RN2[0:1]
-                ROA_TOA = self.c * TOA
-                ROA_TOA_std = self.c * TOA_std
-                ROA2_TOA = ROA_TOA * ROA_TOA
-                k2_TOA = ROA2_TOA[0:1] - ROA2_TOA[1:]
-                K_TOA = k1_TOA + k2_TOA
-                # Construct the matrix A_TOA (see theory)
-                A_TOA = np.hstack((RN_TOA[:, 1:].T - RN_TOA[:, 0],
-                                   np.zeros((np.shape(RN_TOA)[1] - 1, 1))))
-                # Construct the vector K_TDOA (see theory)
-                k1 = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                      axis=0))
-                RDOA = self.c * TDOA
-                RDOA_std = self.c * TDOA_std
-                RDOA2 = RDOA * RDOA
-                k2 = RDOA2
-                K_TDOA = k1 - k2
-                # Construct the matrix A (see theory)
-                A_TDOA = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                                    RDOA.reshape(np.shape(TDOA)[0], 1)))
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                toa_std = self.ldp['TOA_std']
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                tdoa_std = self.ldp['TDOA_std']
+                sh1 = np.shape(rn_toa)
+                sh2 = np.shape(rn_tdoa)
+                # Construct the vector K_toa (see theory)
+                rntoa2 = (np.sum(rn_toa * rn_toa, axis=0))
+                k1_toa = rntoa2[1:] - rntoa2[0:1]
+                rg_toa = self.c * toa_ns
+                rg_toa_std = self.c * toa_std
+                rg2_toa = rg_toa * rg_toa
+                k2_toa = rg2_toa[0:1] - rg2_toa[1:]
+                K_toa = k1_toa + k2_toa
+                # Construct the matrix A_toa (see theory)
+                A_toa = np.hstack((rn_toa[:, 1:].T - rn_toa[:, 0], np.zeros((sh1[1] - 1, 1))))
+                # Construct the vector K_tdoa (see theory)
+                k1_tdoa = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa), axis=0))
+                drg = self.c * tdoa_ns
+                drg_std = self.c * tdoa_std
+                k2_tdoa = drg * drg
+                K_tdoa = k1_tdoa - k2_tdoa
+                # Construct the matrix A_tdoa (see theory)
+                A_tdoa = np.hstack((rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh2[1], 1)))
                 # Apply LS operator
-                K = np.vstack((K_TOA.reshape(np.shape(K_TOA)[0], 1),
-                               K_TDOA.reshape(np.shape(K_TDOA)[0], 1)))
-                A = np.vstack((A_TOA, A_TDOA))
-                C = np.diag(np.hstack((ROA_TOA_std[1:] ** 2,
-                                       RDOA_std[:] ** 2)))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),
-                                                              A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                sh3 = np.shape(K_toa)[0]
+                sh4 = np.shape(K_tdoa)[0]
+                K = np.vstack((K_toa.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
+                A = np.vstack((A_toa, A_tdoa))
+                C = np.diag(np.hstack((rg_toa_std[1:] ** 2, drg_std[:] ** 2)))
+                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             elif toa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                TDOA_std = self.ldp['TDOA_std']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K_RSS (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1_RSS = RN2[1:] - RN2[0:1]
-                ROA_RSS = self.get_range(Rest)
-                ROA_RSS_std = self.get_range_std(Rest)
-                ROA2_RSS = ROA_RSS * ROA_RSS
-                k2_RSS = ROA2_RSS[0:1] - ROA2_RSS[1:]
-                K_RSS = k1_RSS + k2_RSS
-                # Construct the matrix A_RSS (see theory)
-                A_RSS = np.hstack((RN_RSS[:, 1:].T - RN_RSS[:, 0],
-                                   np.zeros((np.shape(RN_RSS)[1] - 1, 1))))
-                # Construct the vector K_TDOA (see theory)
-                k1 = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                      axis=0))
-                RDOA = self.c * TDOA
-                RDOA_std = self.c * TDOA_std
-                RDOA2 = RDOA * RDOA
-                k2 = RDOA2
-                K_TDOA = k1 - k2
-                # Construct the matrix A (see theory)
-                A_TDOA = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                                    RDOA.reshape(np.shape(TDOA)[0], 1)))
+                pl0 = self.ldp['PL0']
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                tdoa_std = self.ldp['TDOA_std']
+                sh1 = np.shape(rn_rss)
+                sh2 = np.shape(rn_tdoa)
+                # Construct the vector K_rss (see theory)
+                rn2 = np.sum(rn_rss * rn_rss, axis=0)
+                k1_rss = rn2[1:] - rn2[0:1]
+                rg = self.get_range(Rest)
+                rg_std = self.get_range_std(Rest)
+                rg2 = rg * rg
+                k2_rss = rg2[0:1] - rg2[1:]
+                K_rss = k1_rss + k2_rss
+                # Construct the matrix A_rss (see theory)
+                A_rss = np.hstack((rn_rss[:, 1:].T - rn_rss[:, 0], np.zeros((sh1[1] - 1, 1))))
+                # Construct the vector K_tdoa (see theory)
+                k1_tdoa = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa), axis=0))
+                drg = self.c * tdoa_ns
+                drg_std = self.c * tdoa_std
+                k2_tdoa = drg * drg
+                K_tdoa = k1_tdoa - k2_tdoa
+                # Construct the matrix A_tdoa (see theory)
+                A_tdoa = np.hstack((rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh2[1], 1)))
                 # Apply LS operator
-                K = np.vstack((K_RSS.reshape(np.shape(K_RSS)[0], 1),
-                               K_TDOA.reshape(np.shape(K_TDOA)[0], 1)))
-                A = np.vstack((A_RSS, A_TDOA))
-                C = np.diag(np.hstack((ROA_RSS_std[1:] ** 2,
-                                       RDOA_std[:] ** 2)))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),
-                                                              A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                sh3 = np.shape(K_rss)[0]
+                sh4 = np.shape(K_tdoa)[0]
+                K = np.vstack((K_rss.reshape(sh3, 1), K_tdoa.reshape(sh4, 1)))
+                A = np.vstack((A_rss, A_tdoa))
+                C = np.diag(np.hstack((rg_std[1:] ** 2, drg_std[:] ** 2)))
+                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                P = Pr[:sh2[0]].reshape(sh2[0], 1)
 
             else:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                TOA_std = self.ldp['TOA_std']
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                TDOA_std = self.ldp['TDOA_std']
-                shRN = np.shape(RN_TDOA)
-                # Construct the vector K_RSS (see theory)
-                RN2 = np.sum(RN_RSS * RN_RSS, axis=0)
-                k1_RSS = RN2[1:] - RN2[0:1]
-                ROA_RSS = self.get_range(Rest)
-                ROA_RSS_std = self.get_range_std(Rest)
-                ROA2_RSS = ROA_RSS * ROA_RSS
-                k2_RSS = ROA2_RSS[0:1] - ROA2_RSS[1:]
-                K_RSS = k1_RSS + k2_RSS
-                # Construct the matrix A_RSS (see theory)
-                A_RSS = np.hstack((RN_RSS[:, 1:].T - RN_RSS[:, 0],
-                                   np.zeros((np.shape(RN_RSS)[1] - 1, 1))))
-                # Construct the vector K_TOA (see theory)
-                RN2 = (np.sum(RN_TOA * RN_TOA, axis=0))
-                k1_TOA = RN2[1:] - RN2[0:1]
-                ROA_TOA = self.c * TOA
-                ROA_TOA_std = self.c * TOA_std
-                ROA2_TOA = ROA_TOA * ROA_TOA
-                k2_TOA = ROA2_TOA[0:1] - ROA2_TOA[1:]
-                K_TOA = k1_TOA + k2_TOA
-                # Construct the matrix A_TOA (see theory)
-                A_TOA = np.hstack((RN_TOA[:, 1:].T - RN_TOA[:, 0],
-                                   np.zeros((np.shape(RN_TOA)[1] - 1, 1))))
-                # Construct the vector K_TDOA (see theory)
-                k1 = (np.sum((RN_TDOA - RNr_TDOA) * (RN_TDOA - RNr_TDOA),
-                      axis=0))
-                RDOA = self.c * TDOA
-                RDOA_std = self.c * TDOA_std
-                RDOA2 = RDOA * RDOA
-                k2 = RDOA2
-                K_TDOA = k1 - k2
+                pl0 = self.ldp['PL0']
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                toa_std = self.ldp['TOA_std']
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                tdoa_std = self.ldp['TDOA_std']
+                sh1 = np.shape(rn_toa)
+                sh2 = np.shape(rn_rss)
+                sh3 = np.shape(rn_tdoa)
+                # Construct the vector K_rss (see theory)
+                rn2 = np.sum(rn_rss * rn_rss, axis=0)
+                k1_rss = rn2[1:] - rn2[0:1]
+                rg_rss = self.get_range(Rest)
+                rg_rss_std = self.get_range_std(Rest)
+                rg2_rss = rg_rss * rg_rss
+                k2_rss = rg2_rss[0:1] - rg2_rss[1:]
+                K_rss = k1_rss + k2_rss
+                # Construct the matrix A_rss (see theory)
+                A_rss = np.hstack((rn_rss[:, 1:].T - rn_rss[:, 0], np.zeros((sh1[1] - 1, 1))))
+                # Construct the vector K_toa (see theory)
+                rntoa2 = (np.sum(rn_toa * rn_toa, axis=0))
+                k1_toa = rntoa2[1:] - rntoa2[0:1]
+                rg_toa = self.c * toa_ns
+                rg_toa_std = self.c * toa_std
+                rg2_toa = rg_toa * rg_toa
+                k2_toa = rg2_toa[0:1] - rg2_toa[1:]
+                K_toa = k1_toa + k2_toa
+                # Construct the matrix A_toa (see theory)
+                A_toa = np.hstack((rn_toa[:, 1:].T - rn_toa[:, 0], np.zeros((sh1[1] - 1, 1))))
+                # Construct the vector K_tdoa (see theory)
+                k1_tdoa = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa), axis=0))
+                drg = self.c * tdoa_ns
+                drg_std = self.c * tdoa_std
+                k2_tdoa = drg * drg
+                K_tdoa = k1_tdoa - k2_tdoa
                 # Construct the matrix A (see theory)
-                A_TDOA = np.hstack((RN_TDOA.T - RNr_TDOA.T,
-                                    RDOA.reshape(np.shape(TDOA)[0], 1)))
+                A_tdoa = np.hstack((rn_tdoa.T - rnr_tdoa.T, drg.reshape(sh2[1], 1)))
                 # Apply LS operator
-                K = np.vstack((np.vstack((K_RSS.reshape(np.shape(K_RSS)
-                                                        [0], 1), K_TOA.reshape(np.shape(K_TOA)[0], 1))),
-                               K_TDOA.reshape(np.shape(K_TDOA)[0], 1)))
-                A = np.vstack((np.vstack((A_RSS, A_TOA)), A_TDOA))
-                C = np.diag(np.hstack((np.hstack((ROA_RSS_std[1:] ** 2,
-                                                  ROA_TOA_std[1:] ** 2)), RDOA_std[:] ** 2)))
-                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C),
-                                                              A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
-                P = Pr[:shRN[0]].reshape(shRN[0], 1)
+                sh4 = np.shape(K_toa)[0]
+                sh5 = np.shape(K_rss)[0]
+                sh6 = np.shape(K_tdoa)[0]
+                K = np.vstack((np.vstack((K_rss.reshape(sh5, 1), K_toa.reshape(sh4, 1))), K_tdoa.reshape(sh6, 1)))
+                A = np.vstack((np.vstack((A_rss, A_toa)), A_tdoa))
+                C = np.diag(np.hstack((np.hstack((rg_rss_std[1:] ** 2, rg_toa_std[1:] ** 2)), drg_std[:] ** 2)))
+                Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, np.dot(nplg.inv(C), A))), np.dot(np.dot(A.T, nplg.inv(C)), K))
+                P = Pr[:sh3[0]].reshape(sh3[0], 1)
 
             return P
 
@@ -785,52 +847,50 @@ class algloc(object):
             raise ValueError("inputs missed")
         else:
             if rss == 0 and toa == 0:
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                TDOA_std = self.ldp['TDOA_std']
-                shRN = np.shape(RN_TDOA)
-                RNnum = shRN[1]
-                RDOA = self.c * TDOA
-                RDOA_std = self.c * TDOA_std
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                tdoa_std = self.ldp['TDOA_std']
+                sh1 = np.shape(rn_tdoa)[1]
+                drg = self.c * tdoa_ns
+                drg_std = self.c * tdoa_std
                 # construct the ML function to be minimized
-                RN1mP = RN_TDOA - np.outer(P, np.ones(RNnum))
-                mRN1mP = np.sqrt(np.diag(np.dot(RN1mP.T, RN1mP)))
-                RN2mP = RNr_TDOA - np.outer(P, np.ones(RNnum))
-                mRN2mP = np.sqrt(np.diag(np.dot(RN2mP.T, RN2mP)))
-                rRDOA = mRN1mP - mRN2mP
-                tk = (RDOA - rRDOA) ** 2 / (2 * RDOA_std ** 2)
-                ML = tk.sum(axis=0)
+                rnmp = rn_tdoa - np.outer(P, np.ones(sh1))
+                mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
+                rnrmp = rnr_tdoa - np.outer(P, np.ones(sh1))
+                mrnrmp = np.sqrt(np.diag(np.dot(rnrmp.T, rnrmp)))
+                rdrg = mrnmp - mrnrmp
+                dd = (drg - rdrg) ** 2 / (2 * drg_std ** 2)
+                ML = dd.sum(axis=0)
             elif rss == 0 and tdoa == 0:
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                TOA_std = self.ldp['TOA_std']
-                RNnum = np.shape(RN_TOA)[1]
-                ROA = self.c * TOA
-                ROA_std = self.c * TOA_std
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                toa_std = self.ldp['TOA_std']
+                sh1 = np.shape(rn_toa)[1]
+                rg = self.c * toa_ns
+                rg_std = self.c * toa_std
                 # construct the ML function to be minimized
-                RNmP = RN_TOA - np.outer(P, np.ones(RNnum))
-                mRNmP = np.sqrt(np.diag(np.dot(RNmP.T, RNmP)))
-                tk = (ROA - mRNmP) ** 2
-                uk = tk / (2 * ROA_std ** 2) + np.log(
-                    np.sqrt(2 * np.pi) * ROA_std)
-                ML = uk.sum(axis=0)
+                rnmp = rn_toa - np.outer(P, np.ones(sh1))
+                mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
+                dd = (rg - mrnmp) ** 2
+                uu = dd / (2 * rg_std ** 2) + np.log(np.sqrt(2 * np.pi) * rg_std)
+                ML = uu.sum(axis=0)
             elif toa == 0 and tdoa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RNnum = np.shape(RN_RSS)[1]
-                S = (np.log(10) / 10) * RSS_std / RSS_np
-                M = (np.log(10) / 10) * (PL0 - RSS) / RSS_np + np.log(d0)
+                pl0 = self.ldp['PL0']
+                sh1 = np.shape(rn_rss)[1]
+                S = (np.log(10) / 10) * rss_std / rss_np
+                M = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
                 # construct the ML function to be minimized
-                RNmP = RN_RSS - np.outer(P, np.ones(RNnum))
-                mRNmP = np.sqrt(np.diag(np.dot(RNmP.T, RNmP)))
-                tk = (M - S ** 2 - np.log(mRNmP)) ** 2
-                uk = tk / (2 * S ** 2)
-                ML = uk.sum(axis=0)
+                rnmp = rn_rss - np.outer(P, np.ones(sh1))
+                mrnmp = np.sqrt(np.diag(np.dot(rnmp.T, rnmp)))
+                dd = (M - S ** 2 - np.log(mrnmp)) ** 2
+                uu = dd / (2 * S ** 2)
+                ML = uu.sum(axis=0)
             elif rss == 0:
                 ML = self.ml_function(P, 0, 1, 0) +\
                      self.ml_function(P, 0, 0, 1)
@@ -881,8 +941,7 @@ class algloc(object):
         if rss == 0 and toa == 0 and tdoa == 0:
             raise ValueError("inputs missed")
         else:
-            P = optimize.fmin(self.ml_function, P0,
-                              args=(rss, toa, tdoa), disp=0)
+            P = optimize.fmin(self.ml_function, P0, args=(rss, toa, tdoa), disp=0)
             return P.reshape(np.shape(P0))
 
     def fim(self, P, rss, toa, tdoa):
@@ -902,64 +961,58 @@ class algloc(object):
         """
         if rss == 0 and toa == 0 and tdoa == 0:
             raise ValueError("inputs missed")
+
         else:
             if rss == 0 and toa == 0:
-                RN_TDOA = self.nodes['RN_TDOA']
-                RNr_TDOA = self.nodes['RNr_TDOA']
-                TDOA = self.ldp['TDOA']
-                TDOA_std = self.ldp['TDOA_std']
-                shRN = np.shape(RN_TDOA)
-                RNnum = shRN[1]
-                RDOA = self.c * TDOA
-                RDOA_std = self.c * TDOA_std
-                FIM = np.zeros((np.shape(RN_TDOA)[0],
-                                np.shape(RN_TDOA)[0]))
-                for i in range(np.shape(RN_TDOA)[1]):
-                    PmRN = np.sqrt(np.dot((P - RN_TDOA[:, i:i + 1]).T,
-                                          P - RN_TDOA[:, i:i + 1]))
-                    PmRNr = np.sqrt(np.dot((P - RNr_TDOA[:, i:i + 1]).T,
-                                           P - RNr_TDOA[:, i:i + 1]))
-                    FIM += (1 / RDOA_std[i] ** 2) *\
-                        np.dot((P - RN_TDOA[:, i:i + 1]) / PmRN -
-                               (P - RNr_TDOA[:, i:i + 1]) / PmRNr,
-                               ((P - RN_TDOA[:, i:i + 1]) / PmRN -
-                                (P - RNr_TDOA[:, i:i + 1]) / PmRNr).T)
+                rn_tdoa = self.nodes['RN_TDOA']
+                rnr_tdoa = self.nodes['RNr_TDOA']
+                tdoa_ns = self.ldp['TDOA']
+                tdoa_std = self.ldp['TDOA_std']
+                sh1 = np.shape(rn_tdoa)
+                drg = self.c * tdoa_ns
+                drg_std = self.c * tdoa_std
+                FIM = np.zeros((sh1[0],sh1[0]))
+                for i in range(sh1[1]):
+                    f1 = P - rn_tdoa[:, i:i + 1]
+                    f2 = P - rnr_tdoa[:, i:i + 1]
+                    pmrn = np.sqrt(np.dot(f1.T,f1))
+                    pmrnr = np.sqrt(np.dot(f2.T,f2))
+                    FIM += (1 / drg_std[i] ** 2) * np.dot(f1 / pmrn - f2 / pmrnr, (f1 / pmrn - f2 / pmrnr).T)
+
             elif rss == 0 and tdoa == 0:
-                RN_TOA = self.nodes['RN_TOA']
-                TOA = self.ldp['TOA']
-                TOA_std = self.ldp['TOA_std']
-                RNnum = np.shape(RN_TOA)[1]
-                ROA = self.c * TOA
-                ROA_std = self.c * TOA_std
-                FIM = np.zeros((np.shape(RN_TOA)[0], np.shape(RN_TOA)[0]))
-                for i in range(np.shape(RN_TOA)[1]):
-                    FIM += np.dot((P - RN_TOA[:, i:i + 1]),
-                                  (P - RN_TOA[:, i:i + 1]).T) / ((ROA_std[i] ** 2) *
-                                                                 np.dot(
-                                                                     (P - RN_TOA[:, i:i + 1]).T,
-                                                                 (P - RN_TOA[:, i:i + 1])))
+                rn_toa = self.nodes['RN_TOA']
+                toa_ns = self.ldp['TOA']
+                toa_std = self.ldp['TOA_std']
+                sh1 = np.shape(rn_toa)
+                rg = self.c * toa_ns
+                rg_std = self.c * toa_std
+                FIM = np.zeros((sh1[0], sh1[0]))
+                for i in range(sh1[1]):
+                    f1 = P - rn_toa[:, i:i + 1]
+                    FIM += np.dot(f1 , f1.T) / ((rg_std[i] ** 2) *np.dot(f1.T , f1))
+
             elif toa == 0 and tdoa == 0:
-                RN_RSS = self.nodes['RN_RSS']
-                RSS = self.ldp['RSS']
-                RSS_std = self.ldp['RSS_std']
-                RSS_np = self.ldp['RSS_np']
+                rn_rss = self.nodes['RN_RSS']
+                rss_db = self.ldp['RSS']
+                rss_std = self.ldp['RSS_std']
+                rss_np = self.ldp['RSS_np']
+                sh1 = np.shape(rn_rss)
                 d0 = self.ldp['d0']
-                PL0 = self.ldp['PL0']
-                RNnum = np.shape(RN_RSS)[1]
-                S = (np.log(10) / 10) * RSS_std / RSS_np
-                FIM = np.zeros((np.shape(RN_RSS)[0],
-                                np.shape(RN_RSS)[0]))
-                for i in range(np.shape(RN_RSS)[1]):
-                    FIM += np.dot((P - RN_RSS[:, i:i + 1]),
-                                  (P - RN_RSS[:, i:i + 1]).T) / ((S[0] ** 2) *\
-                                  (np.dot( (P - RN_RSS[:, i:i + 1]).T,\
-                                           (P - RN_RSS[:, i:i + 1]))) ** 2)
+                pl0 = self.ldp['PL0']
+                S = (np.log(10) / 10) * rss_std / rss_np
+                FIM = np.zeros((sh1[0],sh1[0]))
+                for i in range(sh1[1]):
+                    f1 = P - rn_rss[:, i:i + 1]
+                    FIM += np.dot(f1, f1.T) / ((S[0] ** 2) * (np.dot( f1.T, f1)) ** 2)
             elif rss == 0:
                 FIM = self.fim(P, 0, 1, 0) + self.fim(P, 0, 0, 1)
+
             elif toa == 0:
                 FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 0, 1)
+
             elif tdoa == 0:
                 FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 1, 0)
+
             else:
                 FIM = self.fim(P, 1, 0, 0) + self.fim(P, 0, 1, 0) +\
                     self.fim(P, 0, 0, 1)
@@ -1003,8 +1056,10 @@ class algloc(object):
 
 
 def scenario():
-    """ Defines a sample scenario for testing
-
+    """
+    This method is not a class member, it defines a sample scenario.
+    Defines a sample scenario for testing
+    
     Returns
     -------
 
@@ -1030,13 +1085,13 @@ def scenario():
         >>> TOA_std = 0.001/c*np.ones(np.shape(TOF))
         >>> TOA = TOF + TOA_std
 
-        >>> RSS_std = 0.001 * np.ones(nRN)
-        >>> RSS_np = 2.645 * np.ones(nRN)
-        >>> PL0 = 34.7*np.ones(nRN)
+        >>> rss_std = 0.001 * np.ones(nRN)
+        >>> rss_np = 2.645 * np.ones(nRN)
+        >>> pl0 = 34.7*np.ones(nRN)
         >>> d0 = 1.
         >>> d_RSS = dist(RN_RSS,BN,0) # actual distances
-        >>> X = RSS_std * np.random.randn(np.shape(PL0)[0])
-        >>> RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
+        >>> X = rss_std * np.random.randn(np.shape(pl0)[0])
+        >>> rss_db = pl0-10*rss_np*np.log10(d_RSS/d0)+X
 
         >>> RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
         >>> d = dist(RN_TDOA,BN,0)
@@ -1053,11 +1108,11 @@ def scenario():
         >>> nodes['RNr_TDOA']= RNr_TDOA
 
         >>> ldp={}
-        >>> ldp['RSS'] = RSS
-        >>> ldp['RSS_std'] = RSS_std
-        >>> ldp['RSS_np'] = RSS_np
+        >>> ldp['RSS'] = rss_db
+        >>> ldp['RSS_std'] = rss_std
+        >>> ldp['RSS_np'] = rss_np
         >>> ldp['d0'] = d0
-        >>> ldp['PL0'] = PL0
+        >>> ldp['PL0'] = pl0
         >>> ldp['TOA'] = TOA
         >>> ldp['TOA_std'] = TOA_std
         >>> ldp['TDOA'] = TDOA
@@ -1070,55 +1125,55 @@ def scenario():
         >>> print 'BN0:initial guess for ML estimator'
         >>> print BN0
         """
-    nRN = 4
+    nrn = 4
     dim = 3  # 2 for 2D, 3 for 3D
     L = 20.
     c = 0.3
-    BN = L * sp.rand(dim, 1)
-    BN0 = L * sp.rand(dim, 1)
-    RN_TOA = L * sp.rand(dim, nRN)
-    RN_RSS = L * sp.rand(dim, nRN)
-    RN_TDOA = L * sp.rand(dim, nRN)
+    bn = L * sp.rand(dim, 1)
+    bn0 = L * sp.rand(dim, 1)
+    rn_toa = L * sp.rand(dim, nrn)
+    rn_rss = L * sp.rand(dim, nrn)
+    rn_tdoa = L * sp.rand(dim, nrn)
 
-    d_TOA = dist(RN_TOA, BN, 0)  # actual distances
-    TOF = d_TOA / c  # actual TOA
-    TOA_std = 0.001 / c * np.ones(np.shape(TOF))
-    TOA = TOF + TOA_std
+    d_toa = dist(rn_toa, bn, 0)  # actual distances
+    tof = d_toa / c  # actual TOA
+    toa_std = 0.001 / c * np.ones(np.shape(tof))
+    toa_ns = tof + toa_std
 
-    RSS_std = 0.001 * np.ones(nRN)
-    RSS_np = 2.645 * np.ones(nRN)
-    PL0 = 34.7 * np.ones(nRN)
+    rss_std = 0.001 * np.ones(nrn)
+    rss_np = 2.645 * np.ones(nrn)
+    pl0 = 34.7 * np.ones(nrn)
     d0 = 1.
-    d_RSS = dist(RN_RSS, BN, 0)  # actual distances
-    X = RSS_std * np.random.randn(np.shape(PL0)[0])
-    RSS = PL0 - 10 * RSS_np * np.log10(d_RSS / d0) + X
+    d_rss = dist(rn_rss, bn, 0)  # actual distances
+    x = rss_std * np.random.randn(np.shape(pl0)[0])
+    rss_db = pl0 - 10 * rss_np * np.log10(d_rss / d0) + x
 
-    RNr_TDOA = np.zeros((dim, nRN))  # L*sp.rand(dim,nRN)
-    d = dist(RN_TDOA, BN, 0)
-    dr = dist(RNr_TDOA, BN, 0)
-    TDOF = (d - dr) / c  # actual TDOA
-    TDOA_std = 0.001 / c * np.ones(np.shape(TDOF))
-    TDOA = TDOF + TDOA_std
-
+    rnr_tdoa = np.zeros((dim, nrn))  # L*sp.rand(dim,nRN)
+    d = dist(rn_tdoa, bn, 0)
+    dr = dist(rnr_tdoa, bn, 0)
+    tdof = (d - dr) / c  # actual TDOA
+    tdoa_std = 0.001 / c * np.ones(np.shape(tdof))
+    tdoa_ns = tdof + tdoa_std
+    
     nodes = {}
-    nodes['BN'] = BN
-    nodes['RN_RSS'] = RN_RSS
-    nodes['RN_TOA'] = RN_TOA
-    nodes['RN_TDOA'] = RN_TDOA
-    nodes['RNr_TDOA'] = RNr_TDOA
+    nodes['BN'] = bn
+    nodes['RN_RSS'] = rn_rss
+    nodes['RN_TOA'] = rn_toa
+    nodes['RN_TDOA'] = rn_tdoa
+    nodes['RNr_TDOA'] = rnr_tdoa
 
     ldp = {}
-    ldp['RSS'] = RSS
-    ldp['RSS_std'] = RSS_std
-    ldp['RSS_np'] = RSS_np
+    ldp['RSS'] = rss_db
+    ldp['RSS_std'] = rss_std
+    ldp['RSS_np'] = rss_np
     ldp['d0'] = d0
-    ldp['PL0'] = PL0
-    ldp['TOA'] = TOA
-    ldp['TOA_std'] = TOA_std
-    ldp['TDOA'] = TDOA
-    ldp['TDOA_std'] = TDOA_std
+    ldp['PL0'] = pl0
+    ldp['TOA'] = toa_ns
+    ldp['TOA_std'] = toa_std
+    ldp['TDOA'] = tdoa_ns
+    ldp['TDOA_std'] = tdoa_std
 
-    return nodes, ldp, BN0
+    return nodes, ldp, bn0
 
 
 if __name__ == "__main__":

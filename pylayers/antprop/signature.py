@@ -46,12 +46,19 @@ class Signatures(dict):
 
     def __init__(self, L, pTx, pRx):
         """
+        Parameters
+        ----------
+        L : Layout
+        pTx :
+        pRx : 
         """
         self.L = L
         self.pTx = pTx
         self.pRx = pRx
 
-
+    def __repr__(self):
+        s = 
+        return(s)
     def info(self):
         """
         """

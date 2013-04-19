@@ -2,13 +2,13 @@
 """
 This module handles antennas in pylayers
 
-To instantiate an antenna object : 
+To instantiate an antenna object :
 
 .. python::
 
     A = Antenna(_filename,directory,nf,ntheta,nphi)
 
-typ indicates the antenna file format to read 
+typ indicates the antenna file format to read
 
 Examples
 --------
@@ -1322,12 +1322,14 @@ class Antenna(object):
         L = lBr.max()
         M = mBr.max()
 
+
         #x = -np.cos(theta)
 
         #Pmm1n, Pmp1n = AFLegendre3(20, 20, x)
         #Pmm1n, Pmp1n = AFLegendre3(L, L, x)
         #V, W = VW0(lBr, mBr, x, phi, Pmm1n, Pmp1n)
         V, W = VW(lBr, mBr, theta, phi)
+
 
         Fth = np.dot(Br, np.real(V.T)) - \
             np.dot(Bi, np.imag(V.T)) + \
