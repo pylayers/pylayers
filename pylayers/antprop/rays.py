@@ -81,6 +81,8 @@ class Rays(dict):
             s = s+'ni : '+str(ni)+'\n'
             s = s+'nl : '+str(nl)+'\n'
         except:
+            return(s)
+
         return(s)
 
     def show(self, L):
@@ -866,7 +868,7 @@ class Rays(dict):
 
     def info(self, r):
         '''
-            information for a given ray r
+            provides information for a given ray r
 
         Parameters
         ----------
@@ -880,20 +882,24 @@ class Rays(dict):
 
         ray = self.ray(r)
         typ = self.typ(r)
-        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index', 'type', 'material', 'th(rad)', 'alpha', 'gamma2')
+        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index',
+                                                                    'type',
+                                                                    'slab', 'th(rad)', 'alpha', 'gamma2')
         print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
         for iidx, i in enumerate(typ):
             if i == 'T' or i == 'R':
                 I = getattr(self.I, i)
-                for m in I.dusl.keys():
-                    midx = I.dusl[m]
+                for slab in I.dusl.keys():
+                    print slab
+                    midx = I.dusl[slab]
+                    print midx
                     Iidx = np.array((I.idx))[midx]
-                    th = I.data[I.dusl[m], 0]
+                    th = I.data[I.dusl[slab], 0]
                     gamma = I.gamma[midx]
                     alpha = I.alpha[midx]
                     for ii, Ii in enumerate(Iidx):
                         if Ii == ray[iidx]:
-                            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, m, th[ii], alpha[ii], gamma[ii])
+                            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])
 
             # else:
             print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')

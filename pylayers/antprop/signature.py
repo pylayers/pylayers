@@ -56,9 +56,10 @@ class Signatures(dict):
 
     def __repr__(self):
         size = {}
+        s = self.__class__.__name__ + ' : '  + '\n' + '------------------'+'\n'
+        s = s + str(self.__sizeof__())+'\n'
         for k in self:
             size[k] = len(self[k])
-        s = ''
         s = s + 'from : '+ str(self.source) + ' to ' + str(self.target)+'\n'
         for k in self:
             s = s + str(k) + ' : ' + str(len(self[k])) + '\n'
@@ -77,34 +78,114 @@ class Signatures(dict):
         print "target : ", self.target
 
 
-    def all_simple_paths(self,G, source, target, cutoff=None):
+
+    def propaths(self,G, source, target, cutoff=None):
+        """ all_simple_paths
+
+        Parameters
+        ----------
+
+        G : networkx Graph Gi
+        source : int
+        target : int 
+        cutoff : int
+
+        Notes
+        -----
+
+        adapted from all_simple_path of networkx 
+
+
+        """
         if cutoff < 1:
             return
 
         visited = [source]
+        # stack is a list of iterators
         stack = [iter(G[source])]
-        while stack:
-            # stack is a list of iterators
-
+        # while the list of iterators is not void
+        while stack: #
+            # children is the last iterator of stack
             children = stack[-1]
+            # next child
             child = next(children, None)
-            if child is None:
-                stack.pop()
-                visited.pop()
-            elif len(visited) < cutoff:
-                if child == target:
-                    yield visited + [target]
-                elif child not in visited:
+            print "child : ",child
+            print "visited :",visited
+            if child is None: # if no more child
+                stack.pop()   # remove last iterator
+                visited.pop() # remove from visited list
+            elif len(visited) < cutoff: # if visited list is not too long 
+                if child == target:  # if child is the target point 
+                    yield visited + [target] # output signature
+                elif child not in visited: # else visit other node
                     visited.append(child)
                     # explore all child connexion
                     # TODO : limit the explorable childs
-                    stack.append(iter(G[child]))
-            else: #len(visited) == cutoff:
+                    lc = [k for k in iter(G[child])]
+                    n  = len(lc)
+                    explore=iter(G[child])
+                    stack.append(explore)
+                    #stack.append(iter(G[child]))
+            else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
                     yield visited + [target]
                 stack.pop()
                 visited.pop()
 
+    def all_simple_paths(self,G, source, target, cutoff=None):
+        """ all_simple_paths
+
+        Parameters
+        ----------
+
+        G : networkx Graph Gi
+        source : int
+        target : int 
+        cutoff : int
+
+        Notes
+        -----
+
+        adapted from all_simple_path of networkx 
+
+
+        """
+        if cutoff < 1:
+            return
+
+        visited = [source]
+        # stack is a list of iterators
+        stack = [iter(G[source])]
+        # while the list of iterators is not void
+        while stack: #
+            # children is the last iterator of stack
+            children = stack[-1]
+            # next child
+            child = next(children, None)
+            if child is None: # if no more child
+                stack.pop()   # remove last iterator
+                visited.pop() # remove from visited list
+            elif len(visited) < cutoff: # if visited list is not too long 
+                if child == target:  # if child is the target point 
+                    yield visited + [target] # output signature
+                elif child not in visited: # else visit other node
+                    visited.append(child)
+                    # explore all child connexion
+                    # TODO : limit the explorable childs
+                    lc = [k for k in iter(G[child])]
+                    n  = len(lc)
+                    if n >12:
+                        explore=iter([lc[k] for k in
+                                      np.unique(np.random.randint(0,n,12))])
+                    else:
+                        explore=iter(G[child])
+                    stack.append(explore)
+                    #stack.append(iter(G[child]))
+            else: #len(visited) == cutoff (visited list is too long)
+                if child == target or target in children:
+                    yield visited + [target]
+                stack.pop()
+                visited.pop()
 
     def run(self,metasig,cutoff=1):
         """ get signatures (in one list of arrays) between tx and rx
@@ -190,14 +271,16 @@ class Signatures(dict):
             for cycle in meta:
                 Gi.pos.update(self.L.dGi[cycle].pos)
 
-            #for nt in ndt:
+            #for interaction source  in list of source interaction 
             for s in lis:
-                #for nr in ndr:
+                #for target interaction in list of target interaction
                 for t in lit:
 
                     if (s != t):
-                        #paths = list(self.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
-                        paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                        #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                        #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                        paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+                        #paths = [nx.shortest_path(Gi,source=s,target=t)]
 
                     else:
                         #paths = [[nt]]
@@ -224,19 +307,28 @@ class Signatures(dict):
                         except:
                             self[len(path)] = sigarr
 
-    def meta(self,cutoff):
-        metasig = list(nx.all_simple_paths(self.L.Gt,source=self.source,target=self.target,cutoff=cutoff))
-        return metasig
+    def meta(self):
+        G = self.L.Gt
+        # metasig = list(nx.all_simple_paths(self.L.Gt,source=self.source,target=self.target,cutoff=cutoff))
+        #for cutoff in range(1,5):
+        metasig = nx.shortest_path(G,source=self.source,target=self.target)
+        for c in metasig:
+            try :
+                n = np.hstack((n,np.array(G.neighbors(c))))
+            except:
+                n = np.array(G.neighbors(c))
 
-    def showi(self):
+
+        return list(np.unique(n))
+
+    def showi(self,uni=0,us=0):
         """ interactive show
 
         press n to visit signatures sequentially
 
-        Attributes
+        Parameters
         ----------
-
-            ni : number of interaction
+            uni : index of interaction dictionnary keys
             us : signature index
 
         """
@@ -247,10 +339,8 @@ class Signatures(dict):
 #        plt.draw()
 
         nit = self.keys()
-        uni = 0
         ni = nit[uni]
         ust = len(self[ni])/2
-        us = 0
 
         poly1 = self.L.Gt.node[self.source]['polyg']
         cp1 = poly1.centroid.xy
@@ -326,7 +416,7 @@ class Signatures(dict):
         Parameters
         ----------
 
-            dsig : dict 
+            dsig : dict
 
         Returns
         -------
@@ -377,6 +467,11 @@ class Signature(object):
         """
         self.seq = sig[0, :]
         self.typ = sig[1, :]
+
+    def __repr__(self):
+        s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
+        s = s + self.seq + '\n' + self.typ
+        return s
 
     def info(self):
         """

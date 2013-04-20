@@ -3258,16 +3258,15 @@ class Layout(object):
             4 different nodes associated to the same segment
             R+  R- T+ T-
 
-        A subgraph
 
         """
         self.dGi = {}
         #
         # Create nodes
         #
-        for k in self.dGv:              # for each cycle Gv
+        for k in self.dGv:              # for each cycle ( keys of dGv ) 
             Gv = self.dGv[k]
-            self.dGi[k] = nx.DiGraph()  # create a Digraph Gi 
+            self.dGi[k] = nx.DiGraph()  # create a Digraph dGi[k]
             self.dGi[k].pos = {}        # and its associated node coordinates
             for n in Gv.node:           # for each node of Gv (same node as Gs)
                 if n < 0: # D
@@ -3275,30 +3274,41 @@ class Layout(object):
                     self.dGi[k].pos[str(n)] = self.Gs.pos[n]
                 if n > 0: # R | T
                     cy = self.Gs.node[n]['ncycles']
+                    name = self.Gs.node[n]['name']
                     if len(cy) == 2: # 2 cycles
+
                         cy0 = cy[0]
                         cy1 = cy[1]
-                        #print k,cy0,cy1
-                        # self.dGi[k].add_node(str((n,cy0)))
-                        #self.dGi[k].add_node(str((n,cy1)))
-                        self.dGi[k].add_node(str((n,k)))
-                        self.dGi[k].add_node(str((n,cy0,cy1)))
-                        self.dGi[k].add_node(str((n,cy1,cy0)))
+
+                        
+                        # get neigbor
                         nei = self.Gs.neighbors(n)
                         np1 = nei[0]
                         np2 = nei[1]
+
                         p1 = np.array(self.Gs.pos[np1])
                         p2 = np.array(self.Gs.pos[np2])
                         l = p1 - p2
                         nl = np.dot(l, l)
                         ln = l / nl
+                        
                         delta = nl / 10
-                        self.dGi[k].pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
-                        self.dGi[k].pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
-                        if k==cy0:
-                            self.dGi[k].pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
-                        if k==cy1:
-                            self.dGi[k].pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+
+                        # with  AIR or ABSORBENT there is no reflection
+                        if (name<>'AIR') & (name<>'ABSORBENT'):
+                            self.dGi[k].add_node(str((n,k)))
+                            if k==cy0:
+                                self.dGi[k].pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
+                            if k==cy1:
+                                self.dGi[k].pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+
+
+                        # with METAL or ABSORBENT there is no transmission
+                        if (name<>'METAL') & (name<>'ABSORBENT'):
+                            self.dGi[k].add_node(str((n,cy0,cy1))) 
+                            self.dGi[k].add_node(str((n,cy1,cy0)))
+                            self.dGi[k].pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.) 
+                            self.dGi[k].pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
                     if len(cy) == 1: # segment which is not a separation between rooms
                         self.dGi[k].add_node(str((n, cy[0])))
@@ -3389,6 +3399,7 @@ class Layout(object):
         self.Gi.pos = {}
         #
         # Create nodes
+        #
         for n in self.Gv.node:
             if n < 0: # D
                 self.Gi.add_node(str(n))
@@ -3396,7 +3407,9 @@ class Layout(object):
             if n > 0: # R | T
                 cy = self.Gs.node[n]['ncycles']
                 name = self.Gs.node[n]['name']
-                if len(cy) == 2: # 2 cycles means generally two rooms 
+                # 2 cycles
+                if len(cy) == 2:
+
                     cy0 = cy[0]
                     cy1 = cy[1]
 
@@ -3411,14 +3424,14 @@ class Layout(object):
                     ln = l / nl
 
                     delta = nl / 10
-                    # On AIR or ABSORBENT there is no reflection 
+                    # On AIR or ABSORBENT there is no reflection
                     if (name<>'AIR') & (name<>'ABSORBENT'):
                         self.Gi.add_node(str((n,cy0)))
                         self.Gi.add_node(str((n,cy1)))
                         self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
                         self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
 
-                    # Throgh METAL or ABSORBENT there is no transmission 
+                    # Through METAL or ABSORBENT there is no transmission
                     if (name<>'METAL') & (name<>'ABSORBENT'):
                         self.Gi.add_node(str((n,cy0,cy1)))
                         self.Gi.add_node(str((n,cy1,cy0)))
