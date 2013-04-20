@@ -2891,10 +2891,16 @@ class Layout(object):
         for g in allg:
             if g in graph:
                 try:
-                    gname='G'+g
-                    write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
+                    if g in ['v','i']:
+                        gname1 ='G'+g
+                        gname2 ='dG'+g
+                        write_gpickle(getattr(self,gname1),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
+                        write_gpickle(getattr(self,gname2),basename+'/struc/dG'+g+'_'+self.filename+'.gpickle')
+                    else:
+                        gname='G'+g
+                        write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
                 except:
-                    raise NameError('G'+g+' graph cannot be saved, probably because it has not been build')
+                    raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
 
 
     def dumpr(self, graph='trwcvi'):
@@ -2902,18 +2908,32 @@ class Layout(object):
 
         Parameters
         ----------
+
+        graph : string
             't' : Gt
             'r' : Gr
             's' : Gs
-            'v' : Gv 
-            'i' : Gi 
+            'v' : Gv
+            'i' : Gi
+        Notes
+        -----
+
+        .gpickle files are store under the struc directory of the project
+        specified by the $BASENAME environment variable
+
         """
         allg= ['t','r','w','c','v','i']
         for g in allg:
             if g in graph:
                 try:
-                    gname='G'+g
-                    setattr(self, gname, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
+                    if g in ['v','i']:
+                        gname1 ='G'+g
+                        gname2 ='dG'+g
+                        setattr(self, gname1, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
+                        setattr(self, gname2, read_gpickle(basename+'/struc/dG'+g+'_'+self.filename+'.gpickle'))
+                    else:
+                        gname='G'+g
+                        setattr(self, gname, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
                 except:
                     raise NameError('G'+g +' graph cannot be load')
 

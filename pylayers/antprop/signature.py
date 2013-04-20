@@ -5,9 +5,7 @@ import numpy as np
 import scipy.linalg as la
 import pdb
 import networkx as nx
-#import GrRay3D
-#import Graph
-#import pylayers.gis.layout
+import pylayers.gis.layout as layout
 import pylayers.util.geomutil as geu
 #import pylayers.util.graphutil as gph
 import pylayers.util.pyutil as pyu
@@ -44,31 +42,39 @@ class Signatures(dict):
             position of Rx
     """
 
-    def __init__(self, L, pTx, pRx):
+    def __init__(self,L,source,target):
         """
         Parameters
         ----------
         L : Layout
-        pTx :
-        pRx : 
+        source :
+        target :
         """
         self.L = L
-        self.pTx = pTx
-        self.pRx = pRx
+        self.source = source
+        self.target = target
 
-#    def __repr__(self):
-#        s = 
-#        return(s)
+    def __repr__(self):
+        size = {}
+        for k in self:
+            size[k] = len(self[k])
+        s = ''
+        s = s + 'from : '+ str(self.source) + ' to ' + str(self.target)+'\n'
+        for k in self:
+            s = s + str(k) + ' : ' + str(len(self[k])) + '\n'
+
+        return(s)
+
     def info(self):
         """
         """
         print "Signatures for scenario defined by :"
         print "Layout"
         print "======"
-        self.L.info()
+        L = self.L.info()
         print "================================"
-        print "Transmitter position: ", self.pTx
-        print "Receiver position: ", self.pRx
+        print "source : ", self.source
+        print "target : ", self.target
 
 
     def all_simple_paths(self,G, source, target, cutoff=None):
@@ -100,15 +106,13 @@ class Signatures(dict):
                 visited.pop()
 
 
-    def run(self, tx, rx,cutoff=1):
+    def run(self,metasig,cutoff=1):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
         ----------
 
-            tx : numpy.ndarray
-            rx : numpy.ndarray
-            cutoff :
+            cutoff : limit the exploration of all_simple_path
 
         Returns
         -------
@@ -117,92 +121,124 @@ class Signatures(dict):
 
         """
         try:
-            self.L.Gi
+            self.L.dGi
         except:
-            self.L.build()
+            self.L.buildGi2()
         # all the vnodes >0  from the room
         #
-        NroomTx = self.L.pt2ro(tx)
-        NroomRx = self.L.pt2ro(rx)
+        #NroomTx = self.L.pt2ro(tx)
+        #NroomRx = self.L.pt2ro(rx)
         #print NroomTx,NroomRx
 
-        if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
-            raise AttributeError('Tx or Rx is not in Gr')
+        #if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
+        #    raise AttributeError('Tx or Rx is not in Gr')
 
         # list of interaction in roomTx 
         # list of interaction in roomRx
-        ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
-        ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
+        #ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
+        #ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
 
-        # transmitter
-        ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
-        ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
+        lis = self.L.Gt.node[self.source]['inter']
+        lit = self.L.Gt.node[self.target]['inter']
 
-        # receiver
-        ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
-        ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
+        # source
+        #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
+        #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
+
+        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
+        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
+
+        # target
+        # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
+        # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
+
+        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
+        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
 
         # tx,rx : attaching rule
         #
-        # tx attachs to out transmisision point 
+        # tx attachs to out transmisision point
         # rx attachs to in transmission point
 
         #
         # WARNING : room number <> cycle number
         #
 
-        ncytx = self.L.Gr.node[NroomTx]['cycle']
-        ncyrx = self.L.Gr.node[NroomRx]['cycle']
+        #ncytx = self.L.Gr.node[NroomTx]['cycle']
+        #ncyrx = self.L.Gr.node[NroomRx]['cycle']
 
-        ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
-        ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
+        #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
+        #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
 
+        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
+        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
 
-        ndt = ndt1 + ndt2
-        ndr = ndr1 + ndr2
-        #print ndt
-        #print ndr
-        ntr = np.intersect1d(ndt, ndr)
+        #ndt = ndt1 + ndt2
+        #ndr = ndr1 + ndr2
+        lis  = lisT + lisR
+        lit  = litT + litR
 
-        for nt in ndt:
-            for nr in ndr:
+        #ntr = np.intersect1d(ndt, ndr)
+        li = np.intersect1d(lis, lit)
 
-                if (nt != nr):
-                    paths = list(self.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
-                else:
-                    paths = [[nt]]
-                ### supress the followinfg loops .
-                for path in paths:
-                    sigarr = np.array([],dtype=int).reshape(2, 0)
-                    for interaction in path:
+        for meta in metasig:
+            Gi = nx.DiGraph()
+            for cycle in meta:
+                Gi = nx.compose(Gi,self.L.dGi[cycle])
+            # facultative update position
+            Gi.pos = {}
+            for cycle in meta:
+                Gi.pos.update(self.L.dGi[cycle].pos)
 
-                        it = eval(interaction)
-                        if type(it) == tuple:
-                            if len(it)==2: #reflexion
+            #for nt in ndt:
+            for s in lis:
+                #for nr in ndr:
+                for t in lit:
+
+                    if (s != t):
+                        #paths = list(self.all_simple_paths(self.L.Gi,source=nt,target=nr,cutoff=cutoff))
+                        paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+
+                    else:
+                        #paths = [[nt]]
+                        paths = [[s]]
+                    ### supress the followinfg loops .
+                    for path in paths:
+                        sigarr = np.array([],dtype=int).reshape(2, 0)
+                        for interaction in path:
+
+                            it = eval(interaction)
+                            if type(it) == tuple:
+                                if len(it)==2: #reflexion
+                                    sigarr = np.hstack((sigarr,
+                                                    np.array([[it[0]],[1]],dtype=int)))
+                                if len(it)==3: #transmission
+                                    sigarr = np.hstack((sigarr,
+                                                    np.array([[it[0]],[2]],dtype=int)))
+                            elif it < 0: #diffraction
                                 sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]],[1]],dtype=int)))
-                            if len(it)==3: #transmission
-                                sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]],[2]],dtype=int)))
-                        elif it < 0: #diffraction
-                            sigarr = np.hstack((sigarr,
-                                                np.array([[it],[3]],dtype=int)))
-                    #print sigarr
-                    try:
-                        self[len(path)] = np.vstack((self[len(path)],sigarr))
-                    except:
-                        self[len(path)] = sigarr
+                                                    np.array([[it],[3]],dtype=int)))
+                        #print sigarr
+                        try:
+                            self[len(path)] = np.vstack((self[len(path)],sigarr))
+                        except:
+                            self[len(path)] = sigarr
 
+    def meta(self,cutoff):
+        metasig = list(nx.all_simple_paths(self.L.Gt,source=self.source,target=self.target,cutoff=cutoff))
+        return metasig
 
     def showi(self):
         """ interactive show
-        
-        press n to visit rays
+
+        press n to visit signatures sequentially
 
         Attributes
         ----------
+
             ni : number of interaction
             us : signature index
+
         """
         plt.ion()
         fig=plt.figure()
@@ -213,26 +249,35 @@ class Signatures(dict):
         nit = self.keys()
         uni = 0
         ni = nit[uni]
-        
         ust = len(self[ni])/2
         us = 0
 
+        poly1 = self.L.Gt.node[self.source]['polyg']
+        cp1 = poly1.centroid.xy
+
+        poly2 = self.L.Gt.node[self.target]['polyg']
+        cp2 = poly2.centroid.xy
+
+        ptx = np.array([cp1[0][0],cp1[1][0]])
+        prx = np.array([cp2[0][0],cp2[1][0]])
+
         st='a'
+
         while st != 'q':
             inter=[]
             ax=fig.add_subplot(111)
             fig,ax=self.L.showG(fig=fig,ax=ax,graph='s')
             title = '# interaction :', ni, 'signature #',us,'/',ust
-             
             ax.set_title(title)
 
-            line = self.pTx[:2]
-            ax.plot(self.pRx[0],self.pRx[1],'xb')
-            ax.plot(self.pTx[0],self.pTx[1],'xr')
+            line = ptx
+            # draw terminal points (centroid of source and target cycle)
+
+            ax.plot(ptx[0],prx[1],'xr')
+            ax.plot(prx[0],prx[1],'xb')
 
             if ni not in self.keys():
                 print "incorrect number of interactions"
-                
             pos={}
 
             try:
@@ -246,15 +291,11 @@ class Signatures(dict):
                         inter.append('R')
                     if ii == 2:
                         inter.append('T')
-
-
-
-
             except:
                 print "signature index out of bounds of signature"
-            line = np.vstack((line,self.pRx[:2]))
+
+            line = np.vstack((line,prx))
             ax.plot(line[:,0],line[:,1])
-            
             plt.draw()
             print inter
             st = raw_input()
@@ -273,15 +314,13 @@ class Signatures(dict):
                         uni=0
                         ni=nit[uni]
                         us = 0
-                
 
 
             else:
-                print 'press n for next signature'    
-    
+                print 'press n for next signature'
 
 
-    def rays(self):
+    def rays(self,ptx,prx):
         """ from signatures dict to 2D rays
 
         Parameters
@@ -295,14 +334,15 @@ class Signatures(dict):
             rays : dict
 
         """
-        rays = Rays(self.pTx,self.pRx)
+        rays = Rays(ptx,prx)
         for k in self:
             tsig = self[k]
+            print k
             shsig = np.shape(tsig)
             for l in range(shsig[0]/2):
                 sig = tsig[2*l:2*l+2,:]
                 s   = Signature(sig)
-                Yi  = s.sig2ray(self.L, self.pTx[:2], self.pRx[:2])
+                Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
                 if Yi is not None:
                     Yi = np.fliplr(Yi)
                     nint = len(sig[0, :])
