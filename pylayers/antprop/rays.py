@@ -25,6 +25,41 @@ class Rays(dict):
     Methods
     -------
 
+    to3D(H=3,N=1)
+    locbas(L)
+    fillinter(L)
+    eval
+    show(L)
+    mirror(H=3,N=1)
+    ray(r)
+    typ(r)
+    info(r)
+    signature(L)
+    show3d(ray,bdis,bbas,bstruc,col,id,linewidth)
+    show3()
+
+    Notes
+    -----
+
+    Rays object is obtained from a signature.
+    It is a container for a set of rays between a source 
+    and a target point defining a radio link.
+
+    Once Rays object has been obtained in 2D, it is transform 
+    in 3D via the **to3D** method. This method has two parameters : 
+    the height from floor to ceil, and the number N of 
+    multiple reflections to take into account. 
+
+    Once the 3d rays have been calculated, it is required 
+    to evaluate the local basis along those rays. This is
+    done through the **locbas** method
+
+    Once the local basis have been calculated the different
+    interaction along rays can be informed via the **fillinter**
+    method.
+
+    Once the interaction are informed the field along rays can 
+    be evaluated via the **eval** method
     """
     def __init__(self, pTx, pRx):
         self.pTx = pTx
@@ -35,15 +70,17 @@ class Rays(dict):
         s = ''
         ni = 0
         nl = 0
-        for k in self:
-            r = self[k]['rayidx']
-            nr = len(r)
-            s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
-            ni = ni + nr*k
-            nl = nl + nr*(2*k+1)
-        s = s + '-----'+'\n'
-        s = s+'ni : '+str(ni)+'\n'
-        s = s+'nl : '+str(nl)+'\n'
+        try:
+            for k in self:
+                r = self[k]['rayidx']
+                nr = len(r)
+                s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
+                ni = ni + nr*k
+                nl = nl + nr*(2*k+1)
+            s = s + '-----'+'\n'
+            s = s+'ni : '+str(ni)+'\n'
+            s = s+'nl : '+str(nl)+'\n'
+        except:
         return(s)
 
     def show(self, L):
@@ -800,6 +837,15 @@ class Rays(dict):
 
     def ray(self, r):
         """
+
+        Parameters
+        ----------
+        r : integer
+            ray index
+        
+        Notes
+        -----
+
             Give the ray number and it returns the index of its interactions
         """
         raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
@@ -807,8 +853,12 @@ class Rays(dict):
 
 
     def typ(self, r):
-        """
-            return the list of interaction type of a given ray
+        """ returns interactions list type of a given ray
+
+        Parameters
+        ----------
+        r : integer
+            ray index
         """
 
         a = self.ray(r)
@@ -818,9 +868,10 @@ class Rays(dict):
         '''
             information for a given ray r
 
-        Attributes
+        Parameters
         ----------
-        r : a ray number
+        r : int
+            ray index
 
         '''
         print '-------------------------'
@@ -878,8 +929,8 @@ class Rays(dict):
                col=np.array([1, 0, 1]),
                id=0,
                linewidth=1):
-        """
-        plot a 3D ray
+        """ plot a 3D ray
+
         Parameters
         ----------
 
