@@ -485,7 +485,7 @@ class Layout(object):
 
 
         """
-        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC'])
+        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC']+'/furnitures')
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -2329,14 +2329,21 @@ class Layout(object):
         >>> L.seguv(idx)
         array([[-1.,  0.,  1., -1.],
                [ 0., -1.,  0.,  0.]])
+        >>> idx = np.array([1])
+        >>> L.seguv(idx)
+        array([-1.,  0.])
 
         """
         # idx : npt
         idx  = iseg-1
         # tahe : 2 x npt
         tahe = self.tahe[:,idx]
-        ta   = tahe[0,:]
-        he   = tahe[1,:]
+        if  len(iseg)>1:
+            ta   = tahe[0,:]
+            he   = tahe[1,:]
+        else:
+            ta = tahe[0]
+            he = tahe[1]
         pta  = self.pt[:,ta]
         phe  = self.pt[:,he]
         # v  : 2 x npt
@@ -2344,7 +2351,10 @@ class Layout(object):
         # mv : npt
         mv   = np.sqrt(np.sum(v*v,axis=0))
         # vn : 2 x npt
-        vn  = v/mv[np.newaxis,:]
+        if len(idx)>1:
+            vn  = v/mv[np.newaxis,:]
+        else:
+            vn  = (v/mv).reshape(2)
         return(vn)
 
 

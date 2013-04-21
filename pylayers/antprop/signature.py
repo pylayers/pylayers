@@ -29,6 +29,60 @@ def showsig(L,s,tx,rx):
     plt.show()
     L.display['edlabel']=False
 
+def propout(L,g):
+    """
+
+    Parameters
+    ----------
+
+    L : Layout
+    g : Digraph Gi
+    """
+
+    for e in g.edges():
+        # extract  both interactions
+        i0 = eval(e[0])
+        i1 = eval(e[1])
+        try:
+            nstr0 = i0[0]
+        except:
+            nstr0 = i0
+
+        try:
+            nstr1 = i1[0]
+        except:
+            nstr1 = i1
+
+        output = []
+        if nstr1>0:
+            # segment unitary vector
+            l1 = L.seguv(np.array([nstr1]))
+            p0 = np.array(L.Gs.pos[nstr0])
+            p1 = np.array(L.Gs.pos[nstr1])
+            v01  = p1-p0
+            v01m = np.sqrt(np.dot(v01,v01))
+            v01n = v01/v01m
+            v10n = -v01n
+            # next interaction
+            for i2 in nx.neighbors(g,str(i1)):
+                i2 = eval(i2)
+                if type(i2)==int:
+                    nstr2 = i2
+                else:
+                    nstr2 = i2[0]
+                p2 = np.array(L.Gs.pos[nstr2])
+                v12 = p2-p1
+                v12m = np.sqrt(np.dot(v12,v12))
+                v12n = v12/v12m
+                d1 = np.dot(v01n,l1)
+                d2 = np.dot(l1,v12n)
+                if d1*d2>=0:
+                    output.append(i2)
+                else:
+                    pass
+        g.add_edge(i0,i1,output=output)
+        return(g)
+
 class Signatures(dict):
     """
     gathers all signatures from a layout given tx and rx
