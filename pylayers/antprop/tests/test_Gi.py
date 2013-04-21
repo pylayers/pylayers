@@ -54,19 +54,13 @@ for e in g0.edges():
             else:
                 print "R :" ,i2
             nstr2 = i2[0]
-            norm = L.Gs.node[i2[0]]['norm']
+            pdb.set_trace()
+            npta,nphe  = nx.neighbors(L.Gs,i2[0])
 
         p2 = np.array(L.Gs.pos[nstr2])
         v12 = p2-p1
         v12m = np.sqrt(np.dot(v12,v12))
         v12n = v12/v12m
-        # Heuristic rules
-        # if 0 = R 1 = R
-        #    p12.p01 > 0
-        # if 0 = T 1 = R
-        # if 0 = T 1 = T
-        # if 0 = R 1 = R
-        # if 0 = R 1 = R
 
         print norm
 
@@ -76,5 +70,6 @@ for e in g0.edges():
         v02m = np.sqrt(np.dot(v02,v02))
         v02n = v02/v02m
         output10 = [ ]
+
 
     #print e,vn

@@ -127,7 +127,7 @@ class Layout(object):
         self.load(_filename)
         #self.ax = (-10, 10, -10, 10)
 
-    def ls(self, typ='str'):
+    def ls(self, typ='ini'):
         """ list the available file in dirstruc
 
         Parameters
@@ -157,10 +157,10 @@ class Layout(object):
             >>> L = Layout()
             >>> fillist = L.ls()
             >>> for _filename in filelist:
-            >>>     plt.figure()
-            >>>     L.load(_filename)
-            >>>     fig,ax = L.showGs()
-            >>>     plt.title(_filename)
+            >>>         plt.figure()
+            >>>         L.load(_filename)
+            >>>         fig,ax = L.showGs()
+            >>>         plt.title(_filename)
             >>> plt.show()
 
         """
@@ -2312,6 +2312,43 @@ class Layout(object):
 
         return seglist
 
+    def seguv(self, iseg):
+        """ returns unitary vector along segments
+
+        Parameters
+        ----------
+        iseg : np.array
+                index of segments
+
+        Examples
+        --------
+
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('DLR.ini')
+        >>> idx = np.array([1,2,3,17])
+        >>> L.seguv(idx)
+        array([[-1.,  0.,  1., -1.],
+               [ 0., -1.,  0.,  0.]])
+
+        """
+        # idx : npt
+        idx  = iseg-1
+        # tahe : 2 x npt
+        tahe = self.tahe[:,idx]
+        ta   = tahe[0,:]
+        he   = tahe[1,:]
+        pta  = self.pt[:,ta]
+        phe  = self.pt[:,he]
+        # v  : 2 x npt
+        v    = pta-phe
+        # mv : npt
+        mv   = np.sqrt(np.sum(v*v,axis=0))
+        # vn : 2 x npt
+        vn  = v/mv[np.newaxis,:]
+        return(vn)
+
+
+
     def segpt(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
 
@@ -2371,13 +2408,14 @@ class Layout(object):
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,10])
             >>> L.seginframe(p1,p2)
-            array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35, 36, 37,
-                    38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60, 61, 62,
-                    63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,  98, 99, 109,
-                   112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125,
-                   126, 127, 128, 129, 130, 131, 132, 133, 141, 144, 145, 148, 151, 160,
-                   161, 162, 163, 164, 166, 167, 168, 169, 170, 171, 178, 179, 180, 181,
-                   182, 183, 184, 185, 186, 187, 188, 191, 192, 193, 194, 195, 217])
+            array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35,  36,
+                    37,  38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60,
+                    61,  62,  63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,
+                    98,  99, 109, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
+                   122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 141,
+                   144, 145, 148, 151, 160, 161, 162, 163, 164, 166, 167, 168, 169,
+                   170, 171, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188,
+                   191, 192, 193, 194, 195, 217])
         """
 
         max_x = max(p1[0], p2[0])
@@ -3841,12 +3879,12 @@ class Layout(object):
         Returns
         -------
         walls : list of wall tuples  (Transit format)
-        
+
         Examples
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('office.str2')
+        >>> L = Layout('DLR.ini')
         >>> walls = L.thwall(0,0)
 
         """
