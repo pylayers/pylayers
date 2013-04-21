@@ -81,7 +81,8 @@ def propout(L,g):
                 else:
                     pass
         g.add_edge(i0,i1,output=output)
-        return(g)
+
+    return(g)
 
 class Signatures(dict):
     """
@@ -174,10 +175,9 @@ class Signatures(dict):
                 elif child not in visited: # else visit other node
                     visited.append(child)
                     # explore all child connexion
-                    # TODO : limit the explorable childs
                     lc = [k for k in iter(G[child])]
                     n  = len(lc)
-                    explore=iter(G[child])
+                    explore = iter(G[child])
                     stack.append(explore)
                     #stack.append(iter(G[child]))
             else: #len(visited) == cutoff (visited list is too long)
@@ -320,11 +320,14 @@ class Signatures(dict):
             Gi = nx.DiGraph()
             for cycle in meta:
                 Gi = nx.compose(Gi,self.L.dGi[cycle])
-            # facultative update position
+            # facultative update positions
             Gi.pos = {}
             for cycle in meta:
                 Gi.pos.update(self.L.dGi[cycle].pos)
-
+            #
+            # 
+            #
+            Gi = propout(self.L,Gi)
             #for interaction source  in list of source interaction 
             for s in lis:
                 #for target interaction in list of target interaction
