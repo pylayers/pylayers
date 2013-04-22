@@ -184,7 +184,9 @@ class Signatures(dict):
 
 
         """
-        
+        print "source :",source
+        print "target :",target
+
         if cutoff < 1:
             return
 
@@ -198,13 +200,14 @@ class Signatures(dict):
             children = stack[-1]
             # next child
             child = next(children, None)
-#            print "child : ",child
-#            print "visited :",visited
+            #print "child : ",child
+            #print "visited :",visited
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
             elif len(visited) < cutoff: # if visited list is not too long
                 if child == target:  # if child is the target point
+                    #print visited + [target]
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
 #                    pdb.set_trace()
@@ -219,6 +222,7 @@ class Signatures(dict):
 
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
+                    #print visited + [target]
                     yield visited + [target]
                 stack.pop()
                 visited.pop()
@@ -502,52 +506,82 @@ class Signatures(dict):
             Gi.pos.update(self.L.dGi[cycle].pos)
 
         #
-        # 
         #
+        #
+        Gsi = nx.DiGraph()
+        Gsi.pos = {}
         # remove diffractions from Gi
         Gi = gidl(Gi)
         # add 2nd order output to edges
         Gi = edgeout(self.L,Gi)
-        #for interaction source  in list of source interaction 
+        #for interaction source  in list of source interaction
 
 
         lis = self.L.Gt.node[metasig[0]]['inter']
         lit = self.L.Gt.node[metasig[-1]]['inter']
-        pdb.set_trace()
-        for ic, cycle in enumerate(metasig):
-            ls = self.L.Gt[metasig[ic]][metasig[ic+1]]['segment']
-            lt = self.L.Gt[metasig[ic+1]][metasig[ic+2]]['segment']
+        #pdb.set_trace()
+        for ic in np.arange(len(metasig)-2):
+            # determine list of sources
+            lsource = []
+            ltarget = []
+            if ic>0:
+                ls = self.L.Gt[metasig[ic]][metasig[ic+1]]['segment']
+                for source in ls:
+                    lsource.append(str((source, metasig[ic], metasig[ic+1])))
+            else:
+                lsource = lis
 
-            for source in ls :
-                s = str((source, metasig[ic+1], metasig[ic+2]))
+            # determine list of targets
+            if ic+2 < len(metasig)-1:
+                lt = self.L.Gt[metasig[ic+1]][metasig[ic+2]]['segment']
                 for target in lt:
-                    t = str((target , metasig[ic+2] , metasig[ic+3]))
+                    ltarget.append(str((target , metasig[ic+1], metasig[ic+2])))
+            else:
+                ltarget = lit
 
+            for s in lsource :
+                #print s
+                for t in ltarget:
+                    #print t
                     paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+                    print paths
+                    #pdb.set_trace()
+                    for path in paths:
+                        itm1 = path[0]
+                        if itm1 not in Gsi.node.keys():
+                            Gsi.add_node(itm1)
+                            Gsi.pos[itm1]=self.L.Gi.pos[itm1]
+                        for it in path[1:]:
+                            if it not in Gsi.node.keys():
+                                Gsi.add_node(it)
+                                Gsi.pos[it]=self.L.Gi.pos[it]
+                            Gsi.add_edge(itm1,it)
+                            itm1 = it
                 else:
                     #paths = [[nt]]
                     paths = [[s]]
-                ### supress the followinfg loops .
-                for path in paths:
-                    sigarr = np.array([],dtype=int).reshape(2, 0)
-                    for interaction in path:
-
-                        it = eval(interaction)
-                        if type(it) == tuple:
-                            if len(it)==2: #reflexion
-                                sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]],[1]],dtype=int)))
-                            if len(it)==3: #transmission
-                                sigarr = np.hstack((sigarr,
-                                                np.array([[it[0]],[2]],dtype=int)))
-                        elif it < 0: #diffraction
-                            sigarr = np.hstack((sigarr,
-                                                np.array([[it],[3]],dtype=int)))
-                    #print sigarr
-                    try:
-                        self[len(path)] = np.vstack((self[len(path)],sigarr))
-                    except:
-                        self[len(path)] = sigarr
+        return(Gsi)
+                ### supress the following loops .
+#                for path in paths:
+#                    sigarr = np.array([],dtype=int).reshape(2, 0)
+#                    for interaction in path:
+#
+#                        it = eval(interaction)
+#                        if type(it) == tuple:
+#                            if len(it)==2: #reflexion
+#                                sigarr = np.hstack((sigarr,
+#                                                np.array([[it[0]],[1]],dtype=int)))
+#                            if len(it)==3: #transmission
+#                                sigarr = np.hstack((sigarr,
+#                                                np.array([[it[0]],[2]],dtype=int)))
+#                        elif it < 0: #diffraction
+#                            sigarr = np.hstack((sigarr,
+#                                                np.array([[it],[3]],dtype=int)))
+#                    #print sigarr
+#                    try:
+#                        self[len(path)] = np.vstack((self[len(path)],sigarr))
+#                    except:
+#                        self[len(path)] = sigarr
 
 
 #        for s in lis:

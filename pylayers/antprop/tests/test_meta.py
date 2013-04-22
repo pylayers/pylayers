@@ -38,71 +38,71 @@ S   = Signatures(L,nc1,nc2)
 metasig = S.meta()
 print "S.run"
 a=time.time()
-S.run(metasig,cutoff=6)
+Gsi = S.run2(0,3,cutoff=3)
 b=time.time()
 print b-a
-#S.run(L,metasig,cutoff=3)
-print "r = S.rays "
-r = S.rays(ptx,prx)
-print "r3 = r.to3D "
-r3 = r.to3D()
-print "r3.locbas "
-r3.locbas(L)
-print "r3.fillinter "
-r3.fillinter(L)
-r3.show(L)
-plt.show()
-
-config = ConfigParser.ConfigParser()
-_filesimul = 'default.ini'
-filesimul = pyu.getlong(_filesimul, "ini")
-config.read(filesimul)
-fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
-                   eval(config.get("frequency", "fghzmax")),
-                   eval(config.get("frequency", "nf")))
-
-Cn=r3.eval(fGHz)
-
-Cn.freq=Cn.fGHz
-sco=Cn.prop2tran(a='theta',b='theta')
-wav = wvf.Waveform()
-ciro = sco.applywavB(wav.sfg)
-
-#raynumber = 4
-
-#fig=plt.figure('Cpp')
-#f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
-
-#r3d.info(raynumber)
-# plt.show()
-
-
-
+##S.run(L,metasig,cutoff=3)
+#print "r = S.rays "
+#r = S.rays(ptx,prx)
+#print "r3 = r.to3D "
+#r3 = r.to3D()
+#print "r3.locbas "
+#r3.locbas(L)
+#print "r3.fillinter "
+#r3.fillinter(L)
+#r3.show(L)
+#plt.show()
 #
-#c11 = r3d.Ctilde[:,:,0,0]
-#c12 = r3d.Ctilde[:,:,0,1]
-#c21 = r3d.Ctilde[:,:,1,0]
-#c22 = r3d.Ctilde[:,:,1,1]
+#config = ConfigParser.ConfigParser()
+#_filesimul = 'default.ini'
+#filesimul = pyu.getlong(_filesimul, "ini")
+#config.read(filesimul)
+#fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
+#                   eval(config.get("frequency", "fghzmax")),
+#                   eval(config.get("frequency", "nf")))
+#
+#Cn=r3.eval(fGHz)
+#
+#Cn.freq=Cn.fGHz
+#sco=Cn.prop2tran(a='theta',b='theta')
+#wav = wvf.Waveform()
+#ciro = sco.applywavB(wav.sfg)
+#
+##raynumber = 4
+#
+##fig=plt.figure('Cpp')
+##f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
+#
+##r3d.info(raynumber)
+## plt.show()
 #
 #
 #
-#Cn=Ctilde()
-#Cn.Cpp = bs.FUsignal(r3d.I.f, c11)
-#Cn.Ctp = bs.FUsignal(r3d.I.f, c12)
-#Cn.Cpt = bs.FUsignal(r3d.I.f, c21)
-#Cn.Ctt = bs.FUsignal(r3d.I.f, c22)
-#Cn.nfreq = r3d.I.nf
-#Cn.nray = r3d.nray
-#Cn.tauk=r3d.delays
+##
+##c11 = r3d.Ctilde[:,:,0,0]
+##c12 = r3d.Ctilde[:,:,0,1]
+##c21 = r3d.Ctilde[:,:,1,0]
+##c22 = r3d.Ctilde[:,:,1,1]
+##
+##
+##
+##Cn=Ctilde()
+##Cn.Cpp = bs.FUsignal(r3d.I.f, c11)
+##Cn.Ctp = bs.FUsignal(r3d.I.f, c12)
+##Cn.Cpt = bs.FUsignal(r3d.I.f, c21)
+##Cn.Ctt = bs.FUsignal(r3d.I.f, c22)
+##Cn.nfreq = r3d.I.nf
+##Cn.nray = r3d.nray
+##Cn.tauk=r3d.delays
+##
+##raynumber = 4
+##
+##fig=plt.figure('Cpp')
+##f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
+##
 #
-#raynumber = 4
 #
-#fig=plt.figure('Cpp')
-#f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
 #
-
-
-
-
-
-
+#
+#
+#
