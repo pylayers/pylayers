@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
 from visual import *
 import  pdb as pdb
-
+import pylayers.util.plotutil as pltu
 
 
 def dist (A,B):
@@ -145,9 +145,13 @@ if __name__ == '__main__':
     fig = plt.figure()
 
     ax = fig.add_subplot(111, projection='3d')
-    frameID = 30
+    frameID = 75
     ax.scatter(c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
     ax.axis('scaled')
-    B.CylinderModel()
+    B.CylinderModel(frameID)
+    fig  = plt.figure()
+    for i in range(2,B.c.shape[0]):
+		pltu.cylinder(fig,B.c[i,1:4],B.c[i,4:7],B.c[i,7])	
 
+    plt.axis('scaled')
     plt.show()
