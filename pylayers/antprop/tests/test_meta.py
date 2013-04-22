@@ -2,8 +2,9 @@ from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
 import networkx as nx
 import numpy as np
+import time
 
-L=Layout('DLR.ini')
+L=Layout('WHERE1.ini')
 try:
     L.dumpr()
 except:
@@ -12,7 +13,7 @@ except:
 #L.build()
 #L.dumpw()
 nc1 = 1
-nc2 = 15
+nc2 = 58
 
 poly1 = L.Gt.node[nc1]['polyg']
 cp1 = poly1.centroid.xy
@@ -31,10 +32,12 @@ print d,tau
 
 
 S   = Signatures(L,nc1,nc2)
-metasig = [S.meta()]
+metasig = S.meta()
 print "S.run"
-S.run(metasig,cutoff=5)
-
+a=time.time()
+S.run(metasig,cutoff=6)
+b=time.time()
+print b-a
 
 #S.run(L,metasig,cutoff=3)
 print "r = S.rays "
