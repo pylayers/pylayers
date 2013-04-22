@@ -2454,6 +2454,10 @@ class Layout(object):
                     p = grid[ix, iy, :]
                     seglist, theta = self.layeronlink(p, Tx)
 
+
+
+
+
     def seginline(self, p1, p2):
         """
         Returns the intersection between a given line and all segments
@@ -3094,7 +3098,8 @@ class Layout(object):
             if len(intersection_vnodes) > 1:
                 #print intersection_vnodes,len(intersection_vnodes)
                 #print k[0],k[1]
-                self.Gt.add_edge(k[0], k[1])
+                segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                self.Gt.add_edge(k[0], k[1],segment= segment)
 
         #
         # Construct the polygon associated to each cycle

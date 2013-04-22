@@ -4,8 +4,10 @@ from pylayers.antprop.channel import *
 import pylayers.signal.waveform as wvf
 import networkx as nx
 import numpy as np
+import time
 
-L=Layout('DLR.ini')
+#L = Layout('WHERE1.ini')
+L = Layout('defstr2.ini')
 try:
     L.dumpr()
 except:
@@ -13,8 +15,8 @@ except:
     L.dumpw()
 #L.build()
 #L.dumpw()
-nc1 = 1
-nc2 = 15
+nc1 = 0
+nc2 = 3
 
 poly1 = L.Gt.node[nc1]['polyg']
 cp1 = poly1.centroid.xy
@@ -33,11 +35,12 @@ print d,tau
 
 
 S   = Signatures(L,nc1,nc2)
-metasig = [S.meta()]
+metasig = S.meta()
 print "S.run"
-S.run(metasig,cutoff=4)
-
-
+a=time.time()
+S.run(metasig,cutoff=6)
+b=time.time()
+print b-a
 #S.run(L,metasig,cutoff=3)
 print "r = S.rays "
 r = S.rays(ptx,prx)
@@ -73,7 +76,6 @@ ciro = sco.applywavB(wav.sfg)
 #r3d.info(raynumber)
 # plt.show()
 
-#=======
 
 
 #
