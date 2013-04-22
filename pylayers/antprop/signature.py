@@ -77,10 +77,10 @@ def propout(L,g):
                 d1 = np.dot(v01n,l1)
                 d2 = np.dot(l1,v12n)
                 if d1*d2>=0:
-                    output.append(i2)
+                    output.append(str(i2))
                 else:
                     pass
-        g.add_edge(i0,i1,output=output)
+        g.add_edge(str(i0),str(i1),output=output)
 
     return(g)
 
@@ -152,6 +152,7 @@ class Signatures(dict):
 
 
         """
+        
         if cutoff < 1:
             return
 
@@ -159,87 +160,91 @@ class Signatures(dict):
         # stack is a list of iterators
         stack = [iter(G[source])]
         # while the list of iterators is not void
+
         while stack: #
             # children is the last iterator of stack
             children = stack[-1]
             # next child
             child = next(children, None)
-            print "child : ",child
-            print "visited :",visited
-            if child is None: # if no more child
+#            print "child : ",child
+#            print "visited :",visited
+            if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
             elif len(visited) < cutoff: # if visited list is not too long 
                 if child == target:  # if child is the target point 
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
+#                    pdb.set_trace()
+                    stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
-                    # explore all child connexion
-                    lc = [k for k in iter(G[child])]
-                    n  = len(lc)
-                    explore = iter(G[child])
-                    stack.append(explore)
-                    #stack.append(iter(G[child]))
+#                    # explore all child connexion
+#                    lc = [k for k in iter(G[child])]
+#                    n  = len(lc)
+#                    explore = iter(G[child])
+#                    stack.append(explore)
+
+
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
                     yield visited + [target]
                 stack.pop()
                 visited.pop()
 
-    def all_simple_paths(self,G, source, target, cutoff=None):
-        """ all_simple_paths
+#    def all_simple_paths(self,G, source, target, cutoff=None):
+#        """ all_simple_paths
 
-        Parameters
-        ----------
+#        Parameters
+#        ----------
 
-        G : networkx Graph Gi
-        source : int
-        target : int 
-        cutoff : int
+#        G : networkx Graph Gi
+#        source : int
+#        target : int 
+#        cutoff : int
 
-        Notes
-        -----
+#        Notes
+#        -----
 
-        adapted from all_simple_path of networkx 
+#        adapted from all_simple_path of networkx 
 
 
-        """
-        if cutoff < 1:
-            return
+#        """
+#        if cutoff < 1:
+#            return
 
-        visited = [source]
-        # stack is a list of iterators
-        stack = [iter(G[source])]
-        # while the list of iterators is not void
-        while stack: #
-            # children is the last iterator of stack
-            children = stack[-1]
-            # next child
-            child = next(children, None)
-            if child is None: # if no more child
-                stack.pop()   # remove last iterator
-                visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list is not too long 
-                if child == target:  # if child is the target point 
-                    yield visited + [target] # output signature
-                elif child not in visited: # else visit other node
-                    visited.append(child)
-                    # explore all child connexion
-                    # TODO : limit the explorable childs
-                    lc = [k for k in iter(G[child])]
-                    n  = len(lc)
-                    if n >12:
-                        explore=iter([lc[k] for k in
-                                      np.unique(np.random.randint(0,n,12))])
-                    else:
-                        explore=iter(G[child])
-                    stack.append(explore)
-                    #stack.append(iter(G[child]))
-            else: #len(visited) == cutoff (visited list is too long)
-                if child == target or target in children:
-                    yield visited + [target]
-                stack.pop()
-                visited.pop()
+#        visited = [source]
+#        # stack is a list of iterators
+#        stack = [iter(G[source])]
+#        # while the list of iterators is not void
+#        while stack: #
+#            # children is the last iterator of stack
+#            children = stack[-1]
+#            # next child
+#            child = next(children, None)
+#            if child is None: # if no more child
+#                stack.pop()   # remove last iterator
+#                visited.pop() # remove from visited list
+#            elif len(visited) < cutoff: # if visited list is not too long 
+#                if child == target:  # if child is the target point 
+#                    yield visited + [target] # output signature
+#                elif child not in visited: # else visit other node
+#                    visited.append(child)
+#                    # explore all child connexion
+#                    # TODO : limit the explorable childs
+#                    lc = [k for k in iter(G[child])]
+#                    n  = len(lc)
+#                    if n >12:
+#                        explore=iter([lc[k] for k in
+#                                      np.unique(np.random.randint(0,n,12))])
+#                    else:
+#                        explore=iter(G[child])
+#                    stack.append(explore)
+#                    #stack.append(iter(G[child]))
+#            else: #len(visited) == cutoff (visited list is too long)
+#                if child == target or target in children:
+#                    yield visited + [target]
+#                stack.pop()
+#                visited.pop()
 
     def run(self,metasig,cutoff=1):
         """ get signatures (in one list of arrays) between tx and rx
@@ -316,53 +321,53 @@ class Signatures(dict):
         #ntr = np.intersect1d(ndt, ndr)
         li = np.intersect1d(lis, lit)
 
-        for meta in metasig:
-            Gi = nx.DiGraph()
-            for cycle in meta:
-                Gi = nx.compose(Gi,self.L.dGi[cycle])
-            # facultative update positions
-            Gi.pos = {}
-            for cycle in meta:
-                Gi.pos.update(self.L.dGi[cycle].pos)
-            #
-            # 
-            #
-            Gi = propout(self.L,Gi)
-            #for interaction source  in list of source interaction 
-            for s in lis:
-                #for target interaction in list of target interaction
-                for t in lit:
+#        for meta in metasig:
+#            Gi = nx.DiGraph()
+#            for cycle in meta:
+#                Gi = nx.compose(Gi,self.L.dGi[cycle])
+#            # facultative update positions
+#            Gi.pos = {}
+#            for cycle in meta:
+#                Gi.pos.update(self.L.dGi[cycle].pos)
+#            #
+#            # 
+#            #
+        Gi = propout(self.L,self.L.Gi)
+        #for interaction source  in list of source interaction 
+        for s in lis:
+            #for target interaction in list of target interaction
+            for t in lit:
 
-                    if (s != t):
-                        #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
-                        #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
-                        paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
-                        #paths = [nx.shortest_path(Gi,source=s,target=t)]
+                if (s != t):
+                    #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                    #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                    paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+                    #paths = [nx.shortest_path(Gi,source=s,target=t)]
 
-                    else:
-                        #paths = [[nt]]
-                        paths = [[s]]
-                    ### supress the followinfg loops .
-                    for path in paths:
-                        sigarr = np.array([],dtype=int).reshape(2, 0)
-                        for interaction in path:
+                else:
+                    #paths = [[nt]]
+                    paths = [[s]]
+                ### supress the followinfg loops .
+                for path in paths:
+                    sigarr = np.array([],dtype=int).reshape(2, 0)
+                    for interaction in path:
 
-                            it = eval(interaction)
-                            if type(it) == tuple:
-                                if len(it)==2: #reflexion
-                                    sigarr = np.hstack((sigarr,
-                                                    np.array([[it[0]],[1]],dtype=int)))
-                                if len(it)==3: #transmission
-                                    sigarr = np.hstack((sigarr,
-                                                    np.array([[it[0]],[2]],dtype=int)))
-                            elif it < 0: #diffraction
+                        it = eval(interaction)
+                        if type(it) == tuple:
+                            if len(it)==2: #reflexion
                                 sigarr = np.hstack((sigarr,
-                                                    np.array([[it],[3]],dtype=int)))
-                        #print sigarr
-                        try:
-                            self[len(path)] = np.vstack((self[len(path)],sigarr))
-                        except:
-                            self[len(path)] = sigarr
+                                                np.array([[it[0]],[1]],dtype=int)))
+                            if len(it)==3: #transmission
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]],[2]],dtype=int)))
+                        elif it < 0: #diffraction
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it],[3]],dtype=int)))
+                    #print sigarr
+                    try:
+                        self[len(path)] = np.vstack((self[len(path)],sigarr))
+                    except:
+                        self[len(path)] = sigarr
 
     def meta(self):
         G = self.L.Gt

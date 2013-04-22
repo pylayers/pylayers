@@ -12,7 +12,7 @@ except:
 #L.build()
 #L.dumpw()
 nc1 = 1
-nc2 = 12
+nc2 = 15
 
 poly1 = L.Gt.node[nc1]['polyg']
 cp1 = poly1.centroid.xy
@@ -33,7 +33,7 @@ print d,tau
 S   = Signatures(L,nc1,nc2)
 metasig = [S.meta()]
 print "S.run"
-S.run(metasig,cutoff=3)
+S.run(metasig,cutoff=4)
 
 
 #S.run(L,metasig,cutoff=3)
