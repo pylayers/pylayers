@@ -45,7 +45,6 @@ def gidl(g):
     return(g.subgraph(edlist))
 
 
-
 def edgeout(L,g):
     """
 
@@ -188,8 +187,8 @@ class Signatures(dict):
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list is not too long 
-                if child == target:  # if child is the target point 
+            elif len(visited) < cutoff: # if visited list is not too long
+                if child == target:  # if child is the target point
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
 #                    pdb.set_trace()
@@ -281,33 +280,13 @@ class Signatures(dict):
             self.L.dGi
         except:
             self.L.buildGi2()
-        # all the vnodes >0  from the room
-        #
-        #NroomTx = self.L.pt2ro(tx)
-        #NroomRx = self.L.pt2ro(rx)
-        #print NroomTx,NroomRx
-
-        #if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
-        #    raise AttributeError('Tx or Rx is not in Gr')
-
-        # list of interaction in roomTx 
-        # list of interaction in roomRx
-        #ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
-        #ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
 
         lis = self.L.Gt.node[self.source]['inter']
         lit = self.L.Gt.node[self.target]['inter']
 
-        # source
-        #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
-        #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
 
         lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
         lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
-
-        # target
-        # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
-        # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
 
         litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
         litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
@@ -317,25 +296,13 @@ class Signatures(dict):
         # tx attachs to out transmisision point
         # rx attachs to in transmission point
 
-        #
-        # WARNING : room number <> cycle number
-        #
-
-        #ncytx = self.L.Gr.node[NroomTx]['cycle']
-        #ncyrx = self.L.Gr.node[NroomRx]['cycle']
-
-        #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
-        #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
 
         lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
         litT = filter(lambda l: eval(l)[1]<>self.target,litT)
 
-        #ndt = ndt1 + ndt2
-        #ndr = ndr1 + ndr2
         lis  = lisT + lisR
         lit  = litT + litR
 
-        #ntr = np.intersect1d(ndt, ndr)
         li = np.intersect1d(lis, lit)
 
 #        for meta in metasig:
@@ -347,7 +314,7 @@ class Signatures(dict):
 #            for cycle in meta:
 #                Gi.pos.update(self.L.dGi[cycle].pos)
 #            #
-#            # 
+#            #
 #            #
         # remove diffractions from Gi
         Gi = gidl(self.L.Gi)
@@ -509,8 +476,7 @@ class Signatures(dict):
         rays = Rays(ptx,prx)
         for k in self:
             tsig = self[k]
-            print k
-            shsig = np.shape(tsig)
+            shsig = np.shape(tsig) 
             for l in range(shsig[0]/2):
                 sig = tsig[2*l:2*l+2,:]
                 s   = Signature(sig)
