@@ -703,33 +703,33 @@ class Rays(dict):
             for i in range(0, l):
 
 
-###########################################
-#                # Divergence factor D
-##                 not yet implementented
-###########################################
-                #if i == 1:
-                    #D0=1./si0[:,1]
-                    #rho1=si0[:,1]*alpha[:,i]
-                    #rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
-                    #D=np.sqrt(
-                     #( (rho1 ) / (rho1 + sout[:,i]) )
-                     #*( (rho2) / (rho2 + sout[:,i])))
-                    #D=D*D0
-                    #rho1=rho1+(sout[:,i]*alpha[:,i])
-                    #rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+############################################
+##                # Divergence factor D
+###                 not yet implementented
+############################################
+#                if i == 0:
+#                    D0=1./si0[:,1]
+#                    rho1=si0[:,1]*alpha[:,i]
+#                    rho2=si0[:,1]*alpha[:,i]*gamma[:,i]
+#                    D=np.sqrt(
+#                     ( (rho1 ) / (rho1 + sout[:,i]) )
+#                     *( (rho2) / (rho2 + sout[:,i])))
+#                    D=D*D0
+#                    rho1=rho1+(sout[:,i]*alpha[:,i])
+#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
 
-#                     gerer le loss
-                    #if np.isnan(D).any():
-                        #p=np.nonzero(np.isnan(D))[0]
-                        #D[p]=1./sout[p,1]
-                #else :
-                    #D=np.sqrt(
-                     #( (rho1 ) / (rho1 + sout[:,i]) )
-                     #*( (rho2) / (rho2 + sout[:,i])))
-#
-                    #rho1=rho1+(sout[:,i]*alpha[:,i])
-                    #rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
-###########################################
+##                     gerer le loss
+#                    if np.isnan(D).any():
+#                        p=np.nonzero(np.isnan(D))[0]
+#                        D[p]=1./sout[p,1]
+#                else :
+#                    D=np.sqrt(
+#                     ( (rho1 ) / (rho1 + sout[:,i]) )
+#                     *( (rho2) / (rho2 + sout[:,i])))
+
+#                    rho1=rho1+(sout[:,i]*alpha[:,i])
+#                    rho2=rho2+(sout[:,i]*alpha[:,i]*gamma[:,i])
+############################################
 
                 #  A0  (X dot Y)
                 #  |    |     |
