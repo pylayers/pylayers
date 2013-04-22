@@ -33,7 +33,7 @@ print d,tau
 S   = Signatures(L,nc1,nc2)
 metasig = [S.meta()]
 print "S.run"
-S.run(metasig,cutoff=4)
+S.run(metasig,cutoff=5)
 
 
 #S.run(L,metasig,cutoff=3)

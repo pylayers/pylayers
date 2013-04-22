@@ -29,7 +29,24 @@ def showsig(L,s,tx,rx):
     plt.show()
     L.display['edlabel']=False
 
-def propout(L,g):
+
+def gidl(g):
+    """ gi without diffraction
+
+    Return
+    ------
+   """
+
+    edlist=[]
+    for n in g.nodes():
+        en = eval(n)
+        if type(en) == tuple :
+            edlist.append(n)
+    return(g.subgraph(edlist))
+
+
+
+def edgeout(L,g):
     """
 
     Parameters
@@ -332,7 +349,10 @@ class Signatures(dict):
 #            #
 #            # 
 #            #
-        Gi = propout(self.L,self.L.Gi)
+        # remove diffractions from Gi
+        Gi = gidl(self.L.Gi)
+        # add 2nd order output to edges
+        Gi = edgeout(self.L,Gi)
         #for interaction source  in list of source interaction 
         for s in lis:
             #for target interaction in list of target interaction
