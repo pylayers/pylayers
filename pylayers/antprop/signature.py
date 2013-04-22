@@ -56,9 +56,9 @@ class Signatures(dict):
         self.pTx = pTx
         self.pRx = pRx
 
-    def __repr__(self):
-        s = 
-        return(s)
+    #def __repr__(self):
+        #s = 
+        #return(s)
     def info(self):
         """
         """
