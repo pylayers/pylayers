@@ -695,7 +695,22 @@ class Signatures(dict):
             nbi = k/2
             nr = ns/k
             self[nbi]=(np.array(sig[k]).reshape(nr,nbi,2)).swapaxes(0,2)
-            
+
+
+        d={}
+
+        for k in self :
+            a= self[k]
+            nbr = np.shape((a[0]))[1]
+            d[k]=np.zeros((2*nbr,k),dtype=int)
+            for r in range(nbr):
+                for i in range(k):
+                    d[k][2*r,i]=a[0,i,r]
+                    d[k][2*r+1,i]=a[1,i,r]
+        pdb.set_trace()
+        self.update(d)
+
+        # self [nbi] = 2 x i x r
 
 
                 ### supress the following loops .
@@ -947,10 +962,10 @@ class Signature(object):
         self.seq = sig[0, :]
         self.typ = sig[1, :]
 
-    def __repr__(self):
-        s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
-        s = s + self.seq + '\n' + self.typ
-        return s
+#    def __repr__(self):
+#        s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
+#        s = s + self.seq + '\n' + self.typ
+#        return s
 
     def info(self):
         """

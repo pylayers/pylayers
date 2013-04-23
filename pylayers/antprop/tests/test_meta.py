@@ -38,7 +38,8 @@ metasig = S.meta()
 print "S.run"
 L.buildGi()
 a=time.time()
-S.run2(nc1,nc2,cutoff=2)
+S.run2(nc1,nc2,cutoff=3)
+
 
 
 #Gsi.add_node('Tx')
