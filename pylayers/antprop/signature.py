@@ -424,10 +424,10 @@ class Signatures(dict):
             sigslist = numpy.ndarray
 
         """
-        try:
-            self.L.dGi
-        except:
-            self.L.buildGi2()
+#        try:
+#            self.L.dGi
+#        except:
+#            self.L.buildGi2()
 
         # all the vnodes >0  from the room
         #
@@ -492,10 +492,11 @@ class Signatures(dict):
 #            #
 #            #
 #            #
-        metasig=self.lineofcycle(cs,ct)
+#        metasig=self.lineofcycle(cs,ct)
+        print '3',self.L.cycleinline(4,36)
+        metasig=self.L.cycleinline(cs,ct)
 
-
-#        for meta in metasig:
+##        for meta in metasig:
         Gi = nx.DiGraph()
         for cycle in metasig:
             Gi = nx.compose(Gi,self.L.dGi[cycle])
@@ -505,9 +506,9 @@ class Signatures(dict):
         for cycle in metasig:
             Gi.pos.update(self.L.dGi[cycle].pos)
 
-        #
-        #
-        #
+#        #
+#        #
+#        #
         Gsi = nx.DiGraph()
         Gsi.pos = {}
         # remove diffractions from Gi
@@ -519,6 +520,27 @@ class Signatures(dict):
 
         lis = self.L.Gt.node[metasig[0]]['inter']
         lit = self.L.Gt.node[metasig[-1]]['inter']
+        # filter lis remove transmission coming from outside
+        lli = []        
+        for li in lis:
+            print lli
+            ei = eval(li)
+            if len(ei)==2:
+                lli.append(li)
+            if len(ei)==3:
+                if ei[2]<>cs:
+                   lli.append(li)
+        # filter lit remove transmission going outside
+        llt = []        
+        for li in lit:
+            ei = eval(li)
+            if len(ei)==2:
+                llt.append(li)
+            if len(ei)==3:
+                if ei[2]==ct:
+                   llt.append(li)
+        lis = lli
+        lit = llt 
         #pdb.set_trace()
         for ic in np.arange(len(metasig)-2):
             # determine list of sources
@@ -617,6 +639,20 @@ class Signatures(dict):
 #                        self[len(path)] = np.vstack((self[len(path)],sigarr))
 #                    except:
 #                        self[len(path)] = sigarr
+
+    def run3(self,cs,ct,cutoff=1):
+
+        ns = nx.neighbors(self.L.Gt,cs)
+        nt = nx.neighbors(self.L.Gt,ct)
+        print ns
+        print nt
+        path=[]
+        for s in ns:
+            for t in nt:
+                p=nx.dijkstra_path(self.L.Gt,s,t)
+                if not cs in p and not ct in p:
+                    path.append(p)
+        return path
 
 
     def meta(self):

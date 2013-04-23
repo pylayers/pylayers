@@ -2431,6 +2431,16 @@ class Layout(object):
 
         Dx = max_x - min_x
         Dy = max_y - min_y
+        
+        if Dx < 0.5:
+            max_x=max_x+0.5
+            min_x=min_x-0.5
+
+        if Dy < 0.5:
+            max_y=max_y+0.5
+            min_y=min_y-0.5
+
+
 
         if (Dy < Dx):
             up = np.nonzero((self.pt[0, :] < max_x) & (self.pt[ 0, :] > min_x))[0]
@@ -2455,6 +2465,43 @@ class Layout(object):
                     seglist, theta = self.layeronlink(p, Tx)
 
 
+    def cycleinline(self, c1, c2):
+        """
+        Returns the intersection between a given line and all segments
+        Parameters
+        ----------
+            p1 : numpy.ndarray
+            p2 : numpy.ndarray
+        Returns
+        -------
+            I : numpy.ndarray
+        """
+        I = np.array([]).reshape(3,0)
+
+        poly1 = self.Gt.node[c1]['polyg']
+        p1t = poly1.centroid.xy
+
+        poly2 = self.Gt.node[c2]['polyg']
+        p2t = poly2.centroid.xy
+        
+        p1 = np.array([p1t[0][0],p1t[1][0]])
+        p2 = np.array([p2t[0][0],p2t[1][0]])
+
+        line = sh.LineString((p1,p2))
+        el = self.seginframe(p1,p2)
+        
+        lc = []
+        for seg in el:
+            ta, he = self.Gs.neighbors(seg)
+            pa = np.array(self.Gs.pos[ta])
+            pb = np.array(self.Gs.pos[he])
+
+            segline = sh.LineString((pa,pb))
+            if line.intersects(segline):
+                print seg
+                lc.extend(self.Gs.node[seg]['ncycles'])
+        return np.unique(lc)
+                
 
 
 
@@ -2947,7 +2994,9 @@ class Layout(object):
                         write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
                 except:
                     raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
-
+        root,ext = os.path.splitext(self.filename)
+        if ext == '.ini':
+            self.saveini(self.filename)
 
     def dumpr(self, graph='trwcvi'):
         """ read a dump of given Graph
