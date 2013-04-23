@@ -16,7 +16,7 @@ except:
 #L.build()
 #L.dumpw()
 nc1 = 4
-nc2 = 36
+nc2 = 27
 
 poly1 = L.Gt.node[nc1]['polyg']
 cp1 = poly1.centroid.xy
@@ -32,37 +32,37 @@ tau = d/0.3
 print d,tau
 
 
-
-print '1',L.cycleinline(4,36)
 S   = Signatures(L,nc1,nc2)
-print '2',L.cycleinline(4,36)
+
 metasig = S.meta()
 print "S.run"
 a=time.time()
-Gsi = S.run2(nc1,nc2,cutoff=3)
-Gsi.add_node('Tx')
-Gsi.pos['Tx']=tuple(ptx[:2])
+sig = S.run2(nc1,nc2,cutoff=2)
+#Gsi.add_node('Tx')
+#Gsi.pos['Tx']=tuple(ptx[:2])
 
-for i in L.Gt.node[nc1]['inter']:
-    if i in  Gsi.nodes():
-        Gsi.add_edge('Tx',i)
+#for i in L.Gt.node[nc1]['inter']:
+#    if i in  Gsi.nodes():
+#        Gsi.add_edge('Tx',i)
 
-Gsi.add_node('Rx')
-Gsi.pos['Rx']=tuple(prx[:2])
+#Gsi.add_node('Rx')
+#Gsi.pos['Rx']=tuple(prx[:2])
 
-for i in L.Gt.node[nc2]['inter']:
-    if i in  Gsi.nodes():
-        Gsi.add_edge(i,'Rx')
+#for i in L.Gt.node[nc2]['inter']:
+#    if i in  Gsi.nodes():
+#        Gsi.add_edge(i,'Rx')
 
-sig=list(nx.all_simple_paths(Gsi,'Tx','Rx',cutoff=10))
+#print 'signatures'
+#co = nx.dijkstra_path_length(Gsi,'Tx','Rx')
+#sig=list(nx.all_simple_paths(Gsi,'Tx','Rx',cutoff=co+2))
 
 
 
-b=time.time()
-print b-a
-f,ax=L.showG('t')
-nx.draw(Gsi,Gsi.pos,ax=ax)
-plt.show()
+#b=time.time()
+#print b-a
+#f,ax=L.showG('t')
+#nx.draw(Gsi,Gsi.pos,ax=ax)
+#plt.show()
 
 ##S.run(L,metasig,cutoff=3)
 #print "r = S.rays "

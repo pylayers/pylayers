@@ -493,33 +493,40 @@ class Signatures(dict):
 #            #
 #            #
 #        metasig=self.lineofcycle(cs,ct)
-        print '3',self.L.cycleinline(4,36)
-        metasig=self.L.cycleinline(cs,ct)
 
-##        for meta in metasig:
+############################################################
+##       obtain the list of c ycle in line
+
+        lcil=self.L.cycleinline(cs,ct)
+
+############################################################
+##       Compose graph of interaction with list of cycles in line
+
         Gi = nx.DiGraph()
-        for cycle in metasig:
+        for cycle in lcil:
             Gi = nx.compose(Gi,self.L.dGi[cycle])
 
         # facultative update positions
         Gi.pos = {}
-        for cycle in metasig:
+        for cycle in lcil:
             Gi.pos.update(self.L.dGi[cycle].pos)
 
 #        #
 #        #
 #        #
-        Gsi = nx.DiGraph()
-        Gsi.pos = {}
+        Gf = nx.DiGraph()
+        Gf.pos = {}
         # remove diffractions from Gi
         Gi = gidl(Gi)
         # add 2nd order output to edges
         Gi = edgeout(self.L,Gi)
         #for interaction source  in list of source interaction
 
+####################################################
+#        filter list of interactions in termination cycles
 
-        lis = self.L.Gt.node[metasig[0]]['inter']
-        lit = self.L.Gt.node[metasig[-1]]['inter']
+        lis = self.L.Gt.node[lcil[0]]['inter']
+        lit = self.L.Gt.node[lcil[-1]]['inter']
         # filter lis remove transmission coming from outside
         lli = []        
         for li in lis:
@@ -541,23 +548,28 @@ class Signatures(dict):
                    llt.append(li)
         lis = lli
         lit = llt 
-        #pdb.set_trace()
-        for ic in np.arange(len(metasig)-2):
+
+
+#################################################
+#       propaths (a.k.a. all simple path) per adjacent cycles along cycles in line
+#       Obtaining Gf: filtred graph of Gi with Gc ( rename Gt in Gc )
+
+        for ic in np.arange(len(lcil)-2):
             # determine list of sources
             lsource = []
             ltarget = []
             if ic>0:
-                ls = self.L.Gt[metasig[ic]][metasig[ic+1]]['segment']
+                ls = self.L.Gt[lcil[ic]][lcil[ic+1]]['segment']
                 for source in ls:
-                    lsource.append(str((source, metasig[ic], metasig[ic+1])))
+                    lsource.append(str((source, lcil[ic], lcil[ic+1])))
             else:
                 lsource = lis
 
             # determine list of targets
-            if ic+2 < len(metasig)-1:
-                lt = self.L.Gt[metasig[ic+1]][metasig[ic+2]]['segment']
+            if ic+2 < len(lcil)-1:
+                lt = self.L.Gt[lcil[ic+1]][lcil[ic+2]]['segment']
                 for target in lt:
-                    ltarget.append(str((target , metasig[ic+1], metasig[ic+2])))
+                    ltarget.append(str((target , lcil[ic+1], lcil[ic+2])))
             else:
                 ltarget = lit
 
@@ -566,23 +578,55 @@ class Signatures(dict):
                 for t in ltarget:
                     #print t
                     paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
-                    print paths
-                    #pdb.set_trace()
+
                     for path in paths:
                         itm1 = path[0]
-                        if itm1 not in Gsi.node.keys():
-                            Gsi.add_node(itm1)
-                            Gsi.pos[itm1]=self.L.Gi.pos[itm1]
+                        if itm1 not in Gf.node.keys():
+                            Gf.add_node(itm1)
+                            Gf.pos[itm1]=self.L.Gi.pos[itm1]
                         for it in path[1:]:
-                            if it not in Gsi.node.keys():
-                                Gsi.add_node(it)
-                                Gsi.pos[it]=self.L.Gi.pos[it]
-                            Gsi.add_edge(itm1,it)
+                            if it not in Gf.node.keys():
+                                Gf.add_node(it)
+                                Gf.pos[it]=self.L.Gi.pos[it]
+                            Gf.add_edge(itm1,it)
                             itm1 = it
-                else:
-                    #paths = [[nt]]
-                    paths = [[s]]
-        return(Gsi)
+#                        else:
+#                            #paths = [[nt]]
+#                            paths = [[s]]
+
+
+############################################################
+#       Obtain position of 
+
+
+        poly1 = self.L.Gt.node[cs]['polyg']
+        cp1 = poly1.centroid.xy
+
+        poly2 = self.L.Gt.node[ct]['polyg']
+        cp2 = poly2.centroid.xy
+        pcs = np.array([cp1[0][0],cp1[1][0]])
+        pct = np.array([cp2[0][0],cp2[1][0]])
+
+        Gf.add_node('Tx')
+        Gf.pos['Tx']=tuple(pcs[:2])
+
+        for i in self.L.Gt.node[cs]['inter']:
+            if i in  Gf.nodes():
+                Gf.add_edge('Tx',i)
+
+        Gf.add_node('Rx')
+        Gf.pos['Rx']=tuple(pct[:2])
+
+        for i in self.L.Gt.node[ct]['inter']:
+            if i in  Gf.nodes():
+                Gf.add_edge(i,'Rx')
+
+        print 'signatures'
+        co = nx.dijkstra_path_length(Gf,'Tx','Rx')
+        sig=list(nx.all_simple_paths(Gf,'Tx','Rx',cutoff=co+2))
+
+
+        return(sig)
                 ### supress the following loops .
 #                for path in paths:
 #                    sigarr = np.array([],dtype=int).reshape(2, 0)

@@ -294,14 +294,16 @@ class Layout(object):
         ks = 0 # segments start at index 0 in tahe
         #ds = {}
         Nemax = max(self.Gs.node.keys())
-        self.ts = np.zeros(Nemax+1,dtype=int)
+        self.tgs = np.zeros(Nemax+1,dtype=int)
+        self.tsg = np.zeros(self.Ne,dtype=int)
 
         for node in self.Gs.node:
             if node > 0:
                 self.tahe[0,ks]=dp[nx.neighbors(self.Gs,node)[0]]
                 self.tahe[1,ks]=dp[nx.neighbors(self.Gs,node)[1]]
                 #ds[node] = ks
-                self.ts[node] = ks
+                self.tgs[node] = ks
+                self.tsg[ks]=node
                 ks = ks+1
 
         #
@@ -321,7 +323,7 @@ class Layout(object):
         #for ks in ds:
         for ks in self.Gs.node:
             if ks > 0:
-                k = self.ts[ks]
+                k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
 
 
@@ -2331,7 +2333,7 @@ class Layout(object):
 
         """
         # idx : npt
-        idx  = self.ts[iseg]
+        idx  = self.tgs[iseg]
         # tahe : 2 x npt
         tahe = self.tahe[:,idx]
         if  len(iseg)>1:
@@ -2488,19 +2490,43 @@ class Layout(object):
         p2 = np.array([p2t[0][0],p2t[1][0]])
 
         line = sh.LineString((p1,p2))
-        el = self.seginframe(p1,p2)
+
         
+        els = self.seginframe(p1,p2)
+        elg = self.tsg[els]
+
         lc = []
-        for seg in el:
+        ls=[]
+        I = np.array([]).reshape(2,0)
+        
+        for seg in elg:
             ta, he = self.Gs.neighbors(seg)
             pa = np.array(self.Gs.pos[ta])
             pb = np.array(self.Gs.pos[he])
 
             segline = sh.LineString((pa,pb))
+
+
             if line.intersects(segline):
-                print seg
                 lc.extend(self.Gs.node[seg]['ncycles'])
-        return np.unique(lc)
+                ls.append(seg)
+                psh = line.intersection(segline)
+                I = np.hstack((I, np.array([[psh.x],[psh.y]])))
+        v = (I-p1[:,np.newaxis])
+        dv = np.sum(v*v,axis=0)
+        u = np.argsort(dv)
+        lss = np.array(ls)[u]
+
+        lc=[c1]
+        for s in lss:
+            cy1,cy2 = self.Gs.node[s]['ncycles']
+            if cy1 not in lc :
+                lc.append(cy1)
+            elif cy2 not in lc :
+                lc.append(cy2)
+            else :
+                assert NameError('Bad transisiton in Layout.cycleinline')
+        return lc
                 
 
 
