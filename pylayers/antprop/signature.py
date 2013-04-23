@@ -185,8 +185,8 @@ class Signatures(dict):
 
 
         """
-        print "source :",source
-        print "target :",target
+        #print "source :",source
+        #print "target :",target
 
         if cutoff < 1:
             return
@@ -213,15 +213,8 @@ class Signatures(dict):
                     #print visited + [target]
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
-#                    pdb.set_trace()
                     stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
-#                    # explore all child connexion
-#                    lc = [k for k in iter(G[child])]
-#                    n  = len(lc)
-#                    explore = iter(G[child])
-#                    stack.append(explore)
-
 
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
@@ -232,6 +225,13 @@ class Signatures(dict):
 
 
     def calsig(self,G,dia={},cutoff=None):
+        """
+
+        G   : Gf graph
+        dia : dictionnary of interactions
+        cutoff : integer
+
+        """
         if cutoff < 1:
             return
 
@@ -467,7 +467,7 @@ class Signatures(dict):
 #                        self[len(path)] = sigarr
 
 
-    def run2(self,cs,ct,cutoff=1):
+    def run2(self,cutoff=1):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -554,6 +554,8 @@ class Signatures(dict):
 ############################################################
 ##       obtain the list of c ycle in line
 
+        cs = self.source
+        ct = self.target
         lcil=self.L.cycleinline(cs,ct)
 
 ############################################################
@@ -585,9 +587,8 @@ class Signatures(dict):
         lis = self.L.Gt.node[lcil[0]]['inter']
         lit = self.L.Gt.node[lcil[-1]]['inter']
         # filter lis remove transmission coming from outside
-        lli = []        
+        lli = []
         for li in lis:
-            print lli
             ei = eval(li)
             if len(ei)==2:
                 lli.append(li)
@@ -595,7 +596,7 @@ class Signatures(dict):
                 if ei[2]<>cs:
                    lli.append(li)
         # filter lit remove transmission going outside
-        llt = []        
+        llt = []
         for li in lit:
             ei = eval(li)
             if len(ei)==2:
@@ -604,7 +605,7 @@ class Signatures(dict):
                 if ei[2]==ct:
                    llt.append(li)
         lis = lli
-        lit = llt 
+        lit = llt
 
 
 #################################################
@@ -921,8 +922,7 @@ class Signatures(dict):
         rays = Rays(ptx,prx)
         for k in self:
             tsig = self[k]
-            shsig = np.shape(tsig) 
-            pdb.set_trace()
+            shsig = np.shape(tsig)
             for l in range(shsig[0]/2):
                 sig = tsig[2*l:2*l+2,:]
                 s   = Signature(sig)

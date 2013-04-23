@@ -9,15 +9,16 @@ import logging
 
 L = Layout('WHERE1.ini')
 #L = Layout('defstr2.ini')
-#try:
-#    L.dumpr()
-#except:
-L.build()
-L.dumpw()
+try:
+    L.dumpr()
+except:
+    L.build()
+    L.dumpw()
 #L.build()
 #L.dumpw()
-nc1 = 4
-nc2 = 27
+L.buildGi()
+nc1 = 5
+nc2 = 37
 
 poly1 = L.Gt.node[nc1]['polyg']
 cp1 = poly1.centroid.xy
@@ -32,10 +33,11 @@ d = np.sqrt(np.dot((ptx-prx),(ptx-prx)))
 tau = d/0.3
 print d,tau
 
-
+logging.info('Signature')
 S = Signatures(L,nc1,nc2)
 a =time.time()
-S.run2(nc1,nc2,cutoff=3)
+logging.info('Calculate signature')
+S.run2(cutoff=6)
 b=time.time()
 print b-a
 
@@ -69,28 +71,28 @@ print b-a
 #print "r = S.rays "
 r = S.rays(ptx,prx)
 print "r3 = r.to3D "
-#r3 = r.to3D()
-#print "r3.locbas "
-#r3.locbas(L)
+r3 = r.to3D()
+print "r3.locbas "
+r3.locbas(L)
 #print "r3.fillinter "
-#r3.fillinter(L)
-#r3.show(L)
-#plt.show()
+r3.fillinter(L)
+r3.show(L)
+plt.show()
 ##
-#config = ConfigParser.ConfigParser()
-#_filesimul = 'default.ini'
-#filesimul = pyu.getlong(_filesimul, "ini")
-#config.read(filesimul)
-#fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
-#                   eval(config.get("frequency", "fghzmax")),
-#                   eval(config.get("frequency", "nf")))
+config = ConfigParser.ConfigParser()
+_filesimul = 'default.ini'
+filesimul = pyu.getlong(_filesimul, "ini")
+config.read(filesimul)
+fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
+                   eval(config.get("frequency", "fghzmax")),
+                   eval(config.get("frequency", "nf")))
 
-#Cn=r3.eval(fGHz)
+Cn=r3.eval(fGHz)
 
-#Cn.freq=Cn.fGHz
-#sco=Cn.prop2tran(a='theta',b='theta')
-#wav = wvf.Waveform()
-#ciro = sco.applywavB(wav.sfg)
+Cn.freq=Cn.fGHz
+sco=Cn.prop2tran(a='theta',b='theta')
+wav = wvf.Waveform()
+ciro = sco.applywavB(wav.sfg)
 
 #raynumber = 4
 
