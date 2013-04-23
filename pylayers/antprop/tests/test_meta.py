@@ -38,7 +38,7 @@ S   = Signatures(L,nc1,nc2)
 metasig = S.meta()
 print "S.run"
 a=time.time()
-Gsi = S.run2(0,3,cutoff=3)
+Gsi = S.run2(0,3,cutoff=2)
 b=time.time()
 print b-a
 ##S.run(L,metasig,cutoff=3)
