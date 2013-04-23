@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.antprop.rays import Rays
+import copy
 #from numba import autojit
 
 def showsig(L,s,tx,rx):
@@ -195,8 +196,10 @@ class Signatures(dict):
         stack = [iter(G[source])]
         # while the list of iterators is not void
 
+
         while stack: #
             # children is the last iterator of stack
+
             children = stack[-1]
             # next child
             child = next(children, None)
@@ -226,6 +229,60 @@ class Signatures(dict):
                     yield visited + [target]
                 stack.pop()
                 visited.pop()
+
+
+    def calsig(self,G,dia={},cutoff=None):
+        if cutoff < 1:
+            return
+
+        di=copy.deepcopy(dia)
+        source = 'Tx'
+        target = 'Rx'
+        d={}
+
+        visited = [source]
+        stack = [iter(G[source])]
+
+        out=[]
+
+        while stack:
+#            pdb.set_trace()
+            children = stack[-1]
+            child = next(children, None)
+            if child is None:
+                stack.pop()
+                visited.pop()
+                if len(out) !=0:
+                    out.pop()
+                    out.pop()
+            elif len(visited) < cutoff:
+                if child == target:
+                    lot = len(out)
+                    try:
+                        d.update({lot:d[lot]+(out)})
+                    except:
+                        d[lot]=[]
+                        d.update({lot:d[lot]+(out)})
+#                    yield visited + [target]
+                elif child not in visited:
+                    visited.append(child)
+                    out.extend(di[child])
+                    stack.append(iter(G[child]))
+            else: #len(visited) == cutoff:
+                if child == target or target in children:
+#                    yield visited + [target]
+                    lot = len(out)
+                    try:
+                        d.update({lot:d[lot]+(out)})
+                    except:
+                        d[lot]=[]
+                        d.update({lot:d[lot]+(out)})
+                stack.pop()
+                visited.pop()
+                if len(out) !=0:
+                    out.pop()
+                    out.pop()
+        return d
 
 #    def all_simple_paths(self,G, source, target, cutoff=None):
 #        """ all_simple_paths
@@ -620,13 +677,27 @@ class Signatures(dict):
         for i in self.L.Gt.node[ct]['inter']:
             if i in  Gf.nodes():
                 Gf.add_edge(i,'Rx')
+        # a =[ 0,  1,  2,  1,  4,  1,  6,  1,  8,  1, 10, 1]
+        # aa = np.array(a)
+        # X=aa.reshape((2,3,2)) # r x i x 2
+        # Y=X.swapaxes(0,2) # 2 x i x r
+
+
+
 
         print 'signatures'
         co = nx.dijkstra_path_length(Gf,'Tx','Rx')
-        sig=list(nx.all_simple_paths(Gf,'Tx','Rx',cutoff=co+2))
+        sig=self.calsig(Gf,dia=self.L.di,cutoff=co+2)
 
 
-        return(sig)
+        for k in sig:
+            ns = len(sig[k])
+            nbi = k/2
+            nr = ns/k
+            self[nbi]=(np.array(sig[k]).reshape(nr,nbi,2)).swapaxes(0,2)
+            
+
+
                 ### supress the following loops .
 #                for path in paths:
 #                    sigarr = np.array([],dtype=int).reshape(2, 0)

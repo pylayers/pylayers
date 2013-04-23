@@ -36,8 +36,11 @@ S   = Signatures(L,nc1,nc2)
 
 metasig = S.meta()
 print "S.run"
+L.buildGi()
 a=time.time()
-sig = S.run2(nc1,nc2,cutoff=2)
+S.run2(nc1,nc2,cutoff=2)
+
+
 #Gsi.add_node('Tx')
 #Gsi.pos['Tx']=tuple(ptx[:2])
 
@@ -66,8 +69,8 @@ sig = S.run2(nc1,nc2,cutoff=2)
 
 ##S.run(L,metasig,cutoff=3)
 #print "r = S.rays "
-#r = S.rays(ptx,prx)
-#print "r3 = r.to3D "
+r = S.rays(ptx,prx)
+print "r3 = r.to3D "
 #r3 = r.to3D()
 #print "r3.locbas "
 #r3.locbas(L)
@@ -75,7 +78,7 @@ sig = S.run2(nc1,nc2,cutoff=2)
 #r3.fillinter(L)
 #r3.show(L)
 #plt.show()
-#
+##
 #config = ConfigParser.ConfigParser()
 #_filesimul = 'default.ini'
 #filesimul = pyu.getlong(_filesimul, "ini")
@@ -83,21 +86,21 @@ sig = S.run2(nc1,nc2,cutoff=2)
 #fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
 #                   eval(config.get("frequency", "fghzmax")),
 #                   eval(config.get("frequency", "nf")))
-#
+
 #Cn=r3.eval(fGHz)
-#
+
 #Cn.freq=Cn.fGHz
 #sco=Cn.prop2tran(a='theta',b='theta')
 #wav = wvf.Waveform()
 #ciro = sco.applywavB(wav.sfg)
-#
-##raynumber = 4
-#
-##fig=plt.figure('Cpp')
-##f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
-#
-##r3d.info(raynumber)
-## plt.show()
+
+#raynumber = 4
+
+#fig=plt.figure('Cpp')
+#f,ax=Cn.Cpp.plot(fig=fig,iy=np.array(([raynumber])))
+
+#r3d.info(raynumber)
+# plt.show()
 #
 #
 #

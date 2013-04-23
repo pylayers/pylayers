@@ -3638,6 +3638,11 @@ class Layout(object):
 #                                    print node1, node2
                                     #pdb.set_trace()
 
+        self.di={} # dictionnary which link nodes of Gi to node of Gs and interaction type
+                # string 2 list
+        [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
+        [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
+
 #    def showGraph(self,**kwargs):
 #        """
 #        Parameters
