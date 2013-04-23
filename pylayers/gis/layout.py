@@ -294,14 +294,16 @@ class Layout(object):
         ks = 0 # segments start at index 0 in tahe
         #ds = {}
         Nemax = max(self.Gs.node.keys())
-        self.ts = np.zeros(Nemax+1,dtype=int)
+        self.tgs = np.zeros(Nemax+1,dtype=int)
+        self.tsg = np.zeros(self.Ne,dtype=int)
 
         for node in self.Gs.node:
             if node > 0:
                 self.tahe[0,ks]=dp[nx.neighbors(self.Gs,node)[0]]
                 self.tahe[1,ks]=dp[nx.neighbors(self.Gs,node)[1]]
                 #ds[node] = ks
-                self.ts[node] = ks
+                self.tgs[node] = ks
+                self.tsg[ks]=node
                 ks = ks+1
 
         #
@@ -321,7 +323,7 @@ class Layout(object):
         #for ks in ds:
         for ks in self.Gs.node:
             if ks > 0:
-                k = self.ts[ks]
+                k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
 
 
@@ -2331,7 +2333,7 @@ class Layout(object):
 
         """
         # idx : npt
-        idx  = self.ts[iseg]
+        idx  = self.tgs[iseg]
         # tahe : 2 x npt
         tahe = self.tahe[:,idx]
         if  len(iseg)>1:
@@ -2431,6 +2433,16 @@ class Layout(object):
 
         Dx = max_x - min_x
         Dy = max_y - min_y
+        
+        if Dx < 0.5:
+            max_x=max_x+0.5
+            min_x=min_x-0.5
+
+        if Dy < 0.5:
+            max_y=max_y+0.5
+            min_y=min_y-0.5
+
+
 
         if (Dy < Dx):
             up = np.nonzero((self.pt[0, :] < max_x) & (self.pt[ 0, :] > min_x))[0]
@@ -2455,6 +2467,67 @@ class Layout(object):
                     seglist, theta = self.layeronlink(p, Tx)
 
 
+    def cycleinline(self, c1, c2):
+        """
+        Returns the intersection between a given line and all segments
+        Parameters
+        ----------
+            p1 : numpy.ndarray
+            p2 : numpy.ndarray
+        Returns
+        -------
+            I : numpy.ndarray
+        """
+        I = np.array([]).reshape(3,0)
+
+        poly1 = self.Gt.node[c1]['polyg']
+        p1t = poly1.centroid.xy
+
+        poly2 = self.Gt.node[c2]['polyg']
+        p2t = poly2.centroid.xy
+        
+        p1 = np.array([p1t[0][0],p1t[1][0]])
+        p2 = np.array([p2t[0][0],p2t[1][0]])
+
+        line = sh.LineString((p1,p2))
+
+        
+        els = self.seginframe(p1,p2)
+        elg = self.tsg[els]
+
+        lc = []
+        ls=[]
+        I = np.array([]).reshape(2,0)
+        
+        for seg in elg:
+            ta, he = self.Gs.neighbors(seg)
+            pa = np.array(self.Gs.pos[ta])
+            pb = np.array(self.Gs.pos[he])
+
+            segline = sh.LineString((pa,pb))
+
+
+            if line.intersects(segline):
+                lc.extend(self.Gs.node[seg]['ncycles'])
+                ls.append(seg)
+                psh = line.intersection(segline)
+                I = np.hstack((I, np.array([[psh.x],[psh.y]])))
+        v = (I-p1[:,np.newaxis])
+        dv = np.sum(v*v,axis=0)
+        u = np.argsort(dv)
+        lss = np.array(ls)[u]
+
+        lc=[c1]
+        for s in lss:
+            cy1,cy2 = self.Gs.node[s]['ncycles']
+            if cy1 not in lc :
+                lc.append(cy1)
+            elif cy2 not in lc :
+                lc.append(cy2)
+            else :
+                assert NameError('Bad transisiton in Layout.cycleinline')
+        return lc
+                
 
 
 
@@ -2947,7 +3020,9 @@ class Layout(object):
                         write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
                 except:
                     raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
-
+        root,ext = os.path.splitext(self.filename)
+        if ext == '.ini':
+            self.saveini(self.filename)
 
     def dumpr(self, graph='trwcvi'):
         """ read a dump of given Graph
@@ -3562,6 +3637,11 @@ class Layout(object):
 #                                else:
 #                                    print node1, node2
                                     #pdb.set_trace()
+
+        self.di={} # dictionnary which link nodes of Gi to node of Gs and interaction type
+                # string 2 list
+        [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
+        [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
 #    def showGraph(self,**kwargs):
 #        """
