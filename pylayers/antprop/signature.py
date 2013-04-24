@@ -552,22 +552,28 @@ class Signatures(dict):
 #        metasig=self.lineofcycle(cs,ct)
 
 ############################################################
-##       obtain the list of c ycle in line
+##       obtain the list of cycle in line
 
         cs = self.source
         ct = self.target
         lcil=self.L.cycleinline(cs,ct)
+        lca = [] # list of cycle around
+        for cy in lcil:
+            ncy = nx.neighbors(self.L.Gt,cy)
+            lca = lca+ncy
+        lca = list(np.unique(np.array(lca)))
 
 ############################################################
-##       Compose graph of interaction with list of cycles in line
+##       Compose graph of interactions with the list lca of
+##       cycles around line of cycles
 
         Gi = nx.DiGraph()
-        for cycle in lcil:
+        for cycle in lca:
             Gi = nx.compose(Gi,self.L.dGi[cycle])
 
         # facultative update positions
         Gi.pos = {}
-        for cycle in lcil:
+        for cycle in lca:
             Gi.pos.update(self.L.dGi[cycle].pos)
 
 #        #
@@ -613,9 +619,9 @@ class Signatures(dict):
 #       Obtaining Gf: filtred graph of Gi with Gc ( rename Gt in Gc )
 
         for ic in np.arange(len(lcil)-2):
-            # determine list of sources
             lsource = []
             ltarget = []
+            # determine list of sources
             if ic>0:
                 ls = self.L.Gt[lcil[ic]][lcil[ic+1]]['segment']
                 for source in ls:
