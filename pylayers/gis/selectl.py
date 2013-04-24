@@ -411,6 +411,13 @@ class SelectL(object):
         # h : add subsegment (SS) 
         # j,h : vertical / horizontal scaling (Init)
         #
+        if self.evt == 'b':
+            if self.state == 'Init':
+                nseg = eval(raw_input("seg number :"))
+                self.L.edit_segment(nseg)
+                self.update_state()
+                return
+
         if self.evt == 'j':
             if self.state == 'Init':
                 vscale = eval(enterbox('vertical scaling factor'))
@@ -419,7 +426,7 @@ class SelectL(object):
                 plt.axis('tight')
                 fig,ax = self.show(fig,ax,clear=True)
                 self.update_state()
-                return()
+                return
 
         if self.evt == 'h':
             if self.state == 'Init':
@@ -574,7 +581,6 @@ class SelectL(object):
                     self.state = 'SSS'
                 self.update_state()
                 return 
-            
         #
         # Right clic and selected node is a point
         #
