@@ -339,6 +339,16 @@ class Signatures(dict):
         metasig = metasig + [self.source] + [self.target]
 
 
+        # add cycles separated by air walls
+        lca=[]
+        for cy in metasig:
+            try:
+                lca.extend(self.L.dca[cy])
+            except:
+                pass
+        metasig = metasig + lca
+        metasig = list(np.unique(np.array(metasig)))
+
         lis = self.L.Gt.node[self.source]['inter']
         lit = self.L.Gt.node[self.target]['inter']
 
@@ -380,7 +390,7 @@ class Signatures(dict):
         lit  = litT + litR
 
         #ntr = np.intersect1d(ndt, ndr)
-        li = np.intersect1d(lis, lit)
+#        li = np.intersect1d(lis, lit)
 
         li = []
         for ms in metasig:
@@ -543,20 +553,46 @@ class Signatures(dict):
             ncy = nx.neighbors(self.L.Gt,cy)
             lca = lca+ncy
         lca = list(np.unique(np.array(lca)))
-        lca = lcil
+        lca = lcil 
+        lcair=[]
+        for cy in lca:
+            try:
+                lcair.extend(self.L.dca[cy])
+            except:
+                pass
+        lca = lca + lcair
+        lca = list(np.unique(np.array(lca)))
+
 
 ############################################################
 ##       Compose graph of interactions with the list lca of
 ##       cycles around line of cycles
 
-        Gi = nx.DiGraph()
-        for cycle in lca:
-            Gi = nx.compose(Gi,self.L.dGi[cycle])
+#        Gi = nx.DiGraph()
+#        for cycle in lca:
+#            Gi = nx.compose(Gi,self.L.dGi[cycle])
 
-        # facultative update positions
-        Gi.pos = {}
-        for cycle in lca:
-            Gi.pos.update(self.L.dGi[cycle].pos)
+#        # facultative update positions
+#        Gi.pos = {}
+#        for cycle in lca:
+#            Gi.pos.update(self.L.dGi[cycle].pos)
+
+
+        # extract segment from list of interactions of  lca
+        li = []
+        for ms in lca:
+            li = li + self.L.Gt.node[ms]['inter'] 
+            if '(354, 29)' in li :
+                pdb.set_trace()
+
+        li = list(np.unique(np.array(li)))
+
+        dpos = {k:self.L.Gi.pos[k] for k in li}
+
+        # build the subgraph of L.Gi with only selected interactions
+        Gi = nx.subgraph(self.L.Gi,li)
+        Gi.pos = dpos
+
 
 #        #
 #        #

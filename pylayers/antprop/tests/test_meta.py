@@ -17,8 +17,8 @@ except:
 #L.build()
 #L.dumpw()
 #L.buildGi()
-nc1 = 7#5
-nc2 = 8#37
+nc1 = 6#5
+nc2 = 25#37
 
 poly1 = L.Gt.node[nc1]['polyg']
 cp1 = poly1.centroid.xy
@@ -33,6 +33,8 @@ d = np.sqrt(np.dot((ptx-prx),(ptx-prx)))
 tau = d/0.3
 print d,tau
 
+
+
 logging.info('Signature')
 S = Signatures(L,nc1,nc2)
 a =time.time()
@@ -41,6 +43,12 @@ logging.info('Calculate signature')
 S.run(cutoff=2)
 b=time.time()
 print b-a
+
+for i in L.Gi.nodes():
+    ei = eval(i)
+    if type(ei)!= int:
+        if ei[0] == 354:
+            print i
 
 #Gsi.add_node('Tx')
 #Gsi.pos['Tx']=tuple(ptx[:2])

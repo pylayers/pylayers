@@ -326,6 +326,21 @@ class Layout(object):
                 k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
 
+        self.dca={}
+        for seg,d in self.Gs.node.items():
+            if seg >0 :
+                if d['name'] == 'AIR':
+                    cy=d['ncycles']
+                    try:
+                        self.dca[cy[0]].append(cy[1])
+                    except:
+                        self.dca[cy[0]]=[cy[1]]
+                    try:
+                        self.dca[cy[1]]=[cy[0]]
+                    except:
+                        self.dca[cy[1]].append(cy[0])
+
+
 
     def saveini(self, _fileini):
         """ save structure in an ini file
@@ -2509,6 +2524,7 @@ class Layout(object):
 
             if line.intersects(segline):
                 lc.extend(self.Gs.node[seg]['ncycles'])
+                print seg,self.Gs.node[seg]['ncycles']
                 ls.append(seg)
                 psh = line.intersection(segline)
                 I = np.hstack((I, np.array([[psh.x],[psh.y]])))
@@ -3029,6 +3045,7 @@ class Layout(object):
                     raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
         write_gpickle(getattr(self,'di'),basename+'/struc/di_'+self.filename+'.gpickle')
+        write_gpickle(getattr(self,'dca'),basename+'/struc/dca_'+self.filename+'.gpickle')
 
 
         root,ext = os.path.splitext(self.filename)
@@ -3071,6 +3088,7 @@ class Layout(object):
 
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         setattr(self,'di', read_gpickle(basename+'/struc/di_'+self.filename+'.gpickle'))
+        setattr(self,'dca', read_gpickle(basename+'/struc/dca_'+self.filename+'.gpickle'))
 
 
     def buildGc(self):
@@ -3170,6 +3188,8 @@ class Layout(object):
                 if n>0:
                     if k not in self.Gs.node[n]['ncycles']:
                         self.Gs.node[n]['ncycles'].append(k)
+                        if len(self.Gs.node[n]['ncycles'])>2:
+                            raise NameError('A segment cannot link more than 2 cycles')
 
         #
         #  Seek for Cycle inter connectivity
