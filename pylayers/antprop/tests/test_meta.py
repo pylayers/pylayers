@@ -37,7 +37,7 @@ logging.info('Signature')
 S = Signatures(L,nc1,nc2)
 a =time.time()
 logging.info('Calculate signature')
-S.run2(cutoff=3)
+S.run2(cutoff=6,dcut=3)
 b=time.time()
 print b-a
 

@@ -467,7 +467,7 @@ class Signatures(dict):
 #                        self[len(path)] = sigarr
 
 
-    def run2(self,cutoff=1):
+    def run2(self,cutoff=1,dcut=2):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -562,6 +562,7 @@ class Signatures(dict):
             ncy = nx.neighbors(self.L.Gt,cy)
             lca = lca+ncy
         lca = list(np.unique(np.array(lca)))
+        lca = lcil
 
 ############################################################
 ##       Compose graph of interactions with the list lca of
@@ -621,6 +622,7 @@ class Signatures(dict):
         for ic in np.arange(len(lcil)-2):
             lsource = []
             ltarget = []
+            linter = self.L.Gt.node[lcil[ic]]['inter']
             # determine list of sources
             if ic>0:
                 ls = self.L.Gt[lcil[ic]][lcil[ic+1]]['segment']
@@ -631,12 +633,23 @@ class Signatures(dict):
 
             # determine list of targets
             if ic+2 < len(lcil)-1:
+            #if ic+3 < len(lcil)-1:
                 lt = self.L.Gt[lcil[ic+1]][lcil[ic+2]]['segment']
+                #lt = self.L.Gt[lcil[ic+2]][lcil[ic+3]]['segment']
                 for target in lt:
                     ltarget.append(str((target , lcil[ic+1], lcil[ic+2])))
+                    #ltarget.append(str((target , lcil[ic+2], lcil[ic+3])))
             else:
                 ltarget = lit
 
+            lt   = filter(lambda l: len(eval(l))==3,linter)
+            #lti = filter(lambda l: eval(l)[2]==lcil[ic+1],lt)
+            lto = filter(lambda l: eval(l)[2]<>lcil[ic],lt)
+            ltom = filter(lambda l: eval(l)[2]!=lcil[ic-1],lto)
+            ltomp = filter(lambda l: eval(l)[2]!=lcil[ic+1],ltom)
+
+            lsource = lsource + ltomp
+            #pdb.set_trace()
             for s in lsource :
                 #print s
                 for t in ltarget:
@@ -691,10 +704,10 @@ class Signatures(dict):
 
 
 
-
+        self.Gf = Gf
         print 'signatures'
         co = nx.dijkstra_path_length(Gf,'Tx','Rx')
-        sig=self.calsig(Gf,dia=self.L.di,cutoff=co+2)
+        sig = self.calsig(Gf,dia=self.L.di,cutoff=co+dcut)
 
 
         for k in sig:
