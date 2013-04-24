@@ -2995,6 +2995,13 @@ class Layout(object):
             self.buildGi()
             self.buildGi2()
 
+        f=os.path.splitext(self.filename)
+        if f[1] =='.ini':
+            self.saveini(self.filename)
+        else :
+            self.saveini(f[0] +'.ini')
+
+
     def dumpw(self, graph='trwcvi'):
         """ write a dump of given Graph
 
@@ -3020,6 +3027,10 @@ class Layout(object):
                         write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
                 except:
                     raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
+        # save dictionnary which maps string interaction to [interactionnode, interaction type]
+        write_gpickle(getattr(self,'di'),basename+'/struc/di_'+self.filename+'.gpickle')
+
+
         root,ext = os.path.splitext(self.filename)
         if ext == '.ini':
             self.saveini(self.filename)
@@ -3058,6 +3069,8 @@ class Layout(object):
                 except:
                     raise NameError('G'+g +' graph cannot be load')
 
+        # load dictionnary which maps string interaction to [interactionnode, interaction type]
+        setattr(self,'di', read_gpickle(basename+'/struc/di_'+self.filename+'.gpickle'))
 
 
     def buildGc(self):
@@ -3642,6 +3655,10 @@ class Layout(object):
                 # string 2 list
         [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
         [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
+
+
+
+        
 
 #    def showGraph(self,**kwargs):
 #        """

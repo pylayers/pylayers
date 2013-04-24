@@ -16,9 +16,9 @@ except:
     L.dumpw()
 #L.build()
 #L.dumpw()
-L.buildGi()
-nc1 = 5
-nc2 = 37
+#L.buildGi()
+nc1 = 7#5
+nc2 = 8#37
 
 poly1 = L.Gt.node[nc1]['polyg']
 cp1 = poly1.centroid.xy
@@ -26,7 +26,7 @@ cp1 = poly1.centroid.xy
 poly2 = L.Gt.node[nc2]['polyg']
 cp2 = poly2.centroid.xy
 ptx = np.array([cp1[0][0],cp1[1][0],1.5])
-prx = np.array([cp2[0][0],cp2[1][0],1.5])
+prx = np.array([cp2[0][0]+0.5,cp2[1][0]+0.5,1.5])
 print ptx
 print prx
 d = np.sqrt(np.dot((ptx-prx),(ptx-prx)))
@@ -37,7 +37,8 @@ logging.info('Signature')
 S = Signatures(L,nc1,nc2)
 a =time.time()
 logging.info('Calculate signature')
-S.run2(cutoff=6,dcut=3)
+#S.run2(cutoff=6,dcut=3)
+S.run(cutoff=2)
 b=time.time()
 print b-a
 
