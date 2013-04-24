@@ -148,15 +148,14 @@ class Furniture(object):
             :include-source:
 
             >>> from pylayers.gis.furniture import *
-            >>> import matplotlib.pylab as plt 
+            >>> import matplotlib.pylab as plt
             >>> F = Furniture()
             >>> F.load('Furw1.ini','R1_A')
             >>> F.show()
             >>> axis = plt.axis('scaled')
-            >>> plt.show() 
-            
+            >>> plt.show()
         """
-        filefurn = pyu.getlong(_filename, "struc")
+        filefurn = pyu.getlong(_filename, "struc/furnitures")
         config = ConfigParser.ConfigParser()
         config.read(filefurn)
 

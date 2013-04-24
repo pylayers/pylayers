@@ -1,4 +1,4 @@
-#-*- coding:Utf-8 -*-
+##-*- coding:Utf-8 -*-
 #
 # Class Layout
 #
@@ -127,7 +127,7 @@ class Layout(object):
         self.load(_filename)
         #self.ax = (-10, 10, -10, 10)
 
-    def ls(self, typ='str'):
+    def ls(self, typ='ini'):
         """ list the available file in dirstruc
 
         Parameters
@@ -149,19 +149,10 @@ class Layout(object):
 
         Display all available structures
 
-        .. plot::
-            :include-source:
 
-            >>> import matplotlib.pyplot as plt
-            >>> from pylayers.gis.layout import *
-            >>> L = Layout()
-            >>> fillist = L.ls()
-            >>> for _filename in filelist:
-            >>>     plt.figure()
-            >>>     L.load(_filename)
-            >>>     fig,ax = L.showGs()
-            >>>     plt.title(_filename)
-            >>> plt.show()
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout()
+        >>> fillist = L.ls()
 
         """
 
@@ -177,7 +168,7 @@ class Layout(object):
     def delete(self):
         """ delete Layout graphs
 
-        release  Gs,Gc,Gm
+        delete  Gs,Gc,Gm
 
         """
         del self.Gs
@@ -300,19 +291,25 @@ class Layout(object):
                 dp[node] = kp
                 kp = kp + 1
 
-        ks = 0 # segments
-        ds = {}
+        ks = 0 # segments start at index 0 in tahe
+        #ds = {}
+        Nemax = max(self.Gs.node.keys())
+        self.tgs = np.zeros(Nemax+1,dtype=int)
+        self.tsg = np.zeros(self.Ne,dtype=int)
+
         for node in self.Gs.node:
             if node > 0:
                 self.tahe[0,ks]=dp[nx.neighbors(self.Gs,node)[0]]
                 self.tahe[1,ks]=dp[nx.neighbors(self.Gs,node)[1]]
-                ds[node] = ks
+                #ds[node] = ks
+                self.tgs[node] = ks
+                self.tsg[ks]=node
                 ks = ks+1
 
         #
         # calculate normal to segment ta-he
         #
-        # This could becomes obsolete when the normal will be calculated at 
+        # This could becomes obsolete when the normal will be calculated at
         # creation of the segment
         #
 
@@ -323,9 +320,11 @@ class Layout(object):
         scale = np.sqrt(normx*normx+normy*normy)
         normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
 
-        for ks in ds:
-            k = ds[ks]
-            self.Gs.node[ks]['norm'] = normal[:,k]
+        #for ks in ds:
+        for ks in self.Gs.node:
+            if ks > 0:
+                k = self.tgs[ks]
+                self.Gs.node[ks]['norm'] = normal[:,k]
 
 
     def saveini(self, _fileini):
@@ -477,15 +476,16 @@ class Layout(object):
 
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('Lstruc.str')
+            >>> L = Layout('WHERE1.ini')
             >>> L.loadfur('Furw1.ini')
-            >>> ax = L.showGs()
+            >>> fig = plt.figure()
+            >>> ax = L.showGs(fig=fig,furniture=True)
             >>> ti = plt.title('loadfur')
             >>> plt.show()
 
 
         """
-        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC'])
+        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC']+'/furnitures')
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -588,7 +588,7 @@ class Layout(object):
         codesl = np.array(np.zeros(Ne), dtype=int)
         codes = np.array(np.zeros(Ne), dtype=int)
 
-        # tahe : tableau des noeuds initiaux et finaux des sgements
+        # tahe : segment tail and head point index
         tahe = np.array(np.zeros([2, Ne]), dtype=int)
         ini = 12
         for i in range(Ne):
@@ -1906,9 +1906,6 @@ class Layout(object):
         Not Finished :
 
         """
-        #
-        # TODO : eviter utilisation de self.tahe
-        #
         tail = self.tahe[0, edgelist]
         head = self.tahe[1, edgelist]
 
@@ -2257,6 +2254,7 @@ class Layout(object):
         un = u / nu
 
         seglist = self.seginframe(p1, p2)
+
         npta = self.tahe[0, seglist]
         nphe = self.tahe[1, seglist]
         Pta = self.pt[:, npta]
@@ -2311,6 +2309,53 @@ class Layout(object):
         seglist = seglist[bool]
 
         return seglist
+
+    def seguv(self, iseg):
+        """ returns unitary vector along segments
+
+        Parameters
+        ----------
+        iseg : np.array
+                index of segments
+
+        Examples
+        --------
+
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('DLR.ini')
+        >>> idx = np.array([1,2,3,17])
+        >>> L.seguv(idx)
+        array([[-1.,  0.,  1., -1.],
+               [ 0., -1.,  0.,  0.]])
+        >>> idx = np.array([1])
+        >>> L.seguv(idx)
+        array([-1.,  0.])
+
+        """
+        # idx : npt
+        idx  = self.tgs[iseg]
+        # tahe : 2 x npt
+        tahe = self.tahe[:,idx]
+        if  len(iseg)>1:
+            ta   = tahe[0,:]
+            he   = tahe[1,:]
+        else:
+            ta = tahe[0]
+            he = tahe[1]
+        pta  = self.pt[:,ta]
+        phe  = self.pt[:,he]
+        # v  : 2 x npt
+        v    = pta-phe
+        # mv : npt
+        mv   = np.sqrt(np.sum(v*v,axis=0))
+        # vn : 2 x npt
+        if len(idx)>1:
+            vn  = v/mv[np.newaxis,:]
+        else:
+            vn  = (v/mv).reshape(2)
+        return(vn)
+
+
 
     def segpt(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
@@ -2371,13 +2416,14 @@ class Layout(object):
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,10])
             >>> L.seginframe(p1,p2)
-            array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35, 36, 37,
-                    38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60, 61, 62,
-                    63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,  98, 99, 109,
-                   112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125,
-                   126, 127, 128, 129, 130, 131, 132, 133, 141, 144, 145, 148, 151, 160,
-                   161, 162, 163, 164, 166, 167, 168, 169, 170, 171, 178, 179, 180, 181,
-                   182, 183, 184, 185, 186, 187, 188, 191, 192, 193, 194, 195, 217])
+            array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35,  36,
+                    37,  38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60,
+                    61,  62,  63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,
+                    98,  99, 109, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121,
+                   122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 141,
+                   144, 145, 148, 151, 160, 161, 162, 163, 164, 166, 167, 168, 169,
+                   170, 171, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188,
+                   191, 192, 193, 194, 195, 217])
         """
 
         max_x = max(p1[0], p2[0])
@@ -2387,13 +2433,21 @@ class Layout(object):
 
         Dx = max_x - min_x
         Dy = max_y - min_y
+        
+        if Dx < 0.5:
+            max_x=max_x+0.5
+            min_x=min_x-0.5
+
+        if Dy < 0.5:
+            max_y=max_y+0.5
+            min_y=min_y-0.5
+
+
 
         if (Dy < Dx):
-            up = np.nonzero((self.pt[0, :] < max_x) & (self.pt[
-                0, :] > min_x))[0]
+            up = np.nonzero((self.pt[0, :] < max_x) & (self.pt[ 0, :] > min_x))[0]
         else:
-            up = np.nonzero((self.pt[1, :] < max_y) & (self.pt[
-                1, :] > min_y))[0]
+            up = np.nonzero((self.pt[1, :] < max_y) & (self.pt[ 1, :] > min_y))[0]
 
         seglist = self.segpt(up)
 
@@ -2411,6 +2465,71 @@ class Layout(object):
                 for iy in range(Ny):
                     p = grid[ix, iy, :]
                     seglist, theta = self.layeronlink(p, Tx)
+
+
+    def cycleinline(self, c1, c2):
+        """
+        Returns the intersection between a given line and all segments
+        Parameters
+        ----------
+            p1 : numpy.ndarray
+            p2 : numpy.ndarray
+        Returns
+        -------
+            I : numpy.ndarray
+        """
+        I = np.array([]).reshape(3,0)
+
+        poly1 = self.Gt.node[c1]['polyg']
+        p1t = poly1.centroid.xy
+
+        poly2 = self.Gt.node[c2]['polyg']
+        p2t = poly2.centroid.xy
+        
+        p1 = np.array([p1t[0][0],p1t[1][0]])
+        p2 = np.array([p2t[0][0],p2t[1][0]])
+
+        line = sh.LineString((p1,p2))
+
+        
+        els = self.seginframe(p1,p2)
+        elg = self.tsg[els]
+
+        lc = []
+        ls=[]
+        I = np.array([]).reshape(2,0)
+        
+        for seg in elg:
+            ta, he = self.Gs.neighbors(seg)
+            pa = np.array(self.Gs.pos[ta])
+            pb = np.array(self.Gs.pos[he])
+
+            segline = sh.LineString((pa,pb))
+
+
+            if line.intersects(segline):
+                lc.extend(self.Gs.node[seg]['ncycles'])
+                ls.append(seg)
+                psh = line.intersection(segline)
+                I = np.hstack((I, np.array([[psh.x],[psh.y]])))
+        v = (I-p1[:,np.newaxis])
+        dv = np.sum(v*v,axis=0)
+        u = np.argsort(dv)
+        lss = np.array(ls)[u]
+
+        lc=[c1]
+        for s in lss:
+            cy1,cy2 = self.Gs.node[s]['ncycles']
+            if cy1 not in lc :
+                lc.append(cy1)
+            elif cy2 not in lc :
+                lc.append(cy2)
+            else :
+                assert NameError('Bad transisiton in Layout.cycleinline')
+        return lc
+                
+
+
 
     def seginline(self, p1, p2):
         """
@@ -2891,29 +3010,51 @@ class Layout(object):
         for g in allg:
             if g in graph:
                 try:
-                    gname='G'+g
-                    write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
+                    if g in ['v','i']:
+                        gname1 ='G'+g
+                        gname2 ='dG'+g
+                        write_gpickle(getattr(self,gname1),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
+                        write_gpickle(getattr(self,gname2),basename+'/struc/dG'+g+'_'+self.filename+'.gpickle')
+                    else:
+                        gname='G'+g
+                        write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
                 except:
-                    raise NameError('G'+g+' graph cannot be saved, probably because it has not been build')
-
+                    raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
+        root,ext = os.path.splitext(self.filename)
+        if ext == '.ini':
+            self.saveini(self.filename)
 
     def dumpr(self, graph='trwcvi'):
         """ read a dump of given Graph
 
         Parameters
         ----------
+
+        graph : string
             't' : Gt
             'r' : Gr
             's' : Gs
-            'v' : Gv 
-            'i' : Gi 
+            'v' : Gv
+            'i' : Gi
+        Notes
+        -----
+
+        .gpickle files are store under the struc directory of the project
+        specified by the $BASENAME environment variable
+
         """
         allg= ['t','r','w','c','v','i']
         for g in allg:
             if g in graph:
                 try:
-                    gname='G'+g
-                    setattr(self, gname, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
+                    if g in ['v','i']:
+                        gname1 ='G'+g
+                        gname2 ='dG'+g
+                        setattr(self, gname1, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
+                        setattr(self, gname2, read_gpickle(basename+'/struc/dG'+g+'_'+self.filename+'.gpickle'))
+                    else:
+                        gname='G'+g
+                        setattr(self, gname, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
                 except:
                     raise NameError('G'+g +' graph cannot be load')
 
@@ -3032,7 +3173,8 @@ class Layout(object):
             if len(intersection_vnodes) > 1:
                 #print intersection_vnodes,len(intersection_vnodes)
                 #print k[0],k[1]
-                self.Gt.add_edge(k[0], k[1])
+                segment = intersection_vnodes[np.where(intersection_vnodes>0)]
+                self.Gt.add_edge(k[0], k[1],segment= segment)
 
         #
         # Construct the polygon associated to each cycle
@@ -3238,16 +3380,15 @@ class Layout(object):
             4 different nodes associated to the same segment
             R+  R- T+ T-
 
-        A subgraph
 
         """
         self.dGi = {}
         #
         # Create nodes
         #
-        for k in self.dGv:              # for each cycle Gv
+        for k in self.dGv:              # for each cycle ( keys of dGv ) 
             Gv = self.dGv[k]
-            self.dGi[k] = nx.DiGraph()  # create a Digraph Gi 
+            self.dGi[k] = nx.DiGraph()  # create a Digraph dGi[k]
             self.dGi[k].pos = {}        # and its associated node coordinates
             for n in Gv.node:           # for each node of Gv (same node as Gs)
                 if n < 0: # D
@@ -3255,30 +3396,41 @@ class Layout(object):
                     self.dGi[k].pos[str(n)] = self.Gs.pos[n]
                 if n > 0: # R | T
                     cy = self.Gs.node[n]['ncycles']
+                    name = self.Gs.node[n]['name']
                     if len(cy) == 2: # 2 cycles
+
                         cy0 = cy[0]
                         cy1 = cy[1]
-                        #print k,cy0,cy1
-                        # self.dGi[k].add_node(str((n,cy0)))
-                        #self.dGi[k].add_node(str((n,cy1)))
-                        self.dGi[k].add_node(str((n,k)))
-                        self.dGi[k].add_node(str((n,cy0,cy1)))
-                        self.dGi[k].add_node(str((n,cy1,cy0)))
+
+                        
+                        # get neigbor
                         nei = self.Gs.neighbors(n)
                         np1 = nei[0]
                         np2 = nei[1]
+
                         p1 = np.array(self.Gs.pos[np1])
                         p2 = np.array(self.Gs.pos[np2])
                         l = p1 - p2
                         nl = np.dot(l, l)
                         ln = l / nl
+                        
                         delta = nl / 10
-                        self.dGi[k].pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
-                        self.dGi[k].pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
-                        if k==cy0:
-                            self.dGi[k].pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
-                        if k==cy1:
-                            self.dGi[k].pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+
+                        # with  AIR or ABSORBENT there is no reflection
+                        if (name<>'AIR') & (name<>'ABSORBENT'):
+                            self.dGi[k].add_node(str((n,k)))
+                            if k==cy0:
+                                self.dGi[k].pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
+                            if k==cy1:
+                                self.dGi[k].pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
+
+
+                        # with METAL or ABSORBENT there is no transmission
+                        if (name<>'METAL') & (name<>'ABSORBENT'):
+                            self.dGi[k].add_node(str((n,cy0,cy1))) 
+                            self.dGi[k].add_node(str((n,cy1,cy0)))
+                            self.dGi[k].pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.) 
+                            self.dGi[k].pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
                     if len(cy) == 1: # segment which is not a separation between rooms
                         self.dGi[k].add_node(str((n, cy[0])))
@@ -3369,6 +3521,7 @@ class Layout(object):
         self.Gi.pos = {}
         #
         # Create nodes
+        #
         for n in self.Gv.node:
             if n < 0: # D
                 self.Gi.add_node(str(n))
@@ -3376,7 +3529,9 @@ class Layout(object):
             if n > 0: # R | T
                 cy = self.Gs.node[n]['ncycles']
                 name = self.Gs.node[n]['name']
-                if len(cy) == 2: # 2 cycles means generally two rooms 
+                # 2 cycles
+                if len(cy) == 2:
+
                     cy0 = cy[0]
                     cy1 = cy[1]
 
@@ -3391,14 +3546,14 @@ class Layout(object):
                     ln = l / nl
 
                     delta = nl / 10
-                    # On AIR or ABSORBENT there is no reflection 
+                    # On AIR or ABSORBENT there is no reflection
                     if (name<>'AIR') & (name<>'ABSORBENT'):
                         self.Gi.add_node(str((n,cy0)))
                         self.Gi.add_node(str((n,cy1)))
                         self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
                         self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
 
-                    # Throgh METAL or ABSORBENT there is no transmission 
+                    # Through METAL or ABSORBENT there is no transmission
                     if (name<>'METAL') & (name<>'ABSORBENT'):
                         self.Gi.add_node(str((n,cy0,cy1)))
                         self.Gi.add_node(str((n,cy1,cy0)))
@@ -3482,6 +3637,11 @@ class Layout(object):
 #                                else:
 #                                    print node1, node2
                                     #pdb.set_trace()
+
+        self.di={} # dictionnary which link nodes of Gi to node of Gs and interaction type
+                # string 2 list
+        [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
+        [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
 #    def showGraph(self,**kwargs):
 #        """
@@ -3715,11 +3875,10 @@ class Layout(object):
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout('exemple.str')
-            >>> L.buildGt()
-            >>> L.buildGr()
-            >>> L.buildGv()
-            >>> fig,ax = L.showGs()
-            >>> fig,ax = L.showGv(ax=ax)
+            >>> L.build()
+            >>> fig = plt.figure()
+            >>> fig,ax = L.showGs(fig=fig)
+            >>> ax = L.showGv(ax=ax)
             >>> ti = plt.title('Show Gv')
             >>> t = plt.axis('off')
             >>> plt.show()
@@ -3785,13 +3944,13 @@ class Layout(object):
         Examples
         --------
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('Lstruc.str')
-            >>> L.buildGt()
-            >>> L.buildGr()
-            >>> L.buildGw()
+            >>> L = Layout('WHERE1.ini')
+            >>> L.dumpr()
             >>> nroom1 = 1
             >>> nroom2 = 6
-            >>> L.waypointGw(nroom1,nroom2)
+            >>> l =L.waypointGw(nroom1,nroom2)
+            >>> len(l)
+            8
 
         """
         rooms = nx.dijkstra_path(self.Gw, nroom1, nroom2)
@@ -3808,12 +3967,12 @@ class Layout(object):
         Returns
         -------
         walls : list of wall tuples  (Transit format)
-        
+
         Examples
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('office.str2')
+        >>> L = Layout('DLR.ini')
         >>> walls = L.thwall(0,0)
 
         """
@@ -4689,230 +4848,6 @@ class Layout(object):
             ymax = 10.
 
         self.ax = (xmin - dx, xmax + dx, ymin - dy, ymax + dy)
-
-    def loadGv(self, _fileGv):
-        """Load Layout Gv file which contains Gv graph Values and reconstruct Gv graph.
-
-        Parameters
-        ----------
-        _fileGv : str
-        _fileGv is an *.Gv file, which contains all information about graph of visibility (Gv)
-
-        Returns
-        -------
-        Gv_re : networkx.classes.graph.Graph
-            The graph of visibility reconstructed
-        pos : dict
-            Explicitly set positions of the nodes
-        labels : dict
-            Node labels in a dictionary keyed by edge two-tuple of text labels
-        (default=None), Only labels for the keys in the dictionary are drawn.
-
-        Notes
-        -----
-         Extension of Gv file is lo (to be changed)
-         Those file are placed in the layout directory
-
-
-        Examples
-        --------
-
-        >>> from pylayers.gis.layout import *
-        >>> L = Layout('exemple.str','matDB.ini','slabDB.ini')
-        >>> ncoin,ndiff = L.buildGc()
-        >>> L.buildGt()
-        >>> L.buildGr()
-        >>> _fileGv = 'exemple.lo'
-        >>> Gv_re,pos,labels = L.loadGv( _fileGv)
-        >>> assert Gv_re.nodes()[5]== 6,'Mistake'
-        >>> a=plt.title('Test Gv loadGv')
-        >>> fig,ax = L.showGs()
-        >>> nx.draw(Gv_re,pos,node_color='r')
-        >>> plt.show()
-        >>> plt.clf()
-
-
-        """
-        Gv_re = nx.Graph()
-        pos = {}
-        labels = {}
-        fileGv = pyu.getlong(_fileGv, pstruc['DIRSTRUC'])
-        if os.path.isfile(fileGv):
-            data = io.loadmat(fileGv, appendmat=False)
-            # reconstruct Gv from data
-            Gv_lab = data['lab']
-            pos_val = data['p_val']
-            pos_keys = data['p_keys']
-            Gv_edges = data['edges']
-            Gv_nodes = data['node']
-
-            for i in range(len(pos_keys)):
-                Gv_re.add_node(Gv_nodes[i][0])
-                pos[pos_keys[i][0]] = (pos_val[i][0], pos_val[i][1])
-                labels[Gv_lab[i][0]] = str(Gv_lab[i][0])
-
-            for j in range(len(Gv_edges)):
-                Gv_re.add_edge(Gv_edges[j, 0], Gv_edges[j, 1])
-
-        return(Gv_re, pos, labels)
-
-    def saveGv(self, _fileGv):
-        """Creates Layout's Gv file which contains Gv graph values.
-
-        Parameters
-        ----------
-        _fileGv : str
-        _fileGv is an *.lo file, in which saves all information about graph of
-        visibility (Gv).
-
-
-        """
-        # create lo file
-        fileGv = pyu.getlong(_fileGv, pstruc['DIRSTRUC'])
-
-        # writing into lo file
-        if os.path.isfile(fileGv):
-            print fileGv, 'Warning fileGv already exist'
-        else:
-            print 'create ', fileGv, ' file'
-            data = dict(lab=self.labels_new.keys(),
-                      node=self.Gv_new.nodes(),
-                      edges=self.Gv_new.edges(),
-                      p_val=self.pos_new.values(),
-                      p_keys=self.pos_new.keys())
-
-            io.savemat(fileGv, data, appendmat=False)
-
-    def savelay(self, _fileGv, _filelay):
-        """ Creates Layout's lay file which contains graphs values.
-
-        Parameters
-        ----------
-        _fileGv : str
-            _fileGv is an *.lo file, in which saves all information about graph of
-        visibility (Gv).
-        _filelay : str
-            _fileGv is an *.lay file, in which all information about graphs of
-        structure (Gs), topological (Gt), rooms (Gr) and visibility (Gv) saves.
-
-        Examples
-        --------
-        
-        >>> from pylayers.util.project import *
-        >>> from pylayers.gis.layout import *
-        >>> L = Layout('exemple.str','matDB.ini','slabDB.ini')
-        >>> ncoin,ndiff = L.buildGc()
-        >>> L.buildGt()
-        >>> L.buildGr()
-        >>> _fileGv  = 'exemple.lo'
-        >>> _filelay = 'example.lay'
-        >>> filelay= pyu.getlong(_filelay,pstruc['DIRSTRUC'])
-        >>> assert os.path.isfile(filelay)==True,'already exist'
-
-
-        """
-        Gv, pos, labels = self.loadGv(_fileGv)
-
-        filelay = pyu.getlong(_filelay, pstruc['DIRSTRUC'])
-        if os.path.isfile(filelay):
-            print filelay, ' already exist'
-        else:
-            print 'create ', filelay, ' file'
-            data_Gs = dict(node=self.Gs.nodes(), edges=self.Gs.edges(), p_val=self.Gs.pos.values(), p_keys=self.Gs.pos.keys())
-            data_Gt = dict(node=self.Gt.nodes(), edges=self.Gt.edges(), p_val=self.Gt.pos.values(), p_keys=self.Gt.pos.keys())
-            data_Gr = dict(node=self.Gr.nodes(), edges=self.Gr.edges(), p_val=self.Gr.pos.values(), p_keys=self.Gr.pos.keys())
-            data_Gv = dict(node=Gv.nodes(), edges=Gv.edges(
-                ), p_val=pos.values(), p_keys=pos.keys())
-            data_graph = dict(Gs=data_Gs, Gt=data_Gt, Gr=data_Gr, Gv=data_Gv)
-            cPickle.dump(data_graph, open(filelay, "wb"))
-
-    def loadlay(self, _filelay):
-        """Loads Layout's lay file which contains graphs values.
-
-        Parameters
-        ----------
-        _filelay : str
-            _fileGv is an *.lay file, in which contains all information about graphs of
-        structure (Gs), topological (Gt), rooms (Gr) and visibility (Gv).
-
-        Returns
-        -------
-        data_graph : dict
-            A dictionary which contains all information about graphs Gs, Gt, Gr, Gv.
-
-        Examples
-        --------
-
-        >>> from pylayers.gis.layout import *
-        >>> L = Layout('exemple.str','matDB.ini','slabDB.ini')
-        >>> ncoin,ndiff = L.buildGc()
-        >>> L.buildGt()
-        >>> L.buildGr()
-
-        """
-        filelay = pyu.getlong(_filelay, pstruc['DIRSTRUC'])
-        data_graph = cPickle.load(open(filelay))
-
-        return(data_graph)
-
-
-#    def points_image(self, p_Tx):
-#        """Returns all image points of the bases
-#
-#         Parameters
-#         ----------
-#         p_Tx : numpy.ndarray
-#             A point of the placement of the Tx
-#
-#         Returns
-#         -------
-#         Tx_im : list
-#              A list of tuples: containing the coordinates of image points.
-#         nodes_posi : list
-#              A list of positive numbers of the graph structure.
-#
-#        Examples
-#        --------
-#
-#        >>> from pylayers.gis.layout import *
-#        >>> L = Layout()
-#        >>> L.loadstr('exemple.str','matDB.ini','slabDB.ini')
-#        >>> L.buildGt()
-#        >>> L.buildGr()
-#        >>> p_Tx=np.array([2,0])
-#        >>> Tx_im,nodes_posi=L.points_image(p_Tx)
-#        >>> assert Tx_im[0][0]==2,'Mistake'
-#²
-#        """
-#
-#        nodes_posi = self.nodes_posi()
-#        Tx_im = []
-#        for mk in range(len(nodes_posi)):
-#            num_seg = nodes_posi[mk]
-#            Tx_x, Tx_y = p_Tx
-#            n1, n2 = self.Gs.neighbors(num_seg)
-#            pa_x, pa_y = self.Gs.pos[n1]
-#            pb_x, pb_y = self.Gs.pos[n2]
-#            delx = abs(abs(pa_x) - abs(pb_x))
-#            dely = abs(abs(pa_y) - abs(pb_y))
-#            dist = sh.Point(Tx_x, Tx_y).distance(
-#                sh.LineString([(pa_x, pa_y), (pb_x, pb_y)]))
-#            if delx <= dely:
-#                if max(pa_x, pb_x) <= Tx_x:
-#                    Tx_x_im = Tx_x - 2 * dist
-#                else:
-#                    Tx_x_im = Tx_x + 2 * dist
-#                Tx_y_im = Tx_y
-#                Tx_im.append((Tx_x_im, Tx_y_im))
-#            if delx > dely:
-#                if max(pa_y, pb_y) <= Tx_y:
-#                    Tx_y_im = Tx_y - 2 * dist
-#                else:
-#                    Tx_y_im = Tx_y + 2 * dist
-#                Tx_x_im = Tx_x
-#                Tx_im.append((Tx_x_im, Tx_y_im))
-#
-#        return(Tx_im, nodes_posi)
 
 
     def get_paths(self,nd_in, nd_fin):
