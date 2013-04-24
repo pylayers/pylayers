@@ -26,6 +26,7 @@ from   shapely.ops import cascaded_union
 from   descartes.patch import PolygonPatch
 from numpy import array
 import Image
+import logging
 import urllib2 as urllib
 from cStringIO import StringIO
 
@@ -207,12 +208,21 @@ class Layout(object):
                 n1, n2 = np.array(self.Gs.neighbors(e))  # neighbors
                 p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
                 p2 = np.array(self.Gs.pos[n2])           #     e 
+                #
+                # check if there is no points between segments
+                # non superposition rule
+                #
                 for n in self.Gs.node.keys():
                     if (n < 0) & (n1 != n) & (n2 != n):
                         p = np.array(self.Gs.pos[n])
                         if geu.isBetween(p1, p2, p):
-                            print "Warning segment ", e, "contains point ", n
+                            logging.critical("segment %d contains point %d",e,n)
                             consistent =False
+                cycle = self.Gs.node[e]['ncycles']
+                if len(cycle)==0:
+                    logging.critical("segment %d has no cycle",e)
+                if len(cycle)==3:
+                    logging.critical("segment %d has cycle %s",e,str(cycle))
         return(consistent)
 
     def clip(self, xmin, xmax, ymin, ymax):
@@ -4050,6 +4060,33 @@ class Layout(object):
                 if ss_name != "DOOR":
                     walls.append(wall)
         return(walls)
+
+
+    def pt2cy(self, pt=np.array((0, 0))):
+        """ point to cycle
+
+        Parameters
+        ----------
+        pt : point (ndarray) 
+
+        Returns
+        -------
+        ncy : cycle number
+
+        Notes
+        -----
+            If a cycle contains point pt this function returns the cycle number
+
+        """
+
+        ptsh = sh.Point(pt[0], pt[1])
+        room_exists = False
+        for ncy in self.Gt.node.keys():
+            if self.Gt.node[self.Gr.node[ncy]['cycle']]['polyg'].contains(ptsh):
+                cycle_exists = True
+                return(ncy)
+        if not cycle_exists:
+            raise NameError(str(pt)+" is not in any cycle")
 
     def pt2ro(self, pt=np.array((0, 0))):
         """ point to room
