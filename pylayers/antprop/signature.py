@@ -962,7 +962,30 @@ class Signatures(dict):
             rays : dict
 
         """
+
         rays = Rays(ptx,prx)
+        # detect LOS situation
+        lc  = self.L.cycleinline(self.source,self.target)
+        # if source  and target in the same cycle
+        if len(lc) == 1:
+            rays.los=True
+#        # if source  and target separated by air walls
+#        else :
+#            for ic in xrange(len(lc)-1) :
+#                # if lc[i] connected to a air wall
+#                if lc[ic] in self.L.dca.keys():
+#                    # if lc[i] and lc[i+1] are connected by a airwall
+#                    if lc[ic+1] in self.L.dca[lc[ic]]:
+#                        los = True
+#                    else :
+#                        los = False
+#                        break
+#                else :
+#                    los = False
+#                    break
+
+#        rays[0]['pt']
+        
         for k in self:
             tsig = self[k]
             shsig = np.shape(tsig)

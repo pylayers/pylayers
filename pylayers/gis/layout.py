@@ -4106,7 +4106,7 @@ class Layout(object):
         ptsh = sh.Point(pt[0], pt[1])
         room_exists = False
         for ncy in self.Gt.node.keys():
-            if self.Gt.node[self.Gr.node[ncy]['cycle']]['polyg'].contains(ptsh):
+            if self.Gt.node[ncy]['polyg'].contains(ptsh):
                 cycle_exists = True
                 return(ncy)
         if not cycle_exists:
