@@ -284,6 +284,8 @@ class Layout(object):
 
             self.tahe (2xNn)
             self.pt (2xNe)
+            self.tgs
+            self.dca
 
         """
 
@@ -335,20 +337,6 @@ class Layout(object):
             if ks > 0:
                 k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
-
-        self.dca={}
-        for seg,d in self.Gs.node.items():
-            if seg >0 :
-                if d['name'] == 'AIR':
-                    cy=d['ncycles']
-                    try:
-                        self.dca[cy[0]].append(cy[1])
-                    except:
-                        self.dca[cy[0]]=[cy[1]]
-                    try:
-                        self.dca[cy[1]]=[cy[0]]
-                    except:
-                        self.dca[cy[1]].append(cy[0])
 
 
 
@@ -2726,11 +2714,21 @@ class Layout(object):
     def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1):
         """ show nodes
 
-        show_nodes(self,ndlist=[],size=10,color='b'):
-
+        Parameters
+        ----------
+        ndlist 
+        size   : int 
+            default 10 
+        color :  'b'
+        dlabels : Boolean
+            False
+        font_size : int
+            15
+        alpha : float
+            transparancy 
         """
         if type(ndlist) == np.ndarray:
-            ndlist = ndlist.tolist()
+            ndlist = list(ndlist)
         if len(ndlist) == 0:
             ndlist.append(1e8)
             dlabels = False
@@ -2751,11 +2749,19 @@ class Layout(object):
             nx.draw_networkx_labels(self.Gs, dicopos, dicolab,
                                     font_size=font_size, font_color=color)
 
-    def show_edge(self, edlist=[], alpha=1, width=1, size=2, color='black', font_size=15, dlabels=False):
-        """
-        show_edges
+    def show_seg1(self, edlist=[], alpha=1, width=1, size=2, color='black', font_size=15, dlabels=False):
+        """ show segment
 
-        show_edges(self,edlist=[],alpha=1,width=1,color='black')
+        Parameters
+        ----------
+
+        edlist
+        alpha
+        width
+        size
+        color
+        font_size
+        dlabels
 
         """
         if type(edlist) == 'ndarray':
@@ -2776,12 +2782,12 @@ class Layout(object):
             nx.draw_networkx_labels(
                 self.Gs, dicopos, dicolab, font_size=font_size)
 
-    def show_edges(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
-        """
-        show_edges
+    def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
+        """ show segment
 
         Parameters
         ----------
+
             edlist
             alpha
             width
@@ -2842,16 +2848,16 @@ class Layout(object):
             edlist = list(np.intersect1d(a1, a2))
 
         if self.display['thin']:
-            self.show_edges(edlist, alpha=1, width=1,
+            self.show_segment(edlist, alpha=1, width=1,
                             color=color, dlabels=dlabels, font_size=font_size)
         else:
             slab = self.sl[name]
-            if width==0:   
+            if width==0:
                 linewidth = slab['linewidth'] / 3.
             else:
                 linewidth = width
             color = slab['color']
-            self.show_edges(edlist, alpha=1,
+            self.show_segment(edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
 
@@ -2915,7 +2921,7 @@ class Layout(object):
 #        if ax==[]:
 #            ax = fig.gca()
         if fig == []:
-           fig = plt.figure()
+           fig = plt.gcf()
         if not isinstance(ax, plt.Axes):
             ax  = fig.add_subplot(111)
 
@@ -2947,9 +2953,11 @@ class Layout(object):
             tn = np.array(self.Gs.node.keys())
             u  = np.nonzero(tn > 0)[0]
             edlist = tn[u]
+
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
             self.show_nodes(ndlist, size=10, color='r', dlabels=dlabels)
+
         slablist = self.name.keys()
         if self.display['edges']:
             dlabels = self.display['edlabel']
@@ -2967,7 +2975,7 @@ class Layout(object):
                 edlist2 = set(dico[k])
                 edlist = list(edlist2.intersection(set(edlist)))
                 color = self.sl[k]['color']
-                self.show_edges(edlist=edlist, color='black', alpha=1)
+                self.show_segment(edlist=edlist, color='black', alpha=1)
 
         if self.display['scaled']:
             ax.axis('scaled')
@@ -3020,6 +3028,22 @@ class Layout(object):
         if 'i' in graph:
             self.buildGi()
             self.buildGi2()
+
+        # dictionnary of cycles which have an air wall
+        #self.build()
+        self.dca={}
+        for seg,d in self.Gs.node.items():
+            if seg >0 :
+                if d['name'] == 'AIR':
+                    cy=d['ncycles']
+                    try:
+                        self.dca[cy[0]].append(cy[1])
+                    except:
+                        self.dca[cy[0]]=[cy[1]]
+                    try:
+                        self.dca[cy[1]]=[cy[0]]
+                    except:
+                        self.dca[cy[1]].append(cy[0])
 
         f=os.path.splitext(self.filename)
         if f[1] =='.ini':

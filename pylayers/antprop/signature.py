@@ -293,7 +293,7 @@ class Signatures(dict):
     def run(self,cutoff=1,dcut=2):
 
         lcil=self.L.cycleinline(self.source,self.target)
-        
+
         if len(lcil) <= 2:
             print 'run1'
             self.run1(cutoff=cutoff)
@@ -543,7 +543,21 @@ class Signatures(dict):
 #        metasig=self.lineofcycle(cs,ct)
 
 ############################################################
-##       obtain the list of cycle in line
+##
+##      1. the sequence of cycle between cycle source cs and
+##      cycle target ct are obtained via cycleinline method
+##
+##      2. all cycles adjscent at least to one of the previously
+##      obtained cycles are appended to the list lca (list of cycle around)
+##
+##      3. It is then required to add all cycles
+##      connected to the previous ones via an air wall.
+##
+##      lca is used to build the sliding graph of interactions
+##      it is important that lcil remains ordered this is not the case
+##      for lca
+
+
 
         cs = self.source
         ct = self.target
@@ -553,7 +567,7 @@ class Signatures(dict):
             ncy = nx.neighbors(self.L.Gt,cy)
             lca = lca+ncy
         lca = list(np.unique(np.array(lca)))
-        lca = lcil 
+        lca = lcil
         lcair=[]
         for cy in lca:
             try:
@@ -562,72 +576,65 @@ class Signatures(dict):
                 pass
         lca = lca + lcair
         lca = list(np.unique(np.array(lca)))
-
-
-############################################################
-##       Compose graph of interactions with the list lca of
-##       cycles around line of cycles
-
-#        Gi = nx.DiGraph()
-#        for cycle in lca:
-#            Gi = nx.compose(Gi,self.L.dGi[cycle])
-
-#        # facultative update positions
-#        Gi.pos = {}
-#        for cycle in lca:
-#            Gi.pos.update(self.L.dGi[cycle].pos)
-
-
-        # extract segment from list of interactions of  lca
+        #
+        # extract list of interactions from list of cycles lca
+        #
         li = []
         for ms in lca:
-            li = li + self.L.Gt.node[ms]['inter'] 
-            if '(354, 29)' in li :
-                pdb.set_trace()
-
+            li = li + self.L.Gt.node[ms]['inter']
+        # enforce unicity of interactions in list li
         li = list(np.unique(np.array(li)))
 
+        # extract dictionnary of interactions position
         dpos = {k:self.L.Gi.pos[k] for k in li}
 
-        # build the subgraph of L.Gi with only selected interactions
+        # build the subgraph of L.Gi with only the selected interactions
         Gi = nx.subgraph(self.L.Gi,li)
         Gi.pos = dpos
 
-
-#        #
-#        #
-#        #
         Gf = nx.DiGraph()
         Gf.pos = {}
-        # remove diffractions from Gi
+        # remove diffractions points from Gi
         Gi = gidl(Gi)
         # add 2nd order output to edges
         Gi = edgeout(self.L,Gi)
         #for interaction source  in list of source interaction
 
-####################################################
+############################################################
 #        filter list of interactions in termination cycles
 
+        # list of interactions belonging to source
         lis = self.L.Gt.node[lcil[0]]['inter']
+
+        # list of interactions belonging to target
         lit = self.L.Gt.node[lcil[-1]]['inter']
+
         # filter lis remove transmission coming from outside
-        lli = []
-        for li in lis:
-            ei = eval(li)
-            if len(ei)==2:
-                lli.append(li)
-            if len(ei)==3:
-                if ei[2]<>cs:
-                   lli.append(li)
+        lli   = []
+        lisR  = filter(lambda l: len(eval(l))==2,lis)
+        lisT  = filter(lambda l: len(eval(l))==3,lis)
+        lisTo = filter(lambda l: eval(l)[2]<>cs,lisT)
+        lli = lisR + lisTo
+        # for li in lis:
+        #     ei = eval(li)
+        #     if len(ei)==2:
+        #        lli.append(li)
+        #    if len(ei)==3:
+        #        if ei[2]<>cs:
+        #           lli.append(li)
         # filter lit remove transmission going outside
         llt = []
-        for li in lit:
-            ei = eval(li)
-            if len(ei)==2:
-                llt.append(li)
-            if len(ei)==3:
-                if ei[2]==ct:
-                   llt.append(li)
+        litR  = filter(lambda l: len(eval(l))==2,lit)
+        litT  = filter(lambda l: len(eval(l))==3,lit)
+        litTi = filter(lambda l: eval(l)[2]==ct,litT)
+        llt = litR + litTi
+        #for li in lit:
+        #    ei = eval(li)
+        #    if len(ei)==2:
+        #        llt.append(li)
+        #    if len(ei)==3:
+        #        if ei[2]==ct:
+        #           llt.append(li)
         lis = lli
         lit = llt
 

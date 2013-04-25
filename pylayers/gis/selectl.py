@@ -77,11 +77,12 @@ class SelectL(object):
         #print('show : axis',axis) 
         #plt.axis(ax)
         self.L.display['clear'] = clear
-        self.L.display['nodes'] = dnodes
-        self.L.display['edges'] = dedges
+        #self.L.display['nodes'] = dnodes
+        #self.L.display['edges'] = dedges
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
-        self.L.display['ednodes'] = True
+        #self.L.display['ednodes'] = False
+        #self.L.display['nodes'] = False
         fig,ax = self.L.showGs(fig,ax,axis=axis)
         return(fig,ax)
 
@@ -323,28 +324,50 @@ class SelectL(object):
         cold = pyu.coldict()
         #print "In State ",self.state
         #print "In Event ",self.evt
+
         #
-        # Choose layers to visualized
+        # flip layout in y
         #
         if self.evt == 'v':
             for n in self.L.Gs.pos:
                 self.L.Gs.pos[n]=(self.L.Gs.pos[n][0],-self.L.Gs.pos[n][1])
-
+            self.update_state()
+            return
+        #
+        # offset layout
+        #
         if self.evt == 't':
             offx,offy = offsetbox() 
             for n in self.L.Gs.pos:
                 self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]+offx,self.L.Gs.pos[n][1]+offy)
+            self.update_state()
+            return 
 
+        #
+        # Choose layers to visualized
+        #
         if self.evt == 'l':
             listchoices = self.L.name.keys()
             self.L.display['layers'] = multchoicebox('message',
                                                      'titre', listchoices)
             self.state = 'Init'
             self.update_state()
-            return 
+            return
         #
         # Increment layer
         #
+        if self.evt=='f':
+            self.L.display['nodes'] = not self.L.display['nodes']
+            print self.L.display['nodes']
+            self.update_state()
+            return
+
+        if self.evt=='g':
+            self.L.display['ednodes'] = not self.L.display['ednodes'] 
+            print self.L.display['ednodes']
+            self.update_state()
+            return
+
         if self.evt=='=':
             N = len(self.L.display['layerset'])
             index = self.L.display['layerset'].index(self.L.display['activelayer'])
@@ -413,8 +436,9 @@ class SelectL(object):
         #
         if self.evt == 'b':
             if self.state == 'Init':
-                nseg = eval(raw_input("seg number :"))
-                self.L.edit_segment(nseg)
+                self.nsel = eval(raw_input("seg number :"))
+                #self.L.edit_segment(nseg)
+                self.state='SS'
                 self.update_state()
                 return
 
