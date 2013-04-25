@@ -1016,53 +1016,6 @@ and its neighbors o 0/0.5*Pi/Pi/1.5*Pi/2*Pi.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pylayers.util.geomutil.displot">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">displot</tt><big>(</big><em>pt</em>, <em>ph</em>, <em>col='black'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#displot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.displot" title="Permalink to this definition">¶</a></dt>
-<dd><p>discontinuous plot</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pt:</strong> :</p>
-<blockquote>
-<div><p>tail points array (2 x (2*Nseg))</p>
-</div></blockquote>
-<p><strong>ph :</strong> :</p>
-<blockquote>
-<div><p>head points array (2 x (2*Nseg))</p>
-</div></blockquote>
-<p><strong>col</strong> : string</p>
-<blockquote>
-<div><p>color name</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>f,a</strong> :</p>
-<blockquote class="last">
-<div><p>fig and ax</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span>   <span class="o">=</span> <span class="mi">10</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pt</span>  <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ph</span>  <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/util-geomutil-4.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-4.png">png</a>, <a class="reference external" href="../modules/util-geomutil-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-4.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/util-geomutil-4.png" src="../_images/util-geomutil-4.png" />
-</div>
-</dd></dl>
-
-<dl class="function">
 <dt id="pylayers.util.geomutil.dist">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">dist</tt><big>(</big><em>x</em>, <em>y</em>, <em>ax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.dist" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates distance between two arrays along a given axis
@@ -1088,7 +1041,10 @@ ax : integer (0,1)</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-5.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-4.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-4.png">png</a>, <a class="reference external" href="../modules/util-geomutil-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-4.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/util-geomutil-4.png" src="../_images/util-geomutil-4.png" />
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1308,9 +1264,9 @@ Parameters
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-6.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-6.png">png</a>, <a class="reference external" href="../modules/util-geomutil-6.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-6.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-5.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-5.png">png</a>, <a class="reference external" href="../modules/util-geomutil-5.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-5.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-6.png" src="../_images/util-geomutil-6.png" />
+<img alt="../_images/util-geomutil-5.png" src="../_images/util-geomutil-5.png" />
 </div>
 </dd></dl>
 

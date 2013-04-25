@@ -292,16 +292,15 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.errel">
-<tt class="descname">errel</tt><big>(</big><em>kf=0</em>, <em>dsf=1</em>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.errel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.errel" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">errel</tt><big>(</big><em>kf=-1</em>, <em>dsf=1</em>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.errel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.errel" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates error between antenna pattern and reference pattern</p>
-<p>This function works for a single frequency point</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>kf</strong> : integer</p>
 <blockquote>
-<div><p>frequency index</p>
+<div><p>frequency index. If k=-1 integration over all frequency</p>
 </div></blockquote>
 <p><strong>dsf</strong> : down sampling factor</p>
 <p><strong>typ :</strong> :</p>
@@ -530,6 +529,11 @@ original pattern.</p>
 <p>N is a parameter which allows to suppress value at the pole for the calculation of the error
 if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.pattern">
+<tt class="descname">pattern</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>typ='s3'</em><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.pol2cart">

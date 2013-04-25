@@ -87,7 +87,13 @@ link ( from the fris formula) is introduced in this function.</p>
 <dl class="method">
 <dt id="pylayers.signal.waveform.Waveform.fromfile">
 <tt class="descname">fromfile</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.fromfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.fromfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the measurement waveform</p>
+<dd><p>get the measurement waveform from WHERE1 measurement campaign</p>
+<p>This function is not yet generic</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">({</span><span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;file&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -126,7 +132,7 @@ ip_generic(self,parameters)</p>
 
 <dl class="method">
 <dt id="pylayers.signal.waveform.Waveform.show">
-<tt class="descname">show</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>fig=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.show" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

@@ -164,7 +164,7 @@ tdoa : boolean</div></blockquote>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>Rest</strong> : string</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>Range</strong> : numpy.ndarray</td>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>rg</strong> : numpy.ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -189,7 +189,7 @@ tdoa : boolean</div></blockquote>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>Rest</strong> : string</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>Range_std</strong> : numpy.ndarray</td>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>rg_std</strong> : numpy.ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -395,7 +395,8 @@ Rest : string</p>
 <dl class="function">
 <dt id="pylayers.location.algebraic.algebraic.scenario">
 <tt class="descclassname">pylayers.location.algebraic.algebraic.</tt><tt class="descname">scenario</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/algebraic/algebraic.html#scenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.algebraic.algebraic.scenario" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines a sample scenario for testing</p>
+<dd><p>This method is not a class member, it defines a sample scenario.
+Defines a sample scenario for testing</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -422,13 +423,13 @@ Rest : string</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">TOA</span> <span class="o">=</span> <span class="n">TOF</span> <span class="o">+</span> <span class="n">TOA_std</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">RSS_std</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">RSS_np</span> <span class="o">=</span> <span class="mf">2.645</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">PL0</span> <span class="o">=</span> <span class="mf">34.7</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rss_std</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rss_np</span> <span class="o">=</span> <span class="mf">2.645</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pl0</span> <span class="o">=</span> <span class="mf">34.7</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nRN</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d0</span> <span class="o">=</span> <span class="mf">1.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d_RSS</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">RN_RSS</span><span class="p">,</span><span class="n">BN</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c"># actual distances</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">RSS_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">PL0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">RSS</span> <span class="o">=</span> <span class="n">PL0</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="n">RSS_np</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_RSS</span><span class="o">/</span><span class="n">d0</span><span class="p">)</span><span class="o">+</span><span class="n">X</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">rss_std</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pl0</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rss_db</span> <span class="o">=</span> <span class="n">pl0</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="n">rss_np</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_RSS</span><span class="o">/</span><span class="n">d0</span><span class="p">)</span><span class="o">+</span><span class="n">X</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">RNr_TDOA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span><span class="n">nRN</span><span class="p">))</span><span class="c">#L*sp.rand(dim,nRN)</span>
@@ -448,11 +449,11 @@ Rest : string</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="o">=</span><span class="p">{}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RSS</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RSS_std</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_np&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RSS_np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rss_db</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rss_std</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_np&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rss_np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;PL0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PL0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;PL0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pl0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TOA_std</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TDOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TDOA</span>

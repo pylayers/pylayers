@@ -116,8 +116,8 @@ o  : axis = 2   orhogonal axis</div></blockquote>
 T = matrix(T_o &amp; 0\0 &amp; T_p)</p>
 </div></blockquote>
 <p class="rubric">Notes</p>
-<p>R : np.array   (nf , nt , 2, 2)
-T : np.array   (nf , nt , 2, 2)</p>
+<p>R : np.array   (f , th , 2, 2)
+T : np.array   (f , th , 2, 2)</p>
 </dd></dl>
 
 <dl class="method">
@@ -411,8 +411,8 @@ sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJcB&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="o">+</span><span class="mi">0</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&#39;Jacob.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -903,7 +903,7 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 
 <dl class="class">
 <dt id="pylayers.antprop.slab.SlabDB">
-<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">SlabDB</tt><big>(</big><em>filemat='matDB.ini'</em>, <em>fileslabini='slabDB.ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">SlabDB</tt><big>(</big><em>filemat='matDB.ini'</em>, <em>fileslab='slabDB.ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Slab data base</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

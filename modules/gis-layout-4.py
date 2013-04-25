@@ -1,10 +1,10 @@
 from pylayers.gis.layout import *
-L = Layout()
-L.load('exemple.str')
+L = Layout('exemple.str')
 L.buildGt()
 L.buildGr()
 L.buildGv()
 fig,ax = L.showGs()
 fig,ax = L.showGv(ax=ax)
+ti = plt.title('Show Gv')
 t = plt.axis('off')
 plt.show()

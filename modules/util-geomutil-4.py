@@ -1,8 +1,5 @@
-import scipy as sp
-import matplotlib.pyplot as plt
-from pylayers.util.geomutil import *
-N   = 10
-pt  = sp.rand(2,N)
-ph  = sp.rand(2,N)
-f,a = displot(pt,ph)
-txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
+import numpy as np
+x = np.array([[0., 0., 10., 10.],[0., 10., 10., 0.]])
+y = np.array([[5.],[5.]])
+ax = 0
+d = dist(x,y,ax)

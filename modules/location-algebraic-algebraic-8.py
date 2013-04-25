@@ -13,13 +13,13 @@ TOF = d_TOA/c # actual TOA
 TOA_std = 0.001/c*np.ones(np.shape(TOF))
 TOA = TOF + TOA_std
 
-RSS_std = 0.001 * np.ones(nRN)
-RSS_np = 2.645 * np.ones(nRN)
-PL0 = 34.7*np.ones(nRN)
+rss_std = 0.001 * np.ones(nRN)
+rss_np = 2.645 * np.ones(nRN)
+pl0 = 34.7*np.ones(nRN)
 d0 = 1.
 d_RSS = dist(RN_RSS,BN,0) # actual distances
-X = RSS_std * np.random.randn(np.shape(PL0)[0])
-RSS = PL0-10*RSS_np*np.log10(d_RSS/d0)+X
+X = rss_std * np.random.randn(np.shape(pl0)[0])
+rss_db = pl0-10*rss_np*np.log10(d_RSS/d0)+X
 
 RNr_TDOA = np.zeros((dim,nRN))#L*sp.rand(dim,nRN)
 d = dist(RN_TDOA,BN,0)
@@ -36,11 +36,11 @@ nodes['RN_TDOA']= RN_TDOA
 nodes['RNr_TDOA']= RNr_TDOA
 
 ldp={}
-ldp['RSS'] = RSS
-ldp['RSS_std'] = RSS_std
-ldp['RSS_np'] = RSS_np
+ldp['RSS'] = rss_db
+ldp['RSS_std'] = rss_std
+ldp['RSS_np'] = rss_np
 ldp['d0'] = d0
-ldp['PL0'] = PL0
+ldp['PL0'] = pl0
 ldp['TOA'] = TOA
 ldp['TOA_std'] = TOA_std
 ldp['TDOA'] = TDOA
