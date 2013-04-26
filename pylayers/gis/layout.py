@@ -1265,7 +1265,7 @@ class Layout(object):
 
         Parameters
         ----------
-        p is a (1x2) tuple 
+        p is a (1x2) tuple
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
@@ -1321,20 +1321,20 @@ class Layout(object):
         #print x
 
     def add_pons(self, ns, alpha=0.5):
-        """ add point on segment 
+        """ add point on segment
 
         Parameters
         ----------
-        ns  : int 
-            segment number 
-        alpha : parameterization of the point 
+        ns  : int
+            segment number
+        alpha : parameterization of the point
             alpha = 0 (tail) alpha = 1 (head)
 
         Notes
         -----
 
-        delete segment ns 
-        create 2 segments with same properties 
+        delete segment ns
+        create 2 segments with same properties
 
         """
         nop = self.Gs.neighbors(ns)
@@ -3223,6 +3223,7 @@ class Layout(object):
                     if k not in self.Gs.node[n]['ncycles']:
                         self.Gs.node[n]['ncycles'].append(k)
                         if len(self.Gs.node[n]['ncycles'])>2:
+                            print n,len(self.Gs.node[n]['ncycles'])
                             raise NameError('A segment cannot link more than 2 cycles')
 
         #

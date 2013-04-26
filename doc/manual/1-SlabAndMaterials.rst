@@ -12,9 +12,9 @@ Layout ploting
 ~~~~~~~~~~~~~~
 
 
-The layout ploting expoits vizaulization function of networkx. The
-method showG allows to display the different graphs which constitute the
-layout. option graph :math:`$\in$` {'s','t','i','r','v'}
+The layout ploting exploits vizaulization functions of networkx. The
+method **showG** allows to display the different graphs which constitute the
+layout. The different option for ploting a graph are :math:`$\in$` {'s','t','i','r','v'}
 
 In[73]:
 
