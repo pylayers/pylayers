@@ -324,6 +324,7 @@ class Interactions(Inter,dict):
         self.evaluated = True
 
 
+
 class IntB(Inter):
     """ Local Basis interaction class
 

@@ -536,8 +536,16 @@ class Rays(dict):
         D = IntD()
 
         idx = np.array(())
-        idxts = 0
-        nbrayt = 0
+        if self.los:
+            idxts = 1
+            nbrayt = 1
+
+        else:
+            idxts = 0
+            nbrayt = 0
+
+
+
 
         # Transform dictionnary of slab name to array
         slv = nx.get_node_attributes(L.Gs, "name").values()
@@ -632,6 +640,7 @@ class Rays(dict):
                 #  ,(i+1)xr
                 sif = si[:, :].reshape(size2,order='F')
                 # 2x2,(i+1)xr
+
                 b0 = self[k]['B'][:,:,0,:]
                 b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
                 ## find used slab
@@ -710,6 +719,16 @@ class Rays(dict):
                 ############
                 T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
 
+            elif self.los:
+                ze = np.array([0])
+                self[k]['rays'] = np.array(([[0]]))
+                self[k]['nbrays'] = 1
+                self[k]['rayidx'] = ze
+                self.nray=1
+                self.ray2nbi=ze
+                B.stack(data=np.eye(2)[np.newaxis,:,:], idx=ze)
+                B0.stack(data=np.eye(2)[np.newaxis,:,:],idx=ze)
+
         T.create_dusl(tsl)
         R.create_dusl(rsl)
         self.I = I
@@ -727,8 +746,6 @@ class Rays(dict):
         B=self.B.eval(fGHz)
         B0=self.B0.eval(fGHz)
 
-        if self.los:
-            self.nray=self.nray+1
 
 
 
@@ -746,7 +763,6 @@ class Rays(dict):
 
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
-
         # loop on interaction blocks
         for l in self:
             if l != 0:
@@ -851,12 +867,12 @@ class Rays(dict):
 
 
         if self.los:
-            Ct[:,-1, :, :]= np.eye(2,2)[np.newaxis,np.newaxis,:,:]
+            Ct[:,0, :, :]= np.eye(2,2)[np.newaxis,np.newaxis,:,:]
             self[0]['dis'] = self[0]['si'][0]
             # Fris
-            Ct[:,-1, :, :] = Ct[:,-1, :, :]*1./(self[0]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
-            self.delays[-1] = self[0]['dis']/0.3
-            self.dis[-1] = self[0]['dis']
+            Ct[:,0, :, :] = Ct[:,0, :, :]*1./(self[0]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+            self.delays[0] = self[0]['dis']/0.3
+            self.dis[0] = self[0]['dis']
 
 
         # To be corrected in a future version
@@ -939,9 +955,9 @@ class Rays(dict):
             if i == 'T' or i == 'R':
                 I = getattr(self.I, i)
                 for slab in I.dusl.keys():
-                    print slab
+#                    print slab
                     midx = I.dusl[slab]
-                    print midx
+#                    print midx
                     Iidx = np.array((I.idx))[midx]
                     th = I.data[I.dusl[slab], 0]
                     gamma = I.gamma[midx]
