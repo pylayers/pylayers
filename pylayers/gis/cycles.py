@@ -31,7 +31,7 @@ class Cycles(nx.DiGraph):
         """
         nx.DiGraph.__init__(self)
 
-    #def __repr__(self):
+    def __repr__(self):
         s = ''
         s = s + 'Number of cycles :' +str(len(self.node)) + '\n'
         for k in self:
@@ -46,7 +46,7 @@ class Cycles(nx.DiGraph):
             print k , self.Gi.neighbors(k)
 
     def inclusion(self,full=True):
-        """  Inform the inclusion relations between cycles 
+        """  Inform the inclusion relations between cycles
 
         Notes
         -----
@@ -81,13 +81,19 @@ class Cycles(nx.DiGraph):
         self.l1     = {}
         self.l2     = {}
         self.Area2  = []
+        #
+        # the list of cycles is either the whole set of nodes
+        # or only connected nodes (nodes with degree > 0)
+        #
         if full:
-            lcyt= [ k for k in self] 
+            lcyt= [ k for k in self]
         else:
             lcyt = [ k for k in self if nx.degree(self)[k]>0]
         #print lcyt
+        #
+        # loop on all cycle in list of cycles
         for k in lcyt:
-            Areak = 0
+            #Areak = 0
             ck = self.node[k]['cycle']
             for l in self:
                 if l!=k:
@@ -105,8 +111,8 @@ class Cycles(nx.DiGraph):
                         except:
                             self.contained_in[l]=[k]
                         # update Area iteration k
-                        Areak = abs(cl.area) + Areak
-            self.Area2.append(Areak)
+                        #Areak = abs(cl.area) + Areak
+            #self.Area2.append(Areak)
             try:
                 self.l1[k]       = len(self.contained_by[k])
             except:
@@ -142,6 +148,56 @@ class Cycles(nx.DiGraph):
                             cmin = self.l1[cy2]
                     # c includes cy1
                     self.add_edge(c,cy1)
+
+
+    def decompose2(self):
+        """ recursive function to transform the cycle basis
+
+        """
+        #
+        # root if degree == number of successors
+        #
+        plt.ion()
+        self.lcyroot =[k for k in nx.degree(self)
+                  if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
+                  (nx.degree(self)[k]>0))]
+
+        #for ncyroot in lcyroot:
+        while len(self.lcyroot)>0:
+            # get big cycle
+            ncyroot = self.lcyroot.pop()
+            cybig = self.node[ncyroot]['cycle']
+            #cybig.show('b')
+            # get the list of the successor cycle indices
+            lninc = nx.neighbors(self,ncyroot)
+            for ninc in lninc:
+                cyinc = self.node[ninc]['cycle'] # cycle included
+                cysmall = cybig.split(cyinc) # small cycle
+                if cysmall !=None:
+                    cybig = cysmall
+            #cyinc.show('g')
+            #
+            # split cycle :  cybig = cyinc \cup cysmall
+            #
+            if cysmall != None:
+                self.node[ncyroot]['cycle']=cysmall
+                self.pos[ncyroot]=tuple(cysmall.g)
+                cysmall.show('r')
+                plt.show()
+                for ninc in lninc:
+                    print ncyroot,ninc
+                    self.remove_edge(ncyroot,ninc)
+
+            #
+            # recursive call of decompose
+            #
+            self = self.decompose2()
+            #
+            # Two lines to kill the monster
+            #
+            if len(self.lcyroot)==0:
+                return(self)
+        return(self)
 
     def decompose(self):
         """ recursive function to transform the cycle basis
@@ -191,7 +247,6 @@ class Cycles(nx.DiGraph):
                 if len(self.lcyroot)==0:
                     return(self)
         return(self)
-
 
 class Cycle(object):
     """ Graph cycle class
@@ -421,11 +476,11 @@ class Cycle(object):
 
           Parameters
           ----------
-          Cy :  Cycle
+          cyin :  input cycle
 
           Returns
           -------
-          cyout : Cycle
+          cyout : list of output cycles
 
           Notes
           -----
@@ -455,6 +510,10 @@ class Cycle(object):
             G.pos = {}
             G.pos.update({node: Gunion.pos[node] for node in Gunion})
             cyout = Cycle(G)
+            diffarea = abs(self.area)-(abs(cyin.area)+abs(cyout.area))
+            if diffarea>1e-10:
+                print "area error",diffarea
+                pdb.set_trace()
 
             return(cyout)
 
