@@ -1,4 +1,4 @@
-#-*- coding:Utf-8 -*-
+#1-*- coding:Utf-8 -*-
 import doctest
 import numpy as np
 #import scipy as sp

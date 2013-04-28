@@ -1,100 +1,99 @@
 # -*- coding:Utf-8 -*-
 #
-# Class Cycles
-# Class Cycle
-# 
-# Author : B.Uguen 
-# 
-import doctest 
+# Class Cycles(list)
+# Class Cycle(Graph)
+#
+# Author : B.Uguen
+#  2nd implementation : April 2013
+#
+import doctest
 import networkx as nx
-import numpy as np 
+import numpy as np
 from  pylayers.util import geomutil as geu
 from  pylayers.util import pyutil as pyu
 import matplotlib.pyplot as plt
+import logging
 import pdb
 
-class Cycles(object):
-    """ List of cycles
-
-    Attributes
-    ----------
-    LC    : List of Cycles
-    Nc    : number of Cycles
-    Area1 : list of cycles area
+class Cycles(nx.DiGraph):
+    """ Graph of Cycles
 
     Methods
     -------
-        inclusion 
+        inclusion
         simplify
+        decompose
+
     """
-    def __init__(self,LC,Gs):
+    def __init__(self):
         """
-        LC : list of Cycle
-        Gs : Stucture Graph of a Layout
+            graph of cycle
         """
-        self.Gs = Gs
-        self.LC = LC
-        self.Nc = len(LC)
-        self.Gt = {}
-        self.inclusion()
-        self.Area1 = []
-        for k in range(len(LC)):
-            self.Area1.append(LC[k].area)
-        self.simplify()
+        nx.DiGraph.__init__(self)
+
+    #def __repr__(self):
+        s = ''
+        s = s + 'Number of cycles :' +str(len(self.node)) + '\n'
+        for k in self:
+            s = s + str(self.node[k]['cycle']) + '\n'
+        return(s)
 
     def info(self):
         """ get info from Cycles object
         """
-        print "Number of cycles : ",self.Nc
+        print "Number of cycles : ",len(self)
         for k in self.Gi:
             print k , self.Gi.neighbors(k)
 
-    def inclusion(self):
-        """
+    def inclusion(self,full=True):
+        """  Inform the inclusion relations between cycles 
 
         Notes
         -----
 
         update cycle inclusion graph
-        inclusion is not a reciprocal relation that is the reason why 
-        we loop twice over the entire cycles
 
-        Algorithme :
-            Pour tous les cycles
-                Ck
-                Pour tous les cycles
-                      Cl
-                      Si c'est le meme cycle on passe
-                      Sinon
-                    check inclusion of Ck in Cl
-                    If Inclusion detected
-                        update graphe
-                        d'inclusion Cl in Ck
+        inclusion is not a reciprocal relation that is the reason why
+        we loop twice over the entire cycles list
 
-        Attention :
-            Le test d'inclusion de cycle de fonctionne que si les
-            cycles ont un brin en commun. Si deux cycles ne
-            partagent aucun brin le test d'inclusion renvoie False
-            meme si ce n'est pas le cas
+        Algorithm :
+            for all cycles ck
+                for all cycles cl
+                    if ck <> cl
+                        check inclusion of Ck in Cl
+                        If Inclusion detected
+                            update graphe
 
-        Les relations d'inclusion reelles are recovered par
-        transitivity de la relation d'inclusion
+        Warning
+        -------
+            The inclusion test works only for cycles which share
+            at least one portion of their cycle.
+            If one cycle is completely included in the other the return
+            will be false even if there is inclusion
 
-        Cette fonction met a jour un Digraph
+        actual inclusion relationships are recovered by transitivity of inclusion
+
+        This function updates a Digraph of inclusion
+
         """
-        self.Gi     = nx.DiGraph()
         self.contained_in = {}
         self.contained_by = {}
         self.l1     = {}
         self.l2     = {}
         self.Area2  = []
-        for k in range(self.Nc):
-            ck = self.LC[k]
-            self.Gi.add_node(k)
-            Area     = 0
-            for l in range(self.Nc):
-                if l != self.Nc:
-                    cl = self.LC[l]
+        if full:
+            lcyt= [ k for k in self] 
+        else:
+            lcyt = [ k for k in self if nx.degree(self)[k]>0]
+        #print lcyt
+        for k in lcyt:
+            Areak = 0
+            ck = self.node[k]['cycle']
+            for l in self:
+                if l!=k:
+                    cl = self.node[l]['cycle']
+                    # test inclusion of cl(small) by ck(big)
+                    # non reciprocal
                     incl,path = ck.inclusion(cl)
                     if incl:
                         try:
@@ -105,115 +104,95 @@ class Cycles(object):
                             self.contained_in[l].append(k)
                         except:
                             self.contained_in[l]=[k]
-                        Area = abs(cl.area) + Area
-            self.Area2.append(Area)
+                        # update Area iteration k
+                        Areak = abs(cl.area) + Areak
+            self.Area2.append(Areak)
             try:
                 self.l1[k]       = len(self.contained_by[k])
             except:
                 self.l1[k]       = 0
 
         #
-        # l2 : dictionnaire  longueur d'inclusion <--> cycles inclus
+        # l1 : dictionnary
+        #      key : cycle index   value : number of included cycles
         #
+        # l2 : dictionnary
+        #      key : number of included cycles  value : cycle index
+        #
+
         for k in self.l1.keys():
             l = self.l1[k]
             try:
                 self.l2[l].append(k)
             except:
                 self.l2[l]=[k]
-        # pour toutes les longueurs d'inclusion en partant de 0
+        # for all inclusion length (starting in 0) 
         for l in self.l2.keys():
-            # liste des no de cycle de longueur d'inclusion l
+            # retrieve the list of included cycles of length l
             lnode = self.l2[l]
-            for n in lnode:
-                if self.contained_in.has_key(n):
-                    v = self.contained_in[n]
-                    #print "cycle :",n," is contained in cycles ",v
-                    cmin = self.Nc
-                    for cy in v:
-                        # cherche le cycle incluant de
-                        # longueur minimale
-                        if self.l1[cy] < cmin:
-                            c    = cy
-                            cmin = self.l1[cy]
-                    self.Gi.add_edge(c,n)
+            for cy1 in lnode:
+                if self.contained_in.has_key(cy1):
+                    v = self.contained_in[cy1]
+                    logging.info("cycle %d is included in cycles %s",cy1,str(v)) 
+                    cmin = len(self) # ???
+                    for cy2 in v:
+                        # seek the including cycle of minimal length
+                        if self.l1[cy2] < cmin:
+                            c    = cy2
+                            cmin = self.l1[cy2]
+                    # c includes cy1
+                    self.add_edge(c,cy1)
 
-    def simplify(self):
-        """ simplify Cycles
-
-        Notes 
-        ------
-
-            Pour tous les cycles
-                Ck
-                Recherche les voisins du cycle k
-
-                Si pas de voisins
-                    Le cycle est simple ( non incluant)
-                    Mise a jour du graphe de topologie Gt
-                Sinon
-                    Le cycle est incluant
-                    Construit la liste M de tous les cycles inclus dans Ck
-
-                    Simplification de Ck avec M
-                    Mise a jour du graphe de topologie Gt
+    def decompose(self):
+        """ recursive function to transform the cycle basis
 
         """
-        self.Gt     = nx.Graph()
-        self.Gt.pos = {}
+
+        self.inclusion(True)
         #
-        # Simplification des cycles incluants
+        # root if degree == number of successors
         #
-        # Ce n'est pas le bon algo
-        #
-        NC = []
-        for k in self.Gi.node.keys():
-            ck = self.LC[k]
-            l  = nx.neighbors(self.Gi,k)
-            if len(l)!=0: # cycle incluant
-                cl = self.LC[l[0]]
-                C  = ck.untie(self.Gs,cl)
-                #AC = abs(C.area)
-                #Al = abs(cl.area)
-                #Ak = abs(ck.area)
-                #if (AC+Al!=Ak):
-                #    print "Ak    :",Ak
-                #    print "AC+Al :",AC + Al
-                #    print "diff :",AC + Al - Ak
-                NC.append(C)
-                self.Gt.add_node(k,vnodes=C.cycle)
-                self.Gt.pos[k]=C.g
-                #C.show()
-            else:  # cycle simple
-                NC.append(ck)
-                self.Gt.add_node(k,vnodes=ck.cycle)
-                self.Gt.pos[k]=ck.g
-                #ck.show('red')
-        #self.LC = NC
-        MC = []
-        for j in self.l2:
-            for k in self.l2[j]:
-                ck = self.LC[k]
-                if j>0:
-                    l  = nx.neighbors(self.Gi,k)
-                    C  = ck
-                    # simplification cycles inclus multiples
-                    for nl in l:
-                        cl = self.LC[nl]
-#                        if (j == 16) and (k ==48) and (nl == 52):
-#                            pdb.set_trace()
-                        C  = C.untie(self.Gs,cl)
+        self.lcyroot =[k for k in nx.degree(self)
+                  if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
+                  (nx.degree(self)[k]>0))]
+        print self.lcyroot
+
+        #for ncyroot in lcyroot:
+        while len(self.lcyroot)>0:
+            # get big cycle
+            ncyroot = self.lcyroot.pop()
+            cybig = self.node[ncyroot]['cycle']
+            #cybig.show('b')
+            # buid dictionnary dsuc
+            #   key : cycle number
+            #   value : list of successors
+            lninc = nx.neighbors(self,ncyroot)
+            # get the list of the successor cycle indices
+            for ninc in lninc:
+                cyinc = self.node[ninc]['cycle']     # cycle included
+                #cyinc.show('g')
+                #
+                # split cycle :  cybig = cyinc \cup cysmall
+                #
+                cysmall = cybig.split(cyinc) # small cycle
+                #self.add_node(ninc,cycle=cyinc)
+                if cysmall != None:
+                    self.node[ncyroot]['cycle']=cysmall
+                    self.pos[ncyroot]=tuple(cysmall.g)
+                    self.remove_edge(ncyroot,ninc)
+                    #cysmall.show('r')
+                    #
+                    # recursive call of decompose
+                    #
+                self = self.decompose()
+                #
+                # Two lines to kill the monster
+                #
+                if len(self.lcyroot)==0:
+                    return(self)
+        return(self)
 
 
-                    MC.append(C)
-                    self.Gt.add_node(k,vnodes=C.cycle)
-                    self.Gt.pos[k]=C.g
-                else:
-                    MC.append(ck)
-                    self.Gt.add_node(k,vnodes=ck.cycle)
-                    self.Gt.pos[k]=ck.g
-
-        self.LC = MC
 class Cycle(object):
     """ Graph cycle class
 
@@ -223,29 +202,46 @@ class Cycle(object):
     edges   : np.array
     cycle   : np.array
     """
-    def __init__(self,G,cycle):
-        # This is to obtained an ordered cycle
-        self.G  = G.subgraph(cycle)
-        cycle   = nx.algorithms.cycles.cycle_basis(self.G)[0]
+    def __init__(self,G):
+        # This call to cycle_basis is to obtained an ordered cycle
+        self.G  = G
+        cycle = nx.algorithms.cycles.cycle_basis(self.G)[0]
         self.G  = G.subgraph(cycle)
         self.G.pos = {}
-        for c in cycle:
-            self.G.pos[c] = G.pos[c]
-        self.cycle     = np.array(cycle)
+        self.G.pos.update({ node : G.pos[node] for node in cycle})
+        #for node in cycle:
+        #    self.G.pos[node] = G.pos[node]
+        self.cycle = np.array(cycle)
         self.size      = len(self.cycle)
         self.vertices  = self.cycle[np.nonzero(np.array(self.cycle)<0)[0]]
         self.edges     = self.cycle[np.nonzero(np.array(self.cycle)>0)[0]]
         self.Nv    = len(self.vertices)
         self.Ne    = len(self.edges)
-        self.p     = np.array([])
         for v in  self.vertices:
             try:
-                self.p  = np.hstack((self.p,np.array(self.G.pos[v]).reshape(2,1)))
+                pt =  np.array(self.G.pos[v]).reshape(2,1)
             except:
-                self.p  = np.array(self.G.pos[v]).reshape(2,1)
+                pdb.set_trace()
+            try:
+                self.p  = np.hstack((self.p,pt))
+            except:
+                self.p  = pt
 
         self.area = geu.SignedArea(self.p)
         self.g    = geu.Centroid(self.p)
+
+
+    def __repr__(self):
+        s = ''
+        s = s + 'cycle nstr'+str(self.cycle)+'\n'
+        s = s + 'point number '+str(self.Nv)+'\n'
+        s = s + 'segment number '+str(self.Ne)+'\n'
+        s = s + 'area : '+ str(self.area)+'\n'
+        s = s + 'centroid : '+ str(self.g)+'\n'
+        #s = s + 'G :'+str(self.G.nodes())
+        return(s)
+
+
 
     def info(self):
         """
@@ -270,20 +266,20 @@ class Cycle(object):
 
         Parameters
         ----------
-        Cy  : Cycle 
+        Cy  : Cycle
 
         Returns
         -------
-        boolean  : answer to the inclusion question 
-        path     : path 
+        boolean  : answer to the inclusion question
+        path     : path
 
-        Notes 
+        Notes
         -----
 
         Inclusion implies :
 
             1. The area of the including cycle is larger than the area of included cycle
-            2. The 2 cycles have at least  a common segment 
+            2. The 2 cycles have at least  a common segment
             3. When the  common segment is travelled with the same orientation both cycle SignedArea have the same sign
 
         """
@@ -306,12 +302,11 @@ class Cycle(object):
         else:
             return False,np.array([])
 
-    def simplify(self,G,L):
-        """ 
+    def simplify(self,L):
+        """
         Parameters
         ----------
 
-        G : 
         L : list of cycles
 
         """
@@ -319,7 +314,7 @@ class Cycle(object):
         for Cy in L:
             b,p = T.inclusion(Cy)
             if b:
-                T = T.untie(G,Cy)
+                T = T.split(Cy)
         return(T)
 
     def intersect(self,Cy):
@@ -421,36 +416,47 @@ class Cycle(object):
         return(flip,brin)
 
 
-    def untie(self,G,Cy):
-        """
-          untie(G,Cy)
+    def split(self,cyin):
+        """ split(Cy)
 
           Parameters
           ----------
-          G  : 
-          Cy :  Cycle 
+          Cy :  Cycle
 
-          Notes 
+          Returns
+          -------
+          cyout : Cycle
+
+          Notes
           -----
 
-          Simplify 2 cycles which are in a mutual relation of inclusion 
+          Simplify 2 cycles which are in a mutual relation of inclusion
 
         """
         e1 = self.edges
-        e2 = Cy.edges
-        incl,path = self.inclusion(Cy)
+        e2 = cyin.edges
+        Gunion = nx.compose(self.G,cyin.G)
+        # inform nodes position
+        Gunion.pos = {}
+        Gunion.pos.update({node:self.G.pos[node] for node in self.G})
+        Gunion.pos.update({node:cyin.G.pos[node] for node in cyin.G})
+        incl,path = self.inclusion(cyin)
         if incl:
             ee1   = e1[~np.in1d(e1,path)]
             ee2   = e2[~np.in1d(e2,path)]
             r     = np.hstack((ee1,ee2))
             cycle = np.array([],dtype=int)
             for kt in r:
-                nb = G.neighbors(kt)
+                nb = Gunion.neighbors(kt)
                 cycle = np.hstack((cycle,nb[0],kt,nb[1]))
-            # numpy old version : cycle = np.unique1d(cycle)
             cycle = np.unique(cycle)
-            NCy   = Cycle(G,cycle)
-            return(NCy)
+            # extract subgraph from cycle
+            G     = nx.subgraph(Gunion,cycle)
+            G.pos = {}
+            G.pos.update({node: Gunion.pos[node] for node in Gunion})
+            cyout = Cycle(G)
+
+            return(cyout)
 
 
     def corrcy(self,Cy,flip=False):
@@ -544,7 +550,7 @@ class Cycle(object):
 
 
     def show(self,color='b'):
-        nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color)
+        nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)
         plt.draw()
 
 if __name__ == "__main__":

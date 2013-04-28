@@ -307,11 +307,12 @@ class SelectL(object):
         'l'  : select activelayer
         'i'  : back to init state
         'e'  : edit segment
+        't'  : translate  structure
         'h'  : add subsegment
         'd'  : delete subsegment
         'r'  : refresh
         'o'  : toggle overlay
-        'm'  : toggle mode (point or segment)  
+        'm'  : toggle mode (point or segment)
         'z'  : change display parameters
         'q'  : quit interactive mode
         'x'  : save .str2 file
@@ -445,8 +446,12 @@ class SelectL(object):
                 self.state = 'Init'
                 self.update_state()
                 return
+
             if self.state == 'SP1':
-                print "Write edit_node"
+                self.L.edit_point(self.selected_pt1)
+                self.state = 'Init'
+                self.update_state()
+                return
         #
         # "b" : enter a segment node value with keyboard
         #

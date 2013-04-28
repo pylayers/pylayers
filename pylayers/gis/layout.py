@@ -36,7 +36,8 @@ from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
 # Handle furnitures
 import pylayers.gis.furniture as fur
-from pylayers.gis import cycles as Cycls
+#from pylayers.gis import cycles as Cycls
+from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
 from pylayers.util.easygui import *
 from pylayers.util.project import *
@@ -1742,8 +1743,24 @@ class Layout(object):
             print 'subseg zmax (m) : ', de1['ss_zmax']
         except:
             pass
-    
-    
+
+    def edit_point(self, np):
+        """ edit point
+
+        Parameters
+        ----------
+        np : integer
+            point number
+
+        """
+        title = "Point (" + str(np)  + ")"
+        message = "Enter coordinates "
+        pt = self.Gs.pos[np]
+        data = multenterbox(message, title, (('x','y')),
+                            ((str(pt[0]),str(pt[1]))))
+        self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1])) 
+
+
     def edit_segment(self, e1):
         """ edit segment
 
@@ -1761,8 +1778,8 @@ class Layout(object):
             + transition : boolean (default FALSE)
 
         If a segment has subsegments attached the following properties are
-        added : 
-            + ss_name : string 
+        added :
+            + ss_name : string
             + ss_zmin : subsegment min height (meters)
             + ss_zmax : subsegment max height (meters)
 
@@ -2861,13 +2878,13 @@ class Layout(object):
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
 
-    def showGt(self, ax=[], roomlist=[]):
-        """ show topological graph Gt 
+    def showGt(self, ax=[], roomlist=[],mode='area'):
+        """ show topological graph Gt
 
         Parameters
         -----------
         ax : matlplotlib axes
-        roomlist : list 
+        roomlist : list
             list of room numbers
 
         """
@@ -2878,16 +2895,17 @@ class Layout(object):
         for k, nc in enumerate(self.Gt.node.keys()):
             poly = self.Gt.node[nc]['polyg']
             a = poly.signedarea()
-            if poly.vnodes[0] < 0:
+            if mode == 'area':
                 if a < 0:
-                    poly.plot(color='red')
+                    poly.plot(color='red',alpha=0.5)
                 else:
-                    poly.plot(color='red', alpha=0.5)
-            else:
-                if a < 0:
-                    poly.plot(color='blue')
+                    poly.plot(color='green', alpha=0.5)
+            if mode == 'start':
+                if poly.vnodes[0] < 0:
+                    poly.plot(color='blue',alpha=0.5)
                 else:
-                    poly.plot(color='blue', alpha=0.5)
+                    poly.plot(color='yellow', alpha=0.5)
+
         ax.axis('scaled')
 
     def showGs(self,fig=[], ax=[], ndlist=[], edlist=[], show=False, furniture=False,
@@ -3172,15 +3190,20 @@ class Layout(object):
 
         Notes
         -----
-        1. Exploit `cycle_basis` function of NetworkX
+
+        1. Exploit `cycle_basis` function of NetworkX to get a cycle
+           decomposition of the graph
         2. Each discovered cycle in the graph Gs is transform in a Cycles.Cycles object
-        3. LC (List of Cycles) contains the list of all these Cycle object
-        4. Create graph G_t each cycle of Gs is a node of Gt
-        5. Seek for Cycle inter connectivity
-                Algorithm :
-                    For k in cycles :
-                        vnodesk = get vnodes(k)
-                            For l in cycles > k
+           LC (List of Cycles) contains the list of all these Cycle objects
+
+        Algorithm to create the Gt graph.
+        Each simple cycle of Gs is a node of Gt
+
+        Algorithm  : Seek for Cycle inter connectivity
+
+                    For c1 in cycles :
+                        vnodesc = get vnodes(c1)
+                            For c2 in cycles > c1
                                 vnodesl = get vnodes(l)
                                     nkinnl = vnodesk :math:\cap vnodesl
 
@@ -3191,14 +3214,39 @@ class Layout(object):
             nx.algorithms.cycles.cycle_basis
 
         """
+        #
+        # cycle_basis : get a cycle decomposition basis of Gs
+        #
         C = nx.algorithms.cycles.cycle_basis(self.Gs)
 
-        LC = []
-        for c in C:
-            Cy = Cycls.Cycle(self.Gs, c)
-            LC.append(Cy)
-        Cys = Cycls.Cycles(LC, self.Gs)
-        self.Gt = Cys.Gt
+        #
+        # append each cycle in a list of Cycle.
+        #
+        #   This is the creation of the nodes of Gt
+        #
+        #LC = []
+        Gt = cycl.Cycles()
+        Gt.pos = {}
+        for k,lnode in enumerate(C):
+            G = nx.subgraph(self.Gs,lnode)
+            G.pos = {}
+            G.pos.update({k: self.Gs.pos[k] for k in lnode})
+            #Cy = cy.Cycle(self.Gs, c)
+            cy  = cycl.Cycle(G)
+            Gt.add_node(k,cycle=cy)
+            Gt.pos[k] = tuple(cy.g)
+            #LC.append(cy)
+        Gt.inclusion(full=True)
+        pdb.set_trace()
+        Gt = Gt.decompose()
+        #cys = cys.decompose()
+        #cys.inclusion()
+        #cys.simplify2()
+        # create the set of Cycle in Cycles
+        #Cys = cy.Cycles(LC, self.Gs)
+        #Cys = cycl.Cycles(LC)
+        #self.Gt = cys.Gt
+        #pdb.set_trace()
 
         #N = len(self.Gt.nodes())
         #for k in self.Gt.nodes():
@@ -3213,9 +3261,13 @@ class Layout(object):
         #
         #  Update graph Gs with cycle information
         #
+
+        #  initialize a void list 'ncycles' for each segment of Gs
+        #
         for k in self.Gs.node:
             if k>0:
                 self.Gs.node[k]['ncycles']=[]
+
         for k in range(Ncycles):
             vnodes = np.array(self.Gt.node[k]['vnodes'])
             for n in vnodes:
@@ -3223,8 +3275,8 @@ class Layout(object):
                     if k not in self.Gs.node[n]['ncycles']:
                         self.Gs.node[n]['ncycles'].append(k)
                         if len(self.Gs.node[n]['ncycles'])>2:
-                            print n,len(self.Gs.node[n]['ncycles'])
-                            raise NameError('A segment cannot link more than 2 cycles')
+                            print n,self.Gs.node[n]['ncycles']
+                            logging.warning('A segment cannot link more than 2 cycles')
 
         #
         #  Seek for Cycle inter connectivity
@@ -4544,8 +4596,22 @@ class Layout(object):
         >>> L.geomfile()
 
         """
-        en  = self.Ne
-        cen = self.Nss
+
+        #en  = self.Ne # number of segments
+        en  = len(np.where(np.array(self.Gs.node.keys())>0)[0])
+        if en != self.Ne:
+            logging.warning("wrong number of segment consistency problem in layout")
+        #cen = self.Nss
+        # d : dictionnary of layout sub segments
+        #
+        d = self.subseg()
+        cen = 0
+        for k in d:
+            lss = d[k]
+            cen = cen + len(lss)
+
+        if cen != self.Nss:
+            logging.warning("wrong number of sugsegment consistency problem in layout")
 
         sl = self.sl
 #
@@ -4577,7 +4643,7 @@ class Layout(object):
                 dikn[ik]=i
                 ik = ik + 1
 
-        d = self.subseg()
+        #d = self.subseg()
         cpt = 0
         subseg = {}
         for k in d.keys():
