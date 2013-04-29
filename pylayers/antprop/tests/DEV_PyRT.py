@@ -105,6 +105,7 @@ B = 386
 
 
 
+
 #L = Layout('DLR.ini')
 #try:
 #    L.dumpr()
@@ -112,6 +113,7 @@ B = 386
 #    L.build()
 #    L.dumpw()
 #L.showG('r')
+
 #path = '/private/staff/n/en/buguen/Bureau/WHERE2/WHERE2-DLR-Simulations/'
 #ZigbeeNode = np.loadtxt(path+'Coord_Zigbee_Nodes.csv',delimiter=',')
 #Dongle = np.loadtxt(path+'Coord_dongle.csv',delimiter=',')
@@ -138,6 +140,7 @@ for c,k in enumerate(MT_DLR_RDTMaster):
 # Select a link 
 #
 tx = S.tx.position[:,4]
+<<<<<<< HEAD
 Ctx = S.L.pt2cy(tx)
 print "transmitter :",tx," is in cycle ",Ctx
 
@@ -145,15 +148,30 @@ rx = array([15,3,2.5])
 #rx = S.rx.position[:,28]
 Crx = S.L.pt2cy(rx)
 print "mobile node :",rx," is in cycle ",Crx
+=======
+Rtx = S.L.pt2ro(tx)
+print "transmitter :",tx," is in room ",Rtx
+
+rx = array([15,3,2.5])
+#rx = S.rx.position[:,28]
+Rrx = S.L.pt2ro(rx)
+print "mobile node :",rx," is in room ",Rrx
+>>>>>>> distloc
 
 print tx
 print rx
 a=time.time()
 
 if not os.path.exists('r2d.pickle'):
+<<<<<<< HEAD
     Si = Signatures(S.L,Ctx,Crx)
     Si.run1(cutoff=4)
     r2d = Si.rays(tx,rx)
+=======
+    Si = Signatures(S.L,tx,rx)
+    Si.run(tx,rx,4)
+    r2d = Si.rays()
+>>>>>>> distloc
     file=open("r2d.pickle","w")
     pickle.dump(r2d,file)
     file.close()
@@ -161,8 +179,13 @@ else:
     file = open("r2d.pickle","r")
     r2d = pickle.load(file)
 r3d = r2d.to3D()
+<<<<<<< HEAD
 r3d.locbas(S.L)
 r3d.fillinter(S.L)
+=======
+r3d.locbas(L)
+r3d.fillinter(L)
+>>>>>>> distloc
 
 config = ConfigParser.ConfigParser()
 _filesimul = 'default.ini'

@@ -214,6 +214,7 @@ class Simul(SimulationRT):
 
         self.net = Network(EMS=self.EMS)
         self.gcom=Gcom(net=self.net,sim=self)
+
         self.create_agent()
         # create network
 
