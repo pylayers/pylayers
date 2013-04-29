@@ -280,7 +280,8 @@ class PLocalization(Process):
 #                     if no position has been computed
 
 #            if not bep or (self.sim.now() - self.loc.net.node[self.loc.ID]['PN'].node[self.loc.ID]['te']>self.loc_updt_time):
-            print 'comm!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+            if self.sim.verbose:
+                print 'localization request communication from node',self.loc.ID, '@',self.sim.now()
             self.tx.cmdrq.signal()
             self.loc.update(ldp='TOA')
             
