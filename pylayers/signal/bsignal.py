@@ -2413,8 +2413,8 @@ class FBsignal(Bsignal):
             if (nb == -1):
                 nl = len(self.y)
                 for k in range(nl):
-                    subplot(211)
-                    plot(self.x, np.real(self.y[k]))
+                    plt.subplot(211)
+                    plt.plot(self.x, np.real(self.y[k]))
                     plt.xlabel('Frequency (GHz)')
                     plt.ylabel('Real part')
                     plt.subplot(212)
@@ -2424,7 +2424,7 @@ class FBsignal(Bsignal):
             # plot nb only
             else:
                 plt.subplot(211)
-                plot(self.x, np.real(self.y[nb]))
+                plt.plot(self.x, np.real(self.y[nb]))
                 plt.xlabel('Frequency (GHz)')
                 plt.ylabel('Real part')
                 plt.subplot(212)
@@ -2436,7 +2436,7 @@ class FBsignal(Bsignal):
             plt.stem(self.x, np.real(self.y))
             plt.xlabel('Frequency (GHz)')
             plt.ylabel('Real part')
-            subplot(212)
+            plt.subplot(212)
             #plot(self.x,np.unwrap(np.angle(self.y)))
             plt.stem(self.x, np.imag(self.y))
             plt.xlabel('Frequency (GHz)')
