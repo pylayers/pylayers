@@ -47,8 +47,10 @@ class Waveform:
             [st,sf]=self.ip_generic()
         if self.parameters['type']  == 'mbofdm':
             [st,sf]=self.mbofdm()
-        if self.parameters['type'] == 'file':
+        if self.parameters['type'] == 'W1compensate':
             [st,sf]=self.fromfile()
+        if self.parameters['type'] == 'W1offset':
+            [st,sf]=self.fromfile2()
 
         self.st       = st
         self.sf       = sf
@@ -171,6 +173,57 @@ class Waveform:
 
         W   = w.ftshift()
         return (w,W)
+
+    def fromfile2(self):
+        """
+        get the measurement waveform from WHERE1 measurement campaign
+
+        This function is not yet generic
+
+        >>> from pylayers.signal.waveform import *
+        >>> wav = Waveform({'type':'file'})
+        >>> wav.show()
+
+        """
+        M = mesuwb.UWBMesure(1,1)
+        w = bs.TUsignal()
+
+        ts = M.RAW_DATA.timetx[0]
+        tns = ts*1e9
+        te = tns[1]-tns[0]
+
+        y  = M.RAW_DATA.tx[0]
+
+        # find peak position  u is the index of the peak
+        # yap :after peak
+        # ybp : before peak
+        # yzp : zero padding
+#        maxy = max(y)
+#        u = np.where(y ==maxy)[0][0]
+#        yap = y[u:]
+#        ybp = y[0:u]
+
+        yzp = np.zeros(len(y)-1)
+
+#        tnsp = np.arange(0,tns[-1]-tns[u]+0.5*te,te)
+#        tnsm = np.arange(-(tns[-1]-tns[u]),0,te)
+        N=len(ts)-1
+        tnsm = np.linspace(-tns[-1],-te,N)
+        y = np.hstack((yzp,y))
+        tns = np.hstack((tnsm,tns))
+
+        #
+        # Warning (check if 1/sqrt(30) is not applied elsewhere
+        #
+        w.x = tns
+        w.y = y*(1/np.sqrt(30))
+
+        #  w : TUsignal
+        #  W : FUsignal (Hermitian redundancy removed)
+
+        W   = w.ftshift()
+        return (w,W)
+
 
     def read(self,config):
         """

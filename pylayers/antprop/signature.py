@@ -39,11 +39,15 @@ def gidl(g):
    """
 
     edlist=[]
+    pos={}
     for n in g.nodes():
         en = eval(n)
         if type(en) == tuple :
             edlist.append(n)
-    return(g.subgraph(edlist))
+    gr=g.subgraph(edlist)
+    dpos = {k:g.pos[k] for k in edlist}
+    gr.pos=dpos
+    return(gr)
 
 
 def edgeout(L,g):
@@ -193,6 +197,8 @@ class Signatures(dict):
 
         visited = [source]
         # stack is a list of iterators
+
+
         stack = [iter(G[source])]
         # while the list of iterators is not void
 
@@ -284,137 +290,120 @@ class Signatures(dict):
                     out.pop()
         return d
 
-#    def all_simple_paths(self,G, source, target, cutoff=None):
-#        """ all_simple_paths
+    def run(self,cutoff=1,dcut=2):
 
-#        Parameters
-#        ----------
+        lcil=self.L.cycleinline(self.source,self.target)
 
-#        G : networkx Graph Gi
-#        source : int
-#        target : int 
-#        cutoff : int
+        if len(lcil) <= 2:
+            print 'run1'
+            self.run1(cutoff=cutoff)
+        else :
+            print 'run2'
+            self.run2(cutoff=cutoff,dcut=dcut)
 
-#        Notes
-#        -----
+    def run1(self,cutoff=1):
+        """ get signatures (in one list of arrays) between tx and rx
 
-#        adapted from all_simple_path of networkx 
+        Parameters
+        ----------
+
+            cutoff : limit the exploration of all_simple_path
+
+        Returns
+        -------
+
+            sigslist = numpy.ndarray
+
+        """
+        try:
+            self.L.dGi
+        except:
+            self.L.buildGi2()
+        # all the vnodes >0  from the room
+        #
+        #NroomTx = self.L.pt2ro(tx)
+        #NroomRx = self.L.pt2ro(rx)
+        #print NroomTx,NroomRx
+
+        #if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
+        #    raise AttributeError('Tx or Rx is not in Gr')
+
+        # list of interaction in roomTx 
+        # list of interaction in roomRx
+        #ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
+        #ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
+
+        metasig = nx.neighbors(self.L.Gt,self.source)
+        metasig = metasig + nx.neighbors(self.L.Gt,self.target)
+        metasig = list(np.unique(np.array(metasig)))
+        metasig = metasig + [self.source] + [self.target]
 
 
-#        """
-#        if cutoff < 1:
-#            return
+        # add cycles separated by air walls
+        lca=[]
+        for cy in metasig:
+            try:
+                lca.extend(self.L.dca[cy])
+            except:
+                pass
+        metasig = metasig + lca
+        metasig = list(np.unique(np.array(metasig)))
 
-#        visited = [source]
-#        # stack is a list of iterators
-#        stack = [iter(G[source])]
-#        # while the list of iterators is not void
-#        while stack: #
-#            # children is the last iterator of stack
-#            children = stack[-1]
-#            # next child
-#            child = next(children, None)
-#            if child is None: # if no more child
-#                stack.pop()   # remove last iterator
-#                visited.pop() # remove from visited list
-#            elif len(visited) < cutoff: # if visited list is not too long 
-#                if child == target:  # if child is the target point 
-#                    yield visited + [target] # output signature
-#                elif child not in visited: # else visit other node
-#                    visited.append(child)
-#                    # explore all child connexion
-#                    # TODO : limit the explorable childs
-#                    lc = [k for k in iter(G[child])]
-#                    n  = len(lc)
-#                    if n >12:
-#                        explore=iter([lc[k] for k in
-#                                      np.unique(np.random.randint(0,n,12))])
-#                    else:
-#                        explore=iter(G[child])
-#                    stack.append(explore)
-#                    #stack.append(iter(G[child]))
-#            else: #len(visited) == cutoff (visited list is too long)
-#                if child == target or target in children:
-#                    yield visited + [target]
-#                stack.pop()
-#                visited.pop()
+        lis = self.L.Gt.node[self.source]['inter']
+        lit = self.L.Gt.node[self.target]['inter']
 
-#    def run(self,metasig,cutoff=1):
-#        """ get signatures (in one list of arrays) between tx and rx
+        # source
+        #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
+        #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
 
-#        Parameters
-#        ----------
+        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
+        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
 
-#            cutoff : limit the exploration of all_simple_path
+        # target
+        # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
+        # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
 
-#        Returns
-#        -------
+        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
+        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
 
-#            sigslist = numpy.ndarray
+        # tx,rx : attaching rule
+        #
+        # tx attachs to out transmisision point
+        # rx attachs to in transmission point
 
-#        """
-#        try:
-#            self.L.dGi
-#        except:
-#            self.L.buildGi2()
-#        # all the vnodes >0  from the room
-#        #
-#        #NroomTx = self.L.pt2ro(tx)
-#        #NroomRx = self.L.pt2ro(rx)
-#        #print NroomTx,NroomRx
+        #
+        # WARNING : room number <> cycle number
+        #
 
-#        #if not self.L.Gr.has_node(NroomTx) or not self.L.Gr.has_node(NroomRx):
-#        #    raise AttributeError('Tx or Rx is not in Gr')
+        #ncytx = self.L.Gr.node[NroomTx]['cycle']
+        #ncyrx = self.L.Gr.node[NroomRx]['cycle']
 
-#        # list of interaction in roomTx 
-#        # list of interaction in roomRx
-#        #ndt = self.L.Gt.node[self.L.Gr.node[NroomTx]['cycle']]['inter']
-#        #ndr = self.L.Gt.node[self.L.Gr.node[NroomRx]['cycle']]['inter']
+        #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
+        #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
 
-#        lis = self.L.Gt.node[self.source]['inter']
-#        lit = self.L.Gt.node[self.target]['inter']
+        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
+        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
 
-#        # source
-#        #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
-#        #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
+        #ndt = ndt1 + ndt2
+        #ndr = ndr1 + ndr2
+        lis  = lisT + lisR
+        lit  = litT + litR
 
-#        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
-#        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
-
-#        # target
-#        # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
-#        # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
-
-#        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
-#        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
-
-#        # tx,rx : attaching rule
-#        #
-#        # tx attachs to out transmisision point
-#        # rx attachs to in transmission point
-
-#        #
-#        # WARNING : room number <> cycle number
-#        #
-
-#        #ncytx = self.L.Gr.node[NroomTx]['cycle']
-#        #ncyrx = self.L.Gr.node[NroomRx]['cycle']
-
-#        #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
-#        #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
-
-#        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
-#        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
-
-#        #ndt = ndt1 + ndt2
-#        #ndr = ndr1 + ndr2
-#        lis  = lisT + lisR
-#        lit  = litT + litR
-
-#        #ntr = np.intersect1d(ndt, ndr)
+        #ntr = np.intersect1d(ndt, ndr)
 #        li = np.intersect1d(lis, lit)
 
-##        for meta in metasig:
+        li = []
+        for ms in metasig:
+            li = li + self.L.Gt.node[ms]['inter']
+        li = list(np.unique(np.array(li)))
+
+        dpos = {k:self.L.Gi.pos[k] for k in li}
+
+        Gi = nx.subgraph(self.L.Gi,li)
+        Gi.pos = dpos
+
+#        for meta in metasig:
+        
 #        Gi = nx.DiGraph()
 #        for cycle in metasig:
 #            Gi = nx.compose(Gi,self.L.dGi[cycle])
@@ -424,47 +413,49 @@ class Signatures(dict):
 #        for cycle in metasig:
 #            Gi.pos.update(self.L.dGi[cycle].pos)
 #        pdb.set_trace()
-#        #
-#        # 
-#        #
-#        # remove diffractions from Gi
-#        Gi = gidl(Gi)
-#        # add 2nd order output to edges
-#        Gi = edgeout(self.L,Gi)
-#        #for interaction source  in list of source interaction 
-#        for s in lis:
-#            #for target interaction in list of target interaction
-#            for t in lit:
+        #
+        # 
+        #
+        # remove diffractions from Gi
+        Gi = gidl(Gi)
+        # add 2nd order output to edges
+        Gi = edgeout(self.L,Gi)
+        #for interaction source  in list of source interaction 
+        for s in lis:
+            #for target interaction in list of target interaction
+            for t in lit:
 
-#                if (s != t):
-#                    #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
-#                    #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
-#                    paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
-#                    #paths = [nx.shortest_path(Gi,source=s,target=t)]
-#                else:
-#                    #paths = [[nt]]
-#                    paths = [[s]]
-#                ### supress the followinfg loops .
-#                for path in paths:
-#                    sigarr = np.array([],dtype=int).reshape(2, 0)
-#                    for interaction in path:
+                if (s != t):
+                    #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                    #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                    paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
 
-#                        it = eval(interaction)
-#                        if type(it) == tuple:
-#                            if len(it)==2: #reflexion
-#                                sigarr = np.hstack((sigarr,
-#                                                np.array([[it[0]],[1]],dtype=int)))
-#                            if len(it)==3: #transmission
-#                                sigarr = np.hstack((sigarr,
-#                                                np.array([[it[0]],[2]],dtype=int)))
-#                        elif it < 0: #diffraction
-#                            sigarr = np.hstack((sigarr,
-#                                                np.array([[it],[3]],dtype=int)))
-#                    #print sigarr
-#                    try:
-#                        self[len(path)] = np.vstack((self[len(path)],sigarr))
-#                    except:
-#                        self[len(path)] = sigarr
+                    #paths = [nx.shortest_path(Gi,source=s,target=t)]
+                else:
+                    #paths = [[nt]]
+                    paths = [[s]]
+                ### supress the followinfg loops .
+                for path in paths:
+
+                    sigarr = np.array([],dtype=int).reshape(2, 0)
+                    for interaction in path:
+
+                        it = eval(interaction)
+                        if type(it) == tuple:
+                            if len(it)==2: #reflexion
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]],[1]],dtype=int)))
+                            if len(it)==3: #transmission
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]],[2]],dtype=int)))
+                        elif it < 0: #diffraction
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it],[3]],dtype=int)))
+                    #print sigarr
+                    try:
+                        self[len(path)] = np.vstack((self[len(path)],sigarr))
+                    except:
+                        self[len(path)] = sigarr
 
 
     def run2(self,cutoff=1,dcut=2):
@@ -552,7 +543,21 @@ class Signatures(dict):
 #        metasig=self.lineofcycle(cs,ct)
 
 ############################################################
-##       obtain the list of cycle in line
+##
+##      1. the sequence of cycle between cycle source cs and
+##      cycle target ct are obtained via cycleinline method
+##
+##      2. all cycles adjscent at least to one of the previously
+##      obtained cycles are appended to the list lca (list of cycle around)
+##
+##      3. It is then required to add all cycles
+##      connected to the previous ones via an air wall.
+##
+##      lca is used to build the sliding graph of interactions
+##      it is important that lcil remains ordered this is not the case
+##      for lca
+
+
 
         cs = self.source
         ct = self.target
@@ -563,54 +568,73 @@ class Signatures(dict):
             lca = lca+ncy
         lca = list(np.unique(np.array(lca)))
         lca = lcil
+        lcair=[]
+        for cy in lca:
+            try:
+                lcair.extend(self.L.dca[cy])
+            except:
+                pass
+        lca = lca + lcair
+        lca = list(np.unique(np.array(lca)))
+        #
+        # extract list of interactions from list of cycles lca
+        #
+        li = []
+        for ms in lca:
+            li = li + self.L.Gt.node[ms]['inter']
+        # enforce unicity of interactions in list li
+        li = list(np.unique(np.array(li)))
 
-############################################################
-##       Compose graph of interactions with the list lca of
-##       cycles around line of cycles
+        # extract dictionnary of interactions position
+        dpos = {k:self.L.Gi.pos[k] for k in li}
 
-        Gi = nx.DiGraph()
-        for cycle in lca:
-            Gi = nx.compose(Gi,self.L.dGi[cycle])
+        # build the subgraph of L.Gi with only the selected interactions
+        Gi = nx.subgraph(self.L.Gi,li)
+        Gi.pos = dpos
 
-        # facultative update positions
-        Gi.pos = {}
-        for cycle in lca:
-            Gi.pos.update(self.L.dGi[cycle].pos)
-
-#        #
-#        #
-#        #
         Gf = nx.DiGraph()
         Gf.pos = {}
-        # remove diffractions from Gi
+        # remove diffractions points from Gi
         Gi = gidl(Gi)
         # add 2nd order output to edges
         Gi = edgeout(self.L,Gi)
         #for interaction source  in list of source interaction
 
-####################################################
+############################################################
 #        filter list of interactions in termination cycles
 
+        # list of interactions belonging to source
         lis = self.L.Gt.node[lcil[0]]['inter']
+
+        # list of interactions belonging to target
         lit = self.L.Gt.node[lcil[-1]]['inter']
+
         # filter lis remove transmission coming from outside
-        lli = []
-        for li in lis:
-            ei = eval(li)
-            if len(ei)==2:
-                lli.append(li)
-            if len(ei)==3:
-                if ei[2]<>cs:
-                   lli.append(li)
+        lli   = []
+        lisR  = filter(lambda l: len(eval(l))==2,lis)
+        lisT  = filter(lambda l: len(eval(l))==3,lis)
+        lisTo = filter(lambda l: eval(l)[2]<>cs,lisT)
+        lli = lisR + lisTo
+        # for li in lis:
+        #     ei = eval(li)
+        #     if len(ei)==2:
+        #        lli.append(li)
+        #    if len(ei)==3:
+        #        if ei[2]<>cs:
+        #           lli.append(li)
         # filter lit remove transmission going outside
         llt = []
-        for li in lit:
-            ei = eval(li)
-            if len(ei)==2:
-                llt.append(li)
-            if len(ei)==3:
-                if ei[2]==ct:
-                   llt.append(li)
+        litR  = filter(lambda l: len(eval(l))==2,lit)
+        litT  = filter(lambda l: len(eval(l))==3,lit)
+        litTi = filter(lambda l: eval(l)[2]==ct,litT)
+        llt = litR + litTi
+        #for li in lit:
+        #    ei = eval(li)
+        #    if len(ei)==2:
+        #        llt.append(li)
+        #    if len(ei)==3:
+        #        if ei[2]==ct:
+        #           llt.append(li)
         lis = lli
         lit = llt
 
@@ -938,7 +962,30 @@ class Signatures(dict):
             rays : dict
 
         """
+
         rays = Rays(ptx,prx)
+        # detect LOS situation
+        lc  = self.L.cycleinline(self.source,self.target)
+        # if source  and target in the same cycle
+        if len(lc) == 1:
+            rays.los=True
+#        # if source  and target separated by air walls
+#        else :
+#            for ic in xrange(len(lc)-1) :
+#                # if lc[i] connected to a air wall
+#                if lc[ic] in self.L.dca.keys():
+#                    # if lc[i] and lc[i+1] are connected by a airwall
+#                    if lc[ic+1] in self.L.dca[lc[ic]]:
+#                        los = True
+#                    else :
+#                        los = False
+#                        break
+#                else :
+#                    los = False
+#                    break
+
+#        rays[0]['pt']
+        
         for k in self:
             tsig = self[k]
             shsig = np.shape(tsig)

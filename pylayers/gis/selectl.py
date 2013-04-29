@@ -77,11 +77,12 @@ class SelectL(object):
         #print('show : axis',axis) 
         #plt.axis(ax)
         self.L.display['clear'] = clear
-        self.L.display['nodes'] = dnodes
-        self.L.display['edges'] = dedges
+        #self.L.display['nodes'] = dnodes
+        #self.L.display['edges'] = dedges
         self.L.display['fontsize'] = font_size
         self.L.display['title'] = title
-        self.L.display['ednodes'] = True
+        #self.L.display['ednodes'] = False
+        #self.L.display['nodes'] = False
         fig,ax = self.L.showGs(fig,ax,axis=axis)
         return(fig,ax)
 
@@ -323,28 +324,50 @@ class SelectL(object):
         cold = pyu.coldict()
         #print "In State ",self.state
         #print "In Event ",self.evt
+
         #
-        # Choose layers to visualized
+        # flip layout in y
         #
         if self.evt == 'v':
             for n in self.L.Gs.pos:
                 self.L.Gs.pos[n]=(self.L.Gs.pos[n][0],-self.L.Gs.pos[n][1])
-
+            self.update_state()
+            return
+        #
+        # offset layout
+        #
         if self.evt == 't':
             offx,offy = offsetbox() 
             for n in self.L.Gs.pos:
                 self.L.Gs.pos[n]=(self.L.Gs.pos[n][0]+offx,self.L.Gs.pos[n][1]+offy)
+            self.update_state()
+            return 
 
+        #
+        # Choose layers to visualized
+        #
         if self.evt == 'l':
             listchoices = self.L.name.keys()
             self.L.display['layers'] = multchoicebox('message',
                                                      'titre', listchoices)
             self.state = 'Init'
             self.update_state()
-            return 
+            return
         #
         # Increment layer
         #
+        if self.evt=='f':
+            self.L.display['nodes'] = not self.L.display['nodes']
+            print self.L.display['nodes']
+            self.update_state()
+            return
+
+        if self.evt=='g':
+            self.L.display['ednodes'] = not self.L.display['ednodes'] 
+            print self.L.display['ednodes']
+            self.update_state()
+            return
+
         if self.evt=='=':
             N = len(self.L.display['layerset'])
             index = self.L.display['layerset'].index(self.L.display['activelayer'])
@@ -370,8 +393,12 @@ class SelectL(object):
 
         if self.evt == 'e':
             if (self.state == 'Init'):
+                #
+                # averaging one point coordinate along the smallest dimension
+                #
                 x1 = ax.get_xbound()
                 y1 = ax.get_ybound()
+                # get node list and edge list
                 ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
                 for k,nd in enumerate(ndlist):
                     try:
@@ -379,31 +406,42 @@ class SelectL(object):
                     except:
                         tp = np.array(self.L.Gs.pos[nd])
                 mtp = np.sum(tp,axis=0)/(k+1)
-                stp = np.sqrt(np.sum((tp-mtp)*(tp-mtp),axis=0))/(k+1)
-                ind = np.where(stp==min(stp))[0][0]
-                for nd in ndlist:
-                    x = self.L.Gs.pos[nd][0]
-                    y = self.L.Gs.pos[nd][1]
-                    if ind ==0:
-                        self.L.Gs.pos[nd]=(mtp[0],y)
-                    if ind ==1:
-                        self.L.Gs.pos[nd]=(x,mtp[1])
-                plt.axis('tight')
-                fig,ax = self.show(fig,ax,clear=True)
-                self.update_state()
+                stp = np.sqrt(np.sum((tp-mtp)*(tp-mtp),axis=0)/(k+1))
+                # if the standard deviation is lower than 10cm
+                # averaging coordinates along the shortest axis
+                if min(stp) < 0.10:
+                    ind = np.where(stp==min(stp))[0][0]
+                    for nd in ndlist:
+                        x = self.L.Gs.pos[nd][0]
+                        y = self.L.Gs.pos[nd][1]
+                        if ind ==0:
+                            self.L.Gs.pos[nd]=(mtp[0],y)
+                        if ind ==1:
+                            self.L.Gs.pos[nd]=(x,mtp[1])
+                    plt.axis('tight')
+                    fig,ax = self.show(fig,ax,clear=True)
+                    self.update_state()
                 return()
 
             if (self.state == 'SS') | (self.state =='SSS'):
                 self.L.edit_segment(self.selected_edge1)
                 self.state = 'Init'
                 self.update_state()
-                return 
+                return
             if self.state == 'SP1':
                 print "Write edit_node"
         #
         # h : add subsegment (SS) 
         # j,h : vertical / horizontal scaling (Init)
         #
+        if self.evt == 'b':
+            if self.state == 'Init':
+                self.nsel = eval(raw_input("seg number :"))
+                #self.L.edit_segment(nseg)
+                self.state='SS'
+                self.update_state()
+                return
+
         if self.evt == 'j':
             if self.state == 'Init':
                 vscale = eval(enterbox('vertical scaling factor'))
@@ -412,7 +450,7 @@ class SelectL(object):
                 plt.axis('tight')
                 fig,ax = self.show(fig,ax,clear=True)
                 self.update_state()
-                return()
+                return
 
         if self.evt == 'h':
             if self.state == 'Init':
@@ -567,7 +605,6 @@ class SelectL(object):
                     self.state = 'SSS'
                 self.update_state()
                 return 
-            
         #
         # Right clic and selected node is a point
         #

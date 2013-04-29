@@ -214,8 +214,8 @@ class Network(nx.MultiDiGraph):
         (2, 1, 'toto', {'Pr': [], 'TOA': [], 'key1': 1, 'key2': 2})
         """
 
-        for l in self.LDP:
-            d[l]=[]
+#        for l in self.LDP:
+#            d[l]=[]
         pool = tuple(iterable)
         n = len(pool)
         r = n if r is None else r
@@ -418,6 +418,8 @@ class Network(nx.MultiDiGraph):
             for i in itertools.combinations(self.RAT[Rat],2):
                 self.link[Rat].append(i)
             self.relink[Rat]=[(i[1],i[0]) for i in self.link[Rat]]
+
+
     def get_SubNet(self,Rat=None):
         """
         get SubNetworks of a network
@@ -624,13 +626,12 @@ class Network(nx.MultiDiGraph):
         e=self.link[RAT]#self.SubNet[RAT].edges()
         re=self.relink[RAT] # reverse link aka other direction of link
         lp,lt, d, v= self.EMS.solve(p,e,'all',RAT,epwr,sens)
-        lD=[{'Pr':lp[i],'TOA':np.mod(lt[i],len(e)) ,'d':np.mod(d[i],len(e)),'vis':v[i]} for i in range(len(d))]
-
+        lD=[{'Pr':lp[i],'TOA':lt[np.mod(i,len(e))] ,'d':d[np.mod(i,len(e))],'vis':v[i]} for i in range(len(d))]
         self.update_LDPs(iter(e+re),RAT,lD)
 
 
 
-    def update_pos(self,n,p,p_pe='p'):
+    def update_pos(self,n,p,now=0.,p_pe='p'):
         """ 
         Update Position of a node
 
@@ -651,11 +652,14 @@ class Network(nx.MultiDiGraph):
                 p=[p]
             if len(n) == len(p):    
                 d=dict(zip(n,p))    # transform data to be complient with nx.set_node_attributes            
+                nowd=dict(zip(n,[now]*len(n)))
             else :
                 raise TypeError('n and p must have the same length')
             # update position
             nx.set_node_attributes(self,p_pe,d)        
-
+            # update time of ground truth position
+            if p_pe=='p':
+                nx.set_node_attributes(self,'t',nowd)
         else :
             raise TypeError('n and p must be either: a key and a np.ndarray, or 2 lists')
 
@@ -1198,7 +1202,7 @@ class Network(nx.MultiDiGraph):
             self.idx = self.idx +1
         except:
             pass
-
+    
 
     def pyray_save(self,S):
         """

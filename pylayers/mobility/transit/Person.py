@@ -202,7 +202,7 @@ class Person(Process):
 #                self.update()
                 self.world.update_boid(self)
 
-                self.net.update_pos(self.ID,conv_vecarr(self.position))
+                self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
                 if len(self.save)!=0:
                     p=conv_vecarr(self.position)
                     v=conv_vecarr(self.velocity)
@@ -287,7 +287,7 @@ class Person(Process):
             else:
 #                self.update()
                 self.world.update_boid(self)
-                self.net.update_pos(self.ID,conv_vecarr(self.position))
+                self.net.update_pos(self.ID,conv_vecarr(self.position),self.sim.now())
 
                 yield hold, self, self.interval
 
