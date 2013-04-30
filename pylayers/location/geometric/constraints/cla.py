@@ -132,8 +132,12 @@ class CLA(object):
         self.erronous = []
         self.id = []
         self.origin = []
-        self.runable = []
-        self.used=[]
+        self.runable = [] # does pe is known ?
+        self.visible = [] # does link physically exist ? aka 2 nodes are in visiblity ?
+        self.obsolete = [] # is the ldp has been obtain a long time ago
+        self.usable=[] # constraints are usable = runable + visible
+
+
 
         if len(parmsh) == 0:
             self.parmsh = parmsh
@@ -145,6 +149,21 @@ class CLA(object):
 
         else:
             self.parmsh = parmsh
+
+#    def info(self):
+#        """gives info on the CLA
+
+#        .. todo::
+
+#                improve info
+
+#        """
+#        N = len(self.c)
+#        print "CLA : ", N, " constraints"
+#        print "-----------------------"
+#        for k in range(N):
+#            print "Constraint N° ", k
+#            self.c[k].info()
 
     def info(self):
         """gives info on the CLA
@@ -161,12 +180,20 @@ class CLA(object):
             print "Constraint N° ", k
             self.c[k].info()
 
+    def info2(self):
+        for c in self.c:
+            c.info2()
+
+
     def update(self):
         """update
                 update all constraints of the CLA
         """
         [c.update() for c in self.c if c.runable]
         self.runable=[c.runable for c in self.c]
+        self.obsolete=[c.obsolete for c in self.c]
+        self.visible=[c.visible for c in self.c]
+        self.usable=[c.usable for c in self.c]
 
     def compute(self,pe=True):
         """
@@ -185,12 +212,12 @@ class CLA(object):
         """
         self.merge2()
         self.refine(self.Nc)
-        if (sum(self.runable) >= 3) and (pe == True):
+        if (sum(self.usable) >= 3) and (pe == True):
             self.estpos2()
-            self.Nc=len(self.c)
+            self.Nc=len(np.where(self.usable)[0])
             return True
         else:
-            self.Nc=len(self.c)
+            self.Nc=len(np.where(self.usable)[0])
             return False
 
 
@@ -199,7 +226,7 @@ class CLA(object):
         self.merge2()
         self.refine(self.Nc)
         self.estpos2()
-        self.Nc=len(self.c)
+        self.Nc=len(np.where(self.usable)[0])
         return True
 
     def rescale(self, f_vcw, cid=None):
@@ -269,8 +296,10 @@ class CLA(object):
         self.origin.append(c.origin)
         self.type.append(c.type)
         self.runable.append(c.runable)
+        self.visible.append(c.runable)
+        self.obsolete.append(c.obsolete)
         # by default, if a constraint is runable, it will be used
-        self.used.append(c.runable)
+        self.usable.append(c.runable and c.visible and not c.obsolete)
         self.std.append(c.std)
         self.Nc = self.Nc + 1
         self.vcw.append(c.vcw)
@@ -356,7 +385,8 @@ class CLA(object):
 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.runable) == False)[0]) 
-        Nc = self.Nc - len(np.nonzero(np.array(self.used) == False)[0]) 
+
+        Nc = len(np.where(self.usable)[0])#self.Nc - len(np.nonzero(np.array(self.usable) == False)[0]) 
         self.Nc = Nc
         vcwmin = 1.0  # max(self.vcw)
         step = 1.0
@@ -384,7 +414,7 @@ class CLA(object):
             for c in self.c:                # find intersection between all constraints for the current vcw
                 if (c.type != 'Exclude'):
 #                    if (c.type != 'RSS') or onlyRSS:
-                    if c.runable:
+                    if c.usable:
                         lb = c.lbox
                         try:
                             tlb = tlb.intersect(lb)
@@ -398,14 +428,15 @@ class CLA(object):
                 tlb = tlb.intersect(ex.lbox)
             except:
                 pass
+
             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
                 vcw1 = vcw1 + step
                 step = step * 1.2
-#                print step, vcw1
+                print step, vcw1
             else:                           # if the list is not empty (intersection exist) vcw1 is decreased
                 vcw1 = max(vcw1 - step / 2., vcwmin)  # vcw > vcwmin
                 step = step / 4.
-#                print step, vcw1
+                print step, vcw1
         try:
             if (np.diff(tlb.box[0].bd, axis=0)[0][0] == 0) | (np.diff(tlb.box[0].bd, axis=0)[0][1] == 0):
                 self.setvcw(vcw1 + 1.0)
@@ -453,8 +484,7 @@ class CLA(object):
         Ds = []
 
         for c in self.c:                # for each constraints
-
-            if (c.type != 'RSS') & (c.type != 'Exclude') & (c.runable):
+            if (c.type != 'RSS') & (c.type != 'Exclude') & (c.usable):
 
                 DDB, TB = c.valid_v(
                     lv)  # .reshape(2,len(lv)/4,pow(2,self.ndim))
@@ -880,10 +910,11 @@ class CLA(object):
         clust, axis = self.gapdetect(l, dlindx)
 
         box_center = self.dlayer[l][dlindx].ctr
+        uc = np.where(self.usable)[0]
 
-        for j in range(len(self.c)):
+        for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
-            if (self.c[j].type != 'Exclude') & (self.c[j].runable):
+            if (self.c[j].type != 'Exclude') & (self.c[j].usable):
                 # compute distance between contraint center and all vertexes
                 if self.c[j].type == 'TOA' or self.c[j].type == 'RSS':
                     d = np.sqrt(np.sum((box_center - self.c[j].p * np.ones((len(box_center), 1))) ** 2, axis=1))
@@ -952,13 +983,16 @@ class CLA(object):
 
 
 
-                if clust_vol != 0:
+                if clust_vol != 0 and len(np.where(self.usable)[0]) == 2:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
+                    # verifier que les contraintes utilisées sont les bonne ( ce n'est pas le cas)
+                    # ne marche que si 2 constriantes genere le cluster ( a robustifier)   
+                    pu = np.where(self.usable)[0]
                     try:
-                        dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
+                        dd.append(np.sqrt(np.sum((pc - self.c[pu[0]].p) ** 2)))
                     except:
-                        dd.append(np.sqrt(np.sum((pc - self.c[1].p) ** 2)))
+                        dd.append(np.sqrt(np.sum((pc - self.c[pu[1]].p) ** 2)))
 #                       try:
 #                               vmax=[]
 #                               for i in range(len(lclust)):
@@ -1094,10 +1128,11 @@ class CLA(object):
         clust, axis = self.gapdetect(l, dlindx)
 
         box_center = self.dlayer[l][dlindx].ctr
-
-        for j in range(len(self.c)):
+        
+        uc = np.where(self.c.usable)[0]
+        for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
-            if (self.c[j].type != 'Exclude') & (self.c[j].runable):
+            if (self.c[j].type != 'Exclude') & (self.c[j].usable):
                 # compute distance between contraint center and all vertexes
                 if self.c[j].type == 'TOA' or self.c[j].type == 'RSS':
                     d = np.sqrt(np.sum((box_center - self.c[j].p * np.ones((len(box_center), 1))) ** 2, axis=1))
