@@ -26,6 +26,7 @@ from   shapely.ops import cascaded_union
 from   descartes.patch import PolygonPatch
 from numpy import array
 import Image
+import logging
 import urllib2 as urllib
 from cStringIO import StringIO
 
@@ -207,12 +208,21 @@ class Layout(object):
                 n1, n2 = np.array(self.Gs.neighbors(e))  # neighbors
                 p1 = np.array(self.Gs.pos[n1])           # p1 --- p2
                 p2 = np.array(self.Gs.pos[n2])           #     e 
+                #
+                # check if there is no points between segments
+                # non superposition rule
+                #
                 for n in self.Gs.node.keys():
                     if (n < 0) & (n1 != n) & (n2 != n):
                         p = np.array(self.Gs.pos[n])
                         if geu.isBetween(p1, p2, p):
-                            print "Warning segment ", e, "contains point ", n
+                            logging.critical("segment %d contains point %d",e,n)
                             consistent =False
+                cycle = self.Gs.node[e]['ncycles']
+                if len(cycle)==0:
+                    logging.critical("segment %d has no cycle",e)
+                if len(cycle)==3:
+                    logging.critical("segment %d has cycle %s",e,str(cycle))
         return(consistent)
 
     def clip(self, xmin, xmax, ymin, ymax):
@@ -274,6 +284,8 @@ class Layout(object):
 
             self.tahe (2xNn)
             self.pt (2xNe)
+            self.tgs
+            self.dca
 
         """
 
@@ -325,6 +337,7 @@ class Layout(object):
             if ks > 0:
                 k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
+
 
 
     def saveini(self, _fileini):
@@ -2509,6 +2522,7 @@ class Layout(object):
 
             if line.intersects(segline):
                 lc.extend(self.Gs.node[seg]['ncycles'])
+                print seg,self.Gs.node[seg]['ncycles']
                 ls.append(seg)
                 psh = line.intersection(segline)
                 I = np.hstack((I, np.array([[psh.x],[psh.y]])))
@@ -2700,11 +2714,21 @@ class Layout(object):
     def show_nodes(self, ndlist=[1e8], size=10, color='b', dlabels=False, font_size=15, alpha=1):
         """ show nodes
 
-        show_nodes(self,ndlist=[],size=10,color='b'):
-
+        Parameters
+        ----------
+        ndlist 
+        size   : int 
+            default 10 
+        color :  'b'
+        dlabels : Boolean
+            False
+        font_size : int
+            15
+        alpha : float
+            transparancy 
         """
         if type(ndlist) == np.ndarray:
-            ndlist = ndlist.tolist()
+            ndlist = list(ndlist)
         if len(ndlist) == 0:
             ndlist.append(1e8)
             dlabels = False
@@ -2725,11 +2749,19 @@ class Layout(object):
             nx.draw_networkx_labels(self.Gs, dicopos, dicolab,
                                     font_size=font_size, font_color=color)
 
-    def show_edge(self, edlist=[], alpha=1, width=1, size=2, color='black', font_size=15, dlabels=False):
-        """
-        show_edges
+    def show_seg1(self, edlist=[], alpha=1, width=1, size=2, color='black', font_size=15, dlabels=False):
+        """ show segment
 
-        show_edges(self,edlist=[],alpha=1,width=1,color='black')
+        Parameters
+        ----------
+
+        edlist
+        alpha
+        width
+        size
+        color
+        font_size
+        dlabels
 
         """
         if type(edlist) == 'ndarray':
@@ -2750,12 +2782,12 @@ class Layout(object):
             nx.draw_networkx_labels(
                 self.Gs, dicopos, dicolab, font_size=font_size)
 
-    def show_edges(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
-        """
-        show_edges
+    def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
+        """ show segment
 
         Parameters
         ----------
+
             edlist
             alpha
             width
@@ -2816,16 +2848,16 @@ class Layout(object):
             edlist = list(np.intersect1d(a1, a2))
 
         if self.display['thin']:
-            self.show_edges(edlist, alpha=1, width=1,
+            self.show_segment(edlist, alpha=1, width=1,
                             color=color, dlabels=dlabels, font_size=font_size)
         else:
             slab = self.sl[name]
-            if width==0:   
+            if width==0:
                 linewidth = slab['linewidth'] / 3.
             else:
                 linewidth = width
             color = slab['color']
-            self.show_edges(edlist, alpha=1,
+            self.show_segment(edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
 
@@ -2889,7 +2921,7 @@ class Layout(object):
 #        if ax==[]:
 #            ax = fig.gca()
         if fig == []:
-           fig = plt.figure()
+           fig = plt.gcf()
         if not isinstance(ax, plt.Axes):
             ax  = fig.add_subplot(111)
 
@@ -2921,9 +2953,11 @@ class Layout(object):
             tn = np.array(self.Gs.node.keys())
             u  = np.nonzero(tn > 0)[0]
             edlist = tn[u]
+
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
             self.show_nodes(ndlist, size=10, color='r', dlabels=dlabels)
+
         slablist = self.name.keys()
         if self.display['edges']:
             dlabels = self.display['edlabel']
@@ -2941,7 +2975,7 @@ class Layout(object):
                 edlist2 = set(dico[k])
                 edlist = list(edlist2.intersection(set(edlist)))
                 color = self.sl[k]['color']
-                self.show_edges(edlist=edlist, color='black', alpha=1)
+                self.show_segment(edlist=edlist, color='black', alpha=1)
 
         if self.display['scaled']:
             ax.axis('scaled')
@@ -2995,6 +3029,29 @@ class Layout(object):
             self.buildGi()
             self.buildGi2()
 
+        # dictionnary of cycles which have an air wall
+        #self.build()
+        self.dca={}
+        for seg,d in self.Gs.node.items():
+            if seg >0 :
+                if d['name'] == 'AIR':
+                    cy=d['ncycles']
+                    try:
+                        self.dca[cy[0]].append(cy[1])
+                    except:
+                        self.dca[cy[0]]=[cy[1]]
+                    try:
+                        self.dca[cy[1]]=[cy[0]]
+                    except:
+                        self.dca[cy[1]].append(cy[0])
+
+        f=os.path.splitext(self.filename)
+        if f[1] =='.ini':
+            self.saveini(self.filename)
+        else :
+            self.saveini(f[0] +'.ini')
+
+
     def dumpw(self, graph='trwcvi'):
         """ write a dump of given Graph
 
@@ -3020,6 +3077,11 @@ class Layout(object):
                         write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
                 except:
                     raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
+        # save dictionnary which maps string interaction to [interactionnode, interaction type]
+        write_gpickle(getattr(self,'di'),basename+'/struc/di_'+self.filename+'.gpickle')
+        write_gpickle(getattr(self,'dca'),basename+'/struc/dca_'+self.filename+'.gpickle')
+
+
         root,ext = os.path.splitext(self.filename)
         if ext == '.ini':
             self.saveini(self.filename)
@@ -3058,6 +3120,9 @@ class Layout(object):
                 except:
                     raise NameError('G'+g +' graph cannot be load')
 
+        # load dictionnary which maps string interaction to [interactionnode, interaction type]
+        setattr(self,'di', read_gpickle(basename+'/struc/di_'+self.filename+'.gpickle'))
+        setattr(self,'dca', read_gpickle(basename+'/struc/dca_'+self.filename+'.gpickle'))
 
 
     def buildGc(self):
@@ -3157,6 +3222,8 @@ class Layout(object):
                 if n>0:
                     if k not in self.Gs.node[n]['ncycles']:
                         self.Gs.node[n]['ncycles'].append(k)
+                        if len(self.Gs.node[n]['ncycles'])>2:
+                            raise NameError('A segment cannot link more than 2 cycles')
 
         #
         #  Seek for Cycle inter connectivity
@@ -3643,6 +3710,10 @@ class Layout(object):
         [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
         [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
+
+
+        
+
 #    def showGraph(self,**kwargs):
 #        """
 #        Parameters
@@ -4013,6 +4084,33 @@ class Layout(object):
                 if ss_name != "DOOR":
                     walls.append(wall)
         return(walls)
+
+
+    def pt2cy(self, pt=np.array((0, 0))):
+        """ point to cycle
+
+        Parameters
+        ----------
+        pt : point (ndarray) 
+
+        Returns
+        -------
+        ncy : cycle number
+
+        Notes
+        -----
+            If a cycle contains point pt this function returns the cycle number
+
+        """
+
+        ptsh = sh.Point(pt[0], pt[1])
+        room_exists = False
+        for ncy in self.Gt.node.keys():
+            if self.Gt.node[ncy]['polyg'].contains(ptsh):
+                cycle_exists = True
+                return(ncy)
+        if not cycle_exists:
+            raise NameError(str(pt)+" is not in any cycle")
 
     def pt2ro(self, pt=np.array((0, 0))):
         """ point to room
