@@ -3244,9 +3244,7 @@ class Layout(object):
         #pdb.set_trace()
         #if b1:
         #punctual,cysmall = c23.split(c25)
-        pdb.set_trace()
-        Gt = Gt.decompose()
-        pdb.set_trace()
+        self.Gt = Gt.decompose()
         #cys = cys.decompose()
         #cys.inclusion()
         #cys.simplify2()
@@ -3257,13 +3255,13 @@ class Layout(object):
         #pdb.set_trace()
 
         #N = len(self.Gt.nodes())
-        #for k in self.Gt.nodes():
-        #    nk = np.array(self.Gt.node[k]['vnodes'])
-        #    for l in np.arange(k+1,N):
-        #        nl = np.array(self.Gt.node[l]['vnodes'])
-        #        nkinl = np.intersect1d(nk,nl)
-        #        if len(nkinl!=0):
-        #            self.Gt.add_edge(k,l)
+        for k in self.Gt.nodes():
+            nk = np.array(self.Gt.node[k]['vnodes'])
+            for l in np.arange(k+1,N):
+                nl = np.array(self.Gt.node[l]['vnodes'])
+                nkinl = np.intersect1d(nk,nl)
+                if len(nkinl!=0):
+                    self.Gt.add_edge(k,l)
         Ncycles = len(self.Gt.nodes())
 
         #

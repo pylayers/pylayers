@@ -177,16 +177,12 @@ class Cycles(nx.DiGraph):
             # get big cycle
             ncyroot = self.lcyroot.pop()
             cybig = self.node[ncyroot]['cycle']
-            #if ncyroot==26:
-            #    pdb.set_trace()
-            #cybignc2.show('b')
             # get the list of the successor cycle indices
             lninc = nx.neighbors(self,ncyroot)
             #
             # reduce to the smallest cycle
             #
-            #
-            # when a punctual contact is detected, the order is important
+            # when a punctual contact is detected, the simplification order is important
             #
             reloop = False
             #
@@ -239,7 +235,7 @@ class Cycles(nx.DiGraph):
                 self.remove_edge(ncyroot,ninc)
 
             #
-            # recursive call of decompose
+            # recursive call
             #
             self = self.decompose()
             #
