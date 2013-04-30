@@ -3244,8 +3244,8 @@ class Layout(object):
         #pdb.set_trace()
         #if b1:
         #punctual,cysmall = c23.split(c25)
-        #pdb.set_trace()
-        Gt = Gt.decompose2()
+        pdb.set_trace()
+        Gt = Gt.decompose()
         pdb.set_trace()
         #cys = cys.decompose()
         #cys.inclusion()

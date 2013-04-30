@@ -94,7 +94,6 @@ class Cycles(nx.DiGraph):
         #
         # loop on all cycle in list of cycles
         for k in lcyt:
-            #Areak = 0
             ck = self.node[k]['cycle']
             for l in self:
                 if l!=k:
@@ -111,18 +110,27 @@ class Cycles(nx.DiGraph):
                             self.contained_in[l].append(k)
                         except:
                             self.contained_in[l]=[k]
-                        # update Area iteration k
-                        #Areak = abs(cl.area) + Areak
-            #self.Area2.append(Areak)
-            try:
-                self.l1[k]       = len(self.contained_by[k])
-            except:
-                self.l1[k]       = 0
+
+        # check transitivity
+        for ncy1 in self.contained_by:
+            lcy1 = self.contained_by[ncy1]
+            for ncy2 in lcy1:
+                if ncy2 in self.contained_by:
+                    lcy2 = self.contained_by[ncy2]
+                    for ncy2 in lcy2:
+                        if ncy2 not in lcy1:
+                            print "adding ",ncy2," in ",ncy1
+                            self.contained_by[ncy1].append(ncy2)
 
         #
         # l1 : dictionnary
         #      key : cycle index   value : number of included cycles
         #
+        for k in lcyt:
+            try:
+                self.l1[k]       = len(self.contained_by[k])
+            except:
+                self.l1[k]       = 0
         # l2 : dictionnary
         #      key : number of included cycles  value : cycle index
         #
@@ -133,6 +141,7 @@ class Cycles(nx.DiGraph):
                 self.l2[l].append(k)
             except:
                 self.l2[l]=[k]
+        #pdb.set_trace()
         # for all inclusion length (starting in 0) 
         for l in self.l2.keys():
             # retrieve the list of included cycles of length l
@@ -151,7 +160,7 @@ class Cycles(nx.DiGraph):
                     self.add_edge(c,cy1)
 
 
-    def decompose2(self):
+    def decompose(self):
         """ recursive function to transform the cycle basis
 
         """
@@ -168,27 +177,49 @@ class Cycles(nx.DiGraph):
             # get big cycle
             ncyroot = self.lcyroot.pop()
             cybig = self.node[ncyroot]['cycle']
-            if ncyroot==26:
-                pdb.set_trace()
-            #cybig.show('b')
+            #if ncyroot==26:
+            #    pdb.set_trace()
+            #cybignc2.show('b')
             # get the list of the successor cycle indices
             lninc = nx.neighbors(self,ncyroot)
             #
             # reduce to the smallest cycle
             #
+            #
+            # when a punctual contact is detected, the order is important
+            #
+            reloop = False
+            #
+            # first attempt
+            #
             for ninc in lninc:
                 cyinc1 = self.node[ninc]['cycle'] # cycle included
                 punctual,cyinc2 = cybig.split(cyinc1) # small cycle
+                if punctual:
+                    reloop = True
+                    logging.warning("punctual contact detected proceed in reverse order")
                 if cyinc2 !=None: # divide again with updated big cycle
                     cybig = cyinc2
                 else:
                     print "None"
-            if punctual:
-                cyinc2 = cyinc1
-            else:
-                if cyinc2==None:
-                    cyinc2 = cybig
-            #cyinc.show('g')
+            #
+            # second attempt if a punctual contact has been detected
+            #
+            if reloop:
+                lninc.reverse()
+                reloop=False
+                for ninc in lninc:
+                    cyinc1 = self.node[ninc]['cycle'] # cycle included
+                    punctual,cyinc2 = cybig.split(cyinc1) # small cycle
+                    if punctual:
+                        logging.critical("contact detected reconsider the layout description ")
+                    if cyinc2 !=None: # divide again with updated big cycle
+                        cybig = cyinc2
+                    else:
+                        print "None"
+
+            if cyinc2==None:
+                cyinc2 = cybig
             #
             # split cycle :  cybig = cyinc \cup cysmall
             #
@@ -205,67 +236,17 @@ class Cycles(nx.DiGraph):
             #cysmall.show('r')
             #plt.show()
             for ninc in lninc:
-                print ncyroot,ninc
                 self.remove_edge(ncyroot,ninc)
 
             #
             # recursive call of decompose
             #
-            self = self.decompose2()
+            self = self.decompose()
             #
             # Two lines to kill the monster
             #
             if len(self.lcyroot)==0:
                 return(self)
-        return(self)
-
-    def decompose(self):
-        """ recursive function to transform the cycle basis
-
-        """
-
-        self.inclusion(True)
-        #
-        # root if degree == number of successors
-        #
-        self.lcyroot =[k for k in nx.degree(self)
-                  if (((nx.degree(self)[k]==len(self.neighbors(k)))) and
-                  (nx.degree(self)[k]>0))]
-        print self.lcyroot
-
-        #for ncyroot in lcyroot:
-        while len(self.lcyroot)>0:
-            # get big cycle
-            ncyroot = self.lcyroot.pop()
-            cybig = self.node[ncyroot]['cycle']
-            #cybig.show('b')
-            # buid dictionnary dsuc
-            #   key : cycle number
-            #   value : list of successors
-            lninc = nx.neighbors(self,ncyroot)
-            # get the list of the successor cycle indices
-            for ninc in lninc:
-                cyinc = self.node[ninc]['cycle']     # cycle included
-                #cyinc.show('g')
-                #
-                # split cycle :  cybig = cyinc \cup cysmall
-                #
-                cysmall = cybig.split(cyinc) # small cycle
-                #self.add_node(ninc,cycle=cyinc)
-                if cysmall != None:
-                    self.node[ncyroot]['cycle']=cysmall
-                    self.pos[ncyroot]=tuple(cysmall.g)
-                    self.remove_edge(ncyroot,ninc)
-                    #cysmall.show('r')
-                    #
-                    # recursive call of decompose
-                    #
-                self = self.decompose()
-                #
-                # Two lines to kill the monster
-                #
-                if len(self.lcyroot)==0:
-                    return(self)
         return(self)
 
 class Cycle(object):
