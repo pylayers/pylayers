@@ -13,6 +13,7 @@ from  pylayers.util import geomutil as geu
 from  pylayers.util import pyutil as pyu
 import matplotlib.pyplot as plt
 import logging
+import copy
 import pdb
 
 class Cycles(nx.DiGraph):
@@ -86,7 +87,7 @@ class Cycles(nx.DiGraph):
         # or only connected nodes (nodes with degree > 0)
         #
         if full:
-            lcyt= [ k for k in self]
+            lcyt = [ k for k in self]
         else:
             lcyt = [ k for k in self if nx.degree(self)[k]>0]
         #print lcyt
@@ -167,26 +168,45 @@ class Cycles(nx.DiGraph):
             # get big cycle
             ncyroot = self.lcyroot.pop()
             cybig = self.node[ncyroot]['cycle']
+            if ncyroot==26:
+                pdb.set_trace()
             #cybig.show('b')
             # get the list of the successor cycle indices
             lninc = nx.neighbors(self,ncyroot)
+            #
+            # reduce to the smallest cycle
+            #
             for ninc in lninc:
-                cyinc = self.node[ninc]['cycle'] # cycle included
-                cysmall = cybig.split(cyinc) # small cycle
-                if cysmall !=None:
-                    cybig = cysmall
+                cyinc1 = self.node[ninc]['cycle'] # cycle included
+                punctual,cyinc2 = cybig.split(cyinc1) # small cycle
+                if cyinc2 !=None: # divide again with updated big cycle
+                    cybig = cyinc2
+                else:
+                    print "None"
+            if punctual:
+                cyinc2 = cyinc1
+            else:
+                if cyinc2==None:
+                    cyinc2 = cybig
             #cyinc.show('g')
             #
             # split cycle :  cybig = cyinc \cup cysmall
             #
-            if cysmall != None:
-                self.node[ncyroot]['cycle']=cysmall
-                self.pos[ncyroot]=tuple(cysmall.g)
-                cysmall.show('r')
-                plt.show()
-                for ninc in lninc:
-                    print ncyroot,ninc
-                    self.remove_edge(ncyroot,ninc)
+            #a1 = abs(cyinc1.area)
+            #a2 = abs(cyinc2.area)
+            #if a1<a2:
+            #    cysmall = cyinc1
+            #else:
+            cysmall = cyinc2
+            self.node[ncyroot]['cycle']=cysmall
+            self.pos[ncyroot]=tuple(cysmall.g)
+            #plt.figure()
+            #plt.title(str(ncyroot))
+            #cysmall.show('r')
+            #plt.show()
+            for ninc in lninc:
+                print ncyroot,ninc
+                self.remove_edge(ncyroot,ninc)
 
             #
             # recursive call of decompose
@@ -267,11 +287,80 @@ class Cycle(object):
         #for node in cycle:
         #    self.G.pos[node] = G.pos[node]
         self.cycle = np.array(cycle)
-        self.size      = len(self.cycle)
-        self.vertices  = self.cycle[np.nonzero(np.array(self.cycle)<0)[0]]
-        self.edges     = self.cycle[np.nonzero(np.array(self.cycle)>0)[0]]
-        self.Nv    = len(self.vertices)
-        self.Ne    = len(self.edges)
+        self.update()
+
+    def __add__(self,cy):
+        """
+        addition of 2 cycles is not a cycle except when there is only one
+        contact point between cycle
+        """
+        flip,path = self.intersect(cy)
+        if len(path)>0:
+            if path[0]<0:
+                g1  = copy.deepcopy(self.G)
+                g2  = copy.deepcopy(cy.G)
+                #
+                pt  = g1.pos[path[0]]
+                #
+                n1  = nx.neighbors(g1,path[0])
+                n2  = nx.neighbors(g2,path[0])
+                #
+                g1.remove_node(path[0])
+                g2.remove_node(path[0])
+                #
+                g1.add_node(-1000000)
+                g1.add_node(-1000001)
+                g2.add_node(-1000002)
+                g2.add_node(-1000003)
+                #
+                g1.add_edge(n1[0],-1000000)
+                g1.add_edge(n1[1],-1000001)
+                g2.add_edge(n2[0],-1000002)
+                g2.add_edge(n2[1],-1000003)
+                #
+                # Need to check an intersection for determining  proper connection
+                #
+                p10 = np.array(g1.pos[n1[0]]).reshape(2,1)
+                p11 = np.array(g1.pos[n1[1]]).reshape(2,1)
+                p20 = np.array(g2.pos[n2[0]]).reshape(2,1)
+                p21 = np.array(g2.pos[n2[1]]).reshape(2,1)
+                #
+                boolinter = geu.intersect(p10,p20,p11,p21)[0]
+                #
+                Gc = nx.Graph()
+                Gc = nx.compose(g1,g2)
+                if boolinter:
+                    Gc.add_edge(-1000000,-1000003)
+                    Gc.add_edge(-1000001,-1000002)
+                else:
+                    Gc.add_edge(-1000000,-1000002)
+                    Gc.add_edge(-1000001,-1000003)
+
+                Gc.pos = {}
+                Gc.pos[-1000000] = pt
+                Gc.pos[-1000001] = pt
+                Gc.pos[-1000002] = pt
+                Gc.pos[-1000003] = pt
+                Gc.pos.update(self.G.pos)
+                Gc.pos.update(cy.G.pos)
+                newcy = Cycle(Gc)
+                return(newcy)
+            else:
+                return
+        else:
+            return
+
+
+    def update(self):
+        """ update
+
+        """
+        self.size  = len(self.cycle)
+        self.vertices = self.cycle[np.nonzero(np.array(self.cycle)<0)[0]]
+        self.edges = self.cycle[np.nonzero(np.array(self.cycle)>0)[0]]
+        self.Nv = len(self.vertices)
+        self.Ne = len(self.edges)
+
         for v in  self.vertices:
             try:
                 pt =  np.array(self.G.pos[v]).reshape(2,1)
@@ -284,7 +373,6 @@ class Cycle(object):
 
         self.area = geu.SignedArea(self.p)
         self.g    = geu.Centroid(self.p)
-
 
     def __repr__(self):
         s = ''
@@ -325,7 +413,7 @@ class Cycle(object):
 
         Returns
         -------
-        boolean  : answer to the inclusion question
+        boolean  : True if Cy \subset self
         path     : path
 
         Notes
@@ -335,23 +423,34 @@ class Cycle(object):
 
             1. The area of the including cycle is larger than the area of included cycle
             2. The 2 cycles have at least  a common segment
-            3. When the  common segment is travelled with the same orientation both cycle SignedArea have the same sign
+            3. When the  common segment is travelled with the same orientation
+               both cycle SignedArea have the same sign
 
         """
         if abs(self.area)>abs(Cy.area):
             flip,path = self.intersect(Cy)
             if len(path)>0:
-                s1 = Cy.area*self.area
-                if flip:  # sens oppose
-                    if s1>0:
-                        return False,path
-                    else:
+                if path[0]>0: # cycles share a segments
+                    s1 = Cy.area*self.area
+                    if flip:  # sens oppose
+                        if s1>0:
+                            return False,path
+                        else:
+                            return True,path
+                    else:     # meme sens
+                        if s1>0:
+                            return True,path
+                        else:
+                            return False,path
+                else: #cycles share a point 
+                    areabig   = abs(self.area)
+                    #areasmall = abs(Cy.area)
+                    cycomb    = self + Cy
+                    areacomb  = abs(cycomb.area)
+                    if areacomb < areabig:
                         return True,path
-                else:     # meme sens
-                    if s1>0:
-                        return True,path
                     else:
-                        return False,path
+                        return False,np.array([])
             else:
                 return False,np.array([])
         else:
@@ -377,16 +476,19 @@ class Cycle(object):
 
         Parameters
         ----------
-        Cy : Cycle 
+        Cy : Cycle
 
         Returns
         -------
 
-        flip  :
-        brin  :
+        flip  : boolean
+                indicates the orientation of the common brin
+                True : flipped direction
+                False : same direction
+        brin  : common portion of th
 
-        Notes 
-        ------
+        Notes
+        -----
 
         flip,path = C1.intersect(C2)
 
@@ -396,37 +498,29 @@ class Cycle(object):
         path is the common path along the cycle
 
         """
+        #
+        # segment number
+        #
         e1  = self.edges
         e2  = Cy.edges
+        #
+        # point number
+        #
         v1  = self.vertices
         v2  = Cy.vertices
+        #
+        # intersection of segments and vertices
+        #
         u   = np.intersect1d(e1,e2)
-        Ni  = len(u)
-        #print Ni," segments en commun"
-        if Ni>0:
-            if Ni>1:
+        v   = np.intersect1d(v1,v2)
+        #
+        Nis  = len(u)
+        Nip  = len(v)
+        #print Nis," segments en commun"
+        if Nis>0:
+            if Nis>1:
                 brin1 = self.cycle
                 brin2 = Cy.cycle
-                ####
-                #### Faux
-                ####
-                #tk1 = np.array([],dtype=int)
-                #tk2 = np.array([],dtype=int)
-                #for ku in u:
-                #    ik1 = np.nonzero(e1==ku)[0]
-                #    ik2 = np.nonzero(e2==ku)[0]
-                #    tk1 = np.hstack((tk1,ik1))
-                #    tk2 = np.hstack((tk2,ik2))
-                #tk1.sort()
-                #tk2.sort()
-                #brin1 = e1[tk1]
-                #brin2 = e2[tk2]
-                #if Ni==2:
-                #    if prod(brin1==brin2):
-                #        flip = False
-                #    else:
-                #        flip = True
-                #else:
                 if max(pyu.corrcy(brin1,brin2))>max(pyu.corrcy(brin1,brin2[::-1])):
                     flip = False
                 else:
@@ -454,19 +548,13 @@ class Cycle(object):
                 #    print "sens oppose"
                     flip = True
 
-                #tk1.sort()
-                #tk2.sort()
-                #brin1 = v1[tk1]
-                #brin2 = v2[tk2]
-                #print brin1,brin2
-                #if max(corrcy(brin1,brin2))>max(corrcy(brin1,brin2[::-1])):
-                #    flip = False
-                #else:
-                #    flip = True
                 brin = u
         else:
             flip  = False
-            brin = np.array([])
+            if Nip > 1:
+                brin  = np.array([])
+            else:
+                brin  = v
 
         return(flip,brin)
 
@@ -481,6 +569,8 @@ class Cycle(object):
           Returns
           -------
           cyout : list of output cycles
+          punctual : boolean
+                True if punctual connection
 
           Notes
           -----
@@ -496,7 +586,9 @@ class Cycle(object):
         Gunion.pos.update({node:self.G.pos[node] for node in self.G})
         Gunion.pos.update({node:cyin.G.pos[node] for node in cyin.G})
         incl,path = self.inclusion(cyin)
-        if incl:
+        u = np.where(path>0)[0] # test share segment condition
+        v = np.where(path<0)[0] # test share point condition
+        if (incl) & (len(u)>0):
             ee1   = e1[~np.in1d(e1,path)]
             ee2   = e2[~np.in1d(e2,path)]
             r     = np.hstack((ee1,ee2))
@@ -515,7 +607,11 @@ class Cycle(object):
                 print "area error",diffarea
                 pdb.set_trace()
 
-            return(cyout)
+            return(False,cyout)
+        if (incl) & (len(v)>0):
+            return(True,None)
+        else:
+            return(False,None)
 
 
     def corrcy(self,Cy,flip=False):
@@ -525,8 +621,8 @@ class Cycle(object):
         ----------
 
         Cy : Cycle
-        flip : boolean 
-            default = False 
+        flip : boolean
+            default = False
 
         """
         e1 = self.edges
@@ -610,7 +706,7 @@ class Cycle(object):
 
     def show(self,color='b'):
         nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)
-        plt.draw()
+        plt.draw ()
 
 if __name__ == "__main__":
     doctest.testmod()

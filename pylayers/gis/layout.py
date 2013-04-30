@@ -3237,7 +3237,14 @@ class Layout(object):
             Gt.pos[k] = tuple(cy.g)
             #LC.append(cy)
         Gt.inclusion(full=True)
-        pdb.set_trace()
+        #c23 = Gt.node[23]['cycle']
+        #c25 = Gt.node[25]['cycle']
+        #cc  = c26+c24
+        #b1 = c23.inclusion(c25)
+        #pdb.set_trace()
+        #if b1:
+        #punctual,cysmall = c23.split(c25)
+        #pdb.set_trace()
         Gt = Gt.decompose2()
         pdb.set_trace()
         #cys = cys.decompose()

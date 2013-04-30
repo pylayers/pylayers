@@ -29,8 +29,6 @@ import pdb
 
      ptonseg(pta,phe,pt)
 
-     displot(pt,ph,col='black')
-
      linet(sp,p1,p2,al,col,lwidth)
 
      ccw(A,B,C)
@@ -1093,7 +1091,7 @@ def ccw(A, B, C):
 
 
 def intersect(A, B, C, D):
-    """ check if segment AB intersect segment CD
+    """ check if segment AB intersects segment CD
 
     Parameters
     ----------
@@ -1112,6 +1110,7 @@ def intersect(A, B, C, D):
         >>> import scipy as sp
         >>> import numpy as np
         >>> from pylayers.util.geomutil import *
+        >>> from pylayers.util.plotutil import *
         >>> import matplotlib.pylab as plt
         >>> N = 10
         >>> A = sp.rand(2,N)
@@ -1125,13 +1124,15 @@ def intersect(A, B, C, D):
         >>> ph2 = D[:,b1]
         >>> f1,a1 = displot(pt1,ph1,'r')
         >>> f2,a2 = displot(pt2,ph2,'b')
-        >>> plt.show()
+        >>> ti = plt.title('test intersect')
         >>> A = np.array([[0],[0]])
         >>> B = np.array([[1],[1]])
         >>> C = np.array([[1],[0]])
         >>> D = np.array([[0],[1]])
-        >>> b2 = intersect(A,B,C,D)
-        >>> assert(b2)
+        >>> intersect(A,B,C,D)
+        array([ True], dtype=bool)
+        >>> intersect(A,B,C,D)[0]
+        True
 
     """
     return ((ccw(A, C, D) != ccw(B, C, D)) & (ccw(A, B, C) != ccw(A, B, D)))
@@ -1775,7 +1776,6 @@ class Polygon(shg.Polygon):
             >>> plt.axis('off')
             (-0.5, 4.0, -0.5, 2.5)
             >>> title = plt.title('Testing buildGv')
-            >>> plt.show()
 
 
         Notes
@@ -2436,48 +2436,6 @@ def wall_delta(x1, y1, x2, y2, delta=0.0001):
     cy = y2 - ay * delta / a_mod
 
     return(bx, by, cx, cy)
-
-
-def angle_fix(al):
-    """Fixes the angle formed by the diffraction corner
-    and its neighbors o 0/0.5*Pi/Pi/1.5*Pi/2*Pi.
-
-    Parameters
-    ----------
-    al : float
-      An angle.
-
-    Returns
-    -------
-    al : float
-      An angle equal to 0/0.5*Pi/Pi/1.5*Pi/2*Pi..
-
-    Examples
-    --------
-
-    >>> from pylayers.gis.layout import Layout
-    >>> L = Layout()
-    >>> L.load('exemple.str')
-    >>> ncoin,ndiff = L.buildGc()
-    >>> L.buildGt()
-    >>> L.buildGr()
-    >>> al=0.1
-    >>> al1=angle_fix(al)
-    >>> assert al1== 0.0,'Mistake'
-
-
-    """
-    if (-np.pi / 6 < al or al >= np.pi / 6):
-        al1 = 0.
-    if (-np.pi / 6 + np.pi / 2 < al or al >= np.pi / 6 + np.pi / 2):
-        al1 = np.pi / 2
-    if (-np.pi / 6 + np.pi < al or al >= np.pi / 6 + np.pi):
-        al1 = np.pi
-    if (-np.pi / 6 + 3 * np.pi / 2 < al or al >= np.pi / 6 + 3 * np.pi / 2):
-        al1 = 3 * np.pi / 2
-    else:
-        pass
-    return(al1)
 
 
 def plot_coords2(ax, ob):
