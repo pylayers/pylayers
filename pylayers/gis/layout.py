@@ -3496,7 +3496,7 @@ class Layout(object):
             udeg2 = []
             udeg1 = []
             cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt 
-            polyg = cycle.poly
+            polyg = cycle.polyg
             vnodes = cycle.cycle
             #
             # seek node of degree 2
@@ -4247,7 +4247,7 @@ class Layout(object):
         rooms = []
         for nr in self.Gr.node.keys():
             #if seg in self.Gt.node[self.Gr.node[nr]['cycle']]['vnodes']:
-            ncy = self.Gr.node[nr]['cycle']]
+            ncy = self.Gr.node[nr]['cycle']
             if seg in self.Gt.node[ncy]['cycle'].cycle:
                 rooms.append(nr)
         return rooms
@@ -4333,7 +4333,8 @@ class Layout(object):
         # For all cycles
         #
         for k in self.Gt.node:
-            lseg = self.Gt.node[k]['vnodes'] # list of segment from the cycle
+            #lseg = self.Gt.node[k]['vnodes'] # list of segment from the cycle
+            lseg = self.Gt.node[k]['cycle'].cycle # list of segment from the cycle
             ltrans = np.array(self.listtransition)
             u = np.intersect1d(lseg, ltrans)
             #v = np.intersect1d(lseg, lwallair)
