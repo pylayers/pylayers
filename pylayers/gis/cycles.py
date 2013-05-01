@@ -118,7 +118,7 @@ class Cycles(nx.DiGraph):
                     lcy2 = self.contained_by[ncy2]
                     for ncy2 in lcy2:
                         if ncy2 not in lcy1:
-                            print "adding ",ncy2," in ",ncy1
+                            ##print "adding ",ncy2," in ",ncy1
                             self.contained_by[ncy1].append(ncy2)
 
         #
@@ -196,7 +196,8 @@ class Cycles(nx.DiGraph):
                 if cyinc2 !=None: # divide again with updated big cycle
                     cybig = cyinc2
                 else:
-                    print "None"
+                    pass
+                    #print "None"
             #
             # second attempt if a punctual contact has been detected
             #
@@ -211,7 +212,8 @@ class Cycles(nx.DiGraph):
                     if cyinc2 !=None: # divide again with updated big cycle
                         cybig = cyinc2
                     else:
-                        print "None"
+                        pass
+                        #print "None"
 
             if cyinc2==None:
                 cyinc2 = cybig

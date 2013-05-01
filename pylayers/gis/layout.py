@@ -154,7 +154,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> fillist = L.ls()
+        >>> fillist = ls()
 
         """
 
@@ -271,8 +271,8 @@ class Layout(object):
 
         """
         print "L=Layout('DLR.ini')"
-        print "L.showGs(clear=True)"
-        print "L.showGs(edlist=L.subseg()['WOOD'],dthin=False,dlabels=True)"
+        print "showGs(clear=True)"
+        print "showGs(edlist=L.subseg()['WOOD'],dthin=False,dlabels=True)"
 
 
     def g2npy(self):
@@ -491,9 +491,9 @@ class Layout(object):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.gis.layout import *
             >>> L = Layout('WHERE1.ini')
-            >>> L.loadfur('Furw1.ini')
+            >>> loadfur('Furw1.ini')
             >>> fig = plt.figure()
-            >>> ax = L.showGs(fig=fig,furniture=True)
+            >>> ax = showGs(fig=fig,furniture=True)
             >>> ti = plt.title('loadfur')
             >>> plt.show()
 
@@ -563,7 +563,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.loadstr('exemple.str')
+        >>> loadstr('exemple.str')
 
         """
 
@@ -1044,7 +1044,7 @@ class Layout(object):
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> L.loadstr2('Lstruc.str2')
+            >>> loadstr2('Lstruc.str2')
 
         """
 
@@ -1270,8 +1270,8 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> L.load('exemple.str')
-        >>> L.add_fnod((10.0,10.0))
+        >>> load('exemple.str')
+        >>> add_fnod((10.0,10.0))
         -9
 
 
@@ -1597,12 +1597,14 @@ class Layout(object):
             lnc = [lnc]
 
         for nc in lnc:
-            vnodes = np.array(self.Gt.node[nc]['vnodes'])
+            #vnodes = np.array(self.Gt.node[nc]['vnodes'])
+            vnodes = np.array(self.Gt.node[nc]['cycle'].cycle)
             neigh = self.Gt.neighbors(nc)
             tvn = np.array([])
 
             for ncy in neigh:
-                vn = np.array(self.Gt.node[ncy]['vnodes'])
+                #vn = np.array(self.Gt.node[ncy]['vnodes'])
+                vn = np.array(self.Gt.node[ncy]['cycle'].cycle)
                 try:
                     tvn = np.hstack((tvn, vn))
                 except:
@@ -2274,7 +2276,7 @@ class Layout(object):
         >>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
-        >>> L.angleonlink(p1,p2)
+        >>> angleonlink(p1,p2)
         (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
 
 
@@ -2354,11 +2356,11 @@ class Layout(object):
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
         >>> idx = np.array([1,2,3,17])
-        >>> L.seguv(idx)
+        >>> seguv(idx)
         array([[-1.,  0.,  1., -1.],
                [ 0., -1.,  0.,  0.]])
         >>> idx = np.array([1])
-        >>> L.seguv(idx)
+        >>> seguv(idx)
         array([-1.,  0.])
 
         """
@@ -2408,7 +2410,7 @@ class Layout(object):
         >>> from pylayers.gis.layout import *
         >>> L = Layout('exemple.str')
         >>> ptlist  = np.array([0,1])
-        >>> L.segpt(ptlist)
+        >>> segpt(ptlist)
         array([0, 1, 5, 7])
 
         """
@@ -2445,7 +2447,7 @@ class Layout(object):
             >>> L = Layout('office.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,10])
-            >>> L.seginframe(p1,p2)
+            >>> seginframe(p1,p2)
             array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35,  36,
                     37,  38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60,
                     61,  62,  63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,
@@ -2926,7 +2928,7 @@ class Layout(object):
         roomlist : list
             default : []
 
-        display parameters are defined in  L.display dictionnary
+        display parameters are defined in  display dictionnary
 
         Returns
         -------
@@ -3425,10 +3427,10 @@ class Layout(object):
 
 #        >>> from pylayers.gis.layout import *
 #        >>> L = Layout()
-#        >>> L.load('exemple.str')
-#        >>> L.buildGt()
-#        >>> L.buildGr()
-#        >>> L.buildGv()
+#        >>> load('exemple.str')
+#        >>> buildGt()
+#        >>> buildGr()
+#        >>> buildGv()
 
 #        """
 
@@ -3479,9 +3481,9 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('exemple.str')
-        >>> L.buildGt()
-        >>> L.buildGr()
-        >>> L.buildGv()
+        >>> buildGt()
+        >>> buildGr()
+        >>> buildGv()
 
         """
 
@@ -3493,10 +3495,9 @@ class Layout(object):
         for icycle in self.Gt.node:
             udeg2 = []
             udeg1 = []
-            #icycle = self.Gr.node[nr]['cycle']  # id of cycle
-            cycle = self.Gt.node[icycle]      # cycle of the room
-            polyg  = cycle['polyg']             # pol
-            vnodes = cycle['vnodes']
+            cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt 
+            polyg = cycle.poly
+            vnodes = cycle.cycle
             #
             # seek node of degree 2
             #
@@ -3594,7 +3595,8 @@ class Layout(object):
                     if len(n)==2: # reflection tuple (,2)
                         ns = n[0]  # segment
                         nc = n[1]  # cycle
-                        vnodes = self.Gt.node[nc]['vnodes']
+                        #vnodes = self.Gt.node[nc]['vnodes']
+                        vnodes = self.Gt.node[nc]['cycle'].cycle
                         neigh = Gv.neighbors(ns)  # find neighbors
                         for nb in neigh:
                             if nb in vnodes:           # Si Voisin dans cycle reflexion
@@ -3629,8 +3631,10 @@ class Layout(object):
                         ns  = n[0]  # segment
                         cy0 = n[1]
                         cy1 = n[2]
-                        vnodes0 = self.Gt.node[cy0]['vnodes']
-                        vnodes1 = self.Gt.node[cy1]['vnodes']
+                        #vnodes0 = self.Gt.node[cy0]['vnodes']
+                        #vnodes1 = self.Gt.node[cy1]['vnodes']
+                        vnodes0 = self.Gt.node[cy0]['cycle'].cycle
+                        vnodes1 = self.Gt.node[cy1]['cycle'].cycle
                         neigh = Gv.neighbors(ns)  # find neighbors
                         for nb in neigh:
                             if nb in vnodes1:    # If neighbors in cycle 1
@@ -3722,7 +3726,8 @@ class Layout(object):
                 if len(n)==2: # reflection tuple (,2)
                     ns = n[0]  # segment
                     nc = n[1]  # cycle
-                    vnodes = self.Gt.node[nc]['vnodes']
+                    #vnodes = self.Gt.node[nc]['vnodes']
+                    vnodes = self.Gt.node[nc]['cycle'].cycle
                     neigh = self.Gv.neighbors(ns)  # find neighbors
                     for nb in neigh:
                         if nb in vnodes:           # Si Voisin dans cycle reflexion
@@ -3757,8 +3762,10 @@ class Layout(object):
                     ns  = n[0]  # segment
                     cy0 = n[1]
                     cy1 = n[2]
-                    vnodes0 = self.Gt.node[cy0]['vnodes']
-                    vnodes1 = self.Gt.node[cy1]['vnodes']
+                    #vnodes0 = self.Gt.node[cy0]['vnodes']
+                    #vnodes1 = self.Gt.node[cy1]['vnodes']
+                    vnodes0 = self.Gt.node[cy0]['cycle'].cycle
+                    vnodes1 = self.Gt.node[cy1]['cycle'].cycle
                     neigh = self.Gv.neighbors(ns)  # find neighbors
                     for nb in neigh:
                         if nb in vnodes1:    # If neighbors in cycle 1
@@ -3903,21 +3910,21 @@ class Layout(object):
             >>> from pylayers.gis.layout import  *
             >>> import matplotlib.pyplot as plt
             >>> L = Layout('exemple.str')
-            >>> L.buildGt()
-            >>> L.buildGr()
-            >>> L.buildGv()
+            >>> buildGt()
+            >>> buildGr()
+            >>> buildGv()
             >>> fig = plt.figure(figsize=(10,10))
             >>> ax = fig.add_subplot(221)
-            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
+            >>> fig,ax = showG('s',fig=fig,ax=ax)
             >>> tis = plt.title("Gs")
             >>> ax = fig.add_subplot(222)
-            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+            >>> fig,ax = showG('r',fig=fig,ax=ax)
             >>> tit = plt.title("Gt")
             >>> ax = fig.add_subplot(223)
-            >>> fig,ax = L.showG('c',fig=fig,ax=ax)
+            >>> fig,ax = showG('c',fig=fig,ax=ax)
             >>> tic = plt.title("Gc")
             >>> ax = fig.add_subplot(224)
-            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
+            >>> fig,ax = showG('v',fig=fig,ax=ax)
             >>> tiv = plt.title("Gv")
             >>> plt.show()
 
@@ -4028,10 +4035,10 @@ class Layout(object):
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout('exemple.str')
-            >>> L.build()
+            >>> build()
             >>> fig = plt.figure()
-            >>> fig,ax = L.showGs(fig=fig)
-            >>> ax = L.showGv(ax=ax)
+            >>> fig,ax = showGs(fig=fig)
+            >>> ax = showGv(ax=ax)
             >>> ti = plt.title('Show Gv')
             >>> t = plt.axis('off')
             >>> plt.show()
@@ -4098,10 +4105,10 @@ class Layout(object):
         --------
             >>> from pylayers.gis.layout import *
             >>> L = Layout('WHERE1.ini')
-            >>> L.dumpr()
+            >>> dumpr()
             >>> nroom1 = 1
             >>> nroom2 = 6
-            >>> l =L.waypointGw(nroom1,nroom2)
+            >>> l =waypointGw(nroom1,nroom2)
             >>> len(l)
             8
 
@@ -4126,7 +4133,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> walls = L.thwall(0,0)
+        >>> walls = thwall(0,0)
 
         """
         keyn = self.Gs.node.keys()
@@ -4239,7 +4246,9 @@ class Layout(object):
 
         rooms = []
         for nr in self.Gr.node.keys():
-            if seg in self.Gt.node[self.Gr.node[nr]['cycle']]['vnodes']:
+            #if seg in self.Gt.node[self.Gr.node[nr]['cycle']]['vnodes']:
+            ncy = self.Gr.node[nr]['cycle']]
+            if seg in self.Gt.node[ncy]['cycle'].cycle:
                 rooms.append(nr)
         return rooms
 
@@ -4257,7 +4266,9 @@ class Layout(object):
         """
 
         try:
-            seg = self.Gt.node[self.Gr.node[room]['cycle']]['vnodes']
+            # old vnodes was there
+            ncy = self.Gr.node[room]['cycle']
+            seg = self.Gt.node[ncy].cycle
         except:
             raise NameError(str(room)+" is not in not on Gr")
         u = np.where(seg>=0)
@@ -4278,7 +4289,9 @@ class Layout(object):
         """
 
         try:
-            nod = self.Gt.node[self.Gr.node[room]['cycle']]['vnodes']
+            ncy = self.Gr.node[room]['cycle']
+            nod = self.Gt.node[ncy].cycle
+            #nod = self.Gt.node[self.Gr.node[room]['cycle']]['vnodes']
         except:
             raise NameError(str(room)+" is not in not on Gr")
         u = np.where(nod<0)
@@ -4371,7 +4384,7 @@ class Layout(object):
     def waypoint(self, nroom1, nroom2):
         """
         get the waypoint between room1 and room2
-        waypoint = L.waypoint(nroom1,nroom2)
+        waypoint = waypoint(nroom1,nroom2)
         """
         rooms = nx.dijkstra_path(self.Gr, nroom1, nroom2)
         nroom = len(rooms)
@@ -4459,15 +4472,15 @@ class Layout(object):
         try:
             print "Gt Nodes : ", self.Gt.number_of_nodes()
             print "Gt Edges : ", self.Gt.number_of_edges()
-            print "vnodes = L.Gt.node[Nc]['vnodes'] "
-            print "poly = L.Gt.node[Nc]['polyg'] "
+            print "vnodes = Gt.node[Nc]['cycles'].cycle "
+            print "poly = Gt.node[Nc]['cycle'].polyg "
         except:
             print "no Gt graph"
 
         try:
             print "Gr Nodes    :", self.Gr.number_of_nodes()
             print "Gr Edges    :", self.Gr.number_of_edges()
-            print "Nc  = L.Gr.node[nroom]['cycles']  "
+            print "Nc  = Gr.node[nroom]['cycles']  "
         except:
             print "no Gr graph"
 
@@ -4622,7 +4635,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> L.geomfile()
+        >>> geomfile()
 
         """
 
@@ -4946,6 +4959,8 @@ class Layout(object):
 
             Return  dist list which is a list of all the distances to the walls of the room
 
+        ..todo: to be tested version contain 
+
         """
         pp = Point(p[0], p[1])
 
@@ -4953,11 +4968,13 @@ class Layout(object):
         p0_xy = []
         p1_xy = []
 
-        Nc = L.Gr.node[nroom]['cycle']
-        vnode = L.Gt.node[Nc]['vnodes']
+        Nc = self.Gr.node[nroom]['cycle']
+        #vnode = self.Gt.node[Nc]['vnodes']
+        vnode = self.Gt.node[Nc]['cycle'].cycle
 
-        for j in range(len(L.Gr[nroom]['vnodes'])):
-            nn = L.b_Gr[5]['vnodes'][j]
+        #for j in range(len(Gr[nroom]['vnodes'])):
+        for j in range(len(self.Gr[nroom]['vnodes'])):
+            nn = self.b_Gr[5]['vnodes'][j]
             nta = G1.tahe[0, nn - 1]
             nhe = G1.tahe[1, nn - 1]
             p0 = np.array([G1.pt[0, nta], G1.pt[1, nta]])
@@ -4968,7 +4985,7 @@ class Layout(object):
         pstartwll = np.array(p0_xy)
         pfinwll = np.array(p1_xy)
 
-        for i in range(len(L.b_Gr[nroom]['vnodes'])):
+        for i in range(len(self.b_Gr[nroom]['vnodes'])):
             line_wall = LineString([(pstartwll[i, 0],
                 pstartwll[i, 1]), (pfinwll[i, 0], pfinwll[i, 1])])
             dist.insert(i, line_wall.distance(pp))
@@ -4989,7 +5006,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('exemple.str','matDB.ini','slabDB.ini')
-        >>> p_Tx,p_Rx = L.randTxRx()
+        >>> p_Tx,p_Rx = randTxRx()
 
         Notes
         -----
@@ -5027,7 +5044,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('exemple.str','matDB.ini','slabDB.ini')
-        >>> L.boundary()
+        >>> boundary()
 
         """
         if len(self.Gs.pos.values())<>0:
