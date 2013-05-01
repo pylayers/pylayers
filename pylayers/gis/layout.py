@@ -3244,7 +3244,23 @@ class Layout(object):
         #pdb.set_trace()
         #if b1:
         #punctual,cysmall = c23.split(c25)
-        self.Gt = Gt.decompose()
+        Gt = Gt.decompose()
+        #
+        # check algorithm output
+        #
+        Gt.inclusion()
+        if len(Gt.edges())>0:
+            logging.warning("first decompose run failed")
+            Gt = Gt.decompose()
+            Gt.inclusion()
+            if len(Gt.edges())>0:
+                logging.critical("second decompose run failed")
+        #
+        # transform DiGraph into Graph
+        #
+        self.Gt = nx.Graph(Gt)
+        self.Gt.pos = {}
+        self.Gt.pos.update(Gt.pos)
         #cys = cys.decompose()
         #cys.inclusion()
         #cys.simplify2()
@@ -3254,11 +3270,13 @@ class Layout(object):
         #self.Gt = cys.Gt
         #pdb.set_trace()
 
-        #N = len(self.Gt.nodes())
+        N = len(self.Gt.nodes())
         for k in self.Gt.nodes():
-            nk = np.array(self.Gt.node[k]['vnodes'])
+            #nk = np.array(self.Gt.node[k]['vnodes'])
+            nk = np.array(self.Gt.node[k]['cycle'].cycle)
             for l in np.arange(k+1,N):
-                nl = np.array(self.Gt.node[l]['vnodes'])
+                #nl = np.array(self.Gt.node[l]['vnodes'])
+                nl = np.array(self.Gt.node[l]['cycle'].cycle)
                 nkinl = np.intersect1d(nk,nl)
                 if len(nkinl!=0):
                     self.Gt.add_edge(k,l)
@@ -3275,7 +3293,8 @@ class Layout(object):
                 self.Gs.node[k]['ncycles']=[]
 
         for k in range(Ncycles):
-            vnodes = np.array(self.Gt.node[k]['vnodes'])
+            #vnodes = np.array(self.Gt.node[k]['vnodes'])
+            vnodes = np.array(self.Gt.node[k]['cycle'].cycle)
             for n in vnodes:
                 if n>0:
                     if k not in self.Gs.node[n]['ncycles']:
@@ -3288,8 +3307,10 @@ class Layout(object):
         #  Seek for Cycle inter connectivity
         #
         for k in combinations(range(Ncycles), 2):
-            vnodes0 = np.array(self.Gt.node[k[0]]['vnodes'])
-            vnodes1 = np.array(self.Gt.node[k[1]]['vnodes'])
+            #vnodes0 = np.array(self.Gt.node[k[0]]['vnodes'])
+            #vnodes1 = np.array(self.Gt.node[k[1]]['vnodes'])
+            vnodes0 = np.array(self.Gt.node[k[0]]['cycle'].cycle)
+            vnodes1 = np.array(self.Gt.node[k[1]]['cycle'].cycle)
             #
             # Connect Cycles if they share nodes (segment ? )
             #
@@ -3306,7 +3327,8 @@ class Layout(object):
         # Construct the polygon associated to each cycle
         #
         for k in self.Gt.nodes():
-            vnodes = self.Gt.node[k]['vnodes']
+            #vnodes = self.Gt.node[k]['vnodes']
+            vnodes = self.Gt.node[k]['cycle'].cycle
             u_neg = np.nonzero(vnodes < 0)[0]
             npoints = vnodes[u_neg]
             coords = []
@@ -3332,7 +3354,8 @@ class Layout(object):
         #    not enough information available
         #
         for k in self.Gt.nodes():
-            vnodes = self.Gt.node[k]['vnodes']
+            #vnodes = self.Gt.node[k]['vnodes']
+            vnodes = self.Gt.node[k]['cycle'].cycle
             ListInteractions = []
             for inode in vnodes:
                 if inode > 0:   # segments

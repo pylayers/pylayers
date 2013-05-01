@@ -22,7 +22,6 @@ class Cycles(nx.DiGraph):
     Methods
     -------
         inclusion
-        simplify
         decompose
 
     """
