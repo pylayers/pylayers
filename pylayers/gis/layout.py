@@ -3997,6 +3997,8 @@ class Layout(object):
         if 'v' in graph:
 
             G = self.Gv
+            G.pos={}
+            G.pos.update(self.Gs.pos)
 
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='m'
@@ -4023,6 +4025,7 @@ class Layout(object):
         if 'i' in graph:
 
             G = self.Gi
+
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='k'
 
