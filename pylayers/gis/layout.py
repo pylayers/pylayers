@@ -423,7 +423,7 @@ class Layout(object):
         self.Gs.pos = {}
         self.labels = {}
 
-        # update display section 
+        # update display section
         for k in di['display']:
             try:
                 self.display[k]=eval(di['display'][k])
@@ -433,8 +433,14 @@ class Layout(object):
 
         # update points section 
         for nn in di['points']:
-            self.Gs.pos[eval(nn)] = eval(di['points'][nn])
-            self.labels[eval(nn)] = nn
+            nodeindex = eval(nn)
+            x,y       = eval(di['points'][nn])
+            #
+            # limitation of point precision is important for avoiding
+            # topological in shapely. Layout precision is limited to millimeter.
+            #
+            self.Gs.pos[nodeindex] = (round(1000*x)/1000.,round(1000*y)/1000.)
+            self.labels[nodeindex] = nn
 
         # update segments section 
         for ns in di['segments']:
@@ -3011,7 +3017,6 @@ class Layout(object):
         for nr in roomlist:
             ncy = self.Gr.node[nr]['cycle']
             self.Gt.node[ncy]['polyg'].plot()
-        
         if axis==[]:
             ax.axis('scaled')
         else:
@@ -3495,8 +3500,8 @@ class Layout(object):
         for icycle in self.Gt.node:
             udeg2 = []
             udeg1 = []
-            cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt 
-            polyg = cycle.polyg
+            cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt
+            polyg = self.Gt.node[icycle]['polyg']  # a shapely polygon
             vnodes = cycle.cycle
             #
             # seek node of degree 2
@@ -3929,75 +3934,138 @@ class Layout(object):
             >>> plt.show()
 
         """
-
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
-                    'nodes': False,
-                    'eded': True,
-                    'ndnd': True,
-                    'nded': True,
+                    'nodes': True,
+                    'edges': True,
+                    'labels': False,
+                    'alphan': 1.0,
+                    'alphae': 1.0,
                     'linewidth': 2,
+                    'node_color':'w',
+                    'edge_color':'k',
+                    'node_size':20,
+                    'font_size':30,
                     'nodelist': [],
                     'figsize': (5,5)
                     }
 
         for key, value in defaults.items():
-            if key in kwargs:
-                setattr(self, key, kwargs[key])
-            else:
-                setattr(self, key, value)
+            if key not in kwargs:
                 kwargs[key] = value
 
-        if kwargs['fig'] == []:
-            fig = plt.figure(figsize=kwargs['figsize'])
-            fig.set_frameon(True)
-        else:
-            fig = kwargs['fig']
-
-        if kwargs['ax'] == []:
-            ax = fig.gca()
-        else:
-            ax = kwargs['ax']
-
-
+        #
+        # t : graph of cycles
+        #
         if 't' in graph:
             G = self.Gt
-            nx.draw(G, G.pos, node_color='w', edge_color='r',node_size= 200,fontsize=30)
+
+            if kwargs['edge_color']=='':
+                kwargs['edge_color'] ='r'
+            fig,ax = gru.draw(G,**kwargs)
+            kwargs['fig']=fig
+            kwargs['ax']=ax
+        #
+        # r : graph of rooms
+        #
         if 'r' in graph:
             G = self.Gr
-            nx.draw(G, G.pos, node_color='w', edge_color='g',node_size= 200,fontsize=30)
-        if 's' in graph:
-            G = self.Gs
-            nx.draw(G, G.pos, node_color='w', edge_color='b',node_size= 250,fontsize=30)
-        if 'v' in graph:
-            G = self.Gv
-            nx.draw(G, self.Gs.pos, node_color='w', edge_color='m')
-        if 'c' in graph:
-            G = self.Gc
-            nx.draw(G, self.Gs.pos, node_color='w', edge_color='c')
-        if 'i' in graph:
-            G = self.Gi
-            nx.draw(G,G.pos,node_color='w', edge_color='k', node_size= 1, fontsize=0.1)
-        if 'w' in graph:
-            G = self.Gw
-            nx.draw(G,G.pos,node_color='w', edge_color='k')
 
+            if kwargs['edge_color']=='':
+                kwargs['edge_color'] ='g'
+
+            fig,ax=gru.draw(G,**kwargs)
+            kwargs['fig']=fig
+            kwargs['ax']=ax
+        #
+        # s : structure graph
+        #
+        if 's' in graph:
+
+            G = self.Gs
+
+            if kwargs['edge_color']=='':
+                kwargs['edge_color'] ='g'
+
+            fig,ax = gru.draw(G,**kwargs)
+            kwargs['fig']=fig
+            kwargs['ax']=ax
+        #
+        # v : visibility graph
+        #
+        if 'v' in graph:
+
+            G = self.Gv
+
+            if kwargs['edge_color']=='':
+                kwargs['edge_color'] ='m'
+
+            fig,ax = gru.draw(G,**kwargs)
+            kwargs['fig']=fig
+            kwargs['ax']=ax
+        #
+        # c : connectivity graph (Friedman) deprecated 
+        #
+        if 'c' in graph:
+
+            G = self.Gc
+
+            if kwargs['edge_color']=='':
+                kwargs['edge_color'] ='k'
+
+            fig,ax = gru.draw(G,**kwargs)
+            kwargs['fig']=fig
+            kwargs['ax']=ax
+        #
+        # i :  interaction graph
+        #
+        if 'i' in graph:
+
+            G = self.Gi
+            if kwargs['edge_color']=='':
+                kwargs['edge_color'] ='k'
+
+            fig,ax = gru.draw(G,**kwargs)
+            kwargs['fig']=fig
+            kwargs['ax']=ax
+        #
+        # w :  waypoint graph
+        #
+        if 'w' in graph:
+
+            G = self.Gw
+
+            if kwargs['edge_color']=='':
+                kwargs['edge_color'] ='k'
+
+            fig,ax = gru.draw(G,**kwargs)
+            kwargs['fig']=fig
+            kwargs['ax']=ax
+
+        args = {'fig':fig,'ax':ax,'show':False}
         for k, ncy in enumerate(self.Gt.node.keys()):
-            self.Gt.node[ncy]['polyg'].plot()
+            fig,ax = self.Gt.node[ncy]['polyg'].plot(**args)
+            args['fig']=fig
+            args['ax']=ax
 
         ax.axis('scaled')
+
         # Display doors and windows
+
         d = self.subseg()
         for ss in d.keys():
             if ss == 'DOOR':
                 color = 'red'
+
             if ss == '3D_WINDOW_GLASS':
                 color = 'blue'
+
             if ss == 'WINDOW_GLASS':
                 color = 'cyan'
             else:
                 color= 'black'
+
             for ns in d[ss]:
                 np1, np2 = self.Gs.neighbors(ns)
                 x = [self.Gs.pos[np1][0], self.Gs.pos[np2][0]]

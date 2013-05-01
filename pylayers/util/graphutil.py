@@ -3,6 +3,82 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import doctest
 
+
+def draw(G,**kwargs):
+    """ draw a networkx graph
+    G : Graph with pos (geometric graph)
+
+
+    """
+
+    defaults = {'show': False,
+                'fig': [],
+                'ax': [],
+                'nodes':True,
+                'edges':True,
+                'labels':True,
+                'linewidth': 2,
+                'node_color':'w',
+                'edge_color':'k',
+                'node_size': 200,
+                'linewidth': 2,
+                'font_size': 30,
+                'alphan': 0.8,
+                'alphae': 1.0,
+                'nodelist': [],
+                'edgelist': [],
+                'figsize': (8,8)
+                 }
+    #
+    # update default values
+    #
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+    #
+    # getting fig and ax
+    #
+    if kwargs['fig'] == []:
+        fig = plt.figure(figsize=kwargs['figsize'])
+        fig.set_frameon(True)
+    else:
+        fig = kwargs['fig']
+
+    if kwargs['ax'] == []:
+        ax = fig.gca()
+    else:
+        ax = kwargs['ax']
+
+    #
+    # edges list and nodes list
+    #
+
+    if kwargs['nodelist']==[]:
+        nodelist =  G.nodes()
+    if kwargs['edgelist']==[]:
+        edgelist =  G.edges()
+
+    if kwargs['nodes']:
+        nx.draw_networkx_nodes(G, G.pos,
+                               nodelist = nodelist,
+                               node_color = kwargs['node_color'],
+                               node_size  = kwargs['node_size'],
+                               alpha = kwargs['alphan'])
+    if kwargs['labels']:
+        nx.draw_networkx_labels(G, G.pos,
+                                font_size=kwargs['font_size'])
+
+    if kwargs['edges']:
+        nx.draw_networkx_edges(G, G.pos,
+                               edgelist = edgelist,
+                               edge_color = kwargs['edge_color'],
+                               linewidth = kwargs['linewidth'],
+                               alpha = kwargs['alphae'])
+    if kwargs['show']:
+        plt.show()
+
+    return fig,ax
+
 def edgetype(G):
     """
 
