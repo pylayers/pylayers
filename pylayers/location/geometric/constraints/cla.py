@@ -212,6 +212,7 @@ class CLA(object):
         """
         self.merge2()
         self.refine(self.Nc)
+        self.update()
         if (sum(self.usable) >= 3) and (pe == True):
             self.estpos2()
             self.Nc=len(np.where(self.usable)[0])
