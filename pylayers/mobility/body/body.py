@@ -150,7 +150,7 @@ if __name__ == '__main__':
     ax.axis('scaled')
     B.CylinderModel(frameID)
     fig  = plt.figure()
-    for i in range(2,B.c.shape[0]):
+    for i in range(3,4):#B.c.shape[0]):
 		pltu.cylinder(fig,B.c[i,1:4],B.c[i,4:7],B.c[i,7])	
 
     plt.axis('scaled')
