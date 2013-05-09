@@ -403,7 +403,6 @@ class Signatures(dict):
         Gi.pos = dpos
 
 #        for meta in metasig:
-        
 #        Gi = nx.DiGraph()
 #        for cycle in metasig:
 #            Gi = nx.compose(Gi,self.L.dGi[cycle])
