@@ -54,23 +54,26 @@ def frontline(L,nc,v):
     """ determine cycle frontline
     Parameters
     ----------
-    L : Layout 
-    nc : cycel number
-    v : direction vector 
+    L : Layout
+    nc : cycle number
+    v : direction vector
 
     Example
     -------
 
-    >>> import pylayers.util.geomutil as geu
+    >>> from pylayers.gis.layout import * 
+    >>> L = Layout('DLR.ini')
+    >>> v = np.array([1,1])
+    >>> nseg = frontline(L,0,v)
 
     """
     npt = filter(lambda x: x<0, L.Gt.node[nc]['cycle'].cycle)
     nseg = filter(lambda x: x>0, L.Gt.node[nc]['cycle'].cycle)
     pt  = map(lambda npt : [L.Gs.pos[npt][0],L.Gs.pos[npt][1]],npt)
     pt1 = np.array(pt)
-    n1 = Lr2n(pt1.T)
-    ps = sum(n1*v,axis=0)
-    u = where(ps<0)[0]
+    n1 = geu.Lr2n(pt1.T)
+    ps = np.sum(n1*v[:,np.newaxis],axis=0)
+    u = np.where(ps<0)[0]
     nsegf = map(lambda n: nseg[n],u)
     return nsegf
 
@@ -820,7 +823,7 @@ class Signatures(dict):
         ps = np.array([cps[0][0],cps[1][0]])
         pt = np.array([cpt[0][0],cpt[1][0]])
         v = pt-ps
-        mv = np.sqrt(sum(v*v,axis=0))
+        mv = np.sqrt(np.sum(v*v,axis=0))
         vn = v/mv
         lcil = self.L.cycleinline(cs,ct)
         
@@ -840,15 +843,16 @@ class Signatures(dict):
                 cp2 = poly2.centroid.xy
                 p2 = np.array([cp2[0][0],cp2[1][0]])
                 vp = p2-p1
-                m2 = np.sqrt(sum((p2-p1)*(p2-p1),axis=0))
+                m2 = np.sqrt(np.sum((p2-p1)*(p2-p1),axis=0))
                 vpn = vp/m2
                 dp = np.dot(vpn,vn)
                 # if dot(vn,vpn) >0 cycle cya is ahead
                 if dp>0:
                     lsegs = frontline(self.L,cya,vn)
-                for s in lsegs:
-                    cyb = filter(lamda n : n <> cya,self.L.Gs.node[s]['ncycles'])
-                    dfl[cy].append(str((s,cya,cyb)))
+                    for s in lsegs:
+                        cyb = filter(lambda n : n <> cya,self.L.Gs.node[s]['ncycles'])
+                        if cyb<>[]:
+                            dfl[cy].append(str((s,cya,cyb[0])))
             # remove segments which separate two cycles.
             # TODO: See if it worth to implement
             #lsegs = filter(lambda x : x not in interseg,lsegs)
@@ -915,41 +919,30 @@ class Signatures(dict):
 #################################################
 #       propaths (a.k.a. all simple path) per adjacent cycles along cycles in line
 #       Obtaining Gf: filtred graph of Gi with Gc ( rename Gt in Gc )
-        
+
+        #
         # Gf : filtered graph
+        #
         Gf = nx.DiGraph()
         Gf.pos = {}
-        for ic in np.arange(len(lcil)-2):
-            lsource = []
-            ltarget = []
-            linter = self.L.Gt.node[lcil[ic]]['inter']
-            # determine list of sources
-            if ic>0:
-                ls = self.L.Gt[lcil[ic]][lcil[ic+1]]['segment']
-                for source in ls:
-                    lsource.append(str((source, lcil[ic], lcil[ic+1])))
-            else:
+        ncycles = len(lcil)
+
+        ltarget = []
+        lsource = []
+        for ic in np.arange(ncycles-1):
+
+            # determine list of sources and targets
+            # The famous so called saute mouton algorithm
+            if ic==0:
                 lsource = lis
-
-            # determine list of targets
-            if ic+2 < len(lcil)-1:
-            #if ic+3 < len(lcil)-1:
-                lt = self.L.Gt[lcil[ic+1]][lcil[ic+2]]['segment']
-                #lt = self.L.Gt[lcil[ic+2]][lcil[ic+3]]['segment']
-                for target in lt:
-                    ltarget.append(str((target , lcil[ic+1], lcil[ic+2])))
-                    #ltarget.append(str((target , lcil[ic+2], lcil[ic+3])))
-            else:
+                ltarget = dfl[lcil[0]]
+            elif ic==ncycles-2:
+                lsource = ltarget
                 ltarget = lit
+            else:
+                lsource = ltarget
+                ltarget = dfl[lcil[ic]]
 
-            lt   = filter(lambda l: len(eval(l))==3,linter)
-            #lti = filter(lambda l: eval(l)[2]==lcil[ic+1],lt)
-            lto = filter(lambda l: eval(l)[2]<>lcil[ic],lt)
-            ltom = filter(lambda l: eval(l)[2]!=lcil[ic-1],lto)
-            ltomp = filter(lambda l: eval(l)[2]!=lcil[ic+1],ltom)
-
-            lsource = lsource + ltomp
-            #pdb.set_trace()
             for s in lsource :
                 #print s
                 for t in ltarget:
@@ -967,9 +960,6 @@ class Signatures(dict):
                                 Gf.pos[it]=self.L.Gi.pos[it]
                             Gf.add_edge(itm1,it)
                             itm1 = it
-#                        else:
-#                            #paths = [[nt]]
-#                            paths = [[s]]
 
 
 ################################################################
