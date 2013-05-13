@@ -440,7 +440,7 @@ class Signatures(dict):
 #            Gi.pos.update(self.L.dGi[cycle].pos)
 #        pdb.set_trace()
         #
-        # 
+        #
         #
         # remove diffractions from Gi
         Gi = gidl(Gi)
@@ -809,16 +809,15 @@ class Signatures(dict):
 ##      it is important that lcil remains ordered this is not the case
 ##      for lca
 
-
-        # cs : cycle source 
+        # cs : cycle source
         cs = self.source
-        # ct : cycle target 
+        # ct : cycle target
         ct = self.target
         polys = self.L.Gt.node[cs]['polyg']
         # cps : centroid point source
         cps = polys.centroid.xy
         polyt = self.L.Gt.node[ct]['polyg']
-        # cpt : centroid point target 
+        # cpt : centroid point target
         cpt = polyt.centroid.xy
         ps = np.array([cps[0][0],cps[1][0]])
         pt = np.array([cpt[0][0],cpt[1][0]])
@@ -826,7 +825,7 @@ class Signatures(dict):
         mv = np.sqrt(np.sum(v*v,axis=0))
         vn = v/mv
         lcil = self.L.cycleinline(cs,ct)
-        
+
         # dac : dictionary of adjascent cycles
         dac = {}
         # dfl : dictionnary of fronlines
@@ -965,7 +964,7 @@ class Signatures(dict):
 ################################################################
 #       Obtain position of centroid of cycles source and target
 
-
+        pdb.set_trace()
         poly1 = self.L.Gt.node[cs]['polyg']
         cp1 = poly1.centroid.xy
 
