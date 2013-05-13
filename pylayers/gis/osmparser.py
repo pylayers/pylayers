@@ -215,8 +215,8 @@ relations_parser = OSMParser(concurrency=4,relations_callback=relations.relation
 #_filename = 'map.osm'
 #_filename = 'indoor.osm'
 #_filename = './osm/Rennes.osm'
-#_filename = './osm/poland.osm'
-_filename = './osm/w2ptin.osm'
+_filename = './osm/poland.osm'
+#_filename = './osm/w2ptin.osm'
 # q.parse('map.osm')
 # p.parse('map.osm')
 #
