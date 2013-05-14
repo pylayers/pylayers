@@ -964,7 +964,6 @@ class Signatures(dict):
 ################################################################
 #       Obtain position of centroid of cycles source and target
 
-        pdb.set_trace()
         poly1 = self.L.Gt.node[cs]['polyg']
         cp1 = poly1.centroid.xy
 
@@ -986,16 +985,22 @@ class Signatures(dict):
         for i in self.L.Gt.node[ct]['inter']:
             if i in  Gf.nodes():
                 Gf.add_edge(i,'Rx')
+        while True:
+            culdesac = filter(lambda n: len(nx.neighbors(Gf,n))==0,Gf.nodes())
+            culdesac.remove('Rx')
+            if len(culdesac)>0:
+                Gf.remove_nodes_from(culdesac)
+                print culdesac
+            else:
+                break
         # a =[ 0,  1,  2,  1,  4,  1,  6,  1,  8,  1, 10, 1]
         # aa = np.array(a)
         # X=aa.reshape((2,3,2)) # r x i x 2
         # Y=X.swapaxes(0,2) # 2 x i x r
-
-
-
         self.Gf = Gf
         print 'signatures'
         co = nx.dijkstra_path_length(Gf,'Tx','Rx')
+        pdb.set_trace()
         sig = self.calsig(Gf,dia=self.L.di,cutoff=co+dcut)
 
 
