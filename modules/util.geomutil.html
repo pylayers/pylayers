@@ -440,6 +440,54 @@ look for other geomview options</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="pylayers.util.geomutil.LineString">
+<em class="property">class </em><tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">LineString</tt><big>(</big><em>p</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.LineString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded shapely LineString class</p>
+<dl class="method">
+<dt id="pylayers.util.geomutil.LineString.plot">
+<tt class="descname">plot</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.LineString.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>color</strong> :  string</p>
+<blockquote>
+<div><p>default #abcdef&#8221;</p>
+</div></blockquote>
+<p><strong>alpha</strong> :  float</p>
+<blockquote class="last">
+<div><p>transparency   (default 0.8)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L1</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l2</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L2</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">l2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l3</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span><span class="mi">10</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L3</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">l3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;test plotting LineString&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/util-geomutil-1.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-1.png">png</a>, <a class="reference external" href="../modules/util-geomutil-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/util-geomutil-1.png" src="../_images/util-geomutil-1.png" />
+</div>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt>
 <tt class="descname">Lr2n(p=array([[ 0, 10, 10,  0],</tt></dt>
@@ -645,12 +693,11 @@ The degree of a point is dependent from other polygons around</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="go">(-0.5, 4.0, -0.5, 2.5)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Testing buildGv&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-1.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-1.png">png</a>, <a class="reference external" href="../modules/util-geomutil-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-1.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-2.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-2.png">png</a>, <a class="reference external" href="../modules/util-geomutil-2.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-2.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-1.png" src="../_images/util-geomutil-1.png" />
+<img alt="../_images/util-geomutil-2.png" src="../_images/util-geomutil-2.png" />
 </div>
 </dd></dl>
 
@@ -676,7 +723,7 @@ The degree of a point is dependent from other polygons around</p>
 
 <dl class="method">
 <dt id="pylayers.util.geomutil.Polygon.plot">
-<tt class="descname">plot</tt><big>(</big><em>color='#abcdef'</em>, <em>alpha=0.8</em>, <em>show=False</em>, <em>edgecolor='#000000'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Polygon.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Polygon.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Polygon.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Polygon.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -704,15 +751,20 @@ The degree of a point is dependent from other polygons around</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">P2</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p3</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span><span class="mi">10</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">])]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">P3</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">P1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">P2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">P3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">P1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">P2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">P3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;test plotting polygons&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-2.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-2.png">png</a>, <a class="reference external" href="../modules/util-geomutil-2.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-2.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-3.py">Source code</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-2.png" src="../_images/util-geomutil-2.png" />
+<img alt="../_images/util-geomutil-3_00.png" src="../_images/util-geomutil-3_00.png" />
+<p class="caption">(<a class="reference external" href="../modules/util-geomutil-3_00.png">png</a>, <a class="reference external" href="../modules/util-geomutil-3_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-3_00.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../_images/util-geomutil-3_01.png" src="../_images/util-geomutil-3_01.png" />
+<p class="caption">(<a class="reference external" href="../modules/util-geomutil-3_01.png">png</a>, <a class="reference external" href="../modules/util-geomutil-3_01.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-3_01.pdf">pdf</a>)</p>
 </div>
 </dd></dl>
 
@@ -740,7 +792,7 @@ The degree of a point is dependent from other polygons around</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>This function determines the convex and concav point of a polygon.
+<p>This function determines the convex and concav points of a polygon.
 As there is no orientation convention for the polygon the sign of the cross
 product can&#8217;t be directly interpreted. So we exploit the following
 property :</p>
@@ -771,14 +823,9 @@ We have Nx &gt;= Nc</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#poly.plot()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-3.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-4.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-4.png">png</a>, <a class="reference external" href="../modules/util-geomutil-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-4.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-3_00.png" src="../_images/util-geomutil-3_00.png" />
-<p class="caption">(<a class="reference external" href="../modules/util-geomutil-3_00.png">png</a>, <a class="reference external" href="../modules/util-geomutil-3_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-3_00.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/util-geomutil-3_01.png" src="../_images/util-geomutil-3_01.png" />
-<p class="caption">(<a class="reference external" href="../modules/util-geomutil-3_01.png">png</a>, <a class="reference external" href="../modules/util-geomutil-3_01.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-3_01.pdf">pdf</a>)</p>
+<img alt="../_images/util-geomutil-4.png" src="../_images/util-geomutil-4.png" />
 </div>
 </dd></dl>
 
@@ -870,43 +917,6 @@ We have Nx &gt;= Nc</p>
 <p>a[:,0] : N x theta   theta angle
 a[:,1] : N x phi     phi angle</p>
 <p>M = N x [th,ph,s]  : 3 x 3 x N</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.util.geomutil.angle_fix">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">angle_fix</tt><big>(</big><em>al</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#angle_fix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.angle_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fixes the angle formed by the diffraction corner
-and its neighbors o 0/0.5*Pi/Pi/1.5*Pi/2*Pi.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>al</strong> : float</p>
-<blockquote>
-<div><p>An angle.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>al</strong> : float</p>
-<blockquote class="last">
-<div><p>An angle equal to 0/0.5*Pi/Pi/1.5*Pi/2*Pi..</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;exemple.str&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ncoin</span><span class="p">,</span><span class="n">ndiff</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">buildGc</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGr</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al</span><span class="o">=</span><span class="mf">0.1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">al1</span><span class="o">=</span><span class="n">angle_fix</span><span class="p">(</span><span class="n">al</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">al1</span><span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span><span class="s">&#39;Mistake&#39;</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="function">
@@ -1041,9 +1051,9 @@ ax : integer (0,1)</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">dist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-4.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-4.png">png</a>, <a class="reference external" href="../modules/util-geomutil-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-4.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-5.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-5.png">png</a>, <a class="reference external" href="../modules/util-geomutil-5.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-5.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-4.png" src="../_images/util-geomutil-4.png" />
+<img alt="../_images/util-geomutil-5.png" src="../_images/util-geomutil-5.png" />
 </div>
 </dd></dl>
 
@@ -1111,7 +1121,7 @@ N     : descretization step</p>
 <dl class="function">
 <dt id="pylayers.util.geomutil.intersect">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">intersect</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.intersect" title="Permalink to this definition">¶</a></dt>
-<dd><p>check if segment AB intersect segment CD</p>
+<dd><p>check if segment AB intersects segment CD</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1264,9 +1274,9 @@ Parameters
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-5.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-5.png">png</a>, <a class="reference external" href="../modules/util-geomutil-5.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-5.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-6.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-6.png">png</a>, <a class="reference external" href="../modules/util-geomutil-6.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-6.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-5.png" src="../_images/util-geomutil-5.png" />
+<img alt="../_images/util-geomutil-6.png" src="../_images/util-geomutil-6.png" />
 </div>
 </dd></dl>
 
