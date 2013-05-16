@@ -1000,7 +1000,7 @@ class Signatures(dict):
         self.Gf = Gf
         print 'signatures'
         co = nx.dijkstra_path_length(Gf,'Tx','Rx')
-        pdb.set_trace()
+        #pdb.set_trace()
         sig = self.calsig(Gf,dia=self.L.di,cutoff=co+dcut)
 
 

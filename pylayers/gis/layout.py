@@ -336,7 +336,13 @@ class Layout(object):
         normx = Y[0,:]-Y[1,:]
         normy = X[1,:]-X[0,:]
         scale = np.sqrt(normx*normx+normy*normy)
-        normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
+        #
+        # Dirty fix why scale happens to be 0 sometimes
+        #
+        try:
+            normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
+        except:
+            normal = np.vstack((normx,normy,np.zeros(len(scale))))
 
         #for ks in ds:
         for ks in self.Gs.node:
@@ -2966,7 +2972,7 @@ class Layout(object):
 
         if self.display['clear']:
             ax.cla()
-        # display overlay image    
+        # display overlay image
         if self.display['overlay']:
             if len(self.display['fileoverlay'].split('http:'))>1:
                 img_file = urllib.urlopen(self.display['fileoverlay'])
@@ -4380,7 +4386,7 @@ class Layout(object):
         Summary
         -------
 
-            A room is a cycle with at least one door 
+            A room is a cycle with at least one door
             This function requires graph Gt
 
         """
@@ -4413,9 +4419,11 @@ class Layout(object):
             lseg = self.Gt.node[k]['cycle'].cycle # list of segment from the cycle
             ltrans = np.array(self.listtransition)
             u = np.intersect1d(lseg, ltrans)
+            lairwall = filter(lambda x:self.Gs.node[x]['name']=='AIR',ltans)
+            ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltans)
             #v = np.intersect1d(lseg, lwallair)
             #
-            # If cycle has a door create new room
+            # If cycle has a transition which is not an air wall create a new room
             #
             if len(u) > 0:
                 #self.Gr.add_node(j, cycle=k, doors=u)
@@ -4509,6 +4517,8 @@ class Layout(object):
         """
         fig = plt.gcf()
         ax  = fig.add_subplot(111)
+        self.display['nodes']=True
+        self.display['ednodes']=True
         self.af = SelectL(self,fig=fig,ax=ax)
         fig,ax = self.af.show(fig,ax)
         self.cid1 = fig.canvas.mpl_connect('button_press_event',

@@ -19,11 +19,11 @@ from IPython.display import Image,HTML,Latex
 
 L = Layout('WHERE1.ini')
 #L = Layout('defstr2.ini')
-try:
-    L.dumpr()
-except:
-    L.build()
-    L.dumpw()
+#try:
+#    L.dumpr()
+#except:
+L.build()
+L.dumpw()
 
 # <markdowncell>
 
