@@ -8,6 +8,7 @@
 #
 import doctest
 import networkx as nx
+import shapely.geometry as sh
 import numpy as np
 from  pylayers.util import geomutil as geu
 from  pylayers.util import pyutil as pyu
@@ -269,8 +270,7 @@ class Cycle(object):
 
     def __add__(self,cy):
         """
-        addition of 2 cycles is not a cycle except when there is only one
-        contact point between cycle
+        addition of 2 disjoint cycles is not a cycle
         """
         flip,path = self.intersect(cy)
         if len(path)>0:
@@ -324,7 +324,18 @@ class Cycle(object):
                 newcy = Cycle(Gc)
                 return(newcy)
             else:
-                return
+                g1  = copy.deepcopy(self.G)
+                g2  = copy.deepcopy(cy.G)
+                g1.remove_node(path[0])
+                g2.remove_node(path[0])
+                Gc = nx.Graph()
+                Gc  = nx.compose(g1,g2)
+                Gc.pos = {}
+                Gc.pos.update(self.G.pos)
+                Gc.pos.update(cy.G.pos)
+                newcy = Cycle(Gc)
+                newcy.update()
+                return(newcy)
         else:
             return
 
@@ -682,9 +693,19 @@ class Cycle(object):
         return(flip,brin,tk1,tk2)
 
 
-    def show(self,color='b'):
-        nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)
-        plt.draw ()
+    def show(self,**kwargs):
+        """
+        show cycle
+
+        Acceleration can be obtained if the polygon is calculated once
+        """
+        #nx.draw_networkx_edges(self.G,self.G.pos,width=2,edge_color=color,alpha=0.4)
+        npoints = filter(lambda x : x <0 ,self.cycle)
+        coords  = map(lambda x : self.G.pos[x],npoints)
+        poly = geu.Polygon(sh.MultiPoint(tuple(coords)),self.cycle)
+        fig,ax = poly.plot(**kwargs)
+        return fig,ax
+        #plt.draw ()
 
 if __name__ == "__main__":
     doctest.testmod()
