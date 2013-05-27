@@ -4405,7 +4405,7 @@ class Layout(object):
 
     def buildGr(self):
         #
-        # Build a graph with airwall connected cycles 
+        # Build a graph with airwall connected cycles
         #
         Ga = nx.Graph()
         Ga.pos ={}
@@ -4428,6 +4428,7 @@ class Layout(object):
 
         connected =nx.connected_components(Ga)
         self.Gr = copy.deepcopy(self.Gt)
+
         for licy in connected:
             H = Ga.subgraph(licy)
             dsucc = nx.dfs_successors(H)
@@ -4454,6 +4455,8 @@ class Layout(object):
                 pass
             else:
                 self.Gr.remove_node(cy)
+
+        # Destroy edges which do not share a door
 
 
     def buildGr3(self):
