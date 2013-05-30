@@ -3403,10 +3403,8 @@ class Layout(object):
         d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
 
         for e in self.Gr.edges_iter(): # iterator on Gr edges
-            #doors1 = self.Gr.node[e[0]]['doors']  # doors of room e[0]
-            #doors2 = self.Gr.node[e[1]]['doors']  # doors of room e[1]
-            trans1 = self.Gr.node[e[0]]['transitions']  # transitions of room e[0]
-            trans2 = self.Gr.node[e[1]]['transitions']  # transitions of room e[1]
+            trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
+            trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
             Id = np.intersect1d(trans1,trans2)[0]  # common door
             #try:
             #    Id = np.intersect1d(doors1,doors2)[0]  # common door
@@ -4426,9 +4424,18 @@ class Layout(object):
                             Ga.pos[cy]=self.Gt.pos[cy]
                         Ga.add_edge(k,cy)
 
-        connected =nx.connected_components(Ga)
+        connected = nx.connected_components(Ga)
         self.Gr = copy.deepcopy(self.Gt)
+        #
+        # Big contest : find a shorter way to initialize a new graph node
+        # attribute
+        #
+        for n in self.Gr.nodes():
+            self.Gr.node[n]['transition'] = []
 
+        #
+        # Merge all air-connected cycles
+        #
         for licy in connected:
             H = Ga.subgraph(licy)
             dsucc = nx.dfs_successors(H)
@@ -4437,7 +4444,8 @@ class Layout(object):
                     neigh = nx.neighbors(self.Gr,cy)
                     self.Gr.node[ncy]['cycle']+=self.Gr.node[cy]['cycle']
                     for k in neigh:
-                        self.Gr.add_edge(ncy,k)
+                        if k<> ncy:
+                            self.Gr.add_edge(ncy,k)
                     self.Gr.remove_node(cy)
                 self.Gr.pos[ncy]=tuple(self.Gr.node[ncy]['cycle'].g)
 
@@ -4457,6 +4465,20 @@ class Layout(object):
                 self.Gr.remove_node(cy)
 
         # Destroy edges which do not share a door
+        for e in self.Gr.edges():
+            cy1 = self.Gr.node[e[0]]['cycle']
+            cy2 = self.Gr.node[e[1]]['cycle']
+            f,b = cy1.intersect(cy2) 
+            keep = False
+            for s in b: 
+                if s>0:
+                    if self.Gs.node[s]['transition']:
+                        keep = True
+                        self.Gr.node[e[0]]['transition'].append(s)
+                        self.Gr.node[e[1]]['transition'].append(s)
+
+            if not keep: 
+                self.Gr.remove_edge(*e)
 
 
     def buildGr3(self):
