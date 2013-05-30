@@ -93,6 +93,7 @@ class Simul(SimulationRT):
         if str2bool(self.net_opt['ipython_nb_show']):
             self.verbose = False
         self.roomlist=[]
+        self.create()
 
     def create_layout(self):
         """
@@ -312,7 +313,7 @@ class Simul(SimulationRT):
     def runsimul(self):
         """ Run simulation
         """
-        self.create()
+
         self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
 #        self.simulate(until=float(self.sim_opt['duration']))
         if self.save_opt['savep']:
