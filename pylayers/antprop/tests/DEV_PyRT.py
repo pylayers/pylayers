@@ -140,52 +140,29 @@ for c,k in enumerate(MT_DLR_RDTMaster):
 # Select a link 
 #
 tx = S.tx.position[:,4]
-<<<<<<< HEAD
 Ctx = S.L.pt2cy(tx)
 print "transmitter :",tx," is in cycle ",Ctx
-
-rx = array([15,3,2.5])
-#rx = S.rx.position[:,28]
+rx = array([18,0,2.5])
 Crx = S.L.pt2cy(rx)
 print "mobile node :",rx," is in cycle ",Crx
-=======
-Rtx = S.L.pt2ro(tx)
-print "transmitter :",tx," is in room ",Rtx
-
-rx = array([15,3,2.5])
-#rx = S.rx.position[:,28]
-Rrx = S.L.pt2ro(rx)
-print "mobile node :",rx," is in room ",Rrx
->>>>>>> distloc
-
 print tx
 print rx
+
 a=time.time()
 
-if not os.path.exists('r2d.pickle'):
-<<<<<<< HEAD
-    Si = Signatures(S.L,Ctx,Crx)
-    Si.run1(cutoff=4)
-    r2d = Si.rays(tx,rx)
-=======
-    Si = Signatures(S.L,tx,rx)
-    Si.run(tx,rx,4)
-    r2d = Si.rays()
->>>>>>> distloc
-    file=open("r2d.pickle","w")
-    pickle.dump(r2d,file)
-    file.close()
-else:
-    file = open("r2d.pickle","r")
-    r2d = pickle.load(file)
+#if not os.path.exists('r2d.pickle'):
+Si = Signatures(S.L,Ctx,Crx)
+Si.run3(cutoff=3,dcut=3)
+r2d = Si.rays(tx,rx)
+file=open("r2d.pickle","w")
+pickle.dump(r2d,file)
+file.close()
+#else:
+#    file = open("r2d.pickle","r")
+#    r2d = pickle.load(file)
 r3d = r2d.to3D()
-<<<<<<< HEAD
 r3d.locbas(S.L)
 r3d.fillinter(S.L)
-=======
-r3d.locbas(L)
-r3d.fillinter(L)
->>>>>>> distloc
 
 config = ConfigParser.ConfigParser()
 _filesimul = 'default.ini'
@@ -196,7 +173,6 @@ fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
                      eval(config.get("frequency", "nf")))
 
 Cn=r3d.eval(fGHz)
-
 Cn.freq=Cn.fGHz
 sco=Cn.prop2tran(a='theta',b='theta')
 wav = wvf.Waveform()
