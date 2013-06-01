@@ -17,8 +17,8 @@ from IPython.display import Image,HTML,Latex
 
 # <codecell>
 
-L = Layout('WHERE1.ini')
-#L = Layout('defstr2.ini')
+# L = Layout('WHERE1_clean.ini')
+L = Layout('TA-Office.ini')
 try:
     L.dumpr()
 except:
@@ -31,8 +31,8 @@ except:
 
 # <codecell>
 
-nc1 = 4
-nc2 = 36
+nc1 = 7
+nc2 = 2
 
 
 # <markdowncell>
