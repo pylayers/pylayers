@@ -17,13 +17,15 @@ from IPython.display import Image,HTML,Latex
 
 # <codecell>
 
-# L = Layout('WHERE1_clean.ini')
-L = Layout('TA-Office.ini')
-try:
-    L.dumpr()
-except:
-    L.build()
-    L.dumpw()
+
+L = Layout('WHERE1.ini')
+#L = Layout('defstr2.ini')
+#try:
+#    L.dumpr()
+#except:
+L.build()
+L.dumpw()
+
 
 # <markdowncell>
 

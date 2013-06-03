@@ -1,4 +1,4 @@
-##-*- coding:Utf-8 -*-
+#-*- coding:Utf-8 -*-
 #
 # Class Layout
 #
@@ -6,6 +6,7 @@
 #
 import pdb
 import os
+import copy
 import glob
 import pickle
 import cPickle
@@ -336,7 +337,13 @@ class Layout(object):
         normx = Y[0,:]-Y[1,:]
         normy = X[1,:]-X[0,:]
         scale = np.sqrt(normx*normx+normy*normy)
-        normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
+        #
+        # Dirty fix why scale happens to be 0 sometimes
+        #
+        try:
+            normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
+        except:
+            normal = np.vstack((normx,normy,np.zeros(len(scale))))
 
         #for ks in ds:
         for ks in self.Gs.node:
@@ -2966,7 +2973,7 @@ class Layout(object):
 
         if self.display['clear']:
             ax.cla()
-        # display overlay image    
+        # display overlay image
         if self.display['overlay']:
             if len(self.display['fileoverlay'].split('http:'))>1:
                 img_file = urllib.urlopen(self.display['fileoverlay'])
@@ -3396,10 +3403,8 @@ class Layout(object):
         d_id = max(self.Gr.nodes()) # for numerotation of Gw nodes
 
         for e in self.Gr.edges_iter(): # iterator on Gr edges
-            #doors1 = self.Gr.node[e[0]]['doors']  # doors of room e[0]
-            #doors2 = self.Gr.node[e[1]]['doors']  # doors of room e[1]
-            trans1 = self.Gr.node[e[0]]['transitions']  # transitions of room e[0]
-            trans2 = self.Gr.node[e[1]]['transitions']  # transitions of room e[1]
+            trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
+            trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
             Id = np.intersect1d(trans1,trans2)[0]  # common door
             #try:
             #    Id = np.intersect1d(doors1,doors2)[0]  # common door
@@ -3562,8 +3567,7 @@ class Layout(object):
                         cy0 = cy[0]
                         cy1 = cy[1]
 
-                        
-                        # get neigbor
+                        # get neighbors
                         nei = self.Gs.neighbors(n)
                         np1 = nei[0]
                         np2 = nei[1]
@@ -3573,7 +3577,6 @@ class Layout(object):
                         l = p1 - p2
                         nl = np.dot(l, l)
                         ln = l / nl
-                        
                         delta = nl / 10
 
                         # with  AIR or ABSORBENT there is no reflection
@@ -3953,7 +3956,8 @@ class Layout(object):
                     'node_size':20,
                     'font_size':30,
                     'nodelist': [],
-                    'figsize': (5,5)
+                    'figsize': (5,5),
+                    'mode':'cycle'
                     }
 
         for key, value in defaults.items():
@@ -3976,11 +3980,11 @@ class Layout(object):
         #
         if 'r' in graph:
             G = self.Gr
-
+            kwargs['mode']='room'
             if kwargs['edge_color']=='':
                 kwargs['edge_color'] ='g'
 
-            fig,ax=gru.draw(G,**kwargs)
+            fig,ax = gru.draw(G,**kwargs)
             kwargs['fig']=fig
             kwargs['ax']=ax
         #
@@ -4052,10 +4056,16 @@ class Layout(object):
             kwargs['ax']=ax
 
         args = {'fig':fig,'ax':ax,'show':False}
-        for k, ncy in enumerate(self.Gt.node.keys()):
-            fig,ax = self.Gt.node[ncy]['polyg'].plot(**args)
-            args['fig']=fig
-            args['ax']=ax
+        if kwargs['mode']=='cycle':
+            for k, ncy in enumerate(self.Gt.node.keys()):
+                fig,ax = self.Gt.node[ncy]['polyg'].plot(**args)
+                args['fig']=fig
+                args['ax']=ax
+        else:
+            for k, nro in enumerate(self.Gr.node.keys()):
+                fig,ax = self.Gr.node[nro]['cycle'].show(**args)
+                args['fig']=fig
+                args['ax']=ax
 
         ax.axis('scaled')
 
@@ -4374,14 +4384,112 @@ class Layout(object):
         nod = nod[u]
         return np.sort(nod.tolist())
 
+
+    def builGr2(self,v):
+        """
+        """
+        # 1 : Cycles which are connected with an airwall are merged
+        # 2 : The remaining cycles which contains at least one common door are
+        # connected
+        self.Gr = nx.Graph()
+        self.Gr.pos = {}
+        for ncy in self.Gt.nodes:
+            pass
+        a = map(lambda x: self.Gs.node[x]['ncycles'],v)
+        b = reduce(lambda x,y: x+y,a)
+        involvedcycles = np.unique(np.array(b))
+        # list of cycles which are already involved in rooms
+        alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
+
     def buildGr(self):
-        """ build Graph of room
+        #
+        # Build a graph with airwall connected cycles
+        #
+        Ga = nx.Graph()
+        Ga.pos ={}
+        for k in self.Gt.edge:
+            dk = self.Gt.edge[k]
+            for cy in dk:
+                try:
+                    segs = dk[cy]['segment']
+                except:
+                    segs=[]
+                for s in segs:
+                    if self.Gs.node[s]['name']=='AIR':
+                        if k not in Ga.node:
+                            Ga.add_node(k)
+                            Ga.pos[k]=self.Gt.pos[k]
+                        if cy not in Ga.node:
+                            Ga.add_node(cy)
+                            Ga.pos[cy]=self.Gt.pos[cy]
+                        Ga.add_edge(k,cy)
+
+        connected = nx.connected_components(Ga)
+        self.Gr = copy.deepcopy(self.Gt)
+        #
+        # Big contest : find a shorter way to initialize a new graph node
+        # attribute
+        #
+        for n in self.Gr.nodes():
+            self.Gr.node[n]['transition'] = []
+
+        #
+        # Merge all air-connected cycles
+        #
+        for licy in connected:
+            H = Ga.subgraph(licy)
+            dsucc = nx.dfs_successors(H)
+            for ncy in dsucc:
+                for cy in dsucc[ncy]:
+                    neigh = nx.neighbors(self.Gr,cy)
+                    self.Gr.node[ncy]['cycle']+=self.Gr.node[cy]['cycle']
+                    for k in neigh:
+                        if k<> ncy:
+                            self.Gr.add_edge(ncy,k)
+                    self.Gr.remove_node(cy)
+                self.Gr.pos[ncy]=tuple(self.Gr.node[ncy]['cycle'].g)
+
+
+        ltrans = self.listtransition
+        ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
+
+        # Destroy cycles which have no doors
+
+        keys = self.Gr.node.keys()
+        for cy in keys:
+            lseg = self.Gr.node[cy]['cycle'].cycle
+            hasdoor = filter(lambda n : n in ldoors,lseg)
+            if len(hasdoor)>0:
+                pass
+            else:
+                self.Gr.remove_node(cy)
+
+        # Destroy edges which do not share a door
+        for e in self.Gr.edges():
+            cy1 = self.Gr.node[e[0]]['cycle']
+            cy2 = self.Gr.node[e[1]]['cycle']
+            f,b = cy1.intersect(cy2) 
+            keep = False
+            for s in b: 
+                if s>0:
+                    if self.Gs.node[s]['transition']:
+                        keep = True
+                        self.Gr.node[e[0]]['transition'].append(s)
+                        self.Gr.node[e[1]]['transition'].append(s)
+
+            if not keep: 
+                self.Gr.remove_edge(*e)
+
+
+    def buildGr3(self):
+        """ build Graph of rooms
 
         Summary
         -------
 
-            A room is a cycle with at least one door 
-            This function requires graph Gt
+            A room is a set of cycles which contains at least one door
+
+            This function requires Gt
 
         """
         self.Gr = nx.Graph()
@@ -4390,73 +4498,115 @@ class Layout(object):
         self.transition = {}
         self.airwall = {}
         d = self.subseg()
-        #ldoorseg    = np.array(d['WOOD'])
-        #
-        # .. todo::   avoid using slab to determine transition segments
-        #
-        #try:
-        #    ldoorseg = np.array(d['DOOR'])
-        #except:
-        #    ldoorseg = np.array(())
-        #
-        #try:
-        #    lwallair = np.array(self.name['AIR'])
-        #except:
-        #    lwallair = np.array(())
-
-        j = 0
+        # rcpt : rooms counter
+        rcpt = 0
+        # ltrans : list of transition segment
+        ltrans = np.array(self.listtransition)
+        # lairwalls : list of air walls
+        lairwalls = filter(lambda x:self.Gs.node[x]['name']=='AIR',ltrans)
+        # ldoors : list of doors segment number
+        ldoors = filter(lambda x:self.Gs.node[x]['name']<>'AIR',ltrans)
         #
         # For all cycles
         #
+        # Rule : add a new room if :
+        #       + the cycle has a transition segment which is not an air wall
+        #       unless
+        #       + there already exists a created room which is separated from the
+        #       current cycle by an airwall
+        #
+        #
+        # roomcycles dict room : list of cycles number involved in room
+        # cycleroom dict cycle : room number
+        roomcycles = {}
+        cycleroom = {}
         for k in self.Gt.node:
-            #lseg = self.Gt.node[k]['vnodes'] # list of segment from the cycle
-            lseg = self.Gt.node[k]['cycle'].cycle # list of segment from the cycle
-            ltrans = np.array(self.listtransition)
-            u = np.intersect1d(lseg, ltrans)
-            #v = np.intersect1d(lseg, lwallair)
+            #if k==5:
+            #    pdb.set_trace()
+            # list of segments from the cycle
+            # which have:
+            #  ldoors
+            #  lairwalls
             #
-            # If cycle has a door create new room
+            lseg = self.Gt.node[k]['cycle'].cycle
+            u = np.intersect1d(lseg, ldoors)
+            v = np.intersect1d(lseg, lairwalls)
+            alreadythere =[]
             #
-            if len(u) > 0:
+            # Analysis of cycles which are connected via an air-wall
+            #
+            # cyclehasdoor is True if cycle k has a door segment
+            # hasdoors is True if at least one adjascent cycle from the same
+            # room has a door
+            # doors : np array with doors associated to room k
+            cyclehasdoor = False
+            hasdoors = False
+            doors = np.array([])
+
+            if len(u)>0:
+                cyclehasdoor = True
+                doors = np.array(u)
+            # this should be a recursive function 
+            if len(v)>0:
+                # b : list of cycles which involve an airwall
+                a = map(lambda x: self.Gs.node[x]['ncycles'],v)
+                b = reduce(lambda x,y: x+y,a)
+                involvedcycles = np.unique(np.array(b))
+                # list of cycles which are already involved in rooms
+                alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
+                notyet = filter(lambda x: x not in cycleroom.keys(),involvedcycles)
+                for cy1 in involvedcycles:
+                    lseg1 = self.Gt.node[cy1]['cycle'].cycle
+                    u1 = np.intersect1d(lseg1, ldoors)
+                    if len(u1)>0:
+                        hasdoors = True
+                        doors = np.unique(np.hstack((doors,u1)))
+
+                print "cycle "+str(k)
+                #print "airwall segment "+str(v)
+                #print "involved cycles "+str(involvedcycles)
+                print "already there "+str(alreadythere)
+                print "not there yet "+ str(notyet)
+                #print "cycles involved ",cycleroom.keys()
+            #
+            # If cycle has a door (transition which is not an air wall)
+            # Then create a new room
+            #
+            if (cyclehasdoor|hasdoors) & (len(alreadythere)==0):
                 #self.Gr.add_node(j, cycle=k, doors=u)
-                self.Gr.add_node(j, cycle=k, transitions=u)
-                self.Gr.pos[j] = self.Gt.pos[k]
+                self.Gr.add_node(rcpt, cycle=[k], transitions=doors)
+                self.Gr.pos[rcpt] = self.Gt.pos[k]
+                self.Gr.node[rcpt]['polyg']=self.Gt.node[k]['polyg']
+                #roomcycles[rcpt].append(k)
+                cycleroom[k]=rcpt
+                # add transitions
                 for ku in u:
                     try:
-                        self.transition[ku].append(j)
-                        #self.doors[ku].append(j)
-                        #self.doors[ku].append(j)
+                        self.transition[ku].append(rcpt)
                     except:
-                        #self.doors[ku] = [j]
-                        self.transition[ku] = [j]
-                #
-                # If cycle has an air wall
-                #
-                #if len(v) > 0:
-                #    self.Gr.add_node(j, cycle=k, airwall=v)
-                #    for kv in v:
-                #        try:
-                #            self.airwall[kv].append(j)
-                #        except:
-                #            self.airwall[kv] = [j]
-                j = j + 1
+                        self.transition[ku] = [rcpt]
 
+                # Merge cycles which are separated by an airwall
+                if len(v) > 0:
+                    for kv in v:
+                        ncy  = filter(lambda x : x <>k,self.Gs.node[kv]['ncycles'])[0]
+                        self.Gr.node[rcpt]['cycle'].append(ncy)
+                # increment room counter
+                rcpt += 1
+            if (len(alreadythere)>0):
+                ncy = alreadythere[0]
+                roomn = cycleroom[ncy]
+                for ncy in notyet:
+                    print "merging cycle "+str(ncy)+"in room "+str(roomn)
+                    self.Gr.node[roomn]['polyg'] += self.Gt.node[ncy]['polyg']
+
+
+        # add connection between rooms
         for k in self.transition:
             room1room2 = self.transition[k]
-            # create a door between interior and exterior of building
             if len(room1room2) == 2:
                 self.Gr.add_edge(room1room2[0], room1room2[1])
 
-        #for k in self.doors:
-        #    room1room2 = self.doors[k]
-            # create a door between interior and exterior of building
-        #    if len(room1room2) == 2:
-        #        self.Gr.add_edge(room1room2[0], room1room2[1])
-
-        #for k in self.airwall:
-        #    room1room2 = self.airwall[k]
-        #    if len(room1room2) == 2:
-        #        self.Gr.add_edge(room1room2[0], room1room2[1])
 
     def waypoint(self, nroom1, nroom2):
         """
@@ -4509,6 +4659,8 @@ class Layout(object):
         """
         fig = plt.gcf()
         ax  = fig.add_subplot(111)
+        self.display['nodes']=True
+        self.display['ednodes']=True
         self.af = SelectL(self,fig=fig,ax=ax)
         fig,ax = self.af.show(fig,ax)
         self.cid1 = fig.canvas.mpl_connect('button_press_event',

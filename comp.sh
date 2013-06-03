@@ -1,7 +1,7 @@
 echo '-------------'
 echo 'uninstall'
 echo '-------------'
-sudo python2.7 setup.py develop -u
+sudo python setup.py develop -u
 #sudo python setup.py install -u 
 echo '-------------'
 echo 'remove *.pyc'
