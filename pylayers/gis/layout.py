@@ -4442,12 +4442,14 @@ class Layout(object):
             for ncy in dsucc:
                 for cy in dsucc[ncy]:
                     neigh = nx.neighbors(self.Gr,cy)
-                    self.Gr.node[ncy]['cycle']+=self.Gr.node[cy]['cycle']
+                    self.Gr.node[licy[0]]['cycle']+=self.Gr.node[cy]['cycle']
                     for k in neigh:
-                        if k<> ncy:
-                            self.Gr.add_edge(ncy,k)
-                    self.Gr.remove_node(cy)
-                self.Gr.pos[ncy]=tuple(self.Gr.node[ncy]['cycle'].g)
+                        if k<> licy[0]:
+                            self.Gr.add_edge(licy[0],k)
+            for cy in licy[1:]:            
+                self.Gr.remove_node(cy)
+
+            self.Gr.pos[licy[0]]=tuple(self.Gr.node[licy[0]]['cycle'].g)
 
 
         ltrans = self.listtransition
