@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Generation of an Impulse of normalized energy &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Generation of an Impulse of normalized energy</a><ul>
+<li><a class="reference internal" href="#verification-of-energy-normalization-in-both-domains">Verification of energy normalization in both domains</a></li>
+<li><a class="reference internal" href="#calcul-of-uwb-channel-impulse-response">Calcul of UWB channel impulse response</a></li>
+<li><a class="reference internal" href="#ploting-the-waveform">Ploting the waveform</a></li>
+<li><a class="reference internal" href="#in-time-domain">In time domain</a></li>
+<li><a class="reference internal" href="#in-frequency-domain">in frequency domain</a></li>
+<li><a class="reference internal" href="#construction-of-the-propagation-channel">Construction of the propagation channel</a></li>
+<li><a class="reference internal" href="#construction-of-the-transmission-channel">Construction of the transmission channel</a></li>
+<li><a class="reference internal" href="#calculate-uwb-channel-impulse-response">Calculate UWB Channel Impulse Response</a></li>
+<li><a class="reference internal" href="#hermitian-symetry-enforcment">Hermitian symetry enforcment</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="generation-of-an-impulse-of-normalized-energy">
+<h1>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h1>
+<p>One possible manner to define an ernergy normalized short UWB impulse is
+as follows.</p>
+<p><img class="math" src="../_images/math/5d75f237e17406f99b34e5ef9b34c43333c4fd9e.png" alt="$ p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2} $"/></p>
+<p><img class="math" src="../_images/math/356b74cdc1400c8acaa271e7d2b53f1d9c902e73.png" alt="$ \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}$"/></p>
+<p>where <img class="math" src="../_images/math/b39d396ed6190261ffce7e93c9fbc4b013151fec.png" alt="$B$"/> is the desired bandwidth defined at
+<img class="math" src="../_images/math/803d0909241bbb575dae1791ce49e4024e4c06d3.png" alt="$\gamma_{dB}$"/> below the spectrum maximum and <img class="math" src="../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/> is
+the central frequency of the pulse.</p>
+<p>This waveform is a gaussian windowing of a sine wave of frequency
+<img class="math" src="../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/>. The normalization term depends on the exponential scaling
+factor <img class="math" src="../_images/math/d4946ec46154b310da1d30f828360388c4231983.png" alt="$\tau$"/>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
+<span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">fe</span>     <span class="o">=</span> <span class="mi">100</span>
+<span class="n">ip</span> <span class="o">=</span><span class="n">EnImpulse</span><span class="p">([],</span><span class="n">fc</span><span class="p">,</span><span class="n">band</span><span class="p">,</span><span class="n">thresh</span><span class="p">,</span><span class="n">fe</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ip</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>TUsignal
+--------
+shx :  (343,)
+shy :  (343,)
+dx :   0.01
+xmin : -1.71
+xmax : 1.71
+ymin : -1.89545539648
+ymax : 2.16154131873</pre>
+</div>
+<div class="section" id="verification-of-energy-normalization-in-both-domains">
+<h2>Verification of energy normalization in both domains<a class="headerlink" href="#verification-of-energy-normalization-in-both-domains" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">E1</span><span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Integration in time&quot;</span><span class="p">,</span><span class="n">E1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Integration in time 1.0</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">P</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
+<span class="n">E2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">P</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Integration in frequency domain &quot;</span><span class="p">,</span><span class="n">E2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Integration in frequency domain  1.0</pre>
+</div>
+</div>
+<div class="section" id="calcul-of-uwb-channel-impulse-response">
+<h2>Calcul of UWB channel impulse response<a class="headerlink" href="#calcul-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;where2.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
+<span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
+<span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>tw  :  30.0
+band  :  4.0
+fc  :  4.493
+thresh  :  3.0
+fe  :  50.0
+Np  :  1500.0
+te  :  0.02
+type  :  file</pre>
+</div>
+<p>Here the time domain waveform is measured and the anticausal part of the
+signal is artificially set to 0.</p>
+<p>To handle properly the time domain wavefom it is required to center the
+signal in the middle of the array.</p>
+<p><tt class="docutils literal"><span class="pre">st</span></tt> stands for signal in time domain</p>
+</div>
+<div class="section" id="ploting-the-waveform">
+<h2>Ploting the waveform<a class="headerlink" href="#ploting-the-waveform" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="in-time-domain">
+<h2>In time domain<a class="headerlink" href="#in-time-domain" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_051.png" src="../_images/_fig_051.png" />
+</div>
+<div class="section" id="in-frequency-domain">
+<h2>in frequency domain<a class="headerlink" href="#in-frequency-domain" title="Permalink to this headline">¶</a></h2>
+<p>The frequency domain version of the signal is embedded in the same
+object.</p>
+<p><tt class="docutils literal"><span class="pre">sf</span></tt> stands for signal in frequency domain.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_061.png" src="../_images/_fig_061.png" />
+</div>
+<div class="section" id="construction-of-the-propagation-channel">
+<h2>Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<p>The link between Txid = 1 and Rxid =1 is simply loaded as</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>nray :  500
+nfreq :  181
+nb rays in .tauk file:  500
+nb rays 2:  500</pre>
+</div>
+<p>The following representation shows the spatial spreading of the
+propagation channel. On the left are scattered the intensity of rays wrt
+to angles of departure (in azimut and elevation). On the right is the
+intensity of rays wrt to angles of arrival. It misses the application
+between the 2 planes as well as the delay dimension of the propagation
+channel.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_081.png" src="../_images/_fig_081.png" />
+</div>
+<div class="section" id="construction-of-the-transmission-channel">
+<h2>Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<p>The transmission channel is obtain from the combianation of the
+propagation channel and the vector antenna pattern at bot side of the
+radio link</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">vec2scal</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The ScalChannel object contains all the information about the ray
+transfer functions. The transmission channel is obtained by applying a
+vector radiation pattern using an antenna file. In the presented case,
+it comes from a real antenna which has been used during the FP7 WHERE1
+measurement campaign M1.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>defant.vsh3
+type :  vsh3
+--------------------------
+fmin (GHz) : 2.0
+fmax (GHz) : 8.0
+Nf   : 121
+Br
+-------------
+Nf   :  121
+fmin (GHz) :  2.0
+fmax (GHz) :  8.0
+Ncoeff s3 :  18
+Bi
+-------------
+Nf   :  121
+fmin (GHz) :  2.0
+fmax (GHz) :  8.0
+Ncoeff s3 :  18
+Cr
+-------------
+Nf   :  121
+fmin (GHz) :  2.0
+fmax (GHz) :  8.0
+Ncoeff s3 :  18
+Ci
+-------------
+Nf   :  121
+fmin (GHz) :  2.0
+fmax (GHz) :  8.0
+Ncoeff s3 :  18</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_101.png" src="../_images/_fig_101.png" />
+<p>The antenna can also been taken into account</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>  <span class="c"># scaling constant depends on how are stored the antenna data</span>
+<span class="n">sca</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">vec2scalA</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">sca</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xb1c9b2c&gt;,
+ array([Axes(0.125,0.547727;0.775x0.352273),
+       Axes(0.125,0.125;0.775x0.352273)], dtype=object))</pre>
+</div>
+<img alt="../_images/_fig_12.png" src="../_images/_fig_12.png" />
+</div>
+<div class="section" id="calculate-uwb-channel-impulse-response">
+<h2>Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_13.png" src="../_images/_fig_13.png" />
+</div>
+<div class="section" id="hermitian-symetry-enforcment">
+<h2>Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
+<p>If the number of point for the transmission channel and the waveform
+were the same the mathematical operation is an Hadamrd-Shur product
+between <img class="math" src="../_images/math/56fa5db7f63f540dec899854bd2ffe6e445d15df.png" alt="$\mathbf{Y}$"/> and <img class="math" src="../_images/math/7df94652f9f0a7c4f1f225b7bf793949758ae804.png" alt="$\mathbf{W}$"/>.</p>
+<p><img class="math" src="../_images/math/a8b683440c1f8c6a69dd6547dfbe1f4fd9e9f0e4.png" alt="$\mathbf{Y} = \mathbf{S} \odot \mathbf{W}$"/></p>
+<p>In practice this is what is done after a resampling of the time base
+with the greater time step.</p>
+<p>The process whic consist in going time domain to frequency domain is
+delegate to a specialized class which maintain the proper binding
+between signal samples and their indexation either in time or in
+frequency domain.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wgam</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span>
+<span class="n">Y</span>    <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">wgam</span><span class="p">)</span>
+<span class="n">tau</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">tau0</span>
+</pre></div>
+</div>
+<p>The transmission channel has a member data which is the time delay of
+each path</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;tau =&#39;</span><span class="p">,</span> <span class="n">tau</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>tau = [ 23.86713221  25.90353456  26.71456706  31.5656444   36.76975426
+  33.13220501  29.70841516  33.77007551  38.12306298  38.67871406
+  27.8861973   27.64609677  40.8039797   36.1848012   44.63339207
+  40.97791791  26.00589677  56.03851137  56.50109556  28.40727606
+  45.75470239  46.21869515  28.64099626  31.45147939  56.93564665
+  57.39100019  57.30918643  57.76159531  49.6141571   31.23879355
+  45.89051822  25.74826855  34.70312186  34.5104815   48.01134886
+  59.20577447  58.76448492  39.86471567  35.1232117   45.28595588
+  40.03159863  35.31250959  46.67807592  55.69281322  33.21104234
+  65.58905058  65.1909849   33.00969555  41.92951758  63.97682332
+  64.44036847  43.69434237  42.08821424  43.38811921  42.01423039
+  37.6279447   53.22774303  37.45035232  41.69566991  69.27701651
+  69.74102761  46.85683446  54.41707085  49.77517159  64.76408746
+  65.22203762  51.0450064   65.09271861  65.54837284  70.4639201
+  70.0047007   70.76608669  70.30884091  42.25683377  42.09877275
+  48.44775243  38.19069113  39.32593151  50.54234748  66.37758547
+  66.8244792   50.67407841  71.94971066  71.5000346   68.36337908
+  67.98156041  46.89321202  45.5860115   59.98403491  47.21435752
+  38.01572774  39.49509112  69.29340929  58.934858    59.54859827
+  45.29257972  47.03516415  60.09507282  60.01118612  59.6604466
+  47.35534699  48.9702404   58.11322282  58.55933363  72.12893787
+  72.54040836  49.10618879  77.28751962  76.86907554  58.2278284
+  58.67306783  51.16678171  66.29124293  58.31307211  43.20334349
+  50.48955888  65.89749616  66.39173309  77.23599638  77.70053523
+  56.52016356  55.17961088  56.97789045  42.89361517  65.99858584
+  45.809703    56.63799275  88.72342731  89.65357417  89.18849218
+  77.88935896  78.35002411  56.86076562  78.16282511  49.04279311
+  78.62188797  55.26377154  46.30185981  54.0932939   45.66394152
+  46.44561934  46.76033457  57.99665686  55.38427374  50.24950477
+  54.21639768  47.80371906  89.29277494  90.21705196  89.75488978
+  89.5314171   90.45325563  72.3931858   89.99230651  79.65543756
+  47.66405587  79.24949727  72.0327308   50.70038352  75.90628341
+  80.45504151  75.51315577  57.43282066  64.89406137  50.83170489
+  67.51358711  70.66550806  67.0713716   58.19389048  51.94736653
+  63.56523608  57.74495649  79.2360339   79.68891458  46.90268886
+  69.03683397  67.61226056  68.6588345   67.17069467  52.07554342
+  68.1027834   69.13333333  68.7558644   69.95773327  91.38223729
+  90.46986507  57.31662547  90.92599776  70.05296409  66.25100419
+  52.13525146  84.11271541  84.53947558  47.98186891  59.71670155
+  82.66784744  77.88221877  82.35237675  66.35155529  77.46706827
+  60.77898028  73.17464649  95.64158676  94.77022903  95.20576082
+  57.86029151  58.3083375   59.82823562  72.76684227  77.96777112
+  77.5530786   65.80030395  60.88856853  72.14362219  73.26569608
+  71.41643135  70.96346478  75.05823665  72.58922479  62.36672794
+  72.85840148  61.27669898  64.79979424  70.03675226  72.23597134
+  90.45565753  90.44995498  89.97290449  65.90154272  83.13970461]</pre>
+</div>
+<p>symHz force the Hermitian symetry of Y with zero padding of 500</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">UH</span>   <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="n">UH</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xb3d356c&gt;,
+ array([Axes(0.125,0.547727;0.775x0.352273),
+       Axes(0.125,0.125;0.775x0.352273)], dtype=object))</pre>
+</div>
+<img alt="../_images/_fig_161.png" src="../_images/_fig_161.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">uh</span>   <span class="o">=</span> <span class="n">UH</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">uh</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_171.png" src="../_images/_fig_171.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ips</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">t</span>    <span class="o">=</span> <span class="n">ips</span><span class="o">.</span><span class="n">x</span>
+<span class="n">ip0</span>  <span class="o">=</span> <span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">ips</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">real</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]),</span><span class="n">UH</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">imag</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span>
+<span class="n">U0</span> <span class="o">=</span> <span class="n">FHsignal</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+<span class="n">u0</span> <span class="o">=</span> <span class="n">U0</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">u1</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0xb391fcc&gt;</pre>
+</div>
+<img alt="../_images/_fig_19.png" src="../_images/_fig_19.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">1000</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0xc247c2c&gt;]</pre>
+</div>
+<img alt="../_images/_fig_21.png" src="../_images/_fig_21.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

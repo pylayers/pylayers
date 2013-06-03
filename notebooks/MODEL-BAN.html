@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>An additive model &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">An additive model</a></li>
+<li><a class="reference internal" href="#determination-of-the-reflection-caustic-distance">Determination of the Reflection caustic distance</a></li>
+<li><a class="reference internal" href="#direct-field-at-observation-point-in-the-far-field">Direct field at observation point in the far field</a></li>
+<li><a class="reference internal" href="#incident-field-at-the-reflection-point">Incident field at the Reflection point</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="an-additive-model">
+<h1>An additive model<a class="headerlink" href="#an-additive-model" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of the model is to take into account the presence of a
+dielectric cylinder in the immediate proximity of a an elecromagnetic
+source. Let&#8217;s consider in a first approach that the source is a line
+source and that the cylinder is infinite along the z axis. The model is
+additive meaning that it uses the unperturbed antenna, which can bea
+measured or simulated, and two fundamental parameters, <img class="math" src="../_images/math/c7d457e388298246adb06c587bccd419ea67f7e8.png" alt="a"/> the
+radius of the dielectric cylinder and <img class="math" src="../_images/math/8136a7ef6a03334a7246df9097e5bcc31ba33fd2.png" alt="b"/> the distance between the
+line source and the center of the cylinder which is also the origin of
+this canonical problem.</p>
+<p>The distance between the cylinder and the source is <img class="math" src="../_images/math/cc993dd11667abaf1ec918cf29ecba2675ecd893.png" alt="d=b-a"/></p>
+<p>The geometry of the problem is described in Figure</p>
+<p>The unitary vector along the far field direction of observation is given
+by</p>
+<div class="math">
+<p><img src="../_images/math/c153e440c36c31b9f447e27476ca1db2c872a847.png" alt="\hat{s}=\cos\phi \sin\theta\mathrm{\hat{x}}+ \sin\phi \sin\theta\mathrm{\hat{x}}+cos\theta\mathrm{\hat{z}}"/></p>
+</div><p>The unit vector in the direction from the source point <img class="math" src="../_images/math/424ceba666c8ab2d491d7b232fd11469364efb7c.png" alt="S (b,0,0)"/>
+to the reflection point <img class="math" src="../_images/math/082e133e19b2f6ca2891928e3ab7145b866508b4.png" alt="Q_r (a\cos\gamma_r,a\sin\gamma_r,z_r)"/> is
+given by</p>
+<div class="math">
+<p><img src="../_images/math/f8051dfde0c1fc4e34bf043f7eb03515e3b4a4ef.png" alt="\hat{\mathbf{s^i}}=\frac{(a\cos\gamma_r-b) \mathbf{\hat{x}} + a\sin\gamma_r \mathbf{\hat{y}}+ z_r \mathbf{\hat{z}} }
+                          {(a\cos\gamma_r-b)^2+ (a\sin\gamma_r)^2+z_r^2}"/></p>
+</div><p>The cylinder normal in <img class="math" src="../_images/math/6676c4b6f4cbfb0318da1b48ceeea86ca4fafa13.png" alt="Q_r"/> is given by</p>
+<div class="math">
+<p><img src="../_images/math/e67099de0d79cb40f62b1cc85861ec345390de4e.png" alt="\mathbf{\hat{n}}(Q_r) = cos\gamma_r \mathbf{\hat{x}} + \sin\gamma_r \mathbf{\hat{y}}"/></p>
+</div><p>so the dot product</p>
+<div class="math">
+<p><img src="../_images/math/96d2416e0dfb3dfe1b479217d752e17f884bd3a5.png" alt="\mathbf{\hat{n}}.\mathbf{\hat{s^i}}=\frac{a-b\cos\gamma_r}{\sqrt{a^2+b^2-2ab\cos(\gamma_r)+z_r^2}}"/></p>
+</div><div class="math">
+<p><img src="../_images/math/1dfa9c54746b1397d3ce1ec43db300399c0449d0.png" alt="\mathbf{\hat{n}}.\mathbf{\hat{s^r}} = \cos(\phi-\gamma_r)\sin\theta"/></p>
+</div><p>Enforcement of the reflection law</p>
+<div class="math">
+<p><img src="../_images/math/5fe300e63459f8d3698359feb8ead4153488b049.png" alt="\mathbf{\hat{n}}.\mathbf{\hat{s^r}} = - \mathbf{\hat{n}}.\mathbf{\hat{s^i}}
+
+then yields the following transcendental equation for the determination"/></p>
+</div><p>of the stationnary point parameterized by <img class="math" src="../_images/math/4487223765c687e08c07147482e0d409644b00d7.png" alt="\gamma_r"/> and
+<img class="math" src="../_images/math/adf7bd7343969e2fa3170c1c8300d49c22d4827a.png" alt="z_r"/>.</p>
+<div class="math">
+<p><img src="../_images/math/8d468b0f275e7c408872e7a909a1c34570925c84.png" alt="\frac{a-b\cos\gamma_r}{\sqrt{a^2+b^2-2ab\cos(\gamma_r)}}= - \cos(\phi-\gamma_r)\sin\theta"/></p>
+</div></div>
+<div class="section" id="determination-of-the-reflection-caustic-distance">
+<h1>Determination of the Reflection caustic distance<a class="headerlink" href="#determination-of-the-reflection-caustic-distance" title="Permalink to this headline">¶</a></h1>
+<p>The radius of curavture of the incident wavrefront at <img class="math" src="../_images/math/6676c4b6f4cbfb0318da1b48ceeea86ca4fafa13.png" alt="Q_r"/></p>
+<div class="math">
+<p><img src="../_images/math/ccdcf59c2444c4008242e262c81db8d2f968d5fb.png" alt="s^i = \sqrt{a^2 + b^2 -2 ab\cos \gamma_r+ z_r^2}"/></p>
+</div></div>
+<div class="section" id="direct-field-at-observation-point-in-the-far-field">
+<h1>Direct field at observation point in the far field<a class="headerlink" href="#direct-field-at-observation-point-in-the-far-field" title="Permalink to this headline">¶</a></h1>
+<div class="math">
+<p><img src="../_images/math/34dbbf31d1d8b837d4480b7e11d8f21e4bebf0ec.png" alt="s^r=s-a\cos(\phi-\gamma_r)\sin\theta"/></p>
+</div><div class="math">
+<p><img src="../_images/math/60cca855125ccaf1880c1b4eed504274277fc1c7.png" alt="s^0=s-b\cos\phi\sin\theta"/></p>
+</div><p>The antenna not perturbated by the cylinder has the following vector
+radiation pattern</p>
+<div class="math">
+<p><img src="../_images/math/32bbd721ab40740999dd93d14006401e191a47df.png" alt="\mathbf{U}^i = \left( F\_{\theta}(\theta,\phi) \hat{\mathbf{\theta}} +  F\_{\phi}(\theta,\phi) \hat{\mathbf{\phi}}\right) \frac{e^{-jks^0}}{\sqrt{s^0}}"/></p>
+</div></div>
+<div class="section" id="incident-field-at-the-reflection-point">
+<h1>Incident field at the Reflection point<a class="headerlink" href="#incident-field-at-the-reflection-point" title="Permalink to this headline">¶</a></h1>
+<p>Let <img class="math" src="../_images/math/6676c4b6f4cbfb0318da1b48ceeea86ca4fafa13.png" alt="Q_r"/> be the reflection point on a infinite cylinder. The
+incident field in <img class="math" src="../_images/math/6676c4b6f4cbfb0318da1b48ceeea86ca4fafa13.png" alt="Q_r"/> is given by :</p>
+<div class="math">
+<p><img src="../_images/math/89835f4c364a443a1461ec5bc135753988eef306.png" alt="\mathbf{U}^i(s^i,\theta_r,\phi_r) = \left( F\_{\theta}(\theta_r,\phi_r) \hat{\mathbf{\theta_r}} +  F\_{\phi}(\theta_r,\phi_r) \hat{\mathbf{\phi_r}}\right) \frac{e^{-jks^i}}{\sqrt{s^i}}"/></p>
+</div><div class="math">
+<p><img src="../_images/math/571764a6d8da0228fd5b1d80bd367a3de61eea83.png" alt="\frac{1}{\rho_r}=\frac{1}{\sqrt{a^2+b^2-2ab\cos\gamma_r+z_r^2}}+\frac{2}{a\cos(\phi-\gamma_r)}"/></p>
+</div></div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

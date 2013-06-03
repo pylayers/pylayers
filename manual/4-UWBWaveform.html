@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -87,12 +85,7 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="section" id="generation-of-an-impulse-of-normalized-energy">
+  <div class="section" id="generation-of-an-impulse-of-normalized-energy">
 <h1>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h1>
 <p>One possible manner to define an ernergy normalized short UWB impulse is
 as follows.</p>
@@ -104,16 +97,6 @@ the central frequency of the pulse.</p>
 <p>This waveform is a gaussian windowing of a sine wave of frequency
 <img class="math" src="../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/>. The normalization term depends on the exponential scaling
 factor <img class="math" src="../_images/math/1dc1c0119a604b91be9142370dc3159b6a9bbcb9.png" alt="\tau"/>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
-<span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
-<span class="n">thresh</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">fe</span>     <span class="o">=</span> <span class="mi">100</span>
-<span class="n">ip</span> <span class="o">=</span><span class="n">EnImpulse</span><span class="p">([],</span><span class="n">fc</span><span class="p">,</span><span class="n">band</span><span class="p">,</span><span class="n">thresh</span><span class="p">,</span><span class="n">fe</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">ip</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>TUsignal
 --------
 shx :  (343,)
@@ -126,31 +109,13 @@ ymax : 2.16154131873</pre>
 </div>
 <div class="section" id="verification-of-energy-normalization-in-both-domains">
 <h2>Verification of energy normalization in both domains<a class="headerlink" href="#verification-of-energy-normalization-in-both-domains" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">E1</span><span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">&quot;Integration in time&quot;</span><span class="p">,</span><span class="n">E1</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>Integration in time 1.0</pre>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">P</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
-<span class="n">E2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">P</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
-<span class="k">print</span> <span class="s">&quot;Integration in frequency domain &quot;</span><span class="p">,</span><span class="n">E2</span>
-</pre></div>
 </div>
 <div class="highlight-python"><pre>Integration in frequency domain  1.0</pre>
 </div>
 </div>
 <div class="section" id="calcul-of-uwb-channel-impulse-response">
 <h2>Calcul of UWB channel impulse response<a class="headerlink" href="#calcul-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
-<span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;where2.ini&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
-<span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
-<span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>tw  :  30.0
 band  :  4.0
 fc  :  4.493
@@ -171,28 +136,19 @@ signal in the middle of the array.</p>
 <div class="section" id="in-time-domain">
 <h3>In time domain<a class="headerlink" href="#in-time-domain" title="Permalink to this headline">¶</a></h3>
 <p>In[36]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/4__UWB_Waveform_fig_00.png" src="../_images/4__UWB_Waveform_fig_00.png" />
+<img alt="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_00.png" src="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_00.png" />
 </div>
 <div class="section" id="in-frequency-domain">
 <h3>in frequency domain<a class="headerlink" href="#in-frequency-domain" title="Permalink to this headline">¶</a></h3>
 <p>The frequency domain version of the signal is embedded in the same
 object.</p>
 <p><tt class="docutils literal"><span class="pre">sf</span></tt> stands for signal in frequency domain.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/4__UWB_Waveform_fig_01.png" src="../_images/4__UWB_Waveform_fig_01.png" />
+<img alt="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_01.png" src="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_01.png" />
 </div>
 </div>
 <div class="section" id="construction-of-the-propagation-channel">
 <h2>Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <p>The link between Txid = 1 and Rxid =1 is simply loaded as</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>nray :  500
 nfreq :  181
 nb rays in .tauk file:  500
@@ -204,27 +160,18 @@ to angles of departure (in azimut and elevation). On the right is the
 intensity of rays wrt to angles of arrival. It misses the application
 between the 2 planes as well as the delay dimension of the propagation
 channel.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/4__UWB_Waveform_fig_02.png" src="../_images/4__UWB_Waveform_fig_02.png" />
+<img alt="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_02.png" src="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_02.png" />
 </div>
 <div class="section" id="construction-of-the-transmission-channel">
 <h2>Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <p>The transmission channel is obtain from the combianation of the
 propagation channel and the vector antenna pattern at bot side of the
 radio link</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">vec2scal</span><span class="p">()</span>
-</pre></div>
-</div>
 <p>The ScalChannel object contains all the information about the ray
 transfer functions. The transmission channel is obtained by applying a
 vector radiation pattern using an antenna file. In the presented case,
 it comes from a real antenna which has been used during the FP7 WHERE1
 measurement campaign M1.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>defant.vsh3
 type :  vsh3
 --------------------------
@@ -256,31 +203,17 @@ fmin (GHz) :  2.0
 fmax (GHz) :  8.0
 Ncoeff s3 :  18</pre>
 </div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/4__UWB_Waveform_fig_03.png" src="../_images/4__UWB_Waveform_fig_03.png" />
+<img alt="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_03.png" src="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_03.png" />
 <p>The antenna can also been taken into account</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>  <span class="c"># scaling constant depends on how are stored the antenna data</span>
-<span class="n">sca</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">vec2scalA</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">alpha</span><span class="p">)</span>
-<span class="n">sca</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xb1c9b2c&gt;,
  array([Axes(0.125,0.547727;0.775x0.352273),
        Axes(0.125,0.125;0.775x0.352273)], dtype=object))</pre>
 </div>
-<img alt="../_images/4__UWB_Waveform_fig_04.png" src="../_images/4__UWB_Waveform_fig_04.png" />
+<img alt="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_04.png" src="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_04.png" />
 </div>
 <div class="section" id="calculate-uwb-channel-impulse-response">
 <h2>Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/4__UWB_Waveform_fig_05.png" src="../_images/4__UWB_Waveform_fig_05.png" />
+<img alt="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_05.png" src="manual/4__UWB_Waveform_files/4__UWB_Waveform_fig_05.png" />
 </div>
 </div>
 
@@ -302,7 +235,7 @@ Ncoeff s3 :  18</pre>
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

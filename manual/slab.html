@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2.1. Slab and Materials &mdash; PyLayers</title>
+    <title>Slab and Materials &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -74,12 +72,6 @@
 <h1>Slab and Materials<a class="headerlink" href="#slab-and-materials" title="Permalink to this headline">¶</a></h1>
 <p>Handling of slabs and materials is done in the <cite>slab.py</cite> module in section
 <cite>antprop</cite>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#import mplrc.ieee.transaction</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-</pre></div>
-</div>
 <p>The module <cite>project.py</cite> handle the directory name of the <cite>Pylayers</cite>
 project structure.</p>
 <div class="admonition note">
@@ -93,16 +85,10 @@ database.</p>
 the material database and the slab database. Those 2 database need to be
 consistent.</p>
 <p>The default name for those 2 databases are <cite>matDB.ini</cite> and  <cite>slabDB.ini</cite>.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">=</span><span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>The association between an integer and the name of the available
 slabs is available in <cite>sl.di</cite> dictionary. This association is required
 for compatibility with EM solver PulsRay which needs an associated
 numerical value for each slab.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">di</span>
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s">&#39;METALIC&#39;</span><span class="p">,</span>
  <span class="mi">0</span><span class="p">:</span> <span class="s">&#39;ABSORBENT&#39;</span><span class="p">,</span>
  <span class="mi">1</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
@@ -130,10 +116,6 @@ numerical value for each slab.</p>
 <p>The materials database becomes a member of the slab database, and
 there is also an other dictionary for keeping the association between a
 material id and a material name.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">mat</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
-<span class="n">mat</span><span class="o">.</span><span class="n">di</span>
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s">&#39;METAL&#39;</span><span class="p">,</span>
  <span class="mi">0</span><span class="p">:</span> <span class="s">&#39;ABSORBENT&#39;</span><span class="p">,</span>
  <span class="mi">1</span><span class="p">:</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
@@ -149,49 +131,18 @@ material id and a material name.</p>
 </pre></div>
 </div>
 <p>It is possible to define individual materials</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">lmat</span>    <span class="o">=</span> <span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
-<span class="n">lthick</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.01</span><span class="p">]</span>
-<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;placo&#39;</span><span class="p">,</span><span class="n">lmat</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>Once a slab  is defined, it is possible to evaluate it over a range of angles
 and frequencies.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">theta</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-<span class="n">fGHz</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">2.4</span><span class="p">]</span>
-<span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>In[37]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
-<span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/slab_fig_00.png" src="../_images/slab_fig_00.png" />
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">8.3</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/slab_fig_01.png" src="../_images/slab_fig_01.png" />
+<img alt="manual/slab_files/slab_fig_00.png" src="manual/slab_files/slab_fig_00.png" />
+<img alt="manual/slab_files/slab_fig_01.png" src="manual/slab_files/slab_fig_01.png" />
 <p>In[39]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/slab_fig_02.png" src="../_images/slab_fig_02.png" />
+<img alt="manual/slab_files/slab_fig_02.png" src="manual/slab_files/slab_fig_02.png" />
 <p>This example is described in page 90 of the thesis &#8220;Simulation du
 canal de propagation indoor &#8221; par Cyril Humbert</p>
 <p>In[42]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">lmat</span>    <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">]</span>
-<span class="n">lthick</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.018</span><span class="p">,</span><span class="mf">0.03</span><span class="p">,</span><span class="mf">0.018</span><span class="p">]</span>
-<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;Humbert&#39;</span><span class="p">,</span><span class="n">lmat</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
-<span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">57.5</span><span class="p">])</span>
-</pre></div>
-</div>
 <p>In[44]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;Humbert&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
-<span class="n">sl</span><span class="p">[</span><span class="s">&#39;Humbert&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="../_images/slab_fig_03.png" src="../_images/slab_fig_03.png" />
+<img alt="manual/slab_files/slab_fig_03.png" src="manual/slab_files/slab_fig_03.png" />
 </div>
 
 
@@ -212,7 +163,7 @@ canal de propagation indoor &#8221; par Cyril Humbert</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

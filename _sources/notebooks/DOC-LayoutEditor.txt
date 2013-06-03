@@ -1,0 +1,252 @@
+To edit a new layout, it is first necessary lo load the layout module
+
+
+.. code-block:: python
+
+    from pylayers.gis.layout import *
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0xafdb46c>
+
+To create a new layout just create a new layout object with the name of
+the .ini file
+
+
+.. code-block:: python
+
+    L=Layout('layout.ini')
+
+At that stage the layout file is void
+
+
+.. code-block:: python
+
+    L.info()
+
+
+.. parsed-literal::
+
+    filestr :  layout.ini
+    filematini :  matDB.ini
+    fileslabini :  slabDB.ini
+    filegeom :  geomfile (.off) has no been generated
+    limites  (-20.0, 20.0, -10.0, 10.0)
+    number of Nodes : 0
+    number of Segments : 0
+    number of Sub-Segments : 0
+    Gs Nodes :  0
+    Gs Edges :  0
+    Gc Nodes :  0
+    Gc Edges :  0
+    Gt Nodes :  0
+    Gt Edges :  0
+    vnodes = L.Gt.node[Nc]['vnodes'] 
+    poly = L.Gt.node[Nc]['polyg'] 
+    Gr Nodes    : no Gr graph
+
+The display option dictionnary 
+-------------------------------
+
+The layout can be displayed using matplotlib ploting primitive
+
+
+.. code-block:: python
+
+    L.display
+
+
+.. parsed-literal::
+
+    {'activelayer': 'WINDOW_GLASS',
+     'alpha': 0.5,
+     'box': (-20, 20, -10, 10),
+     'clear': False,
+     'edges': True,
+     'edlabel': False,
+     'edlblsize': 20,
+     'ednodes': False,
+     'fileoverlay': 'TA-Office.png',
+     'fontsize': 20,
+     'layer': [],
+     'layers': [],
+     'layerset': ['WINDOW_GLASS',
+      'PLASTERBOARD_7CM',
+      'WALL',
+      'AIR',
+      'WINDOW',
+      'METALIC',
+      'PLASTERBOARD_14CM',
+      'DOOR',
+      'FLOOR',
+      'METAL',
+      'PARTITION',
+      'CONCRETE_20CM3D',
+      'PLASTERBOARD_10CM',
+      'CEIL',
+      'CONCRETE_6CM3D',
+      'CONCRETE_15CM3D',
+      '3D_WINDOW_GLASS',
+      'WALLS',
+      'WOOD',
+      'CONCRETE_7CM3D',
+      'PILLAR',
+      'ABSORBENT'],
+     'ndlabel': False,
+     'ndlblsize': 20,
+     'ndsize': 10,
+     'nodes': False,
+     'overlay': False,
+     'scaled': True,
+     'subseg': True,
+     'thin': False,
+     'ticksoff': True,
+     'title': '',
+     'visu': False}
+
+
+Layers
+------
+
+-  'layer' : list , []
+-  'layerset',list, list of available layers
+-  'layers', list , []
+-  'activelayer', str , 'WINDOW\_GLASS'
+
+-  'alpha', float , 0.5 , overlay transparency
+-  'box', tuple , (-20,20,-10,10), (xmin xmax,ymin,ymax)
+
+String
+------
+
+-  'title' : str , 'Init'
+-  'fileoverlay' : str , 'TA-Office.png'
+
+size
+----
+
+-  'fontsize', float , 10
+-  'ndsize', float , 10
+-  'ndlblsize' : float 20
+-  'edlblsize' : float , 20
+
+Boolean
+-------
+
+-  'edlabel', boolean, False
+-  'ticksoff',boolean, True
+-  'scaled' : boolean , True
+-  'subseg' : boolean , True
+-  'nodes', boolean , True
+-  'visu', boolean , False
+-  'edges', boolean , True
+-  'clear', boolean, False
+-  'overlay', boolean , False
+-  'thin', boolean , False , If True trace all segments with thickness 1
+-  'ndlabel',boolean, If True display node labels
+-  'ednodes', boolean, True
+
+
+Interactive editor
+------------------
+
+The command L.editor() launches an interactive editor
+
+Edition mode
+------------
+
+There is two different mode of edition
+
+-  A create points mode CP
+
+   -  left clic : free point
+   -  right clic : same x point
+   -  center clic : same y point
+
+-  A create segments mode
+
+   -  left clic : select point 1
+   -  left clic : select point 2
+   -  left clic : create a segment between point 1 and point 2
+
+**m** : to switch from one mode to an other
+
+**i** : to return to init state
+
+Image overlay
+-------------
+
+It is useful while editing a layout to have an overlay of an image in
+order to help placing points. The image overlay can either be an url or
+a filename. In that case the file is stored in
+
+
+.. code-block:: python
+
+    L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
+
+
+.. code-block:: python
+
+    L.display['overlay']=True
+    L.display['alpha']=1
+    L.display['scaled']=False
+    L.display['ticksoff']=False
+
+
+.. code-block:: python
+
+    figsize(15,15)
+    L.showGs()
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0xb5d850c>,
+     <matplotlib.axes.AxesSubplot at 0xb533b8c>)
+
+
+.. image:: DOC-LayoutEditor_files/_fig_05.png
+
+Scaling the figure overlay
+--------------------------
+
+Before going further it is necessary :
+
+-  to place the global framework origin
+-  to precise the vertical and horizontal scale of the image
+
+This is done by the following commands :
+
+-  'i' : back to init state
+-  'm' : goes to CP state
+-  'o' : define the origin
+-  'left click' on the point of the figure chasen as the origin
+-  'left click' on a point at a known distancefrom the origin along x
+   axis. Fill the dialog box with the actual distance (expressed in
+   meters) between the two points.
+-  'right click' on a point at a known distance from the origin along y
+   axis. Fill the dialog box with the actual distance (expressed in
+   meters) between the two points.
+
+
+At that stage, it is possible to start creating points
+
+::
+
+        'b'  : selct a segment 
+        'l'  : select activelayer
+        'i'  : back to init state
+        'e'  : edit segment
+        't'  : translate  structure
+        'h'  : add subsegment
+        'd'  : delete subsegment
+        'r'  : refresh
+        'o'  : toggle overlay
+        'm'  : toggle mode (point or segment)
+        'z'  : change display parameters
+        'q'  : quit interactive mode
+        'x'  : save .str2 file
+        'w'  : display all layers
+
+

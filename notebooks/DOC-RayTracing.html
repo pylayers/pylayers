@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ray-tracing &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Ray-tracing</a><ul>
+<li><a class="reference internal" href="#setting-the-transmitter">Setting the transmitter</a></li>
+<li><a class="reference internal" href="#setting-receiver">Setting receiver</a></li>
+<li><a class="reference internal" href="#adjust-simulation-parameter-optional">Adjust simulation parameter (optional)</a></li>
+<li><a class="reference internal" href="#run-the-ray-tracing">Run the ray tracing</a></li>
+<li><a class="reference internal" href="#plot-cir">Plot CIR</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="section" id="ray-tracing">
+<h1>Ray-tracing<a class="headerlink" href="#ray-tracing" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="c"># loading a layout</span>
+<span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;TA-Office&#39;</span>
+<span class="c"># load the material and slab dictionnaries</span>
+<span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.str&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="setting-the-transmitter">
+<h2>Setting the transmitter<a class="headerlink" href="#setting-the-transmitter" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;tx&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.4</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-receiver">
+<h2>Setting receiver<a class="headerlink" href="#setting-receiver" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.21</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.22</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.23</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.24</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+
+<span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adjust-simulation-parameter-optional">
+<h2>Adjust simulation parameter (optional)<a class="headerlink" href="#adjust-simulation-parameter-optional" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># print launching parameters</span>
+<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+
+<span class="c"># ang Tx : angular step from Tx</span>
+<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">angTx</span>  <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c"># ISB ang Incident Shadow Boundary angle (degree)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ISBang</span> <span class="o">=</span> <span class="mi">90</span>
+
+<span class="c"># ray elimination Threshold</span>
+<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ethreshold</span> <span class="o">=</span> <span class="mf">0.001</span>
+
+<span class="c"># maximum depth</span>
+<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">maxdeep</span>  <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c"># typealgo = 0 (include diffraction) 1 (no diffraction)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">typalgo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">angTx</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ISBang</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">ethreshold</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span> \
+        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">maxdeep</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span> \
+        <span class="nb">str</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">typalgo</span><span class="p">)</span>
+
+<span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">fghzmin</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">fghzmax</span><span class="o">=</span><span class="mi">11</span>
+<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">nf</span><span class="o">=</span><span class="mi">181</span>
+<span class="n">S</span><span class="o">.</span><span class="n">pafreq</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>----------------------------------------------
+            Launching Parameter
+----------------------------------------------
+angTx      : Tx angular step ( degrees)     :  1
+ISBang     : ISB angular sector ( degrees ) :  90
+ethreshold : Exploration Threshold (linear) :  0.001
+maxdeep    : Tree deep max (integer value)  :  10
+typalgo    : Type of algo (default 0)       :  1</pre>
+</div>
+</div>
+<div class="section" id="run-the-ray-tracing">
+<h2>Run the ray tracing<a class="headerlink" href="#run-the-ray-tracing" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>run debug  1 1
+nray :  500
+nfreq :  181
+nb rayons dans .tauk :  500
+nb rayons 2:  500</pre>
+</div>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/site-packages/scipy-0.11.0-py2.7-linux-i686.egg/scipy/io/matlab/mio.py:266: FutureWarning: Using oned_as default value ('column') This will change to 'row' in future versions
+  oned_as=oned_as)</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plot-cir">
+<h2>Plot CIR<a class="headerlink" href="#plot-cir" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">pltcir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+</div>
+<img alt="../_images/_fig_06.png" src="../_images/_fig_06.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

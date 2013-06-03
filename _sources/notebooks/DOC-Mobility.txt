@@ -1,0 +1,15 @@
+Example of Agent mobility 
+-------------------------
+
+.. code-block:: python
+
+    from IPython.display import Image, HTML, Latex, YouTubeVideo
+    import numpy as np
+
+
+.. code-block:: python
+
+    YouTubeVideo('1Qa6xLpU5-M')
+
+
+

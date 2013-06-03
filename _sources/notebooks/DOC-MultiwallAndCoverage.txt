@@ -1,0 +1,186 @@
+Multi-wall model
+================
+
+
+
+.. code-block:: python
+
+    import time
+    from pylayers.util.project import *
+    import pylayers.util.pyutil as pyu
+    from pylayers.util.utilnet import str2bool
+    from pylayers.gis.layout import Layout
+    from pylayers.antprop.multiwall import *
+    from pylayers.antprop.coverage import *
+    from pylayers.network.model import *
+
+
+Loading the layout 
+-------------------
+
+
+.. code-block:: python
+
+    L=Layout('TA-Office.str')
+    try:
+        L.dumpr() # load graphs
+    except:
+        L.build()
+        L.dumpw()
+
+Defining a radio link
+---------------------
+
+We define :
+
+-  A a transmitter
+
+-  B a receviver
+
+
+
+
+.. code-block:: python
+
+    A=np.array((4,1)) # transmitter
+    B=np.array((30,12)) # receiver
+
+Ploting the scene
+-----------------
+
+
+.. code-block:: python
+
+    # figure instanciation
+    f = plt.figure(figsize=(25,25))
+    ax = f.add_subplot(111)
+    r = np.array((A,B))
+    f,ax = L.showG(fig=f,ax=ax,graph='s')
+    
+    ax.plot(A[0],A[1],'ob')
+    ax.plot(B[0],B[1],'or')
+    ax.plot(r[:,0],r[:,1])
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0xaa60aec>]
+
+
+.. image:: DOC-MultiwallAndCoverage_files/_fig_02.png
+
+Find the intersection between the "direct" path and the walls
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+.. code-block:: python
+
+    L.angleonlink(A,B)
+
+
+.. parsed-literal::
+
+    (array([34, 36, 41, 67, 72, 89]),
+     array([ 0.40024066,  0.40024066,  0.40024066,  1.17055567,  1.17055567,
+            0.40024066]))
+
+
+Computing the Multi-wall model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The multi-wall model computation returns losses and LOS excess delay for
+orthogonal and parallel polarization
+
+
+.. code-block:: python
+
+    f   = 2.4
+    r= np.array((B,B))
+    
+    Lwo,Lwp,Edo,Edp=Loss0_v2(L,r,f,A)
+    
+    print 'Losses polar orthogonal \t %g dBm' %(Lwo[0])
+    print 'Losses polar parallel \t %g  dBm' % (Lwp[0])
+    print 'Excess delay polar orthogonal \t %g ns' % (Edo[0])
+    print 'Excess delay polar parallel  \t %g ns' %Edp[0]
+
+
+.. parsed-literal::
+
+    Losses polar orthogonal 	 27.7333 dBm
+    Losses polar parallel 	 16.0573  dBm
+    Excess delay polar orthogonal 	 2.23113 ns
+    Excess delay polar parallel  	 2.12364 ns
+
+Coverage class
+==============
+
+
+By extension, the multi-wall model can also been used to perform a
+coverage of a Layout
+
+
+.. code-block:: python
+
+    C = Coverage()
+    C.L  = L # set layout
+    C.tx = A # set the tramsitter
+
+
+.. code-block:: python
+
+    np.shape(C.grid)
+
+
+.. parsed-literal::
+
+    (800, 2)
+
+
+Compute the coverage
+~~~~~~~~~~~~~~~~~~~~
+
+
+
+.. code-block:: python
+
+    t1=time.time()
+    C.cover()
+    t2=time.time()
+    print 'Coverage performed in ', t2-t1, 's'
+
+
+.. parsed-literal::
+
+    Coverage performed in  5.5845220089 s
+
+Coverage Map
+~~~~~~~~~~~~
+
+
+For Orthogonal polarization
+
+
+.. code-block:: python
+
+    C.showPower(polarization='o')
+    C.showEd(polarization='o')
+
+
+.. image:: DOC-MultiwallAndCoverage_files/_fig_07.png
+
+.. image:: DOC-MultiwallAndCoverage_files/_fig_08.png
+
+For parallel polarization
+
+
+.. code-block:: python
+
+    C.showPower(polarization='p')
+    C.showEd(polarization='p')
+
+.. image:: DOC-MultiwallAndCoverage_files/_fig_09.png
+
+.. image:: DOC-MultiwallAndCoverage_files/_fig_10.png
+

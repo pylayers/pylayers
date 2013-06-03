@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rays &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rays">
+<span id="id1"></span><h1>rays<a class="headerlink" href="#rays" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-pylayers.antprop.rays"></span><dl class="class">
+<dt id="pylayers.antprop.rays.Rays">
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.rays.</tt><tt class="descname">Rays</tt><big>(</big><em>pTx</em>, <em>pRx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set af rays</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>to3D(H=3,N=1)</strong> :</p>
+<p><strong>locbas(L)</strong> :</p>
+<p><strong>fillinter(L)</strong> :</p>
+<p><strong>eval</strong> :</p>
+<p><strong>show(L)</strong> :</p>
+<p><strong>mirror(H=3,N=1)</strong> :</p>
+<p><strong>ray(r)</strong> :</p>
+<p><strong>typ(r)</strong> :</p>
+<p><strong>info(r)</strong> :</p>
+<p><strong>signature(L)</strong> :</p>
+<p><strong>show3d(ray,bdis,bbas,bstruc,col,id,linewidth)</strong> :</p>
+<p class="last"><strong>show3()</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Rays object is obtained from a signature.
+It is a container for a set of rays between a source 
+and a target point defining a radio link.</p>
+<p>Once Rays object has been obtained in 2D, it is transform 
+in 3D via the <strong>to3D</strong> method. This method has two parameters : 
+the height from floor to ceil, and the number N of 
+multiple reflections to take into account.</p>
+<p>Once the 3d rays have been calculated, it is required 
+to evaluate the local basis along those rays. This is
+done through the <strong>locbas</strong> method</p>
+<p>Once the local basis have been calculated the different
+interaction along rays can be informed via the <strong>fillinter</strong>
+method.</p>
+<p>Once the interaction are informed the field along rays can 
+be evaluated via the <strong>eval</strong> method</p>
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.eval">
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>docstring for eval</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.fillinter">
+<tt class="descname">fillinter</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.fillinter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.fillinter" title="Permalink to this definition">¶</a></dt>
+<dd><p>docstring for fillinter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>L</strong> : Layout</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.info">
+<tt class="descname">info</tt><big>(</big><em>r</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.info" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>provides information for a given ray r</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>r</strong> : int</p>
+<blockquote class="last">
+<div><p>ray index</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.locbas">
+<tt class="descname">locbas</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.locbas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.locbas" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>L</strong> : Layout</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.mirror">
+<tt class="descname">mirror</tt><big>(</big><em>H=3</em>, <em>N=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.mirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.mirror" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>H</strong> : float</p>
+<blockquote>
+<div><p>ceil height (default 3m)</p>
+</div></blockquote>
+<p><strong>N</strong> : int</p>
+<blockquote class="last">
+<div><p>handle the number of mirror reflexions</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.ray">
+<tt class="descname">ray</tt><big>(</big><em>r</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.ray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.ray" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>r</strong> : integer</p>
+<blockquote class="last">
+<div><p>ray index</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Give the ray number and it returns the index of its interactions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.show">
+<tt class="descname">show</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot 2D rays within the simulated environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>L</strong> : Layout</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.show3">
+<tt class="descname">show3</tt><big>(</big><em>bdis=True</em>, <em>bstruc=True</em>, <em>id=0</em>, <em>strucname='defstr'</em>, <em>ilist=</em><span class="optional">[</span><span class="optional">]</span>, <em>raylist=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot 3D rays within the simulated environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>raysarr: numpy.ndarray</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.show3d">
+<tt class="descname">show3d</tt><big>(</big><em>ray</em>, <em>bdis=True</em>, <em>bbas=False</em>, <em>bstruc=True</em>, <em>col=array([1</em>, <em>0</em>, <em>1])</em>, <em>id=0</em>, <em>linewidth=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot a 3D ray</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>bdis :</strong> :</p>
+<blockquote>
+<div><p>display boolean - if False return .vect filename</p>
+</div></blockquote>
+<p><strong>bbas :</strong> :</p>
+<blockquote>
+<div><p>display local basis</p>
+</div></blockquote>
+<p><strong>bstruc :</strong> :</p>
+<blockquote>
+<div><p>display structure</p>
+</div></blockquote>
+<p><strong>col  :</strong> :</p>
+<blockquote>
+<div><p>color of the ray</p>
+</div></blockquote>
+<p><strong>id   :</strong> :</p>
+<blockquote>
+<div><p>id of the ray</p>
+</div></blockquote>
+<p class="last"><strong>linewidth :</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.signature">
+<tt class="descname">signature</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.signature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.to3D">
+<tt class="descname">to3D</tt><big>(</big><em>H=3</em>, <em>N=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.to3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.to3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>transform 2D ray to 3D ray</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>H</strong> : float</p>
+<blockquote>
+<div><p>ceil height (default 3m)</p>
+</div></blockquote>
+<p><strong>N</strong> : int</p>
+<blockquote class="last">
+<div><p>handle the number of mirror reflexions</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.rays.Rays.typ">
+<tt class="descname">typ</tt><big>(</big><em>r</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.typ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.typ" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns interactions list type of a given ray</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>r</strong> : integer</p>
+<blockquote class="last">
+<div><p>ray index</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

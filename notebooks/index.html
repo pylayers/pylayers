@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User Manual &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">User Manual</a><ul>
+<li><a class="reference internal" href="#editing-a-layout">Editing A Layout</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#handling-slab-and-materials">Handling Slab and Materials</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#multiwall-motley-keenan-model">MultiWall Motley-Keenan Model</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#ray-tracing-c-implementation">Ray Tracing (C Implementation)</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#uwb-waveform">UWB Waveform</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#nodes-mobility">Nodes Mobility</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#robust-positioning-rgpa">Robust Positioning (RGPA)</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#utility-functions">Utility functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="user-manual">
+<span id="usermanual"></span><h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="editing-a-layout">
+<h2>Editing A Layout<a class="headerlink" href="#editing-a-layout" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html">The display option dictionnary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#layers">Layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#string">String</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#size">size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#boolean">Boolean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#interactive-editor">Interactive editor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#edition-mode">Edition mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#image-overlay">Image overlay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="handling-slab-and-materials">
+<h2>Handling Slab and Materials<a class="headerlink" href="#handling-slab-and-materials" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html">Layout ploting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-name">Slab name</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-dictionnary">Slab dictionnary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-information">Slab Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-evaluation">Slab evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#transmission-and-reflexion-coefficient">Transmission and Reflexion coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#ploting-coefficients">Ploting Coefficients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#with-respect-to-angle">with respect to angle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#wrt-to-angle-and-frequency">wrt to angle and frequency</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="multiwall-motley-keenan-model">
+<h2>MultiWall Motley-Keenan Model<a class="headerlink" href="#multiwall-motley-keenan-model" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-MultiwallAndCoverage.html">Multi-wall model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DOC-MultiwallAndCoverage.html#loading-the-layout">Loading the layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-MultiwallAndCoverage.html#defining-a-radio-link">Defining a radio link</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-MultiwallAndCoverage.html#ploting-the-scene">Ploting the scene</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-MultiwallAndCoverage.html#coverage-class">Coverage class</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="ray-tracing-c-implementation">
+<h2>Ray Tracing (C Implementation)<a class="headerlink" href="#ray-tracing-c-implementation" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-RayTracing.html">Ray-tracing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DOC-RayTracing.html#setting-the-transmitter">Setting the transmitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-RayTracing.html#setting-receiver">Setting receiver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-RayTracing.html#adjust-simulation-parameter-optional">Adjust simulation parameter (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-RayTracing.html#run-the-ray-tracing">Run the ray tracing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-RayTracing.html#plot-cir">Plot CIR</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="uwb-waveform">
+<h2>UWB Waveform<a class="headerlink" href="#uwb-waveform" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-UWBWaveform.html">Generation of an Impulse of normalized energy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#verification-of-energy-normalization-in-both-domains">Verification of energy normalization in both domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#calcul-of-uwb-channel-impulse-response">Calcul of UWB channel impulse response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#ploting-the-waveform">Ploting the waveform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#in-time-domain">In time domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#in-frequency-domain">in frequency domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#construction-of-the-propagation-channel">Construction of the propagation channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#construction-of-the-transmission-channel">Construction of the transmission channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#calculate-uwb-channel-impulse-response">Calculate UWB Channel Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-UWBWaveform.html#hermitian-symetry-enforcment">Hermitian symetry enforcment</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="nodes-mobility">
+<h2>Nodes Mobility<a class="headerlink" href="#nodes-mobility" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-Mobility.html">Example of Agent mobility</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="robust-positioning-rgpa">
+<h2>Robust Positioning (RGPA)<a class="headerlink" href="#robust-positioning-rgpa" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-RGPA.html">RGPA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DOC-RGPA.html#toa">TOA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-RGPA.html#tdoa">TDOA</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-geomutil.html">Class Polygon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#ploting-polygons">ploting polygons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#buildgv">buildGv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#geomview-class">Geomview class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#geomvect-class">GeomVect class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#plotting-a-box">plotting a box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#angledir">angledir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#linet">linet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#dptseg-p-pt-ph">dptseg(p,pt,ph)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-geomutil.html#ptconvex">ptconvex</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

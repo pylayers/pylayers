@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -102,10 +100,12 @@
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">pickle</span> <span class="kn">as</span> <span class="nn">pk</span>
 <span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_tkagg</span> <span class="kn">import</span> <span class="n">FigureCanvasTkAgg</span><span class="p">,</span> <span class="n">NavigationToolbar2TkAgg</span>
-<span class="kn">import</span> <span class="nn">Tkinter</span> <span class="kn">as</span> <span class="nn">tk</span>
+<span class="c">#import Tkinter as tk</span>
 
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">import</span> <span class="nn">copy</span>
@@ -117,11 +117,11 @@
 <span class="c">#from pylayers.util.pymysqldb import Database</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">str2bool</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 
-<span class="kn">import</span> <span class="nn">SimPy.Simulation</span>
-<span class="kn">from</span> <span class="nn">SimPy.Simulation</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span><span class="n">hold</span>
+<span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span><span class="n">hold</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
 <span class="kn">import</span> <span class="nn">select</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -158,15 +158,14 @@
 <span class="sd">        RandomMac(): Generate a RAndom Mac adress    </span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ID</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span><span class="n">pe</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">te</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span><span class="n">RAT</span><span class="o">=</span><span class="p">[],</span><span class="n">epwr</span><span class="o">=</span><span class="p">{},</span><span class="n">sens</span><span class="o">=</span><span class="p">{},</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;ag&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ID</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">t</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">te</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="p">[],</span><span class="n">epwr</span><span class="o">=</span><span class="p">{},</span><span class="n">sens</span><span class="o">=</span><span class="p">{},</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;ag&#39;</span><span class="p">):</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c"># Personnal Network init</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">=</span><span class="n">ID</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PN</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">PN</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="nb">dict</span><span class="p">(</span><span class="n">pe</span><span class="o">=</span><span class="n">pe</span><span class="p">,</span><span class="n">te</span><span class="o">=</span><span class="n">te</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="n">RAT</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">))</span>
         <span class="c"># Network init</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span><span class="nb">dict</span><span class="p">(</span><span class="n">PN</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">],</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span><span class="n">RAT</span><span class="o">=</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="o">=</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="o">=</span><span class="n">sens</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pe</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PN</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span>
@@ -189,7 +188,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">):</span>
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Network class</span>
 <span class="sd">    inherit of networkx.Graph()</span>
 
@@ -223,8 +222,8 @@
 
 
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">owner</span><span class="o">=</span><span class="s">&#39;sim&#39;</span><span class="p">,</span><span class="n">EMS</span><span class="o">=</span><span class="n">EMSolver</span><span class="p">()):</span>
-        <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">owner</span><span class="o">=</span><span class="s">&#39;sim&#39;</span><span class="p">,</span><span class="n">EMS</span><span class="o">=</span><span class="n">EMSolver</span><span class="p">(),</span><span class="n">PN</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">=</span><span class="n">owner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">,</span><span class="s">&#39;Pr&#39;</span><span class="p">]</span> 
@@ -233,11 +232,87 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">coll_plot</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relink</span><span class="o">=</span><span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lidx</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Network.perm"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.perm">[docs]</a>    <span class="k">def</span> <span class="nf">perm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
+        <span class="sd">&quot;&quot;&quot; combi = itertools.permutation(iterable,r) adapted </span>
+<span class="sd">    </span>
+<span class="sd">        This is an adapted version of itertools.permutations in order to be complient with the networkx.add_edges_from method.</span>
+<span class="sd">        itertools.permutations(range(4), 3) --&gt; 012 013 021 023 031 302 102 103 ...</span>
+<span class="sd">    </span>
+<span class="sd">        self.perm([10,11],2,&#39;wifi&#39;) --&gt;     (10, 11, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []}) </span>
+<span class="sd">                                (11, 10, &#39;wifi&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: []})</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        iterable : list</span>
+<span class="sd">            list of node</span>
+<span class="sd">        r     : int</span>
+<span class="sd">            number of node gathered in the output tuple ( always set 2 ! )</span>
 
 
+<span class="sd">        Returns</span>
+<span class="sd">        ------     </span>
+
+<span class="sd">        out : tuple(node_list,r,RAT,d):</span>
+<span class="sd">        node_list    : list of node1        </span>
+<span class="sd">        r        : gather r node in the tuple</span>
+<span class="sd">        RAT        : the specified RAT</span>
+<span class="sd">        d        : dictionnary of RAT attribute</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
 
 
+<span class="sd">        &gt;&gt;&gt; from pylayers.network.network import *</span>
+<span class="sd">        &gt;&gt;&gt; N=Network()</span>
+<span class="sd">        &gt;&gt;&gt; l= [0,1,2]</span>
+<span class="sd">        &gt;&gt;&gt; key=&#39;toto&#39;</span>
+<span class="sd">        &gt;&gt;&gt; d=dict(key1=1,key2=2) </span>
+<span class="sd">        &gt;&gt;&gt; perm=N.perm(l,2,key,d)</span>
+<span class="sd">        &gt;&gt;&gt; perm.next()        </span>
+<span class="sd">        (0, 1, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
+<span class="sd">        &gt;&gt;&gt; perm.next()        </span>
+<span class="sd">        (0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})        for l in self.LDP:</span>
+<span class="sd">        &gt;&gt;&gt; perm.next()</span>
+<span class="sd">        (1, 0, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
+<span class="sd">        &gt;&gt;&gt; perm.next()</span>
+<span class="sd">        (1, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
+<span class="sd">        &gt;&gt;&gt; perm.next()</span>
+<span class="sd">        (2, 0, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
+<span class="sd">        &gt;&gt;&gt; perm.next()</span>
+<span class="sd">        (2, 1, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<span class="c">#        for l in self.LDP:</span>
+<span class="c">#            d[l]=[]</span>
+        <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">n</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">r</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">cycles</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">pool</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">pool</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">)):</span>
+                <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">j</span> <span class="o">=</span> <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="n">j</span><span class="p">],</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="k">yield</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">pool</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">pool</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span>
+
+
+</div>
 <div class="viewcode-block" id="Network.combi"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.combi">[docs]</a>    <span class="k">def</span> <span class="nf">combi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iterable</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
         <span class="sd">&quot;&quot;&quot; combi = itertools.combination(iterable,r) adapted </span>
 <span class="sd">    </span>
@@ -281,9 +356,12 @@
 <span class="sd">        (0, 2, &#39;toto&#39;, {&#39;Pr&#39;: [], &#39;TOA&#39;: [], &#39;key1&#39;: 1, &#39;key2&#39;: 2})</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="c">#        for l in self.LDP:</span>
+<span class="c">#            d[l]=[]</span>
+
             
+
         <span class="n">pool</span> <span class="o">=</span> <span class="n">iterable</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
@@ -369,10 +447,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 <span class="c">#        if Rat !=&#39;None&#39; :</span>
+
         <span class="k">for</span> <span class="n">no</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">no</span><span class="p">][</span><span class="s">&#39;RAT&#39;</span><span class="p">]:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">no</span><span class="p">)</span>
                 <span class="k">except</span> <span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">no</span><span class="p">]</span>
 <span class="c">#        else :</span>
@@ -388,7 +467,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span>    <span class="o">=</span> <span class="p">{}</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">Rat</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         
 
-        
 </div>
 <div class="viewcode-block" id="Network.connect"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
@@ -396,12 +474,24 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         
-    
+        <span class="n">edge_dict</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span><span class="p">:</span>
+            <span class="n">edge_dict</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+        <span class="n">edge_dict</span><span class="p">[</span><span class="s">&#39;vis&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+        
+
 
         <span class="k">for</span> <span class="n">ratnb</span><span class="p">,</span><span class="n">Rat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">combi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">Rat</span><span class="p">],</span><span class="mi">2</span><span class="p">,</span><span class="n">Rat</span><span class="p">)</span>
+<span class="c">#            edges=self.combi(self.RAT[Rat],2,Rat,d=edge_dict)</span>
+            <span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">perm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">Rat</span><span class="p">],</span><span class="mi">2</span><span class="p">,</span><span class="n">Rat</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">edge_dict</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>    
             <span class="bp">self</span><span class="o">.</span><span class="n">get_SubNet</span><span class="p">(</span><span class="n">Rat</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relink</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">[</span><span class="n">Rat</span><span class="p">],</span><span class="mi">2</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relink</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">=</span><span class="p">[(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">[</span><span class="n">Rat</span><span class="p">]]</span>
+
 </div>
 <div class="viewcode-block" id="Network.get_SubNet"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.get_SubNet">[docs]</a>    <span class="k">def</span> <span class="nf">get_SubNet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Rat</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -435,7 +525,6 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="n">Rat</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
         <span class="c">#    pdb.set_trace()</span>
             <span class="k">for</span> <span class="n">Rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="p">:</span>            
@@ -448,8 +537,8 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">][</span><span class="n">Rat</span><span class="p">]</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">][</span><span class="n">Rat</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span>
                     <span class="k">except</span><span class="p">:</span> 
                         <span class="k">pass</span>
 
@@ -466,8 +555,8 @@
                         <span class="k">pass</span>
                 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">][</span><span class="n">Rat</span><span class="p">]</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">][</span><span class="n">Rat</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">Rat</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">]</span>
                     <span class="k">except</span><span class="p">:</span> 
                         <span class="k">pass</span>
 
@@ -499,7 +588,7 @@
                         <span class="k">try</span><span class="p">:</span>
                             <span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nn</span><span class="p">][</span><span class="s">&#39;RAT&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Sn</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                         <span class="k">except</span><span class="p">:</span>
-                            <span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span><span class="n">attr_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">RAT</span><span class="o">=</span><span class="p">[</span><span class="n">Sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">pe</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">te</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()),</span><span class="nb">type</span><span class="o">=</span><span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nn</span><span class="p">][</span><span class="s">&#39;type&#39;</span><span class="p">])</span>
+                            <span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span><span class="n">attr_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">RAT</span><span class="o">=</span><span class="p">[</span><span class="n">Sn</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">pe</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(()),</span><span class="n">te</span><span class="o">=</span><span class="mf">0.</span><span class="p">),</span><span class="nb">type</span><span class="o">=</span><span class="n">Sn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nn</span><span class="p">][</span><span class="s">&#39;type&#39;</span><span class="p">])</span>
 <span class="c">#                pdb.set_trace()</span>
 
                 <span class="c">### init edge of PN</span>
@@ -537,7 +626,7 @@
         <span class="c"># first iteration requested to correctely initiatilzing Personnal Networks&#39;s Subnets </span>
         <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RAT</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">ldp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">LDP</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">compute_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="n">rat</span><span class="p">,</span><span class="n">ldp</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;direct&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">compute_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="n">rat</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_RAT</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_SubNet</span><span class="p">()</span>
@@ -553,10 +642,11 @@
 <span class="c">#            pdb.set_trace()</span>
 <span class="c">#            print &#39;decorator&#39;,a</span>
 <span class="c">#            return func(*args, **kwargs)</span>
-<span class="c">#        return wrapper</span>
+<span class="c">#        return wrapper</span></div>
+    <span class="k">def</span> <span class="nf">dist_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">dp</span><span class="p">):</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">-</span><span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]))</span>
 
 
-</div>
 <div class="viewcode-block" id="Network.update_LDPs"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.update_LDPs">[docs]</a>    <span class="k">def</span> <span class="nf">update_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ln</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set a value between 2 nodes (n1 and n2) for a specific LDP from a RAT</span>
 <span class="sd">            </span>
@@ -582,7 +672,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="o">.</span><span class="n">edges_iter</span><span class="p">(),</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gen_tuple</span><span class="p">(</span><span class="n">ln</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">))</span>
+
 
 </div>
 <div class="viewcode-block" id="Network.compute_LDPs"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.compute_LDPs">[docs]</a>    <span class="k">def</span> <span class="nf">compute_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ln</span><span class="p">,</span><span class="n">RAT</span><span class="p">):</span>
@@ -602,18 +693,18 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">p</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">],</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
-        <span class="n">epwr</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">],</span><span class="s">&#39;epwr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-        <span class="n">sens</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">],</span><span class="s">&#39;sens&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-        <span class="n">e</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+        <span class="n">epwr</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">],</span><span class="s">&#39;epwr&#39;</span><span class="p">)</span>
+        <span class="n">sens</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="p">[</span><span class="n">RAT</span><span class="p">],</span><span class="s">&#39;sens&#39;</span><span class="p">)</span>
+        <span class="n">e</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="c">#self.SubNet[RAT].edges()</span>
+        <span class="n">re</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">relink</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span> <span class="c"># reverse link aka other direction of link</span>
         <span class="n">lp</span><span class="p">,</span><span class="n">lt</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMS</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="p">)</span>
-        <span class="n">lD</span><span class="o">=</span><span class="p">[{</span><span class="s">&#39;Pr&#39;</span><span class="p">:</span><span class="n">lp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="s">&#39;TOA&#39;</span><span class="p">:</span><span class="n">lt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span><span class="s">&#39;d&#39;</span><span class="p">:</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="s">&#39;vis&#39;</span><span class="p">:</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">))]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update_LDPs</span><span class="p">(</span><span class="n">ln</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">)</span>
+        <span class="n">lD</span><span class="o">=</span><span class="p">[{</span><span class="s">&#39;Pr&#39;</span><span class="p">:</span><span class="n">lp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="s">&#39;TOA&#39;</span><span class="p">:</span><span class="n">lt</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))]</span> <span class="p">,</span><span class="s">&#39;d&#39;</span><span class="p">:</span><span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))],</span><span class="s">&#39;vis&#39;</span><span class="p">:</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_LDPs</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">e</span><span class="o">+</span><span class="n">re</span><span class="p">),</span><span class="n">RAT</span><span class="p">,</span><span class="n">lD</span><span class="p">)</span>
 
 
 </div>
-<div class="viewcode-block" id="Network.update_pos"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.update_pos">[docs]</a>    <span class="k">def</span> <span class="nf">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">p_pe</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Network.update_pos"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.update_pos">[docs]</a>    <span class="k">def</span> <span class="nf">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">p_pe</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        Update Position of a node</span>
 
@@ -634,11 +725,14 @@
                 <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>    
                 <span class="n">d</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>    <span class="c"># transform data to be complient with nx.set_node_attributes            </span>
+                <span class="n">nowd</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">n</span><span class="p">,[</span><span class="n">now</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
             <span class="k">else</span> <span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;n and p must have the same length&#39;</span><span class="p">)</span>
             <span class="c"># update position</span>
             <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p_pe</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>        
-
+            <span class="c"># update time of ground truth position</span>
+            <span class="k">if</span> <span class="n">p_pe</span><span class="o">==</span><span class="s">&#39;p&#39;</span><span class="p">:</span>
+                <span class="n">nx</span><span class="o">.</span><span class="n">set_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">nowd</span><span class="p">)</span>
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;n and p must be either: a key and a np.ndarray, or 2 lists&#39;</span><span class="p">)</span>
 
@@ -889,57 +983,67 @@
         <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="Network.pyray_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.pyray_save">[docs]</a>    <span class="k">def</span> <span class="nf">pyray_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            save node positions into ini file, compliant with pyray standard</span>
+    <span class="k">def</span> <span class="nf">init_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
 
-<span class="sd">        Attributes:</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        filename : string </span>
-<span class="sd">                   name of the pyray file</span>
-<span class="sd">        S        : Simulation</span>
-<span class="sd">                   Scipy.Simulation object</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">,</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;when network.ini_save() </span><span class="se">\</span>
-<span class="s">        is used , only 1 rat must be involved in the Network.</span><span class="se">\</span>
-<span class="s">        Please modify agent.ini&#39;</span><span class="p">)</span>
-
-
-        <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span>
         <span class="n">pos</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 
+        <span class="n">AP</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">AG</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">api</span><span class="o">=</span><span class="mi">1</span>
+        <span class="n">loc</span><span class="o">=</span><span class="bp">False</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c"># get methods for localization</span>
+        <span class="n">simcfg</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">simcfg</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="n">save</span> <span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">simcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">,</span><span class="s">&#39;save&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s">&#39;loc&#39;</span> <span class="ow">in</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">loc</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">simcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">,</span><span class="s">&#39;method&#39;</span><span class="p">))</span>
 
-        <span class="c">### save acces point positions</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-
-            <span class="n">AP</span><span class="o">=</span><span class="p">[]</span>
-            <span class="n">AG</span><span class="o">=</span><span class="p">[]</span>
-            <span class="n">api</span><span class="o">=</span><span class="mi">1</span>
-
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span><span class="s">&#39;ap&#39;</span><span class="p">:</span>
+        <span class="c">## find Agent and Acces point</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span><span class="s">&#39;ap&#39;</span><span class="p">:</span>
+                <span class="n">AP</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">])):</span>
                     <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
                     <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
                     <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;coordinates&#39;</span><span class="p">)</span>
-                    <span class="n">AP</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;coordinates&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">api</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
+<span class="c">#                    config.set(&#39;coordinates&#39;,str(api), str(pos[i][1][0]) + &#39; &#39; + str(pos[i][1][1]) + &#39; &#39;+str(height))</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;coordinates&#39;</span><span class="p">,</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
                     <span class="n">api</span><span class="o">=</span><span class="n">api</span><span class="o">+</span><span class="mi">1</span>
                     <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
                     <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">AG</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">AG</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">])):</span>
+                    <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;coordinates&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">loc</span> <span class="p">:</span>
+                        <span class="k">if</span> <span class="s">&#39;geo&#39;</span> <span class="ow">in</span> <span class="n">method</span><span class="p">:</span>
+                            <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;geo_est&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="s">&#39;alg&#39;</span> <span class="ow">in</span> <span class="n">method</span><span class="p">:</span>
+                            <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;alg_est&#39;</span><span class="p">)</span>
+                <span class="c"># if simulation has already been runed with localization, this</span>
+                <span class="c"># ensure that localization section will be created</span>
+
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="s">&#39;coordinates&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
+                        <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;coordinates&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s">&#39;geo_est&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span> <span class="ow">and</span> <span class="s">&#39;geo&#39;</span> <span class="ow">in</span> <span class="n">method</span><span class="p">:</span>
+                        <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;geo_est&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s">&#39;alg_est&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span> <span class="ow">and</span> <span class="s">&#39;alg&#39;</span> <span class="ow">in</span> <span class="n">method</span><span class="p">:</span>
+                        <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;alg_est&#39;</span><span class="p">)</span>
+
+                <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+                <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
 
+        <span class="k">if</span> <span class="s">&#39;pyray&#39;</span> <span class="ow">in</span> <span class="n">save</span> <span class="p">:</span>
 
-
-
-            <span class="n">simcfg</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-            <span class="n">simcfg</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
-            
             <span class="n">file2</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;pyray.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
             <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;nodes&#39;</span><span class="p">)</span>
@@ -952,25 +1056,34 @@
             <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file2</span><span class="p">)</span>
             <span class="n">file2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="s">&#39;loc&#39;</span> <span class="ow">in</span> <span class="n">save</span> <span class="p">:</span>
 
-        <span class="c">### save agent positions</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">!=</span><span class="s">&#39;ap&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
-                    <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;[coordinates]&#39;</span><span class="p">)</span>
-                    <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-                    <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-                <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
-                <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39; = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
-                <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-                <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">file2</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;loc.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;nodes&#39;</span><span class="p">)</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s">&#39;simulation&#39;</span><span class="p">)</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;nodes&#39;</span><span class="p">,</span><span class="s">&#39;AG&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">AG</span><span class="p">))</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;nodes&#39;</span><span class="p">,</span><span class="s">&#39;AP&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">AP</span><span class="p">))</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;simulation&#39;</span><span class="p">,</span><span class="s">&#39;loc_updatetime&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">simcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">,</span><span class="s">&#39;localization_update_time&#39;</span><span class="p">)))</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;simulation&#39;</span><span class="p">,</span><span class="s">&#39;method&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">simcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">,</span><span class="s">&#39;method&#39;</span><span class="p">)))</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;simulation&#39;</span><span class="p">,</span><span class="s">&#39;duration&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">simcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">,</span><span class="s">&#39;duration&#39;</span><span class="p">)))</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file2</span><span class="p">)</span>
+            <span class="n">file2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">method</span>
 
-</div>
+
+
+
+
 <div class="viewcode-block" id="Network.mat_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.mat_save">[docs]</a>    <span class="k">def</span> <span class="nf">mat_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DEPRECATED </span>
+
+<span class="sd">        REPLACED BY pylayers.util.save</span>
+
+<span class="sd">        DEPRECATED </span>
+
 <span class="sd">            save node positions into a matlab structure file</span>
 
 
@@ -1002,23 +1115,31 @@
 
                    
         <span class="n">sp</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;mat.mat&#39;</span><span class="p">,</span><span class="s">&#39;save_data&#39;</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Network.sql_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.sql_save">[docs]</a>    <span class="k">def</span> <span class="nf">sql_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        save network state into mysqldatabase</span>
+
+<span class="c">#    def sql_save(self,S):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        save network state into mysqldatabase</span>
 
 
-<span class="sd">        Attributes:</span>
-<span class="sd">        ----------</span>
-<span class="sd">        </span>
-<span class="sd">        S        : Simulation</span>
-<span class="sd">                   Scipy.Simulation object</span>
+<span class="c">#        Attributes:</span>
+<span class="c">#        ----------</span>
+<span class="c">#        </span>
+<span class="c">#        S        : Simulation</span>
+<span class="c">#                   Scipy.Simulation object</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">writenet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        self.db.writenet(self,S.now())</span>
 </div>
 <div class="viewcode-block" id="Network.txt_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.txt_save">[docs]</a>    <span class="k">def</span> <span class="nf">txt_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DEPRECATED </span>
+
+<span class="sd">        REPLACED BY pylayers.util.save</span>
+
+<span class="sd">        DEPRECATED </span>
+
+
+
 <span class="sd">        save network state into mysqldatabase</span>
 
 
@@ -1031,64 +1152,294 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pyu</span><span class="o">.</span><span class="n">writenet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">)</span>
 
+</div>
+    <span class="k">def</span> <span class="nf">loc_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DEPRECATED </span>
+
+<span class="sd">        REPLACED BY pylayers.util.save</span>
+
+<span class="sd">        DEPRECATED </span>
 
 
-<span class="c">#    def ini_save(self,S,filename=&#39;simulnet_data.ini&#39;,height=1.5):</span>
-<span class="c">#        &quot;&quot;&quot;</span>
-<span class="c">#        save an .ini file of node position . </span>
-<span class="c">#        Only links  which involve mobile nodes (type &#39;ag&#39;) are kept.</span>
-
-<span class="c">#        The produced init file is filled as follow:</span>
-
-<span class="c">#            [timestamp]</span>
-<span class="c">#            nodeID1_nodeID2 = x1,y1,z1,x2,y2,z2</span>
-<span class="c">#            nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4</span>
-<span class="c">#            ....</span>
+<span class="sd">        save txt </span>
+<span class="sd">        node ID , True pos x , True pos y , est pos x , est pos y , timestamp</span>
 
 
-<span class="c">#        Attributes:</span>
-<span class="c">#        ----------</span>
-<span class="c">#        </span>
-<span class="c">#        S        : Simulation</span>
-<span class="c">#                   Scipy.Simulation object</span>
+<span class="sd">        Attributes:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        S        : Simulation</span>
+<span class="sd">                   Scipy.Simulation object</span>
 
-<span class="c">#        filename  : string</span>
-<span class="c">#                   name of the saved ini file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-<span class="c">#        height    : float</span>
-<span class="c">#                   height of the nodes</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+        <span class="n">pe</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;pe_alg&#39;</span><span class="p">)</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;NodeID, True Position x, True Position y, Est Position x, Est Position y, Timestamp</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/simulation.txt&#39;</span><span class="p">,</span><span class="s">&#39;write&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/simulation.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">typ</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&#39;ap&#39;</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pe</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pe</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="n">pyu</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span><span class="s">&#39;,</span><span class="se">\n</span><span class="s">&#39;</span>
+                    <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">+</span><span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="Network.dual_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.dual_save">[docs]</a>    <span class="k">def</span> <span class="nf">dual_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DEPRECATED </span>
+
+<span class="sd">        REPLACED BY pylayers.util.save</span>
+
+<span class="sd">        DEPRECATED </span>
+
+
+
+<span class="sd">        save txt </span>
+
+
+
+<span class="sd">        Attributes:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        S        : Simulation</span>
+<span class="sd">                   Scipy.Simulation object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pos</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+        <span class="n">pclust</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;pe_clust&#39;</span><span class="p">)</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;type&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">entete</span> <span class="o">=</span> <span class="s">&#39;Timestamp, True Position x, True Position y, Est Position1 x, Est Position1 y,Est Position2 x, Est Position2 y</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/pos.txt&#39;</span><span class="p">,</span><span class="s">&#39;write&#39;</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete</span><span class="p">)</span>
+            <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">file2</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/rsslink.txt&#39;</span><span class="p">,</span><span class="s">&#39;write&#39;</span><span class="p">)</span>
+            <span class="n">entete2</span> <span class="o">=</span> <span class="s">&#39;Timestamp, link, linkid, Pr, distance</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">file2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete2</span><span class="p">)</span>
+            <span class="n">file2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">file3</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/anchorposition.txt&#39;</span><span class="p">,</span><span class="s">&#39;write&#39;</span><span class="p">)</span>
+            <span class="n">data3</span> <span class="o">=</span> <span class="s">&#39;node,pos x, pos y</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">file3</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data3</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="n">data3</span><span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+                <span class="n">file3</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data3</span><span class="p">)</span>
+            <span class="n">file3</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">file4</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/toa.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">entete4</span> <span class="o">=</span> <span class="s">&#39;Timestamp, type, toaid, toa,distance</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">file4</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entete4</span><span class="p">)</span>
+            <span class="n">file4</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/pos.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">file2</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/rsslink.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">file4</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]</span> <span class="o">+</span><span class="s">&#39;/toa.txt&#39;</span><span class="p">,</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="s">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span>  <span class="n">pyu</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pclust</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pclust</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pclust</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pclust</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+                    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">e</span> <span class="o">!=</span> <span class="s">&#39;6&#39;</span> <span class="ow">and</span> <span class="n">e</span> <span class="o">!=</span><span class="s">&#39;7&#39;</span><span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">data2</span> <span class="o">=</span> <span class="n">data2</span> <span class="o">+</span><span class="s">&#39;,link,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+                            <span class="k">except</span><span class="p">:</span>
+                                <span class="n">data2</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;,link,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+                        <span class="k">else</span> <span class="p">:</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">data4</span> <span class="o">=</span> <span class="n">data4</span> <span class="o">+</span><span class="s">&#39;,toa,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+                            <span class="k">except</span><span class="p">:</span>
+
+                                <span class="n">data4</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">now</span><span class="p">())</span> <span class="o">+</span> <span class="s">&#39;,toa,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pos</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-</span><span class="n">pos</span><span class="p">[</span><span class="n">e</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+
+            <span class="n">data2</span><span class="o">=</span><span class="n">data2</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">data4</span><span class="o">=</span><span class="n">data4</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">file2</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data2</span><span class="p">)</span>
+            <span class="n">file4</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data4</span><span class="p">)</span>
+
+
+            <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">file2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">file4</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">+</span><span class="mi">1</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+    
+</div>
+<div class="viewcode-block" id="Network.pyray_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.pyray_save">[docs]</a>    <span class="k">def</span> <span class="nf">pyray_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            save node positions into ini file, compliant with pyray standard</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        filename : string </span>
+<span class="sd">                   name of the pyray file</span>
+<span class="sd">        S        : Simulation</span>
+<span class="sd">                   Scipy.Simulation object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">,</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;when network.ini_save() </span><span class="se">\</span>
+<span class="s">        is used , only 1 rat must be involved in the Network.</span><span class="se">\</span>
+<span class="s">        Please modify agent.ini&#39;</span><span class="p">)</span>
+
+
+        <span class="n">height</span><span class="o">=</span> <span class="mf">1.5</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+
+        <span class="c">### create ini files</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_save</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+        <span class="c">### save agent positions</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">!=</span><span class="s">&#39;ap&#39;</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]))</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;coordinates&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
+                <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+                <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="Network.loc_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.loc_save">[docs]</a>    <span class="k">def</span> <span class="nf">loc_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">node</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            save node estimated positions into ini file,</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        S        : Simulation</span>
+<span class="sd">                   Scipy.Simulation object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">node</span>  <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">]</span>
+
+
+        <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span>
+        <span class="c">### create ini files</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lidx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_save</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+
+        <span class="n">pe_alg</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;pe_alg&#39;</span><span class="p">)</span>
+        <span class="n">pe_geo</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;pe_geo&#39;</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_node_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+        <span class="c">### save agent positions estimations</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">!=</span><span class="s">&#39;ap&#39;</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">pe_alg</span> <span class="o">!=</span> <span class="p">{}</span> <span class="p">:</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;alg_est&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pe_alg</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pe_alg</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">pe_geo</span> <span class="o">!=</span> <span class="p">{}</span> <span class="p">:</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;geo_est&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pe_geo</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pe_geo</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;coordinates&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>
+                <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">]),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+                <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lidx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lidx</span><span class="o">+</span><span class="mi">1</span>
+
+
+</div>
+<div class="viewcode-block" id="Network.ini_save"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.Network.ini_save">[docs]</a>    <span class="k">def</span> <span class="nf">ini_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;simulnet_data.ini&#39;</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        ----------</span>
+<span class="sd">        DEPRECATED</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Save an .ini file of node position . </span>
+<span class="sd">        Only links  which involve mobile nodes (type &#39;ag&#39;) are kept.</span>
+
+<span class="sd">        The produced init file is filled as follow:</span>
+
+<span class="sd">            [timestamp]</span>
+<span class="sd">            nodeID1_nodeID2 = x1,y1,z1,x2,y2,z2</span>
+<span class="sd">            nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4</span>
+<span class="sd">            ....</span>
+
+
+<span class="sd">        Attributes:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        S        : Simulation</span>
+<span class="sd">                   Scipy.Simulation object</span>
+
+<span class="sd">        filename  : string</span>
+<span class="sd">                   name of the saved ini file</span>
+
+<span class="sd">        height    : float</span>
+<span class="sd">                   height of the nodes</span>
 
 
 
 
-<span class="c">#    </span>
-<span class="c">#        &quot;&quot;&quot;</span>
 
-<span class="c">#        assert len(self.SubNet.keys()) == 1 , NameError(&#39;when network.ini_save() \</span>
-<span class="c">#        is used , only 1 rat must be involved in the Network.\</span>
-<span class="c">#        Please modify agent.ini&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">,</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;when network.ini_save() </span><span class="se">\</span>
+<span class="s">        is used , only 1 rat must be involved in the Network.</span><span class="se">\</span>
+<span class="s">        Please modify agent.ini&#39;</span><span class="p">)</span>
 
 
-<span class="c">#        if self.idx == 0:</span>
-<span class="c">#            file=open(pyu.getlong(filename ,&#39;output&#39;),&#39;w&#39;)</span>
-<span class="c">#        else:</span>
-<span class="c">#            file=open(pyu.getlong(filename ,&#39;output&#39;),&#39;a&#39;)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span> <span class="p">,</span><span class="s">&#39;output&#39;</span><span class="p">),</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filename</span> <span class="p">,</span><span class="s">&#39;output&#39;</span><span class="p">),</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 
-<span class="c">#        config = ConfigParser.ConfigParser()</span>
-<span class="c">#        timestamp = pyu.timestamp(S.now())</span>
-<span class="c">#        config.add_section(timestamp)</span>
-<span class="c">#        for e in self.edges():</span>
-<span class="c">#            if not ((self.node[e[0][0]][&#39;type&#39;] == &#39;ap&#39;) and  (self.node[e[1][0]][&#39;type&#39;] == &#39;ap&#39;)):</span>
-<span class="c">##                    key=str(self.node[e[0][0]][&#39;type&#39;])+str(e[0])+ &#39;_&#39; +str(self.node[e[1][0]][&#39;type&#39;])+str(e[1])</span>
-<span class="c">#                key=str(e[0]) +&#39;_&#39; +str(e[1])</span>
-<span class="c">#                value1 = str(self.node[e[0][0]][&#39;p&#39;][0])+ &#39;,&#39; +str(self.node[e[0][0]][&#39;p&#39;][1])+&#39;,&#39;+str(height)</span>
-<span class="c">#                value2 = str(self.node[e[1][0]][&#39;p&#39;][0])+ &#39;,&#39; +str(self.node[e[1][0]][&#39;p&#39;][1])+&#39;,&#39;+str(height)</span>
-<span class="c">#                config.set(timestamp, key, value1 + &#39; , &#39; + value2)</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;ap&#39;</span><span class="p">)</span> <span class="ow">and</span>  <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;ap&#39;</span><span class="p">)):</span>
+                <span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span><span class="s">&#39;_&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">value1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+                <span class="n">value2</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span> <span class="s">&#39;,&#39;</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value1</span> <span class="o">+</span> <span class="s">&#39; , &#39;</span> <span class="o">+</span> <span class="n">value2</span><span class="p">)</span>
 
-<span class="c">#        config.write(file)</span>
-<span class="c">#        file.close()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+        <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<span class="c">#        self.idx=self.idx+1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span>
+
+
+
+<span class="c">#class PN(nx.MultiDiGraph):</span>
+
+<span class="c">#    def __init__(self,N):</span>
+<span class="c">#        nx.MultiDiGraph.__init__(self)</span>
+<span class="c">#        self.add_nodes_from(N)</span>
+<span class="c">#        pdb.set_trace()</span>
+<span class="c">#        self.add_edges_from( (u,v,key,deepcopy(datadict))</span>
+<span class="c">#                           for u,nbrs in self.adjacency_iter()</span>
+<span class="c">#                           for v,keydict in nbrs.items()</span>
+<span class="c">#                           for key,datadict in keydict.items() ) </span>
+<span class="c">#        pdb.set_trace()</span>
+<span class="c">#        self.node=N.node</span>
+
+
+
+
+
+
+
+
+
+
+
 </div></div>
 <div class="viewcode-block" id="PNetwork"><a class="viewcode-back" href="../../../modules/network.network.html#pylayers.network.network.PNetwork">[docs]</a><span class="k">class</span> <span class="nc">PNetwork</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1157,6 +1508,7 @@
 
 
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
             <span class="c">############### compute LDP</span>
             <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">RAT</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">compute_LDPs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">nodes</span><span class="p">(),</span><span class="n">rat</span><span class="p">)</span>
@@ -1177,24 +1529,32 @@
 
 
 
-            <span class="c">############# save network</span>
-            <span class="k">if</span> <span class="s">&#39;csv&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">csv_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s">&#39;pyray&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">pyray_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s">&#39;matlab&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">mat_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s">&#39;msql&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">sql_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s">&#39;txt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">txt_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s">&#39;ini&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">ini_save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
+
+<span class="c">#            ############# save network</span>
+<span class="c">#            REPLACED BY A SAVE PROCESS</span>
+<span class="c">#            if &#39;csv&#39; in self.save:</span>
+<span class="c">#                self.net.csv_save(self.filename,self.sim)</span>
+<span class="c">#            if &#39;pyray&#39; in self.save:</span>
+<span class="c">#                self.net.pyray_save(self.sim)</span>
+<span class="c">#            if &#39;matlab&#39; in self.save:</span>
+<span class="c">#                self.net.mat_save(self.sim)</span>
+<span class="c">#            if &#39;msql&#39; in self.save:</span>
+<span class="c">#                self.net.sql_save(self.sim)</span>
+<span class="c">#            if &#39;txt&#39; in self.save:</span>
+<span class="c">#                self.net.txt_save(self.sim)</span>
+
+<span class="c">#            if &#39;ini&#39; in self.save:</span>
+<span class="c">#                self.net.ini_save(self.sim)</span>
+<span class="c">#            if &#39;loc&#39; in self.save:</span>
+<span class="c">#                self.net.loc_save(self.sim)</span>
+<span class="c">#            if &#39;dual&#39; in self.save:</span>
+<span class="c">#                self.net.dual_save(self.sim)</span>
 
 
             <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">get_pos</span><span class="p">()</span>
-
-            <span class="k">print</span> <span class="s">&#39;network updated @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;network updated @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">idx</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span>
             <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">net_updt_time</span>
 </pre></div></div>
 
@@ -1216,7 +1576,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -74,7 +72,7 @@
 <span id="network"></span><span id="network-network"></span><h1>network<a class="headerlink" href="#module-pylayers.network.network" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.network.network.Network">
-<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0xe54576c&gt;</em>, <em>PN=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0x83dbc90&gt;</em>, <em>PN=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Network class
 inherit of networkx.Graph()</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -268,7 +266,7 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.dual_save">
-<tt class="descname">dual_save</tt><big>(</big><em>S</em><big>)</big><a class="headerlink" href="#pylayers.network.network.Network.dual_save" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dual_save</tt><big>(</big><em>S</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.dual_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.dual_save" title="Permalink to this definition">¶</a></dt>
 <dd><p>DEPRECATED</p>
 <p>REPLACED BY pylayers.util.save</p>
 <p>DEPRECATED</p>
@@ -382,7 +380,8 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <dl class="method">
 <dt id="pylayers.network.network.Network.haspe">
 <tt class="descname">haspe</tt><big>(</big><em>n</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.haspe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.haspe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test if a node has a pe key</p>
+<dd><blockquote>
+<div>Test if a node has a pe key</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -395,7 +394,7 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.ini_save">
-<tt class="descname">ini_save</tt><big>(</big><em>S</em>, <em>filename='simulnet_data.ini'</em>, <em>height=1.5</em><big>)</big><a class="headerlink" href="#pylayers.network.network.Network.ini_save" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">ini_save</tt><big>(</big><em>S</em>, <em>filename='simulnet_data.ini'</em>, <em>height=1.5</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.ini_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.ini_save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save an .ini file of node position . 
 Only links  which involve mobile nodes (type &#8216;ag&#8217;) are kept.</p>
 <p>The produced init file is filled as follow:</p>
@@ -422,8 +421,9 @@ nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.loc_save">
-<tt class="descname">loc_save</tt><big>(</big><em>S</em>, <em>node='all'</em>, <em>p=False</em><big>)</big><a class="headerlink" href="#pylayers.network.network.Network.loc_save" title="Permalink to this definition">¶</a></dt>
-<dd><p>save node estimated positions into ini file,</p>
+<tt class="descname">loc_save</tt><big>(</big><em>S</em>, <em>node='all'</em>, <em>p=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.loc_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.loc_save" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>save node estimated positions into ini file,</div></blockquote>
 <dl class="docutils">
 <dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
 <dd>Scipy.Simulation object</dd>
@@ -448,7 +448,7 @@ nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.perm">
-<tt class="descname">perm</tt><big>(</big><em>iterable</em>, <em>r</em>, <em>key</em>, <em>d={}</em><big>)</big><a class="headerlink" href="#pylayers.network.network.Network.perm" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">perm</tt><big>(</big><em>iterable</em>, <em>r</em>, <em>key</em>, <em>d={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.perm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.perm" title="Permalink to this definition">¶</a></dt>
 <dd><p>combi = itertools.permutation(iterable,r) adapted</p>
 <p>This is an adapted version of itertools.permutations in order to be complient with the networkx.add_edges_from method.
 itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 ...</p>
@@ -505,15 +505,18 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 <dl class="method">
 <dt id="pylayers.network.network.Network.pp">
 <tt class="descname">pp</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.pp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.pp" title="Permalink to this definition">¶</a></dt>
-<dd><p>pretty print information
-OBSOLETE</p>
+<dd><dl class="docutils">
+<dt>pretty print information</dt>
+<dd>OBSOLETE</dd>
+</dl>
 <p>Print information on edges connection and LDPs values and accuracy</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.pyray_save">
 <tt class="descname">pyray_save</tt><big>(</big><em>S</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.pyray_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.pyray_save" title="Permalink to this definition">¶</a></dt>
-<dd><p>save node positions into ini file, compliant with pyray standard</p>
+<dd><blockquote>
+<div>save node positions into ini file, compliant with pyray standard</div></blockquote>
 <dl class="docutils">
 <dt>filename <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
 <dd>name of the pyray file</dd>
@@ -524,7 +527,7 @@ OBSOLETE</p>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.show">
-<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xa2d2d6c&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x5a617d0&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the network</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -685,7 +688,7 @@ inherit of networkx.Graph()</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

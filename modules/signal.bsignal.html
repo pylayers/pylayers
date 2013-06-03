@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -146,7 +144,7 @@ else y is smashed</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.imshow">
-<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap instance at 0x9b3ef6c&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x2ecf950&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>imshow of y matrix</p>
 </dd></dl>
 
@@ -924,7 +922,8 @@ N : int</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUsignal.ift">
 <tt class="descname">ift</tt><big>(</big><em>Nz=1</em>, <em>ffts=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.ift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.ift" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the associated TUsignal</p>
+<dd><blockquote>
+<div>return the associated TUsignal</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1036,7 +1035,7 @@ y is a 2D array</p>
 <p class="first admonition-title">Warning</p>
 <p class="last">The signal is rescaled in order to conserve energy</p>
 </div>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">FHSignal</span></tt></p>
 </div>
@@ -1501,7 +1500,7 @@ sym    = 0.25</p>
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#pylayers.signal.bsignal.TUsignal.Yadd_zeros2r" title="pylayers.signal.bsignal.TUsignal.Yadd_zeros2r"><tt class="xref py py-obj docutils literal"><span class="pre">Yadd_zeros2r</span></tt></a>, <tt class="xref py py-obj docutils literal"><span class="pre">Work</span></tt></p>
 </div>
@@ -1595,10 +1594,9 @@ This calculus is then a minorant of the received energy.</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.TUsignal.delays">
 <tt class="descname">delays</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TUsignal.delays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TUsignal.delays" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate delay parameters and othogonality factor from cir
-Returns</p>
-<blockquote>
-<div><dl class="docutils">
+<dd><dl class="docutils">
+<dt>calculate delay parameters and othogonality factor from cir</dt>
+<dd><dl class="first docutils">
 <dt>taum :</dt>
 <dd>mean excess delay</dd>
 <dt>delayspread</dt>
@@ -1606,9 +1604,10 @@ Returns</p>
 <dt>of  :</dt>
 <dd>orthogonality factor</dd>
 </dl>
-<p>Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
+<p class="last">Orthogonality Factor in WCDMA Donlinks in Urban Macrocellular
 environments : Neelesh Metha, Andreas Molish, Lary Greenstein</p>
-</div></blockquote>
+</dd>
+</dl>
 <p>rac{sum_i=1^L}|lpha_i|^4}{left(sum_i=1^L|lpha_i|^2)^2}</p>
 </dd></dl>
 
@@ -1683,7 +1682,7 @@ mode : string</p>
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#pylayers.signal.bsignal.FHsignal.unrex" title="pylayers.signal.bsignal.FHsignal.unrex"><tt class="xref py py-obj docutils literal"><span class="pre">FHsignal.unrex</span></tt></a></p>
 </div>
@@ -1886,7 +1885,7 @@ multiple of the time step dx.</p>
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#pylayers.signal.bsignal.TUsignal.psd" title="pylayers.signal.bsignal.TUsignal.psd"><tt class="xref py py-obj docutils literal"><span class="pre">psd</span></tt></a>, <tt class="xref py py-obj docutils literal"><span class="pre">zlr</span></tt></p>
 </div>
@@ -2295,7 +2294,7 @@ This function can be improved regarding time granularity</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

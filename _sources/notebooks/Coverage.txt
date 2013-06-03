@@ -1,0 +1,125 @@
+Initialization
+==============
+
+
+In[2]:
+
+.. code:: python
+
+    from pylayers.antprop.coverage import *
+    import time
+
+Instantiate a coverage object. By defaut, the TA-Office.str layout
+strucure is loaded.
+
+This information can be modified in the **coverage.ini** file in the
+project directory.
+
+In[3]:
+
+.. code:: python
+
+    C=Coverage()
+    C.L.filename
+
+Out[3]:
+
+.. parsed-literal::
+
+    'TA-Office.str'
+
+Coverage
+========
+
+
+Coverage required Layout graphs.
+
+-  If the graphs for the given layout have already been built, they are
+   loaded from the project directory.
+-  Otherwise, they are built **(it may take few minutes )** and stored
+   into the project directory for the next execution.
+
+
+In[4]:
+
+.. code:: python
+
+    try :
+        C.L.dumpr()
+    except:
+        C.L.build()
+
+Then, the coverage calculation can be launched
+
+In[5]:
+
+.. code:: python
+
+    C.cover()
+
+You can display the coverage result with
+
+In[6]:
+
+.. code:: python
+
+    C.showPower()
+
+.. image:: Coverage_files/Coverage_fig_00.png
+
+The transmitter coordinates are :
+
+In[7]:
+
+.. code:: python
+
+    C.tx
+
+Out[7]:
+
+.. parsed-literal::
+
+    array([-10,  10])
+
+This can be modified, and the coverage can be updated
+
+In[8]:
+
+.. code:: python
+
+    C.tx = np.array((30,12))
+    C.cover()
+    C.showPower()
+
+.. image:: Coverage_files/Coverage_fig_01.png
+
+Speed is for all Tx positions on the grid
+
+In[9]:
+
+.. code:: python
+
+    C.tx = np.array((39,1))
+    start = time.time()
+    C.cover()
+    finish = time.time()
+    C.showPower()
+    print 'in %1.2f seconds' % (finish-start)
+
+.. image:: Coverage_files/Coverage_fig_02.png
+
+.. parsed-literal::
+
+    in 8.18 seconds
+
+
+In[10]:
+
+.. code:: python
+
+    C.tx = np.array((20,4))
+    C.cover()
+    C.showEd()
+
+.. image:: Coverage_files/Coverage_fig_03.png
+

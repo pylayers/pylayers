@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -163,6 +161,7 @@
 
 
 
+
 <div class="viewcode-block" id="EMSolver.solve"><a class="viewcode-back" href="../../../modules/network.show.html#pylayers.network.emsolver.EMSolver.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">LDP</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;compute and return a LDP value thanks to a given method</span>
 
@@ -224,10 +223,16 @@
 
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMS_method</span> <span class="o">==</span> <span class="s">&#39;multiwall&#39;</span><span class="p">:</span>
+
             <span class="n">dd</span><span class="o">=</span><span class="p">{}</span> <span class="c"># distance dictionnary</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
                 <span class="n">lp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))])</span>
                 <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">slp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">lp</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+
+
 
                 <span class="k">if</span> <span class="n">LDP</span><span class="o">==</span><span class="s">&#39;all&#39;</span><span class="p">:</span>
 
@@ -235,46 +240,65 @@
                     <span class="n">lpa</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
                     <span class="n">Pr</span><span class="o">=</span><span class="p">[]</span>
                     <span class="n">TOA</span><span class="o">=</span><span class="p">[]</span>
-                    <span class="n">lsens</span><span class="o">=</span><span class="p">[]</span>
+                    <span class="n">lsens</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
+                    <span class="n">loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
+                    <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
+                    <span class="n">lepwr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lpa</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-                        <span class="n">MW</span><span class="o">=</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<span class="c">#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])</span>
-                        <span class="n">frees</span><span class="o">=</span><span class="n">PL</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">)</span>
-                        <span class="n">lepwr</span><span class="o">=</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">]</span>
-                        <span class="n">Pr</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lepwr</span> <span class="o">-</span> <span class="n">MW</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">frees</span><span class="p">)</span>
-                        <span class="n">TOA</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">MW</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-                        <span class="n">lsens</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">])</span>
+
+                        <span class="c"># excess time of flight + losses computation</span>
+                        <span class="n">MW</span><span class="o">=</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> 
+                        <span class="c"># loss free space</span>
+                        <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">frees</span><span class="p">,</span><span class="n">PL</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">)</span> <span class="p">))</span>
+<span class="c">#                        Pr.extend(lepwr - MW[0] - frees)</span>
+                        <span class="c"># save losses computation </span>
+                        <span class="n">loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">loss</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                        <span class="c"># save excess tof computation </span>
+                        <span class="n">TOA</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">TOA</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+                    <span class="c"># emmited power for the first nodes of computed edges </span>
+                    <span class="n">lepwr1</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
+                    <span class="n">lepwr2</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
+                    <span class="n">Pr</span> <span class="o">=</span> <span class="n">lepwr1</span> <span class="o">-</span> <span class="n">loss</span> <span class="o">-</span> <span class="n">frees</span>
+                    <span class="c"># concatenate reverse link</span>
+                    <span class="n">Pr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Pr</span><span class="p">,</span> <span class="n">lepwr2</span> <span class="o">-</span> <span class="n">loss</span> <span class="o">-</span> <span class="n">frees</span><span class="p">))</span>
                     <span class="n">P</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">Pr</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
                     <span class="n">P</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">sigrss</span>
-                    <span class="n">T</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">TOA</span><span class="o">+</span><span class="n">d</span><span class="o">/</span><span class="mf">0.3</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">T</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span><span class="o">*</span><span class="mf">0.3</span>
+                    <span class="n">lsens</span> <span class="o">=</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
+                    <span class="c"># visibility or not </span>
                     <span class="n">v</span> <span class="o">=</span> <span class="n">P</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">lsens</span>
+
+                    <span class="c"># same toa for link and reverse link</span>
+                    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">TOA</span><span class="o">+</span><span class="n">d</span><span class="o">/</span><span class="mf">0.3</span><span class="p">,</span><span class="n">TOA</span><span class="o">+</span><span class="n">d</span><span class="o">/</span><span class="mf">0.3</span><span class="p">))</span>
+                    <span class="n">T</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">T</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">T</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span><span class="o">*</span><span class="mf">0.3</span>
+                    <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">d</span><span class="p">,</span><span class="n">d</span><span class="p">))</span>
                     <span class="k">return</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
 
 
 
 
-                <span class="k">elif</span> <span class="n">LDP</span> <span class="o">==</span> <span class="s">&#39;Pr&#39;</span><span class="p">:</span>
-                    <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-                    <span class="n">pn</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-                    <span class="n">lpa</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
-                    <span class="n">Lwo</span> <span class="o">=</span> <span class="p">[]</span>
-                    <span class="n">frees</span><span class="o">=</span><span class="p">[]</span>
-                    <span class="n">lepwr</span><span class="o">=</span><span class="p">[]</span>
-                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lpa</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-                        <span class="n">MW</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-                        <span class="n">Lwo</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
-                        <span class="n">frees</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">PL</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">))</span>
-                        <span class="n">lepwr</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">])</span>
-                    <span class="k">return</span> <span class="p">([[</span><span class="n">lepwr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">Lwo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">frees</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">sigrss</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Lwo</span><span class="p">))],</span><span class="n">d</span><span class="p">)</span>
-            
-                <span class="k">elif</span> <span class="n">LDP</span> <span class="o">==</span> <span class="s">&#39;TOA&#39;</span><span class="p">:</span> <span class="c">#### NOT CORRECT !</span>
-                    <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
-                    <span class="k">return</span> <span class="p">([[</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,(</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">std</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="mf">0.3</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span><span class="o">*</span><span class="mf">0.3</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">))],</span><span class="n">d</span><span class="p">)</span>
+<span class="c">#                elif LDP == &#39;Pr&#39;:</span>
+<span class="c">#                    pa = np.vstack(p.values())</span>
+<span class="c">#                    pn = p.keys()</span>
+<span class="c">#                    lpa = len(pa)</span>
+<span class="c">#                    Lwo = []</span>
+<span class="c">#                    frees=[]</span>
+<span class="c">#                    lepwr=[]</span>
+<span class="c">#                    for i in range(lpa-1):</span>
+<span class="c">#                        MW.append(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]))</span>
+<span class="c">#                        Lwo.extend(Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i])[0])</span>
+<span class="c">#                        frees.extend(PL(pa[i+1:lpa],model.f,pa[i],model.rssnp))</span>
+<span class="c">#                        lepwr.extend(epwr[i+1:lpa])</span>
+<span class="c">#                    return ([[lepwr[i] - Lwo[i]-frees[i],model.sigrss] for i in range(len(Lwo))],d)</span>
+<span class="c">#            </span>
+<span class="c">#                elif LDP == &#39;TOA&#39;: #### NOT CORRECT !</span>
+<span class="c">#                    std = self.sigmaTOA*sp.randn(len(d))</span>
+<span class="c">#                    return ([[max(0.0,(d[i]+std[i])*0.3),self.sigmaTOA*0.3] for i in range(len(d))],d)</span>
 
 
             <span class="k">else</span> <span class="p">:</span>
-                <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)))</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)))</span>
 
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;Pyray&#39;</span><span class="p">:</span>
@@ -303,7 +327,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

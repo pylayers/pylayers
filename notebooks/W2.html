@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -93,15 +91,6 @@
 SIRADEL. This section describes some available features of the
 developped tool.</p>
 <p>In[*]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">Simul</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="c"># Transmitter index</span>
-<span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="c"># Receiver index</span>
-<span class="n">irx</span> <span class="o">=</span> <span class="mi">150</span>
-</pre></div>
-</div>
 <div class="section" id="starting-the-simulation">
 <h2>1 Starting the simulation<a class="headerlink" href="#starting-the-simulation" title="Permalink to this headline">¶</a></h2>
 <p>The simulation is loaded by reading a configuration file which contains
@@ -139,18 +128,10 @@ nf = 181
 fmin = 2</pre>
 </div>
 <p>In[*]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span>  <span class="n">Simul</span><span class="p">()</span>
-<span class="n">S</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;where2.ini&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 <div class="section" id="list-of-tx-points">
 <h3>List of Tx points<a class="headerlink" href="#list-of-tx-points" title="Permalink to this headline">¶</a></h3>
 <p>51 Tx points hav beed defined. The coordinates list is as follows</p>
 <p>In[4]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">ipt</span> <span class="ow">in</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="k">print</span> <span class="s">&#39;Tx&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ipt</span><span class="p">)</span><span class="o">+</span> <span class="s">&#39; :&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">ipt</span><span class="p">]</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>Tx1 : [-27.66122067  14.99590106   1.5       ]
 Tx2 : [-25.59470359   8.01524871   1.5       ]
 Tx3 : [-25.64228047  13.01502235   1.5       ]
@@ -209,17 +190,9 @@ Tx51 : [  4.33733062  15.30039306   1.5       ]</pre>
 <h2>List of Rx points<a class="headerlink" href="#list-of-rx-points" title="Permalink to this headline">¶</a></h2>
 <p>343 Rx points have been defined. The coordinates list is has follows :</p>
 <p>In[5]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="c">#for ipt in S.rx.points.keys():</span>
-<span class="c">#    pass</span>
-<span class="c">#print &#39;Rx&#39;+str(ipt)+ &#39; :&#39;,S.rx.points[ipt]</span>
-</pre></div>
-</div>
 <p>The distibution of those points can be shown using the show method of
 the Simulation object</p>
 <p>In[1]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>&lt;span class="ansired"&gt;---------------------------------------------------------------------------&lt;/span&gt;
 &lt;span class="ansired"&gt;NameError&lt;/span&gt;                                 Traceback (most recent call last)
 &lt;span class="ansigreen"&gt;/private/staff/n/en/buguen/svn2/devel/simulator/pyray/&amp;lt;ipython-input-1-8d8f07ec1bba&amp;gt;&lt;/span&gt; in &lt;span class="ansicyan"&gt;&amp;lt;module&amp;gt;&lt;/span&gt;&lt;span class="ansiblue"&gt;()&lt;/span&gt;
@@ -231,10 +204,6 @@ the Simulation object</p>
 <div class="section" id="vectorial-propagation-channel">
 <h2>Vectorial Propagation Channel<a class="headerlink" href="#vectorial-propagation-channel" title="Permalink to this headline">¶</a></h2>
 <p>In[7]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">)</span>
-<span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>nray :  482
 nfreq :  181
 nb rayons dans .tauk :  482
@@ -249,69 +218,30 @@ nb rayons 2:  482</pre>
 <p>The UWB simulation implies the convolution of the radio channel with an
 applied waveform</p>
 <p>In[8]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">show2</span><span class="p">(</span><span class="n">Tp</span><span class="o">=</span><span class="mi">520</span><span class="p">)</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>False False</pre>
 </div>
 <img alt="../_images/W2_fig_01.png" src="../_images/W2_fig_01.png" />
 <p>In[26]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">irx</span> <span class="o">=</span> <span class="mi">18</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pltcir</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">)</span>
-
-<span class="n">S</span><span class="o">.</span><span class="n">showray</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">70</span><span class="p">))</span>
-</pre></div>
-</div>
 <img alt="../_images/W2_fig_02.png" src="../_images/W2_fig_02.png" />
 <img alt="../_images/W2_fig_03.png" src="../_images/W2_fig_03.png" />
 <img alt="../_images/W2_fig_04.png" src="../_images/W2_fig_04.png" />
 <p>In[28]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">irx</span> <span class="o">=</span> <span class="mi">134</span>
-<span class="n">S</span><span class="o">.</span><span class="n">pltcir</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">)</span>
-</pre></div>
-</div>
 <img alt="../_images/W2_fig_05.png" src="../_images/W2_fig_05.png" />
 <img alt="../_images/W2_fig_06.png" src="../_images/W2_fig_06.png" />
 <p>In[11]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">itx</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">irx</span> <span class="o">=</span> <span class="mi">250</span>
-<span class="n">S</span><span class="o">.</span><span class="n">showray</span><span class="p">(</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span><span class="p">,</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">300</span><span class="p">))</span>
-</pre></div>
-</div>
 <img alt="../_images/W2_fig_07.png" src="../_images/W2_fig_07.png" />
 <p>In[12]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">itx</span>
-<span class="n">title</span><span class="p">(</span><span class="s">&#39;PATH LOSS vs distance Tx&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">itx</span><span class="p">))</span>
-<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;distance&#39;</span><span class="p">)</span>
-<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">)</span>
-<span class="n">PL</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="n">itx</span><span class="p">)</span>
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span>
 </pre></div>
 </div>
 <img alt="../_images/W2_fig_08.png" src="../_images/W2_fig_08.png" />
 <p>In[13]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="p">,</span><span class="n">ciro</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">loadcir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>In[14]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><pre>False False</pre>
 </div>
 <img alt="../_images/W2_fig_09.png" src="../_images/W2_fig_09.png" />
 <p>In[15]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">CIRA</span><span class="o">=</span><span class="n">cira</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
-</pre></div>
-</div>
 <p>In[16]:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">CIRA</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
 <img alt="../_images/W2_fig_10.png" src="../_images/W2_fig_10.png" />
 </div>
 </div>
@@ -335,7 +265,7 @@ applied waveform</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

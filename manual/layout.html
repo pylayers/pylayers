@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>1.1. How to edit a new structure ? &mdash; PyLayers</title>
+    <title>How to edit a new structure ? &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -51,16 +49,16 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">1.1. How to edit a new structure ?</a><ul>
-<li><a class="reference internal" href="#terminology">1.1.1. Terminology</a></li>
-<li><a class="reference internal" href="#the-str2-file">1.1.2. The <cite>.str2</cite> file</a></li>
-<li><a class="reference internal" href="#creating-the-layout">1.1.3. Creating the layout</a></li>
-<li><a class="reference internal" href="#layout-editor-matplotlib-gui">1.1.4. Layout editor matplotlib GUI</a></li>
-<li><a class="reference internal" href="#points-creation-mode">1.1.5. Points creation mode</a></li>
-<li><a class="reference internal" href="#walls-edition-mode">1.1.6. Walls edition mode</a></li>
-<li><a class="reference internal" href="#modification-of-display-parameters">1.1.7. Modification of display parameters</a></li>
-<li><a class="reference internal" href="#list-of-keyboard-shortcuts">1.1.8. List of keyboard shortcuts</a></li>
-<li><a class="reference internal" href="#using-graphs">1.1.9. Using graphs</a></li>
+<li><a class="reference internal" href="#">How to edit a new structure ?</a><ul>
+<li><a class="reference internal" href="#terminology">Terminology</a></li>
+<li><a class="reference internal" href="#the-str2-file">The <cite>.str2</cite> file</a></li>
+<li><a class="reference internal" href="#creating-the-layout">Creating the layout</a></li>
+<li><a class="reference internal" href="#layout-editor-matplotlib-gui">Layout editor matplotlib GUI</a></li>
+<li><a class="reference internal" href="#points-creation-mode">Points creation mode</a></li>
+<li><a class="reference internal" href="#walls-edition-mode">Walls edition mode</a></li>
+<li><a class="reference internal" href="#modification-of-display-parameters">Modification of display parameters</a></li>
+<li><a class="reference internal" href="#list-of-keyboard-shortcuts">List of keyboard shortcuts</a></li>
+<li><a class="reference internal" href="#using-graphs">Using graphs</a></li>
 </ul>
 </li>
 </ul>
@@ -113,11 +111,6 @@ a long segment which overlaps all the doors.</p>
 </div>
 <div class="section" id="creating-the-layout">
 <h2>Creating the layout<a class="headerlink" href="#creating-the-layout" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;fname.str2&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>Either the file <cite>fname.str2</cite> exists in which case it is loaded, otherwise a
 void structure is created.</p>
 </div>
@@ -125,9 +118,6 @@ void structure is created.</p>
 <h2>Layout editor matplotlib GUI<a class="headerlink" href="#layout-editor-matplotlib-gui" title="Permalink to this headline">¶</a></h2>
 <p>It exists a tiny structure editor based on matplotlib events handling.
 This editor comes as a particular method of the Layout object.</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">editor</span><span class="p">()</span>
-</pre></div>
-</div>
 <p>After that invocation  a matplolib figure is opened which can interact either with
 mouse or keyboard events.</p>
 </div>
@@ -201,7 +191,7 @@ exploiting the <a class="reference external" href="http://networkx.github.com">n
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

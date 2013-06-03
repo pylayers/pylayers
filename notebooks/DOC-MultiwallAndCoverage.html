@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Multi-wall model &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Multi-wall model</a><ul>
+<li><a class="reference internal" href="#loading-the-layout">Loading the layout</a></li>
+<li><a class="reference internal" href="#defining-a-radio-link">Defining a radio link</a></li>
+<li><a class="reference internal" href="#ploting-the-scene">Ploting the scene</a><ul>
+<li><a class="reference internal" href="#find-the-intersection-between-the-direct-path-and-the-walls">Find the intersection between the &#8220;direct&#8221; path and the walls</a></li>
+<li><a class="reference internal" href="#computing-the-multi-wall-model">Computing the Multi-wall model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#coverage-class">Coverage class</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="multi-wall-model">
+<h1>Multi-wall model<a class="headerlink" href="#multi-wall-model" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">str2bool</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="section" id="loading-the-layout">
+<h2>Loading the layout<a class="headerlink" href="#loading-the-layout" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.str&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span> <span class="c"># load graphs</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-a-radio-link">
+<h2>Defining a radio link<a class="headerlink" href="#defining-a-radio-link" title="Permalink to this headline">¶</a></h2>
+<p>We define :</p>
+<ul class="simple">
+<li>A a transmitter</li>
+<li>B a receviver</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="c"># transmitter</span>
+<span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span> <span class="c"># receiver</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ploting-the-scene">
+<h2>Ploting the scene<a class="headerlink" href="#ploting-the-scene" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># figure instanciation</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0xaa60aec&gt;]</pre>
+</div>
+<img alt="../_images/_fig_02.png" src="../_images/_fig_02.png" />
+<div class="section" id="find-the-intersection-between-the-direct-path-and-the-walls">
+<h3>Find the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#find-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="mi">34</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">89</span><span class="p">]),</span>
+ <span class="n">array</span><span class="p">([</span> <span class="mf">0.40024066</span><span class="p">,</span>  <span class="mf">0.40024066</span><span class="p">,</span>  <span class="mf">0.40024066</span><span class="p">,</span>  <span class="mf">1.17055567</span><span class="p">,</span>  <span class="mf">1.17055567</span><span class="p">,</span>
+        <span class="mf">0.40024066</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="computing-the-multi-wall-model">
+<h3>Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
+<p>The multi-wall model computation returns losses and LOS excess delay for
+orthogonal and parallel polarization</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span>   <span class="o">=</span> <span class="mf">2.4</span>
+<span class="n">r</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+
+<span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="p">,</span><span class="n">Edo</span><span class="p">,</span><span class="n">Edp</span><span class="o">=</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">A</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&#39;Losses polar orthogonal </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> dBm&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span> <span class="s">&#39;Losses polar parallel </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s">  dBm&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Lwp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span> <span class="s">&#39;Excess delay polar orthogonal </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Edo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span> <span class="s">&#39;Excess delay polar parallel  </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span><span class="n">Edp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Losses polar orthogonal      27.7333 dBm
+Losses polar parallel        16.0573  dBm
+Excess delay polar orthogonal        2.23113 ns
+Excess delay polar parallel          2.12364 ns</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="coverage-class">
+<h1>Coverage class<a class="headerlink" href="#coverage-class" title="Permalink to this headline">¶</a></h1>
+<p>By extension, the multi-wall model can also been used to perform a
+coverage of a Layout</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">L</span>  <span class="o">=</span> <span class="n">L</span> <span class="c"># set layout</span>
+<span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">A</span> <span class="c"># set the tramsitter</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">t1</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Coverage performed in  5.5845220089 s</pre>
+</div>
+<p>For Orthogonal polarization</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_07.png" src="../_images/_fig_07.png" />
+<img alt="../_images/_fig_08.png" src="../_images/_fig_08.png" />
+<p>For parallel polarization</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_09.png" src="../_images/_fig_09.png" />
+<img alt="../_images/_fig_10.png" src="../_images/_fig_10.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

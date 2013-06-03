@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -85,7 +83,6 @@
 
 <div class="viewcode-block" id="LOSS_furniture"><a class="viewcode-back" href="../../../modules/antprop.multiwall.html#pylayers.antprop.multiwall.LOSS_furniture">[docs]</a><span class="k">def</span> <span class="nf">LOSS_furniture</span><span class="p">(</span><span class="n">Tx</span><span class="p">,</span><span class="n">Rx</span><span class="p">,</span><span class="n">furn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">      Yu Lei </span>
 <span class="sd">      Not used</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
@@ -104,12 +101,19 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    fGHz:</span>
-<span class="sd">        frequency GHz</span>
-<span class="sd">    GtdB:</span>
-<span class="sd">        transmitting antenna gain dB (default 0 dB)</span>
-<span class="sd">    GrdB:</span>
-<span class="sd">        receiving antenna gain dB (default 0 dB)</span>
+
+<span class="sd">    fGHz: float</span>
+<span class="sd">          frequency GHz</span>
+<span class="sd">    GtdB: float</span>
+<span class="sd">          transmitting antenna gain dB (default 0 dB)</span>
+<span class="sd">    GrdB: float</span>
+<span class="sd">          receiving antenna gain dB (default 0 dB)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    PL0 : float</span>
+<span class="sd">          path @ 1m</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -124,59 +128,91 @@
 <span class="sd">    &gt;&gt;&gt; assert (PL&lt;41)&amp;(PL&gt;40),&quot;something wrong&quot;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ld</span>  <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
+
+    <span class="n">ld</span> <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="n">fGHz</span>
     <span class="n">PL0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ld</span><span class="o">/</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span><span class="o">-</span><span class="n">GtdB</span><span class="o">-</span><span class="n">GrdB</span>
+
     <span class="k">return</span> <span class="n">PL0</span>
 </div>
 <div class="viewcode-block" id="Dgrid_points"><a class="viewcode-back" href="../../../modules/antprop.multiwall.html#pylayers.antprop.multiwall.Dgrid_points">[docs]</a><span class="k">def</span> <span class="nf">Dgrid_points</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">Px</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Dgrid_points(points,Px):</span>
-<span class="sd">    points : Np x 2 array</span>
-<span class="sd">    Px     : 2 x 1  array</span>
+    <span class="sd">&quot;&quot;&quot; distance point to grid</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    points : np.array</span>
+<span class="sd">             grid Np x 2 array</span>
+
+<span class="sd">    Px     : np.array</span>
+<span class="sd">             point 2 x 1  array</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-  
-    <span class="n">Dx</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">Px</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">Dy</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">Px</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">D</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">Dx</span><span class="o">*</span><span class="n">Dx</span> <span class="o">+</span> <span class="n">Dy</span><span class="o">*</span><span class="n">Dy</span> <span class="p">)</span>
+
+    <span class="n">Dx</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">Px</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">Dy</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">Px</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">Dx</span><span class="o">*</span><span class="n">Dx</span> <span class="o">+</span> <span class="n">Dy</span><span class="o">*</span><span class="n">Dy</span> <span class="p">)</span>
 
     <span class="k">return</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Dgrid_zone"><a class="viewcode-back" href="../../../modules/antprop.multiwall.html#pylayers.antprop.multiwall.Dgrid_zone">[docs]</a><span class="k">def</span> <span class="nf">Dgrid_zone</span><span class="p">(</span><span class="n">zone</span><span class="p">,</span><span class="n">Px</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Dgrid_zone(zone,Px):</span>
+    <span class="sd">&quot;&quot;&quot; Distance point to zone</span>
 
 <span class="sd">    A zone is a quadrilateral zone.</span>
 
-<span class="sd">    Zone dictionnary :</span>
-<span class="sd">        xmin xmax Nx</span>
-<span class="sd">        ymin ymax Ny</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 
-<span class="sd">    Build the distance matrix between Tx and the zone points</span>
+<span class="sd">    zone : dictionnary</span>
+<span class="sd">           xmin xmax Nx</span>
+<span class="sd">           ymin ymax Ny</span>
+
+<span class="sd">    Px : np.array</span>
+<span class="sd">         point</span>
+
+<span class="sd">    Build the distance matrix between Tx and points in the zone</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    use broadcasting instead</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">rx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;xmin&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;xmax&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;Nx&#39;</span><span class="p">])</span>
     <span class="n">ry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;ymin&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;ymax&#39;</span><span class="p">],</span><span class="n">zone</span><span class="p">[</span><span class="s">&#39;Ny&#39;</span><span class="p">])</span>
+
     <span class="n">R_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ry</span><span class="p">)),</span><span class="n">rx</span><span class="p">)</span>
     <span class="n">R_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">ry</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">)))</span>
+
     <span class="n">Dx</span> <span class="o">=</span> <span class="n">R_x</span> <span class="o">-</span> <span class="n">Px</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">Dy</span> <span class="o">=</span> <span class="n">R_y</span> <span class="o">-</span> <span class="n">Px</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">D</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">Dx</span><span class="o">+</span><span class="n">Dy</span><span class="o">*</span><span class="n">Dy</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Dx</span><span class="o">*</span><span class="n">Dx</span><span class="o">+</span><span class="n">Dy</span><span class="o">*</span><span class="n">Dy</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">D</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="OneSlopeMdl"><a class="viewcode-back" href="../../../modules/antprop.multiwall.html#pylayers.antprop.multiwall.OneSlopeMdl">[docs]</a><span class="k">def</span> <span class="nf">OneSlopeMdl</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">fGHz</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; one slope model</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    n : float</span>
-<span class="sd">        path loss exponent</span>
-<span class="sd">    D : array</span>
-<span class="sd">        Distance array</span>
-<span class="sd">    fGHz : array</span>
-<span class="sd">        frequency  GHz</span>
+
+<span class="sd">    D   : np.array</span>
+<span class="sd">          distance array</span>
+<span class="sd">    n   : float</span>
+<span class="sd">          path loss exponent</span>
+<span class="sd">    fGHz : np.array</span>
+<span class="sd">           frequency  GHz</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    PL : np.array</span>
+<span class="sd">          path loss as a function of distance</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+
     <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="PL"><a class="viewcode-back" href="../../../modules/antprop.multiwall.html#pylayers.antprop.multiwall.PL">[docs]</a><span class="k">def</span> <span class="nf">PL</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
@@ -184,31 +220,49 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    pts    : array (2xNp)</span>
-<span class="sd">    fGHz   : frequency (GHz)</span>
-<span class="sd">    p      : array (2x1)</span>
-<span class="sd">    n      : path loss exponent</span>
+
+<span class="sd">    pts    : np.array (2xNp)</span>
+<span class="sd">             points</span>
+<span class="sd">    fGHz   : float</span>
+<span class="sd">             frequency (GHz)</span>
+<span class="sd">    p      : np.array (2x1)</span>
+<span class="sd">    n      : float</span>
+<span class="sd">            path loss exponent (default = 2)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    PL : np.array</span>
+<span class="sd">         path loss w.r.t distance and frequency</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pts</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
+
+    <span class="n">PL</span> <span class="o">=</span> <span class="n">PL0</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Loss0_v2"><a class="viewcode-back" href="../../../modules/antprop.multiwall.html#pylayers.antprop.multiwall.Loss0_v2">[docs]</a><span class="k">def</span> <span class="nf">Loss0_v2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">Pts</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; </span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    L</span>
-<span class="sd">        Layout object</span>
-<span class="sd">    Pts</span>
+
+<span class="sd">    L   : Layout</span>
+<span class="sd">          Layout object</span>
+
+<span class="sd">    Pts : observation grid </span>
 <span class="sd">        (Np x 2) array</span>
-<span class="sd">    f</span>
-<span class="sd">        frequency (GHz)</span>
-<span class="sd">    p</span>
+
+<span class="sd">    fGHz : np.array</span>
+<span class="sd">           frequency </span>
+<span class="sd">    p  : point</span>
 <span class="sd">        source points</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    </span>
+
 <span class="sd">    .. plot::</span>
 <span class="sd">        :include-source:</span>
 
@@ -226,8 +280,6 @@
 <span class="sd">        &gt;&gt;&gt; sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker=&#39;x&#39;,c=&#39;k&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)</span>
 <span class="sd">        &gt;&gt;&gt; plt.show()</span>
-
-
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Pts</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1120,7 +1172,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

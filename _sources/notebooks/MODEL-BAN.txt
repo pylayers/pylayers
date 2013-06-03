@@ -1,0 +1,102 @@
+An additive model 
+------------------
+
+The purpose of the model is to take into account the presence of a
+dielectric cylinder in the immediate proximity of a an elecromagnetic
+source. Let's consider in a first approach that the source is a line
+source and that the cylinder is infinite along the z axis. The model is
+additive meaning that it uses the unperturbed antenna, which can bea
+measured or simulated, and two fundamental parameters, :math:`a` the
+radius of the dielectric cylinder and :math:`b` the distance between the
+line source and the center of the cylinder which is also the origin of
+this canonical problem.
+
+The distance between the cylinder and the source is :math:`d=b-a`
+
+The geometry of the problem is described in Figure
+
+The unitary vector along the far field direction of observation is given
+by
+
+.. math:: \hat{s}=\cos\phi \sin\theta\mathrm{\hat{x}}+ \sin\phi \sin\theta\mathrm{\hat{x}}+cos\theta\mathrm{\hat{z}}
+
+
+
+The unit vector in the direction from the source point :math:`S (b,0,0)`
+to the reflection point :math:`Q_r (a\cos\gamma_r,a\sin\gamma_r,z_r)` is
+given by
+
+.. math::
+
+   \hat{\mathbf{s^i}}=\frac{(a\cos\gamma_r-b) \mathbf{\hat{x}} + a\sin\gamma_r \mathbf{\hat{y}}+ z_r \mathbf{\hat{z}} }
+                             {(a\cos\gamma_r-b)^2+ (a\sin\gamma_r)^2+z_r^2}
+
+
+
+The cylinder normal in :math:`Q_r` is given by
+
+.. math:: \mathbf{\hat{n}}(Q_r) = cos\gamma_r \mathbf{\hat{x}} + \sin\gamma_r \mathbf{\hat{y}}
+
+
+
+so the dot product
+
+.. math:: \mathbf{\hat{n}}.\mathbf{\hat{s^i}}=\frac{a-b\cos\gamma_r}{\sqrt{a^2+b^2-2ab\cos(\gamma_r)+z_r^2}}
+
+
+
+.. math:: \mathbf{\hat{n}}.\mathbf{\hat{s^r}} = \cos(\phi-\gamma_r)\sin\theta
+
+
+
+Enforcement of the reflection law
+
+.. math:: \mathbf{\hat{n}}.\mathbf{\hat{s^r}} = - \mathbf{\hat{n}}.\mathbf{\hat{s^i}}
+
+ then yields the following transcendental equation for the determination
+of the stationnary point parameterized by :math:`\gamma_r` and
+:math:`z_r`\ .
+
+.. math:: \frac{a-b\cos\gamma_r}{\sqrt{a^2+b^2-2ab\cos(\gamma_r)}}= - \cos(\phi-\gamma_r)\sin\theta
+
+
+
+Determination of the Reflection caustic distance
+------------------------------------------------
+
+The radius of curavture of the incident wavrefront at :math:`Q_r`
+
+.. math:: s^i = \sqrt{a^2 + b^2 -2 ab\cos \gamma_r+ z_r^2}
+
+
+
+Direct field at observation point in the far field
+--------------------------------------------------
+
+.. math:: s^r=s-a\cos(\phi-\gamma_r)\sin\theta
+
+.. math:: s^0=s-b\cos\phi\sin\theta
+
+
+
+The antenna not perturbated by the cylinder has the following vector
+radiation pattern
+
+.. math:: \mathbf{U}^i = \left( F\_{\theta}(\theta,\phi) \hat{\mathbf{\theta}} +  F\_{\phi}(\theta,\phi) \hat{\mathbf{\phi}}\right) \frac{e^{-jks^0}}{\sqrt{s^0}}
+
+
+
+Incident field at the Reflection point
+--------------------------------------
+
+Let :math:`Q_r` be the reflection point on a infinite cylinder. The
+incident field in :math:`Q_r` is given by :
+
+.. math:: \mathbf{U}^i(s^i,\theta_r,\phi_r) = \left( F\_{\theta}(\theta_r,\phi_r) \hat{\mathbf{\theta_r}} +  F\_{\phi}(\theta_r,\phi_r) \hat{\mathbf{\phi_r}}\right) \frac{e^{-jks^i}}{\sqrt{s^i}}
+
+
+
+.. math:: \frac{1}{\rho_r}=\frac{1}{\sqrt{a^2+b^2-2ab\cos\gamma_r+z_r^2}}+\frac{2}{a\cos(\phi-\gamma_r)}
+
+
+

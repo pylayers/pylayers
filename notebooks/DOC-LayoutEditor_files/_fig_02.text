@@ -1,0 +1,17 @@
+filestr :  layout.ini
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  geomfile (.off) has no been generated
+limites  (-20.0, 20.0, -10.0, 10.0)
+number of Nodes : 0
+number of Segments : 0
+number of Sub-Segments : 0
+Gs Nodes :  0
+Gs Edges :  0
+Gc Nodes :  0
+Gc Edges :  0
+Gt Nodes :  0
+Gt Edges :  0
+vnodes = L.Gt.node[Nc]['vnodes'] 
+poly = L.Gt.node[Nc]['polyg'] 
+Gr Nodes    : no Gr graph

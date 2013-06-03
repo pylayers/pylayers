@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -135,14 +133,19 @@
             <span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">theta</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c"># f x 1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">fGHz</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="c">#self.theta = np.outer(np.ones(nf),theta).astype(&#39;complex&#39;)</span>
+        <span class="c"># 1 x q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thi</span> <span class="o">=</span> <span class="n">theta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
         <span class="c">#</span>
-        <span class="c"># Initialize Io and Ip  (nf,nt,2,2)</span>
+        <span class="c"># Io : f x q x 2 x 2</span>
+        <span class="c"># Ip : f x q x 2 x 2</span>
         <span class="c">#</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">Io</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
 <div class="viewcode-block" id="Interface.RT"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.RT">[docs]</a>    <span class="k">def</span> <span class="nf">RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metalic</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
@@ -155,8 +158,8 @@
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        R : np.array   (nf , nt , 2, 2)</span>
-<span class="sd">        T : np.array   (nf , nt , 2, 2)</span>
+<span class="sd">        R : np.array   (f , th , 2, 2)</span>
+<span class="sd">        T : np.array   (f , th , 2, 2)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">)</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -399,7 +402,6 @@
         <span class="n">rtd</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-
         <span class="n">modRo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="n">modRp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
         <span class="n">modTo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
@@ -411,17 +413,25 @@
         <span class="n">angleTp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="s">&#39;phase&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleRo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, &#39;b&#39;)</span>
+            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, &#39;b&#39;)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
+                <span class="c">#         np.log10(modRo[k, :]), &#39;b&#39;)</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
+                <span class="c">#         np.log10(modRp[k, :]), &#39;r&#39;)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
                          <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modRo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
                          <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modRo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, modRo[k, :], &#39;b&#39;)</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, modRp[k, :], &#39;r&#39;)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modRo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;R _|_&#39;</span><span class="p">,</span> <span class="s">&#39;R //&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper left&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta (degrees)&#39;</span><span class="p">)</span>
         <span class="c">#nom = self.m1.name+&#39;|&#39;+self.m2.name+&#39; &#39;+str(f[k])+&#39;GHz&#39;</span>
@@ -432,17 +442,25 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">nom</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="s">&#39;phase&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, &#39;b&#39;)</span>
+            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, &#39;r&#39;)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
+                <span class="c">#         np.log10(modTo[k, :]), &#39;b&#39;)</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
+                <span class="c">#         np.log10(modTp[k, :]), &#39;r&#39;)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
                          <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
                          <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, modTo[k, :], &#39;b&#39;)</span>
+                <span class="c">#plt.plot(self.theta[0, :] * rtd, modTp[k, :], &#39;r&#39;)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;T _|_&#39;</span><span class="p">,</span> <span class="s">&#39;T //&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta (degrees)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -517,9 +535,10 @@
         <span class="n">n2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">epr2</span> <span class="o">/</span> <span class="n">mur2</span><span class="p">)</span>
 
         <span class="n">ct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
-
-        <span class="n">nT1p</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">/</span> <span class="n">ct</span>         <span class="c"># //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf</span>
-        <span class="n">nT1o</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">*</span> <span class="n">ct</span>         <span class="c"># _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf</span>
+        <span class="c"># //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf</span>
+        <span class="n">nT1p</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">/</span> <span class="n">ct</span>
+        <span class="c"># _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf</span>
+        <span class="n">nT1o</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">*</span> <span class="n">ct</span>
 
         <span class="c">#print np.shape(n1)</span>
         <span class="c">#print np.shape(ct)</span>
@@ -1262,9 +1281,6 @@
         <span class="n">Cp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="n">Cp</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="c">#        _Cp = np.eye(2,dtype=complex)</span>
-
-
-
         <span class="c">#</span>
         <span class="c"># Boucle sur les n-1 matÃ©riaux</span>
         <span class="c">#      lmat[0] est toujours l&#39;air  (Ã  modifier)</span>
@@ -1293,13 +1309,13 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">II</span> <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">ml</span><span class="p">,</span> <span class="n">mr</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lthick&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="c">#</span>
-            <span class="c"># chain the angle</span>
+            <span class="c"># chains the angle</span>
             <span class="c">#</span>
                 <span class="n">theta</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">theta</span>
             <span class="c">#</span>
-            <span class="c"># theta depends on frequency nf x nt</span>
+            <span class="c"># theta depends on frequency f x th</span>
             <span class="c">#</span>
-                <span class="c">#THETA = II.THETA</span>
+            <span class="c"># THETA = II.THETA</span>
 
                 <span class="n">Io</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">Io</span>
                 <span class="n">Ip</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">Ip</span>
@@ -1319,11 +1335,11 @@
             <span class="c"># Using Einstein summation instead of a for loop increases speed by an order of magnitude</span>
             <span class="c">#</span>
 
-<span class="c">#            Co = np.einsum(&#39;ijkl,ijln-&gt;ijkn&#39;, Co, Io)</span>
-<span class="c">#            Cp = np.einsum(&#39;ijkl,ijln-&gt;ijkn&#39;, Cp, Ip)</span>
+            <span class="c">#    Co = np.einsum(&#39;ijkl,ijln-&gt;ijkn&#39;, Co, Io)</span>
+            <span class="c">#    Cp = np.einsum(&#39;ijkl,ijln-&gt;ijkn&#39;, Cp, Ip)</span>
 
 
-            <span class="c">### array broadcasing version , new increased spped in regard of einsum</span>
+            <span class="c">### array broadcasing version , new increased speed in regard of einsum</span>
             <span class="n">Co</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Co</span><span class="p">[</span><span class="o">...</span><span class="p">,:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">Io</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
             <span class="n">Cp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Cp</span><span class="p">[</span><span class="o">...</span><span class="p">,:,:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">Ip</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
@@ -1535,25 +1551,27 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">        DB : slab dictionnary</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">fileslabini</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filemat</span><span class="o">=</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span> <span class="n">fileslab</span><span class="o">=</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        filemat : string</span>
 <span class="sd">        fileslab : string</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileslabini</span> <span class="o">=</span> <span class="n">fileslabini</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fileslabini</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;.slab&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span> <span class="o">=</span> <span class="n">fileslab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;.slab&#39;</span><span class="p">)</span> <span class="c"># WARNING !!!  deprecated in new verion </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">filemat</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filemat</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">fileslabini</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileslabini</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fileslab</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileslab</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 
 <div class="viewcode-block" id="SlabDB.showall"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.SlabDB.showall">[docs]</a>    <span class="k">def</span> <span class="nf">showall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2104,7 +2122,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

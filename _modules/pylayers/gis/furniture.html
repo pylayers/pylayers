@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -223,15 +221,14 @@
 <span class="sd">            :include-source:</span>
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.furniture import *</span>
-<span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt </span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt</span>
 <span class="sd">            &gt;&gt;&gt; F = Furniture()</span>
 <span class="sd">            &gt;&gt;&gt; F.load(&#39;Furw1.ini&#39;,&#39;R1_A&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; F.show()</span>
 <span class="sd">            &gt;&gt;&gt; axis = plt.axis(&#39;scaled&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; plt.show() </span>
-<span class="sd">            </span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filefurn</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="s">&quot;struc&quot;</span><span class="p">)</span>
+        <span class="n">filefurn</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="s">&quot;struc/furnitures&quot;</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
         <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filefurn</span><span class="p">)</span>
 
@@ -392,7 +389,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>
