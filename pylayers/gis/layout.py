@@ -32,6 +32,7 @@ from cStringIO import StringIO
 
 from pylayers.antprop import slab as sb
 from pylayers.util import geomutil as geu
+from pylayers.util import plotutil as plu
 from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
 # Handle furnitures
@@ -180,7 +181,7 @@ class Layout(object):
         self.Gc = nx.Graph()
         self.Gm = nx.Graph()
 
-    def check(self):
+    def check(self,level=0):
         """ Check Layout consistency
 
 
@@ -217,13 +218,17 @@ class Layout(object):
                     if (n < 0) & (n1 != n) & (n2 != n):
                         p = np.array(self.Gs.pos[n])
                         if geu.isBetween(p1, p2, p):
+                            print p1
+                            print p
+                            print p2
                             logging.critical("segment %d contains point %d",e,n)
                             consistent =False
-                cycle = self.Gs.node[e]['ncycles']
-                if len(cycle)==0:
-                    logging.critical("segment %d has no cycle",e)
-                if len(cycle)==3:
-                    logging.critical("segment %d has cycle %s",e,str(cycle))
+                if level>0:
+                    cycle = self.Gs.node[e]['ncycles']
+                    if len(cycle)==0:
+                        logging.critical("segment %d has no cycle",e)
+                    if len(cycle)==3:
+                        logging.critical("segment %d has cycle %s",e,str(cycle))
         return(consistent)
 
     def clip(self, xmin, xmax, ymin, ymax):
@@ -4951,6 +4956,47 @@ class Layout(object):
         sposfull[iz, :] = spos
         return (sposfull)
 
+    def plot_segments(self,lns,**kwargs):
+        """"
+
+        Parameters
+        ----------
+        lns
+        *kwargs
+
+        """
+        defaults = {'show': False,
+                    'fig': None,
+                    'ax': None,
+                    'color': 'b',
+                    'linewidth': 1}
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        if kwargs['fig'] is None:
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+        elif kwargs['ax'] is None:
+            ax = kwargs['fig'].add_subplot(111)
+        else:
+            fig =  kwargs['fig']
+            ax = kwargs['ax']
+        
+        nth = np.array(map(lambda n: nx.neighbors(self.Gs,n),lns))
+        nt = nth[:,0]
+        nh = nth[:,1]
+        # pt : 2 x Ns
+        pt  = np.array(map(lambda n :
+                           [self.Gs.pos[n][0],self.Gs.pos[n][1]],nt)).T
+        # ph : 2 x Ns
+        ph  = np.array(map(lambda n :
+                           [self.Gs.pos[n][0],self.Gs.pos[n][1]],nh)).T
+        
+        fig,ax = plu.displot(pt,ph,fig=fig,ax=ax,color=kwargs['color'])                                 
+
+        return fig,ax
     def showSig(self, sigarr, Tx=None, Rx=None, fig=plt.figure(), ax=None):
         """ Show signature
 
@@ -4968,7 +5014,7 @@ class Layout(object):
         fig   : figure instance
         ax    : axes instance
         lines : lines instance
-        
+
         Examples
         --------
 

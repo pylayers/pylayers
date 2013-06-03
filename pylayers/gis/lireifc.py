@@ -1,7 +1,7 @@
 import sys
 import os
-import numpy as np 
-import scipy as sp 
+import numpy as np
+import scipy as sp
 from pylayers.util import geomutil as geo
 from pylayers.util import pyutil as pyu
 
@@ -20,7 +20,7 @@ dico['POLYLOOP']={}         # OK
 dico['AXIS2PLACEMENT2D']={}
 dico['AXIS2PLACEMENT3D']={}
 dico['LOCALPLACEMENT']={}
-dico['OPENINGELEMENT']={}   # 
+dico['OPENINGELEMENT']={}   #
 dico['SPACE']={}
 dico['QUANTITYAREA']={}
 dico['QUANTITYLENGTH']={}
@@ -60,7 +60,7 @@ for li in lig:
             print sspt
             if len(sspt)==3:
                 vec  = np.array([float(sspt[0]),float(sspt[1]),float(sspt[2])])
-            else:    
+            else:
                 vec  = np.array([float(sspt[0]),float(sspt[1])])
             dico['DIRECTION'][Id] = vec
 
