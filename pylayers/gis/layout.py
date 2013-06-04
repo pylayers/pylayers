@@ -156,7 +156,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> fillist = ls()
+        >>> fillist = L.ls()
 
         """
 
@@ -509,9 +509,10 @@ class Layout(object):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.gis.layout import *
             >>> L = Layout('WHERE1.ini')
-            >>> loadfur('Furw1.ini')
+            >>> L.loadfur('Furw1.ini')
             >>> fig = plt.figure()
-            >>> ax = showGs(fig=fig,furniture=True)
+            >>> ax = fig.gca()
+            >>> fig,ax = L.showGs(fig=fig,ax=ax,furniture=True)
             >>> ti = plt.title('loadfur')
             >>> plt.show()
 
@@ -581,7 +582,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout()
-        >>> loadstr('exemple.str')
+        >>> L.loadstr('example.str')
 
         """
 
@@ -1062,7 +1063,7 @@ class Layout(object):
 
             >>> from pylayers.gis.layout import *
             >>> L = Layout()
-            >>> loadstr2('Lstruc.str2')
+            >>> L.loadstr2('Lstruc.str2')
 
         """
 
@@ -1287,9 +1288,8 @@ class Layout(object):
         p is a (1x2) tuple
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout()
-        >>> load('exemple.str')
-        >>> add_fnod((10.0,10.0))
+        >>> L = Layout('example.str')
+        >>> L.add_fnod((10.0,10.0))
         -9
 
 
@@ -2294,7 +2294,7 @@ class Layout(object):
         >>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
-        >>> angleonlink(p1,p2)
+        >>> L.angleonlink(p1,p2)
         (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
 
 
@@ -2374,11 +2374,11 @@ class Layout(object):
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
         >>> idx = np.array([1,2,3,17])
-        >>> seguv(idx)
+        >>> L.seguv(idx)
         array([[-1.,  0.,  1., -1.],
                [ 0., -1.,  0.,  0.]])
         >>> idx = np.array([1])
-        >>> seguv(idx)
+        >>> L.seguv(idx)
         array([-1.,  0.])
 
         """
@@ -2426,9 +2426,9 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('exemple.str')
+        >>> L = Layout('example.str')
         >>> ptlist  = np.array([0,1])
-        >>> segpt(ptlist)
+        >>> L.segpt(ptlist)
         array([0, 1, 5, 7])
 
         """
@@ -2465,7 +2465,7 @@ class Layout(object):
             >>> L = Layout('office.str')
             >>> p1 = np.array([0,0])
             >>> p2 = np.array([10,10])
-            >>> seginframe(p1,p2)
+            >>> L.seginframe(p1,p2)
             array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35,  36,
                     37,  38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60,
                     61,  62,  63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,
@@ -3442,7 +3442,7 @@ class Layout(object):
 
 #        >>> from pylayers.gis.layout import *
 #        >>> L = Layout()
-#        >>> load('exemple.str')
+#        >>> load('example.str')
 #        >>> buildGt()
 #        >>> buildGr()
 #        >>> buildGv()
@@ -3495,10 +3495,10 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('exemple.str')
-        >>> buildGt()
-        >>> buildGr()
-        >>> buildGv()
+        >>> L = Layout('example.str')
+        >>> L.buildGt()
+        >>> L.buildGr()
+        >>> L.buildGv()
 
         """
 
@@ -3922,22 +3922,22 @@ class Layout(object):
 
             >>> from pylayers.gis.layout import  *
             >>> import matplotlib.pyplot as plt
-            >>> L = Layout('exemple.str')
-            >>> buildGt()
-            >>> buildGr()
-            >>> buildGv()
+            >>> L = Layout('example.str')
+            >>> L.buildGt()
+            >>> L.buildGr()
+            >>> L.buildGv()
             >>> fig = plt.figure(figsize=(10,10))
             >>> ax = fig.add_subplot(221)
-            >>> fig,ax = showG('s',fig=fig,ax=ax)
+            >>> fig,ax = L.showG('s',fig=fig,ax=ax)
             >>> tis = plt.title("Gs")
             >>> ax = fig.add_subplot(222)
-            >>> fig,ax = showG('r',fig=fig,ax=ax)
+            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
             >>> tit = plt.title("Gt")
             >>> ax = fig.add_subplot(223)
-            >>> fig,ax = showG('c',fig=fig,ax=ax)
+            >>> fig,ax = L.showG('c',fig=fig,ax=ax)
             >>> tic = plt.title("Gc")
             >>> ax = fig.add_subplot(224)
-            >>> fig,ax = showG('v',fig=fig,ax=ax)
+            >>> fig,ax = L.showG('v',fig=fig,ax=ax)
             >>> tiv = plt.title("Gv")
             >>> plt.show()
 
@@ -4120,11 +4120,11 @@ class Layout(object):
            :include-source:
 
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('exemple.str')
-            >>> build()
+            >>> L = Layout('example.ini')
+            >>> L.build()
             >>> fig = plt.figure()
-            >>> fig,ax = showGs(fig=fig)
-            >>> ax = showGv(ax=ax)
+            >>> fig,ax = L.showGs(fig=fig)
+            >>> ax = L.showGv(ax=ax)
             >>> ti = plt.title('Show Gv')
             >>> t = plt.axis('off')
             >>> plt.show()
@@ -4184,19 +4184,21 @@ class Layout(object):
 
         Parameters
         ----------
+
             nroom1
             nroom2
 
         Examples
         --------
+
             >>> from pylayers.gis.layout import *
             >>> L = Layout('WHERE1.ini')
-            >>> dumpr()
+            >>> L.dumpr()
             >>> nroom1 = 1
             >>> nroom2 = 6
-            >>> l =waypointGw(nroom1,nroom2)
+            >>> l = L.waypointGw(nroom1,nroom2)
             >>> len(l)
-            8
+            4
 
         """
         rooms = nx.dijkstra_path(self.Gw, nroom1, nroom2)
@@ -4219,7 +4221,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> walls = thwall(0,0)
+        >>> walls = L.thwall(0,0)
 
         """
         keyn = self.Gs.node.keys()
@@ -4859,14 +4861,16 @@ class Layout(object):
         return(filename)
 
     def geomfile(self):
-        """ create a geomview file of the layout
+        """ create a geomview file from the layout
+
+        The `.off` file can be vizualized through the show3 method
 
         Examples
         --------
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> geomfile()
+        >>> L.geomfile()
 
         """
 
@@ -5264,7 +5268,7 @@ class Layout(object):
         return(dist)
 
     def randTxRx(self):
-        """Returns random coordinates for Tx and Rx.
+        """returns random coordinates for Tx and Rx.
 
         Returns
         -------
@@ -5277,8 +5281,8 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('exemple.str','matDB.ini','slabDB.ini')
-        >>> p_Tx,p_Rx = randTxRx()
+        >>> L = Layout('example.str','matDB.ini','slabDB.ini')
+        >>> p_Tx,p_Rx = L.randTxRx()
 
         Notes
         -----
@@ -5315,8 +5319,10 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('exemple.str','matDB.ini','slabDB.ini')
-        >>> boundary()
+        >>> L = Layout('example.str','matDB.ini','slabDB.ini')
+        >>> L.boundary()
+        >>> L.ax
+        (0.0, 10.0, -2.0, 2.0)
 
         """
         if len(self.Gs.pos.values())<>0:
@@ -5354,4 +5360,5 @@ class Layout(object):
 
 
 if __name__ == "__main__":
+    plt.ion()
     doctest.testmod()
