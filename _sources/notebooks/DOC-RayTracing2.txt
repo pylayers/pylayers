@@ -1,0 +1,369 @@
+Example of an UWB channel Ray Tracing simulation
+================================================
+
+
+In the following, all steps required for going from the descrpition of
+the radio scene until the calculation of the UWB channel impulse
+response is described on a simple example.
+
+A ray-tracing simulation is controlled via a configuration file which is
+stored in the *ini* directory of the project directory. By default, a
+default configuration file named **default.ini** is loaded.
+
+
+.. code-block:: python
+
+    from pylayers.simul.simulem import *
+    from pylayers.antprop.rays import *
+    from pylayers.antprop.channel import *
+    from pylayers.antprop.signature import *
+    from pylayers.measures.mesuwb import *
+    import pylayers.util.pyutil as pyu
+    import pylayers.signal.bsignal as bs
+
+A first step consists in loading a layout associated with the
+simulation. Here the ``WHERE1.ini`` layout is chosen along with the
+corresponding slabs and materials files ``matDB.ini`` and
+``slabDB.ini``.
+
+This layout corresponds to the office building where the first WHERE1
+UWB measurement campaign has been conducted.
+
+The layout method loads those in a member layout object **L** of the
+simulation object **S**.
+
+If not already available, the layout associated graphs are built.
+
+
+.. code-block:: python
+
+    S = Simul()
+    # loading a layout 
+    filestr = 'WHERE1'
+    S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
+    try:
+        S.L.dumpr()
+    except:
+        S.L.build()
+        S.L.dumpw()
+
+The layout display is fully parameterized via the embedded **display**
+dictionnary member of the Layout object.which allows to configure the
+``showGs()`` method behavior.
+
+
+.. code-block:: python
+
+    figsize(15,7)    
+    S.L.display['ednodes']=False
+    S.L.display['nodes']=False
+    S.L.display['title']='WHERE1 Project Office Measurement Site'
+    S.L.display['overlay']=False
+    fig,ax=S.L.showGs()    
+
+
+.. image:: DOC-RayTracing2_files/_fig_01.png
+
+Adding coordinates of transmiting and receiving points
+
+-------------------------------------------------------
+
+Coordinates of transmitters and receivers for the simulation are stored
+in **.ini** files. Transmitter and Receiver are instances of the class
+RadioNode which offers different methods for specifying nodes positions.
+The stucture of this **.ini** file presented below. The node Id is
+associated with the 3 coordinates :math:`$x,y,z$` separated by white
+spaces.
+
+::
+
+    [coordinates]
+    1 = -12.2724 7.76319999993 1.2
+    2 = -18.7747 15.1779999998 1.2
+    3 = -4.14179999998 8.86029999983 1.2
+    4 = -9.09139999998 15.1899000001 1.2
+
+
+
+.. code-block:: python
+
+    S.tx = RadioNode(_fileini='w2m1rx.ini',_fileant='defant.vsh3')
+    S.rx = RadioNode(_fileini='w2m1tx.ini',_fileant='defant.vsh3')
+
+The whole simulation setup can then be displayed using the **show**
+method of the Simulation object
+
+
+.. code-block:: python
+
+    fig,ax = S.show()
+
+
+.. parsed-literal::
+
+    Warning : no furniture file loaded
+
+.. image:: DOC-RayTracing2_files/_fig_04.png
+
+The different object of the simulation cans be accessed to obtain
+different information. Below the number of transmitter and receiver.
+
+
+.. code-block:: python
+
+    print 'number of Tx :',len(S.tx.points.keys())
+    print 'number of rx :',len(S.rx.points.keys())
+
+
+.. parsed-literal::
+
+    number of Tx : 302
+    number of rx : 4
+
+The decomposition of the layout in a set of disjoint cycles is
+represented below. Not all cycles are rooms.
+
+
+.. code-block:: python
+
+    fig =plt.figure(figsize=(8,8))
+    fig,ax=S.L.showG('t',fig=fig)
+    plt.axis('off')
+
+
+.. parsed-literal::
+
+    (-40.0, 40.0, 2.0, 18.0)
+
+
+.. image:: DOC-RayTracing2_files/_fig_08.png
+
+Signatures, rays and propagation and transmission channel
+---------------------------------------------------------
+
+
+
+.. code-block:: python
+
+    # Choose Tx and Rx coordinates
+    itx=10
+    irx=2
+    tx= S.tx.points[itx]
+    rx= S.rx.points[irx]
+
+A signature is a sequence of layout objects (points and segments) which
+are involved in a given optical ray joining the transmiter and the
+receiver. The signatutre is calculated from a layout cycle to an other
+layout cycle. This means that is is required first to retrieve the cycle
+number from point coordinates. This is done thanks to the **pt2cy**,
+point to cycle function.
+
+
+.. code-block:: python
+
+    ctx=S.L.pt2cy(tx)
+    crx=S.L.pt2cy(rx)
+    print 'tx point belongs to cycle ',ctx
+    print 'rx point belongs to cycle ',crx
+
+
+.. parsed-literal::
+
+    tx point belongs to cycle  5
+    rx point belongs to cycle  4
+
+Then the signature between cycle 5 and cycle 4 can be calculated. This
+is done by instantiating a Signature object with a given layout and the
+2 cycle number.
+
+The representaion of a signature object provides information about the
+number of signatures for each number of interactions.
+
+
+.. code-block:: python
+
+    %timeit
+    Si = Signatures(S.L,ctx,crx)
+    Si.run1(cutoff=3)
+    Si
+
+
+.. parsed-literal::
+
+    Signatures : 
+    ------------------
+    248
+    from : 5 to 4
+    1 : 2
+    2 : 40
+    3 : 264
+    4 : 1274
+
+
+
+Once the signature has been obtained, 2D rays are calculated with the
+``rays()`` method of the signature **Si**. The coordinates of a
+transmitter and a receiver should be parameters of the function. **r2d**
+object has a ``show`` and ``show3`` method
+
+
+.. code-block:: python
+
+    r2d = Si.rays(tx,rx)
+    r2d.show(S.L)
+
+
+.. parsed-literal::
+
+    12 [4, 5]
+
+.. image:: DOC-RayTracing2_files/_fig_13.png
+
+Then, the **r2d** object is transformed in 3D ray, taking into account
+the reflection on ceil and floor.
+
+
+.. code-block:: python
+
+    r3d=r2d.to3D()
+
+Once the 3D rays are obianed it required to process the determination of
+the local bassis and to fill the interaction matrices
+
+
+.. code-block:: python
+
+    r3d.locbas(S.L)
+    r3d.fillinter(S.L)
+    r3d
+
+
+.. parsed-literal::
+
+    1 / 1 : [0]
+    2 / 5 : [1 2 3 4 5]
+    3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
+    4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
+    5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
+    6 / 8 : [57 58 59 60 61 62 63 64]
+    -----
+    ni : 268
+    nl : 601
+
+
+
+Calulating the Propagation Channel 
+-----------------------------------
+
+The propagation channel is a ``Ctilde`` object. This object can be
+evaluated for different frequency point thanks to the ``eval()`` method
+with a frequency array as argument.
+
+
+.. code-block:: python
+
+    print "fmin : ",S.freq.min()
+    print "fmax : ",S.freq.max()
+    print "Nf : ", len(S.freq)
+
+
+.. parsed-literal::
+
+    fmin :  2.0
+    fmax :  11.0
+    Nf :  181
+
+
+.. code-block:: python
+
+    Ct = r3d.eval(S.freq)
+
+
+.. parsed-literal::
+
+    Rays evaluation
+
+
+.. code-block:: python
+
+    Eco,Ecross = Ct.energy()
+    plot(Ct.tauk,10*np.log10(Eco),'ob')
+    plot(Ct.tauk,10*np.log10(Ecross),'or')
+    xlabel('delay(ns)')
+    ylabel('path energy (dB)')
+    legend(('Co-pol','X-pol'))
+    axis((0,80,-60,20))
+
+
+.. parsed-literal::
+
+    (0, 80, -60, 20)
+
+
+.. image:: DOC-RayTracing2_files/_fig_19.png
+
+The multipath doa/dod diagram can be obtained via the method ``doadod``.
+The colorbar corresponds to the total energy of the path.
+
+
+.. code-block:: python
+
+    Ct.doadod()
+
+.. image:: DOC-RayTracing2_files/_fig_21.png
+
+Apply waveform
+--------------
+
+
+Once the propagation channel is obtained the transmission channel is
+calculated with the method ``prop2tran``
+
+
+.. code-block:: python
+
+    Ct.freq = S.freq
+    sco = Ct.prop2tran(a='theta',b='theta')
+    sca = Ct.prop2tran(a=S.tx.A,b=S.rx.A)
+
+The apply waveform which is here is loaded from a measurement file, and
+compensated for a small time shift. It is important for the latter
+treatment for the applied waveform to be centered on the middle of the
+array as it is illustrated below.
+
+
+.. code-block:: python
+
+    wav = wvf.Waveform({'type':'W1compensate'})
+    #wav = wvf.Waveform({'type' : 'generic','band': 0.499,'fc': 4.493, 'fe': 100, 'thresh': 3, 'tw': 30})
+    wav.show()
+
+.. image:: DOC-RayTracing2_files/_fig_23.png
+
+Finally, the received UWB waveform can be synthesize in applyng the
+waveform to the transmission channel.
+
+
+.. code-block:: python
+
+    ciro = sco.applywavB(wav.sfg)
+    cira = sca.applywavB(wav.sfg)
+
+
+.. code-block:: python
+
+    subplot(121)
+    ciro.plot()
+    xlabel('delay(ns)')
+    ylabel('voltage (V)')
+    title('without antenna')
+    axis((0,90,-0.0002,0.0002))
+    subplot(122)
+    cira.plot()
+    xlabel('delay(ns)')
+    ylabel('voltage (V)')
+    title('with antenna')
+    a=axis((0,90,-0.002,0.002))
+
+.. image:: DOC-RayTracing2_files/_fig_25.png
+

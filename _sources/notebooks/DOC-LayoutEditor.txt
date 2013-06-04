@@ -5,10 +5,6 @@ To edit a new layout, it is first necessary lo load the layout module
 
     from pylayers.gis.layout import *
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0xafdb46c>
-
 To create a new layout just create a new layout object with the name of
 the .ini file
 
@@ -24,27 +20,6 @@ At that stage the layout file is void
 
     L.info()
 
-
-.. parsed-literal::
-
-    filestr :  layout.ini
-    filematini :  matDB.ini
-    fileslabini :  slabDB.ini
-    filegeom :  geomfile (.off) has no been generated
-    limites  (-20.0, 20.0, -10.0, 10.0)
-    number of Nodes : 0
-    number of Segments : 0
-    number of Sub-Segments : 0
-    Gs Nodes :  0
-    Gs Edges :  0
-    Gc Nodes :  0
-    Gc Edges :  0
-    Gt Nodes :  0
-    Gt Edges :  0
-    vnodes = L.Gt.node[Nc]['vnodes'] 
-    poly = L.Gt.node[Nc]['polyg'] 
-    Gr Nodes    : no Gr graph
-
 The display option dictionnary 
 -------------------------------
 
@@ -54,56 +29,6 @@ The layout can be displayed using matplotlib ploting primitive
 .. code-block:: python
 
     L.display
-
-
-.. parsed-literal::
-
-    {'activelayer': 'WINDOW_GLASS',
-     'alpha': 0.5,
-     'box': (-20, 20, -10, 10),
-     'clear': False,
-     'edges': True,
-     'edlabel': False,
-     'edlblsize': 20,
-     'ednodes': False,
-     'fileoverlay': 'TA-Office.png',
-     'fontsize': 20,
-     'layer': [],
-     'layers': [],
-     'layerset': ['WINDOW_GLASS',
-      'PLASTERBOARD_7CM',
-      'WALL',
-      'AIR',
-      'WINDOW',
-      'METALIC',
-      'PLASTERBOARD_14CM',
-      'DOOR',
-      'FLOOR',
-      'METAL',
-      'PARTITION',
-      'CONCRETE_20CM3D',
-      'PLASTERBOARD_10CM',
-      'CEIL',
-      'CONCRETE_6CM3D',
-      'CONCRETE_15CM3D',
-      '3D_WINDOW_GLASS',
-      'WALLS',
-      'WOOD',
-      'CONCRETE_7CM3D',
-      'PILLAR',
-      'ABSORBENT'],
-     'ndlabel': False,
-     'ndlblsize': 20,
-     'ndsize': 10,
-     'nodes': False,
-     'overlay': False,
-     'scaled': True,
-     'subseg': True,
-     'thin': False,
-     'ticksoff': True,
-     'title': '',
-     'visu': False}
-
 
 Layers
 ------
@@ -198,15 +123,6 @@ a filename. In that case the file is stored in
 
     figsize(15,15)
     L.showGs()
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0xb5d850c>,
-     <matplotlib.axes.AxesSubplot at 0xb533b8c>)
-
-
-.. image:: DOC-LayoutEditor_files/_fig_05.png
 
 Scaling the figure overlay
 --------------------------

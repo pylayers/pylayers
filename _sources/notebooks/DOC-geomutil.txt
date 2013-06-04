@@ -1,3 +1,8 @@
+**Geomutil** is a module which gathers different geometrical functions
+used in other modeule of pylayers.
+
+The importation is done as below. The geoutil alias is *geu*
+
 
 .. code-block:: python
 
@@ -6,6 +11,10 @@
 
 Class Polygon
 =============
+
+The Polygon class is a subclass of the shapely polygon class. It allows
+to initialize a Polygon with different object
+(list,np.array,sh.MultiPoint)
 
 
 .. code-block:: python
@@ -32,12 +41,28 @@ ploting polygons
     poly2.plot(color='red')
     poly3.plot(color='#000000')
 
-.. image:: DOC-geomutil_files/_fig_01.png
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x403f150>,
+     <matplotlib.axes.AxesSubplot at 0x3ed4110>)
+
+
+.. image:: DOC-geomutil_files/_fig_02.png
+
+.. image:: DOC-geomutil_files/_fig_04.png
+
+.. image:: DOC-geomutil_files/_fig_06.png
+
+.. image:: DOC-geomutil_files/_fig_08.png
 
 buildGv 
 --------
 
 Dertermine visibility relationships in a Polygon. Returns a graph
+
+This function is used for determining visibility relationships in indoor
+environement.
 
 
 .. code-block:: python
@@ -58,16 +83,20 @@ Dertermine visibility relationships in a Polygon. Returns a graph
     (-0.5, 4.0, -0.5, 2.5)
 
 
-.. image:: DOC-geomutil_files/_fig_03.png
+.. image:: DOC-geomutil_files/_fig_11.png
 
-Geomview class
---------------
+Geomview classes
+================
 
 GeomVect class
 --------------
 
+This class is used to interact with geomview 3D viewer.
+
 geomBase
 ~~~~~~~~
+
+Display a base
 
 
 .. code-block:: python
@@ -181,7 +210,7 @@ linet
     ax = linet(ax,p3,p4,al=0.9,color='green',linewidth=1)
     ax = linet(ax,p4,p1,al=1,color='cyan',linewidth=10)
 
-.. image:: DOC-geomutil_files/_fig_05.png
+.. image:: DOC-geomutil_files/_fig_14.png
 
 dptseg(p,pt,ph)
 ---------------
@@ -221,7 +250,7 @@ displot
     ph  = sp.rand(2,N)
     f,a = displot(pt,ph)
 
-.. image:: DOC-geomutil_files/_fig_07.png
+.. image:: DOC-geomutil_files/_fig_16.png
 
 ptonseg(pta,phe,pt)
 
@@ -270,5 +299,5 @@ ptconvex
     
 
 
-.. image:: DOC-geomutil_files/_fig_09.png
+.. image:: DOC-geomutil_files/_fig_18.png
 

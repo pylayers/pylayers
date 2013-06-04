@@ -1,5 +1,3 @@
-Example of Agent mobility 
--------------------------
 
 .. code-block:: python
 

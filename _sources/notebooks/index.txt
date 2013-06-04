@@ -28,13 +28,21 @@ MultiWall Motley-Keenan Model
 
     DOC-MultiwallAndCoverage.rst
 
-Ray Tracing (C Implementation)
-----------------------------------
+Ray Tracing (Method 1 C Implementation)
+----------------------------------------
 
 .. toctree::
     :maxdepth: 2 
 
     DOC-RayTracing.rst
+
+Ray Tracing (Full Python Implementation)
+-----------------------------------------
+
+.. toctree::
+    :maxdepth: 2 
+
+    DOC-RayTracing2.rst
 
 UWB Waveform
 -------------

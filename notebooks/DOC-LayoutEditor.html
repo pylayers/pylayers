@@ -85,8 +85,6 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0xafdb46c&gt;</pre>
-</div>
 <p>To create a new layout just create a new layout object with the name of
 the .ini file</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;layout.ini&#39;</span><span class="p">)</span>
@@ -96,75 +94,10 @@ the .ini file</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>filestr :  layout.ini
-filematini :  matDB.ini
-fileslabini :  slabDB.ini
-filegeom :  geomfile (.off) has no been generated
-limites  (-20.0, 20.0, -10.0, 10.0)
-number of Nodes : 0
-number of Segments : 0
-number of Sub-Segments : 0
-Gs Nodes :  0
-Gs Edges :  0
-Gc Nodes :  0
-Gc Edges :  0
-Gt Nodes :  0
-Gt Edges :  0
-vnodes = L.Gt.node[Nc]['vnodes']
-poly = L.Gt.node[Nc]['polyg']
-Gr Nodes    : no Gr graph</pre>
-</div>
 <div class="section" id="the-display-option-dictionnary">
 <h1>The display option dictionnary<a class="headerlink" href="#the-display-option-dictionnary" title="Permalink to this headline">¶</a></h1>
 <p>The layout can be displayed using matplotlib ploting primitive</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;activelayer&#39;</span><span class="p">:</span> <span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
- <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
- <span class="s">&#39;box&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
- <span class="s">&#39;clear&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s">&#39;edlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;edlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
- <span class="s">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s">&#39;TA-Office.png&#39;</span><span class="p">,</span>
- <span class="s">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
- <span class="s">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
- <span class="s">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[],</span>
- <span class="s">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
-  <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
-  <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
-  <span class="s">&#39;WINDOW&#39;</span><span class="p">,</span>
-  <span class="s">&#39;METALIC&#39;</span><span class="p">,</span>
-  <span class="s">&#39;PLASTERBOARD_14CM&#39;</span><span class="p">,</span>
-  <span class="s">&#39;DOOR&#39;</span><span class="p">,</span>
-  <span class="s">&#39;FLOOR&#39;</span><span class="p">,</span>
-  <span class="s">&#39;METAL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span>
-  <span class="s">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
-  <span class="s">&#39;PLASTERBOARD_10CM&#39;</span><span class="p">,</span>
-  <span class="s">&#39;CEIL&#39;</span><span class="p">,</span>
-  <span class="s">&#39;CONCRETE_6CM3D&#39;</span><span class="p">,</span>
-  <span class="s">&#39;CONCRETE_15CM3D&#39;</span><span class="p">,</span>
-  <span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">,</span>
-  <span class="s">&#39;WALLS&#39;</span><span class="p">,</span>
-  <span class="s">&#39;WOOD&#39;</span><span class="p">,</span>
-  <span class="s">&#39;CONCRETE_7CM3D&#39;</span><span class="p">,</span>
-  <span class="s">&#39;PILLAR&#39;</span><span class="p">,</span>
-  <span class="s">&#39;ABSORBENT&#39;</span><span class="p">],</span>
- <span class="s">&#39;ndlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;ndlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
- <span class="s">&#39;ndsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
- <span class="s">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;overlay&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;scaled&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s">&#39;subseg&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s">&#39;thin&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
- <span class="s">&#39;ticksoff&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
- <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
- <span class="s">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -254,10 +187,6 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xb5d850c&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0xb533b8c&gt;)</pre>
-</div>
-<img alt="../_images/_fig_05.png" src="../_images/_fig_05.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h1>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h1>

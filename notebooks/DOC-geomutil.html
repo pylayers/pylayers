@@ -52,7 +52,9 @@
 <li><a class="reference internal" href="#">Class Polygon</a><ul>
 <li><a class="reference internal" href="#ploting-polygons">ploting polygons</a></li>
 <li><a class="reference internal" href="#buildgv">buildGv</a></li>
-<li><a class="reference internal" href="#geomview-class">Geomview class</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#geomview-classes">Geomview classes</a><ul>
 <li><a class="reference internal" href="#geomvect-class">GeomVect class</a><ul>
 <li><a class="reference internal" href="#geombase">geomBase</a></li>
 <li><a class="reference internal" href="#points">points</a></li>
@@ -88,12 +90,18 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+  <p><strong>Geomutil</strong> is a module which gathers different geometrical functions
+used in other modeule of pylayers.</p>
+<p>The importation is done as below. The geoutil alias is <em>geu</em></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
 </pre></div>
 </div>
 <div class="section" id="class-polygon">
 <h1>Class Polygon<a class="headerlink" href="#class-polygon" title="Permalink to this headline">¶</a></h1>
+<p>The Polygon class is a subclass of the shapely polygon class. It allows
+to initialize a Polygon with different object
+(list,np.array,sh.MultiPoint)</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">points</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">)])</span>
 <span class="n">poly1</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="n">poly2</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
@@ -114,11 +122,19 @@
 <span class="n">poly3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_01.png" src="../_images/_fig_01.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x403f150&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x3ed4110&gt;)</pre>
+</div>
+<img alt="../_images/_fig_022.png" src="../_images/_fig_022.png" />
+<img alt="../_images/_fig_04.png" src="../_images/_fig_04.png" />
+<img alt="../_images/_fig_062.png" src="../_images/_fig_062.png" />
+<img alt="../_images/_fig_081.png" src="../_images/_fig_081.png" />
 </div>
 <div class="section" id="buildgv">
 <h2>buildGv<a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
 <p>Dertermine visibility relationships in a Polygon. Returns a graph</p>
+<p>This function is used for determining visibility relationships in indoor
+environement.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> \
                                           <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span> \
@@ -131,15 +147,17 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_03.png" src="../_images/_fig_03.png" />
+<img alt="../_images/_fig_11.png" src="../_images/_fig_11.png" />
 </div>
-<div class="section" id="geomview-class">
-<h2>Geomview class<a class="headerlink" href="#geomview-class" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="geomview-classes">
+<h1>Geomview classes<a class="headerlink" href="#geomview-classes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="geomvect-class">
 <h2>GeomVect class<a class="headerlink" href="#geomvect-class" title="Permalink to this headline">¶</a></h2>
+<p>This class is used to interact with geomview 3D viewer.</p>
 <div class="section" id="geombase">
 <h3>geomBase<a class="headerlink" href="#geombase" title="Permalink to this headline">¶</a></h3>
+<p>Display a base</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">v3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
@@ -223,7 +241,7 @@
 <span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_052.png" src="../_images/_fig_052.png" />
+<img alt="../_images/_fig_14.png" src="../_images/_fig_14.png" />
 </div>
 <div class="section" id="dptseg-p-pt-ph">
 <h2>dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h2>
@@ -249,7 +267,7 @@
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_071.png" src="../_images/_fig_071.png" />
+<img alt="../_images/_fig_162.png" src="../_images/_fig_162.png" />
 <p>ptonseg(pta,phe,pt)</p>
 <hr class="docutils" />
 <p>used in select.py</p>
@@ -283,7 +301,7 @@
 <span class="n">polyg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_091.png" src="../_images/_fig_091.png" />
+<img alt="../_images/_fig_181.png" src="../_images/_fig_181.png" />
 </div>
 </div>
 

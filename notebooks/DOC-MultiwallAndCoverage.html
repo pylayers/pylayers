@@ -97,7 +97,7 @@
 </div>
 <div class="section" id="loading-the-layout">
 <h2>Loading the layout<a class="headerlink" href="#loading-the-layout" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.str&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span> <span class="c"># load graphs</span>
 <span class="k">except</span><span class="p">:</span>
@@ -111,10 +111,10 @@
 <p>We define :</p>
 <ul class="simple">
 <li>A a transmitter</li>
-<li>B a receviver</li>
+<li>B a receiver</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="c"># transmitter</span>
-<span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span> <span class="c"># receiver</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="c"># defining transmitter position</span>
+<span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span> <span class="c"># defining receiver position</span>
 </pre></div>
 </div>
 </div>
@@ -129,20 +129,21 @@
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0xaa60aec&gt;]</pre>
-</div>
-<img alt="../_images/_fig_02.png" src="../_images/_fig_02.png" />
+<img alt="../_images/_fig_01.png" src="../_images/_fig_01.png" />
 <div class="section" id="find-the-intersection-between-the-direct-path-and-the-walls">
 <h3>Find the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#find-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+<p>The function <em>angleonlink</em> returns the list of intersected segments and
+the corresponding incidence angles with respect to the segment normal.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">nstr</span><span class="p">,</span><span class="n">thrad</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">nstr</span>
+<span class="k">print</span> <span class="n">thrad</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="mi">34</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">89</span><span class="p">]),</span>
- <span class="n">array</span><span class="p">([</span> <span class="mf">0.40024066</span><span class="p">,</span>  <span class="mf">0.40024066</span><span class="p">,</span>  <span class="mf">0.40024066</span><span class="p">,</span>  <span class="mf">1.17055567</span><span class="p">,</span>  <span class="mf">1.17055567</span><span class="p">,</span>
-        <span class="mf">0.40024066</span><span class="p">]))</span>
-</pre></div>
+<div class="highlight-python"><pre>[34 36 41 67 72]
+[ 0.40024066  0.40024066  0.40024066  1.17055567  1.17055567]</pre>
 </div>
 </div>
 <div class="section" id="computing-the-multi-wall-model">
@@ -154,33 +155,33 @@ orthogonal and parallel polarization</p>
 
 <span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="p">,</span><span class="n">Edo</span><span class="p">,</span><span class="n">Edp</span><span class="o">=</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">A</span><span class="p">)</span>
 
-<span class="k">print</span> <span class="s">&#39;Losses polar orthogonal </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> dBm&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="k">print</span> <span class="s">&#39;Losses polar parallel </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s">  dBm&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Lwp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="k">print</span> <span class="s">&#39;Excess delay polar orthogonal </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Edo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="k">print</span> <span class="s">&#39;Excess delay polar parallel  </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span><span class="n">Edp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;Losses orthogonal polarization </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> dBm&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span> <span class="s">&#39;Losses parallel polarization </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s">  dBm&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Lwp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span> <span class="s">&#39;Excess delay orthogonal polarization  </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Edo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span> <span class="s">&#39;Excess delay parallel polarization   </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span><span class="n">Edp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Losses polar orthogonal      27.7333 dBm
-Losses polar parallel        16.0573  dBm
-Excess delay polar orthogonal        2.23113 ns
-Excess delay polar parallel          2.12364 ns</pre>
+<div class="highlight-python"><pre>Losses orthogonal polarization       27.7333 dBm
+Losses parallel polarization         16.0573  dBm
+Excess delay orthogonal polarization         2.23113 ns
+Excess delay parallel polarization           2.12364 ns</pre>
 </div>
 </div>
 </div>
 </div>
 <div class="section" id="coverage-class">
 <h1>Coverage class<a class="headerlink" href="#coverage-class" title="Permalink to this headline">¶</a></h1>
-<p>By extension, the multi-wall model can also been used to perform a
-coverage of a Layout</p>
+<p>By extension, the multi-wall model can also be used to perform a full
+coverage of a Layout given a transmitter position.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span>  <span class="o">=</span> <span class="n">L</span> <span class="c"># set layout</span>
-<span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">A</span> <span class="c"># set the tramsitter</span>
+<span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">A</span> <span class="c"># set the transmitter</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">3200</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">t1</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -189,7 +190,7 @@ coverage of a Layout</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Coverage performed in  5.5845220089 s</pre>
+<div class="highlight-python"><pre>Coverage performed in  15.3641560078 s</pre>
 </div>
 <p>For Orthogonal polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
@@ -197,14 +198,14 @@ coverage of a Layout</p>
 </pre></div>
 </div>
 <img alt="../_images/_fig_07.png" src="../_images/_fig_07.png" />
-<img alt="../_images/_fig_08.png" src="../_images/_fig_08.png" />
+<img alt="../_images/_fig_09.png" src="../_images/_fig_09.png" />
 <p>For parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_09.png" src="../_images/_fig_09.png" />
-<img alt="../_images/_fig_10.png" src="../_images/_fig_10.png" />
+<img alt="../_images/_fig_111.png" src="../_images/_fig_111.png" />
+<img alt="../_images/_fig_131.png" src="../_images/_fig_131.png" />
 </div>
 
 

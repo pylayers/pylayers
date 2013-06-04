@@ -72,10 +72,18 @@
 <span id="bsignal"></span><h1>layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h1>
 <p>This class handles the description of the indoor propagation environment.
 It manages various input and output data format.</p>
-<p>The most basic description of a Layout is given in a <cite>.str2</cite> file
+<p>The most basic description of a Layout is given in a <cite>.ini</cite> file
 which contains the points and edges list of the Layout.</p>
-<p>Then this raw information is processes to generate a .str file which
-contains additional visibility relationships between vertices and edges</p>
+<p>This <cite>.ini</cite> file can be edited via the interactive command</p>
+<p>Then different graphs are processed in order to enrich the data structure for
+further computations as the calculation of signatures.</p>
+<p>As the building can be computed once there is a command for writing anf
+reading the layout additional information from gpickle format files.</p>
+<p>gpickle files are stored in $BASENAME/struc/ directory</p>
+<p>The <cite>.ini</cite> file can be converted in a <cite>.str2</cite> format which is used for the
+C implementation of yhe ray tracing. This format is going to be deprecated.</p>
+<p>The <cite>.str2</cite> file is processed to generate a <cite>.str</cite> file which
+contains additional visibility relationships between vertices and edges.</p>
 <span class="target" id="module-pylayers.gis.layout"></span><dl class="class">
 <dt id="pylayers.gis.layout.Layout">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr.str'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
@@ -129,9 +137,8 @@ contains additional visibility relationships between vertices and edges</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p is a (1x2) tuple</strong> :</p>
 <p><strong>&gt;&gt;&gt; from pylayers.gis.layout import *</strong> :</p>
-<p><strong>&gt;&gt;&gt; L = Layout()</strong> :</p>
-<p><strong>&gt;&gt;&gt; load(&#8216;exemple.str&#8217;)</strong> :</p>
-<p><strong>&gt;&gt;&gt; add_fnod((10.0,10.0))</strong> :</p>
+<p><strong>&gt;&gt;&gt; L = Layout(&#8216;exemple.str&#8217;)</strong> :</p>
+<p><strong>&gt;&gt;&gt; L.add_fnod((10.0,10.0))</strong> :</p>
 <p class="last"><strong>-9</strong> :</p>
 </td>
 </tr>
@@ -390,7 +397,7 @@ connect : list of point number</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
 <span class="go">(array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))</span>
 </pre></div>
 </div>
@@ -420,7 +427,9 @@ connect : list of point number</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;exemple.str&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">boundary</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">boundary</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">ax</span>
+<span class="go">(0.0, 10.0, -2.0, 2.0)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -559,9 +568,9 @@ Each simple cycle of Gs is a node of Gt</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;exemple.str&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">buildGt</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">buildGr</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">buildGv</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGt</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">buildGv</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1171,10 +1180,7 @@ p2 : (1 x 2 )</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/gis-layout-1.py">Source code</a>, <a class="reference external" href="../modules/gis-layout-1.png">png</a>, <a class="reference external" href="../modules/gis-layout-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/gis-layout-1.png" src="../_images/gis-layout-1.png" />
-</div>
+<p>(<a class="reference external" href="../modules/gis-layout-1.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="method">
@@ -1736,78 +1742,6 @@ p2 : numpy.ndarray</div></blockquote>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/gis-layout-2.py">Source code</a>)</p>
-<div class="figure">
-<img alt="../_images/gis-layout-2_00.png" src="../_images/gis-layout-2_00.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_00.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_00.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_01.png" src="../_images/gis-layout-2_01.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_01.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_01.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_01.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_02.png" src="../_images/gis-layout-2_02.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_02.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_02.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_02.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_03.png" src="../_images/gis-layout-2_03.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_03.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_03.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_03.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_04.png" src="../_images/gis-layout-2_04.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_04.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_04.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_04.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_05.png" src="../_images/gis-layout-2_05.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_05.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_05.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_05.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_06.png" src="../_images/gis-layout-2_06.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_06.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_06.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_06.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_07.png" src="../_images/gis-layout-2_07.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_07.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_07.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_07.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_08.png" src="../_images/gis-layout-2_08.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_08.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_08.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_08.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_09.png" src="../_images/gis-layout-2_09.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_09.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_09.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_09.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_10.png" src="../_images/gis-layout-2_10.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_10.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_10.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_10.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_11.png" src="../_images/gis-layout-2_11.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_11.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_11.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_11.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_12.png" src="../_images/gis-layout-2_12.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_12.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_12.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_12.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_13.png" src="../_images/gis-layout-2_13.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_13.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_13.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_13.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_14.png" src="../_images/gis-layout-2_14.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_14.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_14.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_14.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_15.png" src="../_images/gis-layout-2_15.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_15.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_15.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_15.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_16.png" src="../_images/gis-layout-2_16.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_16.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_16.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_16.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/gis-layout-2_17.png" src="../_images/gis-layout-2_17.png" />
-<p class="caption">(<a class="reference external" href="../modules/gis-layout-2_17.png">png</a>, <a class="reference external" href="../modules/gis-layout-2_17.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-2_17.pdf">pdf</a>)</p>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -1907,15 +1841,12 @@ p2 : numpy.ndarray</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/gis-layout-3.py">Source code</a>, <a class="reference external" href="../modules/gis-layout-3.png">png</a>, <a class="reference external" href="../modules/gis-layout-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-3.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/gis-layout-3.png" src="../_images/gis-layout-3.png" />
-</div>
+<p>(<a class="reference external" href="../modules/gis-layout-3.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x4151510&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x6eeb850&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
