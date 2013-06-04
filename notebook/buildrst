@@ -1,0 +1,12 @@
+#!/bin/bash
+nbconvert.py rst $1
+cat ${1%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
+cat f1 | sed 's/code::/code-block::/'  > f2 
+cat f2 | sed "s/image:: /image:: ${1%%.ipynb}_files\//"  > ${1%%.ipynb}.rst
+rm -Rf ../doc/notebooks/${1%%.ipynb}_files 
+rm -Rf ../../website/html/notebooks/${1%%.ipynb}_files 
+mv -f ${1%%.ipynb}.rst ../doc/notebooks
+cp -Rf ${1%%.ipynb}_files ../doc/notebooks
+mv -f ${1%%.ipynb}_files ../../website/html/notebooks
+rm f1
+rm f2
