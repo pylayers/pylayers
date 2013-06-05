@@ -197,6 +197,36 @@ class Signatures(dict):
         print "target : ", self.target
 
 
+    def sp(self,G, source, target, cutoff=None):
+        if cutoff < 1:
+            return
+        visited = [source]
+        stack = [iter(G[source])]
+        while stack:
+            children = stack[-1]
+            child = next(children, None)
+            if child is None:
+                stack.pop()
+                visited.pop()
+            elif len(visited) < cutoff:
+                if child == target:
+                    for i in range(len(self.ds[source])):
+                        s=self.ds[target][i] + visited
+                        self.ds[target].append(s)
+
+                    # yield visited +[target]
+                elif child not in visited:
+                    visited.append(child)
+                    stack.append(iter(G[child]))
+            else: #len(visited) == cutoff:
+                if child == target or target in children:
+                    for i in range(len(self.ds[source])):
+                        s=self.ds[target][i] + visited
+                        self.ds[target].append(s)
+
+                stack.pop()
+                visited.pop()
+
 
     def propaths(self,G, source, target, cutoff=None):
         """ all_simple_paths
@@ -705,7 +735,6 @@ class Signatures(dict):
                 for t in ltarget:
                     #print t
                     paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
-
                     for path in paths:
                         itm1 = path[0]
                         if itm1 not in Gf.node.keys():
@@ -830,14 +859,19 @@ class Signatures(dict):
         dac = {}
         # dfl : dictionnary of fronlines
         dfl = {}
+
         for cy in lcil:
             dfl[cy] = []
+
             nghb = nx.neighbors(self.L.Gt,cy)
             dac[cy] = nghb
             poly1 = self.L.Gt.node[cy]['polyg']
             cp1 = poly1.centroid.xy
             p1 = np.array([cp1[0][0],cp1[1][0]])
+
             for cya in nghb:
+                if cy == 13:
+                    pdb.set_trace()
                 poly2 = self.L.Gt.node[cya]['polyg']
                 cp2 = poly2.centroid.xy
                 p2 = np.array([cp2[0][0],cp2[1][0]])
@@ -847,11 +881,72 @@ class Signatures(dict):
                 dp = np.dot(vpn,vn)
                 # if dot(vn,vpn) >0 cycle cya is ahead
                 if dp>0:
-                    lsegs = frontline(self.L,cya,vn)
-                    for s in lsegs:
-                        cyb = filter(lambda n : n <> cya,self.L.Gs.node[s]['ncycles'])
+                    lsegso = frontline(self.L,cy,vn)
+                    for s in lsegso:
+                        cyb = filter(lambda n : n <> cy,self.L.Gs.node[s]['ncycles'])
                         if cyb<>[]:
-                            dfl[cy].append(str((s,cya,cyb[0])))
+                            dfl[cy].append(str((s,cy,cyb[0])))
+            dfl[cy]=np.unique(dfl[cy]).tolist()
+        # # list of interactions belonging to source
+        # lis = self.L.Gt.node[lcil[0]]['inter']
+
+        # # list of interactions belonging to target
+        # lit = self.L.Gt.node[lcil[-1]]['inter']
+
+        # # filter lis remove incoming transmission
+        # lli   = []
+        # lisR  = filter(lambda l: len(eval(l))==2,lis)
+        # lisT  = filter(lambda l: len(eval(l))==3,lis)
+        # lisTo = filter(lambda l: eval(l)[2]<>cs,lisT)
+        # lis = lisR + lisTo
+
+        # # filter lit remove outgoing transmission
+        # llt = []
+        # litR  = filter(lambda l: len(eval(l))==2,lit)
+        # litT  = filter(lambda l: len(eval(l))==3,lit)
+        # litTi = filter(lambda l: eval(l)[2]==ct,litT)
+        # lit = litR + litTi
+        
+
+        self.ds={}
+
+        for icy in range(len(lcil)-1):
+            
+
+            pdb.set_trace()
+            io = dfl[lcil[icy]]
+            io_ = dfl[lcil[icy+1]]
+            print io
+            print io_
+            if icy == 0:
+                [self.ds.update({k:[[k]]}) for k in io]        
+
+            # remove keys which are not in front line     
+            # kds = self.ds.keys()
+            # for k in kds :
+            #     if k not in io:
+            #         self.ds.pop(k)
+
+            for j in io_:
+                self.ds[j]=[[]]
+                for i in io:
+                    self.sp(self.L.Gi,i,j,cutoff=2)
+            # [self.ds.pop(k) for k in io]
+                    
+                    # ds[j]
+                    # if len(a) == 1:
+                    #     if len(ds[j]) <> 0:
+                    #         pdb.set_trace()
+                    #         [ds[j][k].extend(a[0][:-1]) for k in range(len(ds[j]))]
+                    #     else :    
+                    #         ds[j]=a[0][:-1]
+                    # elif len(a)> 1:
+                    #     if len(ds[j]) <> 0:
+                    #         [[ds[j][k].extend(a[l][:-1]) for k in range(len(ds[j]))] for l in range(len(a))]
+                    #     else :    
+                    #         ds[j]=a[:-1]
+
+
             # remove segments which separate two cycles.
             # TODO: See if it worth to implement
             #lsegs = filter(lambda x : x not in interseg,lsegs)
@@ -872,6 +967,7 @@ class Signatures(dict):
         #
         # extract list of interactions from list of cycles lca
         #
+
         li = []
         for cy in dac:
             for cya in dac[cy]:
@@ -1022,6 +1118,7 @@ class Signatures(dict):
                     d[k][2*r,i]=a[0,i,r]
                     d[k][2*r+1,i]=a[1,i,r]
         self.update(d)
+
 
 
     def meta(self):

@@ -17,6 +17,7 @@ from IPython.display import Image,HTML,Latex
 
 # <codecell>
 
+
 L = Layout('WHERE1.ini')
 #L = Layout('defstr2.ini')
 #try:
@@ -25,14 +26,15 @@ L = Layout('WHERE1.ini')
 L.build()
 L.dumpw()
 
+
 # <markdowncell>
 
 # A signature is calculated between two cycles. This presents an interest for evaluating coverage maps. All links which have their termination in the same cycle can be obtained with the same signature. 
 
 # <codecell>
 
-nc1 = 4
-nc2 = 36
+nc1 = 7
+nc2 = 2
 
 
 # <markdowncell>
