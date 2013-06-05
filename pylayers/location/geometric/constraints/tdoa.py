@@ -29,7 +29,7 @@ from pylayers.location.geometric.constraints.constraint import *
 
 
 class TDOA(Constraint):
-    def __init__(self, value=45, std=4, vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]])):
+    def __init__(self,id='0', value=45, std=4, vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]]), origin={}):
         """
 
 
@@ -51,7 +51,7 @@ class TDOA(Constraint):
         vrai(deltar)  : check constraint validity
 
         """
-        Constraint.__init__(self, 'TDOA', p)
+        Constraint.__init__(self, 'TDOA', id=id, p=p, origin=origin)
 
         #
         # (vn,wn,tn) triedre orthonormal
@@ -81,9 +81,27 @@ class TDOA(Constraint):
 #               self.lbox    = LBoxN([box],ndim=np.shape(self.p)[1])
 
         self.annulus_bound()
-        self.Id = copy.copy(self.C_Id)
-        Constraint.C_Id = Constraint.C_Id + \
-            1   # constraint counter is incremented
+        self.visible = True
+        self.obsolete = False
+        self.usable = True
+
+
+    def update(self):
+        """
+        update constraint inforamtion
+        """
+        if self.p.any():
+            self.runable = True
+        else:
+            self.runable = False
+
+        self.sstd=self.std * 0.3
+        self.range=self.value *0.3
+        self.rescale(self.vcw)
+        self.evaluated = False
+        self.annulus_bound()
+
+
 
     def tdoa_axes(self, p):
         """

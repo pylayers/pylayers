@@ -1708,7 +1708,8 @@ class Polygon(shg.Polygon):
         """
 
         if type(p) == shg.polygon.Polygon:
-            self.Np = shape(p.exterior.xy)[1] - 1
+            self.Np = np.shape(p.exterior.xy)[1] - 1
+            p = np.vstack((p.exterior.xy[0],p.exterior.xy[1]))
             shg.Polygon.__init__(self, p)
 
         if type(p) == shg.multipoint.MultiPoint:
@@ -1739,6 +1740,20 @@ class Polygon(shg.Polygon):
             u = np.array([-1, 1])
             v = np.arange(self.Np) + 1
             self.vnodes = np.kron(v, u)
+
+    def __add__(self,p):
+        pnew = self.union(p)
+        p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
+        p2 = Polygon(p1)
+        return(p2)
+
+    def __repr__(self):
+        st = ''
+        p = self.ndarray()
+        sh = np.shape(p)
+        for k in range(sh[1]):
+            st = st + '('+str(p[0,k])+','+str(p[1,k])+')\n'
+        return(st)
 
     def ndarray(self):
         """ get a ndarray from a Polygon

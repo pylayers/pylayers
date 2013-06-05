@@ -222,6 +222,7 @@ class Ctilde(object):
 
         Parameters
         -----------
+
         cmap : color map
         s    : float
             size (default 30)
@@ -257,13 +258,13 @@ class Ctilde(object):
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
                     cmap=cmap, edgecolors='none')
         #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, 0, 360))
+        plt.axis((0, 180, -180, 180))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
-        a = plt.colorbar()
+        #a = plt.colorbar()
         #for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
-        a.set_label('dB')
+        #a.set_label('dB')
         plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
         plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
         #ylabel('$\phi_t(\degree)$',fontsize=18)
@@ -271,7 +272,7 @@ class Ctilde(object):
         plt.subplot(122)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
-        plt.axis((0, 180, 0, 360))
+        plt.axis((0, 180, -180, 180))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
         b = plt.colorbar()
@@ -281,6 +282,7 @@ class Ctilde(object):
         plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
         plt.title('DoA', fontsize=fontsize+2)
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
+        plt.axis
 
     def show(self, display=False, mode='linear'):
         """ show
@@ -368,6 +370,7 @@ class Ctilde(object):
 
         See Also
         --------
+
         pylayers.signal.bsignal.FUsignal.energy
 
         """
@@ -380,11 +383,12 @@ class Ctilde(object):
         return Eco, Ecross
 
     def sort(self, tauk):
-        """ sort Ctilde with respect of tauk
+        """ sort Ctilde with respect to tauk
 
         Parameters
         ----------
-        tauk :
+
+        tauk : array of delays
 
         """
         u = argsort(tauk)
@@ -484,15 +488,20 @@ class Ctilde(object):
 
     def vec2scalA(self, At, Ar, alpha=1.0):
         """
-        vec2scalA(self,At,Ar,alpha=1.0):
+        
+        Parameters
+        ----------
 
-        At = transmitter antenna
-        Ar = receiver antenna
+        At : transmitter antenna
+        Ar : receiver antenna
+        alpha : normalization factor
+    
+        Notes
+        -----
 
         Calculate ScalChannel by combining the propagation channel VectChannel
         with realistic antennas transfer function
 
-        alpha : normalization factor
 
         """
 

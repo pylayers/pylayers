@@ -5,5 +5,5 @@
 
    documentation
    download
-   examples
+   manual/index
    acknowledgments

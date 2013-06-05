@@ -817,7 +817,9 @@ class Simul(object):
         for k in self.output.keys():
             self.config.set("output",str(k),self.dout[k])
 
+        # Initialize waveform
         self.wav = wvf.Waveform()
+        # Update waveform 
         self.wav.read(self.config)
         self.save()
 

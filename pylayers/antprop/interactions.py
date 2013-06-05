@@ -750,4 +750,6 @@ class IntD(Inter):
             return(self.A)
 
 if (__name__ == "__main__"):
+    plt.ion()
+    print "testing pylayers/antprop/interactions.py"
     doctest.testmod()

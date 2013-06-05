@@ -147,6 +147,8 @@ class Coverage(object):
         self.freespace = PL(self.grid,self.model.f,self.tx)
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
+        self.snro = self.prdbmo - self.pndbm
+        self.snrp = self.prdbmp - self.pndbm
 
 
     def showEd(self,polarization='o'):
@@ -366,7 +368,6 @@ class Coverage(object):
             >>> C.cover()
             >>> C.showLoss(polarization='o')
             >>> C.showLoss(polarization='p')
-            
         """
         fig = plt.figure()
         fig,ax=self.L.showGs(fig=fig)
