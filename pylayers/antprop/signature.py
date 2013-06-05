@@ -1792,4 +1792,7 @@ class Signature(object):
 
 
 if __name__ == "__main__":
+    plt.ion()
+    print "testing pylayers/antprop/signature.py"
     doctest.testmod()
+    print "-------------------------------------"

@@ -35,8 +35,4 @@ for name in furname:
 apt =np.array(lpt)
 sh =np.shape(apt)
 nfur = sh[0]
-#for k in range(nfur):
-
-plt.axis('scaled')
-plt.savefig('toto.png') 
 

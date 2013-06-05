@@ -158,4 +158,5 @@ def cylinder(fig,pa,pb,R):
     ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
 
 if (__name__ == "__main__"):
+    plt.ion()
     doctest.testmod()

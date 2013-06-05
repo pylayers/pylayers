@@ -35,6 +35,11 @@ except:
     mesdir = basename + '/meas'
 
 try:
+    datadir = os.environ['DATADIR']
+except:
+    datadir = basename + '/meas'
+
+try:
     os.path.isdir(basename +'/figures')
 except:
     os.mkdir(basename+'/figures')

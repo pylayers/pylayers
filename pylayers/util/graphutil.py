@@ -128,7 +128,7 @@ def find_all_paths(graph, start, end):
 
 
 if __name__=="__main__":
-
+    plt.ion()
     doctest.testmod()
 #    points  = shg.MultiPoint([(0, 0),(0, 1),(2.5,1),(2.5,2),(2.8,2),(2.8,1.1),(3.2, 1.1), (3.2, 0.7), (0.4, 0.7), (0.4, 0)])
 #    polyg   = Polygon(points)
