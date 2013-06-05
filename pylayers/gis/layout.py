@@ -2981,7 +2981,9 @@ class Layout(object):
             else:
                 image = Image.open(strdir + '/' + self.display['fileoverlay'])
             #ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.5)
-            ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
+            #ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
+            ax.imshow(image,
+                      extent=self.display['box'],alpha=self.display['alpha'],origin='upper')
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
