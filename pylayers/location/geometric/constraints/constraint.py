@@ -125,6 +125,7 @@ class Constraint(object):
         >>> T.usable
         False
         """
+
         if np.sum(np.isnan(value))<1 and value.size>0:
             setattr(self,name,value)
 
