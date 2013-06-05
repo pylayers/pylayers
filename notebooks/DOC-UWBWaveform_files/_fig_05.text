@@ -1,8 +1,1 @@
-tw  :  30.0
-band  :  4.0
-fc  :  4.493
-thresh  :  3.0
-fe  :  50.0
-Np  :  1500.0
-te  :  0.02
-type  :  file
+type: W1offset
