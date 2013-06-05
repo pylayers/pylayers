@@ -58,13 +58,16 @@
 <li><a class="reference internal" href="#geomvect-class">GeomVect class</a><ul>
 <li><a class="reference internal" href="#geombase">geomBase</a></li>
 <li><a class="reference internal" href="#points">points</a></li>
+<li><a class="reference internal" href="#plotting-a-box">plotting a box</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#plotting-a-box">plotting a box</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility functions</a><ul>
 <li><a class="reference internal" href="#angledir">angledir</a></li>
 <li><a class="reference internal" href="#linet">linet</a></li>
 <li><a class="reference internal" href="#dptseg-p-pt-ph">dptseg(p,pt,ph)</a></li>
 <li><a class="reference internal" href="#ptconvex">ptconvex</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -115,20 +118,16 @@ to initialize a Polygon with different object
 </div>
 <div class="section" id="ploting-polygons">
 <h2>ploting polygons<a class="headerlink" href="#ploting-polygons" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
-<span class="n">poly1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
-<span class="n">poly2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
-<span class="n">poly3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">poly1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">poly2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">poly3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x403f150&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x3ed4110&gt;)</pre>
-</div>
-<img alt="../_images/_fig_022.png" src="../_images/_fig_022.png" />
-<img alt="../_images/_fig_04.png" src="../_images/_fig_04.png" />
-<img alt="../_images/_fig_062.png" src="../_images/_fig_062.png" />
-<img alt="../_images/_fig_081.png" src="../_images/_fig_081.png" />
+<img alt="../_images/_fig_012.png" src="../_images/_fig_012.png" />
 </div>
 <div class="section" id="buildgv">
 <h2>buildGv<a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
@@ -147,7 +146,7 @@ environement.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_11.png" src="../_images/_fig_11.png" />
+<img alt="../_images/_fig_04.png" src="../_images/_fig_04.png" />
 </div>
 </div>
 <div class="section" id="geomview-classes">
@@ -200,9 +199,8 @@ environement.</p>
 </pre></div>
 </div>
 </div>
-</div>
 <div class="section" id="plotting-a-box">
-<h2>plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h2>
+<h3>plotting a box<a class="headerlink" href="#plotting-a-box" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">geo</span><span class="o">=</span><span class="n">Geomoff</span><span class="p">(</span><span class="s">&#39;test3&#39;</span><span class="p">)</span>
 <span class="n">geo</span><span class="o">.</span><span class="n">box</span><span class="p">()</span>
 </pre></div>
@@ -211,8 +209,11 @@ environement.</p>
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="angledir">
-<h2>angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h2>
+<h3>angledir<a class="headerlink" href="#angledir" title="Permalink to this headline">¶</a></h3>
 <p>angledir converts a 3D vector into the 2 spherical angle
 <img class="math" src="../_images/math/df3bbb52c9a78e304035b201338c50ff96e512bb.png" alt="$\theta$"/>, <img class="math" src="../_images/math/c4eab3a2a3e0dfb32e01a4636b1ab86d1a7b783d.png" alt="$\phi$"/> expressed in radians</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
@@ -227,7 +228,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="linet">
-<h2>linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h2>
+<h3>linet<a class="headerlink" href="#linet" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -241,10 +242,10 @@ environement.</p>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_14.png" src="../_images/_fig_14.png" />
+<img alt="../_images/_fig_073.png" src="../_images/_fig_073.png" />
 </div>
 <div class="section" id="dptseg-p-pt-ph">
-<h2>dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h2>
+<h3>dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
 <p>this function calculates distances between a set of points and a segment</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
@@ -267,7 +268,7 @@ environement.</p>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_162.png" src="../_images/_fig_162.png" />
+<img alt="../_images/_fig_092.png" src="../_images/_fig_092.png" />
 <p>ptonseg(pta,phe,pt)</p>
 <hr class="docutils" />
 <p>used in select.py</p>
@@ -282,7 +283,7 @@ environement.</p>
 </div>
 </div>
 <div class="section" id="ptconvex">
-<h2>ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h2>
+<h3>ptconvex<a class="headerlink" href="#ptconvex" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">points</span>  <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
 <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 <span class="n">polyg</span>   <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
@@ -301,7 +302,8 @@ environement.</p>
 <span class="n">polyg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_181.png" src="../_images/_fig_181.png" />
+<img alt="../_images/_fig_11.png" src="../_images/_fig_11.png" />
+</div>
 </div>
 </div>
 

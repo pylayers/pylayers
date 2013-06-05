@@ -1,5 +1,5 @@
-This section explains some features of the class **Layout**. Layout are
-handled by the module **pylayers.gis.layout**
+This section explains some features of the class **Slab**. **Slabs** are
+handled by the module **pylayers.gis.slabs**
 
 
 .. code-block:: python
@@ -7,41 +7,20 @@ handled by the module **pylayers.gis.layout**
     from pylayers.gis.layout import *
     import  matplotlib.pyplot as plt
 
-Layout ploting
-~~~~~~~~~~~~~~
+.. parsed-literal::
 
-
-The layout ploting expoits vizaulization function of networkx. The
-method showG allows to display the different graphs which constitute the
-layout. option graph :math:`$\in$` {'s','t','i','r','v'}
+    <matplotlib.figure.Figure at 0x3d18910>
 
 
 .. code-block:: python
 
-    L = Layout('TA-Office.str')
+    L = Layout('TA-Office.ini')
     L.dumpr()
-    f = plt.figure(figsize=(25,25))
-    L.showG(fig=f,graph='s')
 
+Slab names
+----------
 
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0xac4a02c>,
-     <matplotlib.axes.AxesSubplot at 0xa848aec>)
-
-
-.. image:: DOC-SlabAndMaterials_files/_fig_02.png
-
-Slab name
----------
-
-Each node of :math:`$\mathcal{G}_s$` with a negative index is a point.
-
-Each node of :math:`$\mathcal{G}_s$` with a positive index corresponds
-to a segment (Wall,door,window,...).
-
-Each edge has a **name** attribute, which contains the name entry of its
-constitutive Slab.
+Each segment **name**, is the entry key for its constitutive Slab.
 
 
 .. code-block:: python
@@ -54,16 +33,16 @@ constitutive Slab.
     'PARTITION'
 
 
-In the example above the node +20 of :math:`$\mathcal{G}_s$` is a
-segment of nature 'PARTITION'.
-
-'PARTITION' is a key entry of the Slab dictionnary.
+In the example above the node **20** of :math:`$\mathcal{G}_s$` is a
+segment of name 'PARTITION', which is a key entry of the Slab
+dictionnary.
 
 Slab dictionnary
 ~~~~~~~~~~~~~~~~
 
-The layout L has a **sl** (slab dictionnary) attribute. Inside are
-placed all the available slabs for building the layout.
+The layout L has a **sl** (slab dictionnary) member. This dictionnary
+contains all the available slabs of the layout. For this layout the keys
+of the **sl** dictionnary are :
 
 
 .. code-block:: python
@@ -100,8 +79,8 @@ placed all the available slabs for building the layout.
 Slab Information
 ~~~~~~~~~~~~~~~~
 
-Each slab contains various information about their constitutive
-materials and on electromagnetic propreties.
+Each slab contains informations about their constitutive materials and
+their electromagnetic propreties.
 
 Below an example for a simple slab, constituted with a single material.
 The slab 'WOOD' is made of material 'WOOD'
@@ -130,9 +109,9 @@ The slab 'WOOD' is made of material 'WOOD'
 
 
 Until now the thickness attribute is a tuple with 8 values. This is for
-backward compatibility with pulsray. In future
+backward compatibility with **Pulsray**.
 
-pure python version their will remains no reason to maintain this
+In the pure python version their will remains no reason to maintain this
 limitation.
 
 Notice that in thickness the unit is centimeter, lthick is in SI unit
@@ -173,7 +152,8 @@ Ignore the existence of this attribute, use 'lthick' attribute instead.
     2
 
 
-More complex Slab, using different stacks of materials can be considered
+Multi layers Slab, using different stacks of materials can be easily
+defined using the two lists **lmatname** and **lthick**.
 
 
 .. code-block:: python
@@ -197,7 +177,8 @@ More complex Slab, using different stacks of materials can be considered
     [0.005, 0.005, 0.005]
 
 
-For each material, the electromagnetic propreties can be listed.
+For each constitutive material of a slab, their electromagnetic
+propreties can be obtained as:
 
 
 .. code-block:: python
@@ -300,9 +281,9 @@ Ploting Coefficients
     plt.figure()
     L.sl['WOOD'].plotwrtf(typ='phase')
 
-.. image:: DOC-SlabAndMaterials_files/_fig_15.png
+.. image:: DOC-SlabAndMaterials_files/_fig_14.png
 
-.. image:: DOC-SlabAndMaterials_files/_fig_16.png
+.. image:: DOC-SlabAndMaterials_files/_fig_15.png
 
 with respect to angle
 ~~~~~~~~~~~~~~~~~~~~~
@@ -314,7 +295,7 @@ with respect to angle
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].plotwrta()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_17.png
+.. image:: DOC-SlabAndMaterials_files/_fig_16.png
 
 wrt to angle and frequency 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -327,5 +308,5 @@ wrt to angle and frequency
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].pcolor()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_18.png
+.. image:: DOC-SlabAndMaterials_files/_fig_17.png
 

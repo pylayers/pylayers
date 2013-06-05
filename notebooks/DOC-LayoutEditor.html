@@ -49,15 +49,15 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The display option dictionnary</a></li>
-<li><a class="reference internal" href="#layers">Layers</a></li>
-<li><a class="reference internal" href="#string">String</a></li>
-<li><a class="reference internal" href="#size">size</a></li>
-<li><a class="reference internal" href="#boolean">Boolean</a></li>
+<li><a class="reference internal" href="#">The display option dictionnary</a><ul>
+<li><a class="reference internal" href="#strings">Strings</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#interactive-editor">Interactive editor</a></li>
 <li><a class="reference internal" href="#edition-mode">Edition mode</a></li>
 <li><a class="reference internal" href="#image-overlay">Image overlay</a></li>
 <li><a class="reference internal" href="#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
+<li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
 </ul>
 
 <div id="searchbox" style="display: none">
@@ -81,12 +81,15 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>To edit a new layout, it is first necessary lo load the layout module</p>
+  <p>This section explains some features of the class <strong>Layout</strong>. Layouts are
+handled by the module <strong>pylayers.gis.layout</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>To create a new layout just create a new layout object with the name of
-the .ini file</p>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x40caa10&gt;</pre>
+</div>
+<p>To create a new layout object instantiate a layout with the name of the
+.ini file</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;layout.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -94,15 +97,79 @@ the .ini file</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>filestr :  layout.ini
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  geomfile (.off) has no been generated
+limites  (-20.0, 20.0, -10.0, 10.0)
+number of Nodes : 0
+number of Segments : 0
+number of Sub-Segments : 0
+Gs Nodes :  0
+Gs Edges :  0
+Gc Nodes :  0
+Gc Edges :  0
+Gt Nodes :  0
+Gt Edges :  0
+vnodes = Gt.node[Nc]['cycles'].cycle
+poly = Gt.node[Nc]['cycle'].polyg
+Gr Nodes    : no Gr graph</pre>
+</div>
 <div class="section" id="the-display-option-dictionnary">
 <h1>The display option dictionnary<a class="headerlink" href="#the-display-option-dictionnary" title="Permalink to this headline">¶</a></h1>
 <p>The layout can be displayed using matplotlib ploting primitive</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;activelayer&#39;</span><span class="p">:</span> <span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
+ <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+ <span class="s">&#39;box&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+ <span class="s">&#39;clear&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;edges&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s">&#39;edlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;edlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+ <span class="s">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s">&#39;TA-Office.png&#39;</span><span class="p">,</span>
+ <span class="s">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+ <span class="s">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
+ <span class="s">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[],</span>
+ <span class="s">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
+  <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
+  <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;AIR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;WINDOW&#39;</span><span class="p">,</span>
+  <span class="s">&#39;METALIC&#39;</span><span class="p">,</span>
+  <span class="s">&#39;PLASTERBOARD_14CM&#39;</span><span class="p">,</span>
+  <span class="s">&#39;DOOR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;FLOOR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;METAL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span>
+  <span class="s">&#39;CONCRETE_20CM3D&#39;</span><span class="p">,</span>
+  <span class="s">&#39;PLASTERBOARD_10CM&#39;</span><span class="p">,</span>
+  <span class="s">&#39;CEIL&#39;</span><span class="p">,</span>
+  <span class="s">&#39;CONCRETE_6CM3D&#39;</span><span class="p">,</span>
+  <span class="s">&#39;CONCRETE_15CM3D&#39;</span><span class="p">,</span>
+  <span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">,</span>
+  <span class="s">&#39;WALLS&#39;</span><span class="p">,</span>
+  <span class="s">&#39;WOOD&#39;</span><span class="p">,</span>
+  <span class="s">&#39;CONCRETE_7CM3D&#39;</span><span class="p">,</span>
+  <span class="s">&#39;PILLAR&#39;</span><span class="p">,</span>
+  <span class="s">&#39;ABSORBENT&#39;</span><span class="p">],</span>
+ <span class="s">&#39;ndlabel&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;ndlblsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+ <span class="s">&#39;ndsize&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s">&#39;nodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;overlay&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;scaled&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s">&#39;subseg&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s">&#39;thin&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s">&#39;ticksoff&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+ <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+ <span class="s">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+</pre></div>
 </div>
-<div class="section" id="layers">
-<h1>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h1>
+<p>Layers</p>
+<hr class="docutils" />
 <ul class="simple">
 <li>&#8216;layer&#8217; : list , []</li>
 <li>&#8216;layerset&#8217;,list, list of available layers</li>
@@ -111,25 +178,22 @@ the .ini file</p>
 <li>&#8216;alpha&#8217;, float , 0.5 , overlay transparency</li>
 <li>&#8216;box&#8217;, tuple , (-20,20,-10,10), (xmin xmax,ymin,ymax)</li>
 </ul>
-</div>
-<div class="section" id="string">
-<h1>String<a class="headerlink" href="#string" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="strings">
+<h2>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;title&#8217; : str , &#8216;Init&#8217;</li>
 <li>&#8216;fileoverlay&#8217; : str , &#8216;TA-Office.png&#8217;</li>
 </ul>
-</div>
-<div class="section" id="size">
-<h1>size<a class="headerlink" href="#size" title="Permalink to this headline">¶</a></h1>
+<p>Sizes</p>
+<hr class="docutils" />
 <ul class="simple">
 <li>&#8216;fontsize&#8217;, float , 10</li>
 <li>&#8216;ndsize&#8217;, float , 10</li>
 <li>&#8216;ndlblsize&#8217; : float 20</li>
 <li>&#8216;edlblsize&#8217; : float , 20</li>
 </ul>
-</div>
-<div class="section" id="boolean">
-<h1>Boolean<a class="headerlink" href="#boolean" title="Permalink to this headline">¶</a></h1>
+<p>Boolean</p>
+<hr class="docutils" />
 <ul class="simple">
 <li>&#8216;edlabel&#8217;, boolean, False</li>
 <li>&#8216;ticksoff&#8217;,boolean, True</li>
@@ -145,13 +209,14 @@ the .ini file</p>
 <li>&#8216;ednodes&#8217;, boolean, True</li>
 </ul>
 </div>
+</div>
 <div class="section" id="interactive-editor">
 <h1>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h1>
 <p>The command L.editor() launches an interactive editor</p>
 </div>
 <div class="section" id="edition-mode">
 <h1>Edition mode<a class="headerlink" href="#edition-mode" title="Permalink to this headline">¶</a></h1>
-<p>There is two different mode of edition</p>
+<p>There are two different modes of edition</p>
 <ul class="simple">
 <li>A create points mode CP<ul>
 <li>left clic : free point</li>
@@ -183,16 +248,20 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ticksoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f3df01848d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x4129910&gt;)</pre>
+</div>
+<img alt="../_images/_fig_051.png" src="../_images/_fig_051.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h1>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h1>
 <p>Before going further it is necessary :</p>
 <ul class="simple">
-<li>to place the global framework origin</li>
+<li>to place the global origin</li>
 <li>to precise the vertical and horizontal scale of the image</li>
 </ul>
 <p>This is done by the following commands :</p>
@@ -201,13 +270,15 @@ a filename. In that case the file is stored in</p>
 <li>&#8216;m&#8217; : goes to CP state</li>
 <li>&#8216;o&#8217; : define the origin</li>
 <li>&#8216;left click&#8217; on the point of the figure chasen as the origin</li>
-<li>&#8216;left click&#8217; on a point at a known distancefrom the origin along x
+<li>&#8216;left click&#8217; on a point at a known distance from the origin along x
 axis. Fill the dialog box with the actual distance (expressed in
 meters) between the two points.</li>
-<li>&#8216;right click&#8217; on a point at a known distance from the origin along y
+<li>&#8216;left click&#8217; on a point at a known distance from the origin along y
 axis. Fill the dialog box with the actual distance (expressed in
 meters) between the two points.</li>
 </ul>
+<p>In that sequence of operation it is useful to rescale the figure with
+&#8216;r&#8217;.</p>
 <p>At that stage, it is possible to start creating points</p>
 <div class="highlight-python"><pre>'b'  : selct a segment
 'l'  : select activelayer
@@ -224,6 +295,22 @@ meters) between the two points.</li>
 'x'  : save .str2 file
 'w'  : display all layers</pre>
 </div>
+</div>
+<div class="section" id="vizualisation-of-the-layout">
+<h1>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">font_size</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span><span class="n">node_size</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span><span class="n">node_color</span><span class="o">=</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_071.png" src="../_images/_fig_071.png" />
+<p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
+<p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
+to a segment (Wall,door,window,...).</p>
+<p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 </div>
 
 

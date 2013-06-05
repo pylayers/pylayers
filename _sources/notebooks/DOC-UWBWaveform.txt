@@ -3,7 +3,10 @@
 
     from pylayers.signal.bsignal import *
     from pylayers.simul.simulem import *
-    figsize(8,8)
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x3c2f7d0>
 
 Generation of an Impulse of normalized energy
 =============================================
@@ -11,9 +14,9 @@ Generation of an Impulse of normalized energy
 One possible manner to define an ernergy normalized short UWB impulse is
 as follows.
 
-:math:`$$ p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2} $$`
+$ p(t)= (2 f\_c t) e\ :sup:`{-()`\ 2} $
 
-:math:`$$ \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}$$`
+$ = $
 
 where :math:`$B$` is the desired bandwidth defined at
 :math:`$\gamma_{dB}$` below the spectrum maximum and :math:`$f_c$` is
@@ -77,16 +80,46 @@ Verification of energy normalization in both domains
 
     Integration in frequency domain  1.0
 
-Calcul of UWB channel impulse response
---------------------------------------
+Calculation of UWB channel impulse response
+-------------------------------------------
 
 
 
 .. code-block:: python
 
-    S= Simul()
+    S = Simul()
     S.load('where2.ini')
 
+::
+
+    ---------------------------------------------------------------------------
+    UnboundLocalError                         Traceback (most recent call last)
+    <ipython-input-9-96ef3c5438ab> in <module>()
+          1 S = Simul()
+    ----> 2 S.load('where2.ini')
+    
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/simul/simulem.pyc in load(self, _filesimul)
+       1330         # Waveform section
+       1331         #
+    -> 1332         self.wav = wvf.Waveform()
+       1333         self.wav.read(self.config)
+       1334 
+
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/signal/waveform.pyc in read(self, config)
+        256 
+        257         self.parameters = wparam
+    --> 258         self.eval()
+        259 
+        260 
+
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/signal/waveform.pyc in eval(self)
+         53             [st,sf]=self.fromfile2()
+         54 
+    ---> 55         self.st       = st
+         56         self.sf       = sf
+         57         self.f        = self.sf.x
+
+    UnboundLocalError: local variable 'st' referenced before assignment
 
 .. code-block:: python
 
@@ -126,7 +159,7 @@ In time domain
     S.wav.st.plot()
 
 
-.. image:: DOC-UWBWaveform_files/_fig_05.png
+.. image:: DOC-UWBWaveform_files/_fig_06.png
 
 in frequency domain 
 --------------------
@@ -141,7 +174,7 @@ object.
 
     f,ax=S.wav.sf.plot()
 
-.. image:: DOC-UWBWaveform_files/_fig_06.png
+.. image:: DOC-UWBWaveform_files/_fig_07.png
 
 Construction of the propagation channel 
 ----------------------------------------
@@ -173,7 +206,7 @@ channel.
 
     vc.doadod()
 
-.. image:: DOC-UWBWaveform_files/_fig_08.png
+.. image:: DOC-UWBWaveform_files/_fig_09.png
 
 Construction of the transmission channel
 ----------------------------------------
@@ -239,7 +272,7 @@ measurement campaign M1.
     f,ax=sc.H.plot()
 
 
-.. image:: DOC-UWBWaveform_files/_fig_10.png
+.. image:: DOC-UWBWaveform_files/_fig_11.png
 
 The antenna can also been taken into account
 
@@ -258,7 +291,7 @@ The antenna can also been taken into account
            Axes(0.125,0.125;0.775x0.352273)], dtype=object))
 
 
-.. image:: DOC-UWBWaveform_files/_fig_12.png
+.. image:: DOC-UWBWaveform_files/_fig_13.png
 
 Calculate UWB Channel Impulse Response
 --------------------------------------
@@ -274,7 +307,7 @@ Calculate UWB Channel Impulse Response
 
     cir.plot()
 
-.. image:: DOC-UWBWaveform_files/_fig_13.png
+.. image:: DOC-UWBWaveform_files/_fig_14.png
 
 Hermitian symetry enforcment 
 -----------------------------
@@ -376,7 +409,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
            Axes(0.125,0.125;0.775x0.352273)], dtype=object))
 
 
-.. image:: DOC-UWBWaveform_files/_fig_16.png
+.. image:: DOC-UWBWaveform_files/_fig_17.png
 
 
 .. code-block:: python
@@ -384,7 +417,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
     uh   = UH.ifft(1)
     uh.plot()
 
-.. image:: DOC-UWBWaveform_files/_fig_17.png
+.. image:: DOC-UWBWaveform_files/_fig_18.png
 
 
 .. code-block:: python
@@ -409,7 +442,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
     <matplotlib.figure.Figure at 0xb391fcc>
 
 
-.. image:: DOC-UWBWaveform_files/_fig_19.png
+.. image:: DOC-UWBWaveform_files/_fig_20.png
 
 
 .. code-block:: python
@@ -423,5 +456,5 @@ symHz force the Hermitian symetry of Y with zero padding of 500
     [<matplotlib.lines.Line2D at 0xc247c2c>]
 
 
-.. image:: DOC-UWBWaveform_files/_fig_21.png
+.. image:: DOC-UWBWaveform_files/_fig_22.png
 
