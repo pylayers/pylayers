@@ -1,0 +1,379 @@
+
+.. code-block:: python
+
+    import ConfigParser
+
+This notebook describe the configuration files required for run a
+simulnet simulation. That precise simulator is describe in
+
+
+.. code-block:: python
+
+    from IPython.display import FileLink
+    FileLink('DOC-simulnet.ipynb')
+
+
+
+Simulnet.ini
+============
+
+This file is in "pyprojet"/ini
+
+
+.. code-block:: python
+
+    Cp = ConfigParser.ConfigParser()
+    Cp.read(pyu.getlong('simulnet.ini','ini'))
+
+
+.. parsed-literal::
+
+    ['/private/staff/t/ot/niamiot/Bureau/P1/ini/simulnet.ini']
+
+
+Simulnet.ini contains several sections
+
+
+.. code-block:: python
+
+    Cp.sections()
+
+
+.. parsed-literal::
+
+    ['Mysql',
+     'Save',
+     'Layout',
+     'Mechanics',
+     'Network',
+     'Localization',
+     'Simulation']
+
+
+Save
+----
+
+This section allow to setup save options.
+
+
+.. code-block:: python
+
+    dict(Cp.items('Save'))
+
+
+.. parsed-literal::
+
+    {'save': '[]', 'savep': 'True'}
+
+
+The 'savep' boolean enable/disable save of the simulation.
+
+
+.. code-block:: python
+
+    dict(Cp.items('Save'))['savep']
+
+
+.. parsed-literal::
+
+    'True'
+
+
+Layout
+------
+
+This section allow setup the layout for the simulation
+
+
+.. code-block:: python
+
+    dict(Cp.items('Layout'))
+
+
+.. parsed-literal::
+
+    {'filename': 'plan_scenario.ini',
+     'the_world_height': '20',
+     'the_world_scale': '20',
+     'the_world_width': '65',
+     'x_offset': '30',
+     'y_offset': '2'}
+
+
+Choose the used Layout for simulation
+
+
+.. code-block:: python
+
+    dict(Cp.items('Layout'))['filename']
+
+
+.. parsed-literal::
+
+    'plan_scenario.ini'
+
+
+Setup an offset on the origin of axis
+
+
+.. code-block:: python
+
+    print dict(Cp.items('Layout'))['x_offset']
+    print dict(Cp.items('Layout'))['y_offset']
+
+
+.. parsed-literal::
+
+    30
+    2
+
+Network
+-------
+
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))
+
+
+.. parsed-literal::
+
+    {'communication_mode': "'autonomous'",
+     'dispinfo': 'False',
+     'ipython_nb_show': 'False',
+     'network_update_time': '0.1',
+     'show': 'True',
+     'show_sg': 'False',
+     'show_table': 'False'}
+
+
+Setup communication mode between node:
+
+-  autonomous : the data exchange between nodes is driven by the
+   localization layer. If more information is required to estimate the
+   position a communication request is send to the communication stae
+-  synchro : the data exchange between nodes is periodic. LDPs are
+   periodically refreshed at the network\_update\_time
+
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['communication_mode']
+
+Time step for the refresh network information
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['network_update_time']
+
+
+.. parsed-literal::
+
+    '0.1'
+
+
+Vizualization of the simulation using matplotlib
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['show']
+
+Vizualization of a table summing up the data exchange of the nodes
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['show_table']
+
+
+.. parsed-literal::
+
+    'False'
+
+
+Vizualization of the simulation inside ipython notebook
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['ipython_nb_show']
+
+Mechanics
+---------
+
+This section allow to setup the agent movement during simulation
+
+
+.. code-block:: python
+
+    dict(Cp.items('Mechanics'))
+
+
+.. parsed-literal::
+
+    {'choose_destination': "'random'", 'mecanic_update_time': '0.1'}
+
+
+Setup how agent choose their target:
+
+-  random : the agnet move into the layout randomly
+-  file : the agent follow the sequence specified in
+   /nodes\_destination.ini
+
+
+
+.. code-block:: python
+
+    dict(Cp.items('Mechanics'))['choose_destination']
+
+
+.. parsed-literal::
+
+    "'random'"
+
+
+Time step for refreshing the mechanical layer (ground truth position)
+
+
+.. code-block:: python
+
+    dict(Cp.items('Mechanics'))['mecanic_update_time']
+
+
+.. parsed-literal::
+
+    '0.1'
+
+
+Localization
+------------
+
+Setup Localization algorithms
+
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))
+
+
+.. parsed-literal::
+
+    {'localization': 'True',
+     'localization_update_time': '1.0',
+     'method': "['alg','geo']"}
+
+
+enable/disable localizaiton of the agents
+
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))['localization']
+
+
+.. parsed-literal::
+
+    'True'
+
+
+Select localization methods :
+
+-  Algebraic : hétérogeneous localization algorithm
+-  Geometric : RGPA
+
+
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))['method']
+
+
+.. parsed-literal::
+
+    "['alg','geo']"
+
+
+Time step for localization update
+
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))['localization_update_time']
+
+
+.. parsed-literal::
+
+    '1.0'
+
+
+
+.. code-block:: python
+
+    
+
+Simulation
+----------
+
+
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))
+
+
+
+.. parsed-literal::
+
+    {'duration': '20.0',
+     'seed': '1',
+     'show_interval': '0.5',
+     'showtk': 'False',
+     'speedratio': '1.',
+     'verbose': 'True'}
+
+
+Setup simulation duration in second
+
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))['duration']
+
+
+Setup random seed for simulation
+
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))['seed']
+
+
+
+.. parsed-literal::
+
+    '1'
+
+
+Display messages during simulation
+
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))['verbose']
+
+
+
+.. parsed-literal::
+
+    'True'
+
+
+
+.. code-block:: python
+
+    
+

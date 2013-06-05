@@ -1,0 +1,11 @@
+Agent ID: 1
+Agent name: Person_ID1
+Agent mass: 80
+
+position vector: (30.0533, 2.7772, 0.0000)
+velocity vector: (0.1494, 0.8244, 0.0000)
+acceleration vector: (-0.0915, 0.4152, 0.0000)
+
+waiting time in room: 1.0
+coordinates of its target: (30.1670, 4.9950, 0.0000)
+a list coordinates of its intermediate target: [(18.900000000000002, 2.4975000000000005), (19.460999999999999, 4.9950000000000001), (30.167000000000002, 4.9950000000000001), (29.700000000000006, 2.4974999999999996)]

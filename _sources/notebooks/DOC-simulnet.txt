@@ -1,0 +1,550 @@
+Simulation of a mobile network
+==============================
+
+PyLayers is designed to provide indoor radio channel simulation for
+mobile agents.
+
+The goal is to adress different mobility issues coming up when dealing
+with heterogeneous network in indoor environement, with human being
+carriers of a mobile User Equipement (UE) which possibly embeds several
+Radio Acess Technology (RAT).
+
+Several human can be created and their motion in the environement should
+be as realistic as possible, because for many applications it turns our
+that many parameter of interest are stongly dependent of the dynamic
+topology of the mobile network.
+
+In the following the configuration file for proceeding with those high
+level ``PyLayers`` simulation is described.
+
+The configuration file is ``simulnet.ini``
+
+Running the simulation
+----------------------
+
+Once the following configuration files have been filled :
+
+::
+
+    simulnet.ini 
+    agent.ini
+    emsolver.ini 
+    communication.ini
+
+The simulation can be started with the method ``runsimul``
+
+
+.. code-block:: python
+
+    import pylayers.simul.simulnet as sn 
+    S = sn.Simul()
+    # config
+    S.sim_opt['duration']='10.'
+    S.verbose=False
+    # run
+    S.runsimul()
+    # just for closing an extra figure from notebook,
+    plt.close()
+
+
+.. parsed-literal::
+
+    Layout graphs are loaded from  /home/uguen/Bureau/P1 /struc
+    wait 0.1
+    wait 0.1
+    Processing save results, please wait
+
+Analysis of the saved results
+-----------------------------
+
+Data are stored into ``S.save.save`` dictionnary. If asked in
+``simulnet.ini``, those data are stored in a ``matfile`` in
+``$BASENAME/netsave``
+
+
+.. code-block:: python
+
+    node_id = '1'
+    node_id2 = '6'
+    print 'Node # ',node_id
+    print '\nemitted power', S.save.save['saveopt']['epwr'][node_id]
+    print 'sensitiagentvity node', S.save.save['saveopt']['sens'][node_id]
+    print 'type', S.save.save['saveopt']['type'][node_id]
+    print '\nAt time stamp 0:'
+    print 'true position', S.save.save[node_id]['p'][0]
+    print 'estimated position', S.save.save[node_id]['pe'][0]
+    print '\nOn rat1'
+    print 'Received powers ',S.save.save[node_id][node_id2]['rat1']['Pr'][0]
+    print 'TOA ',S.save.save[node_id][node_id2]['rat1']['TOA'][0]
+
+
+
+.. parsed-literal::
+
+    Node #  1
+    
+    emitted power {'rat1': 0}
+    sensitivity node {'rat1': -80}
+    type ag
+    
+    At time stamp 0:
+    true position [ 18.90762689   2.53145395]
+    estimated position [ nan  nan]
+    
+    On rat1
+    Received powers  [-90.7282282   3.       ]
+    TOA  [ 63.25263999   0.3       ]
+
+Description of inner organization of the Simulation object
+----------------------------------------------------------
+
+Properties of mobile and static agents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+All agents (mobile and anchors) are gathered in a list of agents. Notice
+that anchors are static agents.
+
+
+.. code-block:: python
+
+    S.lAg
+
+
+.. parsed-literal::
+
+    [<pylayers.mobility.agent.Agent at 0x36a2790>,
+     <pylayers.mobility.agent.Agent at 0x36a2950>,
+     <pylayers.mobility.agent.Agent at 0x36a2890>,
+     <pylayers.mobility.agent.Agent at 0x36a2810>]
+
+
+All moving agents have the following mechanical attributes which have an
+influence on mobility.
+
+
+.. code-block:: python
+
+    print 'Agent ID:',S.lAg[0].meca.ID
+    print 'Agent name:',S.lAg[0].meca.name
+    print 'Agent mass:',S.lAg[0].meca.mass
+    
+    
+    print '\nposition vector:',S.lAg[0].meca.position
+    print 'velocity vector:',S.lAg[0].meca.velocity
+    print 'acceleration vector:',S.lAg[0].meca.acceleration
+    
+    print '\nwaiting time in room:',S.lAg[0].meca.wait
+    print 'coordinates of its target:',S.lAg[0].meca.destination
+    print 'a list coordinates of its intermediate target:',S.lAg[0].meca.wp
+
+
+
+.. parsed-literal::
+
+    Agent ID: 1
+    Agent name: Person_ID1
+    Agent mass: 80
+    
+    position vector: (30.0533, 2.7772, 0.0000)
+    velocity vector: (0.1494, 0.8244, 0.0000)
+    acceleration vector: (-0.0915, 0.4152, 0.0000)
+    
+    waiting time in room: 1.0
+    coordinates of its target: (30.1670, 4.9950, 0.0000)
+    a list coordinates of its intermediate target: [(18.900000000000002, 2.4975000000000005), (19.460999999999999, 4.9950000000000001), (30.167000000000002, 4.9950000000000001), (29.700000000000006, 2.4974999999999996)]
+
+Network Attributes
+~~~~~~~~~~~~~~~~~~
+
+The Network class derived from ``networkx`` MultiDigraph
+
+-  Nodes of the graph represent Agents or access points
+-  Edges of the graph gather informations about radio links between
+   nodes
+
+
+The node is a dictionnary which contains the following keys :
+
+-  ``PN`` : personnal network
+-  ``RAT`` : list of RAT of which it belongs
+-  ``p`` : true position
+-  ``pe`` : estimated position if it has been computed by the node
+   itself
+-  ``t`` : time stamp
+-  ``type`` : type ( 'ag' : for agent or 'ap' for access point )
+
+example with node '1'
+
+
+.. code-block:: python
+
+    S.net.node['1']
+
+
+.. parsed-literal::
+
+    {'PN': <pylayers.network.network.Network at 0x44cec90>,
+     'RAT': ['rat1'],
+     'epwr': {'rat1': 0},
+     'p': array([ 30.05326114,   2.77717435]),
+     'pe': array([], dtype=float64),
+     'sens': {'rat1': -80},
+     't': 9.999999999999984,
+     'type': 'ag'}
+
+
+Each node is linked by the edge of the graph
+
+The edge is a dictionnary which contains the following keys :
+
+
+.. code-block:: python
+
+    S.net.edge['1']
+
+
+.. parsed-literal::
+
+    {'2': {'rat1': {'Pr': array([-81.94820689,   3.        ]),
+       'TOA': array([ 38.0497109,   0.3      ]),
+       'd': 11.023573418178282,
+       'vis': False}},
+     '6': {'rat1': {'Pr': array([-106.37164016,    3.        ]),
+       'TOA': array([ 101.60198617,    0.3       ]),
+       'd': 29.546488340866638,
+       'vis': False}},
+     '7': {'rat1': {'Pr': array([-121.84310299,    3.        ]),
+       'TOA': array([ 108.15846843,    0.3       ]),
+       'd': 31.441153129060169,
+       'vis': False}}}
+
+
+Simulnet Configuration Files
+----------------------------
+
+Simulet.ini
+~~~~~~~~~~~
+
+::
+
+    [Mysql]
+    host = localhost
+    user = root
+    passwd = sqlsql
+    dbname = test
+    dumpdb =True
+
+    [Save]
+    save=[]
+    ;save=['csv','mysql','matlab','pyray','txt','ini']
+    savep=True
+
+    [Layout]
+    filename = TA-Office.ini
+
+    x_offset  = 30
+    y_offset = 2
+
+    the_world_width  = 65
+    the_world_height = 20
+    the_world_scale  = 20 
+
+    [Mechanics]
+    ; update time for agent movement
+    mecanic_update_time = 0.1
+    ; select how agnt choose destiantion
+    ;'random' ; file
+    choose_destination = 'random'
+
+
+    [Network]
+    ; refresh TOA regulary 'synchro 'or with distance 'autonomous'
+    Communication_mode='autonomous'
+    ; update time for refreshing network
+    network_update_time = 0.1
+    ; show nodes moving & radio link
+    show = True 
+    ; show in ipython notebook
+    ipython_nb_show = False 
+    ; show signature ( not fully functionnal)
+    show_sg = False
+    ; show 2 tables : mecanic & network
+    show_table = False
+    ; show the same information but in terminal
+    dispinfo = False
+
+    [Localization]
+    ; perform localization
+    localization = True
+    ; time to refresh localization
+    localization_update_time = 1.0
+    ; list of used methods
+    method = ['alg']
+
+
+
+    [Simulation]
+    ; Simulation duration
+    duration = 35.0
+    ; speed ratio 
+    speedratio = 1.
+    ; time for refreshing tk plot ( obsolete)
+    show_interval = 0.5
+    ; show scene using tk renderer ( obsolete)
+    showtk   = False
+    ; choose seed for random mobiliity
+    seed = 1
+    ; verbose output
+    verbose = True
+
+
+agent.ini
+~~~~~~~~~
+
+
+.. code-block:: python
+
+    %load '/home/uguen/Bureau/P1/ini/agent.ini'
+
+::
+
+    [used_agent]
+    list=['A1','A2','BS1','BS2']
+    ;list=['A1','A2']
+
+    [A1]
+    name = John
+    ID = 1
+    type = ag
+    roomId = 0
+    pos=[]
+    RAT = ['rat1']
+    epwr = [0]
+    sensitivity  = [-80]
+    refreshRSS = 0.3
+    refreshTOA = 0.8
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+    condition= "distance:'<5';node:'all';rat:'all';message:['d','pe'];and"
+               "distance:'>10';node:'all';rat:'rat2';message:['pe'];"
+
+
+
+
+    [A2]
+    name = Steve
+    ID = 2
+    type = ag
+    roomId = 15
+    pos=[]
+    RAT = ['rat1']
+    epwr = [0]
+    sensitivity  = [-80]
+    refreshRSS = 0.4
+    refreshTOA = 0.7
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+
+    condition= "distance:'<5';node:'all';rat:'rat1';message:['d','pe'];and"
+               "distance:'>10';node:'all';rat:'rat2';message:['pe'];"
+
+    [A3]
+    name = Peter
+    ID = 3
+    type = ag
+    roomId = 2
+    pos=[]
+    RAT = ['rat1','rat2']   
+    epwr = [0,0]
+    sensitivity  = [-80,-80]
+    refreshRSS = 0.5
+    refreshTOA = 0.5
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+
+    condition= "distance:'<5';node:'all';rat:'rat1';message:['d','pe'];and"
+               "distance:'>10';node:'all';rat:'rat2';message:['pe'];"
+
+
+    [A4]
+    name = Mike
+    ID = 4
+    type = ag
+    roomId = 8
+    pos=[]
+    RAT = ['wifi','bt','lte']   
+    epwr = [0,0,0]
+    sensitivity  = [-80,-80,-80]
+    refreshRSS = 0.5
+    refreshTOA = 0.5
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+
+    [A5]
+    name = Micheal
+    ID = 5
+    type = ag
+    roomId = 15
+    pos=[]
+    RAT = ['wifi','bt','lte']   
+    epwr = [0,0,0]
+    sensitivity  = [-80,-80,-80]
+    refreshRSS = 0.5
+    refreshTOA = 0.5
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+
+    [BS1]
+    name = AP1
+    ID = 6
+    type = ap
+    roomId = -1
+    ;pos= [-5,5]
+    pos= [0.5,2.]
+    RAT = ['rat1']  
+    epwr = [0]
+    sensitivity  = [-80]
+    refreshRSS = 0.5
+    refreshTOA = 0.5
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+    condition= "distance:'<5';node:'all';rat:'rat1';message:['d','pe'];and"
+
+
+    [BS2]
+    name = BS2
+    ID = 7
+    type = ap
+    roomId = -1
+    ;pos= [70,5]
+    pos= [0.7,14]
+    RAT = ['rat1']  
+    epwr = [0]
+    sensitivity  = [-80]
+    refreshRSS = 0.5
+    refreshTOA = 0.5
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+    condition= "distance:'<5';node:'all';rat:'rat1';message:['d','pe'];and"
+
+    [BS3]
+    name = BS3
+    ID = 8
+    type = ap
+    roomId = -1
+    ;pos= [0,20]
+    pos= [39.,13.]
+    RAT = ['rat1']
+    epwr = [0]
+    sensitivity  = [-80]
+    refreshRSS = 0.5
+    refreshTOA = 0.5
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+    condition= "distance:'<5';node:'all';rat:'rat1';message:['d','pe'];and"
+
+    [BS4]
+    name = BS4
+    ID = 9
+    type = ap
+    roomId = -1
+    pos= [70,20]
+    RAT = ['rat1']  
+    epwr = [0]
+    sensitivity  = [-80]
+    refreshRSS = 0.5
+    refreshTOA = 0.5
+    ; forbiden room number
+    froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+    ; mean wait time in room
+    wait = 1.0
+
+
+    condition= "distance:'<5';node:'all';rat:'rat1';message:['d','pe'];and"
+
+
+emsolver.ini
+~~~~~~~~~~~~
+
+
+.. code-block:: python
+
+    %load '/home/uguen/Bureau/P1/ini/EMSolver.ini'
+
+::
+
+    [EMS_config]
+    method = multiwall
+
+    [TOA]
+    sigmatoa = 1.0
+
+    [rat1_PLM]
+    sigrss = 3.0
+    f = 3.0
+    rssnp = 2.64
+    d0 = 1.0
+    method = mode
+
+    [rat3_PLM]
+    sigrss = 3.0
+    f = 3.0
+    rssnp = 2.64
+    d0 = 1.0
+    method = mode
+
+    [rat2_PLM]
+    sigrss = 3.0
+    f = 3.0
+    rssnp = 2.64
+    d0 = 1.0
+    method = mode
+
+
+communication.ini
+~~~~~~~~~~~~~~~~~
+
+
+.. code-block:: python
+
+    %load '/home/uguen/Bureau/P1/ini/communication.ini'
+
+::
+
+    [1]
+
+    rat = ['rat1']
+    rule = ["always"]
+    action = ["range"]
+
+    [2]
+
+    rat = ['rat1']
+    rule = ["always"]
+    action = ["range"]
+
+

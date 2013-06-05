@@ -1,0 +1,599 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simulation of a mobile network &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Simulation of a mobile network</a><ul>
+<li><a class="reference internal" href="#running-the-simulation">Running the simulation</a></li>
+<li><a class="reference internal" href="#analysis-of-the-saved-results">Analysis of the saved results</a></li>
+<li><a class="reference internal" href="#description-of-inner-organization-of-the-simulation-object">Description of inner organization of the Simulation object</a><ul>
+<li><a class="reference internal" href="#properties-of-mobile-and-static-agents">Properties of mobile and static agents</a></li>
+<li><a class="reference internal" href="#network-attributes">Network Attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#simulnet-configuration-files">Simulnet Configuration Files</a><ul>
+<li><a class="reference internal" href="#simulet-ini">Simulet.ini</a></li>
+<li><a class="reference internal" href="#agent-ini">agent.ini</a></li>
+<li><a class="reference internal" href="#emsolver-ini">emsolver.ini</a></li>
+<li><a class="reference internal" href="#communication-ini">communication.ini</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="simulation-of-a-mobile-network">
+<h1>Simulation of a mobile network<a class="headerlink" href="#simulation-of-a-mobile-network" title="Permalink to this headline">¶</a></h1>
+<p>PyLayers is designed to provide indoor radio channel simulation for
+mobile agents.</p>
+<p>The goal is to adress different mobility issues coming up when dealing
+with heterogeneous network in indoor environement, with human being
+carriers of a mobile User Equipement (UE) which possibly embeds several
+Radio Acess Technology (RAT).</p>
+<p>Several human can be created and their motion in the environement should
+be as realistic as possible, because for many applications it turns our
+that many parameter of interest are stongly dependent of the dynamic
+topology of the mobile network.</p>
+<p>In the following the configuration file for proceeding with those high
+level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simulation is described.</p>
+<p>The configuration file is <tt class="docutils literal"><span class="pre">simulnet.ini</span></tt></p>
+<div class="section" id="running-the-simulation">
+<h2>Running the simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this headline">¶</a></h2>
+<p>Once the following configuration files have been filled :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">simulnet</span><span class="o">.</span><span class="n">ini</span>
+<span class="n">agent</span><span class="o">.</span><span class="n">ini</span>
+<span class="n">emsolver</span><span class="o">.</span><span class="n">ini</span>
+<span class="n">communication</span><span class="o">.</span><span class="n">ini</span>
+</pre></div>
+</div>
+<p>The simulation can be started with the method <tt class="docutils literal"><span class="pre">runsimul</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pylayers.simul.simulnet</span> <span class="kn">as</span> <span class="nn">sn</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">sn</span><span class="o">.</span><span class="n">Simul</span><span class="p">()</span>
+<span class="c"># config</span>
+<span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;10.&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span>
+<span class="c"># run</span>
+<span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
+<span class="c"># just for closing an extra figure from notebook,</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Layout graphs are loaded from  /home/uguen/Bureau/P1 /struc
+wait 0.1
+wait 0.1
+Processing save results, please wait</pre>
+</div>
+</div>
+<div class="section" id="analysis-of-the-saved-results">
+<h2>Analysis of the saved results<a class="headerlink" href="#analysis-of-the-saved-results" title="Permalink to this headline">¶</a></h2>
+<p>Data are stored into <tt class="docutils literal"><span class="pre">S.save.save</span></tt> dictionnary. If asked in
+<tt class="docutils literal"><span class="pre">simulnet.ini</span></tt>, those data are stored in a <tt class="docutils literal"><span class="pre">matfile</span></tt> in
+<tt class="docutils literal"><span class="pre">$BASENAME/netsave</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">node_id</span> <span class="o">=</span> <span class="s">&#39;1&#39;</span>
+<span class="n">node_id2</span> <span class="o">=</span> <span class="s">&#39;6&#39;</span>
+<span class="k">print</span> <span class="s">&#39;Node # &#39;</span><span class="p">,</span><span class="n">node_id</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">emitted power&#39;</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;epwr&#39;</span><span class="p">][</span><span class="n">node_id</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;sensitiagentvity node&#39;</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;sens&#39;</span><span class="p">][</span><span class="n">node_id</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;type&#39;</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="s">&#39;saveopt&#39;</span><span class="p">][</span><span class="s">&#39;type&#39;</span><span class="p">][</span><span class="n">node_id</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">At time stamp 0:&#39;</span>
+<span class="k">print</span> <span class="s">&#39;true position&#39;</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s">&#39;p&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;estimated position&#39;</span><span class="p">,</span> <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">On rat1&#39;</span>
+<span class="k">print</span> <span class="s">&#39;Received powers &#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="n">node_id2</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;TOA &#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="o">.</span><span class="n">save</span><span class="p">[</span><span class="n">node_id</span><span class="p">][</span><span class="n">node_id2</span><span class="p">][</span><span class="s">&#39;rat1&#39;</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Node #  1
+
+emitted power {'rat1': 0}
+sensitivity node {'rat1': -80}
+type ag
+
+At time stamp 0:
+true position [ 18.90762689   2.53145395]
+estimated position [ nan  nan]
+
+On rat1
+Received powers  [-90.7282282   3.       ]
+TOA  [ 63.25263999   0.3       ]</pre>
+</div>
+</div>
+<div class="section" id="description-of-inner-organization-of-the-simulation-object">
+<h2>Description of inner organization of the Simulation object<a class="headerlink" href="#description-of-inner-organization-of-the-simulation-object" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="properties-of-mobile-and-static-agents">
+<h3>Properties of mobile and static agents<a class="headerlink" href="#properties-of-mobile-and-static-agents" title="Permalink to this headline">¶</a></h3>
+<p>All agents (mobile and anchors) are gathered in a list of agents. Notice
+that anchors are static agents.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">lAg</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;pylayers.mobility.agent.Agent at 0x36a2790&gt;,
+ &lt;pylayers.mobility.agent.Agent at 0x36a2950&gt;,
+ &lt;pylayers.mobility.agent.Agent at 0x36a2890&gt;,
+ &lt;pylayers.mobility.agent.Agent at 0x36a2810&gt;]</pre>
+</div>
+<p>All moving agents have the following mechanical attributes which have an
+influence on mobility.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;Agent ID:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">ID</span>
+<span class="k">print</span> <span class="s">&#39;Agent name:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">name</span>
+<span class="k">print</span> <span class="s">&#39;Agent mass:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">mass</span>
+
+
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">position vector:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">position</span>
+<span class="k">print</span> <span class="s">&#39;velocity vector:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">velocity</span>
+<span class="k">print</span> <span class="s">&#39;acceleration vector:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">acceleration</span>
+
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">waiting time in room:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">wait</span>
+<span class="k">print</span> <span class="s">&#39;coordinates of its target:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">destination</span>
+<span class="k">print</span> <span class="s">&#39;a list coordinates of its intermediate target:&#39;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">lAg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">meca</span><span class="o">.</span><span class="n">wp</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Agent ID: 1
+Agent name: Person_ID1
+Agent mass: 80
+
+position vector: (30.0533, 2.7772, 0.0000)
+velocity vector: (0.1494, 0.8244, 0.0000)
+acceleration vector: (-0.0915, 0.4152, 0.0000)
+
+waiting time in room: 1.0
+coordinates of its target: (30.1670, 4.9950, 0.0000)
+a list coordinates of its intermediate target: [(18.900000000000002, 2.4975000000000005), (19.460999999999999, 4.9950000000000001), (30.167000000000002, 4.9950000000000001), (29.700000000000006, 2.4974999999999996)]</pre>
+</div>
+</div>
+<div class="section" id="network-attributes">
+<h3>Network Attributes<a class="headerlink" href="#network-attributes" title="Permalink to this headline">¶</a></h3>
+<p>The Network class derived from <tt class="docutils literal"><span class="pre">networkx</span></tt> MultiDigraph</p>
+<ul class="simple">
+<li>Nodes of the graph represent Agents or access points</li>
+<li>Edges of the graph gather informations about radio links between
+nodes</li>
+</ul>
+<p>The node is a dictionnary which contains the following keys :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">PN</span></tt> : personnal network</li>
+<li><tt class="docutils literal"><span class="pre">RAT</span></tt> : list of RAT of which it belongs</li>
+<li><tt class="docutils literal"><span class="pre">p</span></tt> : true position</li>
+<li><tt class="docutils literal"><span class="pre">pe</span></tt> : estimated position if it has been computed by the node
+itself</li>
+<li><tt class="docutils literal"><span class="pre">t</span></tt> : time stamp</li>
+<li><tt class="docutils literal"><span class="pre">type</span></tt> : type ( &#8216;ag&#8217; : for agent or &#8216;ap&#8217; for access point )</li>
+</ul>
+<p>example with node &#8216;1&#8217;</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>{'PN': &lt;pylayers.network.network.Network at 0x44cec90&gt;,
+ 'RAT': ['rat1'],
+ 'epwr': {'rat1': 0},
+ 'p': array([ 30.05326114,   2.77717435]),
+ 'pe': array([], dtype=float64),
+ 'sens': {'rat1': -80},
+ 't': 9.999999999999984,
+ 'type': 'ag'}</pre>
+</div>
+<p>Each node is linked by the edge of the graph</p>
+<p>The edge is a dictionnary which contains the following keys :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;rat1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;Pr&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">81.94820689</span><span class="p">,</span>   <span class="mf">3.</span>        <span class="p">]),</span>
+   <span class="s">&#39;TOA&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">38.0497109</span><span class="p">,</span>   <span class="mf">0.3</span>      <span class="p">]),</span>
+   <span class="s">&#39;d&#39;</span><span class="p">:</span> <span class="mf">11.023573418178282</span><span class="p">,</span>
+   <span class="s">&#39;vis&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}},</span>
+ <span class="s">&#39;6&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;rat1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;Pr&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">106.37164016</span><span class="p">,</span>    <span class="mf">3.</span>        <span class="p">]),</span>
+   <span class="s">&#39;TOA&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">101.60198617</span><span class="p">,</span>    <span class="mf">0.3</span>       <span class="p">]),</span>
+   <span class="s">&#39;d&#39;</span><span class="p">:</span> <span class="mf">29.546488340866638</span><span class="p">,</span>
+   <span class="s">&#39;vis&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}},</span>
+ <span class="s">&#39;7&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;rat1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;Pr&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">121.84310299</span><span class="p">,</span>    <span class="mf">3.</span>        <span class="p">]),</span>
+   <span class="s">&#39;TOA&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">108.15846843</span><span class="p">,</span>    <span class="mf">0.3</span>       <span class="p">]),</span>
+   <span class="s">&#39;d&#39;</span><span class="p">:</span> <span class="mf">31.441153129060169</span><span class="p">,</span>
+   <span class="s">&#39;vis&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="simulnet-configuration-files">
+<h2>Simulnet Configuration Files<a class="headerlink" href="#simulnet-configuration-files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="simulet-ini">
+<h3>Simulet.ini<a class="headerlink" href="#simulet-ini" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><pre>[Mysql]
+host = localhost
+user = root
+passwd = sqlsql
+dbname = test
+dumpdb =True
+
+[Save]
+save=[]
+;save=['csv','mysql','matlab','pyray','txt','ini']
+savep=True
+
+[Layout]
+filename = TA-Office.ini
+
+x_offset  = 30
+y_offset = 2
+
+the_world_width  = 65
+the_world_height = 20
+the_world_scale  = 20
+
+[Mechanics]
+; update time for agent movement
+mecanic_update_time = 0.1
+; select how agnt choose destiantion
+;'random' ; file
+choose_destination = 'random'
+
+
+[Network]
+; refresh TOA regulary 'synchro 'or with distance 'autonomous'
+Communication_mode='autonomous'
+; update time for refreshing network
+network_update_time = 0.1
+; show nodes moving &amp; radio link
+show = True
+; show in ipython notebook
+ipython_nb_show = False
+; show signature ( not fully functionnal)
+show_sg = False
+; show 2 tables : mecanic &amp; network
+show_table = False
+; show the same information but in terminal
+dispinfo = False
+
+[Localization]
+; perform localization
+localization = True
+; time to refresh localization
+localization_update_time = 1.0
+; list of used methods
+method = ['alg']
+
+
+
+[Simulation]
+; Simulation duration
+duration = 35.0
+; speed ratio
+speedratio = 1.
+; time for refreshing tk plot ( obsolete)
+show_interval = 0.5
+; show scene using tk renderer ( obsolete)
+showtk   = False
+; choose seed for random mobiliity
+seed = 1
+; verbose output
+verbose = True</pre>
+</div>
+</div>
+<div class="section" id="agent-ini">
+<h3>agent.ini<a class="headerlink" href="#agent-ini" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">load</span> <span class="s">&#39;/home/uguen/Bureau/P1/ini/agent.ini&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[used_agent]
+list=['A1','A2','BS1','BS2']
+;list=['A1','A2']
+
+[A1]
+name = John
+ID = 1
+type = ag
+roomId = 0
+pos=[]
+RAT = ['rat1']
+epwr = [0]
+sensitivity  = [-80]
+refreshRSS = 0.3
+refreshTOA = 0.8
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+condition= "distance:'&lt;5';node:'all';rat:'all';message:['d','pe'];and"
+           "distance:'&gt;10';node:'all';rat:'rat2';message:['pe'];"
+
+
+
+
+[A2]
+name = Steve
+ID = 2
+type = ag
+roomId = 15
+pos=[]
+RAT = ['rat1']
+epwr = [0]
+sensitivity  = [-80]
+refreshRSS = 0.4
+refreshTOA = 0.7
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+
+condition= "distance:'&lt;5';node:'all';rat:'rat1';message:['d','pe'];and"
+           "distance:'&gt;10';node:'all';rat:'rat2';message:['pe'];"
+
+[A3]
+name = Peter
+ID = 3
+type = ag
+roomId = 2
+pos=[]
+RAT = ['rat1','rat2']
+epwr = [0,0]
+sensitivity  = [-80,-80]
+refreshRSS = 0.5
+refreshTOA = 0.5
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+
+condition= "distance:'&lt;5';node:'all';rat:'rat1';message:['d','pe'];and"
+           "distance:'&gt;10';node:'all';rat:'rat2';message:['pe'];"
+
+
+[A4]
+name = Mike
+ID = 4
+type = ag
+roomId = 8
+pos=[]
+RAT = ['wifi','bt','lte']
+epwr = [0,0,0]
+sensitivity  = [-80,-80,-80]
+refreshRSS = 0.5
+refreshTOA = 0.5
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+
+[A5]
+name = Micheal
+ID = 5
+type = ag
+roomId = 15
+pos=[]
+RAT = ['wifi','bt','lte']
+epwr = [0,0,0]
+sensitivity  = [-80,-80,-80]
+refreshRSS = 0.5
+refreshTOA = 0.5
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+
+[BS1]
+name = AP1
+ID = 6
+type = ap
+roomId = -1
+;pos= [-5,5]
+pos= [0.5,2.]
+RAT = ['rat1']
+epwr = [0]
+sensitivity  = [-80]
+refreshRSS = 0.5
+refreshTOA = 0.5
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+condition= "distance:'&lt;5';node:'all';rat:'rat1';message:['d','pe'];and"
+
+
+[BS2]
+name = BS2
+ID = 7
+type = ap
+roomId = -1
+;pos= [70,5]
+pos= [0.7,14]
+RAT = ['rat1']
+epwr = [0]
+sensitivity  = [-80]
+refreshRSS = 0.5
+refreshTOA = 0.5
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+condition= "distance:'&lt;5';node:'all';rat:'rat1';message:['d','pe'];and"
+
+[BS3]
+name = BS3
+ID = 8
+type = ap
+roomId = -1
+;pos= [0,20]
+pos= [39.,13.]
+RAT = ['rat1']
+epwr = [0]
+sensitivity  = [-80]
+refreshRSS = 0.5
+refreshTOA = 0.5
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+condition= "distance:'&lt;5';node:'all';rat:'rat1';message:['d','pe'];and"
+
+[BS4]
+name = BS4
+ID = 9
+type = ap
+roomId = -1
+pos= [70,20]
+RAT = ['rat1']
+epwr = [0]
+sensitivity  = [-80]
+refreshRSS = 0.5
+refreshTOA = 0.5
+; forbiden room number
+froom = [3,27,26,25,16,28,24,18,17,23,22,21,19,20,10,11]
+; mean wait time in room
+wait = 1.0
+
+
+condition= "distance:'&lt;5';node:'all';rat:'rat1';message:['d','pe'];and"</pre>
+</div>
+</div>
+<div class="section" id="emsolver-ini">
+<h3>emsolver.ini<a class="headerlink" href="#emsolver-ini" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">load</span> <span class="s">&#39;/home/uguen/Bureau/P1/ini/EMSolver.ini&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">EMS_config</span><span class="p">]</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">multiwall</span>
+
+<span class="p">[</span><span class="n">TOA</span><span class="p">]</span>
+<span class="n">sigmatoa</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="p">[</span><span class="n">rat1_PLM</span><span class="p">]</span>
+<span class="n">sigrss</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">rssnp</span> <span class="o">=</span> <span class="mf">2.64</span>
+<span class="n">d0</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">mode</span>
+
+<span class="p">[</span><span class="n">rat3_PLM</span><span class="p">]</span>
+<span class="n">sigrss</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">rssnp</span> <span class="o">=</span> <span class="mf">2.64</span>
+<span class="n">d0</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">mode</span>
+
+<span class="p">[</span><span class="n">rat2_PLM</span><span class="p">]</span>
+<span class="n">sigrss</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">rssnp</span> <span class="o">=</span> <span class="mf">2.64</span>
+<span class="n">d0</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">method</span> <span class="o">=</span> <span class="n">mode</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="communication-ini">
+<h3>communication.ini<a class="headerlink" href="#communication-ini" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">load</span> <span class="s">&#39;/home/uguen/Bureau/P1/ini/communication.ini&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">rat</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;rat1&#39;</span><span class="p">]</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;always&quot;</span><span class="p">]</span>
+<span class="n">action</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;range&quot;</span><span class="p">]</span>
+
+<span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">rat</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;rat1&#39;</span><span class="p">]</span>
+<span class="n">rule</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;always&quot;</span><span class="p">]</span>
+<span class="n">action</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;range&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

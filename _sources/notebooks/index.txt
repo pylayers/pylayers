@@ -58,7 +58,8 @@ Nodes Mobility
 .. toctree::
     :maxdepth: 2 
 
-    DOC-Mobility.rst
+    DOC-simulnet.rst
+
 
 Robust Positioning (RGPA)
 --------------------------
