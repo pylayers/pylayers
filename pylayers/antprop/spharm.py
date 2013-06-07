@@ -1287,8 +1287,9 @@ def VW(l, m, theta ,phi):
     M = np.max(m)
  
     # dirty fix
-
-    theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
+    index = np.where(abs(theta-np.pi/2)<1e-5)[0]
+    if len(index)>0:
+        theta[index]=np.pi/2-0.01
     x = -np.cos(theta)
 
     # The - sign is necessary to get the good reconstruction

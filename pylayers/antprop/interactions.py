@@ -76,8 +76,17 @@ class Inter(object):
 
 
     def delay(self):
-        """
-            calculate delays of a given basis Interaction
+        """ calculate delays of a given basis Interaction
+
+        Note
+        ----
+
+        typ 
+
+            1 : Reflexion 
+            2 : Transmission 
+            3 : Diffraction
+
         """
 
         if self.typ in [1, 2, 3]:
