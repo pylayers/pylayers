@@ -107,7 +107,7 @@ display options are specified in the display dictionnary.
 
 
 Layers
-~~~~~~~
+~~~~~~
 
 -  'layer' : list , []
 -  'layerset',list, list of available layers
@@ -127,7 +127,7 @@ Strings
 
 
 Sizes
-~~~~~~
+~~~~~
 
 -  'fontsize', float , 10
 -  'ndsize', float , 10

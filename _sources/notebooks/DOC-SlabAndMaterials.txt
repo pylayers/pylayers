@@ -5,18 +5,18 @@ This section explains some features of the class **Slab**.
 
 .. code-block:: python
 
+    L = Layout('TA-Office.ini')
+    L.dumpr()
+
+
+.. code-block:: python
+
     from pylayers.gis.layout import *
     import  matplotlib.pyplot as plt
 
 .. parsed-literal::
 
     <matplotlib.figure.Figure at 0x47d3bd0>
-
-
-.. code-block:: python
-
-    L = Layout('TA-Office.ini')
-    L.dumpr()
 
 Slab names
 ~~~~~~~~~~

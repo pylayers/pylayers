@@ -1,23 +1,23 @@
 Simulation of a mobile network
-==============================
+------------------------------
 
 PyLayers is designed to provide indoor radio channel simulation for
 mobile agents.
 
-The goal is to adress different mobility issues coming up when dealing
-with heterogeneous network in indoor environement, with human being
+The goal is to address different mobility problem coming up when dealing
+with heterogeneous network in indoor environement, with humans being
 carriers of a mobile User Equipement (UE) which possibly embeds several
 Radio Acess Technology (RAT).
 
-Several human can be created and their motion in the environement should
-be as realistic as possible, because for many applications it turns our
-that many parameter of interest are stongly dependent of the dynamic
-topology of the mobile network.
+Several humans can be created, and their motion in the environement
+should be as realistic as possible, because for many applications it
+turns out that many parameters of interest are stongly dependent of the
+dynamic topology of the mobile network.
 
 In the following the configuration file for proceeding with those high
 level ``PyLayers`` simulation is described.
 
-The configuration file is ``simulnet.ini``
+The configuration file is by default named ``simulnet.ini``
 
 Running the simulation
 ----------------------
