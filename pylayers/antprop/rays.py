@@ -98,7 +98,7 @@ class Rays(dict):
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        L.showGs(fig, ax)
+        L.showG(fig=fig,ax=ax,graph='s')
         ax.plot(self.pTx[0], self.pTx[1], 'or')
         ax.plot(self.pRx[0], self.pRx[1], 'og')
         for i in self.keys():
@@ -885,14 +885,14 @@ class Rays(dict):
 
 
 
-        Cn=Ctilde()
+        Cn = Ctilde()
         Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
         Cn.Ctp = bs.FUsignal(self.I.fGHz, c12)
         Cn.Cpt = bs.FUsignal(self.I.fGHz, c21)
         Cn.Ctt = bs.FUsignal(self.I.fGHz, c22)
         Cn.nfreq = self.I.nf
         Cn.nray = self.nray
-        Cn.tauk=self.delays
+        Cn.tauk = self.delays
         Cn.fGHz = self.I.fGHz
         # r x 2
         Cn.tang = aod.T

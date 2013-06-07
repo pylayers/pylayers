@@ -30,7 +30,7 @@ class VectChannel(Ctilde):
     Ftt
     Ftp
 
-    freq  : frequency
+    fGHz  : frequency
     tauk  : delay
     tang  : dod
     rang  : doa
@@ -44,9 +44,9 @@ class VectChannel(Ctilde):
         display vect channel
     doadod()
         scatter plot DoA - DoD
-    vec2scal(freq)
+    vec2scal(fGHz)
         build scal channel without antenna
-    vec2scal1(freq)
+    vec2scal1(fGHz)
         build scal channel with antenna
 
     """
@@ -85,7 +85,7 @@ class VectChannel(Ctilde):
         # old version
         #freq      = S.freq()
         #self.freq = freq
-        self.freq = S.freq
+        self.fGHz = S.fGHz
 
         #
         # pour show3 de gr on a besoin de filetra et indoor
@@ -153,10 +153,10 @@ class VectChannel(Ctilde):
 
         """
 
-        #self.Ftt = FUsignal(freq,np.ones(sh))
-        #self.Ftp = FUsignal(freq,np.zeros(sh))
-        #self.Frt = FUsignal(freq,np.ones(sh))
-        #self.Frp = FUsignal(freq,np.zeros(sh))
+        #self.Ftt = FUsignal(fGHz,np.ones(sh))
+        #self.Ftp = FUsignal(fGHz,np.zeros(sh))
+        #self.Frt = FUsignal(fGHz,np.ones(sh))
+        #self.Frp = FUsignal(fGHz,np.zeros(sh))
 
     def show3_old(self, id=0):
         """ geomview visualization old version
@@ -596,16 +596,16 @@ class ScalChannel(object):
 class VectLOS(Ctilde):
     def __init__(self, d, fmin=2, fmax=11, Nf=180):
         self.tauk = np.array([d / 0.3])
-        freq = np.linspace(fmin, fmax, Nf)
-        c1 = 1.0 / d * np.ones(len(freq))
-        c2 = zeros(len(freq))
+        fGHz = np.linspace(fmin, fmax, Nf)
+        c1 = 1.0 / d * np.ones(len(fGHz))
+        c2 = zeros(len(fGHz))
         c1.reshape(1, Nf)
         c2.reshape(1, Nf)
         self.freq = freq
-        self.Ctt = bs.FUsignal(freq, c1)
-        self.Ctp = bs.FUsignal(freq, c2)
-        self.Cpt = bs.FUsignal(freq, c2)
-        self.Cpp = bs.FUsignal(freq, c1)
+        self.Ctt = bs.FUsignal(fGHz, c1)
+        self.Ctp = bs.FUsignal(fGHz, c2)
+        self.Cpt = bs.FUsignal(fGHz, c2)
+        self.Cpp = bs.FUsignal(fGHz, c1)
         self.tang = array([0])
         self.rang = array([0])
         self.nray = 1

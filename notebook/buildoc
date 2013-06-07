@@ -4,9 +4,10 @@
 
 buildrst DOC-geomutil.ipynb
 buildrst DOC-LayoutEditor.ipynb
-buildrst DOC-Mobility.ipynb
 buildrst DOC-MultiwallAndCoverage.ipynb
 buildrst DOC-RayTracing.ipynb
+buildrst DOC-RayTracing2.ipynb
 buildrst DOC-RGPA.ipynb
 buildrst DOC-SlabAndMaterials.ipynb
 buildrst DOC-UWBWaveform.ipynb
+buildrst DOC-simulnet.ipynb

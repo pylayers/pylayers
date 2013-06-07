@@ -6,11 +6,9 @@ import networkx as nx
 import numpy as np
 import pdb
 
-# simple class that handles the parsed OSM data.
-
 # Simple class that handles the parsed OSM data.
 class Way(object):
-    def __init__(self,refs,tags):
+    def __init__(self,refs,tags,coords):
         self.refs  = refs
         self.tags = tags
         N = len(refs)
@@ -87,16 +85,22 @@ class Nodes(object):
             self.cpt += 1
 
 class Ways(object):
-    way = {}
+    w = {}
     cpt = 0
 
     def ways(self, ways):
         for osmid, tags, refs in ways:
-                self.way[osmid] = Way(refs,tags)
+                self.w[osmid] = (refs,tags)
                 self.cpt += 1
+    
+    def eval(self,coords):
+        for osmid in self.w:
+            refs = self.w[osmid][0]
+            tags = self.w[osmid][1]
+            self.way = Way(refs,tags,coords)
 
     def show(self,fig=[],ax=[]):
-        """
+        """ show ways
         """
         if fig==[]:
             fig = plt.figure()
@@ -128,10 +132,6 @@ class Relations(object):
                 self.relation[osmid]['members']=member
                 self.cpt = self.cpt+1
 
-
-#
-#
-#
 class Building(nx.DiGraph):
     """
     """
@@ -180,7 +180,6 @@ class Building(nx.DiGraph):
                 self = self.build(typ=typn,eid=eidn)
 
         return self
-
     def show(self,nid=None,fig=[],ax=[]):
         """
         """
@@ -200,9 +199,10 @@ class Building(nx.DiGraph):
                 fig,ax = self.show(k,fig=fig,ax=ax)
         return fig,ax
 
-
-if __name__=='__main__':
-
+def osmparse(filename):
+    """
+    """
+    
     coords = Coords()
     nodes = Nodes()
     ways = Ways()
@@ -213,106 +213,35 @@ if __name__=='__main__':
     ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
     relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
 
-    #m = Basemap(
-    #    llcrnrlon=-1.65263, llcrnrlat=48.1127, urcrnrlon=-1.62759, urcrnrlat=48.12547,
-    #    resolution='i', projection='cass', lon_0=-1.63, lat_0=48.115)
-
-    #_filename = 'map.osm'
-    #_filename = 'indoor.osm'
-    _filename = './osm/Rennes.osm'
-    #_filename = './osm/poland.osm'
-    #_filename = './osm/w2ptin.osm'
-    # q.parse('map.osm')
-    # p.parse('map.osm')
-    #
-    # 1 - Parse Coords
-    # 2 - Determine lat-lon bounding box
-    # 3 - Convert lat lon in cartesian coordinates based on the bounding box
-    #
     print "parsing coords"
-    coords_parser.parse(_filename)
+    coords_parser.parse(filename)
     coords.cartesian()
     print str(coords.cpt)
-    #
-    # 1 - Parse OSM nodes
-    #
+
     print "parsing nodes"
-    nodes_parser.parse(_filename)
+    nodes_parser.parse(filename)
     print str(nodes.cpt)
 
-    #bd = nodes.boundary
-    #lon_0 = (bd[1]+bd[3])/2.
-    #lat_0 = (bd[0]+bd[2])/2.
-
-    #m = Basemap(llcrnrlon=bd[1], llcrnrlat=bd[0], urcrnrlon=bd[3], urcrnrlat=bd[2],
-    #    resolution='i', projection='cass', lon_0=lon_0, lat_0=lat_0)
-
     print "parsing ways"
-    ways_parser.parse(_filename)
+    ways_parser.parse(filename)
     print str(ways.cpt)
+    ways.eval(coords)
 
     print "parsing relations"
-    relations_parser.parse(_filename)
+    relations_parser.parse(filename)
     print str(relations.cpt)
 
-    #
-    #
+    return coords,nodes,ways,relations
+
+def buildingsparse(filename):
+    """
+    """
+    coords,nodes,ways,relations = osmparse(filename)
     for bid in relations.relation:
         tags = relations.relation[bid]['tags']
         if tags['type']=='building':
             print "Constructing Indoor building ", bid
             bdg = Building(bid)
             bdg = bdg.build(typ='relation',eid=bid)
-    #   Gbat = nx.DiGraph()
-    #   Gbat.add_node(bid)
-    #   tags =  indoor.bats[bid]['tags']
-    #   members  =  indoor.bats[bid]['members']
-    #   for m in members:
-    #       print m
-    #
-    bdg.show()
-    #
-    ##indoor ={}
-    ##nbat = 0
-    ##
-    ## Get the shell of the building
-    ##
-    ## Ajouter les nodes id impliques
-    ##
-    ##for b in bats.building:
-    ##    if 'buildingpart' in bats.building[b]['tags']:
-    ##        if  bats.building[b]['tags']['buildingpart']=='shell':
-    ##            pshell = bats.building[b]['poly']
-    ##            indoor[nbat]={'id':b,'shell':pshell}
-    ##            nbat +=1
-    ##            fig,ax =pshell.plot(fig=fig,ax=ax)
-    ##
-    ###
-    ### Get the room included within the shell
-    ###
-    ##for bid in indoor:
-    ##    indoor[bid]['level']={}
-    ##    pshell = indoor[bid]['shell']
-    ##    for b in bats.building:
-    ##        tags = bats.building[b]['tags']
-    ##        if b != indoor[bid]['id']:
-    ##            if 'buildingpart' in tags:
-    ##                try :
-    ##                    level = tags['level']
-    ##                except:
-    ##                    level = 0
-    ##                if (tags['buildingpart']=='room') | \
-    ##                   (tags['buildingpart']=='corridor') | \
-    ##                   (tags['buildingpart']=='hall') | \
-    ##                   (tags['buildingpart']=='verticalpassage'):
-    ##                    proom  = bats.building[b]['poly']
-    ##                    if proom.within(pshell):
-    ##                        try:
-    ##                            indoor[bid]['level'][level].append(proom)
-    ##                        except:
-    ##                            indoor[bid]['level'][level]=[proom]
-    ##
-    ##for bid in indoor:
-    ##    for level in indoor[bid]['level']:
-    ##        for r in indoor[bid]['level'][level]:
-    ##            fig,ax = r.plot(fig=fig,ax=ax)
+    return bdg
+
