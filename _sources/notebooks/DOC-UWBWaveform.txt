@@ -15,9 +15,9 @@ One possible manner to define an energy normalized short UWB impulse is
 as follows. This UWB waveform is generated with ``bsignal.EnImpulse``
 function.
 
-$ p(t)= (2 f\_c t) e\ :sup:`{-()`\ 2} $
+:math:`$p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}$`
 
-$ = $
+:math:`$\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}$`
 
 where :math:`$B$` is the desired bandwidth defined at
 :math:`$\gamma_{dB}$` below the spectrum maximum and :math:`$f_c$` is

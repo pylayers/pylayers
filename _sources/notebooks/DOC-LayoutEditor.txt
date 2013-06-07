@@ -10,8 +10,7 @@ handled by the module **pylayers.gis.layout**
 
     <matplotlib.figure.Figure at 0x40caa10>
 
-To create a new layout object instantiate a layout with the name of the
-.ini file
+To create a new layout :
 
 
 .. code-block:: python
@@ -46,10 +45,11 @@ At that stage the layout file is void
     poly = Gt.node[Nc]['cycle'].polyg 
     Gr Nodes    : no Gr graph
 
-The display option dictionnary 
--------------------------------
+The display options dictionnary 
+--------------------------------
 
-The layout can be displayed using matplotlib ploting primitive
+The layout can be displayed using matplotlib ploting primitive. Several
+display options are specified in the display dictionnary.
 
 
 .. code-block:: python
@@ -107,7 +107,6 @@ The layout can be displayed using matplotlib ploting primitive
 
 
 Layers
-
 ~~~~~~~
 
 -  'layer' : list , []
@@ -128,7 +127,6 @@ Strings
 
 
 Sizes
-
 ~~~~~~
 
 -  'fontsize', float , 10
@@ -137,8 +135,7 @@ Sizes
 -  'edlblsize' : float , 20
 
 
-Boolean 
-
+Booleans 
 ~~~~~~~~~
 
 -  'edlabel', boolean, False
@@ -281,4 +278,20 @@ Each node of :math:`$\mathcal{G}_s$` with a positive index corresponds
 to a segment (Wall,door,window,...).
 
 The segment name is the key of the **slab** dictionnary.
+
+Segments and Subsegments
+------------------------
+
+It is very important to respect a strict non overlapping rules. No
+segments can recover partially or totally an other segment. This rules
+allows to capture topological relation of the network which are
+exploited for further analysis.
+
+To describe door and window, the concept of subsegment is used. A
+subsegment belongs to a segment, it has mainly 3 attached parameters + A
+slab name + zmin (meter) + zmax (meter)
+
+Currently, it is not possible to define multi-subsegments. for example a
+composite door with wood and glass. This a desirable feature to add for
+future version of PyLayers.
 

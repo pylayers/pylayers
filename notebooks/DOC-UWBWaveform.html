@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="User Manual" href="index.html" />
+    <link rel="next" title="Simulation of a mobile network" href="DOC-simulnet.html" />
+    <link rel="prev" title="Example of an UWB channel Ray Tracing simulation" href="DOC-RayTracing2.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,11 +40,18 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-simulnet.html" title="Simulation of a mobile network"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="DOC-RayTracing2.html" title="Example of an UWB channel Ray Tracing simulation"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" accesskey="U">User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -60,6 +70,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="DOC-RayTracing2.html"
+                        title="previous chapter">Example of an UWB channel Ray Tracing simulation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="DOC-simulnet.html"
+                        title="next chapter">Simulation of a mobile network</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -92,8 +108,8 @@
 <p>One possible manner to define an energy normalized short UWB impulse is
 as follows. This UWB waveform is generated with <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt>
 function.</p>
-<p>$ p(t)= (2 f_c t) e<sup>{-()</sup>2} $</p>
-<p>$ = $</p>
+<p><img class="math" src="../_images/math/a5afef38f216bca3f9241d6c3caae0aa40c7445f.png" alt="$p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}$"/></p>
+<p><img class="math" src="../_images/math/113ffb914c7cddcd4b4042de60fee3cc014aaead.png" alt="$\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}$"/></p>
 <p>where <img class="math" src="../_images/math/b39d396ed6190261ffce7e93c9fbc4b013151fec.png" alt="$B$"/> is the desired bandwidth defined at
 <img class="math" src="../_images/math/803d0909241bbb575dae1791ce49e4024e4c06d3.png" alt="$\gamma_{dB}$"/> below the spectrum maximum and <img class="math" src="../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/> is
 the central frequency of the pulse.</p>
@@ -975,11 +991,18 @@ padding of 500 points</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-simulnet.html" title="Simulation of a mobile network"
+             >next</a></li>
+        <li class="right" >
+          <a href="DOC-RayTracing2.html" title="Example of an UWB channel Ray Tracing simulation"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -1,5 +1,6 @@
-This section explains some features of the class **Slab**. **Slabs** are
-handled by the module **pylayers.gis.slabs**
+This section explains some features of the class **Slab**.
+
+**Slabs** are handled by the module **pylayers.antprop.slab**
 
 
 .. code-block:: python
@@ -9,7 +10,7 @@ handled by the module **pylayers.gis.slabs**
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x3d18910>
+    <matplotlib.figure.Figure at 0x47d3bd0>
 
 
 .. code-block:: python
@@ -18,7 +19,7 @@ handled by the module **pylayers.gis.slabs**
     L.dumpr()
 
 Slab names
-----------
+~~~~~~~~~~
 
 Each segment **name**, is the entry key for its constitutive Slab.
 
@@ -178,7 +179,7 @@ defined using the two lists **lmatname** and **lthick**.
 
 
 For each constitutive material of a slab, their electromagnetic
-propreties can be obtained as:
+properties can be obtained as:
 
 
 .. code-block:: python
@@ -227,13 +228,13 @@ coefficients for
     
     L.sl['WOOD'].ev(fGHz,theta,compensate=True)
     sR = np.shape(L.sl['WOOD'].R) 
-    print '\nHere, we have evluated the slab for',sR[0],'frequency(ies)', 'and',sR[1], 'angle(s)\n'
+    print '\nHere, slab is evaluted for',sR[0],'frequency(ies)', 'and',sR[1], 'angle(s)\n'
 
 
 .. parsed-literal::
 
     
-    Here, we have evluated the slab for 80 frequency(ies) and 158 angle(s)
+    Here, slab is evaluted for 80 frequency(ies) and 158 angle(s)
     
 
 Transmission and Reflexion coefficient
@@ -271,8 +272,7 @@ Ploting Coefficients
 ~~~~~~~~~~~~~~~~~~~~
 
 
- with respect to  frequency
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+with respect to frequency
 
 
 .. code-block:: python
@@ -283,10 +283,9 @@ Ploting Coefficients
 
 .. image:: DOC-SlabAndMaterials_files/_fig_14.png
 
-.. image:: DOC-SlabAndMaterials_files/_fig_15.png
+.. image:: DOC-SlabAndMaterials_files/_fig_16.png
 
 with respect to angle
-~~~~~~~~~~~~~~~~~~~~~
 
 
 .. code-block:: python
@@ -295,10 +294,9 @@ with respect to angle
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].plotwrta()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_16.png
+.. image:: DOC-SlabAndMaterials_files/_fig_18.png
 
-wrt to angle and frequency 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+wrt to angle and frequency
 
 
 .. code-block:: python
@@ -308,5 +306,5 @@ wrt to angle and frequency
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].pcolor()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_17.png
+.. image:: DOC-SlabAndMaterials_files/_fig_20.png
 

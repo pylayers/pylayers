@@ -23,7 +23,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="next" title="The display options dictionnary" href="DOC-LayoutEditor.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,6 +39,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-LayoutEditor.html" title="The display options dictionnary"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="#">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
@@ -81,6 +89,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="DOC-LayoutEditor.html"
+                        title="next chapter">The display options dictionnary</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -108,8 +122,11 @@
 <h2>Editing A Layout<a class="headerlink" href="#editing-a-layout" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html">The display option dictionnary</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html">The display options dictionnary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DOC-LayoutEditor.html#layers">Layers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DOC-LayoutEditor.html#strings">Strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-LayoutEditor.html#sizes">Sizes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOC-LayoutEditor.html#booleans">Booleans</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#interactive-editor">Interactive editor</a></li>
@@ -117,6 +134,7 @@
 <li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#image-overlay">Image overlay</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-LayoutEditor.html#segments-and-subsegments">Segments and Subsegments</a></li>
 </ul>
 </div>
 </div>
@@ -124,16 +142,12 @@
 <h2>Handling Slab and Materials<a class="headerlink" href="#handling-slab-and-materials" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html">Slab names</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-dictionnary">Slab dictionnary</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-information">Slab Information</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-evaluation">Slab evaluation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#transmission-and-reflexion-coefficient">Transmission and Reflexion coefficient</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#ploting-coefficients">Ploting Coefficients</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#with-respect-to-angle">with respect to angle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DOC-SlabAndMaterials.html#wrt-to-angle-and-frequency">wrt to angle and frequency</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html">Slab names</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-dictionnary">Slab dictionnary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-information">Slab Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#slab-evaluation">Slab evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#transmission-and-reflexion-coefficient">Transmission and Reflexion coefficient</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DOC-SlabAndMaterials.html#ploting-coefficients">Ploting Coefficients</a></li>
 </ul>
 </div>
 </div>
@@ -249,6 +263,12 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-LayoutEditor.html" title="The display options dictionnary"
+             >next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="#">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>

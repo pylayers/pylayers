@@ -4,4 +4,4 @@
    :hidden:
 
    notebooks/index
-   manual/index
+   modules/index

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The display option dictionnary &mdash; PyLayers</title>
+    <title>The display options dictionnary &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="User Manual" href="index.html" />
+    <link rel="next" title="Slab names" href="DOC-SlabAndMaterials.html" />
+    <link rel="prev" title="User Manual" href="index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,11 +40,18 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-SlabAndMaterials.html" title="Slab names"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="User Manual"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" accesskey="U">User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -49,8 +59,11 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The display option dictionnary</a><ul>
+<li><a class="reference internal" href="#">The display options dictionnary</a><ul>
+<li><a class="reference internal" href="#layers">Layers</a></li>
 <li><a class="reference internal" href="#strings">Strings</a></li>
+<li><a class="reference internal" href="#sizes">Sizes</a></li>
+<li><a class="reference internal" href="#booleans">Booleans</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#interactive-editor">Interactive editor</a></li>
@@ -58,8 +71,15 @@
 <li><a class="reference internal" href="#image-overlay">Image overlay</a></li>
 <li><a class="reference internal" href="#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
 <li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
+<li><a class="reference internal" href="#segments-and-subsegments">Segments and Subsegments</a></li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">User Manual</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="DOC-SlabAndMaterials.html"
+                        title="next chapter">Slab names</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -88,8 +108,7 @@ handled by the module <strong>pylayers.gis.layout</strong></p>
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x40caa10&gt;</pre>
 </div>
-<p>To create a new layout object instantiate a layout with the name of the
-.ini file</p>
+<p>To create a new layout :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;layout.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -115,9 +134,10 @@ vnodes = Gt.node[Nc]['cycles'].cycle
 poly = Gt.node[Nc]['cycle'].polyg
 Gr Nodes    : no Gr graph</pre>
 </div>
-<div class="section" id="the-display-option-dictionnary">
-<h1>The display option dictionnary<a class="headerlink" href="#the-display-option-dictionnary" title="Permalink to this headline">¶</a></h1>
-<p>The layout can be displayed using matplotlib ploting primitive</p>
+<div class="section" id="the-display-options-dictionnary">
+<h1>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h1>
+<p>The layout can be displayed using matplotlib ploting primitive. Several
+display options are specified in the display dictionnary.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span>
 </pre></div>
 </div>
@@ -168,8 +188,8 @@ Gr Nodes    : no Gr graph</pre>
  <span class="s">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Layers</p>
-<hr class="docutils" />
+<div class="section" id="layers">
+<h2>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;layer&#8217; : list , []</li>
 <li>&#8216;layerset&#8217;,list, list of available layers</li>
@@ -178,22 +198,25 @@ Gr Nodes    : no Gr graph</pre>
 <li>&#8216;alpha&#8217;, float , 0.5 , overlay transparency</li>
 <li>&#8216;box&#8217;, tuple , (-20,20,-10,10), (xmin xmax,ymin,ymax)</li>
 </ul>
+</div>
 <div class="section" id="strings">
 <h2>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;title&#8217; : str , &#8216;Init&#8217;</li>
 <li>&#8216;fileoverlay&#8217; : str , &#8216;TA-Office.png&#8217;</li>
 </ul>
-<p>Sizes</p>
-<hr class="docutils" />
+</div>
+<div class="section" id="sizes">
+<h2>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;fontsize&#8217;, float , 10</li>
 <li>&#8216;ndsize&#8217;, float , 10</li>
 <li>&#8216;ndlblsize&#8217; : float 20</li>
 <li>&#8216;edlblsize&#8217; : float , 20</li>
 </ul>
-<p>Boolean</p>
-<hr class="docutils" />
+</div>
+<div class="section" id="booleans">
+<h2>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;edlabel&#8217;, boolean, False</li>
 <li>&#8216;ticksoff&#8217;,boolean, True</li>
@@ -312,6 +335,19 @@ meters) between the two points.</li>
 to a segment (Wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 </div>
+<div class="section" id="segments-and-subsegments">
+<h1>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h1>
+<p>It is very important to respect a strict non overlapping rules. No
+segments can recover partially or totally an other segment. This rules
+allows to capture topological relation of the network which are
+exploited for further analysis.</p>
+<p>To describe door and window, the concept of subsegment is used. A
+subsegment belongs to a segment, it has mainly 3 attached parameters + A
+slab name + zmin (meter) + zmax (meter)</p>
+<p>Currently, it is not possible to define multi-subsegments. for example a
+composite door with wood and glass. This a desirable feature to add for
+future version of PyLayers.</p>
+</div>
 
 
           </div>
@@ -322,11 +358,18 @@ to a segment (Wall,door,window,...).</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-SlabAndMaterials.html" title="Slab names"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="User Manual"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

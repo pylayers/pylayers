@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="User Manual" href="index.html" />
+    <link rel="next" title="Multi-wall model" href="DOC-MultiwallAndCoverage.html" />
+    <link rel="prev" title="The display options dictionnary" href="DOC-LayoutEditor.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,11 +40,18 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-MultiwallAndCoverage.html" title="Multi-wall model"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="DOC-LayoutEditor.html" title="The display options dictionnary"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" accesskey="U">User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -49,18 +59,20 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Slab names</a><ul>
+<li><a class="reference internal" href="#">Slab names</a></li>
 <li><a class="reference internal" href="#slab-dictionnary">Slab dictionnary</a></li>
 <li><a class="reference internal" href="#slab-information">Slab Information</a></li>
 <li><a class="reference internal" href="#slab-evaluation">Slab evaluation</a></li>
 <li><a class="reference internal" href="#transmission-and-reflexion-coefficient">Transmission and Reflexion coefficient</a></li>
 <li><a class="reference internal" href="#ploting-coefficients">Ploting Coefficients</a></li>
-<li><a class="reference internal" href="#with-respect-to-angle">with respect to angle</a></li>
-<li><a class="reference internal" href="#wrt-to-angle-and-frequency">wrt to angle and frequency</a></li>
-</ul>
-</li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="DOC-LayoutEditor.html"
+                        title="previous chapter">The display options dictionnary</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="DOC-MultiwallAndCoverage.html"
+                        title="next chapter">Multi-wall model</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -82,13 +94,13 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>This section explains some features of the class <strong>Slab</strong>. <strong>Slabs</strong> are
-handled by the module <strong>pylayers.gis.slabs</strong></p>
+  <p>This section explains some features of the class <strong>Slab</strong>.</p>
+<p><strong>Slabs</strong> are handled by the module <strong>pylayers.antprop.slab</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span>  <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3d18910&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x47d3bd0&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
@@ -106,8 +118,9 @@ handled by the module <strong>pylayers.gis.slabs</strong></p>
 <p>In the example above the node <strong>20</strong> of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> is a
 segment of name &#8216;PARTITION&#8217;, which is a key entry of the Slab
 dictionnary.</p>
+</div>
 <div class="section" id="slab-dictionnary">
-<h2>Slab dictionnary<a class="headerlink" href="#slab-dictionnary" title="Permalink to this headline">¶</a></h2>
+<h1>Slab dictionnary<a class="headerlink" href="#slab-dictionnary" title="Permalink to this headline">¶</a></h1>
 <p>The layout L has a <strong>sl</strong> (slab dictionnary) member. This dictionnary
 contains all the available slabs of the layout. For this layout the keys
 of the <strong>sl</strong> dictionnary are :</p>
@@ -140,7 +153,7 @@ of the <strong>sl</strong> dictionnary are :</p>
 </div>
 </div>
 <div class="section" id="slab-information">
-<h2>Slab Information<a class="headerlink" href="#slab-information" title="Permalink to this headline">¶</a></h2>
+<h1>Slab Information<a class="headerlink" href="#slab-information" title="Permalink to this headline">¶</a></h1>
 <p>Each slab contains informations about their constitutive materials and
 their electromagnetic propreties.</p>
 <p>Below an example for a simple slab, constituted with a single material.
@@ -197,7 +210,7 @@ defined using the two lists <strong>lmatname</strong> and <strong>lthick</strong
 </pre></div>
 </div>
 <p>For each constitutive material of a slab, their electromagnetic
-propreties can be obtained as:</p>
+properties can be obtained as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">][</span><span class="s">&#39;lmat&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -223,7 +236,7 @@ propreties can be obtained as:</p>
 </div>
 </div>
 <div class="section" id="slab-evaluation">
-<h2>Slab evaluation<a class="headerlink" href="#slab-evaluation" title="Permalink to this headline">¶</a></h2>
+<h1>Slab evaluation<a class="headerlink" href="#slab-evaluation" title="Permalink to this headline">¶</a></h1>
 <p>Each Slab can be evaluated to obtain the Transmission and Reflexion
 coefficients for</p>
 <ul class="simple">
@@ -235,14 +248,14 @@ coefficients for</p>
 
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">R</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Here, we have evluated the slab for&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;frequency(ies)&#39;</span><span class="p">,</span> <span class="s">&#39;and&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;angle(s)</span><span class="se">\n</span><span class="s">&#39;</span>
+<span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Here, slab is evaluted for&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;frequency(ies)&#39;</span><span class="p">,</span> <span class="s">&#39;and&#39;</span><span class="p">,</span><span class="n">sR</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;angle(s)</span><span class="se">\n</span><span class="s">&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Here, we have evluated the slab for 80 frequency(ies) and 158 angle(s)</pre>
+<div class="highlight-python"><pre>Here, slab is evaluted for 80 frequency(ies) and 158 angle(s)</pre>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficient">
-<h2>Transmission and Reflexion coefficient<a class="headerlink" href="#transmission-and-reflexion-coefficient" title="Permalink to this headline">¶</a></h2>
+<h1>Transmission and Reflexion coefficient<a class="headerlink" href="#transmission-and-reflexion-coefficient" title="Permalink to this headline">¶</a></h1>
 <p>From the evaluation reflexion and tramsmission coeffcient are computed
 for the given frequency range and theta range</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
@@ -264,37 +277,30 @@ Transmission coefficient @ 1.05 GHz and theta= 0.1 :
 </div>
 </div>
 <div class="section" id="ploting-coefficients">
-<h2>Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>with respect to  frequency</div></blockquote>
-<hr class="docutils" />
+<h1>Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h1>
+<p>with respect to frequency</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;mod&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;phase&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/_fig_14.png" src="../_images/_fig_14.png" />
-<img alt="../_images/_fig_15.png" src="../_images/_fig_15.png" />
-</div>
-<div class="section" id="with-respect-to-angle">
-<h2>with respect to angle<a class="headerlink" href="#with-respect-to-angle" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/_fig_16.png" src="../_images/_fig_16.png" />
+<p>with respect to angle</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_16.png" src="../_images/_fig_16.png" />
-</div>
-<div class="section" id="wrt-to-angle-and-frequency">
-<h2>wrt to angle and frequency<a class="headerlink" href="#wrt-to-angle-and-frequency" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/_fig_18.png" src="../_images/_fig_18.png" />
+<p>wrt to angle and frequency</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_17.png" src="../_images/_fig_17.png" />
-</div>
+<img alt="../_images/_fig_20.png" src="../_images/_fig_20.png" />
 </div>
 
 
@@ -306,11 +312,18 @@ Transmission coefficient @ 1.05 GHz and theta= 0.1 :
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-MultiwallAndCoverage.html" title="Multi-wall model"
+             >next</a></li>
+        <li class="right" >
+          <a href="DOC-LayoutEditor.html" title="The display options dictionnary"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
