@@ -38,7 +38,7 @@
       <h3>Navigation</h3>
       <ul>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
  
@@ -246,13 +246,19 @@ once the V,W function</p>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.cart2pol">
 <tt class="descname">cart2pol</tt><big>(</big><em>Fx</em>, <em>Fy</em>, <em>Fz</em>, <em>ith</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.cart2pol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.cart2pol" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith
-Parameters
-&#8212;&#8212;&#8212;-
-Fx
-Fy
-Fz
-ith : theta index</p>
+<dd><p>Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Fx</strong> :</p>
+<p><strong>Fy</strong> :</p>
+<p><strong>Fz</strong> :</p>
+<p class="last"><strong>ith</strong> : theta index</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -351,12 +357,6 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.antenna.Antenna.help">
-<tt class="descname">help</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.help" title="Permalink to this definition">¶</a></dt>
-<dd><p>help on available functions</p>
 </dd></dl>
 
 <dl class="method">
@@ -468,7 +468,7 @@ the vsh coefficients in shape 2</p>
 <dt id="pylayers.antprop.antenna.Antenna.loadvsh3">
 <tt class="descname">loadvsh3</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadvsh3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadvsh3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load antenna&#8217;s vsh3 file</p>
-<p>it contains a thesholded version of vsh coefficients in shape 3</p>
+<p>vsh3 file contains a thesholded version of vsh coefficients in shape 3</p>
 </dd></dl>
 
 <dl class="method">
@@ -531,7 +531,24 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.pattern">
 <tt class="descname">pattern</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pattern" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>return radiation multidimensionnal patterns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : array</p>
+<blockquote>
+<div><p>1xNt</p>
+</div></blockquote>
+<p><strong>phi</strong> : array</p>
+<blockquote class="last">
+<div><p>1xNp</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.pol2cart">
@@ -586,7 +603,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.polar">
-<tt class="descname">polar</tt><big>(</big><em>k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.polar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.polar" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">polar</tt><big>(</big><em>k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1, fig=[], ax=[]</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.polar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.polar" title="Permalink to this definition">¶</a></dt>
 <dd><p>polar plot</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -870,7 +887,7 @@ len(phi) must be equal with shape(F)[2]</p>
       <h3>Navigation</h3>
       <ul>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
  

@@ -3,7 +3,5 @@
 .. toctree::
    :hidden:
 
-   documentation
-   download
+   notebooks/index
    manual/index
-   acknowledgments
