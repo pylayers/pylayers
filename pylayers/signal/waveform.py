@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 import doctest
 import os
+import logging
 import pdb
 import numpy as np
 import scipy as sp
@@ -40,17 +41,20 @@ class Waveform:
         """ evaluate waveform
 
             The lambda/4*pi factor which is necessary to get the proper budget 
-            link ( from the fris formula) is introduced in this function.
+            link ( from the Friis formula) is introduced in this function.
         """
 
         if self.parameters['type']  == 'generic':
             [st,sf]=self.ip_generic()
-        if self.parameters['type']  == 'mbofdm':
+        elif self.parameters['type']  == 'mbofdm':
             [st,sf]=self.mbofdm()
-        if self.parameters['type'] == 'W1compensate':
+        elif self.parameters['type'] == 'W1compensate':
             [st,sf]=self.fromfile()
-        if self.parameters['type'] == 'W1offset':
+        elif self.parameters['type'] == 'W1offset':
             [st,sf]=self.fromfile2()
+        else:
+            logging.critical('waveform type not recognized, check your config \
+                             file')
 
         self.st       = st
         self.sf       = sf
@@ -83,8 +87,11 @@ class Waveform:
 
 
         """
-        for k in self.parameters.keys():
-            print k , " : ",self.parameters[k]
+        if self.parameters['type']=='generic':
+            for k in self.parameters.keys():
+                print k , " : ",self.parameters[k]
+        else:
+            print "type:",self.parameters['type']
 
     def show2(self,Tp=1000):
         """ show2
@@ -253,7 +260,7 @@ class Waveform:
                 wparam[key] = float(val)
             if key == "type":
                 wparam[key] = val
-
+ 
         self.parameters = wparam
         self.eval()
 

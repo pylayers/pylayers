@@ -22,6 +22,8 @@ class Ctilde(object):
     Ctp : FUsignal
     Cpt : FUsignal
     Cpp : FUsignal
+    fGHz : np.array
+        frequency array
     nfreq : int
         number of frequency point
     nray  : int
@@ -116,12 +118,12 @@ class Ctilde(object):
         #
         # Temporary freq --> read filefreq
         #
-        freq = np.linspace(2, 11, nfreq)
+        fGHz = np.linspace(2, 11, nfreq)
 
-        self.Ctt = bs.FUsignal(freq, c11)
-        self.Ctp = bs.FUsignal(freq, c12)
-        self.Cpt = bs.FUsignal(freq, c21)
-        self.Cpp = bs.FUsignal(freq, c22)
+        self.Ctt = bs.FUsignal(fGHz, c11)
+        self.Ctp = bs.FUsignal(fGHz, c12)
+        self.Cpt = bs.FUsignal(fGHz, c21)
+        self.Cpp = bs.FUsignal(fGHz, c22)
         self.nfreq = nfreq
         self.nray = nray
 
@@ -217,11 +219,12 @@ class Ctilde(object):
 
         return(tauk_ch)
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360)):
         """ doadod scatter plot
 
         Parameters
         -----------
+
         cmap : color map
         s    : float
             size (default 30)
@@ -257,13 +260,13 @@ class Ctilde(object):
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
                     cmap=cmap, edgecolors='none')
         #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, 0, 360))
+        plt.axis((0, 180, phi[0], phi[1]))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
-        a = plt.colorbar()
+        #a = plt.colorbar()
         #for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
-        a.set_label('dB')
+        #a.set_label('dB')
         plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
         plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
         #ylabel('$\phi_t(\degree)$',fontsize=18)
@@ -271,7 +274,7 @@ class Ctilde(object):
         plt.subplot(122)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
-        plt.axis((0, 180, 0, 360))
+        plt.axis((0, 180, phi[0], phi[1]))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
         b = plt.colorbar()
@@ -281,6 +284,7 @@ class Ctilde(object):
         plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
         plt.title('DoA', fontsize=fontsize+2)
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
+        plt.axis
 
     def show(self, display=False, mode='linear'):
         """ show
@@ -368,6 +372,7 @@ class Ctilde(object):
 
         See Also
         --------
+
         pylayers.signal.bsignal.FUsignal.energy
 
         """
@@ -380,11 +385,12 @@ class Ctilde(object):
         return Eco, Ecross
 
     def sort(self, tauk):
-        """ sort Ctilde with respect of tauk
+        """ sort Ctilde with respect to tauk
 
         Parameters
         ----------
-        tauk :
+
+        tauk : array of delays
 
         """
         u = argsort(tauk)
@@ -415,7 +421,7 @@ class Ctilde(object):
 
 
         """
-        freq = self.freq
+        freq = self.fGHz
         nfreq = self.nfreq
         nray  = self.nray
         sh = np.shape(self.Ctt.y)
@@ -427,8 +433,8 @@ class Ctilde(object):
                 Fat = np.ones((nray,nfreq))
             if a=='phi':
                 Fap = np.ones((nray,nfreq))
-            Fat = bs.FUsignal(self.freq,Fat)
-            Fap = bs.FUsignal(self.freq,Fap)
+            Fat = bs.FUsignal(self.fGHz,Fat)
+            Fap = bs.FUsignal(self.fGHz,Fap)
         else:
             Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1])
             Fat = Fat.transpose()
@@ -443,8 +449,8 @@ class Ctilde(object):
                 Fbt = np.ones((nray,nfreq))
             if b=='phi':
                 Fbp = np.ones((nray,nfreq))
-            Fbt = bs.FUsignal(self.freq,Fbt)
-            Fbp = bs.FUsignal(self.freq,Fbp)
+            Fbt = bs.FUsignal(self.fGHz,Fbt)
+            Fbp = bs.FUsignal(self.fGHz,Fbp)
         else:
             Fbt , Fbp = b.Fsynth3(self.rang[:, 0],self.rang[:,1])
             # (nray,nfeq) needed
@@ -469,13 +475,17 @@ class Ctilde(object):
 
         slach : ScalChannel
 
+        Note 
+        ----
+        deprecated replaced by prop2tran
+
         """
-        freq = self.freq
+        fGHz = self.fGHz
         sh = np.shape(self.Ctt.y)
-        Ftt = bs.FUsignal(freq, np.ones(sh))
-        Ftp = bs.FUsignal(freq, np.zeros(sh))
-        Frt = bs.FUsignal(freq, np.ones(sh))
-        Frp = bs.FUsignal(freq, np.zeros(sh))
+        Ftt = bs.FUsignal(fGHz, np.ones(sh))
+        Ftp = bs.FUsignal(fGHz, np.zeros(sh))
+        Frt = bs.FUsignal(fGHz, np.ones(sh))
+        Frp = bs.FUsignal(fGHz, np.zeros(sh))
         scalch = ScalChannel(self, Ftt, Ftp, Frt, Frp)
         return(scalch)
 
@@ -484,15 +494,20 @@ class Ctilde(object):
 
     def vec2scalA(self, At, Ar, alpha=1.0):
         """
-        vec2scalA(self,At,Ar,alpha=1.0):
+        
+        Parameters
+        ----------
 
-        At = transmitter antenna
-        Ar = receiver antenna
+        At : transmitter antenna
+        Ar : receiver antenna
+        alpha : normalization factor
+    
+        Notes
+        -----
 
         Calculate ScalChannel by combining the propagation channel VectChannel
         with realistic antennas transfer function
 
-        alpha : normalization factor
 
         """
 
@@ -542,7 +557,7 @@ def VCg2VCl(VCg, Tt, Tr):
     import copy
 
     VCl = copy.deepcopy(VCg)
-    freq = VCl.freq
+    freq = VCl.fGHz
     Rt, tangl = BTB_tx(VCg.tang, Tt)
     Rr, rangl = BTB_rx(VCg.rang, Tr)
 
@@ -577,10 +592,10 @@ def VCg2VCl(VCg, Tt, Tr):
     Ctpl = t00 * r0 + t01 * r1
     Cppl = t10 * r0 + t11 * r1
 
-    VCl.Ctt = bs.FUsignal(freq, Cttl)
-    VCl.Ctp = bs.FUsignal(freq, Ctpl)
-    VCl.Cpt = bs.FUsignal(freq, Cptl)
-    VCl.Cpp = bs.FUsignal(freq, Cppl)
+    VCl.Ctt = bs.FUsignal(fGHz, Cttl)
+    VCl.Ctp = bs.FUsignal(fGHz, Ctpl)
+    VCl.Cpt = bs.FUsignal(fGHz, Cptl)
+    VCl.Cpp = bs.FUsignal(fGHz, Cppl)
 
     return VCl
 
