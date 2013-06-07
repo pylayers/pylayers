@@ -1286,7 +1286,9 @@ def VW(l, m, theta ,phi):
     L = np.max(l)
     M = np.max(m)
  
-    #theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
+    # dirty fix
+
+    theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
     x = -np.cos(theta)
 
     # The - sign is necessary to get the good reconstruction
@@ -1384,7 +1386,9 @@ def VW0(n, m, x, phi, Pmm1n, Pmp1n):
 
 def plotVW(l, m, theta, phi, sf=False):
     """ plot VSH transform vsh basis in 3D plot
+
         (V in fig1 and W in fig2)
+
     Parameters
     ----------
     n,m   : integer values (m<=n)

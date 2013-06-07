@@ -87,8 +87,11 @@ class Waveform:
 
 
         """
-        for k in self.parameters.keys():
-            print k , " : ",self.parameters[k]
+        if self.parameters['type']=='generic':
+            for k in self.parameters.keys():
+                print k , " : ",self.parameters[k]
+        else:
+            print "type:",self.parameters['type']
 
     def show2(self,Tp=1000):
         """ show2

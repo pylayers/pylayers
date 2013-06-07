@@ -4307,12 +4307,12 @@ class Layout(object):
         """
 
         ptsh = sh.Point(pt[0], pt[1])
-        room_exists = False
+        ptshinroom = False
         for nr in self.Gr.node.keys():
-            if self.Gt.node[self.Gr.node[nr]['cycle']]['polyg'].contains(ptsh):
-                room_exists = True
+            if self.Gr.node[nr]['polyg'].contains(ptsh):
+                ptshinroom = True
                 return(nr)
-        if not room_exists:
+        if not ptshinroom:
             raise NameError(str(pt)+" is not in any room")
 
     def seg2ro(self, seg):

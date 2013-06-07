@@ -13,12 +13,9 @@ from   pylayers.util.project import *
 from   scipy import io
 from   scipy import signal, linspace, polyval, polyfit, stats
 #from   pylayers.Simul import SimulEM
-
 #
 # Utility functions
 #
-
-
 def mesname(n, dirname, h=1):
     """ get the measurement data filename
 
@@ -53,7 +50,6 @@ def mesname(n, dirname, h=1):
 
     filename = mesdir + prefix + stn + '.mat'
     return(filename)
-
 
 def ptw1():
     """ return W1 Tx and Rx points
@@ -458,7 +454,6 @@ def ptw1():
 
     return(Tx, Rx)
 
-
 def visibility():
     """ determine visibility type of WHERE1 measurements campaign points
 
@@ -580,7 +575,6 @@ def visibility():
     visi.append(R4)
     return visi
 
-
 def trait(filename, itx=np.array([]), dico={}, h=1):
     """ evaluate various parameters for all measures in itx array
 
@@ -669,7 +663,6 @@ def trait(filename, itx=np.array([]), dico={}, h=1):
 
     return(F)
 
-
 class RAW_DATA(object):
     """
 
@@ -701,7 +694,6 @@ class RAW_DATA(object):
         self.ch4 = d[4]
         self.timetx = d[5]
         self.tx = d[6]
-
 
 class CAL_DATA(object):
     """
@@ -750,7 +742,6 @@ class CAL_DATA(object):
         #
         s1 = self.ch1
         s2 = self.ch2
-
 
 class Fdd(object):
     """ Frequency Domain Deconv Data
@@ -855,7 +846,6 @@ class Fdd(object):
         plt.xlabel('Freq (GHz)')
         plt.title('CH4')
         plt.show()
-
 
 class Tdd(object):
     """
@@ -1202,7 +1192,6 @@ class Tdd(object):
         plt.axis(ax)
         plt. show()
 
-
 class TFP(object):
     """
     Tx
@@ -1291,7 +1280,6 @@ class TFP(object):
         #self.chan_param['toa_th_tmtm']=hstack((self.chan_param['toa_th_tmtm'],FP.chan_param['toa_th_tmtm']))
         #self.chan_param['toa_th_tm']=hstack((self.chan_param['toa_th_tm'],FP.chan_param['toa_th_tm']))
         #self .chan_param['toa_th_tmt']=hstack((self.chan_param['toa_th_tmt'],FP.chan_param['toa_th_tmt']))
-
 
 class FP(object):
     """

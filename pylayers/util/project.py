@@ -92,6 +92,8 @@ for nm in pstruc.keys():
         os.chdir('..')
 
 
+    if nm == 'DIRANT':
+        antdir = dirname 
     if nm == 'DIRSTRUC':
         strdir = dirname
     if nm == 'DIRFUR':

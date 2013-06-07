@@ -217,7 +217,7 @@ class Ctilde(object):
 
         return(tauk_ch)
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360)):
         """ doadod scatter plot
 
         Parameters
@@ -258,7 +258,7 @@ class Ctilde(object):
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
                     cmap=cmap, edgecolors='none')
         #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, -180, 180))
+        plt.axis((0, 180, phi[0], phi[1]))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
         #a = plt.colorbar()
@@ -272,7 +272,7 @@ class Ctilde(object):
         plt.subplot(122)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
-        plt.axis((0, 180, -180, 180))
+        plt.axis((0, 180, phi[0], phi[1]))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
         b = plt.colorbar()

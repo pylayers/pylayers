@@ -98,7 +98,7 @@ class Rays(dict):
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        L.showGs(fig, ax)
+        L.showG(fig=fig,ax=ax,graph='s')
         ax.plot(self.pTx[0], self.pTx[1], 'or')
         ax.plot(self.pRx[0], self.pRx[1], 'og')
         for i in self.keys():
