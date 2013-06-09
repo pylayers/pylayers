@@ -21,7 +21,11 @@ Example of a trajectory synthesis in DLR WHERE2 environment
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x5080e10>
+    <matplotlib.figure.Figure at 0x4cbd850>
+
+This function has to be moved in simulem module. It is a temporary
+implementation. Signatures can be handled much more efficiently here. It
+run a full simulation and returns a list of channel impulse response.
 
 
 .. code-block:: python
@@ -100,63 +104,13 @@ loading the Layout
 
 .. image:: DOC-trajectory_files/_fig_02.png
 
+We have a list of static Anchor Nodes. Those values correspond to the
+actual anchor nodes coordinates of the WHERE2 project DLR measurement
+campaign.
+
 
 .. code-block:: python
 
-    # 
-    # Measures from WHERE2 WP4 measurement campaign @ DLR
-    # 
-    
-    MT_DLR_RDTMaster={ 2:[2.12,0,1.275], 3:[3.12,0,1.275], 4:[4.12,0,1.275],
-                      5:[5.12,0,1.275], 6:[6.12,0,1.275], 7:[7.12,0,1.275],
-                      8:[8.12,0,1.275], 9:[9.12,0,1.275], 10:[10.12,0,1.275],
-                      11:[11.12,0,1.275], 12:[12.12,0,1.275], 13:[13.12,0,1.275],
-                      14:[14.12,0,1.275], 15:[15.12,0,1.275], 16:[16.12,0,1.275],
-                      17:[17.12,0,1.275], 18:[18.12,0,1.275], 19:[19.12,0,1.275],
-                      20:[20.12,0,1.275], 21:[21.12,0,1.275], 22:[22.12,0,1.275],
-                      23:[23.12,0,1.275], 24:[24.12,0,1.275], 25:[25.12,0,1.275],
-                      26:[26.12,0,1.275], 27:[27.12,0,1.275], 28:[28.12,0,1.275],
-                      29:[29.12,0,1.275], 30:[30.12,0,1.275], 31:[31.12,0,1.275],
-                      33:[30.12,0,1.275], 62:[24.12,0,1.275], 63:[24.62,0,1.275],
-                      64:[25.12,0,1.275], 65:[25.62,0,1.275], 66:[26.12,0,1.275],
-                      67:[26.62,0,1.275], 68:[27.12,0,1.275], 69:[27.62,0,1.275],
-                      70:[28.12,0,1.275], 71:[28.62,0,1.275], 72:[29.12,0,1.275],
-                      73:[29.62,0,1.275], 34:[30.12,0,1.275], 35:[30,1.38,1.275],
-                      36:[30,1.88,1.275], 37:[30,2.38,1.275], 38:[30,2.88,1.275],
-                      39:[30,3.88,1.275], 40:[30,4.88,1.275], 41:[30,5.88,1.275]}
-    
-    # 
-    
-    TrolleyMT_ACO_04={ 2:60, 3:59, 4:58, 5:58, 6:58, 7:58, 8:58, 9:58, 10:58,
-                      11:58, 12:58, 13:57, 14:52, 15:12, 16:51, 17:11, 18:50,
-                      19:10, 20:53, 21:54, 22:55, 23:56, 24:56, 25:56, 26:56,
-                      27:56, 28:56, 29:56, 30:56, 31:56, 33:56, 62:56, 63:56,
-                      64:56, 65:56, 66:56, 67:56, 68:56, 69:56, 70:56, 71:56,
-                      72:56, 73:56, 34:56, 35:56, 36:56, 37:56, 38:56, 39:56,
-                      40:56, 41:56} 
-    
-    # 
-    
-    MT_ACO_04 = { 
-        60: [12.5, 2, 1.28],
-        59 :[12.5, 1.5, 1.28],
-        58 :[12.5, 1, 1.28 ],
-        57 :[12.5, 0.5, 1.28],
-        52 :[12.5, 0, 1.28],
-        12 :[12,  0,  1.28],
-        51 :[ 11.5, 0, 1.28],
-        11 :[ 11, 0, 1.28],
-        50 : [10.5, 0, 1.28],
-        10 :[10, 0, 1.28],
-        53 : [10, -0.5, 1.28],
-        54 : [10, -1, 1.28],
-        55 : [10, -1.5, 1.28],
-        56 : [10, -2, 1.28],
-    }
-    
-    # 
-    
-    Dongle = 389
     AnchorNodes = {390:{'name':'MT_ACO_05','coord':[6,0.81,1.64]},
                    386:{'name':'MT_ACO_08','coord':[30.574,2.8,1.291]},
                    391:{'name':'MT_ACO_07','coord':[11.78,-5.553,1.5]},
@@ -165,36 +119,29 @@ loading the Layout
                    400:{'name':'MT_ACO_02','coord':[30.574,2.8,1.291]},
                    1:{'name':'MT_DLR_RTDSlave','coord':[0.85,0,1.18]}
                   }
-    
-    
-
 
 
 .. code-block:: python
 
-    # 
-    #
-    #  Define here the link to be selected
-    #
-    A = 390
-    B = 386
-
-
-.. code-block:: python
-
-    fig,ax=S.L.showG('s',nodes=False)
-    plt.axis('off')
     S.tx.clear()
     S.rx.clear()
     S.tx.filant='def.vsh3'
     S.rx.filant='def.vsh3'
     da ={}
     dm ={}
+
+Vizualization of the simulated scenario
+
+
+.. code-block:: python
+
+    fig,ax=S.L.showG('s',nodes=False)
+    plt.axis('off')
     #
     # add new points in tx and rx
     #
     #for c,k in enumerate(AnchorNodes):
-    c = 0
+    c = 0 # first anchor nodes
     k = AnchorNodes.keys()[c]
     pta = array([AnchorNodes[k]['coord'][0],AnchorNodes[k]['coord'][1],AnchorNodes[k]['coord'][2]]).reshape(3,1)
     #
@@ -212,38 +159,63 @@ loading the Layout
 
 .. image:: DOC-trajectory_files/_fig_05.png
 
+In the following a trajectory for the receiver is defined.
+
+``linevect`` function allows to define a linear trajectory from ``ptt``
+along direction ``vec``.
+
 
 .. code-block:: python
 
-    #for c,k in enumerate(MT_DLR_RDTMaster):
-    #    ptm = array([MT_DLR_RDTMaster[k][0],MT_DLR_RDTMaster[k][1],MT_DLR_RDTMaster[k][2]]).reshape(3,1)
-    #    dm[c]=k
-    #    S.rx.point(ptm,mode="add")
-    #    plt.plot(ptm[0,:],ptm[1,:],'ob')
-    #
-    # In the DLR environement goes from the origin on the left along the corridor
-    # then goes up in the room
-    #
     S.rx.linevect(npt=50, step=0.6, ptt=[0, 0, 1.275], vec=[1, 0, 0], mode='subst')
     ps = S.rx.position[:,-1]
     S.rx.linevect(npt=10, step=0.2, ptt=ps,vec=[0,1,0],mode='append')
-    #print S.tx.position
-    #print S.rx.position
-    
+
+Looking what is does
+
+
+.. code-block:: python
+
+    S.L.display['ednodes']=False
+    S.L.display['edges']=True
+    S.L.display['nodes']=False
+    S.L.display['title']='Trajectory to be simulated'
     S.show(s=20)
-    
-    #p = S.L.Gr.node[0]['polyg']
-    
-    wav = wvf.Waveform({'type':'W1compensate'})
-    tcir = evalcir(S,wav,cutoff=3)
-    file = open("tcir5.pickle","w")
-    pickle.dump(tcir,file)
-    file.close()
 
 
 .. parsed-literal::
 
     Warning : no furniture file loaded
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x7efe490>,
+     <matplotlib.axes.AxesSubplot at 0x7efc110>)
+
+
+.. image:: DOC-trajectory_files/_fig_09.png
+
+Choosing a UWB waveform for the simulation
+
+
+.. code-block:: python
+
+    wav = wvf.Waveform({'type':'W1compensate'})
+    wav.show()
+
+.. image:: DOC-trajectory_files/_fig_11.png
+
+running the simulation
+
+
+.. code-block:: python
+
+    %timeit tcir = evalcir(S,wav,cutoff=3)
+
+
+.. parsed-literal::
+
     1
     37 [1, 18]
     41 [14, 18]
@@ -445,12 +417,699 @@ loading the Layout
     98 [9, 14]
     99 [8, 9]
     Rays evaluation
+    1
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    2
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    3
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    4
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    5
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    6
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    7
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    8
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    9
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    10
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    11
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    12
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    13
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    14
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    15
+    41 [14, 18]
+    Rays evaluation
+    16
+    41 [14, 18]
+    Rays evaluation
+    17
+    41 [14, 18]
+    Rays evaluation
+    18
+    41 [14, 18]
+    Rays evaluation
+    19
+    41 [14, 18]
+    Rays evaluation
+    20
+    41 [14, 18]
+    Rays evaluation
+    21
+    41 [14, 18]
+    Rays evaluation
+    22
+    41 [14, 18]
+    Rays evaluation
+    23
+    41 [14, 18]
+    Rays evaluation
+    24
+    41 [14, 18]
+    Rays evaluation
+    25
+    41 [14, 18]
+    Rays evaluation
+    26
+    41 [14, 18]
+    Rays evaluation
+    27
+    41 [14, 18]
+    Rays evaluation
+    28
+    41 [14, 18]
+    Rays evaluation
+    29
+    41 [14, 18]
+    Rays evaluation
+    30
+    Rays evaluation
+    31
+    Rays evaluation
+    32
+    Rays evaluation
+    33
+    Rays evaluation
+    34
+    Rays evaluation
+    35
+    Rays evaluation
+    36
+    Rays evaluation
+    37
+    Rays evaluation
+    38
+    Rays evaluation
+    39
+    Rays evaluation
+    40
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    41
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    42
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    43
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    44
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    45
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    46
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    47
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    48
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    49
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    50
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    51
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    52
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    53
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    54
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    55
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    56
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    57
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    58
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    59
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    1
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    2
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    3
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    4
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    5
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    6
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    7
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    8
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    9
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    10
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    11
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    12
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    13
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    14
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    15
+    41 [14, 18]
+    Rays evaluation
+    16
+    41 [14, 18]
+    Rays evaluation
+    17
+    41 [14, 18]
+    Rays evaluation
+    18
+    41 [14, 18]
+    Rays evaluation
+    19
+    41 [14, 18]
+    Rays evaluation
+    20
+    41 [14, 18]
+    Rays evaluation
+    21
+    41 [14, 18]
+    Rays evaluation
+    22
+    41 [14, 18]
+    Rays evaluation
+    23
+    41 [14, 18]
+    Rays evaluation
+    24
+    41 [14, 18]
+    Rays evaluation
+    25
+    41 [14, 18]
+    Rays evaluation
+    26
+    41 [14, 18]
+    Rays evaluation
+    27
+    41 [14, 18]
+    Rays evaluation
+    28
+    41 [14, 18]
+    Rays evaluation
+    29
+    41 [14, 18]
+    Rays evaluation
+    30
+    Rays evaluation
+    31
+    Rays evaluation
+    32
+    Rays evaluation
+    33
+    Rays evaluation
+    34
+    Rays evaluation
+    35
+    Rays evaluation
+    36
+    Rays evaluation
+    37
+    Rays evaluation
+    38
+    Rays evaluation
+    39
+    Rays evaluation
+    40
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    41
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    42
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    43
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    44
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    45
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    46
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    47
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    48
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    49
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    50
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    51
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    52
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    53
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    54
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    55
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    56
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    57
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    58
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    59
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    1
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    2
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    3
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    4
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    5
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    6
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    7
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    8
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    9
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    10
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    11
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    12
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    13
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    14
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    15
+    41 [14, 18]
+    Rays evaluation
+    16
+    41 [14, 18]
+    Rays evaluation
+    17
+    41 [14, 18]
+    Rays evaluation
+    18
+    41 [14, 18]
+    Rays evaluation
+    19
+    41 [14, 18]
+    Rays evaluation
+    20
+    41 [14, 18]
+    Rays evaluation
+    21
+    41 [14, 18]
+    Rays evaluation
+    22
+    41 [14, 18]
+    Rays evaluation
+    23
+    41 [14, 18]
+    Rays evaluation
+    24
+    41 [14, 18]
+    Rays evaluation
+    25
+    41 [14, 18]
+    Rays evaluation
+    26
+    41 [14, 18]
+    Rays evaluation
+    27
+    41 [14, 18]
+    Rays evaluation
+    28
+    41 [14, 18]
+    Rays evaluation
+    29
+    41 [14, 18]
+    Rays evaluation
+    30
+    Rays evaluation
+    31
+    Rays evaluation
+    32
+    Rays evaluation
+    33
+    Rays evaluation
+    34
+    Rays evaluation
+    35
+    Rays evaluation
+    36
+    Rays evaluation
+    37
+    Rays evaluation
+    38
+    Rays evaluation
+    39
+    Rays evaluation
+    40
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    41
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    42
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    43
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    44
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    45
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    46
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    47
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    48
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    49
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    50
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    51
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    52
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    53
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    54
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    55
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    56
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    57
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    58
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    59
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    1 loops, best of 3: 56.8 s per loop
 
-.. image:: DOC-trajectory_files/_fig_08.png
+The full trajectory simulation took **56.8s** on a Dell M6700. It is
+stored as a dictionnary of 59 entry containing object from class Usignal
+of length 9930 points.
 
 
 .. code-block:: python
 
+    tcir
+
+
+.. parsed-literal::
+
+    {1: {1: Usignal :  (9930,)  (9930,),
+      2: Usignal :  (9930,)  (9930,),
+      3: Usignal :  (9930,)  (9930,),
+      4: Usignal :  (9930,)  (9930,),
+      5: Usignal :  (9930,)  (9930,),
+      6: Usignal :  (9930,)  (9930,),
+      7: Usignal :  (9930,)  (9930,),
+      8: Usignal :  (9930,)  (9930,),
+      9: Usignal :  (9930,)  (9930,),
+      10: Usignal :  (9930,)  (9930,),
+      11: Usignal :  (9930,)  (9930,),
+      12: Usignal :  (9930,)  (9930,),
+      13: Usignal :  (9930,)  (9930,),
+      14: Usignal :  (9930,)  (9930,),
+      15: Usignal :  (9930,)  (9930,),
+      16: Usignal :  (9930,)  (9930,),
+      17: Usignal :  (9930,)  (9930,),
+      18: Usignal :  (9930,)  (9930,),
+      19: Usignal :  (9930,)  (9930,),
+      20: Usignal :  (9930,)  (9930,),
+      21: Usignal :  (9930,)  (9930,),
+      22: Usignal :  (9930,)  (9930,),
+      23: Usignal :  (9930,)  (9930,),
+      24: Usignal :  (9930,)  (9930,),
+      25: Usignal :  (9930,)  (9930,),
+      26: Usignal :  (9930,)  (9930,),
+      27: Usignal :  (9930,)  (9930,),
+      28: Usignal :  (9930,)  (9930,),
+      29: Usignal :  (9930,)  (9930,),
+      30: Usignal :  (9930,)  (9930,),
+      31: Usignal :  (9930,)  (9930,),
+      32: Usignal :  (9930,)  (9930,),
+      33: Usignal :  (9930,)  (9930,),
+      34: Usignal :  (9930,)  (9930,),
+      35: Usignal :  (9930,)  (9930,),
+      36: Usignal :  (9930,)  (9930,),
+      37: Usignal :  (9930,)  (9930,),
+      38: Usignal :  (9930,)  (9930,),
+      39: Usignal :  (9930,)  (9930,),
+      40: Usignal :  (9930,)  (9930,),
+      41: Usignal :  (9930,)  (9930,),
+      42: Usignal :  (9930,)  (9930,),
+      43: Usignal :  (9930,)  (9930,),
+      44: Usignal :  (9930,)  (9930,),
+      45: Usignal :  (9930,)  (9930,),
+      46: Usignal :  (9930,)  (9930,),
+      47: Usignal :  (9930,)  (9930,),
+      48: Usignal :  (9930,)  (9930,),
+      49: Usignal :  (9930,)  (9930,),
+      50: Usignal :  (9930,)  (9930,),
+      51: Usignal :  (9930,)  (9930,),
+      52: Usignal :  (9930,)  (9930,),
+      53: Usignal :  (9930,)  (9930,),
+      54: Usignal :  (9930,)  (9930,),
+      55: Usignal :  (9930,)  (9930,),
+      56: Usignal :  (9930,)  (9930,),
+      57: Usignal :  (9930,)  (9930,),
+      58: Usignal :  (9930,)  (9930,),
+      59: Usignal :  (9930,)  (9930,)}}
+
+
+Saving the data in pickle format
+
+
+.. code-block:: python
+
+    file = open("tcir5.pickle","w")
+    pickle.dump(tcir,file)
+    file.close()
+
+Reading the data from the above file
+
+
+.. code-block:: python
+
+    del ttcir
     file=open("tcir5.pickle","r")
     tcir=pickle.load(file)
     file.close()
@@ -471,7 +1130,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
     figsize(10,10)
     dmax=150*0.3
-    plt.imshow(20*np.log10(ttcir),vmax=-40,vmin=-150,origin='lower',extent=[0,dmax,1,69])
+    plt.imshow(20*np.log10(ttcir+1e-20),vmax=-40,vmin=-120,origin='lower',extent=[0,dmax,1,69])
     plt.xlabel(r'delay $\times$ c (meters)',fontsize=20)
     #plt.ylabel(r'distance along trajectory (meters)',fontsize=20)
     plt.ylabel(r'trajectory index number',fontsize=20)
@@ -483,16 +1142,10 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    -c:3: RuntimeWarning: divide by zero encountered in log10
-    -c:3: RuntimeWarning: invalid value encountered in log10
-
-
-.. parsed-literal::
-
     (0.0, 45.0, 1.0, 69.0)
 
 
-.. image:: DOC-trajectory_files/_fig_12.png
+.. image:: DOC-trajectory_files/_fig_16.png
 
 
 .. code-block:: python
@@ -509,7 +1162,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
     <matplotlib.text.Text at 0x712cad0>
 
 
-.. image:: DOC-trajectory_files/_fig_15.png
+.. image:: DOC-trajectory_files/_fig_19.png
 
 
 .. code-block:: python
@@ -525,5 +1178,5 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
     <matplotlib.text.Text at 0x70a1f90>
 
 
-.. image:: DOC-trajectory_files/_fig_18.png
+.. image:: DOC-trajectory_files/_fig_22.png
 

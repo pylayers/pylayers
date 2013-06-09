@@ -111,8 +111,11 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5080e10&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4cbd850&gt;</pre>
 </div>
+<p>This function has to be moved in simulem module. It is a temporary
+implementation. Signatures can be handled much more efficiently here. It
+run a full simulation and returns a list of channel impulse response.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameters</span>
@@ -182,61 +185,10 @@
 </pre></div>
 </div>
 <img alt="../_images/_fig_022.png" src="../_images/_fig_022.png" />
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
-<span class="c"># Measures from WHERE2 WP4 measurement campaign @ DLR</span>
-<span class="c">#</span>
-
-<span class="n">MT_DLR_RDTMaster</span><span class="o">=</span><span class="p">{</span> <span class="mi">2</span><span class="p">:[</span><span class="mf">2.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">3</span><span class="p">:[</span><span class="mf">3.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">4</span><span class="p">:[</span><span class="mf">4.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">5</span><span class="p">:[</span><span class="mf">5.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">6</span><span class="p">:[</span><span class="mf">6.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">7</span><span class="p">:[</span><span class="mf">7.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">8</span><span class="p">:[</span><span class="mf">8.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">9</span><span class="p">:[</span><span class="mf">9.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">10</span><span class="p">:[</span><span class="mf">10.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">11</span><span class="p">:[</span><span class="mf">11.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">12</span><span class="p">:[</span><span class="mf">12.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">13</span><span class="p">:[</span><span class="mf">13.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">14</span><span class="p">:[</span><span class="mf">14.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">15</span><span class="p">:[</span><span class="mf">15.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">16</span><span class="p">:[</span><span class="mf">16.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">17</span><span class="p">:[</span><span class="mf">17.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">18</span><span class="p">:[</span><span class="mf">18.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">19</span><span class="p">:[</span><span class="mf">19.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">20</span><span class="p">:[</span><span class="mf">20.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">21</span><span class="p">:[</span><span class="mf">21.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">22</span><span class="p">:[</span><span class="mf">22.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">23</span><span class="p">:[</span><span class="mf">23.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">24</span><span class="p">:[</span><span class="mf">24.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">25</span><span class="p">:[</span><span class="mf">25.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">26</span><span class="p">:[</span><span class="mf">26.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">27</span><span class="p">:[</span><span class="mf">27.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">28</span><span class="p">:[</span><span class="mf">28.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">29</span><span class="p">:[</span><span class="mf">29.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">30</span><span class="p">:[</span><span class="mf">30.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">31</span><span class="p">:[</span><span class="mf">31.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">33</span><span class="p">:[</span><span class="mf">30.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">62</span><span class="p">:[</span><span class="mf">24.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">63</span><span class="p">:[</span><span class="mf">24.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">64</span><span class="p">:[</span><span class="mf">25.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">65</span><span class="p">:[</span><span class="mf">25.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">66</span><span class="p">:[</span><span class="mf">26.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">67</span><span class="p">:[</span><span class="mf">26.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">68</span><span class="p">:[</span><span class="mf">27.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">69</span><span class="p">:[</span><span class="mf">27.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">70</span><span class="p">:[</span><span class="mf">28.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">71</span><span class="p">:[</span><span class="mf">28.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">72</span><span class="p">:[</span><span class="mf">29.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">73</span><span class="p">:[</span><span class="mf">29.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">34</span><span class="p">:[</span><span class="mf">30.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">35</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">1.38</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">36</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">1.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">37</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">2.38</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">38</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">2.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
-                  <span class="mi">39</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">3.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">40</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">4.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">41</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">5.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">]}</span>
-
-<span class="c">#</span>
-
-<span class="n">TrolleyMT_ACO_04</span><span class="o">=</span><span class="p">{</span> <span class="mi">2</span><span class="p">:</span><span class="mi">60</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">59</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span>
-                  <span class="mi">11</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span><span class="mi">57</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span><span class="mi">52</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span><span class="mi">51</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span><span class="mi">11</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span>
-                  <span class="mi">19</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">53</span><span class="p">,</span> <span class="mi">21</span><span class="p">:</span><span class="mi">54</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span><span class="mi">55</span><span class="p">,</span> <span class="mi">23</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">24</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">25</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">26</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
-                  <span class="mi">27</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">28</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">29</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">31</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">33</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">62</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">63</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
-                  <span class="mi">64</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">65</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">66</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">67</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">68</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">69</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">70</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">71</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
-                  <span class="mi">72</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">73</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">34</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">35</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">36</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">37</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">38</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">39</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
-                  <span class="mi">40</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">41</span><span class="p">:</span><span class="mi">56</span><span class="p">}</span>
-
-<span class="c">#</span>
-
-<span class="n">MT_ACO_04</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="mi">60</span><span class="p">:</span> <span class="p">[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">59</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">58</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.28</span> <span class="p">],</span>
-    <span class="mi">57</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">52</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">12</span> <span class="p">:[</span><span class="mi">12</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">51</span> <span class="p">:[</span> <span class="mf">11.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">11</span> <span class="p">:[</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">50</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">10</span> <span class="p">:[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">53</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">54</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">55</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-    <span class="mi">56</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
-<span class="p">}</span>
-
-<span class="c">#</span>
-
-<span class="n">Dongle</span> <span class="o">=</span> <span class="mi">389</span>
-<span class="n">AnchorNodes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">390</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_05&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.81</span><span class="p">,</span><span class="mf">1.64</span><span class="p">]},</span>
+<p>We have a list of static Anchor Nodes. Those values correspond to the
+actual anchor nodes coordinates of the WHERE2 project DLR measurement
+campaign.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">AnchorNodes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">390</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_05&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.81</span><span class="p">,</span><span class="mf">1.64</span><span class="p">]},</span>
                <span class="mi">386</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_08&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">30.574</span><span class="p">,</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.291</span><span class="p">]},</span>
                <span class="mi">391</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_07&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">11.78</span><span class="p">,</span><span class="o">-</span><span class="mf">5.553</span><span class="p">,</span><span class="mf">1.5</span><span class="p">]},</span>
                <span class="mi">385</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;MT_ACO_01&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">19.52</span><span class="p">,</span><span class="o">-</span><span class="mf">0.69</span><span class="p">,</span><span class="mf">1.446</span><span class="p">]},</span>
@@ -246,27 +198,22 @@
               <span class="p">}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
-<span class="c">#</span>
-<span class="c">#  Define here the link to be selected</span>
-<span class="c">#</span>
-<span class="n">A</span> <span class="o">=</span> <span class="mi">390</span>
-<span class="n">B</span> <span class="o">=</span> <span class="mi">386</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
 <span class="n">da</span> <span class="o">=</span><span class="p">{}</span>
 <span class="n">dm</span> <span class="o">=</span><span class="p">{}</span>
+</pre></div>
+</div>
+<p>Vizualization of the simulated scenario</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="c">#</span>
 <span class="c"># add new points in tx and rx</span>
 <span class="c">#</span>
 <span class="c">#for c,k in enumerate(AnchorNodes):</span>
-<span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># first anchor nodes</span>
 <span class="n">k</span> <span class="o">=</span> <span class="n">AnchorNodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">c</span><span class="p">]</span>
 <span class="n">pta</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="c">#</span>
@@ -280,33 +227,239 @@
 <div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x57efe10&gt;]</pre>
 </div>
 <img alt="../_images/_fig_052.png" src="../_images/_fig_052.png" />
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#for c,k in enumerate(MT_DLR_RDTMaster):</span>
-<span class="c">#    ptm = array([MT_DLR_RDTMaster[k][0],MT_DLR_RDTMaster[k][1],MT_DLR_RDTMaster[k][2]]).reshape(3,1)</span>
-<span class="c">#    dm[c]=k</span>
-<span class="c">#    S.rx.point(ptm,mode=&quot;add&quot;)</span>
-<span class="c">#    plt.plot(ptm[0,:],ptm[1,:],&#39;ob&#39;)</span>
-<span class="c">#</span>
-<span class="c"># In the DLR environement goes from the origin on the left along the corridor</span>
-<span class="c"># then goes up in the room</span>
-<span class="c">#</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.275</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
+<p>In the following a trajectory for the receiver is defined.</p>
+<p><tt class="docutils literal"><span class="pre">linevect</span></tt> function allows to define a linear trajectory from <tt class="docutils literal"><span class="pre">ptt</span></tt>
+along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.275</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
 <span class="n">ps</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="n">ps</span><span class="p">,</span><span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
-<span class="c">#print S.tx.position</span>
-<span class="c">#print S.rx.position</span>
-
-<span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-
-<span class="c">#p = S.L.Gr.node[0][&#39;polyg&#39;]</span>
-
-<span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">({</span><span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;W1compensate&#39;</span><span class="p">})</span>
-<span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
-<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tcir</span><span class="p">,</span><span class="nb">file</span><span class="p">)</span>
-<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded
+<p>Looking what is does</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;Trajectory to be simulated&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7efe490&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7efc110&gt;)</pre>
+</div>
+<img alt="../_images/_fig_093.png" src="../_images/_fig_093.png" />
+<p>Choosing a UWB waveform for the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">({</span><span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;W1compensate&#39;</span><span class="p">})</span>
+<span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_113.png" src="../_images/_fig_113.png" />
+<p>running the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">timeit</span> <span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>1
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+2
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+3
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+4
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+5
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+6
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+7
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+8
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+9
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+10
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+11
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+12
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+13
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+14
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+15
+41 [14, 18]
+Rays evaluation
+16
+41 [14, 18]
+Rays evaluation
+17
+41 [14, 18]
+Rays evaluation
+18
+41 [14, 18]
+Rays evaluation
+19
+41 [14, 18]
+Rays evaluation
+20
+41 [14, 18]
+Rays evaluation
+21
+41 [14, 18]
+Rays evaluation
+22
+41 [14, 18]
+Rays evaluation
+23
+41 [14, 18]
+Rays evaluation
+24
+41 [14, 18]
+Rays evaluation
+25
+41 [14, 18]
+Rays evaluation
+26
+41 [14, 18]
+Rays evaluation
+27
+41 [14, 18]
+Rays evaluation
+28
+41 [14, 18]
+Rays evaluation
+29
+41 [14, 18]
+Rays evaluation
+30
+Rays evaluation
+31
+Rays evaluation
+32
+Rays evaluation
+33
+Rays evaluation
+34
+Rays evaluation
+35
+Rays evaluation
+36
+Rays evaluation
+37
+Rays evaluation
+38
+Rays evaluation
+39
+Rays evaluation
+40
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+41
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+42
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+43
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+44
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+45
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+46
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+47
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+48
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+49
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+50
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+51
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+52
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+53
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+54
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+55
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+56
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+57
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+58
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+59
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
 1
 37 [1, 18]
 41 [14, 18]
@@ -507,10 +660,486 @@ Rays evaluation
 59
 98 [9, 14]
 99 [8, 9]
-Rays evaluation</pre>
+Rays evaluation
+1
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+2
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+3
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+4
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+5
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+6
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+7
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+8
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+9
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+10
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+11
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+12
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+13
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+14
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+15
+41 [14, 18]
+Rays evaluation
+16
+41 [14, 18]
+Rays evaluation
+17
+41 [14, 18]
+Rays evaluation
+18
+41 [14, 18]
+Rays evaluation
+19
+41 [14, 18]
+Rays evaluation
+20
+41 [14, 18]
+Rays evaluation
+21
+41 [14, 18]
+Rays evaluation
+22
+41 [14, 18]
+Rays evaluation
+23
+41 [14, 18]
+Rays evaluation
+24
+41 [14, 18]
+Rays evaluation
+25
+41 [14, 18]
+Rays evaluation
+26
+41 [14, 18]
+Rays evaluation
+27
+41 [14, 18]
+Rays evaluation
+28
+41 [14, 18]
+Rays evaluation
+29
+41 [14, 18]
+Rays evaluation
+30
+Rays evaluation
+31
+Rays evaluation
+32
+Rays evaluation
+33
+Rays evaluation
+34
+Rays evaluation
+35
+Rays evaluation
+36
+Rays evaluation
+37
+Rays evaluation
+38
+Rays evaluation
+39
+Rays evaluation
+40
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+41
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+42
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+43
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+44
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+45
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+46
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+47
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+48
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+49
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+50
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+51
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+52
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+53
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+54
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+55
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+56
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+57
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+58
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+59
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+1
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+2
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+3
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+4
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+5
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+6
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+7
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+8
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+9
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+10
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+11
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+12
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+13
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+14
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+15
+41 [14, 18]
+Rays evaluation
+16
+41 [14, 18]
+Rays evaluation
+17
+41 [14, 18]
+Rays evaluation
+18
+41 [14, 18]
+Rays evaluation
+19
+41 [14, 18]
+Rays evaluation
+20
+41 [14, 18]
+Rays evaluation
+21
+41 [14, 18]
+Rays evaluation
+22
+41 [14, 18]
+Rays evaluation
+23
+41 [14, 18]
+Rays evaluation
+24
+41 [14, 18]
+Rays evaluation
+25
+41 [14, 18]
+Rays evaluation
+26
+41 [14, 18]
+Rays evaluation
+27
+41 [14, 18]
+Rays evaluation
+28
+41 [14, 18]
+Rays evaluation
+29
+41 [14, 18]
+Rays evaluation
+30
+Rays evaluation
+31
+Rays evaluation
+32
+Rays evaluation
+33
+Rays evaluation
+34
+Rays evaluation
+35
+Rays evaluation
+36
+Rays evaluation
+37
+Rays evaluation
+38
+Rays evaluation
+39
+Rays evaluation
+40
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+41
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+42
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+43
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+44
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+45
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+46
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+47
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+48
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+49
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+50
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+51
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+52
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+53
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+54
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+55
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+56
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+57
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+58
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+59
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+1 loops, best of 3: 56.8 s per loop</pre>
 </div>
-<img alt="../_images/_fig_082.png" src="../_images/_fig_082.png" />
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+<p>The full trajectory simulation took <strong>56.8s</strong> on a Dell M6700. It is
+stored as a dictionnary of 59 entry containing object from class Usignal
+of length 9930 points.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>{1: {1: Usignal :  (9930,)  (9930,),
+  2: Usignal :  (9930,)  (9930,),
+  3: Usignal :  (9930,)  (9930,),
+  4: Usignal :  (9930,)  (9930,),
+  5: Usignal :  (9930,)  (9930,),
+  6: Usignal :  (9930,)  (9930,),
+  7: Usignal :  (9930,)  (9930,),
+  8: Usignal :  (9930,)  (9930,),
+  9: Usignal :  (9930,)  (9930,),
+  10: Usignal :  (9930,)  (9930,),
+  11: Usignal :  (9930,)  (9930,),
+  12: Usignal :  (9930,)  (9930,),
+  13: Usignal :  (9930,)  (9930,),
+  14: Usignal :  (9930,)  (9930,),
+  15: Usignal :  (9930,)  (9930,),
+  16: Usignal :  (9930,)  (9930,),
+  17: Usignal :  (9930,)  (9930,),
+  18: Usignal :  (9930,)  (9930,),
+  19: Usignal :  (9930,)  (9930,),
+  20: Usignal :  (9930,)  (9930,),
+  21: Usignal :  (9930,)  (9930,),
+  22: Usignal :  (9930,)  (9930,),
+  23: Usignal :  (9930,)  (9930,),
+  24: Usignal :  (9930,)  (9930,),
+  25: Usignal :  (9930,)  (9930,),
+  26: Usignal :  (9930,)  (9930,),
+  27: Usignal :  (9930,)  (9930,),
+  28: Usignal :  (9930,)  (9930,),
+  29: Usignal :  (9930,)  (9930,),
+  30: Usignal :  (9930,)  (9930,),
+  31: Usignal :  (9930,)  (9930,),
+  32: Usignal :  (9930,)  (9930,),
+  33: Usignal :  (9930,)  (9930,),
+  34: Usignal :  (9930,)  (9930,),
+  35: Usignal :  (9930,)  (9930,),
+  36: Usignal :  (9930,)  (9930,),
+  37: Usignal :  (9930,)  (9930,),
+  38: Usignal :  (9930,)  (9930,),
+  39: Usignal :  (9930,)  (9930,),
+  40: Usignal :  (9930,)  (9930,),
+  41: Usignal :  (9930,)  (9930,),
+  42: Usignal :  (9930,)  (9930,),
+  43: Usignal :  (9930,)  (9930,),
+  44: Usignal :  (9930,)  (9930,),
+  45: Usignal :  (9930,)  (9930,),
+  46: Usignal :  (9930,)  (9930,),
+  47: Usignal :  (9930,)  (9930,),
+  48: Usignal :  (9930,)  (9930,),
+  49: Usignal :  (9930,)  (9930,),
+  50: Usignal :  (9930,)  (9930,),
+  51: Usignal :  (9930,)  (9930,),
+  52: Usignal :  (9930,)  (9930,),
+  53: Usignal :  (9930,)  (9930,),
+  54: Usignal :  (9930,)  (9930,),
+  55: Usignal :  (9930,)  (9930,),
+  56: Usignal :  (9930,)  (9930,),
+  57: Usignal :  (9930,)  (9930,),
+  58: Usignal :  (9930,)  (9930,),
+  59: Usignal :  (9930,)  (9930,)}}</pre>
+</div>
+<p>Saving the data in pickle format</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tcir</span><span class="p">,</span><span class="nb">file</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Reading the data from the above file</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">del</span> <span class="n">ttcir</span>
+<span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
 <span class="n">tcir</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
 <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="c">#</span>
@@ -528,7 +1157,7 @@ Rays evaluation</pre>
 <h2>Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">dmax</span><span class="o">=</span><span class="mi">150</span><span class="o">*</span><span class="mf">0.3</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ttcir</span><span class="p">),</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">150</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">dmax</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">69</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ttcir</span><span class="o">+</span><span class="mf">1e-20</span><span class="p">),</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">dmax</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">69</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;delay $\times$ c (meters)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="c">#plt.ylabel(r&#39;distance along trajectory (meters)&#39;,fontsize=20)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;trajectory index number&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -538,13 +1167,10 @@ Rays evaluation</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>-c:3: RuntimeWarning: divide by zero encountered in log10
--c:3: RuntimeWarning: invalid value encountered in log10</pre>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_121.png" src="../_images/_fig_121.png" />
+<img alt="../_images/_fig_162.png" src="../_images/_fig_162.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -554,7 +1180,7 @@ Rays evaluation</pre>
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x712cad0&gt;</pre>
 </div>
-<img alt="../_images/_fig_151.png" src="../_images/_fig_151.png" />
+<img alt="../_images/_fig_192.png" src="../_images/_fig_192.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">40</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
@@ -563,7 +1189,7 @@ Rays evaluation</pre>
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x70a1f90&gt;</pre>
 </div>
-<img alt="../_images/_fig_182.png" src="../_images/_fig_182.png" />
+<img alt="../_images/_fig_22.png" src="../_images/_fig_22.png" />
 </div>
 </div>
 
