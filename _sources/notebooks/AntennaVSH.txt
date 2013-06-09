@@ -1,65 +1,108 @@
-In[1]:
+Vector Spherical sparse representation of full polar complex antenna patterns 
+------------------------------------------------------------------------------
 
-.. code:: python
 
-    from Antenna import *
+.. code-block:: python
 
-Read a trx file. This file has no header, it contains 7 columns :
+    from pylayers.antprop.antenna import *
+    from pylayers.antprop.antvsh import *
 
-In[49]:
+The first step consists in reading the raw data from a .mat file
+obtained from a UWB antenna Thomson 1 in near field chamber.
 
-.. code:: python
 
-    A = Antenna('mat','S4R1.mat','ant/UWBAN/Matfile')
-    #A = Antenna('trx1','UWB_CEA.trx')
+.. code-block:: python
 
-In[52]:
+    A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
 
-.. code:: python
 
-    figsize(5,5)
+.. code-block:: python
+
+    A.info()
+
+
+.. parsed-literal::
+
+    S1R1.mat
+    type :  mat
+    S1R1
+    Th1
+    04/12/12
+    15:55
+    Mohamed at the log
+    
+    1
+    1
+    Nb theta (lat) : 91
+    Nb phi (lon) : 180
+    No vsh coefficient calculated yet
+
+
+.. code-block:: python
+
+    A.show3(k=0,typ='Gain',col=True)
+
+.. image:: AntennaVSH_files/_fig_02.png
+
+
+.. code-block:: python
+
+    A.show3(k=60,typ='Gain',col=False)
+
+.. image:: AntennaVSH_files/_fig_04.png
+
+Unwraping the phase 
+--------------------
+
+
+.. code-block:: python
+
+    freq = A.fa.reshape(104,1,1)
+    ed = A.getdelay(freq)
+    I = A.Ftheta[:,:,:]*exp(2*1j*pi*freq*ed)
+
+
+.. code-block:: python
+
     shape(A.Fphi)
-    freq = A.fa.reshape(104,1,1)/1e9
-    tau=4.185
-    I = A.Ftheta[:,:,:]*exp(-2*1j*pi*freq*tau)
-    print shape(I)
-    print len(A.fa)
-    imshow(unwrap(angle(I[:,45,:])))
-    colorbar()
-    figure()
-    plot(freq[:,0,0],unwrap(angle(I[:,45,85])))
+    im=imshow(angle(I[:,45,:]))
+    cb = colorbar()
+    cb.set_label('phase rad')
+    xlabel('theta')
+
+
 
 .. parsed-literal::
 
-    (104, 91, 180)
-    104
+    <matplotlib.text.Text at 0x7ffad17d7890>
 
-Out[52]:
+
+.. image:: AntennaVSH_files/_fig_07.png
+
+
+.. code-block:: python
+
+    plot(freq[:,0,0]*1e9,unwrap(angle(I[:,45,85])))
+    xlabel('frequency (GHz)')
+
 
 .. parsed-literal::
 
-    [&lt;matplotlib.lines.Line2D at 0xc0cd36c&gt;]
+    <matplotlib.text.Text at 0x458b2d0>
 
-.. image:: AntennaVSH_files/AntennaVSH_fig_00.png
 
-.. image:: AntennaVSH_files/AntennaVSH_fig_01.png
+.. image:: AntennaVSH_files/_fig_10.png
 
-In[30]:
+The following figure represents all the radiation patten in the azimuth
+plane for each of the 104 frequencies
 
-.. code:: python
 
-    for nf in range(104):
-        polar(A.phi,abs(A.Ftheta[nf,45,:]))
-
-.. image:: AntennaVSH_files/AntennaVSH_fig_02.png
-
-In[16]:
-
-.. code:: python
+.. code-block:: python
 
     print 'Ntheta',A.Nt
     print 'Nphi',A.Np
     print 'Nf',A.Nf
+
 
 .. parsed-literal::
 
@@ -67,20 +110,24 @@ In[16]:
     Nphi 180
     Nf 104
 
-In[31]:
 
-.. code:: python
+.. code-block:: python
 
     A.info()
 
+
 .. parsed-literal::
 
-    S4R2.trx
-    type :  trx
-    --------------------------
-    fmin (GHz) : 800000000.0
-    fmax (GHz) : 5950000000.0
-    Nf   : 104
+    S1R1.mat
+    type :  mat
+    S1R1
+    Th1
+    04/12/12
+    15:55
+    Mohamed at the log
+    
+    1
+    1
     Nb theta (lat) : 91
     Nb phi (lon) : 180
     No vsh coefficient calculated yet
@@ -88,134 +135,117 @@ In[31]:
 Evaluation of Vector Spherical Harmonics Coefficients
 =====================================================
 
-At that stage we compute the Vector Spherical Harmonics coefficients
+At that stage the Vector Spherical Harmonics coefficients are computed.
 
-In[32]:
+The vsh fdunction is in the module antvsh.py and is relying on the
+spherepack package.
 
-.. code:: python
 
-    A.vsh()
+.. code-block:: python
 
-In[33]:
+    A = vsh(A)
 
-.. code:: python
+The information about the antenna indicates now the presence of
+spherical coefficients, in format vsh1. N1 = 90 and M1 = 89. There is
+the same number of coefficient for :math:`$B_r$`,:math:`$B_i$`,
+:math:`$C_r$`, :math:`$C_i$` independantly to their importance.
 
-    A.info()
+
+.. code-block:: python
+
+    A.C
+
 
 .. parsed-literal::
 
-    S4R2.trx
-    type :  trx
-    --------------------------
-    fmin (GHz) : 800000000.0
-    fmax (GHz) : 5950000000.0
-    Nf   : 104
-    Nb theta (lat) : 91
-    Nb phi (lon) : 180
-    Br
-    -------------
-    Nf   :  104
-    fmin (GHz) :  800000000.0
-    fmax (GHz) :  5950000000.0
-    N1  :  90
-    M1  :  89
-    Ncoeff s1  8010
-    Bi
-    -------------
-    Nf   :  104
-    fmin (GHz) :  800000000.0
-    fmax (GHz) :  5950000000.0
-    N1  :  90
-    M1  :  89
-    Ncoeff s1  8010
-    Cr
-    -------------
-    Nf   :  104
-    fmin (GHz) :  800000000.0
-    fmax (GHz) :  5950000000.0
-    N1  :  90
-    M1  :  89
-    Ncoeff s1  8010
-    Ci
-    -------------
-    Nf   :  104
-    fmin (GHz) :  800000000.0
-    fmax (GHz) :  5950000000.0
-    N1  :  90
-    M1  :  89
-    Ncoeff s1  8010
+    <pylayers.antprop.spharm.VSHCoeff at 0x7ffad32fc910>
 
-In[34]:
 
-.. code:: python
 
-    
+.. code-block:: python
+
     A.C.s1tos2(30)
 
-::
 
-    <span class="ansired">---------------------------------------------------------------------------</span>
-    <span class="ansired">NameError</span>                                 Traceback (most recent call last)
-    <span class="ansigreen">/private/staff/n/en/buguen/svn2/devel/simulator/pyray/&lt;ipython-input-34-fe57a44f9906&gt;</span> in <span class="ansicyan">&lt;module&gt;</span><span class="ansiblue">()</span>
-    <span class="ansigreen">----&gt; 1</span><span class="ansiyellow"> </span>ls<span class="ansiyellow"></span>
-    <span class="ansigreen">      2</span> A<span class="ansiyellow">.</span>C<span class="ansiyellow">.</span>s1tos2<span class="ansiyellow">(</span><span class="ansicyan">30</span><span class="ansiyellow">)</span><span class="ansiyellow"></span>
-    
-    <span class="ansired">NameError</span>: name &apos;ls&apos; is not defined
-
-In[&nbsp;]:
-
-.. code:: python
+.. code-block:: python
 
     A.C.info()
 
-In[&nbsp;]:
 
-.. code:: python
+.. parsed-literal::
+
+    Br
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+    Bi
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+    Cr
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+    Ci
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+
+
+.. code-block:: python
 
     figsize(10,10)
-    A.C.show(type='s2',k=300)
+    A.C.show(typ='s2',k=300)
 
-In[&nbsp;]:
+.. image:: AntennaVSH_files/_fig_16.png
 
-.. code:: python
+Transformation in shape 3 - energy thresholding
+
+
+.. code-block:: python
+
+    A.C.s2tos3(1e-5)
+
+
+.. code-block:: python
+
+    A.C.show('s3')
+
+.. image:: AntennaVSH_files/_fig_18.png
+
+
+.. code-block:: python
 
     th    = kron(A.theta,ones(A.Np))   
     ph    = kron(ones(A.Nt),A.phi)  
-    Fth2,Fph2 = A.Fsynth2(th,ph) 
+    Fth2,Fph2 = A.Fsynth3(th,ph) 
 
-In[&nbsp;]:
 
-.. code:: python
+.. code-block:: python
 
     FTh2 = Fth2.reshape(A.Nf,A.Nt,A.Np)
     FPh2 = Fph2.reshape(A.Nf,A.Nt,A.Np)
     compdiag(0,A,A.theta,A.phi,FTh2,FPh2,'modulus')
 
-To display a 3D diagram by using the method show3\_geom(
-
-In[&nbsp;]:
-
-.. code:: python
-
-    A.show3_geom(k=0,type='Fphi')
-
-In[&nbsp;]:
-
-.. code:: python
-
-    A.info()
-
-In[&nbsp;]:
-
-.. code:: python
-
-    A.Nf
-
-In[&nbsp;]:
-
-.. code:: python
-
-    for k in range(A.Nf):
-        A.show3_geom(k,type='Ftheta',silent=True)
-        
+.. image:: AntennaVSH_files/_fig_20.png
 

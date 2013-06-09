@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Evaluation of Vector Spherical Harmonics Coefficients &mdash; PyLayers</title>
+    <title>Vector Spherical sparse representation of full polar complex antenna patterns &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="User Manual" href="index.html" />
+    <link rel="next" title="Multi-wall model" href="DOC-MultiwallAndCoverage.html" />
+    <link rel="prev" title="Slab names" href="DOC-SlabAndMaterials.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,16 +40,38 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-MultiwallAndCoverage.html" title="Multi-wall model"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="DOC-SlabAndMaterials.html" title="Slab names"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" accesskey="U">User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Vector Spherical sparse representation of full polar complex antenna patterns</a></li>
+<li><a class="reference internal" href="#unwraping-the-phase">Unwraping the phase</a><ul>
+<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="DOC-SlabAndMaterials.html"
+                        title="previous chapter">Slab names</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="DOC-MultiwallAndCoverage.html"
+                        title="next chapter">Multi-wall model</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -68,101 +93,180 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>In[1]:</p>
-<p>Read a trx file. This file has no header, it contains 7 columns :</p>
-<p>In[49]:</p>
-<p>In[52]:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">104</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
-<span class="mi">104</span>
+  <div class="section" id="vector-spherical-sparse-representation-of-full-polar-complex-antenna-patterns">
+<h1>Vector Spherical sparse representation of full polar complex antenna patterns<a class="headerlink" href="#vector-spherical-sparse-representation-of-full-polar-complex-antenna-patterns" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.antvsh</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<p>Out[52]:</p>
-<div class="highlight-python"><pre>[&amp;lt;matplotlib.lines.Line2D at 0xc0cd36c&amp;gt;]</pre>
+<p>The first step consists in reading the raw data from a .mat file
+obtained from a UWB antenna Thomson 1 in near field chamber.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
-<img alt="../_images/AntennaVSH_fig_00.png" src="../_images/AntennaVSH_fig_00.png" />
-<img alt="../_images/AntennaVSH_fig_01.png" src="../_images/AntennaVSH_fig_01.png" />
-<p>In[30]:</p>
-<img alt="../_images/AntennaVSH_fig_02.png" src="../_images/AntennaVSH_fig_02.png" />
-<p>In[16]:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>S1R1.mat
+type :  mat
+S1R1
+Th1
+04/12/12
+15:55
+Mohamed at the log
+
+1
+1
+Nb theta (lat) : 91
+Nb phi (lon) : 180
+No vsh coefficient calculated yet</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_023.png" src="../_images/_fig_023.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_042.png" src="../_images/_fig_042.png" />
+</div>
+<div class="section" id="unwraping-the-phase">
+<h1>Unwraping the phase<a class="headerlink" href="#unwraping-the-phase" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">freq</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">104</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ed</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">getdelay</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
+<span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,:,:]</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">freq</span><span class="o">*</span><span class="n">ed</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Fphi</span><span class="p">)</span>
+<span class="n">im</span><span class="o">=</span><span class="n">imshow</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,:]))</span>
+<span class="n">cb</span> <span class="o">=</span> <span class="n">colorbar</span><span class="p">()</span>
+<span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;phase rad&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7ffad17d7890&gt;</pre>
+</div>
+<img alt="../_images/_fig_073.png" src="../_images/_fig_073.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span><span class="n">unwrap</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x458b2d0&gt;</pre>
+</div>
+<img alt="../_images/_fig_10.png" src="../_images/_fig_10.png" />
+<p>The following figure represents all the radiation patten in the azimuth
+plane for each of the 104 frequencies</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;Ntheta&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span>
+<span class="k">print</span> <span class="s">&#39;Nphi&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span>
+<span class="k">print</span> <span class="s">&#39;Nf&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span>
+</pre></div>
+</div>
 <div class="highlight-python"><pre>Ntheta 91
 Nphi 180
 Nf 104</pre>
 </div>
-<p>In[31]:</p>
-<div class="highlight-python"><pre>S4R2.trx
-type :  trx
---------------------------
-fmin (GHz) : 800000000.0
-fmax (GHz) : 5950000000.0
-Nf   : 104
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>S1R1.mat
+type :  mat
+S1R1
+Th1
+04/12/12
+15:55
+Mohamed at the log
+
+1
+1
 Nb theta (lat) : 91
 Nb phi (lon) : 180
 No vsh coefficient calculated yet</pre>
 </div>
 <div class="section" id="evaluation-of-vector-spherical-harmonics-coefficients">
-<h1>Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h1>
-<p>At that stage we compute the Vector Spherical Harmonics coefficients</p>
-<p>In[32]:</p>
-<p>In[33]:</p>
-<div class="highlight-python"><pre>S4R2.trx
-type :  trx
---------------------------
-fmin (GHz) : 800000000.0
-fmax (GHz) : 5950000000.0
-Nf   : 104
-Nb theta (lat) : 91
-Nb phi (lon) : 180
-Br
+<h2>Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h2>
+<p>At that stage the Vector Spherical Harmonics coefficients are computed.</p>
+<p>The vsh fdunction is in the module antvsh.py and is relying on the
+spherepack package.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">vsh</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The information about the antenna indicates now the presence of
+spherical coefficients, in format vsh1. N1 = 90 and M1 = 89. There is
+the same number of coefficient for <img class="math" src="../_images/math/d42705f925da45aa80f668ce2461fa7b24ec5ed6.png" alt="$B_r$"/>,:math:<cite>$B_i$</cite>,
+<img class="math" src="../_images/math/73c7499fede9fbced195745f44a1f89b75a3f1c4.png" alt="$C_r$"/>, <img class="math" src="../_images/math/114be4e6129a6229437e3ecafb9dea8a051d937e.png" alt="$C_i$"/> independantly to their importance.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;pylayers.antprop.spharm.VSHCoeff at 0x7ffad32fc910&gt;</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Br
 -------------
 Nf   :  104
-fmin (GHz) :  800000000.0
-fmax (GHz) :  5950000000.0
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
 N1  :  90
 M1  :  89
 Ncoeff s1  8010
+NCoeff s2  :  495
 Bi
 -------------
 Nf   :  104
-fmin (GHz) :  800000000.0
-fmax (GHz) :  5950000000.0
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
 N1  :  90
 M1  :  89
 Ncoeff s1  8010
+NCoeff s2  :  495
 Cr
 -------------
 Nf   :  104
-fmin (GHz) :  800000000.0
-fmax (GHz) :  5950000000.0
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
 N1  :  90
 M1  :  89
 Ncoeff s1  8010
+NCoeff s2  :  495
 Ci
 -------------
 Nf   :  104
-fmin (GHz) :  800000000.0
-fmax (GHz) :  5950000000.0
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
 N1  :  90
 M1  :  89
-Ncoeff s1  8010</pre>
+Ncoeff s1  8010
+NCoeff s2  :  495</pre>
 </div>
-<p>In[34]:</p>
-<div class="highlight-python"><pre>&lt;span class="ansired"&gt;---------------------------------------------------------------------------&lt;/span&gt;
-&lt;span class="ansired"&gt;NameError&lt;/span&gt;                                 Traceback (most recent call last)
-&lt;span class="ansigreen"&gt;/private/staff/n/en/buguen/svn2/devel/simulator/pyray/&amp;lt;ipython-input-34-fe57a44f9906&amp;gt;&lt;/span&gt; in &lt;span class="ansicyan"&gt;&amp;lt;module&amp;gt;&lt;/span&gt;&lt;span class="ansiblue"&gt;()&lt;/span&gt;
-&lt;span class="ansigreen"&gt;----&amp;gt; 1&lt;/span&gt;&lt;span class="ansiyellow"&gt; &lt;/span&gt;ls&lt;span class="ansiyellow"&gt;&lt;/span&gt;
-&lt;span class="ansigreen"&gt;      2&lt;/span&gt; A&lt;span class="ansiyellow"&gt;.&lt;/span&gt;C&lt;span class="ansiyellow"&gt;.&lt;/span&gt;s1tos2&lt;span class="ansiyellow"&gt;(&lt;/span&gt;&lt;span class="ansicyan"&gt;30&lt;/span&gt;&lt;span class="ansiyellow"&gt;)&lt;/span&gt;&lt;span class="ansiyellow"&gt;&lt;/span&gt;
-
-&lt;span class="ansired"&gt;NameError&lt;/span&gt;: name &amp;apos;ls&amp;apos; is not defined</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
 </div>
-<p>In[&amp;nbsp;]:</p>
-<p>In[&amp;nbsp;]:</p>
-<p>In[&amp;nbsp;]:</p>
-<p>In[&amp;nbsp;]:</p>
-<p>To display a 3D diagram by using the method show3_geom(</p>
-<p>In[&amp;nbsp;]:</p>
-<p>In[&amp;nbsp;]:</p>
-<p>In[&amp;nbsp;]:</p>
-<p>In[&amp;nbsp;]:</p>
+<img alt="../_images/_fig_163.png" src="../_images/_fig_163.png" />
+<p>Transformation in shape 3 - energy thresholding</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_182.png" src="../_images/_fig_182.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">th</span>    <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
+<span class="n">ph</span>    <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">),</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
+<span class="n">Fth2</span><span class="p">,</span><span class="n">Fph2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">FTh2</span> <span class="o">=</span> <span class="n">Fth2</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
+<span class="n">FPh2</span> <span class="o">=</span> <span class="n">Fph2</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
+<span class="n">compdiag</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">FTh2</span><span class="p">,</span><span class="n">FPh2</span><span class="p">,</span><span class="s">&#39;modulus&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_201.png" src="../_images/_fig_201.png" />
+</div>
 </div>
 
 
@@ -174,11 +278,18 @@ Ncoeff s1  8010</pre>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-MultiwallAndCoverage.html" title="Multi-wall model"
+             >next</a></li>
+        <li class="right" >
+          <a href="DOC-SlabAndMaterials.html" title="Slab names"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

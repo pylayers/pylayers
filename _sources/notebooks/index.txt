@@ -20,6 +20,14 @@ Handling Slab and Materials
 
     DOC-SlabAndMaterials.rst
 
+Handling Realistic Antenna VSH representation
+---------------------------------------------
+
+.. toctree::
+    :maxdepth: 2 
+
+    AntennaVSH.rst
+
 MultiWall Motley-Keenan Model
 -----------------------------
 
