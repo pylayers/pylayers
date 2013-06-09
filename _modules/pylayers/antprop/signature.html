@@ -269,8 +269,38 @@
         <span class="k">print</span> <span class="s">&quot;source : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
         <span class="k">print</span> <span class="s">&quot;target : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
 
-
 </div>
+    <span class="k">def</span> <span class="nf">sp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cutoff</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="n">source</span><span class="p">]</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="n">source</span><span class="p">])]</span>
+        <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+            <span class="n">children</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">child</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">cutoff</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">child</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="n">source</span><span class="p">])):</span>
+                        <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="n">target</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">visited</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+                    <span class="c"># yield visited +[target]</span>
+                <span class="k">elif</span> <span class="n">child</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                    <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+                    <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">G</span><span class="p">[</span><span class="n">child</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c">#len(visited) == cutoff:</span>
+                <span class="k">if</span> <span class="n">child</span> <span class="o">==</span> <span class="n">target</span> <span class="ow">or</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="n">source</span><span class="p">])):</span>
+                        <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="n">target</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">visited</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+                <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">visited</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+
 <div class="viewcode-block" id="Signatures.propaths"><a class="viewcode-back" href="../../../modules/antprop.signature.html#pylayers.antprop.signature.Signatures.propaths">[docs]</a>    <span class="k">def</span> <span class="nf">propaths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">G</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; all_simple_paths</span>
 
@@ -778,7 +808,6 @@
                 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ltarget</span><span class="p">:</span>
                     <span class="c">#print t</span>
                     <span class="n">paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">propaths</span><span class="p">(</span><span class="n">Gi</span><span class="p">,</span><span class="n">source</span><span class="o">=</span><span class="n">s</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="n">t</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">))</span>
-
                     <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
                         <span class="n">itm1</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                         <span class="k">if</span> <span class="n">itm1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Gf</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -903,14 +932,19 @@
         <span class="n">dac</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="c"># dfl : dictionnary of fronlines</span>
         <span class="n">dfl</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="k">for</span> <span class="n">cy</span> <span class="ow">in</span> <span class="n">lcil</span><span class="p">:</span>
             <span class="n">dfl</span><span class="p">[</span><span class="n">cy</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
             <span class="n">nghb</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="p">,</span><span class="n">cy</span><span class="p">)</span>
             <span class="n">dac</span><span class="p">[</span><span class="n">cy</span><span class="p">]</span> <span class="o">=</span> <span class="n">nghb</span>
             <span class="n">poly1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cy</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span>
             <span class="n">cp1</span> <span class="o">=</span> <span class="n">poly1</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">xy</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cp1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">cp1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+
             <span class="k">for</span> <span class="n">cya</span> <span class="ow">in</span> <span class="n">nghb</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cy</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+                    <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
                 <span class="n">poly2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cya</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span>
                 <span class="n">cp2</span> <span class="o">=</span> <span class="n">poly2</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">xy</span>
                 <span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cp2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">cp2</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
@@ -920,11 +954,72 @@
                 <span class="n">dp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vpn</span><span class="p">,</span><span class="n">vn</span><span class="p">)</span>
                 <span class="c"># if dot(vn,vpn) &gt;0 cycle cya is ahead</span>
                 <span class="k">if</span> <span class="n">dp</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                    <span class="n">lsegs</span> <span class="o">=</span> <span class="n">frontline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">cya</span><span class="p">,</span><span class="n">vn</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lsegs</span><span class="p">:</span>
-                        <span class="n">cyb</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span> <span class="p">:</span> <span class="n">n</span> <span class="o">&lt;&gt;</span> <span class="n">cya</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">])</span>
+                    <span class="n">lsegso</span> <span class="o">=</span> <span class="n">frontline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">cy</span><span class="p">,</span><span class="n">vn</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lsegso</span><span class="p">:</span>
+                        <span class="n">cyb</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span> <span class="p">:</span> <span class="n">n</span> <span class="o">&lt;&gt;</span> <span class="n">cy</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="s">&#39;ncycles&#39;</span><span class="p">])</span>
                         <span class="k">if</span> <span class="n">cyb</span><span class="o">&lt;&gt;</span><span class="p">[]:</span>
-                            <span class="n">dfl</span><span class="p">[</span><span class="n">cy</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">((</span><span class="n">s</span><span class="p">,</span><span class="n">cya</span><span class="p">,</span><span class="n">cyb</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+                            <span class="n">dfl</span><span class="p">[</span><span class="n">cy</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">((</span><span class="n">s</span><span class="p">,</span><span class="n">cy</span><span class="p">,</span><span class="n">cyb</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">dfl</span><span class="p">[</span><span class="n">cy</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">dfl</span><span class="p">[</span><span class="n">cy</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="c"># # list of interactions belonging to source</span>
+        <span class="c"># lis = self.L.Gt.node[lcil[0]][&#39;inter&#39;]</span>
+
+        <span class="c"># # list of interactions belonging to target</span>
+        <span class="c"># lit = self.L.Gt.node[lcil[-1]][&#39;inter&#39;]</span>
+
+        <span class="c"># # filter lis remove incoming transmission</span>
+        <span class="c"># lli   = []</span>
+        <span class="c"># lisR  = filter(lambda l: len(eval(l))==2,lis)</span>
+        <span class="c"># lisT  = filter(lambda l: len(eval(l))==3,lis)</span>
+        <span class="c"># lisTo = filter(lambda l: eval(l)[2]&lt;&gt;cs,lisT)</span>
+        <span class="c"># lis = lisR + lisTo</span>
+
+        <span class="c"># # filter lit remove outgoing transmission</span>
+        <span class="c"># llt = []</span>
+        <span class="c"># litR  = filter(lambda l: len(eval(l))==2,lit)</span>
+        <span class="c"># litT  = filter(lambda l: len(eval(l))==3,lit)</span>
+        <span class="c"># litTi = filter(lambda l: eval(l)[2]==ct,litT)</span>
+        <span class="c"># lit = litR + litTi</span>
+        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">=</span><span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">icy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lcil</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            
+
+            <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+            <span class="n">io</span> <span class="o">=</span> <span class="n">dfl</span><span class="p">[</span><span class="n">lcil</span><span class="p">[</span><span class="n">icy</span><span class="p">]]</span>
+            <span class="n">io_</span> <span class="o">=</span> <span class="n">dfl</span><span class="p">[</span><span class="n">lcil</span><span class="p">[</span><span class="n">icy</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">print</span> <span class="n">io</span>
+            <span class="k">print</span> <span class="n">io_</span>
+            <span class="k">if</span> <span class="n">icy</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:[[</span><span class="n">k</span><span class="p">]]})</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">io</span><span class="p">]</span>        
+
+            <span class="c"># remove keys which are not in front line     </span>
+            <span class="c"># kds = self.ds.keys()</span>
+            <span class="c"># for k in kds :</span>
+            <span class="c">#     if k not in io:</span>
+            <span class="c">#         self.ds.pop(k)</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">io_</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="p">[[]]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">io</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gi</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="c"># [self.ds.pop(k) for k in io]</span>
+                    
+                    <span class="c"># ds[j]</span>
+                    <span class="c"># if len(a) == 1:</span>
+                    <span class="c">#     if len(ds[j]) &lt;&gt; 0:</span>
+                    <span class="c">#         pdb.set_trace()</span>
+                    <span class="c">#         [ds[j][k].extend(a[0][:-1]) for k in range(len(ds[j]))]</span>
+                    <span class="c">#     else :    </span>
+                    <span class="c">#         ds[j]=a[0][:-1]</span>
+                    <span class="c"># elif len(a)&gt; 1:</span>
+                    <span class="c">#     if len(ds[j]) &lt;&gt; 0:</span>
+                    <span class="c">#         [[ds[j][k].extend(a[l][:-1]) for k in range(len(ds[j]))] for l in range(len(a))]</span>
+                    <span class="c">#     else :    </span>
+                    <span class="c">#         ds[j]=a[:-1]</span>
+
+
             <span class="c"># remove segments which separate two cycles.</span>
             <span class="c"># TODO: See if it worth to implement</span>
             <span class="c">#lsegs = filter(lambda x : x not in interseg,lsegs)</span>
@@ -945,6 +1040,7 @@
         <span class="c">#</span>
         <span class="c"># extract list of interactions from list of cycles lca</span>
         <span class="c">#</span>
+
         <span class="n">li</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">cy</span> <span class="ow">in</span> <span class="n">dac</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">cya</span> <span class="ow">in</span> <span class="n">dac</span><span class="p">[</span><span class="n">cy</span><span class="p">]:</span>
@@ -1095,6 +1191,7 @@
                     <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span>
                     <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">r</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
 
 </div>
     <span class="k">def</span> <span class="nf">meta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1865,7 +1962,10 @@
 
 </div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;testing pylayers/antprop/signature.py&quot;</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;-------------------------------------&quot;</span>
 </pre></div>
 
           </div>

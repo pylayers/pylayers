@@ -95,6 +95,8 @@
 <span class="sd">    Ctp : FUsignal</span>
 <span class="sd">    Cpt : FUsignal</span>
 <span class="sd">    Cpp : FUsignal</span>
+<span class="sd">    fGHz : np.array</span>
+<span class="sd">        frequency array</span>
 <span class="sd">    nfreq : int</span>
 <span class="sd">        number of frequency point</span>
 <span class="sd">    nray  : int</span>
@@ -189,12 +191,12 @@
         <span class="c">#</span>
         <span class="c"># Temporary freq --&gt; read filefreq</span>
         <span class="c">#</span>
-        <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">)</span>
+        <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">nfreq</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">c11</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">c12</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">c21</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">c22</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c11</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c12</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c21</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">c22</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span> <span class="o">=</span> <span class="n">nfreq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nray</span> <span class="o">=</span> <span class="n">nray</span>
 
@@ -290,11 +292,12 @@
 
         <span class="k">return</span><span class="p">(</span><span class="n">tauk_ch</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Ctilde.doadod"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.doadod">[docs]</a>    <span class="k">def</span> <span class="nf">doadod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.doadod"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.doadod">[docs]</a>    <span class="k">def</span> <span class="nf">doadod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span><span class="n">phi</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">360</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; doadod scatter plot</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
+
 <span class="sd">        cmap : color map</span>
 <span class="sd">        s    : float</span>
 <span class="sd">            size (default 30)</span>
@@ -330,13 +333,13 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">dod</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">al</span><span class="p">,</span> <span class="n">dod</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">al</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
                     <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">)</span>
         <span class="c">#scatter(dod[:,0]*al,dod[:,1]*al,s=s)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="c">#plt.xticks(fontsize=20)</span>
         <span class="c">#plt.yticks(fontsize=20)</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+        <span class="c">#a = plt.colorbar()</span>
         <span class="c">#for t in a.ax.get_yticklabels():</span>
         <span class="c">#    t.set_fontsize(18)</span>
-        <span class="n">a</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;dB&#39;</span><span class="p">)</span>
+        <span class="c">#a.set_label(&#39;dB&#39;)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_t(\degree)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;$\phi(\degree)$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
         <span class="c">#ylabel(&#39;$\phi_t(\degree)$&#39;,fontsize=18)</span>
@@ -344,7 +347,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">doa</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">al</span><span class="p">,</span> <span class="n">doa</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">al</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
                     <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="c">#plt.xticks(fontsize=20)</span>
         <span class="c">#plt.yticks(fontsize=20)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
@@ -354,6 +357,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_r(\degree)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;DoA&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&quot;$\phi_r (\degree)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span>
 </div>
 <div class="viewcode-block" id="Ctilde.show"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show</span>
@@ -441,6 +445,7 @@
 
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        pylayers.signal.bsignal.FUsignal.energy</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -453,11 +458,12 @@
         <span class="k">return</span> <span class="n">Eco</span><span class="p">,</span> <span class="n">Ecross</span>
 </div>
 <div class="viewcode-block" id="Ctilde.sort"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tauk</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; sort Ctilde with respect of tauk</span>
+        <span class="sd">&quot;&quot;&quot; sort Ctilde with respect to tauk</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        tauk :</span>
+
+<span class="sd">        tauk : array of delays</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">argsort</span><span class="p">(</span><span class="n">tauk</span><span class="p">)</span>
@@ -488,7 +494,7 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
         <span class="n">nfreq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span>
         <span class="n">nray</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nray</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -500,8 +506,8 @@
                 <span class="n">Fat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span><span class="n">nfreq</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">a</span><span class="o">==</span><span class="s">&#39;phi&#39;</span><span class="p">:</span>
                 <span class="n">Fap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span><span class="n">nfreq</span><span class="p">))</span>
-            <span class="n">Fat</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">,</span><span class="n">Fat</span><span class="p">)</span>
-            <span class="n">Fap</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">,</span><span class="n">Fap</span><span class="p">)</span>
+            <span class="n">Fat</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fat</span><span class="p">)</span>
+            <span class="n">Fap</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fap</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Fat</span> <span class="p">,</span> <span class="n">Fap</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">Fat</span> <span class="o">=</span> <span class="n">Fat</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -516,8 +522,8 @@
                 <span class="n">Fbt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span><span class="n">nfreq</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">b</span><span class="o">==</span><span class="s">&#39;phi&#39;</span><span class="p">:</span>
                 <span class="n">Fbp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nray</span><span class="p">,</span><span class="n">nfreq</span><span class="p">))</span>
-            <span class="n">Fbt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">,</span><span class="n">Fbt</span><span class="p">)</span>
-            <span class="n">Fbp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span><span class="p">,</span><span class="n">Fbp</span><span class="p">)</span>
+            <span class="n">Fbt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fbt</span><span class="p">)</span>
+            <span class="n">Fbp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fbp</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Fbt</span> <span class="p">,</span> <span class="n">Fbp</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
             <span class="c"># (nray,nfeq) needed</span>
@@ -542,13 +548,17 @@
 
 <span class="sd">        slach : ScalChannel</span>
 
+<span class="sd">        Note </span>
+<span class="sd">        ----</span>
+<span class="sd">        deprecated replaced by prop2tran</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">freq</span>
+        <span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">Ftt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
-        <span class="n">Ftp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
-        <span class="n">Frt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
-        <span class="n">Frp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">Ftt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">Ftp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">Frt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
+        <span class="n">Frp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sh</span><span class="p">))</span>
         <span class="n">scalch</span> <span class="o">=</span> <span class="n">ScalChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span><span class="p">,</span> <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">scalch</span><span class="p">)</span>
 
@@ -557,15 +567,20 @@
 </div>
 <div class="viewcode-block" id="Ctilde.vec2scalA"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.vec2scalA">[docs]</a>    <span class="k">def</span> <span class="nf">vec2scalA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">At</span><span class="p">,</span> <span class="n">Ar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        vec2scalA(self,At,Ar,alpha=1.0):</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
-<span class="sd">        At = transmitter antenna</span>
-<span class="sd">        Ar = receiver antenna</span>
+<span class="sd">        At : transmitter antenna</span>
+<span class="sd">        Ar : receiver antenna</span>
+<span class="sd">        alpha : normalization factor</span>
+<span class="sd">    </span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 
 <span class="sd">        Calculate ScalChannel by combining the propagation channel VectChannel</span>
 <span class="sd">        with realistic antennas transfer function</span>
 
-<span class="sd">        alpha : normalization factor</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -615,7 +630,7 @@
     <span class="kn">import</span> <span class="nn">copy</span>
 
     <span class="n">VCl</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">VCg</span><span class="p">)</span>
-    <span class="n">freq</span> <span class="o">=</span> <span class="n">VCl</span><span class="o">.</span><span class="n">freq</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">VCl</span><span class="o">.</span><span class="n">fGHz</span>
     <span class="n">Rt</span><span class="p">,</span> <span class="n">tangl</span> <span class="o">=</span> <span class="n">BTB_tx</span><span class="p">(</span><span class="n">VCg</span><span class="o">.</span><span class="n">tang</span><span class="p">,</span> <span class="n">Tt</span><span class="p">)</span>
     <span class="n">Rr</span><span class="p">,</span> <span class="n">rangl</span> <span class="o">=</span> <span class="n">BTB_rx</span><span class="p">(</span><span class="n">VCg</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span> <span class="n">Tr</span><span class="p">)</span>
 
@@ -650,10 +665,10 @@
     <span class="n">Ctpl</span> <span class="o">=</span> <span class="n">t00</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t01</span> <span class="o">*</span> <span class="n">r1</span>
     <span class="n">Cppl</span> <span class="o">=</span> <span class="n">t10</span> <span class="o">*</span> <span class="n">r0</span> <span class="o">+</span> <span class="n">t11</span> <span class="o">*</span> <span class="n">r1</span>
 
-    <span class="n">VCl</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">Cttl</span><span class="p">)</span>
-    <span class="n">VCl</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">Ctpl</span><span class="p">)</span>
-    <span class="n">VCl</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">Cptl</span><span class="p">)</span>
-    <span class="n">VCl</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="n">Cppl</span><span class="p">)</span>
+    <span class="n">VCl</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cttl</span><span class="p">)</span>
+    <span class="n">VCl</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Ctpl</span><span class="p">)</span>
+    <span class="n">VCl</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cptl</span><span class="p">)</span>
+    <span class="n">VCl</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Cppl</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">VCl</span>
 

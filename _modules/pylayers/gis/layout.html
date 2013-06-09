@@ -230,7 +230,7 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">        &gt;&gt;&gt; L = Layout()</span>
-<span class="sd">        &gt;&gt;&gt; fillist = ls()</span>
+<span class="sd">        &gt;&gt;&gt; fillist = L.ls()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -583,9 +583,10 @@
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">            &gt;&gt;&gt; L = Layout(&#39;WHERE1.ini&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; loadfur(&#39;Furw1.ini&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; L.loadfur(&#39;Furw1.ini&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
-<span class="sd">            &gt;&gt;&gt; ax = showGs(fig=fig,furniture=True)</span>
+<span class="sd">            &gt;&gt;&gt; ax = fig.gca()</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = L.showGs(fig=fig,ax=ax,furniture=True)</span>
 <span class="sd">            &gt;&gt;&gt; ti = plt.title(&#39;loadfur&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
@@ -655,7 +656,7 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">        &gt;&gt;&gt; L = Layout()</span>
-<span class="sd">        &gt;&gt;&gt; loadstr(&#39;exemple.str&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L.loadstr(&#39;example.str&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1136,7 +1137,7 @@
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">            &gt;&gt;&gt; L = Layout()</span>
-<span class="sd">            &gt;&gt;&gt; loadstr2(&#39;Lstruc.str2&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; L.loadstr2(&#39;Lstruc.str2&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1361,9 +1362,8 @@
 <span class="sd">        p is a (1x2) tuple</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout()</span>
-<span class="sd">        &gt;&gt;&gt; load(&#39;exemple.str&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; add_fnod((10.0,10.0))</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;example.str&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L.add_fnod((10.0,10.0))</span>
 <span class="sd">        -9</span>
 
 
@@ -2368,7 +2368,7 @@
 <span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; p1 = np.array([0,0])</span>
 <span class="sd">        &gt;&gt;&gt; p2 = np.array([10,3])</span>
-<span class="sd">        &gt;&gt;&gt; angleonlink(p1,p2)</span>
+<span class="sd">        &gt;&gt;&gt; L.angleonlink(p1,p2)</span>
 <span class="sd">        (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))</span>
 
 
@@ -2448,11 +2448,11 @@
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; idx = np.array([1,2,3,17])</span>
-<span class="sd">        &gt;&gt;&gt; seguv(idx)</span>
+<span class="sd">        &gt;&gt;&gt; L.seguv(idx)</span>
 <span class="sd">        array([[-1.,  0.,  1., -1.],</span>
 <span class="sd">               [ 0., -1.,  0.,  0.]])</span>
 <span class="sd">        &gt;&gt;&gt; idx = np.array([1])</span>
-<span class="sd">        &gt;&gt;&gt; seguv(idx)</span>
+<span class="sd">        &gt;&gt;&gt; L.seguv(idx)</span>
 <span class="sd">        array([-1.,  0.])</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2500,9 +2500,9 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;exemple.str&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;example.str&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; ptlist  = np.array([0,1])</span>
-<span class="sd">        &gt;&gt;&gt; segpt(ptlist)</span>
+<span class="sd">        &gt;&gt;&gt; L.segpt(ptlist)</span>
 <span class="sd">        array([0, 1, 5, 7])</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2539,7 +2539,7 @@
 <span class="sd">            &gt;&gt;&gt; L = Layout(&#39;office.str&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; p1 = np.array([0,0])</span>
 <span class="sd">            &gt;&gt;&gt; p2 = np.array([10,10])</span>
-<span class="sd">            &gt;&gt;&gt; seginframe(p1,p2)</span>
+<span class="sd">            &gt;&gt;&gt; L.seginframe(p1,p2)</span>
 <span class="sd">            array([ 13,  16,  17,  18,  24,  25,  26,  27,  30,  31,  32,  35,  36,</span>
 <span class="sd">                    37,  38,  39,  41,  42,  47,  48,  49,  50,  54,  58,  59,  60,</span>
 <span class="sd">                    61,  62,  63,  68,  69,  72,  73,  74,  75,  76,  77,  83,  97,</span>
@@ -3516,7 +3516,7 @@
 
 <span class="c">#        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="c">#        &gt;&gt;&gt; L = Layout()</span>
-<span class="c">#        &gt;&gt;&gt; load(&#39;exemple.str&#39;)</span>
+<span class="c">#        &gt;&gt;&gt; load(&#39;example.str&#39;)</span>
 <span class="c">#        &gt;&gt;&gt; buildGt()</span>
 <span class="c">#        &gt;&gt;&gt; buildGr()</span>
 <span class="c">#        &gt;&gt;&gt; buildGv()</span>
@@ -3569,10 +3569,10 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;exemple.str&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; buildGt()</span>
-<span class="sd">        &gt;&gt;&gt; buildGr()</span>
-<span class="sd">        &gt;&gt;&gt; buildGv()</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;example.str&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L.buildGt()</span>
+<span class="sd">        &gt;&gt;&gt; L.buildGr()</span>
+<span class="sd">        &gt;&gt;&gt; L.buildGv()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -3996,22 +3996,22 @@
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import  *</span>
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;exemple.str&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; buildGt()</span>
-<span class="sd">            &gt;&gt;&gt; buildGr()</span>
-<span class="sd">            &gt;&gt;&gt; buildGv()</span>
+<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;example.str&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; L.buildGt()</span>
+<span class="sd">            &gt;&gt;&gt; L.buildGr()</span>
+<span class="sd">            &gt;&gt;&gt; L.buildGv()</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure(figsize=(10,10))</span>
 <span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(221)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = showG(&#39;s&#39;,fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;s&#39;,fig=fig,ax=ax)</span>
 <span class="sd">            &gt;&gt;&gt; tis = plt.title(&quot;Gs&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(222)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = showG(&#39;r&#39;,fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;r&#39;,fig=fig,ax=ax)</span>
 <span class="sd">            &gt;&gt;&gt; tit = plt.title(&quot;Gt&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(223)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = showG(&#39;c&#39;,fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;c&#39;,fig=fig,ax=ax)</span>
 <span class="sd">            &gt;&gt;&gt; tic = plt.title(&quot;Gc&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; ax = fig.add_subplot(224)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = showG(&#39;v&#39;,fig=fig,ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = L.showG(&#39;v&#39;,fig=fig,ax=ax)</span>
 <span class="sd">            &gt;&gt;&gt; tiv = plt.title(&quot;Gv&quot;)</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
@@ -4194,11 +4194,11 @@
 <span class="sd">           :include-source:</span>
 
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;exemple.str&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; build()</span>
+<span class="sd">            &gt;&gt;&gt; L = Layout(&#39;example.ini&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; L.build()</span>
 <span class="sd">            &gt;&gt;&gt; fig = plt.figure()</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = showGs(fig=fig)</span>
-<span class="sd">            &gt;&gt;&gt; ax = showGv(ax=ax)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = L.showGs(fig=fig)</span>
+<span class="sd">            &gt;&gt;&gt; ax = L.showGv(ax=ax)</span>
 <span class="sd">            &gt;&gt;&gt; ti = plt.title(&#39;Show Gv&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; t = plt.axis(&#39;off&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
@@ -4258,19 +4258,21 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">            nroom1</span>
 <span class="sd">            nroom2</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
+
 <span class="sd">            &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">            &gt;&gt;&gt; L = Layout(&#39;WHERE1.ini&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; dumpr()</span>
+<span class="sd">            &gt;&gt;&gt; L.dumpr()</span>
 <span class="sd">            &gt;&gt;&gt; nroom1 = 1</span>
 <span class="sd">            &gt;&gt;&gt; nroom2 = 6</span>
-<span class="sd">            &gt;&gt;&gt; l =waypointGw(nroom1,nroom2)</span>
+<span class="sd">            &gt;&gt;&gt; l = L.waypointGw(nroom1,nroom2)</span>
 <span class="sd">            &gt;&gt;&gt; len(l)</span>
-<span class="sd">            8</span>
+<span class="sd">            4</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rooms</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">dijkstra_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gw</span><span class="p">,</span> <span class="n">nroom1</span><span class="p">,</span> <span class="n">nroom2</span><span class="p">)</span>
@@ -4293,7 +4295,7 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; walls = thwall(0,0)</span>
+<span class="sd">        &gt;&gt;&gt; walls = L.thwall(0,0)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">keyn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -4379,12 +4381,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">ptsh</span> <span class="o">=</span> <span class="n">sh</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">room_exists</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">ptshinroom</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">for</span> <span class="n">nr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nr</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">ptsh</span><span class="p">):</span>
-                <span class="n">room_exists</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">nr</span><span class="p">][</span><span class="s">&#39;polyg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">ptsh</span><span class="p">):</span>
+                <span class="n">ptshinroom</span> <span class="o">=</span> <span class="bp">True</span>
                 <span class="k">return</span><span class="p">(</span><span class="n">nr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">room_exists</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ptshinroom</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; is not in any room&quot;</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Layout.seg2ro"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.seg2ro">[docs]</a>    <span class="k">def</span> <span class="nf">seg2ro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seg</span><span class="p">):</span>
@@ -4516,12 +4518,14 @@
             <span class="k">for</span> <span class="n">ncy</span> <span class="ow">in</span> <span class="n">dsucc</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">cy</span> <span class="ow">in</span> <span class="n">dsucc</span><span class="p">[</span><span class="n">ncy</span><span class="p">]:</span>
                     <span class="n">neigh</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="p">,</span><span class="n">cy</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cy</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">licy</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">cy</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">neigh</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">k</span><span class="o">&lt;&gt;</span> <span class="n">ncy</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">ncy</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">cy</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">ncy</span><span class="p">]</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">ncy</span><span class="p">][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">k</span><span class="o">&lt;&gt;</span> <span class="n">licy</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">licy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cy</span> <span class="ow">in</span> <span class="n">licy</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>            
+                <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">cy</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="n">licy</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">licy</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;cycle&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">g</span><span class="p">)</span>
 
 
         <span class="n">ltrans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listtransition</span>
@@ -4931,14 +4935,16 @@
         <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Layout.geomfile"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.geomfile">[docs]</a>    <span class="k">def</span> <span class="nf">geomfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; create a geomview file of the layout</span>
+        <span class="sd">&quot;&quot;&quot; create a geomview file from the layout</span>
+
+<span class="sd">        The `.off` file can be vizualized through the show3 method</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
 <span class="sd">        &gt;&gt;&gt; L = Layout(&#39;DLR.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; geomfile()</span>
+<span class="sd">        &gt;&gt;&gt; L.geomfile()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -5336,7 +5342,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Layout.randTxRx"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.randTxRx">[docs]</a>    <span class="k">def</span> <span class="nf">randTxRx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns random coordinates for Tx and Rx.</span>
+        <span class="sd">&quot;&quot;&quot;returns random coordinates for Tx and Rx.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -5349,8 +5355,8 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;exemple.str&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; p_Tx,p_Rx = randTxRx()</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;example.str&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; p_Tx,p_Rx = L.randTxRx()</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -5387,8 +5393,10 @@
 <span class="sd">        --------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.gis.layout import *</span>
-<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;exemple.str&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; boundary()</span>
+<span class="sd">        &gt;&gt;&gt; L = Layout(&#39;example.str&#39;,&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; L.boundary()</span>
+<span class="sd">        &gt;&gt;&gt; L.ax</span>
+<span class="sd">        (0.0, 10.0, -2.0, 2.0)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">pos</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">&lt;&gt;</span><span class="mi">0</span><span class="p">:</span>
@@ -5426,6 +5434,7 @@
 
 </div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 

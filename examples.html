@@ -108,10 +108,77 @@ href="http://pylayers.github.com/documentation/development/_downloads/PyLayers.p
 <span class="gp">In [3]: </span><span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
 
 <span class="gp">In [4]: </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">KeyboardInterrupt                         Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-4-0e75a4f1a346&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 C.cover()</span>
+
+<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/coverage.pyc in cover(self)</span>
+<span class="go">    144 </span>
+<span class="go">    145         &quot;&quot;&quot;</span>
+<span class="go">--&gt; 146         self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)</span>
+<span class="go">    147         self.freespace = PL(self.grid,self.model.f,self.tx)</span>
+<span class="go">    148         self.prdbmo = self.ptdbm - self.freespace - self.Lwo</span>
+
+<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/multiwall.pyc in Loss0_v2(L, Pts, f, p)</span>
+<span class="go">    248                 #</span>
+<span class="go">    249                 lko,lkp  = L.sl[name].losst(f,the)</span>
+<span class="go">--&gt; 250                 do , dp  = L.sl[name].excess_grdelay(theta=the)</span>
+<span class="go">    251                 edo     = edo - np.mean(do)</span>
+<span class="go">    252                 edp     = edp - np.mean(dp)</span>
+
+<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/slab.pyc in excess_grdelay(self, fGHz, theta)</span>
+<span class="go">   1345         &quot;&quot;&quot;</span>
+<span class="go">   1346         df = fGHz[1]-fGHz[0]</span>
+<span class="go">-&gt; 1347         self.ev(fGHz,theta=np.array([theta]),compensate=True)</span>
+<span class="go">   1348         T   = self.T</span>
+<span class="go">   1349         To  = T[:,0,0,0]</span>
+
+<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/slab.pyc in ev(self, fGHz, theta, compensate, RT)</span>
+<span class="go">   1235                     II = MatInterface([ml, mr], 0, fGHz, theta)</span>
+<span class="go">   1236                 else:</span>
+<span class="go">-&gt; 1237                     II = MatInterface([ml, mr], self[&#39;lthick&#39;][i], fGHz, theta)</span>
+<span class="go">   1238             #</span>
+<span class="go">   1239             # chains the angle</span>
+
+<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/slab.pyc in __init__(self, lmat, l, fGHz, theta)</span>
+<span class="go">    501 </span>
+<span class="go">    502         epd = np.exp(1j * deltai)</span>
+<span class="go">--&gt; 503         emd = np.exp(-1j * deltai)</span>
+<span class="go">    504 </span>
+<span class="go">    505         self.Ip[:, :, 0, 0] = epd / Tp</span>
+
+<span class="go">KeyboardInterrupt: </span>
 
 <span class="gp">In [5]: </span><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-5-f96993ff725d&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 C.showPower(polarization=&#39;o&#39;)</span>
+
+<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/coverage.pyc in showPower(self, rxsens, nfl, polarization)</span>
+<span class="go">    227 </span>
+<span class="go">    228         if polarization==&#39;o&#39;:</span>
+<span class="go">--&gt; 229             prdbm=self.prdbmo</span>
+<span class="go">    230         if polarization==&#39;p&#39;:</span>
+<span class="go">    231             prdbm=self.prdbmp</span>
+
+<span class="go">AttributeError: &#39;Coverage&#39; object has no attribute &#39;prdbmo&#39;</span>
 
 <span class="gp">In [6]: </span><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-6-f5b6c1ac9c21&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 C.showPower(polarization=&#39;p&#39;)</span>
+
+<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/coverage.pyc in showPower(self, rxsens, nfl, polarization)</span>
+<span class="go">    229             prdbm=self.prdbmo</span>
+<span class="go">    230         if polarization==&#39;p&#39;:</span>
+<span class="go">--&gt; 231             prdbm=self.prdbmp</span>
+<span class="go">    232 </span>
+<span class="go">    233 #        tCM = plt.cm.get_cmap(&#39;jet&#39;)</span>
+
+<span class="go">AttributeError: &#39;Coverage&#39; object has no attribute &#39;prdbmp&#39;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/coverexampleo.png"><img alt="_images/coverexampleo.png" src="_images/coverexampleo.png" style="width: 5in;" /></a>

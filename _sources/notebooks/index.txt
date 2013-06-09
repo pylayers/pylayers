@@ -51,6 +51,7 @@ UWB Waveform
     :maxdepth: 2 
 
     DOC-UWBWaveform.rst
+    DOC-trajectory.rst
 
 Nodes Mobility
 --------------

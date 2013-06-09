@@ -74,6 +74,7 @@
 <span class="c"># -*- coding:Utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
@@ -113,17 +114,20 @@
         <span class="sd">&quot;&quot;&quot; evaluate waveform</span>
 
 <span class="sd">            The lambda/4*pi factor which is necessary to get the proper budget </span>
-<span class="sd">            link ( from the fris formula) is introduced in this function.</span>
+<span class="sd">            link ( from the Friis formula) is introduced in this function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s">&#39;generic&#39;</span><span class="p">:</span>
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ip_generic</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s">&#39;mbofdm&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s">&#39;mbofdm&#39;</span><span class="p">:</span>
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mbofdm</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1compensate&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1compensate&#39;</span><span class="p">:</span>
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fromfile</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1offset&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1offset&#39;</span><span class="p">:</span>
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fromfile2</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;waveform type not recognized, check your config </span><span class="se">\</span>
+<span class="s">                             file&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">st</span>       <span class="o">=</span> <span class="n">st</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sf</span>       <span class="o">=</span> <span class="n">sf</span>
@@ -156,8 +160,11 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">print</span> <span class="n">k</span> <span class="p">,</span> <span class="s">&quot; : &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;generic&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">print</span> <span class="n">k</span> <span class="p">,</span> <span class="s">&quot; : &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;type:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="Waveform.show2"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.show2">[docs]</a>    <span class="k">def</span> <span class="nf">show2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Tp</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show2</span>
@@ -326,7 +333,7 @@
                 <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;type&quot;</span><span class="p">:</span>
                 <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-
+ 
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">wparam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 

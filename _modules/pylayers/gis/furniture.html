@@ -225,7 +225,7 @@
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt</span>
 <span class="sd">            &gt;&gt;&gt; F = Furniture()</span>
 <span class="sd">            &gt;&gt;&gt; F.load(&#39;Furw1.ini&#39;,&#39;R1_A&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; F.show()</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = F.show()</span>
 <span class="sd">            &gt;&gt;&gt; axis = plt.axis(&#39;scaled&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -322,10 +322,6 @@
 <span class="sd">            offy</span>
 <span class="sd">                offset y  (10)</span>
 
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">            &gt;&gt;&gt; from pylayers.gis.furniture import *</span>
-<span class="sd">            &gt;&gt;&gt; </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
@@ -365,6 +361,7 @@
 
 </div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 
 <span class="c">#   fig.savefig(figuredir+filename+ext1,orientation=&#39;portrait&#39;)</span>
