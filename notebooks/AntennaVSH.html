@@ -124,11 +124,11 @@ No vsh coefficient calculated yet</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_023.png" src="../_images/_fig_023.png" />
+<img alt="../_images/_fig_02.png" src="../_images/_fig_02.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_042.png" src="../_images/_fig_042.png" />
+<img alt="../_images/_fig_04.png" src="../_images/_fig_04.png" />
 </div>
 <div class="section" id="unwraping-the-phase">
 <h1>Unwraping the phase<a class="headerlink" href="#unwraping-the-phase" title="Permalink to this headline">¶</a></h1>
@@ -146,7 +146,7 @@ No vsh coefficient calculated yet</pre>
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7ffad17d7890&gt;</pre>
 </div>
-<img alt="../_images/_fig_073.png" src="../_images/_fig_073.png" />
+<img alt="../_images/_fig_07.png" src="../_images/_fig_07.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span><span class="n">unwrap</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
@@ -246,7 +246,7 @@ NCoeff s2  :  495</pre>
 <span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_163.png" src="../_images/_fig_163.png" />
+<img alt="../_images/_fig_16.png" src="../_images/_fig_16.png" />
 <p>Transformation in shape 3 - energy thresholding</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">)</span>
 </pre></div>
@@ -254,7 +254,7 @@ NCoeff s2  :  495</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_182.png" src="../_images/_fig_182.png" />
+<img alt="../_images/_fig_18.png" src="../_images/_fig_18.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">th</span>    <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
 <span class="n">ph</span>    <span class="o">=</span> <span class="n">kron</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">),</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
 <span class="n">Fth2</span><span class="p">,</span><span class="n">Fph2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
@@ -265,7 +265,7 @@ NCoeff s2  :  495</pre>
 <span class="n">compdiag</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">FTh2</span><span class="p">,</span><span class="n">FPh2</span><span class="p">,</span><span class="s">&#39;modulus&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_201.png" src="../_images/_fig_201.png" />
+<img alt="../_images/_fig_20.png" src="../_images/_fig_20.png" />
 </div>
 </div>
 
@@ -292,9 +292,23 @@ NCoeff s2  :  495</pre>
           <li><a href="index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
+
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
   </body>
 </html>

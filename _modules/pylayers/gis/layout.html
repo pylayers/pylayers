@@ -132,6 +132,7 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    Gs     : Structure graph</span>
 <span class="sd">    Gt     : Topological graph  (indicates topological relationships between rooms)</span>
 <span class="sd">    Gr     : Graph of room</span>
@@ -141,6 +142,108 @@
 <span class="sd">    Nedge  : Number of edges of Gs</span>
 <span class="sd">    pt     : points sequence</span>
 <span class="sd">    tahe   : tail head</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    add_door</span>
+<span class="sd">    add_fnod</span>
+<span class="sd">    add_furniture</span>
+<span class="sd">    add_furniture_file</span>
+<span class="sd">    add_nfpe</span>
+<span class="sd">    add_pnod</span>
+<span class="sd">    add_pons</span>
+<span class="sd">    add_segment</span>
+<span class="sd">    add_subseg</span>
+<span class="sd">    add_window</span>
+<span class="sd">    angleonlink</span>
+<span class="sd">    boundary</span>
+<span class="sd">    build</span>
+<span class="sd">    buildGc</span>
+<span class="sd">    buildGi</span>
+<span class="sd">    buildGi2</span>
+<span class="sd">    buildGr</span>
+<span class="sd">    buildGr3</span>
+<span class="sd">    buildGt</span>
+<span class="sd">    buildGv</span>
+<span class="sd">    buildGw</span>
+<span class="sd">    builGr2</span>
+<span class="sd">    check</span>
+<span class="sd">    check2</span>
+<span class="sd">    checkvis</span>
+<span class="sd">    cleanup</span>
+<span class="sd">    clip</span>
+<span class="sd">    closest_edge</span>
+<span class="sd">    cycleinline</span>
+<span class="sd">    del_cycle</span>
+<span class="sd">    delete</span>
+<span class="sd">    del_node</span>
+<span class="sd">    del_segment</span>
+<span class="sd">    del_subseg</span>
+<span class="sd">    diag</span>
+<span class="sd">    displaygui</span>
+<span class="sd">    distwall</span>
+<span class="sd">    dumpr</span>
+<span class="sd">    dumpw</span>
+<span class="sd">    ed2nd</span>
+<span class="sd">    editor</span>
+<span class="sd">    edit_point</span>
+<span class="sd">    edit_segment</span>
+<span class="sd">    facet3D</span>
+<span class="sd">    facets3D</span>
+<span class="sd">    find_edgelist</span>
+<span class="sd">    g2npy</span>
+<span class="sd">    geomfile</span>
+<span class="sd">    get_paths</span>
+<span class="sd">    get_Sg_pos</span>
+<span class="sd">    get_zone</span>
+<span class="sd">    have_subseg</span>
+<span class="sd">    help</span>
+<span class="sd">    info</span>
+<span class="sd">    info_edge</span>
+<span class="sd">    ispoint</span>
+<span class="sd">    layerongrid</span>
+<span class="sd">    layeronlink</span>
+<span class="sd">    load</span>
+<span class="sd">    loadfur</span>
+<span class="sd">    loadG</span>
+<span class="sd">    loadini</span>
+<span class="sd">    loadstr</span>
+<span class="sd">    loadstr2</span>
+<span class="sd">    ls</span>
+<span class="sd">    nd2ed</span>
+<span class="sd">    onseg</span>
+<span class="sd">    plot_segments</span>
+<span class="sd">    pt2cy</span>
+<span class="sd">    pt2ro</span>
+<span class="sd">    randTxRx</span>
+<span class="sd">    room2nodes</span>
+<span class="sd">    room2segments</span>
+<span class="sd">    save</span>
+<span class="sd">    saveini</span>
+<span class="sd">    savestr2</span>
+<span class="sd">    seg2ro</span>
+<span class="sd">    seginframe</span>
+<span class="sd">    seginline</span>
+<span class="sd">    segpt</span>
+<span class="sd">    seguv</span>
+<span class="sd">    show3</span>
+<span class="sd">    showG</span>
+<span class="sd">    showGs</span>
+<span class="sd">    showGt</span>
+<span class="sd">    showGv</span>
+<span class="sd">    show_layer</span>
+<span class="sd">    show_nodes</span>
+<span class="sd">    show_seg1</span>
+<span class="sd">    show_segment</span>
+<span class="sd">    showSig</span>
+<span class="sd">    signature</span>
+<span class="sd">    subseg</span>
+<span class="sd">    thwall</span>
+<span class="sd">    visilist</span>
+<span class="sd">    visi_papb</span>
+<span class="sd">    waypoint</span>
+<span class="sd">    waypointGw</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    ------</span>
@@ -5455,9 +5558,23 @@
           <li><a href="../gis.html" >pylayers.gis</a> &raquo;</li> 
       </ul>
     </div>
+
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
   </body>
 </html>
