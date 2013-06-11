@@ -2240,7 +2240,7 @@ class Simul(object):
 
         """
 
-        racine = self.filesimul.replace('.ini', '') + 'cir-'
+        prefix = self.filesimul.replace('.ini', '') 
         #
         #
         #
@@ -2252,23 +2252,27 @@ class Simul(object):
             ctx = S.L.pt2cy(tx)
             crx = S.L.pt2cy(rx)
             
-            _filename=racine+str(k)+'-'+str(link)+'-'+str((ctx,crx))
+            _filecir = prefix +'-cir-'+str(k)+'-'+str(link)+'-'+str((ctx,crx))
             D = {}
             D['Tx'] = tx
             D['Rx'] = rx
 
             if (ctx,crx) not in lsig:
                 Si  = Signatures(S.L,ctx,crx)
+                #
+                # Change the run number depending on
+                # the algorithm used for signature determination
+                #
+                Si.run1(cutoff=cutoff)
                 # keep track and save signature
+                _filesir = prefix + '-sig-'+str((ctx,crx))
+                fd = open(filesig,'w')
+                pickle.dump(Si,filesig)
+                fd.close()
                 lsig.appeng((ctx,crx))
                 Si.dump(S.L,(ctx,crx))
 
-            #
-            # Change the run number depending on
-            # the algorithm used for signature determination
-            #
 
-            Si.run1(cutoff=cutoff)
 
             r2d = Si.rays(tx,rx)
             r2d.show(S.L)

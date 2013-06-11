@@ -58,6 +58,7 @@ class Layout(object):
 
     Attributes
     ----------
+
     Gs     : Structure graph
     Gt     : Topological graph  (indicates topological relationships between rooms)
     Gr     : Graph of room
@@ -67,6 +68,108 @@ class Layout(object):
     Nedge  : Number of edges of Gs
     pt     : points sequence
     tahe   : tail head
+
+    Methods
+    -------
+
+    add_door
+    add_fnod
+    add_furniture
+    add_furniture_file
+    add_nfpe
+    add_pnod
+    add_pons
+    add_segment
+    add_subseg
+    add_window
+    angleonlink
+    boundary
+    build
+    buildGc
+    buildGi
+    buildGi2
+    buildGr
+    buildGr3
+    buildGt
+    buildGv
+    buildGw
+    builGr2
+    check
+    check2
+    checkvis
+    cleanup
+    clip
+    closest_edge
+    cycleinline
+    del_cycle
+    delete
+    del_node
+    del_segment
+    del_subseg
+    diag
+    displaygui
+    distwall
+    dumpr
+    dumpw
+    ed2nd
+    editor
+    edit_point
+    edit_segment
+    facet3D
+    facets3D
+    find_edgelist
+    g2npy
+    geomfile
+    get_paths
+    get_Sg_pos
+    get_zone
+    have_subseg
+    help
+    info
+    info_edge
+    ispoint
+    layerongrid
+    layeronlink
+    load
+    loadfur
+    loadG
+    loadini
+    loadstr
+    loadstr2
+    ls
+    nd2ed
+    onseg
+    plot_segments
+    pt2cy
+    pt2ro
+    randTxRx
+    room2nodes
+    room2segments
+    save
+    saveini
+    savestr2
+    seg2ro
+    seginframe
+    seginline
+    segpt
+    seguv
+    show3
+    showG
+    showGs
+    showGt
+    showGv
+    show_layer
+    show_nodes
+    show_seg1
+    show_segment
+    showSig
+    signature
+    subseg
+    thwall
+    visilist
+    visi_papb
+    waypoint
+    waypointGw
 
     Notes
     ------

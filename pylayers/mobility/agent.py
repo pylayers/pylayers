@@ -26,6 +26,7 @@ class Agent(object):
 
            Parameters
            ----------
+
            'ID': string
                 agent ID
            'name': string
