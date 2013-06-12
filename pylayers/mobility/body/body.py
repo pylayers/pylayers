@@ -4,13 +4,12 @@ from pylayers.mobility.body import c3d
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
-from visual import *
+#from visual import *
 import  pdb as pdb
 
 
 class Body(object):
-    """
-       Class to manage c3d files
+    """ Class to manage the Body model 
     """
 
     def __init__(self):
@@ -66,11 +65,13 @@ if __name__ == '__main__':
 
     ax = fig.add_subplot(111, projection='3d')
     frameID = 30
-    ax.scatter(
-        c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
+    ax.scatter(c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
     ax.axis('scaled')
+
     #ax.scatter(c10_15[frameID,:,0],c10_15[frameID,:,1],c10_15[frameID,:,2] )
+
     pointID = 13
+
     plt.figure()
     plt.plot(c10_15[0, pointID].T, '*--', label='x')
     plt.plot(c10_15[1, pointID].T, '*--', label='y')
