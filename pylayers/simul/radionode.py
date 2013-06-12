@@ -117,6 +117,17 @@ class RadioNode(object):
             raise NameError('antenna file does not exist')
         self.save()
 
+    def __repr__(self):
+        """
+        """
+        st = ''
+        for k in range(self.N):
+            st = st + str(k)+ ' : ' \
+                    + str(round(self.position[0,k]*1000)/1000.) + ' ' + \
+                      str(round(self.position[1,k]*1000)/1000.) + ' ' + \
+                      str(round(self.position[2,k]*1000)/1000.) + '\n'
+        return(st)
+
     def pos2pt(self):
         """ position to point
 
@@ -217,6 +228,33 @@ class RadioNode(object):
         self.pos2pt()
         self.save()
 
+    def linevect(self,npt=1, step=1.0 , ptt=[0, 0, 0], vec=[1, 0, 0], mode='subst'):
+        """
+        Parameters
+        ----------
+        npt : number of points
+        step : incremental distance in meters
+        ptt  : point tail (satrting point)
+        vec : unitary vector 
+        """
+        if isinstance(ptt, list):
+            ptt = np.array(ptt)
+        if isinstance(vec, list):
+            vec = np.array(vec)
+        if (npt <= 1):
+            raise ValueError('npt should be greater than 1')
+        ptt = np.reshape(ptt, (3, 1))
+        vec = np.reshape(vec, (3, 1))
+        k = np.arange(npt)
+        pt = ptt + k*step*vec
+        if mode == 'subst':
+            self.position = pt
+        else:
+            self.position = np.append(self.position, pt, axis=1)
+        self.pos2pt()
+        self.N = np.shape(self.position)[1]
+        self.save()
+    
     def line(self, npt, ptt=[0, 0, 0], pth=[1, 0, 0], mode='subst'):
         """ build a line trajectory for a RadioNode
 
@@ -616,18 +654,19 @@ class RadioNode(object):
 #                        chaine = x+" "+y+" "+z+"\n"
 #                        fi_spa.write(chaine)
 #                fi_spa.close()
-    def show(self, num, sp):
+
+    def show(self, num = [], fig=[], ax =[],linewidth=1,marker='-',color='b'):
+        """ Display RadioNode position in the 2D strucure
         """
-         Display RadioNode position in the 2D strucure
-        """
+        if num ==[]:
+            num = np.arange(np.shape(self.position)[1])
         x = self.position[0, num]
         y = self.position[1, num]
-        sp.plot(x, y, 'ob')
-        #indoor = IndoorStr()
-        #filename = pyu.getlong(self.simul.filestr,'struc')
-        #indoor.load(filename)
-        #pt =self.position
-        #indoor.show([0],[0],pt)
+        if ax == []:
+            fig = plt.gcf()
+            ax = fig.gca()
+        ax.plot(x, y,marker=marker,color=color,linewidth=linewidth)
+        return fig,ax
 
     def show3(self, _filestr='struc.off'):
         """ display RadioNode position in geomview

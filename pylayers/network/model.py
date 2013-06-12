@@ -52,11 +52,16 @@ class Model(object):
                       method=self.method)
 
 
+    def __repr__(self):
+        st =  'frequency (GHz) : ' +str(self.f)+'\n'
+        st = st +  'path loss exponent (n) : '+str(self.rssnp)+'\n'
+        st = st +  'PL0 (dB): '+str(self.PL0)
+        return(st)
+
     def info(self):
         print 'frequency (f in GHz) : ',self.f
         print 'path loss exponent (n) : ',self.rssnp
         print 'PL0 : ',self.PL0
-        
 
     def getPL0(self,Gt=0,Gr=0):
         """
@@ -118,7 +123,7 @@ class Model(object):
     def getPL(self,r,RSSStd):
         """
         Get Power Level from a given distance
-        
+
         r : range
         RSSStd : range standard deviation
         """
@@ -127,7 +132,7 @@ class Model(object):
 
         if self.method =='OneSlope':
             PL=self.OneSlope(r)
-        
+
 
         elif self.method == 'mode' or self.method == 'median' or self.method == 'mean':
             PLmean          = self.getPLmean(r)
@@ -145,7 +150,7 @@ class Model(object):
     def getRange(self,RSS,RSSStd):
         """
         Get  distance from a given Power Level
-        
+
         r : range
         """
         if self.method =='OneSlope':
@@ -165,12 +170,12 @@ class Model(object):
             S    = -(np.log(10)/10)* RSSStd/self.rssnp                    # STD of ranges distribution
             M    = (np.log(10)/10)*(self.PL0-RSS)/self.rssnp + np.log(self.d0)        # Mean of ranges distribution
             r    =  np.exp(M+0.5*S**2)
-    
+
         else :
-            raise NameError('invlalid Pathloss method name for range computation')
+            raise NameError('invalid Pathloss method name for range computation')
 
         return(r)
-        
+
 
 
     def getRangeStd(self, RSS, RSSStd):
@@ -193,10 +198,10 @@ class Model(object):
             S       = -(np.log(10)/10)* RSSStd/self.rssnp                                    # STD of ranges distribution
             M       = (np.log(10)/10)*(self.PL0-RSS)/self.rssnp + np.log(self.d0)             # Mean of ranges distribution
             r    =  np.sqrt((np.exp(2*M+3*S**2))*(np.exp(S**2)-1))
-    
+
         else :
             raise NameError('invalid Pathloss method name STD range computation')
-        
+
         return (r)
 
 

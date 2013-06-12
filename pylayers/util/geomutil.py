@@ -29,8 +29,6 @@ import pdb
 
      ptonseg(pta,phe,pt)
 
-     displot(pt,ph,col='black')
-
      linet(sp,p1,p2,al,col,lwidth)
 
      ccw(A,B,C)
@@ -1093,7 +1091,7 @@ def ccw(A, B, C):
 
 
 def intersect(A, B, C, D):
-    """ check if segment AB intersect segment CD
+    """ check if segment AB intersects segment CD
 
     Parameters
     ----------
@@ -1112,6 +1110,7 @@ def intersect(A, B, C, D):
         >>> import scipy as sp
         >>> import numpy as np
         >>> from pylayers.util.geomutil import *
+        >>> from pylayers.util.plotutil import *
         >>> import matplotlib.pylab as plt
         >>> N = 10
         >>> A = sp.rand(2,N)
@@ -1125,13 +1124,15 @@ def intersect(A, B, C, D):
         >>> ph2 = D[:,b1]
         >>> f1,a1 = displot(pt1,ph1,'r')
         >>> f2,a2 = displot(pt2,ph2,'b')
-        >>> plt.show()
+        >>> ti = plt.title('test intersect')
         >>> A = np.array([[0],[0]])
         >>> B = np.array([[1],[1]])
         >>> C = np.array([[1],[0]])
         >>> D = np.array([[0],[1]])
-        >>> b2 = intersect(A,B,C,D)
-        >>> assert(b2)
+        >>> intersect(A,B,C,D)
+        array([ True], dtype=bool)
+        >>> intersect(A,B,C,D)[0]
+        True
 
     """
     return ((ccw(A, C, D) != ccw(B, C, D)) & (ccw(A, B, C) != ccw(A, B, D)))
@@ -1667,7 +1668,7 @@ class Polygon(shg.Polygon):
         p = self.ndarray()
         return sum(np.hstack((p[0, 1::], p[0, 0:1])) * (np.hstack((p[1, 2::], p[1, 0:2])) - p[1, :])) / 2.
 
-    def plot(self, color="#abcdef", alpha=0.8, show=False, edgecolor='#000000'):
+    def plot(self,**kwargs):
         """ plot function
 
         Parameters
@@ -1692,18 +1693,52 @@ class Polygon(shg.Polygon):
             >>> P2 = Polygon(p2)
             >>> p3 = [np.array([10,10]),np.array([11,10]),np.array([11,11]),np.array([10,11])]
             >>> P3 = Polygon(p3)
-            >>> P1.plot('red',alpha=0.3)
-            >>> P2.plot('blue',alpha=0.7)
-            >>> P3.plot('green',alpha=1)
+            >>> fig,ax = P1.plot(color='red',alpha=0.3)
+            >>> fig,ax = P2.plot(fig=fig,ax=ax,color='blue',alpha=0.7)
+            >>> fig,ax = P3.plot(fig=fig,ax=ax,color='green',alpha=1)
             >>> title = plt.title('test plotting polygons')
 
         """
-        fig = plt.gcf()
-        ax = fig.gca()
+
+        defaults = {'show': False,
+                'fig': [],
+                'ax': [],
+                'color':'#abcdef',
+                'edgecolor':'#000000',
+                'alpha':0.8 ,
+                'figsize':(10,10)
+                 }
+        #
+        # update default values
+        #
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+        #
+        # getting fig and ax
+        #
+        if kwargs['fig'] == []:
+            fig = plt.figure(figsize=kwargs['figsize'])
+            fig.set_frameon(True)
+        else:
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
         x, y = self.exterior.xy
-        ax.fill(x, y, color=color, alpha=alpha, ec='black')
-        if show:
+
+        ax.fill(x, y,
+                color = kwargs['color'],
+                alpha=kwargs['alpha'],
+                ec = kwargs['edgecolor'])
+
+        if kwargs['show']:
             plt.show()
+
+        return fig,ax
 
     def simplify(self):
         """ Simplify polygon - suppress adjacent colinear segments
@@ -1757,6 +1792,10 @@ class Polygon(shg.Polygon):
         udeg2     : np.array indexes of points of degree 2
             default = []
 
+        Notes
+        -----
+            Topological error can be raised if the point coordinates accuracy
+            is not limited.
 
         Examples
         --------
@@ -1775,7 +1814,6 @@ class Polygon(shg.Polygon):
             >>> plt.axis('off')
             (-0.5, 4.0, -0.5, 2.5)
             >>> title = plt.title('Testing buildGv')
-            >>> plt.show()
 
 
         Notes
@@ -1803,10 +1841,7 @@ class Polygon(shg.Polygon):
                 kwargs[key] = value
 
         #self.args=args
-        show = kwargs['show']
-        udeg1 = kwargs['udeg1']
-        udeg2 = kwargs['udeg2']
-        if show:
+        if kwargs['show']:
             if kwargs['fig'] == []:
                 fig = plt.figure()
                 fig.set_frameon(True)
@@ -1818,9 +1853,14 @@ class Polygon(shg.Polygon):
             else:
                 ax = kwargs['ax']
             plt.ion()
+
+        udeg1 = kwargs['udeg1']
+        udeg2 = kwargs['udeg2']
+
         GRAY = '#999999'
         Gv = nx.Graph()
         Gv.pos = {}
+
         lring = self.exterior
         #
         # Calculate interior normals
@@ -1833,12 +1873,14 @@ class Polygon(shg.Polygon):
         tcc, n = self.ptconvex()
         Np = self.Np
         #
-        # retrieve points and segments sequence label
+        # retrieve
+        #  npt points label sequence
+        #  nseg segments label sequence 
         #
         # vnodes do not necessarily start with a point
         #
         if self.vnodes[0] < 0:
-            ipt = 2 * np.arange(Np)
+            ipt  = 2 * np.arange(Np)
             iseg = 2 * np.arange(Np) + 1
         else:
             ipt = 2 * np.arange(Np) + 1
@@ -1846,15 +1888,17 @@ class Polygon(shg.Polygon):
 
         npt = self.vnodes[ipt]
         nseg = self.vnodes[iseg]
+
         assert  sum(npt < 0), "something wrong"
+        assert  sum(nseg > 0), "something wrong"
         #
         #
         # Create middle point on lring
         #
         # Warning lring recopy the node at the end of the sequence
         #
-        # A problem come sfrom the fact that we are not sure that the vnodes sequence
-        # starts with a point (negative node)
+        # A problem comes from the fact that a vnodes sequence
+        # do no necessarily starts with a point (negative node)
         #
         #
         tpm = []
@@ -1880,14 +1924,14 @@ class Polygon(shg.Polygon):
         xr, yr = lring.xy
 
         #
-        # Le probleme ce sont les points de degre 1
+        # Degree 1 points
         #
         # Determine diffraction points
         #
         # udeg1 :
-        # deg2 : si nul on garde
-        #         si convexe on garde
-        #         sinon on ne garde pas
+        # deg2 : if null the point is kept
+        #        if convexe the point is kept
+        #        else the point is not kept
         #
         uconvex = np.nonzero(tcc == 1)[0]
         uzero = np.nonzero(tcc == 0)[0]
@@ -1909,7 +1953,7 @@ class Polygon(shg.Polygon):
         #
         # display points and polygon
         #
-        if show:
+        if kwargs['show']:
             points1 = shg.MultiPoint(lring)
             for k, pt in enumerate(points1):
                 if k in uconvex:
@@ -1939,11 +1983,10 @@ class Polygon(shg.Polygon):
             if self.contains(seg):
                 Gv.add_edge(npt[nk[0]], npt[nk[1]], weight=0)
 
-    #
-    #  2) Calculate edge-edge and node-edge visibility
-    #
+        #
+        #  2) Calculate edge-edge and node-edge visibility
+        #
         for nk in range(Np):
-
             ptk = p[:, nk]
             phk = p[:, (nk + 1) % Np]
 
@@ -1956,10 +1999,10 @@ class Polygon(shg.Polygon):
             pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
             pcornerh = phk - lnk * epsilonk  # + n[:,nk]*epsilon
 
-    #
-    # in any case no ray towark nk
-    # if nk is convex no ray toward (nk-1)%Np
-    #
+        #
+        # in any case no ray towark nk
+        # if nk is convex no ray toward (nk-1)%Np
+        #
             for i, pcorner in enumerate([pcornert, pcornerh]):
                 #
                 #  si point tail
@@ -1994,6 +2037,7 @@ class Polygon(shg.Polygon):
                         #if npt[nk] == -3:
                         #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=0.2,color='k')
                         #    plt.draw()
+                        # topological error can be raised here
                         seg2 = self.intersection(seg)
                         #if self.contains(seg):
                         if seg2.almost_equals(seg, decimal=4):
@@ -2024,7 +2068,7 @@ class Polygon(shg.Polygon):
                                     #raw_input()
                             break
 
-        if show:
+        if kwargs['show']:
             nodes = np.array(Gv.nodes())
             uneg = list(nodes[np.nonzero(nodes < 0)[0]])
             upos = list(nodes[np.nonzero(nodes > 0)[0]])
@@ -2180,7 +2224,7 @@ class Polygon(shg.Polygon):
         Notes
         ------
 
-            This function determines the convex and concav point of a polygon.
+            This function determines the convex and concav points of a polygon.
             As there is no orientation convention for the polygon the sign of the cross
             product can't be directly interpreted. So we exploit the following
             property :
@@ -2206,7 +2250,10 @@ class Polygon(shg.Polygon):
         n = Lr2n(p)
 
         tcc = np.zeros(Np)
-
+        
+        #
+        # cross product between two adjascent normals
+        #
         for k in range(Nseg):
             nk = n[:, (k - 1) % Nseg]
             nkp1 = n[:, k]
@@ -2214,8 +2261,11 @@ class Polygon(shg.Polygon):
             tcc[k] = v
 
         #print "ptseg tcc ",tcc
-        upos = np.nonzero(tcc > 1e-4)[0]
-        uneg = np.nonzero(tcc < -1e-4)[0]
+        #
+        # warning this test is fragile
+        #
+        upos = np.nonzero(tcc > 1e-3)[0]
+        uneg = np.nonzero(tcc < -1e-3)[0]
 
         if len(upos) > len(uneg):
             nconvex = uneg
@@ -2226,7 +2276,13 @@ class Polygon(shg.Polygon):
             nconcav = uneg
 
         if len(upos) == len(uneg):
-            print "error poylgon is a star "
+            print "error polygon is a star "
+            print "tcc",tcc
+            print "upos",upos
+            print "uneg",uneg
+            self.plot()
+            pdb.set_trace()
+
 
         tcc = np.zeros(Np)
         tcc[nconvex] = 1
@@ -2436,48 +2492,6 @@ def wall_delta(x1, y1, x2, y2, delta=0.0001):
     cy = y2 - ay * delta / a_mod
 
     return(bx, by, cx, cy)
-
-
-def angle_fix(al):
-    """Fixes the angle formed by the diffraction corner
-    and its neighbors o 0/0.5*Pi/Pi/1.5*Pi/2*Pi.
-
-    Parameters
-    ----------
-    al : float
-      An angle.
-
-    Returns
-    -------
-    al : float
-      An angle equal to 0/0.5*Pi/Pi/1.5*Pi/2*Pi..
-
-    Examples
-    --------
-
-    >>> from pylayers.gis.layout import Layout
-    >>> L = Layout()
-    >>> L.load('exemple.str')
-    >>> ncoin,ndiff = L.buildGc()
-    >>> L.buildGt()
-    >>> L.buildGr()
-    >>> al=0.1
-    >>> al1=angle_fix(al)
-    >>> assert al1== 0.0,'Mistake'
-
-
-    """
-    if (-np.pi / 6 < al or al >= np.pi / 6):
-        al1 = 0.
-    if (-np.pi / 6 + np.pi / 2 < al or al >= np.pi / 6 + np.pi / 2):
-        al1 = np.pi / 2
-    if (-np.pi / 6 + np.pi < al or al >= np.pi / 6 + np.pi):
-        al1 = np.pi
-    if (-np.pi / 6 + 3 * np.pi / 2 < al or al >= np.pi / 6 + 3 * np.pi / 2):
-        al1 = 3 * np.pi / 2
-    else:
-        pass
-    return(al1)
 
 
 def plot_coords2(ax, ob):

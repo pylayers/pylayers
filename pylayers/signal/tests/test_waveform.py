@@ -5,7 +5,7 @@ param= {'type' : 'generic',\
             'fe': 100,\
             'thresh': 3,\
             'tw': 30}
-w = Waveform(param)
+w = Waveform({'type':'W1offset'})
 w.show()
 
 

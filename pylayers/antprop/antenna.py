@@ -396,9 +396,9 @@ class Antenna(object):
             errTh = np.sum(dTh2)
             errPh = np.sum(dPh2)
 
-        errelTh = errTh / mvTh2
-        errelPh = errPh / mvPh2
-        errel = (errTh + errPh) / (mvTh2 + mvPh2)
+        errelTh = (errTh / mvTh2)
+        errelPh = (errPh / mvPh2)
+        errel =( (errTh + errPh) / (mvTh2 + mvPh2))
 
         return(errelTh, errelPh, errel)
 
