@@ -1,0 +1,467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.mobility.transit.Person &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../../index.html" />
+    <link rel="up" title="pylayers.mobility.transit" href="../transit.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../../index.html"><img src="../../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../transit.html" accesskey="U">pylayers.mobility.transit</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.mobility.transit.Person</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span><span class="n">Simulation</span><span class="p">,</span><span class="n">hold</span>
+<span class="kn">import</span> <span class="nn">ConfigParser</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="c">#from math import *</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">normalvariate</span><span class="p">,</span><span class="n">uniform</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.vec3</span> <span class="kn">import</span> <span class="n">vec3</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.World</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.SteeringBehavior</span> <span class="kn">import</span> <span class="n">default_steering_mind</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span><span class="p">,</span><span class="n">gauss</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.utilnet</span> <span class="kn">import</span> <span class="n">conv_vecarr</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="c">#from pylayers.util.pymysqldb import Database </span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="c"># &quot;near collision avoidance&quot; inspired from</span>
+<span class="c">#   http://people.revoledu.com/kardi/publication/Kouchi2001.pdf</span>
+
+<span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="nb">max</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="n">vec3</span><span class="o">.</span><span class="n">truncate</span> <span class="o">=</span> <span class="n">truncate</span>
+
+<span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">size</span>
+<span class="n">vec3</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+
+<span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="n">vec3</span><span class="o">.</span><span class="n">copy</span> <span class="o">=</span> <span class="n">copy</span>
+
+<div class="viewcode-block" id="Person"><a class="viewcode-back" href="../../../../modules/mobility.transit.person.html#pylayers.mobility.transit.Person.Person">[docs]</a><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Person Process</span>
+<span class="sd">        handle the mobility of the agent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">max_acceleration</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="c"># m/s/s</span>
+    <span class="n">max_speed</span>    <span class="o">=</span> <span class="mf">1.2</span> <span class="c"># m/s</span>
+    <span class="c">#radius = 0.2106  # if one person takes 1.5 feet^2 of space, per traffic stds</span>
+    <span class="c"># 2r = 0.5 to 0.7 for &quot;sports fans&quot;, per the Helbing, Farkas, Vicsek paper</span>
+    <span class="n">radius</span>       <span class="o">=</span> <span class="mf">2.85</span>   <span class="c"># per the Teknomo, et al, paper</span>
+    <span class="n">mass</span>         <span class="o">=</span> <span class="mi">80</span> <span class="c"># kg</span>
+    <span class="n">average_radius</span>   <span class="o">=</span> <span class="mf">0.6</span>
+    <span class="n">npers</span>        <span class="o">=</span> <span class="mi">0</span>
+    <span class="c">#GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)</span>
+<div class="viewcode-block" id="Person.__init__"><a class="viewcode-back" href="../../../../modules/mobility.transit.person.html#pylayers.mobility.transit.Person.Person.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ID</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span><span class="n">roomId</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="p">[],</span> <span class="n">net</span><span class="o">=</span><span class="n">Network</span><span class="p">(),</span>
+        <span class="n">wld</span> <span class="o">=</span> <span class="n">world</span><span class="p">(),</span><span class="n">sim</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">moving</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">froom</span><span class="o">=</span><span class="p">[],</span><span class="n">wait</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">cdest</span><span class="o">=</span><span class="s">&#39;random&#39;</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot; Class Person</span>
+<span class="sd">            inherits of Simpy.SimulationRT</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        ID    : float/hex/str/...</span>
+<span class="sd">                agent Id</span>
+<span class="sd">        interval : float</span>
+<span class="sd">                refresh interval of agent mobility</span>
+<span class="sd">        roomId : int</span>
+<span class="sd">                room ID where agent start when simulation is launched</span>
+<span class="sd">        L : pylayers.gis.layout.Layout()</span>
+<span class="sd">            Layout instance, in which the agent is moving</span>
+<span class="sd">        net : pylayers.network.Network()</span>
+<span class="sd">            Network instance, in which network agent are communicating.</span>
+<span class="sd">            This is used for fill the true position filed of the graph</span>
+<span class="sd">            It must be removed in a further version ( when a proper save instance</span>
+<span class="sd">            would be created)</span>
+<span class="sd">        wld : pylayers.mobility.transit.world.world()</span>
+<span class="sd">            world instance. equivalent to layout but in the pytk framework. </span>
+<span class="sd">            TODO : remove in a further version</span>
+<span class="sd">        sim : SimPy.Simulation.Simulation.RT()</span>
+<span class="sd">            Simulation instance share by all the pylayer project. </span>
+<span class="sd">        moving : bool </span>
+<span class="sd">            indicate if the agent is moving or not ( relevant for acces poitns)</span>
+<span class="sd">        froom : list</span>
+<span class="sd">            list of forbiden rooms. </span>
+<span class="sd">        wait : float</span>
+<span class="sd">            wait time of the agent when he has reach teh desitaion</span>
+<span class="sd">        cdest : str</span>
+<span class="sd">            method for choosing setination &#39;random &#39; of file read</span>
+<span class="sd">        save : list</span>
+<span class="sd">            list of save option type .</span>
+<span class="sd">            It will be removed in a further version ( when a proper save instance</span>
+<span class="sd">            would be created)</span>
+
+
+<span class="sd">        Methods</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        move : move the agent </span>
+<span class="sd">        update : DEPRECATED used for Tkinter plot</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+        <span class="c">#GeomNetType = np.dtype([(&#39;Id&#39;,int), </span>
+        <span class="c">#        (&#39;time&#39;,int), </span>
+        <span class="c">#           (&#39;p&#39;,float,(1,3)),</span>
+        <span class="c">#           (&#39;v&#39;,float,(1,3)),</span>
+        <span class="c">#           (&#39;a&#39;,float,(1,3))])</span>
+        <span class="n">Person</span><span class="o">.</span><span class="n">npers</span> <span class="o">+=</span><span class="mi">1</span>
+        <span class="n">Process</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Person_ID&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">),</span><span class="n">sim</span><span class="o">=</span><span class="n">sim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">=</span><span class="n">ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">world</span> <span class="o">=</span> <span class="n">wld</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manager_args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="o">=</span><span class="n">moving</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span>    <span class="o">=</span> <span class="n">roomId</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forbidroomId</span> <span class="o">=</span> <span class="n">froom</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">=</span> <span class="n">cdest</span> <span class="c"># choose tdestination type</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;random&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">size</span><span class="p">())))</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">forbidroomId</span><span class="p">):</span> <span class="c"># or (self.nextroomId in self.sim.roomlist): # test destination different de l&#39;arrive</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">size</span><span class="p">())))</span>
+            <span class="c">#self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;file&#39;</span><span class="p">:</span>
+           <span class="n">cfg</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+           <span class="n">cfg</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;nodes_destination.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">room_seq</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">))[</span><span class="s">&#39;room_seq&#39;</span><span class="p">])</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">room_wait</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">))[</span><span class="s">&#39;room_wait&#39;</span><span class="p">])</span>
+           <span class="k">print</span> <span class="s">&#39;WARNING: when nodes_destination ini file is read:&#39;</span>
+           <span class="k">print</span> <span class="s">&#39;1) the room initialization starts in the first room of the list, not in the room configured in agent.ini&#39;</span>
+           <span class="k">print</span> <span class="s">&#39;2) forbiden rooms are neglected&#39;</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="o">=</span><span class="mi">1</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">nb_room</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">room_seq</span><span class="p">)</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">room_seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">room_seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="p">]</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">room_wait</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="p">]</span>
+        <span class="c">#self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wp</span>       <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">waypointGw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roomId</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec3</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>  <span class="p">)</span> 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">roomId</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">roomId</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">except</span><span class="p">:</span>     
+            <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+<span class="c">#           self.old_pos = vec3()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stuck</span> <span class="o">=</span> <span class="mi">0</span>           
+        <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">localx</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">localy</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">add_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+
+        <span class="c"># from Helbing, et al &quot;Self-organizing pedestrian movement&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span> <span class="o">=</span> <span class="mf">1.2</span><span class="c">#normalvariate(1.0, 0.26)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">desired_speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">normalvariate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average_radius</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intersection</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">False</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="bp">False</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">behaviors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">steering_mind</span> <span class="o">=</span> <span class="n">default_steering_mind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cancelled</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">=</span><span class="n">net</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="n">wait</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="o">=</span><span class="n">save</span>
+
+
+
+        <span class="k">if</span> <span class="s">&#39;mysql&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+           <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+           <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+           <span class="n">sql_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mysql&#39;</span><span class="p">))</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">],</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">],</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;passwd&#39;</span><span class="p">],</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;dbname&#39;</span><span class="p">])</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="Person.move"><a class="viewcode-back" href="../../../../modules/mobility.transit.person.html#pylayers.mobility.transit.Person.Person.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Move the Agent</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ID</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;meca update @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+                <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">cancelled</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">passivate</span><span class="p">,</span> <span class="bp">self</span>
+                    <span class="k">print</span> <span class="s">&quot;Person.move: activated after being cancelled&quot;</span> 
+                <span class="n">checked</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">zone</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">zones</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">zone</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">checked</span><span class="p">:</span>
+                        <span class="n">checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zone</span><span class="p">)</span>
+                        <span class="n">zone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">acceleration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steering_mind</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> 
+                <span class="n">acceleration</span> <span class="o">=</span> <span class="n">acceleration</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_acceleration</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">acceleration</span> <span class="o">=</span> <span class="n">acceleration</span> 
+                <span class="n">velocity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">+</span> <span class="n">acceleration</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_speed</span><span class="p">)</span> 
+                <span class="k">if</span> <span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.2</span><span class="p">:</span>
+                    <span class="c"># record direction only when we&#39;ve really had some</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">localy</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">localx</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval</span>
+<span class="c">#                self.update()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">update_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">p</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+                    <span class="n">v</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="p">)</span>
+                    <span class="n">a</span><span class="o">=</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acceleration</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s">&#39;mysql&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">writemeca</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span><span class="n">p</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s">&#39;txt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+                    <span class="n">pyu</span><span class="o">.</span><span class="n">writemeca</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span><span class="n">p</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrived</span><span class="p">:</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">False</span>
+                        <span class="c">#pr = self.sim.roomlist.index(self.nextroomId)</span>
+                        <span class="c">#self.sim.roomlist.pop(pr)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>
+
+                    <span class="c">#</span>
+                    <span class="c"># Si porte on continue</span>
+                    <span class="c">#</span>
+                    <span class="c">#</span>
+                    <span class="c"># ig destination --&gt; next room</span>
+                    <span class="c">#</span>
+                    <span class="c">#adjroom  = self.L.Gr.neighbors(self.roomId)</span>
+                    <span class="c">#Nadjroom = len(adjroom)</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;random&#39;</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">size</span><span class="p">())))</span>
+                            <span class="c"># test 1 ) next != actualroom</span>
+                            <span class="c">#      2 ) nextroom != fordiden room</span>
+                            <span class="c">#      3 ) room not share without another agent</span>
+                            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">roomId</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">forbidroomId</span><span class="p">):</span><span class="c"># or (self.nextroomId in self.sim.roomlist):</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span>   <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">size</span><span class="p">())))</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cdest</span> <span class="o">==</span> <span class="s">&#39;file&#39;</span><span class="p">:</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="o">+</span><span class="mi">1</span>
+                           <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_room</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="o">=</span><span class="mi">0</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">room_seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="p">]</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">room_wait</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">room_counter</span><span class="p">]</span>
+                        <span class="c">#self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim</span>
+                        <span class="n">wp</span>        <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">waypointGw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">roomId</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nextroomId</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">tup</span> <span class="ow">in</span> <span class="n">wp</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec3</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>  <span class="p">)</span> 
+                    <span class="c">#nextroom = adjroom[k]</span>
+                    <span class="c">#    print &quot;room : &quot;,self.roomId</span>
+                    <span class="c">#    print &quot;nextroom : &quot;,self.nextroomId</span>
+                    <span class="c">#p_nextroom = self.L.Gr.pos[self.nextroomId]</span>
+                    <span class="c">#setdoors1  = self.L.Gr.node[self.roomId][&#39;doors&#39;]</span>
+                    <span class="c">#setdoors2  = self.L.Gr.node[nextroom][&#39;doors&#39;]</span>
+                    <span class="c">#doorId     = np.intersect1d(setdoors1,setdoors2)[0]</span>
+                    <span class="c">#</span>
+                    <span class="c"># coord door</span>
+                    <span class="c">#</span>
+                    <span class="c">#unode = self.L.Gs.neighbors(doorId)    </span>
+                    <span class="c">#p1    = self.L.Gs.pos[unode[0]]</span>
+                    <span class="c">#p2    = self.L.Gs.pos[unode[1]]</span>
+                    <span class="c">#print p1</span>
+                    <span class="c">#print p2</span>
+                    <span class="c">#pdoor = (np.array(p1)+np.array(p2))/2</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c">#waittime = uniform(0,10)</span>
+
+                    <span class="c">#if self.manager:</span>
+                    <span class="c">#    if self.manager(self, *self.manager_args):</span>
+                    <span class="c">#    yield hold , self , waittime</span>
+                    <span class="c">#else:</span>
+                    <span class="c">#    yield hold, self , waittime </span>
+
+<span class="c">#                        self.wait=abs(gauss(50,50))</span>
+<span class="c">#                        self.wait=abs(gauss(1,1))</span>
+                        <span class="k">print</span> <span class="s">&#39;wait&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">interval</span>    
+                        <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wait</span> 
+
+                    <span class="k">else</span><span class="p">:</span>    
+                        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c">#print &quot;wp : &quot;, self.waypoints</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c">#print &quot;dest : &quot;, self.destination    </span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval</span>
+            <span class="k">else</span><span class="p">:</span>
+<span class="c">#                self.update()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">update_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">conv_vecarr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+
+                <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval</span>
+</div>
+<div class="viewcode-block" id="Person.delete"><a class="viewcode-back" href="../../../../modules/mobility.transit.person.html#pylayers.mobility.transit.Person.Person.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            delete boid from world.tk</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">tk</span>
+        <span class="n">tk</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graphic</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">remove_boid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cancelled</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c">#    def update(self):</span>
+<span class="c">#        tk = self.world.tk</span>
+<span class="c">#        if tk is None: return</span>
+<span class="c">#        if not hasattr(self, &#39;graphic&#39;):</span>
+<span class="c">#            self.graphic = tk.canvas.create_polygon(0, 0, 0, 1, 1, 1, 1, 0, smooth=True, fill=&#39;red&#39;, outline=&#39;black&#39;, tag=&#39;person&#39;)</span>
+<span class="c">#            if tk.collision_vectors:</span>
+<span class="c">#                self.graphic_front_collision = tk.canvas.create_line(0, 0, 1, 0, fill=&#39;white&#39;)</span>
+<span class="c">#                self.graphic_left_collision = tk.canvas.create_line(0, 0, 1, 0, fill=&#39;white&#39;)</span>
+<span class="c">#                self.graphic_right_collision = tk.canvas.create_line(0, 0, 1, 0, fill=&#39;white&#39;)</span>
+<span class="c">#                self.graphic_intersection = tk.canvas.create_oval(0, 0, 1, 1, fill=&#39;red&#39;)</span>
+<span class="c">#                self.graphic_intersection_normal = tk.canvas.create_line(0, 0, 1, 1, fill=&#39;red&#39;)</span>
+<span class="c">#            if tk.vectors:</span>
+<span class="c">#                self.graphic_velocity = tk.canvas.create_line(0, 0, 1, 0, fill=&#39;green&#39;)</span>
+<span class="c">#                self.graphic_acceleration = tk.canvas.create_line(0, 0, 1, 0, fill=&#39;blue&#39;)</span>
+<span class="c">#        x_, y_ = tk.x_, tk.y_</span>
+<span class="c">#        position = self.position</span>
+<span class="c">#        width, depth = self.localx * (self.radius), self.localy * (self.radius * 0.65)</span>
+<span class="c">#        ul = position - depth + width</span>
+<span class="c">#        ur = position + depth + width</span>
+<span class="c">#        lr = position + depth - width</span>
+<span class="c">#        ll = position - depth - width</span>
+<span class="c">#        tk.canvas.coords(self.graphic,</span>
+<span class="c">#                 x_(ul.x), y_(ul.y), x_(ur.x), y_(ur.y),</span>
+<span class="c">#                 x_(lr.x), y_(lr.y), x_(ll.x), y_(ll.y))</span>
+<span class="c">#        tk.canvas.create_line(x_(ur.x),y_(ur.y),x_(ul.x),y_(ul.y))</span>
+
+
+
+
+<span class="c">#        if tk.vectors:</span>
+<span class="c">#            xx, yy, unused_z = position</span>
+<span class="c">#            velocity = self.velocity</span>
+<span class="c">#            tk.canvas.coords(self.graphic_velocity,</span>
+<span class="c">#                     x_(xx), y_(yy), x_(xx + velocity.x), y_(yy + velocity.y))</span>
+<span class="c">#            acceleration = self.acceleration</span>
+<span class="c">#            tk.canvas.coords(self.graphic_acceleration,</span>
+<span class="c">#                     x_(xx), y_(yy), x_(xx + acceleration.x), y_(yy + acceleration.y))</span>
+<span class="c">#        if tk.collision_vectors:</span>
+<span class="c">#            xx, yy, unused_z = position</span>
+<span class="c">#            speed = self.velocity.length()</span>
+<span class="c">#            front_check = 0.5 + speed * 1.5</span>
+<span class="c">#            side_check = 0.5 + speed * 0.5</span>
+<span class="c">#            point = self.localy.scale(front_check)</span>
+<span class="c">#            tk.canvas.coords(self.graphic_front_collision,</span>
+<span class="c">#                     x_(xx), y_(yy), x_(xx + point.x), y_(yy + point.y))</span>
+<span class="c">#            point = (self.localy + self.localx).scale(side_check)</span>
+<span class="c">#            tk.canvas.coords(self.graphic_left_collision,</span>
+<span class="c">#                     x_(xx), y_(yy), x_(xx + point.x), y_(yy + point.y))</span>
+<span class="c">#            point = (self.localy - self.localx).scale(side_check)</span>
+<span class="c">#            tk.canvas.coords(self.graphic_right_collision,</span>
+<span class="c">#                     x_(xx), y_(yy), x_(xx + point.x), y_(yy + point.y))</span>
+<span class="c">#            if self.intersection:</span>
+<span class="c">#            xx, yy, unused_z = self.intersection</span>
+<span class="c">#            tk.canvas.coords(self.graphic_intersection,</span>
+<span class="c">#                     x_(xx-0.2), y_(yy-0.2), x_(xx + 0.2), y_(yy + 0.2))</span>
+<span class="c">#            point = self.intersection_normal</span>
+<span class="c">#            tk.canvas.coords(self.graphic_intersection_normal,</span>
+<span class="c">#                     x_(xx), y_(yy), x_(xx + point.x), y_(yy + point.y))</span>
+<span class="c">#            else:</span>
+<span class="c">#            tk.canvas.coords(self.graphic_intersection,</span>
+<span class="c">#                     0, 0, 0, 0)</span>
+<span class="c">#            tk.canvas.coords(self.graphic_intersection_normal,</span>
+<span class="c">#                     0, 0, 0, 0)</span>
+<span class="c">#        tk.canvas.lower(self.graphic, &#39;vehicle&#39;)</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../transit.html" >pylayers.mobility.transit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

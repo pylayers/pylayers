@@ -1,0 +1,13 @@
+.. _steeringbehavior:
+
+Steering behavior
+=================
+
+
+.. autoclass:: pylayers.mobility.transit.SteeringBehavior
+   :members:
+   :special-members:
+
+.. automodule:: pylayers.mobility.transit.SteeringBehavior
+   :members:
+   :special-members:

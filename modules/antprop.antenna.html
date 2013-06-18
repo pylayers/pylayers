@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="up" title="antprop" href="antprop.html" />
-    <link rel="next" title="channel" href="antprop.channel.html" />
-    <link rel="prev" title="antprop" href="antprop.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -40,19 +37,11 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="antprop.channel.html" title="channel"
-             accesskey="N">next</a></li>
-        <li class="right" >
-          <a href="antprop.html" title="antprop"
-             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="antprop.html" accesskey="U">antprop</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
@@ -66,12 +55,6 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="antprop.html"
-                        title="previous chapter">antprop</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="antprop.channel.html"
-                        title="next chapter">channel</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -263,19 +246,13 @@ once the V,W function</p>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.cart2pol">
 <tt class="descname">cart2pol</tt><big>(</big><em>Fx</em>, <em>Fy</em>, <em>Fz</em>, <em>ith</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.cart2pol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.cart2pol" title="Permalink to this definition">¶</a></dt>
-<dd><p>Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Fx</strong> :</p>
-<p><strong>Fy</strong> :</p>
-<p><strong>Fz</strong> :</p>
-<p class="last"><strong>ith</strong> : theta index</p>
-</td>
-</tr>
-</tbody>
-</table>
+<dd><p>Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith
+Parameters
+&#8212;&#8212;&#8212;-
+Fx
+Fy
+Fz
+ith : theta index</p>
 </dd></dl>
 
 <dl class="method">
@@ -374,6 +351,12 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.antenna.Antenna.help">
+<tt class="descname">help</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>help on available functions</p>
 </dd></dl>
 
 <dl class="method">
@@ -485,7 +468,7 @@ the vsh coefficients in shape 2</p>
 <dt id="pylayers.antprop.antenna.Antenna.loadvsh3">
 <tt class="descname">loadvsh3</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.loadvsh3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.loadvsh3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load antenna&#8217;s vsh3 file</p>
-<p>vsh3 file contains a thesholded version of vsh coefficients in shape 3</p>
+<p>it contains a thesholded version of vsh coefficients in shape 3</p>
 </dd></dl>
 
 <dl class="method">
@@ -548,24 +531,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.pattern">
 <tt class="descname">pattern</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>typ='s3'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.pattern" title="Permalink to this definition">¶</a></dt>
-<dd><p>return radiation multidimensionnal patterns</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : array</p>
-<blockquote>
-<div><p>1xNt</p>
-</div></blockquote>
-<p><strong>phi</strong> : array</p>
-<blockquote class="last">
-<div><p>1xNp</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.pol2cart">
@@ -620,7 +586,7 @@ if N=0 all values are kept else   N &lt; n &lt; Nt - N</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.antenna.Antenna.polar">
-<tt class="descname">polar</tt><big>(</big><em>k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1, fig=[], ax=[]</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.polar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.polar" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">polar</tt><big>(</big><em>k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.polar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.polar" title="Permalink to this definition">¶</a></dt>
 <dd><p>polar plot</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -903,38 +869,16 @@ len(phi) must be equal with shape(F)[2]</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="antprop.channel.html" title="channel"
-             >next</a></li>
-        <li class="right" >
-          <a href="antprop.html" title="antprop"
-             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="antprop.html" >antprop</a> &raquo;</li> 
+ 
       </ul>
     </div>
-
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
   </body>
 </html>

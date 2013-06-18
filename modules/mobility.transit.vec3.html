@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; PyLayers</title>
+    <title>vec3 &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" />
-    <link rel="up" title="mobility" href="mobility.html" />
-    <link rel="next" title="&lt;no title&gt;" href="mobility.transit.world2.html" />
-    <link rel="prev" title="Steering Behavior" href="mobility.transit.steeringbehavior2.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -40,30 +37,16 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="mobility.transit.world2.html" title="&lt;no title&gt;"
-             accesskey="N">next</a></li>
-        <li class="right" >
-          <a href="mobility.transit.steeringbehavior2.html" title="Steering Behavior"
-             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="mobility.html" accesskey="U">mobility</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="mobility.transit.steeringbehavior2.html"
-                        title="previous chapter">Steering Behavior</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="mobility.transit.world2.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -85,7 +68,370 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
+  <div class="section" id="vec3">
+<span id="id1"></span><h1>vec3<a class="headerlink" href="#vec3" title="Permalink to this headline">¶</a></h1>
+<dl class="attribute">
+<dt id="pylayers.mobility.transit.vec3">
+<tt class="descclassname">pylayers.mobility.transit.</tt><tt class="descname">vec3</tt><a class="headerlink" href="#pylayers.mobility.transit.vec3" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#module-pylayers.mobility.transit.vec3" title="pylayers.mobility.transit.vec3"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.mobility.transit.vec3</span></tt></a></p>
+</dd></dl>
+
+<span class="target" id="module-pylayers.mobility.transit.vec3"></span><dl class="class">
+<dt id="pylayers.mobility.transit.vec3.vec3">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.transit.vec3.</tt><tt class="descname">vec3</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Three-dimensional vector.</p>
+<p>This class can be used to represent points, vectors, normals
+or even colors. The usual vector operations are available.</p>
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__abs__">
+<tt class="descname">__abs__</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__abs__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__abs__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the length of the vector.</p>
+<p>abs(v) is equivalent to v.length().</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">2.11896201004</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector addition.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+<span class="go">(0.7000, 1.2500, -1.3000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__div__">
+<tt class="descname">__div__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__div__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__div__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Division by scalar</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">/</span><span class="mf">2.0</span>
+<span class="go">(0.5000, 0.2500, -0.9000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__eq__">
+<tt class="descname">__eq__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__eq__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>== operator</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">==</span><span class="n">b</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">b</span><span class="o">==</span><span class="n">c</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">==</span><span class="bp">None</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__getitem__">
+<tt class="descname">__getitem__</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a component by index (0-based)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">-1.8</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__iadd__">
+<tt class="descname">__iadd__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__iadd__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__iadd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inline vector addition.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">+=</span><span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">(0.7000, 1.2500, -1.3000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__idiv__">
+<tt class="descname">__idiv__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__idiv__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__idiv__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inline division with scalar</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">/=</span><span class="mf">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">(0.5000, 0.2500, -0.9000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__imod__">
+<tt class="descname">__imod__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__imod__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__imod__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inline modulo</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">%=</span><span class="mf">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">(1.0000, 0.5000, 0.2000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__imul__">
+<tt class="descname">__imul__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__imul__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__imul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inline multiplication (only with scalar)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">*=</span><span class="mf">2.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">(2.0000, 1.0000, -3.6000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
+<p>There are several possibilities how to initialize a vector:</p>
+<p>v = vec3()       -&gt; v = &lt;0,0,0&gt;
+v = vec3(a)      -&gt; v = &lt;a,a,a&gt;
+v = vec3(x,y)    -&gt; v = &lt;x,y,0&gt;
+v = vec3(x,y,z)  -&gt; v = &lt;x,y,z&gt;</p>
+<p>Note that specifying just one value sets all three components to
+that value (except when that single value is a another vec3, then
+that vector is copied).</p>
+<p>Additionally you can wrap those values in a list or a tuple or
+specify them as a string:</p>
+<p>v = vec3([1,2,3]) -&gt; v = &lt;1,2,3&gt;
+v = vec3(&#8220;4,5&#8221;)   -&gt; v = &lt;4,5,0&gt;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__isub__">
+<tt class="descname">__isub__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__isub__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__isub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inline vector subtraction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">-=</span><span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">(1.3000, -0.2500, -2.3000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__len__">
+<tt class="descname">__len__</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__len__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__len__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of the sequence (always 3)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__mod__">
+<tt class="descname">__mod__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__mod__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__mod__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modulo (component wise)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">%</span><span class="mf">2.0</span>
+<span class="go">(1.0000, 0.5000, 0.2000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__mul__">
+<tt class="descname">__mul__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__mul__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiplication with a scalar or dot product.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">*</span><span class="mf">2.0</span>
+<span class="go">(2.0000, 1.0000, -3.6000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">a</span>
+<span class="go">(2.0000, 1.0000, -3.6000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span>
+<span class="go">-0.825</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__ne__">
+<tt class="descname">__ne__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__ne__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>!= operator</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">!=</span><span class="n">b</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">b</span><span class="o">!=</span><span class="n">c</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">!=</span><span class="bp">None</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__neg__">
+<tt class="descname">__neg__</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__neg__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__neg__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Negation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="o">-</span><span class="n">a</span>
+<span class="go">(-3.0000, -2.5000, 1.8000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__pos__">
+<tt class="descname">__pos__</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__pos__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__pos__" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="o">+</span><span class="n">a</span>
+<span class="go">(3.0000, 2.5000, -1.8000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__rmul__">
+<tt class="descname">__rmul__</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__rmul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiplication with a scalar or dot product.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">*</span><span class="mf">2.0</span>
+<span class="go">(2.0000, 1.0000, -3.6000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">a</span>
+<span class="go">(2.0000, 1.0000, -3.6000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span>
+<span class="go">-0.825</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__setitem__">
+<tt class="descname">__setitem__</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__setitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a component by index (0-based)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mf">1.5</span><span class="p">;</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mf">0.7</span><span class="p">;</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=-</span><span class="mf">0.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">(1.5000, 0.7000, -0.3000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.__sub__">
+<tt class="descname">__sub__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.__sub__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.__sub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector subtraction.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span>
+<span class="go">(1.3000, -0.2500, -2.3000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.angle">
+<tt class="descname">angle</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return angle (in radians) between self and other.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="go">1.99306755584</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.cross">
+<tt class="descname">cross</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.cross"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.cross" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross product.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">c</span>
+<span class="go">(1.6000, 0.0400, 0.9000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.length">
+<tt class="descname">length</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the length of the vector.</p>
+<p>v.length() is equivalent to abs(v).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+<span class="go">2.11896201004</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.normalize">
+<tt class="descname">normalize</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return normalized vector.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="go">(0.4719, 0.2360, -0.8495)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.ortho">
+<tt class="descname">ortho</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.ortho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.ortho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an orthogonal vector.</p>
+<p>Returns a vector that is orthogonal to self (where
+self*self.ortho()==0).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">round</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">ortho</span><span class="p">(),</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.reflect">
+<tt class="descname">reflect</tt><big>(</big><em>N</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.reflect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.reflect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the reflection vector.</p>
+<p>N is the surface normal which has to be of unit length.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">.</span><span class="n">reflect</span><span class="p">(</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">(2.6000, 0.5000, -0.2000)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.vec3.vec3.refract">
+<tt class="descname">refract</tt><big>(</big><em>N</em>, <em>eta</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/vec3.html#vec3.refract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.vec3.vec3.refract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the transmitted vector.</p>
+<p>N is the surface normal which has to be of unit length.
+eta is the relative index of refraction. If the returned
+vector is zero then there is no transmitted light because
+of total internal reflection.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">=</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span><span class="o">.</span><span class="n">refract</span><span class="p">(</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mf">1.33</span><span class="p">)</span>
+<span class="go">(1.3300, -1.7920, 1.0640)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
 
           </div>
         </div>
@@ -95,38 +441,16 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="mobility.transit.world2.html" title="&lt;no title&gt;"
-             >next</a></li>
-        <li class="right" >
-          <a href="mobility.transit.steeringbehavior2.html" title="Steering Behavior"
-             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="index.html" >User references</a> &raquo;</li>
-          <li><a href="mobility.html" >mobility</a> &raquo;</li> 
+ 
       </ul>
     </div>
-
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-34943220-1']);
-  _gaq.push(['_setDomainName', 'pylayers.github.io']);
-  _gaq.push(['_setAllowLinker', true]);
-  _gaq.push(['_trackPageview']);
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })(); 
-</script> 
- 
   </body>
 </html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Steering behavior &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="steering-behavior">
+<span id="steeringbehavior"></span><h1>Steering behavior<a class="headerlink" href="#steering-behavior" title="Permalink to this headline">¶</a></h1>
+<dl class="attribute">
+<dt id="pylayers.mobility.transit.SteeringBehavior">
+<tt class="descclassname">pylayers.mobility.transit.</tt><tt class="descname">SteeringBehavior</tt><a class="headerlink" href="#pylayers.mobility.transit.SteeringBehavior" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#module-pylayers.mobility.transit.SteeringBehavior" title="pylayers.mobility.transit.SteeringBehavior"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.mobility.transit.SteeringBehavior</span></tt></a></p>
+</dd></dl>
+
+<span class="target" id="module-pylayers.mobility.transit.SteeringBehavior"></span><p>This module is based on Steering Behaviors for Autonomous Characters
+created by Craig Reynolds and expanded upon by many.</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.red3d.com/cwr/steer/">http://www.red3d.com/cwr/steer/</a></p>
+<p><a class="reference external" href="http://www.red3d.com/cwr/papers/1999/gdc99steer.html">http://www.red3d.com/cwr/papers/1999/gdc99steer.html</a></p>
+<p><a class="reference external" href="http://opensteer.sourceforge.net/">http://opensteer.sourceforge.net/</a></p>
+<p><a class="reference external" href="http://www.steeringbehaviors.de/">http://www.steeringbehaviors.de/</a></p>
+</div></blockquote>
+<dl class="function">
+<dt id="pylayers.mobility.transit.SteeringBehavior.default_steering_mind">
+<tt class="descclassname">pylayers.mobility.transit.SteeringBehavior.</tt><tt class="descname">default_steering_mind</tt><big>(</big><em>boid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/SteeringBehavior.html#default_steering_mind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.SteeringBehavior.default_steering_mind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple sum of all steering vectors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.mobility.transit.SteeringBehavior.queue_steering_mind">
+<tt class="descclassname">pylayers.mobility.transit.SteeringBehavior.</tt><tt class="descname">queue_steering_mind</tt><big>(</big><em>boid</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/SteeringBehavior.html#queue_steering_mind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.SteeringBehavior.queue_steering_mind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sum of all steering vectors, except Separation in some cases.</p>
+<p>The Separation steering vector will be ignored if any prior
+steering behavior gave a non-zero acceleration, typically
+Containment.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

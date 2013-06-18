@@ -1,0 +1,618 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.mobility.transit.vec3 &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../../index.html" />
+    <link rel="up" title="pylayers.mobility.transit" href="../transit.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../../index.html"><img src="../../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../transit.html" accesskey="U">pylayers.mobility.transit</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.mobility.transit.vec3</h1><div class="highlight"><pre>
+<span class="c">#####################################################################</span>
+<span class="c"># vec3 - 3-dimensional vector</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2002, Matthias Baas (baas@ira.uka.de)</span>
+<span class="c">#</span>
+<span class="c"># You may distribute under the terms of the BSD license, as</span>
+<span class="c"># specified in the file license.txt.</span>
+<span class="c">####################################################################</span>
+
+<span class="kn">import</span> <span class="nn">types</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">copy</span>
+
+<span class="c"># vec3</span>
+<div class="viewcode-block" id="vec3"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3">[docs]</a><span class="k">class</span> <span class="nc">vec3</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Three-dimensional vector.</span>
+
+<span class="sd">    This class can be used to represent points, vectors, normals</span>
+<span class="sd">    or even colors. The usual vector operations are available.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="vec3.__init__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor.</span>
+
+<span class="sd">        There are several possibilities how to initialize a vector:</span>
+
+<span class="sd">        v = vec3()       -&gt; v = &lt;0,0,0&gt;</span>
+<span class="sd">        v = vec3(a)      -&gt; v = &lt;a,a,a&gt;</span>
+<span class="sd">        v = vec3(x,y)    -&gt; v = &lt;x,y,0&gt;</span>
+<span class="sd">        v = vec3(x,y,z)  -&gt; v = &lt;x,y,z&gt;</span>
+
+<span class="sd">        Note that specifying just one value sets all three components to</span>
+<span class="sd">        that value (except when that single value is a another vec3, then</span>
+<span class="sd">        that vector is copied).</span>
+
+<span class="sd">        Additionally you can wrap those values in a list or a tuple or</span>
+<span class="sd">        specify them as a string:</span>
+
+<span class="sd">        v = vec3([1,2,3]) -&gt; v = &lt;1,2,3&gt;</span>
+<span class="sd">        v = vec3(&quot;4,5&quot;)   -&gt; v = &lt;4,5,0&gt;        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c"># scalar</span>
+            <span class="k">if</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">FloatType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c"># vec3  </span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vec3</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c"># Tuple/List</span>
+            <span class="k">elif</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">TupleType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">ListType</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">z</span>         <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;vec3() takes at most 3 arguments&quot;</span>
+            <span class="c"># String</span>
+            <span class="k">elif</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">StringType</span><span class="p">:</span>
+                <span class="n">s</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">,</span><span class="s">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;  &quot;</span><span class="p">,</span><span class="s">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">s</span><span class="o">==</span><span class="p">[</span><span class="s">&quot;&quot;</span><span class="p">]:</span>
+                    <span class="n">s</span><span class="o">=</span><span class="p">[]</span>
+                <span class="n">f</span><span class="o">=</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">s</span><span class="p">)</span>
+                <span class="n">dummy</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">dummy</span>
+            <span class="c"># error</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span><span class="s">&quot;vec3() arg can&#39;t be converted to vec3&quot;</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">)</span>
+            
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">args</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;vec3() takes at most 3 arguments&quot;</span>
+
+</div>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;vec3(&#39;</span><span class="o">+</span><span class="sb">`self.x`</span><span class="o">+</span><span class="s">&#39;, &#39;</span><span class="o">+</span><span class="sb">`self.y`</span><span class="o">+</span><span class="s">&#39;, &#39;</span><span class="o">+</span><span class="sb">`self.z`</span><span class="o">+</span><span class="s">&#39;)&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s">&quot;</span><span class="si">%1.4f</span><span class="s">&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;(&#39;</span><span class="o">+</span><span class="n">fmt</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="s">&#39;, &#39;</span><span class="o">+</span><span class="n">fmt</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="s">&#39;, &#39;</span><span class="o">+</span><span class="n">fmt</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">+</span><span class="s">&#39;)&#39;</span>
+
+
+<div class="viewcode-block" id="vec3.__eq__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;== operator</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; c=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; print a==b</span>
+<span class="sd">        0</span>
+<span class="sd">        &gt;&gt;&gt; print b==c</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; print a==None</span>
+<span class="sd">        0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">==</span><span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">==</span><span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">==</span><span class="n">other</span><span class="o">.</span><span class="n">z</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="vec3.__ne__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__ne__">[docs]</a>    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;!= operator</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; c=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; print a!=b</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; print b!=c</span>
+<span class="sd">        0</span>
+<span class="sd">        &gt;&gt;&gt; print a!=None</span>
+<span class="sd">        1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">!=</span><span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">!=</span><span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">!=</span><span class="n">other</span><span class="o">.</span><span class="n">z</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+</div>
+<div class="viewcode-block" id="vec3.__add__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Vector addition.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; print a+b</span>
+<span class="sd">        (0.7000, 1.2500, -1.3000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">+</span><span class="n">other</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for +&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__sub__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Vector subtraction.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; print a-b</span>
+<span class="sd">        (1.3000, -0.2500, -2.3000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">-</span><span class="n">other</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for -&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__mul__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__mul__">[docs]</a>    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Multiplication with a scalar or dot product.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; print a*2.0</span>
+<span class="sd">        (2.0000, 1.0000, -3.6000)</span>
+<span class="sd">        &gt;&gt;&gt; print 2.0*a</span>
+<span class="sd">        (2.0000, 1.0000, -3.6000)</span>
+<span class="sd">        &gt;&gt;&gt; print a*b</span>
+<span class="sd">        -0.825</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># vec3*scalar</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">FloatType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># vec3*vec3</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">z</span>
+        <span class="c"># unsupported</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Try to delegate the operation to the other operand</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="s">&quot;__rmul__&quot;</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span><span class="o">!=</span><span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">other</span><span class="o">.</span><span class="n">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for *&quot;</span>
+</div>
+    <span class="n">__rmul__</span> <span class="o">=</span> <span class="n">__mul__</span>
+
+<div class="viewcode-block" id="vec3.__div__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__div__">[docs]</a>    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Division by scalar</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print a/2.0</span>
+<span class="sd">        (0.5000, 0.2500, -0.9000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># vec3/scalar</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">FloatType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">/</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">/</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">/</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># unsupported</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for /&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__mod__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__mod__">[docs]</a>    <span class="k">def</span> <span class="nf">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Modulo (component wise)</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(3.0, 2.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print a%2.0</span>
+<span class="sd">        (1.0000, 0.5000, 0.2000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># vec3%scalar</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">FloatType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">%</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">%</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">%</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># unsupported</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for %&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__iadd__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__iadd__">[docs]</a>    <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inline vector addition.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; a+=b</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        (0.7000, 1.2500, -1.3000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">+=</span><span class="n">other</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">+=</span><span class="n">other</span><span class="o">.</span><span class="n">y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">+=</span><span class="n">other</span><span class="o">.</span><span class="n">z</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for +=&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__isub__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__isub__">[docs]</a>    <span class="k">def</span> <span class="nf">__isub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inline vector subtraction.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; a-=b</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        (1.3000, -0.2500, -2.3000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">-=</span><span class="n">other</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">-=</span><span class="n">other</span><span class="o">.</span><span class="n">y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">-=</span><span class="n">other</span><span class="o">.</span><span class="n">z</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for -=&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__imul__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__imul__">[docs]</a>    <span class="k">def</span> <span class="nf">__imul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inline multiplication (only with scalar)</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; a*=2.0</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        (2.0000, 1.0000, -3.6000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># vec3*=scalar</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">FloatType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*=</span><span class="n">other</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*=</span><span class="n">other</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*=</span><span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for *=&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__idiv__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__idiv__">[docs]</a>    <span class="k">def</span> <span class="nf">__idiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inline division with scalar</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; a/=2.0</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        (0.5000, 0.2500, -0.9000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># vec3/=scalar</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">FloatType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">/=</span><span class="n">other</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">/=</span><span class="n">other</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">/=</span><span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for /=&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__imod__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__imod__">[docs]</a>    <span class="k">def</span> <span class="nf">__imod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Inline modulo</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(3.0, 2.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; a%=2.0</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        (1.0000, 0.5000, 0.2000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="c"># vec3%=scalar</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">FloatType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">or</span> <span class="n">T</span><span class="o">==</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">%=</span><span class="n">other</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">%=</span><span class="n">other</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">%=</span><span class="n">other</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for %=&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__neg__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__neg__">[docs]</a>    <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Negation</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(3.0, 2.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print -a</span>
+<span class="sd">        (-3.0000, -2.5000, 1.8000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="vec3.__pos__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__pos__">[docs]</a>    <span class="k">def</span> <span class="nf">__pos__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &gt;&gt;&gt; a=vec3(3.0, 2.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print +a</span>
+<span class="sd">        (3.0000, 2.5000, -1.8000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="vec3.__abs__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__abs__">[docs]</a>    <span class="k">def</span> <span class="nf">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the length of the vector.</span>
+
+<span class="sd">        abs(v) is equivalent to v.length().</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print abs(a)</span>
+<span class="sd">        2.11896201004</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">*</span><span class="bp">self</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="vec3.__len__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Length of the sequence (always 3)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">3</span>
+</div>
+<div class="viewcode-block" id="vec3.__getitem__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a component by index (0-based)</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print a[0]</span>
+<span class="sd">        1.0</span>
+<span class="sd">        &gt;&gt;&gt; print a[1]</span>
+<span class="sd">        0.5</span>
+<span class="sd">        &gt;&gt;&gt; print a[2]</span>
+<span class="sd">        -1.8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">!=</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">and</span> <span class="n">T</span><span class="o">!=</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;index must be integer&quot;</span>
+
+        <span class="k">if</span>   <span class="n">key</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="k">elif</span> <span class="n">key</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">elif</span> <span class="n">key</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">,</span><span class="s">&quot;index out of range&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.__setitem__"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.__setitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set a component by index (0-based)</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3()</span>
+<span class="sd">        &gt;&gt;&gt; a[0]=1.5; a[1]=0.7; a[2]=-0.3</span>
+<span class="sd">        &gt;&gt;&gt; print a</span>
+<span class="sd">        (1.5000, 0.7000, -0.3000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">T</span><span class="o">=</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">T</span><span class="o">!=</span><span class="n">types</span><span class="o">.</span><span class="n">IntType</span> <span class="ow">and</span> <span class="n">T</span><span class="o">!=</span><span class="n">types</span><span class="o">.</span><span class="n">LongType</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;index must be integer&quot;</span>
+
+        <span class="k">if</span>   <span class="n">key</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">key</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">key</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">,</span><span class="s">&quot;index out of range&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.cross"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.cross">[docs]</a>    <span class="k">def</span> <span class="nf">cross</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cross product.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; c=a.cross(b)</span>
+<span class="sd">        &gt;&gt;&gt; print c</span>
+<span class="sd">        (1.6000, 0.0400, 0.9000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">z</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for cross()&quot;</span>
+        
+</div>
+<div class="viewcode-block" id="vec3.length"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.length">[docs]</a>    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the length of the vector.</span>
+
+<span class="sd">        v.length() is equivalent to abs(v).</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print a.length()</span>
+<span class="sd">        2.11896201004</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">*</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="vec3.normalize"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return normalized vector.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print a.normalize()</span>
+<span class="sd">        (0.4719, 0.2360, -0.8495)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">nlen</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">*</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="n">nlen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">nlen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="n">nlen</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="vec3.angle"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.angle">[docs]</a>    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return angle (in radians) between self and other.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; b=vec3(-0.3, 0.75, 0.5)</span>
+<span class="sd">        &gt;&gt;&gt; print a.angle(b)</span>
+<span class="sd">        1.99306755584</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">vec3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">acos</span><span class="p">((</span><span class="bp">self</span><span class="o">*</span><span class="n">other</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">other</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="s">&quot;unsupported operand type for angle()&quot;</span>
+</div>
+<div class="viewcode-block" id="vec3.reflect"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.reflect">[docs]</a>    <span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the reflection vector.</span>
+
+<span class="sd">        N is the surface normal which has to be of unit length.</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, 0.5, -1.8)</span>
+<span class="sd">        &gt;&gt;&gt; print a.reflect(vec3(1,0,1))</span>
+<span class="sd">        (2.6000, 0.5000, -0.2000)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">*</span><span class="n">N</span><span class="p">)</span><span class="o">*</span><span class="n">N</span>
+</div>
+<div class="viewcode-block" id="vec3.refract"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.refract">[docs]</a>    <span class="k">def</span> <span class="nf">refract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">eta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the transmitted vector.</span>
+
+<span class="sd">        N is the surface normal which has to be of unit length.</span>
+<span class="sd">        eta is the relative index of refraction. If the returned</span>
+<span class="sd">        vector is zero then there is no transmitted light because</span>
+<span class="sd">        of total internal reflection.</span>
+<span class="sd">        </span>
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, -1.5, 0.8)</span>
+<span class="sd">        &gt;&gt;&gt; print a.refract(vec3(0,1,0), 1.33)</span>
+<span class="sd">        (1.3300, -1.7920, 1.0640)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">*</span><span class="n">N</span>
+        <span class="n">k</span>   <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">eta</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">dot</span><span class="o">*</span><span class="n">dot</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">eta</span><span class="o">*</span><span class="bp">self</span> <span class="o">-</span> <span class="p">(</span><span class="n">eta</span><span class="o">*</span><span class="n">dot</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">))</span><span class="o">*</span><span class="n">N</span>
+</div>
+<div class="viewcode-block" id="vec3.ortho"><a class="viewcode-back" href="../../../../modules/mobility.transit.vec3.html#pylayers.mobility.transit.vec3.vec3.ortho">[docs]</a>    <span class="k">def</span> <span class="nf">ortho</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns an orthogonal vector.</span>
+
+<span class="sd">        Returns a vector that is orthogonal to self (where</span>
+<span class="sd">        self*self.ortho()==0).</span>
+
+<span class="sd">        &gt;&gt;&gt; a=vec3(1.0, -1.5, 0.8)</span>
+<span class="sd">        &gt;&gt;&gt; print round(a*a.ortho(),8)</span>
+<span class="sd">        0.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">x</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">z</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="c"># Is z the smallest element? Then use x and y</span>
+        <span class="k">if</span> <span class="n">z</span><span class="o">&lt;=</span><span class="n">x</span> <span class="ow">and</span> <span class="n">z</span><span class="o">&lt;=</span><span class="n">y</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="c"># Is y smallest element? Then use x and z</span>
+        <span class="k">elif</span> <span class="n">y</span><span class="o">&lt;=</span><span class="n">x</span> <span class="ow">and</span> <span class="n">y</span><span class="o">&lt;=</span><span class="n">z</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="c"># x is smallest</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        
+	</div>
+    <span class="k">def</span> <span class="nf">ang0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+	<span class="n">C</span>    <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+	<span class="k">except</span><span class="p">:</span> 
+		<span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span> <span class="nf">vquarter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+	<span class="n">a0</span> 	<span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">())</span>
+	<span class="n">a1</span> 	<span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">())</span>
+	<span class="n">a0</span><span class="o">.</span><span class="n">x</span>	<span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span><span class="o">+</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+	<span class="n">a1</span><span class="o">.</span><span class="n">x</span>	<span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+	<span class="n">a0</span><span class="o">.</span><span class="n">y</span>	<span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span><span class="o">+</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+	<span class="n">a1</span><span class="o">.</span><span class="n">y</span>	<span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+	<span class="k">return</span> <span class="p">[</span><span class="n">a0</span><span class="p">,</span><span class="bp">self</span><span class="p">,</span><span class="n">a1</span><span class="p">]</span>
+
+<span class="c">######################################################################</span></div>
+<span class="k">def</span> <span class="nf">_test</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">doctest</span><span class="o">,</span> <span class="nn">vec3</span>
+    <span class="n">failed</span><span class="p">,</span> <span class="n">total</span> <span class="o">=</span> <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">(</span><span class="n">vec3</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%d</span><span class="s">/</span><span class="si">%d</span><span class="s"> failed&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">failed</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">_test</span><span class="p">()</span>
+
+<span class="c">#    a = vec3(1,2,3.03)</span>
+<span class="c">#    b = vec3(&quot;-2,0.5,1E10&quot;)</span>
+
+<span class="c">#    print a.angle(b)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../transit.html" >pylayers.mobility.transit</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

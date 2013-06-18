@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>mobility.transit.SteeringBehavior &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for mobility.transit.SteeringBehavior</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">This module is based on Steering Behaviors for Autonomous Characters</span>
+<span class="sd">created by Craig Reynolds and expanded upon by many.</span>
+
+<span class="sd">    http://www.red3d.com/cwr/steer/</span>
+<span class="sd">    http://www.red3d.com/cwr/papers/1999/gdc99steer.html</span>
+<span class="sd">    http://opensteer.sourceforge.net/</span>
+<span class="sd">    http://www.steeringbehaviors.de/</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.World</span> <span class="kn">import</span> <span class="n">world</span>
+<span class="kn">from</span> <span class="nn">pylayers.mobility.transit.vec3</span> <span class="kn">import</span> <span class="n">vec3</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">uniform</span><span class="p">,</span><span class="n">gauss</span><span class="p">,</span><span class="n">randint</span>
+<span class="kn">import</span> <span class="nn">pdb</span> 
+
+
+<span class="k">class</span> <span class="nc">Seek</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">displacement</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">destination</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
+        <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
+        <span class="n">steering</span> <span class="o">=</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="k">if</span> <span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.15</span><span class="p">:</span>
+            <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">steering</span>
+
+<span class="k">class</span> <span class="nc">Arrive</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">current_speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">current_speed</span> <span class="o">&lt;</span> <span class="mf">0.0001</span><span class="p">:</span>
+            <span class="n">current_speed</span> <span class="o">=</span> <span class="mf">0.0001</span>
+        <span class="n">slowing_distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_speed</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_acceleration</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">current_speed</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">target_offset</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">destination</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">target_offset</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="n">ramped_speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span> <span class="o">*</span> <span class="p">(</span><span class="n">distance</span> <span class="o">/</span> <span class="n">slowing_distance</span><span class="p">)</span>
+        <span class="n">clipped_speed</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ramped_speed</span><span class="p">,</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span><span class="p">)</span>
+        <span class="n">desired_velocity</span> <span class="o">=</span> <span class="p">(</span><span class="n">clipped_speed</span> <span class="o">/</span> <span class="n">distance</span><span class="p">)</span> <span class="o">*</span> <span class="n">target_offset</span>
+        <span class="n">steering</span> <span class="o">=</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+        <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">boid</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span>
+            <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">steering</span>
+
+<span class="k">class</span> <span class="nc">Wander</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">wander_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="s">&#39;wander_value&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wander_value</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">wander_value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">wander_value</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">wander_value</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">boid</span><span class="o">.</span><span class="n">wander_value</span> <span class="o">=</span> <span class="n">wander_value</span>
+        <span class="n">desired_velocity</span> <span class="o">=</span> <span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">wander_value</span><span class="p">))</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
+        <span class="k">return</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+        
+
+<span class="k">class</span> <span class="nc">FollowWaypoints</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">waypoints</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">waypoints</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">waypoints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="n">vec3</span><span class="p">()</span>
+        <span class="n">displacement</span> <span class="o">=</span> <span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
+        <span class="k">if</span> <span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
+        <span class="k">return</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
+
+<span class="k">class</span> <span class="nc">Separation</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
+        <span class="n">others</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">boids</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">)</span>
+        <span class="n">separation_distance</span> <span class="o">=</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span>
+        <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">other</span> <span class="ow">in</span> <span class="n">others</span><span class="p">:</span>
+            <span class="n">local_position</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">to_local</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="n">in_front</span> <span class="o">=</span> <span class="n">local_position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">radius</span>
+            <span class="k">if</span> <span class="n">in_front</span> <span class="ow">and</span> <span class="n">local_position</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">separation_distance</span><span class="p">:</span>
+                <span class="n">separation</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
+                <span class="n">force</span> <span class="o">=</span> <span class="n">separation</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">separation</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="c"># create orthogonal vector in order to make boids avoidance</span>
+                <span class="n">force2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">**</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">force</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">force</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>
+<span class="c">#                force2 = vec3(-force[1],force[0],0)</span>
+                <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">force2</span>
+        <span class="k">return</span> <span class="n">acceleration</span>
+
+<span class="k">class</span> <span class="nc">Queuing</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
+        <span class="n">others</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">boids</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="n">local_front</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">other</span> <span class="ow">in</span> <span class="n">others</span><span class="p">:</span>
+            <span class="n">local_position</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">to_local</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">local_position</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">local_front</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">local_position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">angle</span> <span class="o">&lt;</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">speed</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">speed</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vec3</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">Containment</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
+        <span class="n">walls</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">obstacles</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
+        <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+        <span class="n">front_intersect</span> <span class="o">=</span> <span class="n">left_intersect</span> <span class="o">=</span> <span class="n">right_intersect</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">front_distance</span> <span class="o">=</span> <span class="n">left_distance</span> <span class="o">=</span> <span class="n">right_distance</span> <span class="o">=</span> <span class="mi">30000</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="n">front_check</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="n">speed</span> <span class="o">*</span> <span class="mf">0.5</span>
+        <span class="n">side_check</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="n">speed</span> <span class="o">*</span> <span class="mf">0.5</span>
+        <span class="n">front_test</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">front_check</span><span class="p">)</span>
+        <span class="n">left_test</span> <span class="o">=</span> <span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="p">)</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">side_check</span><span class="p">)</span>
+        <span class="n">right_test</span> <span class="o">=</span> <span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span> <span class="o">+</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="p">)</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">side_check</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
+        <span class="n">boid</span><span class="o">.</span><span class="n">intersection</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">checked</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">walls</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">checked</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="n">checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_intersection</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">front_test</span><span class="p">,</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;gauss&#39;</span><span class="p">)</span>
+<span class="c">#        if intersect:</span>
+<span class="c">#        pdb.set_trace()</span>
+            <span class="k">if</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_along_check</span> <span class="o">&lt;</span> <span class="n">front_distance</span><span class="p">:</span>
+                <span class="n">front_intersect</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">front_distance</span> <span class="o">=</span> <span class="n">distance_along_check</span>
+                <span class="n">front_direction</span> <span class="o">=</span> <span class="n">direction</span>
+            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_intersection</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">left_test</span><span class="p">,</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">front_intersect</span> <span class="ow">and</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_along_check</span> <span class="o">&lt;</span> <span class="n">left_distance</span><span class="p">:</span>
+                <span class="n">left_intersect</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">left_distance</span> <span class="o">=</span> <span class="n">distance_along_check</span>
+                <span class="n">left_direction</span> <span class="o">=</span> <span class="n">direction</span>
+            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_intersection</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">right_test</span><span class="p">,</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">front_intersect</span> <span class="ow">and</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_along_check</span> <span class="o">&lt;</span> <span class="n">right_distance</span><span class="p">:</span>
+                <span class="n">right_intersect</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">right_distance</span> <span class="o">=</span> <span class="n">distance_along_check</span>
+                <span class="n">right_direction</span> <span class="o">=</span> <span class="n">direction</span>
+            <span class="k">if</span> <span class="n">front_intersect</span> <span class="ow">or</span> <span class="n">left_intersect</span> <span class="ow">or</span> <span class="n">right_intersect</span> <span class="p">:</span>
+                <span class="k">break</span>
+    
+    
+<span class="c">#    print speed</span>
+<span class="c">#    # parabolic speed </span>
+        <span class="n">d_no_influ</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c"># m</span>
+        <span class="n">repuls</span>     <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="c">#/ boid.max_speed</span>
+<span class="c">#        speed = (repuls/(d_no_influ**2)*min(distance_along_check,d_no_influ)**2 - 2*repuls/(d_no_influ)*min(distance_along_check,d_no_influ) + repuls) #/ boid.max_speed</span>
+<span class="c">#        speed = max (1.2*boid.max_speed, 1.0/(sqrt(2*pi*d_no_influ**2))*exp(-repuls**2/(2**d_no_influ**2)))</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="nb">max</span> <span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span><span class="p">,</span> <span class="mf">3.0</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0001</span><span class="p">,(</span><span class="mf">1.</span><span class="o">*</span><span class="n">repuls</span><span class="p">)))</span>
+       <span class="c"># speed = boid.velocity.length() / boid.max_speed # ORIGINAL CODE</span>
+        <span class="k">if</span> <span class="n">front_intersect</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">front_direction</span> <span class="o">==</span> <span class="s">&#39;left&#39;</span><span class="p">:</span>
+                <span class="n">acceleration</span> <span class="o">=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span> 
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">acceleration</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span> 
+        <span class="k">elif</span> <span class="n">left_intersect</span><span class="p">:</span>
+            <span class="n">acceleration</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">right_intersect</span><span class="p">:</span>
+            <span class="n">acceleration</span> <span class="o">=</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">acceleration</span>
+
+
+<span class="c">#    def test_intersection(self, boid, wall, position, vector):</span>
+<span class="c">#        # From http://astronomy.swin.edu.au/~pbourke/geometry/lineline2d/</span>
+<span class="c">#        point1, point2 = wall</span>
+<span class="c">#        denominator = ((vector.y * (point2[0] - point1[0]))</span>
+<span class="c">#                       - (vector.x * (point2[1] - point1[1])))</span>
+<span class="c">#        if denominator == 0.0:</span>
+<span class="c">#            # parallel or coincident</span>
+<span class="c">#             return False, None, None</span>
+<span class="c">#        u_a = (vector.x * (point1[1] - position.y)</span>
+<span class="c">#               - (vector.y) * (point1[0] - position.x)) / denominator</span>
+<span class="c">#        u_b = ((point2[0] - point1[0]) * (point1[1] - position.y)</span>
+<span class="c">#               - (point2[1] - point1[1]) * (point1[0] - position.x)) / denominator</span>
+<span class="c">#        intersect = 0.0 &lt; u_a &lt; 1.0 and 0.0 &lt; u_b &lt; 1.0</span>
+<span class="c">#        if intersect:</span>
+<span class="c">#            intersection = vec3(point1[0] + u_a * (point2[0] - point1[0]),</span>
+<span class="c">#                                point1[1] + u_a * (point2[1] - point1[1]))</span>
+<span class="c">#            boid.intersection = intersection</span>
+<span class="c">#            distance_along_check = u_b</span>
+<span class="c">#            wall_vector = vec3(point1) - vec3(point2)</span>
+<span class="c">#            wall_vector_normal = vec3(-wall_vector.y, wall_vector.x).normalize()</span>
+<span class="c">#            boid.intersection_normal = wall_vector_normal</span>
+<span class="c">#            normal_point = intersection + wall_vector_normal</span>
+<span class="c">#            local_normal_point = boid.world.to_local(boid, normal_point)</span>
+<span class="c">#            if local_normal_point.x &lt;= 0.0:</span>
+<span class="c">#                direction = &#39;left&#39;</span>
+<span class="c">#            else:</span>
+<span class="c">#                direction = &#39;right&#39;</span>
+<span class="c">#            return True, distance_along_check, direction</span>
+<span class="c">#        else:</span>
+<span class="c">#            return False, None, None</span>
+
+    <span class="k">def</span> <span class="nf">test_intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">):</span>
+        <span class="c"># From http://astronomy.swin.edu.au/~pbourke/geometry/lineline2d/</span>
+        <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span> <span class="o">=</span> <span class="n">wall</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;direct&#39;</span><span class="p">:</span>
+            <span class="n">VR</span><span class="o">=</span><span class="n">vector</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;uniform&#39;</span><span class="p">:</span>
+    <span class="c">######## version uniform</span>
+            <span class="n">r</span><span class="o">=</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">pi</span><span class="o">/</span><span class="mf">12.0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mf">12.0</span><span class="p">)</span>
+            <span class="n">v0</span><span class="o">=</span><span class="n">vector</span><span class="o">.</span><span class="n">ang0</span><span class="p">()</span>
+            <span class="n">vl</span><span class="o">=</span><span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+            <span class="n">VR</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">v0</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">sin</span><span class="p">(</span><span class="n">v0</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">vector</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;gauss&#39;</span><span class="p">:</span>
+    <span class="c">######## version gaussienne</span>
+            <span class="n">vl</span><span class="o">=</span><span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+            <span class="n">r</span><span class="o">=</span><span class="n">gauss</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">ang0</span><span class="p">(),</span><span class="n">pi</span><span class="o">/</span><span class="mf">12.0</span><span class="p">)</span>
+            <span class="n">VR</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">sin</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">vl</span><span class="p">,</span><span class="n">vector</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;ellipse&#39;</span><span class="p">:</span>
+    <span class="c">######## version ellipse</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">ang0</span><span class="p">(),</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mf">6.0</span><span class="p">))</span> <span class="c"># random angle to test</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>                 <span class="c"># create an elipse... </span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">/</span><span class="mf">1.5</span>                            <span class="c"># ...to test  collision if b=a/1. ellipse =circle</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="n">a</span>             <span class="c"># ...</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="n">e</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>     <span class="c"># ....</span>
+            <span class="n">VR</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="p">,</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="p">,</span><span class="n">vector</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="p">((</span><span class="n">VR</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="n">point2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="o">-</span> <span class="p">(</span><span class="n">VR</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">point2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="k">if</span> <span class="n">denominator</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="c"># parallel or coincident</span>
+            <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">None</span>
+        <span class="n">u_a</span> <span class="o">=</span> <span class="p">(</span><span class="n">VR</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+               <span class="o">-</span> <span class="p">(</span><span class="n">VR</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="n">denominator</span>
+        <span class="n">u_b</span> <span class="o">=</span> <span class="p">((</span><span class="n">point2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+               <span class="o">-</span> <span class="p">(</span><span class="n">point2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="n">denominator</span>
+        <span class="n">intersect</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">u_a</span> <span class="o">&lt;</span> <span class="mf">1.0</span> <span class="ow">and</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">u_b</span> <span class="o">&lt;</span> <span class="mf">1.0</span>
+        <span class="k">if</span> <span class="n">intersect</span><span class="p">:</span>
+            <span class="n">intersection</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">u_a</span> <span class="o">*</span> <span class="p">(</span><span class="n">point2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">point1</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                <span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">u_a</span> <span class="o">*</span> <span class="p">(</span><span class="n">point2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">point1</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">boid</span><span class="o">.</span><span class="n">intersection</span> <span class="o">=</span> <span class="n">intersection</span>
+            <span class="n">distance_along_check</span> <span class="o">=</span> <span class="n">u_b</span>
+            <span class="n">wall_VR</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="n">point1</span><span class="p">)</span> <span class="o">-</span> <span class="n">vec3</span><span class="p">(</span><span class="n">point2</span><span class="p">)</span>
+            <span class="n">wall_VR_normal</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">wall_VR</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">wall_VR</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+            <span class="n">boid</span><span class="o">.</span><span class="n">intersection_normal</span> <span class="o">=</span> <span class="n">wall_VR_normal</span>
+            <span class="n">normal_point</span> <span class="o">=</span> <span class="n">intersection</span> <span class="o">+</span> <span class="n">wall_VR_normal</span>
+            <span class="n">local_normal_point</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">to_local</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="n">normal_point</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">local_normal_point</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="s">&#39;left&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="s">&#39;right&#39;</span>
+            <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">None</span>
+   
+<span class="k">class</span> <span class="nc">InterpenetrationConstraint</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+        <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">radius</span>
+        <span class="k">for</span> <span class="n">other</span> <span class="ow">in</span> <span class="n">the_world</span><span class="o">.</span><span class="n">boids</span><span class="p">(</span><span class="n">boid</span><span class="p">):</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">position</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">offset</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+            <span class="n">radius_ij</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">radius</span>
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">radius_ij</span><span class="p">:</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">radius_ij</span> <span class="o">-</span> <span class="n">distance</span><span class="p">)</span>
+                <span class="n">boid</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">offset</span>
+        <span class="n">wall_found</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">checked</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">obstacle</span> <span class="ow">in</span> <span class="n">the_world</span><span class="o">.</span><span class="n">obstacles</span><span class="p">(</span><span class="n">boid</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">obstacle</span> <span class="ow">in</span> <span class="n">checked</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="n">checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obstacle</span><span class="p">)</span>
+            <span class="n">intersect</span><span class="p">,</span> <span class="n">distance_to_line</span><span class="p">,</span> <span class="n">normal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_from_line</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">obstacle</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">intersect</span> <span class="ow">and</span> <span class="n">distance_to_line</span> <span class="o">&lt;</span> <span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">:</span>
+                <span class="n">wall_found</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="n">normal</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">-</span> <span class="n">distance_to_line</span><span class="p">)</span>
+                <span class="n">boid</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">normal</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">wall_found</span><span class="p">:</span>
+            <span class="n">checked</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">obstacle</span> <span class="ow">in</span> <span class="n">the_world</span><span class="o">.</span><span class="n">obstacles</span><span class="p">(</span><span class="n">boid</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">obstacle</span> <span class="ow">in</span> <span class="n">checked</span><span class="p">:</span> <span class="k">continue</span>
+                <span class="n">checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obstacle</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="p">(</span><span class="n">obstacle</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">obstacle</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">offset</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="n">vec3</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+                    <span class="n">distance</span> <span class="o">=</span> <span class="n">offset</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">:</span>
+                        <span class="n">boid</span><span class="o">.</span><span class="n">position</span> <span class="o">+=</span> <span class="n">offset</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">-</span> <span class="n">distance</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">vec3</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">distance_from_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="n">line_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">vec3</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">vec3</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+             <span class="o">+</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span> \
+            <span class="o">/</span> <span class="n">line_length</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="mf">0.0</span> <span class="o">&lt;</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="c"># point is tangent to line</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">vector</span> <span class="o">=</span> <span class="n">position</span> <span class="o">-</span> <span class="n">vec3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">vector</span>
+        <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="default_steering_mind"><a class="viewcode-back" href="../../../modules/mobility.transit.steeringbehavior.html#mobility.transit.SteeringBehavior.default_steering_mind">[docs]</a><span class="k">def</span> <span class="nf">default_steering_mind</span><span class="p">(</span><span class="n">boid</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simple sum of all steering vectors.&quot;&quot;&quot;</span>
+    <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">behavior</span> <span class="ow">in</span> <span class="n">boid</span><span class="o">.</span><span class="n">behaviors</span><span class="p">:</span>
+        <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">behavior</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">acceleration</span>
+</div>
+<div class="viewcode-block" id="queue_steering_mind"><a class="viewcode-back" href="../../../modules/mobility.transit.steeringbehavior.html#mobility.transit.SteeringBehavior.queue_steering_mind">[docs]</a><span class="k">def</span> <span class="nf">queue_steering_mind</span><span class="p">(</span><span class="n">boid</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sum of all steering vectors, except Separation in some cases.</span>
+
+<span class="sd">    The Separation steering vector will be ignored if any prior</span>
+<span class="sd">    steering behavior gave a non-zero acceleration, typically</span>
+<span class="sd">    Containment.&quot;&quot;&quot;</span>
+
+    <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">behavior</span> <span class="ow">in</span> <span class="n">boid</span><span class="o">.</span><span class="n">behaviors</span><span class="p">:</span>
+<span class="c">#        if not isinstance(behavior, Separation) or acceleration.length() &lt; 0.0001:</span>
+         <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">behavior</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">acceleration</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>
