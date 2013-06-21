@@ -45,7 +45,7 @@ class Rays(dict):
     It is a container for a set of rays between a source 
     and a target point defining a radio link.
 
-    Once Rays object has been obtained in 2D, it is transform 
+    Once a Rays object has been obtained in 2D, it is transform 
     in 3D via the **to3D** method. This method has two parameters : 
     the height from floor to ceil, and the number N of 
     multiple reflections to take into account. 
@@ -55,7 +55,7 @@ class Rays(dict):
     done through the **locbas** method
 
     Once the local basis have been calculated the different
-    interaction along rays can be informed via the **fillinter**
+    interactions along rays can be informed via the **fillinter**
     method.
 
     Once the interaction are informed the field along rays can 
