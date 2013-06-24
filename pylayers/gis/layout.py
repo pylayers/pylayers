@@ -486,12 +486,7 @@ class Layout(object):
         """
         self.filename = _fileosm
         fileosm = pyu.getlong(_fileosm,'struc')
-        pdb.set_trace()
         coords,nodes,ways,relations = osm.osmparse(fileosm,typ='floorplan')
-        self.Gs = nx.Graph()
-        self.Gs.pos = {}
-        self.labels = {}
-
         nn  = 0
         ne = 0 
         nss  = 0 
@@ -533,7 +528,10 @@ class Layout(object):
         self.Nn = nn
         self.Ne = ne
         self.Nss = nss
-
+        #del coords
+        #del nodes
+        #del ways
+        #del relations
         # convert graph Gs to numpy arrays for speed up post processing
         self.g2npy()
 

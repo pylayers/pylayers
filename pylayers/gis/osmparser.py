@@ -43,13 +43,29 @@ class Way(object):
 class Coords(object):
     """
     """
-    latlon = {}
     cpt = 0
-    xy ={}
+    latlon = {}
+    xy = {}
     minlon = 1000
     maxlon = -1000
     minlat = 1000
     maxlat = -1000
+
+    def __repr__(self):
+        st = ''
+        for k in self.xy:
+            st = st + str(k)+ ':' + str(self.xy[k])+'\n' 
+        st = st+ 'Ncoords = '+ str(len(self.xy))+'\n'
+        return(st)
+
+    def clean(self):
+        self.cpt = 0 
+        self.latlon={}
+        self.xy = {}
+        self.minlon =1000
+        self.maxlon =-1000
+        self.minlat =1000
+        self.maxlat =-1000
 
     def coords(self, coords):
         # callback method for coords
@@ -97,6 +113,10 @@ class Nodes(object):
             lat = coords[1]
             self.cpt += 1
 
+    def clean(self):       
+        self.node= {}
+        self.cpt = 0
+
 class Ways(object):
     """
 
@@ -122,6 +142,11 @@ class Ways(object):
         for osmid, tags, refs in ways:
                 self.w[osmid] = (refs,tags)
                 self.cpt += 1
+
+    def clean(self):
+        self.w = {}
+        self.way = {}
+        self.cpt = 0
 
     def building(self, ways):
         """ 
@@ -175,7 +200,6 @@ class Ways(object):
             tags  = self.way[b].tags
             if ('building' in tags) | ('buildingpart' in tags):
                 print "buildingpart found"
-                pdb.set_trace()
                 try:
                     poly  = self.way[b].shp
                     if 'building:roof:colour' in tags:
@@ -197,6 +221,9 @@ class Relations(object):
                 self.relation[osmid]['tags']=tags
                 self.relation[osmid]['members']=member
                 self.cpt = self.cpt+1
+    def clean(self):       
+        self.relation= {}
+        self.cpt = 0
 
 class FloorPlan(nx.DiGraph):
     """
@@ -288,12 +315,25 @@ def osmparse(filename,typ='floorplan',verbose=False):
         floorplan | building 
     verbose : boolean
         default : False
+
+    Returns
+    -------
+
+    coords : 
+    nodes  : 
+    ways   : 
+    relations :
+
     """
     
     coords = Coords()
+    coords.clean()
     nodes = Nodes()
+    nodes.clean()
     ways = Ways()
+    ways.clean()
     relations = Relations()
+    relations.clean()
 
     coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
     nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
