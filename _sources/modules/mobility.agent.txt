@@ -1,9 +1,10 @@
 .. _agent:
 
-.. autoclass:: pylayers.mobility.agent
-   :members:
-   :special-members:
+agent
+=====
+
 
 .. automodule:: pylayers.mobility.agent
    :members:
+   :special-members:
 

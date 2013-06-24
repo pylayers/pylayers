@@ -23,7 +23,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="next" title="gis" href="gis.html" />
+    <link rel="prev" title="Class Polygon" href="../notebooks/DOC-geomutil.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,8 +39,14 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="gis.html" title="gis"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../notebooks/DOC-geomutil.html" title="Class Polygon"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
  
@@ -47,6 +55,12 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../notebooks/DOC-geomutil.html"
+                        title="previous chapter">Class Polygon</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gis.html"
+                        title="next chapter">gis</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -76,14 +90,13 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body"></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">June 18, 2013</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">June 21, 2013</td>
 </tr>
 </tbody>
 </table>
 <span class="target" id="module-pylayers"></span><p>This reference manual details functions, modules, and objects
 included in PyLayers, describing what they are and what they do.</p>
-<p>This documentation is generated automatically from the source code.
-All the functions are not properly documented and described yet.</p>
+<p>This documentation is generated automatically from the source code.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="gis.html">gis</a><ul>
@@ -111,11 +124,11 @@ All the functions are not properly documented and described yet.</p>
 <li class="toctree-l1"><a class="reference internal" href="network.html">network</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="network.emsolver.html">emsolver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network.model.html">model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network.show.html">emsolver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network.network.html">network</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="simul.html">simul</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simul.radionode.html">radionode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simul.simulem.html">simulem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simul.simulnet.html">simulinet</a></li>
 </ul>
@@ -128,18 +141,18 @@ All the functions are not properly documented and described yet.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mobility.html">mobility</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mobility.transit.person.html">agent</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mobility.transit.steeringbehavior.html">Steering behavior</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mobility.transit.vec3.html">vec3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mobility.transit.world.html">World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mobility.agent.html">agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mobility.transit.person3.html">Person3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mobility.transit.steeringbehavior2.html">Steering Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mobility.transit.Zones.html">Zones</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">util</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="util.geomutil.html">geomutil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.graphutil.html">graphutil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.project.html">project</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.pymysqldb.html">pymysqldb</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util.utilnet.html">utilnet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#geometrical-utility-functions">geometrical utility functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#graph-utility-functions">graph utility functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#handling-project-directory">Handling project directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#network-utilty-function">Network utilty function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#various-utility-function">Various utility function</a></li>
 </ul>
 </li>
 </ul>
@@ -155,16 +168,36 @@ All the functions are not properly documented and described yet.</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="gis.html" title="gis"
+             >next</a></li>
+        <li class="right" >
+          <a href="../notebooks/DOC-geomutil.html" title="Class Polygon"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
  
       </ul>
     </div>
+
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
   </body>
 </html>

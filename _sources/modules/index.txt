@@ -13,13 +13,12 @@ This reference manual details functions, modules, and objects
 included in PyLayers, describing what they are and what they do. 
 
 This documentation is generated automatically from the source code. 
-All the functions are not properly documented and described yet. 
 
 
 .. toctree::
    :maxdepth: 2
-
-   gis.rst
+    
+   gis.rst 
 
    antprop.rst
 
@@ -34,5 +33,4 @@ All the functions are not properly documented and described yet.
    mobility.rst
 
    util.rst 
-
 

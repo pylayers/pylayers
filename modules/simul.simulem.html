@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="simul" href="simul.html" />
+    <link rel="next" title="simulinet" href="simul.simulnet.html" />
+    <link rel="prev" title="radionode" href="simul.radionode.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,16 +40,30 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="simul.simulnet.html" title="simulinet"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="simul.radionode.html" title="radionode"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="simul.html" accesskey="U">simul</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="simul.radionode.html"
+                        title="previous chapter">radionode</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="simul.simulnet.html"
+                        title="next chapter">simulinet</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -529,10 +546,18 @@ o : omnidirectionnal</p>
 <tt class="descname">freq</tt><big>(</big><em>GUI=False</em><big>)</big><a class="reference internal" href="../_modules/simul/simulem.html#Simul.freq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulem.Simul.freq" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div>return the frequency base from the content of filefreq</div></blockquote>
-<dl class="docutils">
-<dt>GUI</dt>
-<dd>Boolean</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>GUI</strong> :</p>
+<blockquote class="last">
+<div><p>Boolean</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -745,6 +770,27 @@ noise : boolean</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="simul.simulem.Simul.run2">
+<tt class="descname">run2</tt><big>(</big><em>link</em>, <em>cirforce=True</em>, <em>verbose=False</em>, <em>cutoff=4</em><big>)</big><a class="reference internal" href="../_modules/simul/simulem.html#Simul.run2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulem.Simul.run2" title="Permalink to this definition">¶</a></dt>
+<dd><p>run the simulation for 1 tx and a set of rx</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>itx</strong> : tx index</p>
+<p><strong>srx</strong> : list of rx index</p>
+<p class="last"><strong>cirforce</strong> : boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">index point start with 1</p>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="simul.simulem.Simul.save">
 <tt class="descname">save</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/simul/simulem.html#Simul.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulem.Simul.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>save simulation file</p>
@@ -762,7 +808,7 @@ directory basename/ini in the Project tree</p>
 
 <dl class="method">
 <dt id="simul.simulem.Simul.scatter">
-<tt class="descname">scatter</tt><big>(</big><em>itx</em>, <em>irx</em>, <em>values</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x3cdc750&gt;</em>, <em>s=30</em>, <em>spl=221</em>, <em>title=''</em>, <em>vaxis=(-30</em>, <em>10</em>, <em>2</em>, <em>18)</em>, <em>vmin=0</em>, <em>vmax=1</em>, <em>colbool=False</em>, <em>cblabel='dB'</em><big>)</big><a class="reference internal" href="../_modules/simul/simulem.html#Simul.scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulem.Simul.scatter" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">scatter</tt><big>(</big><em>itx</em>, <em>irx</em>, <em>values</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x4464b10&gt;</em>, <em>s=30</em>, <em>spl=221</em>, <em>title=''</em>, <em>vaxis=(-30</em>, <em>10</em>, <em>2</em>, <em>18)</em>, <em>vmin=0</em>, <em>vmax=1</em>, <em>colbool=False</em>, <em>cblabel='dB'</em><big>)</big><a class="reference internal" href="../_modules/simul/simulem.html#Simul.scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.simulem.Simul.scatter" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -976,16 +1022,38 @@ rep : directory</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="simul.simulnet.html" title="simulinet"
+             >next</a></li>
+        <li class="right" >
+          <a href="simul.radionode.html" title="radionode"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../documentation.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="simul.html" >simul</a> &raquo;</li> 
       </ul>
     </div>
+
     <div class="footer">
         &copy; Copyright 2013, PyLayers developer team.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
   </body>
 </html>

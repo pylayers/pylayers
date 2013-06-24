@@ -4,7 +4,7 @@
 antprop
 =======
 
-Thi module contains all the classes and functions related to antennas and
+This module contains all the classes and functions related to antennas and
 propagation channel description. 
 
 .. module:: pylayers.antprop
