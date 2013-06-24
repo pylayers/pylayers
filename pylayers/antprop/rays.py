@@ -45,7 +45,7 @@ class Rays(dict):
     It is a container for a set of rays between a source 
     and a target point defining a radio link.
 
-    Once Rays object has been obtained in 2D, it is transform 
+    Once a Rays object has been obtained in 2D, it is transform 
     in 3D via the **to3D** method. This method has two parameters : 
     the height from floor to ceil, and the number N of 
     multiple reflections to take into account. 
@@ -55,7 +55,7 @@ class Rays(dict):
     done through the **locbas** method
 
     Once the local basis have been calculated the different
-    interaction along rays can be informed via the **fillinter**
+    interactions along rays can be informed via the **fillinter**
     method.
 
     Once the interaction are informed the field along rays can 
@@ -194,10 +194,10 @@ class Rays(dict):
         for i in self:
             pts = self[i]['pt'][0:2, :, :]
             sig = self[i]['sig']
-            t = self.pTx[0:2].reshape((
-                2, 1, 1)) * np.ones((1, 1, len(pts[0, 0, :])))
-            r = self.pRx[0:2].reshape((
-                2, 1, 1)) * np.ones((1, 1, len(pts[0, 0, :])))
+            t = self.pTx[0:2].reshape((2, 1, 1)) * \
+                    np.ones((1, 1, len(pts[0, 0, :])))
+            r = self.pRx[0:2].reshape((2, 1, 1)) * \
+                    np.ones((1, 1, len(pts[0, 0, :])))
             pts1 = np.hstack((t, np.hstack((pts, r))))
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             si = np.sqrt(np.sum(si1 * si1, axis=0))
@@ -205,10 +205,10 @@ class Rays(dict):
             self[i]['alpha'] = np.zeros(np.shape(si[:-1, :]))
 
             for j in range(len(self[i]['alpha'][:, 0])):
-                self[i]['alpha'][j, :] = np.sum(si[
-                                                0:j+1, :], axis=0)/np.sum(si, axis=0)
-                self[i]['pt'][2, j, :] = tx[2] + self[
-                    i]['alpha'][j, :] * (rx[2] - tx[2])
+                self[i]['alpha'][j, :] = np.sum(si[0:j+1, :], axis=0) \
+                                        /np.sum(si, axis=0)
+                self[i]['pt'][2, j, :] = tx[2] + self[i]['alpha'][j, :] \
+                                        * (rx[2] - tx[2])
 
         #
         #  Phase 3 : Initialize 3D rays dictionnary
@@ -376,6 +376,7 @@ class Rays(dict):
 
                 # si : (i+1) x r
                 self[k]['si'] = lsi
+                self[k]['dis'] = np.sum(lsi,axis=0)
 
                 vn = self[k]['norm']
 
@@ -499,6 +500,7 @@ class Rays(dict):
                 # si : (i+1) x r
                 si = np.sqrt(np.sum((self[0]['pt'][:,0]-self[0]['pt'][:,1])**2,axis=0))
                 self[k]['si'] = np.vstack((si,0.))
+                self[k]['dis'] = np.array((si))
                 self[k]['aod'] = np.array(())
                 self[k]['Bo0'] = np.array(())
                 self[k]['scpr'] = np.array(())
@@ -738,7 +740,14 @@ class Rays(dict):
 
 
     def eval(self,fGHz=np.array([2.4])):
-        """docstring for eval"""
+        """  docstring for eval
+
+        Parameters
+        ----------
+
+        fGHz : array
+            
+        """
 
         print 'Rays evaluation'
 
@@ -855,8 +864,10 @@ class Rays(dict):
                 # fill the C tilde
                 Ct[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
                 # delay computation:
-                self[l]['dis'] = self.I.si0[self[l]['rays'][
-                    0,:]] + np.sum(self.I.sout[self[l]['rays']], axis=0)
+                # sum the distance from antenna to first interaction si0
+                # and the sum of all outgoing segments
+                #self[l]['dis'] = self.I.si0[self[l]['rays'][0,:]] \
+                #        + np.sum(self.I.sout[self[l]['rays']], axis=0)
 
                 # Power losses due to distances
                 # will be removed once the divergence factor will be implemented
@@ -864,11 +875,12 @@ class Rays(dict):
                     'rayidx'], :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
                 self.delays[self[l]['rayidx']] = self[l]['dis']/0.3
                 self.dis[self[l]['rayidx']] = self[l]['dis']
-
-
+        #
+        # true LOS when no interaction
+        # 
         if self.los:
             Ct[:,0, :, :]= np.eye(2,2)[np.newaxis,np.newaxis,:,:]
-            self[0]['dis'] = self[0]['si'][0]
+            #self[0]['dis'] = self[0]['si'][0]
             # Fris
             Ct[:,0, :, :] = Ct[:,0, :, :]*1./(self[0]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
             self.delays[0] = self[0]['dis']/0.3

@@ -11,3 +11,5 @@ buildrst DOC-RGPA.ipynb
 buildrst DOC-SlabAndMaterials.ipynb
 buildrst DOC-UWBWaveform.ipynb
 buildrst DOC-simulnet.ipynb
+buildrst DOC-trajectory.ipynb
+buildrst AntennaVSH.ipynb

@@ -1591,8 +1591,6 @@ class LineString(shg.LineString):
             p = np.array(p)
 
         if type(p) == np.ndarray:
-            if np.shape(p)[1] == 2:
-                p = p.T
             self.Np = np.shape(p)[1]
             tp = []
             for k in range(self.Np):
@@ -1602,14 +1600,17 @@ class LineString(shg.LineString):
             shg.LineString.__init__(self, tu)
 
     def plot(self,**kwargs):
-        """ plot function
+        """ plot LineString
 
         Parameters
         ----------
+
         color :  string
             default #abcdef"
         alpha :  float
             transparency   (default 0.8)
+        fig : figure object
+        ax  : axes object
 
         Examples
         --------
