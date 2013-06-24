@@ -5,18 +5,33 @@ This section explains some features of the class **Slab**.
 
 .. code-block:: python
 
-    L = Layout('TA-Office.ini')
-    L.dumpr()
+    from pylayers.gis.layout import *
+    import  matplotlib.pyplot as plt
 
 
 .. code-block:: python
 
-    from pylayers.gis.layout import *
-    import  matplotlib.pyplot as plt
+    L = Layout('TA-Office.ini')
+    L.build()
+
+
+.. code-block:: python
+
+    L.dumpw()
+
+
+.. code-block:: python
+
+    L.showG('i')
+
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x47d3bd0>
+    (<matplotlib.figure.Figure at 0x47ba350>,
+     <matplotlib.axes.AxesSubplot at 0x478ee10>)
+
+
+.. image:: DOC-SlabAndMaterials_files/_fig_02.png
 
 Slab names
 ~~~~~~~~~~
@@ -26,7 +41,7 @@ Each segment **name**, is the entry key for its constitutive Slab.
 
 .. code-block:: python
 
-    L.Gs.node[20]['name']
+    L.Gs.node[19]['name']
 
 
 .. parsed-literal::
@@ -223,7 +238,7 @@ coefficients for
 
 .. code-block:: python
 
-    fGHz   = np.arange(1,5,0.05)
+    fGHz = np.arange(1,5,0.05)
     theta = np.arange(0,pi/2,0.01)
     
     L.sl['WOOD'].ev(fGHz,theta,compensate=True)
@@ -281,9 +296,9 @@ with respect to frequency
     plt.figure()
     L.sl['WOOD'].plotwrtf(typ='phase')
 
-.. image:: DOC-SlabAndMaterials_files/_fig_14.png
-
 .. image:: DOC-SlabAndMaterials_files/_fig_16.png
+
+.. image:: DOC-SlabAndMaterials_files/_fig_18.png
 
 with respect to angle
 
@@ -294,7 +309,7 @@ with respect to angle
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].plotwrta()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_18.png
+.. image:: DOC-SlabAndMaterials_files/_fig_20.png
 
 wrt to angle and frequency
 
@@ -306,5 +321,5 @@ wrt to angle and frequency
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].pcolor()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_20.png
+.. image:: DOC-SlabAndMaterials_files/_fig_22.png
 

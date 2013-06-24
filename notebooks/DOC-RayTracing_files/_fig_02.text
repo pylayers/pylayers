@@ -1,5 +1,8 @@
-run debug  1 1
-nray :  500
-nfreq :  181
-nb rayons dans .tauk :  500
-nb rayons 2:  500
+----------------------------------------------
+            Launching Parameter               
+----------------------------------------------
+angTx      : Tx angular step ( degrees)     :  1
+ISBang     : ISB angular sector ( degrees ) :  90
+ethreshold : Exploration Threshold (linear) :  0.001
+maxdeep    : Tree deep max (integer value)  :  10
+typalgo    : Type of algo (default 0)       :  1

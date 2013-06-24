@@ -144,14 +144,14 @@ No vsh coefficient calculated yet</pre>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7ffad17d7890&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f38bf1af050&gt;</pre>
 </div>
 <img alt="../_images/_fig_07.png" src="../_images/_fig_07.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span><span class="n">unwrap</span><span class="p">(</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x458b2d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x3cab0d0&gt;</pre>
 </div>
 <img alt="../_images/_fig_10.png" src="../_images/_fig_10.png" />
 <p>The following figure represents all the radiation patten in the azimuth
@@ -194,10 +194,41 @@ spherepack package.</p>
 spherical coefficients, in format vsh1. N1 = 90 and M1 = 89. There is
 the same number of coefficient for <img class="math" src="../_images/math/d42705f925da45aa80f668ce2461fa7b24ec5ed6.png" alt="$B_r$"/>,:math:<cite>$B_i$</cite>,
 <img class="math" src="../_images/math/73c7499fede9fbced195745f44a1f89b75a3f1c4.png" alt="$C_r$"/>, <img class="math" src="../_images/math/114be4e6129a6229437e3ecafb9dea8a051d937e.png" alt="$C_i$"/> independantly to their importance.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;pylayers.antprop.spharm.VSHCoeff at 0x7ffad32fc910&gt;</pre>
+<div class="highlight-python"><pre>Br
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010
+Bi
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010
+Cr
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010
+Ci
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s1tos2</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
@@ -266,6 +297,9 @@ NCoeff s2  :  495</pre>
 </pre></div>
 </div>
 <img alt="../_images/_fig_20.png" src="../_images/_fig_20.png" />
+<div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
 </div>
 </div>
 

@@ -168,7 +168,7 @@ ymax : 2.16154131873</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_061.png" src="../_images/_fig_061.png" />
+<img alt="../_images/_fig_06.png" src="../_images/_fig_06.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -199,7 +199,7 @@ object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_132.png" src="../_images/_fig_132.png" />
+<img alt="../_images/_fig_131.png" src="../_images/_fig_131.png" />
 </div>
 <div class="section" id="construction-of-the-propagation-channel">
 <h2>Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
@@ -272,13 +272,13 @@ Ncoeff s3 :  18</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_191.png" src="../_images/_fig_191.png" />
+<img alt="../_images/_fig_19.png" src="../_images/_fig_19.png" />
 <p>The figure below plot on a same graph all the tansfer function in
 modulus and phase of the ray transfer function.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">iy</span><span class="o">=</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_211.png" src="../_images/_fig_211.png" />
+<img alt="../_images/_fig_21.png" src="../_images/_fig_21.png" />
 <p>If a realistic antenna is applied it gives</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>  <span class="c"># scaling constant depends on how are stored the antenna data</span>
 <span class="n">sca</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>

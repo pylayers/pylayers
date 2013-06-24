@@ -1,1 +1,32 @@
-<pylayers.antprop.spharm.VSHCoeff at 0x7ffad32fc910>
+Br
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010
+Bi
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010
+Cr
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010
+Ci
+-------------
+Nf   :  104
+fmin (GHz) :  0.8
+fmax (GHz) :  5.95
+N1  :  90
+M1  :  89
+Ncoeff s1  8010

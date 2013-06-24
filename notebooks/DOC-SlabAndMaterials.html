@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="User Manual" href="index.html" />
     <link rel="next" title="Vector Spherical sparse representation of full polar complex antenna patterns" href="AntennaVSH.html" />
-    <link rel="prev" title="The display options dictionnary" href="DOC-LayoutEditor.html" /> 
+    <link rel="prev" title="The different layout format" href="DOC-LayoutEditor.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="AntennaVSH.html" title="Vector Spherical sparse representation of full polar complex antenna patterns"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="DOC-LayoutEditor.html" title="The display options dictionnary"
+          <a href="DOC-LayoutEditor.html" title="The different layout format"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
@@ -69,7 +69,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="DOC-LayoutEditor.html"
-                        title="previous chapter">The display options dictionnary</a></p>
+                        title="previous chapter">The different layout format</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="AntennaVSH.html"
                         title="next chapter">Vector Spherical sparse representation of full polar complex antenna patterns</a></p>
@@ -96,20 +96,28 @@
             
   <p>This section explains some features of the class <strong>Slab</strong>.</p>
 <p><strong>Slabs</strong> are handled by the module <strong>pylayers.antprop.slab</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
-<span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span>  <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x47d3bd0&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x47ba350&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x478ee10&gt;)</pre>
+</div>
+<img alt="../_images/_fig_025.png" src="../_images/_fig_025.png" />
 <div class="section" id="slab-names">
 <h1>Slab names<a class="headerlink" href="#slab-names" title="Permalink to this headline">¶</a></h1>
 <p>Each segment <strong>name</strong>, is the entry key for its constitutive Slab.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">20</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">19</span><span class="p">][</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;PARTITION&#39;</span>
@@ -243,7 +251,7 @@ coefficients for</p>
 <li>a given frequency range</li>
 <li>a given incidence angle range (<img class="math" src="../_images/math/77375b78a9e3285bb5338b7abdda4ac01b7d0d59.png" alt="$0\le\theta&lt;\frac{\pi}{2}$"/>)</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -284,15 +292,15 @@ Transmission coefficient @ 1.05 GHz and theta= 0.1 :
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrtf</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;phase&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_14.png" src="../_images/_fig_14.png" />
 <img alt="../_images/_fig_161.png" src="../_images/_fig_161.png" />
+<img alt="../_images/_fig_182.png" src="../_images/_fig_182.png" />
 <p>with respect to angle</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_182.png" src="../_images/_fig_182.png" />
+<img alt="../_images/_fig_201.png" src="../_images/_fig_201.png" />
 <p>wrt to angle and frequency</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
@@ -300,7 +308,7 @@ Transmission coefficient @ 1.05 GHz and theta= 0.1 :
 <span class="n">L</span><span class="o">.</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_201.png" src="../_images/_fig_201.png" />
+<img alt="../_images/_fig_221.png" src="../_images/_fig_221.png" />
 </div>
 
 
@@ -316,7 +324,7 @@ Transmission coefficient @ 1.05 GHz and theta= 0.1 :
           <a href="AntennaVSH.html" title="Vector Spherical sparse representation of full polar complex antenna patterns"
              >next</a></li>
         <li class="right" >
-          <a href="DOC-LayoutEditor.html" title="The display options dictionnary"
+          <a href="DOC-LayoutEditor.html" title="The different layout format"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>

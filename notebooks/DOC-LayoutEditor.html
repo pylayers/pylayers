@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The display options dictionnary &mdash; PyLayers</title>
+    <title>The different layout format &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -59,19 +59,23 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The display options dictionnary</a><ul>
+<li><a class="reference internal" href="#">The different layout format</a><ul>
+<li><a class="reference internal" href="#reading-osm-file-format">Reading <cite>.osm</cite> file format</a></li>
+<li><a class="reference internal" href="#the-display-options-dictionnary">The display options dictionnary</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#layers">Layers</a></li>
 <li><a class="reference internal" href="#strings">Strings</a></li>
 <li><a class="reference internal" href="#sizes">Sizes</a></li>
-<li><a class="reference internal" href="#booleans">Booleans</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#booleans">Booleans</a><ul>
 <li><a class="reference internal" href="#interactive-editor">Interactive editor</a></li>
 <li><a class="reference internal" href="#edition-mode">Edition mode</a></li>
 <li><a class="reference internal" href="#image-overlay">Image overlay</a></li>
 <li><a class="reference internal" href="#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
 <li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
 <li><a class="reference internal" href="#segments-and-subsegments">Segments and Subsegments</a></li>
+</ul>
+</li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -102,42 +106,208 @@
           <div class="body">
             
   <p>This section explains some features of the class <strong>Layout</strong>. Layouts are
-handled by the module <strong>pylayers.gis.layout</strong></p>
+handled by the module <strong>pylayers.gis.layout</strong>.</p>
+<p>This module handles different files format including geo-referenced
+files in open street map format <tt class="docutils literal"><span class="pre">.osm</span></tt>.</p>
+<p>The choice has been made to take advantage of a mature floor plan editor
+<em>JOSM</em> with the plugin <em>PicLayer</em>. It is well described in
+<a class="reference external" href="http://wiki.openstreetmap.org/wiki/IndoorOSM">http://wiki.openstreetmap.org/wiki/IndoorOSM</a></p>
+<p>The <tt class="docutils literal"><span class="pre">pylayers.gis.osmparser</span></tt> module allows to parse osm files and to
+convert into different PyLayers format. This module is called by
+<tt class="docutils literal"><span class="pre">loadosm()</span></tt> method.</p>
+<p>PyLayers has also a low level structure editor based on <tt class="docutils literal"><span class="pre">matplotlib</span></tt>
+which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method.</p>
+<div class="section" id="the-different-layout-format">
+<h1>The different layout format<a class="headerlink" href="#the-different-layout-format" title="Permalink to this headline">¶</a></h1>
+<p>The layout format has evolved a lot over time and is going to evolve
+again. The different recognized file extensions are the following :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">.str2</span></tt>: a ASCII file (Node list + edge list)</li>
+<li><tt class="docutils literal"><span class="pre">.str</span></tt> : a binary file which includes visibility relations between
+point and segments</li>
+<li><tt class="docutils literal"><span class="pre">.ini</span></tt> : an ini file which gather</li>
+<li><tt class="docutils literal"><span class="pre">.osm</span></tt> : an xml file which can be edited with JOSM
+<a class="reference external" href="http://josm.openstreetmap.de/">http://josm.openstreetmap.de/</a></li>
+</ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x40caa10&gt;</pre>
-</div>
-<p>To create a new layout :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;layout.ini&#39;</span><span class="p">)</span>
+<div class="section" id="reading-osm-file-format">
+<h2>Reading <cite>.osm</cite> file format<a class="headerlink" href="#reading-osm-file-format" title="Permalink to this headline">¶</a></h2>
+<p>To read an existing layout it is sufficient to create a Layout object
+with, as an argument, a file name with one of the recognized extension.
+All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
+project. The project root directory is defined in the <tt class="docutils literal"><span class="pre">$BASENAME</span></tt>
+environment variable.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSTRUC&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>At that stage the layout file is void</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">struc</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">pstruc</span></tt> is a dictionnary which gathers all directories which are used
+in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pstruc</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;DIRANT&#39;</span><span class="p">:</span> <span class="s">&#39;ant&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRCIR&#39;</span><span class="p">:</span> <span class="s">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRFUR&#39;</span><span class="p">:</span> <span class="s">&#39;struc/furnitures&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRGEOM&#39;</span><span class="p">:</span> <span class="s">&#39;geom&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRLCH&#39;</span><span class="p">:</span> <span class="s">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRMAT&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRMAT2&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRMES&#39;</span><span class="p">:</span> <span class="s">&#39;meas&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">:</span> <span class="s">&#39;netsave&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRSIMUL&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRSLAB&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRSLAB2&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRSTRUC&#39;</span><span class="p">:</span> <span class="s">&#39;struc&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRSTRUC2&#39;</span><span class="p">:</span> <span class="s">&#39;struc&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRTRA&#39;</span><span class="p">:</span> <span class="s">&#39;output&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRTUD&#39;</span><span class="p">:</span> <span class="s">&#39;output&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The structure of the <tt class="docutils literal"><span class="pre">.osm</span></tt> file is shown below</p>
+<div class="highlight-python"><pre>%%bash
+
+    cd $BASENAME/struc
+    ls *.osm</pre>
+</div>
+<div class="highlight-python"><pre>11D-E1.osm
+11D.osm
+DLR.osm
+where1.osm</pre>
+</div>
+<div class="highlight-python"><pre>%%bash
+    cd $BASENAME/struc
+    head DLR.osm
+    echo '---'
+    tail -17 DLR.osm</pre>
+</div>
+<div class="highlight-python"><pre>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;osm version='0.6' upload='false' generator='JOSM'&gt;
+  &lt;node id='-212' action='modify' visible='true' lat='48.084786570023745' lon='11.27779169137997' /&gt;
+  &lt;node id='-210' action='modify' visible='true' lat='48.08477983698066' lon='11.277807970757943' /&gt;
+  &lt;node id='-208' action='modify' visible='true' lat='48.08477470372689' lon='11.277820382088898' /&gt;
+  &lt;node id='-206' action='modify' visible='true' lat='48.08476292533722' lon='11.277769777676356' /&gt;
+  &lt;node id='-204' action='modify' visible='true' lat='48.08485956769662' lon='11.27777543967586' /&gt;
+  &lt;node id='-202' action='modify' visible='true' lat='48.08486676516895' lon='11.277782110228287' /&gt;
+  &lt;node id='-200' action='modify' visible='true' lat='48.08488518369812' lon='11.277821870499377' /&gt;
+  &lt;node id='-198' action='modify' visible='true' lat='48.08488036457005' lon='11.277775932263998' /&gt;
+---
+  &lt;way id='-216' action='modify' visible='true'&gt;
+    &lt;nd ref='-8' /&gt;
+    &lt;nd ref='-118' /&gt;
+    &lt;tag k='name' v='WALL' /&gt;
+    &lt;tag k='transition' v='False' /&gt;
+    &lt;tag k='zmax' v='3.0' /&gt;
+    &lt;tag k='zmin' v='0.0' /&gt;
+  &lt;/way&gt;
+  &lt;way id='-214' action='modify' visible='true'&gt;
+    &lt;nd ref='-4' /&gt;
+    &lt;nd ref='-6' /&gt;
+    &lt;tag k='name' v='WALL' /&gt;
+    &lt;tag k='transition' v='False' /&gt;
+    &lt;tag k='zmax' v='3.0' /&gt;
+    &lt;tag k='zmin' v='0.0' /&gt;
+  &lt;/way&gt;
+&lt;/osm&gt;</pre>
+</div>
+<p>To read a new layout :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.osm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_053.png" src="../_images/_fig_053.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>filestr :  layout.ini
+<div class="highlight-python"><pre>filestr :  TA-Office.ini
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
-filegeom :  geomfile (.off) has no been generated
-limites  (-20.0, 20.0, -10.0, 10.0)
-number of Nodes : 0
-number of Segments : 0
-number of Sub-Segments : 0
-Gs Nodes :  0
-Gs Edges :  0
+filegeom :  TA-Office.off
+limites  (0.0, 40.0, 0.0, 15.0)
+number of Nodes : 71
+number of Segments : 87
+number of Sub-Segments : 16
+Gs Nodes :  158
+Gs Edges :  174
 Gc Nodes :  0
 Gc Edges :  0
-Gt Nodes :  0
-Gt Edges :  0
+Gt Nodes :  17
+Gt Edges :  30
 vnodes = Gt.node[Nc]['cycles'].cycle
 poly = Gt.node[Nc]['cycle'].polyg
-Gr Nodes    : no Gr graph</pre>
+Gr Nodes    : 17
+Gr Edges    : 16
+Nc  = Gr.node[nroom]['cycles']</pre>
+</div>
+<p>The different graphs associated with the layout are then built</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>WARNING:root:punctual contact detected proceed in reverse order</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
+<span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_095.png" src="../_images/_fig_095.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_114.png" src="../_images/_fig_114.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_132.png" src="../_images/_fig_132.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_151.png" src="../_images/_fig_151.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_171.png" src="../_images/_fig_171.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
-<h1>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h1>
+<h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>filestr :  DLR.osm
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  DLR.off
+limites  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
+number of Nodes : 105
+number of Segments : 124
+number of Sub-Segments : 30
+Gs Nodes :  229
+Gs Edges :  248
+Gc Nodes :  0
+Gc Edges :  0
+Gt Nodes :  20
+Gt Edges :  48
+vnodes = Gt.node[Nc]['cycles'].cycle
+poly = Gt.node[Nc]['cycle'].polyg
+Gr Nodes    : 18
+Gr Edges    : 36
+Nc  = Gr.node[nroom]['cycles']</pre>
+</div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
-display options are specified in the display dictionnary.</p>
+display options are specified in the display dictionnary. Those options
+are exploited in <tt class="docutils literal"><span class="pre">showGs()</span></tt> vizualisation method.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span>
 </pre></div>
 </div>
@@ -152,7 +322,7 @@ display options are specified in the display dictionnary.</p>
  <span class="s">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s">&#39;TA-Office.png&#39;</span><span class="p">,</span>
  <span class="s">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
  <span class="s">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
- <span class="s">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[],</span>
+ <span class="s">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WALL&#39;</span><span class="p">,</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span> <span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">],</span>
  <span class="s">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
   <span class="s">&#39;PLASTERBOARD_7CM&#39;</span><span class="p">,</span>
   <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
@@ -188,8 +358,10 @@ display options are specified in the display dictionnary.</p>
  <span class="s">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
 </pre></div>
 </div>
+</div>
+</div>
 <div class="section" id="layers">
-<h2>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h2>
+<h1>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li>&#8216;layer&#8217; : list , []</li>
 <li>&#8216;layerset&#8217;,list, list of available layers</li>
@@ -200,14 +372,14 @@ display options are specified in the display dictionnary.</p>
 </ul>
 </div>
 <div class="section" id="strings">
-<h2>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h2>
+<h1>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li>&#8216;title&#8217; : str , &#8216;Init&#8217;</li>
 <li>&#8216;fileoverlay&#8217; : str , &#8216;TA-Office.png&#8217;</li>
 </ul>
 </div>
 <div class="section" id="sizes">
-<h2>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h2>
+<h1>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li>&#8216;fontsize&#8217;, float , 10</li>
 <li>&#8216;ndsize&#8217;, float , 10</li>
@@ -216,7 +388,7 @@ display options are specified in the display dictionnary.</p>
 </ul>
 </div>
 <div class="section" id="booleans">
-<h2>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h2>
+<h1>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li>&#8216;edlabel&#8217;, boolean, False</li>
 <li>&#8216;ticksoff&#8217;,boolean, True</li>
@@ -231,14 +403,18 @@ display options are specified in the display dictionnary.</p>
 <li>&#8216;ndlabel&#8217;,boolean, If True display node labels</li>
 <li>&#8216;ednodes&#8217;, boolean, True</li>
 </ul>
-</div>
-</div>
 <div class="section" id="interactive-editor">
-<h1>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h1>
-<p>The command L.editor() launches an interactive editor</p>
+<h2>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
+<p>The command L.editor() launches an interactive editor. The state machine
+is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
+<p>To have an idea of all available options, look in the
+<tt class="docutils literal"><span class="pre">pylayers.gis.SelectL</span></tt> module.</p>
+<p><a class="reference external" href="http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state">http://pylayers.github.io/pylayers/_modules/pylayers/gis/selectl.html#SelectL.new_state</a></p>
+<p>All bug correction and ergonomic improvement of this editor is welcome.
+Just pull request your modifications.</p>
 </div>
 <div class="section" id="edition-mode">
-<h1>Edition mode<a class="headerlink" href="#edition-mode" title="Permalink to this headline">¶</a></h1>
+<h2>Edition mode<a class="headerlink" href="#edition-mode" title="Permalink to this headline">¶</a></h2>
 <p>There are two different modes of edition</p>
 <ul class="simple">
 <li>A create points mode CP<ul>
@@ -258,7 +434,7 @@ display options are specified in the display dictionnary.</p>
 <p><strong>i</strong> : to return to init state</p>
 </div>
 <div class="section" id="image-overlay">
-<h1>Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h1>
+<h2>Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h2>
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
@@ -275,13 +451,13 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f3df01848d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x4129910&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x52d0f50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x4c0c790&gt;)</pre>
 </div>
-<img alt="../_images/_fig_051.png" src="../_images/_fig_051.png" />
+<img alt="../_images/_fig_22.png" src="../_images/_fig_22.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
-<h1>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h1>
+<h2>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h2>
 <p>Before going further it is necessary :</p>
 <ul class="simple">
 <li>to place the global origin</li>
@@ -320,7 +496,7 @@ meters) between the two points.</li>
 </div>
 </div>
 <div class="section" id="vizualisation-of-the-layout">
-<h1>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h1>
+<h2>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
@@ -329,24 +505,33 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_071.png" src="../_images/_fig_071.png" />
+<img alt="../_images/_fig_241.png" src="../_images/_fig_241.png" />
 <p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
 <p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
 to a segment (Wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 </div>
 <div class="section" id="segments-and-subsegments">
-<h1>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h1>
-<p>It is very important to respect a strict non overlapping rules. No
-segments can recover partially or totally an other segment. This rules
-allows to capture topological relation of the network which are
-exploited for further analysis.</p>
-<p>To describe door and window, the concept of subsegment is used. A
-subsegment belongs to a segment, it has mainly 3 attached parameters + A
-slab name + zmin (meter) + zmax (meter)</p>
+<h2>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h2>
+<p>It is very important to respect a strict non overlapping rule. <strong>No
+segments can recover partially or totally an other segment</strong>.</p>
+<p>This rule allows to capture topological relations of the network which
+are exploited for further analysis.</p>
+<p>To describe door and window, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is used. A
+<tt class="docutils literal"><span class="pre">subsegment</span></tt> belongs to a <tt class="docutils literal"><span class="pre">segment</span></tt>, it has mainly 3 attached
+parameters :</p>
+<ul class="simple">
+<li>A slab name</li>
+<li>zmin (meter)</li>
+<li>zmax (meter)</li>
+</ul>
 <p>Currently, it is not possible to define multi-subsegments. for example a
 composite door with wood and glass. This a desirable feature to add for
-future version of PyLayers.</p>
+future versions.</p>
+<div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
+</div>
 </div>
 
 

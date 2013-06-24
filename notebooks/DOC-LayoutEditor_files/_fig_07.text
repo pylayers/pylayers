@@ -1,0 +1,19 @@
+filestr :  TA-Office.ini
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  TA-Office.off
+limites  (0.0, 40.0, 0.0, 15.0)
+number of Nodes : 71
+number of Segments : 87
+number of Sub-Segments : 16
+Gs Nodes :  158
+Gs Edges :  174
+Gc Nodes :  0
+Gc Edges :  0
+Gt Nodes :  17
+Gt Edges :  30
+vnodes = Gt.node[Nc]['cycles'].cycle 
+poly = Gt.node[Nc]['cycle'].polyg 
+Gr Nodes    : 17
+Gr Edges    : 16
+Nc  = Gr.node[nroom]['cycles']  

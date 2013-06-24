@@ -111,7 +111,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4cbd850&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x33c4750&gt;</pre>
 </div>
 <p>This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
@@ -224,7 +224,7 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x57efe10&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe3850ac810&gt;]</pre>
 </div>
 <img alt="../_images/_fig_052.png" src="../_images/_fig_052.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
@@ -245,8 +245,8 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 </div>
 <div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7efe490&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7efc110&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe385203090&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fe385206ed0&gt;)</pre>
 </div>
 <img alt="../_images/_fig_093.png" src="../_images/_fig_093.png" />
 <p>Choosing a UWB waveform for the simulation</p>
@@ -256,7 +256,7 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 </div>
 <img alt="../_images/_fig_113.png" src="../_images/_fig_113.png" />
 <p>running the simulation</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">timeit</span> <span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><pre>1
@@ -459,611 +459,7 @@ Rays evaluation
 59
 98 [9, 14]
 99 [8, 9]
-Rays evaluation
-1
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-2
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-3
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-4
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-5
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-6
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-7
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-8
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-9
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-10
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-11
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-12
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-13
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-14
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-15
-41 [14, 18]
-Rays evaluation
-16
-41 [14, 18]
-Rays evaluation
-17
-41 [14, 18]
-Rays evaluation
-18
-41 [14, 18]
-Rays evaluation
-19
-41 [14, 18]
-Rays evaluation
-20
-41 [14, 18]
-Rays evaluation
-21
-41 [14, 18]
-Rays evaluation
-22
-41 [14, 18]
-Rays evaluation
-23
-41 [14, 18]
-Rays evaluation
-24
-41 [14, 18]
-Rays evaluation
-25
-41 [14, 18]
-Rays evaluation
-26
-41 [14, 18]
-Rays evaluation
-27
-41 [14, 18]
-Rays evaluation
-28
-41 [14, 18]
-Rays evaluation
-29
-41 [14, 18]
-Rays evaluation
-30
-Rays evaluation
-31
-Rays evaluation
-32
-Rays evaluation
-33
-Rays evaluation
-34
-Rays evaluation
-35
-Rays evaluation
-36
-Rays evaluation
-37
-Rays evaluation
-38
-Rays evaluation
-39
-Rays evaluation
-40
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-41
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-42
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-43
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-44
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-45
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-46
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-47
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-48
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-49
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-50
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-51
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-52
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-53
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-54
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-55
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-56
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-57
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-58
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-59
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-1
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-2
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-3
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-4
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-5
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-6
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-7
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-8
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-9
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-10
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-11
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-12
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-13
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-14
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-15
-41 [14, 18]
-Rays evaluation
-16
-41 [14, 18]
-Rays evaluation
-17
-41 [14, 18]
-Rays evaluation
-18
-41 [14, 18]
-Rays evaluation
-19
-41 [14, 18]
-Rays evaluation
-20
-41 [14, 18]
-Rays evaluation
-21
-41 [14, 18]
-Rays evaluation
-22
-41 [14, 18]
-Rays evaluation
-23
-41 [14, 18]
-Rays evaluation
-24
-41 [14, 18]
-Rays evaluation
-25
-41 [14, 18]
-Rays evaluation
-26
-41 [14, 18]
-Rays evaluation
-27
-41 [14, 18]
-Rays evaluation
-28
-41 [14, 18]
-Rays evaluation
-29
-41 [14, 18]
-Rays evaluation
-30
-Rays evaluation
-31
-Rays evaluation
-32
-Rays evaluation
-33
-Rays evaluation
-34
-Rays evaluation
-35
-Rays evaluation
-36
-Rays evaluation
-37
-Rays evaluation
-38
-Rays evaluation
-39
-Rays evaluation
-40
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-41
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-42
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-43
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-44
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-45
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-46
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-47
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-48
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-49
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-50
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-51
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-52
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-53
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-54
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-55
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-56
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-57
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-58
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-59
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-1
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-2
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-3
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-4
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-5
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-6
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-7
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-8
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-9
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-10
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-11
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-12
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-13
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-14
-37 [1, 18]
-41 [14, 18]
-Rays evaluation
-15
-41 [14, 18]
-Rays evaluation
-16
-41 [14, 18]
-Rays evaluation
-17
-41 [14, 18]
-Rays evaluation
-18
-41 [14, 18]
-Rays evaluation
-19
-41 [14, 18]
-Rays evaluation
-20
-41 [14, 18]
-Rays evaluation
-21
-41 [14, 18]
-Rays evaluation
-22
-41 [14, 18]
-Rays evaluation
-23
-41 [14, 18]
-Rays evaluation
-24
-41 [14, 18]
-Rays evaluation
-25
-41 [14, 18]
-Rays evaluation
-26
-41 [14, 18]
-Rays evaluation
-27
-41 [14, 18]
-Rays evaluation
-28
-41 [14, 18]
-Rays evaluation
-29
-41 [14, 18]
-Rays evaluation
-30
-Rays evaluation
-31
-Rays evaluation
-32
-Rays evaluation
-33
-Rays evaluation
-34
-Rays evaluation
-35
-Rays evaluation
-36
-Rays evaluation
-37
-Rays evaluation
-38
-Rays evaluation
-39
-Rays evaluation
-40
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-41
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-42
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-43
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-44
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-45
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-46
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-47
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-48
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-49
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-50
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-51
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-52
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-53
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-54
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-55
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-56
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-57
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-58
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-59
-98 [9, 14]
-99 [8, 9]
-Rays evaluation
-1 loops, best of 3: 56.8 s per loop</pre>
+Rays evaluation</pre>
 </div>
 <p>The full trajectory simulation took <strong>56.8s</strong> on a Dell M6700. It is
 stored as a dictionnary of 59 entry containing object from class Usignal
@@ -1071,65 +467,65 @@ of length 9930 points.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>{1: {1: Usignal :  (9930,)  (9930,),
-  2: Usignal :  (9930,)  (9930,),
-  3: Usignal :  (9930,)  (9930,),
-  4: Usignal :  (9930,)  (9930,),
-  5: Usignal :  (9930,)  (9930,),
-  6: Usignal :  (9930,)  (9930,),
-  7: Usignal :  (9930,)  (9930,),
-  8: Usignal :  (9930,)  (9930,),
-  9: Usignal :  (9930,)  (9930,),
-  10: Usignal :  (9930,)  (9930,),
-  11: Usignal :  (9930,)  (9930,),
-  12: Usignal :  (9930,)  (9930,),
-  13: Usignal :  (9930,)  (9930,),
-  14: Usignal :  (9930,)  (9930,),
-  15: Usignal :  (9930,)  (9930,),
-  16: Usignal :  (9930,)  (9930,),
-  17: Usignal :  (9930,)  (9930,),
-  18: Usignal :  (9930,)  (9930,),
-  19: Usignal :  (9930,)  (9930,),
-  20: Usignal :  (9930,)  (9930,),
-  21: Usignal :  (9930,)  (9930,),
-  22: Usignal :  (9930,)  (9930,),
-  23: Usignal :  (9930,)  (9930,),
-  24: Usignal :  (9930,)  (9930,),
-  25: Usignal :  (9930,)  (9930,),
-  26: Usignal :  (9930,)  (9930,),
-  27: Usignal :  (9930,)  (9930,),
-  28: Usignal :  (9930,)  (9930,),
-  29: Usignal :  (9930,)  (9930,),
-  30: Usignal :  (9930,)  (9930,),
-  31: Usignal :  (9930,)  (9930,),
-  32: Usignal :  (9930,)  (9930,),
-  33: Usignal :  (9930,)  (9930,),
-  34: Usignal :  (9930,)  (9930,),
-  35: Usignal :  (9930,)  (9930,),
-  36: Usignal :  (9930,)  (9930,),
-  37: Usignal :  (9930,)  (9930,),
-  38: Usignal :  (9930,)  (9930,),
-  39: Usignal :  (9930,)  (9930,),
-  40: Usignal :  (9930,)  (9930,),
-  41: Usignal :  (9930,)  (9930,),
-  42: Usignal :  (9930,)  (9930,),
-  43: Usignal :  (9930,)  (9930,),
-  44: Usignal :  (9930,)  (9930,),
-  45: Usignal :  (9930,)  (9930,),
-  46: Usignal :  (9930,)  (9930,),
-  47: Usignal :  (9930,)  (9930,),
-  48: Usignal :  (9930,)  (9930,),
-  49: Usignal :  (9930,)  (9930,),
-  50: Usignal :  (9930,)  (9930,),
-  51: Usignal :  (9930,)  (9930,),
-  52: Usignal :  (9930,)  (9930,),
-  53: Usignal :  (9930,)  (9930,),
-  54: Usignal :  (9930,)  (9930,),
-  55: Usignal :  (9930,)  (9930,),
-  56: Usignal :  (9930,)  (9930,),
-  57: Usignal :  (9930,)  (9930,),
-  58: Usignal :  (9930,)  (9930,),
-  59: Usignal :  (9930,)  (9930,)}}</pre>
+<div class="highlight-python"><pre>{1: {1: Usignal :  (7856,)  (7856,),
+  2: Usignal :  (7986,)  (7986,),
+  3: Usignal :  (8115,)  (8115,),
+  4: Usignal :  (8245,)  (8245,),
+  5: Usignal :  (8375,)  (8375,),
+  6: Usignal :  (6849,)  (6849,),
+  7: Usignal :  (6977,)  (6977,),
+  8: Usignal :  (7105,)  (7105,),
+  9: Usignal :  (7233,)  (7233,),
+  10: Usignal :  (7361,)  (7361,),
+  11: Usignal :  (7490,)  (7490,),
+  12: Usignal :  (7618,)  (7618,),
+  13: Usignal :  (7747,)  (7747,),
+  14: Usignal :  (7876,)  (7876,),
+  15: Usignal :  (5633,)  (5633,),
+  16: Usignal :  (5509,)  (5509,),
+  17: Usignal :  (5385,)  (5385,),
+  18: Usignal :  (5259,)  (5259,),
+  19: Usignal :  (5226,)  (5226,),
+  20: Usignal :  (5195,)  (5195,),
+  21: Usignal :  (5169,)  (5169,),
+  22: Usignal :  (4731,)  (4731,),
+  23: Usignal :  (4610,)  (4610,),
+  24: Usignal :  (4490,)  (4490,),
+  25: Usignal :  (4371,)  (4371,),
+  26: Usignal :  (4253,)  (4253,),
+  27: Usignal :  (4137,)  (4137,),
+  28: Usignal :  (4022,)  (4022,),
+  29: Usignal :  (4328,)  (4328,),
+  30: Usignal :  (5607,)  (5607,),
+  31: Usignal :  (5545,)  (5545,),
+  32: Usignal :  (5486,)  (5486,),
+  33: Usignal :  (5431,)  (5431,),
+  34: Usignal :  (5776,)  (5776,),
+  35: Usignal :  (5783,)  (5783,),
+  36: Usignal :  (5795,)  (5795,),
+  37: Usignal :  (5811,)  (5811,),
+  38: Usignal :  (5830,)  (5830,),
+  39: Usignal :  (5853,)  (5853,),
+  40: Usignal :  (6293,)  (6293,),
+  41: Usignal :  (6166,)  (6166,),
+  42: Usignal :  (6039,)  (6039,),
+  43: Usignal :  (5912,)  (5912,),
+  44: Usignal :  (5786,)  (5786,),
+  45: Usignal :  (5660,)  (5660,),
+  46: Usignal :  (5536,)  (5536,),
+  47: Usignal :  (5425,)  (5425,),
+  48: Usignal :  (5320,)  (5320,),
+  49: Usignal :  (5611,)  (5611,),
+  50: Usignal :  (5611,)  (5611,),
+  51: Usignal :  (5613,)  (5613,),
+  52: Usignal :  (5615,)  (5615,),
+  53: Usignal :  (5624,)  (5624,),
+  54: Usignal :  (5628,)  (5628,),
+  55: Usignal :  (5633,)  (5633,),
+  56: Usignal :  (5638,)  (5638,),
+  57: Usignal :  (5643,)  (5643,),
+  58: Usignal :  (7709,)  (7709,),
+  59: Usignal :  (7713,)  (7713,)}}</pre>
 </div>
 <p>Saving the data in pickle format</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
@@ -1138,7 +534,7 @@ of length 9930 points.</p>
 </pre></div>
 </div>
 <p>Reading the data from the above file</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">del</span> <span class="n">ttcir</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">del</span> <span class="n">tcir</span>
 <span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
 <span class="n">tcir</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
 <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -1167,10 +563,12 @@ of length 9930 points.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>-c:3: RuntimeWarning: invalid value encountered in log10</pre>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_163.png" src="../_images/_fig_163.png" />
+<img alt="../_images/_fig_17.png" src="../_images/_fig_17.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
@@ -1180,7 +578,7 @@ of length 9930 points.</p>
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x712cad0&gt;</pre>
 </div>
-<img alt="../_images/_fig_192.png" src="../_images/_fig_192.png" />
+<img alt="../_images/_fig_202.png" src="../_images/_fig_202.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">40</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
@@ -1189,7 +587,7 @@ of length 9930 points.</p>
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x70a1f90&gt;</pre>
 </div>
-<img alt="../_images/_fig_22.png" src="../_images/_fig_22.png" />
+<img alt="../_images/_fig_23.png" src="../_images/_fig_23.png" />
 </div>
 </div>
 

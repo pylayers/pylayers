@@ -1,11 +1,18 @@
-
-Reflection coefficient @ 1.05 GHz and theta= 0.1 :
-
- R= [[-0.46812931-0.06286165j  0.00000000+0.j        ]
- [ 0.00000000+0.j          0.46812931+0.06286165j]]
-
-Transmission coefficient @ 1.05 GHz and theta= 0.1 :
-
- T= [[ 0.72738249-0.48850885j  0.00000000+0.j        ]
- [ 0.00000000+0.j          0.72738249-0.48850885j]] 
-
+[{'epr': (3.79999995232+0j),
+  'index': 4,
+  'mur': (1+0j),
+  'name': 'GLASS',
+  'roughness': 0.0,
+  'sigma': 0.0},
+ {'epr': (1+0j),
+  'index': 1,
+  'mur': (1+0j),
+  'name': 'AIR',
+  'roughness': 0.0,
+  'sigma': 0.0},
+ {'epr': (3.79999995232+0j),
+  'index': 4,
+  'mur': (1+0j),
+  'name': 'GLASS',
+  'roughness': 0.0,
+  'sigma': 0.0}]

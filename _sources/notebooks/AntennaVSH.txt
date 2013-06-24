@@ -74,7 +74,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7ffad17d7890>
+    <matplotlib.text.Text at 0x7f38bf1af050>
 
 
 .. image:: AntennaVSH_files/_fig_07.png
@@ -88,7 +88,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x458b2d0>
+    <matplotlib.text.Text at 0x3cab0d0>
 
 
 .. image:: AntennaVSH_files/_fig_10.png
@@ -153,13 +153,43 @@ the same number of coefficient for :math:`$B_r$`,:math:`$B_i$`,
 
 .. code-block:: python
 
-    A.C
+    A.C.info()
 
 
 .. parsed-literal::
 
-    <pylayers.antprop.spharm.VSHCoeff at 0x7ffad32fc910>
-
+    Br
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    Bi
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    Cr
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    Ci
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
 
 
 .. code-block:: python
@@ -248,4 +278,9 @@ Transformation in shape 3 - energy thresholding
     compdiag(0,A,A.theta,A.phi,FTh2,FPh2,'modulus')
 
 .. image:: AntennaVSH_files/_fig_20.png
+
+
+.. code-block:: python
+
+    
 

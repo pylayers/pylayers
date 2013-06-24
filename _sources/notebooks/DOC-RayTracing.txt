@@ -3,6 +3,10 @@
 
     from pylayers.simul.simulem import *
 
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x3c17f90>
+
 Ray-tracing
 -----------
 
@@ -106,13 +110,13 @@ Run the ray tracing
     run debug  1 1
     nray :  500
     nfreq :  181
-    nb rayons dans .tauk :  500
-    nb rayons 2:  500
+    nb rays in .tauk file:  500
+    nb rays 2:  500
 
 
 .. parsed-literal::
 
-    /usr/local/lib/python2.7/site-packages/scipy-0.11.0-py2.7-linux-i686.egg/scipy/io/matlab/mio.py:266: FutureWarning: Using oned_as default value ('column') This will change to 'row' in future versions
+    /usr/local/lib/python2.7/dist-packages/scipy/io/matlab/mio.py:267: FutureWarning: Using oned_as default value ('column') This will change to 'row' in future versions
       oned_as=oned_as)
 
 
@@ -135,5 +139,10 @@ Plot CIR
 
     Warning : no furniture file loaded
 
-.. image:: DOC-RayTracing_files/_fig_06.png
+.. image:: DOC-RayTracing_files/_fig_07.png
+
+
+.. code-block:: python
+
+    
 

@@ -1,23 +1,161 @@
 This section explains some features of the class **Layout**. Layouts are
-handled by the module **pylayers.gis.layout**
+handled by the module **pylayers.gis.layout**.
+
+This module handles different files format including geo-referenced
+files in open street map format ``.osm``.
+
+The choice has been made to take advantage of a mature floor plan editor
+*JOSM* with the plugin *PicLayer*. It is well described in
+http://wiki.openstreetmap.org/wiki/IndoorOSM
+
+The ``pylayers.gis.osmparser`` module allows to parse osm files and to
+convert into different PyLayers format. This module is called by
+``loadosm()`` method.
+
+PyLayers has also a low level structure editor based on ``matplotlib``
+which can be invoqued using the ``editor()`` method.
+
+The different layout format 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The layout format has evolved a lot over time and is going to evolve
+again. The different recognized file extensions are the following :
+
+-  ``.str2``: a ASCII file (Node list + edge list)
+-  ``.str`` : a binary file which includes visibility relations between
+   point and segments
+-  ``.ini`` : an ini file which gather
+-  ``.osm`` : an xml file which can be edited with JOSM
+   http://josm.openstreetmap.de/
+
 
 
 .. code-block:: python
 
     from pylayers.gis.layout import *
+    from pylayers.util.project import *
 
-.. parsed-literal::
+Reading `.osm` file format
+--------------------------
 
-    <matplotlib.figure.Figure at 0x40caa10>
-
-To create a new layout :
+To read an existing layout it is sufficient to create a Layout object
+with, as an argument, a file name with one of the recognized extension.
+All files are stored in the ``pstruc['DIRSTRUC']`` directory of the
+project. The project root directory is defined in the ``$BASENAME``
+environment variable.
 
 
 .. code-block:: python
 
-    L=Layout('layout.ini')
+    print pstruc['DIRSTRUC']
 
-At that stage the layout file is void
+
+.. parsed-literal::
+
+    struc
+
+``pstruc`` is a dictionnary which gathers all directories which are used
+in ``PyLayers``
+
+
+.. code-block:: python
+
+    pstruc
+
+
+.. parsed-literal::
+
+    {'DIRANT': 'ant',
+     'DIRCIR': 'output',
+     'DIRFUR': 'struc/furnitures',
+     'DIRGEOM': 'geom',
+     'DIRLCH': 'output',
+     'DIRMAT': 'ini',
+     'DIRMAT2': 'ini',
+     'DIRMES': 'meas',
+     'DIRNETSAVE': 'netsave',
+     'DIRSIMUL': 'ini',
+     'DIRSLAB': 'ini',
+     'DIRSLAB2': 'ini',
+     'DIRSTRUC': 'struc',
+     'DIRSTRUC2': 'struc',
+     'DIRTRA': 'output',
+     'DIRTUD': 'output'}
+
+
+The structure of the ``.osm`` file is shown below
+
+
+.. code-block:: python
+
+    %%bash 
+    
+        cd $BASENAME/struc
+        ls *.osm
+
+
+
+.. parsed-literal::
+
+    11D-E1.osm
+    11D.osm
+    DLR.osm
+    where1.osm
+
+
+.. code-block:: python
+
+    %%bash 
+        cd $BASENAME/struc
+        head DLR.osm
+        echo '---'
+        tail -17 DLR.osm
+
+
+.. parsed-literal::
+
+    <?xml version='1.0' encoding='UTF-8'?>
+    <osm version='0.6' upload='false' generator='JOSM'>
+      <node id='-212' action='modify' visible='true' lat='48.084786570023745' lon='11.27779169137997' />
+      <node id='-210' action='modify' visible='true' lat='48.08477983698066' lon='11.277807970757943' />
+      <node id='-208' action='modify' visible='true' lat='48.08477470372689' lon='11.277820382088898' />
+      <node id='-206' action='modify' visible='true' lat='48.08476292533722' lon='11.277769777676356' />
+      <node id='-204' action='modify' visible='true' lat='48.08485956769662' lon='11.27777543967586' />
+      <node id='-202' action='modify' visible='true' lat='48.08486676516895' lon='11.277782110228287' />
+      <node id='-200' action='modify' visible='true' lat='48.08488518369812' lon='11.277821870499377' />
+      <node id='-198' action='modify' visible='true' lat='48.08488036457005' lon='11.277775932263998' />
+    ---
+      <way id='-216' action='modify' visible='true'>
+        <nd ref='-8' />
+        <nd ref='-118' />
+        <tag k='name' v='WALL' />
+        <tag k='transition' v='False' />
+        <tag k='zmax' v='3.0' />
+        <tag k='zmin' v='0.0' />
+      </way>
+      <way id='-214' action='modify' visible='true'>
+        <nd ref='-4' />
+        <nd ref='-6' />
+        <tag k='name' v='WALL' />
+        <tag k='transition' v='False' />
+        <tag k='zmax' v='3.0' />
+        <tag k='zmin' v='0.0' />
+      </way>
+    </osm>
+
+To read a new layout :
+
+
+.. code-block:: python
+
+    L=Layout('DLR.osm')
+
+
+.. code-block:: python
+
+    fig,ax=L.showGs()
+
+.. image:: DOC-LayoutEditor_files/_fig_05.png
 
 
 .. code-block:: python
@@ -27,29 +165,114 @@ At that stage the layout file is void
 
 .. parsed-literal::
 
-    filestr :  layout.ini
+    filestr :  TA-Office.ini
     filematini :  matDB.ini
     fileslabini :  slabDB.ini
-    filegeom :  geomfile (.off) has no been generated
-    limites  (-20.0, 20.0, -10.0, 10.0)
-    number of Nodes : 0
-    number of Segments : 0
-    number of Sub-Segments : 0
-    Gs Nodes :  0
-    Gs Edges :  0
+    filegeom :  TA-Office.off
+    limites  (0.0, 40.0, 0.0, 15.0)
+    number of Nodes : 71
+    number of Segments : 87
+    number of Sub-Segments : 16
+    Gs Nodes :  158
+    Gs Edges :  174
     Gc Nodes :  0
     Gc Edges :  0
-    Gt Nodes :  0
-    Gt Edges :  0
+    Gt Nodes :  17
+    Gt Edges :  30
     vnodes = Gt.node[Nc]['cycles'].cycle 
     poly = Gt.node[Nc]['cycle'].polyg 
-    Gr Nodes    : no Gr graph
+    Gr Nodes    : 17
+    Gr Edges    : 16
+    Nc  = Gr.node[nroom]['cycles']  
+
+The different graphs associated with the layout are then built
+
+
+.. code-block:: python
+
+    L.build()
+
+
+.. parsed-literal::
+
+    WARNING:root:punctual contact detected proceed in reverse order
+
+
+.. code-block:: python
+
+    f,a=L.showG('t')
+    b=axis('off')
+
+.. image:: DOC-LayoutEditor_files/_fig_09.png
+
+
+.. code-block:: python
+
+    f,a=L.showG('r')
+    b=axis('off')
+
+.. image:: DOC-LayoutEditor_files/_fig_11.png
+
+
+.. code-block:: python
+
+    f,a=L.showG('w')
+    b=axis('off')
+
+.. image:: DOC-LayoutEditor_files/_fig_13.png
+
+
+.. code-block:: python
+
+    f,a=L.showG('v')
+    b=axis('off')
+
+.. image:: DOC-LayoutEditor_files/_fig_15.png
+
+
+.. code-block:: python
+
+    f=figure(figsize=(20,20))
+    a = f.gca()
+    f,a=L.showG('i',fig=f,ax=a)
+    b=axis('off')
+
+.. image:: DOC-LayoutEditor_files/_fig_17.png
 
 The display options dictionnary 
 --------------------------------
 
+
+.. code-block:: python
+
+    L.info()
+
+
+.. parsed-literal::
+
+    filestr :  DLR.osm
+    filematini :  matDB.ini
+    fileslabini :  slabDB.ini
+    filegeom :  DLR.off
+    limites  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
+    number of Nodes : 105
+    number of Segments : 124
+    number of Sub-Segments : 30
+    Gs Nodes :  229
+    Gs Edges :  248
+    Gc Nodes :  0
+    Gc Edges :  0
+    Gt Nodes :  20
+    Gt Edges :  48
+    vnodes = Gt.node[Nc]['cycles'].cycle 
+    poly = Gt.node[Nc]['cycle'].polyg 
+    Gr Nodes    : 18
+    Gr Edges    : 36
+    Nc  = Gr.node[nroom]['cycles']  
+
 The layout can be displayed using matplotlib ploting primitive. Several
-display options are specified in the display dictionnary.
+display options are specified in the display dictionnary. Those options
+are exploited in ``showGs()`` vizualisation method.
 
 
 .. code-block:: python
@@ -70,7 +293,7 @@ display options are specified in the display dictionnary.
      'fileoverlay': 'TA-Office.png',
      'fontsize': 20,
      'layer': [],
-     'layers': [],
+     'layers': ['WALL', 'PARTITION', '3D_WINDOW_GLASS', 'AIR'],
      'layerset': ['WINDOW_GLASS',
       'PLASTERBOARD_7CM',
       'WALL',
@@ -155,7 +378,16 @@ Booleans
 Interactive editor
 ------------------
 
-The command L.editor() launches an interactive editor
+The command L.editor() launches an interactive editor. The state machine
+is implemented in module ``pylayers.gis.selectl.py``.
+
+To have an idea of all available options, look in the
+``pylayers.gis.SelectL`` module.
+
+http://pylayers.github.io/pylayers/\_modules/pylayers/gis/selectl.html#SelectL.new\_state
+
+All bug correction and ergonomic improvement of this editor is welcome.
+Just pull request your modifications.
 
 Edition mode
 ------------
@@ -207,11 +439,11 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f3df01848d0>,
-     <matplotlib.axes.AxesSubplot at 0x4129910>)
+    (<matplotlib.figure.Figure at 0x52d0f50>,
+     <matplotlib.axes.AxesSubplot at 0x4c0c790>)
 
 
-.. image:: DOC-LayoutEditor_files/_fig_05.png
+.. image:: DOC-LayoutEditor_files/_fig_22.png
 
 Scaling the figure overlay
 --------------------------
@@ -270,7 +502,7 @@ Vizualisation of the layout
     fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
     a = plt.axis('off')
 
-.. image:: DOC-LayoutEditor_files/_fig_07.png
+.. image:: DOC-LayoutEditor_files/_fig_24.png
 
 Each node of :math:`$\mathcal{G}_s$` with a negative index is a point.
 
@@ -282,16 +514,26 @@ The segment name is the key of the **slab** dictionnary.
 Segments and Subsegments
 ------------------------
 
-It is very important to respect a strict non overlapping rules. No
-segments can recover partially or totally an other segment. This rules
-allows to capture topological relation of the network which are
-exploited for further analysis.
+It is very important to respect a strict non overlapping rule. **No
+segments can recover partially or totally an other segment**.
 
-To describe door and window, the concept of subsegment is used. A
-subsegment belongs to a segment, it has mainly 3 attached parameters + A
-slab name + zmin (meter) + zmax (meter)
+This rule allows to capture topological relations of the network which
+are exploited for further analysis.
+
+To describe door and window, the concept of ``subsegment`` is used. A
+``subsegment`` belongs to a ``segment``, it has mainly 3 attached
+parameters :
+
+-  A slab name
+-  zmin (meter)
+-  zmax (meter)
 
 Currently, it is not possible to define multi-subsegments. for example a
 composite door with wood and glass. This a desirable feature to add for
-future version of PyLayers.
+future versions.
+
+
+.. code-block:: python
+
+    
 
