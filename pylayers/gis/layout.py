@@ -38,6 +38,7 @@ from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
 # Handle furnitures
 import pylayers.gis.furniture as fur
+import pylayers.gis.osmparser as osm
 #from pylayers.gis import cycles as Cycls
 from pylayers.gis import cycles as cycl # new version of cycles
 from pylayers.gis.selectl import SelectL
@@ -49,6 +50,7 @@ from itertools import combinations
 import pdb
 import ast
 import pylayers.util.graphutil as gph
+from mpl_toolkits.basemap import Basemap
 #
 #
 
@@ -58,6 +60,7 @@ class Layout(object):
 
     Attributes
     ----------
+
     Gs     : Structure graph
     Gt     : Topological graph  (indicates topological relationships between rooms)
     Gr     : Graph of room
@@ -67,6 +70,108 @@ class Layout(object):
     Nedge  : Number of edges of Gs
     pt     : points sequence
     tahe   : tail head
+
+    Methods
+    -------
+
+    add_door
+    add_fnod
+    add_furniture
+    add_furniture_file
+    add_nfpe
+    add_pnod
+    add_pons
+    add_segment
+    add_subseg
+    add_window
+    angleonlink
+    boundary
+    build
+    buildGc
+    buildGi
+    buildGi2
+    buildGr
+    buildGr3
+    buildGt
+    buildGv
+    buildGw
+    builGr2
+    check
+    check2
+    checkvis
+    cleanup
+    clip
+    closest_edge
+    cycleinline
+    del_cycle
+    delete
+    del_node
+    del_segment
+    del_subseg
+    diag
+    displaygui
+    distwall
+    dumpr
+    dumpw
+    ed2nd
+    editor
+    edit_point
+    edit_segment
+    facet3D
+    facets3D
+    find_edgelist
+    g2npy
+    geomfile
+    get_paths
+    get_Sg_pos
+    get_zone
+    have_subseg
+    help
+    info
+    info_edge
+    ispoint
+    layerongrid
+    layeronlink
+    load
+    loadfur
+    loadG
+    loadini
+    loadstr
+    loadstr2
+    ls
+    nd2ed
+    onseg
+    plot_segments
+    pt2cy
+    pt2ro
+    randTxRx
+    room2nodes
+    room2segments
+    save
+    saveini
+    savestr2
+    seg2ro
+    seginframe
+    seginline
+    segpt
+    seguv
+    show3
+    showG
+    showGs
+    showGt
+    showGv
+    show_layer
+    show_nodes
+    show_seg1
+    show_segment
+    showSig
+    signature
+    subseg
+    thwall
+    visilist
+    visi_papb
+    waypoint
+    waypointGw
 
     Notes
     ------
@@ -84,20 +189,29 @@ class Layout(object):
         self.sl = sb.SlabDB()
         self.sl.mat = mat
         self.sl.load(_fileslabini)
+        self.labels = {}
 
+        self.Nn = 0
+        self.Ne = 0
+        self.Nss = 0
+        #
+        # Initializing graphs
+        #
         self.Gs = nx.Graph()
         self.Gc = nx.Graph()
         self.Gt = nx.Graph()
         self.Gm = nx.Graph()
-        self.labels = {}
         self.Gs.pos = {}
-        self.Nn = 0
-        self.Ne = 0
-        self.Nss = 0
+        #
+        # related file names
+        #
         self.filename = _filename
         self.fileslabini = _fileslabini
         self.filematini = _filematini
         self.filefur = _filefur
+        #
+        # setting display option
+        #
         self.display = {}
         self.display['title'] = ''
         self.display['ticksoff'] = True
@@ -351,7 +465,127 @@ class Layout(object):
                 k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
 
+    def loadosm(self, _fileosm):
+        """ load layout from an osm file format
+        
+        Parameters 
+        ----------
 
+        _fileosm : string 
+
+
+        Notes
+        -----
+
+        In JOSM nodes are numbered with negative indexes. It is not valid to
+        have a positive node number. To stay compliant with the PyLayers
+        convention which tells that <0 node are points and >0 are segments,   
+        in the osm format, segments are numbered negatively with a known offset
+        of 1e7=10000000. The convention is set back when loading the osm file.
+
+        """
+        self.filename = _fileosm
+        fileosm = pyu.getlong(_fileosm,'struc')
+        coords,nodes,ways,relations = osm.osmparse(fileosm,typ='floorplan')
+        nn  = 0
+        ne = 0 
+        nss  = 0 
+        for npt in coords.xy:
+            self.Gs.add_node(npt)
+            self.Gs.pos[npt] = tuple(coords.xy[npt])
+            nn+=1
+
+        for k,nseg in enumerate(ways.way):
+            tahe = ways.way[nseg].refs
+            if len(tahe)==2:
+                nta = tahe[0]
+                nhe = tahe[1]
+                d  = ways.way[nseg].tags
+                # avoid segment 0 
+                ns = k+1
+                # transcode segment index 
+                if d.has_key('name'):
+                    name = d['name']
+                else:
+                    name = 'AIR'
+                    d['name'] = 'AIR'
+                self.Gs.add_node(ns)
+                self.Gs.add_edge(nta,ns)
+                self.Gs.add_edge(ns,nhe)
+                self.Gs.node[ns] = d
+                self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
+                if d.has_key('ss_name'):
+                    nss+=1
+                if name not in self.display['layers']:
+                    self.display['layers'].append(name)
+                self.labels[ns] = str(ns)
+                if name in self.name:
+                    self.name[name].append(ns)
+                else:
+                    self.name[name] = [ns]
+                ne+=1
+
+        self.Nn = nn
+        self.Ne = ne
+        self.Nss = nss
+        #del coords
+        #del nodes
+        #del ways
+        #del relations
+        # convert graph Gs to numpy arrays for speed up post processing
+        self.g2npy()
+
+    def saveosm(self, _fileosm):
+        """  save layout in osm file format 
+
+        Parameters 
+        ----------
+
+        _fileosm : string 
+
+        """
+        fileosm = pyu.getlong(_fileosm,'struc')
+        #
+        #  
+        #
+        lonmin = -2
+        lonmax = -1
+        latmin = 47
+        latmax = 48
+        lon_0 = -1.5
+        lat_0 = 47.5
+        m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
+            resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
+        fd = open(fileosm,"w")
+        fd.write("<?xml version='1.0' encoding='UTF-8'?>\n")
+        fd.write("<osm version='0.6' upload='false' generator='PyLayers'>\n")
+
+        for n in self.Gs.pos:
+            if n <0:
+                x,y = self.Gs.pos[n]
+                lon,lat = m(x,y,inverse=True)
+                fd.write("<node id='"+str(n)+"' action='modify' visible='true' lat='"+str(lat)+"' lon='"+str(lon)+"' />\n")
+
+        for n in self.Gs.pos:
+            if n >0:
+                neigh = nx.neighbors(self.Gs,n)
+                d = self.Gs.node[n]
+                noden = -10000000-n
+                fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n") 
+                fd.write("<nd ref='"+str(neigh[0])+"' />\n") 
+                fd.write("<nd ref='"+str(neigh[1])+"' />\n") 
+                fd.write("<tag k='name' v='"+d['name']+"' />\n") 
+                fd.write("<tag k='zmin' v='"+str(d['zmin'])+"' />\n") 
+                fd.write("<tag k='zmax' v='"+str(d['zmax'])+"' />\n") 
+                fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n") 
+                if d.has_key('ss_name'):
+                    fd.write("<tag k='ss_name' v='"+d['ss_name']+"' />\n") 
+                    fd.write("<tag k='ss_zmin' v='"+str(d['ss_zmin'])+"' />\n") 
+                    fd.write("<tag k='ss_zmax' v='"+str(d['ss_zmax'])+"' />\n") 
+                fd.write("</way>\n") 
+
+
+        fd.write("</osm>\n")
 
     def saveini(self, _fileini):
         """ save structure in an ini file
@@ -401,6 +635,7 @@ class Layout(object):
 
         # convert graph Gs to numpy arrays for speed up post processing
         # ideally an edited Layout should be locked while not saved.
+
         self.g2npy()
 
 
@@ -435,7 +670,9 @@ class Layout(object):
         self.Gs.pos = {}
         self.labels = {}
 
+        #
         # update display section
+        #
         for k in di['display']:
             try:
                 self.display[k]=eval(di['display'][k])
@@ -449,7 +686,8 @@ class Layout(object):
             x,y       = eval(di['points'][nn])
             #
             # limitation of point precision is important for avoiding
-            # topological in shapely. Layout precision is limited to millimeter.
+            # topological problems in shapely. 
+            # Layout precision is hard limited to millimeter precision. 
             #
             self.Gs.pos[nodeindex] = (round(1000*x)/1000.,round(1000*y)/1000.)
             self.labels[nodeindex] = nn
@@ -539,7 +777,7 @@ class Layout(object):
         Notes
         -----
 
-        Available format are .ini , .str2 , .str
+        Available format are .ini , .str2 , .str , .osm
 
         if filename does not exist the file is not loaded
 
@@ -549,7 +787,10 @@ class Layout(object):
         filename,ext=os.path.splitext(_filename)
         filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
         if os.path.exists(filename):
-            if ext=='.str':
+            if ext=='.osm':
+                #self.loadosm(_filename,self.filematini,self.fileslabini)
+                self.loadosm(_filename)
+            elif ext=='.str':
                 self.loadstr(_filename,self.filematini,self.fileslabini)
             elif ext=='.str2':
                 self.loadstr2(_filename,self.filematini,self.fileslabini)
@@ -1233,7 +1474,7 @@ class Layout(object):
         #self.boundary(1,1)
 
     def subseg(self):
-        """ establish the association : name <->  edgelist
+        """ establishes the association : name <->  edgelist
 
         Returns
         -------
@@ -1256,6 +1497,7 @@ class Layout(object):
                     dico[name].append(k)
                 else:
                     dico[name] = [k]
+           
         self.dsseg = dico
         self.listtransition = listtransition
         return(dico)
@@ -4861,7 +5103,7 @@ class Layout(object):
         return(filename)
 
     def geomfile(self):
-        """ create a geomview file from the layout
+        """ create a geomview file 
 
         The `.off` file can be vizualized through the show3 method
 
@@ -4873,7 +5115,9 @@ class Layout(object):
         >>> L.geomfile()
 
         """
-
+        # calculate center of gravity
+        pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
+        
         #en  = self.Ne # number of segments
         en  = len(np.where(np.array(self.Gs.node.keys())>0)[0])
         if en != self.Ne:
@@ -4888,7 +5132,7 @@ class Layout(object):
             cen = cen + len(lss)
 
         if cen != self.Nss:
-            logging.warning("wrong number of sugsegment consistency problem in layout")
+            logging.warning("wrong number of subsegment consistency problem in layout")
 
         sl = self.sl
 #
@@ -4903,22 +5147,25 @@ class Layout(object):
         dikn = {}
         for i in self.Gs.node.keys():
             if i > 0:  # segment
-                nebr = self.Gs.neighbors(i)
-                n1 = nebr[0]
-                n2 = nebr[1]
-                P1[0:2, ik] = np.array(self.Gs.pos[n1])
-                P1[2, ik] = self.Gs.node[i]['zmin']
+                if self.Gs.node[i]['name']<>'AIR':
+                    nebr = self.Gs.neighbors(i)
+                    n1 = nebr[0]
+                    n2 = nebr[1]
+                    P1[0:2, ik] = np.array(self.Gs.pos[n1])-pg
+                    P1[2, ik] = self.Gs.node[i]['zmin']
 
-                P2[0:2, ik] = np.array(self.Gs.pos[n2])
-                P2[2, ik] = self.Gs.node[i]['zmin']
+                    P2[0:2, ik] = np.array(self.Gs.pos[n2])-pg
+                    P2[2, ik] = self.Gs.node[i]['zmin']
 
-                P3[0:2, ik] = np.array(self.Gs.pos[n2])
-                P3[2, ik] = self.Gs.node[i]['zmax']
+                    P3[0:2, ik] = np.array(self.Gs.pos[n2])-pg
+                    P3[2, ik] = self.Gs.node[i]['zmax']
 
-                P4[0:2, ik] = np.array(self.Gs.pos[n1])
-                P4[2, ik] = self.Gs.node[i]['zmax']
-                dikn[ik]=i
-                ik = ik + 1
+                    P4[0:2, ik] = np.array(self.Gs.pos[n1])-pg
+                    P4[2, ik] = self.Gs.node[i]['zmax']
+                    dikn[ik]=i
+                    ik = ik + 1
+                else:
+                    en = en-1
 
         #d = self.subseg()
         cpt = 0
@@ -4932,19 +5179,19 @@ class Layout(object):
                 n2 = nebr[1]
                 #print ik,n1,n2
 
-                P1[0:2, ik] = np.array(self.Gs.pos[n1])
+                P1[0:2, ik] = np.array(self.Gs.pos[n1])-pg
                 P1[2, ik] = self.Gs.node[l]['ss_zmin']
                 #print P1[:,ik]
 
-                P2[0:2, ik] = np.array(self.Gs.pos[n2])
+                P2[0:2, ik] = np.array(self.Gs.pos[n2])-pg
                 P2[2, ik] = self.Gs.node[l]['ss_zmin']
                 #print P2[:,ik]
 
-                P3[0:2, ik] = np.array(self.Gs.pos[n2])
+                P3[0:2, ik] = np.array(self.Gs.pos[n2])-pg 
                 P3[2, ik] = self.Gs.node[l]['ss_zmax']
                 #print P3[:,ik]
 
-                P4[0:2, ik] = np.array(self.Gs.pos[n1])
+                P4[0:2, ik] = np.array(self.Gs.pos[n1])-pg
                 P4[2, ik] = self.Gs.node[l]['ss_zmax']
                 #print P4[:,ik]
 
