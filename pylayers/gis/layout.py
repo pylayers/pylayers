@@ -234,6 +234,7 @@ class Layout(object):
         self.display['activelayer'] = self.sl.keys()[0]
         self.display['layers'] = []
         self.display['overlay'] = False
+        self.display['inverse'] = False
         #self.display['fileoverlay']="/home/buguen/Pyproject/data/image/"
         self.display['fileoverlay'] = "TA-Office.png"
         #self.display['box'] = (-11.4, 19.525, -8.58, 23.41)
@@ -501,6 +502,11 @@ class Layout(object):
                 nta = tahe[0]
                 nhe = tahe[1]
                 d  = ways.way[nseg].tags
+                for key in d:
+                    try:
+                        d[key]=eval(d[key])
+                    except:
+                        pass
                 # avoid segment 0 
                 ns = k+1
                 # transcode segment index 
@@ -3223,8 +3229,10 @@ class Layout(object):
                 image = Image.open(im)
             else:
                 image = Image.open(strdir + '/' + self.display['fileoverlay'])
-            #ax.imshow(image, origin='lower', extent=(0, 40, 0, 15), alpha=0.5)
-            ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
+            if self.display['inverse']:    
+                ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
+            else:                
+                ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
@@ -3636,9 +3644,18 @@ class Layout(object):
 
         See Also
         --------
+
         buildGr
 
+        Notes
+        -----
+
+        for all edges of Gr (adjascent room)
+            if room1 and room2 have a common transition 
+            
+
         """
+
         self.Gw = nx.Graph()
         self.Gw.pos = {}
 
@@ -3647,15 +3664,9 @@ class Layout(object):
         for e in self.Gr.edges_iter(): # iterator on Gr edges
             trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
             trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
-            Id = np.intersect1d(trans1,trans2)[0]  # common door
-            #try:
-            #    Id = np.intersect1d(doors1,doors2)[0]  # common door
-            #except:
-            #    wall1 = self.Gr.node[e[0]]['airwall']  # airwall of room e[0]
-            #    wall2 = self.Gr.node[e[1]]['airwall']  # airwall of room e[1]
-            #    Id = np.intersect1d(wall1, wall2)[0]  # common airwall 
+            Id = np.intersect1d(trans1,trans2)[0]  # list of common doors
 
-            unode = self.Gs.neighbors(Id) # get edge number of common door|airwall
+            unode = self.Gs.neighbors(Id) # get edge number of common doors
             p1 = self.Gs.pos[unode[0]]
             p2 = self.Gs.pos[unode[1]]
             pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common door
@@ -4136,6 +4147,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         graph : char
             't' : Gt 'r' : Gr 's' : Gs 'v' : Gv  'c': Gc 'i' : Gi
         show : boolean
@@ -4646,8 +4658,16 @@ class Layout(object):
         alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
 
     def buildGr(self):
+        """ build the graph of rooms Gr 
+
+        Notes
+        -----
+        
+        adjascent rooms are connected 
+
+        """
         #
-        # Build a graph with airwall connected cycles
+        # 
         #
         Ga = nx.Graph()
         Ga.pos ={}
@@ -4928,7 +4948,7 @@ class Layout(object):
             print "geomfile (.off) has no been generated"
         
         self.boundary()
-        print "limites ",self.ax
+        print "boundaries ",self.ax
         print "number of Nodes :", self.Nn
         print "number of Segments :", self.Ne
         print "number of Sub-Segments :", self.Nss
@@ -4937,12 +4957,6 @@ class Layout(object):
             print "Gs Edges : ", self.Gs.number_of_edges()
         except:
             print "no Gs graph"
-
-        try:
-            print "Gc Nodes : ", self.Gc.number_of_nodes()
-            print "Gc Edges : ", self.Gc.number_of_edges()
-        except:
-            print "no Gc graph"
 
         try:
             print "Gt Nodes : ", self.Gt.number_of_nodes()
