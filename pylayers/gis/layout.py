@@ -4928,7 +4928,7 @@ class Layout(object):
             print "geomfile (.off) has no been generated"
         
         self.boundary()
-        print "limites ",self.ax
+        print "boundaries ",self.ax
         print "number of Nodes :", self.Nn
         print "number of Segments :", self.Ne
         print "number of Sub-Segments :", self.Nss
@@ -4937,12 +4937,6 @@ class Layout(object):
             print "Gs Edges : ", self.Gs.number_of_edges()
         except:
             print "no Gs graph"
-
-        try:
-            print "Gc Nodes : ", self.Gc.number_of_nodes()
-            print "Gc Edges : ", self.Gc.number_of_edges()
-        except:
-            print "no Gc graph"
 
         try:
             print "Gt Nodes : ", self.Gt.number_of_nodes()
