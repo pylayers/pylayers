@@ -501,6 +501,11 @@ class Layout(object):
                 nta = tahe[0]
                 nhe = tahe[1]
                 d  = ways.way[nseg].tags
+                for key in d:
+                    try:
+                        d[key]=eval(d[key])
+                    except:
+                        pass
                 # avoid segment 0 
                 ns = k+1
                 # transcode segment index 
@@ -3636,9 +3641,18 @@ class Layout(object):
 
         See Also
         --------
+
         buildGr
 
+        Notes
+        -----
+
+        for all edges of Gr (adjascent room)
+            if room1 and room2 have a common transition 
+            
+
         """
+
         self.Gw = nx.Graph()
         self.Gw.pos = {}
 
@@ -3647,15 +3661,9 @@ class Layout(object):
         for e in self.Gr.edges_iter(): # iterator on Gr edges
             trans1 = self.Gr.node[e[0]]['transition']  # transitions of room e[0]
             trans2 = self.Gr.node[e[1]]['transition']  # transitions of room e[1]
-            Id = np.intersect1d(trans1,trans2)[0]  # common door
-            #try:
-            #    Id = np.intersect1d(doors1,doors2)[0]  # common door
-            #except:
-            #    wall1 = self.Gr.node[e[0]]['airwall']  # airwall of room e[0]
-            #    wall2 = self.Gr.node[e[1]]['airwall']  # airwall of room e[1]
-            #    Id = np.intersect1d(wall1, wall2)[0]  # common airwall 
+            Id = np.intersect1d(trans1,trans2)[0]  # list of common doors
 
-            unode = self.Gs.neighbors(Id) # get edge number of common door|airwall
+            unode = self.Gs.neighbors(Id) # get edge number of common doors
             p1 = self.Gs.pos[unode[0]]
             p2 = self.Gs.pos[unode[1]]
             pdoor = (np.array(p1) + np.array(p2)) / 2  # middle of the common door
@@ -4136,6 +4144,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         graph : char
             't' : Gt 'r' : Gr 's' : Gs 'v' : Gv  'c': Gc 'i' : Gi
         show : boolean
@@ -4646,8 +4655,16 @@ class Layout(object):
         alreadythere = filter(lambda x: x in cycleroom.keys(),involvedcycles)
 
     def buildGr(self):
+        """ build the graph of rooms Gr 
+
+        Notes
+        -----
+        
+        adjascent rooms are connected 
+
+        """
         #
-        # Build a graph with airwall connected cycles
+        # 
         #
         Ga = nx.Graph()
         Ga.pos ={}
