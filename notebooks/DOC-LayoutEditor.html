@@ -60,7 +60,7 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">The different layout format</a><ul>
-<li><a class="reference internal" href="#reading-osm-file-format">Reading <cite>.osm</cite> file format</a></li>
+<li><a class="reference internal" href="#reading-an-existing-layout">Reading an existing Layout</a></li>
 <li><a class="reference internal" href="#the-display-options-dictionnary">The display options dictionnary</a></li>
 </ul>
 </li>
@@ -105,18 +105,26 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>This section explains some features of the class <strong>Layout</strong>. Layouts are
-handled by the module <strong>pylayers.gis.layout</strong>.</p>
-<p>This module handles different files format including geo-referenced
+  <p>This section explains some features of the class <strong>Layout</strong>.</p>
+<p>A Layout is a representaion of a floorplan, it is handled by the module
+<strong>pylayers.gis.layout</strong>.</p>
+<p>This module recognizes different file formats including geo-referenced
 files in open street map format <tt class="docutils literal"><span class="pre">.osm</span></tt>.</p>
-<p>The choice has been made to take advantage of a mature floor plan editor
-<em>JOSM</em> with the plugin <em>PicLayer</em>. It is well described in
+<p>Using osm is interesting because it gives access to a huge geo database,
+and particularly it allows to take advantage of a mature floor plan
+editor <em>JOSM</em> with the plugin <em>PicLayer</em>. This is well described in
 <a class="reference external" href="http://wiki.openstreetmap.org/wiki/IndoorOSM">http://wiki.openstreetmap.org/wiki/IndoorOSM</a></p>
-<p>The <tt class="docutils literal"><span class="pre">pylayers.gis.osmparser</span></tt> module allows to parse osm files and to
-convert into different PyLayers format. This module is called by
-<tt class="docutils literal"><span class="pre">loadosm()</span></tt> method.</p>
-<p>PyLayers has also a low level structure editor based on <tt class="docutils literal"><span class="pre">matplotlib</span></tt>
-which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method.</p>
+<p>The <tt class="docutils literal"><span class="pre">pylayers.gis.osmparser</span></tt> module parses <tt class="docutils literal"><span class="pre">osm</span></tt> files.</p>
+<p>See the following methods of the layout object</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">loadosm()</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">saveosm()</span></tt></li>
+</ul>
+<p>PyLayers comes also with a low level structure editor based on
+<tt class="docutils literal"><span class="pre">matplotlib</span></tt> which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method. This
+editor is more suited for modyfing constitutive properties of walls. In
+the future a dedicated plugin in <tt class="docutils literal"><span class="pre">JOSM</span></tt> could be a much better
+solution.</p>
 <div class="section" id="the-different-layout-format">
 <h1>The different layout format<a class="headerlink" href="#the-different-layout-format" title="Permalink to this headline">¶</a></h1>
 <p>The layout format has evolved a lot over time and is going to evolve
@@ -125,7 +133,8 @@ again. The different recognized file extensions are the following :</p>
 <li><tt class="docutils literal"><span class="pre">.str2</span></tt>: a ASCII file (Node list + edge list)</li>
 <li><tt class="docutils literal"><span class="pre">.str</span></tt> : a binary file which includes visibility relations between
 point and segments</li>
-<li><tt class="docutils literal"><span class="pre">.ini</span></tt> : an ini file which gather</li>
+<li><tt class="docutils literal"><span class="pre">.ini</span></tt> : an ini file which gather node list and edge list as well
+as the state of the current <tt class="docutils literal"><span class="pre">display</span></tt> dictionnary</li>
 <li><tt class="docutils literal"><span class="pre">.osm</span></tt> : an xml file which can be edited with JOSM
 <a class="reference external" href="http://josm.openstreetmap.de/">http://josm.openstreetmap.de/</a></li>
 </ul>
@@ -133,8 +142,10 @@ point and segments</li>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="section" id="reading-osm-file-format">
-<h2>Reading <cite>.osm</cite> file format<a class="headerlink" href="#reading-osm-file-format" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x474b250&gt;</pre>
+</div>
+<div class="section" id="reading-an-existing-layout">
+<h2>Reading an existing Layout<a class="headerlink" href="#reading-an-existing-layout" title="Permalink to this headline">¶</a></h2>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
@@ -187,17 +198,17 @@ where1.osm</pre>
     tail -17 DLR.osm</pre>
 </div>
 <div class="highlight-python"><pre>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
-&lt;osm version='0.6' upload='false' generator='JOSM'&gt;
-  &lt;node id='-212' action='modify' visible='true' lat='48.084786570023745' lon='11.27779169137997' /&gt;
-  &lt;node id='-210' action='modify' visible='true' lat='48.08477983698066' lon='11.277807970757943' /&gt;
-  &lt;node id='-208' action='modify' visible='true' lat='48.08477470372689' lon='11.277820382088898' /&gt;
-  &lt;node id='-206' action='modify' visible='true' lat='48.08476292533722' lon='11.277769777676356' /&gt;
-  &lt;node id='-204' action='modify' visible='true' lat='48.08485956769662' lon='11.27777543967586' /&gt;
-  &lt;node id='-202' action='modify' visible='true' lat='48.08486676516895' lon='11.277782110228287' /&gt;
-  &lt;node id='-200' action='modify' visible='true' lat='48.08488518369812' lon='11.277821870499377' /&gt;
-  &lt;node id='-198' action='modify' visible='true' lat='48.08488036457005' lon='11.277775932263998' /&gt;
+&lt;osm version='0.6' upload='False' generator='JOSM'&gt;
+  &lt;node id='-212' action='modify' visible='True' lat='48.084786570023745' lon='11.27779169137997' /&gt;
+  &lt;node id='-210' action='modify' visible='True' lat='48.08477983698066' lon='11.277807970757943' /&gt;
+  &lt;node id='-208' action='modify' visible='True' lat='48.08477470372689' lon='11.277820382088898' /&gt;
+  &lt;node id='-206' action='modify' visible='True' lat='48.08476292533722' lon='11.277769777676356' /&gt;
+  &lt;node id='-204' action='modify' visible='True' lat='48.08485956769662' lon='11.27777543967586' /&gt;
+  &lt;node id='-202' action='modify' visible='True' lat='48.08486676516895' lon='11.277782110228287' /&gt;
+  &lt;node id='-200' action='modify' visible='True' lat='48.08488518369812' lon='11.277821870499377' /&gt;
+  &lt;node id='-198' action='modify' visible='True' lat='48.08488036457005' lon='11.277775932263998' /&gt;
 ---
-  &lt;way id='-216' action='modify' visible='true'&gt;
+  &lt;way id='-216' action='modify' visible='True'&gt;
     &lt;nd ref='-8' /&gt;
     &lt;nd ref='-118' /&gt;
     &lt;tag k='name' v='WALL' /&gt;
@@ -205,7 +216,7 @@ where1.osm</pre>
     &lt;tag k='zmax' v='3.0' /&gt;
     &lt;tag k='zmin' v='0.0' /&gt;
   &lt;/way&gt;
-  &lt;way id='-214' action='modify' visible='true'&gt;
+  &lt;way id='-214' action='modify' visible='True'&gt;
     &lt;nd ref='-4' /&gt;
     &lt;nd ref='-6' /&gt;
     &lt;tag k='name' v='WALL' /&gt;
@@ -215,36 +226,32 @@ where1.osm</pre>
   &lt;/way&gt;
 &lt;/osm&gt;</pre>
 </div>
-<p>To read a new layout :</p>
+<p>To read a new layout in osm format :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.osm&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_053.png" src="../_images/_fig_053.png" />
+<img alt="../_images/_fig_061.png" src="../_images/_fig_061.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>filestr :  TA-Office.ini
+<div class="highlight-python"><pre>filestr :  DLR.osm
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
-filegeom :  TA-Office.off
-limites  (0.0, 40.0, 0.0, 15.0)
-number of Nodes : 71
-number of Segments : 87
-number of Sub-Segments : 16
-Gs Nodes :  158
-Gs Edges :  174
-Gc Nodes :  0
-Gc Edges :  0
-Gt Nodes :  17
-Gt Edges :  30
+filegeom :  DLR.off
+boundaries  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
+number of Nodes : 105
+number of Segments : 124
+number of Sub-Segments : 30
+Gs Nodes :  229
+Gs Edges :  248
+Gt Nodes :  0
+Gt Edges :  0
 vnodes = Gt.node[Nc]['cycles'].cycle
 poly = Gt.node[Nc]['cycle'].polyg
-Gr Nodes    : 17
-Gr Edges    : 16
-Nc  = Gr.node[nroom]['cycles']</pre>
+Gr Nodes    : no Gr graph</pre>
 </div>
 <p>The different graphs associated with the layout are then built</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
@@ -252,33 +259,45 @@ Nc  = Gr.node[nroom]['cycles']</pre>
 </div>
 <div class="highlight-python"><pre>WARNING:root:punctual contact detected proceed in reverse order</pre>
 </div>
+<p>The topological graph <img class="math" src="../_images/math/a892b186e1073b70c0e051986d7adef0a6ee3e2d.png" alt="$\mathcal{G}_t$"/> or graph of non
+overlapping cycles.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_095.png" src="../_images/_fig_095.png" />
+<img alt="../_images/_fig_101.png" src="../_images/_fig_101.png" />
+<p>The graph of room <img class="math" src="../_images/math/b16c4406d54a8f8201b41ab4cc7381f211b81782.png" alt="$\mathcal{G}_r$"/>. Two rooms which share at
+least a wall are connected. Two rooms which share only a corner
+(punctual connection) are not connected</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_114.png" src="../_images/_fig_114.png" />
+<img alt="../_images/_fig_122.png" src="../_images/_fig_122.png" />
+<p>The graph of waypath <img class="math" src="../_images/math/01fae7c16f24ce4f0e1492668333229fcb15841b.png" alt="$\mathcal{G}_w$"/>. This graph is used for
+agent mobility. This allows to determine the shortest path between 2
+rooms. This information could be included in the osm file. This is not
+the case yet</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_132.png" src="../_images/_fig_132.png" />
+<img alt="../_images/_fig_14.png" src="../_images/_fig_14.png" />
+<p>The graph of visibility <img class="math" src="../_images/math/2fed76dfec266db4718197a48249b74bdde77563.png" alt="$\mathcal{G_v}$"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_151.png" src="../_images/_fig_151.png" />
-<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<img alt="../_images/_fig_163.png" src="../_images/_fig_163.png" />
+<p>The graph of interactions <img class="math" src="../_images/math/810d51416e7a3e7e86a0c9f086b19f7176d929ca.png" alt="$\mathcal{G}_i$"/> used to dertermine the
+ray signatures.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_171.png" src="../_images/_fig_171.png" />
+<img alt="../_images/_fig_184.png" src="../_images/_fig_184.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
 <h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
@@ -289,20 +308,18 @@ Nc  = Gr.node[nroom]['cycles']</pre>
 filematini :  matDB.ini
 fileslabini :  slabDB.ini
 filegeom :  DLR.off
-limites  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
+boundaries  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
 number of Nodes : 105
 number of Segments : 124
 number of Sub-Segments : 30
 Gs Nodes :  229
 Gs Edges :  248
-Gc Nodes :  0
-Gc Edges :  0
 Gt Nodes :  20
 Gt Edges :  48
 vnodes = Gt.node[Nc]['cycles'].cycle
 poly = Gt.node[Nc]['cycle'].polyg
-Gr Nodes    : 18
-Gr Edges    : 36
+Gr Nodes    : 16
+Gr Edges    : 16
 Nc  = Gr.node[nroom]['cycles']</pre>
 </div>
 <p>The layout can be displayed using matplotlib ploting primitive. Several
@@ -321,6 +338,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
  <span class="s">&#39;ednodes&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s">&#39;fileoverlay&#39;</span><span class="p">:</span> <span class="s">&#39;TA-Office.png&#39;</span><span class="p">,</span>
  <span class="s">&#39;fontsize&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+ <span class="s">&#39;inverse&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
  <span class="s">&#39;layer&#39;</span><span class="p">:</span> <span class="p">[],</span>
  <span class="s">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WALL&#39;</span><span class="p">,</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span> <span class="s">&#39;3D_WINDOW_GLASS&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">],</span>
  <span class="s">&#39;layerset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WINDOW_GLASS&#39;</span><span class="p">,</span>
@@ -438,23 +456,25 @@ Just pull request your modifications.</p>
 <p>It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;fileoverlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;http://images.wikia.com/theoffice/images/9/9e/Layout.jpg&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()</span>
+<span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;fileoverlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;http://images.wikia.com/theoffice/images/9/9e/Layout.jpg&#39;</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
 <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
 <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;scaled&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ticksoff&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;inverse&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x52d0f50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x4c0c790&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x66aedd0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x5b3df90&gt;)</pre>
 </div>
-<img alt="../_images/_fig_22.png" src="../_images/_fig_22.png" />
+<img alt="../_images/_fig_231.png" src="../_images/_fig_231.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h2>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h2>
@@ -505,7 +525,7 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_241.png" src="../_images/_fig_241.png" />
+<img alt="../_images/_fig_25.png" src="../_images/_fig_25.png" />
 <p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
 <p>Each node of <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
 to a segment (Wall,door,window,...).</p>
@@ -513,8 +533,8 @@ to a segment (Wall,door,window,...).</p>
 </div>
 <div class="section" id="segments-and-subsegments">
 <h2>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h2>
-<p>It is very important to respect a strict non overlapping rule. <strong>No
-segments can recover partially or totally an other segment</strong>.</p>
+<p>It is required to respect a strict non overlapping rule. <strong>No segments
+can recover partially or totally an other segment</strong>.</p>
 <p>This rule allows to capture topological relations of the network which
 are exploited for further analysis.</p>
 <p>To describe door and window, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is used. A
@@ -528,9 +548,6 @@ parameters :</p>
 <p>Currently, it is not possible to define multi-subsegments. for example a
 composite door with wood and glass. This a desirable feature to add for
 future versions.</p>
-<div class="highlight-python"><div class="highlight"><pre>
-</pre></div>
-</div>
 </div>
 </div>
 

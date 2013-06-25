@@ -1,4 +1,16 @@
-11D-E1.osm
-11D.osm
-DLR.osm
-where1.osm
+{'DIRANT': 'ant',
+ 'DIRCIR': 'output',
+ 'DIRFUR': 'struc/furnitures',
+ 'DIRGEOM': 'geom',
+ 'DIRLCH': 'output',
+ 'DIRMAT': 'ini',
+ 'DIRMAT2': 'ini',
+ 'DIRMES': 'meas',
+ 'DIRNETSAVE': 'netsave',
+ 'DIRSIMUL': 'ini',
+ 'DIRSLAB': 'ini',
+ 'DIRSLAB2': 'ini',
+ 'DIRSTRUC': 'struc',
+ 'DIRSTRUC2': 'struc',
+ 'DIRTRA': 'output',
+ 'DIRTUD': 'output'}

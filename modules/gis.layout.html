@@ -624,6 +624,14 @@ R+  R- T+ T-</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.gis.layout.Layout.buildGr">
+<tt class="descname">buildGr</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGr" title="Permalink to this definition">¶</a></dt>
+<dd><p>build the graph of rooms Gr</p>
+<p class="rubric">Notes</p>
+<p>adjascent rooms are connected</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.gis.layout.Layout.buildGr3">
 <tt class="descname">buildGr3</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.buildGr3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.buildGr3" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
@@ -698,8 +706,13 @@ Each simple cycle of Gs is a node of Gt</p>
 <dd><p>build Graph of waypaths</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">buildGr</span></tt></p>
+<p class="last"><a class="reference internal" href="#pylayers.gis.layout.Layout.buildGr" title="pylayers.gis.layout.Layout.buildGr"><tt class="xref py py-obj docutils literal"><span class="pre">buildGr</span></tt></a></p>
 </div>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>for all edges of Gr (adjascent room)</dt>
+<dd>if room1 and room2 have a common transition</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -2008,7 +2021,7 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x56c9e50&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x59c8190&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

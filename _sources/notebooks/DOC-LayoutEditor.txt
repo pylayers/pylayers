@@ -1,19 +1,28 @@
-This section explains some features of the class **Layout**. Layouts are
-handled by the module **pylayers.gis.layout**.
+This section explains some features of the class **Layout**.
 
-This module handles different files format including geo-referenced
+A Layout is a representaion of a floorplan, it is handled by the module
+**pylayers.gis.layout**.
+
+This module recognizes different file formats including geo-referenced
 files in open street map format ``.osm``.
 
-The choice has been made to take advantage of a mature floor plan editor
-*JOSM* with the plugin *PicLayer*. It is well described in
+Using osm is interesting because it gives access to a huge geo database,
+and particularly it allows to take advantage of a mature floor plan
+editor *JOSM* with the plugin *PicLayer*. This is well described in
 http://wiki.openstreetmap.org/wiki/IndoorOSM
 
-The ``pylayers.gis.osmparser`` module allows to parse osm files and to
-convert into different PyLayers format. This module is called by
-``loadosm()`` method.
+The ``pylayers.gis.osmparser`` module parses ``osm`` files.
 
-PyLayers has also a low level structure editor based on ``matplotlib``
-which can be invoqued using the ``editor()`` method.
+See the following methods of the layout object
+
+-  ``loadosm()``
+-  ``saveosm()``
+
+PyLayers comes also with a low level structure editor based on
+``matplotlib`` which can be invoqued using the ``editor()`` method. This
+editor is more suited for modyfing constitutive properties of walls. In
+the future a dedicated plugin in ``JOSM`` could be a much better
+solution.
 
 The different layout format 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,7 +33,8 @@ again. The different recognized file extensions are the following :
 -  ``.str2``: a ASCII file (Node list + edge list)
 -  ``.str`` : a binary file which includes visibility relations between
    point and segments
--  ``.ini`` : an ini file which gather
+-  ``.ini`` : an ini file which gather node list and edge list as well
+   as the state of the current ``display`` dictionnary
 -  ``.osm`` : an xml file which can be edited with JOSM
    http://josm.openstreetmap.de/
 
@@ -35,7 +45,11 @@ again. The different recognized file extensions are the following :
     from pylayers.gis.layout import *
     from pylayers.util.project import *
 
-Reading `.osm` file format
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x474b250>
+
+Reading an existing Layout
 --------------------------
 
 To read an existing layout it is sufficient to create a Layout object
@@ -115,17 +129,17 @@ The structure of the ``.osm`` file is shown below
 .. parsed-literal::
 
     <?xml version='1.0' encoding='UTF-8'?>
-    <osm version='0.6' upload='false' generator='JOSM'>
-      <node id='-212' action='modify' visible='true' lat='48.084786570023745' lon='11.27779169137997' />
-      <node id='-210' action='modify' visible='true' lat='48.08477983698066' lon='11.277807970757943' />
-      <node id='-208' action='modify' visible='true' lat='48.08477470372689' lon='11.277820382088898' />
-      <node id='-206' action='modify' visible='true' lat='48.08476292533722' lon='11.277769777676356' />
-      <node id='-204' action='modify' visible='true' lat='48.08485956769662' lon='11.27777543967586' />
-      <node id='-202' action='modify' visible='true' lat='48.08486676516895' lon='11.277782110228287' />
-      <node id='-200' action='modify' visible='true' lat='48.08488518369812' lon='11.277821870499377' />
-      <node id='-198' action='modify' visible='true' lat='48.08488036457005' lon='11.277775932263998' />
+    <osm version='0.6' upload='False' generator='JOSM'>
+      <node id='-212' action='modify' visible='True' lat='48.084786570023745' lon='11.27779169137997' />
+      <node id='-210' action='modify' visible='True' lat='48.08477983698066' lon='11.277807970757943' />
+      <node id='-208' action='modify' visible='True' lat='48.08477470372689' lon='11.277820382088898' />
+      <node id='-206' action='modify' visible='True' lat='48.08476292533722' lon='11.277769777676356' />
+      <node id='-204' action='modify' visible='True' lat='48.08485956769662' lon='11.27777543967586' />
+      <node id='-202' action='modify' visible='True' lat='48.08486676516895' lon='11.277782110228287' />
+      <node id='-200' action='modify' visible='True' lat='48.08488518369812' lon='11.277821870499377' />
+      <node id='-198' action='modify' visible='True' lat='48.08488036457005' lon='11.277775932263998' />
     ---
-      <way id='-216' action='modify' visible='true'>
+      <way id='-216' action='modify' visible='True'>
         <nd ref='-8' />
         <nd ref='-118' />
         <tag k='name' v='WALL' />
@@ -133,7 +147,7 @@ The structure of the ``.osm`` file is shown below
         <tag k='zmax' v='3.0' />
         <tag k='zmin' v='0.0' />
       </way>
-      <way id='-214' action='modify' visible='true'>
+      <way id='-214' action='modify' visible='True'>
         <nd ref='-4' />
         <nd ref='-6' />
         <tag k='name' v='WALL' />
@@ -143,7 +157,7 @@ The structure of the ``.osm`` file is shown below
       </way>
     </osm>
 
-To read a new layout :
+To read a new layout in osm format :
 
 
 .. code-block:: python
@@ -155,7 +169,7 @@ To read a new layout :
 
     fig,ax=L.showGs()
 
-.. image:: DOC-LayoutEditor_files/_fig_05.png
+.. image:: DOC-LayoutEditor_files/_fig_06.png
 
 
 .. code-block:: python
@@ -165,25 +179,21 @@ To read a new layout :
 
 .. parsed-literal::
 
-    filestr :  TA-Office.ini
+    filestr :  DLR.osm
     filematini :  matDB.ini
     fileslabini :  slabDB.ini
-    filegeom :  TA-Office.off
-    limites  (0.0, 40.0, 0.0, 15.0)
-    number of Nodes : 71
-    number of Segments : 87
-    number of Sub-Segments : 16
-    Gs Nodes :  158
-    Gs Edges :  174
-    Gc Nodes :  0
-    Gc Edges :  0
-    Gt Nodes :  17
-    Gt Edges :  30
+    filegeom :  DLR.off
+    boundaries  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
+    number of Nodes : 105
+    number of Segments : 124
+    number of Sub-Segments : 30
+    Gs Nodes :  229
+    Gs Edges :  248
+    Gt Nodes :  0
+    Gt Edges :  0
     vnodes = Gt.node[Nc]['cycles'].cycle 
     poly = Gt.node[Nc]['cycle'].polyg 
-    Gr Nodes    : 17
-    Gr Edges    : 16
-    Nc  = Gr.node[nroom]['cycles']  
+    Gr Nodes    : no Gr graph
 
 The different graphs associated with the layout are then built
 
@@ -197,13 +207,20 @@ The different graphs associated with the layout are then built
 
     WARNING:root:punctual contact detected proceed in reverse order
 
+The topological graph :math:`$\mathcal{G}_t$` or graph of non
+overlapping cycles.
+
 
 .. code-block:: python
 
     f,a=L.showG('t')
     b=axis('off')
 
-.. image:: DOC-LayoutEditor_files/_fig_09.png
+.. image:: DOC-LayoutEditor_files/_fig_10.png
+
+The graph of room :math:`$\mathcal{G}_r$`. Two rooms which share at
+least a wall are connected. Two rooms which share only a corner
+(punctual connection) are not connected
 
 
 .. code-block:: python
@@ -211,7 +228,12 @@ The different graphs associated with the layout are then built
     f,a=L.showG('r')
     b=axis('off')
 
-.. image:: DOC-LayoutEditor_files/_fig_11.png
+.. image:: DOC-LayoutEditor_files/_fig_12.png
+
+The graph of waypath :math:`$\mathcal{G}_w$`. This graph is used for
+agent mobility. This allows to determine the shortest path between 2
+rooms. This information could be included in the osm file. This is not
+the case yet
 
 
 .. code-block:: python
@@ -219,7 +241,9 @@ The different graphs associated with the layout are then built
     f,a=L.showG('w')
     b=axis('off')
 
-.. image:: DOC-LayoutEditor_files/_fig_13.png
+.. image:: DOC-LayoutEditor_files/_fig_14.png
+
+The graph of visibility :math:`$\mathcal{G_v}$`
 
 
 .. code-block:: python
@@ -227,17 +251,20 @@ The different graphs associated with the layout are then built
     f,a=L.showG('v')
     b=axis('off')
 
-.. image:: DOC-LayoutEditor_files/_fig_15.png
+.. image:: DOC-LayoutEditor_files/_fig_16.png
+
+The graph of interactions :math:`$\mathcal{G}_i$` used to dertermine the
+ray signatures.
 
 
 .. code-block:: python
 
-    f=figure(figsize=(20,20))
+    f=figure(figsize=(15,15))
     a = f.gca()
     f,a=L.showG('i',fig=f,ax=a)
     b=axis('off')
 
-.. image:: DOC-LayoutEditor_files/_fig_17.png
+.. image:: DOC-LayoutEditor_files/_fig_18.png
 
 The display options dictionnary 
 --------------------------------
@@ -254,20 +281,18 @@ The display options dictionnary
     filematini :  matDB.ini
     fileslabini :  slabDB.ini
     filegeom :  DLR.off
-    limites  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
+    boundaries  (742.96390126943857, 779.36807532009323, 1111.8981215904842, 1139.1207102126)
     number of Nodes : 105
     number of Segments : 124
     number of Sub-Segments : 30
     Gs Nodes :  229
     Gs Edges :  248
-    Gc Nodes :  0
-    Gc Edges :  0
     Gt Nodes :  20
     Gt Edges :  48
     vnodes = Gt.node[Nc]['cycles'].cycle 
     poly = Gt.node[Nc]['cycle'].polyg 
-    Gr Nodes    : 18
-    Gr Edges    : 36
+    Gr Nodes    : 16
+    Gr Edges    : 16
     Nc  = Gr.node[nroom]['cycles']  
 
 The layout can be displayed using matplotlib ploting primitive. Several
@@ -292,6 +317,7 @@ are exploited in ``showGs()`` vizualisation method.
      'ednodes': False,
      'fileoverlay': 'TA-Office.png',
      'fontsize': 20,
+     'inverse': False,
      'layer': [],
      'layers': ['WALL', 'PARTITION', '3D_WINDOW_GLASS', 'AIR'],
      'layerset': ['WINDOW_GLASS',
@@ -420,6 +446,7 @@ a filename. In that case the file is stored in
 
 .. code-block:: python
 
+    L=Layout()
     L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
 
 
@@ -429,6 +456,7 @@ a filename. In that case the file is stored in
     L.display['alpha']=1
     L.display['scaled']=False
     L.display['ticksoff']=False
+    L.display['inverse']=True
 
 
 .. code-block:: python
@@ -439,11 +467,11 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x52d0f50>,
-     <matplotlib.axes.AxesSubplot at 0x4c0c790>)
+    (<matplotlib.figure.Figure at 0x66aedd0>,
+     <matplotlib.axes.AxesSubplot at 0x5b3df90>)
 
 
-.. image:: DOC-LayoutEditor_files/_fig_22.png
+.. image:: DOC-LayoutEditor_files/_fig_23.png
 
 Scaling the figure overlay
 --------------------------
@@ -502,7 +530,7 @@ Vizualisation of the layout
     fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
     a = plt.axis('off')
 
-.. image:: DOC-LayoutEditor_files/_fig_24.png
+.. image:: DOC-LayoutEditor_files/_fig_25.png
 
 Each node of :math:`$\mathcal{G}_s$` with a negative index is a point.
 
@@ -514,8 +542,8 @@ The segment name is the key of the **slab** dictionnary.
 Segments and Subsegments
 ------------------------
 
-It is very important to respect a strict non overlapping rule. **No
-segments can recover partially or totally an other segment**.
+It is required to respect a strict non overlapping rule. **No segments
+can recover partially or totally an other segment**.
 
 This rule allows to capture topological relations of the network which
 are exploited for further analysis.
@@ -531,9 +559,4 @@ parameters :
 Currently, it is not possible to define multi-subsegments. for example a
 composite door with wood and glass. This a desirable feature to add for
 future versions.
-
-
-.. code-block:: python
-
-    
 

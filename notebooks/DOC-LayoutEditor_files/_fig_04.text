@@ -1,28 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<osm version='0.6' upload='false' generator='JOSM'>
-  <node id='-212' action='modify' visible='true' lat='48.084786570023745' lon='11.27779169137997' />
-  <node id='-210' action='modify' visible='true' lat='48.08477983698066' lon='11.277807970757943' />
-  <node id='-208' action='modify' visible='true' lat='48.08477470372689' lon='11.277820382088898' />
-  <node id='-206' action='modify' visible='true' lat='48.08476292533722' lon='11.277769777676356' />
-  <node id='-204' action='modify' visible='true' lat='48.08485956769662' lon='11.27777543967586' />
-  <node id='-202' action='modify' visible='true' lat='48.08486676516895' lon='11.277782110228287' />
-  <node id='-200' action='modify' visible='true' lat='48.08488518369812' lon='11.277821870499377' />
-  <node id='-198' action='modify' visible='true' lat='48.08488036457005' lon='11.277775932263998' />
----
-  <way id='-216' action='modify' visible='true'>
-    <nd ref='-8' />
-    <nd ref='-118' />
-    <tag k='name' v='WALL' />
-    <tag k='transition' v='False' />
-    <tag k='zmax' v='3.0' />
-    <tag k='zmin' v='0.0' />
-  </way>
-  <way id='-214' action='modify' visible='true'>
-    <nd ref='-4' />
-    <nd ref='-6' />
-    <tag k='name' v='WALL' />
-    <tag k='transition' v='False' />
-    <tag k='zmax' v='3.0' />
-    <tag k='zmin' v='0.0' />
-  </way>
-</osm>
+11D-E1.osm
+11D.osm
+DLR.osm
+where1.osm

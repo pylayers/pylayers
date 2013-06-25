@@ -4580,7 +4580,7 @@
         <span class="c"># list of cycles which are already involved in rooms</span>
         <span class="n">alreadythere</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cycleroom</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">involvedcycles</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">buildGr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Layout.buildGr"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.buildGr">[docs]</a>    <span class="k">def</span> <span class="nf">buildGr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c">#</span>
         <span class="c"># Build a graph with airwall connected cycles</span>
         <span class="c">#</span>
@@ -4661,7 +4661,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">keep</span><span class="p">:</span> 
                 <span class="bp">self</span><span class="o">.</span><span class="n">Gr</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="o">*</span><span class="n">e</span><span class="p">)</span>
 
-
+</div>
 <div class="viewcode-block" id="Layout.buildGr3"><a class="viewcode-back" href="../../../modules/gis.layout.html#pylayers.gis.layout.Layout.buildGr3">[docs]</a>    <span class="k">def</span> <span class="nf">buildGr3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; build Graph of rooms</span>
 
