@@ -407,4 +407,7 @@ def connectModel(d,fGHz=2.4,sensitivitydBm=-85,n=2,PtdBm=0):
 
 
 if __name__=="__main__":
+    plt.ion()
+    print "testing net.py"
     doctest.testmod()
+    print "------------"

@@ -14,11 +14,10 @@ import ConfigParser
 import pdb
 
 class Coverage(object):
-    """ Handle Layout Coverage 
+    """ Handle Layout Coverage
 
         Methods
         -------
-  
         create grid()
             create a uniform grid for evaluating losses
         cover()
@@ -26,12 +25,11 @@ class Coverage(object):
         showPower()
             display the map of received power
         showLoss()
-            display the map of losses 
+            display the map of losses
 
 
         Attributes
         ----------
-        
         All attributes are read from fileini ino the ini directory of the
         current project
 
@@ -40,8 +38,8 @@ class Coverage(object):
 
         L :  a Layout
         model : a pylayers.network.model object.
-        xstep : x step for grid
-        ystep : y step for grid
+        nx    : number of point on x
+        ny    : number of point on y
         tx    : transmitter position
         txpe  : transmitter power emmission level
         show  : boolean for automatic display power map
@@ -62,13 +60,16 @@ class Coverage(object):
         self.showopt=dict(self.config.items('show'))
 
         self.L=Layout(self.layoutopt['filename'])
-        self.model=Model(f=eval(self.plm['f']),
+        self.model=Model(f=eval(self.plm['fghz']),
                          rssnp=eval(self.plm['rssnp']),
                          d0=eval(self.plm['d0']),
                          sigrss=eval(self.plm['sigrss']))
-        self.xstep = eval(self.gridopt['xstep'])
-        self.ystep = eval(self.gridopt['ystep'])
+        self.nx = eval(self.gridopt['nx'])
+        self.ny = eval(self.gridopt['ny'])
+        self.mode = eval(self.gridopt['full'])
+        self.boundary = eval(self.gridopt['boundary'])
         # transitter section
+        self.fGHz = eval(self.txopt['fghz'])
         self.tx = np.array((eval(self.txopt['x']),eval(self.txopt['y'])))
         self.ptdbm = eval(self.txopt['ptdbm'])
         self.framelengthbytes = eval(self.txopt['framelengthbytes'])
@@ -80,6 +81,7 @@ class Coverage(object):
         self.temperaturek = eval(self.rxopt['temperaturek'])
         self.noisefactordb = eval(self.rxopt['noisefactordb'])
 
+        
         Pn = (10**(self.noisefactordb/10.)+1)*kBoltzmann*self.temperaturek*self.bandwidthmhz*1e3
         self.pndbm = 10*np.log10(Pn)+60
 
@@ -94,18 +96,34 @@ class Coverage(object):
         except:
             self.L.buildGt()
             self.L.dumpw('t')
-        self.creategrid()
 
+        self.creategrid(full=self.mode,boundary=self.boundary)
 
-    def creategrid(self):
-        """create a grid
-            create a grid for various evaluation
+    def __repr__(self):
+        st=''
+        st= st+ 'tx :'+str(self.txopt) + '\n'
+        st= st+ 'rx :'+str(self.rxopt) + '\n'
+
+    def creategrid(self,full=True,boundary=[]):
+        """ create a grid
+
+        Parameters
+        ----------
+        full : boolean
+            default (True) use all the layout area
+        boundary : (xmin,ymin,xmax,ymax)
+            if full is False the boundary is used
 
         """
-        mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
-        ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
-        x=np.linspace(mi[0],ma[0],self.xstep)
-        y=np.linspace(mi[1],ma[1],self.ystep)
+        if full:
+            mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
+            ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
+        else:
+            mi = np.array([boundary[0],boundary[1]])
+            ma = np.array([boundary[2],boundary[3]])
+
+        x=np.linspace(mi[0],ma[0],self.nx)
+        y=np.linspace(mi[1],ma[1],self.ny)
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
 
@@ -129,6 +147,8 @@ class Coverage(object):
         self.freespace = PL(self.grid,self.model.f,self.tx)
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
+        self.snro = self.prdbmo - self.pndbm
+        self.snrp = self.prdbmp - self.pndbm
 
 
     def showEd(self,polarization='o'):
@@ -152,12 +172,12 @@ class Coverage(object):
         b=self.grid[0,1]
         t=self.grid[-1,-1]
         if polarization=='o':
-            cov=ax.imshow(self.Edo.reshape((self.xstep,self.ystep)).T,
+            cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,
                       extent=(l,r,b,t),
                       origin='lower')
             titre = "Map of LOS excess delay, polar orthogonal"
         if polarization=='p':
-            cov=ax.imshow(self.Edp.reshape((self.xstep,self.ystep)).T,
+            cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,
                       extent=(l,r,b,t),
                       origin='lower')
             titre = "Map of LOS excess delay, polar parallel"
@@ -231,23 +251,23 @@ class Coverage(object):
             ### values between the rx sensitivity and noise floor
             mcPrf = np.ma.masked_where((prdbm > self.rxsens) 
                                      & (prdbm < self.pndbm),prdbm)
-            cov1 = ax.imshow(mcPrf.reshape((self.xstep,self.ystep)).T,
+            cov1 = ax.imshow(mcPrf.reshape((self.nx,self.ny)).T,
                              extent=(l,r,b,t),cmap = my_cmap,
                              vmin=self.rxsens,origin='lower')
 
             ### values above the sensitivity
             mcPrs = np.ma.masked_where(prdbm < self.rxsens,prdbm)
-            cov = ax.imshow(mcPrs.reshape((self.xstep,self.ystep)).T,
+            cov = ax.imshow(mcPrs.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
                             cmap = 'jet',
                             vmin=self.rxsens,origin='lower')
             title=title + '\n gray : Pr (dBm) < %.2f' % self.rxsens + ' dBm'
 
         else :
-            cov=ax.imshow(prdbm.reshape((self.xstep,self.ystep)).T,
+            cov=ax.imshow(prdbm.reshape((self.nx,self.ny)).T,
                           extent=(l,r,b,t),
                           cmap = 'jet',
-                          vmin=self.PndBm,origin='lower')
+                          vmin=self.pndbm,origin='lower')
 
         if nfl:
             ### values under the noise floor 
@@ -256,7 +276,7 @@ class Coverage(object):
             cPr = prdbm
             cPr[cl] = self.pndbm
             mcPruf = np.ma.masked_where(cPr > self.pndbm,cPr)
-            cov2 = ax.imshow(mcPruf.reshape((self.xstep,self.ystep)).T,
+            cov2 = ax.imshow(mcPruf.reshape((self.nx,self.ny)).T,
                              extent=(l,r,b,t),cmap = 'binary',
                              vmax=self.pndbm,origin='lower')
             title=title + '\n white : Pr (dBm) < %.2f' % self.pndbm + ' dBm'
@@ -317,7 +337,7 @@ class Coverage(object):
 
         zones[uconnected] = 1
         zones[utransition] = (prdbm[utransition]-PrL)/(PrU-PrL)
-        cov = ax.imshow(zones.reshape((self.xstep,self.ystep)).T,
+        cov = ax.imshow(zones.reshape((self.nx,self.ny)).T,
                              extent=(l,r,b,t),cmap = 'BuGn',origin='lower')
 
         title='PDR region'
@@ -348,7 +368,6 @@ class Coverage(object):
             >>> C.cover()
             >>> C.showLoss(polarization='o')
             >>> C.showLoss(polarization='p')
-            
         """
         fig = plt.figure()
         fig,ax=self.L.showGs(fig=fig)
@@ -358,12 +377,12 @@ class Coverage(object):
         t=self.grid[-1,-1]
 
         if polarization=='o':
-            cov = ax.imshow(self.Lwo.reshape((self.xstep,self.ystep)).T,
+            cov = ax.imshow(self.Lwo.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
                             origin='lower')
             title = ('Map of losses, orthogonal (V) polarization') 
         if polarization=='p':
-            cov = ax.imshow(self.Lwp.reshape((self.xstep,self.ystep)).T,
+            cov = ax.imshow(self.Lwp.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
                             origin='lower')
             title = ('Map of losses, parallel (H) polarization') 

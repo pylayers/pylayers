@@ -8,7 +8,7 @@ import doctest
 import pdb
 
 
-def displot(pt, ph, col='black'):
+def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
     """ discontinuous plot
 
     Parameters
@@ -41,8 +41,9 @@ def displot(pt, ph, col='black'):
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
-    fig = plt.gcf()
-    ax  = fig.gca()
+    if fig == None:
+        fig = plt.gcf()
+        ax  = fig.gca()
     Nseg = np.shape(pt)[1]
     pz = np.empty((2,))
     pn = np.zeros((2,))
@@ -54,7 +55,7 @@ def displot(pt, ph, col='black'):
     mask = np.kron(np.ones((2, Nseg)), m1)
     pzz = pz[1:, :].T
     vertices = np.ma.masked_array(pzz, mask)
-    ax.plot(vertices[0, :], vertices[1, :], color=col)
+    ax.plot(vertices[0, :], vertices[1, :], color=color,linewidth=linewidth)
     return fig, ax
 
 def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
@@ -157,4 +158,5 @@ def cylinder(fig,pa,pb,R):
     ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
 
 if (__name__ == "__main__"):
+    plt.ion()
     doctest.testmod()

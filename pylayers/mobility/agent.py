@@ -26,6 +26,7 @@ class Agent(object):
 
            Parameters
            ----------
+
            'ID': string
                 agent ID
            'name': string
@@ -60,9 +61,9 @@ class Agent(object):
            'gcom':pylayers.communication.Gcom()
                 Communication graph
            'comm_mod': string
-                Communication between nodes mode: 
+                Communication between nodes mode:
                 'autonomous': all TOAs are refreshed regulary
-                'synchro' : only visilbe TOAs are refreshed 
+                'synchro' : only visilbe TOAs are refreshed
         """
         defaults = {'ID': 0,
                     'name': 'johndoe',
@@ -100,6 +101,7 @@ class Agent(object):
         self.net = args['net']
         self.epwr = args['epwr']
         self.gcom = args['gcom']
+        self.sim = args['sim']
         try:
             self.dcond = args['dcond']
         except:
@@ -127,10 +129,10 @@ class Agent(object):
 
             ## Network init
             self.node = Node(ID=self.ID, p=conv_vecarr(self.meca.position),
-                             t=time.time(), RAT=args['RAT'],
+                             t=self.sim.now(), RAT=args['RAT'],
                              epwr=args['epwr'], sens=args['sens'], type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
-            self.sim = args['sim']
+
             self.sim.activate(self.meca, self.meca.move(), 0.0)
             self.PN = self.net.node[self.ID]['PN']
 
@@ -149,36 +151,43 @@ class Agent(object):
 
 
             elif args['comm_mode'] == 'autonomous':
-                ## The TOA requests are made by node only when they are in visibility of pairs.
+                ## The requests are made by node only when they are in visibility of pairs.
 
+                # self.rxr only manage a refresh RSS process
                 self.rxr = RX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
-                self.rxt = RX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
-                self.txt = TX(net=self.net, ID=self.ID,
-                              dcond=self.dcond, gcom=self.gcom, sim=self.sim)
+                              gcom=self.gcom, sim=self.sim)
+                # self.tx manage all requests to other nodes
+                self.tx = TX(net=self.net, ID=self.ID,
+                              gcom=self.gcom, sim=self.sim)
+                # self.tx replies to  requests from self.tx
+                self.rx = RX(net=self.net, ID=self.ID,
+                              gcom=self.gcom, sim=self.sim)
 
                 self.sim.activate(self.rxr, self.rxr.refresh_RSS(), 0.0)
-                self.sim.activate(self.rxt, self.rxt.wait_TOArq(), 0.0)
-                self.sim.activate(self.txt, self.txt.request_TOA(), 0.0)
+                self.sim.activate(self.tx, self.tx.request(), 0.0)
+                self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
+
 
 
 
         elif self.type == 'ap':
             if args['roomId'] == -1:
                 self.node = Node(ID=self.ID, p=self.args['pos'],
-                                 t=time.time(), RAT=args['RAT'],
+                                 t=self.sim.now(), RAT=args['RAT'],
                                  epwr=args['epwr'], sens=args['sens'], type=self.type)
             else:
                 pp = np.array(args['Layout'].Gr.pos[self.args['roomId']])
-                self.node = Node(ID=self.ID, p=pp, t=time.time(), RAT=args['RAT'],
+                self.node = Node(ID=self.ID, p=pp, t=self.sim.now(), RAT=args['RAT'],
                                  epwr=args['epwr'], sens=args['sens'], type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim = args['sim']
 #            self.sim.activate(self.meca, self.meca.move(),0.0)
             self.PN = self.net.node[self.ID]['PN']
             self.PN.node[self.ID]['pe'] = self.net.node[self.ID]['p']
-
+            if args['comm_mode'] == 'autonomous':
+                self.rx = RX(net=self.net, ID=self.ID,
+                              gcom=self.gcom, sim=self.sim)
+                self.sim.activate(self.rx, self.rx.wait_request(), 0.0)
         else:
             raise NameError('wrong agent type, it must be either agent (ag) or acces point (ap) ')
 
@@ -202,6 +211,7 @@ class Agent(object):
             self.loc = Localization(net=self.net, ID=self.ID,
                                     method=args['loc_method'])
             self.Ploc = PLocalization(loc=self.loc,
-                                      loc_updt_time=args['loc_updt'], sim=args['sim'])
+                                      loc_updt_time=args['loc_updt'],
+                                      tx=self.tx,
+                                      sim=args['sim'])
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
-

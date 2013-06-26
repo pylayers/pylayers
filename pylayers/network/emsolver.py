@@ -95,9 +95,9 @@ class EMSolver(object):
         Attributes
         ----------
             n1p : np.array
-                node 1 postion
+                node 1 position
             n2p : np.array
-                node 2 postion
+                node 2 position
             LDP : string
                 Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
             epwr : list of nodes emmited power

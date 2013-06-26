@@ -103,13 +103,17 @@ A = 390
 B = 386
 
 
-L = Layout('DLR.ini')
-try:
-    L.dumpr()
-except:
-    L.build()
-    L.dumpw()
-L.showG('r')
+
+
+
+#L = Layout('DLR.ini')
+#try:
+#    L.dumpr()
+#except:
+#    L.build()
+#    L.dumpw()
+#L.showG('r')
+
 #path = '/private/staff/n/en/buguen/Bureau/WHERE2/WHERE2-DLR-Simulations/'
 #ZigbeeNode = np.loadtxt(path+'Coord_Zigbee_Nodes.csv',delimiter=',')
 #Dongle = np.loadtxt(path+'Coord_dongle.csv',delimiter=',')
@@ -136,31 +140,29 @@ for c,k in enumerate(MT_DLR_RDTMaster):
 # Select a link 
 #
 tx = S.tx.position[:,4]
-Rtx = S.L.pt2ro(tx)
-print "transmitter :",tx," is in room ",Rtx
-
-rx = array([15,3,2.5])
-#rx = S.rx.position[:,28]
-Rrx = S.L.pt2ro(rx)
-print "mobile node :",rx," is in room ",Rrx
-
+Ctx = S.L.pt2cy(tx)
+print "transmitter :",tx," is in cycle ",Ctx
+rx = array([18,0,2.5])
+Crx = S.L.pt2cy(rx)
+print "mobile node :",rx," is in cycle ",Crx
 print tx
 print rx
+
 a=time.time()
 
-if not os.path.exists('r2d.pickle'):
-    Si = Signatures(S.L,tx,rx)
-    Si.run(tx,rx,4)
-    r2d = Si.rays()
-    file=open("r2d.pickle","w")
-    pickle.dump(r2d,file)
-    file.close()
-else:
-    file = open("r2d.pickle","r")
-    r2d = pickle.load(file)
+#if not os.path.exists('r2d.pickle'):
+Si = Signatures(S.L,Ctx,Crx)
+Si.run3(cutoff=3,dcut=3)
+r2d = Si.rays(tx,rx)
+file=open("r2d.pickle","w")
+pickle.dump(r2d,file)
+file.close()
+#else:
+#    file = open("r2d.pickle","r")
+#    r2d = pickle.load(file)
 r3d = r2d.to3D()
-r3d.locbas(L)
-r3d.fillinter(L)
+r3d.locbas(S.L)
+r3d.fillinter(S.L)
 
 config = ConfigParser.ConfigParser()
 _filesimul = 'default.ini'
@@ -171,7 +173,6 @@ fGHz = np.linspace(eval(config.get("frequency", "fghzmin")),
                      eval(config.get("frequency", "nf")))
 
 Cn=r3d.eval(fGHz)
-
 Cn.freq=Cn.fGHz
 sco=Cn.prop2tran(a='theta',b='theta')
 wav = wvf.Waveform()

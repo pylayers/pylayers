@@ -105,6 +105,53 @@ class Constraint(object):
         self.parmsh['grid'] = True       # display grid
         self.parmsh['grav'] = True       # display box gravity center
 
+    def updc(self,name='p',value=np.array(())):
+        """ update values of a constraint
+
+        Example :
+        -------
+        >>> from pylayers.location.geometric.constraints.toa import *
+        >>> T=TOA()
+        >>> T.usable
+        True
+        >>> T.p
+        array([], dtype=float64)
+
+
+        >>> T.updc('p',np.array((10,3)))
+        >>> T.p
+        array([10,  3])
+        >>> T.updc('value',[np.nan])
+        >>> T.usable
+        False
+        """
+        if np.sum(np.isnan(value))<1 and value.size>0:
+            setattr(self,name,value)
+
+            # once p is set, constraint is runable
+            if name =='p':
+                self.runable = True
+
+            # once value is set and constraint has a std value
+            # condstraint is usable
+            if name =='value':
+                if np.sum(np.isnan(self.std))<1 and self.runable:
+                    self.usable = True
+
+            # once std is set and constraint has a value
+            # condstraint is usable
+            if name =='std':
+                if np.sum(np.isnan(self.value))<1 and self.runable:
+                    self.usable = True
+
+
+        else :
+            if name =='p':
+                self.runable = False
+            elif name =='value' or name =='std':
+                self.usable = False
+
+
     def info(self):
         """ display info on constraint
         """
@@ -132,6 +179,15 @@ class Constraint(object):
         print "-------------------"
         self.lbox.info()
         print "-------------------"
+
+    def info2(self):
+
+
+        print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+        np.set_printoptions(precision=3)
+        print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+
+
 
     def show3(self):
         """ display constraint on Geomview

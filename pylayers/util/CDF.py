@@ -5,6 +5,12 @@ import scipy as sp
 import matplotlib.pyplot as plt
 import pdb
 import mplrc.ieee.transaction
+#
+# mplrc is a python module which provides an easy way to change
+# matplotlib's plotting configuration for specific publications. 
+# git clone https://github.com/arsenovic/mplrc.git
+#
+#
 from matplotlib import rcParams
 
 
@@ -21,7 +27,7 @@ class CDF(object):
 
 		d0 = ld[0]  
 
-		d0['bound']       : bornes en abscisses de la cdf 0 
+		d0['bound']       : abscisse bounds of the cdf  
 		d0['values']      : valeurs 
 		d0['xlabel']      : 
 		d0['ylabel']      : 
@@ -95,12 +101,12 @@ class CDF(object):
 			markercolor    = d['markercolor']
 			markerfrequency = d['markerfrequency']
 			linewidth    = d['linewidth']
-			line 	  = d['line']
+			linestyle = d['linestyle']
 			color	  = d['color']
 			legend    = d['legend']
 #			leg.append(legend)
 			cdf    = self.cdf[k]
-			c.append(ax.plot(bound,cdf,marker=marker,markevery=markerfrequency,ms=markersize,mfc=markercolor,ls=line,c=color,linewidth=linewidth,label=legend))
+			c.append(ax.plot(bound,cdf,marker=marker,markevery=markerfrequency,ms=markersize,mfc=markercolor,ls=linestyle,c=color,linewidth=linewidth,label=legend))
 		plt.xlabel(self.ld[0]['xlabel'])
 		plt.ylabel(self.ld[0]['ylabel'])
 		#plt.legend((c),(leg),loc=0,scatterpoints=1,numpoints=1.)
@@ -118,8 +124,13 @@ if __name__=="__main__":
 	d0['xlabel'] = 'xlabel' 
 	d0['ylabel'] = 'ylabel' 
 	d0['legend'] = 'legend '
+	d0['markersize'] = 3
+	d0['markercolor'] = 'red'
+	d0['markerfrequency'] = 2
 	d0['title']  = 'title'  
-	d0['marker']  = 'r-'  
+	d0['color']  = 'black'  
+	d0['marker']  = 'o'  
+	d0['linestyle']  = '-'  
 	d0['linewidth']  = 3  
 	d0['filename']  = 'essai.png'  
 	d1 = {}
@@ -128,8 +139,13 @@ if __name__=="__main__":
 	d1['xlabel'] = 'xlabel' 
 	d1['ylabel'] = 'ylabel' 
 	d1['legend'] = 'legend '
+	d1['markersize'] = 3
+	d1['markercolor'] = 'blue'
+	d1['linestyle']  = '-'  
+	d1['color']  = 'black'  
+	d1['markerfrequency'] = 2
 	d1['title']  = 'title'  
-	d1['marker']  = 'bo'  
+	d1['marker']  = 'o'  
 	d1['linewidth']  = 3  
 	lv = [d0,d1]
-	c  = CDF(lv)
+	c = CDF(lv,'fig')

@@ -93,6 +93,7 @@ class Simul(SimulationRT):
         if str2bool(self.net_opt['ipython_nb_show']):
             self.verbose = False
         self.roomlist=[]
+        self.create()
 
     def create_layout(self):
         """
@@ -126,11 +127,7 @@ class Simul(SimulationRT):
         #self.L.loadGr(G1)
             print 'This is the first time your use this layout file.\
             Layout graphs are curently being built, it may take few minutes.'
-            self.L.buildGt()
-            self.L.buildGr()
-            self.L.buildGw()
-            self.L.buildGv()
-            self.L.buildGi()
+            self.L.build()     
             self.L.dumpw()
         x_offset = 0  # float(self.lay_opt['x_offset'])
         y_offset = 0  # float(self.lay_opt['y_offset'])
@@ -214,6 +211,7 @@ class Simul(SimulationRT):
 
         self.net = Network(EMS=self.EMS)
         self.gcom=Gcom(net=self.net,sim=self)
+
         self.create_agent()
         # create network
 
@@ -311,7 +309,7 @@ class Simul(SimulationRT):
     def runsimul(self):
         """ Run simulation
         """
-        self.create()
+
         self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
 #        self.simulate(until=float(self.sim_opt['duration']))
         if self.save_opt['savep']:
