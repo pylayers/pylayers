@@ -1550,7 +1550,7 @@ class Signature(object):
             >>> L = Layout()
             >>> L.buildGt()
             >>> L.buildGr()
-            >>> seq = [1,5,1]
+            >>> seq = np.array([[1,5,1],[1,1,1]])
             >>> s = Signature(seq)
             >>> tx = np.array([4,-1])
             >>> rx = np.array([1,1])
@@ -1567,6 +1567,19 @@ class Signature(object):
             >>> l5 = ax.plot(ray[0,:],ray[1,:],color='#999999',alpha=0.6,linewidth=0.6)
             >>> fig,ax = L.showGs(fig,ax)
             >>> plt.show()
+
+        Notes
+        -----
+
+        For mathematical details see : 
+
+        @INPROCEEDINGS{6546704, 
+        author={Laaraiedh, Mohamed and Amiot, Nicolas and Uguen, Bernard}, 
+        booktitle={Antennas and Propagation (EuCAP), 2013 7th European Conference on}, 
+        title={Efficient ray tracing tool for UWB propagation and
+               localization modeling}, 
+        year={2013}, 
+        pages={2307-2311},}
 
         """
 
