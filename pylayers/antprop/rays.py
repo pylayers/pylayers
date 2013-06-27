@@ -317,8 +317,8 @@ class Rays(dict):
                     ptees = pte
                     siges = sig
 
-                if k == 3:
-                    pdb.set_trace()
+                #if k == 3:
+                #    pdb.set_trace()
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
