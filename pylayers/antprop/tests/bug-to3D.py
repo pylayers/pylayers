@@ -5,6 +5,12 @@ from IPython.display import Image,HTML,Latex
 
 L=Layout('DLR.osm')
 L.build()
+#try:
+#    L.dumpr()
+#except:
+#    L.build()
+#    L.dumpw()
+
 L.showG('t',labels=True,figsize=(10,10))
 
 nc1 = 1
@@ -30,12 +36,13 @@ print d,tau
 
 r=S.rays(ptx,prx)
 figsize=(10,10)
-r.show(L)
+r.show(L,i=[3],r=[0,1])
 r3 = r.to3D()
 r3.locbas(L)
 r3.fillinter(L)
-
+r3.show(L,i=[3],r=[0,1])
+plt.title('Here is the bug')
 pg=np.array([[760.59],[1124.911],[0]])
 
-r3.show3(strucname='DLR',pg=pg)
+#r3.show3(strucname='DLR',pg=pg)
 
