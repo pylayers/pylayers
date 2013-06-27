@@ -3283,7 +3283,6 @@ class Layout(object):
         if axis==[]:
             ax.axis('scaled')
         else:
-            print "showGs",axis
             ax.axis(axis)
 
         if show:
@@ -4955,11 +4954,12 @@ class Layout(object):
         self.display['nodes']=True
         self.display['ednodes']=True
         self.af = SelectL(self,fig=fig,ax=ax)
-        fig,ax = self.af.show(fig,ax)
+        fig,ax = self.af.show(fig,ax,clear=True)
         self.cid1 = fig.canvas.mpl_connect('button_press_event',
                                            self.af.OnClick)
         self.cid2 = fig.canvas.mpl_connect('key_press_event',
                                            self.af.OnPress)
+        plt.axis('tight')
         plt.draw()
         plt.show()
 
