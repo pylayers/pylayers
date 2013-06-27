@@ -4,13 +4,14 @@ import networkx as nx
 from IPython.display import Image,HTML,Latex
 
 L=Layout('DLR.osm')
-L.build()
-#try:
-#    L.dumpr()
-#except:
-#    L.build()
-#    L.dumpw()
+#L.build()
+try:
+    L.dumpr()
+except:
+    L.build()
+    L.dumpw()
 
+plt.ion()
 L.showG('t',labels=True,figsize=(10,10))
 
 nc1 = 1
@@ -40,9 +41,7 @@ r.show(L,i=[3],r=[0,1])
 r3 = r.to3D()
 r3.locbas(L)
 r3.fillinter(L)
-r3.show(L,i=[3],r=[0,1])
-plt.title('Here is the bug')
+r3.show(L,i=[3],r=[2])
 pg=np.array([[760.59],[1124.911],[0]])
-
-#r3.show3(strucname='DLR',pg=pg)
+r3.show3(strucname='DLR',pg=pg)
 

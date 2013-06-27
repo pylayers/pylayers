@@ -52,8 +52,8 @@ class Rays(dict):
     the height from floor to ceil, and the number N of 
     multiple reflections to take into account. 
 
-    Once the 3d rays have been calculated, it is required 
-    to evaluate the local basis along those rays. This is
+    Once the 3d rays have been calculated, the  
+    the local basis are evaluated along those rays. This is
     done through the **locbas** method
 
     Once the local basis have been calculated the different
@@ -735,8 +735,8 @@ class Rays(dict):
         uslv = np.unique(slv)
         uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
 
-#       create reverse dictionnary with all material as a key
-#       and associated point/segment as a value
+        # create reverse dictionnary with all material as a key
+        # and associated point/segment as a value
 
         dsla = {}
         for s in uslv:
@@ -749,8 +749,11 @@ class Rays(dict):
         # warning use zeros instead of empty because slab zero
         # is virtually used before assigning correct slab to ceil and floor
 
+        #
         # sla is an array of string.
         # each value of Gs node is the index of the corresponding slab
+        #
+
         sla[slk] = np.array(slv)
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
@@ -758,6 +761,8 @@ class Rays(dict):
 
         tsl = np.array(())
         rsl = np.array(())
+        
+        # loop on group of interactions 
         for k in self:
             if k !=0:
                 
@@ -789,7 +794,7 @@ class Rays(dict):
 
                 ## index creation
                 ##################
-                # create index for retrieve interactions
+                # create index for retrieving interactions
 
                 # integer offset : total size idx
                 idxts = idxts + idx.size
@@ -802,7 +807,8 @@ class Rays(dict):
                 self[k]['nbrays'] = nbray
                 self[k]['rayidx'] = nbrayt + np.arange(nbray)
 
-                # create a numpy array to link ray index to ites correponding niuber of interactions
+                # create a numpy array to relate the ray index to its corresponding
+                # number of interactions
                 ray2nbi=np.ones((nbray))
 
                 
@@ -825,13 +831,12 @@ class Rays(dict):
                 b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
                 ## find used slab
                 ##################
-
                 # find slab type for the rnstr
 
                 sl = sla[nstrf]
 
-                # seek interactions position
-                ############################
+                # seek for interactions position
+                ################################
                 uR = np.where((itypf == 1))[0]
                 uT = np.where((itypf == 2))[0]
                 uD = np.where((itypf == 3))[0]
@@ -849,11 +854,12 @@ class Rays(dict):
                 sl[uRf] = 'FLOOR'
                 sl[uRc] = 'CEIL'
 
-    #            # Fill the used slab
-    #            ####################
+                # Fill the used slab
+                #####################
 
                 tsl = np.hstack((tsl, sl[uT]))
                 rsl = np.hstack((rsl, sl[uR], sl[uRf], sl[uRc]))
+
     ##            for s in uslv:
     ##
     ##                T.dusl[s]=np.hstack((T.dusl[s],len(T.idx) + np.where(sl[uT]==s)[0]))
@@ -881,9 +887,9 @@ class Rays(dict):
                 B.stack(data=b.T, idx=idxf)
                 B0.stack(data=b0.T,idx=self[k]['rayidx'])
 
-    ##            #Reflexion
-    ##            ##########
-    ##          # wall reflexion
+                ### Reflexion
+                ############
+                ### wall reflexion
                 R.stack(data=np.array((thetaf[uR], sif[uR], sif[uR+1])).T,
                         idx=idxf[uR])
                 # floor reflexion
@@ -893,7 +899,7 @@ class Rays(dict):
                 R.stack(data=np.array((thetaf[uRc], sif[uRc], sif[uRc+1])).T,
                         idx=idxf[uRc])
 
-    ###         sl[idxf[uT]]
+                ### sl[idxf[uT]]
 
                 # Transmision
                 ############
@@ -1206,6 +1212,7 @@ class Rays(dict):
         id   :
             id of the ray
         linewidth :
+
         """
 
         filerac = pyu.getlong("ray" + str(id), pstruc['DIRGEOM'])
@@ -1255,14 +1262,25 @@ class Rays(dict):
         else:
             return(filename)
 
-    def show3(self, bdis=True, bstruc=True, id=0,
-              strucname='defstr', ilist=[], raylist=[],pg=np.array([[0],[0],[0]])):
+    def show3(self, bdis=True, bstruc=True, id=0, strucname='defstr', ilist=[], raylist=[],pg=np.array([[0],[0],[0]])):
         """ plot 3D rays within the simulated environment
 
         Parameters
         ----------
+            bdis : boolean
+                True
+            bstruc : boolean
+                True
+            id : int 
+            strucname : string 
+                'defstr'
+            ilist : list of group of interactions
+            raylist : list of index rays 
+            pg : centroid of the structure 
+         
 
-            raysarr: numpy.ndarray
+        Examples
+        -------- 
 
         """
         if ilist == []:
@@ -1282,8 +1300,7 @@ class Rays(dict):
                 else:
                     rlist = raylist
                 for j in rlist:
-                    ray = np.hstack((pTx,
-                                     np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
+                    ray = np.hstack((pTx,np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
                     # ray = rays[i]['pt'][:,:,j]
                     col = np.array([2, 0, 1])
                     # print ray
