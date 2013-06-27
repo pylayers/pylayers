@@ -18,16 +18,22 @@ class Way(object):
         self.tags = tags
         N = len(refs)
         p = np.zeros((2, N))
+        self.valid = True
         for k, nid in enumerate(refs):
-            p[0, k] = coords.xy[nid][0]
-            p[1, k] = coords.xy[nid][1]
+            try: 
+                p[0, k] = coords.xy[nid][0]
+                p[1, k] = coords.xy[nid][1]
+            except:
+                self.valid=False
+                break
         # closed way of open way
-        if (N>=4) & (refs[0]==refs[-1]):
-            self.shp = geu.Polygon(p)
-            self.typ = 0
-        else:
-            self.shp = geu.LineString(p)
-            self.typ = 1
+        if self.valid:
+            if (N>=4) & (refs[0]==refs[-1]):
+                self.shp = geu.Polygon(p)
+                self.typ = 0
+            else:
+                self.shp = geu.LineString(p)
+                self.typ = 1
 
     def __repr__(self):
         st = ''
@@ -164,7 +170,9 @@ class Ways(object):
         for osmid in self.w:
             refs = self.w[osmid][0]
             tags = self.w[osmid][1]
-            self.way[osmid] = Way(refs,tags,coords)
+            away =  Way(refs,tags,coords)
+            if away.valid:
+                self.way[osmid] = away
     
     def show(self,fig=[],ax=[],typ=2):
         """ show all way
@@ -305,7 +313,7 @@ class FloorPlan(nx.DiGraph):
                 fig,ax = self.show(k,fig=fig,ax=ax)
         return fig,ax
 
-def osmparse(filename,typ='floorplan',verbose=False):
+def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True):
     """
 
     Parameters
@@ -315,6 +323,10 @@ def osmparse(filename,typ='floorplan',verbose=False):
         floorplan | building 
     verbose : boolean
         default : False
+    c : boolean 
+    n : boolean
+    w : boolean 
+    r : boolean 
 
     Returns
     -------
@@ -325,58 +337,116 @@ def osmparse(filename,typ='floorplan',verbose=False):
     relations :
 
     """
+    if c: 
+        coords = Coords()
+        coords.clean()
+        coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
+        if verbose:
+            print "parsing coords"
+
+        coords_parser.parse(filename)
+        coords.cartesian()
+
+        if verbose:
+            print str(coords.cpt)
+    else:
+        coords = None
+
+    if n:    
+        nodes = Nodes()
+        nodes.clean()
+        nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
+
+        if verbose:
+            print "parsing nodes"
+
+        nodes_parser.parse(filename)
+
+        if verbose:
+            print str(nodes.cpt)
+    else:
+        nodes = None
+
+    if w:    
+        ways = Ways()
+        ways.clean()
+        if typ=='building':
+            ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
+        if typ=='floorplan':    
+            ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
+        if verbose:
+            print "parsing ways"
+        ways_parser.parse(filename)
     
-    coords = Coords()
-    coords.clean()
-    nodes = Nodes()
-    nodes.clean()
-    ways = Ways()
-    ways.clean()
-    relations = Relations()
-    relations.clean()
-
-    coords_parser = OSMParser(concurrency=4, coords_callback=coords.coords)
-    nodes_parser = OSMParser(concurrency=4, nodes_callback=nodes.nodes)
-    if typ=='building':
-        ways_parser = OSMParser(concurrency=4, ways_callback=ways.building)
-    if typ=='floorplan':    
-        ways_parser = OSMParser(concurrency=4, ways_callback=ways.ways)
-    relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
-
-    if verbose:
-        print "parsing coords"
-
-    coords_parser.parse(filename)
-    coords.cartesian()
-
-    if verbose:
-        print str(coords.cpt)
-
-    if verbose:
-        print "parsing nodes"
-
-    nodes_parser.parse(filename)
-
-    if verbose:
-        print str(nodes.cpt)
-
-    if verbose:
-        print "parsing ways"
-    ways_parser.parse(filename)
+        if verbose:
+            print str(ways.cpt)
     
-    if verbose:
-        print str(ways.cpt)
+        # convert lat,lon in cartesian  
+        ways.eval(coords)
+    else:
+        ways = None
 
-    ways.eval(coords)
 
-    if verbose:
-        print "parsing relations"
-    relations_parser.parse(filename)
-    
-    if verbose:
-        print str(relations.cpt)
+    if r:    
+        relations = Relations()
+        relations.clean()
+        relations_parser = OSMParser(concurrency=4,relations_callback=relations.relations)
+
+        if verbose:
+            print "parsing relations"
+        relations_parser.parse(filename)
+        
+        if verbose:
+            print str(relations.cpt)
+    else:
+        relations = None
 
     return coords,nodes,ways,relations
+
+
+def extract(alat,alon,fileosm,fileout):
+    """
+
+    Parameters
+    ----------
+    alat : array of latitude (1xn)
+    alon : array of longitude (1xn)
+    fileosm : source osm file 
+    filout  : output osm file  
+
+    Returns
+    -------
+
+    m : Basemap oject for coordinates conversion
+
+    """
+    latmax = alat.max()
+    latmin = alat.min()
+    lonmax = alon.max()
+    lonmin = alon.min()
+    lon_0=(lonmax+lonmin)/2
+    lat_0=(latmax+latmin)/2
+
+    command = 'osmconvert -b='+str(lonmin)+','\
+            + str(latmin)+','+str(lonmax)+','\
+            + str(latmax)+' '+fileosm +' > '+ fileout+'.osm'
+    print command
+    os.system(command)
+
+    m = Basemap(llcrnrlon=lonmin,llcrnrlat=latmin,urcrnrlon=lonmax,urcrnrlat=latmax,
+            resolution='i',projection='cass',lon_0=lon_0,lat_0=lat_0)
+
+    return(m) 
+
+def getbdg(fileosm,m):
+    """
+    """
+
+    coords,nodes,ways,relation = osmparse(fileosm,typ='building')
+    zone = []
+    for w in ways.way:
+        zone.append(Polygon(p))
+    return(zone)
 
 def buildingsparse(filename):
     """

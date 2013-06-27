@@ -3408,6 +3408,23 @@ class Layout(object):
                 except:
                     raise NameError('G'+g +' graph cannot be load')
 
+        #
+        # fixing bug #136 
+        # update ncycles attributes of Gs from information in Gt 
+        #
+        for k in self.Gs.node:
+            if k>0:
+                self.Gs.node[k]['ncycles']=[]
+        for k in self.Gt.node:
+            vnodes = self.Gt.node[k]['cycle'].cycle
+            for inode in vnodes:
+                if inode > 0:   # segments
+                    if k not in self.Gs.node[inode]['ncycles']:
+                        self.Gs.node[inode]['ncycles'].append(k)
+                        if len(self.Gs.node[inode]['ncycles'])>2:
+                            print n,self.Gs.node[inode]['ncycles']
+                            logging.warning('dumpr : a segment cannot relate more than 2 cycles')
+
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
         setattr(self,'di', read_gpickle(basename+'/struc/di_'+self.filename+'.gpickle'))
         setattr(self,'dca', read_gpickle(basename+'/struc/dca_'+self.filename+'.gpickle'))
@@ -3571,7 +3588,7 @@ class Layout(object):
                         self.Gs.node[n]['ncycles'].append(k)
                         if len(self.Gs.node[n]['ncycles'])>2:
                             print n,self.Gs.node[n]['ncycles']
-                            logging.warning('A segment cannot link more than 2 cycles')
+                            logging.warning('A segment cannot relate more than 2 cycles')
 
         #
         #  Seek for Cycle inter connectivity
@@ -3620,8 +3637,8 @@ class Layout(object):
         #   tuple (nseg,ncycle) : Reflection on nseg toward cycle ncycle
         #         (nseg,cy0,cy1) : Transmission from cy0 to cy1 through nseg
         #
-        #    At that stage the diffraction points are not included
-        #    not enough information available
+        #   At that stage the diffraction points are not included
+        #   not enough information available
         #
         for k in self.Gt.nodes():
             #vnodes = self.Gt.node[k]['vnodes']
@@ -3631,9 +3648,18 @@ class Layout(object):
                 if inode > 0:   # segments
                     cy = set(self.Gs.node[inode]['ncycles'])
                     name = self.Gs.node[inode]['name']  # segment name
+                    #
+                    # Reflexion occurs on segment different
+                    # from AIR and ABSORBENT  (segment number, cycle)
+                    #
                     if (name<>'AIR') & (name<>'ABSORBENT'):
                         ListInteractions.append(str((inode, k)))
-                    if len(cy) == 2: # 2 cycles means two rooms
+                    #
+                    # Transmission needs 2 cycles 
+                    # segemnt different from METAL and ABSORBENT
+                    #
+                    # (segment number, cycle in , cycle out )
+                    if len(cy) == 2: 
                         if (name<>'METAL') & (name<>'ABSORBENT'):
                             ncy = list(cy.difference({k}))[0]
                             ListInteractions.append(str((inode, k, ncy)))
@@ -4536,7 +4562,7 @@ class Layout(object):
         """
 
         ptsh = sh.Point(pt[0], pt[1])
-        room_exists = False
+        cycle_exists = False
         for ncy in self.Gt.node.keys():
             if self.Gt.node[ncy]['polyg'].contains(ptsh):
                 cycle_exists = True

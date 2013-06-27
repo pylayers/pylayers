@@ -45,7 +45,7 @@ def showr(L,r2d,tx,rx,k,l,color='b'):
 
 
 S = Simul()
-filestr = 'DLR'
+filestr = 'DLR2'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
 try:
     S.L.dumpr()
@@ -152,7 +152,8 @@ a=time.time()
 
 #if not os.path.exists('r2d.pickle'):
 Si = Signatures(S.L,Ctx,Crx)
-Si.run3(cutoff=3,dcut=3)
+Si.run1(cutoff=3)
+#Si.run3(cutoff=3,dcut=3)
 r2d = Si.rays(tx,rx)
 file=open("r2d.pickle","w")
 pickle.dump(r2d,file)

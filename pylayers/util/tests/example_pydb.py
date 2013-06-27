@@ -1,4 +1,4 @@
-from pydb import *
+from pylayers.util.pydb import *
 
 server = 'IETR-A99F50DEDA\SQLEXPRESSDB'
 database = 'NEWWHERE2'
