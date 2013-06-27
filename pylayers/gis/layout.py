@@ -2613,6 +2613,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         iseg : np.array
                 index of segments
 

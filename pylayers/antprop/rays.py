@@ -26,6 +26,8 @@ class Rays(dict):
     -------
 
     to3D(H=3,N=1)
+        for k in self:   # for all interaction group k
+        for k in self:   # for all interaction group k
     locbas(L)
     fillinter(L)
     eval
@@ -98,7 +100,7 @@ class Rays(dict):
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        L.showG(fig=fig,ax=ax,graph='s')
+        L.showG(fig=fig,ax=ax,graph='s',nodes=False)
         ax.plot(self.pTx[0], self.pTx[1], 'or')
         ax.plot(self.pRx[0], self.pRx[1], 'og')
         for i in self.keys():
@@ -108,6 +110,7 @@ class Rays(dict):
                                             self.pRx[0:2].reshape((2, 1))))
                                  ))
                 ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
+                ax.axis('off')
 
     def mirror(self, H=3, N=1):
         """ mirror
@@ -121,11 +124,30 @@ class Rays(dict):
         N : int
             handle the number of mirror reflexions
 
+        Returns
+        -------
+
+        d : dict 
+            k : zm  v: alpham
+            k : zp  v: alphap
+
+        Examples
+        --------
+        
+        >>> ptx = np.array([1,1,1.5])
+        >>> prx = np.array([2,2,1.2])
+        >>> r = Rays(ptx,prx)
+        >>> r.mirror()
+
         """
         km = np.arange(-N+1, N+1, 1)
         kp = np.arange(-N, N+1, 1)
+        #
+        # heights of transmitter and receiver
+        #
         ht = self.pTx[2]
         hr = self.pRx[2]
+
         zkp = 2*kp*H + ht
         zkm = 2*km*H - ht
 
@@ -153,7 +175,7 @@ class Rays(dict):
                 pas = -H
                 kp = int(np.floor(zp/H))
             thrp = np.arange(kp*H, bup, pas)
-            d[zp] = alphap = abs(thrp-zp)/abs(hr-zp)
+            d[zp] = abs(thrp-zp)/abs(hr-zp)
             # print "zp",zp
             # print "kp",kp
             # print "thrp",thrp
@@ -171,7 +193,12 @@ class Rays(dict):
             ceil height (default 3m)
 
         N : int
-            handle the number of mirror reflexions
+            number of mirror reflexions
+
+        returns
+        -------
+
+        r3d : Rays 
 
         Notes
         -----
@@ -181,6 +208,7 @@ class Rays(dict):
 
         tx = self.pTx
         rx = self.pRx
+
         #
         # Phase 1 : calculate Tx images height and vertical parameterization
         #
@@ -195,9 +223,9 @@ class Rays(dict):
             pts = self[i]['pt'][0:2, :, :]
             sig = self[i]['sig']
             t = self.pTx[0:2].reshape((2, 1, 1)) * \
-                    np.ones((1, 1, len(pts[0, 0, :])))
+                np.ones((1, 1, len(pts[0, 0, :])))
             r = self.pRx[0:2].reshape((2, 1, 1)) * \
-                    np.ones((1, 1, len(pts[0, 0, :])))
+                np.ones((1, 1, len(pts[0, 0, :])))
             pts1 = np.hstack((t, np.hstack((pts, r))))
             si1 = pts1[:, 1:, :] - pts1[:, :-1, :]
             si = np.sqrt(np.sum(si1 * si1, axis=0))
@@ -206,15 +234,15 @@ class Rays(dict):
 
             for j in range(len(self[i]['alpha'][:, 0])):
                 self[i]['alpha'][j, :] = np.sum(si[0:j+1, :], axis=0) \
-                                        /np.sum(si, axis=0)
+                        /np.sum(si, axis=0)
                 self[i]['pt'][2, j, :] = tx[2] + self[i]['alpha'][j, :] \
-                                        * (rx[2] - tx[2])
+                    * (rx[2] - tx[2])
 
         #
         #  Phase 3 : Initialize 3D rays dictionnary
         #
         r3d = Rays(tx, rx)
-        r3d.los=self.los
+        r3d.los = self.los
         r3d.is3D = True
 
         #
@@ -242,18 +270,15 @@ class Rays(dict):
             Tx = tx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
             Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
             pte = self[k]['pt']             # ndim x k x Nrayk
-            pte = np.hstack((Tx, pte, Rx))       # ndim x k+2 x Nrayk
-            for l in d:                          # for each vertical pattern (C,F,CF,FC,....)
-                Nint = len(d[
-                           l])                 # number of additional interaction
-                if Nint > 0:                     # if new interaction ==> need extension
+            pte = np.hstack((Tx, pte, Rx))  # ndim x k+2 x Nrayk
+            for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
+                Nint = len(d[l])            # number of additional interaction
+                if Nint > 0:                # if new interaction ==> need extension
                     a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*np.ones(
                         (1, Nrayk))))  # extended old parameterization
-                    ks = np.argsort(a1e, axis=0)  # get sorted indices
-                    a1es = np.sort(
-                        a1e, axis=0)  # sorted extended parameterization
-                    ptee = np.hstack((pte, np.zeros((
-                        3, Nint, Nrayk))))     # ndim x (Nint+k+2) x Nrayk
+                    ks = np.argsort(a1e, axis=0) # get sorted indices
+                    a1es = np.sort(a1e, axis=0)  # sorted extended parameterization
+                    ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))     # ndim x (Nint+k+2) x Nrayk
                     if l < 0:
                         u = np.mod(range(Nint), 2)
                     else:
@@ -269,10 +294,8 @@ class Rays(dict):
                                        # 2 x (Nint+k+2) x Nrayk
                     ptees = ptee[:, ks, range(Nrayk)]     # sorted points
                     siges = sige[:, ks, range(Nrayk)]     # sorted signature
-                    iint_f, iray_f = np.where(siges[
-                                              1, :] == 4)  # floor interaction
-                    iint_c, iray_c = np.where(siges[
-                                              1, :] == 5)  # ceil interaction
+                    iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
+                    iint_c, iray_c = np.where(siges[ 1, :] == 5)  # ceil interaction
 
                     coeff_f = (a1es[iint_f, iray_f]-a1es[iint_f-1, iray_f])/(
                         a1es[iint_f+1, iray_f]-a1es[iint_f-1, iray_f])
@@ -293,6 +316,9 @@ class Rays(dict):
                     ks = np.argsort(a1es, axis=0)
                     ptees = pte
                     siges = sig
+
+                if k == 3:
+                    pdb.set_trace()
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
@@ -314,6 +340,20 @@ class Rays(dict):
             r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
 
         return(r3d)
+
+    def length(self):
+        """ calculate length of rays
+
+        """
+        dk = {}
+        for k in self:   # for all interaction group k
+            # 3 x Ni-1 x Nr
+            vk = self[k]['pt'][:,1:,:]-self[k]['pt'][:,0:-1,:]
+            d1 = np.sqrt(np.sum(vk*vk,axis=0))
+            d2 = np.sum(d1,axis=0)
+            dk[k] = d1
+        return(dk)
+
 
     def locbas(self, L):
         """
@@ -1078,7 +1118,7 @@ class Rays(dict):
             return(filename)
 
     def show3(self, bdis=True, bstruc=True, id=0,
-              strucname='defstr', ilist=[], raylist=[]):
+              strucname='defstr', ilist=[], raylist=[],pg=np.array([[0],[0],[0]])):
         """ plot 3D rays within the simulated environment
 
         Parameters
@@ -1089,8 +1129,8 @@ class Rays(dict):
         """
         if ilist == []:
             ilist = self.keys()
-        pTx = self.pTx.reshape((3, 1))
-        pRx = self.pRx.reshape((3, 1))
+        pTx = self.pTx.reshape((3, 1))-pg
+        pRx = self.pRx.reshape((3, 1))-pg
         filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
         fo = open(filename, "w")
         fo.write("LIST\n")
@@ -1105,7 +1145,7 @@ class Rays(dict):
                     rlist = raylist
                 for j in rlist:
                     ray = np.hstack((pTx,
-                                     np.hstack((self[i]['pt'][:, :, j], pRx))))
+                                     np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
                     # ray = rays[i]['pt'][:,:,j]
                     col = np.array([2, 0, 1])
                     # print ray
