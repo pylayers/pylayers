@@ -18,16 +18,22 @@ class Way(object):
         self.tags = tags
         N = len(refs)
         p = np.zeros((2, N))
+        self.valid = True
         for k, nid in enumerate(refs):
-            p[0, k] = coords.xy[nid][0]
-            p[1, k] = coords.xy[nid][1]
+            try: 
+                p[0, k] = coords.xy[nid][0]
+                p[1, k] = coords.xy[nid][1]
+            except:
+                self.valid=False
+                break
         # closed way of open way
-        if (N>=4) & (refs[0]==refs[-1]):
-            self.shp = geu.Polygon(p)
-            self.typ = 0
-        else:
-            self.shp = geu.LineString(p)
-            self.typ = 1
+        if self.valid:
+            if (N>=4) & (refs[0]==refs[-1]):
+                self.shp = geu.Polygon(p)
+                self.typ = 0
+            else:
+                self.shp = geu.LineString(p)
+                self.typ = 1
 
     def __repr__(self):
         st = ''
@@ -164,7 +170,9 @@ class Ways(object):
         for osmid in self.w:
             refs = self.w[osmid][0]
             tags = self.w[osmid][1]
-            self.way[osmid] = Way(refs,tags,coords)
+            away =  Way(refs,tags,coords)
+            if away.valid:
+                self.way[osmid] = away
     
     def show(self,fig=[],ax=[],typ=2):
         """ show all way
@@ -366,7 +374,8 @@ def osmparse(filename,typ='floorplan',verbose=False):
     
     if verbose:
         print str(ways.cpt)
-
+    
+    # convert lat,lon in cartesian  
     ways.eval(coords)
 
     if verbose:
