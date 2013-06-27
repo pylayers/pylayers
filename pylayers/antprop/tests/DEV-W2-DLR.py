@@ -34,7 +34,6 @@ except:
     S.L.dumpw()
 S.L.build()
 S.L.dumpw()
-figsize(10,10)    
 S.L.display['ednodes']=False
 S.L.display['nodes']=False
 S.L.display['title']='DLR WP4 WHERE2 measurement site'
@@ -125,7 +124,6 @@ Dongle = np.loadtxt(path+'Coord_dongle.csv',delimiter=',')
 
 # <codecell>
 
-figsize(10,10)
 fig,ax=L.showG('s',nodes=False)
 axis('off')
 S.tx.clear()
@@ -155,7 +153,6 @@ print S.rx.position
 
 # <codecell>
 
-figsize(10,10)
 S.show(s=20)
 
 # <codecell>
@@ -260,7 +257,6 @@ print Nh,"hours and",Nm,"minutes"
 
 # <codecell>
 
-figsize(20,20)
 tstart = 10+48/60.
 for k in range(36):
     cle = tl.keys()[k]
