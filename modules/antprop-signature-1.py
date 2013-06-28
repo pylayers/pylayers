@@ -5,7 +5,7 @@ from pylayers.antprop.signature import *
 L = Layout()
 L.buildGt()
 L.buildGr()
-seq = [1,5,1]
+seq = np.array([[1,5,1],[1,1,1]])
 s = Signature(seq)
 tx = np.array([4,-1])
 rx = np.array([1,1])

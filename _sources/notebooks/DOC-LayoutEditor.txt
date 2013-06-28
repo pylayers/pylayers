@@ -1,6 +1,9 @@
-This section explains some features of the class **Layout**.
+Introduction
+------------
 
-A Layout is a representaion of a floorplan, it is handled by the module
+This section explains the main features of the **Layout** class.
+
+A Layout is a representation of a floorplan, it is handled by the module
 **pylayers.gis.layout**.
 
 This module recognizes different file formats including geo-referenced
@@ -18,14 +21,43 @@ See the following methods of the layout object
 -  ``loadosm()``
 -  ``saveosm()``
 
-PyLayers comes also with a low level structure editor based on
-``matplotlib`` which can be invoqued using the ``editor()`` method. This
-editor is more suited for modyfing constitutive properties of walls. In
-the future a dedicated plugin in ``JOSM`` could be a much better
-solution.
+
+Structure of the Layout
+-----------------------
+
+At first a Layout is described by a set of points (negative index) and a
+set of segments (positive index).
+
+Points and segments are nodes of the :math:`$\mathcal{G}_s$` graph.
+
+It is required to respect a strict non overlapping rule. **No segments
+can recover partially or totally an other segment**.
+
+This rule allows to capture topological relations of the network which
+are exploited for further analysis.
+
+Subsegments
+~~~~~~~~~~~
+
+To describe doors and windows, the concept of ``subsegment`` is
+introduced.
+
+A ``subsegment`` belongs to a ``segment``, it has mainly 3 attached
+parameters :
+
+-  A slab name
+-  zmin (meter)
+-  zmax (meter)
+
+:math:`$N_{ss}[k] = M_s + M_{ss} N_s + k$`
+
+:math:`$M_{s}$` and :math:`$M_{ss}$` are respectively the maximum number
+of segments and the maximum number of subsegment per segment.
+
+Those two values are embedded in the layout file.
 
 The different layout format 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 The layout format has evolved a lot over time and is going to evolve
 again. The different recognized file extensions are the following :
@@ -415,8 +447,14 @@ http://pylayers.github.io/pylayers/\_modules/pylayers/gis/selectl.html#SelectL.n
 All bug correction and ergonomic improvement of this editor is welcome.
 Just pull request your modifications.
 
-Edition mode
-------------
+The interactive editor L.editor()
+---------------------------------
+
+PyLayers comes along with a low level structure editor based on
+``matplotlib`` which can be invoqued using the ``editor()`` method. This
+editor is more suited for modyfing constitutive properties of walls. In
+the future a dedicated plugin in ``JOSM`` could be a much better
+solution.
 
 There are two different modes of edition
 
@@ -437,7 +475,7 @@ There are two different modes of edition
 **i** : to return to init state
 
 Image overlay
--------------
+~~~~~~~~~~~~~
 
 It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
@@ -474,7 +512,7 @@ a filename. In that case the file is stored in
 .. image:: DOC-LayoutEditor_files/_fig_23.png
 
 Scaling the figure overlay
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before going further it is necessary :
 
@@ -542,21 +580,5 @@ The segment name is the key of the **slab** dictionnary.
 Segments and Subsegments
 ------------------------
 
-It is required to respect a strict non overlapping rule. **No segments
-can recover partially or totally an other segment**.
 
-This rule allows to capture topological relations of the network which
-are exploited for further analysis.
-
-To describe door and window, the concept of ``subsegment`` is used. A
-``subsegment`` belongs to a ``segment``, it has mainly 3 attached
-parameters :
-
--  A slab name
--  zmin (meter)
--  zmax (meter)
-
-Currently, it is not possible to define multi-subsegments. for example a
-composite door with wood and glass. This a desirable feature to add for
-future versions.
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The different layout format &mdash; PyLayers</title>
+    <title>Introduction &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -59,23 +59,28 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The different layout format</a><ul>
-<li><a class="reference internal" href="#reading-an-existing-layout">Reading an existing Layout</a></li>
-<li><a class="reference internal" href="#the-display-options-dictionnary">The display options dictionnary</a></li>
+<li><a class="reference internal" href="#">Introduction</a></li>
+<li><a class="reference internal" href="#structure-of-the-layout">Structure of the Layout</a><ul>
+<li><a class="reference internal" href="#subsegments">Subsegments</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#the-different-layout-format">The different layout format</a></li>
+<li><a class="reference internal" href="#reading-an-existing-layout">Reading an existing Layout</a></li>
+<li><a class="reference internal" href="#the-display-options-dictionnary">The display options dictionnary</a><ul>
 <li><a class="reference internal" href="#layers">Layers</a></li>
 <li><a class="reference internal" href="#strings">Strings</a></li>
 <li><a class="reference internal" href="#sizes">Sizes</a></li>
-<li><a class="reference internal" href="#booleans">Booleans</a><ul>
-<li><a class="reference internal" href="#interactive-editor">Interactive editor</a></li>
-<li><a class="reference internal" href="#edition-mode">Edition mode</a></li>
-<li><a class="reference internal" href="#image-overlay">Image overlay</a></li>
-<li><a class="reference internal" href="#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
-<li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
-<li><a class="reference internal" href="#segments-and-subsegments">Segments and Subsegments</a></li>
+<li><a class="reference internal" href="#booleans">Booleans</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#interactive-editor">Interactive editor</a></li>
+<li><a class="reference internal" href="#the-interactive-editor-l-editor">The interactive editor L.editor()</a><ul>
+<li><a class="reference internal" href="#image-overlay">Image overlay</a></li>
+<li><a class="reference internal" href="#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
+<li><a class="reference internal" href="#segments-and-subsegments">Segments and Subsegments</a></li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -105,8 +110,10 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>This section explains some features of the class <strong>Layout</strong>.</p>
-<p>A Layout is a representaion of a floorplan, it is handled by the module
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>This section explains the main features of the <strong>Layout</strong> class.</p>
+<p>A Layout is a representation of a floorplan, it is handled by the module
 <strong>pylayers.gis.layout</strong>.</p>
 <p>This module recognizes different file formats including geo-referenced
 files in open street map format <tt class="docutils literal"><span class="pre">.osm</span></tt>.</p>
@@ -120,11 +127,33 @@ editor <em>JOSM</em> with the plugin <em>PicLayer</em>. This is well described i
 <li><tt class="docutils literal"><span class="pre">loadosm()</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">saveosm()</span></tt></li>
 </ul>
-<p>PyLayers comes also with a low level structure editor based on
-<tt class="docutils literal"><span class="pre">matplotlib</span></tt> which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method. This
-editor is more suited for modyfing constitutive properties of walls. In
-the future a dedicated plugin in <tt class="docutils literal"><span class="pre">JOSM</span></tt> could be a much better
-solution.</p>
+</div>
+<div class="section" id="structure-of-the-layout">
+<h1>Structure of the Layout<a class="headerlink" href="#structure-of-the-layout" title="Permalink to this headline">¶</a></h1>
+<p>At first a Layout is described by a set of points (negative index) and a
+set of segments (positive index).</p>
+<p>Points and segments are nodes of the <img class="math" src="../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> graph.</p>
+<p>It is required to respect a strict non overlapping rule. <strong>No segments
+can recover partially or totally an other segment</strong>.</p>
+<p>This rule allows to capture topological relations of the network which
+are exploited for further analysis.</p>
+<div class="section" id="subsegments">
+<h2>Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
+<p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
+introduced.</p>
+<p>A <tt class="docutils literal"><span class="pre">subsegment</span></tt> belongs to a <tt class="docutils literal"><span class="pre">segment</span></tt>, it has mainly 3 attached
+parameters :</p>
+<ul class="simple">
+<li>A slab name</li>
+<li>zmin (meter)</li>
+<li>zmax (meter)</li>
+</ul>
+<p><img class="math" src="../_images/math/06c36ac66c987af5766e804ce3756cf8666545f7.png" alt="$N_{ss}[k] = M_s + M_{ss} N_s + k$"/></p>
+<p><img class="math" src="../_images/math/f78a181c8addfef22565b76137aaa814f22748aa.png" alt="$M_{s}$"/> and <img class="math" src="../_images/math/50927b027c2308cc51584c948935b9608dd53dbd.png" alt="$M_{ss}$"/> are respectively the maximum number
+of segments and the maximum number of subsegment per segment.</p>
+<p>Those two values are embedded in the layout file.</p>
+</div>
+</div>
 <div class="section" id="the-different-layout-format">
 <h1>The different layout format<a class="headerlink" href="#the-different-layout-format" title="Permalink to this headline">¶</a></h1>
 <p>The layout format has evolved a lot over time and is going to evolve
@@ -144,8 +173,9 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x474b250&gt;</pre>
 </div>
+</div>
 <div class="section" id="reading-an-existing-layout">
-<h2>Reading an existing Layout<a class="headerlink" href="#reading-an-existing-layout" title="Permalink to this headline">¶</a></h2>
+<h1>Reading an existing Layout<a class="headerlink" href="#reading-an-existing-layout" title="Permalink to this headline">¶</a></h1>
 <p>To read an existing layout it is sufficient to create a Layout object
 with, as an argument, a file name with one of the recognized extension.
 All files are stored in the <tt class="docutils literal"><span class="pre">pstruc['DIRSTRUC']</span></tt> directory of the
@@ -300,7 +330,7 @@ ray signatures.</p>
 <img alt="../_images/_fig_184.png" src="../_images/_fig_184.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
-<h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
+<h1>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -376,10 +406,8 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
  <span class="s">&#39;visu&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
 </pre></div>
 </div>
-</div>
-</div>
 <div class="section" id="layers">
-<h1>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h1>
+<h2>Layers<a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;layer&#8217; : list , []</li>
 <li>&#8216;layerset&#8217;,list, list of available layers</li>
@@ -390,14 +418,14 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </ul>
 </div>
 <div class="section" id="strings">
-<h1>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h1>
+<h2>Strings<a class="headerlink" href="#strings" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;title&#8217; : str , &#8216;Init&#8217;</li>
 <li>&#8216;fileoverlay&#8217; : str , &#8216;TA-Office.png&#8217;</li>
 </ul>
 </div>
 <div class="section" id="sizes">
-<h1>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h1>
+<h2>Sizes<a class="headerlink" href="#sizes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;fontsize&#8217;, float , 10</li>
 <li>&#8216;ndsize&#8217;, float , 10</li>
@@ -406,7 +434,7 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 </ul>
 </div>
 <div class="section" id="booleans">
-<h1>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h1>
+<h2>Booleans<a class="headerlink" href="#booleans" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>&#8216;edlabel&#8217;, boolean, False</li>
 <li>&#8216;ticksoff&#8217;,boolean, True</li>
@@ -421,8 +449,10 @@ are exploited in <tt class="docutils literal"><span class="pre">showGs()</span><
 <li>&#8216;ndlabel&#8217;,boolean, If True display node labels</li>
 <li>&#8216;ednodes&#8217;, boolean, True</li>
 </ul>
+</div>
+</div>
 <div class="section" id="interactive-editor">
-<h2>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h2>
+<h1>Interactive editor<a class="headerlink" href="#interactive-editor" title="Permalink to this headline">¶</a></h1>
 <p>The command L.editor() launches an interactive editor. The state machine
 is implemented in module <tt class="docutils literal"><span class="pre">pylayers.gis.selectl.py</span></tt>.</p>
 <p>To have an idea of all available options, look in the
@@ -431,8 +461,13 @@ is implemented in module <tt class="docutils literal"><span class="pre">pylayers
 <p>All bug correction and ergonomic improvement of this editor is welcome.
 Just pull request your modifications.</p>
 </div>
-<div class="section" id="edition-mode">
-<h2>Edition mode<a class="headerlink" href="#edition-mode" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-interactive-editor-l-editor">
+<h1>The interactive editor L.editor()<a class="headerlink" href="#the-interactive-editor-l-editor" title="Permalink to this headline">¶</a></h1>
+<p>PyLayers comes along with a low level structure editor based on
+<tt class="docutils literal"><span class="pre">matplotlib</span></tt> which can be invoqued using the <tt class="docutils literal"><span class="pre">editor()</span></tt> method. This
+editor is more suited for modyfing constitutive properties of walls. In
+the future a dedicated plugin in <tt class="docutils literal"><span class="pre">JOSM</span></tt> could be a much better
+solution.</p>
 <p>There are two different modes of edition</p>
 <ul class="simple">
 <li>A create points mode CP<ul>
@@ -450,7 +485,6 @@ Just pull request your modifications.</p>
 </ul>
 <p><strong>m</strong> : to switch from one mode to an other</p>
 <p><strong>i</strong> : to return to init state</p>
-</div>
 <div class="section" id="image-overlay">
 <h2>Image overlay<a class="headerlink" href="#image-overlay" title="Permalink to this headline">¶</a></h2>
 <p>It is useful while editing a layout to have an overlay of an image in
@@ -515,8 +549,9 @@ meters) between the two points.</li>
 'w'  : display all layers</pre>
 </div>
 </div>
+</div>
 <div class="section" id="vizualisation-of-the-layout">
-<h2>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h2>
+<h1>Vizualisation of the layout<a class="headerlink" href="#vizualisation-of-the-layout" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
@@ -532,23 +567,7 @@ to a segment (Wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
 </div>
 <div class="section" id="segments-and-subsegments">
-<h2>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h2>
-<p>It is required to respect a strict non overlapping rule. <strong>No segments
-can recover partially or totally an other segment</strong>.</p>
-<p>This rule allows to capture topological relations of the network which
-are exploited for further analysis.</p>
-<p>To describe door and window, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is used. A
-<tt class="docutils literal"><span class="pre">subsegment</span></tt> belongs to a <tt class="docutils literal"><span class="pre">segment</span></tt>, it has mainly 3 attached
-parameters :</p>
-<ul class="simple">
-<li>A slab name</li>
-<li>zmin (meter)</li>
-<li>zmax (meter)</li>
-</ul>
-<p>Currently, it is not possible to define multi-subsegments. for example a
-composite door with wood and glass. This a desirable feature to add for
-future versions.</p>
-</div>
+<h1>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h1>
 </div>
 
 

@@ -96,6 +96,10 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>to3D(H=3,N=1)</strong> :</p>
+<blockquote>
+<div><p>for k in self:   # for all interaction group k
+for k in self:   # for all interaction group k</p>
+</div></blockquote>
 <p><strong>locbas(L)</strong> :</p>
 <p><strong>fillinter(L)</strong> :</p>
 <p><strong>eval</strong> :</p>
@@ -119,8 +123,8 @@ and a target point defining a radio link.</p>
 in 3D via the <strong>to3D</strong> method. This method has two parameters : 
 the height from floor to ceil, and the number N of 
 multiple reflections to take into account.</p>
-<p>Once the 3d rays have been calculated, it is required 
-to evaluate the local basis along those rays. This is
+<p>Once the 3d rays have been calculated, the  
+the local basis are evaluated along those rays. This is
 done through the <strong>locbas</strong> method</p>
 <p>Once the local basis have been calculated the different
 interactions along rays can be informed via the <strong>fillinter</strong>
@@ -175,6 +179,12 @@ be evaluated via the <strong>eval</strong> method</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.rays.Rays.length">
+<tt class="descname">length</tt><big>(</big><em>typ=2</em><big>)</big><a class="headerlink" href="#pylayers.antprop.rays.Rays.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate length of rays</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.rays.Rays.locbas">
 <tt class="descname">locbas</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.locbas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.locbas" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
@@ -199,13 +209,27 @@ be evaluated via the <strong>eval</strong> method</p>
 <div><p>ceil height (default 3m)</p>
 </div></blockquote>
 <p><strong>N</strong> : int</p>
-<blockquote class="last">
+<blockquote>
 <div><p>handle the number of mirror reflexions</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>d</strong> : dict</p>
+<blockquote class="last">
+<div><p>k : zm  v: alpham
+k : zp  v: alphap</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ptx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span><span class="n">prx</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">mirror</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -229,27 +253,59 @@ be evaluated via the <strong>eval</strong> method</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.show">
-<tt class="descname">show</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>L</em>, <em>i=-1</em>, <em>r=-1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot 2D rays within the simulated environment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>L</strong> : Layout</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
+<p><strong>i</strong> : list or -1 (default = all groups)</p>
+<blockquote>
+<div><p>list of interaction group number</p>
+</div></blockquote>
+<p><strong>r</strong> : list or -1 (default = all rays)</p>
+<blockquote class="last">
+<div><p>list of index of ray in interaction group</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.antprop.rays.Rays.show3">
-<tt class="descname">show3</tt><big>(</big><em>bdis=True</em>, <em>bstruc=True</em>, <em>id=0</em>, <em>strucname='defstr'</em>, <em>ilist=</em><span class="optional">[</span><span class="optional">]</span>, <em>raylist=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show3" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descname">Rays.show3(bdis=True, bstruc=True, id=0, strucname='defstr', ilist=[], raylist=[], pg=array([[0],</tt></dt>
+<dt>
+<tt class="descname">[0],</tt></dt>
+<dt>
+<tt class="descname">[0]]))</tt></dt>
 <dd><p>plot 3D rays within the simulated environment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>raysarr: numpy.ndarray</strong> :</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>bdis</strong> : boolean</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>True</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>bstruc <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd><p class="first last">True</p>
+</dd>
+</dl>
+<p>id : int 
+strucname : string</p>
+<blockquote>
+<div><p>&#8216;defstr&#8217;</p>
+</div></blockquote>
+<p>ilist : list of group of interactions
+raylist : list of index rays 
+pg : centroid of the structure</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
@@ -308,9 +364,12 @@ be evaluated via the <strong>eval</strong> method</p>
 <div><p>ceil height (default 3m)</p>
 </div></blockquote>
 <p><strong>N</strong> : int</p>
-<blockquote class="last">
-<div><p>handle the number of mirror reflexions</p>
+<blockquote>
+<div><p>number of mirror reflexions</p>
 </div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>r3d</strong> : Rays</p>
 </td>
 </tr>
 </tbody>
