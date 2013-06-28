@@ -22,6 +22,17 @@ import pylayers.signal.bsignal as bs
 class Rays(dict):
     """ A set af rays
 
+    Members
+    -------
+
+    'rays'   : 
+    'nbrays' :
+    'rayidx' :
+    'sig'    :
+    'pt'     :
+    'alpha'  :
+
+
     Methods
     -------
 
@@ -33,9 +44,10 @@ class Rays(dict):
     eval
     show(L)
     mirror(H=3,N=1)
-    ray(r)
-    typ(r)
-    info(r)
+    ray
+    typ
+    info
+    to3D
     signature(L)
     show3d(ray,bdis,bbas,bstruc,col,id,linewidth)
     show3()
@@ -447,13 +459,18 @@ class Rays(dict):
                     z  = np.mod(l+a1es*(rx[2]-l), 2*H)
                     pz = np.where(z > H)
                     z[pz] = 2*H-z[pz]
-                    ptees[2, :] = z
+                    ptees[2, :] = z 
+                # recopy old 2D parameterization (no extension)
                 else:
-                    a1es = a1                        # recopy old 2D parameterization (no extension)
+                    a1es = a1                       
                     ks = np.argsort(a1es, axis=0)
                     ptees = pte
                     siges = sig
 
+                #
+                #    
+                #
+                #
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
