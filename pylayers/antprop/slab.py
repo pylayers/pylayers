@@ -1077,12 +1077,17 @@ class Slab(dict, Interface):
         self['evaluated'] = False
 
     def __repr__(self):
-        st = '| '
-        for k in range(len(self.lmat)):
-            st = st + self.lmat[k]+' | '
-        st = st+'\n'    
-        for k in range(len(self.lmat)):
-            ntick=np.ceil(self.lthick[k]/0.05)
+        if self['evaluated']:
+            st = 'fGHz :  '+str(self.fGHz[0,:]) +':'+str(self.fGHz[-1,:]) +':'+str(len(self.fGHz[:,0]))+"\n"
+            st = st+ 'theta : '+str(self.theta[:,0])+':'+str(self.theta[:,-1])+':'+str(len(self.theta[0,:]))+"\n"
+            st = st + '| '
+        else:
+            st = '| '
+        for k in range(len(self['lmatname'])):
+            st = st + self['lmatname'][k]+' | '
+        st = st+'\n|'    
+        for k in range(len(self['lmatname'])):
+            ntick = int(np.ceil(self['lthick'][k]/0.01))
             for l in range(ntick):
                 st = st+'-'
             st = st +'|' 
@@ -1190,6 +1195,8 @@ class Slab(dict, Interface):
             fGHz = np.array([fGHz])
         if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
+        self.theta = theta
+        self.fGHz = fGHz
 
         nf = len(fGHz)
         nt = len(theta)
