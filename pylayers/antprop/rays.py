@@ -467,9 +467,11 @@ class Rays(dict):
                     ptees = pte
                     siges = sig
 
-                #
-                #    
-                #
+                #   ptes (3 x i+2 x r ) 
+                z = ptes[2,1:-1,:]
+
+                #   z --> kl subseg level  
+                #   siges[0,:] --> Ms + nstr *Mss + (kl) 
                 #
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))

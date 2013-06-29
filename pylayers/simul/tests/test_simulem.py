@@ -11,6 +11,7 @@ S.layout(filestr+'.str','matDB.ini','slabDB.ini')
 S.tx = RadioNode(typ='tx')
 S.tx.point([1.2,1,1.4])
 
+pdb.set_trace()
 # setting receiver
 
 S.rx = RadioNode(typ='rx')
@@ -54,7 +55,6 @@ S.pafreq.save()
 print "Launching "
 print "-----------------"
 S.launching(1)
-
 # retrieve the launching tree
 
 L1 = S.getlaunch(1)
