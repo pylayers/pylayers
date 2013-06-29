@@ -729,8 +729,13 @@ class Layout(object):
         for ns in di['segments']:
             self.Gs.add_node(eval(ns))
             d = eval(di['segments'][ns])
-            if 'ss_name' in d:
+            if d.has_key('ss_name'):
                 Nss = Nss + len(d['ss_name'])
+                for n in d['ss_name']:
+                    if n in self.name:
+                        self.name[n].append(ns)
+                    else:
+                        self.name[n]=[ns]
             name = d['name']
             nta = d['connect'][0]
             nhe = d['connect'][1]

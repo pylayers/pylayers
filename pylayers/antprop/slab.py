@@ -1070,11 +1070,25 @@ class Slab(dict, Interface):
         self['nbmat'] = 1
         self['imat'] = (0, 0, 0, 0, 0, 0, 0, 0)
         self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        self['lthick'] = [0.1]
         self['color'] = 'black'
         self['linewidth'] = 1.0
         self.mat = mat
         self['evaluated'] = False
 
+    def __repr__(self):
+        st = '| '
+        for k in range(len(self.lmat)):
+            st = st + self.lmat[k]+' | '
+        st = st+'\n'    
+        for k in range(len(self.lmat)):
+            ntick=np.ceil(self.lthick[k]/0.05)
+            for l in range(ntick):
+                st = st+'-'
+            st = st +'|' 
+        st = st+'\n'
+        return(st)
+                
     def info(self):
         """ Display Slab Info
 
@@ -1136,6 +1150,7 @@ class Slab(dict, Interface):
 
         Warnings
         --------
+
         In .slab file thickness variable is expressed in cm
 
         for lthick distance  are expressed in meters
