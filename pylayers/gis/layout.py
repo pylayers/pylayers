@@ -542,11 +542,16 @@ class Layout(object):
                 self.Gs.add_edge(ns,nhe)
                 self.Gs.node[ns] = d
                 self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
-                if d.has_key('ss_name'):
-                    nss+=len(d['ss_name'])
                 if name not in self.display['layers']:
                     self.display['layers'].append(name)
                 self.labels[ns] = str(ns)
+                if d.has_key('ss_name'):
+                    nss+=len(d['ss_name'])
+                    for n in d['ss_name']:
+                        if n in self.name:
+                            self.name[n].append(ns)
+                        else:
+                            self.name[n]=[ns]
                 if name in self.name:
                     self.name[name].append(ns)
                 else:
