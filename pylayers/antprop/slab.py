@@ -1118,10 +1118,10 @@ class Slab(dict, Interface):
 
         """
         print "------------"
-        print "name : ", self.name
-        print "nbmat : ", self.nbmat
+        print "name : ", self
+        print "nbmat : ", len(self['lmatname'])
         chaine = "[ "
-        for i in range(self.nbmat):
+        for i in range(len(self['lmatname'])):
             index_mat = self.imat[i]
             name_mat = self.mat.di[index_mat]
             self.mat[name_mat].info()

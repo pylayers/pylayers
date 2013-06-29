@@ -260,6 +260,17 @@ class Layout(object):
         st = st + "\n" 
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
+        st = st + "\nDictionnaries"+"\n----------------\n"
+        if hasattr(self,'di'):
+            st = st + "di k=interaction v= [nstr,typi]" +"\n"
+        if hasattr(self,'sl'):
+            st = st + "sl k=slab name v=dictionary" +"\n"
+        st = st + "\nArrays"+"\n----------------\n"
+        if hasattr(self,'tsg'):
+            st = st + "tsg : get segment index in Gs from tahe" +"\n"
+        if hasattr(self,'tgs'):
+            st = st + "tgs : get segment index in tahe from Gs" +"\n"
+
         return(st) 
 
     def ls(self, typ='ini'):
@@ -482,10 +493,13 @@ class Layout(object):
             normal = np.vstack((normx,normy,np.zeros(len(scale))))
 
         #for ks in ds:
+        self.lsss=[]
         for ks in self.Gs.node:
             if ks > 0:
                 k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
+                if self.Gs.node[ks].has_key('ss_name'):
+                    self.lsss.append(ks)
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
@@ -4366,10 +4380,10 @@ class Layout(object):
         ax.axis('scaled')
 
         # Display doors and windows
-
+        cold = pyu.coldict()
         d = self.subseg()
         for ss in d.keys():
-            color = self.sl[ss]['color']
+            color = cold[self.sl[ss]['color']]
             for ns in d[ss]:
                 norm = self.Gs.node[ns[0]]['norm']
                 np1, np2 = self.Gs.neighbors(ns[0])
@@ -5237,8 +5251,7 @@ class Layout(object):
                     ik = ik + 1
                 else:
                     en = en-1
-
-        # FYI : d = self.subseg()
+        # d = self.subseg()
         # k : ss_name v: seg number 
         cpt = 0
         subseg = {}
