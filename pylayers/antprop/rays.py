@@ -164,7 +164,9 @@ class Rays(dict):
         >>> ptx = np.array([1,1,1.5])
         >>> prx = np.array([2,2,1.2])
         >>> r = Rays(ptx,prx)
-        >>> r.mirror()
+        >>> d = r.mirror()
+        >>> d[-1.5]
+        array([ 0.55555556])
 
         """
         km = np.arange(-N+1, N+1, 1)
@@ -210,7 +212,7 @@ class Rays(dict):
 
         return(d)
 
-    def to3D(self, H=3, N=1):
+    def to3D(self, H=3, N=1,lsss=[]):
         """ transform 2D ray to 3D ray
 
         Parameters
@@ -221,6 +223,8 @@ class Rays(dict):
 
         N : int
             number of mirror reflexions
+
+        lsss : list od segment with a subsegment    
 
         returns
         -------
@@ -468,8 +472,9 @@ class Rays(dict):
                     siges = sig
 
                 #   ptes (3 x i+2 x r ) 
-                z = ptes[2,1:-1,:]
-
+                #   z = ptes[2,1:-1,:]
+                u = map(lambda x: np.where(siges[0,:,:]==x),lsss)
+                pdb.set_trace()
                 #   z --> kl subseg level  
                 #   siges[0,:] --> Ms + nstr *Mss + (kl) 
                 #

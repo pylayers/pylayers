@@ -266,6 +266,8 @@ class Layout(object):
         if hasattr(self,'sl'):
             st = st + "sl k=slab name v=dictionary" +"\n"
         st = st + "\nArrays"+"\n----------------\n"
+        if hasattr(self,'lsss'):
+            st = st + "lsss : list of segments with sub-segment"+"\n"
         if hasattr(self,'tsg'):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
         if hasattr(self,'tgs'):
@@ -3232,7 +3234,6 @@ class Layout(object):
         ax 
 
         """
-
 #        if fig ==[]:
 #            fig = plt.gcf()
 #        if ax==[]:
@@ -3288,13 +3289,16 @@ class Layout(object):
                 self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
                                 font_size=font_size,width=width)
+
         if self.display['subseg']:
             dico = self.subseg()
             for k in dico.keys():
-                edlist2 = set(dico[k])
-                edlist = list(edlist2.intersection(set(edlist)))
                 color = self.sl[k]['color']
-                self.show_segment(edlist=edlist, color='black', alpha=1)
+                edlist2 = []
+                for ts in dico[k]:
+                    edlist2.append(ts[0])
+                edlist = list(set(edlist2).intersection(set(edlist)))
+                self.show_segment(edlist=edlist, color=color, alpha=0.5,width=2)
 
         if self.display['scaled']:
             ax.axis('scaled')
