@@ -198,6 +198,7 @@ class Layout(object):
         # Initializing graphs
         #
         self.Gs = nx.Graph()
+        self.Gr = nx.Graph()
         self.Gc = nx.Graph()
         self.Gt = nx.Graph()
         self.Gm = nx.Graph()
@@ -250,15 +251,15 @@ class Layout(object):
         st = '\n'
         st = st + "----------------\n"
         st = st + self.filename + "\n" 
+        st = st + "----------------\n\n"
         st = st + "Number of points  : "+ str(self.Np)+"\n"
         st = st + "Number of segments  : "+str(self.Ns)+"\n"
         st = st + "Number of sub segments  : "+str(self.Nss)+"\n"
-        st = st + "Number of cycles  : "+str(self.np)+"\n"
-        st = st + "Number of rooms  : "+ str(len(self.Gt.node))+"\n"
-        st = st + "Number of cycles  : "+ str(len(self.Gr.node))+"\n"
+        st = st + "Number of cycles  : "+ str(len(self.Gt.node))+"\n"
+        st = st + "Number of rooms  : "+ str(len(self.Gr.node))+"\n"
         st = st + "\n" 
-        st = st + "xrange :"+ str(elf.ax[0:2])+"\n"
-        st = st + "yrange :"+ str(elf.ax[2:])+"\n"
+        st = st + "xrange :"+ str(self.ax[0:2])+"\n"
+        st = st + "yrange :"+ str(self.ax[2:])+"\n"
         return(st) 
 
     def ls(self, typ='ini'):
@@ -508,13 +509,14 @@ class Layout(object):
         self.filename = _fileosm
         fileosm = pyu.getlong(_fileosm,'struc')
         coords,nodes,ways,relations = osm.osmparse(fileosm,typ='floorplan')
-        nn  = 0
-        ne = 0 
+        _np = 0 # _ to avoid name conflict with numpy alias
+        _ns = 0 
+        ns  = 0 
         nss  = 0 
         for npt in coords.xy:
             self.Gs.add_node(npt)
             self.Gs.pos[npt] = tuple(coords.xy[npt])
-            nn+=1
+            _np+=1
 
         for k,nseg in enumerate(ways.way):
             tahe = ways.way[nseg].refs
@@ -527,7 +529,7 @@ class Layout(object):
                         d[key]=eval(d[key])
                     except:
                         pass
-                # avoid segment 0 
+                # avoid  0 value (not a segment number)
                 ns = k+1
                 # transcode segment index 
                 if d.has_key('name'):
@@ -541,7 +543,7 @@ class Layout(object):
                 self.Gs.node[ns] = d
                 self.Gs.pos[ns] = tuple((np.array(self.Gs.pos[nta])+np.array(self.Gs.pos[nhe]))/2.)
                 if d.has_key('ss_name'):
-                    nss+=1
+                    nss+=len(d['ss_name'])
                 if name not in self.display['layers']:
                     self.display['layers'].append(name)
                 self.labels[ns] = str(ns)
@@ -549,10 +551,10 @@ class Layout(object):
                     self.name[name].append(ns)
                 else:
                     self.name[name] = [ns]
-                ne+=1
+                _ns+=1
 
-        self.Np = nn
-        self.Ns = ne
+        self.Np = _np
+        self.Ns = _ns
         self.Nss = nss
         #del coords
         #del nodes
@@ -600,11 +602,12 @@ class Layout(object):
                 fd.write("<way id='"+str(noden)+"' action='modify' visible='true'>\n") 
                 fd.write("<nd ref='"+str(neigh[0])+"' />\n") 
                 fd.write("<nd ref='"+str(neigh[1])+"' />\n") 
-                fd.write("<tag k='name' v='"+d['name']+"' />\n") 
+                fd.write("<tag k='name' v='"+str(d['name'])+"' />\n") 
                 fd.write("<tag k='z' v='"+str(d['z'])+"' />\n") 
                 fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n") 
                 if d.has_key('ss_name'):
-                    fd.write("<tag k='ss_name' v='"+d['ss_name']+"' />\n") 
+                    ch = str(d['ss_name'])    
+                    fd.write("<tag k='ss_name' v=\""+ch+"\" />\n") 
                     fd.write("<tag k='ss_z' v='"+str(d['ss_z'])+"' />\n") 
                 fd.write("</way>\n") 
 
