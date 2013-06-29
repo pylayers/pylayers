@@ -245,6 +245,21 @@ class Layout(object):
             self.name[k] = []
         self.load(_filename)
         self.boundary()
+    
+    def __repr__(self):
+        st = '\n'
+        st = st + "----------------\n"
+        st = st + self.filename + "\n" 
+        st = st + "Number of points  : "+ str(self.Np)+"\n"
+        st = st + "Number of segments  : "+str(self.Ns)+"\n"
+        st = st + "Number of sub segments  : "+str(self.Nss)+"\n"
+        st = st + "Number of cycles  : "+str(self.np)+"\n"
+        st = st + "Number of rooms  : "+ str(len(self.Gt.node))+"\n"
+        st = st + "Number of cycles  : "+ str(len(self.Gr.node))+"\n"
+        st = st + "\n" 
+        st = st + "xrange :"+ str(elf.ax[0:2])+"\n"
+        st = st + "yrange :"+ str(elf.ax[2:])+"\n"
+        return(st) 
 
     def ls(self, typ='ini'):
         """ list the available file in dirstruc
@@ -406,8 +421,8 @@ class Layout(object):
 
             This fucntion updates from Gs:
 
-            self.tahe (2xNn)
-            self.pt (2xNe)
+            self.pt (2xNp)
+            self.tahe (2xNs)
             self.tgs
             self.dca
 
@@ -429,8 +444,8 @@ class Layout(object):
 
         ks = 0 # segments start at index 0 in tahe
         #ds = {}
-        Nemax = max(self.Gs.node.keys())
-        self.tgs = np.zeros(Nemax+1,dtype=int)
+        Nsmax = max(self.Gs.node.keys())
+        self.tgs = np.zeros(Nsmax+1,dtype=int)
         self.tsg = np.zeros(self.Ns,dtype=int)
 
         for node in self.Gs.node:
@@ -673,9 +688,8 @@ class Layout(object):
                 except:
                     print section, option
 
-        self.Np = eval(di['info']['npoints'])
-        self.Ns = eval(di['info']['nsegments'])
-        self.Nss = eval(di['info']['nsubsegments'])
+        self.Np = len(di['points'])
+        self.Ns = len(di['segments'])
         self.Gs = nx.Graph()
         self.Gs.pos = {}
         self.labels = {}
@@ -703,9 +717,12 @@ class Layout(object):
             self.labels[nodeindex] = nn
 
         # update segments section 
+        Nss = 0 
         for ns in di['segments']:
             self.Gs.add_node(eval(ns))
             d = eval(di['segments'][ns])
+            if 'ss_name' in d:
+                Nss = Nss + len(d['ss_name'])
             name = d['name']
             nta = d['connect'][0]
             nhe = d['connect'][1]
@@ -720,7 +737,7 @@ class Layout(object):
                 self.name[name].append(eval(ns))
             else:
                 self.name[name] = [eval(ns)]
-
+        self.Nss = Nss
         # compliant with config file without  material/slab information
         if config.has_section('files'):
             self.filematini=config.get('files','materials')
@@ -854,28 +871,28 @@ class Layout(object):
         fo.close()
 
         #
-        # Read : Nn Ns Nss
+        # Read : Np Ns Nss
         #        Number of Nodes           nn
         #        Number of Edges           en
         #        Number of Sub Segments    cen
         #
         data_nn = data[0:4]
-        Nn = stru.unpack('i', data_nn)[0]
+        Np = stru.unpack('i', data_nn)[0]
         data_en = data[4:8]
-        Ne = stru.unpack('i', data_en)[0]
+        Ns = stru.unpack('i', data_en)[0]
         data_cen = data[8:12]
         Nss = stru.unpack('i', data_cen)[0]
-        self.Np = Nn
-        self.Ns = Ne
+        self.Np = Np
+        self.Ns = Ns
         self.Nss = Nss
 
-        codesl = np.array(np.zeros(Ne), dtype=int)
-        codes = np.array(np.zeros(Ne), dtype=int)
+        codesl = np.array(np.zeros(Ns), dtype=int)
+        codes = np.array(np.zeros(Ns), dtype=int)
 
         # tahe : segment tail and head point index
-        tahe = np.array(np.zeros([2, Ne]), dtype=int)
+        tahe = np.array(np.zeros([2, Ns]), dtype=int)
         ini = 12
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 4 * i
             stop = ini + 4 * (i + 1)
             dt = data[start:stop]
@@ -883,7 +900,7 @@ class Layout(object):
             tahe[0, i] = stru.unpack('i', dt)[0] - 1
 
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 4 * i
             stop = ini + 4 * (i + 1)
             dt = data[start:stop]
@@ -891,16 +908,16 @@ class Layout(object):
             tahe[1, i] = stru.unpack('i', dt)[0] - 1
 
         # x : tableau des coordonnees x des noeuds
-        pt = np.array(np.zeros([2, Nn], dtype=np.float64))
+        pt = np.array(np.zeros([2, Np], dtype=np.float64))
         ini = stop
-        for i in range(Nn):
+        for i in range(Np):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
             pt[0, i] = stru.unpack('d', dt)[0]
         # y : tableau des coordinates y des noeuds
         ini = stop
-        for i in range(Nn):
+        for i in range(Np):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
@@ -908,7 +925,7 @@ class Layout(object):
         #--------------------------------------------
         # Node labelling (structure nodes)
         #--------------------------------------------
-        for k in range(Nn):
+        for k in range(Np):
             self.Gs.add_node(-(k + 1))
             self.Gs.pos[-(k + 1)] = (pt[0, k], pt[1, k])
             self.labels[-(k + 1)] = str(-(k + 1))
@@ -916,10 +933,10 @@ class Layout(object):
         #
         # y : type de noeud
         #
-        typ = np.array(np.zeros(Nn), dtype=int)
-        codep = np.array(np.zeros(Nn), dtype=int)
+        typ = np.array(np.zeros(Np), dtype=int)
+        codep = np.array(np.zeros(Np), dtype=int)
         ini = stop
-        for i in range(Nn):
+        for i in range(Np):
             start = ini + 4 * i
             stop = ini + 4 * (i + 1)
             dt = data[start:stop]
@@ -928,46 +945,46 @@ class Layout(object):
         #
         # agi : tableau des angles initiaux des noeuds de type 2
         #
-        ag = np.array(np.zeros([3, Nn], dtype=np.float64))
+        ag = np.array(np.zeros([3, Np], dtype=np.float64))
         ini = stop
-        for i in range(Nn):
+        for i in range(Np):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
             ag[0, i] = stru.unpack('d', dt)[0]
         # agf : tableau des angles finaux des noeuds de type 2
         ini = stop
-        for i in range(Nn):
+        for i in range(Np):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
             ag[1, i] = stru.unpack('d', dt)[0]
         # nN : tableau des parametres d'ouverture de diedre des noeuds de type 2
-        nN = np.array(1.0 * np.zeros(Nn))
+        nN = np.array(1.0 * np.zeros(Np))
         ini = stop
-        for i in range(Nn):
+        for i in range(Np):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
             ag[2, i] = stru.unpack('d', dt)[0]
         #eml  =
-        em = np.array(np.zeros([3, Ne]), dtype=int)
+        em = np.array(np.zeros([3, Ns]), dtype=int)
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 4 * i
             stop = ini + 4 * (i + 1)
             dt = data[start:stop]
             em[0, i] = stru.unpack('i', dt)[0]
         #emr  =
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 4 * i
             stop = ini + 4 * (i + 1)
             dt = data[start:stop]
             em[1, i] = stru.unpack('i', dt)[0]
         #emc  =
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 4 * i
             stop = ini + 4 * (i + 1)
             dt = data[start:stop]
@@ -977,32 +994,32 @@ class Layout(object):
             name = self.sl.di[codesl[i]]
             lname.append(name)
         #thickness =
-        thick = np.array(1.0 * np.zeros(Ne))
+        thick = np.array(1.0 * np.zeros(Ns))
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
             thick[i] = stru.unpack('d', dt)[0]
         #ehmin =
-        z = np.array(np.zeros([2, Ne], dtype=np.float64))
+        z = np.array(np.zeros([2, Ns], dtype=np.float64))
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
             z[0, i] = stru.unpack('d', dt)[0]
         #ehmax =
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
             z[1, i] = stru.unpack('d', dt)[0]
 
-        norm = np.array(np.zeros([2, Ne], dtype=np.float64))
+        norm = np.array(np.zeros([2, Ns], dtype=np.float64))
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 16 * i
             stop = ini + 16 * (i + 1)
             dt1 = data[start:start + 8]
@@ -1013,10 +1030,10 @@ class Layout(object):
         # read matrice node-node
         #
         ini = stop
-        nd_nd = np.zeros([Nn, Nn], dtype=int)
-        for i in range(Nn):
-            for j in range(Nn):
-                k = Nn * i + j
+        nd_nd = np.zeros([Np, Np], dtype=int)
+        for i in range(Np):
+            for j in range(Np):
+                k = Np * i + j
                 start = ini + 4 * k
                 stop = ini + 4 * (k + 1)
                 dt = data[start:stop]
@@ -1025,10 +1042,10 @@ class Layout(object):
         # read matrice node-edge
         #
         ini = stop
-        nd_ed = np.zeros([Ne, Nn], dtype=int)
-        for i in range(Ne):
-            for j in range(Nn):
-                k = Nn * i + j
+        nd_ed = np.zeros([Ns, Np], dtype=int)
+        for i in range(Ns):
+            for j in range(Np):
+                k = Np * i + j
                 start = ini + 4 * k
                 stop = ini + 4 * (k + 1)
                 dt = data[start:stop]
@@ -1036,9 +1053,9 @@ class Layout(object):
         #
         # read mat_i
         #
-        mat_i = np.array(np.zeros(Ne), dtype=int)
+        mat_i = np.array(np.zeros(Ns), dtype=int)
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 4 * i
             stop = ini + 4 * (i + 1)
             dt = data[start:stop]
@@ -1046,9 +1063,9 @@ class Layout(object):
         #
         # read mat_d
         #
-        mat_d = np.array(1.0 * np.zeros(Ne))
+        mat_d = np.array(1.0 * np.zeros(Ns))
         ini = stop
-        for i in range(Ne):
+        for i in range(Ns):
             start = ini + 8 * i
             stop = ini + 8 * (i + 1)
             dt = data[start:stop]
@@ -1057,10 +1074,10 @@ class Layout(object):
         # read matrice ed-ed
         #
         ini = stop
-        ed_ed = np.zeros([Ne, Ne], dtype=int)
-        for i in range(Ne):
-            for j in range(Ne):
-                k = Ne * i + j
+        ed_ed = np.zeros([Ns, Ns], dtype=int)
+        for i in range(Ns):
+            for j in range(Ns):
+                k = Ns * i + j
                 start = ini + 4 * k
                 stop = ini + 4 * (k + 1)
                 dt = data[start:stop]
@@ -1209,7 +1226,7 @@ class Layout(object):
         # Node labelling (structure edges)
         #----------------------------------------
         self.display['layers']=[]
-        for k in range(Ne):
+        for k in range(Ns):
             self.Gs.add_node(k + 1, name=lname[k])
             self.Gs.add_node(k + 1, z=(z[0, k],z[1, k]))
             self.Gs.add_node(k + 1, norm=np.array([norm[0, k],
@@ -1249,16 +1266,16 @@ class Layout(object):
         #
         # !! Incomplet  (To Do nd_ed)
         #
-        Nn = np.shape(nd_nd)[0]
-        for k in range(Nn):
+        Np = np.shape(nd_nd)[0]
+        for k in range(Np):
             nnp = -(k + 1)
             kvu = sp.nonzero(nd_nd[k] == 3)
             nc = -kvu[0] - 1
             for l in nc:
                 self.Gc.add_edge(nnp, l)
 
-        Ne = np.shape(ed_ed)[0]
-        for k in range(Ne):
+        Ns = np.shape(ed_ed)[0]
+        for k in range(Ns):
             ne = k + 1
             kvu = sp.nonzero(ed_ed[k] != 0)
             nc = kvu[0] + 1
@@ -1344,29 +1361,29 @@ class Layout(object):
         #
         # Parse the .str2 header NP NSEG NCOSEG
         #
-        Nn = int(l1[0])
-        Ne = int(l1[1])
+        Np = int(l1[0])
+        Ns = int(l1[1])
         Nss = int(l1[2])
-        self.Np = Nn
-        self.Ns = Ne
+        self.Np = Np
+        self.Ns = Ns
         self.Nss = Nss
 
         lname = []
 
 
-        pt = np.array(np.zeros([2, Nn], dtype=np.float64))
-        codep = np.array(np.zeros(Nn, dtype=int))
-        ag = np.array(np.zeros([3, Nn], dtype=np.float64))
-        tahe = np.array(np.zeros([2, Ne], dtype=int))
-        codesl = np.array(np.zeros(Ne), dtype=int)
-        codes = np.array(np.zeros(Ne), dtype=int)
+        pt = np.array(np.zeros([2, Np], dtype=np.float64))
+        codep = np.array(np.zeros(Np, dtype=int))
+        ag = np.array(np.zeros([3, Np], dtype=np.float64))
+        tahe = np.array(np.zeros([2, Ns], dtype=int))
+        codesl = np.array(np.zeros(Ns), dtype=int)
+        codes = np.array(np.zeros(Ns), dtype=int)
 
-        em = np.array(np.zeros([3, Ne]), dtype=int)
-        thick = np.array(np.zeros(Ne))
+        em = np.array(np.zeros([3, Ns]), dtype=int)
+        thick = np.array(np.zeros(Ns))
 
-        ed_mat_prop_d = np.array(np.zeros(Ne, dtype=float))
-        height = np.array(np.zeros([2, Ne], dtype=float))
-        z = np.array(np.zeros([2, Ne], dtype=float))
+        ed_mat_prop_d = np.array(np.zeros(Ns, dtype=float))
+        height = np.array(np.zeros([2, Ns], dtype=float))
+        z = np.array(np.zeros([2, Ns], dtype=float))
 
         ce_ed = np.array(np.zeros(Nss), dtype=int)
         ce_core = np.array(np.zeros(Nss), dtype=int)
@@ -1377,7 +1394,7 @@ class Layout(object):
         #
         # Read points
         #
-        for i in range(Nn):
+        for i in range(Np):
             dt = lines[i + 1].split()
             pt[0, i] = float(dt[0])
             pt[1, i] = float(dt[1])
@@ -1389,14 +1406,14 @@ class Layout(object):
         #--------------------------------------------
         # Node labelling (structure nodes)
         #--------------------------------------------
-        for k in range(Nn):
+        for k in range(Np):
             self.Gs.add_node(-(k + 1))
             self.Gs.pos[-(k + 1)] = (pt[0, k], pt[1, k])
             self.labels[-(k + 1)] = str(-(k + 1))
         #
         # Read segments
         #
-        for i in range(Ne):
+        for i in range(Ns):
             dt = lines[i + ind1].split()
             tahe[0, i] = int(dt[0])
             tahe[1, i] = int(dt[1])
@@ -1434,7 +1451,7 @@ class Layout(object):
         # Node labelling (structure edges)
         #----------------------------------------
         self.display['layers']=[]
-        for k in range(Ne):
+        for k in range(Ns):
             #print k, lname[k]
             self.Gs.add_node(k + 1, name=lname[k])
             self.Gs.add_node(k + 1, zmin=z[0, k])
