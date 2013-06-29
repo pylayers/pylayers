@@ -4356,22 +4356,15 @@ class Layout(object):
 
         d = self.subseg()
         for ss in d.keys():
-            if ss == 'DOOR':
-                color = 'red'
-
-            if ss == '3D_WINDOW_GLASS':
-                color = 'blue'
-
-            if ss == 'WINDOW_GLASS':
-                color = 'cyan'
-            else:
-                color= 'black'
-
+            color = self.sl[ss]['color']
             for ns in d[ss]:
-                np1, np2 = self.Gs.neighbors(ns)
-                x = [self.Gs.pos[np1][0], self.Gs.pos[np2][0]]
-                y = [self.Gs.pos[np1][1], self.Gs.pos[np2][1]]
-                ax.plot(x, y, linewidth=2, color=color)
+                norm = self.Gs.node[ns[0]]['norm']
+                np1, np2 = self.Gs.neighbors(ns[0])
+                x = np.array([self.Gs.pos[np1][0], self.Gs.pos[np2][0]])
+                y = np.array([self.Gs.pos[np1][1], self.Gs.pos[np2][1]])
+                xoff = (1+ns[1])*0.05*norm[0]
+                yoff = (1+ns[1])*0.05*norm[1]
+                ax.plot(x+xoff, y+yoff, linewidth=2, color=color)
 
         if kwargs['show']:
             plt.show()
