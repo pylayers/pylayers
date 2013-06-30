@@ -226,8 +226,6 @@ class Rays(dict):
         N : int
             number of mirror reflexions
 
-        lsss : list od segment with a subsegment    
-
         returns
         -------
 
@@ -474,15 +472,20 @@ class Rays(dict):
                     siges = sig
 
                 #   ptes (3 x i+2 x r ) 
-                u   = map(lambda x: list(np.where(siges[0,:,:]==x)),L.lsss)[0]
+                lsss = np.unique(np.array(L.lsss))
+                # index of signature which corresponds to subsegment
+                u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
+                # dimension extension of index u for : 
+                #    z coordinate extraction (append line 2 on dimension 0)    
+                #    0 signature extraction  (append line 0 on  dimension 0)    
                 v   = [2*np.ones(len(u[0]),dtype=int)]+u
                 w   = [0*np.ones(len(u[0]),dtype=int)]+u
-                # zss : height of interaction on subsegments
+                # zss : height of interactions on subsegments
                 zss = ptees[v]
                 # structure index of corresponding subsegments 
                 nstrs = siges[w]
-                #print "nstrs: ",nstrs
-                #print "zss:",zss
+                print "nstrs: ",nstrs
+                print "zss:",zss
                 #
                 # Determine which subsegment has been intersected 
                 # k = 0 : no subsegment intersected
@@ -498,12 +501,16 @@ class Rays(dict):
                         return(0)
 
                 indexss = map(findindex,zip(zinterval,tab))
-                indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                indexnew = L.stridess[nstrs]+indexss
+                #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
+                #iindexnex = L.isss[ind]
+                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
                 # update signature
                 siges[w] = indexnew
-                #print "indexss:",indexss
-                #print "indexnew:",indexnew
-                #print siges
+                print "indexss:",indexss
+                print "indexnew:",indexnew
+                print siges
                 #pdb.set_trace()
                 #pdb.set_trace()
                 # expand dimension add z dimension (2) 
@@ -580,8 +587,8 @@ class Rays(dict):
         # nsegment x k
         key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
 
-        nmax = max(L.Gs.node.keys())
-        mapping = np.zeros(nmax+1, dtype=int)
+        nsmax = max(L.Gs.node.keys())
+        mapping = np.zeros(nsmax+1, dtype=int)
         mapping[key] = np.arange(len(key), dtype=int)
 
         #
@@ -589,7 +596,7 @@ class Rays(dict):
         #   the structure number is < 0 for points 
         #                           > 0 for segments
         # A segment can have several subsegments (until 100)
-        #  nstrs is the nstr of the segment if sous segment : 1000000 + nstr*100 + k-1
+        #  nstrs is the nstr of the segment if subsegment : 
         #  nstr  is the glabal which allows to recover the slab values 
         #
         for k in self:
@@ -597,16 +604,16 @@ class Rays(dict):
                 nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
                 ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
                 # nstr of underlying segment
-                #print nstr
-                uss   = np.where(nstr>1000000)
-                #print uss
+                # position of interaction corresponding to a sub segment 
+                uss   = np.where(nstr>nsmax)
+                # print uss
                 nstrs = copy.copy(nstr)
-                nstrs = nstr
                 if len(uss)>0:
-                    nstrs[uss] = nstr[uss]/100-10000
+                    ind   = nstr[uss]-nsmax
+                    nstrs[uss] = L.lsss[ind] 
                 #    print nstr
                 #    print nstrs
-                #pdb.set_trace()
+                pdb.set_trace()
                 nray = np.shape(nstr)[1]
 
                 uwall = np.where((ityp == 1) | (ityp == 2))
@@ -614,11 +621,11 @@ class Rays(dict):
                 ufloor = np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
-                nstrwall  = nstr[uwall[0], uwall[1]]     # nstr of walls
+                nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls
                 nstrswall = nstrs[uwall[0], uwall[1]]   # nstrs of walls
 
-                self[k]['nstrwall']  = nstrwall    # store
-                self[k]['nstrswall'] = nstrswall   # store
+                self[k]['nstrwall']  = nstrwall    # store nstr without subsegment
+                self[k]['nstrswall'] = nstrswall   # store nstr with subsegment
 
                 self[k]['norm'] = np.zeros((3, k, nray))   # 3 x int x nray
 
@@ -829,8 +836,8 @@ class Rays(dict):
         for s in uslv:
             dsla[s] = np.where(s == np.array(slv))[0]
 
-        nmax = max(L.Gs.node.keys())
-        sla = np.zeros((nmax+1), dtype='S20')
+        nsmax = max(L.Gs.node.keys())
+        sla = np.zeros((nsmax+1), dtype='S20')
 
         # array type str with more than 1 character
         # warning use zeros instead of empty because slab zero

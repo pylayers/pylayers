@@ -260,20 +260,22 @@ class Layout(object):
         st = st + "\n" 
         st = st + "xrange :"+ str(self.ax[0:2])+"\n"
         st = st + "yrange :"+ str(self.ax[2:])+"\n"
-        st = st + "\nDictionnaries"+"\n----------------\n"
+        st = st + "\nUseful dictionnaries"+"\n----------------\n"
         if hasattr(self,'di'):
             st = st + "di k=interaction v= [nstr,typi]" +"\n"
         if hasattr(self,'sl'):
             st = st + "sl k=slab name v=dictionary" +"\n"
-        st = st + "\nArrays"+"\n----------------\n"
-        if hasattr(self,'lsss'):
-            st = st + "lsss : list of segments with sub-segment"+"\n"
+        st = st + "\nUseful arrays"+"\n----------------\n"
         if hasattr(self,'tsg'):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
         if hasattr(self,'tgs'):
             st = st + "tgs : get segment index in tahe from Gs" +"\n"
+        if hasattr(self,'lsss'):
+            st = st + "lsss : list of segments with sub-segment"+"\n"
+        if hasattr(self,'sridess'):
+            st = st + "stridess : stride to calculate the index of a subsegment" +"\n"
         if hasattr(self,'sla'):
-            st = st + "sla : associate nstr to slabname" +"\n"
+            st = st + "sla : associated slab name" +"\n"
 
         return(st) 
 
@@ -504,8 +506,8 @@ class Layout(object):
         # nsmax can be different from the total number of segments
         self.lsss = []
         self.isss = []
+        self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
         self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
-        pdb.set_trace()
         #
         # index is for indexing subsegment after the nsmax value
         #
@@ -515,10 +517,12 @@ class Layout(object):
                 k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
                 self.sla[ks]=self.Gs.node[ks]['name']
+                self.stridess[ks]=0
                 if self.Gs.node[ks].has_key('ss_name'):
-                    self.lsss.append(ks)
                     nss = len(self.Gs.node[ks]['ss_name'])
+                    self.stridess[ks]=index-1
                     for slabname in self.Gs.node[ks]['ss_name']:
+                        self.lsss.append(ks)
                         self.sla[index] = slabname
                         self.isss.append(index)
                         index = index+1
@@ -688,7 +692,7 @@ class Layout(object):
                 except:
                     d['transition']=False
                     try:
-                        if d['ss_name']=='DOOR':
+                        if 'DOOR' in d['ss_name']:
                             d['transition']=True
                     except:
                         pass
@@ -2591,7 +2595,7 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
+        >>> L = Layout('DLR3.ini','matDB.ini','slabDB.ini')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
         >>> L.angleonlink(p1,p2)
@@ -5720,6 +5724,6 @@ class Layout(object):
 
 
 if __name__ == "__main__":
-    #plt.ion()
-    #doctest.testmod()
-    L = Layout('defstr3.ini')
+    plt.ion()
+    doctest.testmod()
+    #L = Layout('defstr3.ini')
