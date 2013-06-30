@@ -605,15 +605,15 @@ class Rays(dict):
                 ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment 
-                print nstr
+                #print nstr
                 uss   = np.where(nstr>nsmax)
-                print uss
+                #print uss
                 nstrs = copy.copy(nstr)
                 if len(uss)>0:
                     ind   = nstr[uss]-nsmax
                     nstrs[uss] = np.array(L.lsss)[ind] 
                 #    print nstr
-                print nstrs
+                #print nstrs
                 #pdb.set_trace()
                 nray = np.shape(nstr)[1]
 
@@ -823,11 +823,10 @@ class Rays(dict):
 
 
         # Transform dictionnary of slab name to array
-        slv = nx.get_node_attributes(L.Gs, "name").values()
-        slk = nx.get_node_attributes(L.Gs, "name").keys()
-
+        #slv = nx.get_node_attributes(L.Gs, "name").values()
+        #slk = nx.get_node_attributes(L.Gs, "name").keys()
         # find all material used in simulation
-        uslv = np.unique(slv)
+        uslv = np.unique(L.sla[1:])
         uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
 
         # create reverse dictionnary with all material as a key
@@ -853,7 +852,7 @@ class Rays(dict):
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-
+        
         tsl = np.array(())
         rsl = np.array(())
         
@@ -1025,7 +1024,7 @@ class Rays(dict):
         self.B0 = B0
 
 
-    def eval(self,fGHz=np.array([2.4])):
+    def eval(self,fGHz=np.array([2.4]),ib=[]):
         """  docstring for eval
 
         Parameters
@@ -1059,7 +1058,10 @@ class Rays(dict):
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
         # loop on interaction blocks
-        for l in self:
+        if ib==[]:
+            ib=self.keys()
+
+        for l in ib:
             if l != 0:
                 # l stands for the number of interactions
                 r = self[l]['nbrays']

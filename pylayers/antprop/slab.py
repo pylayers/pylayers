@@ -10,7 +10,7 @@ This module contains the following classes :
     + Slab(dict)
     + SlabDB(dict)
 
-This module exploits numpy broadcasting mecanism :
+This module exploits heavily numpy broadcasting mechanism :
 
     nf : axis = 0   frequency axis
     nt : axis = 1   angular axis
@@ -592,7 +592,7 @@ class Mat(dict):
         return(epsc)
 
     def info(self):
-        """ Display material properties
+        """ display material properties
         """
 
         print "---------------------------------"
@@ -1122,8 +1122,8 @@ class Slab(dict, Interface):
         print "nbmat : ", len(self['lmatname'])
         chaine = "[ "
         for i in range(len(self['lmatname'])):
-            index_mat = self.imat[i]
-            name_mat = self.mat.di[index_mat]
+            index_mat = self['imat'][i]
+            name_mat = self['mat'][index_mat]
             self.mat[name_mat].info()
             if self['evaluated']:
                 epsrc = self.mat[name_mat].epsc(self.fGHz[0])
@@ -1131,11 +1131,11 @@ class Slab(dict, Interface):
             chaine = chaine + name_mat + '   '
             chaine = chaine + ']'
             print chaine
-            print "index : ", self.index
-            print "imat   : ", self.imat
-            print "thickness (m) : ", self.thickness
-            print "color : ", self.color
-            print "linewidth :", self.linewidth
+            print "index : ", self['index']
+            print "imat   : ", self['imat']
+            print "thickness (m) : ", self['thickness']
+            print "color : ", self['color']
+            print "linewidth :", self['linewidth']
             if self['evaluated']:
                 print "---------------------"
                 nf = len(self.fGHz)
@@ -1247,11 +1247,11 @@ class Slab(dict, Interface):
                 Io = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Io[:, :, 0, 1] = -1
                 Io[:, :, 1, 0] = -1
-#                _Io=np.eye(2,dtype=complex)+np.eye(2)-1
+#           _Io=np.eye(2,dtype=complex)+np.eye(2)-1
                 Ip = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Ip[:, :, 0, 1] = -1
                 Ip[:, :, 1, 0] = -1
-#                _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
+#           _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
             else:
                 if i == self.n - 2:
                     II = MatInterface([ml, mr], 0, fGHz, theta)
