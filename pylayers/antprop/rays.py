@@ -484,8 +484,8 @@ class Rays(dict):
                 zss = ptees[v]
                 # structure index of corresponding subsegments 
                 nstrs = siges[w]
-                print "nstrs: ",nstrs
-                print "zss:",zss
+                #print "nstrs: ",nstrs
+                #print "zss:",zss
                 #
                 # Determine which subsegment has been intersected 
                 # k = 0 : no subsegment intersected
@@ -508,9 +508,9 @@ class Rays(dict):
                 #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
                 # update signature
                 siges[w] = indexnew
-                print "indexss:",indexss
-                print "indexnew:",indexnew
-                print siges
+                #print "indexss:",indexss
+                #print "indexnew:",indexnew
+                #print siges
                 #pdb.set_trace()
                 #pdb.set_trace()
                 # expand dimension add z dimension (2) 
@@ -605,15 +605,16 @@ class Rays(dict):
                 ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment 
+                print nstr
                 uss   = np.where(nstr>nsmax)
-                # print uss
+                print uss
                 nstrs = copy.copy(nstr)
                 if len(uss)>0:
                     ind   = nstr[uss]-nsmax
-                    nstrs[uss] = L.lsss[ind] 
+                    nstrs[uss] = np.array(L.lsss)[ind] 
                 #    print nstr
-                #    print nstrs
-                pdb.set_trace()
+                print nstrs
+                #pdb.set_trace()
                 nray = np.shape(nstr)[1]
 
                 uwall = np.where((ityp == 1) | (ityp == 2))
@@ -832,12 +833,12 @@ class Rays(dict):
         # create reverse dictionnary with all material as a key
         # and associated point/segment as a value
 
-        dsla = {}
-        for s in uslv:
-            dsla[s] = np.where(s == np.array(slv))[0]
+        #dsla = {}
+        #for s in uslv:
+        #    dsla[s] = np.where(s == np.array(slv))[0]
 
         nsmax = max(L.Gs.node.keys())
-        sla = np.zeros((nsmax+1), dtype='S20')
+        #sla = np.zeros((nsmax+1), dtype='S20')
 
         # array type str with more than 1 character
         # warning use zeros instead of empty because slab zero
@@ -848,7 +849,7 @@ class Rays(dict):
         # each value of Gs node is the index of the corresponding slab
         #
 
-        sla[slk] = np.array(slv)
+        #sla[slk] = np.array(slv)
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
@@ -856,7 +857,6 @@ class Rays(dict):
         tsl = np.array(())
         rsl = np.array(())
         
-        pdb.set_trace()
         # loop on group of interactions 
         for k in self:
             if k !=0:
@@ -892,6 +892,7 @@ class Rays(dict):
                 # create index for retrieving interactions
 
                 # integer offset : total size idx
+
                 idxts = idxts + idx.size
 
                 idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
@@ -904,6 +905,7 @@ class Rays(dict):
 
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
+
                 ray2nbi=np.ones((nbray))
 
                 
@@ -924,13 +926,15 @@ class Rays(dict):
 
                 b0 = self[k]['B'][:,:,0,:]
                 b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+
                 ## find used slab
                 ##################
                 # find slab type for the rnstr
                 # nstrf is a number of slab
                 # this is a problem for handling subsegment
                 #
-                sl = sla[nstrf]
+
+                sl = L.sla[nstrf]
 
                 # seek for interactions position
                 ################################
@@ -981,6 +985,7 @@ class Rays(dict):
                 # Warning
                 # B.idx refers to an interaction index
                 # whereas B0.idx refers to a ray number
+
                 B.stack(data=b.T, idx=idxf)
                 B0.stack(data=b0.T,idx=self[k]['rayidx'])
 
