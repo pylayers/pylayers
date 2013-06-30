@@ -272,6 +272,8 @@ class Layout(object):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
         if hasattr(self,'tgs'):
             st = st + "tgs : get segment index in tahe from Gs" +"\n"
+        if hasattr(self,'sla'):
+            st = st + "sla : associate nstr to slabname" +"\n"
 
         return(st) 
 
@@ -495,13 +497,31 @@ class Layout(object):
             normal = np.vstack((normx,normy,np.zeros(len(scale))))
 
         #for ks in ds:
-        self.lsss=[]
+        #
+        # lsss : list of subsegment 
+        #
+        nsmax  = max(self.Gs.node.keys())
+        # nsmax can be different from the total number of segments
+        self.lsss = []
+        self.isss = []
+        self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
+        pdb.set_trace()
+        #
+        # index is for indexing subsegment after the nsmax value
+        #
+        index = nsmax+1
         for ks in self.Gs.node:
             if ks > 0:
                 k = self.tgs[ks]
                 self.Gs.node[ks]['norm'] = normal[:,k]
+                self.sla[ks]=self.Gs.node[ks]['name']
                 if self.Gs.node[ks].has_key('ss_name'):
                     self.lsss.append(ks)
+                    nss = len(self.Gs.node[ks]['ss_name'])
+                    for slabname in self.Gs.node[ks]['ss_name']:
+                        self.sla[index] = slabname
+                        self.isss.append(index)
+                        index = index+1
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format

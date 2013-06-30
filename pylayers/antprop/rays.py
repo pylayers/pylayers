@@ -920,7 +920,9 @@ class Rays(dict):
                 ## find used slab
                 ##################
                 # find slab type for the rnstr
-
+                # nstrf is a number of slab
+                # this is a problem for handling subsegment
+                #
                 sl = sla[nstrf]
 
                 # seek for interactions position
