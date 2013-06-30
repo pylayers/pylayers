@@ -212,11 +212,13 @@ class Rays(dict):
 
         return(d)
 
-    def to3D(self, H=3, N=1,lsss=[]):
+    def to3D(self,L,H=3, N=1):
         """ transform 2D ray to 3D ray
 
         Parameters
         ----------
+
+        L : Layout object
 
         H : float
             ceil height (default 3m)
@@ -472,9 +474,49 @@ class Rays(dict):
                     siges = sig
 
                 #   ptes (3 x i+2 x r ) 
-                #   z = ptes[2,1:-1,:]
-                u = map(lambda x: np.where(siges[0,:,:]==x),lsss)
-                pdb.set_trace()
+                u   = map(lambda x: list(np.where(siges[0,:,:]==x)),L.lsss)[0]
+                v   = [2*np.ones(len(u[0]),dtype=int)]+u
+                w   = [0*np.ones(len(u[0]),dtype=int)]+u
+                # zss : height of interaction on subsegments
+                zss = ptees[v]
+                # structure index of corresponding subsegments 
+                nstrs = siges[w]
+                print "nstrs: ",nstrs
+                print "zss:",zss
+                #
+                # Determine which subsegment has been intersected 
+                # k = 0 : no subsegment intersected
+                zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
+                tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
+                                                       (z[1]>x[1])),x[0]),zip(zinterval,zss))
+                #print tab
+                def findindex(x):
+                    if len(x[1])>0:
+                        k = x[0].index(x[1][0])+1
+                        return(k)
+                    else:
+                        return(0)
+
+                indexss = map(findindex,zip(zinterval,tab))
+                indexnew = map(lambda x: 0 if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                print "indexss:",indexss
+                print "indexnew:",indexnew
+
+                #pdb.set_trace()
+                #pdb.set_trace()
+                # expand dimension add z dimension (2) 
+                # tuple concatenation doesn't work with array this is strange!!
+                #
+                # >> a = (1,2,3)
+                # >> b = (3,5,6) 
+                # >> a+b 
+                # (1,2,3,3,5,6)
+                # but 
+                # >> u = (array([1,2]),array([1,2]))
+                # >> v = (array([2,2]))
+                # >> u + v 
+                # array([[3,4],[3,4]])  inconsistent !
+                #
                 #   z --> kl subseg level  
                 #   siges[0,:] --> Ms + nstr *Mss + (kl) 
                 #

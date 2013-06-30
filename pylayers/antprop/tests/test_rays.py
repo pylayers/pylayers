@@ -22,7 +22,7 @@ Si = Signatures(S.L,Ctx,Crx)
 Si.run1(cutoff=5)
 #Si.run2(cutoff=3,dcut=2)
 r2d = Si.rays(tx,rx)
-r3d = r2d.to3D(lsss=S.L.lsss)
+r3d = r2d.to3D(S.L)
 r3d.locbas(S.L)
 r3d.fillinter(S.L)
 pg = np.sum(S.L.pt,axis=1)/np.shape(S.L.pt)[1]
