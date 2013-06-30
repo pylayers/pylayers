@@ -2,7 +2,7 @@
 # -*- coding: latin1 -*-
 import pdb
 import os
-import pdb
+import copy 
 import ConfigParser
 import glob
 import doctest
@@ -481,8 +481,8 @@ class Rays(dict):
                 zss = ptees[v]
                 # structure index of corresponding subsegments 
                 nstrs = siges[w]
-                print "nstrs: ",nstrs
-                print "zss:",zss
+                #print "nstrs: ",nstrs
+                #print "zss:",zss
                 #
                 # Determine which subsegment has been intersected 
                 # k = 0 : no subsegment intersected
@@ -498,10 +498,12 @@ class Rays(dict):
                         return(0)
 
                 indexss = map(findindex,zip(zinterval,tab))
-                indexnew = map(lambda x: 0 if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
-                print "indexss:",indexss
-                print "indexnew:",indexnew
-
+                indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                # update signature
+                siges[w] = indexnew
+                #print "indexss:",indexss
+                #print "indexnew:",indexnew
+                #print siges
                 #pdb.set_trace()
                 #pdb.set_trace()
                 # expand dimension add z dimension (2) 
@@ -573,22 +575,38 @@ class Rays(dict):
         #
 
         # nsegment x 3
-        norm = np.array(nx.get_node_attributes(
-            L.Gs, 'norm').values())
+        norm = np.array(nx.get_node_attributes( L.Gs, 'norm').values())
 
         # nsegment x k
-        key = np.array(nx.get_node_attributes(
-            L.Gs, 'norm').keys())
+        key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
 
         nmax = max(L.Gs.node.keys())
         mapping = np.zeros(nmax+1, dtype=int)
         mapping[key] = np.arange(len(key), dtype=int)
 
+        #
+        # Structutre number : nstr
+        #   the structure number is < 0 for points 
+        #                           > 0 for segments
+        # A segment can have several subsegments (until 100)
+        #  nstrs is the nstr of the segment if sous segment : 1000000 + nstr*100 + k-1
+        #  nstr  is the glabal which allows to recover the slab values 
+        #
         for k in self:
             if k <> 0:
                 nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
                 ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
-
+                # nstr of underlying segment
+                #print nstr
+                uss   = np.where(nstr>1000000)
+                #print uss
+                nstrs = copy.copy(nstr)
+                nstrs = nstr
+                if len(uss)>0:
+                    nstrs[uss] = nstr[uss]/100-10000
+                #    print nstr
+                #    print nstrs
+                #pdb.set_trace()
                 nray = np.shape(nstr)[1]
 
                 uwall = np.where((ityp == 1) | (ityp == 2))
@@ -596,8 +614,11 @@ class Rays(dict):
                 ufloor = np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
-                nstrwall = nstr[uwall[0], uwall[1]]   # nstr of walls
-                self[k]['nstrwall'] = nstrwall       # store
+                nstrwall  = nstr[uwall[0], uwall[1]]     # nstr of walls
+                nstrswall = nstrs[uwall[0], uwall[1]]   # nstrs of walls
+
+                self[k]['nstrwall']  = nstrwall    # store
+                self[k]['nstrswall'] = nstrswall   # store
 
                 self[k]['norm'] = np.zeros((3, k, nray))   # 3 x int x nray
 
@@ -607,7 +628,7 @@ class Rays(dict):
                 #
 
                 # norm : 3 x i x r
-                self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrwall],:].T
+                self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
 
@@ -828,6 +849,7 @@ class Rays(dict):
         tsl = np.array(())
         rsl = np.array(())
         
+        pdb.set_trace()
         # loop on group of interactions 
         for k in self:
             if k !=0:

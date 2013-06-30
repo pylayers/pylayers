@@ -16,14 +16,38 @@ from pylayers.measures import mesuwb
 
 class Waveform:
     """
-        Waveform Class
+        Attributes
+        ----------
+
+        st  : time domain
+        sf  : frequency domain
+        sfg : frequency domain integrated
+
+        Methods
+        -------
+        eval 
+        show2
+        ip_generic
+        fromfile
+        fromfile2
+        read
+        gui
+        show
+
     """
     def __init__(self,parameters=[]):
         """
-           wavetype   =   'generic' =   'mbofdm' =   'fromfile'
-           st  : time domain
-           sf  : frequency domain
-           sfg : frequency domain integrated
+
+        defaults parameters
+            param= {'type' : 'generic',
+            'band': 0.499,
+            'fc': 4.493,
+            'fe': 100,
+            'thresh': 3,
+            'tw': 30}
+
+        type  :  {'generic','W1compensate','W1offset'}
+           
         """
         param= {'type' : 'generic',
                 'band': 0.499,
@@ -46,8 +70,8 @@ class Waveform:
 
         if self.parameters['type']  == 'generic':
             [st,sf]=self.ip_generic()
-        elif self.parameters['type']  == 'mbofdm':
-            [st,sf]=self.mbofdm()
+        #elif self.parameters['type']  == 'mbofdm':
+        #    [st,sf]=self.mbofdm()
         elif self.parameters['type'] == 'W1compensate':
             [st,sf]=self.fromfile()
         elif self.parameters['type'] == 'W1offset':
@@ -98,6 +122,7 @@ class Waveform:
 
         Parameters
         ----------
+
         Tp : float
         
         """
@@ -110,7 +135,8 @@ class Waveform:
 
     def ip_generic(self):
         """    Create an Energy normalized Gaussian impulse (Usignal)
-            ip_generic(self,parameters)
+
+        ip_generic(self,parameters)
         
 
         """
@@ -139,7 +165,7 @@ class Waveform:
         This function is not yet generic
 
         >>> from pylayers.signal.waveform import *
-        >>> wav = Waveform({'type':'file'})
+        >>> wav = Waveform({'type':'W1compensate'})
         >>> wav.show()
 
         """
@@ -188,7 +214,7 @@ class Waveform:
         This function is not yet generic
 
         >>> from pylayers.signal.waveform import *
-        >>> wav = Waveform({'type':'file'})
+        >>> wav = Waveform({'type':'W1offset'})
         >>> wav.show()
 
         """
@@ -322,4 +348,5 @@ class Waveform:
 
 
 if __name__ == "__main__":
+    plt.ion()
     doctest.testmod()

@@ -2,7 +2,9 @@ from pylayers.antprop.rays import *
 from pylayers.gis.layout import *
 from pylayers.antprop.signature import *
 import pylayers.signal.bsignal as bs
+import pylayers.signal.waveform as wvf 
 from pylayers.simul.simulem import *
+import matplotlib.pyplot as plt 
 
 S = Simul()
 filestr = 'defstr3'
@@ -28,3 +30,9 @@ r3d.fillinter(S.L)
 pg = np.sum(S.L.pt,axis=1)/np.shape(S.L.pt)[1]
 pg = array([pg[0],pg[1],0]).reshape(3,1)
 r3d.show3(strucname='defstr3',pg=pg)
+fGHz=np.arange(2,11,0.1)
+Cn=r3d.eval(fGHz)
+sco=Cn.prop2tran(a='theta',b='theta')
+wav = wvf.Waveform()
+ciro = sco.applywavB(wav.sfg)
+plt.show()
