@@ -89,8 +89,28 @@
 <span id="id1"></span><h1>waveform<a class="headerlink" href="#waveform" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-pylayers.signal.waveform"></span><dl class="class">
 <dt id="pylayers.signal.waveform.Waveform">
-<em class="property">class </em><tt class="descclassname">pylayers.signal.waveform.</tt><tt class="descname">Waveform</tt><big>(</big><em>parameters=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Waveform Class</p>
+<em class="property">class </em><tt class="descclassname">pylayers.signal.waveform.</tt><tt class="descname">Waveform</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>st</strong> : time domain</p>
+<p><strong>sf</strong> : frequency domain</p>
+<p><strong>sfg</strong> : frequency domain integrated</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>eval</strong> :</p>
+<p><strong>show2</strong> :</p>
+<p><strong>ip_generic</strong> :</p>
+<p><strong>fromfile</strong> :</p>
+<p><strong>fromfile2</strong> :</p>
+<p><strong>read</strong> :</p>
+<p><strong>gui</strong> :</p>
+<p class="last"><strong>show</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="pylayers.signal.waveform.Waveform.eval">
 <tt class="descname">eval</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.eval" title="Permalink to this definition">¶</a></dt>
@@ -105,7 +125,7 @@ link ( from the Friis formula) is introduced in this function.</p>
 <dd><p>get the measurement waveform from WHERE1 measurement campaign</p>
 <p>This function is not yet generic</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">({</span><span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;file&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -117,7 +137,7 @@ link ( from the Friis formula) is introduced in this function.</p>
 <dd><p>get the measurement waveform from WHERE1 measurement campaign</p>
 <p>This function is not yet generic</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">({</span><span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;file&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1offset&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -138,8 +158,8 @@ link ( from the Friis formula) is introduced in this function.</p>
 <dl class="method">
 <dt id="pylayers.signal.waveform.Waveform.ip_generic">
 <tt class="descname">ip_generic</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.ip_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.ip_generic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an Energy normalized Gaussian impulse (Usignal)
-ip_generic(self,parameters)</p>
+<dd><p>Create an Energy normalized Gaussian impulse (Usignal)</p>
+<p>ip_generic(self,parameters)</p>
 </dd></dl>
 
 <dl class="method">
@@ -164,12 +184,12 @@ ip_generic(self,parameters)</p>
 
 <dl class="method">
 <dt id="pylayers.signal.waveform.Waveform.show2">
-<tt class="descname">show2</tt><big>(</big><em>Tp=1000</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.show2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.show2" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show2</tt><big>(</big><em>Tpns=1000</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/waveform.html#Waveform.show2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.waveform.Waveform.show2" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>Tp</strong> : float</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>Tpns</strong> : float</td>
 </tr>
 </tbody>
 </table>

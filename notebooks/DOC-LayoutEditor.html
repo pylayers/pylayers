@@ -141,17 +141,26 @@ are exploited for further analysis.</p>
 <h2>Subsegments<a class="headerlink" href="#subsegments" title="Permalink to this headline">¶</a></h2>
 <p>To describe doors and windows, the concept of <tt class="docutils literal"><span class="pre">subsegment</span></tt> is
 introduced.</p>
-<p>A <tt class="docutils literal"><span class="pre">subsegment</span></tt> belongs to a <tt class="docutils literal"><span class="pre">segment</span></tt>, it has mainly 3 attached
+<p>A <tt class="docutils literal"><span class="pre">segment</span></tt> has attributes :</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">name</span></tt> : slab name</li>
+<li><tt class="docutils literal"><span class="pre">z</span></tt> : tuple of minimum and maximum heights with respect to ground
+(meters)</li>
+<li><tt class="docutils literal"><span class="pre">transition</span></tt> : a boolean indicating if a human can cross this
+segment. For example, segments associated with a door are transition
+segments but we will see later that it may be judicious to split
+space with transparent segments which have the name &#8216;AIR&#8217;. Those
+segments are also <tt class="docutils literal"><span class="pre">transition=True</span></tt></li>
+</ul>
+<p>A <tt class="docutils literal"><span class="pre">subsegment</span></tt> belongs to a <tt class="docutils literal"><span class="pre">segment</span></tt>, it has mainly 2 attached
 parameters :</p>
 <ul class="simple">
-<li>A slab name</li>
-<li>zmin (meter)</li>
-<li>zmax (meter)</li>
+<li><tt class="docutils literal"><span class="pre">ss_name</span></tt> : subsegment slab name</li>
+<li><tt class="docutils literal"><span class="pre">ss_z</span></tt> : [(zmin1,zmax1),(zmin2,zmax2),...,(zminK,zmaxK))] list of
+minimum and maximum height of associated subsegments (meters)</li>
 </ul>
-<p><img class="math" src="../_images/math/06c36ac66c987af5766e804ce3756cf8666545f7.png" alt="$N_{ss}[k] = M_s + M_{ss} N_s + k$"/></p>
-<p><img class="math" src="../_images/math/f78a181c8addfef22565b76137aaa814f22748aa.png" alt="$M_{s}$"/> and <img class="math" src="../_images/math/50927b027c2308cc51584c948935b9608dd53dbd.png" alt="$M_{ss}$"/> are respectively the maximum number
-of segments and the maximum number of subsegment per segment.</p>
-<p>Those two values are embedded in the layout file.</p>
+<p>When appearing in a 3D ray a subsegment should have a unique index
+different from the segment index.</p>
 </div>
 </div>
 <div class="section" id="the-different-layout-format">
@@ -319,7 +328,7 @@ the case yet</p>
 </pre></div>
 </div>
 <img alt="../_images/_fig_163.png" src="../_images/_fig_163.png" />
-<p>The graph of interactions <img class="math" src="../_images/math/810d51416e7a3e7e86a0c9f086b19f7176d929ca.png" alt="$\mathcal{G}_i$"/> used to dertermine the
+<p>The graph of interactions <img class="math" src="../_images/math/810d51416e7a3e7e86a0c9f086b19f7176d929ca.png" alt="$\mathcal{G}_i$"/> used to determine the
 ray signatures.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>

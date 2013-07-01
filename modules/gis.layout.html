@@ -400,7 +400,7 @@ create 2 segments with same properties</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.add_segment">
-<tt class="descname">add_segment</tt><big>(</big><em>n1</em>, <em>n2</em>, <em>name='PARTITION'</em>, <em>zmin=0</em>, <em>zmax=3.0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_segment" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_segment</tt><big>(</big><em>n1</em>, <em>n2</em>, <em>name='PARTITION'</em>, <em>z=(0.0</em>, <em>3.0)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_segment" title="Permalink to this definition">¶</a></dt>
 <dd><p>add edge between node n1 and node n2</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -412,17 +412,13 @@ create 2 segments with same properties</p>
 <blockquote>
 <div><p>layer name &#8216;PARTITION&#8217;</p>
 </div></blockquote>
-<p><strong>zmin</strong> : float</p>
+<p><strong>z</strong> : tuple of float</p>
 <blockquote>
-<div><p>default = 0</p>
-</div></blockquote>
-<p><strong>zmax</strong> : float</p>
-<blockquote>
-<div><p>default 3.0</p>
+<div><p>default = (0,3.0)</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>neum</strong> : segment number (&gt;0)</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>num</strong> : segment number (&gt;0)</p>
 </td>
 </tr>
 </tbody>
@@ -470,7 +466,7 @@ connect : list of point number</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.add_window">
-<tt class="descname">add_window</tt><big>(</big><em>e1</em>, <em>zmin</em>, <em>zmax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_window" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_window</tt><big>(</big><em>e1</em>, <em>z</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a window on segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -480,8 +476,10 @@ connect : list of point number</p>
 <blockquote>
 <div><p>segment number</p>
 </div></blockquote>
-<p><strong>zmin</strong> : float</p>
-<p class="last"><strong>zmax</strong> : float</p>
+<p><strong>z</strong> : tuple of float</p>
+<blockquote class="last">
+<div><p>(zmin,zmax)</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -517,7 +515,7 @@ connect : list of point number</p>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;DLR3.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span>
@@ -1067,8 +1065,7 @@ added :</p>
 <blockquote>
 <div><ul class="simple">
 <li>ss_name : string</li>
-<li>ss_zmin : subsegment min height (meters)</li>
-<li>ss_zmax : subsegment max height (meters)</li>
+<li>ss_z : subsegment [(min height (meters),max height (meters))]</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -1131,8 +1128,8 @@ nodelist : input nodelist</p>
 <dd><p>graph to numpy conversion</p>
 <p class="rubric">Notes</p>
 <p>This fucntion updates from Gs:</p>
-<p>self.tahe (2xNn)
-self.pt (2xNe)
+<p>self.pt (2xNp)
+self.tahe (2xNs)
 self.tgs
 self.dca</p>
 </dd></dl>
@@ -1318,10 +1315,7 @@ p2 : (1 x 2 )</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/gis-layout-1.py">Source code</a>, <a class="reference external" href="../modules/gis-layout-1.png">png</a>, <a class="reference external" href="../modules/gis-layout-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/gis-layout-1.png" src="../_images/gis-layout-1.png" />
-</div>
+<p>(<a class="reference external" href="../modules/gis-layout-1.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="method">
@@ -1445,7 +1439,7 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
 <blockquote>
-<div><p>{&#8216;str&#8217;<a href="#id1"><span class="problematic" id="id2">|</span></a>}</p>
+<div><p>{&#8216;str&#8217;|&#8217;ini&#8217;|&#8217;osm&#8217;|&#8217;str2&#8217;}</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2019,15 +2013,12 @@ p2 : numpy.ndarray</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/gis-layout-3.py">Source code</a>, <a class="reference external" href="../modules/gis-layout-3.png">png</a>, <a class="reference external" href="../modules/gis-layout-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/gis-layout-3.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/gis-layout-3.png" src="../_images/gis-layout-3.png" />
-</div>
+<p>(<a class="reference external" href="../modules/gis-layout-3.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x4e5d190&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x637bd10&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

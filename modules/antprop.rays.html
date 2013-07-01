@@ -105,9 +105,10 @@ for k in self:   # for all interaction group k</p>
 <p><strong>eval</strong> :</p>
 <p><strong>show(L)</strong> :</p>
 <p><strong>mirror(H=3,N=1)</strong> :</p>
-<p><strong>ray(r)</strong> :</p>
-<p><strong>typ(r)</strong> :</p>
-<p><strong>info(r)</strong> :</p>
+<p><strong>ray</strong> :</p>
+<p><strong>typ</strong> :</p>
+<p><strong>info</strong> :</p>
+<p><strong>to3D</strong> :</p>
 <p><strong>signature(L)</strong> :</p>
 <p><strong>show3d(ray,bdis,bbas,bstruc,col,id,linewidth)</strong> :</p>
 <p class="last"><strong>show3()</strong> :</p>
@@ -133,7 +134,7 @@ method.</p>
 be evaluated via the <strong>eval</strong> method</p>
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.eval">
-<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.eval" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em>, <em>ib=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>docstring for eval</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -227,7 +228,9 @@ k : zp  v: alphap</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ptx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Rays</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span><span class="n">prx</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">mirror</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">mirror</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="o">-</span><span class="mf">1.5</span><span class="p">]</span>
+<span class="go">array([ 0.55555556])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -353,13 +356,14 @@ pg : centroid of the structure</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.to3D">
-<tt class="descname">to3D</tt><big>(</big><em>H=3</em>, <em>N=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.to3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.to3D" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to3D</tt><big>(</big><em>L</em>, <em>H=3</em>, <em>N=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.to3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.to3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>transform 2D ray to 3D ray</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>H</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout object</p>
+<p><strong>H</strong> : float</p>
 <blockquote>
 <div><p>ceil height (default 3m)</p>
 </div></blockquote>

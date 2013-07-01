@@ -5,13 +5,15 @@ Third party packages
 Pylayers is written in Python and is standing on the shoulders of the
 following giant Python packages:
 
-* numpy ( for algebra in multi dimensions )  
-* scipy ( for scientific libraries )
-* SimPy ( for discrete events simulation ) 
-* matplotlib ( for the graphical outputs ) 
-* networkx ( for graph description and algorithms ) 
-* shapely ( for planar geometry )   
-* ipython ( to rule them all ... ) 
+* `numpy <http://www.numpy.org>`_ ( for algebra in multi dimensions )  
+* `scipy <http://www.scipy.org>`_ ( for scientific libraries )
+* `matplotlib <http://matplotlib.org/gallery.html>`_ ( for the graphical outputs ) 
+* `matplotlib basemap <http://matplotlib.org/basemap>`_ ( for GIS ) 
+* `pandas <http://pandas.pydata.org>`_ ( for time series and data manipulation )
+* `SimPy <http://simpy.sourceforge.net>`_ ( for discrete events simulation ) 
+* `networkx <http://networkx.github.io>`_ ( for graph description and algorithms ) 
+* `shapely <http://toblerity.github.io/shapely/project.html>`_ ( for GIS and planar geometry )   
+* `ipython <http://ipython.org>`_ ( to rule them all ... ) 
 
 
 Pylayers relies also on the interactive 3D viewing program `geomview <http://www.geomview.org>`_ tool for fast and simple interaction with 3D entities. 
@@ -46,8 +48,10 @@ Download the last release in your preferred format on github.
 
 We warmly encourage all new user to contribute new suggestions, algorithms, models and other improvements back to the project
 
-**Just fork it !** on your github account and get in touch on the mailing list
-if you get some interest or see practical applications.
+`**Just fork it !** <http://github.com/pylayers/pylayers/fork>`_ on your
+github account and get in touch on the `mailing list <https://groups.google.com/forum/#!forum/pylayers-users>`_
+if you have some interest or see practical applications.
+
 
 
 
@@ -59,23 +63,23 @@ project AUBADE and CORMORAN and by the European projects `FP7 UCELLS <http://www
 FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/logoUR1.jpg 
-    :scale: 18%
+    :scale: 38%
     :target: http://www.univ-rennes1.fr/english 
 
 .. image:: _static/logoIETR.jpg 
-    :scale: 22%
+    :scale: 32%
     :target: http://www.ietr.fr/ 
 
 .. image:: _static/logoESIR.png 
-    :scale: 20%
+    :scale: 30%
     :target: http://esir.univ-rennes1.fr/ 
 
 .. image:: _static/bretagnegd.jpg 
-    :scale: 20%
+    :scale: 30%
     :target: http://www.louisbourdon.com/index.htm
 
 .. image::  _static/fp7.png 
-    :scale: 10%
+    :scale: 40%
 
 .. image::  _static/ucells.png 
     :scale: 40%
@@ -84,11 +88,11 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
     :scale: 30%
 
 .. image:: _static/WHERE2_Logo.jpg 
-    :scale: 20%
+    :scale: 40%
     :target: http://www.ict-where.eu/ 
 
 .. image:: _static/logo_CORMORAN.png 
-    :scale: 20%
+    :scale: 40%
 
 .. image:: _static/IR.png 
     :scale: 30%

@@ -42,19 +42,26 @@ Subsegments
 To describe doors and windows, the concept of ``subsegment`` is
 introduced.
 
-A ``subsegment`` belongs to a ``segment``, it has mainly 3 attached
+A ``segment`` has attributes :
+
+-  ``name`` : slab name
+-  ``z`` : tuple of minimum and maximum heights with respect to ground
+   (meters)
+-  ``transition`` : a boolean indicating if a human can cross this
+   segment. For example, segments associated with a door are transition
+   segments but we will see later that it may be judicious to split
+   space with transparent segments which have the name 'AIR'. Those
+   segments are also ``transition=True``
+
+A ``subsegment`` belongs to a ``segment``, it has mainly 2 attached
 parameters :
 
--  A slab name
--  zmin (meter)
--  zmax (meter)
+-  ``ss_name`` : subsegment slab name
+-  ``ss_z`` : [(zmin1,zmax1),(zmin2,zmax2),...,(zminK,zmaxK))] list of
+   minimum and maximum height of associated subsegments (meters)
 
-:math:`$N_{ss}[k] = M_s + M_{ss} N_s + k$`
-
-:math:`$M_{s}$` and :math:`$M_{ss}$` are respectively the maximum number
-of segments and the maximum number of subsegment per segment.
-
-Those two values are embedded in the layout file.
+When appearing in a 3D ray a subsegment should have a unique index
+different from the segment index.
 
 The different layout format 
 ----------------------------
@@ -285,7 +292,7 @@ The graph of visibility :math:`$\mathcal{G_v}$`
 
 .. image:: DOC-LayoutEditor_files/_fig_16.png
 
-The graph of interactions :math:`$\mathcal{G}_i$` used to dertermine the
+The graph of interactions :math:`$\mathcal{G}_i$` used to determine the
 ray signatures.
 
 
