@@ -3331,7 +3331,6 @@ class Layout(object):
             dthin = self.display['thin']
             alpha = self.display['alpha']
             for nameslab in self.display['layers']:
-                print nameslab, edlist
                 self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
                                 font_size=font_size,width=width)
