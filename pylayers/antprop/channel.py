@@ -168,7 +168,7 @@ class Ctilde(object):
             nray_rang = stru.unpack('i', fo.read(4))[0]
             buf = fo.read()
             fo.close()
-            # coorectif Bug evalfield
+            # corectif Bug evalfield
             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
             self.rang = tmp[0:nray, :]
 
@@ -603,8 +603,8 @@ def VCg2VCl(VCg, Tt, Tr):
 class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel 
 
-    The transmission channel TChannel is obtained from combination of the propagation
-    channel with the antenna transfer functions from both transmitter and
+    The transmission channel TChannel is obtained through combination of the propagation
+    channel and the antenna transfer functions from both transmitter and
     receiver.
 
     Members
@@ -634,6 +634,16 @@ class Tchannel(bs.FUDAsignal):
         """
 
         bs.FUDAsignal.__init__(self,fGHz,alpha,tau,dod,doa)
+    
+    def __repr__(self):
+        st =''
+        st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(x))+"\n"
+        st = st + 'alpha :'+str(min(self.y))+' '+str(max(self.y))+' '+str(np.shape(y))+"\n"
+        st = st + 'tau :'+str(min(self.tau))+' '+str(max(self.tau))+"\n"
+        st = st + 'dist :'+str(min(0.3*self.tau))+' '+str(max(0.3*self.tau))+"\n"
+        st = st + 'doa :'+str(min(self.doa))+' '+str(max(self.doa))+"\n"
+        st = st + 'dod :'+str(min(self.dod))+' '+str(max(self.dod))+"\n"
+        return(st)
 
     def info(self):
         """ display information

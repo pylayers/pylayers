@@ -251,6 +251,9 @@ class Layout(object):
         st = '\n'
         st = st + "----------------\n"
         st = st + self.filename + "\n" 
+        if self.display['fileoverlay']<>'':
+            filename = pyu.getlong(self.display['fileoverlay'],'struc')
+            st = st + "Image('"+filename+"')\n" 
         st = st + "----------------\n\n"
         st = st + "Number of points  : "+ str(self.Np)+"\n"
         st = st + "Number of segments  : "+str(self.Ns)+"\n"
@@ -265,6 +268,8 @@ class Layout(object):
             st = st + "di k=interaction v= [nstr,typi]" +"\n"
         if hasattr(self,'sl'):
             st = st + "sl k=slab name v=dictionary" +"\n"
+        if hasattr(self,'name'):
+            st = st + "name :  k=slab v=seglist " +"\n"
         st = st + "\nUseful arrays"+"\n----------------\n"
         if hasattr(self,'tsg'):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
@@ -277,9 +282,7 @@ class Layout(object):
         if hasattr(self,'sla'):
             st = st + "sla : associated slab name" +"\n"
         if hasattr(self,'stridess'):
-            st = st + "sla : stride for adressing sub segment " +"\n"
-        if hasattr(self,'name'):
-            st = st + "name :  " +"\n"
+            st = st + "stridess : stride for adressing sub segment " +"\n"
 
         return(st) 
 
@@ -568,6 +571,18 @@ class Layout(object):
                 nta = tahe[0]
                 nhe = tahe[1]
                 d  = ways.way[nseg].tags
+                
+                # old format conversion
+                if d.has_key('zmin'):
+                    d['z']=(d['zmin'],d['zmax'])
+                    del(d['zmin'])
+                    del(d['zmax'])
+                if d.has_key('ss_zmin'):
+                    d['ss_z']=[(d['ss_zmin'],d['ss_zmax'])]
+                    d['ss_name']=[d['ss_name']]
+                    del(d['ss_zmin'])
+                    del(d['ss_zmax'])
+                #/old format conversion                  
                 for key in d:
                     try:
                         d[key]=eval(d[key])
@@ -600,6 +615,7 @@ class Layout(object):
                     self.name[name].append(ns)
                 else:
                     self.name[name] = [ns]
+                    
                 _ns+=1
 
         self.Np = _np
@@ -652,12 +668,12 @@ class Layout(object):
                 fd.write("<nd ref='"+str(neigh[0])+"' />\n") 
                 fd.write("<nd ref='"+str(neigh[1])+"' />\n") 
                 fd.write("<tag k='name' v='"+str(d['name'])+"' />\n") 
-                fd.write("<tag k='z' v='"+str(d['z'])+"' />\n") 
+                fd.write("<tag k='z' v=\""+str(d['z'])+"\" />\n") 
                 fd.write("<tag k='transition' v='"+str(d['transition'])+"' />\n") 
                 if d.has_key('ss_name'):
                     ch = str(d['ss_name'])    
                     fd.write("<tag k='ss_name' v=\""+ch+"\" />\n") 
-                    fd.write("<tag k='ss_z' v='"+str(d['ss_z'])+"' />\n") 
+                    fd.write("<tag k='ss_z' v=\""+str(d['ss_z'])+"\" />\n") 
                 fd.write("</way>\n") 
 
 
@@ -2614,7 +2630,7 @@ class Layout(object):
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR3.ini','matDB.ini','slabDB.ini')
+        >>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
         >>> L.angleonlink(p1,p2)
