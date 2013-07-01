@@ -637,12 +637,10 @@ class Tchannel(bs.FUDAsignal):
     
     def __repr__(self):
         st =''
-        st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(x))+"\n"
-        st = st + 'alpha :'+str(min(self.y))+' '+str(max(self.y))+' '+str(np.shape(y))+"\n"
-        st = st + 'tau :'+str(min(self.tau))+' '+str(max(self.tau))+"\n"
-        st = st + 'dist :'+str(min(0.3*self.tau))+' '+str(max(0.3*self.tau))+"\n"
-        st = st + 'doa :'+str(min(self.doa))+' '+str(max(self.doa))+"\n"
-        st = st + 'dod :'+str(min(self.dod))+' '+str(max(self.dod))+"\n"
+        st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
+        st = st + 'shape  :'+str(np.shape(self.y))+"\n"
+        st = st + 'tau :'+str(min(self.tau0))+' '+str(max(self.tau0))+"\n"
+        st = st + 'dist :'+str(min(0.3*self.tau0))+' '+str(max(0.3*self.tau0))+"\n"
         return(st)
 
     def info(self):

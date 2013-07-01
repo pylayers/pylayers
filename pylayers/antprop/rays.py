@@ -782,15 +782,23 @@ class Rays(dict):
                 E=np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
 
-    def fillinter(self, L):
+    def fillinter(self, L,clean=True):
         """  docstring for fillinter
 
         Parameters
         ----------
 
         L : Layout
-        """
+        clean : 
 
+        """
+    
+        if hasattr(self,'I'):
+            del self.I
+        if hasattr(self,'B'):
+            del self.B
+        if hasattr(self,'B0'):
+            del self.B0
         # stacked interactions
         I = Interactions()
 

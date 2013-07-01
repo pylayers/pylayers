@@ -41,6 +41,7 @@ cirwood = scwood.applywavB(wav.sfg)
 print(S.L.Gs.node[1])
 S.L.Gs.node[1]['ss_name']=['METAL','AIR','METAL']
 print(S.L.Gs.node[1])
+pdb.set_trace()
 r3d.fillinter(S.L)
 Cmetal=r3d.eval(fGHz)
 scmetal=Cmetal.prop2tran(a='theta',b='theta')
