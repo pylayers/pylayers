@@ -276,6 +276,10 @@ class Layout(object):
             st = st + "stridess : stride to calculate the index of a subsegment" +"\n"
         if hasattr(self,'sla'):
             st = st + "sla : associated slab name" +"\n"
+        if hasattr(self,'stridess'):
+            st = st + "sla : stride for adressing sub segment " +"\n"
+        if hasattr(self,'name'):
+            st = st + "name :  " +"\n"
 
         return(st) 
 
@@ -685,6 +689,21 @@ class Layout(object):
         for n in self.Gs.pos:
             if n >0:
                 d = self.Gs.node[n]
+                # old format conversion
+                if d.has_key('ss_ce1'):
+                    del d['ss_ce1']
+                if d.has_key('ss_ce2'):
+                    del d['ss_ce2']
+                if d.has_key('zmin'):
+                    d['z']=(d['zmin'],d['zmax'])
+                    del(d['zmin'])
+                    del(d['zmax'])
+                if d.has_key('ss_zmin'):
+                    d['ss_z']=[(d['ss_zmin'],d['ss_zmax'])]
+                    d['ss_name']=[d['ss_name']]
+                    del(d['ss_zmin'])
+                    del(d['ss_zmax'])
+    
                 d['connect'] = nx.neighbors(self.Gs,n)
                 try:
                     if d['transition']:
@@ -773,9 +792,9 @@ class Layout(object):
                 Nss = Nss + len(d['ss_name'])
                 for n in d['ss_name']:
                     if n in self.name:
-                        self.name[n].append(ns)
+                        self.name[n].append(eval(ns))
                     else:
-                        self.name[n]=[ns]
+                        self.name[n]=[eval(ns)]
             name = d['name']
             nta = d['connect'][0]
             nhe = d['connect'][1]
@@ -3289,10 +3308,12 @@ class Layout(object):
                 ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
             else:                
                 ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
+
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
             ndlist = tn[u]
+
         if edlist == []:
             tn = np.array(self.Gs.node.keys())
             u  = np.nonzero(tn > 0)[0]
@@ -3310,6 +3331,7 @@ class Layout(object):
             dthin = self.display['thin']
             alpha = self.display['alpha']
             for nameslab in self.display['layers']:
+                print nameslab, edlist
                 self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
                                 font_size=font_size,width=width)
