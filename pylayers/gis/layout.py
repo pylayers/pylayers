@@ -4577,11 +4577,13 @@ class Layout(object):
 
         Parameters
         ----------
+
         offx
         offy
 
         Returns
         -------
+
         walls : list of wall tuples  (Transit format)
 
         Examples
@@ -4601,12 +4603,9 @@ class Layout(object):
                 phe = self.Gs.pos[nb[1]]
                 pn = self.Gs.node[nd]['norm']
                 name = self.Gs.node[nd]['name']
-                try:
-                    ss_name = self.Gs.node[nd]['ss_name']
-                except:
-                    ss_name = ''
-                l = self.sl[name]
-                thick = sum(l['lthick'])
+                transition = self.Gs.node[nd]['transition']
+                sl = self.sl[name]
+                thick = sum(sl['lthick'])
 
                 p1 = np.array(pta) + \
                      np.array((pn[0], pn[1])) * thick / 2. + \
@@ -4625,8 +4624,7 @@ class Layout(object):
                      np.array([offx, offy])
 
                 wall = (tuple(p1), tuple(p2), tuple(p3), tuple(p4))
-                #if ss_name!="WOOD":
-                if ss_name != "DOOR":
+                if not transition:
                     walls.append(wall)
         return(walls)
 

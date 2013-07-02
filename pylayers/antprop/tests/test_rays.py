@@ -30,25 +30,39 @@ r3d.locbas(S.L)
 r3d.fillinter(S.L)
 pg = np.sum(S.L.pt,axis=1)/np.shape(S.L.pt)[1]
 pg = array([pg[0],pg[1],0]).reshape(3,1)
-#r3d.show3(strucname='defstr3',pg=pg)
+r3d.show3(strucname='defstr3',pg=pg)
 fGHz=np.arange(2,11,0.1)
-#Cn=r3d.eval(fGHz,ib=[1])
 
+wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 Cwood=r3d.eval(fGHz)
 scwood=Cwood.prop2tran(a='theta',b='theta')
-wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 cirwood = scwood.applywavB(wav.sfg)
-print(S.L.Gs.node[1])
-S.L.Gs.node[1]['ss_name']=['METAL','AIR','METAL']
-print(S.L.Gs.node[1])
-pdb.set_trace()
-r3d.fillinter(S.L)
+
+S.L.Gs.node[1]['ss_name']=['METAL','AIR','WOOD']
+# graph to numpy 
+S.L.g2npy()
+r3d.fillinter(S.L,append=True)
 Cmetal=r3d.eval(fGHz)
 scmetal=Cmetal.prop2tran(a='theta',b='theta')
-wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 cirmetal = scmetal.applywavB(wav.sfg)
-plt.subplot(211)
+
+
+
+S.L.Gs.node[1]['ss_name']=['AIR','AIR','WOOD']
+# graph to numpy 
+S.L.g2npy()
+r3d.fillinter(S.L,append=True)
+Cair=r3d.eval(fGHz)
+scair=Cair.prop2tran(a='theta',b='theta')
+cirair = scair.applywavB(wav.sfg)
+
+
+
+
+plt.subplot(311)
 cirwood.plot()
-plt.subplot(212)
+plt.subplot(312)
 cirmetal.plot()
+plt.subplot(313)
+cirair.plot()
 plt.show()

@@ -79,6 +79,7 @@ class Rays(dict):
         self.pTx = pTx
         self.pRx = pRx
         self.nray = 0
+        self.raypt = 0
         self.los=False
 
     def __repr__(self):
@@ -549,6 +550,11 @@ class Rays(dict):
             r3d[0]['pt'][:,0,:]=tx[:,np.newaxis]
             r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
 
+        lnint = r3d.keys()
+        #r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint) 
+        for k in lnint:
+            r3d.nray = r3d.nray + np.shape(r3d[k]['sig'])[2]
+
         return(r3d)
 
     def length(self,typ=2):
@@ -782,23 +788,22 @@ class Rays(dict):
                 E=np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
 
-    def fillinter(self, L,clean=True):
+    def fillinter(self, L,append=False):
         """  docstring for fillinter
 
         Parameters
         ----------
 
-        L : Layout
-        clean : 
+        L      : Layout
+        append : Boolean 
+            if   True append new rays to existing structure
+            else True append new rays to existing structure
 
         """
-    
-        if hasattr(self,'I'):
-            del self.I
-        if hasattr(self,'B'):
-            del self.B
-        if hasattr(self,'B0'):
-            del self.B0
+       
+        # reinitilized ray pointer if not in append mode 
+        if not append:
+            self.raypt = 0
         # stacked interactions
         I = Interactions()
 
@@ -923,7 +928,7 @@ class Rays(dict):
 
                 self.ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
-                self.nray = self.nray + self[k]['nbrays']
+                self.raypt = self.raypt + self[k]['nbrays']
                 idxf = idx.reshape(idx.size,order='F')
                 #  (i+1)xr
                 size2 = si[:, :].size
@@ -1019,7 +1024,7 @@ class Rays(dict):
                 self[k]['rays'] = np.array(([[0]]))
                 self[k]['nbrays'] = 1
                 self[k]['rayidx'] = ze
-                self.nray=1
+                self.raypt = 1
                 self.ray2nbi=ze
                 B.stack(data=np.eye(2)[np.newaxis,:,:], idx=ze)
                 B0.stack(data=np.eye(2)[np.newaxis,:,:],idx=ze)
@@ -1043,13 +1048,10 @@ class Rays(dict):
         """
 
         print 'Rays evaluation'
-
+        
         self.I.eval(fGHz)
         B=self.B.eval(fGHz)
         B0=self.B0.eval(fGHz)
-
-
-
 
         # Ct : f x r x 2 x 2
         Ct = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)

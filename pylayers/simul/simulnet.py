@@ -110,13 +110,13 @@ class Simul(SimulationRT):
         _filename = self.lay_opt['filename']
         #sl=Slab.SlabDB(self.lay_opt['slab'],self.lay_opt['slabmat'])
         #G1   = Graph.Graph(sl=sl,filename=_filename)
-        self.L = Layout()
-        if _filename.split('.')[1] == 'str':
-            self.L.loadstr(_filename)
-        elif _filename.split('.')[1] == 'str2':
-            self.L.loadstr2(_filename)
-        elif _filename.split('.')[1] == 'ini':
-            self.L.loadini(_filename)
+        self.L = Layout(_filename)
+        #if _filename.split('.')[1] == 'str':
+        #    self.L.loadstr(_filename)
+        #elif _filename.split('.')[1] == 'str2':
+        #    self.L.loadstr2(_filename)
+        #elif _filename.split('.')[1] == 'ini':
+        #    self.L.loadini(_filename)
 
 
         try:
