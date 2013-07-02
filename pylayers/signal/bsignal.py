@@ -2602,7 +2602,7 @@ class FBsignal(Bsignal):
                 plt.subplot(212)
                 plt.stem(self.x, np.imag(self.y[k]), color)
                 plt.xlabel('Frequency (GHz)')
-                ylabel('imaginary part)')
+                plt.ylabel('imaginary part)')
         else:
 
             plt.subplot(211)
