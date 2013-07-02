@@ -1,0 +1,37 @@
+Dependencies 
+------------
+
+Before to install pylayers you need to install the following dependencies 
+
+
+numpy>=1.6.1
+scipy>=0.10.1
+networkx>=1.7
+matplotlib>=1.1.0
+matplotlib.basemap 
+shapely>=1.2.14
+descartes>=1.0
+SimPy>=2.2
+PIL>=1.1.5
+bitstring>=3.0.2
+shapely>=1.2.14
+descartes>=1.0
+
+
+Most of this dependencies are handled in the setup.py script.
+
+python setup.py install
+
+It is then required to define the two enviroment variables PYLAYERS and BASENAME
+
+in your .bashrc add those 2 lines 
+
+#export PYLAYERS=<path to the directory where pylayers is installed>
+export PYLAYERS=~/pylayers
+export BASENAME=~/plproject
+
+Testing
+-------
+
+make test-code
+
