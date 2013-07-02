@@ -320,6 +320,6 @@ class Simul(SimulationRT):
 if __name__ == '__main__':
 
     S = Simul()
-    seed(eval(S.sim_opt['seed']))
+    #seed(eval(S.sim_opt['seed']))
     S.runsimul()
 

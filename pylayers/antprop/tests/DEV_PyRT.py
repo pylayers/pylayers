@@ -45,7 +45,7 @@ def showr(L,r2d,tx,rx,k,l,color='b'):
 
 
 S = Simul()
-filestr = 'DLR2'
+filestr = 'DLR'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
 try:
     S.L.dumpr()

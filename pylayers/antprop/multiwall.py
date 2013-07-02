@@ -170,7 +170,7 @@ def PL(pts,fGHz,p,n=2.0):
 
     return(PL)
 
-def Loss0_v2(L,Pts,f,p):
+def Loss0_v2(L,Pts,fGHz,p):
     """ 
 
     Parameters
@@ -225,7 +225,8 @@ def Loss0_v2(L,Pts,f,p):
         for k in seglist:
             if k != 0:
                 try:
-                    name = L.Gs.node[k]['ss_name']
+                    # TODO use z to determine ss_name
+                    name = L.Gs.node[k]['ss_name'][0]
                 except:
                     name = L.Gs.node[k]['name']
                 #if k in S.indoor.ce.keys():
@@ -246,12 +247,12 @@ def Loss0_v2(L,Pts,f,p):
                 #
                 # Loss0 du slab
                 #
-                lko,lkp  = L.sl[name].losst(f,the)
+                lko,lkp  = L.sl[name].losst(fGHz,the)
                 do , dp  = L.sl[name].excess_grdelay(theta=the)
-                edo     = edo - np.mean(do)
-                edp     = edp - np.mean(dp)
-    #            print lko
-    #            print lkp
+                edo = edo - np.mean(do)
+                edp = edp - np.mean(dp)
+    #           print lko
+    #           print lkp
                 Lo   = Lo + lko[0]
                 Lp   = Lp + lkp[0]
         Lwo = np.hstack((Lwo,Lo))

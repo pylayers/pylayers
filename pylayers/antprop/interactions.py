@@ -64,12 +64,14 @@ class Inter(object):
     def create_dusl(self,a):
         """ create dictionnary of used slab.
 
-        Attributes
+        Parameters 
         ----------
-        a : np.array of string which contains ordered interactions
+
+        a : np.array of strings which contains ordered interactions
             ordered as in self.idx/self.data
 
         """
+
         for s in self.dusl:
             self.dusl[s]=np.where(a==s)[0]
 

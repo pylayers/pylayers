@@ -2,7 +2,7 @@
 # -*- coding: latin1 -*-
 import pdb
 import os
-import pdb
+import copy 
 import ConfigParser
 import glob
 import doctest
@@ -164,7 +164,9 @@ class Rays(dict):
         >>> ptx = np.array([1,1,1.5])
         >>> prx = np.array([2,2,1.2])
         >>> r = Rays(ptx,prx)
-        >>> r.mirror()
+        >>> d = r.mirror()
+        >>> d[-1.5]
+        array([ 0.55555556])
 
         """
         km = np.arange(-N+1, N+1, 1)
@@ -210,11 +212,13 @@ class Rays(dict):
 
         return(d)
 
-    def to3D(self, H=3, N=1):
+    def to3D(self,L,H=3, N=1):
         """ transform 2D ray to 3D ray
 
         Parameters
         ----------
+
+        L : Layout object
 
         H : float
             ceil height (default 3m)
@@ -467,9 +471,63 @@ class Rays(dict):
                     ptees = pte
                     siges = sig
 
+                #   ptes (3 x i+2 x r ) 
+                lsss = np.unique(np.array(L.lsss))
+                # index of signature which corresponds to subsegment
+                u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
+                # dimension extension of index u for : 
+                #    z coordinate extraction (append line 2 on dimension 0)    
+                #    0 signature extraction  (append line 0 on  dimension 0)    
+                v   = [2*np.ones(len(u[0]),dtype=int)]+u
+                w   = [0*np.ones(len(u[0]),dtype=int)]+u
+                # zss : height of interactions on subsegments
+                zss = ptees[v]
+                # structure index of corresponding subsegments 
+                nstrs = siges[w]
+                #print "nstrs: ",nstrs
+                #print "zss:",zss
                 #
-                #    
+                # Determine which subsegment has been intersected 
+                # k = 0 : no subsegment intersected
+                zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
+                tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
+                                                       (z[1]>x[1])),x[0]),zip(zinterval,zss))
+                #print tab
+                def findindex(x):
+                    if len(x[1])>0:
+                        k = x[0].index(x[1][0])+1
+                        return(k)
+                    else:
+                        return(0)
+
+                indexss = map(findindex,zip(zinterval,tab))
+                indexnew = L.stridess[nstrs]+indexss
+                #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
+                #iindexnex = L.isss[ind]
+                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                # update signature
+                siges[w] = indexnew
+                #print "indexss:",indexss
+                #print "indexnew:",indexnew
+                #print siges
+                #pdb.set_trace()
+                #pdb.set_trace()
+                # expand dimension add z dimension (2) 
+                # tuple concatenation doesn't work with array this is strange!!
                 #
+                # >> a = (1,2,3)
+                # >> b = (3,5,6) 
+                # >> a+b 
+                # (1,2,3,3,5,6)
+                # but 
+                # >> u = (array([1,2]),array([1,2]))
+                # >> v = (array([2,2]))
+                # >> u + v 
+                # array([[3,4],[3,4]])  inconsistent !
+                #
+                #   z --> kl subseg level  
+                #   siges[0,:] --> Ms + nstr *Mss + (kl) 
                 #
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
@@ -524,22 +582,39 @@ class Rays(dict):
         #
 
         # nsegment x 3
-        norm = np.array(nx.get_node_attributes(
-            L.Gs, 'norm').values())
+        norm = np.array(nx.get_node_attributes( L.Gs, 'norm').values())
 
         # nsegment x k
-        key = np.array(nx.get_node_attributes(
-            L.Gs, 'norm').keys())
+        key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
 
-        nmax = max(L.Gs.node.keys())
-        mapping = np.zeros(nmax+1, dtype=int)
+        nsmax = max(L.Gs.node.keys())
+        mapping = np.zeros(nsmax+1, dtype=int)
         mapping[key] = np.arange(len(key), dtype=int)
 
+        #
+        # Structutre number : nstr
+        #   the structure number is < 0 for points 
+        #                           > 0 for segments
+        # A segment can have several subsegments (until 100)
+        #  nstrs is the nstr of the segment if subsegment : 
+        #  nstr  is the glabal which allows to recover the slab values 
+        #
         for k in self:
             if k <> 0:
                 nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
                 ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
-
+                # nstr of underlying segment
+                # position of interaction corresponding to a sub segment 
+                #print nstr
+                uss   = np.where(nstr>nsmax)
+                #print uss
+                nstrs = copy.copy(nstr)
+                if len(uss)>0:
+                    ind   = nstr[uss]-nsmax
+                    nstrs[uss] = np.array(L.lsss)[ind] 
+                #    print nstr
+                #print nstrs
+                #pdb.set_trace()
                 nray = np.shape(nstr)[1]
 
                 uwall = np.where((ityp == 1) | (ityp == 2))
@@ -547,8 +622,11 @@ class Rays(dict):
                 ufloor = np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
-                nstrwall = nstr[uwall[0], uwall[1]]   # nstr of walls
-                self[k]['nstrwall'] = nstrwall       # store
+                nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls
+                nstrswall = nstrs[uwall[0], uwall[1]]   # nstrs of walls
+
+                self[k]['nstrwall']  = nstrwall    # store nstr without subsegment
+                self[k]['nstrswall'] = nstrswall   # store nstr with subsegment
 
                 self[k]['norm'] = np.zeros((3, k, nray))   # 3 x int x nray
 
@@ -558,7 +636,7 @@ class Rays(dict):
                 #
 
                 # norm : 3 x i x r
-                self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrwall],:].T
+                self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
 
@@ -704,15 +782,23 @@ class Rays(dict):
                 E=np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
 
-    def fillinter(self, L):
+    def fillinter(self, L,clean=True):
         """  docstring for fillinter
 
         Parameters
         ----------
 
         L : Layout
-        """
+        clean : 
 
+        """
+    
+        if hasattr(self,'I'):
+            del self.I
+        if hasattr(self,'B'):
+            del self.B
+        if hasattr(self,'B0'):
+            del self.B0
         # stacked interactions
         I = Interactions()
 
@@ -745,22 +831,21 @@ class Rays(dict):
 
 
         # Transform dictionnary of slab name to array
-        slv = nx.get_node_attributes(L.Gs, "name").values()
-        slk = nx.get_node_attributes(L.Gs, "name").keys()
-
+        #slv = nx.get_node_attributes(L.Gs, "name").values()
+        #slk = nx.get_node_attributes(L.Gs, "name").keys()
         # find all material used in simulation
-        uslv = np.unique(slv)
+        uslv = np.unique(L.sla[1:])
         uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
 
         # create reverse dictionnary with all material as a key
         # and associated point/segment as a value
 
-        dsla = {}
-        for s in uslv:
-            dsla[s] = np.where(s == np.array(slv))[0]
+        #dsla = {}
+        #for s in uslv:
+        #    dsla[s] = np.where(s == np.array(slv))[0]
 
-        nmax = max(L.Gs.node.keys())
-        sla = np.zeros((nmax+1), dtype='S20')
+        nsmax = max(L.Gs.node.keys())
+        #sla = np.zeros((nsmax+1), dtype='S20')
 
         # array type str with more than 1 character
         # warning use zeros instead of empty because slab zero
@@ -771,11 +856,11 @@ class Rays(dict):
         # each value of Gs node is the index of the corresponding slab
         #
 
-        sla[slk] = np.array(slv)
+        #sla[slk] = np.array(slv)
 
         R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
         T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-
+        
         tsl = np.array(())
         rsl = np.array(())
         
@@ -814,6 +899,7 @@ class Rays(dict):
                 # create index for retrieving interactions
 
                 # integer offset : total size idx
+
                 idxts = idxts + idx.size
 
                 idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
@@ -826,6 +912,7 @@ class Rays(dict):
 
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
+
                 ray2nbi=np.ones((nbray))
 
                 
@@ -846,11 +933,15 @@ class Rays(dict):
 
                 b0 = self[k]['B'][:,:,0,:]
                 b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+
                 ## find used slab
                 ##################
                 # find slab type for the rnstr
+                # nstrf is a number of slab
+                # this is a problem for handling subsegment
+                #
 
-                sl = sla[nstrf]
+                sl = L.sla[nstrf]
 
                 # seek for interactions position
                 ################################
@@ -901,6 +992,7 @@ class Rays(dict):
                 # Warning
                 # B.idx refers to an interaction index
                 # whereas B0.idx refers to a ray number
+
                 B.stack(data=b.T, idx=idxf)
                 B0.stack(data=b0.T,idx=self[k]['rayidx'])
 
@@ -940,7 +1032,7 @@ class Rays(dict):
         self.B0 = B0
 
 
-    def eval(self,fGHz=np.array([2.4])):
+    def eval(self,fGHz=np.array([2.4]),ib=[]):
         """  docstring for eval
 
         Parameters
@@ -974,7 +1066,10 @@ class Rays(dict):
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
         # loop on interaction blocks
-        for l in self:
+        if ib==[]:
+            ib=self.keys()
+
+        for l in ib:
             if l != 0:
                 # l stands for the number of interactions
                 r = self[l]['nbrays']

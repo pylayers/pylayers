@@ -54,7 +54,6 @@ S.pafreq.save()
 print "Launching "
 print "-----------------"
 S.launching(1)
-
 # retrieve the launching tree
 
 L1 = S.getlaunch(1)

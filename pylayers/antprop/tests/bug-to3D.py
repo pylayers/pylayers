@@ -3,7 +3,7 @@ from pylayers.antprop.signature import *
 import networkx as nx
 from IPython.display import Image,HTML,Latex
 
-L=Layout('DLR.osm')
+L=Layout('DLR.ini')
 #L.build()
 try:
     L.dumpr()
