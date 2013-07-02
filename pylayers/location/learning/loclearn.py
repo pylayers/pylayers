@@ -8,7 +8,7 @@ import scipy as sp
 import pylab as pl
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import interval
+#import interval
 import itertools
 import networkx as NX
 import ffnet  # ffnet, mlgraph, savenet, loadnet, exportnet
@@ -70,7 +70,7 @@ def knn_learn(nneighbors=1, data_train=np.array([]), target_train=np.array([]), 
 
     """
 
-    clf = ngb.NeighborsClassifier(nneighbors).fit(data_train, target_train)
+    clf = ngb.KNeighborsClassifier(nneighbors).fit(data_train, target_train)
     targets = clf.predict(data_test)
     return targets
 
