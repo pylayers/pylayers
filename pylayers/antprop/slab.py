@@ -47,6 +47,7 @@ class Interface(object):
     """
     def __init__(self, fGHz=np.array([2.4]), theta=np.array([[0.0 + 0 * 1j]]), name=''):
         """
+
         fGHz  :
             frequency in GHz (default 2.4)
         theta :
@@ -167,16 +168,55 @@ class Interface(object):
         plt.ylabel('f (GHz)')
         plt.show()
 
+    def tocolor(self,fGHz):
+        """
+
+        Parameters
+        ----------
+
+        fGHz : np.array
+
+
+        """
+        # nf x nt x 2 x 2 
+        modTo = abs(self.T[:, 0, 0, 0])
+        modTp = abs(self.T[:, 0, 1, 1])
+        N = len(fGHz)
+        if N>3:
+            M = N/3
+            ared = (sum(modTo[0:M])+sum(modTp[0:M]))/(2*M)
+            agreen = (sum(modTo[M:2*M])+sum(modTp[M:2*M]))/(2*M)
+            ablue = (sum(modTo[2*M:])+sum(modTp[2*M:]))/(2*(N-2*M))
+            vred = hex(int(np.floor(ared*255))).replace('0x','')
+            vgreen = hex(int(np.floor(agreen*255))).replace('0x','')
+            vblue = hex(int(np.floor(ablue*255))).replace('0x','')
+            if len(vred)==1:
+                vred = '0'+vred
+            if len(vgreen)==1:
+                vgreen = '0'+vgreen
+            if len(vblue)==1:
+                vblue = '0'+vblue
+            col = '#'+vred+vgreen+vblue
+        else:
+            alpha = (sum(modTo)+sum(modTp))/(2*N)
+            val = hex(int(np.floor(alpha*255))).replace('0x','')
+            col = '#'+val+val+val
+        return(col)    
+
+
     def loss0(self, fGHz, display=False):
         """ Evaluate Loss at normal incidence theta=0
 
         Parameters
         ----------
+
         fGHz    : np.array  (nf,1)
         display : boolean
                 default (False)
+
         Returns
         -------
+
         Lo : loss in dB polarization orthogonal
         Lp : loss in dB polarization parallel
 
@@ -209,6 +249,7 @@ class Interface(object):
 
         Returns
         -------
+
         Lo : np.array
         Lp : np.array
 
@@ -1376,18 +1417,41 @@ class Slab(dict, Interface):
         delayp = np.diff(ap)/(2*np.pi*df)
         return (delayo,delayp)
 
+    def tocolor(self, fGHz=np.array([2.4])):
+        """
+        
+        Parameters
+        ----------
+
+        fGHz : np.array
+        
+        Examples
+        --------
+
+        >>> sl  = SlabDB('matDB.ini','slabDB.ini')
+        >>> s1  = sl['PARTITION']
+        >>> col24 = s1.tocolor(np.array([2.4]))
+        >>> fGHz = np.arange(0.5,8,100)
+        >>> col8 = s1.tocolor(fGHz)
+
+        """
+
+        self.ev(fGHz, theta=np.array([0.0]),compensate=True)
+        color = Interface.tocolor(self, fGHz)
+        return(color)
 
     def loss0(self, fGHz=2.4):
-        """
-        Calculate loss for theta=0 at frequency (f)
+        """ calculate loss for theta=0 at frequency (fGHz)
 
         Parameters
         ----------
+
         fGHz : frequency (GHz)  np.array()
             default 2.4
 
         Returns
         -------
+
         Lo  : np.array
             Loss at 0 deg polarization ortho
         Lp :  np.array
@@ -2050,4 +2114,8 @@ def calsig(cval, fGHz, typ='epsr'):
 
 
 if (__name__ == "__main__"):
+    plt.ion()
     doctest.testmod()
+    sl = SlabDB('matDB.ini','slabDB.ini')
+    s1 = sl['PILLAR']
+    fGHz=np.arange(0.6,5.0,0.1)
