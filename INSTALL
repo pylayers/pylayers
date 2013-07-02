@@ -30,5 +30,8 @@ in your .bashrc add those 2 lines
 export PYLAYERS=~/pylayers
 export BASENAME=~/plproject
 
+Testing
+-------
 
+make test-code
 

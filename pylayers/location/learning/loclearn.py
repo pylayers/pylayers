@@ -16,7 +16,7 @@ from numpy.random import RandomState
 from itertools import cycle
 from sklearn import linear_model as lm  # LogisticRegression, SGDClassifier
 from sklearn import svm  # SVC, NuSVC, LinearSVC, SVR
-from sklearn import neighbors as ngb  # NeighborsClassifier, NeighborsRegressor
+from sklearn import neighbors as ngb  # KNeighborsClassifier, KNeighborsRegressor
 from sklearn import mixture as mix  # GMM
 from sklearn import cluster as clus  # KMeans, MeanShift, AffinityPropagation, SpectralClustering
 
