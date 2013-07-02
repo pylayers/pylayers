@@ -1,0 +1,33 @@
+The documentation is built in a directory above $PYLAYERS.
+This directory is ../website when in $PYLAYERS.
+
+../website/doctrees
+../website/html 
+    this directory is the gh-pages of the external pylayers website 
+
+
+The website main page is static. It is not built from the index.rst page 
+of the documentation. It is described in the _template directory
+
+../website/html/index.html 
+    Documentation 
+        manual/notebook.html 
+    Examples
+        examples.rst (locally)
+        examples.html 
+    References
+        modules/index.rst  (locally) 
+        modules/index.html 
+    Acknoledgments    
+        acknoledgements.rst (locally)
+        acknoledgements.html 
+    Download
+        download.html 
+
+The css is in _static/sphinxdoc.css        
+
+
+To transform the notebook in rst file and moving figures and images in the
+proper place type : 
+
+../notebook/buildoc
