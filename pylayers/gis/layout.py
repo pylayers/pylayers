@@ -2899,7 +2899,10 @@ class Layout(object):
 
             if line.intersects(segline):
                 lc.extend(self.Gs.node[seg]['ncycles'])
+<<<<<<< HEAD
+=======
                 #print seg,self.Gs.node[seg]['ncycles']
+>>>>>>> 541f2d88b77ff190934e0d8e8e0b4ff979931a2f
                 ls.append(seg)
                 psh = line.intersection(segline)
                 I = np.hstack((I, np.array([[psh.x],[psh.y]])))
@@ -3177,7 +3180,12 @@ class Layout(object):
         """
         clrlist = []
         cold = pyu.coldict()
-        clrlist.append(cold[color])
+
+        if color[0]<>'#':
+            clrlist.append(cold[color])
+        else:
+            clrlist.append(color)
+
         ecmap = clr.ListedColormap(clrlist)
         U = self.Gs.edges(edlist)
         ue = (np.ones(2 * len(edlist))).astype('int').tolist()
@@ -3193,7 +3201,7 @@ class Layout(object):
 
     def show_layer(self, name, edlist=[], alpha=1, width=0,
                    color='black', dnodes=False, dthin=False,
-                   dlabels=False, font_size=15):
+                   dlabels=False, font_size=15,fGHz=[]):
         """ show layer
 
         Parameters
@@ -3233,7 +3241,14 @@ class Layout(object):
                 linewidth = slab['linewidth'] / 3.
             else:
                 linewidth = width
-            color = slab['color']
+            if fGHz==[]:    
+                color = slab['color']
+            else:
+                if (name<>'METAL') & (name<>'METALIC'):
+                    color = slab.tocolor(fGHz)
+                else:
+                    color = 'black' 
+
             self.show_segment(edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
@@ -3269,11 +3284,12 @@ class Layout(object):
         ax.axis('scaled')
 
     def showGs(self,fig=[], ax=[], ndlist=[], edlist=[], show=False, furniture=False,
-               roomlist=[],axis=[],width=0):
+               roomlist=[],axis=[],width=0,fGHz=[]):
         """ show structure graph Gs
 
         Parameters
         ----------
+
         ax      : ax 
         ndlist  : np.array
             set of nodes to be displayed
@@ -3290,6 +3306,7 @@ class Layout(object):
 
         Returns
         -------
+
         ax 
 
         """
@@ -3297,6 +3314,7 @@ class Layout(object):
 #            fig = plt.gcf()
 #        if ax==[]:
 #            ax = fig.gca()
+
         if fig == []:
            fig = plt.gcf()
         if not isinstance(ax, plt.Axes):
@@ -3331,9 +3349,11 @@ class Layout(object):
             ndlist = tn[u]
 
         if edlist == []:
-            tn = np.array(self.Gs.node.keys())
-            u  = np.nonzero(tn > 0)[0]
-            edlist = tn[u]
+            tn = self.Gs.node.keys()
+            #u  = np.nonzero(tn > 0)[0]
+            #edlist = tn[u]
+            edlist = filter(lambda x: (x>0) ,tn)
+            #& (not self.Gs.node[x].has_key('ss_name')),tn)
 
         if self.display['nodes']:
             dlabels = self.display['ndlabel']
@@ -3349,17 +3369,27 @@ class Layout(object):
             for nameslab in self.display['layers']:
                 self.show_layer(nameslab, edlist=edlist, alpha=alpha,
                                 dthin=dthin, dnodes=dnodes, dlabels=dlabels,
-                                font_size=font_size,width=width)
+                                font_size=font_size,width=width,fGHz=fGHz)
 
         if self.display['subseg']:
             dico = self.subseg()
             for k in dico.keys():
-                color = self.sl[k]['color']
+                if fGHz==[]:
+                    color = self.sl[k]['color']
+                else:
+                    if (k<>'METAL') & (k<>'METALIC'):
+                        color = self.sl[k].tocolor(fGHz)
+                        #color = 'red'
+                    else:
+                        color='black'
+                        #print k,color
                 edlist2 = []
                 for ts in dico[k]:
                     edlist2.append(ts[0])
-                edlist = list(set(edlist2).intersection(set(edlist)))
-                self.show_segment(edlist=edlist, color=color, alpha=0.5,width=2)
+                    #edlist2.append(ts)
+                edlist3 = list(set(edlist2).intersection(set(edlist)))
+                #print k , color , edlist 
+                self.show_segment(edlist=edlist3, color=color, alpha=1.0,width=2)
 
         if self.display['scaled']:
             ax.axis('scaled')
