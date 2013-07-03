@@ -129,7 +129,7 @@ def cylinder(fig,pa,pb,R):
         nc = 1
         pa = pa.reshape(3,1)
         pb = pb.reshape(3,1)
-    ax = fig.gca(projection='3d') 
+        ax = fig.gca(projection='3d') 
     theta = np.linspace(0, 2 * np.pi, 40)
     # 3 x nc
     v = (pb-pa)
@@ -146,15 +146,16 @@ def cylinder(fig,pa,pb,R):
     # 3 x nc x ntheta
     p = pa[:,:,np.newaxis] + \
             R*(np.cos(theta[np.newaxis,np.newaxis,:])*pn[:,:,np.newaxis] + \
-               np.sin(theta[np.newaxis,np.newaxis,:])*qn[:,:,np.newaxis])
-    ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
+              np.sin(theta[np.newaxis,np.newaxis,:])*qn[:,:,np.newaxis])
+    #ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
     p = pb[:,:,np.newaxis] + \
             R*(np.cos(theta[np.newaxis,np.newaxis,:])*pn[:,:,np.newaxis] + \
                np.sin(theta[np.newaxis,np.newaxis,:])*qn[:,:,np.newaxis])
-    ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
+    #ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
     t = np.arange(0,1,0.05)
     p = pa[:,:,np.newaxis]+t[np.newaxis,np.newaxis,:]*(pb[:,:,np.newaxis]-pa[:,:,np.newaxis])
     ax.plot(p[0,0,:], p[1,0,:], p[2,0,:], label='parametric curve',color='b')
+    
 
 if (__name__ == "__main__"):
     doctest.testmod()

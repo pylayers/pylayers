@@ -141,7 +141,8 @@ if __name__ == '__main__':
     B = Body()
     B.LoadMotion()
     c10_15 = B.d
-    #nx.draw(B.g)
+    nx.draw(B.g)
+    plt.axis('scaled')
     fig = plt.figure()
 
     ax = fig.add_subplot(111, projection='3d')
@@ -150,8 +151,7 @@ if __name__ == '__main__':
     ax.axis('scaled')
     B.CylinderModel(frameID)
     fig  = plt.figure()
-    for i in range(3,4):#B.c.shape[0]):
+    for i in range(B.c.shape[0]):
 		pltu.cylinder(fig,B.c[i,1:4],B.c[i,4:7],B.c[i,7])	
-
-    plt.axis('scaled')
+		plt.autoscale()
     plt.show()
