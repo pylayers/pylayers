@@ -79,10 +79,11 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
 
 .. image:: _static/where1logo.jpg 
     :scale: 30%
+    :target: http://www.ict-where.eu/ 
 
 .. image:: _static/WHERE2_Logo.jpg 
     :scale: 40%
-    :target: http://www.ict-where.eu/ 
+    :target: http://www.kn-s.dlr.de/where2/documents/W2_Newsletter_issue3.pdf
 
 .. image:: _static/logo_CORMORAN.png 
     :scale: 50%
