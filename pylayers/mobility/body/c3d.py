@@ -70,7 +70,7 @@ def getFloat(str):
 # ResidualError      MarkerRelated ErrorInfo  [Nmarkers x NvideoFrames]
 def read_c3d(_filename='07_01.c3d'):
 
-    FullFileName = pyu.getlong(_filename,'body/c3d')
+    FullFileName = pyu.getlong(_filename, 'body/c3d')
     Markers = []
     VideoFrameRate = 0
     AnalogSignals = []
@@ -82,7 +82,7 @@ def read_c3d(_filename='07_01.c3d'):
     print "*********************"
     print "**** Opening File ***"
     print "*********************"
-    
+
     #ind=findstr(FullFileName,'\');
     #if ind>0, FileName=FullFileName(ind(length(ind))+1:length(FullFileName)); else FileName=FullFileName; end
     print "FileName = ", FullFileName
@@ -90,35 +90,33 @@ def read_c3d(_filename='07_01.c3d'):
     # native format (PC-intel)
     content = fid.read()
     content_memory = content
-    
-    
+
     NrecordFirstParameterblock, content = getNumber(
         content, 1)     # Reading record number of parameter section
-    
-    
+
     key, content = getNumber(content, 1)
-    
+
     #if key~=80,
     #h=errordlg(['File: ',FileName,' does not comply to the C3D format'],'application error');
     #uiwait(h)
     #fclose(fid)
     #return
     #end
-    
+
     if key != 80:
         print 'File: ', FullFileName, ' does not comply to the C3D format'
         fid.close()
-    
+
     #fseek(fid,512*(NrecordFirstParameterblock-1)+3,'bof'); % jump to processortype - field
     #proctype=fread(fid,1,'int8')-83;                       % proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
     content = content[512 * (NrecordFirstParameterblock - 1) + 1:]
     proctype, content = getNumber(content, 1)
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
-    
+
     #print "*************************"
     #print "**** Processor coding ***"
     #print "*************************"
-    
+
     if proctype == 1:
         print "Intel-PC"
     elif proctype == 2:
@@ -127,8 +125,7 @@ def read_c3d(_filename='07_01.c3d'):
         print "MIPS-SUN/SGI"
     else:
         print "unknown processor type"
-    
-    
+
     #if proctype==2,
     #    fclose(fid);
     #    fid=fopen(FullFileName,'r','d'); % DEC VAX D floating point and VAX ordering
@@ -136,47 +133,47 @@ def read_c3d(_filename='07_01.c3d'):
     print "***********************"
     print "**** Reading Header ***"
     print "***********************"
-    
+
     # ###############################################
     # ##                                           ##
     # ##    read header                            ##
     # ##                                           ##
     # ###############################################
-    
+
     #%NrecordFirstParameterblock=fread(fid,1,'int8');     % Reading record number of parameter section
     #%key1=fread(fid,1,'int8');                           % key = 80;
-    
+
     content = content_memory
-    
+
     #
     #fseek(fid,2,'bof');
     content = content[2:]
-    
+
     #
     Nmarkers, content = getNumber(content, 2)
     NanalogSamplesPerVideoFrame, content = getNumber(content, 2)
-    
+
     StartFrame, content = getNumber(content, 2)
     EndFrame, content = getNumber(content, 2)
-    
+
     MaxInterpolationGap, content = getNumber(content, 2)
-    
+
     Scale, content = getFloat(content)
-    
+
     NrecordDataBlock, content = getNumber(content, 2)
-    
+
     NanalogFramesPerVideoFrame, content = getNumber(content, 2)
-    
-    
+
     if NanalogFramesPerVideoFrame > 0:
-        NanalogChannels = NanalogSamplesPerVideoFrame / NanalogFramesPerVideoFrame
+        NanalogChannels = NanalogSamplesPerVideoFrame / \
+            NanalogFramesPerVideoFrame
     else:
         NanalogChannels = 0
-    
+
     VideoFrameRate, content = getFloat(content)
-    
+
     AnalogFrameRate = VideoFrameRate * NanalogFramesPerVideoFrame
-    
+
     print "NanalogFramesPerVideoFrame= ", NanalogFramesPerVideoFrame
     print "AnalogFrameRate= ", AnalogFrameRate
     print "VideoFrameRate= ", VideoFrameRate
@@ -184,21 +181,20 @@ def read_c3d(_filename='07_01.c3d'):
     print "Nmarkers= ", Nmarkers
     print "StartFrame= ", StartFrame
     print "EndFrame= ", EndFrame
-    
+
     print "***********************"
     print "**** Reading Events ..."
     print "***********************"
-    
+
     content = content_memory
     content = content[298:]  # bizarre .. ce devrait etre 150 selon la doc
-    
+
     EventIndicator, content = getNumber(content, 2)
-    
-    
+
     EventTime = []
     EventValue = []
     EventName = []
-    
+
     print "EventIndicator = ", EventIndicator
     if EventIndicator == 12345:
         Nevents, content = getNumber(content, 2)
@@ -219,32 +215,30 @@ def read_c3d(_filename='07_01.c3d'):
                 lenom = content[0:4]
                 content = content[4:]
                 EventName.append(lenom)
-    
-    
+
     print "***************************"
     print "**** Reading Parameters ..."
     print "***************************"
-    
+
     content = content_memory
     content = content[512 * (NrecordFirstParameterblock - 1):]
-    
+
     ParameterGroups = []
     ParameterNumberIndex = []
     #
     dat1, content = getNumber(content, 1)
     key2, content = getNumber(content, 1)
-    
+
     NparameterRecords, content = getNumber(content, 1)
     print "NparameterRecords=", NparameterRecords
     proctype, content = getNumber(content, 1)
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
-    
+
     for i in range(NparameterRecords):
         leparam = ParameterGroup(None, None, [])
         ParameterGroups.append(leparam)
         ParameterNumberIndex.append(0)
-    
-    
+
     #
     #
     Ncharacters, content = getNumber(content, 1)
@@ -254,7 +248,7 @@ def read_c3d(_filename='07_01.c3d'):
     if GroupNumber >= 128:
         GroupNumber = -(2 ** 8) + (GroupNumber)
     #print "GroupNumber = ", GroupNumber
-    
+
     while Ncharacters > 0:
         if GroupNumber < 0:
             GroupNumber = abs(GroupNumber)
@@ -272,7 +266,7 @@ def read_c3d(_filename='07_01.c3d'):
             ParameterNumberIndex[GroupNumber] = 0
             content = content[offset - 3 - deschars:]
         else:
-    
+
             ParameterNumberIndex[GroupNumber] = ParameterNumberIndex[
                 GroupNumber] + 1
             ParameterNumber = ParameterNumberIndex[GroupNumber]
@@ -288,12 +282,13 @@ def read_c3d(_filename='07_01.c3d'):
             offset, content = getNumber(content, 2)
             filepos = len(content_memory) - len(content)
             nextrec = filepos + offset - 2
-    
+
             type, content = getNumber(content, 1)
             if type >= 128:
                 type = -(2 ** 8) + type
-            ParameterGroups[GroupNumber].parameter[ParameterNumber - 1].type = type
-    
+            ParameterGroups[GroupNumber].parameter[
+                ParameterNumber - 1].type = type
+
             dimnum, content = getNumber(content, 1)
             if dimnum == 0:
                 datalength = abs(type)
@@ -307,9 +302,9 @@ def read_c3d(_filename='07_01.c3d'):
                     ParameterGroups[GroupNumber].parameter[
                         ParameterNumber - 1].dim.append(dimension[j])
                 datalength = abs(type) * mult
-    
+
             #print "ParameterNumber = ", ParameterNumber, " Group Number = ", GroupNumber
-    
+
             if type == -1:
                 data = ""
                 wordlength = dimension[0]
@@ -336,7 +331,7 @@ def read_c3d(_filename='07_01.c3d'):
                 else:
                     #print  ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data
                     pass
-    
+
             elif type == 1:
                 data = []
                 Nparameters = datalength / abs(type)
@@ -347,7 +342,7 @@ def read_c3d(_filename='07_01.c3d'):
                 ParameterGroups[GroupNumber].parameter[
                     ParameterNumber - 1].data = data
                 #print ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data
-    
+
                 #print "type boolean"
             elif type == 2 and datalength > 0:
                 data = []
@@ -365,7 +360,7 @@ def read_c3d(_filename='07_01.c3d'):
                     ParameterGroups[GroupNumber].parameter[
                         ParameterNumber - 1].data = data
                 #print ParameterGroups[GroupNumber].parameter[ParameterNumber-1].data
-    
+
                 #pass
                 #print "type integer"
             elif type == 4 and datalength > 0:
@@ -392,10 +387,10 @@ def read_c3d(_filename='07_01.c3d'):
                 content = content[deschars:]
                 ParameterGroups[GroupNumber].parameter[
                     ParameterNumber - 1].description = description
-    
+
             content = content_memory
             content = content[nextrec:]
-    
+
         Ncharacters, content = getNumber(content, 1)
         if Ncharacters >= 128:
             Ncharacters = -(2 ** 8) + (Ncharacters)
@@ -403,8 +398,7 @@ def read_c3d(_filename='07_01.c3d'):
         if GroupNumber >= 128:
             GroupNumber = -(2 ** 8) + (GroupNumber)
         #print "GroupNumber = ", GroupNumber
-    
-    
+
     ## ###############################################
     ## ##                                           ##
     ## ##    read data block                        ##
@@ -414,10 +408,10 @@ def read_c3d(_filename='07_01.c3d'):
     #
     content = content_memory
     content = content[(NrecordDataBlock - 1) * 512:]
-    
+
     NvideoFrames = EndFrame - StartFrame + 1
     print "NVideoFrames = ", NvideoFrames
-    
+
     for i in range(NvideoFrames):
         Markers.append([])
         ResidualError.append([])
@@ -426,7 +420,7 @@ def read_c3d(_filename='07_01.c3d'):
             Markers[i].append(Marker(0.0, 0.0, 0.0))
             ResidualError[i].append(0)
             CameraInfo[i].append(0)
-    
+
     #print Markers
     #
     #if Scale < 0
@@ -445,7 +439,7 @@ def read_c3d(_filename='07_01.c3d'):
     #                fread(fid,NanalogChannels,'int16')';
     #        end
     #    end
-    
+
     print "***************************"
     print "**** Reading DataBlock ...."
     print "***************************"
@@ -495,24 +489,27 @@ def read_c3d(_filename='07_01.c3d'):
     #        end
     #    end
     #end
-    
+
     else:
         for i in range(NvideoFrames):
             #print "**** Frame ", i, " *****"
             print "*",
             for j in range(Nmarkers):
                 #x, content = getNumber(content,2)
-                x = ord(content[ptr_read]) + ord(content[ptr_read + 1]) * (2 ** 8)
+                x = ord(content[ptr_read]) + ord(content[
+                    ptr_read + 1]) * (2 ** 8)
                 ptr_read += 2
                 if x > 32768:
                     x = -(2 ** 16) + (x)
                 #y, content = getNumber(content,2)
-                y = ord(content[ptr_read]) + ord(content[ptr_read + 1]) * (2 ** 8)
+                y = ord(content[ptr_read]) + ord(content[
+                    ptr_read + 1]) * (2 ** 8)
                 ptr_read += 2
                 if y > 32768:
                     y = -(2 ** 16) + (y)
                 #z, content = getNumber(content,2)
-                z = ord(content[ptr_read]) + ord(content[ptr_read + 1]) * (2 ** 8)
+                z = ord(content[ptr_read]) + ord(content[
+                    ptr_read + 1]) * (2 ** 8)
                 ptr_read += 2
                 if z > 32768:
                     z = -(2 ** 16) + (z)
@@ -537,7 +534,7 @@ def read_c3d(_filename='07_01.c3d'):
             Frames[i, j, 0] = -Markers[i][j].x
             Frames[i, j, 1] = -Markers[i][j].y
             Frames[i, j, 2] = -Markers[i][j].z
-    return(Subjects,Point,Frames)
+    return(Subjects, Point, Frames)
 #    fr = Frames[0]
 #    """axex = fr[:,0]
 #    axey = fr[:,1]
