@@ -74,13 +74,6 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
     :scale: 30%
     :target: http://esir.univ-rennes1.fr/ 
 
-.. image:: _static/bretagnegd.jpg 
-    :scale: 30%
-    :target: http://www.louisbourdon.com/index.htm
-
-.. image::  _static/fp7.png 
-    :scale: 40%
-
 .. image::  _static/ucells.png 
     :scale: 40%
 
@@ -92,12 +85,21 @@ FP7 WHERE1, `FP7 WHERE2 <http://www.ict-where.eu/>`_.
     :target: http://www.ict-where.eu/ 
 
 .. image:: _static/logo_CORMORAN.png 
-    :scale: 40%
+    :scale: 50%
 
 .. image:: _static/IR.png 
-    :scale: 30%
+    :scale: 40%
+    :target: http://www.images-et-reseaux.com/en
 
+.. image:: _static/bretagnegd.jpg 
+    :scale: 40%
+    :target: http://www.louisbourdon.com/index.htm
 
+.. image:: _static/anr.png 
+    :scale: 3%
+
+.. image::  _static/fp7.png 
+    :scale: 50%
 
 License
 =======
