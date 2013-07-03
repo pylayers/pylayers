@@ -2899,10 +2899,7 @@ class Layout(object):
 
             if line.intersects(segline):
                 lc.extend(self.Gs.node[seg]['ncycles'])
-<<<<<<< HEAD
-=======
-                #print seg,self.Gs.node[seg]['ncycles']
->>>>>>> 541f2d88b77ff190934e0d8e8e0b4ff979931a2f
+            #print seg,self.Gs.node[seg]['ncycles']
                 ls.append(seg)
                 psh = line.intersection(segline)
                 I = np.hstack((I, np.array([[psh.x],[psh.y]])))
