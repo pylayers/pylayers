@@ -2414,12 +2414,7 @@ class FBsignal(Bsignal):
                 nl = len(self.y)
                 for k in range(nl):
                     plt.subplot(211)
-<<<<<<< HEAD
-
-                    plot(self.x, np.real(self.y[k]))
-=======
                     plt.plot(self.x, np.real(self.y[k]))
->>>>>>> c445c4243d02cff7da4f3464f959614efd3a71c6
                     plt.xlabel('Frequency (GHz)')
                     plt.ylabel('Real part')
                     plt.subplot(212)
