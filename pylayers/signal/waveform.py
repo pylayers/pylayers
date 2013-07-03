@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 import doctest
 import os
+import logging
 import pdb
 import numpy as np
 import scipy as sp
@@ -13,44 +14,83 @@ from pylayers.signal   import bsignal as bs
 from pylayers.util     import easygui
 from pylayers.measures import mesuwb
 
-class Waveform:
+class Waveform(dict):
     """
-        Waveform Class
+
+    Attributes
+    ----------
+
+    st  : time domain
+    sf  : frequency domain
+    sfg : frequency domain integrated
+
+    Methods
+    -------
+
+    eval 
+    show2
+    ip_generic
+    fromfile
+    fromfile2
+    read
+    gui
+    show
+
     """
-    def __init__(self,parameters=[]):
+    def __init__(self,**kwargs):
         """
-           wavetype   =   'generic' =   'mbofdm' =   'fromfile'
-           st  : time domain
-           sf  : frequency domain
-           sfg : frequency domain integrated
+
+        Parameters
+        ----------
+
+        'typ' : string 
+            'generic',
+         'bandGHz': float
+            0.499
+         'fcGHz': float
+            4.493
+         'fsGHz': float
+            100,
+         'threshdB': 
+              3,
+         'twns': float
+            30
+
+        typ  :  'generic','W1compensate','W1offset'
+           
         """
-        param= {'type' : 'generic',
-                'band': 0.499,
-                'fc': 4.493,
-                'fe': 100,
-                'thresh': 3,
-                'tw': 30}
-        if parameters==[]:
-            self.parameters = param
-        else:
-            self.parameters = parameters
+        defaults = {'typ':'generic',
+                'bandGHz': 0.499,
+                'fcGHz': 4.493,
+                'feGHz': 100,
+                'threshdB': 3,
+                'twns': 30}
+        
+        for key, value in defaults.items():
+            if key not in kwargs:
+                self[key] = value
+            else:
+                self[key] = kwargs[key]
         self.eval()
 
     def eval(self):
         """ evaluate waveform
 
             The lambda/4*pi factor which is necessary to get the proper budget 
-            link ( from the fris formula) is introduced in this function.
+            link ( from the Friis formula) is introduced in this function.
         """
 
-        if self.parameters['type']  == 'generic':
+        if self['typ']  == 'generic':
             [st,sf]=self.ip_generic()
-        if self.parameters['type']  == 'mbofdm':
-            [st,sf]=self.mbofdm()
-        if self.parameters['type'] == 'W1compensate':
+        #elif self['typ']  == 'mbofdm':
+        #    [st,sf]=self.mbofdm()
+        elif self['typ'] == 'W1compensate':
             [st,sf]=self.fromfile()
-        if self.parameters['type'] == 'W1offset':
+        elif self['typ'] == 'W1offset':
             [st,sf]=self.fromfile2()
+        else:
+            logging.critical('waveform typ not recognized, check your config \
+                             file')
 
         self.st       = st
         self.sf       = sf
@@ -68,30 +108,25 @@ class Waveform:
         -------
 
         >>> from pylayers.signal.waveform import *
-        >>> param= {'type' : 'generic',\
-            'band': 0.499,\
-            'fc': 4.493,\
-            'fe': 100,\
-            'thresh': 3,\
-            'tw': 30}
-        >>> w = Waveform(param)
-        >>> # W = {}
-        >>> # W['t']=w.st.x
-        >>> # W['p']=w.st.y
+        >>> w = Waveform(typ='generic',bandGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)
         >>> w.show()
         >>> plt.show()         
 
 
         """
-        for k in self.parameters.keys():
-            print k , " : ",self.parameters[k]
+        if self['typ']=='generic':
+            for k in self.keys():
+                print k , " : ",self[k]
+        else:
+            print "typ:",self['typ']
 
-    def show2(self,Tp=1000):
+    def show2(self,Tpns=1000):
         """ show2
 
         Parameters
         ----------
-        Tp : float
+
+        Tpns : float
         
         """
         plt.subplot(211)
@@ -103,20 +138,21 @@ class Waveform:
 
     def ip_generic(self):
         """    Create an Energy normalized Gaussian impulse (Usignal)
-            ip_generic(self,parameters)
+
+        ip_generic(self,parameters)
         
 
         """
-        Tw     = self.parameters['tw']
-        fc     = self.parameters['fc']
-        band   = self.parameters['band']
-        thresh = self.parameters['thresh']
-        fe     = self.parameters['fe']
+        Tw     = self['twns']
+        fc     = self['fcGHz']
+        band   = self['bandGHz']
+        thresh = self['threshdB']
+        fe     = self['feGHz']
         te     = 1.0/fe
 
-        self.parameters['te'] = te
+        self['te'] = te
         Np     = fe*Tw
-        self.parameters['Np']=Np
+        self['Np']=Np
         x      = np.linspace(-0.5*Tw+te/2,0.5*Tw+te/2,Np,endpoint=False)
         #x     = arange(-Tw,Tw,te)
 
@@ -132,7 +168,7 @@ class Waveform:
         This function is not yet generic
 
         >>> from pylayers.signal.waveform import *
-        >>> wav = Waveform({'type':'file'})
+        >>> wav = Waveform(typ='W1compensate')
         >>> wav.show()
 
         """
@@ -181,7 +217,7 @@ class Waveform:
         This function is not yet generic
 
         >>> from pylayers.signal.waveform import *
-        >>> wav = Waveform({'type':'file'})
+        >>> wav = Waveform(typ='W1offset')
         >>> wav.show()
 
         """
@@ -229,32 +265,31 @@ class Waveform:
         """
         Parameters
         ----------
+
             config : ConfigParser object
 
         Returns
         -------
             w      : waveform
-         """
+        """
 
         par = config.items("waveform")
-        wparam =  {}
         for k in range(len(par)):
             key = par[k][0]
             val = par[k][1]
-            if key == "band":
-                wparam[key] = float(val)
-            if key == "fc":
-                wparam[key] = float(val)
-            if key == "fe":
-                wparam[key] = float(val)
-            if key == "thresh":
-                wparam[key] = float(val)
-            if key == "tw":
-                wparam[key] = float(val)
-            if key == "type":
-                wparam[key] = val
-
-        self.parameters = wparam
+            if key == "bandGHz":
+                self[key] = float(val)
+            if key == "fcGHz":
+                self[key] = float(val)
+            if key == "feGHz":
+                self[key] = float(val)
+            if key == "threshdB":
+                self[key] = float(val)
+            if key == "twns":
+                self[key] = float(val)
+            if key == "typ":
+                self[key] = val
+ 
         self.eval()
 
 
@@ -262,7 +297,7 @@ class Waveform:
         """
         Get the Waveform parameter
         """
-        if self.parameters['type'] == 'generic':
+        if self['typ'] == 'generic':
             self.st.plot()
             show()
             wavegui = multenterbox('','Waveform Parameter',
@@ -271,18 +306,18 @@ class Waveform:
              'band (GHz)',
              'thresh (dB)',
              'fe (GHz) integer value'),
-            ( self.parameters['Tw'] ,
-            self.parameters['fc'] ,
-            self.parameters['band'] ,
-            self.parameters['tresh'],
-            self.parameters['fe']
+            ( self['twns'] ,
+            self['fcGHz'] ,
+            self['bandGHz'] ,
+            self['threshdB'],
+            self['feGHz']
             ))
 
-            self.parameters['Tw']    = eval(wavegui[0])
-            self.parameters['fc']    = eval(wavegui[1])
-            self.parameters['band']  = eval(wavegui[2])
-            self.parameters['tresh'] = eval(wavegui[3])
-            self.parameters['fe']    = eval(wavegui[4])
+            self.parameters['Twns']    = eval(wavegui[0])
+            self.parameters['fcGHz']    = eval(wavegui[1])
+            self.parameters['bandGHz']  = eval(wavegui[2])
+            self.parameters['threshdB'] = eval(wavegui[3])
+            self.parameters['feGHz']    = eval(wavegui[4])
 
             [st,sf]       = self.ip_generic()
             self.st       = st
@@ -297,8 +332,8 @@ class Waveform:
         if fig ==[]:
             fig = plt.figure()
         title =''
-        for pk in self.parameters.keys():
-            val   = self.parameters[pk]
+        for pk in self.keys():
+            val   = self[pk]
             title = title + pk + ': '
             if type(val) != 'str':
                 title = title + str(val) + ' '
@@ -315,4 +350,5 @@ class Waveform:
 
 
 if __name__ == "__main__":
+    plt.ion()
     doctest.testmod()

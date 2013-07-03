@@ -11,9 +11,12 @@ pylayers/antprop/__init__.py
 pylayers/antprop/antenna.py
 pylayers/antprop/antvsh.py
 pylayers/antprop/channel.py
+pylayers/antprop/channelc.py
 pylayers/antprop/coverage.py
+pylayers/antprop/interactions.py
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
+pylayers/antprop/raysc.py
 pylayers/antprop/signature.py
 pylayers/antprop/signew.py
 pylayers/antprop/slab.py
@@ -56,6 +59,14 @@ pylayers/measures/__init__.py
 pylayers/measures/mesuwb.py
 pylayers/mobility/__init__.py
 pylayers/mobility/agent.py
+pylayers/mobility/body/DeuxSeg.py
+pylayers/mobility/body/__init__.py
+pylayers/mobility/body/body.py
+pylayers/mobility/body/c3d.py
+pylayers/mobility/body/c3dtools.py
+pylayers/mobility/body/cylinder.py
+pylayers/mobility/body/dist.py
+pylayers/mobility/body/raycyl.py
 pylayers/mobility/transit/Person.py
 pylayers/mobility/transit/SteeringBehavior.py
 pylayers/mobility/transit/World.py
@@ -85,6 +96,7 @@ pylayers/util/geomutil.py
 pylayers/util/graphutil.py
 pylayers/util/plotutil.py
 pylayers/util/project.py
+pylayers/util/pydb.py
 pylayers/util/pymysqldb.py
 pylayers/util/pyutil.py
 pylayers/util/save.py

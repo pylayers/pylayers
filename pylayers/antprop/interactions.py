@@ -64,20 +64,31 @@ class Inter(object):
     def create_dusl(self,a):
         """ create dictionnary of used slab.
 
-        Attributes
+        Parameters 
         ----------
-        a : np.array of string which contains ordered interactions
+
+        a : np.array of strings which contains ordered interactions
             ordered as in self.idx/self.data
 
         """
+
         for s in self.dusl:
             self.dusl[s]=np.where(a==s)[0]
 
 
 
     def delay(self):
-        """
-            calculate delays of a given basis Interaction
+        """ calculate delays of a given basis Interaction
+
+        Note
+        ----
+
+        typ 
+
+            1 : Reflexion 
+            2 : Transmission 
+            3 : Diffraction
+
         """
 
         if self.typ in [1, 2, 3]:
@@ -750,4 +761,6 @@ class IntD(Inter):
             return(self.A)
 
 if (__name__ == "__main__"):
+    plt.ion()
+    print "testing pylayers/antprop/interactions.py"
     doctest.testmod()

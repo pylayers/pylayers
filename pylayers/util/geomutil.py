@@ -1574,6 +1574,105 @@ def v_color(ob):
 #   Functions used for calculation of Gv
 #-------------------------------------------
 
+class LineString(shg.LineString):
+    """ Overloaded shapely LineString class
+    """
+    def __init__(self,p):
+
+        if type(p) == shg.polygon.Polygon:
+            self.Np = shape(p.exterior.xy)[1] - 1
+            shg.LineString.__init__(self, p)
+
+        if type(p) == shg.multipoint.MultiPoint:
+            self.Np = np.shape(p)[0]
+            shg.LineString.__init__(self, p)
+
+        if type(p) == list:
+            p = np.array(p)
+
+        if type(p) == np.ndarray:
+            self.Np = np.shape(p)[1]
+            tp = []
+            for k in range(self.Np):
+                tp.append(p[:, k])
+            tp.append(tp[0])
+            tu = tuple(tp)
+            shg.LineString.__init__(self, tu)
+
+    def plot(self,**kwargs):
+        """ plot LineString
+
+        Parameters
+        ----------
+
+        color :  string
+            default #abcdef"
+        alpha :  float
+            transparency   (default 0.8)
+        fig : figure object
+        ax  : axes object
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.util.geomutil import * 
+            >>> import matplotlib.pyplot as plt
+            >>> import numpy as np
+            >>> l1 = np.array([[0,1,1,0],[0,0,1,1]])
+            >>> L1 = LineString(l1)
+            >>> l2 = [[3,4,4,3],[1,1,2,2]]
+            >>> L2 = LineString(l2)
+            >>> l3 = [np.array([10,10]),np.array([11,10]),np.array([11,11]),np.array([10,11])]
+            >>> L3 = LineString(l3)
+            >>> fig,ax = L1.plot(color='red',alpha=0.3,linewidth=3)
+            >>> fig,ax = L2.plot(fig=fig,ax=ax,color='blue',alpha=0.7,linewidth=2)
+            >>> fig,ax = L3.plot(fig=fig,ax=ax,color='green',alpha=1,linewidth=1)
+            >>> title = plt.title('test plotting LineString')
+
+        """
+
+        defaults = {'show': False,
+                'fig': [],
+                'ax': [],
+                'color':'#abcdef',
+                'linewidth':1,
+                'alpha':0.8 ,
+                'figsize':(10,10)
+                 }
+        #
+        # update default values
+        #
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+        #
+        # getting fig and ax
+        #
+        if kwargs['fig'] == []:
+            fig = plt.figure(figsize=kwargs['figsize'])
+            fig.set_frameon(True)
+        else:
+            fig = kwargs['fig']
+
+        if kwargs['ax'] == []:
+            ax = fig.gca()
+        else:
+            ax = kwargs['ax']
+
+        x, y = self.xy
+
+        ax.plot(x, y,
+                color = kwargs['color'],
+                alpha=kwargs['alpha'],
+                linewidth = kwargs['linewidth'])
+
+        if kwargs['show']:
+            plt.show()
+
+        return fig,ax
 
 class Polygon(shg.Polygon):
     """ Overloaded shapely Polygon class
@@ -1610,7 +1709,8 @@ class Polygon(shg.Polygon):
         """
 
         if type(p) == shg.polygon.Polygon:
-            self.Np = shape(p.exterior.xy)[1] - 1
+            self.Np = np.shape(p.exterior.xy)[1] - 1
+            p = np.vstack((p.exterior.xy[0],p.exterior.xy[1]))
             shg.Polygon.__init__(self, p)
 
         if type(p) == shg.multipoint.MultiPoint:
@@ -1641,6 +1741,20 @@ class Polygon(shg.Polygon):
             u = np.array([-1, 1])
             v = np.arange(self.Np) + 1
             self.vnodes = np.kron(v, u)
+
+    def __add__(self,p):
+        pnew = self.union(p)
+        p1 = np.vstack((pnew.exterior.xy[0],pnew.exterior.xy[1]))
+        p2 = Polygon(p1)
+        return(p2)
+
+    def __repr__(self):
+        st = ''
+        p = self.ndarray()
+        sh = np.shape(p)
+        for k in range(sh[1]):
+            st = st + '('+str(p[0,k])+','+str(p[1,k])+')\n'
+        return(st)
 
     def ndarray(self):
         """ get a ndarray from a Polygon
@@ -2743,7 +2857,7 @@ def linepoly_intersection(l,poly):
     shpoly = sh.polygon((poly[:,0],poly[:,1],poly[:,2]))
     psh = shl.intersection(shpoly)
     return np.array([[psh.x],[psh.y]])
-    
+
 def mirror(p,pa,pb):
     """ Compute the mirror of p with respect to the segment pa pb
 

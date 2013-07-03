@@ -151,7 +151,7 @@ class Furniture(object):
             >>> import matplotlib.pylab as plt
             >>> F = Furniture()
             >>> F.load('Furw1.ini','R1_A')
-            >>> F.show()
+            >>> fig,ax = F.show()
             >>> axis = plt.axis('scaled')
             >>> plt.show()
         """
@@ -248,10 +248,6 @@ class Furniture(object):
             offy
                 offset y  (10)
 
-        Examples
-        --------
-            >>> from pylayers.gis.furniture import *
-            >>> 
         """
 
         vertices = []
@@ -291,6 +287,7 @@ class Furniture(object):
 
 
 if __name__ == "__main__":
+    plt.ion()
     doctest.testmod()
 
 #   fig.savefig(figuredir+filename+ext1,orientation='portrait')

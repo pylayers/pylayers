@@ -35,6 +35,11 @@ except:
     mesdir = basename + '/meas'
 
 try:
+    datadir = os.environ['DATADIR']
+except:
+    datadir = basename + '/meas'
+
+try:
     os.path.isdir(basename +'/figures')
 except:
     os.mkdir(basename+'/figures')
@@ -87,6 +92,8 @@ for nm in pstruc.keys():
         os.chdir('..')
 
 
+    if nm == 'DIRANT':
+        antdir = dirname 
     if nm == 'DIRSTRUC':
         strdir = dirname
     if nm == 'DIRFUR':

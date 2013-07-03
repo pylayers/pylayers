@@ -93,6 +93,7 @@ class Simul(SimulationRT):
         if str2bool(self.net_opt['ipython_nb_show']):
             self.verbose = False
         self.roomlist=[]
+        self.create()
 
     def create_layout(self):
         """
@@ -109,13 +110,13 @@ class Simul(SimulationRT):
         _filename = self.lay_opt['filename']
         #sl=Slab.SlabDB(self.lay_opt['slab'],self.lay_opt['slabmat'])
         #G1   = Graph.Graph(sl=sl,filename=_filename)
-        self.L = Layout()
-        if _filename.split('.')[1] == 'str':
-            self.L.loadstr(_filename)
-        elif _filename.split('.')[1] == 'str2':
-            self.L.loadstr2(_filename)
-        elif _filename.split('.')[1] == 'ini':
-            self.L.loadini(_filename)
+        self.L = Layout(_filename)
+        #if _filename.split('.')[1] == 'str':
+        #    self.L.loadstr(_filename)
+        #elif _filename.split('.')[1] == 'str2':
+        #    self.L.loadstr2(_filename)
+        #elif _filename.split('.')[1] == 'ini':
+        #    self.L.loadini(_filename)
 
 
         try:
@@ -126,11 +127,7 @@ class Simul(SimulationRT):
         #self.L.loadGr(G1)
             print 'This is the first time your use this layout file.\
             Layout graphs are curently being built, it may take few minutes.'
-            self.L.buildGt()
-            self.L.buildGr()
-            self.L.buildGw()
-            self.L.buildGv()
-            self.L.buildGi()
+            self.L.build()     
             self.L.dumpw()
         x_offset = 0  # float(self.lay_opt['x_offset'])
         y_offset = 0  # float(self.lay_opt['y_offset'])
@@ -312,7 +309,7 @@ class Simul(SimulationRT):
     def runsimul(self):
         """ Run simulation
         """
-        self.create()
+
         self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
 #        self.simulate(until=float(self.sim_opt['duration']))
         if self.save_opt['savep']:
@@ -323,6 +320,6 @@ class Simul(SimulationRT):
 if __name__ == '__main__':
 
     S = Simul()
-    seed(eval(S.sim_opt['seed']))
+    #seed(eval(S.sim_opt['seed']))
     S.runsimul()
 

@@ -276,7 +276,15 @@ class Antenna(object):
         self.Nf = 104
 
     def pattern(self,theta,phi,typ='s3'):
-        """
+        """ return radiation multidimensionnal patterns 
+        
+        Parameters
+        ----------
+        theta   : array
+            1xNt
+        phi     : array
+            1xNp
+
         """
         Nt = len(theta)
         Np = len(phi)
@@ -638,26 +646,7 @@ class Antenna(object):
         except:
             print "No vsh coefficient calculated yet"
 
-    def help(self):
-        """
-        help on available functions
-        """
-        print "Antenna Class : List of available function"
-        print "------------------------------------------"
-        print "A.init(filename)"
-        print "A.info()"
-        print "A.demo()"
-        print "A.help()"
-        print "A.show3_geom(k=0,typ='Gain'|'Ftheta'|Fphi',mode='linear'|'not implemented',silent=(True)|False)"
-        print "A.pol3d(k=0,R=1,St=1(Downsampling along theta),Sp=1(idem),silent=(False)[True)"
-        print "A.mse(Fth,Fph,N=0) "
-        print "A.elec_delay()"
-        print "A.vsh() : Vector spherical harmonics transform"
-        print "A.Fsynth2(theta,phi) : Calulate diagram from shape 2 coeff"
-        print "A.Fsynth3(theta,phi) : Calulate diagram from shape 3 coeff"
-        print "movie_vsh(mode='linear')"
-
-    def polar(self, k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1):
+    def polar(self, k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1,fig=[],ax=[]):
         """ polar plot
 
             Parameters
@@ -689,19 +678,29 @@ class Antenna(object):
 
         """
 
+        if fig==[]:
+            fig = plt.figure(figsize=(8, 8))
+
+        if ax==[]:    
+            ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
+
         rc('grid', color='#316931', linewidth=1, linestyle='-')
         rc('xtick', labelsize=15)
         rc('ytick', labelsize=15)
+
         DyndB = dyn * 5
         GmindB = GmaxdB - DyndB
+
         # force square figure and square axes looks better for polar, IMO
-        fig = plt.figure(figsize=(8, 8))
-        ax = fig.add_axes([0.1, 0.1, 0.8, 0.8], polar=True, axisbg='#d5de9c')
+
         t1 = np.arange(5, DyndB + 5, 5)
         t2 = np.arange(GmindB + 5, GmaxdB + 5, 5)
+
         rline1, rtext1 = plt.rgrids(t1, t2)
+
         a1 = np.arange(0, 360, 30)
         a2 = [90, 60, 30, 0, 330, 300, 270, 240, 210, 180, 150, 120]
+
         rline2, rtext2 = plt.thetagrids(a1, a2)
 
         col = ['k', 'r', 'g', 'b', 'm', 'c', 'y']
@@ -747,6 +746,7 @@ class Antenna(object):
             ax.plot(angle, r, color=col[cpt], lw=2, label=chaine)
             cpt = cpt + 1
         ax.legend()
+        return(fig,ax)
 
     def show3_geom(self, k=0, typ='Gain', mode='linear', silent=False):
         """ show3 geomview
@@ -823,9 +823,10 @@ class Antenna(object):
         ax.set_zlabel('Z')
 
         if col:
-            ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.hot_r)
+            ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
+                            cmap=cm.hot_r,shade=True)
         else:
-            ax.plot3D(ravel(X), ravel(Y), ravel(Z))
+            ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
 
     def pol3d(self, k=0, R=50, St=1, Sp=1, silent=False):
         """ Display polarisation diagram  in 3D
@@ -1035,7 +1036,8 @@ class Antenna(object):
         ind = index_vsh(N, M)
         n = ind[:, 0]
         m = ind[:, 1]
-        V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        V, W = VW(n, m, x, phi)
         #
         # broadcasting along frequency axis
         #
@@ -1258,7 +1260,8 @@ class Antenna(object):
         n = ind[:, 0]
         m = ind[:, 1]
 
-        V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        V, W = VW(n, m, x, phi)
 
 
         Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
@@ -1328,6 +1331,7 @@ class Antenna(object):
         #Pmm1n, Pmp1n = AFLegendre3(20, 20, x)
         #Pmm1n, Pmp1n = AFLegendre3(L, L, x)
         #V, W = VW0(lBr, mBr, x, phi, Pmm1n, Pmp1n)
+
         V, W = VW(lBr, mBr, theta, phi)
 
 
@@ -1494,7 +1498,8 @@ class Antenna(object):
     def loadvsh3(self):
         """ Load antenna's vsh3 file
 
-            it contains a thesholded version of vsh coefficients in shape 3
+            vsh3 file contains a thesholded version of vsh coefficients in shape 3
+
         """
 
         _filevsh3 = self._filename
@@ -1644,6 +1649,7 @@ class Antenna(object):
     def cart2pol(self, Fx, Fy, Fz, ith):
         """
         Conversion Fx,Fy,Fz vers Ftheta, Fphi for theta=ith
+
         Parameters
         ----------
         Fx
