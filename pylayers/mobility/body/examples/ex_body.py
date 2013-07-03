@@ -8,8 +8,8 @@ nframes = 126
 B = Body()
 
 plt.figure()
-nx.draw(B.g)
 plt.title("Body graph 15 Nodes - 10 Edges ")
+nx.draw(B.g)
 
 plt.axis('scaled')
 
@@ -45,7 +45,7 @@ plt.axis('scaled')
 
 
 # Load a .c3dmotion capture file
-B.LoadMotion(filename='07_01_c3d',nframes=nframes)
+B.LoadMotion(filename='07_01.c3d',nframes=nframes)
 
 # extract a numpy array (3 x np x nf )
 #
