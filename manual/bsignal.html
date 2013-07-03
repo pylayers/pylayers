@@ -148,45 +148,23 @@
 <p><em>Construction of the VectChannel</em></p>
 <p><em class="xref std std-ref">pylayers.antprop.channel.VectChannel</em></p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">vc</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">VC</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">KeyError                                  Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-21-0be40c2b38b4&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 vc = S.VC(1,1)</span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/simul/simulem.pyc in VC(self, itx, irx)</span>
-<span class="go">   2448         &quot;&quot;&quot;</span>
-<span class="go">   2449 </span>
-<span class="go">-&gt; 2450         VCl = channelc.VectChannel(self, itx, irx, False)</span>
-<span class="go">   2451         return(VCl)</span>
-<span class="go">   2452 </span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/channelc.pyc in __init__(self, S, itx, irx, transpose)</span>
-<span class="go">     69         #   a verifier -ravel-</span>
-<span class="go">     70         self.fail = False</span>
-<span class="go">---&gt; 71         _filefield = S.dfield[itx][irx]</span>
-<span class="go">     72         filefield = pyu.getlong(_filefield,pstruc[&#39;DIRTUD&#39;])</span>
-<span class="go">     73         _filetauk = S.dtauk[itx][irx]</span>
-
-<span class="go">KeyError: 1</span>
+<span class="go">nray :  500</span>
+<span class="go">nfreq :  181</span>
+<span class="go">nb rays in .tauk file:  500</span>
+<span class="go">nb rays 2:  500</span>
 
 <span class="gp">In [22]: </span><span class="n">vc</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-22-d0872865149e&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 vc.doadod()</span>
-
-<span class="go">NameError: name &#39;vc&#39; is not defined</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/doadod.png"><img alt="../_images/doadod.png" src="../_images/doadod.png" style="width: 8in;" /></a>
 <p><em>Construction of the ScalChannel</em></p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [23]: </span><span class="n">H</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">tran2prop</span><span class="p">()</span>
 <span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">AttributeError                            Traceback (most recent call last)</span>
 <span class="go">&lt;ipython-input-23-37573399afd8&gt; in &lt;module&gt;()</span>
 <span class="go">----&gt; 1 H = vc.tran2prop()</span>
 
-<span class="go">NameError: name &#39;vc&#39; is not defined</span>
+<span class="go">AttributeError: &#39;VectChannel&#39; object has no attribute &#39;tran2prop&#39;</span>
 </pre></div>
 </div>
 <p>Tchannel object is the container for the ray transfer function</p>
@@ -219,7 +197,7 @@
 <span class="go">Ncoeff s3 :  18</span>
 
 <span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0x656fe90</span><span class="o">&gt;</span>
+<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span> <span class="n">at</span> <span class="mh">0x87af490</span><span class="o">&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">H</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="go">---------------------------------------------------------------------------</span>

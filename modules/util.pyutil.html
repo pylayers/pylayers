@@ -468,7 +468,7 @@ use the function.</p>
 
 <dl class="function">
 <dt id="pylayers.util.pyutil.getlong">
-<tt class="descclassname">pylayers.util.pyutil.</tt><tt class="descname">getlong</tt><big>(</big><em>shortname</em>, <em>dir</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pyutil.html#getlong"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pyutil.getlong" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pylayers.util.pyutil.</tt><tt class="descname">getlong</tt><big>(</big><em>shortname</em>, <em>dir</em>, <em>source='project'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/pyutil.html#getlong"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.pyutil.getlong" title="Permalink to this definition">¶</a></dt>
 <dd><p>get a long name</p>
 <p>This function allows to construct the long file name relatively
 to a current project directory which is stored in the environment
@@ -481,7 +481,8 @@ variable $BASENAME</p>
 <blockquote>
 <div><p>short name of the file</p>
 </div></blockquote>
-<p class="last"><strong>dir</strong> : directory in $BASENAME</p>
+<p><strong>dir</strong> : directory in $BASENAME or $PYLAYERS</p>
+<p class="last"><strong>source</strong> : string</p>
 </td>
 </tr>
 </tbody>

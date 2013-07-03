@@ -148,9 +148,9 @@ T : np.array   (f , th , 2, 2)</p>
 <blockquote>
 <div><p>default (False)</p>
 </div></blockquote>
-<p><strong>Returns</strong> :</p>
-<p><strong>&#8212;&#8212;-</strong> :</p>
-<p><strong>Lo</strong> : loss in dB polarization orthogonal</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Lo</strong> : loss in dB polarization orthogonal</p>
 <p class="last"><strong>Lp</strong> : loss in dB polarization parallel</p>
 </td>
 </tr>
@@ -283,6 +283,19 @@ T : np.array   (f , th , 2, 2)</p>
 <div class="figure">
 <img alt="../_images/antprop-slab-2.png" src="../_images/antprop-slab-2.png" />
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.slab.Interface.tocolor">
+<tt class="descname">tocolor</tt><big>(</big><em>fGHz</em><big>)</big><a class="headerlink" href="#pylayers.antprop.slab.Interface.tocolor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>fGHz</strong> : np.array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -789,7 +802,7 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <dl class="method">
 <dt id="pylayers.antprop.slab.Slab.loss0">
 <tt class="descname">loss0</tt><big>(</big><em>fGHz=2.4</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab.loss0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab.loss0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate loss for theta=0 at frequency (f)</p>
+<dd><p>calculate loss for theta=0 at frequency (fGHz)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -912,6 +925,27 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.slab.Slab.tocolor">
+<tt class="descname">tocolor</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="headerlink" href="#pylayers.antprop.slab.Slab.tocolor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>fGHz</strong> : np.array</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span>  <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span>  <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col24</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col8</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
