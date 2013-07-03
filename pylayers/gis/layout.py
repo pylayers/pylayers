@@ -2899,10 +2899,7 @@ class Layout(object):
 
             if line.intersects(segline):
                 lc.extend(self.Gs.node[seg]['ncycles'])
-<<<<<<< HEAD
-=======
-                #print seg,self.Gs.node[seg]['ncycles']
->>>>>>> 541f2d88b77ff190934e0d8e8e0b4ff979931a2f
+            #print seg,self.Gs.node[seg]['ncycles']
                 ls.append(seg)
                 psh = line.intersection(segline)
                 I = np.hstack((I, np.array([[psh.x],[psh.y]])))
@@ -3431,10 +3428,10 @@ class Layout(object):
             self.buildGt()
         if 'r' in graph:
             self.buildGr()
-        if 'w' in graph:
-            self.buildGw()
-        if 'c' in graph:
-            self.buildGc()
+        #if 'w' in graph:
+        #    self.buildGw()
+        #if 'c' in graph:
+        #    self.buildGc()
         if 'v' in graph:
             self.buildGv()
         if 'i' in graph:

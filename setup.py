@@ -26,7 +26,6 @@ setup(name='pylayers' ,
         'bitstring>=3.0.2',
         'shapely>=1.2.14',
         'descartes>=1.0',
-        'imposm>=2.5.0',
                         ],
       packages=find_packages()
 )
