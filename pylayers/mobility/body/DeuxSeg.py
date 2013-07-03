@@ -62,7 +62,6 @@ def dmin3d(A,B,C,D):
     #~ print 'dmin', dmin
     return(alpha,beta,dmin)
 
-# <codecell>
 
 a,b,d=dmin3d(A,B,C,D)
 
