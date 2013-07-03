@@ -4,7 +4,7 @@ from pylayers.mobility.body import c3d
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
-from visual import *
+#from visual import *
 import  pdb as pdb
 import pylayers.util.plotutil as pltu
 

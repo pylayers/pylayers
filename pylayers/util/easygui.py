@@ -360,12 +360,12 @@ def floatbox(text1='Enter float', text2=''):
     value = eval(point[0])
     return value
 
-def offsetbox(text1='Enter offset values', text2=''):
+def offsetbox(text1='Enter offset values', text2='',default=('0','0')):
     """
     GUI for points
             npt is a number of points (default : npt=1)
     """
-    point = multenterbox(text1, text2,('x', 'y'), ('0','0'))
+    point = multenterbox(text1, text2,('x', 'y'), default)
     offx = eval(point[0])
     offy = eval(point[1])
     return (offx, offy)

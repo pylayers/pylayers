@@ -9,7 +9,7 @@ import pdb
 #       Création d'une arborescence de projet 
 #       """
 #       def __init__(self):
-#       def     
+#       def
 
 currentdir = os.getcwd()
 
@@ -35,6 +35,11 @@ except:
     mesdir = basename + '/meas'
 
 try:
+    datadir = os.environ['DATADIR']
+except:
+    datadir = basename + '/meas'
+
+try:
     os.path.isdir(basename +'/figures')
 except:
     os.mkdir(basename+'/figures')
@@ -48,6 +53,7 @@ pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
 pstruc['DIRSTRUC'] ='struc'
 pstruc['DIRSTRUC2'] = 'struc'
+pstruc['DIRFUR'] = 'struc/furnitures'
 pstruc['DIRSLAB'] = 'ini'
 pstruc['DIRSLAB2'] = 'ini'
 pstruc['DIRMAT'] = 'ini'
@@ -86,8 +92,12 @@ for nm in pstruc.keys():
         os.chdir('..')
 
 
+    if nm == 'DIRANT':
+        antdir = dirname 
     if nm == 'DIRSTRUC':
         strdir = dirname
+    if nm == 'DIRFUR':
+        furdir = dirname
     if nm == 'DIRGEOM':
         geomdir = dirname
     if nm == 'DIRLCH':
@@ -110,15 +120,15 @@ for nm in pstruc.keys():
 #
 
 
-dirlist=['ini','struc','ant','output','geom']
-
+dirlist=['ini','struc','struc/furnitures','ant','output','geom']
 for dl in dirlist:
     filelist = os.listdir(pylayersdir+'/data/' + dl)
     for fi in filelist:
-        if os.path.isfile(basename+'/' + dl +'/' +fi):
-            pass
-        else:
-            shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+        if not os.path.isdir(basename+'/'+dl+'/'+fi):
+            if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
+                pass
+            else:
+                shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 
 
 os.chdir(currentdir)

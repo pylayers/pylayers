@@ -22,6 +22,8 @@ class Ctilde(object):
     Ctp : FUsignal
     Cpt : FUsignal
     Cpp : FUsignal
+    fGHz : np.array
+        frequency array
     nfreq : int
         number of frequency point
     nray  : int
@@ -68,9 +70,9 @@ class Ctilde(object):
 
         >>> from pylayers.antprop.channel import *
         >>> from pylayers.simul.simulem import *
-        >>> S=Simul()
+        >>> S = Simul()
         >>> S.load('default.ini')
-        >>> C =Ctilde()
+        >>> C = Ctilde()
         >>> C.load(pyu.getlong(S.dtud[1][1],'output'))
 
         """
@@ -116,12 +118,12 @@ class Ctilde(object):
         #
         # Temporary freq --> read filefreq
         #
-        freq = np.linspace(2, 11, nfreq)
+        fGHz = np.linspace(2, 11, nfreq)
 
-        self.Ctt = bs.FUsignal(freq, c11)
-        self.Ctp = bs.FUsignal(freq, c12)
-        self.Cpt = bs.FUsignal(freq, c21)
-        self.Cpp = bs.FUsignal(freq, c22)
+        self.Ctt = bs.FUsignal(fGHz, c11)
+        self.Ctp = bs.FUsignal(fGHz, c12)
+        self.Cpt = bs.FUsignal(fGHz, c21)
+        self.Cpp = bs.FUsignal(fGHz, c22)
         self.nfreq = nfreq
         self.nray = nray
 
@@ -166,14 +168,12 @@ class Ctilde(object):
             nray_rang = stru.unpack('i', fo.read(4))[0]
             buf = fo.read()
             fo.close()
-            # coorectif Bug evalfield
+            # corectif Bug evalfield
             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
             self.rang = tmp[0:nray, :]
 
     def mobility(self, v, dt):
         """ Modify channel for uniform mobility
-
-        NOT FINISHED
 
         Parameters
         ----------
@@ -217,11 +217,12 @@ class Ctilde(object):
 
         return(tauk_ch)
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360)):
         """ doadod scatter plot
 
         Parameters
         -----------
+
         cmap : color map
         s    : float
             size (default 30)
@@ -257,13 +258,13 @@ class Ctilde(object):
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
                     cmap=cmap, edgecolors='none')
         #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
-        plt.axis((0, 180, 0, 360))
+        plt.axis((0, 180, phi[0], phi[1]))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
-        a = plt.colorbar()
+        #a = plt.colorbar()
         #for t in a.ax.get_yticklabels():
         #    t.set_fontsize(18)
-        a.set_label('dB')
+        #a.set_label('dB')
         plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
         plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
         #ylabel('$\phi_t(\degree)$',fontsize=18)
@@ -271,7 +272,7 @@ class Ctilde(object):
         plt.subplot(122)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
-        plt.axis((0, 180, 0, 360))
+        plt.axis((0, 180, phi[0], phi[1]))
         #plt.xticks(fontsize=20)
         #plt.yticks(fontsize=20)
         b = plt.colorbar()
@@ -281,6 +282,7 @@ class Ctilde(object):
         plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
         plt.title('DoA', fontsize=fontsize+2)
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
+        plt.axis
 
     def show(self, display=False, mode='linear'):
         """ show
@@ -363,11 +365,13 @@ class Ctilde(object):
 
         Returns
         -------
+
         Eco    : Energy on co channel    tt + pp
         Ecross : Energy on cross channel tp + pt
 
         See Also
         --------
+
         pylayers.signal.bsignal.FUsignal.energy
 
         """
@@ -380,11 +384,12 @@ class Ctilde(object):
         return Eco, Ecross
 
     def sort(self, tauk):
-        """ sort Ctilde with respect of tauk
+        """ sort Ctilde with respect to tauk
 
         Parameters
         ----------
-        tauk :
+
+        tauk : array of delays
 
         """
         u = argsort(tauk)
@@ -402,7 +407,7 @@ class Ctilde(object):
 
         a : string or antenna array
             polarization antenna a ( 'theta' | 'phi' | 'ant' ) 
-         : string or antenna array
+        b : string or antenna array
             polarization antenna b ( 'theta' | 'phi' | 'ant' ) 
 
             0 : theta
@@ -415,7 +420,7 @@ class Ctilde(object):
 
 
         """
-        freq = self.freq
+        freq = self.fGHz
         nfreq = self.nfreq
         nray  = self.nray
         sh = np.shape(self.Ctt.y)
@@ -427,8 +432,8 @@ class Ctilde(object):
                 Fat = np.ones((nray,nfreq))
             if a=='phi':
                 Fap = np.ones((nray,nfreq))
-            Fat = bs.FUsignal(self.freq,Fat)
-            Fap = bs.FUsignal(self.freq,Fap)
+            Fat = bs.FUsignal(self.fGHz,Fat)
+            Fap = bs.FUsignal(self.fGHz,Fap)
         else:
             Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1])
             Fat = Fat.transpose()
@@ -443,17 +448,16 @@ class Ctilde(object):
                 Fbt = np.ones((nray,nfreq))
             if b=='phi':
                 Fbp = np.ones((nray,nfreq))
-            Fbt = bs.FUsignal(self.freq,Fbt)
-            Fbp = bs.FUsignal(self.freq,Fbp)
+            Fbt = bs.FUsignal(self.fGHz,Fbt)
+            Fbp = bs.FUsignal(self.fGHz,Fbp)
         else:
             Fbt , Fbp = b.Fsynth3(self.rang[:, 0],self.rang[:,1])
-            # (nray,nfeq) needed
+
             Fbt = Fbt.transpose()
             Fbp = Fbp.transpose()
             Fbt = bs.FUsignal(b.fa,Fbt)
             Fbp = bs.FUsignal(b.fa,Fbp)
 
-        #pdb.set_trace()
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -469,13 +473,18 @@ class Ctilde(object):
 
         slach : ScalChannel
 
+        Note 
+        ----
+
+        deprecated this is now replaced by the function prop2tran
+
         """
-        freq = self.freq
+        fGHz = self.fGHz
         sh = np.shape(self.Ctt.y)
-        Ftt = bs.FUsignal(freq, np.ones(sh))
-        Ftp = bs.FUsignal(freq, np.zeros(sh))
-        Frt = bs.FUsignal(freq, np.ones(sh))
-        Frp = bs.FUsignal(freq, np.zeros(sh))
+        Ftt = bs.FUsignal(fGHz, np.ones(sh))
+        Ftp = bs.FUsignal(fGHz, np.zeros(sh))
+        Frt = bs.FUsignal(fGHz, np.ones(sh))
+        Frp = bs.FUsignal(fGHz, np.zeros(sh))
         scalch = ScalChannel(self, Ftt, Ftp, Frt, Frp)
         return(scalch)
 
@@ -484,15 +493,20 @@ class Ctilde(object):
 
     def vec2scalA(self, At, Ar, alpha=1.0):
         """
-        vec2scalA(self,At,Ar,alpha=1.0):
+        
+        Parameters
+        ----------
 
-        At = transmitter antenna
-        Ar = receiver antenna
+        At : transmitter antenna
+        Ar : receiver antenna
+        alpha : normalization factor
+    
+        Notes
+        -----
 
         Calculate ScalChannel by combining the propagation channel VectChannel
         with realistic antennas transfer function
 
-        alpha : normalization factor
 
         """
 
@@ -514,10 +528,10 @@ class Ctilde(object):
         return(scalch)
 
     def info(self):
+        """ Info (Nf,Nray,shape(y))
         """
-        Info (Nf,Nray,shape(y))
-        """
-        print "Nf   :", self.nfreq
+
+        print "Nfreq  :", self.nfreq
         print "Nray :", self.nray
         print "shape Ctt :", np.shape(self.Ctt.y)
         print "shape Ctp :", np.shape(self.Ctp.y)
@@ -528,21 +542,22 @@ class Ctilde(object):
 def VCg2VCl(VCg, Tt, Tr):
     """ global reference frame to local reference frame
 
-        Parameters
-        ----------
-        VCg : VectChannel global
-        Tt  : Tx rotation matrix
-        Tr  : Rx rotation matrix
+    Parameters
+    ----------
 
-        Returns
-        -------
-        VCl : VectChannel (local)
+    VCg : VectChannel global
+    Tt  : Tx rotation matrix
+    Tr  : Rx rotation matrix
+
+    Returns
+    -------
+    VCl : VectChannel (local)
 
     """
     import copy
 
     VCl = copy.deepcopy(VCg)
-    freq = VCl.freq
+    freq = VCl.fGHz
     Rt, tangl = BTB_tx(VCg.tang, Tt)
     Rr, rangl = BTB_rx(VCg.rang, Tr)
 
@@ -577,10 +592,10 @@ def VCg2VCl(VCg, Tt, Tr):
     Ctpl = t00 * r0 + t01 * r1
     Cppl = t10 * r0 + t11 * r1
 
-    VCl.Ctt = bs.FUsignal(freq, Cttl)
-    VCl.Ctp = bs.FUsignal(freq, Ctpl)
-    VCl.Cpt = bs.FUsignal(freq, Cptl)
-    VCl.Cpp = bs.FUsignal(freq, Cppl)
+    VCl.Ctt = bs.FUsignal(fGHz, Cttl)
+    VCl.Ctp = bs.FUsignal(fGHz, Ctpl)
+    VCl.Cpt = bs.FUsignal(fGHz, Cptl)
+    VCl.Cpp = bs.FUsignal(fGHz, Cppl)
 
     return VCl
 
@@ -588,8 +603,8 @@ def VCg2VCl(VCg, Tt, Tr):
 class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel 
 
-    The transmission channel TChannel is obtained from combination of the propagation
-    channel with the antenna transfer functions from both transmitter and
+    The transmission channel TChannel is obtained through combination of the propagation
+    channel and the antenna transfer functions from both transmitter and
     receiver.
 
     Members
@@ -619,6 +634,14 @@ class Tchannel(bs.FUDAsignal):
         """
 
         bs.FUDAsignal.__init__(self,fGHz,alpha,tau,dod,doa)
+    
+    def __repr__(self):
+        st =''
+        st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
+        st = st + 'shape  :'+str(np.shape(self.y))+"\n"
+        st = st + 'tau :'+str(min(self.tau0))+' '+str(max(self.tau0))+"\n"
+        st = st + 'dist :'+str(min(0.3*self.tau0))+' '+str(max(0.3*self.tau0))+"\n"
+        return(st)
 
     def info(self):
         """ display information
@@ -674,6 +697,7 @@ class Tchannel(bs.FUDAsignal):
 
         Notes
         -----
+
         The overall received signal is built in time domain
         w is apply on the overall CIR
 
@@ -704,10 +728,12 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
+
         Wgam : waveform including gamma factor
 
         Returns
         -------
+
         ri  : TUDsignal
 
             impulse response for each ray separately
@@ -729,9 +755,8 @@ class Tchannel(bs.FUDAsignal):
         # return a FUDsignal
         #
         Y = self.apply(Wgam)
-        #ri      = Y.ft1(500,0)
-        # Le fftshift est activé
         ri = Y.ft1(500, 1)
+
         return(ri)
 
     def applywavA(self, Wgam, Tw):
@@ -858,236 +883,5 @@ class Tchannel(bs.FUDAsignal):
         # on s'arrange que Hk.x[0]==Wk.x[0]
 
 if __name__ == "__main__":
-    #import tkFileDialog
-    #FD = tkFileDialog
+    plt.ion()
     doctest.testmod()
-############################
-## test Channel, Simulation, Antenna
-############################
-#
-#     #################################
-#     # initialisation de la simulation
-#     #################################
-#
-#     #
-#     # choix des antennes
-#     #
-#     fileantt = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
-#     ("All", "*")],
-#      title="Please choose an antenna file",
-#      initialdir=antdir)
-#
-#     fileantr = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
-#     ("All", "*")],
-#      title="Please choose an antenna file",
-#      initialdir=antdir)
-#
-#     #
-#     # creation d'objet Simulation
-#     #
-#     S=Simulation(fileantTx=_fileantt,fileantRx=_fileantr)
-#
-#     #
-#     # choix du fichier field
-#     #
-#     filefield = FD.askopenfilename(filetypes = [("Fichiers field","*.field"),
-#      ("All", "*")],
-#      title="Please choose a field file",
-#      initialdir=tuddir)
-#
-#     filetauk = filefield.replace('.field','.tauk')
-#     filetang = filefield.replace('.field','.tang')
-#     filerang = filefield.replace('.field','.rang')
-#     filefreq = filefield.replace('.field','.freq')
-#     # il faudra recuperer aussi filetra
-#
-#      S.filefield.append(getshort(filefield))
-#     S.filetauk.append(getshort(filetauk))
-#     S.filetang.append(getshort(filetang))
-#     S.filerang.append(getshort(filerang))
-#     #S.filetra.append(getshort(filetra))
-
-#     fichsimulin = FD.askopenfilename(filetypes = [("Fichiers simul ","*.simul"),
-#          ("All", "*")],
-#          title="Please choose a simulation file",
-#          initialdir=simuldir)
-##          parent=root)
-#     _fichsimulin = getshort(fichsimulin)
-#     S = Simulation(_fichsimulin)
-#
-#     #
-#     # Frequency range for Siradel measurements
-#     #
-#     f     = arange(2,11.05,0.05)
-#
-#     #################################
-#     # definition de la forme d'onde a l'emission
-#     #################################
-#     Tw = 10
-#     x  = arange(-Tw,Tw,0.005)
-#     w  = EnImpulse(x,5,3,10)
-#
-#     W = w.ft()
-#     f = W.x
-#     ygamma = -1j*0.3/(4*np.pi*f)
-#     gamm  = FUsignal(f,ygamma)
-#     Wgam  = W*gamm
-#     wgam  = Wgam.ift()
-#
-###       #
-###       # plot waveform
-###       #
-###       figure()
-###       plot(w.x,w.y,linewidth=3)
-###       ylabel('(V)',fontsize=28)
-###       xlabel('retard(ns)',fontsize=28)
-###       xticks(fontsize=26)
-###       yticks(fontsize=26)
-###       title('w(t)',fontsize=30)
-###       grid(linewidth=2)
-###       show()
-##
-##      ################################
-##      # recuperation du canal de propagation simule
-##      ################################
-##
-##      VC   = VectChannel(S,0,False)
-##      #
-##      # If file from Siradel
-##      #
-##      #VC   = VectChannel(S,0,True)
-##
-##      ################################
-##      # calcul du canal de transmission
-##      ################################
-##
-##      #
-##      # avec antennes omnis
-##      #
-##      SC      = VC.vec2scal()
-##
-##      #
-##      # avec antennes simulees
-##      #
-##      VCA     = VC
-##      SCA     = VCA.vec2scalA(S.tx.A,S.rx.A)
-##
-##      ################################
-##      # calcul du signal recu
-##      ################################
-##
-##      #
-##      # avec antennes omnis
-##      #
-##      r  = SC.applywavB(Wgam)
-##
-##      #
-##      # avec antennes simulees
-##      #
-##      rA = SCA.applywavB(Wgam)
-##
-##      ################################
-##      # visualisation de resultats
-##      ################################
-##
-##      figure()
-##      # pour monocone on a un gain max de 8.59**2
-##      #plot(r.x,r.y*70,'b-')
-##      # pour dipole on a un gain max de 1.68**2
-##      #plot(r.x,r.y*2.8,'b-')
-##
-##      #
-##      # calcul de la valeur maximale du gain d'antenne
-##      #
-##
-##      gain_At=np.sqrt((abs(SCA.Ftt.y))**2+(abs(SCA.Ftp.y))**2)
-##      gain_Ar=np.sqrt((abs(SCA.Frt.y))**2+(abs(SCA.Frp.y))**2)
-##
-##      G=gain_At.max()*gain_Ar.max()
-##
-##      figure()
-##      plot(r.x,r.y*G,'b-')
-##      plot(rA.x,rA.y,'r-')
-##      ax=gca()
-##      ax.ticklabel_format(style='sci',axis='y')
-##      ax.yaxis.major.formatter.set_powerlimits((0,0))
-##      xlabel('retard (ns)',fontsize=28)
-##      ylabel('(V)',fontsize=28)
-##      xticks(fontsize=24)
-##      yticks(fontsize=24)
-##      title('r(t)',fontsize=30)
-##      show()
-##
-###       #legend(('antennes omnis','antennes simulees'))
-###       show()
-##
-################################
-### test changement d'antennes
-################################
-##      #S.tx.gantenna()
-##      #S.rx.gantenna()
-##
-##      #SCA   = VCA.vec2scalA(S.tx.A,S.rx.A)
-##      #rA = SCA.applywavB(Wgam)
-##
-##      #gain_At=np.sqrt((abs(SCA.Ftt.y))**2+(abs(SCA.Ftp.y))**2)
-##      #gain_Ar=np.sqrt((abs(SCA.Frt.y))**2+(abs(SCA.Frp.y))**2)
-##
-##      #G=gain_At.max()*gain_Ar.max()
-##
-##      #figure()
-##      #plot(r.x,r.y*G,'b-')
-##      #plot(rA.x,rA.y,'r-')
-##      #xlabel('retard (ns)',fontsize=28)
-##      #ylabel('(V)',fontsize=28)
-##      #xticks(fontsize=24)
-##      #yticks(fontsize=24)
-##      #title('r(t)',fontsize=30)
-##
-##      #legend(('ideale','dipole'))
-##      #show()
-##
-##
-#
-###############################
-## test passage Rg -> Rl
-###############################
-#     itx=0
-#     irx=0
-#     VCg = VectChannel(S,itx,irx,False)
-#     alpha = np.pi*rand()
-#     beta  = np.pi*rand()
-#     gamma = np.pi*rand()
-#     Ta = MEulerAngle(alpha,beta,gamma)
-#     alpha = np.pi*rand()
-#     beta  = np.pi*rand()
-#     gamma = np.pi*rand()
-#     Tb = MEulerAngle(alpha,beta,gamma)
-#
-#     VCl=VCg2VCl(VCg,Ta,Tb)
-#
-#     SCl  = VCl.vec2scal()
-#
-#     VClA  = VCl
-#     SClA  = VClA.vec2scalA(S.tx.A,S.rx.A)
-#
-#     rl = SCl.applywavB(Wgam)
-#     rlA = SClA.applywavB(Wgam)
-#
-#     gain_At=np.sqrt((abs(SClA.Ftt.y))**2+(abs(SClA.Ftp.y))**2)
-#     gain_Ar=np.sqrt((abs(SClA.Frt.y))**2+(abs(SClA.Frp.y))**2)
-#     G=gain_At.max()*gain_Ar.max()
-#
-#     figure()
-#     plot(rl.x,rl.y*G,'b-')
-#     plot(rlA.x,rlA.y,'r-')
-#     ax=gca()
-#     ax.ticklabel_format(style='sci',axis='y')
-#     ax.yaxis.major.formatter.set_powerlimits((0,0))
-#     xlabel('retard (ns)',fontsize=28)
-#     ylabel('(V)',fontsize=28)
-#     xticks(fontsize=24)
-#     yticks(fontsize=24)
-#     title('r(t)',fontsize=30)
-#     show()
-#

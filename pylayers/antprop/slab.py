@@ -10,7 +10,7 @@ This module contains the following classes :
     + Slab(dict)
     + SlabDB(dict)
 
-This module exploits numpy broadcasting mecanism :
+This module exploits heavily numpy broadcasting mechanism :
 
     nf : axis = 0   frequency axis
     nt : axis = 1   angular axis
@@ -47,6 +47,7 @@ class Interface(object):
     """
     def __init__(self, fGHz=np.array([2.4]), theta=np.array([[0.0 + 0 * 1j]]), name=''):
         """
+
         fGHz  :
             frequency in GHz (default 2.4)
         theta :
@@ -60,14 +61,19 @@ class Interface(object):
             theta = theta.reshape(1, len(theta))
         self.nf = len(fGHz)
         self.nt = np.shape(theta)[1]
+        # f x 1
         self.fGHz = fGHz.reshape(self.nf, 1)
-        #self.theta = np.outer(np.ones(nf),theta).astype('complex')
+        # 1 x q
+        self.thi = theta
         self.theta = theta
         #
-        # Initialize Io and Ip  (nf,nt,2,2)
+        # Io : f x q x 2 x 2
+        # Ip : f x q x 2 x 2
         #
         self.Ip = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
+
         self.Io = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
+
         self.name = name
 
     def RT(self, metalic=False,RT='RT'):
@@ -80,8 +86,8 @@ class Interface(object):
 
         Notes
         -----
-        R : np.array   (nf , nt , 2, 2)
-        T : np.array   (nf , nt , 2, 2)
+        R : np.array   (f , th , 2, 2)
+        T : np.array   (f , th , 2, 2)
         """
         sh = np.shape(self.Io)
         nf = sh[0]
@@ -162,16 +168,55 @@ class Interface(object):
         plt.ylabel('f (GHz)')
         plt.show()
 
+    def tocolor(self,fGHz):
+        """
+
+        Parameters
+        ----------
+
+        fGHz : np.array
+
+
+        """
+        # nf x nt x 2 x 2 
+        modTo = abs(self.T[:, 0, 0, 0])
+        modTp = abs(self.T[:, 0, 1, 1])
+        N = len(fGHz)
+        if N>3:
+            M = N/3
+            ared = (sum(modTo[0:M])+sum(modTp[0:M]))/(2*M)
+            agreen = (sum(modTo[M:2*M])+sum(modTp[M:2*M]))/(2*M)
+            ablue = (sum(modTo[2*M:])+sum(modTp[2*M:]))/(2*(N-2*M))
+            vred = hex(int(np.floor(ared*255))).replace('0x','')
+            vgreen = hex(int(np.floor(agreen*255))).replace('0x','')
+            vblue = hex(int(np.floor(ablue*255))).replace('0x','')
+            if len(vred)==1:
+                vred = '0'+vred
+            if len(vgreen)==1:
+                vgreen = '0'+vgreen
+            if len(vblue)==1:
+                vblue = '0'+vblue
+            col = '#'+vred+vgreen+vblue
+        else:
+            alpha = (sum(modTo)+sum(modTp))/(2*N)
+            val = hex(int(np.floor(alpha*255))).replace('0x','')
+            col = '#'+val+val+val
+        return(col)    
+
+
     def loss0(self, fGHz, display=False):
         """ Evaluate Loss at normal incidence theta=0
 
         Parameters
         ----------
+
         fGHz    : np.array  (nf,1)
         display : boolean
                 default (False)
+
         Returns
         -------
+
         Lo : loss in dB polarization orthogonal
         Lp : loss in dB polarization parallel
 
@@ -204,6 +249,7 @@ class Interface(object):
 
         Returns
         -------
+
         Lo : np.array
         Lp : np.array
 
@@ -324,7 +370,6 @@ class Interface(object):
         rtd = 180 / np.pi
 
         plt.subplot(211)
-
         modRo = abs(self.R[:, :, 0, 0])
         modRp = abs(self.R[:, :, 1, 1])
         modTo = abs(self.T[:, :, 0, 0])
@@ -336,17 +381,25 @@ class Interface(object):
         angleTp = np.angle(self.T[:, :, 1, 1])
 
         if display == 'phase':
-            plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
-            plt.plot(self.theta[0, :] * rtd, angleRp[k, :] * rtd, 'r')
+            #plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
+            #plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
+            plt.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
+            plt.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
         else:
             if dB:
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modRo[k, :]), 'b')
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modRp[k, :]), 'r')
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modRo[k, :]), 'b')
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modRp[k, :]), 'r')
             else:
-                plt.plot(self.theta[0, :] * rtd, modRo[k, :], 'b')
-                plt.plot(self.theta[0, :] * rtd, modRp[k, :], 'r')
+                #plt.plot(self.theta[0, :] * rtd, modRo[k, :], 'b')
+                #plt.plot(self.theta[0, :] * rtd, modRp[k, :], 'r')
+                plt.plot(self.thi[0,:] * rtd, modRo[k, :], 'b')
+                plt.plot(self.thi[0,:] * rtd, modRp[k, :], 'r')
         plt.legend(('R _|_', 'R //'), loc='upper left')
         plt.xlabel('theta (degrees)')
         #nom = self.m1.name+'|'+self.m2.name+' '+str(f[k])+'GHz'
@@ -357,17 +410,25 @@ class Interface(object):
             plt.title(self.name + nom)
         plt.subplot(212)
         if display == 'phase':
-            plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, 'b')
-            plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, 'r')
+            plt.plot(self.thi[0,:] * rtd, angleTo[k, :] * rtd, 'b')
+            plt.plot(self.thi[0,:] * rtd, angleTp[k, :] * rtd, 'r')
+            #plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, 'b')
+            #plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, 'r')
         else:
             if dB:
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modTo[k, :]), 'b')
+                #plt.plot(self.theta[0, :] * rtd, 20 *
+                #         np.log10(modTp[k, :]), 'r')
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modTo[k, :]), 'b')
-                plt.plot(self.theta[0, :] * rtd, 20 *
+                plt.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modTp[k, :]), 'r')
             else:
-                plt.plot(self.theta[0, :] * rtd, modTo[k, :], 'b')
-                plt.plot(self.theta[0, :] * rtd, modTp[k, :], 'r')
+                #plt.plot(self.theta[0, :] * rtd, modTo[k, :], 'b')
+                #plt.plot(self.theta[0, :] * rtd, modTp[k, :], 'r')
+                plt.plot(self.thi[0,:] * rtd, modTo[k, :], 'b')
+                plt.plot(self.thi[0,:] * rtd, modTp[k, :], 'r')
         plt.legend(('T _|_', 'T //'), loc='upper right')
         plt.xlabel('theta (degrees)')
         plt.show()
@@ -442,9 +503,10 @@ class MatInterface(Interface):
         n2 = np.sqrt(epr2 / mur2)
 
         ct = np.cos(self.theta)
-
-        nT1p = n1 / ct         # //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
-        nT1o = n1 * ct         # _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        # //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        nT1p = n1 / ct
+        # _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        nT1o = n1 * ct
 
         #print np.shape(n1)
         #print np.shape(ct)
@@ -571,7 +633,7 @@ class Mat(dict):
         return(epsc)
 
     def info(self):
-        """ Display material properties
+        """ display material properties
         """
 
         print "---------------------------------"
@@ -1049,11 +1111,30 @@ class Slab(dict, Interface):
         self['nbmat'] = 1
         self['imat'] = (0, 0, 0, 0, 0, 0, 0, 0)
         self['thickness'] = (10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        self['lthick'] = [0.1]
         self['color'] = 'black'
         self['linewidth'] = 1.0
         self.mat = mat
         self['evaluated'] = False
 
+    def __repr__(self):
+        if self['evaluated']:
+            st = 'fGHz :  '+str(self.fGHz[0,:]) +':'+str(self.fGHz[-1,:]) +':'+str(len(self.fGHz[:,0]))+"\n"
+            st = st+ 'theta : '+str(self.theta[:,0])+':'+str(self.theta[:,-1])+':'+str(len(self.theta[0,:]))+"\n"
+            st = st + '| '
+        else:
+            st = '| '
+        for k in range(len(self['lmatname'])):
+            st = st + self['lmatname'][k]+' | '
+        st = st+'\n|'    
+        for k in range(len(self['lmatname'])):
+            ntick = int(np.ceil(self['lthick'][k]/0.01))
+            for l in range(ntick):
+                st = st+'-'
+            st = st +'|' 
+        st = st+'\n'
+        return(st)
+                
     def info(self):
         """ Display Slab Info
 
@@ -1078,12 +1159,12 @@ class Slab(dict, Interface):
 
         """
         print "------------"
-        print "name : ", self.name
-        print "nbmat : ", self.nbmat
+        print "name : ", self
+        print "nbmat : ", len(self['lmatname'])
         chaine = "[ "
-        for i in range(self.nbmat):
-            index_mat = self.imat[i]
-            name_mat = self.mat.di[index_mat]
+        for i in range(len(self['lmatname'])):
+            index_mat = self['imat'][i]
+            name_mat = self['mat'][index_mat]
             self.mat[name_mat].info()
             if self['evaluated']:
                 epsrc = self.mat[name_mat].epsc(self.fGHz[0])
@@ -1091,11 +1172,11 @@ class Slab(dict, Interface):
             chaine = chaine + name_mat + '   '
             chaine = chaine + ']'
             print chaine
-            print "index : ", self.index
-            print "imat   : ", self.imat
-            print "thickness (m) : ", self.thickness
-            print "color : ", self.color
-            print "linewidth :", self.linewidth
+            print "index : ", self['index']
+            print "imat   : ", self['imat']
+            print "thickness (m) : ", self['thickness']
+            print "color : ", self['color']
+            print "linewidth :", self['linewidth']
             if self['evaluated']:
                 print "---------------------"
                 nf = len(self.fGHz)
@@ -1115,6 +1196,7 @@ class Slab(dict, Interface):
 
         Warnings
         --------
+
         In .slab file thickness variable is expressed in cm
 
         for lthick distance  are expressed in meters
@@ -1154,6 +1236,8 @@ class Slab(dict, Interface):
             fGHz = np.array([fGHz])
         if not isinstance(theta, np.ndarray):
             theta = np.array([theta])
+        self.theta = theta
+        self.fGHz = fGHz
 
         nf = len(fGHz)
         nt = len(theta)
@@ -1187,9 +1271,6 @@ class Slab(dict, Interface):
         Cp[:, :, 0, 0] = 1
         Cp[:, :, 1, 1] = 1
 #        _Cp = np.eye(2,dtype=complex)
-
-
-
         #
         # Boucle sur les n-1 matériaux
         #      lmat[0] est toujours l'air  (à modifier)
@@ -1207,24 +1288,24 @@ class Slab(dict, Interface):
                 Io = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Io[:, :, 0, 1] = -1
                 Io[:, :, 1, 0] = -1
-#                _Io=np.eye(2,dtype=complex)+np.eye(2)-1
+#           _Io=np.eye(2,dtype=complex)+np.eye(2)-1
                 Ip = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Ip[:, :, 0, 1] = -1
                 Ip[:, :, 1, 0] = -1
-#                _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
+#           _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
             else:
                 if i == self.n - 2:
                     II = MatInterface([ml, mr], 0, fGHz, theta)
                 else:
                     II = MatInterface([ml, mr], self['lthick'][i], fGHz, theta)
             #
-            # chain the angle
+            # chains the angle
             #
                 theta = II.theta
             #
-            # theta depends on frequency nf x nt
+            # theta depends on frequency f x th
             #
-                #THETA = II.THETA
+            # THETA = II.THETA
 
                 Io = II.Io
                 Ip = II.Ip
@@ -1244,11 +1325,11 @@ class Slab(dict, Interface):
             # Using Einstein summation instead of a for loop increases speed by an order of magnitude
             #
 
-#            Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
-#            Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
+            #    Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
+            #    Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
 
 
-            ### array broadcasing version , new increased spped in regard of einsum
+            ### array broadcasing version , new increased speed in regard of einsum
             Co=np.sum(Co[...,:,:,np.newaxis]*Io[...,np.newaxis,:,:], axis=3)
             Cp=np.sum(Cp[...,:,:,np.newaxis]*Ip[...,np.newaxis,:,:], axis=3)
 
@@ -1336,18 +1417,41 @@ class Slab(dict, Interface):
         delayp = np.diff(ap)/(2*np.pi*df)
         return (delayo,delayp)
 
+    def tocolor(self, fGHz=np.array([2.4])):
+        """
+        
+        Parameters
+        ----------
+
+        fGHz : np.array
+        
+        Examples
+        --------
+
+        >>> sl  = SlabDB('matDB.ini','slabDB.ini')
+        >>> s1  = sl['PARTITION']
+        >>> col24 = s1.tocolor(np.array([2.4]))
+        >>> fGHz = np.arange(0.5,8,100)
+        >>> col8 = s1.tocolor(fGHz)
+
+        """
+
+        self.ev(fGHz, theta=np.array([0.0]),compensate=True)
+        color = Interface.tocolor(self, fGHz)
+        return(color)
 
     def loss0(self, fGHz=2.4):
-        """
-        Calculate loss for theta=0 at frequency (f)
+        """ calculate loss for theta=0 at frequency (fGHz)
 
         Parameters
         ----------
+
         fGHz : frequency (GHz)  np.array()
             default 2.4
 
         Returns
         -------
+
         Lo  : np.array
             Loss at 0 deg polarization ortho
         Lp :  np.array
@@ -1460,6 +1564,7 @@ class SlabDB(dict):
 
     Attributes
     ----------
+
         DB : slab dictionnary
 
     """
@@ -1468,6 +1573,7 @@ class SlabDB(dict):
 
         Parameters
         ----------
+
         filemat : string
         fileslab : string
 
@@ -2008,4 +2114,8 @@ def calsig(cval, fGHz, typ='epsr'):
 
 
 if (__name__ == "__main__"):
+    plt.ion()
     doctest.testmod()
+    sl = SlabDB('matDB.ini','slabDB.ini')
+    s1 = sl['PILLAR']
+    fGHz=np.arange(0.6,5.0,0.1)
