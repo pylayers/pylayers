@@ -16,7 +16,7 @@ develop-eggs
 .installed.cfg
 lib
 lib64
-
+pylayers/gis/osmparser.py
 # Installer logs
 pip-log.txt
 
