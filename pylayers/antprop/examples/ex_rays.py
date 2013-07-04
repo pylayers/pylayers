@@ -5,7 +5,7 @@ import pylayers.signal.bsignal as bs
 import pylayers.signal.waveform as wvf 
 from pylayers.simul.simulem import *
 import matplotlib.pyplot as plt 
-
+plt.ion()
 S = Simul()
 filestr = 'defstr3'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
@@ -31,7 +31,7 @@ r3d.locbas(S.L)
 r3d.fillinter(S.L)
 pg = np.sum(S.L.pt,axis=1)/np.shape(S.L.pt)[1]
 pg = array([pg[0],pg[1],0]).reshape(3,1)
-r3d.show3(strucname='defstr3',pg=pg)
+#r3d.show3(strucname='defstr3',pg=pg)
 fGHz=np.arange(2,11,0.5)
 wav = wvf.Waveform(fcGHz=5,bandGHz=3)
 r3d.fillinter(S.L,append=True)
@@ -66,3 +66,16 @@ ax3 = fig.add_subplot(313,sharey=ax1)
 cirmetal.plot()
 plt.title("['METAL','AIR','WOOD']")
 plt.show()
+
+fig2=plt.figure()
+cirair.plot(dB=True,col='b')
+cirwood.plot(dB=True,col='k')
+cirmetal.plot(dB=True,col='r')
+plt.axis([0,100,-150,-30])
+plt.legend(['air','wood','metal'])
+plt.xlabel('delay (ns)')
+plt.ylabel('level (dB)')
+plt.title('A simple illustration of shadowing effect')
+#fig3=plt.figure()
+#scmetal.plot3d()
+#plt.show()

@@ -2135,6 +2135,23 @@ class Layout(object):
         self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1])) 
 
 
+    def chgmss(self,ns,ss_name=[],ss_z=[]):
+        """
+
+        Parameters
+        ----------
+
+        """
+        if ns in self.Gs.node.keys():
+            if self.Gs.node[ns].has_key('ss_name'):
+                if ss_name<>[]:
+                    self.Gs.node[ns]['ss_name']=ss_name
+                if ss_z<>[]:
+                    self.Gs.node[ns]['ss_z']=ss_z
+
+                # update Layout information    
+                self.g2npy()
+
     def edit_segment(self, e1):
         """ edit segment
 
