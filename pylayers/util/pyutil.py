@@ -10,7 +10,6 @@ from   bitstring  import BitString
 import datetime as dat
 from pylayers.util.project import *
 import shutil
-import pdb
 import sys
 import zipfile
 #
