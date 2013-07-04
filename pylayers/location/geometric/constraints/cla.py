@@ -195,7 +195,7 @@ class CLA(object):
         self.visible=[c.visible for c in self.c]
         self.usable=[c.usable for c in self.c]
 
-    def compute(self,pe=True):
+    def compute(self,pe=True,mergeRSS=False,refineRSS=True):
         """
         Compute the cla to estimate the postion
     
@@ -210,8 +210,8 @@ class CLA(object):
                 True if the position estimation has been performed.
 
         """
-        self.merge2()
-        self.refine(self.Nc)
+        self.merge2(RSS=mergeRSS)
+        self.refine(self.Nc,RSS=refineRSS)
         self.update()
         if (sum(self.usable) >= 3) and (pe == True):
             self.estpos2()
@@ -223,10 +223,11 @@ class CLA(object):
 
 
 
-    def compute_amb(self,pe=True):
-        self.merge2()
-        self.refine(self.Nc)
-        self.estpos2()
+    def compute_amb(self,pe=True,HT=True):
+
+        self.merge2(RSS=False)
+        self.refine(self.Nc,RSS=False)
+        self.estpos_amb(HT=True)
         self.Nc=len(np.where(self.usable)[0])
         return True
 
@@ -537,7 +538,7 @@ class CLA(object):
             AB  = np.unique(np.hstack((AB,ABt)))
             return (EB, AB)
 
-    def refine(self, l, NBOXMAX=50, VOLMIN=0.001):
+    def refine(self, l, NBOXMAX=50, VOLMIN=0.001,RSS=True):
 
         """refine the l layer of the CLA
 
@@ -577,7 +578,7 @@ class CLA(object):
 
         lv = B.bd2coord()
 
-        EB, AB = self.valid_v(lv, l)
+        EB, AB = self.valid_v(lv, l,RSS=RSS)
         del lv
         self.erronous.append(self.erro)
 
@@ -1118,7 +1119,7 @@ class CLA(object):
 
 
 
-    def estpos_amb(self, l=-1, amb=False):
+    def estpos_amb(self, l=-1, amb=False,HT=False):
         """ Position estimation ambiguity
         TEST FUNCTION
        estimate position from the enclosed or/and ambibuous boxes for situations 
@@ -1131,6 +1132,8 @@ class CLA(object):
 
                 l       : Layer of the estimation. If -1 estimation is made on the highest available layer
                 amb     : Use ambiguous boxes (if available) to perform the position estimation. default = False
+                HT : boolean to use or not hypothesis technique to sove amibuity
+
 
         :Returns :
                 Nothing but fills self.pe with an array
@@ -1181,8 +1184,12 @@ class CLA(object):
 #                       self.saveP[i]=P
         self.saveP = poids
 #                       PP.append(P*self.dlayer[l][dlindx].box[i].ctr)
+
+
+
 ##########################################
         self.pecluster=[]
+        pdb.set_trace()
         if clust != []:
 
             print 'cluster'
@@ -1225,6 +1232,10 @@ class CLA(object):
                         mps = mp
                         estclu = clusters
 
+
+
+
+
                 if clust_vol != 0:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
@@ -1242,68 +1253,73 @@ class CLA(object):
 #                self.pecluster.append(np.mean(self.dlayer[2][0].ctr[cl],axis=0))
 #            pdb.set_trace()
 
-            try:
-                M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)
-                      ) / (10. * self.c[0].model['RSSnp']))[0]
-                LL = np.log(dd[1] / dd[0]) * (1 + np.log(
-                    dd[0] * dd[1]) - 2 * M)
+            if HT:
+                print "enter in HT processing"
+                try:
+                    # for now, it is supposed that all RSS share the same model
+                    icr=np.where(self.c.type=='RSS')[0]
+                    M = (((-self.c[icr[0]].model['PL0'] - self.c[icr[0]].value) * np.log(10)
+                          ) / (10. * self.c[icr[0]].model['RSSnp']))[0]
+                    LL = np.log(dd[1] / dd[0]) * (1 + np.log(
+                        dd[0] * dd[1]) - 2 * M)
 
-                if LL > 0:
-#                                       vmax = np.max(poids[np.unique(lclust[0])])
-#                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
-#                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[0])[peindx]]
+                    if LL > 0:
+    #                                       vmax = np.max(poids[np.unique(lclust[0])])
+    #                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
+    #                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[0])[peindx]]
 
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[0])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[0])])
-                    pestdmin = np.min(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[0])])
-                    self.pestd = pestdmax - pestdmin
-                else:
-#                                       vmax = np.max(poids[np.unique(lclust[1])])
-#                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
-#                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[1])[peindx]]
-                    
+                        #if LL>0  cluster 0 is selctionned and tits centroids is chosen as position estimation
 
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[1])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[1])])
-                    pestdmin = np.min(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[1])])
-                    self.pestd = pestdmax - pestdmin
+                        self.pe = np.mean(self.dlayer[l][dlindx].ctr[
+                            np.unique(lclust[0])], axis=0)
+                        print "HT processing done"
+                        pestdmax = np.max(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[0])])
+                        pestdmin = np.min(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[0])])
+                        self.pestd = pestdmax - pestdmin
+
+
+                    else:
+
+
+                        #if LL<0  cluster 1 is selctionned and tits centroids is chosen as position estimation
+
+                        self.pe = np.mean(self.dlayer[l][dlindx].ctr[
+                            np.unique(lclust[1])], axis=0)
+                        pestdmax = np.max(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[1])])
+                        pestdmin = np.min(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[1])])
+                        self.pestd = pestdmax - pestdmin
 
                     for cl in lclust:
                         self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
                         np.unique(cl)], axis=0))
 
-            except:
+                except:
+                    print "!!!!! HT FAIL !!!!!!!"
 
-                if np.sum(poids) > 0.:
-                    self.pe = np.sum(poids * self.dlayer[l][dlindx]
-                        .ctr.T, axis=1) / np.sum(poids)
-                else:
-                    self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
-                        len(self.dlayer[l][dlindx].ctr)
-                pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
-                pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
-                self.pestd = pestdmax - pestdmin
-                print 'out cluster!!!!!!!!!!!!!!!!!!!'
-                for cl in lclust:	
-                    self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
-                    np.unique(cl)], axis=0))
-                #self.pe = np.sum(self.dlayer[l][dlindx].ctr,axis=0)/len(self.dlayer[l][dlindx].ctr)
-#                       try:
-#                               print 'clust vol',clust_vol
-#                               self.pe = np.mean(self.dlayer[l][dlindx].ctr[estclu],axis=0)
-#
-#                       except:
-#                               pdb.set_trace()
-#
-#                               PP=self.saveP[clust[estclu]/2]*self.dlayer[l][dlindx].ctr[clust[estclu]/2].T
-#                               self.pe = np.sum(PP.T,axis=0)/np.sum(self.saveP[clust[estclu]/2])
-#                               pdb.set_trace()
+                    if np.sum(poids) > 0.:
+                        self.pe = np.sum(poids * self.dlayer[l][dlindx]
+                            .ctr.T, axis=1) / np.sum(poids)
+                    else:
+                        self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
+                            len(self.dlayer[l][dlindx].ctr)
+                    pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
+                    pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
+                    self.pestd = pestdmax - pestdmin
+
+ 
+
+            # store the centroid of clusters into self.peclsuter
+            for cl in lclust:	
+                self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
+                np.unique(cl)], axis=0))
+
+
+
+        # if not cluster
         else:
             if np.sum(poids) > 0.:
                 self.pe = np.sum(poids * self.dlayer[l][
