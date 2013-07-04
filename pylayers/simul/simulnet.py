@@ -80,7 +80,8 @@ class Simul(SimulationRT):
         SimulationRT.__init__(self)
         self.initialize()
         self.config = ConfigParser.ConfigParser()
-        self.config.read(pyu.getlong('simulnet.ini','ini'))
+        filename = pyu.getlong('simulnet.ini','ini')
+        self.config.read(filename)
         self.sim_opt = dict(self.config.items('Simulation'))
         self.lay_opt = dict(self.config.items('Layout'))
         self.meca_opt = dict(self.config.items('Mechanics'))
@@ -93,6 +94,7 @@ class Simul(SimulationRT):
         if str2bool(self.net_opt['ipython_nb_show']):
             self.verbose = False
         self.roomlist=[]
+
         self.create()
 
     def create_layout(self):
@@ -121,11 +123,11 @@ class Simul(SimulationRT):
 
         try:
             self.L.dumpr()
-            print 'Layout graphs are loaded from ',basename,'/struc'
+            print 'Layout graphs are loaded from ',basename,'/struc/ini'
         except:
         #self.L.sl = sl
         #self.L.loadGr(G1)
-            print 'This is the first time your use this layout file.\
+            print 'This is the first time the layout file is used\
             Layout graphs are curently being built, it may take few minutes.'
             self.L.build()     
             self.L.dumpw()
@@ -243,7 +245,8 @@ class Simul(SimulationRT):
         self.activate(self.visu, self.visu.execute(), 0.0)
 
     def create(self):
-        """ Create the simulation, to be ready to run
+        """ Create the simulation 
+            This method is called at the end of __init__
 
         """
 
@@ -253,6 +256,7 @@ class Simul(SimulationRT):
                 os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
                 '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
 
+        ## TODO supprimer la ref en dur 
         if 'txt' in self.save_opt['save']:
             pyu.writeDetails(self)
             if os.path.isfile(basename+'/output/Nodes.txt'):
@@ -267,9 +271,6 @@ class Simul(SimulationRT):
                         except:
                             pass
                         
-
-
-
         self.create_layout()
         self.create_EMS()
         self.create_network()

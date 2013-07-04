@@ -7,7 +7,7 @@ from pylayers.simul.simulem import *
 #
 #-------------------------------
 S = Simul()
-
+pdb.set_trace()
 # loading a layout 
 filestr = 'defstr'
 S.layout(filestr+'.str','matDB.ini','slabDB.ini')

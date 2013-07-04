@@ -1,4 +1,4 @@
-    # -*- coding:Utf-8 -*-
+# -*- coding:Utf-8 -*-
 import numpy as np
 import scipy as sp 
 import time 

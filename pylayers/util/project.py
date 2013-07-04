@@ -45,14 +45,16 @@ except:
     os.mkdir(basename+'/figures')
 
 
-
 # Dictionnary which associate PULSRAY environment variable with sub direrories
 # of the project 
 #
 pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
-pstruc['DIRSTRUC'] ='struc'
-pstruc['DIRSTRUC2'] = 'struc'
+pstruc['DIRSTRUC'] ='struc/str'
+pstruc['DIRWRL'] ='struc/wrl'
+pstruc['DIRINI'] ='struc/ini'
+pstruc['DIROSM'] ='struc/osm'
+pstruc['DIRSTRUC2'] = 'struc/str'
 pstruc['DIRFUR'] = 'struc/furnitures'
 pstruc['DIRSLAB'] = 'ini'
 pstruc['DIRSLAB2'] = 'ini'
@@ -115,20 +117,21 @@ for nm in pstruc.keys():
     fd = open(basename+'/project.conf','a')
     fd.write(nm+' '+dirname +'\n')
     fd.close()
+
 #
 # copy files from /data/ini in project directory 
 #
 
-
-dirlist=['ini','struc','struc/furnitures','ant','output','geom']
-for dl in dirlist:
-    filelist = os.listdir(pylayersdir+'/data/' + dl)
-    for fi in filelist:
-        if not os.path.isdir(basename+'/'+dl+'/'+fi):
-            if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
-                pass
-            else:
-                shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+if basename<>pylayersdir+'/data':
+    dirlist=['ini','struc','struc/furnitures','ant','output','geom']
+    for dl in dirlist:
+        filelist = os.listdir(pylayersdir+'/data/' + dl)
+        for fi in filelist:
+            if not os.path.isdir(basename+'/'+dl+'/'+fi):
+                if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
+                    pass
+                else:
+                    shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
 
 
 os.chdir(currentdir)

@@ -9,14 +9,12 @@ import matplotlib.pyplot as plt
 S = Simul()
 filestr = 'defstr3'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
-S.L.Gs.node[9]['ss_name']=['WOOD','AIR','METAL']
+S.L.Gs.node[1]['ss_name']=['WOOD','AIR','METAL']
 S.L.build()
+tx=array([759,1114,1.0])
+rx=array([767,1114,1.5])
 S.tx.clear()
 S.rx.clear()
-tx=array([1,0,1.0])
-rx=array([7,0,1.5])
-#tx=array([763,1120,1.0])
-#rx=array([750,1130,1.5])
 S.tx.point(tx)
 S.rx.point(rx)
 Ctx = S.L.pt2cy(S.tx.position[:,0])
@@ -41,7 +39,7 @@ Cwood=r3d.eval(fGHz)
 scwood=Cwood.prop2tran(a='theta',b='theta')
 cirwood = scwood.applywavB(wav.sfg)
 
-S.L.Gs.node[9]['ss_name']=['METAL','AIR','WOOD']
+S.L.Gs.node[1]['ss_name']=['METAL','AIR','WOOD']
 # graph to numpy 
 print "Layout : g2npy" 
 S.L.g2npy()
@@ -52,7 +50,7 @@ cirmetal = scmetal.applywavB(wav.sfg)
 
 
 
-S.L.Gs.node[9]['ss_name']=['AIR','AIR','WOOD']
+S.L.Gs.node[1]['ss_name']=['AIR','AIR','WOOD']
 # graph to numpy 
 S.L.g2npy()
 r3d.fillinter(S.L,append=True)
