@@ -163,6 +163,91 @@ class RSS(Constraint):
         else:
             return False
 
+
+
+    def valid_v(self, v):
+        """ Test if a liste of a vertexes from a box is compatible with the constraint. Vertexes are obtained thanks to LBoxN.bd2coordinates()
+
+        valid_v(v) : check if a set of vertex are valid for the given constraint
+
+        Returns
+
+        - DDbound ( boxes validity)
+        - TB    for error checker
+
+        DDbound = list[[tested vertex DD>self.cmin],[tested vertex DD<self.cmax]]
+
+
+                                    nb box
+                                <-------------->
+                pmin<cmin       |
+                pmin<cmax       |
+        TB =    pmax<cmin       |
+                pmin<cmax       |
+
+
+
+                                            nb vertexes
+                                        <------------------->
+                        pmin<Dmin       |
+                        pmin<Dmax       |
+        DDbound =       pmax<Dmin       |
+                        pmin<Dmax       |
+
+
+        Parameters
+        ----------
+                v       : np.arrays
+                        a vertexes arrays
+
+        Returns
+        -------
+
+                DDbound : np.array 2 x vertexes containing boolean
+                        Test Lboxn boundaries  with contraint
+                TB      : np.array 4 v vertexes
+                        Multiple test for error checker in Lboxn boundaries  with contraint
+
+
+
+        """
+
+#               DDbound = []
+        p0 = self.p
+        ppb = pow(2, len(p0))
+        nbbox = len(v) / ppb
+
+        DDbound = np.zeros((4, len(v)), dtype='bool')
+        TB = np.zeros((4, nbbox), dtype='bool')
+
+        P = np.outer(np.ones(len(v)), p0)
+        D = P - v
+
+        # calculate all distance from constraint origin to all vertexes
+        DD = np.sqrt(np.sum(D * D, axis=1))
+        # for each box , find the vertex closest to the constraint origin and the farest.
+        T = np.array((np.min(DD.reshape(nbbox, ppb), axis=1),
+                      np.max(DD.reshape(nbbox, ppb), axis=1)))
+
+        TB[0, :] = (T[0, :] <= self.cmin)
+        TB[1, :] = (T[0, :] <= self.cmax)
+        TB[2, :] = (T[1, :] <= self.cmin)
+        TB[3, :] = (T[1, :] <= self.cmax)
+        DDbound[0, :] = (DD >= self.cmin)
+        DDbound[1, :] = (DD <= self.cmax)
+#               DDbound[2,:]=(DD<=self.cmin)
+#               DDbound[3,:]=(DD<=self.cmax)
+
+        return DDbound, TB
+
+
+
+
+
+
+
+
+
     def valid(self, b):
         """check if a box is valid for the given constraint
 
@@ -192,7 +277,7 @@ class RSS(Constraint):
         else:
             return(False)
 
-    def valid_v(self, v):
+    def valid_vold(self, v):
         """
         .. todo:
                 update as TOA valid_v !!
@@ -211,6 +296,12 @@ class RSS(Constraint):
         DD2 = (DD >= self.cmin) & (DD <= self.cmax)
 
         return DD2
+
+
+
+
+
+
 
     def estvol(self):
         """ Constraint Volume estimation
