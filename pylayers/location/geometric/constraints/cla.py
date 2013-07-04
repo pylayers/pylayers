@@ -342,16 +342,20 @@ class CLA(object):
 
                 rename 'setvcw' or trying to merge with 'self.rescale' in order to be homogene with all constraints (TOA,TDOA,RSS)
 
-        :Parameters:
+        Parameters
+        -----------
                 vcw     : a vcw value
-
-        :Returns:
+                RSS : boolean
+                    True : RSS are considered in merging
+                    False : RSS are excluded from merging
+        Returns
+        -------
                 Nothing but update all constraint from the CLA
         """
         for c in self.c:
             c.rescale(vcw)
 
-    def merge2(self, vcw_init=1.0):
+    def merge2(self, vcw_init=1.0, RSS=False):
         """Merge all constraints from the CLA2_reduc2
 
         Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.
@@ -402,6 +406,7 @@ class CLA(object):
                 if 'TOA' not in self.type:
                     onlyRSS = True
 
+
         while (step > 0.05) | (vcw1 == vcwmin):
 
             self.setvcw(vcw1)
@@ -412,17 +417,19 @@ class CLA(object):
             except:
                 pass
 
+        
+
             for c in self.c:                # find intersection between all constraints for the current vcw
                 if (c.type != 'Exclude'):
-#                    if (c.type != 'RSS') or onlyRSS:
-                    if c.usable:
-                        lb = c.lbox
-                        try:
-                            tlb = tlb.intersect(lb)
-                        except:
-                            tlb = lb
-                    else:
-                        pass
+                    if (c.type != 'RSS') or onlyRSS or RSS:
+                        if c.usable:
+                            lb = c.lbox
+                            try:
+                                tlb = tlb.intersect(lb)
+                            except:
+                                tlb = lb
+                        else:
+                            pass
                 else:
                     ex = c
             try:
@@ -433,11 +440,11 @@ class CLA(object):
             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
                 vcw1 = vcw1 + step
                 step = step * 1.2
-                print step, vcw1
+                #print step, vcw1
             else:                           # if the list is not empty (intersection exist) vcw1 is decreased
                 vcw1 = max(vcw1 - step / 2., vcwmin)  # vcw > vcwmin
                 step = step / 4.
-                print step, vcw1
+                #print step, vcw1
         try:
             if (np.diff(tlb.box[0].bd, axis=0)[0][0] == 0) | (np.diff(tlb.box[0].bd, axis=0)[0][1] == 0):
                 self.setvcw(vcw1 + 1.0)
@@ -453,7 +460,7 @@ class CLA(object):
         self.dlayer[Nc] = [LBoxN([]), tlb]
         self.dlayer[Nc][1].volume()
 
-    def valid_v(self, lv, N):
+    def valid_v(self, lv, N, RSS=True):
         """test a vertex list with constraints
 
         Each vertexes from boxes pass into the list are tested to determine if the box is out (OB), ambiguous (AB) or enclosed (EB)
@@ -465,7 +472,9 @@ class CLA(object):
                 self
                 lv : a vertex list from BOXN.octants
                 N  : number of constraints aka layer number
-
+                RSS : boolean
+                    True : RSS constraints are kept as any other constraints for boxes evaluation (ambigous /enclosed)
+                    False : RSS constraints are ignored in boxes evaluation (ambigous /enclosed)
         :Returns:
                 AB : a list with the numerous of Ambiguous Boxes
                 EB : a list with the numerous of Enclosed Boxes
@@ -484,8 +493,12 @@ class CLA(object):
         TT = []
         Ds = []
 
+        if RSS:
+            loop_condition="(c.type != 'Exclude') & (c.usable)"
+        else :
+            loop_condition="(c.type != 'RSS') & (c.type != 'Exclude') & (c.usable)"
         for c in self.c:                # for each constraints
-            if (c.type != 'RSS') & (c.type != 'Exclude') & (c.usable):
+            if eval(loop_condition):
 
                 DDB, TB = c.valid_v(
                     lv)  # .reshape(2,len(lv)/4,pow(2,self.ndim))
@@ -666,38 +679,53 @@ class CLA(object):
         fd = open(filename, "w")
         fd.write("LIST\n")
         par = self.parmsh
-        if par['constr_boxes']:
+        
 
-            if l == -1:
-                if sc == 'all':
-                    for c in self.c:
-                        if c.runable:
-                            c.parmsh['display'] = False
-                            c.parmsh['scene'] = False
-                            fname = c.show3()
-                            fd.write("{<" + fname + ".list}\n")
-
-                else:
-                    try:
-                        for vsc in sc:
-                            if self.c[vsc].runable:
-                                self.c[vsc].parmsh['display'] = False
-                                self.c[vsc].parmsh['scene'] = False
-                                fname = self.c[vsc].show3()
-                                fd.write("{<" + fname + ".list}\n")
-                    except:
-                        if self.c[sc].runable:
-                            self.c[sc].parmsh['display'] = False
-                            self.c[sc].parmsh['scene'] = False
-                            fname = self.c[sc].show3()
-                            fd.write("{<" + fname + ".list}\n")
+        if l == -1:
+            if sc == 'all':
+                for c in self.c:
+                    if c.runable:
+                        c.parmsh['display'] = False
+                        c.parmsh['scene'] = False
+                        # if constrinat boxes has to be displayed 
+                        if par['constr_boxes']:
+                            c.parmsh['boxes'] = False
+                        else :
+                            c.parmsh['boxes'] = True
+                        fname = c.show3()
+                        fd.write("{<" + fname + ".list}\n")
 
             else:
-                if c[l].runable:
-                    self.c[l].parmsh['dispay'] = False
-                    self.c[l].parmsh['scene'] = False
-                    fname = self.c[l].show3()
-                    fd.write("{<" + fname + ".list}\n")
+                try:
+                    for vsc in sc:
+                        if self.c[vsc].runable:
+                            self.c[vsc].parmsh['display'] = False
+                            self.c[vsc].parmsh['scene'] = False
+                        if par['constr_boxes']:
+                            self.c[vsc].parmsh['boxes'] = False
+                        else :
+                            self.c[vsc].parmsh['boxes'] = True
+                            fname = self.c[vsc].show3()
+                            fd.write("{<" + fname + ".list}\n")
+                except:
+                    if self.c[sc].runable:
+                        self.c[sc].parmsh['display'] = False
+                        self.c[sc].parmsh['scene'] = False
+                        if par['constr_boxes']:
+                            self.c[sc].parmsh['boxes'] = False
+                        else :
+                            self.c[sc].parmsh['boxes'] = True
+                        fname = self.c[sc].show3()
+                        fd.write("{<" + fname + ".list}\n")
+
+        else:
+            if c[l].runable:
+                self.c[l].parmsh['dispay'] = False
+                self.c[l].parmsh['scene'] = False
+                fname = self.c[l].show3()
+                fd.write("{<" + fname + ".list}\n")
+
+
 
         col = ['r', 'b', 'g', 'm', 'y', 'b', 'r']
 
@@ -913,6 +941,8 @@ class CLA(object):
         box_center = self.dlayer[l][dlindx].ctr
         uc = np.where(self.usable)[0]
 
+
+        # proba computation for all center of each boxes
         for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
             if (self.c[j].type != 'Exclude') & (self.c[j].usable):
@@ -966,11 +996,9 @@ class CLA(object):
                 else:
 
                     if len(np.shape(count)) > 1:
-                        clusters = np.intersect1d(clust[count[i,
-                                                              0]], clust[count[i, 1]])
+                        clusters = np.intersect1d(clust[count[i,0]], clust[count[i, 1]])
                     else:
-                        clusters = np.intersect1d(clust[count[
-                            0]], clust[count[1]])
+                        clusters = np.intersect1d(clust[count[0]], clust[count[1]])
 
                 clust_vol = np.sum(np.array(self.dlayer[l][
                     dlindx].vol)[np.unique(clusters)])
@@ -1040,17 +1068,14 @@ class CLA(object):
             except:
 
                 if np.sum(poids) > 0.:
-                    self.pe = np.sum(poids * self.dlayer[l][dlindx]
-                        .ctr.T, axis=1) / np.sum(poids)
+                    self.pe = np.sum(poids * self.dlayer[l][dlindx].ctr.T, axis=1) / np.sum(poids)
                 else:
-                    self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
-                        len(self.dlayer[l][dlindx].ctr)
+                    self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / len(self.dlayer[l][dlindx].ctr)
                 pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
                 pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
                 self.pestd = pestdmax - pestdmin
                 for cl in lclust:	
-                    self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
-                    np.unique(cl)], axis=0))
+                    self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[np.unique(cl)], axis=0))
                 #self.pe = np.sum(self.dlayer[l][dlindx].ctr,axis=0)/len(self.dlayer[l][dlindx].ctr)
 #                       try:
 #                               print 'clust vol',clust_vol
@@ -1130,7 +1155,7 @@ class CLA(object):
 
         box_center = self.dlayer[l][dlindx].ctr
         
-        uc = np.where(self.c.usable)[0]
+        uc = np.where(self.usable)[0]
         for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
             if (self.c[j].type != 'Exclude') & (self.c[j].usable):
