@@ -928,11 +928,11 @@ class CLA(object):
                 gap=[gap[0]]
             if not len(gap) ==0:
 
-                  # in a futur version it will be more convenient to stock each 
+                # in a futur version it will be more convenient to stock each 
                 # detected cluster in a given axis with a dictionary as the given
                 # axis as a key.
-#                c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=cm[igap]))
-#                c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>cm[igap]))
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=cm[igap]))
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>cm[igap]))
 
 
 
@@ -1035,7 +1035,7 @@ class CLA(object):
         box_center = self.dlayer[l][dlindx].ctr
         uc = np.where(self.usable)[0]
 
-
+        
         # proba computation for all center of each boxes
         for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
@@ -1065,7 +1065,7 @@ class CLA(object):
 ##########################################
         self.pecluster=[]
         if clust != []:
-
+        
             print 'cluster'
             lclust = []
             dd = []
@@ -1105,17 +1105,18 @@ class CLA(object):
                         estclu = clusters
 
 
-
-                if clust_vol != 0 and len(np.where(self.usable)[0]) == 2:
+                itoas=np.where(np.array(self.type)=='TOA')[0]
+                if clust_vol != 0 and len(itoas) == 2:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
                     # verifier que les contraintes utilisées sont les bonne ( ce n'est pas le cas)
                     # ne marche que si 2 constriantes genere le cluster ( a robustifier)   
                     pu = np.where(self.usable)[0]
                     try:
-                        dd.append(np.sqrt(np.sum((pc - self.c[pu[0]].p) ** 2)))
+                        dd.append(np.sqrt(np.sum((pc - self.c[itoas[0]].p) ** 2)))
                     except:
-                        dd.append(np.sqrt(np.sum((pc - self.c[pu[1]].p) ** 2)))
+                        dd.append(np.sqrt(np.sum((pc - self.c[itoas[1]].p) ** 2)))
+
 #                       try:
 #                               vmax=[]
 #                               for i in range(len(lclust)):
@@ -1127,11 +1128,11 @@ class CLA(object):
 
                 print "enter in HT processing"
                 try:
+
                     # for now, it is supposed that all RSS share the same model
                     icr=np.where(np.array(self.type)=='RSS')[0]
                     M = (((-self.c[icr[0]].model.PL0 - self.c[icr[0]].value) * np.log(10) ) / (10. * self.c[icr[0]].model.rssnp))
-                    LL = np.log(dd[1] / dd[0]) * (1 + np.log(
-                        dd[0] * dd[1]) - 2 * M)
+                    LL = np.log(dd[1] / dd[0]) * (1 + np.log(dd[0] * dd[1]) - 2 * M)
 
                     if LL > 0:
     #                                       vmax = np.max(poids[np.unique(lclust[0])])
