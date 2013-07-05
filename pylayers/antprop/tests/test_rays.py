@@ -5,7 +5,9 @@ import pylayers.signal.bsignal as bs
 import pylayers.signal.waveform as wvf 
 from pylayers.simul.simulem import *
 import matplotlib.pyplot as plt 
-
+print "======================="
+print " start test_rays.py (Ray Tracing numpy) "
+print "======================="
 S = Simul()
 filestr = 'defstr3'
 S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
@@ -58,3 +60,6 @@ Cair=r3d.eval(fGHz)
 scair=Cair.prop2tran(a='theta',b='theta')
 cirair = scair.applywavB(wav.sfg)
 
+print "======================="
+print " stop test_rays.py (Ray Tracing numpy) "
+print "======================="

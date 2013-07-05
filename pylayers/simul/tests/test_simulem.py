@@ -6,6 +6,10 @@ from pylayers.simul.simulem import *
 # Testing PyRay : C Ray tracing tool
 #
 #-------------------------------
+print "======================="
+print " start test_simulem.py (PyRay Ray Tracing C Implementation) "
+print "======================="
+
 S = Simul()
 # loading a layout 
 filestr = 'defstr'
@@ -63,19 +67,24 @@ L1 = S.getlaunch(1)
 
 # display the launching tree for different depths
 
-print "Tracing "
+print "tracing(1,1)"
 print "-----------------"
 print "purc :",S.config.get('tud','purc')
 fig = plt.figure()
 S.tracing(1,1)
 gr = GrRay3D()
 gr.load(S.dtra[1][1],S.L)
-print "Tratotud "
+print "tratotud(1,1)"
 print "-----------------"
 print "purc :",S.config.get('tud','purc')
 S.tratotud(1,1)
 gt = GrRayTud()
-print "Evalfield "
+print "field(1,1)"
 print "-----------------"
 S.field(1,1)
+print "cir(1,1)"
+print "-----------------"
 S.cir(1,1)
+print "======================="
+print " stop test_simulem.py  "
+print "======================="
