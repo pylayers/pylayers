@@ -89,7 +89,10 @@ class RSS(Constraint):
             self.config = ConfigParser.ConfigParser()
             self.config.read(pyu.getlong('EMSolver.ini', 'ini'))
             param = dict(self.config.items('rat1_PLM'))
-            self.model = Model(f=eval(param['f']), rssnp=eval(param['rssnp']), d0=eval(param['d0']), method=param['method'])
+            self.model = PLSmodel(f=eval(param['f']), 
+                                  rssnp=eval(param['rssnp']), 
+                                  d0=eval(param['d0']), 
+                                  method=param['method'])
 #                       self.model={}
 #                       self.model['PL0'] =-34.7
 #                       self.model['d0']  = 1.0

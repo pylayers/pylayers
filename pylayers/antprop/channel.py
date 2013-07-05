@@ -34,11 +34,30 @@ class Ctilde(object):
         """
             transpose == False   (r,f)
             transpose == True    (f,r)
+
+            A Ctilde object is the output of eval method
+            of a Rays object.
+
         """
         self.fail = False
 
     def __repr__(self):
-        s = 'Ctilde'
+        s = 'Ctilde'+'\n---------\n'
+        if hasattr(self,'Cpp'):
+            s = s +str(np.shape(self.Cpp.y))+'\n'
+        if hasattr(self,'nray'):
+            s = s+ 'Nray : '+ str(self.nray)+'\n'
+            s = s+ 'fmin(GHz) : '+ str(self.Cpp.x[0])+'\n'
+            s = s+ 'fmax(GHz): '+ str(self.Cpp.x[-1])+'\n'
+            s = s+ 'Nfreq : '+ str(self.nfreq)+'\n'
+        s = s+ '\n methods :'+'\n---------\n'
+        s = s+ 'prop2tran(a=theta,b=phi)\n'
+        s = s+ 'energy()\n'
+        s = s+ 'doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
+        s = s+ 'mobility(v,dt)\n'
+        s = s+ 'show(mode=linear)\n'
+        s = s+ 'sort()\n'
+            
         return(s)
 
 
@@ -194,7 +213,7 @@ class Ctilde(object):
         Returns
         -------
 
-        VC : modified VectChannel
+        C : modified Ctilde
 
         """
 
@@ -238,9 +257,9 @@ class Ctilde(object):
         """
         dod = self.tang
         doa = self.rang
-        # determine Energy in copol and crospol
-        Eco, Ecross = self.energy()
-        Etot = Eco + Ecross
+        # determine Energy in each channel 
+        Ett,Epp,Etp,Ept = self.energy()
+        Etot = Ett+Epp+Etp+Ept
         Emax = max(Etot)
         Etot = Etot / Emax + 1e-7
         Emax = max(10 * np.log10(Etot))
@@ -361,43 +380,66 @@ class Ctilde(object):
             plt.show()
 
     def energy(self):
-        """ Calculate energy on co and cross channel
+        """ Calculate energy on each channel
 
         Returns
         -------
 
-        Eco    : Energy on co channel    tt + pp
-        Ecross : Energy on cross channel tp + pt
+        ECtt  : Energy on co channel    tt 
+        ECpp  : Energy on co channel    pp 
+        ECtp  : Energy on co channel    tp 
+        ECpt  : Energy on co channel    pt 
 
+        
         See Also
         --------
 
         pylayers.signal.bsignal.FUsignal.energy
+
+    
 
         """
         ECtt = self.Ctt.energy(1)
         ECtp = self.Ctp.energy(1)
         ECpt = self.Cpt.energy(1)
         ECpp = self.Cpp.energy(1)
-        Eco = ECtt + ECpp
-        Ecross = ECtp + ECpt
-        return Eco, Ecross
+        #Eco = ECtt + ECpp
+        #Ecross = ECtp + ECpt
+        return ECtt,ECpp,ECtp,ECpt
 
-    def sort(self, tauk):
+    def sort(self,typ='tauk'):
         """ sort Ctilde with respect to tauk
 
         Parameters
         ----------
 
-        tauk : array of delays
+        typ  : string 
+            which parameter to sort 'tau','att','atp','art','arp','energy'
 
         """
-        u = argsort(tauk)
+        if typ=='tau':
+            u = np.argsort(self.tauk)
+        if typ=='att':
+            u = np.argsort(self.tang[:,0])
+        if typ=='atp':
+            u = np.argsort(self.tang[:,1])
+        if typ=='art':
+            u = np.argsort(self.rang[:,0])
+        if typ=='arp':
+            u = np.argsort(self.rang[:,1])
+        if typ=='energy':
+            Ett,Epp,Etp,Ept=self.energy()
+            Etot = Ett+Epp+Etp+Ept 
+            u = np.argsort(Etot)
 
-        self.Ctt = self.Ctt[u, :]
-        self.Cpp = self.Cpp[u, :]
-        self.Ctp = self.Ctp[u, :]
-        self.Cpt = self.Cpt[u, :]
+        self.tauk = self.tauk[u]
+        self.tang = self.tang[u,:]
+        self.rang = self.rang[u,:]
+
+        self.Ctt.y = self.Ctt.y[u, :]
+        self.Cpp.y = self.Cpp.y[u, :]
+        self.Ctp.y = self.Ctp.y[u, :]
+        self.Cpt.y = self.Cpt.y[u, :]
 
     def prop2tran(self,a='theta',b='theta'):
         """ transform propagation channel into transmission channel
@@ -539,27 +581,31 @@ class Ctilde(object):
         print "shape Cpp :", np.shape(self.Cpp.y)
 
 
-def VCg2VCl(VCg, Tt, Tr):
+def Cg2Cl(Cg, Tt, Tr):
     """ global reference frame to local reference frame
 
     Parameters
     ----------
 
-    VCg : VectChannel global
+    Cg  : Ctilde global
     Tt  : Tx rotation matrix
     Tr  : Rx rotation matrix
 
     Returns
     -------
-    VCl : VectChannel (local)
+    Cl : Ctilde local 
+
+    Examples
+    --------
 
     """
     import copy
-
-    VCl = copy.deepcopy(VCg)
-    freq = VCl.fGHz
-    Rt, tangl = BTB_tx(VCg.tang, Tt)
-    Rr, rangl = BTB_rx(VCg.rang, Tr)
+    # don't loose the global channel
+    Cl = copy.deepcopy(Cg)
+    # get frequency axes    
+    fGHz = Cl.fGHz
+    Rt, tangl = BTB_tx(Cg.tang, Tt)
+    Rr, rangl = BTB_rx(Cg.rang, Tr)
 
     VCl.tang = tangl
     VCl.rang = rangl
@@ -609,6 +655,7 @@ class Tchannel(bs.FUDAsignal):
 
     Members
     -------
+
         ray transfer functions  (nray,nfreq)
     dod  :
         direction of depature (rad) [theta_t,phi_t]  nray x 2
