@@ -1194,11 +1194,13 @@ class Rays(dict):
         c22 = Ct[:,:,1,1]
 
 
-
+        #
+        # Construction of the Ctilde channel 
+        #
         Cn = Ctilde()
         Cn.Cpp = bs.FUsignal(self.I.fGHz, c11)
-        Cn.Ctp = bs.FUsignal(self.I.fGHz, c12)
-        Cn.Cpt = bs.FUsignal(self.I.fGHz, c21)
+        Cn.Cpt = bs.FUsignal(self.I.fGHz, c12)
+        Cn.Ctp = bs.FUsignal(self.I.fGHz, c21)
         Cn.Ctt = bs.FUsignal(self.I.fGHz, c22)
         Cn.nfreq = self.I.nf
         Cn.nray = self.nray

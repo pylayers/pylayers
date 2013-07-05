@@ -554,7 +554,7 @@ class Layout(object):
 
         """
         self.filename = _fileosm
-        fileosm = pyu.getlong(_fileosm,'struc')
+        fileosm = pyu.getlong(_fileosm,'struc/osm')
         coords,nodes,ways,relations = osm.osmparse(fileosm,typ='floorplan')
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0 
@@ -735,7 +735,7 @@ class Layout(object):
         config.set("files",'materials',self.filematini)
         config.set("files",'slab',self.fileslabini)
         config.set("files",'furniture',self.filefur)
-        fileini = pyu.getlong(_fileini,'struc')
+        fileini = pyu.getlong(_fileini,pstruc['DIRINI'])
         fd = open(fileini,"w")
         config.write(fd)
         fd.close()
@@ -759,7 +759,7 @@ class Layout(object):
         self.filename=_fileini
         di = {}
         config = ConfigParser.ConfigParser()
-        fileini = pyu.getlong(_fileini,"struc")
+        fileini = pyu.getlong(_fileini,pstruc['DIRINI'])
         config.read(fileini)
         sections = config.sections()
         for section in sections:
@@ -871,7 +871,7 @@ class Layout(object):
 
 
         """
-        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC']+'/furnitures')
+        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -896,27 +896,32 @@ class Layout(object):
 
         if filename does not exist the file is not loaded
 
-        layout files are stored in the directory pstruc['DIRSTRUC']
+        layout files are stored in the directory pstruc['DIRxxx']
 
         """
         filename,ext=os.path.splitext(_filename)
-        filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
-        if os.path.exists(filename):
-            if ext=='.osm':
-                #self.loadosm(_filename,self.filematini,self.fileslabini)
+        if ext=='.osm':
+            filename = pyu.getlong(_filename,pstruc['DIROSM'])
+            if os.path.exists(filename):
                 self.loadosm(_filename)
-            elif ext=='.str':
+        elif ext=='.str':
+            filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
+            if os.path.exists(filename):
                 self.loadstr(_filename,self.filematini,self.fileslabini)
-            elif ext=='.str2':
+        elif ext=='.str2':
+            filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
+            if os.path.exists(filename):
                 self.loadstr2(_filename,self.filematini,self.fileslabini)
-                self.geomfile
-            elif ext=='.ini':
+        elif ext=='.ini':
+            filename = pyu.getlong(_filename,pstruc['DIRINI'])
+            if os.path.exists(filename):
                 self.loadini(_filename)
-            else:
-                raise NameError('layout filename extension not recognized')
+        else:
+            raise NameError('layout filename extension not recognized')
 
-            #  construct geomfile (.off) for vizalisation with geomview
+        #  construct geomfile (.off) for vizalisation with geomview
 
+        if os.path.exists(filename):
             try:
                 self.geomfile()
             except:
@@ -1856,7 +1861,7 @@ class Layout(object):
         _filefur : string
         """
 
-        filefur = pyu.getlong(_filefur, pstruc['DIRSTRUC'])
+        filefur = pyu.getlong(_filefur, pstruc['DIRFUR'])
         config = ConfigParser.ConfigParser()
         config.read(filefur)
         furname = config.sections()
@@ -2134,6 +2139,23 @@ class Layout(object):
                             ((str(pt[0]),str(pt[1]))))
         self.Gs.pos[np]=tuple(eval(data[0]),eval(data[1])) 
 
+
+    def chgmss(self,ns,ss_name=[],ss_z=[]):
+        """
+
+        Parameters
+        ----------
+
+        """
+        if ns in self.Gs.node.keys():
+            if self.Gs.node[ns].has_key('ss_name'):
+                if ss_name<>[]:
+                    self.Gs.node[ns]['ss_name']=ss_name
+                if ss_z<>[]:
+                    self.Gs.node[ns]['ss_z']=ss_z
+
+                # update Layout information    
+                self.g2npy()
 
     def edit_segment(self, e1):
         """ edit segment
@@ -3419,6 +3441,7 @@ class Layout(object):
         ----------
             't' : Gt
             'r' : Gr
+            'w" : Gw
             's' : Gs
             'v' : Gv
             'i' : Gi
@@ -3428,8 +3451,8 @@ class Layout(object):
             self.buildGt()
         if 'r' in graph:
             self.buildGr()
-        #if 'w' in graph:
-        #    self.buildGw()
+        if 'w' in graph:
+            self.buildGw()
         #if 'c' in graph:
         #    self.buildGc()
         if 'v' in graph:
@@ -3479,16 +3502,16 @@ class Layout(object):
                     if g in ['v','i']:
                         gname1 ='G'+g
                         gname2 ='dG'+g
-                        write_gpickle(getattr(self,gname1),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
-                        write_gpickle(getattr(self,gname2),basename+'/struc/dG'+g+'_'+self.filename+'.gpickle')
+                        write_gpickle(getattr(self,gname1),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
+                        write_gpickle(getattr(self,gname2),basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle')
                     else:
                         gname='G'+g
-                        write_gpickle(getattr(self,gname),basename+'/struc/G'+g+'_'+self.filename+'.gpickle')
+                        write_gpickle(getattr(self,gname),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
                 except:
                     raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
-        write_gpickle(getattr(self,'di'),basename+'/struc/di_'+self.filename+'.gpickle')
-        write_gpickle(getattr(self,'dca'),basename+'/struc/dca_'+self.filename+'.gpickle')
+        write_gpickle(getattr(self,'di'),basename+'/struc/gpickle/di_'+self.filename+'.gpickle')
+        write_gpickle(getattr(self,'dca'),basename+'/struc/gpickle/dca_'+self.filename+'.gpickle')
 
 
         root,ext = os.path.splitext(self.filename)
@@ -3521,11 +3544,14 @@ class Layout(object):
                     if g in ['v','i']:
                         gname1 ='G'+g
                         gname2 ='dG'+g
-                        setattr(self, gname1, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
-                        setattr(self, gname2, read_gpickle(basename+'/struc/dG'+g+'_'+self.filename+'.gpickle'))
+                        setattr(self, gname1,
+                                read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
+                        setattr(self, gname2,
+                                read_gpickle(basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle'))
                     else:
                         gname='G'+g
-                        setattr(self, gname, read_gpickle(basename+'/struc/G'+g+'_'+self.filename+'.gpickle'))
+                        setattr(self, gname,
+                                read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
                 except:
                     raise NameError('G'+g +' graph cannot be load')
 
@@ -3547,8 +3573,8 @@ class Layout(object):
                             logging.warning('dumpr : a segment cannot relate more than 2 cycles')
 
         # load dictionnary which maps string interaction to [interactionnode, interaction type]
-        setattr(self,'di', read_gpickle(basename+'/struc/di_'+self.filename+'.gpickle'))
-        setattr(self,'dca', read_gpickle(basename+'/struc/dca_'+self.filename+'.gpickle'))
+        setattr(self,'di', read_gpickle(basename+'/struc/gpickle/di_'+self.filename+'.gpickle'))
+        setattr(self,'dca', read_gpickle(basename+'/struc/gpickle/dca_'+self.filename+'.gpickle'))
 
 
     def buildGc(self):

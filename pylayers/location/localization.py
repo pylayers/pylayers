@@ -19,7 +19,7 @@ from pylayers.location.algebraic.algebraic import *
 
 from pylayers.network.communication import Gcom, TX, RX
 
-from   pylayers.network.model import Model
+from   pylayers.network.model import PLSmodel
 import networkx as nx
 
 class Localization(object):
@@ -74,7 +74,10 @@ class Localization(object):
                         RSS(id = rat+'-Pr-'+self.ID+'-'+e,
                             value = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][0],
                             std = self.net.node[self.ID]['PN'].edge[self.ID][e][rat]['Pr'][1],
-                            model=Model(f=eval(param['f']), rssnp=eval(param['rssnp']), d0=eval(param['d0']), method=param['method']),
+                            model = PLSmodel(f = eval(param['f']), 
+                                             rssnp = eval(param['rssnp']),
+                                             d0 = eval(param['d0']), 
+                                             method = param['method']),
                             p = self.net.node[self.ID]['PN'].node[e]['pe'],
                             origin={'id':self.ID,'link':[e],'rat':rat,'ldp':'Pr'}
                             )

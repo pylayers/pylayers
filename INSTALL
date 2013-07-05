@@ -8,7 +8,6 @@ numpy>=1.6.1
 scipy>=0.10.1
 networkx>=1.7
 matplotlib>=1.1.0
-matplotlib.basemap 
 shapely>=1.2.14
 descartes>=1.0
 SimPy>=2.2
@@ -17,6 +16,17 @@ bitstring>=3.0.2
 shapely>=1.2.14
 descartes>=1.0
 
+The installation of matplotlib basemap requires installation of libraries GEOS
+and PROJ4. The installation procedure is well described in
+
+http://matplotlib.org/basemap/users/installing.html
+
+For supporting the osm format PyLayers is relying on imposm. The installation 
+of imposm is not straighforward it requires to install first Tokyo-Cabinet
+and Google-Protobuf library. PyLayers can work without imposm you need to 
+comment the only import to the module in pylayers/gis/osmparser.py. 
+
+http://imposm.org/docs/imposm/latest/install.html#id1
 
 Most of this dependencies are handled in the setup.py script.
 

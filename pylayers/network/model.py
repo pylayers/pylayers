@@ -25,12 +25,14 @@ import numpy as np
 import scipy as sp 
 
 import pdb
+import doctest 
 
 
-class Model(object):
-    """ RSS model
+class PLSmodel(object):
+    """ Path Loss Shadowing model
 
     Attributes
+    ----------
 
     f : frequency in GHz
     n : path loss exponent
@@ -64,11 +66,16 @@ class Model(object):
         print 'PL0 : ',self.PL0
 
     def getPL0(self,Gt=0,Gr=0):
-        """
+        """ get Path Loss at reference distance d0
+
+        Parameters
+        ----------
+        
         PL0_c : PL0 compute
         f  : frequency GHz
         Gt : transmitting antenna gain dB (default 0 dB) 
         Gr : receiving antenna gain dB (default 0 dB) 
+
         """
         Gt  = 10**(Gt/10.)
         Gr  = 10**(Gr/10.)
@@ -82,9 +89,10 @@ class Model(object):
         """
         OneSlope model : give Power Level from distance  with OneSlope method
 
-        f : frequency  GHz
-        n : path loss exponent
-        D : range array 
+        Parameters
+        ----------
+
+        r : range (meters)
 
         """
         try:
@@ -95,7 +103,12 @@ class Model(object):
         return(PL)
 
     def iOneSlope(self,PL):
-        """
+        """ goes from PL to estimated distance
+
+        Parameters
+        ----------
+
+        PL 
         inverse OneSlope model : give distance from Power Level with OneSlope method
 
         f : frequency  GHz
@@ -113,26 +126,40 @@ class Model(object):
 
     def getPLmean(self, d):
         """
-        Compute PL mean
+            Compute PL mean
+
+        Notes
+        -----
+
+            $$\bar{PL}=PL_0 - 10 n_p \log_{10}{\frac{d}{d_0}}$$
+
         """
+        
+        PLmean = self.PL0-10*self.rssnp*np.log10(d/self.d0)
 
-
-        return          self.PL0-10*self.rssnp*np.log10(d/self.d0)
+        return  PLmean  
 
 
     def getPL(self,r,RSSStd):
         """
         Get Power Level from a given distance
+        
+        Parameters
+        ----------
 
         r : range
         RSSStd : range standard deviation
+
+        Examples
+        --------
+
+        >>> M = PLSmodel(f=0.3,rssnp=2.64,d0=1,sigrss=3,method='mode')
+        >>> PL =  M.getPL(16,1)
+
         """
-
-
 
         if self.method =='OneSlope':
             PL=self.OneSlope(r)
-
 
         elif self.method == 'mode' or self.method == 'median' or self.method == 'mean':
             PLmean          = self.getPLmean(r)
@@ -205,7 +232,8 @@ class Model(object):
         return (r)
 
 
-
+if __name__=='__main__':
+    doctest.testmod()
 
 
 

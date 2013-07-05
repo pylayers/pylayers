@@ -805,12 +805,12 @@ class Simul(object):
         #
         # waveform section
         #
-        self.config.set("waveform", "tw", str(self.wav.parameters['tw']))
-        self.config.set("waveform", "band", str(self.wav.parameters['band']))
-        self.config.set("waveform", "fc", str(self.wav.parameters['fc']))
-        self.config.set("waveform", "thresh", str(self.wav.parameters['thresh']))
-        self.config.set("waveform", "type", str(self.wav.parameters['type']))
-        self.config.set("waveform", "fe", str(self.wav.parameters['fe']))
+        self.config.set("waveform", "tw", str(self.wav['twns']))
+        self.config.set("waveform", "band", str(self.wav['bandGHz']))
+        self.config.set("waveform", "fc", str(self.wav['fcGHz']))
+        self.config.set("waveform", "thresh", str(self.wav['threshdB']))
+        self.config.set("waveform", "type", str(self.wav['typ']))
+        self.config.set("waveform", "fe", str(self.wav['feGHz']))
         #
         # output section
         #
