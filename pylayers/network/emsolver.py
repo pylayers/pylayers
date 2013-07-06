@@ -29,14 +29,13 @@ import ConfigParser
 import itertools
 
 import pylayers.util.pyutil as pyu
-
 import pylayers.util.project
-from   pylayers.gis.layout import Layout
 import pylayers.antprop.slab
-from pylayers.antprop.multiwall import *
 
+from pylayers.gis.layout import Layout
+from pylayers.antprop.multiwall import *
 from pylayers.util.project import *
-from   pylayers.network.model import Model
+from pylayers.network.model import PLSmodel
 
 
 import pdb
@@ -83,8 +82,20 @@ class EMSolver(object):
 
 
     def load_model(self,RAT):
-        ratopt=dict(self.config.items(RAT+'_PLM'))
-        self.model[RAT]=Model(f=eval(ratopt['f']),rssnp=eval(ratopt['rssnp']),d0=eval(ratopt['d0']),sigrss=eval(ratopt['sigrss']),method=ratopt['method'])
+        """
+        Parameters
+        ----------
+
+        RAT  : 
+
+
+        """
+        ratopt = dict(self.config.items(RAT+'_PLM'))
+        self.model[RAT] = PLSmodel(f = eval(ratopt['f']),
+                                   rssnp = eval(ratopt['rssnp']),
+                                   d0 = eval(ratopt['d0']),
+                                   sigrss = eval(ratopt['sigrss']),
+                                   method = ratopt['method'])
 
 
 
@@ -119,7 +130,7 @@ class EMSolver(object):
                 self.load_model(RAT)
                 model=self.model[RAT]
             except:
-                self.model[RAT]=Model()
+                self.model[RAT]=PLSmodel()
                 self.save_model(RAT,self.model[RAT])
                 model=self.model[RAT]
 

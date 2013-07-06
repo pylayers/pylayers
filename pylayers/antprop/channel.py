@@ -34,11 +34,30 @@ class Ctilde(object):
         """
             transpose == False   (r,f)
             transpose == True    (f,r)
+
+            A Ctilde object is the output of eval method
+            of a Rays object.
+
         """
         self.fail = False
 
     def __repr__(self):
-        s = 'Ctilde'
+        s = 'Ctilde'+'\n---------\n'
+        if hasattr(self,'Cpp'):
+            s = s +str(np.shape(self.Cpp.y))+'\n'
+        if hasattr(self,'nray'):
+            s = s+ 'Nray : '+ str(self.nray)+'\n'
+            s = s+ 'fmin(GHz) : '+ str(self.Cpp.x[0])+'\n'
+            s = s+ 'fmax(GHz): '+ str(self.Cpp.x[-1])+'\n'
+            s = s+ 'Nfreq : '+ str(self.nfreq)+'\n'
+        s = s+ '\n methods :'+'\n---------\n'
+        s = s+ 'prop2tran(a=theta,b=phi)\n'
+        s = s+ 'energy()\n'
+        s = s+ 'doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))\n'
+        s = s+ 'mobility(v,dt)\n'
+        s = s+ 'show(mode=linear)\n'
+        s = s+ 'sort()\n'
+            
         return(s)
 
 
@@ -70,9 +89,9 @@ class Ctilde(object):
 
         >>> from pylayers.antprop.channel import *
         >>> from pylayers.simul.simulem import *
-        >>> S=Simul()
+        >>> S = Simul()
         >>> S.load('default.ini')
-        >>> C =Ctilde()
+        >>> C = Ctilde()
         >>> C.load(pyu.getlong(S.dtud[1][1],'output'))
 
         """
@@ -168,14 +187,12 @@ class Ctilde(object):
             nray_rang = stru.unpack('i', fo.read(4))[0]
             buf = fo.read()
             fo.close()
-            # coorectif Bug evalfield
+            # corectif Bug evalfield
             tmp = np.ndarray(shape=(nray_rang, 2), buffer=buf)
             self.rang = tmp[0:nray, :]
 
     def mobility(self, v, dt):
         """ Modify channel for uniform mobility
-
-        NOT FINISHED
 
         Parameters
         ----------
@@ -196,7 +213,7 @@ class Ctilde(object):
         Returns
         -------
 
-        VC : modified VectChannel
+        C : modified Ctilde
 
         """
 
@@ -240,9 +257,9 @@ class Ctilde(object):
         """
         dod = self.tang
         doa = self.rang
-        # determine Energy in copol and crospol
-        Eco, Ecross = self.energy()
-        Etot = Eco + Ecross
+        # determine Energy in each channel 
+        Ett,Epp,Etp,Ept = self.energy()
+        Etot = Ett+Epp+Etp+Ept
         Emax = max(Etot)
         Etot = Etot / Emax + 1e-7
         Emax = max(10 * np.log10(Etot))
@@ -363,42 +380,66 @@ class Ctilde(object):
             plt.show()
 
     def energy(self):
-        """ Calculate energy on co and cross channel
+        """ Calculate energy on each channel
 
         Returns
         -------
-        Eco    : Energy on co channel    tt + pp
-        Ecross : Energy on cross channel tp + pt
 
+        ECtt  : Energy on co channel    tt 
+        ECpp  : Energy on co channel    pp 
+        ECtp  : Energy on co channel    tp 
+        ECpt  : Energy on co channel    pt 
+
+        
         See Also
         --------
 
         pylayers.signal.bsignal.FUsignal.energy
+
+    
 
         """
         ECtt = self.Ctt.energy(1)
         ECtp = self.Ctp.energy(1)
         ECpt = self.Cpt.energy(1)
         ECpp = self.Cpp.energy(1)
-        Eco = ECtt + ECpp
-        Ecross = ECtp + ECpt
-        return Eco, Ecross
+        #Eco = ECtt + ECpp
+        #Ecross = ECtp + ECpt
+        return ECtt,ECpp,ECtp,ECpt
 
-    def sort(self, tauk):
+    def sort(self,typ='tauk'):
         """ sort Ctilde with respect to tauk
 
         Parameters
         ----------
 
-        tauk : array of delays
+        typ  : string 
+            which parameter to sort 'tau','att','atp','art','arp','energy'
 
         """
-        u = argsort(tauk)
+        if typ=='tau':
+            u = np.argsort(self.tauk)
+        if typ=='att':
+            u = np.argsort(self.tang[:,0])
+        if typ=='atp':
+            u = np.argsort(self.tang[:,1])
+        if typ=='art':
+            u = np.argsort(self.rang[:,0])
+        if typ=='arp':
+            u = np.argsort(self.rang[:,1])
+        if typ=='energy':
+            Ett,Epp,Etp,Ept=self.energy()
+            Etot = Ett+Epp+Etp+Ept 
+            u = np.argsort(Etot)
 
-        self.Ctt = self.Ctt[u, :]
-        self.Cpp = self.Cpp[u, :]
-        self.Ctp = self.Ctp[u, :]
-        self.Cpt = self.Cpt[u, :]
+        self.tauk = self.tauk[u]
+        self.tang = self.tang[u,:]
+        self.rang = self.rang[u,:]
+
+        self.Ctt.y = self.Ctt.y[u, :]
+        self.Cpp.y = self.Cpp.y[u, :]
+        self.Ctp.y = self.Ctp.y[u, :]
+        self.Cpt.y = self.Cpt.y[u, :]
 
     def prop2tran(self,a='theta',b='theta'):
         """ transform propagation channel into transmission channel
@@ -408,7 +449,7 @@ class Ctilde(object):
 
         a : string or antenna array
             polarization antenna a ( 'theta' | 'phi' | 'ant' ) 
-         : string or antenna array
+        b : string or antenna array
             polarization antenna b ( 'theta' | 'phi' | 'ant' ) 
 
             0 : theta
@@ -453,13 +494,12 @@ class Ctilde(object):
             Fbp = bs.FUsignal(self.fGHz,Fbp)
         else:
             Fbt , Fbp = b.Fsynth3(self.rang[:, 0],self.rang[:,1])
-            # (nray,nfeq) needed
+
             Fbt = Fbt.transpose()
             Fbp = Fbp.transpose()
             Fbt = bs.FUsignal(b.fa,Fbt)
             Fbp = bs.FUsignal(b.fa,Fbp)
 
-        #pdb.set_trace()
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -477,7 +517,8 @@ class Ctilde(object):
 
         Note 
         ----
-        deprecated replaced by prop2tran
+
+        deprecated this is now replaced by the function prop2tran
 
         """
         fGHz = self.fGHz
@@ -529,10 +570,10 @@ class Ctilde(object):
         return(scalch)
 
     def info(self):
+        """ Info (Nf,Nray,shape(y))
         """
-        Info (Nf,Nray,shape(y))
-        """
-        print "Nf   :", self.nfreq
+
+        print "Nfreq  :", self.nfreq
         print "Nray :", self.nray
         print "shape Ctt :", np.shape(self.Ctt.y)
         print "shape Ctp :", np.shape(self.Ctp.y)
@@ -540,26 +581,31 @@ class Ctilde(object):
         print "shape Cpp :", np.shape(self.Cpp.y)
 
 
-def VCg2VCl(VCg, Tt, Tr):
+def Cg2Cl(Cg, Tt, Tr):
     """ global reference frame to local reference frame
 
-        Parameters
-        ----------
-        VCg : VectChannel global
-        Tt  : Tx rotation matrix
-        Tr  : Rx rotation matrix
+    Parameters
+    ----------
 
-        Returns
-        -------
-        VCl : VectChannel (local)
+    Cg  : Ctilde global
+    Tt  : Tx rotation matrix
+    Tr  : Rx rotation matrix
+
+    Returns
+    -------
+    Cl : Ctilde local 
+
+    Examples
+    --------
 
     """
     import copy
-
-    VCl = copy.deepcopy(VCg)
-    freq = VCl.fGHz
-    Rt, tangl = BTB_tx(VCg.tang, Tt)
-    Rr, rangl = BTB_rx(VCg.rang, Tr)
+    # don't loose the global channel
+    Cl = copy.deepcopy(Cg)
+    # get frequency axes    
+    fGHz = Cl.fGHz
+    Rt, tangl = BTB_tx(Cg.tang, Tt)
+    Rr, rangl = BTB_rx(Cg.rang, Tr)
 
     VCl.tang = tangl
     VCl.rang = rangl
@@ -603,12 +649,13 @@ def VCg2VCl(VCg, Tt, Tr):
 class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel 
 
-    The transmission channel TChannel is obtained from combination of the propagation
-    channel with the antenna transfer functions from both transmitter and
+    The transmission channel TChannel is obtained through combination of the propagation
+    channel and the antenna transfer functions from both transmitter and
     receiver.
 
     Members
     -------
+
         ray transfer functions  (nray,nfreq)
     dod  :
         direction of depature (rad) [theta_t,phi_t]  nray x 2
@@ -634,6 +681,14 @@ class Tchannel(bs.FUDAsignal):
         """
 
         bs.FUDAsignal.__init__(self,fGHz,alpha,tau,dod,doa)
+    
+    def __repr__(self):
+        st =''
+        st = st + 'freq :'+str(self.x[0])+' '+str(self.x[-1])+' '+str(len(self.x))+"\n"
+        st = st + 'shape  :'+str(np.shape(self.y))+"\n"
+        st = st + 'tau :'+str(min(self.tau0))+' '+str(max(self.tau0))+"\n"
+        st = st + 'dist :'+str(min(0.3*self.tau0))+' '+str(max(0.3*self.tau0))+"\n"
+        return(st)
 
     def info(self):
         """ display information
@@ -689,6 +744,7 @@ class Tchannel(bs.FUDAsignal):
 
         Notes
         -----
+
         The overall received signal is built in time domain
         w is apply on the overall CIR
 
@@ -719,10 +775,12 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
+
         Wgam : waveform including gamma factor
 
         Returns
         -------
+
         ri  : TUDsignal
 
             impulse response for each ray separately
@@ -744,9 +802,8 @@ class Tchannel(bs.FUDAsignal):
         # return a FUDsignal
         #
         Y = self.apply(Wgam)
-        #ri      = Y.ft1(500,0)
-        # Le fftshift est activé
         ri = Y.ft1(500, 1)
+
         return(ri)
 
     def applywavA(self, Wgam, Tw):
@@ -873,236 +930,5 @@ class Tchannel(bs.FUDAsignal):
         # on s'arrange que Hk.x[0]==Wk.x[0]
 
 if __name__ == "__main__":
-    #import tkFileDialog
-    #FD = tkFileDialog
+    plt.ion()
     doctest.testmod()
-############################
-## test Channel, Simulation, Antenna
-############################
-#
-#     #################################
-#     # initialisation de la simulation
-#     #################################
-#
-#     #
-#     # choix des antennes
-#     #
-#     fileantt = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
-#     ("All", "*")],
-#      title="Please choose an antenna file",
-#      initialdir=antdir)
-#
-#     fileantr = FD.askopenfilename(filetypes = [("Fichiers vsh3","*.vsh3"),
-#     ("All", "*")],
-#      title="Please choose an antenna file",
-#      initialdir=antdir)
-#
-#     #
-#     # creation d'objet Simulation
-#     #
-#     S=Simulation(fileantTx=_fileantt,fileantRx=_fileantr)
-#
-#     #
-#     # choix du fichier field
-#     #
-#     filefield = FD.askopenfilename(filetypes = [("Fichiers field","*.field"),
-#      ("All", "*")],
-#      title="Please choose a field file",
-#      initialdir=tuddir)
-#
-#     filetauk = filefield.replace('.field','.tauk')
-#     filetang = filefield.replace('.field','.tang')
-#     filerang = filefield.replace('.field','.rang')
-#     filefreq = filefield.replace('.field','.freq')
-#     # il faudra recuperer aussi filetra
-#
-#      S.filefield.append(getshort(filefield))
-#     S.filetauk.append(getshort(filetauk))
-#     S.filetang.append(getshort(filetang))
-#     S.filerang.append(getshort(filerang))
-#     #S.filetra.append(getshort(filetra))
-
-#     fichsimulin = FD.askopenfilename(filetypes = [("Fichiers simul ","*.simul"),
-#          ("All", "*")],
-#          title="Please choose a simulation file",
-#          initialdir=simuldir)
-##          parent=root)
-#     _fichsimulin = getshort(fichsimulin)
-#     S = Simulation(_fichsimulin)
-#
-#     #
-#     # Frequency range for Siradel measurements
-#     #
-#     f     = arange(2,11.05,0.05)
-#
-#     #################################
-#     # definition de la forme d'onde a l'emission
-#     #################################
-#     Tw = 10
-#     x  = arange(-Tw,Tw,0.005)
-#     w  = EnImpulse(x,5,3,10)
-#
-#     W = w.ft()
-#     f = W.x
-#     ygamma = -1j*0.3/(4*np.pi*f)
-#     gamm  = FUsignal(f,ygamma)
-#     Wgam  = W*gamm
-#     wgam  = Wgam.ift()
-#
-###       #
-###       # plot waveform
-###       #
-###       figure()
-###       plot(w.x,w.y,linewidth=3)
-###       ylabel('(V)',fontsize=28)
-###       xlabel('retard(ns)',fontsize=28)
-###       xticks(fontsize=26)
-###       yticks(fontsize=26)
-###       title('w(t)',fontsize=30)
-###       grid(linewidth=2)
-###       show()
-##
-##      ################################
-##      # recuperation du canal de propagation simule
-##      ################################
-##
-##      VC   = VectChannel(S,0,False)
-##      #
-##      # If file from Siradel
-##      #
-##      #VC   = VectChannel(S,0,True)
-##
-##      ################################
-##      # calcul du canal de transmission
-##      ################################
-##
-##      #
-##      # avec antennes omnis
-##      #
-##      SC      = VC.vec2scal()
-##
-##      #
-##      # avec antennes simulees
-##      #
-##      VCA     = VC
-##      SCA     = VCA.vec2scalA(S.tx.A,S.rx.A)
-##
-##      ################################
-##      # calcul du signal recu
-##      ################################
-##
-##      #
-##      # avec antennes omnis
-##      #
-##      r  = SC.applywavB(Wgam)
-##
-##      #
-##      # avec antennes simulees
-##      #
-##      rA = SCA.applywavB(Wgam)
-##
-##      ################################
-##      # visualisation de resultats
-##      ################################
-##
-##      figure()
-##      # pour monocone on a un gain max de 8.59**2
-##      #plot(r.x,r.y*70,'b-')
-##      # pour dipole on a un gain max de 1.68**2
-##      #plot(r.x,r.y*2.8,'b-')
-##
-##      #
-##      # calcul de la valeur maximale du gain d'antenne
-##      #
-##
-##      gain_At=np.sqrt((abs(SCA.Ftt.y))**2+(abs(SCA.Ftp.y))**2)
-##      gain_Ar=np.sqrt((abs(SCA.Frt.y))**2+(abs(SCA.Frp.y))**2)
-##
-##      G=gain_At.max()*gain_Ar.max()
-##
-##      figure()
-##      plot(r.x,r.y*G,'b-')
-##      plot(rA.x,rA.y,'r-')
-##      ax=gca()
-##      ax.ticklabel_format(style='sci',axis='y')
-##      ax.yaxis.major.formatter.set_powerlimits((0,0))
-##      xlabel('retard (ns)',fontsize=28)
-##      ylabel('(V)',fontsize=28)
-##      xticks(fontsize=24)
-##      yticks(fontsize=24)
-##      title('r(t)',fontsize=30)
-##      show()
-##
-###       #legend(('antennes omnis','antennes simulees'))
-###       show()
-##
-################################
-### test changement d'antennes
-################################
-##      #S.tx.gantenna()
-##      #S.rx.gantenna()
-##
-##      #SCA   = VCA.vec2scalA(S.tx.A,S.rx.A)
-##      #rA = SCA.applywavB(Wgam)
-##
-##      #gain_At=np.sqrt((abs(SCA.Ftt.y))**2+(abs(SCA.Ftp.y))**2)
-##      #gain_Ar=np.sqrt((abs(SCA.Frt.y))**2+(abs(SCA.Frp.y))**2)
-##
-##      #G=gain_At.max()*gain_Ar.max()
-##
-##      #figure()
-##      #plot(r.x,r.y*G,'b-')
-##      #plot(rA.x,rA.y,'r-')
-##      #xlabel('retard (ns)',fontsize=28)
-##      #ylabel('(V)',fontsize=28)
-##      #xticks(fontsize=24)
-##      #yticks(fontsize=24)
-##      #title('r(t)',fontsize=30)
-##
-##      #legend(('ideale','dipole'))
-##      #show()
-##
-##
-#
-###############################
-## test passage Rg -> Rl
-###############################
-#     itx=0
-#     irx=0
-#     VCg = VectChannel(S,itx,irx,False)
-#     alpha = np.pi*rand()
-#     beta  = np.pi*rand()
-#     gamma = np.pi*rand()
-#     Ta = MEulerAngle(alpha,beta,gamma)
-#     alpha = np.pi*rand()
-#     beta  = np.pi*rand()
-#     gamma = np.pi*rand()
-#     Tb = MEulerAngle(alpha,beta,gamma)
-#
-#     VCl=VCg2VCl(VCg,Ta,Tb)
-#
-#     SCl  = VCl.vec2scal()
-#
-#     VClA  = VCl
-#     SClA  = VClA.vec2scalA(S.tx.A,S.rx.A)
-#
-#     rl = SCl.applywavB(Wgam)
-#     rlA = SClA.applywavB(Wgam)
-#
-#     gain_At=np.sqrt((abs(SClA.Ftt.y))**2+(abs(SClA.Ftp.y))**2)
-#     gain_Ar=np.sqrt((abs(SClA.Frt.y))**2+(abs(SClA.Frp.y))**2)
-#     G=gain_At.max()*gain_Ar.max()
-#
-#     figure()
-#     plot(rl.x,rl.y*G,'b-')
-#     plot(rlA.x,rlA.y,'r-')
-#     ax=gca()
-#     ax.ticklabel_format(style='sci',axis='y')
-#     ax.yaxis.major.formatter.set_powerlimits((0,0))
-#     xlabel('retard (ns)',fontsize=28)
-#     ylabel('(V)',fontsize=28)
-#     xticks(fontsize=24)
-#     yticks(fontsize=24)
-#     title('r(t)',fontsize=30)
-#     show()
-#

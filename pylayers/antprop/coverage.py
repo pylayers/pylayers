@@ -57,13 +57,14 @@ class Coverage(object):
         self.gridopt = dict(self.config.items('grid'))
         self.txopt = dict(self.config.items('tx'))
         self.rxopt = dict(self.config.items('rx'))
-        self.showopt=dict(self.config.items('show'))
+        self.showopt = dict(self.config.items('show'))
 
-        self.L=Layout(self.layoutopt['filename'])
-        self.model=Model(f=eval(self.plm['fghz']),
+        self.L = Layout(self.layoutopt['filename'])
+        self.model = PLSmodel(f=eval(self.plm['fghz']),
                          rssnp=eval(self.plm['rssnp']),
                          d0=eval(self.plm['d0']),
                          sigrss=eval(self.plm['sigrss']))
+
         self.nx = eval(self.gridopt['nx'])
         self.ny = eval(self.gridopt['ny'])
         self.mode = eval(self.gridopt['full'])

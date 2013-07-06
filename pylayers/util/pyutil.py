@@ -5,11 +5,11 @@ import scipy as sp
 import matplotlib.pylab as plt 
 import scipy.special as spe
 import doctest
+import logging
 from   bitstring  import BitString
 import datetime as dat
 from pylayers.util.project import *
 import shutil
-import pdb
 import sys
 import zipfile
 #
@@ -90,7 +90,7 @@ def lt2idic(lt):
         dic[int(tup[0])]=np.array([float(val[0]),float(val[1]),float(val[2])])
     return(dic)    
 
-def getlong(shortname,dir):
+def getlong(shortname,directory):
     """  get a long name
 
     This function allows to construct the long file name relatively
@@ -102,15 +102,17 @@ def getlong(shortname,dir):
     shortname : string
         short name of the file
 
-    dir       : directory in $BASENAME
+    dir       : directory in $BASENAME or $PYLAYERS
+    source    : string 
 
     """
-
     try:
         basename=os.environ['BASENAME']
     except:
-        basename=os.environ['HOME']+"/Pyproject"
-    longname = basename+'/'+dir+'/'+shortname
+        logging.critical("BASENAME environment variable should be defined")
+        #basename=os.environ['HOME']+"/Pyproject"
+
+    longname = basename+'/'+directory+'/'+shortname
     return(longname)
 
 def getshort(longname):

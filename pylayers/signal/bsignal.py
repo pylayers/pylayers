@@ -7,9 +7,11 @@ import numpy as np
 import scipy as sp
 import scipy.interpolate as interp
 import numpy.fft as fft
+import pandas as pd
 from copy import *
 import matplotlib.pylab as plt
 import matplotlib.gridspec as gridspec
+from mpl_toolkits.mplot3d import Axes3D
 from pylayers.util.pyutil import *
 import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin
@@ -1186,7 +1188,7 @@ class TUsignal(TBsignal, Usignal):
         Examples
         --------
 
-            >>> from pylayers.signal.bsignal import *
+        >>> from pylayers.signal.bsignal import *
 
         """
         A  = self.fftsh()
@@ -1198,11 +1200,13 @@ class TUsignal(TBsignal, Usignal):
 
         Parameters
         ----------
+
         R    : Resistance (default 50 Ohms)
         Tpns : real 
             PRP (default 100 ns)
 
         .. note::
+
             If time is in ns the resulting PSD is expressed in dBm/MHz (~10-9)
 
         """
@@ -2602,7 +2606,7 @@ class FBsignal(Bsignal):
                 plt.subplot(212)
                 plt.stem(self.x, np.imag(self.y[k]), color)
                 plt.xlabel('Frequency (GHz)')
-                ylabel('imaginary part)')
+                plt.ylabel('imaginary part)')
         else:
 
             plt.subplot(211)
@@ -3296,10 +3300,12 @@ class FUDsignal(FUsignal):
 
         Parameters
         ----------
-            Nz     : int
-                Number of zeros for zero padding
-            ffts   : nt
-                fftshift indicator (default 0 )
+
+        Nz     : int
+            Number of zeros for zero padding
+        ffts   : nt
+            fftshift indicator (default 0 )
+
         """
         tau = self.tau0 + self.tau1
         Nray = len(tau)
@@ -3344,10 +3350,16 @@ class FUDsignal(FUsignal):
 
         Parameters
         ----------
+
         Nz   : number of zeros for zero padding
         ffts : fftshift indicator
             0  no fftshift
             1  apply fftshift
+        Returns
+        -------
+
+        r : TUsignal
+
 
         """
         tau = self.tau0
@@ -3386,6 +3398,50 @@ class FUDsignal(FUsignal):
         si.translate(tau[k])
         r = r + si
         return r
+        
+        
+    def plot3d(self,fig=[],ax=[]):
+        """
+
+        Examples
+        --------
+
+        >>> from pylayers.signal.bsignal import *
+        >>> import numpy as np
+        >>> N = 2
+        >>> fGHz = np.arange(1,3,1)
+        >>> tau0 = np.sort(np.random.rand(N))
+        >>> alpha = np.random.rand(N,len(fGHz))
+        >>> s = FUDsignal(x=fGHz,y=alpha,tau0=tau0)
+        >>> plt.figure()
+        >>> s.plot3d()
+        >>> s.show()
+
+        """
+        Ntau = np.shape(self.y)[0]
+        Nf   = np.shape(self.y)[1]
+
+        if fig==[]:
+            fig = plt.figure()
+
+        if ax == []:    
+            ax  = fig.add_subplot(111, projection = '3d')
+
+        for k,f in enumerate(self.x):
+            for i,j in zip(self.tau0,abs(self.y[:,k])):
+                ax.plot([i,i],[f,f],[0,j],color= 'k')
+                                   
+        ax.set_xlabel('Delay (ns)')
+        ax.set_xlim3d(0,max(self.tau0))
+
+        ax.set_ylabel('Frequency (fGHz)')
+        ax.set_ylim3d(self.x[0],self.x[-1])
+        
+        powermin = abs(self.y).min()
+        powermax = abs(self.y).max()
+        ax.set_zlabel('Power (linear)')
+        ax.set_zlim3d(powermin,powermax)
+
 
     def ft2(self, df=0.01):
         """ build channel transfer function (frequency domain)
@@ -3427,17 +3483,18 @@ class FUDsignal(FUsignal):
 
         return U
 
-class FUDAsignal(FUsignal):
+class FUDAsignal(FUDsignal):
     """
-    FUDAsignal : Uniform signal in Frequency domain with delays and angles
+    FUDAsignal : Uniform signal in frequency domain with delays and angles
 
 
     Attributes
     ----------
-        x    : ndarray 1xN
-        y    : ndarray MxN
-        tau0 : delay
-        tau1 : additional delay
+
+    x    : ndarray 1xN
+    y    : ndarray MxN
+    tau0 : delay
+    tau1 : additional delay
 
     Methods
     -------
@@ -3447,6 +3504,7 @@ class FUDAsignal(FUsignal):
     iftd    : inverse Fourier transform
     ft1     : construct CIR from ifft(RTF)
     ft2     :
+
     """
     def __init__(self, 
                  x = np.array([]), 
@@ -3455,177 +3513,14 @@ class FUDAsignal(FUsignal):
                  dod = np.array([]),
                  doa = np.array([])):
 
-        FUsignal.__init__(self, x, y)
-        self.tau0 = tau0
+        FUDsignal.__init__(self, x, y,tau0)
         self.dod  = dod
         self.doa  = doa
-        self.tau1 = 0.0
 
     def __repr__(self):
         s = FUDsignal.__repr__(self)
         return(s)
 
-    def minphas(self):
-        """ construct a minimal phase FUsignal
-
-        Notes
-        -----
-
-        - Evaluate slope of the phase
-        - deduce delay
-        - update delay of FUDSignal
-        - Compensation of phase slope to obtain minimal phase
-
-        """
-        f = self.x
-        phase = np.unwrap(np.angle(self.y))
-        dphi = phase[:, -1] - phase[:, 0]
-        df = self.x[-1] - self.x[0]
-        slope = dphi / df
-        #if slope >0:
-        #   print 'minphas Warning : non causal FUSignal'
-        #phi0      = +1j*slope*(f[-1]+f[0]/2)
-        F, S = np.meshgrid(f, slope)
-        #E   = exp(-1j*slope*f+phi0)
-        E = np.exp(-1j * S * F)
-        self.y = self.y * E
-        self.tau1 = -slope / (2 * np.pi)
-
-    def totud(self, Nz=1, ffts=0):
-        """ transform to TUDsignal
-
-        Parameters
-        ----------
-            Nz     : int
-                Number of zeros for zero padding
-            ffts   : nt
-                fftshift indicator (default 0 )
-        """
-        tau = self.tau0 + self.tau1
-        Nray = len(tau)
-        s = self.ift(Nz, ffts)
-        tud = TUDsignal(s.x, s.y, tau)
-        return(tud)
-
-    def iftd(self, Nz=1, tstart=-10, tstop=100, ffts=0):
-        """ time pasting
-
-        Parameters
-        ----------
-
-        Nz : int
-        tstart : float
-        tstop  : float
-        ffts   : int
-            fftshift indicator
-
-        """
-        tau = self.tau0
-        Nray = len(tau)
-        s = self.ift(Nz, ffts)
-        x = s.x
-        dx = s.dx()
-        x_new = np.arange(tstart, tstop, dx)
-        yini = np.zeros((Nray, len(x_new)))
-        rf = TUsignal(x_new, yini)
-        #
-        # initializes a void signal
-        #
-        for i in range(Nray):
-            r = TUsignal(x_new, np.zeros(len(x_new)))
-            si = TUsignal(x, s.y[i, :])
-            si.translate(tau[i])
-            r = r + si
-            rf.y[i, :] = r.y
-        return rf
-
-    def ft1(self, Nz, ffts=0):
-        """  construct CIR from ifft(RTF)
-
-        Parameters
-        ----------
-        Nz   : number of zeros for zero padding
-        ffts : fftshift indicator
-            0  no fftshift
-            1  apply fftshift
-
-        Returns
-        -------
-        r : TUsignal
-
-        """
-        tau = self.tau0
-        self.s = self.ift(Nz, ffts)
-        x = self.s.x
-        r = TUsignal(x, np.zeros(len(x)))
-
-        if len(tau) == 1:
-            return(self.s)
-        else:
-            for i in range(len(tau)):
-                si = TUsignal(self.s.x, self.s.y[i, :])
-                si.translate(tau[i])
-                r = r + si
-            return r
-
-    def ftau(self, Nz=0, k=0, ffts=0):
-        """ time superposition   
-
-        Parameters
-        ----------
-        Nz  : number of zeros for zero padding
-        k   : starting index 
-        ffts = 0  no fftshift
-        ffts = 1  apply fftshift
-
-        Returns
-        -------
-        r : TUsignal 
-        """
-        tau = self.tau0
-        s = self.ift(Nz, ffts)
-        x = s.x
-        r = TUsignal(x, np.zeros(len(x)))
-        si = TUsignal(s.x, s.y[k, :])
-        si.translate(tau[k])
-        r = r + si
-        return r
-
-    def ft2(self, df=0.01):
-        """ build channel transfer function (frequency domain)
-
-        Parameters
-        ----------
-        df : float 
-            frequency step (dafault 0.01)
-        
-        1. get  fmin and fmax
-        2. build a new base with frequency step df
-        3. Initialize a FUsignal with the new frequency base 
-        4. build  matrix tau * f  (Nray x Nf)
-        5. buildl matrix E= exp(-2 j pi f tau)
-        6. resampling of FUDsignal according to f --> S
-        7. apply the element wise product E .* S
-        8. add all rays 
-
-        """
-        fmin = self.x[0]
-        fmax = self.x[-1]
-        tau = self.tau0
-
-        f = np.arange(fmin, fmax, df)
-
-        U = FUsignal(f, np.zeros(len(f)))
-
-        TAUF = np.outer(tau, f)
-        E = np.exp(-2 * 1j * np.pi * TAUF)
-
-        S = self.resample(f)
-        ES = E * S.y
-        V = sum(ES, axis=0)
-        U.y = V
-
-        return U
 
 class FHsignal(FUsignal):
     """
@@ -3977,6 +3872,7 @@ def test():
 #
 
 if __name__ == "__main__":
+    plt.ion()
     doctest.testmod()
     #ip1 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)
     #ip2 = EnImpulse(fc=4.493,band=0.499,thresh=3,fe=40)

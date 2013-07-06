@@ -283,17 +283,18 @@ class GeomVect(Geomview):
 
         Examples
         --------
-            >>> import numpy as np
-            >>> import scipy as sp
-            >>> from pylayers.util.geomutil import *
-            >>> pt1 = sp.rand(3,10)
-            >>> pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}
-            >>> gv1 = GeomVect('test1')
-            >>> gv1.points(pt1)
-            >>> #gv1.show3()
-            >>> gv2 = GeomVect('test2')
-            >>> gv2.points(pt2)
-            >>> #gv2.show3()
+
+        >>> import numpy as np
+        >>> import scipy as sp
+        >>> from pylayers.util.geomutil import *
+        >>> pt1 = sp.rand(3,10)
+        >>> pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}
+        >>> gv1 = GeomVect('test1')
+        >>> gv1.points(pt1)
+        >>> #gv1.show3()
+        >>> gv2 = GeomVect('test2')
+        >>> gv2.points(pt2)
+        >>> #gv2.show3()
 
         .. todo::
             colorbar depending of a value associated with point
@@ -387,6 +388,42 @@ class Geomoff(Geomview):
     def __init__(self, _filename):
         _filename = _filename + '.off'
         Geomview.__init__(self, _filename)
+
+    def loadpt(self):
+        """
+        """
+        fo = open(self.filename,'r')
+        lis = fo.readlines()
+        typ,nv,nf,ne=lis[0].split(' ')
+        if typ<>'OFF':
+            logging.critical('not an off file')
+        else:
+            try:
+                nv = eval(nv)    
+                nf = eval(nf)
+                ne = eval(ne)
+            except:
+                logging.critical('load off wrong number of values')
+        print nv,nf,ne       
+        for k in range(nv):
+            x,y,z = lis[k+1].split(' ')
+            x = eval(x)
+            y = eval(y)
+            z = eval(z)
+            try:
+                t = np.vstack((t,np.array([x,y,z])))
+            except:                  
+                t = np.array([x,y,z])
+        return(t)
+
+            
+
+
+
+    def savept(self,_fileoff):
+        """
+        """ 
+        pass
 
     def polygon(self, p, poly):
         """  create geomview off for polygon
@@ -800,6 +837,75 @@ def pvecn(v1, v2):
         print("error divide by zero in pvecn")
     return(v4)
 
+def onbfromaxe(A, B):
+    """ orthonormal basis from 2 points defining an axe
+
+    Parameters
+    ----------
+
+    A : np.array 
+        3 x n
+    B : np.array
+        3 x n 
+
+    Returns
+    -------
+
+
+    T basis (un,vn,wn)
+        3 x n x 3 
+    (un,vn) is a basis in the plane transverse to the axis vn
+    wn is the unitary vector along vector AB 
+
+    Examples
+    --------
+
+    >>> A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
+    >>> B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
+    >>> onbfromaxe(A,B)
+    array([[[ 0.79158384, -0.61106057,  0.        ],
+            [ 0.61106057,  0.79158384,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]],
+    <BLANKLINE>
+           [[ 0.74214568, -0.67023861,  0.        ],
+            [ 0.67023861,  0.74214568,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]],
+    <BLANKLINE>
+           [[ 0.80923784, -0.58748116,  0.        ],
+            [ 0.58748116,  0.80923784,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]],
+    <BLANKLINE>
+           [[ 0.52138786, -0.85331981,  0.        ],
+            [ 0.85331981,  0.52138786,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]]])
+
+
+    see also
+    --------
+    
+    pylayers.util.geomutil.Geomvect.geomBase
+    pylayers.util.mobility.body
+
+    """
+    np.random.seed(0)
+    N = np.shape(A)[1] 
+    # modab 1xN
+    modab = np.sqrt(np.sum((B-A)*(B-A),axis=0))
+    # wn 3xN
+    wn = (B - A) / modab
+    random_vector = np.random.rand(3,N)
+    u = random_vector - np.sum(random_vector*wn,axis=0)*wn
+    modu = np.sqrt(np.sum(u*u,axis=0))
+    # un : 3xN
+    un = u /modu 
+    # vn : 3xN
+    vn = np.cross(wn,un,axis=0)
+    T  = np.dstack((un,vn,wn))
+    # reshape dimension for having index of cylinder axe first
+    # N x 3 x 3
+    T  = T.swapaxes(0,1)
+    return T 
+
 
 def vec_sph(th, ph):
     """
@@ -1101,7 +1207,7 @@ def intersect(A, B, C, D):
     D : np.array (2xN)
 
 
-    Exemples
+    Examples
     --------
 
     .. plot::
@@ -1570,9 +1676,6 @@ def v_color(ob):
     """
     return COLOR[ob.is_simple]
 
-#--------------------------------------------
-#   Functions used for calculation of Gv
-#-------------------------------------------
 
 class LineString(shg.LineString):
     """ Overloaded shapely LineString class
@@ -1625,11 +1728,8 @@ class LineString(shg.LineString):
             >>> L1 = LineString(l1)
             >>> l2 = [[3,4,4,3],[1,1,2,2]]
             >>> L2 = LineString(l2)
-            >>> l3 = [np.array([10,10]),np.array([11,10]),np.array([11,11]),np.array([10,11])]
-            >>> L3 = LineString(l3)
             >>> fig,ax = L1.plot(color='red',alpha=0.3,linewidth=3)
             >>> fig,ax = L2.plot(fig=fig,ax=ax,color='blue',alpha=0.7,linewidth=2)
-            >>> fig,ax = L3.plot(fig=fig,ax=ax,color='green',alpha=1,linewidth=1)
             >>> title = plt.title('test plotting LineString')
 
         """
@@ -1674,6 +1774,9 @@ class LineString(shg.LineString):
 
         return fig,ax
 
+#-----------------------------------------------------------
+#   Functions used for calculation of visibility graph Gv
+#-----------------------------------------------------------
 class Polygon(shg.Polygon):
     """ Overloaded shapely Polygon class
 
@@ -2579,9 +2682,6 @@ def wall_delta(x1, y1, x2, y2, delta=0.0001):
     Examples
     --------
 
-    >>> from pylayers.gis.layout import * 
-    >>> L = Layout()
-    >>> L.loadstr('exemple.str')
     >>> x1=-2.
     >>> y1=2.
     >>> x2=-1.
@@ -2863,16 +2963,18 @@ def mirror(p,pa,pb):
 
     Parameters
     ----------
-        p : numpy.ndarray
-            point to image
-        pa : numpy.ndarray
-            segment tail
-        pb : numpy.ndarray
-            segment head 
+
+    p : numpy.ndarray
+        point to image
+    pa : numpy.ndarray
+        segment tail
+    pb : numpy.ndarray
+        segment head 
 
     Returns
     -------
-        M : numpy.ndarray
+    
+    M : numpy.ndarray
 
     Example
     -------
@@ -2915,4 +3017,5 @@ def mirror(p,pa,pb):
     return x
 
 if __name__ == "__main__":
+    plt.ion()
     doctest.testmod()

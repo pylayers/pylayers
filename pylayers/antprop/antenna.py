@@ -404,9 +404,9 @@ class Antenna(object):
             errTh = np.sum(dTh2)
             errPh = np.sum(dPh2)
 
-        errelTh = errTh / mvTh2
-        errelPh = errPh / mvPh2
-        errel = (errTh + errPh) / (mvTh2 + mvPh2)
+        errelTh = (errTh / mvTh2)
+        errelPh = (errPh / mvPh2)
+        errel =( (errTh + errPh) / (mvTh2 + mvPh2))
 
         return(errelTh, errelPh, errel)
 
@@ -1036,7 +1036,8 @@ class Antenna(object):
         ind = index_vsh(N, M)
         n = ind[:, 0]
         m = ind[:, 1]
-        V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        V, W = VW(n, m, x, phi)
         #
         # broadcasting along frequency axis
         #
@@ -1259,7 +1260,8 @@ class Antenna(object):
         n = ind[:, 0]
         m = ind[:, 1]
 
-        V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+        V, W = VW(n, m, x, phi)
 
 
         Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \

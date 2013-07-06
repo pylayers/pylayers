@@ -233,11 +233,11 @@ class Constraint(object):
                 color = ['m', 'g', 'c', 'y', 'm', 'b', 'r',
                          'm', 'g', 'c', 'y', 'orange', 'skyblue']
                 #color = ['skyblue','skyblue','orange']
-
-                lb = self.lbox
-                lb.parmsh['display'] = False
-                filename2 = lb.show3(Id=[self.id], col='m')  # )color[self.Id])
-                fd.write("{<" + filename2 + "}\n")
+                if self.parmsh['boxes']:
+                    lb = self.lbox
+                    lb.parmsh['display'] = False
+                    filename2 = lb.show3(Id=[self.id], col='m')  # )color[self.Id])
+                    fd.write("{<" + filename2 + "}\n")
                 #
                 # Display Spherical Constraint
                 #

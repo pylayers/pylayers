@@ -8,7 +8,7 @@ import scipy as sp
 import pylab as pl
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import interval
+#import interval
 import itertools
 import networkx as NX
 import ffnet  # ffnet, mlgraph, savenet, loadnet, exportnet
@@ -16,7 +16,7 @@ from numpy.random import RandomState
 from itertools import cycle
 from sklearn import linear_model as lm  # LogisticRegression, SGDClassifier
 from sklearn import svm  # SVC, NuSVC, LinearSVC, SVR
-from sklearn import neighbors as ngb  # NeighborsClassifier, NeighborsRegressor
+from sklearn import neighbors as ngb  # KNeighborsClassifier, KNeighborsRegressor
 from sklearn import mixture as mix  # GMM
 from sklearn import cluster as clus  # KMeans, MeanShift, AffinityPropagation, SpectralClustering
 
@@ -70,7 +70,7 @@ def knn_learn(nneighbors=1, data_train=np.array([]), target_train=np.array([]), 
 
     """
 
-    clf = ngb.NeighborsClassifier(nneighbors).fit(data_train, target_train)
+    clf = ngb.KNeighborsClassifier(nneighbors).fit(data_train, target_train)
     targets = clf.predict(data_test)
     return targets
 
