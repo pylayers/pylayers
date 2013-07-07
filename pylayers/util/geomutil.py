@@ -399,12 +399,12 @@ class Geomoff(Geomview):
             logging.critical('not an off file')
         else:
             try:
-                nv = eval(nv)    
+                nv = eval(nv)
                 nf = eval(nf)
                 ne = eval(ne)
             except:
                 logging.critical('load off wrong number of values')
-        print nv,nf,ne       
+        print nv,nf,ne
         for k in range(nv):
             x,y,z = lis[k+1].split(' ')
             x = eval(x)
@@ -412,13 +412,9 @@ class Geomoff(Geomview):
             z = eval(z)
             try:
                 t = np.vstack((t,np.array([x,y,z])))
-            except:                  
+            except:
                 t = np.array([x,y,z])
         return(t)
-
-            
-
-
 
     def savept(self,_fileoff):
         """
@@ -486,7 +482,7 @@ class Geomoff(Geomview):
         fo.close()
 
     def box(self, extrem = np.array([-1,1,-1,1,-3,3])):
-        """ Geomview file for creating a box
+        """ create a box
 
         Parameters
         ----------
@@ -494,11 +490,11 @@ class Geomoff(Geomview):
         extrem : ndarray
                  (1x6) [xmin,xmax,ymin,ymax,zmin,zmax]
 
-        Example
-        -------
+        Examples
+        --------
 
-            >>> geo = Geomoff('test')
-            >>> geo.box()
+        >>> geo = Geomoff('test')
+        >>> geo.box()
 
         """
         xmin = extrem[0]
@@ -882,7 +878,7 @@ def onbfromaxe(A, B):
 
     see also
     --------
-    
+
     pylayers.util.geomutil.Geomvect.geomBase
     pylayers.util.mobility.body
 
@@ -1243,6 +1239,24 @@ def intersect(A, B, C, D):
     """
     return ((ccw(A, C, D) != ccw(B, C, D)) & (ccw(A, B, C) != ccw(A, B, D)))
 
+def map3(X,Y):
+    """ find linear transpormation mapping 3 points to 3 points
+
+    Parameters
+    ----------
+    X  : np.array
+        Nx3x3
+    Y
+        Nx3x3
+
+    Returns
+    -------
+    T : np.array
+        Nx3x3
+
+    """
+    T = np.dot(Y,la.inv(X))
+    return(T)
 
 def mul3(A, B):
     """
@@ -1296,21 +1310,22 @@ def mul3(A, B):
 
 def MRot3(a, axe):
     """
-    Return a 3D rotation matrix along axe 1|2|3
+    Return a 3D rotation matrix along axe 0|1|2
+
     Parameters
     ----------
 
     a   :  angle (radians)
-    axe :  1:x 2:y 3:z
+    axe :  0:x 1:y 2:z
 
     """
     M3 = np.eye(3)
     M2 = np.array(((np.cos(a), -np.sin(a)), (np.sin(a), np.cos(a))))
-    if (axe == 1):
+    if (axe == 0):
         M3[1:3, 1:3] = M2
-    if (axe == 2):
+    if (axe == 1):
         M3[0::2, 0::2] = M2
-    if (axe == 3):
+    if (axe == 2):
         M3[0:2, 0:2] = M2
     return(M3)
 
@@ -1320,6 +1335,7 @@ def MEulerAngle(alpha, beta, gamma):
 
     Parameters
     ----------
+
     alpha  : float
         rotation along axis z
     beta : float
@@ -1327,8 +1343,9 @@ def MEulerAngle(alpha, beta, gamma):
     gamma : float
         rotation along axis y
 
-    Return
-    ------
+    Returns
+    -------
+
     T    : np.array (3x3)
         rotation matrix
 
@@ -1340,15 +1357,17 @@ def MEulerAngle(alpha, beta, gamma):
 
     Warnings
     --------
+
     Bizarre I was expected
 
     -1  0  0
      0  0  1
      0  1  0
+
     """
-    Ra = MRot3(alpha, 3)
-    Rb = MRot3(beta, 1)
-    Rg = MRot3(gamma, 2)
+    Ra = MRot3(alpha, 2)
+    Rb = MRot3(beta, 0)
+    Rg = MRot3(gamma, 1)
 
     T = np.dot(np.dot(Ra, Rb), Rg)
     #T  = np.dot(np.dot(Rg,Rb),Ra)
