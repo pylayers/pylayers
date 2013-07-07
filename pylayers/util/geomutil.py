@@ -1506,8 +1506,6 @@ def BTB_tx(a_g, T):
 
     return R, al
 
-
-
 class Plot_shapely(object):
     """draw Shapely with matplotlib - pylab
      Plot_shapely.py
@@ -1584,7 +1582,6 @@ class Plot_shapely(object):
             self.plot_line()
         else:
             raise ValueError("inconnu au bataillon: %s" % self.type)
-
 
 def plot_coords(ax, ob, color='#999999'):
     """ plotting coord of a `shapely` object
