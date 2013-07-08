@@ -28,6 +28,7 @@ import time
 from pylayers.location.geometric.util.boxn import *
 from pylayers.location.geometric.util import geomview as g
 from pylayers.location.geometric.util.scene import *
+from interval import interval,inf
 import os
 import sys
 
@@ -306,10 +307,12 @@ class CLA(object):
         ...
 
 
-        :Parameters:
+        Parameters
+        ----------
                 c       : any constraint wichi heritates from Constraint object
 
-        :Returns:
+        Returns
+        -------
                 Nothing but fills self.c list of constraints
 
         """
@@ -486,19 +489,19 @@ class CLA(object):
 
         Each vertexes from boxes pass into the list are tested to determine if the box is out (OB), ambiguous (AB) or enclosed (EB)
 
-        ...
 
-
-        :Parameters:
-                self
-                lv : a vertex list from BOXN.octants
-                N  : number of constraints aka layer number
-                RSS : boolean
-                    True : RSS constraints are kept as any other constraints for boxes evaluation (ambigous /enclosed)
-                    False : RSS constraints are ignored in boxes evaluation (ambigous /enclosed)
-        :Returns:
-                AB : a list with the numerous of Ambiguous Boxes
-                EB : a list with the numerous of Enclosed Boxes
+        Parameters
+        ----------
+            self
+            lv : a vertex list from BOXN.octants
+            N  : number of constraints aka layer number
+            RSS : boolean
+                True : RSS constraints are kept as any other constraints for boxes evaluation (ambigous /enclosed)
+                False : RSS constraints are ignored in boxes evaluation (ambigous /enclosed)
+        Returns
+        -------
+            AB : a list with the numerous of Ambiguous Boxes
+            EB : a list with the numerous of Enclosed Boxes
         """
         assert N <= self.Nc, " N > Number of Constraints "
 
@@ -571,16 +574,17 @@ class CLA(object):
         All boxes partially inside of the VA are divided into octants. Each octants are tested into the self.valid.
 
 
-        ...
-
-        :Parameters:
+        
+        Parameters
+        ----------
                 self
                 l : the layer number
                 NBOXMAX : the maximum number of obtained boxes
                 VOLMIN :  the minimum volume achievable by the obtained boxes
 
 
-        :Returns:
+        Returns
+        -------
                 Nothing, but fills self.dlayer[l][0] and self.dlayer[l][1] respectively with enclosed boxes and ambiguous boxes
         """
 
@@ -891,7 +895,7 @@ class CLA(object):
 #        return clust, axis
 
 
-    def gapdetect2(self, l, dlindx):
+    def gapdetect(self, l, dlindx):
         """basic gap detection
 
         Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
@@ -910,37 +914,170 @@ class CLA(object):
                 clust   : a list of array. each array contains boxes from the same cluster
                 axis    : axis/axes where gap has/have been detectes
 
+        Example
+        -------
+        >>> from pylayers.location.geometric.constraints.cla import *
+        >>> from pylayers.location.geometric.constraints.toa import *
+        >>> from pylayers.location.geometric.constraints.exclude import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+
+        >>> a=np.array(([1,0,0]))
+        >>> b=np.array(([10,0,0]))
+        >>> nodes=np.array(([-10,10],[-10,10],[-1,1]))
+        >>> n= np.array((5,5,0))
+        >>> d1=np.sqrt(np.sum((a-n)**2))
+        >>> d2=np.sqrt(np.sum((b-n)**2))
+        >>> T1=TOA(id=1,value=d1/0.3,std=0.5,p=a)
+        >>> T2=TOA(id=2,value=d2/0.3,std=0.5,p=b)
+        >>> E=Exclude(nodes.T)
+        >>> T1.runable=True
+        >>> T2.runable=True
+        >>> C=CLA()
+        >>> C.append(T1)
+        >>> C.append(T2)
+        >>> C.append(E)
+        >>> C.merge2()
+        >>> C.refine(C.Nc)
+        >>> C.estpos2()
+        
+
         """
         gcoord = []
         axis = np.zeros(self.ndim, dtype='int8')
         clust = []
         c2={}
         axis=np.zeros(self.ndim, dtype='int8')
-        for i in range(self.ndim):
-            c2[i]=[]
-            cm,icm=np.unique(self.dlayer[l][dlindx].bd[0::2, i],return_index=True)
-            cp,icp=np.unique(self.dlayer[l][dlindx].bd[1::2, i],return_index=True)
-            # looking for a discontinuity in axis i
-            gap=[]
-            [gap.append(k) for k in cm[1:] if k not in cp]
 
-            if len(gap) > 1:
-                gap=[gap[0]]
-            if not len(gap) ==0:
+        for i in range(self.ndim):
+            # find all begining point on axis i
+            uA,iuA=np.unique(self.dlayer[l][dlindx].bd[::2,i],return_index=True)
+            # find all ending point on axis i
+            uB,iuB=np.unique(self.dlayer[l][dlindx].bd[1::2,i],return_index=True)
+            # remove 1st point in uA
+            uAA = uA[1:]
+            iuAA = iuA[1:]
+            # remove last point in uA
+            uBB = uB[:-1]
+            iuBB = iuB[:-1]
+
+#            u=[]
+#            # find center of all these segment  
+#            [u.append((uA[k]+uA[k+1])/2) for k in range(len(uA)-1) ]
+
+#            # get all center of the boxes
+#            C=self.dlayer[l][dlindx].ctr[:,i]
+#            v=np.unique(C)
+
+
+            # if no gap, all begining point must also be ending point, otherwise,
+            # a gap exists
+            igap=[]
+#            [igap.append(ik) for ik,k in enumerate(u) if k not in v]
+            [igap.append(ik) for ik,k in enumerate(uAA) if k not in uBB]
+            if len(igap) > 1:
+                igap=[igap[0]]
+            # if a segment has a center which is not a box center , there is a gap
+            # indexes are split into 2 set
+            if not len(igap) ==0:
 
                 # in a futur version it will be more convenient to stock each 
                 # detected cluster in a given axis with a dictionary as the given
                 # axis as a key.
 #               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=cm[igap]))
 #               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>cm[igap]))
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=gap)[0]/2)
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>gap)[0]/2)
 
-
-
-                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=gap)[0]/2)
-                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>gap)[0]/2)
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=uA[igap])[0]/2)
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>uA[igap])[0]/2)
                 axis[i]=1
 #            else :
 #                clust = []
+        return clust,axis
+
+
+    def gapdetect2(self, l, dlindx):
+        """basic gap detection
+
+        Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
+        This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.
+        requiere  pyinterval class 
+
+        ...
+
+        Parameters
+        ----------
+                l       : layer numbero
+                dlindx  : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes
+
+        Return
+        ------
+                clust   : a list of array. each array contains boxes from the same cluster
+                axis    : axis/axes where gap has/have been detectes
+
+        Example
+        -------
+        >>> from pylayers.location.geometric.constraints.cla import *
+        >>> from pylayers.location.geometric.constraints.toa import *
+        >>> from pylayers.location.geometric.constraints.exclude import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+
+        >>> a=np.array(([1,0,0]))
+        >>> b=np.array(([10,0,0]))
+        >>> nodes=np.array(([-10,10],[-10,10],[-1,1]))
+        >>> n= np.array((5,5,0))
+        >>> d1=np.sqrt(np.sum((a-n)**2))
+        >>> d2=np.sqrt(np.sum((b-n)**2))
+        >>> T1=TOA(id=1,value=d1/0.3,std=0.5,p=a)
+        >>> T2=TOA(id=2,value=d2/0.3,std=0.5,p=b)
+        >>> E=Exclude(nodes.T)
+        >>> T1.runable=True
+        >>> T2.runable=True
+        >>> C=CLA()
+        >>> C.append(T1)
+        >>> C.append(T2)
+        >>> C.append(E)
+        >>> C.merge2()
+        >>> C.refine(C.Nc)
+        >>> C.estpos2()
+        
+
+        """
+        gcoord = []
+        axis = np.zeros(self.ndim, dtype='int8')
+        clust = []
+        c2={}
+        axis=np.zeros(self.ndim, dtype='int8')
+
+        for i in range(self.ndim):
+            # reshape boxes to be compliant with interval
+            Z=self.dlayer[l][dlindx].bd[:,i]
+            Zr=Z.reshape(len(Z)/2,2)
+            # create intervals
+            I=[interval(Zr[k]) for k in range(len(Zr))]
+            ii=interval()
+
+            # gather interval
+            for j in I:
+                ii=ii|j
+            # if a gap appears (more than a unique interval) 
+            if len(ii)>1:
+
+                # in a futur version it will be more convenient to stock each 
+                # detected cluster in a given axis with a dictionary as the given
+                # axis as a key.
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=cm[igap]))
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>cm[igap]))
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=gap)[0]/2)
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>gap)[0]/2)
+
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=ii[0][1])[0]/2)
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>=ii[1][0])[0]/2)
+                axis[i]=1
+
+
         return clust,axis
 
 
@@ -1065,7 +1202,9 @@ class CLA(object):
 ##########################################
         self.pecluster=[]
         if clust != []:
-        
+
+
+
             print 'cluster'
             lclust = []
             dd = []
