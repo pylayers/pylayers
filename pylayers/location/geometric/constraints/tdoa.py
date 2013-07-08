@@ -81,9 +81,7 @@ class TDOA(Constraint):
 #               self.lbox    = LBoxN([box],ndim=np.shape(self.p)[1])
 
         self.annulus_bound()
-        self.visible = True
-        self.obsolete = False
-        self.usable = True
+
 
 
     def update(self):
