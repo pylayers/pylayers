@@ -115,9 +115,6 @@ class Geomlist(Geomview):
     def __init__(self, _filename):
         _filename = _filename + '.list'
         Geomview.__init__(self, _filename)
-        fd = open(self.filename, 'w')
-        fd.write('LIST\n')
-        fd.close()
 
     def append(self, strg):
         """
@@ -416,10 +413,30 @@ class Geomoff(Geomview):
                 t = np.array([x,y,z])
         return(t)
 
-    def savept(self,_fileoff):
+    def savept(self,ptnew,_fileoff):
         """
         """ 
-        pass
+        fo = open(self.filename,'r')
+        lis = fo.readlines()
+        typ,nv,nf,ne=lis[0].split(' ')
+        if typ<>'OFF':
+            logging.critical('not an off file')
+        else:
+            try:
+                nv = eval(nv)
+                nf = eval(nf)
+                ne = eval(ne)
+            except:
+                logging.critical('load off wrong number of values')
+        fo.close()
+        fileoff = pyu.getlong(_fileoff, "geom")
+        fo = open(fileoff,'w')
+        fo.write(lis[0])
+        for k in range(nv):
+            fo.write(str(ptnew[k,0])+' '+str(ptnew[k,1])+' '+str(ptnew[k,2])+' '+'\n')
+        for li in lis[k+2:]:
+            fo.write(li)
+        fo.close()
 
     def polygon(self, p, poly):
         """  create geomview off for polygon

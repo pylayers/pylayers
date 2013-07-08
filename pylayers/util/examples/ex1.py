@@ -27,7 +27,7 @@ ax = fig.add_subplot(111, projection='3d')
 xs = pt[:,0]
 ys = pt[:,1]
 zs = pt[:,2]
-ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
+#ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
 #plt.axis('scaled')
 #plt.show()
 
@@ -40,9 +40,9 @@ pA = np.array([[3],[3],[3]])
 pB = np.array([[10],[10],[10]])
 pM = (pA+pB)/2.
 T = onbfromaxe(pA,pB)
-R = 0.3
+R = 0.8
 X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
-Y = np.hstack((pM,pA,pB,pM+R*T[:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[0,:,0].reshape(3,1)))
+Y = np.hstack((pM,pA,pB,pM+R*T[:,0].reshape(3,1),pM+R*T[0,:,0].reshape(3,1),pB+R*T[0,:,1].reshape(3,1)))
 A,B = cylmap(Y)
 # 
 ptn = np.dot(A,pt.T)+B
@@ -50,6 +50,9 @@ ptn = np.dot(A,pt.T)+B
 xs = ptn[0,:]
 ys = ptn[1,:]
 zs = ptn[2,:]
-ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
-plt.axis('scaled')
-plt.show()
+#ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
+#plt.axis('scaled')
+#plt.show()
+cyl.savept(ptn.T,'ge1.off')
+cy2=Geomoff('ge1')
+cy2.show3()

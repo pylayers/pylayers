@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
 import  pdb as pdb
+import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as pltu
 import pylayers.util.geomutil as geu
 import doctest
@@ -51,23 +52,47 @@ class BodyCylinder(object):
 
     def __init__(self):
         self.g = nx.Graph()
-        nodes_ID = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        self.marker_set = ['STRN', 'CLAV', 'RFHD', 'RSHO', 'LSHO', 'RELB', 'LELB', 'RWRB', 'LWRB', 'RFWT', 'LFWT', 'RKNE', 'LKNE', 'RANK', 'LANK']
-        self.g.add_nodes_from(nodes_ID)
-        self.g.add_edge(0, 1)
-        self.g.add_edge(0, 9)
-        self.g.add_edge(0, 10)
+        self.nodes_Id = {
+            0:'STRN', 
+            1:'CLAV',
+            2:'RFHD', 
+            3:'RSHO', 
+            4:'LSHO',
+            5:'RELB', 
+            6:'LELB', 
+            7:'RWRB', 
+            8:'LWRB',
+            9:'RFWT',
+            10:'LFWT', 
+            11:'RKNE',
+            12:'LKNE', 
+            13:'RANK', 
+            14:'LANK'}
+        self.g.add_nodes_from(self.nodes_Id.keys())
+        self.g.add_edge(0, 1,radius =1)
+        self.g[0][1]['radius']=10
+        #self.g.add_edge(0, 9)
+        #self.g.add_edge(0, 10)
         self.g.add_edge(1, 2)
-        self.g.add_edge(1, 3)
-        self.g.add_edge(1, 4)
+        self.g[1][2]['radius']=8
+        #self.g.add_edge(1, 3)
+        #self.g.add_edge(1, 4)
         self.g.add_edge(3, 5)
+        self.g[3][5]['radius']=5
         self.g.add_edge(4, 6)
+        self.g[4][6]['radius']=5
         self.g.add_edge(5, 7)
+        self.g[5][7]['radius']=5
         self.g.add_edge(6, 8)
+        self.g[6][8]['radius']=5
         self.g.add_edge(9, 11)
+        self.g[9][11]['radius']=5
         self.g.add_edge(10, 12)
+        self.g[10][12]['radius']=5
         self.g.add_edge(11, 13)
+        self.g[11][13]['radius']=5
         self.g.add_edge(12, 14)
+        self.g[12][14]['radius']=5
 
     def loadC3D(self, filename='07_01.c3d', nframes=126):
         """ load nfranes of motion capture C3D file 
@@ -85,8 +110,8 @@ class BodyCylinder(object):
         # self.d 3 x np x nf
         self.d = np.ndarray(shape=(3, 15, np.shape(f)[0]))
         ind = []
-        for i in range(len(self.marker_set)):
-            ind.append(p.index(s[0] + self.marker_set[i]))
+        for i in self.nodes_Id:
+            ind.append(p.index(s[0] + self.nodes_Id[i]))
 
         # f.T : 3 x np x nf
         self.d = f[0:nframes, ind, :].T
@@ -94,7 +119,41 @@ class BodyCylinder(object):
         for i in range(15):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
 
-    def model(self, nc=10):
+    def show3(self,iframe): 
+        self.geomfile(iframe)
+        bdy = geu.Geomlist('body'+str(iframe))
+        bdy.show3()
+
+    def geomfile(self,iframe):
+        """
+        """
+        cyl = geu.Geomoff('cylinder')
+        pt = cyl.loadpt()
+
+        _filebody = 'body'+str(iframe)+'.list'
+        filebody = pyu.getlong(_filebody,"geom")
+
+        fo = open(filebody,"w")
+        fo.write("LIST\n")
+        for k,e in enumerate(self.g.edges()):
+            e0 = e[0]
+            e1 = e[1]
+            pA = self.d[:,e0,iframe].reshape(3,1)
+            pB = self.d[:,e1,iframe].reshape(3,1)
+            pM = (pA+pB)/2.
+            T = geu.onbfromaxe(pA,pB)
+            R = self.g[e0][e1]['radius']
+            Y = np.hstack((pM,pA,pB,pM+R*T[0,:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[0,:,0].reshape(3,1)))
+            A,B = geu.cylmap(Y)
+            ptn = np.dot(A,pt.T)+B
+            _filename = 'edge'+str(k)+'-'+str(iframe)+'.off'
+            filename = pyu.getlong(_filename,"geom")
+            cyl.savept(ptn.T,_filename)
+            fo.write('{<'+filename+'}\n')
+        fo.close()
+
+
+    def antennas(self, nc=10):
         """
 
         Parameters
@@ -106,7 +165,7 @@ class BodyCylinder(object):
         -----
         
         add a member data 
-        c : array(shape  =  (nc,8)), Cylinder Id , A coordiante, B Coordinate , cylinder radius
+        c : array(shape  =  (nc,8)), Cylinder Id , A coordinate, B Coordinate , cylinder radius
 
         """
         self.nc = nc
