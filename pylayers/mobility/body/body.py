@@ -70,7 +70,7 @@ class BodyCylinder(object):
         self.g.add_edge(12, 14)
 
     def loadC3D(self, filename='07_01.c3d', nframes=126):
-        """ load nfranes of motion capture C3D file 
+        """ load nframes of motion capture C3D file 
 
         Parameters
         ----------

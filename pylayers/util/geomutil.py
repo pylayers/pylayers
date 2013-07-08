@@ -849,9 +849,9 @@ def onbfromaxe(A, B):
 
 
     T basis (un,vn,wn)
-        3 x n x 3 
+        3 x n x 3
     (un,vn) is a basis in the plane transverse to the axis vn
-    wn is the unitary vector along vector AB 
+    wn is the unitary vector along vector AB
 
     Examples
     --------
@@ -884,7 +884,7 @@ def onbfromaxe(A, B):
 
     """
     np.random.seed(0)
-    N = np.shape(A)[1] 
+    N = np.shape(A)[1]
     # modab 1xN
     modab = np.sqrt(np.sum((B-A)*(B-A),axis=0))
     # wn 3xN
@@ -893,14 +893,14 @@ def onbfromaxe(A, B):
     u = random_vector - np.sum(random_vector*wn,axis=0)*wn
     modu = np.sqrt(np.sum(u*u,axis=0))
     # un : 3xN
-    un = u /modu 
+    un = u /modu
     # vn : 3xN
     vn = np.cross(wn,un,axis=0)
     T  = np.dstack((un,vn,wn))
     # reshape dimension for having index of cylinder axe first
     # N x 3 x 3
     T  = T.swapaxes(0,1)
-    return T 
+    return T
 
 
 def vec_sph(th, ph):
