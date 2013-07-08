@@ -99,6 +99,7 @@ class BodyCylinder(object):
 
         Parameters
         ----------
+
         nc  : number of cylinders 
     
         Notes
@@ -241,7 +242,7 @@ class BodyCylinder(object):
 
 
 def translate(cycle, new_origin):
-    """ rotate a cycle of frames by an angle alpha
+    """  rotate a cycle of frames by an angle alpha
 
     Parameters
     ----------
@@ -269,7 +270,7 @@ def translate(cycle, new_origin):
 
 
 def rotation(cycle, alpha=np.pi/2):
-    """ rotate a cycle of frames by an angle alpha
+    """  rotate a cycle of frames by an angle alpha
 
     Parameters
     ----------
@@ -298,7 +299,7 @@ def rotation(cycle, alpha=np.pi/2):
 
 
 def Global_Trajectory(cycle, traj):
-    """
+    """ 
 
     Parameters
     ----------
