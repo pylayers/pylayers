@@ -1239,11 +1239,12 @@ def intersect(A, B, C, D):
     """
     return ((ccw(A, C, D) != ccw(B, C, D)) & (ccw(A, B, C) != ccw(A, B, D)))
 
-def map3(X,Y):
-    """ find linear transpormation mapping 3 points to 3 points
+def cylmap(Y):
+    """ find affine transformation 
 
     Parameters
     ----------
+
     X  : np.array
         Nx3x3
     Y
@@ -1251,12 +1252,19 @@ def map3(X,Y):
 
     Returns
     -------
+
     T : np.array
         Nx3x3
 
+    Y = A X + B 
+
     """
-    T = np.dot(Y,la.inv(X))
-    return(T)
+    X = np.array([[0,0,0],[0,0,0.25],[0,0,-0.25],[0.0625,0,0],[0,0.0625,0]]).T
+    B = Y[:,0][:,np.newaxis]
+    Yc = Y-B
+    pX = la.pinv(X)
+    A = np.dot(Yc,pX)
+    return(A,B)
 
 def mul3(A, B):
     """
@@ -1525,8 +1533,6 @@ def BTB_tx(a_g, T):
 
     return R, al
 
-
-
 class Plot_shapely(object):
     """draw Shapely with matplotlib - pylab
      Plot_shapely.py
@@ -1603,7 +1609,6 @@ class Plot_shapely(object):
             self.plot_line()
         else:
             raise ValueError("inconnu au bataillon: %s" % self.type)
-
 
 def plot_coords(ax, ob, color='#999999'):
     """ plotting coord of a `shapely` object
