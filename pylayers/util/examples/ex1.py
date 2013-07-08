@@ -27,7 +27,7 @@ ax = fig.add_subplot(111, projection='3d')
 xs = pt[:,0]
 ys = pt[:,1]
 zs = pt[:,2]
-#ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
+ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
 #plt.axis('scaled')
 #plt.show()
 
@@ -41,7 +41,8 @@ pB = np.array([[10],[10],[10]])
 pM = (pA+pB)/2.
 T = onbfromaxe(pA,pB)
 R = 0.3
-Y = np.hstack((pM,pA,pB,pM+R*T[:,0].reshape(3,1),pM+R*T[:,1].reshape(3,1)))
+X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
+Y = np.hstack((pM,pA,pB,pM+R*T[:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[0,:,0].reshape(3,1)))
 A,B = cylmap(Y)
 # 
 ptn = np.dot(A,pt.T)+B
