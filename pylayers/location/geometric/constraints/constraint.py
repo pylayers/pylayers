@@ -85,6 +85,9 @@ class Constraint(object):
             self.runable = True
         else:
             self.runable = False
+        self.usable = True
+        self.visible = True
+        self.obsolete = False
         self.p = p
         self.validity = 20                  # not used
         self.id = id  # Id of constraint is set to counter + 1
