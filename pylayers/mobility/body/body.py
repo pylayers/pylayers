@@ -52,6 +52,7 @@ class BodyCylinder(object):
 
     def __init__(self):
         self.g = nx.Graph()
+        self.npoints = 15
         self.nodes_Id = {
             0:'STRN', 
             1:'CLAV',
@@ -93,6 +94,12 @@ class BodyCylinder(object):
         self.g[11][13]['radius']=5
         self.g.add_edge(12, 14)
         self.g[12][14]['radius']=5
+
+    def center(self):
+        """
+        """
+        self.pg = np.sum(self.d,axis=1)/self.npoints
+        self.d = self.d - self.pg[:,np.newaxis,:]
 
     def loadC3D(self, filename='07_01.c3d', nframes=126):
         """ load nfranes of motion capture C3D file 

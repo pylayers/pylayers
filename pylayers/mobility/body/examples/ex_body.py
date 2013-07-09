@@ -74,7 +74,7 @@ bc.loadC3D(filename='07_01.c3d',nframes=nframes)
 
 c3dframe = bc.d
 bc.geomfile(0)
-bc.movie()
+#bc.movie()
 pg = np.sum(bc.d,axis=1)
 
 #
