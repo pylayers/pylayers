@@ -5,7 +5,7 @@ from pylayers.mobility.body import c3d
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
-import  pdb as pdb
+import pdb as pdb
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as pltu
 import pylayers.util.geomutil as geu
@@ -52,7 +52,7 @@ class BodyCylinder(object):
 
     def __init__(self):
         self.g = nx.Graph()
-        self.npoints = 15
+        self.npoints = 15 
         self.nodes_Id = {
             0:'STRN', 
             1:'CLAV',
@@ -69,6 +69,21 @@ class BodyCylinder(object):
             12:'LKNE', 
             13:'RANK', 
             14:'LANK'}
+#            15:'LFIN'}
+#            16:'LELB',
+#            17:'RUPA',
+#            18:'LUPA',
+#            19:'RFRM',
+#            20:'LFRM',
+#            21:'LSHN',
+#            22:'RSHN',
+#            23:'LTHI',
+#            24:'RTHI',
+#            25:'LHEE',
+#            26:'RHEE',
+#            27:'LTOE',
+#            28:'RTOE',
+#            29:'RMT5'}
         self.g.add_nodes_from(self.nodes_Id.keys())
         self.g.add_edge(0, 1,radius =1)
         self.g[0][1]['radius']=10
@@ -97,12 +112,18 @@ class BodyCylinder(object):
 
     def center(self):
         """
+
+        Returns
+        -------
+
         """
         self.pg = np.sum(self.d,axis=1)/self.npoints
         self.d = self.d - self.pg[:,np.newaxis,:]
+        return(pg)
 
+    
     def loadC3D(self, filename='07_01.c3d', nframes=126):
-        """ load nfranes of motion capture C3D file 
+        """ load nframes of motion capture C3D file 
 
         Parameters
         ----------
@@ -113,10 +134,12 @@ class BodyCylinder(object):
         """
         self.nframes = nframes
         s, p, f = c3d.read_c3d(filename)
+
+        #pdb.set_trace()
         CM_TO_M = 0.01
         # self.d 3 x np x nf
         # 
-        self.d = np.ndarray(shape=(3, 15, np.shape(f)[0]))
+        self.d = np.ndarray(shape=(3, self.npoints, np.shape(f)[0]))
         if self.d[2,:,:].max()>50:
             self.d = self.d*CM_TO_M
         ind = []
@@ -126,8 +149,19 @@ class BodyCylinder(object):
         # f.T : 3 x np x nf
         self.d = f[0:nframes, ind, :].T
         self.g.pos = {}
-        for i in range(15):
+        for i in range(self.npoints):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
+        #
+        # Extension of cylinder
+        #
+        self.g.add_node(15)
+        pm  = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
+        pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
+        pmf = pmf[:,np.newaxis,:]
+        self.d = np.concatenate((self.d,pmf),axis=1)
+        self.g.add_edge(0, 15)
+        self.g.pos[15] = (pm[1],pm[2])
+        self.g[0][15]['radius']=10
 
     def movie(self):
         for k in range(self.nframes):
@@ -438,7 +472,7 @@ if __name__ == '__main__':
 #    nframes = 126
 #    Bc = BodyCylinder()
 #    Bc.loadC3D()
-#    c10_15 = Bc.d
+#    c10_1t = Bc.d
 #    #nx.draw(B.g)
 #    fig = plt.figure()
 #
