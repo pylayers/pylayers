@@ -404,7 +404,7 @@ class Geomoff(Geomview):
                 ne = eval(ne)
             except:
                 logging.critical('load off wrong number of values')
-        print nv,nf,ne
+        #print nv,nf,ne
         for k in range(nv):
             x,y,z = lis[k+1].split(' ')
             x = eval(x)
@@ -416,10 +416,28 @@ class Geomoff(Geomview):
                 t = np.array([x,y,z])
         return(t)
 
-    def savept(self,_fileoff):
+    def savept(self,newpt,_fileout):
         """
-        """ 
-        pass
+        """
+        fo = open(self.filename,'r')
+        lis = fo.readlines()
+        typ,nv,nf,ne=lis[0].split(' ')
+        if typ<>'OFF':
+            logging.critical('not an off file')
+        else:
+            try:
+                nv = eval(nv)
+                nf = eval(nf)
+                ne = eval(ne)
+            except:
+                logging.critical('load off wrong number of values')
+        fo.close()
+        fo = open(_fileout,'w')
+        fo.write(lis[0])
+        for k in range(nv):
+            fo.write(str(newpt[k,0])+' '+str(newpt[k,1])+' '+str(newpt[k,2])+'\n')
+        for li in lis[k+2:]:
+            fo.write(li)
 
     def polygon(self, p, poly):
         """  create geomview off for polygon
@@ -1259,7 +1277,7 @@ def cylmap(Y):
     Y = A X + B 
 
     """
-    X = np.array([[0,0,0],[0,0,0.25],[0,0,-0.25],[0.0625,0,0],[0,0.0625,0]]).T
+    X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
     B = Y[:,0][:,np.newaxis]
     Yc = Y-B
     pX = la.pinv(X)
