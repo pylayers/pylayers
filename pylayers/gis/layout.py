@@ -180,7 +180,7 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filename='defstr.str',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
+    def __init__(self,_filename='defstr3.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
 
 
         mat = sb.MatDB()
@@ -920,7 +920,7 @@ class Layout(object):
             raise NameError('layout filename extension not recognized')
 
         #  construct geomfile (.off) for vizalisation with geomview
-
+        self.subseg()
         if os.path.exists(filename):
             try:
                 self.geomfile()

@@ -56,6 +56,8 @@ pstruc['DIRINI'] ='struc/ini'
 pstruc['DIROSM'] ='struc/osm'
 pstruc['DIRSTRUC2'] = 'struc/str'
 pstruc['DIRFUR'] = 'struc/furnitures'
+pstruc['DIRIMAGE'] = 'struc/images'
+pstruc['DIRPICKLE'] = 'struc/gpickle'
 pstruc['DIRSLAB'] = 'ini'
 pstruc['DIRSLAB2'] = 'ini'
 pstruc['DIRMAT'] = 'ini'
@@ -83,15 +85,45 @@ except:
 #
 fd = open(basename+'/project.conf','w')
 fd.close()
-for nm in pstruc.keys():
+#for nm in pstruc.keys():
+for nm,nv in pstruc.items():
     dirname =  basename + '/'+pstruc[nm] 
-    try:
-        os.chdir(dirname)
-        os.chdir('..')
-    except:
-        print "create "+ dirname
-        os.mkdir(dirname)
-        os.chdir('..')
+    sp = nv.split('/')  
+    if len(sp)>1:
+        if not os.path.isdir(basename + '/'+sp[0]):     
+            os.mkdir(basename + '/'+sp[0])
+            os.mkdir(basename + '/'+nv)
+            print "create ",basename + '/'+nv
+        else:
+            if not os.path.isdir(basename + '/'+nv):
+                os.mkdir(basename + '/'+nv)
+                print "create ",basename + '/'+nv
+    else :
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
+            print "create ",dirname
+        
+
+
+#    try:
+#        os.chdir(dirname)
+#        os.chdir('..')
+#    except:
+#        pdb.set_trace()
+#        sp = nv.split('/')  
+#        if len(sp)>1:
+#            try:
+#                os.chdir(basename + '/'+sp[0])
+#                os.chdir('..')
+#            except:
+#                os.mkdir(basename + '/'+sp[0])
+#                os.chdir(basename + '/'+sp[0])
+#                os.mkdir(basename + '/'+sp[1])
+#                os.chdir('..')
+#        else:
+#            print "create "+ dirname
+#            os.mkdir(dirname)
+#            os.chdir('..')
 
 
     if nm == 'DIRANT':
@@ -123,7 +155,7 @@ for nm in pstruc.keys():
 #
 
 if basename<>pylayersdir+'/data':
-    dirlist=['ini','struc','struc/furnitures','ant','output','geom']
+    dirlist=['ini','struc','struc/furnitures','struc/osm','struc/str','struc/wrl','struc/images','struc/ini','ant','output','geom']
     for dl in dirlist:
         filelist = os.listdir(pylayersdir+'/data/' + dl)
         for fi in filelist:
@@ -132,6 +164,6 @@ if basename<>pylayersdir+'/data':
                     pass
                 else:
                     shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
-
+            
 
 os.chdir(currentdir)
