@@ -68,8 +68,9 @@ def getFloat(str):
 # ParameterGroup     ParameterGroup(Ngroups).Parameters(Nparameters).data ..etc.
 # CameraInfo         MarkerRelated CameraInfo [Nmarkers x NvideoFrames]
 # ResidualError      MarkerRelated ErrorInfo  [Nmarkers x NvideoFrames]
-def read_c3d(_filename='07_01.c3d'):
-
+def read_c3d(_filename='07_01.c3d',verbose=False):
+    """ read c3d file 
+    """
     FullFileName = pyu.getlong(_filename, 'body/c3d')
     Markers = []
     VideoFrameRate = 0
@@ -79,13 +80,14 @@ def read_c3d(_filename='07_01.c3d'):
     ParameterGroups = []
     CameraInfo = []
     ResidualError = []
-    print "*********************"
-    print "**** Opening File ***"
-    print "*********************"
+    if verbose:
+        print "*********************"
+        print "**** Opening File ***"
+        print "*********************"
 
     #ind=findstr(FullFileName,'\');
     #if ind>0, FileName=FullFileName(ind(length(ind))+1:length(FullFileName)); else FileName=FullFileName; end
-    print "FileName = ", FullFileName
+        print "FileName = ", FullFileName
     fid = open(FullFileName, 'rb')
     # native format (PC-intel)
     content = fid.read()
@@ -117,22 +119,23 @@ def read_c3d(_filename='07_01.c3d'):
     #print "**** Processor coding ***"
     #print "*************************"
 
-    if proctype == 1:
-        print "Intel-PC"
-    elif proctype == 2:
-        print "DEC-VAX"
-    elif proctype == 3:
-        print "MIPS-SUN/SGI"
-    else:
-        print "unknown processor type"
+    #if proctype == 1:
+    #    print "Intel-PC"
+    #elif proctype == 2:
+    #    print "DEC-VAX"
+    #elif proctype == 3:
+    #    print "MIPS-SUN/SGI"
+    #else:
+    #    print "unknown processor type"
 
     #if proctype==2,
     #    fclose(fid);
     #    fid=fopen(FullFileName,'r','d'); % DEC VAX D floating point and VAX ordering
     #end
-    print "***********************"
-    print "**** Reading Header ***"
-    print "***********************"
+    if verbose:
+        print "***********************"
+        print "**** Reading Header ***"
+        print "***********************"
 
     # ###############################################
     # ##                                           ##
@@ -174,17 +177,18 @@ def read_c3d(_filename='07_01.c3d'):
 
     AnalogFrameRate = VideoFrameRate * NanalogFramesPerVideoFrame
 
-    print "NanalogFramesPerVideoFrame= ", NanalogFramesPerVideoFrame
-    print "AnalogFrameRate= ", AnalogFrameRate
-    print "VideoFrameRate= ", VideoFrameRate
-    print "Scale= ", Scale
-    print "Nmarkers= ", Nmarkers
-    print "StartFrame= ", StartFrame
-    print "EndFrame= ", EndFrame
+    if verbose:
+        print "NanalogFramesPerVideoFrame= ", NanalogFramesPerVideoFrame
+        print "AnalogFrameRate= ", AnalogFrameRate
+        print "VideoFrameRate= ", VideoFrameRate
+        print "Scale= ", Scale
+        print "Nmarkers= ", Nmarkers
+        print "StartFrame= ", StartFrame
+        print "EndFrame= ", EndFrame
 
-    print "***********************"
-    print "**** Reading Events ..."
-    print "***********************"
+        print "***********************"
+        print "**** Reading Events ..."
+        print "***********************"
 
     content = content_memory
     content = content[298:]  # bizarre .. ce devrait etre 150 selon la doc
@@ -194,11 +198,11 @@ def read_c3d(_filename='07_01.c3d'):
     EventTime = []
     EventValue = []
     EventName = []
-
-    print "EventIndicator = ", EventIndicator
+    if verbose:
+        print "EventIndicator = ", EventIndicator
     if EventIndicator == 12345:
         Nevents, content = getNumber(content, 2)
-        print "Nevents= ", Nevents
+        #print "Nevents= ", Nevents
         content = content[2:]
         if Nevents > 0:
             for i in range(Nevents):
@@ -215,10 +219,11 @@ def read_c3d(_filename='07_01.c3d'):
                 lenom = content[0:4]
                 content = content[4:]
                 EventName.append(lenom)
-
-    print "***************************"
-    print "**** Reading Parameters ..."
-    print "***************************"
+    
+    if verbose:
+        print "***************************"
+        print "**** Reading Parameters ..."
+        print "***************************"
 
     content = content_memory
     content = content[512 * (NrecordFirstParameterblock - 1):]
@@ -230,7 +235,8 @@ def read_c3d(_filename='07_01.c3d'):
     key2, content = getNumber(content, 1)
 
     NparameterRecords, content = getNumber(content, 1)
-    print "NparameterRecords=", NparameterRecords
+    if verbose:
+        print "NparameterRecords=", NparameterRecords
     proctype, content = getNumber(content, 1)
     proctype = proctype - 83                      # proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
@@ -319,12 +325,14 @@ def read_c3d(_filename='07_01.c3d'):
                     ParameterGroups[GroupNumber].parameter[
                         ParameterNumber - 1].data.append(data)  # ???
                 if string.rstrip(ParameterName) == "LABELS" and string.rstrip(GroupName) == "POINT":
-                    print "POINT = ", ParameterGroups[
+                    if verbose:
+                        print "POINT = ", ParameterGroups[
                         GroupNumber].parameter[ParameterNumber - 1].data
                     Point = ParameterGroups[
                         GroupNumber].parameter[ParameterNumber - 1].data
                 elif string.rstrip(ParameterName) == "LABEL_PREFIXES" and string.rstrip(GroupName) == "SUBJECTS":
-                    print "SUBJECTS = ", ParameterGroups[
+                    if verbose:
+                        print "SUBJECTS = ", ParameterGroups[
                         GroupNumber].parameter[ParameterNumber - 1].data
                     Subjects = ParameterGroups[
                         GroupNumber].parameter[ParameterNumber - 1].data
@@ -335,7 +343,8 @@ def read_c3d(_filename='07_01.c3d'):
             elif type == 1:
                 data = []
                 Nparameters = datalength / abs(type)
-                print "Nparameters=", Nparameters
+                if verbose:
+                    print "Nparameters=", Nparameters
                 for i in range(Nparameters):
                     ladata, content = getNumber(content, 1)
                     data.append(ladata)
@@ -410,7 +419,8 @@ def read_c3d(_filename='07_01.c3d'):
     content = content[(NrecordDataBlock - 1) * 512:]
 
     NvideoFrames = EndFrame - StartFrame + 1
-    print "NVideoFrames = ", NvideoFrames
+    if verbose:
+        print "NVideoFrames = ", NvideoFrames
 
     for i in range(NvideoFrames):
         Markers.append([])
@@ -439,14 +449,15 @@ def read_c3d(_filename='07_01.c3d'):
     #                fread(fid,NanalogChannels,'int16')';
     #        end
     #    end
-
-    print "***************************"
-    print "**** Reading DataBlock ...."
-    print "***************************"
+    if verbose:
+        print "***************************"
+        print "**** Reading DataBlock ...."
+        print "***************************"
     ptr_read = 0
     if Scale < 0.0:
         for i in range(NvideoFrames):
-            print "*",
+            if verbose:
+                print "*",
             for j in range(Nmarkers):
                 #x, content = getFloat(content)
                 #y, content = getFloat(content)

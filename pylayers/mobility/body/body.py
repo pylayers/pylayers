@@ -104,11 +104,14 @@ class BodyCylinder(object):
         nframes  : int 
             number of frames 
         """
-
+        self.nframes = nframes
         s, p, f = c3d.read_c3d(filename)
-
+        CM_TO_M = 0.01
         # self.d 3 x np x nf
+        # 
         self.d = np.ndarray(shape=(3, 15, np.shape(f)[0]))
+        if self.d[2,:,:].max()>50:
+            self.d = self.d*CM_TO_M
         ind = []
         for i in self.nodes_Id:
             ind.append(p.index(s[0] + self.nodes_Id[i]))
@@ -119,12 +122,16 @@ class BodyCylinder(object):
         for i in range(15):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
 
-    def show3(self,iframe): 
+    def movie(self):
+        for k in range(self.nframes):
+            self.geomfile(k,verbose=True)
+
+    def show3(self,iframe=0): 
         self.geomfile(iframe)
         bdy = geu.Geomlist('body'+str(iframe))
         bdy.show3()
 
-    def geomfile(self,iframe):
+    def geomfile(self,iframe,verbose=False):
         """
         """
         cyl = geu.Geomoff('cylinder')
@@ -135,6 +142,8 @@ class BodyCylinder(object):
 
         fo = open(filebody,"w")
         fo.write("LIST\n")
+        if verbose:
+            print ("LIST\n")
         for k,e in enumerate(self.g.edges()):
             e0 = e[0]
             e1 = e[1]
@@ -150,6 +159,8 @@ class BodyCylinder(object):
             filename = pyu.getlong(_filename,"geom")
             cyl.savept(ptn.T,_filename)
             fo.write('{<'+filename+'}\n')
+            if verbose:
+                print('{<'+filename+'}\n')
         fo.close()
 
 

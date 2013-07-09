@@ -74,6 +74,9 @@ bc.loadC3D(filename='07_01.c3d',nframes=nframes)
 
 c3dframe = bc.d
 bc.geomfile(0)
+bc.movie()
+pg = np.sum(bc.d,axis=1)
+
 #
 # Convert c3d file into a 10 (4+4+1+1) cylinder model
 #
@@ -83,7 +86,7 @@ bc.geomfile(0)
 #  c : array(shape  =  (nc,8)), Id (1), A coordinate (3) , B coordinate (3) , radius (1)
 #
 
-bc.antennas()
+#bc.antennas()
 
 #
 # create a reference basis on each cylinder

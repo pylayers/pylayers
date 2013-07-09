@@ -401,7 +401,7 @@ class Geomoff(Geomview):
                 ne = eval(ne)
             except:
                 logging.critical('load off wrong number of values')
-        print nv,nf,ne
+        #print nv,nf,ne
         for k in range(nv):
             x,y,z = lis[k+1].split(' ')
             x = eval(x)
