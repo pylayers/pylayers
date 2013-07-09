@@ -116,11 +116,47 @@ class BodyCylinder(object):
         Returns
         -------
 
+        pg 
+
+
+        Notes
+        -----
+
+        Here we calculate only the projection of the body centroid in the
+        plane 0xy
+
         """
+
         self.pg = np.sum(self.d,axis=1)/self.npoints
         self.d = self.d - self.pg[:,np.newaxis,:]
+
         return(pg)
 
+    def trajectory(self,traj,tk,Tstep):
+        """ translate the body on a time stamped trajectory
+
+        Parameters
+        ----------
+
+        traj : t,x,y,z
+        tk : float 
+            time for evaluation of topos
+        Tstep : duration of the periodic motion sequence 
+
+        """
+        tf = Tstep/self.nframes # frame sampling period  
+        kt = np.ceil(tk)
+        kf = np.ceil(np.mod(tk,tf))
+        # 3 x 15 
+        vs = self.pg[:,kf] - self.pg[:,kf-1]
+        vt = traj[kt+1:1:] - traj[kt:1:]
+        psa = np.array([0,0])
+        psb = psa + vs
+        pta = traj[kt,1:-1]
+        ptb = pta + vt
+        A,B = geu.affine2d((psa,psb),(pta,ptb))
+        self.topos = np.dot(A,self.d[:,:,kf])+B
+        
     
     def loadC3D(self, filename='07_01.c3d', nframes=126):
         """ load nframes of motion capture C3D file 
@@ -131,6 +167,7 @@ class BodyCylinder(object):
         filename : string
         nframes  : int 
             number of frames 
+
         """
         self.nframes = nframes
         s, p, f = c3d.read_c3d(filename)

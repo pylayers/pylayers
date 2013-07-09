@@ -15,6 +15,7 @@ PIL>=1.1.5
 bitstring>=3.0.2
 shapely>=1.2.14
 descartes>=1.0
+pyintervall>=1.0
 
 The installation of matplotlib basemap requires installation of libraries GEOS
 and PROJ4. The installation procedure is well described in
