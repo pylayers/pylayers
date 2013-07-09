@@ -155,10 +155,9 @@ for nm,nv in pstruc.items():
 #
 
 if basename<>pylayersdir+'/data':
-    dirlist=['ini','struc','struc/furnitures','struc/osm','ant','output','geom']
+    dirlist=['ini','struc','struc/furnitures','struc/osm','struc/str','struc/wrl','struc/images','struc/ini','ant','output','geom']
     for dl in dirlist:
         filelist = os.listdir(pylayersdir+'/data/' + dl)
-
         for fi in filelist:
             if not os.path.isdir(basename+'/'+dl+'/'+fi):
                 if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
