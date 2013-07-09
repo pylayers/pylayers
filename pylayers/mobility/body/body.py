@@ -6,28 +6,28 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
 import  pdb as pdb
+import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as pltu
+import pylayers.util.geomutil as geu
 import doctest
 
 
-def Basis_generation(A, B):
-    v = (B - A) / np.linalg.norm(B - A)
-    test = True
-    while test:
-        random_vector = np.random.random(3)
-        u = random_vector - np.dot(np.dot(random_vector, v), v)
-        if(u.any()):
-            test = False
-    u = u / np.linalg.norm(u)
-    w = np.cross(u, v)
-    return u, v, w
-
 
 def ChangeBasis(u0, v0, w0, v1):
+    """
+    Parameters
+    ----------
 
-    # Rotation autour de l'axe w
+    u0
+    v0
+    w0
+    v1
 
-    v2 = v1 - np.dot(np.dot(v1, w0), w0)  # projection de v1 sur le plan (u,v)
+    """
+
+    # Rotate with respect to axe w
+
+    v2 = v1 - np.dot(np.dot(v1, w0), w0)  # projection of v1 on plan (u,v)
     v2 = v2 / np.linalg.norm(v2)
     c = np.dot(v2, u0)
     s = np.dot(v2, v0)
@@ -46,41 +46,75 @@ def dist(A, B):
     return d
 
 
-class Body(object):
-    """
-       Class to manage c3d files
+class BodyCylinder(object):
+    """ Class to manage the Body model 
     """
 
     def __init__(self):
-
         self.g = nx.Graph()
-        nodes_ID = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-        self.marker_set = ['STRN', 'CLAV', 'RFHD', 'RSHO', 'LSHO', 'RELB', 'LELB', 'RWRB', 'LWRB', 'RFWT', 'LFWT', 'RKNE', 'LKNE', 'RANK', 'LANK']
-        self.g.add_nodes_from(nodes_ID)
-        self.g.add_edge(0, 1)
-        self.g.add_edge(0, 9)
-        self.g.add_edge(0, 10)
+        self.nodes_Id = {
+            0:'STRN', 
+            1:'CLAV',
+            2:'RFHD', 
+            3:'RSHO', 
+            4:'LSHO',
+            5:'RELB', 
+            6:'LELB', 
+            7:'RWRB', 
+            8:'LWRB',
+            9:'RFWT',
+            10:'LFWT', 
+            11:'RKNE',
+            12:'LKNE', 
+            13:'RANK', 
+            14:'LANK'}
+        self.g.add_nodes_from(self.nodes_Id.keys())
+        self.g.add_edge(0, 1,radius =1)
+        self.g[0][1]['radius']=10
+        #self.g.add_edge(0, 9)
+        #self.g.add_edge(0, 10)
         self.g.add_edge(1, 2)
-        self.g.add_edge(1, 3)
-        self.g.add_edge(1, 4)
+        self.g[1][2]['radius']=8
+        #self.g.add_edge(1, 3)
+        #self.g.add_edge(1, 4)
         self.g.add_edge(3, 5)
+        self.g[3][5]['radius']=5
         self.g.add_edge(4, 6)
+        self.g[4][6]['radius']=5
         self.g.add_edge(5, 7)
+        self.g[5][7]['radius']=5
         self.g.add_edge(6, 8)
+        self.g[6][8]['radius']=5
         self.g.add_edge(9, 11)
+        self.g[9][11]['radius']=5
         self.g.add_edge(10, 12)
+        self.g[10][12]['radius']=5
         self.g.add_edge(11, 13)
+        self.g[11][13]['radius']=5
         self.g.add_edge(12, 14)
+        self.g[12][14]['radius']=5
 
-    def LoadMotion(self, filename='07_01.c3d', nframes=126):
+    def loadC3D(self, filename='07_01.c3d', nframes=126):
+        """ load nfranes of motion capture C3D file 
 
+        Parameters
+        ----------
+
+        filename : string
+        nframes  : int 
+            number of frames 
+        """
+        self.nframes = nframes
         s, p, f = c3d.read_c3d(filename)
-
+        CM_TO_M = 0.01
         # self.d 3 x np x nf
+        # 
         self.d = np.ndarray(shape=(3, 15, np.shape(f)[0]))
+        if self.d[2,:,:].max()>50:
+            self.d = self.d*CM_TO_M
         ind = []
-        for i in range(len(self.marker_set)):
-            ind.append(p.index(s[0] + self.marker_set[i]))
+        for i in self.nodes_Id:
+            ind.append(p.index(s[0] + self.nodes_Id[i]))
 
         # f.T : 3 x np x nf
         self.d = f[0:nframes, ind, :].T
@@ -88,16 +122,65 @@ class Body(object):
         for i in range(15):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
 
-    def CylinderModel(self, nc=10):
+    def movie(self):
+        for k in range(self.nframes):
+            self.geomfile(k,verbose=True)
 
+    def show3(self,iframe=0): 
+        self.geomfile(iframe)
+        bdy = geu.Geomlist('body'+str(iframe))
+        bdy.show3()
+
+    def geomfile(self,iframe,verbose=False):
+        """
+        """
+        cyl = geu.Geomoff('cylinder')
+        pt = cyl.loadpt()
+
+        _filebody = 'body'+str(iframe)+'.list'
+        filebody = pyu.getlong(_filebody,"geom")
+
+        fo = open(filebody,"w")
+        fo.write("LIST\n")
+        if verbose:
+            print ("LIST\n")
+        for k,e in enumerate(self.g.edges()):
+            e0 = e[0]
+            e1 = e[1]
+            pA = self.d[:,e0,iframe].reshape(3,1)
+            pB = self.d[:,e1,iframe].reshape(3,1)
+            pM = (pA+pB)/2.
+            T = geu.onbfromaxe(pA,pB)
+            R = self.g[e0][e1]['radius']
+            Y = np.hstack((pM,pA,pB,pM+R*T[0,:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[0,:,0].reshape(3,1)))
+            A,B = geu.cylmap(Y)
+            ptn = np.dot(A,pt.T)+B
+            _filename = 'edge'+str(k)+'-'+str(iframe)+'.off'
+            filename = pyu.getlong(_filename,"geom")
+            cyl.savept(ptn.T,_filename)
+            fo.write('{<'+filename+'}\n')
+            if verbose:
+                print('{<'+filename+'}\n')
+        fo.close()
+
+
+    def antennas(self, nc=10):
         """
 
-        nc  =  cylinder number
-        c : array(shape  =  (nc,8)), Cylinder Id , A coordiante, B Coordinate , cylinder radius
+        Parameters
+        ----------
+
+        nc  : number of cylinders 
+    
+        Notes
+        -----
+        
+        add a member data 
+        c : array(shape  =  (nc,8)), Cylinder Id , A coordinate, B Coordinate , cylinder radius
 
         """
-
-        self.c = np.ndarray(shape=(nc, 8, 126))
+        self.nc = nc
+        self.c  = np.ndarray(shape=(nc, 8, 126))
         i = 0
         self.c[i, 0] = i
         self.c[i, 1:4] = (self.d[:, 9] + self.d[:, 10]) / 2
@@ -161,16 +244,36 @@ class Body(object):
         self.c[i, 7] = 5
 
     def cylinder_basis0(self, frameId=0):
-        nc = self.c.shape[0]
-        self.basis0 = np.ndarray(shape=(nc, 9))
+        """ update basis0
+
+        Parameters
+        ----------
+
+        frameId : int 
+            default 0 
+
+        Notes 
+        -----
+
+        Each 
+
+
+        """
+
+        nc = self.nc
+        # basis0 is nc x 9 
+        #
+        #
+        self.basis0 = np.ndarray(shape=(nc,3,3))
+
         for i in range(nc):
             Ai = self.c[i, 1:4, frameId]
             Bi = self.c[i, 4:7, frameId]
             u, v, w = Basis_generation(Ai, Bi)
             #pdb.set_trace()
-            self.basis0[i, 0:3] = u
-            self.basis0[i, 3:6] = v
-            self.basis0[i, 6:] = w
+            self.basis0[i,0,:] = u
+            self.basis0[i,1,:] = v
+            self.basis0[i,w,:] = w
 
     def cylinder_basis_k(self, frameId):
 
@@ -209,7 +312,7 @@ class Body(object):
 
 
 def translate(cycle, new_origin):
-    """ rotate a cycle of frames by an angle alpha
+    """  rotate a cycle of frames by an angle alpha
 
     Parameters
     ----------
@@ -237,7 +340,7 @@ def translate(cycle, new_origin):
 
 
 def rotation(cycle, alpha=np.pi/2):
-    """ rotate a cycle of frames by an angle alpha
+    """  rotate a cycle of frames by an angle alpha
 
     Parameters
     ----------
@@ -266,7 +369,7 @@ def rotation(cycle, alpha=np.pi/2):
 
 
 def Global_Trajectory(cycle, traj):
-    """
+    """ 
 
     Parameters
     ----------
@@ -325,3 +428,26 @@ if __name__ == '__main__':
     plt.ion()
     doctest.testmod()
 
+#    nframes = 126
+#    Bc = BodyCylinder()
+#    Bc.loadC3D()
+#    c10_15 = Bc.d
+#    #nx.draw(B.g)
+#    fig = plt.figure()
+#
+#    ax = fig.add_subplot(111, projection='3d')
+#    frameID = 30
+#    ax.scatter(c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
+#    ax.axis('scaled')
+#
+#    #ax.scatter(c10_15[frameID,:,0],c10_15[frameID,:,1],c10_15[frameID,:,2] )
+#
+#    pointID = 13
+#
+#    plt.figure()
+#    plt.plot(c10_15[0, pointID].T, '*--', label='x')
+#    plt.plot(c10_15[1, pointID].T, '*--', label='y')
+#    plt.plot(c10_15[2, pointID].T, '*--', label='z')
+#    plt.legend()
+#
+#    plt.show()

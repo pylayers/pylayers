@@ -3,6 +3,12 @@
 + Nicolas Amiot  
   nicolas.amiot@univ-rennes1.fr
 + Mohamed Laaraiedh 
-   mohamedh.laaraiedh@univ-rennes1.fr
+  mohamedh.laaraiedh@univ-rennes1.fr
 + Meriem Mhedhbi  
-   meriem.mhedhbi@univ-rennes1.fr
+  meriem.mhedhbi@univ-rennes1.fr
++ Stephane Avrillon 
++ Roxana Burghelea	
++ Eric Plouhinec
++ Friedman Tchoffo Talom 
++ Taguhi Chaluyman
++ Yu Lei

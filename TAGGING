@@ -1,0 +1,18 @@
+When commiting a new version 
+x.y.z-t
+
+If this is a bug fix, typos, ... 
+
+git tag -a "vx.y.z-t+1"
+
+If there is a new feature 
+
+git tag -a "vx.y.z+1"
+
+If the next milestone is reached 
+
+git tag -a "vx.y+1.0"
+
+If it a major release
+
+git tag -a "vx+1.0.0"
