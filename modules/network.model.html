@@ -88,65 +88,111 @@
   <div class="section" id="model">
 <span id="id1"></span><h1>model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-pylayers.network.model"></span><dl class="class">
-<dt id="pylayers.network.model.Model">
-<em class="property">class </em><tt class="descclassname">pylayers.network.model.</tt><tt class="descname">Model</tt><big>(</big><em>f=3.0</em>, <em>rssnp=2.64</em>, <em>d0=1.0</em>, <em>sigrss=3.0</em>, <em>method='mode'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model" title="Permalink to this definition">¶</a></dt>
-<dd><p>RSS model</p>
-<p>Attributes</p>
-<p>f : frequency in GHz
-n : path loss exponent
-method : used model</p>
+<dt id="pylayers.network.model.PLSmodel">
+<em class="property">class </em><tt class="descclassname">pylayers.network.model.</tt><tt class="descname">PLSmodel</tt><big>(</big><em>f=3.0</em>, <em>rssnp=2.64</em>, <em>d0=1.0</em>, <em>sigrss=3.0</em>, <em>method='mode'</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path Loss Shadowing model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>f</strong> : frequency in GHz</p>
+<p><strong>n</strong> : path loss exponent</p>
+<p class="last"><strong>method</strong> : used model</p>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
-<dt id="pylayers.network.model.Model.OneSlope">
-<tt class="descname">OneSlope</tt><big>(</big><em>r</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model.OneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model.OneSlope" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.model.PLSmodel.OneSlope">
+<tt class="descname">OneSlope</tt><big>(</big><em>r</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel.OneSlope" title="Permalink to this definition">¶</a></dt>
 <dd><p>OneSlope model : give Power Level from distance  with OneSlope method</p>
-<p>f : frequency  GHz
-n : path loss exponent
-D : range array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>r</strong> : range (meters)</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.model.Model.getPL">
-<tt class="descname">getPL</tt><big>(</big><em>r</em>, <em>RSSStd</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model.getPL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model.getPL" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.model.PLSmodel.getPL">
+<tt class="descname">getPL</tt><big>(</big><em>r</em>, <em>RSSStd</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel.getPL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get Power Level from a given distance</p>
-<p>r : range
-RSSStd : range standard deviation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>r</strong> : range</p>
+<p class="last"><strong>RSSStd</strong> : range standard deviation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PL</span> <span class="o">=</span>  <span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.model.Model.getPL0">
-<tt class="descname">getPL0</tt><big>(</big><em>Gt=0</em>, <em>Gr=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model.getPL0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model.getPL0" title="Permalink to this definition">¶</a></dt>
-<dd><p>PL0_c : PL0 compute
-f  : frequency GHz
-Gt : transmitting antenna gain dB (default 0 dB) 
-Gr : receiving antenna gain dB (default 0 dB)</p>
+<dt id="pylayers.network.model.PLSmodel.getPL0">
+<tt class="descname">getPL0</tt><big>(</big><em>Gt=0</em>, <em>Gr=0</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel.getPL0" title="Permalink to this definition">¶</a></dt>
+<dd><p>get Path Loss at reference distance d0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>PL0_c</strong> : PL0 compute</p>
+<p><strong>f</strong> : frequency GHz</p>
+<p><strong>Gt</strong> : transmitting antenna gain dB (default 0 dB)</p>
+<p class="last"><strong>Gr</strong> : receiving antenna gain dB (default 0 dB)</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.model.Model.getPLmean">
-<tt class="descname">getPLmean</tt><big>(</big><em>d</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model.getPLmean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model.getPLmean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute PL mean</p>
+<dt id="pylayers.network.model.PLSmodel.getPLmean">
+<tt class="descname">getPLmean</tt><big>(</big><em>d</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel.getPLmean" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Compute PL mean</div></blockquote>
+<p>rac{d}{d_0}}$$</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.model.Model.getRange">
-<tt class="descname">getRange</tt><big>(</big><em>RSS</em>, <em>RSSStd</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model.getRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model.getRange" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.model.PLSmodel.getRange">
+<tt class="descname">getRange</tt><big>(</big><em>RSS</em>, <em>RSSStd</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel.getRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get  distance from a given Power Level</p>
 <p>r : range</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.model.Model.getRangeStd">
-<tt class="descname">getRangeStd</tt><big>(</big><em>RSS</em>, <em>RSSStd</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model.getRangeStd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model.getRangeStd" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.model.PLSmodel.getRangeStd">
+<tt class="descname">getRangeStd</tt><big>(</big><em>RSS</em>, <em>RSSStd</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel.getRangeStd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute Ranges std associated to &#8220;Rest&#8221; estimator</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.model.Model.iOneSlope">
-<tt class="descname">iOneSlope</tt><big>(</big><em>PL</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/model.html#Model.iOneSlope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.model.Model.iOneSlope" title="Permalink to this definition">¶</a></dt>
-<dd><p>inverse OneSlope model : give distance from Power Level with OneSlope method</p>
-<p>f : frequency  GHz
-n : path loss exponent
-r : range array</p>
+<dt id="pylayers.network.model.PLSmodel.iOneSlope">
+<tt class="descname">iOneSlope</tt><big>(</big><em>PL</em><big>)</big><a class="headerlink" href="#pylayers.network.model.PLSmodel.iOneSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>goes from PL to estimated distance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>PL</strong> :</p>
+<p><strong>inverse OneSlope model</strong> : give distance from Power Level with OneSlope method</p>
+<p><strong>f</strong> : frequency  GHz</p>
+<p><strong>n</strong> : path loss exponent</p>
+<p class="last"><strong>r</strong> : range array</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

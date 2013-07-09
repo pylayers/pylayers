@@ -66,8 +66,9 @@ different from the segment index.
 The different layout format 
 ----------------------------
 
-The layout format has evolved a lot over time and is going to evolve
-again. The different recognized file extensions are the following :
+The layout format has regularly evolved over time and is going to evolve
+again. Currently, the different recognized file extensions are the
+following :
 
 -  ``.str2``: a ASCII file (Node list + edge list)
 -  ``.str`` : a binary file which includes visibility relations between

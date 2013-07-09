@@ -87,7 +87,27 @@
             
   <div class="section" id="channel">
 <span id="id1"></span><h1>channel<a class="headerlink" href="#channel" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-pylayers.antprop.channel"></span><dl class="class">
+<span class="target" id="module-pylayers.antprop.channel"></span><dl class="function">
+<dt id="pylayers.antprop.channel.Cg2Cl">
+<tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">Cg2Cl</tt><big>(</big><em>Cg</em>, <em>Tt</em>, <em>Tr</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Cg2Cl" title="Permalink to this definition">¶</a></dt>
+<dd><p>global reference frame to local reference frame</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Cg</strong> : Ctilde global</p>
+<p><strong>Tt</strong> : Tx rotation matrix</p>
+<p><strong>Tr</strong> : Rx rotation matrix</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Cl</strong> : Ctilde local</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
 <dt id="pylayers.antprop.channel.Ctilde">
 <em class="property">class </em><tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">Ctilde</tt><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde" title="Permalink to this definition">¶</a></dt>
 <dd><p>container for the 4 components of the polarimetric ray channel</p>
@@ -123,7 +143,7 @@
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.doadod">
-<tt class="descname">doadod</tt><big>(</big><em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x3ea3ad0&gt;</em>, <em>s=30</em>, <em>fontsize=12</em>, <em>phi=(0</em>, <em>360)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">doadod</tt><big>(</big><em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x4464e10&gt;</em>, <em>s=30</em>, <em>fontsize=12</em>, <em>phi=(0</em>, <em>360)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
 <dd><p>scatter plot of the DoA-DoD channel structure
 the energy is colorcoded over all couples of DoA-DoD</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -148,20 +168,22 @@ the energy is colorcoded over all couples of DoA-DoD</p>
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.energy">
 <tt class="descname">energy</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.energy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate energy on co and cross channel</p>
+<dd><p>Calculate energy on each channel</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Eco</strong> : Energy on co channel    tt + pp</p>
-<p class="last"><strong>Ecross</strong> : Energy on cross channel tp + pt</p>
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ECtt</strong> : Energy on co channel    tt</p>
+<p><strong>ECpp</strong> : Energy on co channel    pp</p>
+<p><strong>ECtp</strong> : Energy on co channel    tp</p>
+<p class="last"><strong>ECpt</strong> : Energy on co channel    pt</p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.FUsignal.energy</span></tt></p>
+<p class="last"><a class="reference internal" href="signal.bsignal.html#pylayers.signal.bsignal.FUsignal.energy" title="pylayers.signal.bsignal.FUsignal.energy"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.signal.bsignal.FUsignal.energy</span></tt></a></p>
 </div>
 </dd></dl>
 
@@ -219,7 +241,7 @@ delay , angle of departure , angle of arrival.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>VC</strong> : modified VectChannel</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>C</strong> : modified Ctilde</p>
 </td>
 </tr>
 </tbody>
@@ -275,13 +297,17 @@ v en m/s (vitesse de changement de Rx)</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.sort">
-<tt class="descname">sort</tt><big>(</big><em>tauk</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.sort" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sort</tt><big>(</big><em>typ='tauk'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.sort" title="Permalink to this definition">¶</a></dt>
 <dd><p>sort Ctilde with respect to tauk</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>tauk</strong> : array of delays</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>typ</strong> : string</p>
+<blockquote class="last">
+<div><p>which parameter to sort &#8216;tau&#8217;,&#8217;att&#8217;,&#8217;atp&#8217;,&#8217;art&#8217;,&#8217;arp&#8217;,&#8217;energy&#8217;</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
@@ -475,26 +501,6 @@ w is apply on the overall CIR</p>
 </table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="function">
-<dt id="pylayers.antprop.channel.VCg2VCl">
-<tt class="descclassname">pylayers.antprop.channel.</tt><tt class="descname">VCg2VCl</tt><big>(</big><em>VCg</em>, <em>Tt</em>, <em>Tr</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#VCg2VCl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.VCg2VCl" title="Permalink to this definition">¶</a></dt>
-<dd><p>global reference frame to local reference frame</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>VCg</strong> : VectChannel global</p>
-<p><strong>Tt</strong> : Tx rotation matrix</p>
-<p><strong>Tr</strong> : Rx rotation matrix</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>VCl</strong> : VectChannel (local)</p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>

@@ -75,8 +75,10 @@
 <tt class="descname">EMSolver(L=</tt></dt>
 <dt>
 <tt class="descname">----------------</tt></dt>
-<dt id="pylayers.network.emsolver.defstr.str">
-<em class="property">class </em><tt class="descclassname">defstr.</tt><tt class="descname">str</tt><a class="headerlink" href="#pylayers.network.emsolver.defstr.str" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.emsolver.defstr3.ini">
+<em class="property">class </em><tt class="descclassname">defstr3.</tt><tt class="descname">ini</tt><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.emsolver.Image">
+<em class="property">class </em><tt class="descclassname">pylayers.network.emsolver.</tt><tt class="descname">Image</tt><big>(</big><em>'/home/uguen/Bureau/P1/struc/TA-Office.png'</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.Image" title="Permalink to this definition">¶</a></dt>
 <dt>
 <tt class="descname">----------------</tt></dt>
 <dt>
@@ -86,7 +88,7 @@
 <dt>
 <tt class="descname">Number of segments  : 9</tt></dt>
 <dt>
-<tt class="descname">Number of sub segments  : 1</tt></dt>
+<tt class="descname">Number of sub segments  : 3</tt></dt>
 <dt>
 <tt class="descname">Number of cycles  : 0</tt></dt>
 <dt>
@@ -94,60 +96,92 @@
 <dt>
 <tt class="descname"></tt></dt>
 <dt>
-<tt class="descname">xrange :(0.0, 10.0)</tt></dt>
+<tt class="descname">xrange :(758.49, 768.516)</tt></dt>
 <dt>
-<tt class="descname">yrange :(-2.0, 2.0)</tt></dt>
+<tt class="descname">yrange :(1111.9, 1115.963)</tt></dt>
 <dt>
 <tt class="descname"></tt></dt>
-<dt id="pylayers.network.emsolver.Dictionnaries">
-<em class="property">class </em><tt class="descclassname">pylayers.network.emsolver.</tt><tt class="descname">Dictionnaries</tt><a class="headerlink" href="#pylayers.network.emsolver.Dictionnaries" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descname">Useful dictionnaries</tt></dt>
 <dt>
 <tt class="descname">----------------</tt></dt>
 <dt>
 <tt class="descname">sl k=slab name v=dictionary</tt></dt>
 <dt>
+<tt class="descname">name :  k=slab v=seglist</tt></dt>
+<dt>
 <tt class="descname"></tt></dt>
-<dt id="pylayers.network.emsolver.Arrays">
-<em class="property">class </em><tt class="descclassname">pylayers.network.emsolver.</tt><tt class="descname">Arrays</tt><a class="headerlink" href="#pylayers.network.emsolver.Arrays" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descname">Useful arrays</tt></dt>
 <dt>
 <tt class="descname">----------------</tt></dt>
+<dt>
+<tt class="descname">tsg : get segment index in Gs from tahe</tt></dt>
+<dt>
+<tt class="descname">tgs : get segment index in tahe from Gs</tt></dt>
+<dt>
+<tt class="descname">lsss : list of segments with sub-segment</tt></dt>
+<dt>
+<tt class="descname">sla : associated slab name</tt></dt>
+<dt>
+<tt class="descname">stridess : stride for adressing sub segment</tt></dt>
 <dt>
 <tt class="descname">)</tt></dt>
 <dd><p>Invoque an electromagnetic solver</p>
 <dl class="method">
-<dt id="pylayers.network.emsolver.defstr.str.EMSolver.save_model">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">save_model</tt><big>(</big><em>RAT</em>, <em>model</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.str.EMSolver.save_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>save a RAT model</p>
+<dt id="pylayers.network.emsolver.defstr3.ini.EMSolver.load_model">
+<tt class="descclassname">EMSolver.</tt><tt class="descname">load_model</tt><big>(</big><em>RAT</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini.EMSolver.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>RAT  :</strong> :</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.emsolver.defstr.str.EMSolver.solve">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">solve</tt><big>(</big><em>p</em>, <em>e</em>, <em>LDP</em>, <em>RAT</em>, <em>epwr</em>, <em>sens</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.str.EMSolver.solve" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.emsolver.defstr3.ini.EMSolver.save_model">
+<tt class="descclassname">EMSolver.</tt><tt class="descname">save_model</tt><big>(</big><em>RAT</em>, <em>model</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini.EMSolver.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>save a RAT model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>RAT :</strong> :</p>
+<p class="last"><strong>model :</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.emsolver.defstr3.ini.EMSolver.solve">
+<tt class="descclassname">EMSolver.</tt><tt class="descname">solve</tt><big>(</big><em>p</em>, <em>e</em>, <em>LDP</em>, <em>RAT</em>, <em>epwr</em>, <em>sens</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini.EMSolver.solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>compute and return a LDP value thanks to a given method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>n1p</strong> : np.array</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n1p</strong> : np.array</p>
 <blockquote>
-<div><blockquote>
 <div><p>node 1 position</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>n2p <span class="classifier-delimiter">:</span> <span class="classifier">np.array</span></dt>
-<dd><p class="first last">node 2 position</p>
-</dd>
-<dt>LDP <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd><p class="first last">Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</p>
-</dd>
-</dl>
-<p>epwr : list of nodes emmited power</p>
+<p><strong>n2p</strong> : np.array</p>
+<blockquote>
+<div><p>node 2 position</p>
 </div></blockquote>
+<p><strong>LDP</strong> : string</p>
+<blockquote>
+<div><p>Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</p>
+</div></blockquote>
+<p><strong>epwr</strong> : list of nodes emmited power</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
-<blockquote class="last">
-<div><blockquote>
+<blockquote>
 <div><dl class="docutils">
 <dt>A LDP value <span class="classifier-delimiter">:</span> <span class="classifier">* A time in ns for LDP =&#8217;TOA&#8217;</span></dt>
 <dd><ul class="first last simple">
@@ -156,15 +190,13 @@
 </dd>
 </dl>
 </div></blockquote>
-<dl class="docutils">
-<dt>std <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><dl class="first last docutils">
+<p><strong>std</strong> : float</p>
+<blockquote class="last">
+<div><dl class="docutils">
 <dt>A LDP value standard deviation:     * A time in ns for LDP =&#8217;TOA&#8217;</dt>
 <dd><ul class="first last simple">
 <li>A received power in dBm for LDP =&#8217;Pr&#8217;</li>
 </ul>
-</dd>
-</dl>
 </dd>
 </dl>
 </div></blockquote>

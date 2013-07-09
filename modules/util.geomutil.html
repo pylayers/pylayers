@@ -302,6 +302,20 @@ The first abs(Nv[0]) of them form the first polyline,</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pt1</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pt2</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">:(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">2</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="mi">3</span><span class="p">:(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">4</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gv1</span> <span class="o">=</span> <span class="n">GeomVect</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gv1</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">pt1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#gv1.show3()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gv2</span> <span class="o">=</span> <span class="n">GeomVect</span><span class="p">(</span><span class="s">&#39;test2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gv2</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">pt2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#gv2.show3()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -374,7 +388,7 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 <dl class="method">
 <dt id="pylayers.util.geomutil.Geomoff.box">
 <tt class="descname">box</tt><big>(</big><em>extrem=array([-1</em>, <em>1</em>, <em>-1</em>, <em>1</em>, <em>-3</em>, <em>3])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomoff.box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.box" title="Permalink to this definition">¶</a></dt>
-<dd><p>Geomview file for creating a box</p>
+<dd><p>create a box</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -387,7 +401,17 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">geo</span> <span class="o">=</span> <span class="n">Geomoff</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">geo</span><span class="o">.</span><span class="n">box</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
+
+<dl class="method">
+<dt id="pylayers.util.geomutil.Geomoff.loadpt">
+<tt class="descname">loadpt</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.loadpt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="pylayers.util.geomutil.Geomoff.polygon">
@@ -432,6 +456,11 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="pylayers.util.geomutil.Geomoff.savept">
+<tt class="descname">savept</tt><big>(</big><em>ptnew</em>, <em>_fileoff</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.savept" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -489,11 +518,8 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L1</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l2</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L2</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">l2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">l3</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span><span class="mi">10</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">]),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">])]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L3</span> <span class="o">=</span> <span class="n">LineString</span><span class="p">(</span><span class="n">l3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">title</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;test plotting LineString&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -571,8 +597,14 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 <div><p>rotation along axis x</p>
 </div></blockquote>
 <p><strong>gamma</strong> : float</p>
-<blockquote class="last">
+<blockquote>
 <div><p>rotation along axis y</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>T</strong> : np.array (3x3)</p>
+<blockquote class="last">
+<div><p>rotation matrix</p>
 </div></blockquote>
 </td>
 </tr>
@@ -603,11 +635,17 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 <dl class="function">
 <dt id="pylayers.util.geomutil.MRot3">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">MRot3</tt><big>(</big><em>a</em>, <em>axe</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#MRot3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.MRot3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a 3D rotation matrix along axe 1|2|3
-Parameters
-&#8212;&#8212;&#8212;-</p>
-<p>a   :  angle (radians)
-axe :  1:x 2:y 3:z</p>
+<dd><p>Return a 3D rotation matrix along axe 0|1|2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> :  angle (radians)</p>
+<p class="last"><strong>axe</strong> :  0:x 1:y 2:z</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -1043,6 +1081,35 @@ a[:,1] : N x phi     phi angle</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="pylayers.util.geomutil.cylmap">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">cylmap</tt><big>(</big><em>Y</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.cylmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>find affine transformation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>X</strong> : np.array</p>
+<blockquote>
+<div><p>Nx3x3</p>
+</div></blockquote>
+<p><strong>Y</strong> :</p>
+<blockquote>
+<div><p>Nx3x3</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>T</strong> : np.array</p>
+<blockquote>
+<div><p>Nx3x3</p>
+</div></blockquote>
+<p class="last"><strong>Y = A X + B</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="pylayers.util.geomutil.dist">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">dist</tt><big>(</big><em>x</em>, <em>y</em>, <em>ax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.dist" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates distance between two arrays along a given axis
@@ -1151,6 +1218,39 @@ N     : descretization step</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span> <span class="o">=</span> <span class="n">intersect</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pt1</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ph1</span> <span class="o">=</span> <span class="n">B</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pt2</span> <span class="o">=</span> <span class="n">C</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ph2</span> <span class="o">=</span> <span class="n">D</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span><span class="n">ph1</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt2</span><span class="p">,</span><span class="n">ph2</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;test intersect&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">intersect</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">)</span>
+<span class="go">array([ True], dtype=bool)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">intersect</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/util-geomutil-6.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-6.png">png</a>, <a class="reference external" href="../modules/util-geomutil-6.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-6.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/util-geomutil-6.png" src="../_images/util-geomutil-6.png" />
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1291,9 +1391,9 @@ Parameters
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-6.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-6.png">png</a>, <a class="reference external" href="../modules/util-geomutil-6.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-6.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-7.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-7.png">png</a>, <a class="reference external" href="../modules/util-geomutil-7.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-7.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-6.png" src="../_images/util-geomutil-6.png" />
+<img alt="../_images/util-geomutil-7.png" src="../_images/util-geomutil-7.png" />
 </div>
 </dd></dl>
 
@@ -1307,17 +1407,15 @@ Parameters
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> : numpy.ndarray</p>
 <blockquote>
-<div><blockquote>
 <div><p>point to image</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>pa <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
-<dd><p class="first last">segment tail</p>
-</dd>
-<dt>pb <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
-<dd><p class="first last">segment head</p>
-</dd>
-</dl>
+<p><strong>pa</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>segment tail</p>
+</div></blockquote>
+<p><strong>pb</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>segment head</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1368,6 +1466,61 @@ Parameters
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.util.geomutil.onbfromaxe">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">onbfromaxe</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.onbfromaxe" title="Permalink to this definition">¶</a></dt>
+<dd><p>orthonormal basis from 2 points defining an axe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>A</strong> : np.array</p>
+<blockquote>
+<div><p>3 x n</p>
+</div></blockquote>
+<p><strong>B</strong> : np.array</p>
+<blockquote>
+<div><p>3 x n</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>T basis (un,vn,wn)</strong> :</p>
+<blockquote>
+<div><p>3 x n x 3</p>
+</div></blockquote>
+<p><strong>(un,vn) is a basis in the plane transverse to the axis vn</strong> :</p>
+<p class="last"><strong>wn is the unitary vector along vector AB</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.util.geomutil.Geomvect.geomBase</span></tt>, <tt class="xref py py-obj docutils literal"><span class="pre">pylayers.util.mobility.body</span></tt></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">onbfromaxe</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+<span class="go">array([[[ 0.79158384, -0.61106057,  0.        ],</span>
+<span class="go">        [ 0.61106057,  0.79158384,  0.        ],</span>
+<span class="go">        [ 0.        ,  0.        ,  1.        ]],</span>
+
+<span class="go">       [[ 0.74214568, -0.67023861,  0.        ],</span>
+<span class="go">        [ 0.67023861,  0.74214568,  0.        ],</span>
+<span class="go">        [ 0.        ,  0.        ,  1.        ]],</span>
+
+<span class="go">       [[ 0.80923784, -0.58748116,  0.        ],</span>
+<span class="go">        [ 0.58748116,  0.80923784,  0.        ],</span>
+<span class="go">        [ 0.        ,  0.        ,  1.        ]],</span>
+
+<span class="go">       [[ 0.52138786, -0.85331981,  0.        ],</span>
+<span class="go">        [ 0.85331981,  0.52138786,  0.        ],</span>
+<span class="go">        [ 0.        ,  0.        ,  1.        ]]])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1773,10 +1926,7 @@ tolerance length are identified.</p>
 <div class="math">
 <p><img src="../_images/math/5a7abed1416bd57f91e0afcd1277d9905573d6d6.png" alt="bx=x1+(x2-x1) \frac{\delta}{mod(a)}."/></p>
 </div><p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="o">.</span><span class="n">loadstr</span><span class="p">(</span><span class="s">&#39;exemple.str&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x1</span><span class="o">=-</span><span class="mf">2.</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x1</span><span class="o">=-</span><span class="mf">2.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span><span class="o">=</span><span class="mf">2.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x2</span><span class="o">=-</span><span class="mf">1.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span><span class="o">=</span><span class="mf">1.</span>

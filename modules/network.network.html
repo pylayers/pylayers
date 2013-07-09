@@ -89,7 +89,7 @@
 <span id="network"></span><span id="network-network"></span><h1>network<a class="headerlink" href="#module-pylayers.network.network" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.network.network.Network">
-<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0x9c3b490&gt;</em>, <em>PN=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0x85f8d90&gt;</em>, <em>PN=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Network class
 inherit of networkx.Graph()</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -139,7 +139,7 @@ value = node position</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>gene</strong> : tuple(x,y) iterator</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>gene</strong> : tuple(x,y) iterator</p>
 <p><strong>rat</strong> : str</p>
 <p><strong>var</strong> : list</p>
 <blockquote class="last">
@@ -186,7 +186,7 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>iterable</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>iterable</strong> : list</p>
 <blockquote>
 <div><p>list of node</p>
 </div></blockquote>
@@ -228,7 +228,7 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>n1</strong> : float/string</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n1</strong> : float/string</p>
 <blockquote>
 <div><p>node ID</p>
 </div></blockquote>
@@ -273,12 +273,22 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <dt id="pylayers.network.network.Network.csv_save">
 <tt class="descname">csv_save</tt><big>(</big><em>filename</em>, <em>S</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.csv_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.csv_save" title="Permalink to this definition">¶</a></dt>
 <dd><p>save node positions into csv file</p>
-<dl class="docutils">
-<dt>filename <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
-<dd>name of the csv file</dd>
-<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
-<dd>Scipy.Simulation object</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>name of the csv file</p>
+</div></blockquote>
+<p><strong>S</strong> : Simulation</p>
+<blockquote class="last">
+<div><p>Scipy.Simulation object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -288,24 +298,25 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <p>REPLACED BY pylayers.util.save</p>
 <p>DEPRECATED</p>
 <p>save txt</p>
-<dl class="docutils">
-<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
-<dd>Scipy.Simulation object</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>S</strong> : Simulation</p>
+<blockquote class="last">
+<div><p>Scipy.Simulation object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.get_RAT">
 <tt class="descname">get_RAT</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.get_RAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.get_RAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>get rat from nodes of the network</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><strong>Rat</strong> : specify which RAt you want to append to your network. If None, all rat are appended.</td>
-</tr>
-</tbody>
-</table>
+<p>RAT argument specifies which RAt to append to the network. If None, all rat are appended.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
@@ -324,16 +335,19 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <dl class="method">
 <dt id="pylayers.network.network.Network.get_SubNet">
 <tt class="descname">get_SubNet</tt><big>(</big><em>Rat=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.get_SubNet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.get_SubNet" title="Permalink to this definition">¶</a></dt>
-<dd><p>get SubNetworks of a network
-!!! ALWAYS use self.get_RAT() BEFORE !!!!!</p>
+<dd><p>get SubNetworks of a network</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><strong>Rat</strong> : specify which SubNet you want to create</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>Rat</strong> : specify which SubNet to create</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">ALWAYS use self.get_RAT() BEFORE !</p>
+</div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">N</span><span class="o">=</span><span class="n">Network</span><span class="p">()</span>
@@ -364,10 +378,10 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>RAT</strong> : specify a RAT to display node position. If None, all RAT are displayed</p>
-<p><strong>Returns</strong> :</p>
-<p><strong>&#8212;&#8212;</strong> :</p>
-<p><strong>dictionnary</strong> :     key</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>RAT</strong> : specify a RAT to display node position. If None, all RAT are displayed</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dictionnary</strong> :     key</p>
 <p class="last"><strong>value</strong> : np.array node position</p>
 </td>
 </tr>
@@ -383,7 +397,7 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>RAT</strong> : specify a RAT to display node position. If None, all RAT are displayed</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>RAT</strong> : specify a RAT to display node position. If None, all RAT are displayed</p>
 <p><strong>Returns</strong> :</p>
 <p><strong>&#8212;&#8212;</strong> :</p>
 <p><strong>dictionnary</strong> :     key</p>
@@ -403,7 +417,14 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>Boolean</strong> : True if node n has a pe k</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n</strong> : integer</p>
+<blockquote>
+<div><p>node numbner</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Boolean</strong> : True if node n has a pe k</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -437,6 +458,11 @@ nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.network.network.Network.init_save">
+<tt class="descname">init_save</tt><big>(</big><em>height=1.5</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.init_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.init_save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="pylayers.network.network.Network.loc_save">
 <tt class="descname">loc_save</tt><big>(</big><em>S</em>, <em>node='all'</em>, <em>p=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.loc_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.loc_save" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
@@ -455,12 +481,35 @@ nodeID2_nodeID4 = x2,y2,z2,x4,y4,z4
 <p>DEPRECATED</p>
 <blockquote>
 <div>save node positions into a matlab structure file</div></blockquote>
-<dl class="docutils">
-<dt>filename <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
-<dd>name of the mat file</dd>
-<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
-<dd>Scipy.Simulation object</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>name of the mat file</p>
+</div></blockquote>
+<p><strong>S</strong> : Simulation</p>
+<blockquote class="last">
+<div><p>Scipy.Simulation object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.network.Network.overview">
+<tt class="descname">overview</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.overview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.overview" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>O</strong> : dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -477,7 +526,7 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>iterable</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>iterable</strong> : list</p>
 <blockquote>
 <div><p>list of node</p>
 </div></blockquote>
@@ -534,23 +583,33 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 <tt class="descname">pyray_save</tt><big>(</big><em>S</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.pyray_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.pyray_save" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div>save node positions into ini file, compliant with pyray standard</div></blockquote>
-<dl class="docutils">
-<dt>filename <span class="classifier-delimiter">:</span> <span class="classifier">string </span></dt>
-<dd>name of the pyray file</dd>
-<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
-<dd>Scipy.Simulation object</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : string</p>
+<blockquote>
+<div><p>name of the pyray file</p>
+</div></blockquote>
+<p><strong>S</strong> : Simulation</p>
+<blockquote class="last">
+<div><p>Scipy.Simulation object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.show">
-<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x9c3b290&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x85f8710&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the network</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>RAT</strong> : specify a RAT to display. If None, all RAT are displayed</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>RAT</strong> : specify a RAT to display. If None, all RAT are displayed</p>
 <p><strong>legend</strong> : Bool. Toggle display edge legend</p>
 <p><strong>ion</strong> : interactive mode for matplotlib</p>
 <p><strong>info</strong> : plot information on edges</p>
@@ -570,10 +629,18 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 <p>REPLACED BY pylayers.util.save</p>
 <p>DEPRECATED</p>
 <p>save network state into mysqldatabase</p>
-<dl class="docutils">
-<dt>S <span class="classifier-delimiter">:</span> <span class="classifier">Simulation</span></dt>
-<dd>Scipy.Simulation object</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>S</strong> : Simulation</p>
+<blockquote class="last">
+<div><p>Scipy.Simulation object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -591,7 +658,7 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>n1</strong> : node ID</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n1</strong> : node ID</p>
 <p><strong>n2</strong> : node ID</p>
 <p><strong>RAT</strong> : string</p>
 <blockquote>
@@ -625,7 +692,7 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>n</strong> : float/string (or a list of)</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n</strong> : float/string (or a list of)</p>
 <blockquote>
 <div><p>node ID</p>
 </div></blockquote>

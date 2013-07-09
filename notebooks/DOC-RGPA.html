@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RGPA &mdash; PyLayers</title>
+    <title>Robust Geometric Positioning Algorithm presented in ``_ &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -59,11 +59,13 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">RGPA</a><ul>
-<li><a class="reference internal" href="#toa">TOA</a></li>
-<li><a class="reference internal" href="#tdoa">TDOA</a></li>
+<li><a class="reference internal" href="#">Robust Geometric Positioning Algorithm presented in ``_</a><ul>
+<li><a class="reference internal" href="#rgpa"># RGPA</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#toa">TOA</a></li>
+<li><a class="reference internal" href="#rss">RSS</a></li>
+<li><a class="reference internal" href="#tdoa">TDOA</a></li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -93,11 +95,14 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <p>Robust Geometric Positioning Algorithm presented in</p>
+  <div class="section" id="robust-geometric-positioning-algorithm-presented-in">
+<h1>Robust Geometric Positioning Algorithm presented in <a href="#id1"><span class="problematic" id="id2">``</span></a>_<a class="headerlink" href="#robust-geometric-positioning-algorithm-presented-in" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.cla</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.toa</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.tdoa</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.rss</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
@@ -122,7 +127,7 @@
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x104caa210&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x326a350&gt;</pre>
 </div>
 <img alt="../_images/_fig_022.png" src="../_images/_fig_022.png" />
 <p>compute the true distance and the associated TOAs</p>
@@ -148,9 +153,11 @@ distance p-3= 23.5372045919 / toa3= 78.4573486396
 distance p-4= 18.0277563773 / toa3= 60.0925212577</pre>
 </div>
 <div class="section" id="rgpa">
-<h1>RGPA<a class="headerlink" href="#rgpa" title="Permalink to this headline">¶</a></h1>
+<h2># RGPA<a class="headerlink" href="#rgpa" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
 <div class="section" id="toa">
-<h2>TOA<a class="headerlink" href="#toa" title="Permalink to this headline">¶</a></h2>
+<h1>TOA<a class="headerlink" href="#toa" title="Permalink to this headline">¶</a></h1>
 <p>instanciate the constraint layer array which gathers all the geometric
 constraints of the considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
@@ -174,10 +181,10 @@ constraints of the considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">c</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;pylayers.location.geometric.constraints.toa.TOA at 0x104c408d0&gt;,
- &lt;pylayers.location.geometric.constraints.toa.TOA at 0x104c38d50&gt;,
- &lt;pylayers.location.geometric.constraints.toa.TOA at 0x104c38e50&gt;,
- &lt;pylayers.location.geometric.constraints.toa.TOA at 0x104c40bd0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;pylayers.location.geometric.constraints.toa.TOA at 0x31c5850&gt;,
+ &lt;pylayers.location.geometric.constraints.toa.TOA at 0x3258ad0&gt;,
+ &lt;pylayers.location.geometric.constraints.toa.TOA at 0x31c5fd0&gt;,
+ &lt;pylayers.location.geometric.constraints.toa.TOA at 0x31c5d90&gt;]</pre>
 </div>
 <p>Get information on the cla :</p>
 <ul class="simple">
@@ -210,10 +217,6 @@ TOA , [-10 -10] , 60.0925212577,     1.0, 1, 1, 0, 0</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>0.25 1.5
-0.0625 1.375
-0.015625 1.34375</pre>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
 </pre></div>
 </div>
@@ -225,8 +228,40 @@ TOA , [-10 -10] , 60.0925212577,     1.0, 1, 1, 0, 0</pre>
 </pre></div>
 </div>
 </div>
+<div class="section" id="rss">
+<h1>RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h1>
+<p>The RSS is a quantity with related to distance.To model the Path Loss
+shadowing model is widely used. To define a path loss shadowing model</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">=</span><span class="n">Model</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;mode&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For simulation purpose : get RSS from distances wit the given model</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">toa1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">16.666666666666668</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>---------------------------------------------------------------------------
+IndexError                                Traceback (most recent call last)
+&lt;ipython-input-15-a6871920bb98&gt; in &lt;module&gt;()
+----&gt; 1 M.getPL(toa1,1)
+
+/home/uguen/Documents/rch/devel/pylayersbug/pylayers/network/model.pyc in getPL(self, r, RSSStd)
+    138             PLmean          = self.getPLmean(r)
+    139             shPLmean        = np.shape(PLmean)
+--&gt; 140             Xrand           = RSSStd*sp.randn(shPLmean[0])
+    141             PL        = PLmean+Xrand
+    142
+
+IndexError: tuple index out of range</pre>
+</div>
+</div>
 <div class="section" id="tdoa">
-<h2>TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
+<h1>TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Td1</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ptoa1</span><span class="p">,</span><span class="n">ptoa2</span><span class="p">]))</span>
 <span class="n">Td2</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ptoa1</span><span class="p">,</span><span class="n">ptoa3</span><span class="p">]))</span>
 <span class="n">Td3</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ptoa1</span><span class="p">,</span><span class="n">ptoa4</span><span class="p">]))</span>
@@ -244,15 +279,12 @@ TOA , [-10 -10] , 60.0925212577,     1.0, 1, 1, 0, 0</pre>
 <div class="highlight-python"><pre>TDOA 2.0
 TDOA 2.0
 TDOA 2.0
-0.25 1.5
 TDOA 1.5
 TDOA 1.5
 TDOA 1.5
-0.0625 1.375
 TDOA 1.375
 TDOA 1.375
 TDOA 1.375
-0.015625 1.34375
 TDOA 1.375
 TDOA 1.375
 TDOA 1.375</pre>
@@ -265,10 +297,6 @@ TDOA 1.375</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.021</span><span class="p">,</span>  <span class="mf">4.987</span><span class="p">])</span>
 </pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre>
-</pre></div>
-</div>
 </div>
 </div>
 

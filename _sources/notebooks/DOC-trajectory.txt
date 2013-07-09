@@ -21,7 +21,7 @@ Example of a trajectory synthesis in DLR WHERE2 environment
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x33c4750>
+    <matplotlib.figure.Figure at 0x5553390>
 
 This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
@@ -85,13 +85,18 @@ loading the Layout
 .. code-block:: python
 
     S = Simul()
-    filestr = 'DLR'
+    filestr = 'DLR2'
     S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
     try:
         S.L.dumpr()
     except:
         S.L.build()
         S.L.dumpw()
+
+
+.. parsed-literal::
+
+    problem to construct geomfile
 
 
 .. code-block:: python
@@ -102,7 +107,24 @@ loading the Layout
     S.L.display['overlay']=False
     fig,ax = S.L.showGs()    
 
-.. image:: DOC-trajectory_files/_fig_02.png
+::
+
+    ---------------------------------------------------------------------------
+    KeyError                                  Traceback (most recent call last)
+    <ipython-input-5-16f3a92614ed> in <module>()
+          3 S.L.display['title']='DLR WP4 WHERE2 measurement site'
+          4 S.L.display['overlay']=False
+    ----> 5 fig,ax = S.L.showGs()
+    
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/gis/layout.pyc in showGs(self, fig, ax, ndlist, edlist, show, furniture, roomlist, axis, width)
+       3318             dico = self.subseg()
+       3319             for k in dico.keys():
+    -> 3320                 color = self.sl[k]['color']
+       3321                 edlist2 = []
+       3322                 for ts in dico[k]:
+
+    KeyError: 'A'
+.. image:: DOC-trajectory_files/_fig_03.png
 
 We have a list of static Anchor Nodes. Those values correspond to the
 actual anchor nodes coordinates of the WHERE2 project DLR measurement
@@ -157,7 +179,7 @@ Vizualization of the simulated scenario
     [<matplotlib.lines.Line2D at 0x7fe3850ac810>]
 
 
-.. image:: DOC-trajectory_files/_fig_05.png
+.. image:: DOC-trajectory_files/_fig_06.png
 
 In the following a trajectory for the receiver is defined.
 
@@ -194,7 +216,7 @@ Looking what is does
      <matplotlib.axes.AxesSubplot at 0x7fe385206ed0>)
 
 
-.. image:: DOC-trajectory_files/_fig_09.png
+.. image:: DOC-trajectory_files/_fig_10.png
 
 Choosing a UWB waveform for the simulation
 
@@ -204,7 +226,7 @@ Choosing a UWB waveform for the simulation
     wav = wvf.Waveform({'type':'W1compensate'})
     wav.show()
 
-.. image:: DOC-trajectory_files/_fig_11.png
+.. image:: DOC-trajectory_files/_fig_12.png
 
 running the simulation
 
@@ -546,7 +568,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
     (0.0, 45.0, 1.0, 69.0)
 
 
-.. image:: DOC-trajectory_files/_fig_17.png
+.. image:: DOC-trajectory_files/_fig_18.png
 
 
 .. code-block:: python
@@ -563,7 +585,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
     <matplotlib.text.Text at 0x712cad0>
 
 
-.. image:: DOC-trajectory_files/_fig_20.png
+.. image:: DOC-trajectory_files/_fig_21.png
 
 
 .. code-block:: python
@@ -579,5 +601,5 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
     <matplotlib.text.Text at 0x70a1f90>
 
 
-.. image:: DOC-trajectory_files/_fig_23.png
+.. image:: DOC-trajectory_files/_fig_24.png
 

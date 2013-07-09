@@ -1,59 +1,201 @@
-{1: {1: Usignal :  (7856,)  (7856,),
-  2: Usignal :  (7986,)  (7986,),
-  3: Usignal :  (8115,)  (8115,),
-  4: Usignal :  (8245,)  (8245,),
-  5: Usignal :  (8375,)  (8375,),
-  6: Usignal :  (6849,)  (6849,),
-  7: Usignal :  (6977,)  (6977,),
-  8: Usignal :  (7105,)  (7105,),
-  9: Usignal :  (7233,)  (7233,),
-  10: Usignal :  (7361,)  (7361,),
-  11: Usignal :  (7490,)  (7490,),
-  12: Usignal :  (7618,)  (7618,),
-  13: Usignal :  (7747,)  (7747,),
-  14: Usignal :  (7876,)  (7876,),
-  15: Usignal :  (5633,)  (5633,),
-  16: Usignal :  (5509,)  (5509,),
-  17: Usignal :  (5385,)  (5385,),
-  18: Usignal :  (5259,)  (5259,),
-  19: Usignal :  (5226,)  (5226,),
-  20: Usignal :  (5195,)  (5195,),
-  21: Usignal :  (5169,)  (5169,),
-  22: Usignal :  (4731,)  (4731,),
-  23: Usignal :  (4610,)  (4610,),
-  24: Usignal :  (4490,)  (4490,),
-  25: Usignal :  (4371,)  (4371,),
-  26: Usignal :  (4253,)  (4253,),
-  27: Usignal :  (4137,)  (4137,),
-  28: Usignal :  (4022,)  (4022,),
-  29: Usignal :  (4328,)  (4328,),
-  30: Usignal :  (5607,)  (5607,),
-  31: Usignal :  (5545,)  (5545,),
-  32: Usignal :  (5486,)  (5486,),
-  33: Usignal :  (5431,)  (5431,),
-  34: Usignal :  (5776,)  (5776,),
-  35: Usignal :  (5783,)  (5783,),
-  36: Usignal :  (5795,)  (5795,),
-  37: Usignal :  (5811,)  (5811,),
-  38: Usignal :  (5830,)  (5830,),
-  39: Usignal :  (5853,)  (5853,),
-  40: Usignal :  (6293,)  (6293,),
-  41: Usignal :  (6166,)  (6166,),
-  42: Usignal :  (6039,)  (6039,),
-  43: Usignal :  (5912,)  (5912,),
-  44: Usignal :  (5786,)  (5786,),
-  45: Usignal :  (5660,)  (5660,),
-  46: Usignal :  (5536,)  (5536,),
-  47: Usignal :  (5425,)  (5425,),
-  48: Usignal :  (5320,)  (5320,),
-  49: Usignal :  (5611,)  (5611,),
-  50: Usignal :  (5611,)  (5611,),
-  51: Usignal :  (5613,)  (5613,),
-  52: Usignal :  (5615,)  (5615,),
-  53: Usignal :  (5624,)  (5624,),
-  54: Usignal :  (5628,)  (5628,),
-  55: Usignal :  (5633,)  (5633,),
-  56: Usignal :  (5638,)  (5638,),
-  57: Usignal :  (5643,)  (5643,),
-  58: Usignal :  (7709,)  (7709,),
-  59: Usignal :  (7713,)  (7713,)}}
+1
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+2
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+3
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+4
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+5
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+6
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+7
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+8
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+9
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+10
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+11
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+12
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+13
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+14
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+15
+41 [14, 18]
+Rays evaluation
+16
+41 [14, 18]
+Rays evaluation
+17
+41 [14, 18]
+Rays evaluation
+18
+41 [14, 18]
+Rays evaluation
+19
+41 [14, 18]
+Rays evaluation
+20
+41 [14, 18]
+Rays evaluation
+21
+41 [14, 18]
+Rays evaluation
+22
+41 [14, 18]
+Rays evaluation
+23
+41 [14, 18]
+Rays evaluation
+24
+41 [14, 18]
+Rays evaluation
+25
+41 [14, 18]
+Rays evaluation
+26
+41 [14, 18]
+Rays evaluation
+27
+41 [14, 18]
+Rays evaluation
+28
+41 [14, 18]
+Rays evaluation
+29
+41 [14, 18]
+Rays evaluation
+30
+Rays evaluation
+31
+Rays evaluation
+32
+Rays evaluation
+33
+Rays evaluation
+34
+Rays evaluation
+35
+Rays evaluation
+36
+Rays evaluation
+37
+Rays evaluation
+38
+Rays evaluation
+39
+Rays evaluation
+40
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+41
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+42
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+43
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+44
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+45
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+46
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+47
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+48
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+49
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+50
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+51
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+52
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+53
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+54
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+55
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+56
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+57
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+58
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+59
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
