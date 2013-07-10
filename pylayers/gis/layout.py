@@ -5673,21 +5673,24 @@ class Layout(object):
 
         Parameters
         ----------
-            p
-                point
-            nroom
-                room number of p
-        Return
-        ------
-            dist
+
+        p : ndarray
+            point coordinate
+
+        nroom : int 
+            room number of p
+
+        Returns
+        -------
+
+        dist
                 list of distances to walls of room nroom
 
         Notes
         -----
 
-            Return  dist list which is a list of all the distances to the walls of the room
+        Return  dist a list of all the distances to the walls of a room
 
-        ..todo: to be tested version contain 
 
         """
         pp = Point(p[0], p[1])

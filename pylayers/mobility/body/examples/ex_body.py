@@ -30,6 +30,17 @@ nx.draw(bc.g,bc.g.pos)
 
 plt.axis('scaled')
 
+bc.center()
+
+Tstep = 1
+time = np.arange(0,5,0.01)
+v = 8000/3600.
+x = v*time
+y = np.zeros(len(time))
+traj = np.vstack((time.T,x.T,y.T)).T
+
+#bc.settopos(traj,2.3,Tstep)
+bc.movie(traj=traj,tk=time,topos=True)
 ############# verification de la base
 #B.LoadMotion()
 #c3d_frames = B.d
@@ -60,9 +71,7 @@ plt.axis('scaled')
 #plt.show()
 ############   Antenna on cylinders
 
-
 # Load a .c3dmotion capture file
-bc.loadC3D(filename='07_01.c3d',nframes=nframes)
 
 #
 # extract a numpy array (3 x np x nf )
@@ -72,10 +81,11 @@ bc.loadC3D(filename='07_01.c3d',nframes=nframes)
 #   nf : number of frames
 #
 
-c3dframe = bc.d
-bc.geomfile(0)
+#c3dframe = bc.d
+
+#bc.geomfile(0)
 #bc.movie()
-pg = np.sum(bc.d,axis=1)
+#pg = np.sum(bc.d,axis=1)
 
 #
 # Convert c3d file into a 10 (4+4+1+1) cylinder model

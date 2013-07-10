@@ -11,10 +11,9 @@ import pylayers.util.plotutil as pltu
 import pylayers.util.geomutil as geu
 import doctest
 
-
-
 def ChangeBasis(u0, v0, w0, v1):
     """
+
     Parameters
     ----------
 
@@ -39,7 +38,7 @@ def ChangeBasis(u0, v0, w0, v1):
 
 def dist(A, B):
     """
-    evaluate the distance between two points 1 and B
+    evaluate the distance between two points A and B
     """
 
     d = np.sqrt((A[0] - B[0]) ** 2 + (A[1] - B[1]) ** 2 + (A[2] - B[2]) ** 2)
@@ -86,29 +85,29 @@ class BodyCylinder(object):
 #            29:'RMT5'}
         self.g.add_nodes_from(self.nodes_Id.keys())
         self.g.add_edge(0, 1,radius =1)
-        self.g[0][1]['radius']=10
+        self.g[0][1]['radius']=0.18
         #self.g.add_edge(0, 9)
         #self.g.add_edge(0, 10)
         self.g.add_edge(1, 2)
-        self.g[1][2]['radius']=8
+        self.g[1][2]['radius']=0.12
         #self.g.add_edge(1, 3)
         #self.g.add_edge(1, 4)
         self.g.add_edge(3, 5)
-        self.g[3][5]['radius']=5
+        self.g[3][5]['radius']=0.05
         self.g.add_edge(4, 6)
-        self.g[4][6]['radius']=5
+        self.g[4][6]['radius']=0.05
         self.g.add_edge(5, 7)
-        self.g[5][7]['radius']=5
+        self.g[5][7]['radius']=0.05
         self.g.add_edge(6, 8)
-        self.g[6][8]['radius']=5
+        self.g[6][8]['radius']=0.05
         self.g.add_edge(9, 11)
-        self.g[9][11]['radius']=5
+        self.g[9][11]['radius']=0.05
         self.g.add_edge(10, 12)
-        self.g[10][12]['radius']=5
+        self.g[10][12]['radius']=0.05
         self.g.add_edge(11, 13)
-        self.g[11][13]['radius']=5
+        self.g[11][13]['radius']=0.05
         self.g.add_edge(12, 14)
-        self.g[12][14]['radius']=5
+        self.g[12][14]['radius']=0.05
 
     def center(self):
         """
@@ -126,36 +125,83 @@ class BodyCylinder(object):
         plane 0xy
 
         """
-
+        # self.d  : 3x16xNf
+        # self.pg : 3xNf
         self.pg = np.sum(self.d,axis=1)/self.npoints
+        self.pg[2,:] = 0
         self.d = self.d - self.pg[:,np.newaxis,:]
 
-        return(pg)
+    def posvel(self,traj,tk):
+        """ position and velocity
+        """
+        tf = Tstep/(1.0*self.nframes) # frame sampling period  
+        kt = int(np.floor(tk))
+        kf = int(np.floor(np.mod(tk,Tstep)/tf))
+        # self.pg : 3 x Nframes 
+        # traj : Nptraj x 3 (t,x,y)
 
-    def trajectory(self,traj,tk,Tstep):
+        # vs  : speed vector along motion capture frame
+        # vsn : unitary speed vector along motion capture frame
+        vs = self.pg[0:-1,kf] - self.pg[0:-1,kf-1]
+        vsn = vs/np.sqrt(np.dot(vs,vs))
+        wsn = np.array([vsn[1],-vsn[0]])
+        #
+        # vt : speed vector along trajectory 
+        #
+        vt = traj[kt+1,1:] - traj[kt,1:]
+        vtn = vt/np.sqrt(np.dot(vt,vt))
+        wtn = np.array([vtn[1],-vtn[0]])
+""
+    def settopos(self,traj,tk,Tstep):
         """ translate the body on a time stamped trajectory
 
         Parameters
         ----------
 
-        traj : t,x,y,z
+        traj : t,x,y
         tk : float 
             time for evaluation of topos
         Tstep : duration of the periodic motion sequence 
 
+        Examples
+        --------
+
+        >>> import numpy as np 
+        >>> time = np.arange(0,10,0.1)
+        >>> v = 4000/3600.
+        >>> x = v*time
+        >>> y = zeros(len(time))
+        >>> traj = np.vstack(time.T,x.T,y.T)
+        >>> bc = BodyCylinder()
+        >>> bc.center()
+        >>> bc.trajectory(traj,2.3,2)
+
         """
-        tf = Tstep/self.nframes # frame sampling period  
-        kt = np.ceil(tk)
-        kf = np.ceil(np.mod(tk,tf))
-        # 3 x 15 
-        vs = self.pg[:,kf] - self.pg[:,kf-1]
-        vt = traj[kt+1:1:] - traj[kt:1:]
+                #
+        #
+        # psa : origin source
+        # psb = psa+vsn : a point in the direction of pedestrian motion 
+        #
+        # pta : target translation 
+        # ptb = pta+vtn : a point in the direction of trajectory 
+
         psa = np.array([0,0])
-        psb = psa + vs
-        pta = traj[kt,1:-1]
-        ptb = pta + vt
-        A,B = geu.affine2d((psa,psb),(pta,ptb))
-        self.topos = np.dot(A,self.d[:,:,kf])+B
+        psb = psa + vsn
+        psc = psa + wsn
+
+        pta = traj[kt,1:]
+        ptb = pta + vtn
+        ptc = pta + wtn
+
+        X   = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
+        Y   = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
+        a,b = geu.affine(X,Y)
+        A = np.eye(3)                
+        B = np.zeros((3,1))                
+        A[0:-1,0:-1]=a                
+        B[0:-1,:]=b
+        print kf
+        self.topos = (np.dot(A,self.d[:,:,kf])+B)
         
     
     def loadC3D(self, filename='07_01.c3d', nframes=126):
@@ -177,14 +223,14 @@ class BodyCylinder(object):
         # self.d 3 x np x nf
         # 
         self.d = np.ndarray(shape=(3, self.npoints, np.shape(f)[0]))
-        if self.d[2,:,:].max()>50:
-            self.d = self.d*CM_TO_M
+        #if self.d[2,:,:].max()>50:
         ind = []
         for i in self.nodes_Id:
             ind.append(p.index(s[0] + self.nodes_Id[i]))
 
         # f.T : 3 x np x nf
         self.d = f[0:nframes, ind, :].T
+        self.d = self.d*CM_TO_M
         self.g.pos = {}
         for i in range(self.npoints):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
@@ -198,42 +244,76 @@ class BodyCylinder(object):
         self.d = np.concatenate((self.d,pmf),axis=1)
         self.g.add_edge(0, 15)
         self.g.pos[15] = (pm[1],pm[2])
-        self.g[0][15]['radius']=10
+        self.g[0][15]['radius']=0.1
 
-    def movie(self):
-        for k in range(self.nframes):
-            self.geomfile(k,verbose=True)
+    def movie(self,topos=False,tk=[],traj=[]):
+        if not topos:
+            for k in range(self.nframes):
+                self.geomfile(iframe=k,verbose=True)
+        else:
+            for k,ttk in enumerate(tk):
+                stk = str(k).zfill(6)
+                self.settopos(traj=traj,tk=ttk,Tstep=1)
+                self.geomfile(topos=True,verbose=False,tag=stk)
 
-    def show3(self,iframe=0): 
-        self.geomfile(iframe)
+    def show3(self,iframe=0,topos=True,tag=''): 
+        """
+        Parameters
+        ----------
+
+        iframe : frame number (useless if topos == True)
+        topos : if True show the current body topos
+        tag : aditional string for naming file .off (useless if topos==False)
+
+        """
+        self.geomfile(iframe=0,topos=topos,tag=tag)
         bdy = geu.Geomlist('body'+str(iframe))
         bdy.show3()
 
-    def geomfile(self,iframe,verbose=False):
-        """
+    def geomfile(self,iframe=0,verbose=False,topos=False,tag=''):
+        """ create a geomview file from a body configuration 
+
+        Parameters
+        ----------
+
+        iframe : int 
+        verbose : boolean
+        topos : boolean 
+        tag : string 
+
         """
         cyl = geu.Geomoff('cylinder')
         pt = cyl.loadpt()
-
-        _filebody = 'body'+str(iframe)+'.list'
+        if not topos:
+            _filebody = str(iframe).zfill(4)+'body.list'
+        else:    
+            _filebody = tag+'-body.list'
         filebody = pyu.getlong(_filebody,"geom")
-
+        filestruc = pyu.getlong('DLR.off',"geom")
         fo = open(filebody,"w")
         fo.write("LIST\n")
+        fo.write('{<'+filestruc+'}\n')
         if verbose:
             print ("LIST\n")
         for k,e in enumerate(self.g.edges()):
             e0 = e[0]
             e1 = e[1]
-            pA = self.d[:,e0,iframe].reshape(3,1)
-            pB = self.d[:,e1,iframe].reshape(3,1)
+            if not topos:
+                pA = self.d[:,e0,iframe].reshape(3,1)
+                pB = self.d[:,e1,iframe].reshape(3,1)
+            else:    
+                pA = self.topos[:,e0].reshape(3,1)
+                pB = self.topos[:,e1].reshape(3,1)
             pM = (pA+pB)/2.
             T = geu.onbfromaxe(pA,pB)
             R = self.g[e0][e1]['radius']
             Y = np.hstack((pM,pA,pB,pM+R*T[0,:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[0,:,0].reshape(3,1)))
             A,B = geu.cylmap(Y)
             ptn = np.dot(A,pt.T)+B
-            _filename = 'edge'+str(k)+'-'+str(iframe)+'.off'
+            if not topos:
+                _filename = 'edge'+str(k)+'-'+str(iframe)+'.off'
+            else:
+                _filename = tag+'-edge'+str(k)+'.off'
             filename = pyu.getlong(_filename,"geom")
             cyl.savept(ptn.T,_filename)
             fo.write('{<'+filename+'}\n')
@@ -242,116 +322,38 @@ class BodyCylinder(object):
         fo.close()
 
 
-    def antennas(self, nc=10):
-        """
 
-        Parameters
-        ----------
-
-        nc  : number of cylinders 
-    
-        Notes
-        -----
-        
-        add a member data 
-        c : array(shape  =  (nc,8)), Cylinder Id , A coordinate, B Coordinate , cylinder radius
-
-        """
-        self.nc = nc
-        self.c  = np.ndarray(shape=(nc, 8, 126))
-        i = 0
-        self.c[i, 0] = i
-        self.c[i, 1:4] = (self.d[:, 9] + self.d[:, 10]) / 2
-        self.c[i, 4:6] = self.c[i, 1:3]
-        self.c[i, 6] = (self.d[2, 3] + self.d[2, 4]) / 2
-        self.c[i, 7] = dist(self.d[:, 9], self.d[:, 10]) / 2
-
-        i = 1
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.c[0, 4:7]
-        self.c[i, 4:6] = self.c[0, 4:6]
-        self.c[i, 6] = self.d[2, 2, ]
-        self.c[i, 7] = 2
-
-        i = 2
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 6]
-        self.c[i, 4:7] = self.d[:, 4]
-        self.c[i, 7] = 5
-
-        i = 3
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 5]
-        self.c[i, 4:7] = self.d[:, 3]
-        self.c[i, 7] = 5
-
-        i = 4
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 8]
-        self.c[i, 4:7] = self.d[:, 6]
-        self.c[i, 7] = 5
-
-        i = 5
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 7]
-        self.c[i, 4:7] = self.d[:, 5]
-        self.c[i, 7] = 5
-
-        i = 6
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 12, ]
-        self.c[i, 4:7] = self.d[:, 10]
-        self.c[i, 7] = 5
-
-        i = 7
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 11]
-        self.c[i, 4:7] = self.d[:, 9]
-        self.c[i, 7] = 5
-
-        i = 8
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 14]
-        self.c[i, 4:7] = self.d[:, 12]
-        self.c[i, 7] = 5
-
-        i = 9
-        self.c[i, 0] = i
-        self.c[i, 1:4] = self.d[:, 13]
-        self.c[i, 4:7] = self.d[:, 11]
-        self.c[i, 7] = 5
-
-    def cylinder_basis0(self, frameId=0):
-        """ update basis0
+    def updbasis0(self,frameId=0,topos=True):
+        """ updata basis0
 
         Parameters
         ----------
 
         frameId : int 
             default 0 
-
-        Notes 
-        -----
-
-        Each 
+        topos : boolean     
+            default True
 
 
         """
 
-        nc = self.nc
-        # basis0 is nc x 9 
-        #
+        nc = len(self.g.edges())
+        # basis0 : nc x 9 
         #
         self.basis0 = np.ndarray(shape=(nc,3,3))
 
-        for i in range(nc):
-            Ai = self.c[i, 1:4, frameId]
-            Bi = self.c[i, 4:7, frameId]
-            u, v, w = Basis_generation(Ai, Bi)
-            #pdb.set_trace()
-            self.basis0[i,0,:] = u
-            self.basis0[i,1,:] = v
-            self.basis0[i,w,:] = w
+        for k,e in enumerate(self.g.edges()):
+            e0 = e[0]
+            e1 = e[1]
+            if not topos:
+                pA = self.d[:,e0,iframe].reshape(3,1)
+                pB = self.d[:,e1,iframe].reshape(3,1)
+            else:    
+                pA = self.topos[:,e0].reshape(3,1)
+                pB = self.topos[:,e1].reshape(3,1)
+            pM = (pA+pB)/2.
+            T = geu.onbfromaxe(pA,pB)
+            self.basis0[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
 
