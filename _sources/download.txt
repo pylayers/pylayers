@@ -2,16 +2,7 @@
 Download
 ~~~~~~~~
 
-Source and binary releases
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. http://pypi.python.org/pypi/pylayers/
-
-.. http://pylayers.lanl.gov/download/pylayers/
-
-Documentation
-~~~~~~~~~~~~~
-*PDF*
-
-.. http://pylayers.lanl.gov/pylayers_reference.pdf
-.. http://pylayers.lanl.gov/pylayers_tutorial.pdf
++ `zip file version 0.2 <http://github.com/pylayers/pylayers/archive/master.zip>`_  
++ `Fork <https://github.com/pylayers/pylayers/fork>`_
++ git clone https://github.com/pylayers/pylayers.git
 

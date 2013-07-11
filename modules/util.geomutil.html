@@ -975,6 +975,40 @@ a[:,1] : N x phi     phi angle</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="pylayers.util.geomutil.affine">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">affine</tt><big>(</big><em>X</em>, <em>Y</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.affine" title="Permalink to this definition">¶</a></dt>
+<dd><p>find affine transformation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>X</strong> : np.array</p>
+<blockquote>
+<div><p>3xN</p>
+</div></blockquote>
+<p><strong>Y</strong> :</p>
+<blockquote>
+<div><p>3xN</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>A</strong> : np.array</p>
+<blockquote>
+<div><p>3x3</p>
+</div></blockquote>
+<p><strong>B</strong> : np.array</p>
+<blockquote class="last">
+<div><p>3x1</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Y = A X + B</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="pylayers.util.geomutil.angledir">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">angledir</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#angledir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.angledir" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate (theta,phi) from direction vector</p>
@@ -1090,23 +1124,28 @@ a[:,1] : N x phi     phi angle</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>X</strong> : np.array</p>
 <blockquote>
-<div><p>Nx3x3</p>
+<div><p>3xN</p>
 </div></blockquote>
 <p><strong>Y</strong> :</p>
 <blockquote>
-<div><p>Nx3x3</p>
+<div><p>3xN</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>T</strong> : np.array</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>A</strong> : np.array</p>
 <blockquote>
-<div><p>Nx3x3</p>
+<div><p>3x3</p>
 </div></blockquote>
-<p class="last"><strong>Y = A X + B</strong> :</p>
+<p><strong>B</strong> : np.array</p>
+<blockquote class="last">
+<div><p>3x1</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>Y = A X + B</p>
 </dd></dl>
 
 <dl class="function">
@@ -1139,6 +1178,65 @@ ax : integer (0,1)</div></blockquote>
 <div class="figure">
 <img alt="../_images/util-geomutil-5.png" src="../_images/util-geomutil-5.png" />
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.util.geomutil.distseg">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">distseg</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>alpha</em>, <em>beta</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.distseg" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>A</strong> : (3xN) initial point segment 1</p>
+<p><strong>B</strong> : (3xN) end point segment 1</p>
+<p><strong>C</strong> : (3xN) starting point segment 2</p>
+<p><strong>D</strong> : (3xN) end point segment 2</p>
+<p><strong>alpha :</strong> :</p>
+<p><strong>beta  :</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>f :</strong> :</p>
+<p class="last"><strong>g :</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">dmin3d</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="go">    &gt;&gt;&gt;    a = 0 </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="go">    &gt;&gt;&gt;    b = 0 </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span> 
+<span class="go">    &gt;&gt;&gt; f, g   = dist(A,B,C,D,a,b)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.util.geomutil.dmin3d">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">dmin3d</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.dmin3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>dmin3d evaluate the minimal distance between 2 set of segments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>A</strong> : (3xN) initial point segment 1</p>
+<p><strong>B</strong> : (3xN) end point segment 1</p>
+<p><strong>C</strong> : (3xN) starting point segment 2</p>
+<p><strong>D</strong> : (3xN) end point segment 2</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>alpha :</strong> :</p>
+<p><strong>beta  :</strong> :</p>
+<p class="last"><strong>dmin</strong> : minimal distance between 2 segments</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">

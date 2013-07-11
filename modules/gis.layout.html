@@ -101,12 +101,6 @@ reading the layout additional information from gpickle format files.</p>
 C implementation of yhe ray tracing. This format is going to be deprecated.</p>
 <p>The <cite>.str2</cite> file is processed to generate a <cite>.str</cite> file which
 contains additional visibility relationships between vertices and edges.</p>
-<dl class="attribute">
-<dt id="pylayers.gis.layout">
-<tt class="descclassname">pylayers.gis.</tt><tt class="descname">layout</tt><a class="headerlink" href="#pylayers.gis.layout" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#module-pylayers.gis.layout" title="pylayers.gis.layout"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.gis.layout</span></tt></a></p>
-</dd></dl>
-
 <span class="target" id="module-pylayers.gis.layout"></span><dl class="class">
 <dt id="pylayers.gis.layout.Layout">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr3.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
@@ -923,31 +917,26 @@ al2</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> : ndarray</p>
 <blockquote>
-<div><blockquote>
-<div><p>point</p>
+<div><p>point coordinate</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>nroom</dt>
-<dd><p class="first last">room number of p</p>
-</dd>
-</dl>
+<p><strong>nroom</strong> : int</p>
+<blockquote>
+<div><p>room number of p</p>
 </div></blockquote>
-<p><strong>Return</strong> :</p>
-<p><strong>&#8212;&#8212;</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dist</strong> :</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>dist</dt>
-<dd><p class="first last">list of distances to walls of room nroom</p>
-</dd>
-</dl>
+<div><p>list of distances to walls of room nroom</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>..todo: to be tested version contain</p>
+<p class="rubric">Notes</p>
+<p>Return  dist a list of all the distances to the walls of a room</p>
 </dd></dl>
 
 <dl class="method">
@@ -2030,7 +2019,7 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x8cf9ed0&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x5b08710&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

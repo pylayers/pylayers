@@ -1,0 +1,63 @@
+
+
+Double Glass example from litterature [1] in sub TeraHertz D-band @ 120GHz
+--------------------------------------------------------------------------
+
+
+.. code-block:: python
+
+    from pylayers.antprop.slab import * 
+    import numpy as np
+    import matplotlib.pylab as plt
+    sl = SlabDB('matDB.ini','slabDB.ini')
+            
+    sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
+    sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
+    sl.add('ConcreteJc',['ConcreteJc'],[0.049])
+    
+    theta = np.linspace(20,60,100)*np.pi/180
+    sl['ConcreteJc'].ev(120,theta)
+    sl['ConcreteJc'].plotwrta(dB=True)
+
+
+.. image:: DOC-THz_files/_fig_01.png
+
+`[1] Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R.  "Reflection ant Transmission Properties of Building Materials in D-Band for Modeling Future mm-Wave Communication Systems" Antennas and Propagation (EuCAP), 2010 Proceedings of the Fourth European Conference on <http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/search/searchresult.jsp?newsearch=true&queryText=Reflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems&x=-1035&y=-193>`_
+
+
+`[2] R.Piesiewicz 'Terahertz characterization of building materials'  Electronics .Journal Jan 2005 Vol 41 N°18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`_
+
+
+
+.. code-block:: python
+
+    
+    sl['DoubleGlass'].ev(120,theta)
+    sl['DoubleGlass'].plotwrta(dB=True)
+
+.. image:: DOC-THz_files/_fig_03.png
+
+
+.. code-block:: python
+
+    freq = np.linspace(110,135,50)
+    sl['DoubleGlass'].ev(freq,theta)
+    sl['DoubleGlass'].plotwrtf(k=0)  # @20°
+
+.. image:: DOC-THz_files/_fig_05.png
+
+Frequency angle representation of reflexion and transmission
+coefficient, to be compare with figure 3.c and 3d of [1]
+
+
+.. code-block:: python
+
+    figsize(8,8)
+    freq = np.linspace(110,135,50)
+    
+    sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[0.0029,0.0102,0.0029])
+    sl['DoubleGlass'].ev(freq,theta)
+    sl['DoubleGlass'].pcolor(dB=True)
+
+.. image:: DOC-THz_files/_fig_07.png
+

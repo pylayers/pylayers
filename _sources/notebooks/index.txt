@@ -20,6 +20,11 @@ Handling Slab and Materials
 
     DOC-SlabAndMaterials.rst
 
+.. toctree::
+    :maxdepth: 2 
+    
+    DOC-THz.rst 
+
 Handling Realistic Antenna VSH representation
 ---------------------------------------------
 
