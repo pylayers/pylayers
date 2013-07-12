@@ -1,5 +1,23 @@
-Robust Geometric Positioning Algorithm presented in ``_
--------------------------------------------------------
+Robust Geometric Positioning Algorithm
+--------------------------------------
+
+The algorithm which is demonstrated in this section is described in [1]
+
+[1]: `Nicolas Amiot, Mohamed Laaraiedh, and Bernard Uguen "Evaluation of
+a Geometric Positioning Algorithm for Hybrid Wireless Networks Softcom
+2012
+Split <http://hal.archives-ouvertes.fr/docs/00/77/61/80/PDF/Evaluation_of_a_geometric_positioning_algorithm_for_hybrid_wireless_networks.pdf>`_
+
+::
+
+    @INPROCEEDINGS{6347627, 
+    author={Amiot, N. and Laaraiedh, M. and Uguen, B.}, 
+    booktitle={Software, Telecommunications and Computer Networks (SoftCOM), 2012 20th International Conference on}, 
+    title={Evaluation of a geometric positioning algorithm for hybrid wireless networks}, 
+    year={2012}, 
+    pages={1-5},
+    }
+
 
 
 .. code-block:: python
@@ -12,6 +30,8 @@ Robust Geometric Positioning Algorithm presented in ``_
     
     import matplotlib.pyplot as plt
 
+
+Define position of points in the plane
 
 
 .. code-block:: python
@@ -31,23 +51,16 @@ Display the scene
     f=plt.figure()
     ax=f.add_subplot(111)
     ax.plot(ptoa1[0],ptoa1[1],'or',label='anchor 1')
-    ax.plot(ptoa2[0],ptoa2[1],'or',label='anchor 2')
-    ax.plot(ptoa3[0],ptoa3[1],'or',label='anchor 3')
-    ax.plot(ptoa4[0],ptoa4[1],'or',label='anchor 4')
+    ax.plot(ptoa2[0],ptoa2[1],'ob',label='anchor 2')
+    ax.plot(ptoa3[0],ptoa3[1],'og',label='anchor 3')
+    ax.plot(ptoa4[0],ptoa4[1],'oc',label='anchor 4')
     ax.plot(p[0],p[1],'xb',label='p')
-    
-    
-    ax.legend(loc='best')
+    ax.axis([-15,15,-20,40])
+    lg=ax.legend(loc='best')
 
+.. image:: DOC-RGPA_files/_fig_01.png
 
-.. parsed-literal::
-
-    <matplotlib.legend.Legend at 0x326a350>
-
-
-.. image:: DOC-RGPA_files/_fig_02.png
-
-compute the true distance and the associated TOAs
+Then, compute true distances and associated TOAs
 
 
 .. code-block:: python
@@ -62,35 +75,36 @@ compute the true distance and the associated TOAs
     toa3=d3/0.3
     toa4=d4/0.3
     
-    print 'distance p-1=',d1, '/ toa1=',toa1
-    print 'distance p-2=',d2, '/ toa2=',toa2
-    print 'distance p-3=',d3, '/ toa3=',toa3
-    print 'distance p-4=',d4, '/ toa3=',toa4
+    print( 'distance p-1 = %.2f meters / toa1 = %.2f ns'% (d1,toa1))
+    print( 'distance p-2 = %.2f meters / toa2 = %.2f ns'% (d2,toa2))
+    print( 'distance p-3 = %.2f meters / toa3 = %.2f ns'% (d3,toa3))
+    print( 'distance p-4 = %.2f meters / toa4 = %.2f ns'% (d4,toa4))
+
 
 
 .. parsed-literal::
 
-    distance p-1= 5.0 / toa1= 16.6666666667
-    distance p-2= 14.1421356237 / toa2= 47.1404520791
-    distance p-3= 23.5372045919 / toa3= 78.4573486396
-    distance p-4= 18.0277563773 / toa3= 60.0925212577
+    distance p-1 = 5.00 meters / toa1 = 16.67 ns
+    distance p-2 = 14.14 meters / toa2 = 47.14 ns
+    distance p-3 = 23.54 meters / toa3 = 78.46 ns
+    distance p-4 = 18.03 meters / toa4 = 60.09 ns
 
-# RGPA
-======
+RGPA
+----
 
 TOA
----
+~~~
 
-
-instanciate the constraint layer array which gathers all the geometric
-constraints of the considered scenario.
+At the begining it is require to create the Constraint Layer Array
+(``CLA``) which gathers all the geometric constraints of the considered
+scenario.
 
 
 .. code-block:: python
 
     C=CLA()
 
-Instanciate TOA objects Watch out their id are differnts
+Instanciate TOA objects. Notice that the ids have to be different.
 
 
 .. code-block:: python
@@ -100,7 +114,7 @@ Instanciate TOA objects Watch out their id are differnts
     T3=TOA(id=2,value = toa3, std = 1.0, p = ptoa3)
     T4=TOA(id=3,value = toa4, std = 1.0, p = ptoa4)
 
-Add TOA contrstraints to the CLA
+Then the TOA constrains are added one after an other to the CLA list.
 
 
 .. code-block:: python
@@ -120,13 +134,13 @@ List all constraints of the CLA
 
 .. parsed-literal::
 
-    [<pylayers.location.geometric.constraints.toa.TOA at 0x31c5850>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x3258ad0>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x31c5fd0>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x31c5d90>]
+    [<pylayers.location.geometric.constraints.toa.TOA at 0x3ee1a90>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x3ee1a50>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x3ee1990>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x3ee19d0>]
 
 
-Get information on the cla :
+Get informations from the ``CLA`` :
 
 -  type : TOA / RSS
 -  p : Position of the origin of the constraint
@@ -162,7 +176,6 @@ Update the CLA
 
     C.update()
 
-
 Compute the cla
 
 
@@ -176,7 +189,7 @@ Compute the cla
     True
 
 
-show the estimated position
+Then display the estimated position
 
 
 .. code-block:: python
@@ -189,19 +202,35 @@ show the estimated position
     array([ -4.735e-03,   4.992e+00])
 
 
-RSS
----
-
-
-The RSS is a quantity with related to distance.To model the Path Loss
-shadowing model is widely used. To define a path loss shadowing model
+to be compared with the true position :
 
 
 .. code-block:: python
 
-    M=Model(f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mode')
+    p
 
-For simulation purpose : get RSS from distances wit the given model
+
+.. parsed-literal::
+
+    array([0, 5])
+
+
+RSS
+---
+
+
+The RSS is a quantity which is weakly related to distance. To model the
+RSS/distance dependenct the Path Loss Shadowing model is widely used. To
+define a path loss shadowing model use the dedicated class ``PLSModel``
+as follow
+
+
+.. code-block:: python
+
+    M=PLSmodel(f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mode')
+
+For simulation purpose it is possible to get a realization of an RSS
+value from a given distance.
 
 
 .. code-block:: python
@@ -217,23 +246,26 @@ For simulation purpose : get RSS from distances wit the given model
 
 .. code-block:: python
 
+    PLmean = M.getPLmean(toa1)
+    sp.randn()
+
+
+.. parsed-literal::
+
+    0.07005132922140281
+
+
+
+.. code-block:: python
+
     M.getPL(toa1,1)
 
-::
 
-    ---------------------------------------------------------------------------
-    IndexError                                Traceback (most recent call last)
-    <ipython-input-15-a6871920bb98> in <module>()
-    ----> 1 M.getPL(toa1,1)
-    
-    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/network/model.pyc in getPL(self, r, RSSStd)
-        138             PLmean          = self.getPLmean(r)
-        139             shPLmean        = np.shape(PLmean)
-    --> 140             Xrand           = RSSStd*sp.randn(shPLmean[0])
-        141             PL        = PLmean+Xrand
-        142 
+.. parsed-literal::
 
-    IndexError: tuple index out of range
+    10.345571671009282
+
+
 TDOA
 ----
 
@@ -280,6 +312,8 @@ TDOA
 
     True
 
+
+The estimated position is
 
 
 .. code-block:: python
