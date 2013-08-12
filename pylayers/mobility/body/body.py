@@ -151,7 +151,7 @@ class BodyCylinder(object):
         vt = traj[kt+1,1:] - traj[kt,1:]
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
-""
+
     def settopos(self,traj,tk,Tstep):
         """ translate the body on a time stamped trajectory
 
