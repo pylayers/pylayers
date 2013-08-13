@@ -109,13 +109,29 @@ class BodyCylinder(object):
         self.g.add_edge(12, 14)
         self.g[12][14]['radius']=0.05
 
+    def __repr__(self):
+        st = ''
+        
+        if 'filename' in dir(self):
+            st = st +'filename : '+ self.filename +'\n'
+        if 'nframes' in dir(self):    
+            st = st +'nframes :' + str(self.nframes) +'\n'
+        if 'pg' in dir(self):
+            st = st + 'Centered : True'+'\n'
+        if 'topos' in dir(self):
+            st = st + 'topos : True'+'\n'
+        else:    
+            st = st + 'topos : False'+'\n'
+        return(st)    
+
     def center(self):
-        """
+        """ centering body 
 
         Returns
         -------
 
-        pg 
+        self.pg : center of gravity 
+        self.d  : set of centered frames
 
 
         Notes
@@ -131,8 +147,16 @@ class BodyCylinder(object):
         self.pg[2,:] = 0
         self.d = self.d - self.pg[:,np.newaxis,:]
 
-    def posvel(self,traj,tk):
+
+    def posvel(self,traj,tk,Tstep):
         """ position and velocity
+
+        Parameters
+        ----------
+        traj : t,x,y
+        tk : float 
+            time for evaluation of topos
+
         """
         tf = Tstep/(1.0*self.nframes) # frame sampling period  
         kt = int(np.floor(tk))
@@ -151,6 +175,8 @@ class BodyCylinder(object):
         vt = traj[kt+1,1:] - traj[kt,1:]
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
+        
+        return(kf,kt,vsn,wsn,vtn,wtn)
 
     def settopos(self,traj,tk,Tstep):
         """ translate the body on a time stamped trajectory
@@ -170,20 +196,22 @@ class BodyCylinder(object):
         >>> time = np.arange(0,10,0.1)
         >>> v = 4000/3600.
         >>> x = v*time
-        >>> y = zeros(len(time))
-        >>> traj = np.vstack(time.T,x.T,y.T)
+        >>> y = np.zeros(len(time))
+        >>> traj = np.vstack((time.T,x.T,y.T))
         >>> bc = BodyCylinder()
         >>> bc.center()
-        >>> bc.trajectory(traj,2.3,2)
+        >>> bc.settopos(traj,2.3,2)
 
         """
-                #
+        #
         #
         # psa : origin source
         # psb = psa+vsn : a point in the direction of pedestrian motion 
         #
         # pta : target translation 
         # ptb = pta+vtn : a point in the direction of trajectory 
+        
+        kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,tk,Tstep)
 
         psa = np.array([0,0])
         psb = psa + vsn
@@ -195,6 +223,7 @@ class BodyCylinder(object):
 
         X   = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
         Y   = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
+
         a,b = geu.affine(X,Y)
         A = np.eye(3)                
         B = np.zeros((3,1))                
@@ -211,11 +240,15 @@ class BodyCylinder(object):
         ----------
 
         filename : string
+            file name 
         nframes  : int 
             number of frames 
 
         """
+
         self.nframes = nframes
+        self.filename = filename
+
         s, p, f = c3d.read_c3d(filename)
 
         #pdb.set_trace()
@@ -247,15 +280,41 @@ class BodyCylinder(object):
         self.g[0][15]['radius']=0.1
 
     def movie(self,topos=False,tk=[],traj=[]):
+        """
+        Parameters
+        ----------
+
+        topos : Boolean
+        tk    : 
+        traj  :     
+
+        """
+
         if not topos:
             for k in range(self.nframes):
                 self.geomfile(iframe=k,verbose=True)
         else:
             for k,ttk in enumerate(tk):
-                stk = str(k).zfill(6)
+                stk = str(k).zfill(6) # for string alignement 
                 self.settopos(traj=traj,tk=ttk,Tstep=1)
                 self.geomfile(topos=True,verbose=False,tag=stk)
 
+    def plot3d(self,iframe=0,fig=[],ax=[],col='b'):
+        """
+        Parameters
+        ----------
+        iframe : 
+        fig : 
+        ax  :
+        """
+        if fig == []:
+            fig = plt.figure()
+        if ax == []:
+            ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(self.d[0, :, iframe], self.d[1, :, iframe], self.d[2, :, iframe],color=col)
+        ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
+        return(fig,ax)
+                    
     def show3(self,iframe=0,topos=True,tag=''): 
         """
         Parameters
@@ -356,7 +415,8 @@ class BodyCylinder(object):
             self.basis0[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
-
+        """
+        """
         nc = self.c.shape[0]
         self.basisk = np.ndarray(shape=(nc, 9))
         for i in range(nc):
@@ -371,6 +431,8 @@ class BodyCylinder(object):
             self.basisk[i, 6:] = wk
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
+        """
+        """
         r = self.c[cylinderId, 7, frameId]
 
         x = r * np.cos(alpha)
