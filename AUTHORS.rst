@@ -6,3 +6,9 @@
   mohamedh.laaraiedh@univ-rennes1.fr
 + Meriem Mhedhbi  
   meriem.mhedhbi@univ-rennes1.fr
++ Stephane Avrillon 
++ Roxana Burghelea	
++ Eric Plouhinec
++ Friedman Tchoffo Talom 
++ Taguhi Chaluyman
++ Yu Lei
