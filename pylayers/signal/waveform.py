@@ -172,7 +172,8 @@ class Waveform(dict):
         >>> wav.show()
 
         """
-        M = mesuwb.UWBMesure(1,1)
+
+        M = mesuwb.UWBMesure(1,h=1)
         w = bs.TUsignal()
 
         ts = M.RAW_DATA.timetx[0]

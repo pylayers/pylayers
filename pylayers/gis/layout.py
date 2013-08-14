@@ -5302,8 +5302,17 @@ class Layout(object):
 
         return(filename)
 
-    def geomfile(self):
-        """ create a geomview file 
+    def geomfile(self,centered=False):
+        """ create a .off geomview file 
+
+        Parameters
+        ----------
+
+        centered : Boolean
+            if True the layout is centered around its center of gravity
+
+        Notes
+        -----
 
         The `.off` file can be vizualized through the show3 method
 
@@ -5317,7 +5326,10 @@ class Layout(object):
         """
     
         # calculate center of gravity
-        pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
+        if centered:
+            pg = np.sum(self.pt,axis=1)/np.shape(self.pt)[1]
+        else:
+            pg = np.array([0,0])
         
         #en  = self.Ns # number of segments
         en  = len(np.where(np.array(self.Gs.node.keys())>0)[0])

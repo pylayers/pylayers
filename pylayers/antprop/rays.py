@@ -1297,7 +1297,25 @@ class Rays(dict):
 
 
     def signature(self, L):
-        """
+        """ extract ray signature
+
+        Parameters
+        ----------
+
+        L : Layout 
+
+        Returns
+        -------
+
+        sig 
+
+        Notes
+        -----
+
+        Signature of a ray is store as a member 
+
+        r[nint]['sig']
+
         """
         sig = Signatures(L, self.pTx, self.pRx)
         for k in self:
@@ -1317,17 +1335,20 @@ class Rays(dict):
         Parameters
         ----------
 
-        bdis :
-            display boolean - if False return .vect filename
-        bbas :
-            display local basis
-        bstruc :
-            display structure
-        col  :
-            color of the ray
-        id   :
-            id of the ray
-        linewidth :
+        ray : 
+
+        bdis : Boolean
+            if False return .vect filename (True)
+        bbas : Boolean
+            display local basis (False)
+        bstruc : Boolean
+            display structure (True)
+        col  : ndarray() 1x3
+            color of the ray  ([1,0,1])
+        id   : Integer
+            id of the ray (default 0)
+        linewidth : Integer
+            default 1
 
         """
 
@@ -1378,25 +1399,29 @@ class Rays(dict):
         else:
             return(filename)
 
-    def show3(self, bdis=True, bstruc=True, id=0, strucname='defstr', ilist=[], raylist=[],pg=np.array([[0],[0],[0]])):
+    def show3(self, 
+              bdis=True, 
+              bstruc=True, 
+              id=0, 
+              strucname='defstr', 
+              ilist=[], 
+              raylist=[],pg=np.array([[0],[0],[0]])):
         """ plot 3D rays within the simulated environment
 
         Parameters
         ----------
-            bdis : boolean
-                True
-            bstruc : boolean
-                True
-            id : int 
-            strucname : string 
-                'defstr'
-            ilist : list of group of interactions
-            raylist : list of index rays 
-            pg : centroid of the structure 
-         
 
-        Examples
-        -------- 
+        bdis : boolean
+            True
+        bstruc : boolean
+            True
+        id : int 
+        strucname : string 
+            'defstr'
+        ilist : list of group of interactions
+        raylist : list of index rays 
+        pg : centroid of the structure 
+         
 
         """
         if ilist == []:
