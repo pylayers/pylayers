@@ -137,8 +137,8 @@ class BodyCylinder(object):
         Notes
         -----
 
-        Here we calculate only the projection of the body centroid in the
-        plane 0xy
+        Here only the projection of the body centroid in the
+        plane 0xy is calculated
 
         """
         # self.d  : 3x16xNf
@@ -178,16 +178,18 @@ class BodyCylinder(object):
         
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj,tk,Tstep):
+    def settopos(self,traj,tk=0,Tstep=3):
         """ translate the body on a time stamped trajectory
 
         Parameters
         ----------
 
-        traj : t,x,y
+        traj : ndarray (3,N)
+            t,x,y
         tk : float 
-            time for evaluation of topos
-        Tstep : duration of the periodic motion sequence 
+            time for evaluation of topos (seconds)
+        Tstep : float 
+           duration of the periodic motion sequence (seconds)
 
         Examples
         --------
@@ -199,8 +201,14 @@ class BodyCylinder(object):
         >>> y = np.zeros(len(time))
         >>> traj = np.vstack((time.T,x.T,y.T))
         >>> bc = BodyCylinder()
+        >>> bc.loadC3D(filename='07_01.c3d')
         >>> bc.center()
         >>> bc.settopos(traj,2.3,2)
+
+        Notes
+        -----
+
+        topos is the current spatial global position of a body configuration.
 
         """
         #
@@ -299,20 +307,44 @@ class BodyCylinder(object):
                 self.settopos(traj=traj,tk=ttk,Tstep=1)
                 self.geomfile(topos=True,verbose=False,tag=stk)
 
-    def plot3d(self,iframe=0,fig=[],ax=[],col='b'):
-        """
+    def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
+        """ scatter 3d plot 
+        
         Parameters
         ----------
-        iframe : 
+
+        iframe : int 
+        topos : boolean    
         fig : 
         ax  :
+
+        Returns
+        -------
+        
+        fig,ax 
+
         """
         if fig == []:
             fig = plt.figure()
         if ax == []:
             ax = fig.add_subplot(111, projection='3d')
-        ax.scatter(self.d[0, :, iframe], self.d[1, :, iframe], self.d[2, :, iframe],color=col)
-        ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
+        if not topos:    
+            ax.scatter(self.d[0, :, iframe], self.d[1, :, iframe], self.d[2, :, iframe],color=col)
+        else:
+            ax.scatter(self.topos[0, :], self.topos[1, :], self.topos[2, :],color=col)
+
+        for k,e in enumerate(self.g.edges()):
+            e0 = e[0]
+            e1 = e[1]
+            if not topos:
+                pA = self.d[:,e0,iframe].reshape(3,1)
+                pB = self.d[:,e1,iframe].reshape(3,1)
+            else:    
+                pA = self.topos[:,e0].reshape(3,1)
+                pB = self.topos[:,e1].reshape(3,1)
+            ax.plot(np.array([pA[0][0],pB[0][0]]),np.array([pA[1][0],pB[1][0]]),
+                    np.array([pA[2][0],pB[2][0]]),zdir='z',c=col)
+        #ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
         return(fig,ax)
                     
     def show3(self,iframe=0,topos=True,tag=''): 
@@ -383,7 +415,7 @@ class BodyCylinder(object):
 
 
     def updbasis0(self,frameId=0,topos=True):
-        """ updata basis0
+        """ update basis0
 
         Parameters
         ----------
@@ -393,10 +425,20 @@ class BodyCylinder(object):
         topos : boolean     
             default True
 
+        Returns
+        -------
+
+        self.basis0 : ndarray (nc,3,3)
+
+        Notes
+        -----
+
+        There are as many basis as cylinders (body graph edges) 
 
         """
 
         nc = len(self.g.edges())
+        #
         # basis0 : nc x 9 
         #
         self.basis0 = np.ndarray(shape=(nc,3,3))
