@@ -2165,10 +2165,14 @@ class Simul(object):
 
         Parameters
         ----------
-            ntx
+
+        ntx : integer
                  launching index
-            nrx
+        nrx : integer
                  tracing index
+        verbose : Boolean
+            
+
         """
         chaine = "evalfield -tud " + self.dtud[itx][irx] + \
                  " -slab " + self.fileslab + \
@@ -2579,8 +2583,6 @@ class Simul(object):
                 self.CIRa.append(CIRa)
 
 
-
-
-if (__name__ == "__main__"):
-    plt.ion()
-    doctest.testmod()
+#if (__name__ == "__main__"):
+#    plt.ion()
+#    doctest.testmod()

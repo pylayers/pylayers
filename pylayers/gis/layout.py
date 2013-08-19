@@ -1362,7 +1362,7 @@ class Layout(object):
         Np = np.shape(nd_nd)[0]
         for k in range(Np):
             nnp = -(k + 1)
-            kvu = sp.nonzero(nd_nd[k] == 3)
+            kvu = np.nonzero(nd_nd[k] == 3)
             nc = -kvu[0] - 1
             for l in nc:
                 self.Gc.add_edge(nnp, l)
@@ -1370,7 +1370,7 @@ class Layout(object):
         Ns = np.shape(ed_ed)[0]
         for k in range(Ns):
             ne = k + 1
-            kvu = sp.nonzero(ed_ed[k] != 0)
+            kvu = np.nonzero(ed_ed[k] != 0)
             nc = kvu[0] + 1
             for l in nc:
                 self.Gc.add_edge(ne, l)
@@ -3055,7 +3055,7 @@ class Layout(object):
         y2 = y[he]
 
         den = (pb[1] - pa[1]) * (x2 - x1) - (pb[0] - pa[0]) * (y2 - y1)
-        w = sp.nonzero(abs(den) < 1e-12)[0]
+        w = np.nonzero(abs(den) < 1e-12)[0]
 
         den[w] = 1e-12
         numa = (pb[0] - pa[0]) * (y1 - pa[1]) - (pb[1] - pa[1]) * \
