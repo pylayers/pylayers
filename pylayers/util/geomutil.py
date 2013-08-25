@@ -31,9 +31,9 @@ import pdb
 
      linet(sp,p1,p2,al,col,lwidth)
 
-     ccw(A,B,C)
+     ccw(a,b,c)
 
-     intersect(A,B,C,D)
+     intersect(a,b,c,d)
 
      mul3(A,B)
 
@@ -282,8 +282,8 @@ class GeomVect(Geomview):
         --------
 
         >>> import numpy as np
-        >>> import scipy as sp
         >>> from pylayers.util.geomutil import *
+        >>> import scipy as sp
         >>> pt1 = sp.rand(3,10)
         >>> pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}
         >>> gv1 = GeomVect('test1')
@@ -1176,14 +1176,15 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
     return(ax)
 
 
-def ccw(A, B, C):
+def ccw(a, b, c):
     """ counter clock wise order
 
     Parameters
     ----------
-    A : array(2,N)
-    B : array(2,N)
-    C : array(2,N)
+
+    a : ndarray (2,N)
+    b : ndarray (2,N)
+    c : ndarray (2,N)
 
     Returns
     -------
@@ -1200,24 +1201,27 @@ def ccw(A, B, C):
     --------
 
     >>> import scipy as sp
-    >>> A = sp.rand(2,100)
-    >>> B = sp.rand(2,100)
-    >>> C = sp.rand(2,100)
-    >>> u = ccw(A,B,C)
+    >>> a = sp.rand(2,100)
+    >>> b = sp.rand(2,100)
+    >>> c = sp.rand(2,100)
+    >>> u = ccw(a,b,c)
 
     """
-    return((C[1, :] - A[1, :]) * (B[0, :] - A[0, :]) > (B[1, :] - A[1, :]) * (C[0, :] - A[0, :]))
+    #return((c[1, :] - a[1, :]) * (b[0, :] - a[0, :]) > (b[1, :] - a[1, :]) * (c[0, :] - a[0, :]))
+    return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) > 
+           (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
 
 
-def intersect(A, B, C, D):
+def intersect(a, b, c, d):
     """ check if segment AB intersects segment CD
 
     Parameters
     ----------
-    A : np.array (2xN)
-    B : np.array (2xN)
-    C : np.array (2xN)
-    D : np.array (2xN)
+
+    a : np.array (2xN)
+    b : np.array (2xN)
+    c : np.array (2xN)
+    d : np.array (2xN)
 
 
     Examples
@@ -1254,7 +1258,7 @@ def intersect(A, B, C, D):
         True
 
     """
-    return ((ccw(A, C, D) != ccw(B, C, D)) & (ccw(A, B, C) != ccw(A, B, D)))
+    return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
 
 def affine(X,Y):
     """ find affine transformation 
@@ -3093,100 +3097,108 @@ def mirror(p,pa,pb):
     x = la.solve(A, v0)
     return x
 
-def distseg(A,B,C,D,alpha,beta):
-    """
+def distseg(a,b,c,d,alpha,beta):
+    """ distance to segments
     
     Parameters
     ----------
 
-    A : (3xN) initial point segment 1
-    B : (3xN) end point segment 1
-    C : (3xN) starting point segment 2
-    D : (3xN) end point segment 2  
+    a : (3xN) initial point segment 1
+    b : (3xN) end point segment 1
+    c : (3xN) starting point segment 2
+    d : (3xN) end point segment 2  
+
     alpha : 
     beta  :
 
     Returns
     -------
 
-    f : 
-    g :    
- 
+    f : square of the distance to the segment
  
     Examples 
     --------
     
-    >>> a,b,d=dmin3d(A,B,C,D)
-    >>> if a < 0:
-	>>>    a = 0 
-    >>> if a > 1:
-    >>>    a = 1
-    >>> if b < 0:
-	>>>    b = 0 
-    >>> if b > 1:
-    >>>    b = 1 
-	>>> f, g   = dist(A,B,C,D,a,b)
+    >>> import numpy as np 
+    >>> np.random.seed(0)
+    >>> a = np.random.rand(3,10)
+    >>> b = np.random.rand(3,10)
+    >>> c = np.random.rand(3,10)
+    >>> d = np.random.rand(3,10)
+    >>> alpha,beta,dmin = dmin3d(a,b,c,d)
+    >>> alpha[alpha<0]=0
+    >>> alpha[alpha>1]=1
+    >>> beta[beta<0]=0
+    >>> beta[beta>1]=1
+	>>> f = distseg(a,b,c,d,alpha,beta)
+    >>> p1 = a - alpha*(a-b)
+    >>> p2 = c + beta*(d-c)
+    >>> v = p1-p2
+    >>> g = np.sum(v*v,axis=0)
+    >>> diff = np.sum(f-g,axis=0)
+    >>> np.testing.assert_almost_equal(diff,0)
 
     """
 
-    AC=C-A
-    CD=D-C
-    BA=A-B
+    ac = c-a
+    cd = d-c
+    ba = a-b
     
-    u0 = np.dot(AC,AC)
-    u4 = np.dot(BA,BA)
-    u5 = np.dot(CD,CD)
-    u1 = np.dot(BA,AC)
-    u2 = np.dot(CD,AC)
-    u3 = np.dot(CD,BA)
+    u0 = np.sum(ac*ac,axis=0)
+    u4 = np.sum(ba*ba,axis=0)
+    u5 = np.sum(cd*cd,axis=0)
+    u1 = np.sum(ba*ac,axis=0)
+    u2 = np.sum(cd*ac,axis=0)
+    u3 = np.sum(cd*ba,axis=0)
     
     f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
-    M  = A - alpha*BA
-    N  = C + beta*CD
-    g  = np.dot(M-N,M-N)
 
-    return(f,g)
+    # m = a - alpha*ba
+    # n = c + beta*cd
+    # g = np.dot(m-n,m-n)
 
-def dmin3d(A,B,C,D):
-    """
-    dmin3d evaluate the minimal distance between 2 set of segments 
+    return f
+
+def dmin3d(a,b,c,d):
+    """ evaluate the minimal distance between 2 set of segments 
 
     Parameters
     ----------
 
-    A : (3xN) initial point segment 1
-    B : (3xN) end point segment 1
-    C : (3xN) starting point segment 2
-    D : (3xN) end point segment 2  
+    a : (3xN) initial point segment 1
+    b : (3xN) end point segment 1
+    c : (3xN) starting point segment 2
+    d : (3xN) end point segment 2  
 
     Returns
     -------
 
-    alpha : 
-    beta  :
+    alpha : segment parameterization 
+    beta  : segment parameterization
     dmin  : minimal distance between 2 segments 
+
+    Examples
+    --------
 
     """
     
-    AC=C-A
-    CD=D-C
-    BA=A-B
+    ac = c-a
+    cd = d-c
+    ba = a-b
     
-    u0 = dot(AC,AC)
-    u4 = dot(BA,BA)
-    u5 = dot(CD,CD)
-    u1 = dot(BA,AC)
-    u2 = dot(CD,AC)
-    u3 = dot(CD,BA) 
-    
+    u0 = np.sum(ac*ac,axis=0)
+    u4 = np.sum(ba*ba,axis=0)
+    u5 = np.sum(cd*cd,axis=0)
+    u1 = np.sum(ba*ac,axis=0)
+    u2 = np.sum(cd*ac,axis=0)
+    u3 = np.sum(cd*ba,axis=0)
        
-    den   = u4*u5-u3*u3
+    den = u4*u5-u3*u3
     alpha = (u2*u3-u1*u5)/(1.*den)
-    beta  = (u1*u3-u2*u4)/(1.*den)
-    dmin = sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5) 
+    beta = (u1*u3-u2*u4)/(1.*den)
+    dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5) 
+
     return(alpha,beta,dmin)
-
-
 
 if __name__ == "__main__":
     plt.ion()

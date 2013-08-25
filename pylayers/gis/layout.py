@@ -180,7 +180,7 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filename='defstr3.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
 
 
         mat = sb.MatDB()
@@ -5181,22 +5181,24 @@ class Layout(object):
             return(ke[nup[0]][0])
 
     def onseg(self, pt, tol=0.01):
-        """
-        onseg(pt,tol)
+        """ segment number from point (deprecated) 
 
-        return the segment number which contains point pt
+        return segment number which contains point pt
 
-        pt  np.array(1x2)  it is a 2D point
+        Parameters
+        ----------
+
+        pt  np.array(1x2)  
         tol = 0.01      tolerance
 
         """
 
-        pts = np.array(self.Gs.pos.values()).T
-        ke = np.array(self.Gs.pos.keys())
+        pts = np.array(self.Gs.pos.values()).T   # structure points
+        ke = np.array(self.Gs.pos.keys())        # point keys
         n = np.shape(pts)[1]
         nbu = np.array([])
         if (n > 0):
-            num = np.arange(n)
+            num = np.arange(n)                   # 
             b = self.inbox(pt, tol)
 
             ta = self.tahe[0, b]

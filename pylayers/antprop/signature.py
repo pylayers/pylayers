@@ -56,6 +56,10 @@ def gidl(g):
 def frontline(L,nc,v):
     """ determine cycle frontline
 
+    This function calculates the scalar product of the normals of a cycle 
+    and returns the indev of segments whith are facing the given direction v.
+    scalar product < 0.
+
     Parameters
     ----------
 
@@ -63,22 +67,34 @@ def frontline(L,nc,v):
     nc : cycle number
     v : direction vector
 
+    Returns
+    -------
+
+    nsegf : list 
+
     Example
     -------
 
     >>> from pylayers.gis.layout import * 
-    >>> L = Layout('DLR.ini')
+    >>> L = Layout()
+    >>> L.build()
     >>> v = np.array([1,1])
-    >>> nseg = frontline(L,0,v)
+    >>> frontline(L,0,v)
+    [3, 4]
+
+    See Also
+    --------
+
+    run3
 
     """
-    npt = filter(lambda x: x<0, L.Gt.node[nc]['cycle'].cycle)
-    nseg = filter(lambda x: x>0, L.Gt.node[nc]['cycle'].cycle)
+    npt = filter(lambda x: x<0, L.Gt.node[nc]['cycle'].cycle)  # points 
+    nseg = filter(lambda x: x>0, L.Gt.node[nc]['cycle'].cycle) # segments
     pt  = map(lambda npt : [L.Gs.pos[npt][0],L.Gs.pos[npt][1]],npt)
-    pt1 = np.array(pt)
-    n1 = geu.Lr2n(pt1.T)
-    ps = np.sum(n1*v[:,np.newaxis],axis=0)
-    u = np.where(ps<0)[0]
+    pt1 = np.array(pt)   # convert in ndarray
+    n1 = geu.Lr2n(pt1.T) # get the normals of the cycle
+    ps = np.sum(n1*v[:,np.newaxis],axis=0) # scalar product with vector v
+    u = np.where(ps<0)[0]   # keep segment if scalar product <0
     nsegf = map(lambda n: nseg[n],u)
     return nsegf
 
@@ -137,7 +153,7 @@ def edgeout(L,g):
                 v12m = np.sqrt(np.dot(v12,v12))
                 v12n = v12/v12m
                 d1 = np.dot(v01n,l1)
-                 d2 = np.dot(l1,v12n)
+                d2 = np.dot(l1,v12n)
 #                if nstr0==32 and nstr1 == 42  and nstr2 ==50:
 #                    pdb.set_trace()
                 if d1*d2>=0 and typ == 1:
@@ -154,7 +170,7 @@ def edgeout(L,g):
     return(g)
 
 class Signatures(dict):
-    " "" gathers all signatures from a layout given tx and rx
+    """ gathers all signatures from a layout given tx and rx
 
     Attributes
     ----------
@@ -1305,8 +1321,8 @@ class Signatures(dict):
             for l in range(shsig[0]/2):
                 sig = tsig[2*l:2*l+2,:]
                 s   = Signature(sig)
-                Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
-                if Yi is not None:
+                isray,Yi  = s.sig2ray(self.L, ptx[:2], prx[:2])
+                if isray:
                     Yi = np.fliplr(Yi)
                     nint = len(sig[0, :])
                     if nint in rays.keys():
@@ -1325,18 +1341,22 @@ class Signatures(dict):
 class Signature(object):
     """ class Signature
 
-    A signature contains two lists
+    Attributes
+    ----------
 
-    seq : list of interaction numbers
-    typ : list of interaction type
+    seq : list  of interaction point (edges (>0)  or vertices (<0) [int]
+    typ : list of interaction type 1-R 2-T 3-D  [int] 
+    pa  : tail point of interaction segmenti (2xN) ndarray
+    pb  : head point of interaction segment  (2xN) ndarray
+    pc  : center point of interaction segment (2xN) ndarray
+
     """
     def __init__(self, sig):
         """
-        pa  : tail point of interaction segment
-        pb  : head point of interaction segment
-        pc  : center point of interaction segment
-        typ : type of interaction 1-R 2-T 3-D
-        seq : sequence of interaction point (edges (>0)  or vertices (<0)
+
+        >>> seq = np.array([[1,5,1],[1,1,1]])
+        >>> s = Signature(seq)
+
         """
         self.seq = sig[0, :]
         self.typ = sig[1, :]
@@ -1564,7 +1584,8 @@ class Signature(object):
 
         Returns
         -------
-
+        isvalid : bool
+            True if the backtrace ends successfully
         Y : ndarray (2 x (N+2))
             sequence of points corresponding to the seek ray
 
@@ -1587,7 +1608,7 @@ class Signature(object):
             >>> rx = np.array([1,1])
             >>> s.ev(L)
             >>> M = s.image(tx)
-            >>> Y = s.backtrace(tx,rx,M)
+            >>> isvalid,Y = s.backtrace(tx,rx,M)
             >>> fig = plt.figure()
             >>> ax = fig.add_subplot(111)
             >>> l1 = ax.plot(tx[0],tx[1],'or')
@@ -1626,6 +1647,8 @@ class Signature(object):
         Y = pkm1
         k = 0     # intercation counter
         beta = .5 # to enter into the loop
+        isvalid = True # signature is valid by default 
+
         while (((beta <= 1) & (beta >= 0)) & (k < N)):
             if int(typ[k]) != 3: # not a diffraction 
                 # Formula (30) of paper Eucap 2012
@@ -1653,11 +1676,12 @@ class Signature(object):
             k = k + 1
         if ((k == N) & ((beta > 0) & (beta < 1)) & ((alpha > 0) & (alpha < 1))):
             Y = np.hstack((Y, tx.reshape(2, 1)))
-            return(Y)
+            return isvalid,Y
         else:
-            return(None)
+            isvalid = False 
+            return isvalid,(k,alpha,beta) 
 
-    def sig2ray(self, L, pTx, pRx):
+    def sig2ray(self, L, pTx, pRx, mode='incremental'):
         """ convert a signature to a 2D ray
 
         Parameters
@@ -1668,6 +1692,7 @@ class Signature(object):
             2D transmitter position
         pRx : ndarray
             2D receiver position
+        mod : if mod=='incremental' a set of alternative signatures is return
 
         Returns
         -------
@@ -1686,8 +1711,26 @@ class Signature(object):
         # calculates images from pTx
         M = self.image(pTx)
     
-        Y = self.backtrace(pTx, pRx, M)
-        return Y
+        isvalid,Y = self.backtrace(pTx, pRx, M)
+        # 
+        # If incremental mode this function returns an alternative signature
+        # in case the signature do not yield a valid ray.
+        #
+        isray = True
+        if mode=='incremental':
+            if isvalid:
+                return isray,Y
+            else:
+                isray=False
+                # something to do here
+                return isray,None
+        else:
+            if isvalid:
+                return isray,Y
+            else:
+                isray=False
+                return isray,None
+            
  
 # def get_sigslist(self, tx, rx):
 #        """
