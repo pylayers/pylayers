@@ -34,8 +34,11 @@ def showsig(L,s,tx,rx):
 def gidl(g):
     """ gi without diffraction
 
-    Return
-    ------
+   Returns
+   -------
+
+   gr 
+
    """
 
     edlist=[]
@@ -52,8 +55,10 @@ def gidl(g):
 
 def frontline(L,nc,v):
     """ determine cycle frontline
+
     Parameters
     ----------
+
     L : Layout
     nc : cycle number
     v : direction vector
@@ -132,7 +137,7 @@ def edgeout(L,g):
                 v12m = np.sqrt(np.dot(v12,v12))
                 v12n = v12/v12m
                 d1 = np.dot(v01n,l1)
-                d2 = np.dot(l1,v12n)
+                 d2 = np.dot(l1,v12n)
 #                if nstr0==32 and nstr1 == 42  and nstr2 ==50:
 #                    pdb.set_trace()
                 if d1*d2>=0 and typ == 1:
@@ -149,16 +154,17 @@ def edgeout(L,g):
     return(g)
 
 class Signatures(dict):
-    """
-    gathers all signatures from a layout given tx and rx
+    " "" gathers all signatures from a layout given tx and rx
 
     Attributes
     ----------
-        L : gis.Layout
-        pTx : numpy.ndarray
-            position of Tx
-        pRx : numpy.ndarray
-            position of Rx
+
+    L : gis.Layout
+    pTx : numpy.ndarray
+        position of Tx
+    pRx : numpy.ndarray
+        position of Rx
+
     """
 
     def __init__(self,L,source,target):
@@ -166,8 +172,11 @@ class Signatures(dict):
         Parameters
         ----------
         L : Layout
-        source :
-        target :
+        source : int 
+            cycle number 
+        target : int 
+            cycle index
+
         """
         self.L = L
         self.source = source
@@ -198,6 +207,9 @@ class Signatures(dict):
 
 
     def sp(self,G, source, target, cutoff=None):
+        """ 
+
+        """
         if cutoff < 1:
             return
         visited = [source]
@@ -228,15 +240,17 @@ class Signatures(dict):
                 visited.pop()
 
 
-    def propaths(self,G, source, target, cutoff=None):
-        """ all_simple_paths
+    def propaths(self,G, source, target, cutoff=1):
+        """ seek all simple_path from source to target
 
         Parameters
         ----------
 
         G : networkx Graph Gi
-        source : int
-        target : int 
+        source : tuple 
+            interaction (node of Gi) 
+        target : tuple 
+            interaction (node of Gi) 
         cutoff : int
 
         Notes
@@ -244,6 +258,7 @@ class Signatures(dict):
 
         adapted from all_simple_path of networkx 
 
+        1- Determine all nodes connected to Gi 
 
         """
         #print "source :",source
@@ -271,7 +286,7 @@ class Signatures(dict):
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list is not too long
+            elif len(visited) < cutoff: # if visited list length is less than cutoff 
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
@@ -290,7 +305,10 @@ class Signatures(dict):
     def calsig(self,G,dia={},cutoff=None):
         """
 
-        G   : Gf graph
+        Parameters
+        ----------
+
+        G   : graph
         dia : dictionnary of interactions
         cutoff : integer
 
@@ -364,14 +382,16 @@ class Signatures(dict):
         Parameters
         ----------
 
-            cutoff : limit the exploration of all_simple_path
+        cutoff : int 
+            limit the exploration of all_simple_path
 
         Returns
         -------
 
-            sigslist = numpy.ndarray
+        sigslist :  numpy.ndarray
 
         """
+
         try:
             self.L.dGi
         except:
@@ -1247,12 +1267,12 @@ class Signatures(dict):
         Parameters
         ----------
 
-            dsig : dict
+        dsig : dict
 
         Returns
         -------
 
-            rays : dict
+        rays : dict
 
         """
 
@@ -1343,18 +1363,37 @@ class Signature(object):
 
         Parameters
         ----------
-            L : Layout
+
+        L : Layout
 
         Notes
         -----
-        Le type des interactions d extremite reste indetermine a ce stade
+
+        This function converts the sequence of intercation into numpy arrays
+        which contains coordinates of segments extremities involved in the 
+        signature. At that level the coordinates of extremities (tx and rx) is 
+        not known yet.
+        
+        members data 
+
+        pa  tail of segment  (2xN) 
+        pb  head of segment  (2xN)  
+        pc  the center of segment (2xN) 
+
+        norm normal to the sefment if segment 
+        in case the interaction is a point the normal is undefined and then
+        set to 0. 
+
         """
         N = len(self.seq)
         self.pa = np.zeros((2, N))  # tail
         self.pb = np.zeros((2, N))  # head
         self.pc = np.zeros((2, N))  # center
-        #self.typ = np.zeros(N)
         self.norm = np.zeros((2, N))
+
+        # 
+        # .. TODO:  here a mapping would be more efficient
+        #
 
         for n in range(N):
             k = self.seq[n]
@@ -1366,7 +1405,6 @@ class Signature(object):
                 self.pb[:, n] = np.array(L.Gs.pos[he])
                 self.pc[:, n] = np.array(L.Gs.pos[k])
                 self.norm[:, n] = norm
-                #self.typ[n] = 1
             else:      # node
                 pa = np.array(L.Gs.pos[k])
                 norm = np.array([0, 0])
@@ -1374,26 +1412,17 @@ class Signature(object):
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
-                #self.typ[n] = 3
-        #
-        #  vecteurs entre deux points adjascents de la signature
-        #
-        #self.v   = s.pc[:,1:]-s.pc[:,:-1]
-        #self.vn  = self.v /np.sqrt(np.sum(self.v*self.v,axis=0))
-        #u1       = np.sum(self.norm*self.vn[:,0:-1],axis=0)
-        #u2       = np.sum(self.norm*self.vn[:,1:],axis=0)
-        #self.typ = sign(u1*u2)
-        #return(vn)
-        #return(typ)
 
     def evtx(self, L, tx, rx):
-        """ evtx
+        """ evtx ( deprecated ) 
 
         Parameters
         ----------
-            L  : Layout
-            tx : np.array (2xN)
-            rx : np.array (2xM)
+
+        L  : Layout
+        tx : np.array (2xN)
+        rx : np.array (2xM)
+
 
         """
         self.pa = tx.reshape(2, 1)
@@ -1518,24 +1547,26 @@ class Signature(object):
         x = la.solve(A, y)
         M = np.vstack((x[0::2], x[1::2]))
         return M
+
     def backtrace(self, tx, rx, M):
-        """
-        backtracing step: given the image, tx, and rx, this function
+        """ backtracing step: given the image, tx, and rx, this function
         traces the 2D ray.
 
         Parameters
         ----------
-            tx :  numpy.ndarray
-                  transmitter
-            rx :  numpy.ndarray
-                  receiver
-            M  :  numpy.ndarray
-                  images obtained using image()
+
+        tx :  ndarray (2x1)
+              transmitter
+        rx :  ndarray (2x1) 
+              receiver
+        M  :  ndarray (2xN) 
+              N image points obtained using self.image method
 
         Returns
         -------
-            Y : numpy.ndarray
-                2D ray
+
+        Y : ndarray (2 x (N+2))
+            sequence of points corresponding to the seek ray
 
         Examples
         --------
@@ -1593,11 +1624,10 @@ class Signature(object):
 
         pkm1 = rx.reshape(2, 1)
         Y = pkm1
-        k = 0
-        beta = .5
-        cpt = 0
+        k = 0     # intercation counter
+        beta = .5 # to enter into the loop
         while (((beta <= 1) & (beta >= 0)) & (k < N)):
-            if int(typ[k]) != 3:
+            if int(typ[k]) != 3: # not a diffraction 
                 # Formula (30) of paper Eucap 2012
                 l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0
                                 ))
@@ -1628,26 +1658,34 @@ class Signature(object):
             return(None)
 
     def sig2ray(self, L, pTx, pRx):
-        """
-        convert a signature to a 2D ray
+        """ convert a signature to a 2D ray
+
         Parameters
         ----------
-            L : Layout
-            pTx : ndarray
-                2D transmitter position
-            pRx : ndarray
-                2D receiver position
+
+        L : Layout
+        pTx : ndarray
+            2D transmitter position
+        pRx : ndarray
+            2D receiver position
+
         Returns
         -------
-            Y : numpy.ndarray
+
+        Y : ndarray (2x(N+2))
+            
         """
         try:
             L.Gr
         except:
             L.build()
-
+        
+        # ev transforms a sequence of segment into numpy arrays (points)
+        # necessary for image calculation
         self.ev(L)
+        # calculates images from pTx
         M = self.image(pTx)
+    
         Y = self.backtrace(pTx, pRx, M)
         return Y
  

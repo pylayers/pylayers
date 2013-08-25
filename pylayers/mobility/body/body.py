@@ -153,11 +153,25 @@ class BodyCylinder(object):
 
         Parameters
         ----------
-        traj : t,x,y
+
+        traj : ndarray
+            nx3
         tk : float 
             time for evaluation of topos
+        Tstep : flloat 
+        
+        Returns
+        -------
+        
+        kf 
+        kt 
+        vsn
+        wsn 
+        vtn 
+        wtn 
 
         """
+
         tf = Tstep/(1.0*self.nframes) # frame sampling period  
         kt = int(np.floor(tk))
         kf = int(np.floor(np.mod(tk,Tstep)/tf))
@@ -348,12 +362,15 @@ class BodyCylinder(object):
         return(fig,ax)
                     
     def show3(self,iframe=0,topos=True,tag=''): 
-        """
+        """ create geomfile for frame iframe 
+
         Parameters
         ----------
 
-        iframe : frame number (useless if topos == True)
-        topos : if True show the current body topos
+        iframe : int 
+            frame number (useless if topos == True)
+        topos : boolean 
+            if True show the current body topos
         tag : aditional string for naming file .off (useless if topos==False)
 
         """
@@ -635,3 +652,4 @@ if __name__ == '__main__':
 #    plt.legend()
 #
 #    plt.show()
+
