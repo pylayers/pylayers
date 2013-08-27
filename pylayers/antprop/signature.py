@@ -203,10 +203,12 @@ class Signatures(dict):
         s = self.__class__.__name__ + ' : '  + '\n' + '------------------'+'\n'
         s = s + str(self.__sizeof__())+'\n'
         for k in self:
-            size[k] = len(self[k])
+            size[k] = len(self[k]/2)
         s = s + 'from : '+ str(self.source) + ' to ' + str(self.target)+'\n'
         for k in self:
             s = s + str(k) + ' : ' + str(len(self[k])) + '\n'
+        for k in self:
+            s = s + str(k) + ' : ' + str(self[k].reshape(size[k],2,2)) + '\n'
 
         return(s)
 
@@ -1569,7 +1571,9 @@ class Signature(object):
         return M
 
     def backtrace(self, tx, rx, M):
-        """ backtracing step: given the image, tx, and rx, this function
+        """ backtrace given image, tx, and rx
+        
+        this function
         traces the 2D ray.
 
         Parameters
@@ -1584,8 +1588,10 @@ class Signature(object):
 
         Returns
         -------
+
         isvalid : bool
             True if the backtrace ends successfully
+
         Y : ndarray (2 x (N+2))
             sequence of points corresponding to the seek ray
 

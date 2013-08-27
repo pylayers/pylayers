@@ -1042,7 +1042,7 @@ def normalize(vec):
     return(vecn)
 
 def ptonseg(pta, phe, pt):
-    """ Return a point on the segment pta pte
+    """ return a point on the segment (pta,pte)
 
     Parameters
     ----------
@@ -1075,7 +1075,7 @@ def ptonseg(pta, phe, pt):
     return p
 
 def dptseg(p,pt,ph):
-    """ Distance between a set of points and a segment
+    """ distance between a set of points and a segment
 
     Parameters
     ----------
@@ -1256,6 +1256,11 @@ def intersect(a, b, c, d):
         array([ True], dtype=bool)
         >>> intersect(A,B,C,D)[0]
         True
+    
+    See Also
+    --------
+
+    ccw : counter clock wise detection 
 
     """
     return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
