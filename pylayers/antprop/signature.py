@@ -199,16 +199,26 @@ class Signatures(dict):
         self.target = target
 
     def __repr__(self):
+        def fun1(x):
+            if x==1: 
+                return('R')
+            if x==2:
+                return('T')
+            if x==3:
+                return('D')
         size = {}
-        s = self.__class__.__name__ + ' : '  + '\n' + '------------------'+'\n'
-        s = s + str(self.__sizeof__())+'\n'
+        s = self.__class__.__name__ + '\n' + '----------'+'\n'
+        #s = s + str(self.__sizeof__())+'\n'
         for k in self:
-            size[k] = len(self[k]/2)
+            size[k] = len(self[k])/2
         s = s + 'from : '+ str(self.source) + ' to ' + str(self.target)+'\n'
         for k in self:
-            s = s + str(k) + ' : ' + str(len(self[k])) + '\n'
-        for k in self:
-            s = s + str(k) + ' : ' + str(self[k].reshape(size[k],2,2)) + '\n'
+            s = s + str(k) + ' : ' + str(size[k]) + '\n'
+            a = np.swapaxes(self[k].reshape(size[k],2,k),0,2) 
+            # nl x 2 x nsig 
+            for i in range(k):
+                s = s + '   '+ str(a[i,0,:]) + '\n'
+                s = s + '   '+ str(a[i,1,:]) + '\n'
 
         return(s)
 
@@ -1279,13 +1289,18 @@ class Signatures(dict):
                 print 'press n for next signature'
 
 
-    def rays(self,ptx,prx):
+    def rays(self,ptx=0,prx=1):
         """ from signatures dict to 2D rays
 
         Parameters
         ----------
 
-        dsig : dict
+        tx : numpy.array or int 
+            Tx coordinates is the center of gravity of the cycle number if
+            type(tx)=int
+        rx :  numpy.array or int    
+            Rx coordinates is the center of gravity of the cycle number if
+            type(rx)=int
 
         Returns
         -------
@@ -1293,7 +1308,11 @@ class Signatures(dict):
         rays : dict
 
         """
-
+        
+        if type(ptx)==int:
+            ptx = np.array(self.L.Gt.pos[ptx])
+        if type(prx)==int:
+            prx = np.array(self.L.Gt.pos[prx])
         rays = Rays(ptx,prx)
         # detect LOS situation
         lc  = self.L.cycleinline(self.source,self.target)
@@ -1316,7 +1335,6 @@ class Signatures(dict):
 #                    break
 
 #        rays[0]['pt']
-        
         for k in self:
             tsig = self[k]
             shsig = np.shape(tsig)
@@ -1363,10 +1381,12 @@ class Signature(object):
         self.seq = sig[0, :]
         self.typ = sig[1, :]
 
-#    def __repr__(self):
-#        s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
-#        s = s + self.seq + '\n' + self.typ
-#        return s
+    def __repr__(self):
+        #s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
+        s = ''
+        s = s + str(self.seq) + '\n' 
+        s = s + str(self.typ) + '\n'
+        return s
 
     def info(self):
         """
@@ -1669,7 +1689,7 @@ class Signature(object):
                 yk = np.hstack((pkm1[:, 0].T, pa[:, N - (k + 1)].T))
                 deT = np.linalg.det(T)
                 if abs(deT) < 1e-15:
-                    return(None)
+                    return(False,(k,None,None))
                 xk = la.solve(T, yk)
                 pkm1 = xk[0:2].reshape(2, 1)
                 gk = xk[2::]
@@ -1716,8 +1736,12 @@ class Signature(object):
         self.ev(L)
         # calculates images from pTx
         M = self.image(pTx)
-    
+        
+        print self
+        if np.array_equal(self.seq,np.array([5,7,4])):
+            pdb.set_trace()
         isvalid,Y = self.backtrace(pTx, pRx, M)
+        print isvalid,Y
         # 
         # If incremental mode this function returns an alternative signature
         # in case the signature do not yield a valid ray.
