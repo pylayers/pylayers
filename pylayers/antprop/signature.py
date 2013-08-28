@@ -211,7 +211,7 @@ class Signatures(dict):
         #s = s + str(self.__sizeof__())+'\n'
         for k in self:
             size[k] = len(self[k])/2
-        s = s + 'from : '+ str(self.source) + ' to ' + str(self.target)+'\n'
+        s = s + 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
         for k in self:
             s = s + str(k) + ' : ' + str(size[k]) + '\n'
             a = np.swapaxes(self[k].reshape(size[k],2,k),0,2) 
@@ -221,6 +221,17 @@ class Signatures(dict):
                 s = s + '   '+ str(a[i,1,:]) + '\n'
 
         return(s)
+    
+    def num(self):
+        """ calculates number of signatures
+        """
+        self.nsig = 0
+        self.nint = 0
+        for k in self:
+            size = len(self[k])/2
+            self.nsig + = size
+            self.nint + = size*k
+        
 
     def info(self):
         """
@@ -1737,11 +1748,11 @@ class Signature(object):
         # calculates images from pTx
         M = self.image(pTx)
         
-        print self
-        if np.array_equal(self.seq,np.array([5,7,4])):
-            pdb.set_trace()
+        #print self
+        #if np.array_equal(self.seq,np.array([5,7,4])):
+        #    pdb.set_trace()
         isvalid,Y = self.backtrace(pTx, pRx, M)
-        print isvalid,Y
+        #print isvalid,Y
         # 
         # If incremental mode this function returns an alternative signature
         # in case the signature do not yield a valid ray.

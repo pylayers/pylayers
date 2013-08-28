@@ -7,6 +7,7 @@ from numpy.testing import ( TestCase, assert_almost_equal, assert_raises, assert
 
 class Tesonb(TestCase):
     def test_onbfrmaxe(self):
+        print "testing geomutil.onbfrmaxe"
         A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
         B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
         T = onbfromaxe(A,B)
