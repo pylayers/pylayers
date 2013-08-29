@@ -4877,41 +4877,19 @@ class Layout(object):
         #  for all conected components 
         #  licy = [22,78,5] 3 cycles are conected
         for licy in connected:
-            todelete = []
-            tokeep = []
-            print "licy ",licy
-            H = Ga.subgraph(licy)
-            dsucc = nx.dfs_successors(H)
-            print "dsucc",dsucc
-            for ncy in dsucc: #{78:[5,22]}
-                tokeep.append(ncy)     #78 
-                for cy in dsucc[ncy]: #5 22
-                    print "cy", cy 
-                    neigh = nx.neighbors(self.Gr,cy) # all neighbors of 5 
-                    print neigh
-                    # old version confusion ncy et licy[0]
-                    #
-                    #if licy[0]<>cy: # if different from root node licy[0]
-                    #    print "fusion ",licy[0],cy
-                    #    self.Gr.node[licy[0]]['cycle']+=self.Gr.node[cy]['cycle']
-                    print "fusion ",ncy,cy
-                    todelete.append(cy)
-                    self.Gr.node[ncy]['cycle']+=self.Gr.node[cy]['cycle']
-                    for k in neigh:
-                        #if k<> licy[0]:
-                            #self.Gr.add_edge(licy[0],k)
-                        if k<> ncy:
-                            self.Gr.add_edge(ncy,k)
-            #for cy in licy[1:]:            
-            # Remove all cycles which have been fusioned 
-            #
-            # for cy in licy[1:]:            
-            for cy in todelete:            
+            root = licy[0]
+            tomerge = licy[1:]
+            for cy in tomerge: #5 22
+                neigh = nx.neighbors(self.Gr,cy) # all neighbors of 5 
+                self.Gr.node[root]['cycle']+=self.Gr.node[cy]['cycle']
+                for k in neigh:
+                    if k<> root:
+                        self.Gr.add_edge(root,k)
+            # remove merged cycles            
+            for cy in tomerge:            
                 self.Gr.remove_node(cy)
-
-            #self.Gr.pos[licy[0]]=tuple(self.Gr.node[licy[0]]['cycle'].g)
-            for ncy in tokeep:
-                self.Gr.pos[ncy]=tuple(self.Gr.node[ncy]['cycle'].g)
+            # update pos of root cycle with new center of gravity
+            self.Gr.pos[root]=tuple(self.Gr.node[root]['cycle'].g)
 
 
         ltrans = self.listtransition
