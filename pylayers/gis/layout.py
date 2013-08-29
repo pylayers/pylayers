@@ -4835,6 +4835,9 @@ class Layout(object):
         adjascent rooms are connected 
         Gr is at first a deep copy of Gt 
 
+        The difficulty here is to take into account the AIR transition
+        segments
+
         """
         #
         # Create a graph of adjascent rooms
@@ -4870,23 +4873,45 @@ class Layout(object):
 
         #
         # Merge all air-connected cycles
-        #
-        # for all conected components 
+        # Pseudo code
+        #  for all conected components 
+        #  licy = [22,78,5] 3 cycles are conected
         for licy in connected:
+            todelete = []
+            tokeep = []
+            print "licy ",licy
             H = Ga.subgraph(licy)
             dsucc = nx.dfs_successors(H)
-            for ncy in dsucc:
-                for cy in dsucc[ncy]:
-                    neigh = nx.neighbors(self.Gr,cy)
-                    if licy[0]<>cy: 
-                        self.Gr.node[licy[0]]['cycle']+=self.Gr.node[cy]['cycle']
+            print "dsucc",dsucc
+            for ncy in dsucc: #{78:[5,22]}
+                tokeep.append(ncy)     #78 
+                for cy in dsucc[ncy]: #5 22
+                    print "cy", cy 
+                    neigh = nx.neighbors(self.Gr,cy) # all neighbors of 5 
+                    print neigh
+                    # old version confusion ncy et licy[0]
+                    #
+                    #if licy[0]<>cy: # if different from root node licy[0]
+                    #    print "fusion ",licy[0],cy
+                    #    self.Gr.node[licy[0]]['cycle']+=self.Gr.node[cy]['cycle']
+                    print "fusion ",ncy,cy
+                    todelete.append(cy)
+                    self.Gr.node[ncy]['cycle']+=self.Gr.node[cy]['cycle']
                     for k in neigh:
-                        if k<> licy[0]:
-                            self.Gr.add_edge(licy[0],k)
-            for cy in licy[1:]:            
+                        #if k<> licy[0]:
+                            #self.Gr.add_edge(licy[0],k)
+                        if k<> ncy:
+                            self.Gr.add_edge(ncy,k)
+            #for cy in licy[1:]:            
+            # Remove all cycles which have been fusioned 
+            #
+            # for cy in licy[1:]:            
+            for cy in todelete:            
                 self.Gr.remove_node(cy)
 
-            self.Gr.pos[licy[0]]=tuple(self.Gr.node[licy[0]]['cycle'].g)
+            #self.Gr.pos[licy[0]]=tuple(self.Gr.node[licy[0]]['cycle'].g)
+            for ncy in tokeep:
+                self.Gr.pos[ncy]=tuple(self.Gr.node[ncy]['cycle'].g)
 
 
         ltrans = self.listtransition
@@ -4918,6 +4943,8 @@ class Layout(object):
 
             if not keep: 
                 self.Gr.remove_edge(*e)
+
+        return(Ga)        
 
 
     def buildGr3(self):
