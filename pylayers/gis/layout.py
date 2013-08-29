@@ -4387,13 +4387,15 @@ class Layout(object):
                     'font_size':30,
                     'nodelist': [],
                     'figsize': (5,5),
-                    'mode':'cycle'
+                    'mode':'cycle',
                     }
 
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-
+        # overriding first argument graph         
+        if 'graph' in kwargs:
+            graph = kwargs['graph']
         #
         # t : graph of cycles
         #

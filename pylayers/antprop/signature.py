@@ -229,8 +229,8 @@ class Signatures(dict):
         self.nint = 0
         for k in self:
             size = len(self[k])/2
-            self.nsig + = size
-            self.nint + = size*k
+            self.nsig += size
+            self.nint += size*k
         
 
     def info(self):
