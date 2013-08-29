@@ -502,7 +502,7 @@ class Layout(object):
         try:
             normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
         except:
-            logging.warning('one layout normal is length=0 something wrong')
+            logging.critical('one layout normal is length=0 something wrong')
             normal = np.vstack((normx,normy,np.zeros(len(scale))))
 
         #for ks in ds:
@@ -4833,10 +4833,11 @@ class Layout(object):
         -----
         
         adjascent rooms are connected 
+        Gr is at first a deep copy of Gt 
 
         """
         #
-        # 
+        # Create a graph of adjascent rooms
         #
         Ga = nx.Graph()
         Ga.pos ={}
@@ -4856,7 +4857,8 @@ class Layout(object):
                             Ga.add_node(cy)
                             Ga.pos[cy]=self.Gt.pos[cy]
                         Ga.add_edge(k,cy)
-
+        
+        # connected list of connected components of Gt 
         connected = nx.connected_components(Ga)
         self.Gr = copy.deepcopy(self.Gt)
         #
@@ -4869,13 +4871,15 @@ class Layout(object):
         #
         # Merge all air-connected cycles
         #
+        # for all conected components 
         for licy in connected:
             H = Ga.subgraph(licy)
             dsucc = nx.dfs_successors(H)
             for ncy in dsucc:
                 for cy in dsucc[ncy]:
                     neigh = nx.neighbors(self.Gr,cy)
-                    self.Gr.node[licy[0]]['cycle']+=self.Gr.node[cy]['cycle']
+                    if licy[0]<>cy: 
+                        self.Gr.node[licy[0]]['cycle']+=self.Gr.node[cy]['cycle']
                     for k in neigh:
                         if k<> licy[0]:
                             self.Gr.add_edge(licy[0],k)
