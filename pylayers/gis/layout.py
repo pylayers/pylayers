@@ -1,3 +1,4 @@
+
 #-*- coding:Utf-8 -*-
 #
 # Class Layout
@@ -4677,7 +4678,7 @@ class Layout(object):
                      np.array([offx, offy])
 
                 wall = (tuple(p1), tuple(p2), tuple(p3), tuple(p4))
-                if not transition:
+                if not transition and name <> 'AIR':
                     walls.append(wall)
         return(walls)
 
