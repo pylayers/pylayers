@@ -5,8 +5,8 @@ import doctest
 #doctest.testmod(layout)
 
 
-#L = Layout('TA-Office.ini')
-L = Layout('DLR.ini')
+L = Layout('TA-Office.ini')
+#L = Layout('DLR.ini')
 try:
     L.dumpr()
 except:
