@@ -83,16 +83,7 @@ class Save(Process):
         self.net=args['net']
 
 
-        self.save={}
-        self.filename = eval(self.opt['filename'])
-        self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'write')
-        self.save['saveopt']={}
-        self.save['saveopt']['lpos']=self.lpos
-        self.save['saveopt']['lldp']=self.lldp
-        self.save['saveopt']['lrat']=self.lrat
-        pickle.dump(self.save, self.file)
-        self.file.close()
-        self.idx=0
+
 
     def load(self,filename=[]):
         """
@@ -164,7 +155,20 @@ class Save(Process):
         """
             Run the save Result process
         """
+        self.save={}
+        self.filename = eval(self.opt['filename'])
+        self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'write')
+        self.save['saveopt']={}
+        self.save['saveopt']['lpos']=self.lpos
+        self.save['saveopt']['lldp']=self.lldp
+        self.save['saveopt']['lrat']=self.lrat
+        self.save['saveopt']['nbsamples']=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
+        self.save['saveopt']['duration']=eval(self.sim.sim_opt['duration'])
+        self.save['saveopt']['save_update_time']=eval(self.opt['save_update_time'])
 
+        pickle.dump(self.save, self.file)
+        self.file.close()
+        self.idx=0
 
         ### init save dictionnary
         self.save['saveopt']['Layout'] = self.L.filename
