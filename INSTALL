@@ -15,6 +15,7 @@ PIL>=1.1.5
 bitstring>=3.0.2
 shapely>=1.2.14
 descartes>=1.0
+pyintervall>=1.0
 
 The installation of matplotlib basemap requires installation of libraries GEOS
 and PROJ4. The installation procedure is well described in
@@ -39,6 +40,17 @@ in your .bashrc add those 2 lines
 #export PYLAYERS=<path to the directory where pylayers is installed>
 export PYLAYERS=~/pylayers
 export BASENAME=~/plproject
+
+Installing PyInterval
+---------------------
+
+sudo easy_install pyinterval
+
+get crlibm library first 
+http://lipforge.ens-lyon.fr/frs/?group_id=8&release_id=123
+
+if problem for compilation add 
+CPPFLAGS= -fPIC in scs_lib/Makefile
 
 Testing
 -------

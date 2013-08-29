@@ -180,7 +180,7 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filename='defstr3.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
+    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
 
 
         mat = sb.MatDB()
@@ -502,7 +502,7 @@ class Layout(object):
         try:
             normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
         except:
-            logging.warning('one layout normal is length=0 something wrong')
+            logging.critical('one layout normal is length=0 something wrong')
             normal = np.vstack((normx,normy,np.zeros(len(scale))))
 
         #for ks in ds:
@@ -4195,6 +4195,8 @@ class Layout(object):
                                 if ((node1 in self.Gi.node.keys())
                                  & (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)
+                                    self.Gi.add_edge(node2, node1)
+                                    # diffraction is a reciprocal interaction
     #                            else:
     #                                print node1, node2
                                     #pdb_set_trace()
@@ -4385,13 +4387,15 @@ class Layout(object):
                     'font_size':30,
                     'nodelist': [],
                     'figsize': (5,5),
-                    'mode':'cycle'
+                    'mode':'cycle',
                     }
 
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
-
+        # overriding first argument graph         
+        if 'graph' in kwargs:
+            graph = kwargs['graph']
         #
         # t : graph of cycles
         #
@@ -4829,10 +4833,14 @@ class Layout(object):
         -----
         
         adjascent rooms are connected 
+        Gr is at first a deep copy of Gt 
+
+        The difficulty here is to take into account the AIR transition
+        segments
 
         """
         #
-        # 
+        # Create a graph of adjascent rooms
         #
         Ga = nx.Graph()
         Ga.pos ={}
@@ -4852,7 +4860,8 @@ class Layout(object):
                             Ga.add_node(cy)
                             Ga.pos[cy]=self.Gt.pos[cy]
                         Ga.add_edge(k,cy)
-
+        
+        # connected list of connected components of Gt 
         connected = nx.connected_components(Ga)
         self.Gr = copy.deepcopy(self.Gt)
         #
@@ -4864,21 +4873,23 @@ class Layout(object):
 
         #
         # Merge all air-connected cycles
-        #
+        # Pseudo code
+        #  for all conected components 
+        #  licy = [22,78,5] 3 cycles are conected
         for licy in connected:
-            H = Ga.subgraph(licy)
-            dsucc = nx.dfs_successors(H)
-            for ncy in dsucc:
-                for cy in dsucc[ncy]:
-                    neigh = nx.neighbors(self.Gr,cy)
-                    self.Gr.node[licy[0]]['cycle']+=self.Gr.node[cy]['cycle']
-                    for k in neigh:
-                        if k<> licy[0]:
-                            self.Gr.add_edge(licy[0],k)
-            for cy in licy[1:]:            
+            root = licy[0]
+            tomerge = licy[1:]
+            for cy in tomerge: #5 22
+                neigh = nx.neighbors(self.Gr,cy) # all neighbors of 5 
+                self.Gr.node[root]['cycle']+=self.Gr.node[cy]['cycle']
+                for k in neigh:
+                    if k<> root:
+                        self.Gr.add_edge(root,k)
+            # remove merged cycles            
+            for cy in tomerge:            
                 self.Gr.remove_node(cy)
-
-            self.Gr.pos[licy[0]]=tuple(self.Gr.node[licy[0]]['cycle'].g)
+            # update pos of root cycle with new center of gravity
+            self.Gr.pos[root]=tuple(self.Gr.node[root]['cycle'].g)
 
 
         ltrans = self.listtransition
@@ -4910,6 +4921,8 @@ class Layout(object):
 
             if not keep: 
                 self.Gr.remove_edge(*e)
+
+        return(Ga)        
 
 
     def buildGr3(self):
@@ -5181,22 +5194,24 @@ class Layout(object):
             return(ke[nup[0]][0])
 
     def onseg(self, pt, tol=0.01):
-        """
-        onseg(pt,tol)
+        """ segment number from point (deprecated) 
 
-        return the segment number which contains point pt
+        return segment number which contains point pt
 
-        pt  np.array(1x2)  it is a 2D point
+        Parameters
+        ----------
+
+        pt  np.array(1x2)  
         tol = 0.01      tolerance
 
         """
 
-        pts = np.array(self.Gs.pos.values()).T
-        ke = np.array(self.Gs.pos.keys())
+        pts = np.array(self.Gs.pos.values()).T   # structure points
+        ke = np.array(self.Gs.pos.keys())        # point keys
         n = np.shape(pts)[1]
         nbu = np.array([])
         if (n > 0):
-            num = np.arange(n)
+            num = np.arange(n)                   # 
             b = self.inbox(pt, tol)
 
             ta = self.tahe[0, b]
@@ -5685,21 +5700,24 @@ class Layout(object):
 
         Parameters
         ----------
-            p
-                point
-            nroom
-                room number of p
-        Return
-        ------
-            dist
+
+        p : ndarray
+            point coordinate
+
+        nroom : int 
+            room number of p
+
+        Returns
+        -------
+
+        dist
                 list of distances to walls of room nroom
 
         Notes
         -----
 
-            Return  dist list which is a list of all the distances to the walls of the room
+        Return  dist a list of all the distances to the walls of a room
 
-        ..todo: to be tested version contain 
 
         """
         pp = Point(p[0], p[1])
