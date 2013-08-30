@@ -2,16 +2,13 @@ from numpy import *
 from scipy import *
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pylab as plt
-
 def Tangent_Point(t,center, radius):
-	
-	"""
-	t : is the transmitter coordinates 
-	center : coordinates of the circle center
-	radius :  radius of the circle
-	
-	""" 
-	t = t - center 
+    """
+     t :  transmitter coordinates 
+	 center : coordinates of the circle center
+     radius :  radius of the circle
+    """ 
+    t = t - center 
 	alpha = t[0]
 	beta  = t[1]
 	d = sqrt(alpha **2+ beta**2)
@@ -62,7 +59,7 @@ def Reflection_Point (t,r,center, radius):
 		
 	
 	else:
-		y1 = sqrt(1/(alpha**2 + beta**2))*alpha*radius 
+        y1 = sqrt(1/(alpha**2 + beta**2))*alpha*radius 
 		y2 = -sqrt(1/(alpha**2 + beta**2))*alpha*radius
 		x1 = -beta*y1/alpha
 		x2 = -beta*y2/alpha
@@ -71,7 +68,7 @@ def Reflection_Point (t,r,center, radius):
 	R2 = array([x2,y2])
 	print 'R1 = ', R1
 	print 'R2 = ', R1 
-	return message , R1,R2
+	 return message , R1,R2
 	
 
 #

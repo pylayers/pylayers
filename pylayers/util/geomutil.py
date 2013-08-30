@@ -31,9 +31,9 @@ import pdb
 
      linet(sp,p1,p2,al,col,lwidth)
 
-     ccw(A,B,C)
+     ccw(a,b,c)
 
-     intersect(A,B,C,D)
+     intersect(a,b,c,d)
 
      mul3(A,B)
 
@@ -115,9 +115,6 @@ class Geomlist(Geomview):
     def __init__(self, _filename):
         _filename = _filename + '.list'
         Geomview.__init__(self, _filename)
-        fd = open(self.filename, 'w')
-        fd.write('LIST\n')
-        fd.close()
 
     def append(self, strg):
         """
@@ -283,17 +280,18 @@ class GeomVect(Geomview):
 
         Examples
         --------
-            >>> import numpy as np
-            >>> import scipy as sp
-            >>> from pylayers.util.geomutil import *
-            >>> pt1 = sp.rand(3,10)
-            >>> pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}
-            >>> gv1 = GeomVect('test1')
-            >>> gv1.points(pt1)
-            >>> #gv1.show3()
-            >>> gv2 = GeomVect('test2')
-            >>> gv2.points(pt2)
-            >>> #gv2.show3()
+
+        >>> import numpy as np
+        >>> from pylayers.util.geomutil import *
+        >>> import scipy as sp
+        >>> pt1 = sp.rand(3,10)
+        >>> pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}
+        >>> gv1 = GeomVect('test1')
+        >>> gv1.points(pt1)
+        >>> #gv1.show3()
+        >>> gv2 = GeomVect('test2')
+        >>> gv2.points(pt2)
+        >>> #gv2.show3()
 
         .. todo::
             colorbar depending of a value associated with point
@@ -388,6 +386,58 @@ class Geomoff(Geomview):
         _filename = _filename + '.off'
         Geomview.__init__(self, _filename)
 
+    def loadpt(self):
+        """
+        """
+        fo = open(self.filename,'r')
+        lis = fo.readlines()
+        typ,nv,nf,ne=lis[0].split(' ')
+        if typ<>'OFF':
+            logging.critical('not an off file')
+        else:
+            try:
+                nv = eval(nv)
+                nf = eval(nf)
+                ne = eval(ne)
+            except:
+                logging.critical('load off wrong number of values')
+        #print nv,nf,ne
+        for k in range(nv):
+            x,y,z = lis[k+1].split(' ')
+            x = eval(x)
+            y = eval(y)
+            z = eval(z)
+            try:
+                t = np.vstack((t,np.array([x,y,z])))
+            except:
+                t = np.array([x,y,z])
+        return(t)
+
+    def savept(self,ptnew,_fileoff):
+        """
+        """ 
+        fo = open(self.filename,'r')
+        lis = fo.readlines()
+        typ,nv,nf,ne=lis[0].split(' ')
+        if typ<>'OFF':
+            logging.critical('not an off file')
+        else:
+            try:
+                nv = eval(nv)
+                nf = eval(nf)
+                ne = eval(ne)
+            except:
+                logging.critical('load off wrong number of values')
+        fo.close()
+        fileoff = pyu.getlong(_fileoff, "geom")
+        fo = open(fileoff,'w')
+        fo.write(lis[0])
+        for k in range(nv):
+            fo.write(str(ptnew[k,0])+' '+str(ptnew[k,1])+' '+str(ptnew[k,2])+' '+'\n')
+        for li in lis[k+2:]:
+            fo.write(li)
+        fo.close()
+
     def polygon(self, p, poly):
         """  create geomview off for polygon
 
@@ -449,7 +499,7 @@ class Geomoff(Geomview):
         fo.close()
 
     def box(self, extrem = np.array([-1,1,-1,1,-3,3])):
-        """ Geomview file for creating a box
+        """ create a box
 
         Parameters
         ----------
@@ -457,11 +507,11 @@ class Geomoff(Geomview):
         extrem : ndarray
                  (1x6) [xmin,xmax,ymin,ymax,zmin,zmax]
 
-        Example
-        -------
+        Examples
+        --------
 
-            >>> geo = Geomoff('test')
-            >>> geo.box()
+        >>> geo = Geomoff('test')
+        >>> geo.box()
 
         """
         xmin = extrem[0]
@@ -800,6 +850,75 @@ def pvecn(v1, v2):
         print("error divide by zero in pvecn")
     return(v4)
 
+def onbfromaxe(A, B):
+    """ orthonormal basis from 2 points defining an axe
+
+    Parameters
+    ----------
+
+    A : np.array 
+        3 x n
+    B : np.array
+        3 x n 
+
+    Returns
+    -------
+
+
+    T basis (un,vn,wn)
+        3 x n x 3 
+    (un,vn) is a basis in the plane transverse to the axis vn
+    wn is the unitary vector along vector AB 
+
+    Examples
+    --------
+
+    >>> A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
+    >>> B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
+    >>> onbfromaxe(A,B)
+    array([[[ 0.79158384, -0.61106057,  0.        ],
+            [ 0.61106057,  0.79158384,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]],
+    <BLANKLINE>
+           [[ 0.74214568, -0.67023861,  0.        ],
+            [ 0.67023861,  0.74214568,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]],
+    <BLANKLINE>
+           [[ 0.80923784, -0.58748116,  0.        ],
+            [ 0.58748116,  0.80923784,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]],
+    <BLANKLINE>
+           [[ 0.52138786, -0.85331981,  0.        ],
+            [ 0.85331981,  0.52138786,  0.        ],
+            [ 0.        ,  0.        ,  1.        ]]])
+
+
+    see also
+    --------
+
+    pylayers.util.geomutil.Geomvect.geomBase
+    pylayers.util.mobility.body
+
+    """
+    np.random.seed(0)
+    N = np.shape(A)[1] 
+    # modab 1xN
+    modab = np.sqrt(np.sum((B-A)*(B-A),axis=0))
+    # wn 3xN
+    wn = (B - A) / modab
+    random_vector = np.random.rand(3,N)
+    u = random_vector - np.sum(random_vector*wn,axis=0)*wn
+    modu = np.sqrt(np.sum(u*u,axis=0))
+    # un : 3xN
+    un = u /modu 
+    # vn : 3xN
+    vn = np.cross(wn,un,axis=0)
+    T  = np.dstack((un,vn,wn))
+    # reshape dimension for having index of cylinder axe first
+    # N x 3 x 3
+    T  = T.swapaxes(0,1)
+    return T 
+
 
 def vec_sph(th, ph):
     """
@@ -923,7 +1042,7 @@ def normalize(vec):
     return(vecn)
 
 def ptonseg(pta, phe, pt):
-    """ Return a point on the segment pta pte
+    """ return a point on the segment (pta,pte)
 
     Parameters
     ----------
@@ -956,7 +1075,7 @@ def ptonseg(pta, phe, pt):
     return p
 
 def dptseg(p,pt,ph):
-    """ Distance between a set of points and a segment
+    """ distance between a set of points and a segment
 
     Parameters
     ----------
@@ -1057,14 +1176,15 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
     return(ax)
 
 
-def ccw(A, B, C):
+def ccw(a, b, c):
     """ counter clock wise order
 
     Parameters
     ----------
-    A : array(2,N)
-    B : array(2,N)
-    C : array(2,N)
+
+    a : ndarray (2,N)
+    b : ndarray (2,N)
+    c : ndarray (2,N)
 
     Returns
     -------
@@ -1081,27 +1201,30 @@ def ccw(A, B, C):
     --------
 
     >>> import scipy as sp
-    >>> A = sp.rand(2,100)
-    >>> B = sp.rand(2,100)
-    >>> C = sp.rand(2,100)
-    >>> u = ccw(A,B,C)
+    >>> a = sp.rand(2,100)
+    >>> b = sp.rand(2,100)
+    >>> c = sp.rand(2,100)
+    >>> u = ccw(a,b,c)
 
     """
-    return((C[1, :] - A[1, :]) * (B[0, :] - A[0, :]) > (B[1, :] - A[1, :]) * (C[0, :] - A[0, :]))
+    #return((c[1, :] - a[1, :]) * (b[0, :] - a[0, :]) > (b[1, :] - a[1, :]) * (c[0, :] - a[0, :]))
+    return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) > 
+           (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
 
 
-def intersect(A, B, C, D):
+def intersect(a, b, c, d):
     """ check if segment AB intersects segment CD
 
     Parameters
     ----------
-    A : np.array (2xN)
-    B : np.array (2xN)
-    C : np.array (2xN)
-    D : np.array (2xN)
+
+    a : np.array (2xN)
+    b : np.array (2xN)
+    c : np.array (2xN)
+    d : np.array (2xN)
 
 
-    Exemples
+    Examples
     --------
 
     .. plot::
@@ -1133,10 +1256,77 @@ def intersect(A, B, C, D):
         array([ True], dtype=bool)
         >>> intersect(A,B,C,D)[0]
         True
+    
+    See Also
+    --------
+
+    ccw : counter clock wise detection 
 
     """
-    return ((ccw(A, C, D) != ccw(B, C, D)) & (ccw(A, B, C) != ccw(A, B, D)))
+    return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
 
+def affine(X,Y):
+    """ find affine transformation 
+    
+    Parameters
+    ----------
+
+    X  : np.array
+        3xN
+    Y
+        3xN
+
+    Returns
+    -------
+
+    A : np.array
+        3x3
+    B : np.array
+        3x1
+
+    Notes
+    -----
+    Given X and Y find the affine transformation 
+
+    Y = A X + B 
+    """
+    B = Y[:,0][:,np.newaxis]
+    Yc = Y-B
+    pX = la.pinv(X)
+    A = np.dot(Yc,pX)
+    return(A,B)
+
+def cylmap(Y):
+    """ find affine transformation 
+
+    Parameters
+    ----------
+
+    X  : np.array
+        3xN
+    Y
+        3xN
+
+    Returns
+    -------
+
+    A : np.array
+        3x3
+    B : np.array
+        3x1
+
+    Notes
+    -----
+
+    Y = A X + B 
+
+    """
+    X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
+    B = Y[:,0][:,np.newaxis]
+    Yc = Y-B
+    pX = la.pinv(X)
+    A = np.dot(Yc,pX)
+    return(A,B)
 
 def mul3(A, B):
     """
@@ -1190,21 +1380,22 @@ def mul3(A, B):
 
 def MRot3(a, axe):
     """
-    Return a 3D rotation matrix along axe 1|2|3
+    Return a 3D rotation matrix along axe 0|1|2
+
     Parameters
     ----------
 
     a   :  angle (radians)
-    axe :  1:x 2:y 3:z
+    axe :  0:x 1:y 2:z
 
     """
     M3 = np.eye(3)
     M2 = np.array(((np.cos(a), -np.sin(a)), (np.sin(a), np.cos(a))))
-    if (axe == 1):
+    if (axe == 0):
         M3[1:3, 1:3] = M2
-    if (axe == 2):
+    if (axe == 1):
         M3[0::2, 0::2] = M2
-    if (axe == 3):
+    if (axe == 2):
         M3[0:2, 0:2] = M2
     return(M3)
 
@@ -1214,6 +1405,7 @@ def MEulerAngle(alpha, beta, gamma):
 
     Parameters
     ----------
+
     alpha  : float
         rotation along axis z
     beta : float
@@ -1221,8 +1413,9 @@ def MEulerAngle(alpha, beta, gamma):
     gamma : float
         rotation along axis y
 
-    Return
-    ------
+    Returns
+    -------
+
     T    : np.array (3x3)
         rotation matrix
 
@@ -1234,15 +1427,17 @@ def MEulerAngle(alpha, beta, gamma):
 
     Warnings
     --------
+
     Bizarre I was expected
 
     -1  0  0
      0  0  1
      0  1  0
+
     """
-    Ra = MRot3(alpha, 3)
-    Rb = MRot3(beta, 1)
-    Rg = MRot3(gamma, 2)
+    Ra = MRot3(alpha, 2)
+    Rb = MRot3(beta, 0)
+    Rg = MRot3(gamma, 1)
 
     T = np.dot(np.dot(Ra, Rb), Rg)
     #T  = np.dot(np.dot(Rg,Rb),Ra)
@@ -1400,8 +1595,6 @@ def BTB_tx(a_g, T):
 
     return R, al
 
-
-
 class Plot_shapely(object):
     """draw Shapely with matplotlib - pylab
      Plot_shapely.py
@@ -1478,7 +1671,6 @@ class Plot_shapely(object):
             self.plot_line()
         else:
             raise ValueError("inconnu au bataillon: %s" % self.type)
-
 
 def plot_coords(ax, ob, color='#999999'):
     """ plotting coord of a `shapely` object
@@ -1570,9 +1762,6 @@ def v_color(ob):
     """
     return COLOR[ob.is_simple]
 
-#--------------------------------------------
-#   Functions used for calculation of Gv
-#-------------------------------------------
 
 class LineString(shg.LineString):
     """ Overloaded shapely LineString class
@@ -1625,11 +1814,8 @@ class LineString(shg.LineString):
             >>> L1 = LineString(l1)
             >>> l2 = [[3,4,4,3],[1,1,2,2]]
             >>> L2 = LineString(l2)
-            >>> l3 = [np.array([10,10]),np.array([11,10]),np.array([11,11]),np.array([10,11])]
-            >>> L3 = LineString(l3)
             >>> fig,ax = L1.plot(color='red',alpha=0.3,linewidth=3)
             >>> fig,ax = L2.plot(fig=fig,ax=ax,color='blue',alpha=0.7,linewidth=2)
-            >>> fig,ax = L3.plot(fig=fig,ax=ax,color='green',alpha=1,linewidth=1)
             >>> title = plt.title('test plotting LineString')
 
         """
@@ -1674,6 +1860,9 @@ class LineString(shg.LineString):
 
         return fig,ax
 
+#-----------------------------------------------------------
+#   Functions used for calculation of visibility graph Gv
+#-----------------------------------------------------------
 class Polygon(shg.Polygon):
     """ Overloaded shapely Polygon class
 
@@ -2579,9 +2768,6 @@ def wall_delta(x1, y1, x2, y2, delta=0.0001):
     Examples
     --------
 
-    >>> from pylayers.gis.layout import * 
-    >>> L = Layout()
-    >>> L.loadstr('exemple.str')
     >>> x1=-2.
     >>> y1=2.
     >>> x2=-1.
@@ -2863,16 +3049,18 @@ def mirror(p,pa,pb):
 
     Parameters
     ----------
-        p : numpy.ndarray
-            point to image
-        pa : numpy.ndarray
-            segment tail
-        pb : numpy.ndarray
-            segment head 
+
+    p : numpy.ndarray
+        point to image
+    pa : numpy.ndarray
+        segment tail
+    pb : numpy.ndarray
+        segment head 
 
     Returns
     -------
-        M : numpy.ndarray
+    
+    M : numpy.ndarray
 
     Example
     -------
@@ -2914,5 +3102,109 @@ def mirror(p,pa,pb):
     x = la.solve(A, v0)
     return x
 
+def distseg(a,b,c,d,alpha,beta):
+    """ distance to segments
+    
+    Parameters
+    ----------
+
+    a : (3xN) initial point segment 1
+    b : (3xN) end point segment 1
+    c : (3xN) starting point segment 2
+    d : (3xN) end point segment 2  
+
+    alpha : 
+    beta  :
+
+    Returns
+    -------
+
+    f : square of the distance to the segment
+ 
+    Examples 
+    --------
+    
+    >>> import numpy as np 
+    >>> np.random.seed(0)
+    >>> a = np.random.rand(3,10)
+    >>> b = np.random.rand(3,10)
+    >>> c = np.random.rand(3,10)
+    >>> d = np.random.rand(3,10)
+    >>> alpha,beta,dmin = dmin3d(a,b,c,d)
+    >>> alpha[alpha<0]=0
+    >>> alpha[alpha>1]=1
+    >>> beta[beta<0]=0
+    >>> beta[beta>1]=1
+	>>> f = distseg(a,b,c,d,alpha,beta)
+    >>> p1 = a - alpha*(a-b)
+    >>> p2 = c + beta*(d-c)
+    >>> v = p1-p2
+    >>> g = np.sum(v*v,axis=0)
+    >>> diff = np.sum(f-g,axis=0)
+    >>> np.testing.assert_almost_equal(diff,0)
+
+    """
+
+    ac = c-a
+    cd = d-c
+    ba = a-b
+    
+    u0 = np.sum(ac*ac,axis=0)
+    u4 = np.sum(ba*ba,axis=0)
+    u5 = np.sum(cd*cd,axis=0)
+    u1 = np.sum(ba*ac,axis=0)
+    u2 = np.sum(cd*ac,axis=0)
+    u3 = np.sum(cd*ba,axis=0)
+    
+    f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
+
+    # m = a - alpha*ba
+    # n = c + beta*cd
+    # g = np.dot(m-n,m-n)
+
+    return f
+
+def dmin3d(a,b,c,d):
+    """ evaluate the minimal distance between 2 set of segments 
+
+    Parameters
+    ----------
+
+    a : (3xN) initial point segment 1
+    b : (3xN) end point segment 1
+    c : (3xN) starting point segment 2
+    d : (3xN) end point segment 2  
+
+    Returns
+    -------
+
+    alpha : segment parameterization 
+    beta  : segment parameterization
+    dmin  : minimal distance between 2 segments 
+
+    Examples
+    --------
+
+    """
+    
+    ac = c-a
+    cd = d-c
+    ba = a-b
+    
+    u0 = np.sum(ac*ac,axis=0)
+    u4 = np.sum(ba*ba,axis=0)
+    u5 = np.sum(cd*cd,axis=0)
+    u1 = np.sum(ba*ac,axis=0)
+    u2 = np.sum(cd*ac,axis=0)
+    u3 = np.sum(cd*ba,axis=0)
+       
+    den = u4*u5-u3*u3
+    alpha = (u2*u3-u1*u5)/(1.*den)
+    beta = (u1*u3-u2*u4)/(1.*den)
+    dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5) 
+
+    return(alpha,beta,dmin)
+
 if __name__ == "__main__":
+    plt.ion()
     doctest.testmod()

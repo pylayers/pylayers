@@ -40,6 +40,7 @@ def dmin3d(A,B,C,D):
       B   (3xN) end point segment 1
       C   (3xN) starting point segment 2
       D   (3xN) end point segment 2  
+
     """
     
     AC=C-A

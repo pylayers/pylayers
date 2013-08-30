@@ -170,7 +170,7 @@ class SelectL(object):
             #
             # If Layout has no point go to CP state
             #
-            if self.L.Nn==0:
+            if self.L.Np==0:
                 self.state='CP'
                 self.update_state()
 

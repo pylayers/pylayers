@@ -1,0 +1,14 @@
+T = seg2onb(A,B)
+Geomoff()
+	loadpt
+
+rayon cylindre initial connu 
+rayon cylindre final paramètre
+longueur cylindre 
+axe cylindre (ab)
+axe segment (AB)
+u connu 
+
+f(a) = A
+f(b) = B
+f(a+

@@ -19,6 +19,18 @@ import pdb
 
 class Seek:
     def calculate(self, boid):
+        """
+        Parameters
+        ----------
+
+        boid 
+
+        Notes 
+        -----
+
+
+
+        """
         displacement = boid.destination - boid.position
         desired_velocity = displacement.normalize() * boid.desired_speed
         steering = desired_velocity - boid.velocity

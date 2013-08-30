@@ -22,15 +22,15 @@ import pylayers.signal.bsignal as bs
 class Rays(dict):
     """ A set af rays
 
-    Members
-    -------
+    Attributes
+    ----------
 
-    'rays'   : 
-    'nbrays' :
-    'rayidx' :
-    'sig'    :
-    'pt'     :
-    'alpha'  :
+    rays   : 
+    nbrays :
+    rayidx :
+    sig    :
+    pt     :
+    alpha  :
 
 
     Methods
@@ -55,7 +55,7 @@ class Rays(dict):
     Notes
     -----
 
-    Rays object is obtained from a signature.
+    The Rays object is obtained from a signature.
     It is a container for a set of rays between a source 
     and a target point defining a radio link.
 
@@ -82,6 +82,15 @@ class Rays(dict):
         self.raypt = 0
         self.los=False
 
+    def __len__(self):
+        Nray = 0 
+        Nint = 0
+        for k in self.keys():
+            sh = np.shape(self[k]['sig'])
+            Nray = Nray+sh[2]
+        return Nray
+
+
     def __repr__(self):
         s = ''
         ni = 0
@@ -101,7 +110,7 @@ class Rays(dict):
 
         return(s)
 
-    def show(self,L,i=-1,r=-1):
+    def show(self,L,**kwargs):
         """  plot 2D rays within the simulated environment
 
 
@@ -110,35 +119,57 @@ class Rays(dict):
 
         L : Layout
         i : list or -1 (default = all groups)
-            list of interaction group number 
+            list of interaction group numbers 
         r : list or -1 (default = all rays) 
-            list of index of ray in interaction group 
+            list of indices of ray in interaction group 
+        graph : type of graph to be displayed
+
 
         """
+        defaults = {'i':-1,
+                   'r':-1,
+                   'fig':[],
+                   'ax':[],
+                   'graph':'s',
+                    'color':'black',
+                    'alpharay':1,
+                    'widthray':0.1,
+                    'colray':'black'
+                   }
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
 
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        L.showG(fig=fig,ax=ax,graph='s',nodes=False)
+        #if kwargs['fig'] ==[]:
+        #    fig = plt.figure()
+        #if kwargs['ax'] ==[]:    
+        #    ax = fig.add_subplot(111)
+
+        fig,ax = L.showG(**kwargs)
         ax.plot(self.pTx[0], self.pTx[1], 'or')
         ax.plot(self.pRx[0], self.pRx[1], 'og')
-        if i==-1:
+        # i=-1 all rays
+        # else block of interactions i
+        if kwargs['i']==-1:
             lgrint = self.keys()
         else:
-            lgrint = i
+            lgrint = [kwargs['i']]
             
 
         for i in lgrint:
-            if r==-1:
+            if kwargs['r']==-1:
                 lray = range(len(self[i]['pt'][0, 0, :]))
             else:
-                lray = r
+                lray = [kwargs['r']]
             for j in lray: 
                 ray = np.hstack((self.pTx[0:2].reshape((2, 1)),
                                  np.hstack((self[i]['pt'][0:2, :, j],
                                  self.pRx[0:2].reshape((2, 1))))
                                  ))
-                ax.plot(ray[0, :], ray[1, :], alpha=0.6, linewidth=1.)
+                ax.plot(ray[0, :], ray[1, :],
+                        alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
                 ax.axis('off')
+        return(fig,ax)       
 
     def mirror(self, H=3, N=1):
         """ mirror

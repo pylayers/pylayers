@@ -5,8 +5,10 @@ import doctest
 #doctest.testmod(layout)
 
 
+L = Layout('TA-Office.ini')
+#L = Layout('DLR.ini')
 #L = Layout('TA-Office.ini')
-L = Layout('DLR.ini')
+#L = Layout('WHERE1.ini')
 try:
     L.dumpr()
 except:
@@ -17,7 +19,7 @@ fig = plt.gcf()
 #ax1  = fig.add_subplot(221)
 ax1  = fig.add_subplot(321)
 L.display['thin']=True
-fig,ax1  = L.showGs(fig=fig,ax=ax1)
+fig,ax1  = L.showG(graph='s',fig=fig,ax=ax1)
 #L.display['edlabel']=True
 #L.display['edlblsize']=50
 # display selected segments
@@ -27,7 +29,7 @@ fig = plt.gcf()
 ax1 = plt.gca()
 fig,ax1 =  L.showGs(fig=fig,ax=ax1,edlist=[125],width=4)
 ax11 = fig.add_subplot(322)
-L.showG(fig=fig,ax=ax11,graph='')
+L.showG(fig=fig,ax=ax11,graph='s')
 #plt.savefig('graphGs.png')
 #build topological graph 
 ax2 = fig.add_subplot(323)

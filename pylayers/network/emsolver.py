@@ -65,6 +65,13 @@ class EMSolver(object):
 
     def save_model(self,RAT,model):
         """save a RAT model
+
+        Parameters
+        ----------
+
+        RAT :
+
+        model :
             
         """
         fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
@@ -83,6 +90,7 @@ class EMSolver(object):
 
     def load_model(self,RAT):
         """
+
         Parameters
         ----------
 
@@ -103,24 +111,26 @@ class EMSolver(object):
     def solve(self,p,e,LDP,RAT,epwr,sens):
         """compute and return a LDP value thanks to a given method
 
-        Attributes
+        Parameters
         ----------
-            n1p : np.array
-                node 1 position
-            n2p : np.array
-                node 2 position
-            LDP : string
-                Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
-            epwr : list of nodes emmited power
+
+        n1p : np.array
+            node 1 position
+        n2p : np.array
+            node 2 position
+        LDP : string
+            Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
+        epwr : list of nodes emmited power
                 
         Returns
         -------
-            value : float
-                A LDP value :     * A time in ns for LDP ='TOA'
-                        * A received power in dBm for LDP ='Pr'
-            std : float
-                A LDP value standard deviation:     * A time in ns for LDP ='TOA'
-                                    * A received power in dBm for LDP ='Pr'
+        
+        value : float
+            A LDP value :     * A time in ns for LDP ='TOA'
+                    * A received power in dBm for LDP ='Pr'
+        std : float
+            A LDP value standard deviation:     * A time in ns for LDP ='TOA'
+                                * A received power in dBm for LDP ='Pr'
 
         """
         try:

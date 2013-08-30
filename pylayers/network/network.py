@@ -121,6 +121,7 @@ class Network(nx.MultiDiGraph):
 
     Attributes
     ----------
+
     RAT : dictionnary
         keys  = RAT 
         value = list of nodes id
@@ -136,6 +137,7 @@ class Network(nx.MultiDiGraph):
 
     Methods
     -------
+
     get_RAT(self)                    : Get RAT from nodes of the network
     connect(self)                    : Connect each node from a rat together
     create(self)                    : compute get_RAT(),get_pos() and connect()
@@ -145,6 +147,7 @@ class Network(nx.MultiDiGraph):
     get_pos(self,RAT=None)                : get node positions
     pp(self)                    : pretty print on std out all edtges informations
     show(Rat=None,legend=True)            : Display network for all rat or specified in Rat. 
+
     """
 
 
@@ -173,8 +176,9 @@ class Network(nx.MultiDiGraph):
         self.perm([10,11],2,'wifi') -->     (10, 11, 'wifi', {'Pr': [], 'TOA': []}) 
                                 (11, 10, 'wifi', {'Pr': [], 'TOA': []})
 
-        Attributes
+        Parameters
         ----------
+
         iterable : list
             list of node
         r     : int
@@ -192,7 +196,6 @@ class Network(nx.MultiDiGraph):
 
         Examples
         --------
-
 
         >>> from pylayers.network.network import *
         >>> N=Network()
@@ -251,8 +254,9 @@ class Network(nx.MultiDiGraph):
                                 (10, 12, 'wifi', {'Pr': [], 'TOA': []})
                             (11, 12, 'wifi', {'Pr': [], 'TOA': []})
 
-        Attributes
+        Parameters
         ----------
+
         iterable : list
             list of node
         r     : int
@@ -313,7 +317,7 @@ class Network(nx.MultiDiGraph):
         """
         generate a specific tuple  
 
-        Attributes
+        Parameters
         ----------
 
         gene : tuple(x,y) iterator 
@@ -323,6 +327,7 @@ class Network(nx.MultiDiGraph):
 
         Yield
         -----
+
         tuple : (gene[i][0],gene[i][1],rat,var[i]) for iteration i
 
         Examples
@@ -355,9 +360,8 @@ class Network(nx.MultiDiGraph):
         """ get rat from nodes of the network
         
 
-        Attributes
-        ----------
-            Rat : specify which RAt you want to append to your network. If None, all rat are appended.
+
+        RAT argument specifies which RAt to append to the network. If None, all rat are appended.
 
         Examples
         --------
@@ -423,13 +427,16 @@ class Network(nx.MultiDiGraph):
     def get_SubNet(self,Rat=None):
         """
         get SubNetworks of a network
-        !!! ALWAYS use self.get_RAT() BEFORE !!!!!
 
+        Warnings
+        --------
+        
+        ALWAYS use self.get_RAT() BEFORE !
 
-
-        Attributes
+        Parameters
         ----------
-        Rat : specify which SubNet you want to create
+
+        Rat : specify which SubNet to create
         
         Examples
         --------
@@ -580,7 +587,7 @@ class Network(nx.MultiDiGraph):
         This method update :     * The network edges 
                     * The personal network (PN) of both n1 and n2
 
-        Attributes
+        Parameters
         ----------
 
         n1      : node ID
@@ -606,7 +613,7 @@ class Network(nx.MultiDiGraph):
     def compute_LDPs(self,ln,RAT):
         """compute edge LDP
 
-        Attributes
+        Parameters
         ----------
 
         n1      : float/string
@@ -635,7 +642,7 @@ class Network(nx.MultiDiGraph):
         """ 
         Update Position of a node
 
-        Attributes
+        Parameters
         ----------
 
         n      : float/string (or a list of)
@@ -667,12 +674,14 @@ class Network(nx.MultiDiGraph):
     def get_pos(self,RAT=None):
         """ get node positions
 
-        Attributes
+        Parameters 
         ----------
+
         RAT : specify a RAT to display node position. If None, all RAT are displayed    
         
         Returns 
-        ------
+        -------
+
         dictionnary :     key     : node ID
         value     : np.array node position
         
@@ -695,12 +704,14 @@ class Network(nx.MultiDiGraph):
     def get_pos_est(self,RAT=None):
         """ get node estimated  positions ( only available in PN network)
 
-        Attributes
+        Parameters
         ----------
+
         RAT : specify a RAT to display node position. If None, all RAT are displayed    
         
         Returns 
         ------
+
         dictionnary :     key     : node ID
         value     : np.array node position
         
@@ -720,9 +731,17 @@ class Network(nx.MultiDiGraph):
         """
             Test if a node has a pe key
         
+        Parameters
+        ----------
+
+        n : integer 
+            node numbner
+
         Returns
         -------
-            Boolean : True if node n has a pe k
+
+        Boolean : True if node n has a pe k
+
         """
         try:
             return  self.node[n]['pe'].any()
@@ -731,6 +750,14 @@ class Network(nx.MultiDiGraph):
 
 
     def overview(self):
+        """ overview 
+
+        Returns
+        -------
+
+        O : dict 
+
+        """
         O={}
         for sn in self.SubNet.iteritems():
             for ldp in self.LDP:    
@@ -769,7 +796,7 @@ class Network(nx.MultiDiGraph):
         """ 
         Show the network
 
-        Attributes 
+        Parameters 
         ----------
 
         RAT     : specify a RAT to display. If None, all RAT are displayed
@@ -890,7 +917,7 @@ class Network(nx.MultiDiGraph):
         """
         save node positions into csv file
 
-        Attributes:
+        PArameters 
         ----------
         
         filename : string 
@@ -911,6 +938,8 @@ class Network(nx.MultiDiGraph):
 
 
     def init_save(self,height=1.5):
+        """
+        """
 
         pos=nx.get_node_attributes(self,'p').items()
 
@@ -1014,7 +1043,7 @@ class Network(nx.MultiDiGraph):
             save node positions into a matlab structure file
 
 
-        Attributes:
+        Parameters
         ----------
         
         filename : string 
@@ -1070,7 +1099,7 @@ class Network(nx.MultiDiGraph):
         save network state into mysqldatabase
 
 
-        Attributes:
+        Parameters 
         ----------
         
         S        : Simulation
@@ -1093,7 +1122,7 @@ class Network(nx.MultiDiGraph):
         node ID , True pos x , True pos y , est pos x , est pos y , timestamp
 
 
-        Attributes:
+        Parameters
         ----------
         
         S        : Simulation
@@ -1136,7 +1165,7 @@ class Network(nx.MultiDiGraph):
 
 
 
-        Attributes:
+        Parameters
         ----------
         
         S        : Simulation
@@ -1208,7 +1237,7 @@ class Network(nx.MultiDiGraph):
         """
             save node positions into ini file, compliant with pyray standard
 
-        Attributes:
+        Parameters
         ----------
         
         filename : string 
