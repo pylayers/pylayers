@@ -252,9 +252,11 @@ class Cycle(object):
 
     Attributes
     ----------
+
     vertices : np.array
     edges   : np.array
     cycle   : np.array
+
     """
     def __init__(self,G):
         # This call to cycle_basis is to obtained an ordered cycle
@@ -269,8 +271,17 @@ class Cycle(object):
         self.update()
 
     def __add__(self,cy):
-        """
-        addition of 2 disjoint cycles is not a cycle
+        """ addition of 2 disjoint cycles is not a cycle
+        Parameters
+        ----------
+
+        cy : Cycle
+
+        Returns
+        -------
+
+        newcy or None
+       
         """
         flip,path = self.intersect(cy)
         if len(path)>0:

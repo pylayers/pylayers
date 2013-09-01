@@ -4998,8 +4998,9 @@ class Layout(object):
         connected = nx.connected_components(Ga)
         self.Gr = copy.deepcopy(self.Gt)
         #
-        # Big contest : find a shorter way to initialize a new graph node
-        # attribute
+        #  Connected components might not be all contiguous
+        #  this a problem because the concatenation of cycles
+        #  operation below requires cycles contiguity
         #
         for n in self.Gr.nodes():
             self.Gr.node[n]['transition'] = []
@@ -5008,18 +5009,30 @@ class Layout(object):
         # Merge all air-connected cycles
         # Pseudo code
         #  for all conected components 
-        #  licy = [22,78,5] 3 cycles are conected
+        #  licy = [22,78,5] 3 cycles are connected
         for licy in connected:
-            root = licy[0]
-            tomerge = licy[1:]
-            for cy in tomerge: #5 22
-                neigh = nx.neighbors(self.Gr,cy) # all neighbors of 5 
-                self.Gr.node[root]['cycle']+=self.Gr.node[cy]['cycle']
-                for k in neigh:
-                    if k<> root:
-                        self.Gr.add_edge(root,k)
+            merged = []        # merged cycle is void
+            root = licy[0]     # pick the first cycle as root 22
+            tomerge = licy[1:] # 78,5
+            #for cy in tomerge: # 78,5 
+            while tomerge<>[]:
+                ncy = tomerge.pop()
+                # testing cycle contiguity before merging 
+                croot = self.Gr.node[root]['cycle']
+                cy = self.Gr.node[ncy]['cycle']
+                flip,path = croot.intersect(cy)
+                if len(path) < 1:
+                    print licy
+                    tomerge.insert(0,ncy)
+                else:    
+                    neigh = nx.neighbors(self.Gr,ncy) # all neighbors of 5 
+                    self.Gr.node[root]['cycle']+=self.Gr.node[ncy]['cycle'] # here the merging 
+                    merged.append(ncy)
+                    for k in neigh:
+                        if k<> root:
+                            self.Gr.add_edge(root,k)
             # remove merged cycles            
-            for cy in tomerge:            
+            for cy in merged:            
                 self.Gr.remove_node(cy)
             # update pos of root cycle with new center of gravity
             self.Gr.pos[root]=tuple(self.Gr.node[root]['cycle'].g)
