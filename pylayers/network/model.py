@@ -163,8 +163,11 @@ class PLSmodel(object):
 
         elif self.method == 'mode' or self.method == 'median' or self.method == 'mean':
             PLmean          = self.getPLmean(r)
-            shPLmean        = np.shape(PLmean)
-            Xrand           = RSSStd*sp.randn(shPLmean[0])
+            try:
+                shPLmean        = np.shape(PLmean)
+                Xrand           = RSSStd*sp.randn(shPLmean[0])
+            except:
+                Xrand           = RSSStd*sp.randn()
             PL        = PLmean+Xrand
 
         else :
