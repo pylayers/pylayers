@@ -200,7 +200,7 @@ class Signatures(dict):
 
     def __repr__(self):
         def fun1(x):
-            if x==1: 
+            if x==1:
                 return('R')
             if x==2:
                 return('T')
@@ -214,16 +214,23 @@ class Signatures(dict):
         s = s + 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
         for k in self:
             s = s + str(k) + ' : ' + str(size[k]) + '\n'
-            a = np.swapaxes(self[k].reshape(size[k],2,k),0,2) 
-            # nl x 2 x nsig 
+            a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
+            # nl x 2 x nsig
             for i in range(k):
                 s = s + '   '+ str(a[i,0,:]) + '\n'
                 s = s + '   '+ str(a[i,1,:]) + '\n'
 
         return(s)
-    
+
+    def __len__(self):
+        nsig = 0
+        for k in self:
+            size = len(self[k])/2
+            nsig += size
+        return(nsig)
+
     def num(self):
-        """ calculates number of signatures
+        """ calculates the number of signatures
         """
         self.nsig = 0
         self.nint = 0
@@ -231,7 +238,6 @@ class Signatures(dict):
             size = len(self[k])/2
             self.nsig += size
             self.nint += size*k
-        
 
     def info(self):
         """
@@ -1306,20 +1312,27 @@ class Signatures(dict):
         Parameters
         ----------
 
-        tx : numpy.array or int 
+        tx : numpy.array or int
             Tx coordinates is the center of gravity of the cycle number if
             type(tx)=int
-        rx :  numpy.array or int    
+        rx :  numpy.array or int
             Rx coordinates is the center of gravity of the cycle number if
             type(rx)=int
 
         Returns
         -------
 
-        rays : dict
+        rays : Rays
+
+        Notes
+        -----
+
+        In the same time the signature of the ray is stored in the Rays object
+
+        Todo : Find the best memory implemntation
 
         """
-        
+
         if type(ptx)==int:
             ptx = np.array(self.L.Gt.pos[ptx])
         if type(prx)==int:
@@ -1347,6 +1360,7 @@ class Signatures(dict):
 
 #        rays[0]['pt']
         for k in self:
+            # get signature for k interactions
             tsig = self[k]
             shsig = np.shape(tsig)
             for l in range(shsig[0]/2):

@@ -83,8 +83,7 @@ class Rays(dict):
         self.los=False
 
     def __len__(self):
-        Nray = 0 
-        Nint = 0
+        Nray = 0
         for k in self.keys():
             sh = np.shape(self[k]['sig'])
             Nray = Nray+sh[2]
