@@ -196,7 +196,7 @@ class CLA(object):
         self.visible=[c.visible for c in self.c]
         self.usable=[c.usable for c in self.c]
 
-    def compute(self,pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True):
+    def compute(self,pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
         """
         Compute the cla to estimate the postion
     
@@ -238,6 +238,10 @@ class CLA(object):
             self.estpos2(HT=HT)
             self.Nc=len(np.where(self.usable)[0])
             return True
+        elif forceamb:
+            self.estpos2(HT=HT)
+            return False
+
         else:
             self.Nc=len(np.where(self.usable)[0])
             return False
@@ -1222,7 +1226,7 @@ class CLA(object):
                                           * (pow(2, saxis - p)), p)
                     p = p + 1
             count = count.T
-
+            lpc=[]
             for i in range(len(clust)):
                 if len(clust) < 3:
                     clusters = clust[i]
@@ -1248,15 +1252,21 @@ class CLA(object):
                 if clust_vol != 0 and len(itoas) == 2:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
+                    lpc.append(pc)
                     # verifier que les contraintes utilisées sont les bonne ( ce n'est pas le cas)
                     # ne marche que si 2 constriantes genere le cluster ( a robustifier)   
                     pu = np.where(self.usable)[0]
+                    # try:
+                    #     dd.append(np.sqrt(np.sum((pc - self.c[itoas[0]].p) ** 2)))
+                    # except:
+                    #     dd.append(np.sqrt(np.sum((pc - self.c[itoas[1]].p) ** 2)))
+                    # print pc
                     try:
                         dd.append(np.sqrt(np.sum((pc - self.c[itoas[0]].p) ** 2)))
                     except:
                         dd.append(np.sqrt(np.sum((pc - self.c[itoas[1]].p) ** 2)))
-
-#                       try:
+                    print pc
+            #                       try:
 #                               vmax=[]
 #                               for i in range(len(lclust)):
 #                                       vmax.append(np.max(poids[np.unique(lclust[i])]))
@@ -1269,11 +1279,36 @@ class CLA(object):
                 try:
 
                     # for now, it is supposed that all RSS share the same model
+                    rssvalues=[]
                     icr=np.where(np.array(self.type)=='RSS')[0]
-                    M = (((-self.c[icr[0]].model.PL0 - self.c[icr[0]].value) * np.log(10) ) / (10. * self.c[icr[0]].model.rssnp))
-                    LL = np.log(dd[1] / dd[0]) * (1 + np.log(dd[0] * dd[1]) - 2 * M)
+                    for irss in range(len(icr)):
+                        d0=np.sqrt(np.sum((self.c[icr[irss]].p-lpc[0])**2))
+                        d1=np.sqrt(np.sum((self.c[icr[irss]].p-lpc[1])**2))
+                        rssvalues.append(self.c[icr[irss]].value)
+                        try:
+                            drss= np.vstack((drss,np.array((d0,d1))))
+                        except:
+                            drss= np.array((d0,d1))
+                    if len(np.shape(drss))==1:
+                        drss=drss.reshape(1,2)    
 
-                    if LL > 0:
+                    M = (((-self.c[icr[0]].model.PL0 - self.c[icr[0]].value) * np.log(10) ) / (10. * self.c[icr[0]].model.rssnp))
+                    PL0= -self.c[icr[0]].model.PL0 
+                    NP = self.c[icr[0]].model.rssnp
+                    
+                    mu1=PL0-10*NP*np.log10(drss[:,0])
+                    mu2=PL0-10*NP*np.log10(drss[:,1])
+                    sig=self.c[icr[0]].model.sigrss
+                    values=np.array((rssvalues))
+                    LT=np.sum(1/(2.*sig**2)*(mu2**2-mu1**2))
+                    RT=np.sum((1/(1.*sig))*values*(mu1-mu2))
+
+
+                    # LL = np.log(dd[1] / dd[0]) * (1 + np.log(dd[0] * dd[1]) - 2 * M)
+
+
+                    # if LL > 0:
+                    if LT>RT:
     #                                       vmax = np.max(poids[np.unique(lclust[0])])
     #                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
     #                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[0])[peindx]]

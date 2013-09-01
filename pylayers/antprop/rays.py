@@ -133,7 +133,8 @@ class Rays(dict):
                     'color':'black',
                     'alpharay':1,
                     'widthray':0.1,
-                    'colray':'black'
+                    'colray':'black',
+                    'ms':5
                    }
         for key, value in defaults.items():
             if key not in kwargs:
@@ -145,8 +146,8 @@ class Rays(dict):
         #    ax = fig.add_subplot(111)
 
         fig,ax = L.showG(**kwargs)
-        ax.plot(self.pTx[0], self.pTx[1], 'or')
-        ax.plot(self.pRx[0], self.pRx[1], 'og')
+        ax.plot(self.pTx[0], self.pTx[1], 'or',ms=kwargs['ms'])
+        ax.plot(self.pRx[0], self.pRx[1], 'og',ms=kwargs['ms'])
         # i=-1 all rays
         # else block of interactions i
         if kwargs['i']==-1:
