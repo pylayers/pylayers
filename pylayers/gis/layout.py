@@ -4014,7 +4014,7 @@ class Layout(object):
         #
         self.dGv = {}  # dict of Gv graph
         for icycle in self.Gt.node:
-            print icycle
+            #print icycle
             udeg2 = []
             udeg1 = []
             cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt
@@ -4037,7 +4037,7 @@ class Layout(object):
                         udeg1.append(index)    # warning not used
             # udeg1 = self.degree[1]
             # udeg2 = self.degree[2]        
-            print udeg2    
+            #print udeg2    
             Gv = polyg.buildGv(show=show,udeg1=udeg1,udeg2=udeg2)
             #if icycle == 78:
             #    pdb.set_trace()
