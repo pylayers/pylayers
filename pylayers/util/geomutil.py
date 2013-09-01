@@ -2592,7 +2592,7 @@ class Polygon(shg.Polygon):
         #
         # warning this test is fragile
         #
-        print tcc
+        # debug : print tcc
         #
         # The purpose here is to remove flat transition 
         #

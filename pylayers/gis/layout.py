@@ -491,15 +491,38 @@ class Layout(object):
         # 
         # self.degree : dictionnary (point degree : list of point index) 
         #
-        degpnt = map(lambda x : nx.degree(self.Gs,x),upnt)  # points absolute degrees
-        degmax = max(degpnt)
+        
+        degpnt = np.array(map(lambda x : nx.degree(self.Gs,x),upnt))  # points absolute degrees
+        
+        # lairwall : list of air wall segments
+        lairwall = self.name['AIR'] 
+        #
+        # function to count airwall connected to a point  
+        # probably not the faster solution 
+        #
+        def nairwall(nupt):
+            lseg = nx.neighbors(self.Gs,nupt)
+            n = 0 
+            for ns in lseg:
+                if ns in lairwall:
+                    n = n+1
+            return n 
+                    
+        nairwall = np.array(map(nairwall,upnt))
 
+        #
+        # if a node is connected to N air wall ==> deg = deg - N 
+        #
+        degpnt = degpnt - nairwall
+
+        degmax = max(degpnt)
         self.degree = {}
         for deg in range(degmax+1):
             num = filter(lambda x : degpnt[x]==deg,range(len(degpnt))) # position of degree 1 point 
-            npt = map(lambda x : upnt[x],num)  # number of degree 1 points
+            npt = np.array(map(lambda x : upnt[x],num))  # number of degree 1 points
             self.degree[deg] = npt
 
+          
         #
         # convert geometric information in numpy array
         #    
@@ -559,24 +582,25 @@ class Layout(object):
         self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
         self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
         
-        #
+        # Storing segment normals 
+        # Handling of subsegments
+        # 
         # index is for indexing subsegment after the nsmax value
         #
         index = nsmax+1
-        for ks in self.Gs.node:
-            if ks > 0:
-                k = self.tgs[ks]
-                self.Gs.node[ks]['norm'] = normal[:,k]
-                self.sla[ks]=self.Gs.node[ks]['name']
-                self.stridess[ks]=0
-                if self.Gs.node[ks].has_key('ss_name'):
-                    nss = len(self.Gs.node[ks]['ss_name'])
-                    self.stridess[ks]=index-1
-                    for slabname in self.Gs.node[ks]['ss_name']:
-                        self.lsss.append(ks)
-                        self.sla[index] = slabname
-                        self.isss.append(index)
-                        index = index+1
+        for ks in useg:
+            k = self.tgs[ks]                        # index numpy 
+            self.Gs.node[ks]['norm'] = normal[:,k]  # update normal 
+            self.sla[ks]=self.Gs.node[ks]['name']   # update sla dict 
+            self.stridess[ks]=0                     # initialize stridess[ks]
+            if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
+                nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
+                self.stridess[ks]=index-1           # update stridess[ks] dict
+                for slabname in self.Gs.node[ks]['ss_name']:
+                    self.lsss.append(ks)
+                    self.sla[index] = slabname
+                    self.isss.append(index)
+                    index = index+1
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
@@ -2006,7 +2030,7 @@ class Layout(object):
                 # update slab name <-> edge number dictionnary
                 self.name[name].remove(e)
                 # delete subseg if required
-
+        self.g2npy()
 
 
 
@@ -3990,7 +4014,7 @@ class Layout(object):
         #
         self.dGv = {}  # dict of Gv graph
         for icycle in self.Gt.node:
-            #print icycle
+            print icycle
             udeg2 = []
             udeg1 = []
             cycle = self.Gt.node[icycle]['cycle']  # a cycle  from Gt
@@ -4011,7 +4035,10 @@ class Layout(object):
                         udeg2.append(index)
                     if deg == 1:
                         udeg1.append(index)    # warning not used
-            Gv = polyg.buildGv(show=show, udeg2=udeg2)
+            # udeg1 = self.degree[1]
+            # udeg2 = self.degree[2]        
+            print udeg2    
+            Gv = polyg.buildGv(show=show,udeg1=udeg1,udeg2=udeg2)
             #if icycle == 78:
             #    pdb.set_trace()
             #
@@ -4375,6 +4402,49 @@ class Layout(object):
 #                ax.plot(x,y,linewidth=2,color=color)
 #        if kwargs['show']:
 #            plt.show()
+    
+    def show(self,**kwargs):
+        """
+        """
+        defaults = {'show': True,
+                    'fig': [],
+                    'ax': [],
+                    'nodes': False,
+                    'edges': True,
+                    'labels': False,
+                    'alphan': 1.0,
+                    'alphae': 1.0,
+                    'linewidth': 2,
+                    'node_color':'w',
+                    'edge_color':'k',
+                    'node_size':20,
+                    'font_size':30,
+                    'nodelist': [],
+                    'figsize': (5,5),
+                    'mode':'cycle',
+                    }
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        segfilt = filter(lambda x : x not in self.name['AIR'], self.tsg)  
+        # get the association between segment and nx edges
+        edges = self.Gs.edges()
+        Ne = len(edges)
+        segments = np.array(edges)[:,0]
+        dse = {k:v for k,v in zip(segments,range(Ne))}
+        edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))    
+        # Warning edgelist is to be understood as edge of graph and not segments of layout
+        fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
+
+        ldeg1  = list(self.degree[1])
+        ldeg4  = list(self.degree[4])
+        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg1,edges=False,nodes=True,node_size=70,node_color='r')
+        fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg4,edges=False,nodes=True,node_size=70,node_color='g')
+        #     if k==1:
+        #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,edges=False,nodes=True,node_size=50,node_color='c')
+        #     if k==4:
+        #         fig,ax = self.showG('s',fig=fig,ax=ax,nodelist=ldeg,nodes=False,node_size=50,node_color='b')       
 
     def showG(self, graph='r', **kwargs):
         """ show graphs
@@ -4444,6 +4514,7 @@ class Layout(object):
                     'node_size':20,
                     'font_size':30,
                     'nodelist': [],
+                    'edgelist': [],
                     'figsize': (5,5),
                     'mode':'cycle',
                     }
@@ -4559,7 +4630,9 @@ class Layout(object):
 
         ax.axis('scaled')
 
-        # Display doors and windows
+        #
+        # Display doors and windows subsegments with a slight offset
+        #
         cold = pyu.coldict()
         d = self.subseg()
         for ss in d.keys():
@@ -4573,6 +4646,8 @@ class Layout(object):
                 yoff = (1+ns[1])*0.05*norm[1]
                 ax.plot(x+xoff, y+yoff, linewidth=2, color=color)
 
+        
+                  
         if kwargs['show']:
             plt.show()
 
