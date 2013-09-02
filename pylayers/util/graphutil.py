@@ -2,13 +2,32 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import networkx as nx
 import doctest
-
+import pdb
 
 def draw(G,**kwargs):
     """ draw a networkx graph
     G : Graph with pos (geometric graph)
 
-
+    
+    Parameters
+    ----------
+    show : False
+    fig : []
+    ax : []
+    'nodes':True,
+    'edges':True,
+    'labels':True,
+    'linewidth': 2,
+    'node_color':'w',
+    'edge_color':'k',
+    'node_size': 200,
+    'linewidth': 2,
+    'font_size': 30,
+    'alphan': 0.8,
+    'alphae': 1.0,
+    'nodelist': [],
+    'edgelist': [],
+    'figsize': (8,8)
     """
 
     defaults = {'show': False,
@@ -55,8 +74,13 @@ def draw(G,**kwargs):
 
     if kwargs['nodelist']==[]:
         nodelist =  G.nodes()
+    else:
+        nodelist=kwargs['nodelist']
+
     if kwargs['edgelist']==[]:
         edgelist =  G.edges()
+    else:
+        edgelist = map(lambda x : G.edges()[x],kwargs['edgelist']) # for nx an edge list is a list of tuple
 
     if kwargs['nodes']:
         nx.draw_networkx_nodes(G, G.pos,

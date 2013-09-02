@@ -6,7 +6,7 @@ from random import normalvariate,uniform
 from pylayers.mobility.transit.vec3 import vec3
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.SteeringBehavior import default_steering_mind
-from random import uniform,gauss
+from random import uniform,gauss,sample
 import numpy as np
 
 from pylayers.network.network import Network
@@ -112,9 +112,11 @@ class Person(Process):
         self.forbidroomId = froom 
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
-            self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+            # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+            self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId): # or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
-                self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
             #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         elif self.cdest == 'file':
            cfg = ConfigParser.ConfigParser()
@@ -229,12 +231,14 @@ class Person(Process):
                     #adjroom  = self.L.Gr.neighbors(self.roomId)
                     #Nadjroom = len(adjroom)
                         if self.cdest == 'random':
-                            self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                            # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                            self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
                             # test 1 ) next != actualroom
                             #      2 ) nextroom != fordiden room
                             #      3 ) room not share without another agent
                             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId):# or (self.nextroomId in self.sim.roomlist):
-                                self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                                # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
                         elif self.cdest == 'file':
                            self.room_counter=self.room_counter+1
                            if self.room_counter >= self.nb_room:

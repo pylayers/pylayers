@@ -47,6 +47,9 @@ cyl.savept(ptn.T,'cylin.off')
 xs = ptn[0,:]
 ys = ptn[1,:]
 zs = ptn[2,:]
-ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
-plt.axis('scaled')
-plt.show()
+#ax.scatter(xs=xs,ys=ys,zs=zs,zdir='z')
+#plt.axis('scaled')
+#plt.show()
+cyl.savept(ptn.T,'ge1.off')
+cy2=Geomoff('ge1')
+cy2.show3()

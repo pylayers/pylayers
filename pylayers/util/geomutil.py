@@ -31,9 +31,9 @@ import pdb
 
      linet(sp,p1,p2,al,col,lwidth)
 
-     ccw(A,B,C)
+     ccw(a,b,c)
 
-     intersect(A,B,C,D)
+     intersect(a,b,c,d)
 
      mul3(A,B)
 
@@ -115,9 +115,6 @@ class Geomlist(Geomview):
     def __init__(self, _filename):
         _filename = _filename + '.list'
         Geomview.__init__(self, _filename)
-        fd = open(self.filename, 'w')
-        fd.write('LIST\n')
-        fd.close()
 
     def append(self, strg):
         """
@@ -285,8 +282,8 @@ class GeomVect(Geomview):
         --------
 
         >>> import numpy as np
-        >>> import scipy as sp
         >>> from pylayers.util.geomutil import *
+        >>> import scipy as sp
         >>> pt1 = sp.rand(3,10)
         >>> pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}
         >>> gv1 = GeomVect('test1')
@@ -416,9 +413,9 @@ class Geomoff(Geomview):
                 t = np.array([x,y,z])
         return(t)
 
-    def savept(self,newpt,_fileout):
+    def savept(self,ptnew,_fileoff):
         """
-        """
+        """ 
         fo = open(self.filename,'r')
         lis = fo.readlines()
         typ,nv,nf,ne=lis[0].split(' ')
@@ -432,12 +429,15 @@ class Geomoff(Geomview):
             except:
                 logging.critical('load off wrong number of values')
         fo.close()
-        fo = open(_fileout,'w')
+
+        fileoff = pyu.getlong(_fileoff, "geom")
+        fo = open(fileoff,'w')
         fo.write(lis[0])
         for k in range(nv):
-            fo.write(str(newpt[k,0])+' '+str(newpt[k,1])+' '+str(newpt[k,2])+'\n')
+            fo.write(str(ptnew[k,0])+' '+str(ptnew[k,1])+' '+str(ptnew[k,2])+' '+'\n')
         for li in lis[k+2:]:
             fo.write(li)
+        fo.close()
 
     def polygon(self, p, poly):
         """  create geomview off for polygon
@@ -1043,7 +1043,7 @@ def normalize(vec):
     return(vecn)
 
 def ptonseg(pta, phe, pt):
-    """ Return a point on the segment pta pte
+    """ return a point on the segment (pta,pte)
 
     Parameters
     ----------
@@ -1076,7 +1076,7 @@ def ptonseg(pta, phe, pt):
     return p
 
 def dptseg(p,pt,ph):
-    """ Distance between a set of points and a segment
+    """ distance between a set of points and a segment
 
     Parameters
     ----------
@@ -1177,14 +1177,15 @@ def linet(ax, p1, p2, al=0.9, color='blue', linewidth=1):
     return(ax)
 
 
-def ccw(A, B, C):
+def ccw(a, b, c):
     """ counter clock wise order
 
     Parameters
     ----------
-    A : array(2,N)
-    B : array(2,N)
-    C : array(2,N)
+
+    a : ndarray (2,N)
+    b : ndarray (2,N)
+    c : ndarray (2,N)
 
     Returns
     -------
@@ -1201,24 +1202,27 @@ def ccw(A, B, C):
     --------
 
     >>> import scipy as sp
-    >>> A = sp.rand(2,100)
-    >>> B = sp.rand(2,100)
-    >>> C = sp.rand(2,100)
-    >>> u = ccw(A,B,C)
+    >>> a = sp.rand(2,100)
+    >>> b = sp.rand(2,100)
+    >>> c = sp.rand(2,100)
+    >>> u = ccw(a,b,c)
 
     """
-    return((C[1, :] - A[1, :]) * (B[0, :] - A[0, :]) > (B[1, :] - A[1, :]) * (C[0, :] - A[0, :]))
+    #return((c[1, :] - a[1, :]) * (b[0, :] - a[0, :]) > (b[1, :] - a[1, :]) * (c[0, :] - a[0, :]))
+    return((c[1, ...] - a[1, ...]) * (b[0, ...] - a[0, ...]) > 
+           (b[1, ...] - a[1, ...]) * (c[0, ...] - a[0, ...]))
 
 
-def intersect(A, B, C, D):
+def intersect(a, b, c, d):
     """ check if segment AB intersects segment CD
 
     Parameters
     ----------
-    A : np.array (2xN)
-    B : np.array (2xN)
-    C : np.array (2xN)
-    D : np.array (2xN)
+
+    a : np.array (2xN)
+    b : np.array (2xN)
+    c : np.array (2xN)
+    d : np.array (2xN)
 
 
     Examples
@@ -1253,9 +1257,45 @@ def intersect(A, B, C, D):
         array([ True], dtype=bool)
         >>> intersect(A,B,C,D)[0]
         True
+    
+    See Also
+    --------
+
+    ccw : counter clock wise detection 
 
     """
-    return ((ccw(A, C, D) != ccw(B, C, D)) & (ccw(A, B, C) != ccw(A, B, D)))
+    return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
+
+def affine(X,Y):
+    """ find affine transformation 
+    
+    Parameters
+    ----------
+
+    X  : np.array
+        3xN
+    Y
+        3xN
+
+    Returns
+    -------
+
+    A : np.array
+        3x3
+    B : np.array
+        3x1
+
+    Notes
+    -----
+    Given X and Y find the affine transformation 
+
+    Y = A X + B 
+    """
+    B = Y[:,0][:,np.newaxis]
+    Yc = Y-B
+    pX = la.pinv(X)
+    A = np.dot(Yc,pX)
+    return(A,B)
 
 def cylmap(Y):
     """ find affine transformation 
@@ -1264,15 +1304,20 @@ def cylmap(Y):
     ----------
 
     X  : np.array
-        Nx3x3
+        3xN
     Y
-        Nx3x3
+        3xN
 
     Returns
     -------
 
-    T : np.array
-        Nx3x3
+    A : np.array
+        3x3
+    B : np.array
+        3x1
+
+    Notes
+    -----
 
     Y = A X + B 
 
@@ -1838,18 +1883,23 @@ class Polygon(shg.Polygon):
     """
     def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[]):
         """
+
         Parameters
         ----------
-            p : list
-                2xNp np.array
-                shg.MultiPoint
-                shg.Polygon
-            vnodes : list of alternating points and segments numbers
-                default = [] in this case a regular ordered sequence
-                is generated.
+
+        p : list
+            2xNp np.array
+            shg.MultiPoint
+            shg.Polygon
+        vnodes : list of alternating points and segments numbers
+            default = [] in this case a regular ordered sequence
+            is generated.
+
         Notes
         -----
-            A Polygon as an equal number of points and segments
+
+        Convention : a Polygon as an equal number of points and segments
+        There is an implicit closure between first and last point
 
         """
 
@@ -2042,6 +2092,7 @@ class Polygon(shg.Polygon):
 
         Parameters
         ----------
+
         display   : boolean
             default : False
         fig       : matplotlib.figure.pyplot
@@ -2050,11 +2101,6 @@ class Polygon(shg.Polygon):
             default = []
         udeg2     : np.array indexes of points of degree 2
             default = []
-
-        Notes
-        -----
-            Topological error can be raised if the point coordinates accuracy
-            is not limited.
 
         Examples
         --------
@@ -2081,6 +2127,13 @@ class Polygon(shg.Polygon):
         Segment k and (k+1)%N share segment (k+1)%N
         The degree of a point is dependent from other polygons around
 
+        Topological error can be raised if the point coordinates accuracy
+        is not limited.
+
+        See Also
+        --------
+
+        pylayers.gis.layout
 
         """
         defaults = {'show': False,
@@ -2148,8 +2201,8 @@ class Polygon(shg.Polygon):
         npt = self.vnodes[ipt]
         nseg = self.vnodes[iseg]
 
-        assert  sum(npt < 0), "something wrong"
-        assert  sum(nseg > 0), "something wrong"
+        assert  np.all(npt < 0), "something wrong with points"
+        assert  np.all(nseg > 0), "something wrong with segments"
         #
         #
         # Create middle point on lring
@@ -2183,19 +2236,22 @@ class Polygon(shg.Polygon):
         xr, yr = lring.xy
 
         #
-        # Degree 1 points
+        # Degree 1 points : typically doors
         #
         # Determine diffraction points
         #
         # udeg1 :
-        # deg2 : if null the point is kept
-        #        if convexe the point is kept
-        #        else the point is not kept
+        # deg2 : if null:
+        #           the point is kept
+        #        if convex:
+        #           the point is kept
+        #        else:
+        #           the point is not kept
         #
-        uconvex = np.nonzero(tcc == 1)[0]
-        uzero = np.nonzero(tcc == 0)[0]
-        udiffdoor = np.intersect1d(uzero, udeg2)  # les points paralleles de degre 2 sont souvent des portes ou des fenetres
-        udiff = np.hstack((uconvex, udiffdoor)).astype('int')
+        uconvex = np.nonzero(tcc == 1)[0] # convex point position
+        uzero = np.nonzero(tcc == 0)[0]   # planar point (joining two parallel segment)
+        udiffdoor = np.intersect1d(uzero, udeg2)  # degree 2 paralell points are often doors and windows 
+        udiff = np.hstack((uconvex, udiffdoor)).astype('int') # diffracting point 
         #print "vnodes",self.vnodes
         #print "tcc : ",tcc
         #print "uzero : ",uzero
@@ -2210,7 +2266,7 @@ class Polygon(shg.Polygon):
         #if uzero!=[]:
         #    print "zero :",npt[uzero]
         #
-        # display points and polygon
+        # if show == True display points and polygon
         #
         if kwargs['show']:
             points1 = shg.MultiPoint(lring)
@@ -2227,13 +2283,13 @@ class Polygon(shg.Polygon):
             ax.add_patch(patch)
 
         #
-        #  1) Calculate node node visibility
+        #  1) Calculate node-node visibility
         #
-
+        # The following exploits definition of convexity.
         #
-        #  Entre les combinaisons de points convexes
-        #  Il faut elargir aux portes points de degre 2
-        #  eventuellement non convexes cross product nul
+        # Between all combinations of diffracting points 
+        # create a segment and check it is fully included in the polygon 
+        # if it is true then there is a visibility between the 2 points.
         #
         for nk in combinations(udiff, 2):
             p1 = p[:, nk[0]]
@@ -2245,16 +2301,20 @@ class Polygon(shg.Polygon):
         #
         #  2) Calculate edge-edge and node-edge visibility
         #
-        for nk in range(Np):
-            ptk = p[:, nk]
-            phk = p[:, (nk + 1) % Np]
+        for nk in range(Np):   # loop on range of number of points 
+            ptk = p[:, nk]     # tail point 
+            phk = p[:, (nk + 1) % Np] # head point (%Np to get 0 as last point)
 
+            # lnk : unitary vector on segment nk
             lk = phk - ptk
             nlk = np.sqrt(np.dot(lk, lk))
-            lnk = lk / nlk
-
-            epsilonk = nlk / 1000.
-
+            lnk = lk / nlk     
+            
+            # the epsilon is (1/1000) of the segment length 
+            epsilonk = nlk / 1000.  # this can be dangerous (epsilon can be large)
+            
+            # x--o----------------------o--x
+            #    +eps                  -eps
             pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
             pcornerh = phk - lnk * epsilonk  # + n[:,nk]*epsilon
 
@@ -2262,21 +2322,23 @@ class Polygon(shg.Polygon):
         # in any case no ray towark nk
         # if nk is convex no ray toward (nk-1)%Np
         #
+        # start from the two extremity of the segment 
             for i, pcorner in enumerate([pcornert, pcornerh]):
                 #
-                #  si point tail
-                #           on retire de segment nk
-                #  et si le point est convexe on retire le segment precedent
+                #  if tail point 
+                #           remove nk segment 
+                #  and if the point is convex
+                #          remove previous segment 
                 #
                 #  si point head
                 #
                 listpoint = range(Np)
-                listpoint.remove(nk)
-                if i == 0:
-                    if nk in uconvex:
+                listpoint.remove(nk)   # remove current point 
+                if i == 0:  # first iteration pcornert 
+                    if nk in uconvex:  # == 1
                         listpoint.remove((nk - 1) % Np)
-                if i == 1:
-                    if (nk + 1) % Np in uconvex:
+                if i == 1:  # second iteration pcornerh
+                    if (nk + 1) % Np in uconvex: # ==1
                         listpoint.remove((nk + 1) % Np)
 
                 for ns in listpoint:
@@ -2442,11 +2504,14 @@ class Polygon(shg.Polygon):
 
         Parameters
         ----------
+
         display : boolean
+            default False
 
 
         Returns
         -------
+
         tcc     : np.array (1x Nseg)
             1 if convex , -1 if concav , 0 if plane
         n       :  array(2xNseg)
@@ -2489,10 +2554,16 @@ class Polygon(shg.Polygon):
             property :
 
             Let N be the number of points of the Polygon. N  = Nx + Nc where
-            Nx is the number of convex point and Nc the number of concav points
+            Nx is the number of convex points and Nc the number of concav points
+
             We have Nx >= Nc
 
             If a point is common to two parallel segments, the cross product is = 0
+        
+        See Also
+        --------
+
+        Lr2n
 
         """
 
@@ -2519,12 +2590,15 @@ class Polygon(shg.Polygon):
             v = np.cross(nk, nkp1)
             tcc[k] = v
 
-        #print "ptseg tcc ",tcc
         #
         # warning this test is fragile
         #
-        upos = np.nonzero(tcc > 1e-3)[0]
-        uneg = np.nonzero(tcc < -1e-3)[0]
+        # debug : print tcc
+        #
+        # The purpose here is to remove flat transition 
+        #
+        upos = np.nonzero(tcc > 1e-2)[0]
+        uneg = np.nonzero(tcc < -1e-2)[0]
 
         if len(upos) > len(uneg):
             nconvex = uneg
@@ -3057,6 +3131,109 @@ def mirror(p,pa,pb):
     v0 = np.dot(-S, p) + vc0
     x = la.solve(A, v0)
     return x
+
+def distseg(a,b,c,d,alpha,beta):
+    """ distance to segments
+    
+    Parameters
+    ----------
+
+    a : (3xN) initial point segment 1
+    b : (3xN) end point segment 1
+    c : (3xN) starting point segment 2
+    d : (3xN) end point segment 2  
+
+    alpha : 
+    beta  :
+
+    Returns
+    -------
+
+    f : square of the distance to the segment
+ 
+    Examples 
+    --------
+    
+    >>> import numpy as np 
+    >>> np.random.seed(0)
+    >>> a = np.random.rand(3,10)
+    >>> b = np.random.rand(3,10)
+    >>> c = np.random.rand(3,10)
+    >>> d = np.random.rand(3,10)
+    >>> alpha,beta,dmin = dmin3d(a,b,c,d)
+    >>> alpha[alpha<0]=0
+    >>> alpha[alpha>1]=1
+    >>> beta[beta<0]=0
+    >>> beta[beta>1]=1
+	>>> f = distseg(a,b,c,d,alpha,beta)
+    >>> p1 = a - alpha*(a-b)
+    >>> p2 = c + beta*(d-c)
+    >>> v = p1-p2
+    >>> g = np.sum(v*v,axis=0)
+    >>> diff = np.sum(f-g,axis=0)
+    >>> np.testing.assert_almost_equal(diff,0)
+
+    """
+
+    ac = c-a
+    cd = d-c
+    ba = a-b
+    
+    u0 = np.sum(ac*ac,axis=0)
+    u4 = np.sum(ba*ba,axis=0)
+    u5 = np.sum(cd*cd,axis=0)
+    u1 = np.sum(ba*ac,axis=0)
+    u2 = np.sum(cd*ac,axis=0)
+    u3 = np.sum(cd*ba,axis=0)
+    
+    f = u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5
+
+    # m = a - alpha*ba
+    # n = c + beta*cd
+    # g = np.dot(m-n,m-n)
+
+    return f
+
+def dmin3d(a,b,c,d):
+    """ evaluate the minimal distance between 2 set of segments 
+
+    Parameters
+    ----------
+
+    a : (3xN) initial point segment 1
+    b : (3xN) end point segment 1
+    c : (3xN) starting point segment 2
+    d : (3xN) end point segment 2  
+
+    Returns
+    -------
+
+    alpha : segment parameterization 
+    beta  : segment parameterization
+    dmin  : minimal distance between 2 segments 
+
+    Examples
+    --------
+
+    """
+    
+    ac = c-a
+    cd = d-c
+    ba = a-b
+    
+    u0 = np.sum(ac*ac,axis=0)
+    u4 = np.sum(ba*ba,axis=0)
+    u5 = np.sum(cd*cd,axis=0)
+    u1 = np.sum(ba*ac,axis=0)
+    u2 = np.sum(cd*ac,axis=0)
+    u3 = np.sum(cd*ba,axis=0)
+       
+    den = u4*u5-u3*u3
+    alpha = (u2*u3-u1*u5)/(1.*den)
+    beta = (u1*u3-u2*u4)/(1.*den)
+    dmin = np.sqrt(u0 + 2*(alpha*u1+beta*u2+alpha*beta*u3)+alpha*alpha*u4+ beta*beta*u5) 
+
+    return(alpha,beta,dmin)
 
 if __name__ == "__main__":
     plt.ion()

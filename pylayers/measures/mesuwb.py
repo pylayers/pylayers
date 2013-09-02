@@ -1475,6 +1475,7 @@ class UWBMesure(object):
 
     Attributes
     ----------
+
     tdd
         Time domain deconv data
     fdd
@@ -1505,10 +1506,11 @@ class UWBMesure(object):
     """
 
     def __init__(self, nTx, h=1, display=False):
-        """ UWBMesure
+        """
 
         Parameters
         ----------
+        
            nTx
             Tx index
            h
@@ -1516,12 +1518,13 @@ class UWBMesure(object):
 
          Examples
          --------
-         .. plot::
-             :include-source:
 
-             >>> from pylayers.measures.mesuwb import *
-             >>> M1 = UWBMesure(1)
-             >>> M1.show()
+         .. plot::
+            :include-source:
+
+            >>> from pylayers.measures.mesuwb import *
+            >>> M1 = UWBMesure(1)
+            >>> M1.show()
 
         """
         # Raw data matlab file reading
