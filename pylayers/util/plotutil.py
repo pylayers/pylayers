@@ -7,6 +7,93 @@ from matplotlib import cm
 import doctest
 import pdb
 
+def mulplot(x,y,**kwargs):
+    """ handling multiple plots
+
+    x : ndarray  (Nc x Nx)
+    y : ndarray  (Nv x Ny)
+
+    type : "modulus | phase"
+    dB : bool
+        False
+    fig = []    
+    ax  = []    
+    nlg  : int 
+        number of lines 
+
+    """
+    defaults = {'type':['v'],
+                'dB':[False],
+                'titre':[''],
+                'labels':['Un label'],
+                'xlabels':['Angle (degrees)'],
+                'ylabels':['Level'],
+                'ncol':2,
+                'nlin':2,
+                'fig':[],
+                'ax':[],
+               }
+
+    # radians to degree coefficient   
+
+    rtd = 180./np.pi
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+    
+    nfigx = np.shape(x)[0]
+    nfigy = np.shape(y)[0]
+
+    fig = kwargs['fig']
+    ax = kwargs['ax']
+    nlin = kwargs['nlin']
+    ncol = kwargs['ncol']
+    labels = kwargs['labels']
+    xlabels = kwargs['xlabels']
+    ylabels = kwargs['ylabels']
+    nlabels = len(labels)
+    nxlabels = len(xlabels)
+    nylabels = len(ylabels)
+    assert((nlabels==nfigy)|(nlabels==1))
+    assert((nxlabels==nfigy)|(nxlabels==1))
+    assert((nylabels==nfigy)|(nxlabels==1))
+
+    # filtering kwargs argument for plot function 
+    args ={}
+    for k in kwargs:
+        if k not in defaults.keys():
+            args[k]=kwargs[k]
+
+    assert(np.shape(x)[1]==np.shape(y)[1])
+    assert((nfigy==ncol*nlin) | (nfigy==1))
+
+    if ax==[]:    
+        fig,ax=plt.subplots(ncol,nlin)
+    
+    for l in range(nlin):
+        for c in range(ncol):
+            kf = l*ncol+c
+            if kwargs['type']=='v':
+                ax[l,c].plot(x[kf%nfigx,:],y[kf%nfigy,:],label=labels[kf%nlabels],**args)
+            if kwargs['type']=='r':
+                ax[l,c].plot(x[kf%nfigx,:],np.angle(y[kf%nfigy,:]),label=labels[kf%nlabels],**args)
+            if kwargs['type']=='d':
+                ax[l,c].plot(x[kf%nfigx,:],np.angle(y[kf%nfigy,:])*rtd,label=labels[kf%nlabels],**args)
+            if kwargs['type']=='m':
+                ax[l,c].plot(x[kf%nfigx,:],np.abs(y[kf%nfigy,:]),label=labels[kf%nlabels],**args)
+            if kwargs['type']=='l10':
+                ax[l,c].plot(x[kf%nfigx,:],10*np.log10(np.abs(y[kf%nfigy,:])),label=labels[kf%nlabels],**args)
+            if kwargs['type']=='l20':
+                ax[l,c].plot(x[kf%nfigx,:],20*np.log10(np.abs(y[kf%nfigy,:])),label=labels[kf%nlabels],**args)
+
+            ax[l,c].set_xlabel(xlabels[kf%nxlabels])
+            ax[l,c].set_ylabel(ylabels[kf%nylabels])
+            ax[l,c].legend()
+
+    plt.tight_layout()
+
+    return(fig,ax)                  
+
 
 def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
     """ discontinuous plot

@@ -334,7 +334,8 @@ class Interface(object):
         plt.xlabel('frequency (GHz)')
         plt.show()
 
-    def plotwrta(self, k=0, display='modulus', name='', dB=False):
+    #def plotwrta(self, k=0, display='modulus', title='', dB=False):
+    def plotwrta(self, **kwargs):
         """ plot R & T coefficients with respect to angle
 
          Parameters
@@ -342,6 +343,8 @@ class Interface(object):
          k       : frequency index
          display : string
             {'modulus'|'phase'}
+         name    : ''
+            
          dB      : boolean
             False
 
@@ -367,9 +370,45 @@ class Interface(object):
              >>> plt.show()
 
         """
-        rtd = 180 / np.pi
+        defaults = {'display':'modulus',
+                    'dB':False,
+                    'title':'',
+                    'k':0,
+                    'fig':[],
+                    'ax':[],
+                    'nfig':2
+                   }
+        
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
 
-        plt.subplot(211)
+        k = kwargs['k'] # frequency index
+
+        rtd = 180 / np.pi
+        
+        if ax==[]:
+            fig = gcf()
+            if nfig==2: 
+                ax1 = plt.subplot(211)
+                ax2 = plt.subplot(212)
+            if nfig==4:    
+                ax1 = plt.subplot(211)
+                ax2 = plt.subplot(212)
+                ax3 = plt.subplot(223)
+                ax4 = plt.subplot(214)
+        else:
+            if nfig==2: 
+                ax1 = ax[0]
+                ax2 = ax[1]
+            if nfig==4: 
+                ax1 = ax[0]
+                ax2 = ax[1]
+                ax3 = ax[2]
+                ax4 = ax[3]
+
+        # Reflexion 
+
         modRo = abs(self.R[:, :, 0, 0])
         modRp = abs(self.R[:, :, 1, 1])
         modTo = abs(self.T[:, :, 0, 0])
@@ -380,58 +419,80 @@ class Interface(object):
         angleTo = np.angle(self.T[:, :, 0, 0])
         angleTp = np.angle(self.T[:, :, 1, 1])
 
-        if display == 'phase':
-            #plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
-            #plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, 'b')
-            plt.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
-            plt.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
+        if kwargs['display'] == 'phase':
+            if nfig==2:
+                ax1.plot(self.thi[0,:] * rtd, angleRo[k, :] * rtd, 'r')
+                ax1.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
+            if nfig==4:    
+                ax1.plot(self.thi[0,:] * rtd, angleRo[k, :] * rtd, 'r')
+                ax2.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
         else:
-            if dB:
-                #plt.plot(self.theta[0, :] * rtd, 20 *
-                #         np.log10(modRo[k, :]), 'b')
-                #plt.plot(self.theta[0, :] * rtd, 20 *
-                #         np.log10(modRp[k, :]), 'r')
-                plt.plot(self.thi[0,:] * rtd, 20 *
+            if kwargs['dB']:
+                if nfig==2:
+                    ax1.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modRo[k, :]), 'b')
-                plt.plot(self.thi[0,:] * rtd, 20 *
+                    ax1.plot(self.thi[0,:] * rtd, 20 *
+                         np.log10(modRp[k, :]), 'r')
+                if nfig==4:
+                    ax1.plot(self.thi[0,:] * rtd, 20 *
+                         np.log10(modRo[k, :]), 'b')
+                    ax2.plot(self.thi[0,:] * rtd, 20 *
                          np.log10(modRp[k, :]), 'r')
             else:
-                #plt.plot(self.theta[0, :] * rtd, modRo[k, :], 'b')
-                #plt.plot(self.theta[0, :] * rtd, modRp[k, :], 'r')
-                plt.plot(self.thi[0,:] * rtd, modRo[k, :], 'b')
-                plt.plot(self.thi[0,:] * rtd, modRp[k, :], 'r')
-        plt.legend(('R _|_', 'R //'), loc='upper left')
-        plt.xlabel('theta (degrees)')
+                if nfig==2:
+                    ax1.plot(self.thi[0,:] * rtd, modRo[k, :], 'b')
+                    ax1.plot(self.thi[0,:] * rtd, modRp[k, :], 'r')
+                if nfig==4:
+                    ax1.plot(self.thi[0,:] * rtd, modRo[k, :], 'b')
+                    ax2.plot(self.thi[0,:] * rtd, modRp[k, :], 'r')
+        if nfig==2:            
+            ax1.legend(('R _|_', 'R //'), loc='upper left')
+            ax1.xlabel('theta (degrees)')
+        if nfig==4:            
+            ax1.legend(('R _|_'), loc='upper left')
+            ax2.legend(('R _|_'), loc='upper left')
+            ax1.xlabel('theta (degrees)')
+            ax2.xlabel('theta (degrees)')
         #nom = self.m1.name+'|'+self.m2.name+' '+str(f[k])+'GHz'
         nom = ' f =' + str(self.fGHz[k, 0]) + ' GHz'
-        if name != '':
-            plt.title(name + nom)
+        if kwargs['title'] != '':
+            plt.title(kwargs['title']+ nom)
         else:
             plt.title(self.name + nom)
+        
+        # Transmission 
+
         plt.subplot(212)
-        if display == 'phase':
-            plt.plot(self.thi[0,:] * rtd, angleTo[k, :] * rtd, 'b')
-            plt.plot(self.thi[0,:] * rtd, angleTp[k, :] * rtd, 'r')
+        if kwargs['display'] == 'phase':
+            plt.plot(self.thi[0,:] * rtd, angleTo[k, :] * rtd, color='b',**kwargs)
+            plt.plot(self.thi[0,:] * rtd, angleTp[k, :] * rtd, color='r',**kwargs)
             #plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, 'b')
             #plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, 'r')
         else:
-            if dB:
+            if kwargs['dB']:
                 #plt.plot(self.theta[0, :] * rtd, 20 *
                 #         np.log10(modTo[k, :]), 'b')
                 #plt.plot(self.theta[0, :] * rtd, 20 *
                 #         np.log10(modTp[k, :]), 'r')
                 plt.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modTo[k, :]), 'b')
+                         np.log10(modTo[k, :]),color='b', **kwargs)
                 plt.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modTp[k, :]), 'r')
+                         np.log10(modTp[k, :]),color='r', **kwargs)
             else:
                 #plt.plot(self.theta[0, :] * rtd, modTo[k, :], 'b')
                 #plt.plot(self.theta[0, :] * rtd, modTp[k, :], 'r')
-                plt.plot(self.thi[0,:] * rtd, modTo[k, :], 'b')
-                plt.plot(self.thi[0,:] * rtd, modTp[k, :], 'r')
+                plt.plot(self.thi[0,:] * rtd, modTo[k, :], color='b',**kwargs)
+                plt.plot(self.thi[0,:] * rtd, modTp[k, :], color='r',**kwargs)
+
         plt.legend(('T _|_', 'T //'), loc='upper right')
         plt.xlabel('theta (degrees)')
-        plt.show()
+        if kwargs['show']:
+            plt.show()
+        
+        if nfig==2:
+            return fig,[ax1,ax2]
+        if nfig==4:
+            return fig,[ax1,ax2,ax3,ax4]
 
 
 class MatInterface(Interface):
@@ -791,7 +852,7 @@ class MatDB(dict):
         ----------
         name : string
             material name
-        val  : float or complex
+        cval : float or complex
             epsilon or index
         sigma : float or complex
             permeability
@@ -801,6 +862,7 @@ class MatDB(dict):
 
         Notes
         -----
+
         There are two manners to enter a material
 
         i)  epsr and sigma
@@ -1106,6 +1168,16 @@ class Slab(dict, Interface):
 
     """
     def __init__(self, mat, name='NEWSLAB'):
+        """
+
+        Parameters
+        ----------
+
+        mat : 
+        name : string     
+            slab name 
+
+        """
         self['name'] = name
         self['index'] = 0
         self['nbmat'] = 1
@@ -1685,15 +1757,19 @@ class SlabDB(dict):
         slab.M.plotwrta(name=name)
 
     def add(self, name, lname, lthick, color='black'):
-        """
+        """ add a slab in dB
+
         Parameters
         ----------
+
         name       : string
-        lmatname   : list of mat name
+        lname      : list of mat name
         lthick     : list ot float
             lthick  is in meters
+
         Warnings
-        -------
+        --------
+
         thickness is in cm in .slab
 
         Examples

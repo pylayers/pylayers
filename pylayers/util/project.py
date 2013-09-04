@@ -88,10 +88,10 @@ fd.close()
 #for nm in pstruc.keys():
 for nm,nv in pstruc.items():
     dirname =  basename + '/'+pstruc[nm] 
-    sp = nv.split('/')  
-    if len(sp)>1:
-        if not os.path.isdir(basename + '/'+sp[0]):     
-            os.mkdir(basename + '/'+sp[0])
+    spl = nv.split('/') # never again a variable called sp 
+    if len(spl)>1:
+        if not os.path.isdir(basename + '/'+spl[0]):     
+            os.mkdir(basename + '/'+spl[0])
             os.mkdir(basename + '/'+nv)
             print "create ",basename + '/'+nv
         else:
