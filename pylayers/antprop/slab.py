@@ -30,6 +30,7 @@ import struct as stru
 import ConfigParser
 from   pylayers.util.project import *
 import pylayers.util.pyutil as pyu
+import pylayers.util.plotutil as plu
 from   pylayers.util.easygui import *
 import pdb
 
@@ -271,82 +272,23 @@ class Interface(object):
 
         return(Lo, Lp)
 
-    def plotwrtf(self, k=0, typ='mod'):
-        """ plot R & T coefficients with respect to frequency
+    def plotwrt(self,var='a',kv=0,**kwargs):
+        """ plot R & T coefficients with respect to angle or frequency
 
          Parameters
          ----------
 
-         k  : int
-            theta index
-         typ: string 
-            type of dispaly default ('mod')
-
-         Examples
-         ---------
-
-         .. plot::
-             :include-source:
-
-             >>> from pylayers.antprop.slab import *
-             >>> import matplotlib.pylab as plt
-             >>> import numpy as np
-             >>> theta = np.arange(0,np.pi/2,0.01)
-             >>> fGHz  = np.arange(0.1,10,0.2)
-             >>> sl    = SlabDB('matDB.ini','slabDB.ini')
-             >>> mat   = sl.mat
-             >>> lmat  = [mat['AIR'],mat['WOOD']]
-             >>> II    = MatInterface(lmat,0,fGHz,theta)
-             >>> II.RT()
-             >>> fig = plt.figure()
-             >>> II.plotwrtf(10)
-             >>> plt.show()
-
-        """
-        ax1 = plt.subplot(211)
-        modRo = abs(self.R[:, :, 0, 0])
-        modRp = abs(self.R[:, :, 1, 1])
-        modTo = abs(self.T[:, :, 0, 0])
-        modTp = abs(self.T[:, :, 1, 1])
-        angRo = np.angle((self.R[:, :, 0, 0]))
-        angRp = np.angle((self.R[:, :, 1, 1]))
-        angTo = np.angle((self.T[:, :, 0, 0]))
-        angTp = np.angle((self.T[:, :, 1, 1]))
-        #nom = self.m1.name+'|'+self.m2.name+' '+str(theta[k])+'degrees'
-        #title('Reflection & Transmission Coefficient  : '+ nom)
-        plt.title(self.name)
-        if typ=='mod':
-            plt.plot(self.fGHz, modRo[:, k], 'b')
-            plt.plot(self.fGHz, modRp[:, k], 'r')
-        else:
-            plt.plot(self.fGHz, angRo[:, k], 'b')
-            plt.plot(self.fGHz, angRp[:, k], 'r')
-        plt.legend(('R _|_', 'R //'), loc='upper left')
-        plt.xlabel('frequency (GHz)')
-        ax2 = plt.subplot(212,sharex=ax1)
-        if typ=='mod':
-            plt.plot(self.fGHz, modTo[:, k], 'b')
-            plt.plot(self.fGHz, modTp[:, k], 'r')
-        else:
-            plt.plot(self.fGHz, angTo[:, k], 'b')
-            plt.plot(self.fGHz, angTp[:, k], 'r')
-        plt.legend(('T _|_', 'T //'), loc='upper right')
-        plt.xlabel('frequency (GHz)')
-        plt.show()
-
-    #def plotwrta(self, k=0, display='modulus', title='', dB=False):
-    def plotwrta(self, **kwargs):
-        """ plot R & T coefficients with respect to angle
-
-         Parameters
-         -----------
-         k       : frequency index
-         display : string
-            {'modulus'|'phase'}
-         name    : ''
-            
-         dB      : boolean
-            False
+         kv  : int
+            variable index
+         polar: string 
+                'po', # po | p | o   (parallel+ortho | parallel | ortogonal)
+         coeff: string 
+                'RT', # RT | R | T   (Reflexion & Transmission ) | Reflexion | Transmission 
+         var:  string 
+                'a',    # a | f       angle | frequency 
+         types : string 
+                'm' | 'r' | 'd' | 'l20'
+                mod   rad    deg   dB
 
          Examples
          --------
@@ -355,144 +297,132 @@ class Interface(object):
              :include-source:
 
              >>> from pylayers.antprop.slab import *
+             >>> import matplotlib.pylab as plt
              >>> import numpy as np
-             >>> import matplotlib.pyplot as plt
              >>> theta = np.arange(0,np.pi/2,0.01)
-             >>> fGHz  = np.arange(0.1,10,0.2)
-             >>> sl  = SlabDB('matDB.ini','slabDB.ini')
-             >>> mat = sl.mat
+             >>> fGHz = np.arange(0.1,10,0.2)
+             >>> sl = SlabDB('matDB.ini','slabDB.ini')
+             >>> mat   = sl.mat
+             >>> lmat  = [mat['AIR'],mat['WOOD']]
+             >>> II    = MatInterface(lmat,0,fGHz,theta)
+             >>> II.RT()
+             >>> fig,ax = II.plotwrt('a',kv=10,types=['m'])
              >>> air = mat['AIR']
              >>> brick  = mat['BRICK']
              >>> II  = MatInterface([air,brick],0,fGHz,theta)
              >>> II.RT()
-             >>> fig = plt.figure()
-             >>> II.plotwrta(0)
+             >>> fig,ax = II.plotwrt('f',color='k',types=['m'])
              >>> plt.show()
 
+
         """
-        defaults = {'display':'modulus',
-                    'dB':False,
-                    'title':'',
-                    'k':0,
-                    'fig':[],
-                    'ax':[],
-                    'nfig':2
-                   }
-        
+        defaults = {'types':['l20'], 
+                'polar':'po', # po | p | o 
+                'coeff':'RT', # RT | R | T 
+               }
+
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
 
-        k = kwargs['k'] # frequency index
-
+        #fGHz = self.fGHz[k]
         rtd = 180 / np.pi
         
-        if ax==[]:
-            fig = gcf()
-            if nfig==2: 
-                ax1 = plt.subplot(211)
-                ax2 = plt.subplot(212)
-            if nfig==4:    
-                ax1 = plt.subplot(211)
-                ax2 = plt.subplot(212)
-                ax3 = plt.subplot(223)
-                ax4 = plt.subplot(214)
-        else:
-            if nfig==2: 
-                ax1 = ax[0]
-                ax2 = ax[1]
-            if nfig==4: 
-                ax1 = ax[0]
-                ax2 = ax[1]
-                ax3 = ax[2]
-                ax4 = ax[3]
-
+        # filtering kwargs argument for mulplot function 
+        args ={}
+        for k in kwargs:
+            if k not in defaults.keys():
+                args[k]=kwargs[k]
+        
+        if 'labels' not in kwargs.keys():        
+            args['labels'] = [self.name]
+            
+        args['titles'] = []
+        args['types'] = kwargs['types']
+        
         # Reflexion 
-
-        modRo = abs(self.R[:, :, 0, 0])
-        modRp = abs(self.R[:, :, 1, 1])
-        modTo = abs(self.T[:, :, 0, 0])
-        modTp = abs(self.T[:, :, 1, 1])
-
-        angleRo = np.angle(self.R[:, :, 0, 0])
-        angleRp = np.angle(self.R[:, :, 1, 1])
-        angleTo = np.angle(self.T[:, :, 0, 0])
-        angleTp = np.angle(self.T[:, :, 1, 1])
-
-        if kwargs['display'] == 'phase':
-            if nfig==2:
-                ax1.plot(self.thi[0,:] * rtd, angleRo[k, :] * rtd, 'r')
-                ax1.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
-            if nfig==4:    
-                ax1.plot(self.thi[0,:] * rtd, angleRo[k, :] * rtd, 'r')
-                ax2.plot(self.thi[0,:] * rtd, angleRp[k, :] * rtd, 'r')
-        else:
-            if kwargs['dB']:
-                if nfig==2:
-                    ax1.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modRo[k, :]), 'b')
-                    ax1.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modRp[k, :]), 'r')
-                if nfig==4:
-                    ax1.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modRo[k, :]), 'b')
-                    ax2.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modRp[k, :]), 'r')
-            else:
-                if nfig==2:
-                    ax1.plot(self.thi[0,:] * rtd, modRo[k, :], 'b')
-                    ax1.plot(self.thi[0,:] * rtd, modRp[k, :], 'r')
-                if nfig==4:
-                    ax1.plot(self.thi[0,:] * rtd, modRo[k, :], 'b')
-                    ax2.plot(self.thi[0,:] * rtd, modRp[k, :], 'r')
-        if nfig==2:            
-            ax1.legend(('R _|_', 'R //'), loc='upper left')
-            ax1.xlabel('theta (degrees)')
-        if nfig==4:            
-            ax1.legend(('R _|_'), loc='upper left')
-            ax2.legend(('R _|_'), loc='upper left')
-            ax1.xlabel('theta (degrees)')
-            ax2.xlabel('theta (degrees)')
-        #nom = self.m1.name+'|'+self.m2.name+' '+str(f[k])+'GHz'
-        nom = ' f =' + str(self.fGHz[k, 0]) + ' GHz'
-        if kwargs['title'] != '':
-            plt.title(kwargs['title']+ nom)
-        else:
-            plt.title(self.name + nom)
-        
+        if 'R' in kwargs['coeff']:
+            if 'o' in kwargs['polar']:
+                args['titles'].append(u'$R_{\perp}$')
+                if var=='f':  # wrt frequency 
+                    Ro = self.R[:, kv, 0, 0]
+                    y = Ro
+                if var=='a': # wrt angle
+                    Ro = self.R[kv, :, 0, 0]
+                    y = Ro
+            if 'p' in kwargs['polar']:
+                args['titles'].append(u'$R_{//}$')
+                if var=='f':  # wrt frequency 
+                    Rp = self.R[:, kv, 1, 1]
+                    try:
+                        y = np.vstack((y,Rp))
+                    except:
+                        y = Rp
+                if var =='a': # wrt angle
+                    Rp = self.R[kv, :, 1, 1]
+                    try:
+                        y = np.vstack((y,Rp))
+                    except:
+                        y = Rp
         # Transmission 
-
-        plt.subplot(212)
-        if kwargs['display'] == 'phase':
-            plt.plot(self.thi[0,:] * rtd, angleTo[k, :] * rtd, color='b',**kwargs)
-            plt.plot(self.thi[0,:] * rtd, angleTp[k, :] * rtd, color='r',**kwargs)
-            #plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, 'b')
-            #plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, 'r')
-        else:
-            if kwargs['dB']:
-                #plt.plot(self.theta[0, :] * rtd, 20 *
-                #         np.log10(modTo[k, :]), 'b')
-                #plt.plot(self.theta[0, :] * rtd, 20 *
-                #         np.log10(modTp[k, :]), 'r')
-                plt.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modTo[k, :]),color='b', **kwargs)
-                plt.plot(self.thi[0,:] * rtd, 20 *
-                         np.log10(modTp[k, :]),color='r', **kwargs)
-            else:
-                #plt.plot(self.theta[0, :] * rtd, modTo[k, :], 'b')
-                #plt.plot(self.theta[0, :] * rtd, modTp[k, :], 'r')
-                plt.plot(self.thi[0,:] * rtd, modTo[k, :], color='b',**kwargs)
-                plt.plot(self.thi[0,:] * rtd, modTp[k, :], color='r',**kwargs)
-
-        plt.legend(('T _|_', 'T //'), loc='upper right')
-        plt.xlabel('theta (degrees)')
-        if kwargs['show']:
-            plt.show()
+        if 'T' in kwargs['coeff']:
+            if 'o' in kwargs['polar']:
+                args['titles'].append(u'$T_{\perp}$')
+                if var=='f':  # wrt frequency 
+                    To = self.T[:, kv, 0, 0]
+                    try:
+                        y = np.vstack((y,To))
+                    except:
+                        y = To
+                if var =='a': # wrt angle
+                    To = self.T[kv, :, 0, 0]
+                    try:
+                        y = np.vstack((y,To))
+                    except:
+                        y = To
+            if 'p' in kwargs['polar']:
+                args['titles'].append(u'$T_{//}$')
+                if var=='f':  # wrt frequency 
+                    Tp = self.T[:, kv, 1, 1]
+                    try:
+                        y = np.vstack((y,Tp))
+                    except:
+                        y = To
+                if var =='a': # wrt angle
+                    Tp = self.T[kv, :, 1, 1]
+                    try:
+                        y = np.vstack((y,Tp))
+                    except:
+                        y = To
         
-        if nfig==2:
-            return fig,[ax1,ax2]
-        if nfig==4:
-            return fig,[ax1,ax2,ax3,ax4]
+        # setting the x axis 
+        if var=='f':  # wrt frequency 
+            if len(self.fGHz)==1:
+                x = self.fGHz[np.newaxis,:]
+            else:  # f x a   
+                x = self.fGHz[:,0]
+            args['xlabels'] = ['Frequency (GHz)']
+        if var=='a':  # wrt angle
+            if len(self.thi)==1:
+                x = self.thi[0,:][np.newaxis,:]*rtd
+            else:  # f x a
+                x = self.thi[0,:]*rtd
+            args['xlabels'] = ['Angle (deg)']
+
+        nplot = np.shape(y)[0]
+        if nplot==1:
+            args['ncol'] = 1
+            args['nlin'] = 1
+        if nplot==2:
+            args['ncol'] = 1
+            args['nlin'] = 2
+        if nplot==4:
+            args['ncol'] = 2
+            args['nlin'] = 2
+
+        fig,ax = plu.mulcplot(x,y,**args)
+
+        return fig,ax
 
 
 class MatInterface(Interface):
@@ -502,6 +432,7 @@ class MatInterface(Interface):
 
     Notes
     -----
+
     This is required for recursive utilization of this function when the
     output angle of an interface happens to be the input angle of the
     next interface. As this angle depends on materials which themselves
@@ -1226,7 +1157,7 @@ class Slab(dict, Interface):
             >>> theta = np.arange(0,np.pi/2,0.01)
             >>> fGHz = np.array([57.5])
             >>> sl['placo'].ev(fGHz,theta)
-            >>> sl['placo'].plotwrta()
+            >>> fig,ax=sl['placo'].plotwrt(axis=1,types=['m'])
             >>> plt.show()
 
         """
@@ -1613,7 +1544,7 @@ class Slab(dict, Interface):
         self.linewidth = eval(data[6])
         self.dass()
 
-    def show(self, fGHz=2.4, theta=np.arange(0, np.pi / 2., 0.01), dtype=np.float64, display='modulus', dB=False):
+    def show(self, fGHz=2.4, theta=np.arange(0, np.pi / 2., 0.01), dtype=np.float64, dB=False):
         """ show slab Reflection and Transmission coefficient
 
         Parameters
@@ -1628,8 +1559,8 @@ class Slab(dict, Interface):
         """
         self.ev(fGHz, theta)
         if self['evaluated']:
-            self.M.plotwrta(display=display, dB=dB)
-
+            fig,ax=self.M.plotwrt(axis=1,types=['l20'])
+        return fig,ax
 
 class SlabDB(dict):
     """ Slab data base
@@ -1754,7 +1685,8 @@ class SlabDB(dict):
         """
         slab = self[name]
         slab.ev(fGHz=fGHz)
-        slab.M.plotwrta(name=name)
+        fig,ax = slab.M.plotwrt(axis=1)
+        return fig,ax
 
     def add(self, name, lname, lthick, color='black'):
         """ add a slab in dB
@@ -1797,10 +1729,10 @@ class SlabDB(dict):
                 0.0029,0.0102,0.0029])
             theta = np.linspace(20,60,100)*np.pi/180
             sl['ConcreteJc'].ev(120,theta)
-            sl['ConcreteJc'].plotwrta(dB=True)
+            sl['ConcreteJc'].plotwrt(axis=1,types=['l20'])
             fig = plt.figure()
             sl['DoubleGlass'].ev(120,theta)
-            sl['DoubleGlass'].plotwrta(dB=True)
+            sl['DoubleGlass'].plotwrt(axis=1,types=['l20'])
             freq = np.linspace(110,135,50)
             fig = plt.figure()
             sl['DoubleGlass'].ev(freq,theta)
