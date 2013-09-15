@@ -48,11 +48,14 @@ class Bsignal(object):
         ndim = self.y.ndim
         if ndim > 1:
             shy = np.shape(self.y)
-            lx = max(np.shape(self.x))
-            if (shy[1] != lx):
+            shx = np.shape(self.x) 
+            lx  = shx[0]
+            ly  = shy[-1]
+            # last dimension of y should be equal to dimension of x
+            if (ly != lx):
                 print "Error in Bsignal : Dimension incompatibility "
                 print "x : ", lx
-                print "y : ", shy
+                print "y : ", ly
 
     def __repr__(self):
         return '%s :  %s  %s' % (
@@ -79,12 +82,12 @@ class Bsignal(object):
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
             >>> e = EnImpulse()
-            >>> fig,ax = e.plot()
+            >>> fig,ax = e.plot(types=['v'])
             >>> e.save('impulse.mat')
             >>> del e
             >>> h = TUsignal()
             >>> h.load('impulse.mat')
-            >>> fig,ax = h.plot()
+            >>> fig,ax = h.plot(types=['v'])
         """
 
         d = {}
@@ -112,7 +115,13 @@ class Bsignal(object):
 
         Notes
         -----
+
         y is set to the corresponding zero vector
+
+        Use __set__ instead 
+
+        .. todo:: check coherence of support internally 
+
         """
         self.x = x
         Np = len(self.x)
@@ -133,8 +142,11 @@ class Bsignal(object):
 
         Parameters
         ----------
+
         color : string 
             default 'b-'
+
+            
 
         """
         ndim = self.y.ndim
@@ -150,6 +162,7 @@ class Bsignal(object):
 
         Parameters
         ----------
+
         color : string 
             default 'b-'
 
@@ -232,12 +245,17 @@ class Bsignal(object):
                   'xmin'  :-1e15,
                   'xmax'  : 1e15,
                   'logx'  : False,
-                  'logy'  : False 
+                  'logy'  : False,
+ #                 'fig'   : [],
+ #                 'ax'    : []  
                  }
 
         for key, value in defaults.items():
             if key not in kwargs:
                 kwargs[key] = value
+
+#       fig = kwargs['fig']
+#       ax  = kwargs['ax']
 
         vline = kwargs['vline']
         hline = kwargs['hline']
@@ -262,35 +280,23 @@ class Bsignal(object):
             x = 0.3 * self.x[u]
         else:
             x = self.x[u]
-        #
-        # Ny > 1
-        #
+
         ndim = self.y.ndim
-        fig = []
-        ax  = []
 
-        
+        #
+        # if ndim(y) > 1
+        #
         if ndim > 1:
-            if (kwargs['iy'] == -1):
-                Ny = np.shape(self.y)[0]
-                sety = np.arange(Ny)
-            else:
-                sety = np.array(kwargs['iy'])
-                Ny = len(sety)
-
-            if kwargs['separated']:    
-                yx = self.y[:,u]
-                yy = yx[sety,:]
-                fig,ax = mulcplot(self.x,yy*conversion,nlin=8,ncol=4,fig=fig,ax=ax,**args)
-            else:
-                for k in sety:
-                    fig,ax = mulcplot(self.x,self.y[k,u]*conversion,nlin=1,ncol=1,fig=fig,ax=ax,**args)
-
+            yx = self.y[...,u]
+            fig,ax = mulcplot(self.x,yx*conversion,**args)
         else:
-            fig,ax = mulcplot(self.x,self.y[u]*conversion,nlin=1,ncol=1,**args)
+            fig,ax = mulcplot(self.x,self.y[u]*conversion,**args)
         #
         # Draw vertical and horizontal lines
         #
+        # To be added in mulcplot
+        #
+
         tcolor = ['red', 'green', 'green', 'green', 'black', 'black', 'black']
         for i in range(len(vline)):
             if ax != []:
@@ -347,11 +353,11 @@ class Bsignal(object):
             >>> x = np.linspace(-10,10,100)
             >>> y = np.sin(2*np.pi*12*x)+np.random.normal(0,0.1,len(x))
             >>> s = TUsignal(x,y)
-            >>> fig,ax = s.plot()
+            >>> fig,ax = s.plot(types=['v'])
             >>> txt1 = plt.title('before gating')
             >>> plt.show()
             >>> s.gating(-3,4)
-            >>> fig,ax=s.plot()
+            >>> fig,ax=s.plot(types=['v'])
             >>> txt2 = plt.title('after gating')
             >>> plt.show()
 
@@ -462,6 +468,7 @@ class Usignal(Bsignal):
 
         Examples
         --------
+        
         >>> u = Usignal()
         >>> u.setx(0,10,0.1)
 
@@ -626,7 +633,7 @@ class Usignal(Bsignal):
             >>> i2 = EnImpulse()
             >>> i2.translate(-10)
             >>> i3 = i1.align(i2)
-            >>> fig,ax=i3.plot()
+            >>> fig,ax=i3.plot(types=['v'])
             >>> plt.show()
 
         """
@@ -803,9 +810,9 @@ class Usignal(Bsignal):
             >>> from pylayers.signal import *
             >>> from matplotlib.pylab import *
             >>> ip = EnImpulse()
-            >>> fig,ax = ip.plot()
+            >>> fig,ax = ip.plot(types=['v'])
             >>> ip.zlr(-10,10)
-            >>> fig,ax = ip.plot(fig=fig,ax=ax)
+            >>> fig,ax = ip.plot(types=['v'],fig=fig,ax=ax)
             >>> show()
 
         """
@@ -864,7 +871,7 @@ class TBsignal(Bsignal):
         >>> y = np.array( [ 0,1 ,-5, 8 , 10])
         >>> s = Bsignal(x,y)
         >>> fi = figure()
-        >>> fig,ax=s.plot()
+        >>> fig,ax=s.plot(types=['v'])
         >>> ti = title('TBsignal : plot')
         >>> show()
 
@@ -942,7 +949,7 @@ class TBsignal(Bsignal):
             >>> from matplotlib.pylab import *
             >>> ip = EnImpulse()
             >>> ip.translate(-10)
-            >>> fig,ax=ip.plot()
+            >>> fig,ax=ip.plot(types=['v'])
             >>> show()
 
 
@@ -994,6 +1001,7 @@ class TBsignal(Bsignal):
         xn = np.linspace(self.x[0], self.x[-1], N)
         yn = fi(xn)
         U = TUsignal(xn, yn)
+
         return U
 
 
@@ -1033,10 +1041,10 @@ class TUsignal(TBsignal, Usignal):
             >>> ddsu  = dsu.diff()
             >>> dddsu = ddsu.diff()
             >>> fi = plt.figure()
-            >>> fig,ax=su.plot(color='k')
-            >>> fig,ax=dsu.plot(color='g',fig=fig,ax=ax)
-            >>> fig,ax=ddsu.plot(color='r',fig=fig,ax=ax)
-            >>> fig,ax=dddsu.plot(color='b',fig=fig,ax=ax)
+            >>> fig,ax=su.plot(types=['v'] ,color='k')
+            >>> fig,ax=dsu.plot(types=['v'],color='g',fig=fig,ax=ax)
+            >>> fig,ax=ddsu.plot(types=['v'],color='r',fig=fig,ax=ax)
+            >>> fig,ax=dddsu.plot(types=['v'],color='b',fig=fig,ax=ax)
             >>> ti = plt.title('TUsignal : diff')
             >>> plt.show()
 
@@ -1242,6 +1250,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
+
         FHsignal : if mode == 'bilateral'
         FUsignal : if mode == 'unilateral'
 
@@ -2419,13 +2428,12 @@ class FBsignal(Bsignal):
             plt.xlabel('Frequency (GHz)')
             plt.ylabel('Imaginary part')
 
-    def plot(self, phase=True, dB=True,
-             iy=np.array([0]),
-             ax=[],fig=[],name=''):
-        """ plot
+    def plot(self, **kwargs):
+        """ plot FBsignal
 
         Parameters
         ----------
+
         phase : boolean 
             default True 
         dB : boolean
@@ -2444,61 +2452,19 @@ class FBsignal(Bsignal):
         >>> S.y = cos(2*pi*S.x)+1j*sin(3*pi*S.x+pi/3)
         >>> fig,ax = S.plot()
         >>> plt.show()
+    
+        See Also
+        --------
+
+        Bsignal.plot
 
         """
-        
-        if phase :
-            nrow = 2
-        else :
-            nrow = 1
+        if 'types' not in kwargs:
+            kwargs['types'] = 'l20'
 
+        fig,ax = Bsignal.plot(self,**kwargs)
 
-        if fig==[]:
-            fig,axs=plt.subplots(nrows=nrow,ncols=1,sharex=True,num=name)
-        elif ax== []:
-            axs=[]
-            axs.append(fig.add_subplot(2,1,1))
-            axs.append(fig.add_subplot(2,1,2))
-#            ff,axs=plt.subplots(nrows=nrow,ncols=1,sharex=True,num=name)
-
-        ndim = self.y.ndim
-        if ndim > 1:
-            for k in iy:
-                if phase:
-                    if dB:
-                        axs[0].plot(self.x, 20 *
-                                 np.log10(abs(self.y[k])))
-                    else:
-                        axs[0].plot(self.x,
-                                 abs(self.y[k]))
-                    axs[0].set_ylabel('Modulus')
-                    axs[1].plot(self.x,np.unwrap(np.angle(self.y[k])))
-                    axs[1].set_xlabel('Frequency (GHz)')
-                    axs[1].set_ylabel('Phase (rad)')
-                else:
-                    if dB:
-                        axs.plot(self.x, 20 * np.log10(abs(self.y[k])))
-                    else:
-                        axs.plot(self.x, abs(self.y[k]))
-                    axs.set_xlabel('Frequency (GHz)')
-                    axs.set_ylabel('Modulus')
-        else:
-            if phase:
-                if dB:
-                    axs[0].plot(self.x, 20 * np.log10(abs(self.y)))
-                else:
-                    axs[0].plot(self.x, abs(self.y))
-                axs[0].set_ylabel('Modulus')
-                #plot(self.x,np.unwrap(angle(self.y)))
-                axs[1].plot(self.x,np.unwrap(np.angle(self.y)))
-                axs[1].set_xlabel('Frequency (GHz)')
-                axs[1].set_ylabel('Phase (rad)')
-            else:
-                axs.plot(self.x, abs(self.y))
-                axs.set_xlabel('Frequency (GHz)')
-                axs.set_ylabel('Modulus')
-        
-        return (fig,axs)
+        return fig,ax
 
     def plotdB(self, mask=False, n=2, phase=True):
         """ usage : plotdB()

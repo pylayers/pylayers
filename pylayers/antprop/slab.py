@@ -398,13 +398,15 @@ class Interface(object):
         # setting the x axis 
         if var=='f':  # wrt frequency 
             if len(self.fGHz)==1:
-                x = self.fGHz[np.newaxis,:]
+                #x = self.fGHz[np.newaxis,:]
+                x = self.fGHz[:]
             else:  # f x a   
                 x = self.fGHz[:,0]
             args['xlabels'] = ['Frequency (GHz)']
         if var=='a':  # wrt angle
             if len(self.thi)==1:
-                x = self.thi[0,:][np.newaxis,:]*rtd
+                x = self.thi[0,:][:]*rtd
+                #x = self.thi[0,:][np.newaxis,:]*rtd
             else:  # f x a
                 x = self.thi[0,:]*rtd
             args['xlabels'] = ['Angle (deg)']
