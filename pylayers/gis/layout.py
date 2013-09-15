@@ -106,7 +106,7 @@ class Layout(object):
     cycleinline
     del_cycle
     delete
-    del_node
+    del_points
     del_segment
     del_subseg
     diag
@@ -479,13 +479,13 @@ class Layout(object):
         self.tgs
         self.dca
         self.lsss : list of subsegments
+
         """
 
         nodes = self.Gs.nodes()
         useg  = filter(lambda x : x>0,nodes)
         upnt  = filter(lambda x : x<0,nodes)
-        degseg  = map(lambda x : nx.degree(self.Gs,x),useg)
-
+        degseg = map(lambda x : nx.degree(self.Gs,x),useg)
         assert(np.all(array(degseg)==2)) # all segments should have degree 2
 
         # 
@@ -526,9 +526,12 @@ class Layout(object):
         #
         # convert geometric information in numpy array
         #    
-        self.pt = np.array(np.zeros([2, self.Np]), dtype=float)
-        self.tahe = np.array(np.zeros([2, self.Ns]), dtype=int)
-           
+        self.pt = np.array(np.zeros([2, len(upnt)]), dtype=float)
+        self.tahe = np.array(np.zeros([2, len(useg)]), dtype=int)
+        
+        self.Np = len(upnt)
+        self.Ns = len(useg)
+
         self.pt[0,:]= np.array([self.Gs.pos[k][0] for k in upnt])  
         self.pt[1,:]= np.array([self.Gs.pos[k][1] for k in upnt]) 
 
@@ -1963,36 +1966,37 @@ class Layout(object):
                 except:
                     raise NameError('No such furniture type - '+typ+'-') 
 
-    def del_node(self, ln):
-        """ delete node in list ln
+    def del_points(self, ln):
+        """ delete points in list ln
 
         Parameters
         ----------
+
         ln : list 
             node list 
         """
+
         if (type(ln) == np.ndarray):
             ln = list(ln)
 
-        if (type(ln) == np.int32):
-            ln = [ln]
-
-        if (type(ln) == int):
+        if (type(ln) <> list):
             ln = [ln]
 
         for n1 in ln:
+            assert(n1<0)
             nbrs = self.Gs.neighbors(n1)
             #nbrc = self.Gc.neighbors(n1)
             self.Gs.remove_node(n1)
             del self.Gs.pos[n1]
-            try:
-                self.Gc.remove_node(n1)
-            except:
-                print "No Gc node",n1
+            #try:
+            #    self.Gc.remove_node(n1)
+            #except:
+            #    print "No Gc node",n1
             for k in nbrs:
+                assert(k>0)
                 self.del_segment(k)
             #
-            # .. todo :: del_node Layout.py :  Attention Graph Gc non mis a jour
+            # .. todo :: del_point Layout.py :  Attention Graph Gc non mis a jour
             #
             self.labels.pop(n1)
             self.Np = self.Np - 1
@@ -2013,26 +2017,46 @@ class Layout(object):
         if (type(le) == np.ndarray):
             le = list(le)
 
-        if (type(le) == np.int32):
-            le = [le]
-
-        if (type(le) == int):
+        if (type(le) <> list):
             le = [le]
 
         for e in le:
-            if e > 0:
-                self.del_subseg(e)
-                name = self.Gs.node[e]['name']
-                del self.Gs.pos[e] # delete edge position
-                self.Gs.remove_node(e)
-                self.labels.pop(e)
-                self.Ns = self.Ns - 1
-                # update slab name <-> edge number dictionnary
-                self.name[name].remove(e)
-                # delete subseg if required
+            assert(e>0)
+            self.del_subseg(e)
+            name = self.Gs.node[e]['name']
+            del self.Gs.pos[e] # delete edge position
+            self.Gs.remove_node(e)
+            self.labels.pop(e)
+            self.Ns = self.Ns - 1
+            # update slab name <-> edge number dictionnary
+            self.name[name].remove(e)
+            # delete subseg if required
         self.g2npy()
 
 
+    def translate(self,vec):
+        """ translate layout
+        """
+        for k in self.Gs.pos:
+            pt=self.Gs.pos[k]
+            self.Gs.pos[k]=(pt[0]+vec[0],pt[1]+vec[1])
+
+    def rotate(self,angle):
+        """ rotate layout
+
+        Parameters
+        ----------
+
+        angle (deg)
+
+        """
+        a = angle*np.pi/180
+        for k in self.Gs.pos:
+            pt=self.Gs.pos[k]
+            ptr = np.dot(array([[np.cos(a), -np.sin(a)],[np.sin(a),np.cos(a)]]),array(pt))
+            self.Gs.pos[k]=(ptr[0],ptr[1])
+
+        self.g2npy()
 
     def del_cycle(self, lnc):
         """ delete a cycle
@@ -3151,8 +3175,28 @@ class Layout(object):
 
         return(visi)
 
-    def save(self, filename):
-        """ save Layout
+    def save(self,filename=[]):
+        """ save layout
+        """
+        if filename==[]:
+            racine, ext = os.path.splitext(self.filename)
+            filename = racine + '.str2'
+            fileini = racine + '.ini'
+            self.savestr2(filename)
+            self.saveini(fileini)
+            print "structure saved in ", filename
+            print "structure saved in ", fileini
+        else:    
+            racine, ext = os.path.splitext(filename)
+            if ext == '.str2':
+                self.savestr2(filename)
+                print "structure saved in ", filename
+            if ext == '.ini':
+                self.savestr2(filename)
+                print "structure saved in ", fileini
+
+    def saveold(self, filename):
+        """ save Layout (deprecated)
 
         Parameters
         ----------

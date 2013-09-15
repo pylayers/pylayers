@@ -87,9 +87,15 @@ def mulcplot(x,y,**kwargs):
             args[k]=kwargs[k]
 
     if len(np.shape(x))>1:
+        print np.shape(x)
+        print np.shape(y)
         assert(np.shape(x)[1]==np.shape(y)[1])
     else:
-        assert(np.shape(x)[0]==np.shape(y)[1])
+        if len(np.shape(y))>1:
+            assert(np.shape(x)[0]==np.shape(y)[1])
+        else:
+            assert(np.shape(x)[0]==np.shape(y)[0])
+            y = y[np.newaxis,:]
         x = x[np.newaxis,:]
 
     nfigx = np.shape(x)[0]
@@ -102,11 +108,14 @@ def mulcplot(x,y,**kwargs):
     assert((nylabels==nfigy)|(nxlabels==1))
 
     if ax==[]:    
-        fig,ax=plt.subplots(ncol,nlin,sharey=True)
-        if nlin==1:
-            ax = ax[np.newaxis,:]
-        if ncol==1:
-            ax = ax[:,np.newaxis]
+        fig,ax=plt.subplots(nlin,ncol,sharey=True,sharex=True)
+        if (nlin==1)&(ncol==1):
+            ax = np.array(ax)[np.newaxis,np.newaxis]
+        else:    
+            if nlin==1:
+                ax = ax[np.newaxis,:]
+            if ncol==1:
+                ax = ax[:,np.newaxis]
    
     for l in range(nlin):
         for c in range(ncol):
@@ -132,6 +141,8 @@ def mulcplot(x,y,**kwargs):
             ax[l,c].set_ylabel(ylabels[k%nylabels])
             ax[l,c].set_title(titles[k%ntitles])
             ax[l,c].legend()
+            ax[l,c].get_xaxis().set_visible(False)
+            ax[l,c].get_yaxis().set_visible(False)
 
     plt.tight_layout()
 

@@ -13,6 +13,7 @@ import matplotlib.pylab as plt
 import matplotlib.gridspec as gridspec
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.util.pyutil import *
+from pylayers.util.plotutil import *
 import scipy.io as ios
 from scipy.signal import cspline1d, cspline1d_eval, iirfilter, iirdesign, lfilter, firwin
 
@@ -78,12 +79,12 @@ class Bsignal(object):
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
             >>> e = EnImpulse()
-            >>> e.plot()
+            >>> fig,ax = e.plot()
             >>> e.save('impulse.mat')
             >>> del e
             >>> h = TUsignal()
             >>> h.load('impulse.mat')
-            >>> h.plot()
+            >>> fig,ax = h.plot()
         """
 
         d = {}
@@ -190,22 +191,7 @@ class Bsignal(object):
             plt.colorbar()
             plt.axis('auto')
 
-    def plot(self, 
-             iy = 0, 
-             col = 'black', 
-             vline = np.array([]),
-             hline = np.array([]),
-             unit1 = 'V',
-             unit2 = 'V', 
-             xmin = -1e5,
-             xmax = 1e5,
-             ax =[],
-             dB = False, 
-             dist = False, 
-             display = True,
-             logx = False, 
-             logy = False,
-            ):
+    def plot(self, **kwargs):
         """ plot signal
 
         Parameters
@@ -235,84 +221,73 @@ class Bsignal(object):
             default False
 
         """
-        ndim = self.y.ndim
-        conversion = 1.0
-        if ((unit1 == 'V') & (unit2 == 'mV')):
-            conversion = 1000
+       
+        defaults = {'iy'  :  -1,
+                  'vline' : np.array([]),
+                  'hline' : np.array([]),
+                  'unit1' : 'V',
+                  'unit2' : 'V', 
+                  'separated' : True, 
+                  'dist'  : False ,
+                  'xmin'  :-1e15,
+                  'xmax'  : 1e15,
+                  'logx'  : False,
+                  'logy'  : False 
+                 }
 
-        u = np.nonzero((self.x > xmin) & (self.x < xmax))[0]
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        vline = kwargs['vline']
+        hline = kwargs['hline']
+
+        # filtering kwargs argument for plot function 
+        args ={}
+        for k in kwargs:
+            if k not in defaults.keys():
+                args[k]=kwargs[k]
+
+        conversion = 1.0
+        if ((kwargs['unit1'] == 'V') & (kwargs['unit2'] == 'mV')):
+            conversion = 1000
+    
+        # restriction of x support 
+        u = np.nonzero((self.x > kwargs['xmin']) & (self.x < kwargs['xmax']))[0]
+
         #
-        if dist:
+        # conver ns in meter if dist=True
+        #
+        if kwargs['dist']:
             x = 0.3 * self.x[u]
         else:
             x = self.x[u]
         #
-        # More than 1 y
+        # Ny > 1
         #
-        if ndim > 1:
-            nl = len(self.y)
-            if (iy == -1):
-                sety = range(nl)
-            else:
-                sety = [iy]
-            for k in sety:
-                if dB:
-                    y = 20 * np.log10(abs(self.y[k, u] * conversion) + 1e-12)
-                else:
-                    y = self.y[k, u] * conversion
+        ndim = self.y.ndim
+        fig = []
+        ax  = []
 
-                if ax != []:
-                    if logx & logy:
-                        ax.loglog(x, abs(y),
-                                  color=col)
-                    elif logx:
-                        ax.semilogx(x, y,
-                                    color=col)
-                    elif logy:
-                        ax.semilogy(x, abs(y),
-                                    color=col)
-                    else:
-                        ax.plot(x, y, color=col)
-                else:
-                    if logx & logy:
-                        loglog(x, abs(y),
-                               color=col)
-                    elif logx:
-                        semilogx(x, y, color=col)
-                    elif logy:
-                        semilogy(x, abs(y),
-                                 color=col)
-                    else:
-                        plt.plot(x, y, color=col)
-        #
-        # Only one y
-        #
+        
+        if ndim > 1:
+            if (kwargs['iy'] == -1):
+                Ny = np.shape(self.y)[0]
+                sety = np.arange(Ny)
+            else:
+                sety = np.array(kwargs['iy'])
+                Ny = len(sety)
+
+            if kwargs['separated']:    
+                yx = self.y[:,u]
+                yy = yx[sety,:]
+                fig,ax = mulcplot(self.x,yy*conversion,nlin=8,ncol=4,fig=fig,ax=ax,**args)
+            else:
+                for k in sety:
+                    fig,ax = mulcplot(self.x,self.y[k,u]*conversion,nlin=1,ncol=1,fig=fig,ax=ax,**args)
+
         else:
-            if dB:
-                y = 20 * np.log10(abs(self.y[u] * conversion) + 1e-12)
-            else:
-                y = self.y[u] * conversion
-            if ax != []:
-                if logx & logy:
-                    ax.loglog(x, abs(y), color=col)
-                elif logx:
-                    ax.semilogx(x, y, color=col)
-                elif logy:
-                    ax.semilogy(x, abs(y),
-                                color=col)
-                else:
-                    ax.plot(x, y, color=col)
-            else:
-                if logx & logy:
-                    plt.loglog(x, abs(y),
-                               color=col)
-                elif logx:
-                    plt.semilogx(x, y, color=col)
-                elif logy:
-                    plt.semilogy(x, abs(y),
-                                 color=col)
-                else:
-                    plt.plot(x, y, color=col)
+            fig,ax = mulcplot(self.x,self.y[u]*conversion,nlin=1,ncol=1,**args)
         #
         # Draw vertical and horizontal lines
         #
@@ -328,20 +303,9 @@ class Bsignal(object):
                 ax.axhline(hline[i] * conversion, color='red')
             else:
                 axhline(hline[i] * conversion, color='red')
+        
+        return(fig,ax)
 
-#    def plotdB(self):
-#        """
-#        plotdB()    obsolete use plot with dB=True option instead
-#        """
-#        ndim = self.y.ndim
-#        if ndim > 1 :
-#            nl = len(self.y)
-#            for k in range(nl):
-#                plot(self.x,20*np.log10(self.y[k]+1e-12))
-#        else:
-#            plot(self.x,20*np.log10(abs(self.y)+1e-12))
-#            xlabel('Time (ns)')
-#            ylabel('dB')
     def flatteny(self,yrange=[],reversible=False):
         """ flatten y array
         Parameters
@@ -360,10 +324,11 @@ class Bsignal(object):
                 self.y = np.sum(self.y[yrange,:],axis=0)
 
     def gating(self, xmin, xmax):
-        """ gating beween xmin and xmax
+        """ gating between xmin and xmax
 
         Parameters
         ----------
+
         xmin : float
         xmax : float 
 
@@ -382,11 +347,11 @@ class Bsignal(object):
             >>> x = np.linspace(-10,10,100)
             >>> y = np.sin(2*np.pi*12*x)+np.random.normal(0,0.1,len(x))
             >>> s = TUsignal(x,y)
-            >>> s.plot()
+            >>> fig,ax = s.plot()
             >>> txt1 = plt.title('before gating')
             >>> plt.show()
             >>> s.gating(-3,4)
-            >>> s.plot()
+            >>> fig,ax=s.plot()
             >>> txt2 = plt.title('after gating')
             >>> plt.show()
 
@@ -396,6 +361,7 @@ class Bsignal(object):
             When a gating is applied the removed information is lost
 
         """
+
         u = np.nonzero((self.x > xmin) & (self.x < xmax))[0]
         Nx = len(self.x)
         shy = np.shape(self.y)
@@ -660,7 +626,7 @@ class Usignal(Bsignal):
             >>> i2 = EnImpulse()
             >>> i2.translate(-10)
             >>> i3 = i1.align(i2)
-            >>> i3.plot()
+            >>> fig,ax=i3.plot()
             >>> plt.show()
 
         """
@@ -837,9 +803,9 @@ class Usignal(Bsignal):
             >>> from pylayers.signal import *
             >>> from matplotlib.pylab import *
             >>> ip = EnImpulse()
-            >>> ip.plot()
+            >>> fig,ax = ip.plot()
             >>> ip.zlr(-10,10)
-            >>> ip.plot()
+            >>> fig,ax = ip.plot(fig=fig,ax=ax)
             >>> show()
 
         """
@@ -879,22 +845,7 @@ class TBsignal(Bsignal):
         s = Bsignal.__repr__(self)
         return(s)
 
-    def plot(self,
-             iy=0,
-             col='black',
-             vline=np.array([]),
-             hline=np.array([]),
-             showlabel=[True, True],
-             unit1 = 'V',
-             unit2 = 'V',
-             ax=[],
-             tmin = -1e5,
-             tmax = +1e5,
-             dB = False,
-             dist=False,
-             logx=False,
-             logy=False,
-             ):
+    def plot(self,**kwargs):
         """ plot TBsignal
 
         Parameters
@@ -913,38 +864,60 @@ class TBsignal(Bsignal):
         >>> y = np.array( [ 0,1 ,-5, 8 , 10])
         >>> s = Bsignal(x,y)
         >>> fi = figure()
-        >>> s.plot()
+        >>> fig,ax=s.plot()
         >>> ti = title('TBsignal : plot')
         >>> show()
 
         """
-        if tmin != -1e5:
-            xmin = tmin
+        
+        
+        defaults = {'iy'  :  -1,
+                  'vline' : np.array([]),
+                  'hline' : np.array([]),
+                  'unit1' : 'V',
+                  'unit2' : 'V', 
+                  'dist'  : False ,
+                  'xmin'  :-1e15,
+                  'xmax'  : 1e15,
+                  'logx'  : False,
+                  'logy'  : False 
+                 }
+        
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+#        if tmin != -1e5:
+#            xmin = tmin
+#        else:
+#            xmin = -1e5
+#
+#        if tmax != 1e5:
+#            xmax = tmax
+#        else:
+#            xmax = tmax
+
+        if kwargs['dist']:
+            kwargs['xlabels']=['distance (m)']
         else:
-            xmin = -1e5
-        if tmax != 1e5:
-            xmax = tmax
-        else:
-            xmax = tmax
-        Bsignal.plot(self, iy=iy, col=col, vline=vline, hline=hline, unit1=unit1, unit2=unit2,
-                     xmin=xmin, xmax=xmax, ax=ax, dB=dB, dist=dist, logx=logx,
-                     logy=logy)
-        if showlabel[0]:
-            if dist:
-                plt.xlabel('distance (m)')
-            else:
-                plt.xlabel('Time (ns)')
-        if showlabel[1]:
-            if unit2 == 'mV':
-                if dB:
-                    plt.ylabel('Voltage (dBmV)')
-                else:
-                    plt.ylabel('Voltage (mV)')
-            if unit2 == 'V':
-                if dB:
-                    plt.ylabel('Voltage (dBV)')
-                else:
-                    plt.ylabel('Voltage (V)')
+            kwargs['xlabels']=['Time (ns)']
+
+
+#        if kwargs['unit2'] == 'mV':
+#            if kwargs['type']=='l20':
+#                kwargs['ylabel']=['Voltage (dBmV)']
+#            if kwargs['type']=='v':
+#                kwargs['ylabel']=['Voltage (mV)']
+#
+#        if kwargs['unit2'] == 'V':
+#            if kwargs['type']=='l20':
+#                kwargs['ylabel']=['Voltage (dBmV)']
+#            if kwargs['type']=='v':
+#                plt.ylabel('Voltage (mV)')
+        
+        fig,ax = Bsignal.plot(self,**kwargs) 
+
+        return(fig,ax)
 
     def translate(self, tau):
         """  translate signal by tau
@@ -969,7 +942,7 @@ class TBsignal(Bsignal):
             >>> from matplotlib.pylab import *
             >>> ip = EnImpulse()
             >>> ip.translate(-10)
-            >>> ip.plot()
+            >>> fig,ax=ip.plot()
             >>> show()
 
 
@@ -1010,8 +983,8 @@ class TBsignal(Bsignal):
             >>> su100 = sb.b2u(100)
             >>> fi = plt.figure()
             >>> sb.stem()
-            >>> su20.plot(col='k')
-            >>> su100.plot(col='r')
+            >>> fig,ax=su20.plot(color='k')
+            >>> fig,ax=su100.plot(color='r',fig=fig,ax=ax)
             >>> ti = plt.title('b2u : sb(blue) su20(black) su200(red)')
             >>> plt.show()
 
@@ -1060,10 +1033,10 @@ class TUsignal(TBsignal, Usignal):
             >>> ddsu  = dsu.diff()
             >>> dddsu = ddsu.diff()
             >>> fi = plt.figure()
-            >>> su.plot(col='k')
-            >>> dsu.plot(col='g')
-            >>> ddsu.plot(col='r')
-            >>> dddsu.plot(col='b')
+            >>> fig,ax=su.plot(color='k')
+            >>> fig,ax=dsu.plot(color='g',fig=fig,ax=ax)
+            >>> fig,ax=ddsu.plot(color='r',fig=fig,ax=ax)
+            >>> fig,ax=dddsu.plot(color='b',fig=fig,ax=ax)
             >>> ti = plt.title('TUsignal : diff')
             >>> plt.show()
 
@@ -2469,7 +2442,7 @@ class FBsignal(Bsignal):
         >>> S = FBsignal()
         >>> S.x = arange(100)
         >>> S.y = cos(2*pi*S.x)+1j*sin(3*pi*S.x+pi/3)
-        >>> S.plot()
+        >>> fig,ax = S.plot()
         >>> plt.show()
 
         """
@@ -2715,9 +2688,9 @@ class FUsignal(FBsignal, Usignal):
             >>> y = np.ones(len(x))
             >>> U = FUsignal(x,y)
             >>> fi = plt.figure()
-            >>> U.plot()
+            >>> fig,ax = U.plot()
             >>> U.window('hamming')
-            >>> U.plot()
+            >>> fig,ax = U.plot()
 
 
 
@@ -3413,7 +3386,6 @@ class FUDsignal(FUsignal):
         >>> tau0 = np.sort(np.random.rand(N))
         >>> alpha = np.random.rand(N,len(fGHz))
         >>> s = FUDsignal(x=fGHz,y=alpha,tau0=tau0)
-        >>> plt.figure()
         >>> s.plot3d()
         >>> s.show()
 

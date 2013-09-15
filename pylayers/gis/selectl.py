@@ -504,7 +504,7 @@ class SelectL(object):
         if self.evt == 'd':
             if  self.state == 'SP1':
                 self.state = 'Init'
-                self.L.del_node(self.selected_pt1)
+                self.L.del_points(self.selected_pt1)
                 self.update_state()
                 return
             if self.state == 'SS':
@@ -527,7 +527,7 @@ class SelectL(object):
                 ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
                 #print x1,y1
                 #print ndlist
-                self.L.del_node(ndlist)
+                self.L.del_points(ndlist)
                 self.update_state()
                 return
 
@@ -536,7 +536,7 @@ class SelectL(object):
         #
         if self.evt == 'r':
             plt.axis('tight')
-            fig,ax = self.show(fig,ax,clear=True)
+            fig,iax = self.show(fig,ax,clear=True)
             self.state = 'Init'
             self.update_state()
             return
