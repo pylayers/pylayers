@@ -1882,18 +1882,23 @@ class Polygon(shg.Polygon):
     """
     def __init__(self, p=[[3, 4, 4, 3], [1, 1, 2, 2]], vnodes=[]):
         """
+
         Parameters
         ----------
-            p : list
-                2xNp np.array
-                shg.MultiPoint
-                shg.Polygon
-            vnodes : list of alternating points and segments numbers
-                default = [] in this case a regular ordered sequence
-                is generated.
+
+        p : list
+            2xNp np.array
+            shg.MultiPoint
+            shg.Polygon
+        vnodes : list of alternating points and segments numbers
+            default = [] in this case a regular ordered sequence
+            is generated.
+
         Notes
         -----
-            A Polygon as an equal number of points and segments
+
+        Convention : a Polygon as an equal number of points and segments
+        There is an implicit closure between first and last point
 
         """
 
@@ -2086,6 +2091,7 @@ class Polygon(shg.Polygon):
 
         Parameters
         ----------
+
         display   : boolean
             default : False
         fig       : matplotlib.figure.pyplot
@@ -2094,11 +2100,6 @@ class Polygon(shg.Polygon):
             default = []
         udeg2     : np.array indexes of points of degree 2
             default = []
-
-        Notes
-        -----
-            Topological error can be raised if the point coordinates accuracy
-            is not limited.
 
         Examples
         --------
@@ -2125,6 +2126,13 @@ class Polygon(shg.Polygon):
         Segment k and (k+1)%N share segment (k+1)%N
         The degree of a point is dependent from other polygons around
 
+        Topological error can be raised if the point coordinates accuracy
+        is not limited.
+
+        See Also
+        --------
+
+        pylayers.gis.layout
 
         """
         defaults = {'show': False,
@@ -2192,8 +2200,8 @@ class Polygon(shg.Polygon):
         npt = self.vnodes[ipt]
         nseg = self.vnodes[iseg]
 
-        assert  sum(npt < 0), "something wrong"
-        assert  sum(nseg > 0), "something wrong"
+        assert  np.all(npt < 0), "something wrong with points"
+        assert  np.all(nseg > 0), "something wrong with segments"
         #
         #
         # Create middle point on lring
@@ -2227,19 +2235,22 @@ class Polygon(shg.Polygon):
         xr, yr = lring.xy
 
         #
-        # Degree 1 points
+        # Degree 1 points : typically doors
         #
         # Determine diffraction points
         #
         # udeg1 :
-        # deg2 : if null the point is kept
-        #        if convexe the point is kept
-        #        else the point is not kept
+        # deg2 : if null:
+        #           the point is kept
+        #        if convex:
+        #           the point is kept
+        #        else:
+        #           the point is not kept
         #
-        uconvex = np.nonzero(tcc == 1)[0]
-        uzero = np.nonzero(tcc == 0)[0]
-        udiffdoor = np.intersect1d(uzero, udeg2)  # les points paralleles de degre 2 sont souvent des portes ou des fenetres
-        udiff = np.hstack((uconvex, udiffdoor)).astype('int')
+        uconvex = np.nonzero(tcc == 1)[0] # convex point position
+        uzero = np.nonzero(tcc == 0)[0]   # planar point (joining two parallel segment)
+        udiffdoor = np.intersect1d(uzero, udeg2)  # degree 2 paralell points are often doors and windows 
+        udiff = np.hstack((uconvex, udiffdoor)).astype('int') # diffracting point 
         #print "vnodes",self.vnodes
         #print "tcc : ",tcc
         #print "uzero : ",uzero
@@ -2254,7 +2265,7 @@ class Polygon(shg.Polygon):
         #if uzero!=[]:
         #    print "zero :",npt[uzero]
         #
-        # display points and polygon
+        # if show == True display points and polygon
         #
         if kwargs['show']:
             points1 = shg.MultiPoint(lring)
@@ -2271,13 +2282,13 @@ class Polygon(shg.Polygon):
             ax.add_patch(patch)
 
         #
-        #  1) Calculate node node visibility
+        #  1) Calculate node-node visibility
         #
-
+        # The following exploits definition of convexity.
         #
-        #  Entre les combinaisons de points convexes
-        #  Il faut elargir aux portes points de degre 2
-        #  eventuellement non convexes cross product nul
+        # Between all combinations of diffracting points 
+        # create a segment and check it is fully included in the polygon 
+        # if it is true then there is a visibility between the 2 points.
         #
         for nk in combinations(udiff, 2):
             p1 = p[:, nk[0]]
@@ -2289,16 +2300,20 @@ class Polygon(shg.Polygon):
         #
         #  2) Calculate edge-edge and node-edge visibility
         #
-        for nk in range(Np):
-            ptk = p[:, nk]
-            phk = p[:, (nk + 1) % Np]
+        for nk in range(Np):   # loop on range of number of points 
+            ptk = p[:, nk]     # tail point 
+            phk = p[:, (nk + 1) % Np] # head point (%Np to get 0 as last point)
 
+            # lnk : unitary vector on segment nk
             lk = phk - ptk
             nlk = np.sqrt(np.dot(lk, lk))
-            lnk = lk / nlk
-
-            epsilonk = nlk / 1000.
-
+            lnk = lk / nlk     
+            
+            # the epsilon is (1/1000) of the segment length 
+            epsilonk = nlk / 1000.  # this can be dangerous (epsilon can be large)
+            
+            # x--o----------------------o--x
+            #    +eps                  -eps
             pcornert = ptk + lnk * epsilonk  # + n[:,nk]*epsilon
             pcornerh = phk - lnk * epsilonk  # + n[:,nk]*epsilon
 
@@ -2306,21 +2321,23 @@ class Polygon(shg.Polygon):
         # in any case no ray towark nk
         # if nk is convex no ray toward (nk-1)%Np
         #
+        # start from the two extremity of the segment 
             for i, pcorner in enumerate([pcornert, pcornerh]):
                 #
-                #  si point tail
-                #           on retire de segment nk
-                #  et si le point est convexe on retire le segment precedent
+                #  if tail point 
+                #           remove nk segment 
+                #  and if the point is convex
+                #          remove previous segment 
                 #
                 #  si point head
                 #
                 listpoint = range(Np)
-                listpoint.remove(nk)
-                if i == 0:
-                    if nk in uconvex:
+                listpoint.remove(nk)   # remove current point 
+                if i == 0:  # first iteration pcornert 
+                    if nk in uconvex:  # == 1
                         listpoint.remove((nk - 1) % Np)
-                if i == 1:
-                    if (nk + 1) % Np in uconvex:
+                if i == 1:  # second iteration pcornerh
+                    if (nk + 1) % Np in uconvex: # ==1
                         listpoint.remove((nk + 1) % Np)
 
                 for ns in listpoint:
@@ -2486,11 +2503,14 @@ class Polygon(shg.Polygon):
 
         Parameters
         ----------
+
         display : boolean
+            default False
 
 
         Returns
         -------
+
         tcc     : np.array (1x Nseg)
             1 if convex , -1 if concav , 0 if plane
         n       :  array(2xNseg)
@@ -2533,10 +2553,16 @@ class Polygon(shg.Polygon):
             property :
 
             Let N be the number of points of the Polygon. N  = Nx + Nc where
-            Nx is the number of convex point and Nc the number of concav points
+            Nx is the number of convex points and Nc the number of concav points
+
             We have Nx >= Nc
 
             If a point is common to two parallel segments, the cross product is = 0
+        
+        See Also
+        --------
+
+        Lr2n
 
         """
 
@@ -2563,12 +2589,15 @@ class Polygon(shg.Polygon):
             v = np.cross(nk, nkp1)
             tcc[k] = v
 
-        #print "ptseg tcc ",tcc
         #
         # warning this test is fragile
         #
-        upos = np.nonzero(tcc > 1e-3)[0]
-        uneg = np.nonzero(tcc < -1e-3)[0]
+        # debug : print tcc
+        #
+        # The purpose here is to remove flat transition 
+        #
+        upos = np.nonzero(tcc > 1e-2)[0]
+        uneg = np.nonzero(tcc < -1e-2)[0]
 
         if len(upos) > len(uneg):
             nconvex = uneg

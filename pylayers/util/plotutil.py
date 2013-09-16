@@ -7,6 +7,135 @@ from matplotlib import cm
 import doctest
 import pdb
 
+def mulcplot(x,y,**kwargs):
+    """ handling multiple complex variable plots
+
+    x : ndarray  (Nc x Nx)
+    y : ndarray  (Nv x Ny)
+
+    type : "modulus | phase"
+    dB : bool
+        False
+    fig = []    
+    ax  = []    
+    nlg  : int 
+        number of lines 
+
+    """
+    defaults = {'types':['l20'],
+                'titles':[''],
+                'labels':[''],
+                'xlabels':['Amplitude (dB)'],
+                'ncol':2,
+                'nlin':2,
+                'fig':[],
+                'ax':[],
+               }
+
+    # radians to degree coefficient   
+    rtd = 180./np.pi
+
+    # smart placement of legend box
+    plt.rcParams['legend.loc'] = 'best'
+
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+   
+    if 'ylabels' not in kwargs:
+        ylabels = []
+        for t in kwargs['types']:
+            if t=='m':
+                ylabels.append('Amplitude'),
+            if t=='v':
+                ylabels.append('Amplitude'),
+            if t=='l10':
+                ylabels.append('Amplitude (dB)'),
+            if t=='l20':
+                ylabels.append('Amplitude (dB)'),
+            if t=='d':
+                ylabels.append('Phase (deg)'),
+            if t=='r':
+                ylabels.append('Phase (rad)'),
+            if t=='du':
+                ylabels.append('Unwrapped Phase (deg)'),
+            if t=='ru':
+                ylabels.append('Unwrapped Phase (rad)'),
+    else:
+        ylabels = kwargs['ylabels']
+
+    fig = kwargs['fig']
+    ax = kwargs['ax']
+    nlin = kwargs['nlin']
+    ncol = kwargs['ncol']
+    types = kwargs['types']
+    titles = kwargs['titles']
+    labels = kwargs['labels']
+    xlabels = kwargs['xlabels']
+
+    ntypes = len(types)
+    ntitles = len(titles)
+    nlabels = len(labels)
+    nxlabels = len(xlabels)
+    nylabels = len(ylabels)
+
+
+    # filtering kwargs argument for plot function 
+    args ={}
+    for k in kwargs:
+        if k not in defaults.keys():
+            args[k]=kwargs[k]
+
+    if len(np.shape(x))>1:
+        assert(np.shape(x)[1]==np.shape(y)[1])
+    else:
+        assert(np.shape(x)[0]==np.shape(y)[1])
+        x = x[np.newaxis,:]
+
+    nfigx = np.shape(x)[0]
+    nfigy = np.shape(y)[0]
+
+    assert((nfigy==ncol*nlin) | (nfigy==1))
+    assert((nlabels==nfigy)|(nlabels==1))
+    assert((ntitles==ncol*nlin)|(ntitles==1))
+    assert((nxlabels==nfigy)|(nxlabels==1))
+    assert((nylabels==nfigy)|(nxlabels==1))
+
+    if ax==[]:    
+        fig,ax=plt.subplots(ncol,nlin,sharey=True)
+        if nlin==1:
+            ax = ax[np.newaxis,:]
+        if ncol==1:
+            ax = ax[:,np.newaxis]
+   
+    for l in range(nlin):
+        for c in range(ncol):
+            k = l*ncol+c
+            if types[k%ntypes]=='v':
+                ax[l,c].plot(x[k%nfigx,:],y[k%nfigy,:],label=labels[k%nlabels],**args)
+            if types[k%ntypes]=='r':
+                ax[l,c].plot(x[k%nfigx,:],np.angle(y[k%nfigy,:]),label=labels[k%nlabels],**args)
+            if types[k%ntypes]=='ru':
+                ax[l,c].plot(x[k%nfigx,:],np.unwrap(np.angle(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+            if types[k%ntypes]=='d':
+                ax[l,c].plot(x[k%nfigx,:],np.angle(y[k%nfigy,:])*rtd,label=labels[k%nlabels],**args)
+            if types[k%ntypes]=='du':
+                ax[l,c].plot(x[k%nfigx,:],np.unwrap(np.angle(y[k%nfigy,:]))*rtd,label=labels[k%nlabels],**args)
+            if types[k%ntypes]=='m':
+                ax[l,c].plot(x[k%nfigx,:],np.abs(y[k%nfigy,:]),label=labels[k%nlabels],**args)
+            if types[k%ntypes]=='l10':
+                ax[l,c].plot(x[k%nfigx,:],10*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+            if types[k%ntypes]=='l20':
+                ax[l,c].plot(x[k%nfigx,:],20*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+
+            ax[l,c].set_xlabel(xlabels[k%nxlabels])
+            ax[l,c].set_ylabel(ylabels[k%nylabels])
+            ax[l,c].set_title(titles[k%ntitles])
+            ax[l,c].legend()
+
+    plt.tight_layout()
+
+    return(fig,ax)                  
 
 def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
     """ discontinuous plot
