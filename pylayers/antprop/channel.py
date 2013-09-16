@@ -499,7 +499,6 @@ class Ctilde(object):
             Fbp = Fbp.transpose()
             Fbt = bs.FUsignal(b.fa,Fbt)
             Fbp = bs.FUsignal(b.fa,Fbp)
-
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp

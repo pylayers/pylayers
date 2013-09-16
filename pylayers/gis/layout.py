@@ -2619,9 +2619,15 @@ class Layout(object):
             #
             # sub-segment
             #
+            
             if 'ss_name' in self.Gs.node[i]:
+                
+                
                 name = str(self.Gs.node[i]['ss_name'])
-                core = str(sl[name]['index'])
+                try:
+                    core = str(sl[name]['index'])
+                except:    
+                    core = str(sl[eval(name)[0]]['index'])
                 ce1 = str(self.Gs.node[i]['ss_ce'][0][0])
                 ce2 = str(self.Gs.node[i]['ss_ce'][0][1])
                 zmin = str(self.Gs.node[i]['ss_z'][0][0])
@@ -2629,7 +2635,7 @@ class Layout(object):
                 chaine = str(k + 1) + " " + core + " " + ce1 + \
                     " " + ce2 + " " + ss_zmin + " " + ss_zmax +  "\n"
                 fo.write(chaine)
-
+               
         fo.close()
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
@@ -2838,7 +2844,6 @@ class Layout(object):
                    170, 171, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188,
                    191, 192, 193, 194, 195, 217])
         """
-
         max_x = max(p1[0], p2[0])
         min_x = min(p1[0], p2[0])
         max_y = max(p1[1], p2[1])
