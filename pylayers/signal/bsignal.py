@@ -709,7 +709,7 @@ class Usignal(Bsignal):
             # u2 is included in u1
                 U1 = u1
                 x = u1.x
-                indx = plt.find((x >= u2_start) & (x <= u2_stop))
+                indx = np.nonzero((x >= u2_start) & (x <= u2_stop))[0]
                 U2 = Usignal(x, np.zeros((N2,len(x))))
                 #pdb.set_trace()
                 U2.y[:,indx] = u2.y[:, 0:np.shape(indx)[0]]
@@ -718,7 +718,7 @@ class Usignal(Bsignal):
             # u1 is included in u2
                 U2 = u2
                 x = u2.x
-                indx = plt.find((x >= u1_start) & (x <= u1_stop))
+                indx = np.nonzero((x >= u1_start) & (x <= u1_stop))[0]
                 U1 = Usignal(x, np.zeros((N1,len(x))))
                 U1.y[:,indx] = u1.y
 
@@ -1412,7 +1412,7 @@ class TUsignal(TBsignal, Usignal):
         step = M / 1e2
         thre = M - step
         while step > M / 1e5:
-            u = plt.find(self.y > thre)
+            u = np.nonzero(self.y > thre)[0]
             if nbint(u) < nint:
                 thre = thre - step
             else:
@@ -1420,7 +1420,7 @@ class TUsignal(TBsignal, Usignal):
                 step = step / 2
 
         w = u[1:] - u[0:-1]
-        w0 = plt.find(w != 1)
+        w0 = np.nonzero(w != 1)[0]
         vv = u[0:w0[0] + 1]
         ff = max(y[vv])
         Efirst = ff / E0
@@ -1462,7 +1462,7 @@ class TUsignal(TBsignal, Usignal):
         """ time domain convolution
         """
         dx = u.dx()
-        i0 = plt.find((u.x < dx) & (u.x > -dx))
+        i0 = np.nonzero((u.x < dx) & (u.x > -dx))[0]
         ind0 = i0[0]
         N1 = len(self.x)
         N2 = len(u.x)
@@ -1627,13 +1627,13 @@ class TUsignal(TBsignal, Usignal):
         n = int(np.ceil(tau0 / te))
         Correlation = np.correlate(self.y, Sy, mode='full')
         seuil = max(Correlation[len(Sx):len(Sx) + n - 200])
-        v = plt.find(Correlation[len(Sx) + n - 200:] > seuil)
+        v = np.nonzero(Correlation[len(Sx) + n - 200:] > seuil)[0]
         if len(v) == 0:
             ff = seuil / E0
         else:
 
             w = v[1:] - v[0:-1]
-            w0 = plt.find(w != 1)
+            w0 = np.nonzero(w != 1)[0]
             if len(w0) == 0:
                 ff = max(Correlation[len(Sx) + n - 200:][v]) / E0
             else:
