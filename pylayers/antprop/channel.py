@@ -764,10 +764,33 @@ class Tchannel(bs.FUDAsignal):
                 f = interp1d(h.x, h.y)
                 x_new = arange(h.x[0], h.x[-1], dxw)[0:-1]
                 y_new = f(x_new)
-                h = TUsignal(x_new, y_new)
+                h = bs.TUsignal(x_new, y_new)
 
         ri = h.convolve(w)
         return(ri)
+
+    def chantap(self,**kwargs):
+
+
+        defaults = {
+                    'fcGHz':4.5,
+                    'WGHz':1,
+                    'Ntap':100
+        }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+
+
+        h = bs.FUDsignal(self.x,self.y,self.tau0)
+        htap = h.chantap(**kwargs)
+        return htap
+ 
+        
+
+
 
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )
