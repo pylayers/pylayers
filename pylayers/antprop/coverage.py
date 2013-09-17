@@ -192,7 +192,7 @@ class Coverage(object):
         clb.set_label('excess delay (ns)')
         if self.show:
             plt.show()
-
+        return fig,ax
 
     def showPower(self,rxsens=True,nfl=True,polarization='o'):
         """ show the map of received power
@@ -293,7 +293,9 @@ class Coverage(object):
         if self.show:
             plt.show()
 
+        return fig,ax
 
+        
     def showTransistionRegion(self,polarization='o'):
         """
         Notes
