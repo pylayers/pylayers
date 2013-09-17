@@ -1262,6 +1262,10 @@ class TUsignal(TBsignal, Usignal):
             return(Ou)
         return(O)
 
+
+
+
+
 #       def waterfall(self,N,typ='l'):
 #          """
 #          """
@@ -3211,6 +3215,41 @@ class FUsignal(FBsignal, Usignal):
         return(V)
 
 
+    def chantap(self,**kwargs):
+        """
+
+        see http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf
+        page 26
+
+        """
+        defaults = {
+                    'fcGHz':4.5,
+                    'WGHz':1,
+                    'Ntap':100
+        }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        fcGHz=kwargs['fcGHz']
+        WGHz=kwargs['WGHz']
+        Ntap=kwargs['Ntap']
+        # yb : tau x f x 1
+        yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.tau0[:,np.newaxis,np.newaxis] * fcGHz )
+        # l : 1 x 1 x tap
+        l  = np.arange(Ntap)[np.newaxis,np.newaxis,:]
+        # l : tau x 1 x 1
+        tau = self.tau0[:,np.newaxis,np.newaxis]
+        # S : tau x f x tap
+        S   = np.sinc(l-tau*WGHz)
+        # htap : f x tap
+        htap = np.sum(yb*S,axis=0)
+        htapi = np.sum(htap,axis=0)
+
+        return htapi
+
+
 
 class FUDsignal(FUsignal):
     """
@@ -3454,6 +3493,8 @@ class FUDsignal(FUsignal):
         U.y = V
 
         return U
+
+
 
 class FUDAsignal(FUDsignal):
     """
