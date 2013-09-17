@@ -36,9 +36,9 @@ sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
 
 
 # by default var='a' and kv = 0 
-fig,ax = sl['TESS-p50-5cm'].plotwrt(color='k',labels=[''])
-fig,ax = sl['TESS-p50-10cm'].plotwrt(color='k',labels=[''],linestyle='dashed',fig=fig,ax=ax)
-fig,ax = sl['TESS-p50-15cm'].plotwrt(color='k',labels=[''],linestyle='dashdot',fig=fig,ax=ax)
+fig,ax = sl['TESS-p50-5cm'].plotwrt(color='k',ncol=2,nlin=2,labels=[''])
+fig,ax = sl['TESS-p50-10cm'].plotwrt(color='k',ncol=2,nlin=2,labels=[''],linestyle='dashed',fig=fig,ax=ax)
+fig,ax = sl['TESS-p50-15cm'].plotwrt(color='k',ncol=2,nlin=2,labels=[''],linestyle='dashdot',fig=fig,ax=ax)
 
 
 

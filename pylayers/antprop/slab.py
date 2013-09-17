@@ -419,6 +419,7 @@ class Interface(object):
             args['ncol'] = 1
             args['nlin'] = 2
         if nplot==4:
+            print "test"
             args['ncol'] = 2
             args['nlin'] = 2
 

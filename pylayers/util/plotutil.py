@@ -22,7 +22,7 @@ def mulcplot(x,y,**kwargs):
             'l20' : dB (20 log10)
             'd'   : phase degrees
             'r'   : phase radians
-            'du'  : pahse degrees unwrap 
+            'du'  : phase degrees unwrap 
             'ru'  : phase radians unwrap 
             'gdn' : group delay (ns) 
             'gdm' : group distance (m) 
@@ -66,6 +66,10 @@ def mulcplot(x,y,**kwargs):
 
     # smart placement of legend box
     plt.rcParams['legend.loc'] = 'best'
+    
+    grid = False
+    if 'nlin' in kwargs:
+        grid=True
 
     for key, value in defaults.items():
         if key not in kwargs:
@@ -131,13 +135,14 @@ def mulcplot(x,y,**kwargs):
         nlin = ydim[0]
         ncol = ydim[1]
     else:
-        if len(shy)>1:
-            nlin = shy[0]
-            ncol = 1
-        else:
-            nlin = 1
-            ncol = 1
-            y = y[np.newaxis,:]
+        if not grid:
+            if len(shy)>1:
+                nlin = shy[0]
+                ncol = 1
+            else:
+                nlin = 1
+                ncol = 1
+                y = y[np.newaxis,:]
 
     
     # below is the same axis constraint as for Bsignal object
@@ -190,10 +195,10 @@ def mulcplot(x,y,**kwargs):
                     ax[l,c].plot(x,np.imag(y[l,c,:]),label=lablc,**args)
                 if types[0]=='gdn':
                     df  = x[1]-x[0]
-                    ax[l,c].plot(x,-np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
+                    ax[l,c].plot(x[0:-1],-np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
                 if types[0]=='gdm':
                     df  = x[1]-x[0]
-                    ax[l,c].plot(x,-0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
+                    ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
                 
                 if nxlabels>1:
                     ax[l,c].set_xlabel(xlabels[l,c])
@@ -234,10 +239,10 @@ def mulcplot(x,y,**kwargs):
                     ax[l,c].plot(x,np.imag(y[k%nfigy,:]),label=labels[k%nlabels],**args)
                 if types[0]=='gdn':
                     df  = x[1]-x[0]
-                    ax[l,c].plot(x,-np.diff(np.unwrap(np.angle(y[k%nfigy,:])))/(2*np.pi*df),label=labels[k%nlabels],**args)
+                    ax[l,c].plot(x[0:-1],-np.diff(np.unwrap(np.angle(y[k%nfigy,:])))/(2*np.pi*df),label=labels[k%nlabels],**args)
                 if types[0]=='gdm':
                     df  = x[1]-x[0]
-                    ax[l,c].plot(x,-0.3*np.diff(np.unwrap(np.angle(y[k%nfigy,:])))/(2*np.pi*df),label=labels[k%nlabels],**args)
+                    ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[k%nfigy,:])))/(2*np.pi*df),label=labels[k%nlabels],**args)
 
                 ax[l,c].set_xlabel(xlabels[k%nxlabels])
                 ax[l,c].set_ylabel(ylabels[k%nylabels])
