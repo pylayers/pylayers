@@ -279,6 +279,82 @@ class MIMO(object):
 
         return(fig,ax)
 
+    def animgrid1(self,**kwargs):
+        """
+        """
+
+        defaults = { 'layout':[],
+                    'vmin' : 0, 
+                    'vmax': 0.5,
+                    'linewidth':0,
+                    'fig':[],
+                    'ax':[],
+                    'filename':'animgrid1',
+                    'save':True
+                   }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=(20,20))
+            ax  = fig.add_subplot(111)
+        
+        if kwargs['layout']<>[]:
+            L = kwargs['layout']
+            fig,ax = L.show(fig=fig,ax=ax)
+
+        Nframe = self.gloc.y.shape[1]
+        if kwargs['abs']:
+            scat = ax.scatter(self.grid[...,0],
+                               self.grid[...,1],
+                               c=abs(self.gloc.y[:,0]),
+                               s=kwargs['s'],
+                               vmin=kwargs['vmin'],
+                               vmax=kwargs['vmax'],
+                               linewidth=kwargs['linewidth'])
+        else:
+            scat = ax.scatter(self.grid[...,0],
+                               self.grid[...,1],
+                               c=self.gloc.y[:,0],
+                               s=kwargs['s'],
+                               vmin=kwargs['vmin'],
+                               vmax=kwargs['vmax'],
+                               linewidth=kwargs['linewidth'])
+
+        cb   = plt.colorbar(scat)
+        delay_template = '%d : tau = %5.2f (ns) d= %5.2f (m)'
+        delay_text  = ax1.text(0.1,0.9,'',transform=ax1.transAxes,fontsize=18)
+
+        def init():
+            delay_text.set_text('')
+            if kwargs['abs']:
+                scat.set_array(abs(self.gloc.y[:,0]))
+            else:
+                scat.set_array(self.gloc.y[:,0])
+            return scat,delay_text
+        
+        def animate(i):
+            delay_text.set_text(delay_template%(i,D.gloc.x[i],D.gloc.x[i]*0.3))
+            if kwargs['abs']:
+                scat.set_array(abs(self.gloc.y[:,i]))
+            else:
+                scat.set_array(abs(self.gloc.y[:,i]))
+            return scat,delay_text
+
+        anim = animation.FuncAnimation(fig, 
+                                       animate, 
+                                       init_func=init, 
+                                       frames=Nframe, 
+                                       interval=1, 
+                                       blit=True)
+        if kwargs['save']:
+            anim.save(kwargs['filename']+'.mp4', fps=5)
+        
+        return fig,ax,anim
+
     def plot(self,frequency=True,phase=False,dB=True,cal=True,fig=[],ax=[],color='k'):
         """
 
