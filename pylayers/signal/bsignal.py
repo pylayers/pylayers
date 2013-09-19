@@ -1673,20 +1673,20 @@ class TUsignal(TBsignal, Usignal):
         te = self.dx()
         n = int(np.ceil(tau0 / te))
         seuil = max(self.y[:n])
-        v = plt.find(self.y[n:] > seuil)
+        v = np.nonzero(self.y[n:] > seuil)[0]
         if len(v) == 0:
             toa = n * te
         else:
             w = v[1:] - v[0:-1]
-            w0 = plt.find(w != 1)
+            w0 = np.nonzero(w != 1)[0]
             if len(w0) == 0:
                 r = max(self.y[n:][v])
-                toa = plt.find(self.y == r) * te
+                toa = np.nonzero(self.y == r)[0] * te
 
             else:
                 vv = v[0:w0[0] + 1]
                 r = max(self.y[n:][vv])
-                toa = plt.find(self.y == r) * te
+                toa = np.nonzero(self.y == r)[0] * te
 
         u = np.nonzero((toa + Tint * (1 - sym) > self.x) & (
             self.x > toa - Tint * sym))
@@ -1745,7 +1745,7 @@ class TUsignal(TBsignal, Usignal):
         # determine time of maximum value of ()^2
         #
         maxy2 = max(y2)
-        u = plt.find(y2 == maxy2)
+        u = np.nonzero(y2 == maxy2)[0]
 
         te = self.dx()
 
@@ -1776,7 +1776,7 @@ class TUsignal(TBsignal, Usignal):
         y2 = (self.y) ** 2
         t = self.x
         maxy2 = max(y2)
-        u = plt.find(y2 == maxy2)
+        u = np.nonzero(y2 == maxy2)[0]
         tau_Emax = t[u]
         return(tau_Emax)
 
@@ -1789,7 +1789,7 @@ class TUsignal(TBsignal, Usignal):
         VL = array([])
 
         M = max(self.y)
-        n = plt.find(self.y == M)
+        n = np.nonzero(self.y == M)[0]
 
         thre = M
         v = 1
@@ -1805,9 +1805,9 @@ class TUsignal(TBsignal, Usignal):
         while vl < 20:
     #       while v < 50:
 
-            u = plt.find(self.y > thre)
+            u = np.nonzero(self.y > thre)[0]
             v = nbint(u)
-            h = plt.find(u > n)
+            h = np.nonzero(u > n)[0]
             g = delete(u, h)
             vl = nbint(g) - 1
 
@@ -1831,7 +1831,7 @@ class TUsignal(TBsignal, Usignal):
         """
         t = self.x
         Max = max(self.y)
-        nmax = plt.find(self.y == Max)
+        nmax = np.nonzero(self.y == Max)[0]
         n = nmax
         step = Max / 1e2
         thre = Max - step
@@ -1844,13 +1844,13 @@ class TUsignal(TBsignal, Usignal):
 
         while delta > 4 * Max / 1e2:
 
-            u = plt.find(self.y > thre)
-            hr = plt.find(u > n)
+            u = np.nonzero(self.y > thre)[0]
+            hr = np.nonzero(u > n)[0]
             g = delete(u, hr)
 
             if nmax >= 6000:
             #set the fenetre=6000*0.005=30ns
-                hl = plt.find(g < nmax - 6000)
+                hl = np.nonzero(g < nmax - 6000)[0]
                 u = delete(g, hl)
             else:
                 u = g
@@ -1889,7 +1889,7 @@ class TUsignal(TBsignal, Usignal):
         t = self.x
         maxbruit = max(self.y[0:1000])
         Max = max(self.y)
-        nmax = plt.find(self.y == Max)
+        nmax = np.nonzero(self.y == Max)[0]
         n = nmax
         step = Max / 1e2
         thre = Max - step
@@ -1902,13 +1902,13 @@ class TUsignal(TBsignal, Usignal):
         # tant delta est plus grande que w% du Max
         while delta > w * Max / 1e2:
 
-            u = plt.find(self.y > thre)
-            hr = plt.find(u > n)
+            u = np.nonzero(self.y > thre)[0]
+            hr = np.nonzero(u > n)[0]
             g = delete(u, hr)
 
             if nmax >= 6000:
             #set the fenetre=6000*0.005=30ns
-                hl = plt.find(g < nmax - 6000)
+                hl = np.nonzero(g < nmax - 6000)[0]
                 u = delete(g, hl)
             else:
                 u = g
@@ -1954,7 +1954,7 @@ class TUsignal(TBsignal, Usignal):
         thre = M - step
         while step > M / 1e5:
     #          axhline(y=thre,color='green')
-            u = plt.find(self.y > thre)
+            u = np.nonzero(self.y > thre)[0]
             if nbint(u) < nint:
             # down
                 thre = thre - step
@@ -1988,7 +1988,7 @@ class TUsignal(TBsignal, Usignal):
         #In the W1-M1 measurement
         #thlos=0.05   thnlos=0.15
         #
-        v = plt.find(y2 >= th)
+        v = np.nonzero(y2 >= th)[0]
         toa = t[v[0]]
         return toa
 
@@ -2003,7 +2003,7 @@ class TUsignal(TBsignal, Usignal):
         #
         #In the W1-M1 measurement th=0.15
         #
-        v = plt.find(cdf.y >= th)
+        v = np.nonzero(cdf.y >= th)[0]
         toa = t[v[0]]
         return toa
 
@@ -2019,7 +2019,7 @@ class TUsignal(TBsignal, Usignal):
                 (np.sqrt(self.Etot()) + np.sqrt(self.Emax()))
         th = alpha * maxy2
 
-        v = plt.find(y2 >= th)
+        v = np.nonzero(y2 >= th)[0]
         toa = t[v[0]]
         return toa
 
@@ -2036,7 +2036,7 @@ class TUsignal(TBsignal, Usignal):
         print alpha
         th = alpha * maxy2
 
-        v = plt.find(y2 >= th)
+        v = np.nonzero(y2 >= th)[0]
         toa = t[v[0]]
         return toa
 
@@ -2053,7 +2053,7 @@ class TUsignal(TBsignal, Usignal):
         print alpha
         th = alpha * maxy2
 
-        v = plt.find(y2 >= th)
+        v = np.nonzero(y2 >= th)[0]
         toa = t[v[0]]
         return toa
 
@@ -2065,11 +2065,11 @@ class TUsignal(TBsignal, Usignal):
         y2 = (self.y) ** 2
         t = self.x
         maxy2 = max(y2)
-        u = plt.find(y2 == maxy2)
+        u = np.nonzero(y2 == maxy2)[0]
         cdf, vary = self.ecdf()
 
         alpha = np.sqrt(cdf.y[u]) / np.sqrt(cdf.y[-1])
-        v = plt.find(cdf.y >= alpha * cdf.y[u])
+        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
         toa = t[v[0]]
         return toa
 
@@ -2081,12 +2081,12 @@ class TUsignal(TBsignal, Usignal):
         y2 = (self.y) ** 2
         t = self.x
         maxy2 = max(y2)
-        u = plt.find(y2 == maxy2)
+        u = np.nonzero(y2 == maxy2)[0]
         cdf, vary = self.ecdf()
 
         alpha = (np.sqrt(cdf.y[-1]) - np.sqrt(
             cdf.y[u])) / (np.sqrt(cdf.y[-1]) + np.sqrt(cdf.y[u]))
-        v = plt.find(cdf.y >= alpha * cdf.y[u])
+        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
         toa = t[v[0]]
         return toa
 
@@ -2097,11 +2097,11 @@ class TUsignal(TBsignal, Usignal):
         y2 = (self.y) ** 2
         t = self.x
         maxy2 = max(y2)
-        u = plt.find(y2 == maxy2)
+        u = np.nonzero(y2 == maxy2)[0]
         cdf, vary = self.ecdf()
 
         alpha = (np.sqrt(cdf.y[-1]) - np.sqrt(cdf.y[u])) / np.sqrt(cdf.y[-1])
-        v = plt.find(cdf.y >= alpha * cdf.y[u])
+        v = np.nonzero(cdf.y >= alpha * cdf.y[u])[0]
         toa = t[v[0]]
         return toa
 
@@ -2196,7 +2196,7 @@ class TUsignal(TBsignal, Usignal):
         #
         if in_positivity:
             pdf = diff(f)
-            u = plt.find(pdf < 0)
+            u = np.nonzero(pdf < 0)[0]
             pdf[u] = 0
             ecdf = cumsum(pdf)
         else:
@@ -2252,8 +2252,8 @@ class TUsignal(TBsignal, Usignal):
         cdf, vary = self.ecdf()
         pdf = diff(cdf.y)
 
-        u = plt.find(cdf.y > alpha)
-        v = plt.find(cdf.y < 1 - alpha)
+        u = np.nonzero(cdf.y > alpha)[0]
+        v = np.nonzero(cdf.y < 1 - alpha)[0]
 
         t = t[u[0]:v[-1]]
         pdf = pdf[u[0]:v[-1]]
@@ -2309,8 +2309,8 @@ class TUsignal(TBsignal, Usignal):
         pdf = diff(cdf.y)
         taum = self.tau_moy(tau0)
 
-        u = plt.find(cdf.y > alpha)
-        v = plt.find(cdf.y < 1 - alpha)
+        u = np.nonzero(cdf.y > alpha)[0]
+        v = np.nonzero(cdf.y < 1 - alpha)[0]
 
         t = t[u[0]:v[-1]]
         pdf = pdf[u[0]:v[-1]]
@@ -2775,7 +2775,7 @@ class FUsignal(FBsignal, Usignal):
 
         EMH2cum = EMH2sorted.cumsum()
         EMH2cumnor = EMH2cum * 100 / EMH2cum[-1]
-        ind2 = plt.find(EMH2cumnor < thresh)
+        ind2 = np.nonzero(EMH2cumnor < thresh)[0]
         indices = ind1rev[ind2]
 
         self.indices = indices
@@ -2799,7 +2799,7 @@ class FUsignal(FBsignal, Usignal):
         print ind1
 
         EMH2dBsorted = EMH2dB[ind1]
-        ind2 = plt.find(EMH2dBsorted > (EMH2dBmax - threshdB))
+        ind2 = np.nonzero(EMH2dBsorted > (EMH2dBmax - threshdB))[0]
         indices = ind1[ind2]
         print indices
         return indices
@@ -2968,7 +2968,8 @@ class FUsignal(FBsignal, Usignal):
         >>> y2[0] = 0
         >>> y     = np.vstack((y1,y2))
         >>> S     = FUsignal(x,y)
-        >>> SH    = S.symHz(10)
+        >>> S.symHz(10)
+        FHsignal :  (48,)  (2, 48)
 
         """
         f = self.x
@@ -3183,17 +3184,30 @@ class FUsignal(FBsignal, Usignal):
 
 
     def chantap(self,**kwargs):
-        """
+        """ calculate channel tap 
+
+        Parameters
+        ----------
+
+        fcGHz : float 
+            center frequency GHz
+        WGHz :  float   
+            bandwidth GHz
+        Ntap :  number of tap 
+        baseband : boolean
+            default : True
+
+        Notes
+        -----
 
         see http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf
         page 26
 
         """
-        defaults = {
-                    'fcGHz':4.5,
+        defaults = { 'fcGHz':4.5,
                     'WGHz':1,
-                    'Ntap':100
-        }
+                    'Ntap':100,
+                    'baseband':True}
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -3203,7 +3217,10 @@ class FUsignal(FBsignal, Usignal):
         WGHz=kwargs['WGHz']
         Ntap=kwargs['Ntap']
         # yb : tau x f x 1
-        yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.tau0[:,np.newaxis,np.newaxis] * fcGHz )
+        if baseband:
+            yb = self.y[:,:,np.newaxis]*np.exp(-2 * 1j * np.pi *self.tau0[:,np.newaxis,np.newaxis] * fcGHz )
+        else:
+            yb = self.y[:,:,np.newaxis]
         # l : 1 x 1 x tap
         l  = np.arange(Ntap)[np.newaxis,np.newaxis,:]
         # l : tau x 1 x 1
