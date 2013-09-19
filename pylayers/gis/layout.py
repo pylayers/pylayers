@@ -4482,6 +4482,9 @@ class Layout(object):
         Ne = len(edges)
         segments = np.array(edges)[:,0]
         dse = {k:v for k,v in zip(segments,range(Ne))}
+
+        #pdb.set_trace()
+
         edfilt = list(np.ravel(np.array(map(lambda x : [dse[x]-1,dse[x]],segfilt))))    
         # Warning edgelist is to be understood as edge of graph and not segments of layout
         fig,ax = self.showG('s',nodes=False,edgelist=edfilt)
