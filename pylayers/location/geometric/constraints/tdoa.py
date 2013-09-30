@@ -88,11 +88,13 @@ class TDOA(Constraint):
         """
         update constraint inforamtion
         """
-        if self.p.any():
-            self.runable = True
-        else:
-            self.runable = False
-
+        # if self.p.any():
+        #     self.runable = True
+        # else:
+        #     self.runable = False
+        self.updc('p',value=self.p)
+        self.updc('value',value=self.value)
+        self.updc('std',value=self.std)
         self.sstd=self.std * 0.3
         self.range=self.value *0.3
         self.rescale(self.vcw)
