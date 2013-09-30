@@ -196,7 +196,7 @@ class CLA(object):
         self.visible=[c.visible for c in self.c]
         self.usable=[c.usable for c in self.c]
 
-    def compute(self,pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,estambpos=False,forceamb=False):
+    def compute(self,pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
         """
         Compute the cla to estimate the postion
     
@@ -219,15 +219,8 @@ class CLA(object):
                 True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
                         in estpos2 method 
                 False : no HT methos is applied 
-            estambpos    
-                True : use ambiguous boxes to estimate the position
-                False: only use enclosed box to estimate the position
 
-            forceamb : 
-                True : try to estimate the position even if the number of constaints is unsufficent.
-                False: position is not estimated if the number of constraint is unsufficent.
             Hybrid positioning based on hypothesis thesting
-            
             N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
             A Hybrid Positioning Method Based on Hypothesis Testing
             ,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
@@ -242,11 +235,11 @@ class CLA(object):
         self.refine(l=self.Nc,NBOXMAX=NBOXMAX, VOLMIN=VOLMIN,RSS=refineRSS)
         self.update()
         if (sum(self.usable) >= 3) and (pe == True):
-            self.estpos2(HT=HT,amb=estambpos)
+            self.estpos2(HT=HT)
             self.Nc=len(np.where(self.usable)[0])
             return True
         elif forceamb:
-            self.estpos2(HT=HT,amb=estambpos)
+            self.estpos2(HT=HT)
             return False
 
         else:
