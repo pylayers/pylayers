@@ -3,12 +3,15 @@ from pylayers.util.project import *
 from pylayers.gis.readvrml import *
 import numpy as np 
 import matplotlib.pylab as plt 
+import matplotlib.animation as animation
 import scipy.linalg as la
 #
 # This class handles the data coming from the MIMO Channel Sounder IETR lab
 #
 class MIMO(object):
-    def __init__(self,_filename='',rep='',
+    def __init__(self,
+                 _filename='',
+                 rep='',
                  Nf=1601,
                  fminGHz=1.8,
                  fmaxGHz=2.2,
@@ -171,11 +174,29 @@ class MIMO(object):
              OT=np.array([5.29,6.65]),
              cT=np.array([-0.07,0]),
              cR=np.array([0.07,0])):
-        """
-            OR = array([3.4,0.73])
-            OT = array([5.29,6.65])
-            cR = array([0.07,0])
-            cT = array([-0.07,0])
+        """ Evaluate the data on a grid in the plane 
+            
+            Parameters 
+            ----------
+
+            M : np.array() (Nx x Ny)
+            OR : np.array (,2) 
+                Origin of receiver [3.4,0.73]
+            OT : np.array (,2) 
+                Origin of transmitter [5.29,6.65]
+            cR : np.array (,2) 
+                array receiving vector [0.07,0]
+            cT : np.array (,2) 
+                array transmitting vector [-0.07,0]
+
+            Notes
+            -----
+
+           Updated object members 
+            
+            self.grid : M  (Nx x Ny x 2) 
+            self.gloc : TUsignal (x (,ntau) y (Nx x Ny,ntau) )
+
         """
 
         aR = cR[0]/np.sqrt(cR[0]**2+cR[1]**2)
@@ -278,19 +299,169 @@ class MIMO(object):
             fig,ax = self.hcal.plot(**kwargs)
 
         return(fig,ax)
+    
+    def showgrid(self,**kwargs):
+        """ show the data on a spatial grid 
 
-    def animgrid1(self,**kwargs):
+        Parameters
+        ----------
+        
+        'layout':[],
+        's':50,
+        'vmin' : 0, 
+        'vmax': 0.5,
+        'linewidth':0,
+        'fig':[],
+        'ax':[],
+        'save':True,
+        'filename':'showgrid1',
+        'title':'',
+        'save':True,
+        'dB':False,
+        'OR' : np.array([3.4,0.73]),
+        'OT' : np.array([5.29,6.65]),
+        'cR' : np.array([0.07,0]),
+        'cT' : np.array([-0.07,0]),
+        'target' : np.array([]),
+        'gating':False,
+        'dynamic':30
+       
+
+        Notes 
+        -----
+
+        This function accvept a Layout as input and allows to display 
+        a projection of the spatio-delay volume on a 2D grid. 
+
+
+        """
+        defaults = { 'layout':[],
+                    's':50,
+                    'vmin' : 0, 
+                    'vmax': 0.5,
+                    'linewidth':0,
+                    'fig':[],
+                    'ax':[],
+                    'save':True,
+                    'filename':'showgrid1',
+                    'title':'',
+                    'save':True,
+                    'dB':False,
+                    'OR' : np.array([3.4,0.73]),
+                    'OT' : np.array([5.29,6.65]),
+                    'cR' : np.array([0.07,0]),
+                    'cT' : np.array([-0.07,0]),
+                    'target' : np.array([]),
+                    'gating':False
+                   }
+       
+       
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+        
+        OR = kwargs['OR']
+        OT = kwargs['OT']
+        cR = kwargs['cR']
+        cT = kwargs['cT']
+
+        ULAR = OR+np.arange(8)[:,np.newaxis]*cR-3.5*cR
+        ULAT = OT+np.arange(4)[:,np.newaxis][::-1]*cT-1.5*cT
+
+        if kwargs['gating']:
+            dTM = np.sqrt((self.grid[...,0]-OT[0])**2+(self.grid[...,1]-OT[1])**2)
+            dRM = np.sqrt((self.grid[...,0]-OR[0])**2+(self.grid[...,1]-OR[1])**2)
+            # dM : Nx,Ny
+            dM  = dTM+dRM 
+            # dM : ,Nx x Ny
+            dM = np.ravel(dM) 
+            # 6 sigma = 1/400MHz
+            # 6 sigma = 2.5ns 
+            # sigma = (2.5/6)
+            # alpha = 1/(2 sigma^2) = 2*(2.5)**2/36 = 0.347
+            #
+            alpha = 0.347
+            # Gaussian gate 
+            # Laplacian gate 
+            # Nx x Ny x Ntau
+            self.gate = np.exp(-alpha*(dM[:,np.newaxis]/0.3-self.gloc.x[np.newaxis,:])**2)
+            data = self.gloc.y*self.gate
+            data = np.sum(abs(data),axis=1)
+        else:
+            data = np.sum(abs(self.gloc.y),axis=1)
+
+        if kwargs['fig']==[]:
+            fig = plt.figure(figsize=(10,10))
+            ax  = fig.add_subplot(111)
+        else:
+            fig=kwargs['fig']
+            ax = kwargs['ax']
+
+        if kwargs['dB']:
+            data = 20*np.log10(data)
+            vmax = data.max()
+            # clipping @ vmax - dynamic 
+            vmin = vmax-kwargs['dynamic']
+        else:
+            vmin = data.min()
+            vmax = data.max()
+        
+        scat = ax.scatter(self.grid[...,0],
+                               self.grid[...,1],
+                               c= data,
+                               s=kwargs['s'],
+                               vmin=vmin,
+                               vmax=vmax,
+                               linewidth=kwargs['linewidth'])
+
+        cb = plt.colorbar(scat)
+        if kwargs['dB']:
+            cb.set_label('Level (dB)')
+        else:
+            cb.set_label('Linear Level')
+
+
+        # plot ULAs
+
+        ax.plot(ULAR[:,0],ULAR[:,1],'+b')
+        ax.plot(ULAT[:,0],ULAT[:,1],'+g')  
+        plt.axis('off')
+
+        # plot target
+
+        if kwargs['target']<>[]:
+            target = ax.scatter(kwargs['target'][0],kwargs['target'][1],c='black',s=100)
+
+        # display layout 
+        if kwargs['layout'] <> []:
+            L = kwargs['layout']
+            #fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
+            L.display['ednodes']=False
+            L.display['nodes']=False
+            L.display['title']=kwargs['title']
+            fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
+
+        if kwargs['save']:
+            fig.savefig(kwargs['filename']+'.pdf')
+            fig.savefig(kwargs['filename']+'.png')
+
+        return fig,ax
+
+    def animgrid(self,**kwargs):
         """
         """
 
         defaults = { 'layout':[],
+                    's':100,
                     'vmin' : 0, 
                     'vmax': 0.5,
                     'linewidth':0,
                     'fig':[],
                     'ax':[],
                     'filename':'animgrid1',
-                    'save':True
+                    'save':True,
+                    'abs':True,
+                    'title':'',
                    }
 
         for key, value in defaults.items():
@@ -304,7 +475,7 @@ class MIMO(object):
         
         if kwargs['layout']<>[]:
             L = kwargs['layout']
-            fig,ax = L.show(fig=fig,ax=ax)
+            fig,ax = L.showG('s',fig=fig,ax=ax,nodes=False)
 
         Nframe = self.gloc.y.shape[1]
         if kwargs['abs']:
@@ -324,9 +495,10 @@ class MIMO(object):
                                vmax=kwargs['vmax'],
                                linewidth=kwargs['linewidth'])
 
+        title  = ax.text(0.1,0.9,kwargs['title'],transform=ax.transAxes,fontsize=18)
         cb   = plt.colorbar(scat)
         delay_template = '%d : tau = %5.2f (ns) d= %5.2f (m)'
-        delay_text  = ax1.text(0.1,0.9,'',transform=ax1.transAxes,fontsize=18)
+        delay_text  = ax.text(0.1,0.9,'',transform=ax.transAxes,fontsize=18)
 
         def init():
             delay_text.set_text('')
@@ -337,7 +509,7 @@ class MIMO(object):
             return scat,delay_text
         
         def animate(i):
-            delay_text.set_text(delay_template%(i,D.gloc.x[i],D.gloc.x[i]*0.3))
+            delay_text.set_text(delay_template%(i,self.gloc.x[i],self.gloc.x[i]*0.3))
             if kwargs['abs']:
                 scat.set_array(abs(self.gloc.y[:,i]))
             else:
@@ -385,6 +557,7 @@ class MIMO(object):
                     ax[iR,iT].set_xlabel('f (GHz)') 
                 ax[iR,iT].set_title(str(iR+1)+'x'+str(iT+1)) 
         return(fig,ax)
+
 
 #plt.ion()
 #TS1 = []

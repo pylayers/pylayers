@@ -1,4 +1,3 @@
-
 #-*- coding:Utf-8 -*-
 #
 # Class Layout
@@ -2799,7 +2798,10 @@ class Layout(object):
         #print 'n :',n
         #print 'un : ',unn
         #print 'theta (deg)',the*180./pi
-        seglist = seglist+1
+
+        # seglist = seglist+1
+        seglist = map(lambda x : self.tsg[x],seglist)
+
         return(seglist, theta)
 
     def layeronlink(self, p1, p2):
@@ -3413,11 +3415,13 @@ class Layout(object):
         for k, nc in enumerate(self.Gt.node.keys()):
             poly = self.Gt.node[nc]['polyg']
             a = poly.signedarea()
+
             if mode == 'area':
                 if a < 0:
                     poly.plot(color='red',alpha=0.5)
                 else:
                     poly.plot(color='green', alpha=0.5)
+
             if mode == 'start':
                 if poly.vnodes[0] < 0:
                     poly.plot(color='blue',alpha=0.5)
@@ -4666,6 +4670,7 @@ class Layout(object):
             kwargs['ax']=ax
 
         args = {'fig':fig,'ax':ax,'show':False}
+
         if kwargs['mode']=='cycle':
             for k, ncy in enumerate(self.Gt.node.keys()):
                 fig,ax = self.Gt.node[ncy]['polyg'].plot(**args)

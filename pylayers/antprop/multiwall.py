@@ -56,7 +56,7 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     """
 
-    ld = 0.3/fGHz
+    ld  = 0.3/fGHz
     PL0 = -20*np.log10(ld/(4.0*np.pi))-GtdB-GrdB
 
     return PL0
@@ -224,6 +224,8 @@ def Loss0_v2(L,Pts,fGHz,p):
         i = 0
         for k in seglist:
             if k != 0:
+                if k==124:
+                    pdb.set_trace()
                 try:
                     # TODO use z to determine ss_name
                     name = L.Gs.node[k]['ss_name'][0]

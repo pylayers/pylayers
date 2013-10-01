@@ -18,6 +18,7 @@ class Coverage(object):
 
         Methods
         -------
+
         create grid()
             create a uniform grid for evaluating losses
         cover()
@@ -30,6 +31,7 @@ class Coverage(object):
 
         Attributes
         ----------
+
         All attributes are read from fileini ino the ini directory of the
         current project
 
@@ -60,10 +62,10 @@ class Coverage(object):
         self.showopt = dict(self.config.items('show'))
 
         self.L = Layout(self.layoutopt['filename'])
-        self.model = PLSmodel(f=eval(self.plm['fghz']),
-                         rssnp=eval(self.plm['rssnp']),
-                         d0=eval(self.plm['d0']),
-                         sigrss=eval(self.plm['sigrss']))
+        self.model = PLSmodel(f = eval(self.plm['fghz']),
+                          rssnp = eval(self.plm['rssnp']),
+                             d0 = eval(self.plm['d0']),
+                         sigrss = eval(self.plm['sigrss']))
 
         self.nx = eval(self.gridopt['nx'])
         self.ny = eval(self.gridopt['ny'])
@@ -101,15 +103,28 @@ class Coverage(object):
         self.creategrid(full=self.mode,boundary=self.boundary)
 
     def __repr__(self):
+        """
+        """
         st=''
-        st= st+ 'tx :'+str(self.txopt) + '\n'
-        st= st+ 'rx :'+str(self.rxopt) + '\n'
+        st= st+ 'tx : ' + str(self.tx) + '\n'
+        st= st+ 'fghz : ' + str(self.fGHz) + '\n'
+        st= st+ 'nx : ' + str(self.nx) + '\n'
+        st= st+ 'ny : ' + str(self.ny) + '\n'
+        st= st+ 'mode : ' + str(self.mode) + '\n'
+        st= st+ 'boundary (xmin,ymin,xmax,ymax) : ' + str(self.boundary) + '\n'
+        st= st+ 'rxsens : '+ str(self.rxsens) + '\n' 
+        st= st+ 'bandwithmhz : '+ str(self.bandwidthmhz) + '\n' 
+        st= st+ 'temperaturek : '+ str(self.temperaturek) + '\n' 
+        st= st+ 'noisefactordb : '+ str(self.noisefactordb) + '\n' 
+        st= st+ 'plm : '+ str(self.plm) + '\n' 
+        return(st)
 
     def creategrid(self,full=True,boundary=[]):
         """ create a grid
 
         Parameters
         ----------
+
         full : boolean
             default (True) use all the layout area
         boundary : (xmin,ymin,xmax,ymax)
@@ -144,8 +159,10 @@ class Coverage(object):
             >>> C.showPr()
 
         """
-        self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
-        self.freespace = PL(self.grid,self.model.f,self.tx)
+        #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
+        self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.fGHz,self.tx)
+        #self.freespace = PL(self.grid,self.model.f,self.tx)
+        self.freespace = PL(self.grid,self.fGHz,self.tx)
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
         self.snro = self.prdbmo - self.pndbm
@@ -209,6 +226,7 @@ class Coverage(object):
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -219,12 +237,13 @@ class Coverage(object):
 
         """
 
-        fig=plt.figure()
-        fig,ax=self.L.showGs(fig=fig)
-        l=self.grid[0,0]
-        r=self.grid[-1,0]
-        b=self.grid[0,1]
-        t=self.grid[-1,-1]
+        fig = plt.figure()
+        fig,ax = self.L.showGs(fig=fig)
+
+        l = self.grid[0,0]
+        r = self.grid[-1,0]
+        b = self.grid[0,1]
+        t = self.grid[-1,-1]
 
         if polarization=='o':
             prdbm=self.prdbmo
@@ -235,7 +254,8 @@ class Coverage(object):
 #        tCM._init()
 #        alphas = np.abs(np.linspace(.0,1.0, tCM.N))
 #        tCM._lut[:-3,-1] = alphas
-        title='Map of received power - Pt = '+str(self.ptdbm)+' dBm'
+
+        title='Map of received power - Pt = ' + str(self.ptdbm) + ' dBm'
 
         cdict = {
         'red'  :  ((0., 0.5, 0.5), (1., 1., 1.)),
