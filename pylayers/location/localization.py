@@ -145,7 +145,6 @@ class Localization(object):
                         c.updc('value',value)
                         c.updc('std',std)
 
-
                     if 'alg' in self.method :
                         if c.runable:
                             if c.type == 'TOA':
@@ -176,6 +175,13 @@ class Localization(object):
             pass
         self.cla.update()
 
+        ############"" FOR DEBUG
+        prss=np.where(np.array(self.cla.type)=='RSS')[0]
+        for x in range(len(self.cla.c)):
+            if x in prss:
+                self.cla.usable[x]=False
+
+
     def savep(self,value,now=0.,name='pe'):
         """
             write an estimated position into self.net
@@ -194,7 +200,6 @@ class Localization(object):
             True if estimated position has been computed
         """
 
-
         if sum(self.cla.usable) >= 2:
             cpe = self.cla.compute(pe=pe)
             if cpe:
@@ -205,7 +210,7 @@ class Localization(object):
             return False
         # in case of lack of observables
         elif sum(self.cla.usable) >= 1:
-            cpe = self.cla.compute_amb(pe=pe)
+            cpe = self.cla.compute(pe=pe)
             if cpe:
                 self.savep(np.array(self.cla.pecluster),now=now,name='pe_clust')
                 self.net.node[self.ID]['PN'].node[self.ID]['te']=now # estimated time
@@ -271,6 +276,7 @@ class PLocalization(Process):
 
 
             # if no previous position have been computed or if position is obsolete
+            bep=False
             if self.loc.net.node[self.loc.ID]['pe'].size == 0 :
                 self.tx.cmdrq.signal()
                 self.loc.update(ldp='TOA')
@@ -289,6 +295,6 @@ class PLocalization(Process):
             self.loc.update(ldp='TOA')
             
 
-            if self.sim.verbose:
-                print 'localization node',self.loc.ID, ' update @',self.sim.now()
+            if bep and self.sim.verbose :
+                print 'LOCALIZATION node',self.loc.ID, ' update @',self.sim.now()
             yield hold, self, self.loc_updt_time
