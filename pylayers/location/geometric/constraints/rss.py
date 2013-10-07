@@ -109,11 +109,14 @@ class RSS(Constraint):
         """
         update constraint inforamtion
         """
-        if self.p.any():
-            self.runable = True
-        else:
-            self.runable = False
+        # if self.p.any():
+        #     self.runable = True
+        # else:
+        #     self.runable = False
 #               self.LOC = RSSLocation(self.p)
+        self.updc('p',value=self.p)
+        self.updc('value',value=self.value)
+        self.updc('std',value=self.std)
         self.sstd = self.model.getRangeStd(self.value, self.std)  # (self.LOC.getRangeStd(self.p, self.model['PL0'], self.model['d0'], self.value,self.model['RSSnp'], self.model['RSSStd'], self.model['Rest']))/0.3
         self.range = self.model.getRange(self.value, self.std)  # self.LOC.getRange(self.p, self.model['PL0'], self.model['d0'], self.value, self.model['RSSnp'], self.model['RSSStd'], self.model['Rest'])
 #               self.sstd   = self.std*0.3

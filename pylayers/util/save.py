@@ -131,8 +131,11 @@ class Save(Process):
             self.savemat['node_'+n]=self.save[n]
             for n2 in nodes:
                 if n2 != n:
-                    self.savemat['node_'+n]['node_'+n2]=self.save[n][n2]
-                    del self.savemat[n][n2]
+                    try:
+                        self.savemat['node_'+n]['node_'+n2]=self.save[n][n2]
+                        del self.savemat[n][n2]
+                    except:
+                        pass
             del self.savemat[n]
 
             for o in self.save['saveopt']:
@@ -221,9 +224,11 @@ class Save(Process):
             for e in self.net.edges():
                 for rat in self.lrat:
                     for ldp in self.lldp:
-                        self.save[e[0]][e[1]][rat][ldp][self.idx]=rl[rat+ldp][e]
-                        self.save[e[1]][e[0]][rat][ldp][self.idx]=rl[rat+ldp][e]
-
+                        try:
+                            self.save[e[0]][e[1]][rat][ldp][self.idx]=rl[rat+ldp][e]
+                            self.save[e[1]][e[0]][rat][ldp][self.idx]=rl[rat+ldp][e]
+                        except:
+                            pass
             self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'a')
             pickle.dump(self.save, self.file)
             self.file.close()
