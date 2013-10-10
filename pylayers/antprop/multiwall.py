@@ -214,6 +214,7 @@ def Loss0_v2(L,Pts,fGHz,p):
     Lwp = np.array([])
     Edo = np.array([])
     Edp = np.array([])
+
     for i in range(N):
         Lo = 0.0
         Lp = 0.0

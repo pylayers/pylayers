@@ -2735,11 +2735,87 @@ class Layout(object):
                
         fo.close()
 
+    def angleonlink2(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
+        """ angleonlink(self,p1,p2) return seglist between p1 and p2
+
+        Parameters
+        ----------
+
+        p1 : (N x 2 )
+            [0,0]
+        p2 : (N x 2 )
+            [10,3]
+
+        Returns
+        -------
+
+        seglist : list
+                  list of segment number on the link
+        theta
+
+        Examples
+        --------
+
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
+        >>> p1 = np.array([0,0])
+        >>> p2 = np.array([10,3])
+        >>> L.angleonlink(p1,p2)
+        (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
+
+
+        """
+
+        assert np.shape(p1)==np.shape(p2)
+        # N x 2 
+        u = p1 - p2
+        # N x 1
+        nu = np.sqrt(np.sum(u*u,axis=1))
+        # N x 2
+        un = u / nu[:,np.newaxis]
+
+        seglist = self.seginframe2(p1, p2)
+
+        npta = self.tahe[0, seglist]
+        nphe = self.tahe[1, seglist]
+        Pta = self.pt[:, npta]
+        Phe = self.pt[:, nphe]
+
+        P1 = np.outer(p1, np.ones(len(seglist)))
+        P2 = np.outer(p2, np.ones(len(seglist)))
+
+        bo = geu.intersect(P1, P2, Pta, Phe)
+
+        seglist = seglist[bo]
+        #
+        # Calculate normal angle angle of incidence
+        #
+        tail = self.tahe[0, seglist]
+        head = self.tahe[1, seglist]
+        vn = np.vstack((self.pt[1, head] - self.pt[1, tail],
+                        self.pt[0, head] - self.pt[0, tail]))
+        mvn = np.outer(np.ones(2), np.sqrt(np.sum(vn * vn, axis=0)))
+        n = vn / mvn
+        uu = np.outer(un, np.ones(len(seglist)))
+        unn = abs(np.sum(uu * n, axis=0))
+        theta = np.arccos(unn)
+        #print vn
+        #print mvn
+        #print 'n :',n
+        #print 'un : ',unn
+        #print 'theta (deg)',the*180./pi
+
+        # seglist = seglist+1
+        seglist = map(lambda x : self.tsg[x],seglist)
+
+        return(seglist, theta)
+
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
         """ angleonlink(self,p1,p2) return seglist between p1 and p2
 
         Parameters
         ----------
+
         p1 : (1 x 2 )
             [0,0]
         p2 : (1 x 2 )
@@ -2876,13 +2952,14 @@ class Layout(object):
 
 
 
-    def segpt(self, ptlist=np.array([0])):
+    def segpt2(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
 
         Parameters
         ----------
 
         ptlist
+
             array(1xNp) Point number array
 
         Returns
@@ -2901,12 +2978,129 @@ class Layout(object):
         array([0, 1, 5, 7])
 
         """
+
+        #seglist = np.array([], dtype=int)
+        ut = map(lambda x : np.hstack((np.nonzero(self.tahe[0,:]==x)[0],
+                                       np.nonzero(self.tahe[1,:]==x)[0])), ptlist) 
+        utstack = reduce(lambda x,y : np.hstack((x,y)),ut)
+        #uvstack = reduce(lambda x,y : np.hstack((x,y)),uv)
+        #for i in ptlist:
+        #    ut = np.nonzero(self.tahe[0, :] == i)[0]
+        #    uv = np.nonzero(self.tahe[1, :] == i)[0]
+        #    seglist = np.hstack((seglist, ut, uv))
+        seglist = np.unique(utstack)
+
+        return(seglist)
+
+    def segpt(self, ptlist=np.array([0])):
+        """ return the seg list of a sequence of point number
+
+        Parameters
+        ----------
+
+        ptlist
+
+            array(1xNp) Point number array
+
+        Returns
+        -------
+
+        seglist
+            array seglist associated with ptlist
+
+        Examples
+        --------
+
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('example.str')
+        >>> ptlist  = np.array([0,1])
+        >>> L.segpt(ptlist)
+        array([0, 1, 5, 7])
+
+        Notes
+        -----
+
+        segpt is faster than segpt2
+
+        """
         seglist = np.array([], dtype=int)
         for i in ptlist:
             ut = np.nonzero(self.tahe[0, :] == i)[0]
             uv = np.nonzero(self.tahe[1, :] == i)[0]
             seglist = np.hstack((seglist, ut, uv))
         seglist = np.unique(seglist)
+        return(seglist)
+
+    def extrseg(self):
+        """ calculate extremum of segments
+        Notes
+        -----
+
+        Used in seginframe
+
+        """
+        # 2 x Np
+        pt   = self.pt 
+        # tahe 2 x Nseg
+        th  = zip(self.tahe[0,:],self.tahe[1,:])
+
+        self.max_sx = np.array(map(lambda x : max(pt[0,x[0]],pt[0,x[1]]), th))
+        self.min_sx = np.array(map(lambda x : min(pt[0,x[0]],pt[0,x[1]]), th))
+        self.max_sy = np.array(map(lambda x : max(pt[1,x[0]],pt[1,x[1]]), th))
+        self.min_sy = np.array(map(lambda x : min(pt[1,x[0]],pt[1,x[1]]), th))
+
+    def seginframe2(self, p1, p2):
+        """ return the seg list of a given zone defined by two points
+
+            Parameters
+            ----------
+
+            p1
+                array (2 x N)
+            p2
+                array (2 x N)
+
+            Returns
+            -------
+
+            seglist
+                list of segment number inside a planar region defined by p1 an p2
+
+
+            Examples
+            --------
+
+            >>> from pylayers.gis.layout import *
+            >>> L = Layout('TA-Office.str')
+            >>> p1 = np.array([[0,0,0],[0,0,0]])
+            >>> p2 = np.array([[10,10,10],[10,10,10]])
+            >>> seglist = L.seginframe2(p1,p2)
+            >>> edlist  = L.tsg[seglist[0]]
+            >>> L.showGs(edlist=edlist)
+
+        """
+
+        # N x 1
+        max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+        min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+        max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+        min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+        
+        # to be move elsewhere
+
+        self.extrseg()
+
+        # clipping conditions to keep segment 
+        # max_sx > min_x
+        # min_sx < max_x
+        # max_sy > min_y
+        # min_sy < max_y
+
+        seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
+                                             (self.min_sx < x[1]) & 
+                                             (self.max_sy > x[2]) &  
+                                             (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
+
         return(seglist)
 
     def seginframe(self, p1, p2):
@@ -2971,7 +3165,7 @@ class Layout(object):
 
         return(seglist)
 
-        def layerongrid(self, grid, Tx):
+    def layerongrid(self, grid, Tx):
             """ grid Nx,Ny,2
             Tx   1x2
             .. todo:: layeron grid Not finished
