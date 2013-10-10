@@ -603,6 +603,8 @@ class Layout(object):
                     self.sla[index] = slabname
                     self.isss.append(index)
                     index = index+1
+        # calculate extremum of segments            
+        self.extrseg()
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
@@ -2844,7 +2846,11 @@ class Layout(object):
         nu = np.sqrt(np.dot(u, u))
         un = u / nu
 
-        seglist = self.seginframe(p1, p2)
+        
+        #seglist = self.seginframe(p1, p2)
+        # new implementation of seginframe is faster
+        #
+        seglist = self.seginframe2(p1, p2)
 
         npta = self.tahe[0, seglist]
         nphe = self.tahe[1, seglist]
@@ -3071,7 +3077,7 @@ class Layout(object):
             --------
 
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('TA-Office.str')
+            >>> L = Layout('TA-Office.ini')
             >>> p1 = np.array([[0,0,0],[0,0,0]])
             >>> p2 = np.array([[10,10,10],[10,10,10]])
             >>> seglist = L.seginframe2(p1,p2)
@@ -3080,26 +3086,35 @@ class Layout(object):
 
         """
 
-        # N x 1
-        max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
-        min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
-        max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
-        min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+        assert(np.shape(p1)==np.shape(p2))
+
+        if len(np.shape(p1))>1:
+            # N x 1
+            max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+            min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+            max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+            min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+
+            seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
+                                             (self.min_sx < x[1]) & 
+                                             (self.max_sy > x[2]) &  
+                                             (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
+        else:
+            max_x = max(p1[0], p2[0])
+            min_x = min(p1[0], p2[0])
+            max_y = max(p1[1], p2[1])
+            min_y = min(p1[1], p2[1])
+            seglist = np.nonzero( (self.max_sx > min_x) &
+                                  (self.min_sx < max_x) & 
+                                  (self.max_sy > min_y) &  
+                                  (self.min_sy < max_y ) ) [0]
         
-        # to be move elsewhere
-
-        self.extrseg()
-
         # clipping conditions to keep segment 
         # max_sx > min_x
         # min_sx < max_x
         # max_sy > min_y
         # min_sy < max_y
 
-        seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
-                                             (self.min_sx < x[1]) & 
-                                             (self.max_sy > x[2]) &  
-                                             (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
 
         return(seglist)
 
@@ -3204,7 +3219,9 @@ class Layout(object):
         line = sh.LineString((p1,p2))
 
         
-        els = self.seginframe(p1,p2)
+        # els = self.seginframe(p1,p2)
+        # new implementation of seginframe is faster
+        els = self.seginframe2(p1,p2)
         elg = self.tsg[els]
 
         lc = []
