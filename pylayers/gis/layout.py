@@ -2738,7 +2738,7 @@ class Layout(object):
         fo.close()
 
     def angleonlink2(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
-        """ angleonlink(self,p1,p2) return seglist between p1 and p2
+        """ angleonlink2(self,p1,p2) return (seglist,angle) between p1 and p2
 
         Parameters
         ----------
@@ -2753,28 +2753,35 @@ class Layout(object):
 
         seglist : list
                   list of segment number on the link
-        theta
+        angle   : angle (in radians) between segment and LOS axis
 
         Examples
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
+        >>> L = Layout('DLR.ini')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
-        >>> L.angleonlink(p1,p2)
+        >>> L.angleonlink2(p1,p2)
         (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
 
 
         """
 
         assert np.shape(p1)==np.shape(p2)
-        # N x 2 
-        u = p1 - p2
-        # N x 1
-        nu = np.sqrt(np.sum(u*u,axis=1))
-        # N x 2
-        un = u / nu[:,np.newaxis]
+        if len(np.shape(p1))>1:
+            # N x 2 
+            u = p1 - p2
+            # N x 1
+            nu = np.sqrt(np.sum(u*u,axis=1))
+            # N x 2
+            un = u / nu[:,np.newaxis]
+        else:
+            u = p1 - p2
+            # N x 1
+            nu = np.sqrt(np.sum(u*u))
+            # N x 2
+            un = u / nu
 
         seglist = self.seginframe2(p1, p2)
 
@@ -2800,7 +2807,7 @@ class Layout(object):
         n = vn / mvn
         uu = np.outer(un, np.ones(len(seglist)))
         unn = abs(np.sum(uu * n, axis=0))
-        theta = np.arccos(unn)
+        angle = np.arccos(unn)
         #print vn
         #print mvn
         #print 'n :',n
@@ -2810,7 +2817,7 @@ class Layout(object):
         # seglist = seglist+1
         seglist = map(lambda x : self.tsg[x],seglist)
 
-        return(seglist, theta)
+        return(seglist, angle)
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
         """ angleonlink(self,p1,p2) return seglist between p1 and p2
@@ -2842,15 +2849,16 @@ class Layout(object):
 
 
         """
+
         u = p1 - p2
         nu = np.sqrt(np.dot(u, u))
         un = u / nu
 
         
-        #seglist = self.seginframe(p1, p2)
+        seglist = self.seginframe(p1, p2)
         # new implementation of seginframe is faster
         #
-        seglist = self.seginframe2(p1, p2)
+        #seglist = self.seginframe2(p1, p2)
 
         npta = self.tahe[0, seglist]
         nphe = self.tahe[1, seglist]
@@ -3088,6 +3096,13 @@ class Layout(object):
 
         assert(np.shape(p1)==np.shape(p2))
 
+        # clipping conditions to keep segment 
+        #
+        # max_sx > min_x
+        # min_sx < max_x
+        # max_sy > min_y
+        # min_sy < max_y
+
         if len(np.shape(p1))>1:
             # N x 1
             max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
@@ -3109,11 +3124,6 @@ class Layout(object):
                                   (self.max_sy > min_y) &  
                                   (self.min_sy < max_y ) ) [0]
         
-        # clipping conditions to keep segment 
-        # max_sx > min_x
-        # min_sx < max_x
-        # max_sy > min_y
-        # min_sy < max_y
 
 
         return(seglist)
