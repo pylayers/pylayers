@@ -564,14 +564,8 @@ class Layout(object):
         normy = X[1,:]-X[0,:]
 
         scale = np.sqrt(normx*normx+normy*normy)
-        #
-        # Dirty fix : because scale happens to be 0 sometimes
-        #
-        try:
-            normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
-        except:
-            logging.critical('one layout normal is length=0 something wrong')
-            normal = np.vstack((normx,normy,np.zeros(len(scale))))
+        assert (scale.all()>0)
+        self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
 
         #for ks in ds:
         #
@@ -592,7 +586,7 @@ class Layout(object):
         index = nsmax+1
         for ks in useg:
             k = self.tgs[ks]                        # index numpy 
-            self.Gs.node[ks]['norm'] = normal[:,k]  # update normal 
+            self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal 
             self.sla[ks]=self.Gs.node[ks]['name']   # update sla dict 
             self.stridess[ks]=0                     # initialize stridess[ks]
             if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
@@ -2769,6 +2763,7 @@ class Layout(object):
         """
 
         assert np.shape(p1)==np.shape(p2)
+
         if len(np.shape(p1))>1:
             # N x 2 
             u = p1 - p2
@@ -2784,29 +2779,57 @@ class Layout(object):
             un = u / nu
 
         seglist = self.seginframe2(p1, p2)
+        upos = np.nonzero(seglist>0)[0]
+        uneg = np.nonzero(seglist<0)[0]
 
-        npta = self.tahe[0, seglist]
-        nphe = self.tahe[1, seglist]
+        nlink = len(uneg)+1
+        # retrieve the number of segment per link 
+        llink = np.hstack((uneg[0],np.hstack((uneg[1:],array([len(seglist)])))-uneg-1))
+        # [(link id,number of seg),...]
+        #nl = zip(np.arange(nlink),llink)
+
+        npta = self.tahe[0, seglist[upos]]
+        nphe = self.tahe[1, seglist[upos]]
+
         Pta = self.pt[:, npta]
         Phe = self.pt[:, nphe]
+        
+        #
+        # This part should possibly be improved 
+        #
 
-        P1 = np.outer(p1, np.ones(len(seglist)))
-        P2 = np.outer(p2, np.ones(len(seglist)))
+        for i,nl in enumerate(llink):
+            try:
+                P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
+                P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
+                ilink = np.hstack((ilink,array([-1]),i*np.ones(nl,dtype='int')))
+            except:
+                P1 = np.outer(p1[:,i],np.ones(nl))
+                P2 = np.outer(p2[:,i],np.ones(nl))
+                ilink = i*np.ones(nl,dtype='int')
 
         bo = geu.intersect(P1, P2, Pta, Phe)
 
-        seglist = seglist[bo]
+        upos_intersect = upos[bo]
+
+        seglist2 = seglist[upos_intersect]
+        idxlnk = ilink[upos_intersect]
         #
-        # Calculate normal angle angle of incidence
+        # Calculate  angle of incidence refered from segment normal 
         #
-        tail = self.tahe[0, seglist]
-        head = self.tahe[1, seglist]
-        vn = np.vstack((self.pt[1, head] - self.pt[1, tail],
-                        self.pt[0, head] - self.pt[0, tail]))
-        mvn = np.outer(np.ones(2), np.sqrt(np.sum(vn * vn, axis=0)))
-        n = vn / mvn
-        uu = np.outer(un, np.ones(len(seglist)))
-        unn = abs(np.sum(uu * n, axis=0))
+        #tail = self.tahe[0, seglist2]
+        #head = self.tahe[1, seglist2]
+        # Calculate normal of all segments 
+        # already available ? 
+        #vn = np.vstack((self.pt[1, head] - self.pt[1, tail],
+        #                self.pt[0, head] - self.pt[0, tail]))
+        #mvn = np.sqrt(np.sum(vn * vn, axis=0))
+        #n = vn / mvn[np.newaxis,:]
+        #uu = np.outer(un, np.ones(len(seglist)))
+        norm  = self.normal[0:2,seglist2]
+        # vector along the link
+        uu = un[:,idxlnk] 
+        unn = abs(np.sum(uu * norm, axis=0))
         angle = np.arccos(unn)
         #print vn
         #print mvn
@@ -2815,12 +2838,15 @@ class Layout(object):
         #print 'theta (deg)',the*180./pi
 
         # seglist = seglist+1
-        seglist = map(lambda x : self.tsg[x],seglist)
-
-        return(seglist, angle)
+        seglist = np.array(map(lambda x : self.tsg[x],seglist2))
+        data = np.zeros(len(seglist),dtype=[('i','i8'),('s','i8'),('a',np.float32)])
+        data['i'] = idxlnk
+        data['s'] = seglist 
+        data['a'] = angle 
+        return(data)
 
     def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
-        """ angleonlink(self,p1,p2) return seglist between p1 and p2
+        """ angleonlink(self,p1,p2) returns seglist between p1 and p2
 
         Parameters
         ----------
@@ -2862,8 +2888,9 @@ class Layout(object):
 
         npta = self.tahe[0, seglist]
         nphe = self.tahe[1, seglist]
-        Pta = self.pt[:, npta]
-        Phe = self.pt[:, nphe]
+
+        Pta  = self.pt[:, npta]
+        Phe  = self.pt[:, nphe]
 
         P1 = np.outer(p1, np.ones(len(seglist)))
         P2 = np.outer(p2, np.ones(len(seglist)))
@@ -2871,18 +2898,22 @@ class Layout(object):
         bo = geu.intersect(P1, P2, Pta, Phe)
 
         seglist = seglist[bo]
+
         #
         # Calculate normal angle angle of incidence
         #
         tail = self.tahe[0, seglist]
         head = self.tahe[1, seglist]
-        vn = np.vstack((self.pt[1, head] - self.pt[1, tail],
+
+        vn  = np.vstack((self.pt[1, head] - self.pt[1, tail],
                         self.pt[0, head] - self.pt[0, tail]))
         mvn = np.outer(np.ones(2), np.sqrt(np.sum(vn * vn, axis=0)))
+
         n = vn / mvn
         uu = np.outer(un, np.ones(len(seglist)))
         unn = abs(np.sum(uu * n, axis=0))
         theta = np.arccos(unn)
+
         #print vn
         #print mvn
         #print 'n :',n
@@ -3104,7 +3135,9 @@ class Layout(object):
         # min_sy < max_y
 
         if len(np.shape(p1))>1:
+
             # N x 1
+
             max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
             min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
             max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
@@ -3114,11 +3147,20 @@ class Layout(object):
                                              (self.min_sx < x[1]) & 
                                              (self.max_sy > x[2]) &  
                                              (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
+            # np.array stacking 
+            # -1 acts as a deliminiter (not a segment number)
+
+            seglist = reduce(lambda x,y : np.hstack((x,array([-1]),y)),seglist) 
+
+            return(seglist)
+
         else:
+
             max_x = max(p1[0], p2[0])
             min_x = min(p1[0], p2[0])
             max_y = max(p1[1], p2[1])
             min_y = min(p1[1], p2[1])
+
             seglist = np.nonzero( (self.max_sx > min_x) &
                                   (self.min_sx < max_x) & 
                                   (self.max_sy > min_y) &  
@@ -3126,7 +3168,7 @@ class Layout(object):
         
 
 
-        return(seglist)
+            return(seglist)
 
     def seginframe(self, p1, p2):
         """ return the seg list of a given zone defined by two points
