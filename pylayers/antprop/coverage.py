@@ -128,28 +128,30 @@ class Coverage(object):
         full : boolean
             default (True) use all the layout area
         boundary : (xmin,ymin,xmax,ymax)
-            if full is False the boundary is used
+            if full is False the boundary argument is used
 
         """
+
         if full:
             mi=np.min(self.L.Gs.pos.values(),axis=0)+0.01
             ma=np.max(self.L.Gs.pos.values(),axis=0)-0.01
         else:
+            assert boundary<>[]
             mi = np.array([boundary[0],boundary[1]])
             ma = np.array([boundary[2],boundary[3]])
 
-        x=np.linspace(mi[0],ma[0],self.nx)
-        y=np.linspace(mi[1],ma[1],self.ny)
+        x = np.linspace(mi[0],ma[0],self.nx)
+        y = np.linspace(mi[1],ma[1],self.ny)
+
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
-
-
-
+        
     def cover(self):
         """ start the coverage calculation
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -161,14 +163,37 @@ class Coverage(object):
         """
         #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
         self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.fGHz,self.tx)
-        #self.freespace = PL(self.grid,self.model.f,self.tx)
-        self.freespace = PL(self.grid,self.fGHz,self.tx)
+        self.freespace = PL(self.fGHz,self.grid,self.tx)
+        self.prdbmo = self.ptdbm - self.freespace - self.Lwo
+        self.prdbmp = self.ptdbm - self.freespace - self.Lwp
+        self.snro = self.prdbmo - self.pndbm
+        self.snrp = self.prdbmp - self.pndbm
+
+    def cover2(self):
+        """ start the coverage calculation
+
+        Examples
+        --------
+
+        .. plot::
+            :include-source:
+
+            >>> from pylayers.antprop.coverage import *
+            >>> C = Coverage()
+            >>> C.cover()
+            >>> C.showPr()
+
+        """
+        #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
+        self.Lwo,self.Lwp = Losst(self.L,self.fGHz,self.grid.T,self.tx)
+        self.freespace = PL(self.fGHz,self.grid,self.tx)
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
         self.snro = self.prdbmo - self.pndbm
         self.snrp = self.prdbmp - self.pndbm
 
 
+    
     def showEd(self,polarization='o'):
         """ show direct path excess of delay map
 
@@ -183,17 +208,19 @@ class Coverage(object):
             >>> C.showEdo()
         """
 
-        fig=plt.figure()
-        fig,ax=self.L.showGs(fig=fig)
-        l=self.grid[0,0]
-        r=self.grid[-1,0]
-        b=self.grid[0,1]
-        t=self.grid[-1,-1]
+        fig = plt.figure()
+        fig,ax = self.L.showGs(fig=fig)
+        l = self.grid[0,0]
+        r = self.grid[-1,0]
+        b = self.grid[0,1]
+        t = self.grid[-1,-1]
+
         if polarization=='o':
             cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,
                       extent=(l,r,b,t),
                       origin='lower')
             titre = "Map of LOS excess delay, polar orthogonal"
+
         if polarization=='p':
             cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,
                       extent=(l,r,b,t),
@@ -207,6 +234,7 @@ class Coverage(object):
         cax = divider.append_axes("right", size="5%", pad=0.05)
         clb = fig.colorbar(cov,cax)
         clb.set_label('excess delay (ns)')
+
         if self.show:
             plt.show()
         return fig,ax
@@ -343,6 +371,7 @@ class Coverage(object):
 
         fig=plt.figure()
         fig,ax = self.L.showGs(fig=fig)
+
         l = self.grid[0,0]
         r = self.grid[-1,0]
         b = self.grid[0,1]

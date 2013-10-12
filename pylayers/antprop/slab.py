@@ -239,7 +239,7 @@ class Interface(object):
         return(Lo, Lp)
 
     def losst(self, fGHz, display=False):
-        """  Evaluate Loss
+        """  Evaluate Loss 
 
         Parameters
         ----------
@@ -252,23 +252,28 @@ class Interface(object):
         -------
 
         Lo : np.array
+            Loss orthogonal polarization (dB)
         Lp : np.array
+            Loss parallel polarization (dB)
 
         """
 
         modTo = abs(self.T[:, :, 0, 0])
         modTp = abs(self.T[:, :, 1, 1])
+        
+        #Lo = -20 * np.log10(modTo[:, 0])
+        #Lp = -20 * np.log10(modTp[:, 0])
 
-        Lo = -20 * np.log10(modTo[:, 0])
-        Lp = -20 * np.log10(modTp[:, 0])
+        Lo = -20 * np.log10(modTo)
+        Lp = -20 * np.log10(modTp)
 
         if display:
-            np.plot(fGHz, Lo, 'b')
+            plt.plot(fGHz, Lo, 'b')
             #plot(f,Lp,'r')
             #legend(('L0 _|_','L0 //'),loc='upper right')
-            np.legend(('L0 (dB)'), loc='upper right')
-            np.xlabel('frequency (GHz)')
-            np.show()
+            plt.legend(('L0 (dB)'), loc='upper right')
+            plt.xlabel('frequency (GHz)')
+            plt.show()
 
         return(Lo, Lp)
 
@@ -1482,25 +1487,32 @@ class Slab(dict, Interface):
         return(Lo, Lp)
 
     def losst(self, fGHz, theta):
-        """
-        Calculate loss for theta=th at frequency (f)
+        """ Calculate loss w.r.t angle and frequency
 
         Parameters
         ----------
+
         fGHz   :  np.array()
             frequency (GHz)
-        th     :  float
-            theta angle
+
+        theta  :  np.array 
+            theta angle (radians)
 
         Returns
         -------
+
         Lo  : np.array
             Loss orthogonal
+
         Lp  : np.array
             Loss paralell
 
         """
-        self.ev(fGHz, theta=np.array([theta]))
+        # for backward compatibility 
+        if type(theta)==float:
+            theta = np.array([theta])
+
+        self.ev(fGHz, theta)
         Lo, Lp = Interface.losst(self, fGHz)
         return(Lo, Lp)
 

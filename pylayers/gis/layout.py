@@ -587,7 +587,7 @@ class Layout(object):
         for ks in useg:
             k = self.tgs[ks]                        # index numpy 
             self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal 
-            self.sla[ks]=self.Gs.node[ks]['name']   # update sla dict 
+            self.sla[ks]=self.Gs.node[ks]['name']   # update sla array 
             self.stridess[ks]=0                     # initialize stridess[ks]
             if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
                 nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
@@ -2737,10 +2737,8 @@ class Layout(object):
         Parameters
         ----------
 
-        p1 : (N x 2 )
-            [0,0]
-        p2 : (N x 2 )
-            [10,3]
+        p1 : np.array (2 x Np) or (2,) 
+        p2 : np.array (2 x Np) or (2,) 
 
         Returns
         -------
@@ -2761,30 +2759,41 @@ class Layout(object):
 
 
         """
+        
+        sh1 = np.shape(p1)
+        sh2 = np.shape(p2)
 
-        assert np.shape(p1)==np.shape(p2)
+        assert sh1[0]==2
+        assert sh2[0]==2
 
-        if len(np.shape(p1))>1:
-            # N x 2 
-            u = p1 - p2
-            # N x 1
-            nu = np.sqrt(np.sum(u*u,axis=1))
-            # N x 2
-            un = u / nu[:,np.newaxis]
-        else:
-            u = p1 - p2
-            # N x 1
-            nu = np.sqrt(np.sum(u*u))
-            # N x 2
-            un = u / nu
+        if (len(sh1)<2) & (len(sh2)>1):
+            p1 = np.outer(p1,np.ones(sh2[1]))
+
+        if (len(sh2)<2) & (len(sh1)>1):    
+            p2 = np.outer(p2,np.ones(sh1[1]))
+
+        if (len(sh2)<2) & (len(sh1)<2):    
+            p1 = np.outer(p1,np.ones(1))
+            p2 = np.outer(p2,np.ones(1))
+        
+        # 2 x N
+        u = p1 - p2
+        # 1 x N
+        nu = np.sqrt(np.sum(u*u,axis=0))
+        # 2 x N  
+        un = u / nu[np.newaxis,:]
 
         seglist = self.seginframe2(p1, p2)
-        upos = np.nonzero(seglist>0)[0]
+
+        upos = np.nonzero(seglist>=0)[0]
         uneg = np.nonzero(seglist<0)[0]
 
-        nlink = len(uneg)+1
-        # retrieve the number of segment per link 
-        llink = np.hstack((uneg[0],np.hstack((uneg[1:],array([len(seglist)])))-uneg-1))
+        nNLOS = len(uneg)+1
+        # retrieve the number of segments per link 
+        if nNLOS>1:
+            llink = np.hstack((uneg[0],np.hstack((uneg[1:],array([len(seglist)])))-uneg-1))
+        else:
+            llink = np.array([len(seglist)])
         # [(link id,number of seg),...]
         #nl = zip(np.arange(nlink),llink)
 
@@ -2814,34 +2823,32 @@ class Layout(object):
 
         seglist2 = seglist[upos_intersect]
         idxlnk = ilink[upos_intersect]
-        #
+
+        #k
         # Calculate  angle of incidence refered from segment normal 
         #
-        #tail = self.tahe[0, seglist2]
-        #head = self.tahe[1, seglist2]
-        # Calculate normal of all segments 
-        # already available ? 
-        #vn = np.vstack((self.pt[1, head] - self.pt[1, tail],
-        #                self.pt[0, head] - self.pt[0, tail]))
-        #mvn = np.sqrt(np.sum(vn * vn, axis=0))
-        #n = vn / mvn[np.newaxis,:]
-        #uu = np.outer(un, np.ones(len(seglist)))
+
         norm  = self.normal[0:2,seglist2]
         # vector along the link
         uu = un[:,idxlnk] 
         unn = abs(np.sum(uu * norm, axis=0))
         angle = np.arccos(unn)
-        #print vn
-        #print mvn
-        #print 'n :',n
-        #print 'un : ',unn
-        #print 'theta (deg)',the*180./pi
 
         # seglist = seglist+1
         seglist = np.array(map(lambda x : self.tsg[x],seglist2))
         data = np.zeros(len(seglist),dtype=[('i','i8'),('s','i8'),('a',np.float32)])
+
+        #
+        # update subsegment in seglist 
+        #
+        # self.sla
+        # self.lsss
+        # self.stridess
+        #
+        sseglist = map(lambda x: self.stridess[x]+1 if x in self.lsss else x,seglist)
+
         data['i'] = idxlnk
-        data['s'] = seglist 
+        data['s'] = sseglist 
         data['a'] = angle 
         return(data)
 
@@ -3125,7 +3132,21 @@ class Layout(object):
 
         """
 
-        assert(np.shape(p1)==np.shape(p2))
+        sh1 = np.shape(p1)
+        sh2 = np.shape(p2)
+
+        assert sh1[0]==2
+        assert sh2[0]==2
+
+        if (len(sh1)<2) & (len(sh2)>1):
+            p1 = np.outer(p1,np.ones(sh2[1]))
+
+        if (len(sh2)<2) & (len(sh1)>1):    
+            p2 = np.outer(p2,np.ones(sh1[1]))
+
+        if (len(sh2)<2) & (len(sh1)<2):    
+            p1 = np.outer(p1,np.ones(1))
+            p2 = np.outer(p2,np.ones(1))
 
         # clipping conditions to keep segment 
         #
@@ -3134,41 +3155,24 @@ class Layout(object):
         # max_sy > min_y
         # min_sy < max_y
 
-        if len(np.shape(p1))>1:
 
             # N x 1
 
-            max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
-            min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
-            max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
-            min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+        max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+        min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+        max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+        min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
 
-            seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
-                                             (self.min_sx < x[1]) & 
-                                             (self.max_sy > x[2]) &  
-                                             (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
-            # np.array stacking 
-            # -1 acts as a deliminiter (not a segment number)
+        seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
+                                         (self.min_sx < x[1]) & 
+                                         (self.max_sy > x[2]) &  
+                                         (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
+        # np.array stacking 
+        # -1 acts as a deliminiter (not a segment number)
 
-            seglist = reduce(lambda x,y : np.hstack((x,array([-1]),y)),seglist) 
+        seglist = reduce(lambda x,y : np.hstack((x,array([-1]),y)),seglist) 
 
-            return(seglist)
-
-        else:
-
-            max_x = max(p1[0], p2[0])
-            min_x = min(p1[0], p2[0])
-            max_y = max(p1[1], p2[1])
-            min_y = min(p1[1], p2[1])
-
-            seglist = np.nonzero( (self.max_sx > min_x) &
-                                  (self.min_sx < max_x) & 
-                                  (self.max_sy > min_y) &  
-                                  (self.min_sy < max_y ) ) [0]
-        
-
-
-            return(seglist)
+        return(seglist)
 
     def seginframe(self, p1, p2):
         """ return the seg list of a given zone defined by two points
