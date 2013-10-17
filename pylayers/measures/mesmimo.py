@@ -62,7 +62,15 @@ class MIMO(object):
                     hcal = Hcal.ift(Nz=Nz,ffts=1)
                     shh = hcal.y.shape
                     self.hcal = TUsignal(hcal.x,np.reshape(hcal.y,(Nr,Nt,shh[-1])))
+    
 
+    def __repr__(self),
+        str = 'MIMO Object'+'\n'
+        str = 'Nr : '+str(self.Nr)+ '\n'
+        str = 'Nt : '+str(self.Nr)+ '\n'
+        str = 'Nf : '+str(self.Nf)+ '\n'
+        return(str)
+        
     def __sub__(self,m):
         N = MIMO()
         N.freq = self.freq
@@ -129,6 +137,14 @@ class MIMO(object):
     
     def calBento2(self,fcGHz=2,duR=0.05,duT=0.05,time=False,taumin=0,taumax=80,Nz=20000):
         """ calculate the Bentosela h function
+
+        fcGHz : float 
+        duR   : grid step in uR
+        duT   : grid step in uT 
+        time  : boolean 
+        taumin  : float 0 
+        taumax  : float 
+        Nz   : int (20000)
 
         """
         # f : m x n x uR x f
@@ -306,31 +322,31 @@ class MIMO(object):
         Parameters
         ----------
         
-        'layout':[],
-        's':50,
-        'vmin' : 0, 
-        'vmax': 0.5,
-        'linewidth':0,
-        'fig':[],
-        'ax':[],
-        'save':True,
-        'filename':'showgrid1',
-        'title':'',
-        'save':True,
-        'dB':False,
-        'OR' : np.array([3.4,0.73]),
-        'OT' : np.array([5.29,6.65]),
-        'cR' : np.array([0.07,0]),
-        'cT' : np.array([-0.07,0]),
-        'target' : np.array([]),
-        'gating':False,
-        'dynamic':30
+        layout:[],
+        s:50,
+        vmin : 0, 
+        vmax: 0.5,
+        linewidth:0,
+        fig:[],
+        ax:[],
+        save:True,
+        filename:'showgrid1',
+        title:'',
+        save:True,
+        dB : False,
+        OR : np.array([3.4,0.73]),
+        OT : np.array([5.29,6.65]),
+        cR : np.array([0.07,0]),
+        cT : np.array([-0.07,0]),
+        target : np.array([]),
+        gating : False,
+        dynamic : 30
        
 
         Notes 
         -----
 
-        This function accvept a Layout as input and allows to display 
+        This function accepts a Layout as input and allows to display 
         a projection of the spatio-delay volume on a 2D grid. 
 
 
