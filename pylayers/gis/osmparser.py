@@ -9,9 +9,12 @@ import pdb
 # classes that handle the OSM data file format.
 class Way(object):
     """ 
-    A Way is a polyline  
+    
+    A Way is a polyline or a Polycon (if closed)
+
     typ : 0 Polygon
           1 LineString
+
     """
     def __init__(self,refs,tags,coords):
         self.refs  = refs
@@ -87,7 +90,19 @@ class Coords(object):
         self.boundary=np.array([self.minlat,self.minlon,self.maxlat,self.maxlon])
 
     def cartesian(self):
-        """
+        """ Convert Latitude/Longitude in cartesian 
+        
+        Returns
+        -------
+
+        m : Basemap converter
+
+
+        Notes
+        -----
+
+        The transformation is centered on the mean of latitude and longitude 
+
         """
         bd = self.boundary
         lon_0 = (bd[1]+bd[3])/2.
@@ -100,6 +115,8 @@ class Coords(object):
         for id in self.latlon:
             x, y = m(self.latlon[id][0], self.latlon[id][1])
             self.xy[id]  = np.array([x,y])
+        
+        return(m)
 
 class Nodes(object):
     """
@@ -128,6 +145,10 @@ class Ways(object):
 
     Attributes
     ----------
+
+    w
+    way
+    cpt 
 
     Methods
     -------
@@ -176,6 +197,13 @@ class Ways(object):
     
     def show(self,fig=[],ax=[],typ=2):
         """ show all way
+
+        Parameters
+        ----------
+
+        fig : figure
+        ax  : axe
+        typ : 0|1|2 (default)
 
         """
         if fig==[]:
@@ -337,6 +365,7 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
     relations :
 
     """
+
     if c: 
         coords = Coords()
         coords.clean()
@@ -345,7 +374,7 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
             print "parsing coords"
 
         coords_parser.parse(filename)
-        coords.cartesian()
+        m = coords.cartesian()
 
         if verbose:
             print str(coords.cpt)
@@ -401,7 +430,7 @@ def osmparse(filename,typ='floorplan',verbose=False,c=True,n=True,w=True,r=True)
     else:
         relations = None
 
-    return coords,nodes,ways,relations
+    return coords,nodes,ways,relations,m
 
 
 def extract(alat,alon,fileosm,fileout):
@@ -439,10 +468,22 @@ def extract(alat,alon,fileosm,fileout):
     return(m) 
 
 def getbdg(fileosm,m):
-    """
+    """ get building from osm file 
+
+    Parameters 
+    ----------
+
+    fileosm : string 
+    m : Basemap object 
+
+    Returns
+    -------
+
+    zone : list of Polygon  
+
     """
 
-    coords,nodes,ways,relation = osmparse(fileosm,typ='building')
+    coords,nodes,ways,relation,m = osmparse(fileosm,typ='building')
     zone = []
     for w in ways.way:
         zone.append(Polygon(p))
@@ -451,12 +492,12 @@ def getbdg(fileosm,m):
 def buildingsparse(filename):
     """
     """
-    coords,nodes,ways,relations = osmparse(filename)
+    coords,nodes,ways,relations,m = osmparse(filename)
     for bid in relations.relation:
         tags = relations.relation[bid]['tags']
         if tags['type']=='building':
             print "Constructing Indoor building ", bid
             bdg = FloorPlan(bid,coords,nodes,ways,relations)
             bdg.build(typ='relation',eid=bid)
-    return bdg
+    return bdg,m
 

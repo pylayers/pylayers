@@ -626,7 +626,7 @@ class Layout(object):
         """
         self.filename = _fileosm
         fileosm = pyu.getlong(_fileosm,'struc/osm')
-        coords,nodes,ways,relations = osm.osmparse(fileosm,typ='floorplan')
+        coords,nodes,ways,relations,m = osm.osmparse(fileosm,typ='floorplan')
         _np = 0 # _ to avoid name conflict with numpy alias
         _ns = 0 
         ns  = 0 
