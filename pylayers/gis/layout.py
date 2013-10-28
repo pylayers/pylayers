@@ -1,4 +1,3 @@
-
 #-*- coding:Utf-8 -*-
 #
 # Class Layout
@@ -565,14 +564,8 @@ class Layout(object):
         normy = X[1,:]-X[0,:]
 
         scale = np.sqrt(normx*normx+normy*normy)
-        #
-        # Dirty fix : because scale happens to be 0 sometimes
-        #
-        try:
-            normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
-        except:
-            logging.critical('one layout normal is length=0 something wrong')
-            normal = np.vstack((normx,normy,np.zeros(len(scale))))
+        assert (scale.all()>0)
+        self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
 
         #for ks in ds:
         #
@@ -593,8 +586,8 @@ class Layout(object):
         index = nsmax+1
         for ks in useg:
             k = self.tgs[ks]                        # index numpy 
-            self.Gs.node[ks]['norm'] = normal[:,k]  # update normal 
-            self.sla[ks]=self.Gs.node[ks]['name']   # update sla dict 
+            self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal 
+            self.sla[ks]=self.Gs.node[ks]['name']   # update sla array 
             self.stridess[ks]=0                     # initialize stridess[ks]
             if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
                 nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
@@ -604,6 +597,8 @@ class Layout(object):
                     self.sla[index] = slabname
                     self.isss.append(index)
                     index = index+1
+        # calculate extremum of segments            
+        self.extrseg()
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
@@ -2736,11 +2731,133 @@ class Layout(object):
                
         fo.close()
 
-    def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
-        """ angleonlink(self,p1,p2) return seglist between p1 and p2
+    def angleonlink2(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
+        """ angleonlink2(self,p1,p2) return (seglist,angle) between p1 and p2
 
         Parameters
         ----------
+
+        p1 : np.array (2 x Np) or (2,) 
+        p2 : np.array (2 x Np) or (2,) 
+
+        Returns
+        -------
+
+        seglist : list
+                  list of segment number on the link
+        angle   : angle (in radians) between segment and LOS axis
+
+        Examples
+        --------
+
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('DLR.ini')
+        >>> p1 = np.array([0,0])
+        >>> p2 = np.array([10,3])
+        >>> L.angleonlink2(p1,p2)
+        (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
+
+
+        """
+        
+        sh1 = np.shape(p1)
+        sh2 = np.shape(p2)
+
+        assert sh1[0]==2
+        assert sh2[0]==2
+
+        if (len(sh1)<2) & (len(sh2)>1):
+            p1 = np.outer(p1,np.ones(sh2[1]))
+
+        if (len(sh2)<2) & (len(sh1)>1):    
+            p2 = np.outer(p2,np.ones(sh1[1]))
+
+        if (len(sh2)<2) & (len(sh1)<2):    
+            p1 = np.outer(p1,np.ones(1))
+            p2 = np.outer(p2,np.ones(1))
+        
+        # 2 x N
+        u = p1 - p2
+        # 1 x N
+        nu = np.sqrt(np.sum(u*u,axis=0))
+        # 2 x N  
+        un = u / nu[np.newaxis,:]
+
+        seglist = self.seginframe2(p1, p2)
+
+        upos = np.nonzero(seglist>=0)[0]
+        uneg = np.nonzero(seglist<0)[0]
+
+        nNLOS = len(uneg)+1
+        # retrieve the number of segments per link 
+        if nNLOS>1:
+            llink = np.hstack((uneg[0],np.hstack((uneg[1:],array([len(seglist)])))-uneg-1))
+        else:
+            llink = np.array([len(seglist)])
+        # [(link id,number of seg),...]
+        #nl = zip(np.arange(nlink),llink)
+
+        npta = self.tahe[0, seglist[upos]]
+        nphe = self.tahe[1, seglist[upos]]
+
+        Pta = self.pt[:, npta]
+        Phe = self.pt[:, nphe]
+        
+        #
+        # This part should possibly be improved 
+        #
+
+        for i,nl in enumerate(llink):
+            try:
+                P1 = np.hstack((P1,np.outer(p1[:,i],np.ones(nl))))
+                P2 = np.hstack((P2,np.outer(p2[:,i],np.ones(nl))))
+                ilink = np.hstack((ilink,array([-1]),i*np.ones(nl,dtype='int')))
+            except:
+                P1 = np.outer(p1[:,i],np.ones(nl))
+                P2 = np.outer(p2[:,i],np.ones(nl))
+                ilink = i*np.ones(nl,dtype='int')
+
+        bo = geu.intersect(P1, P2, Pta, Phe)
+
+        upos_intersect = upos[bo]
+
+        seglist2 = seglist[upos_intersect]
+        idxlnk = ilink[upos_intersect]
+
+        #k
+        # Calculate  angle of incidence refered from segment normal 
+        #
+
+        norm  = self.normal[0:2,seglist2]
+        # vector along the link
+        uu = un[:,idxlnk] 
+        unn = abs(np.sum(uu * norm, axis=0))
+        angle = np.arccos(unn)
+
+        # seglist = seglist+1
+        seglist = np.array(map(lambda x : self.tsg[x],seglist2))
+        data = np.zeros(len(seglist),dtype=[('i','i8'),('s','i8'),('a',np.float32)])
+
+        #
+        # update subsegment in seglist 
+        #
+        # self.sla
+        # self.lsss
+        # self.stridess
+        #
+        sseglist = map(lambda x: self.stridess[x]+1 if x in self.lsss else x,seglist)
+
+        data['i'] = idxlnk
+        data['s'] = sseglist 
+        data['a'] = angle 
+        return(data)
+
+    def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
+        """ angleonlink(self,p1,p2) returns seglist between p1 and p2
+
+        Parameters
+        ----------
+
         p1 : (1 x 2 )
             [0,0]
         p2 : (1 x 2 )
@@ -2765,16 +2882,22 @@ class Layout(object):
 
 
         """
+
         u = p1 - p2
         nu = np.sqrt(np.dot(u, u))
         un = u / nu
 
+        
         seglist = self.seginframe(p1, p2)
+        # new implementation of seginframe is faster
+        #
+        #seglist = self.seginframe2(p1, p2)
 
         npta = self.tahe[0, seglist]
         nphe = self.tahe[1, seglist]
-        Pta = self.pt[:, npta]
-        Phe = self.pt[:, nphe]
+
+        Pta  = self.pt[:, npta]
+        Phe  = self.pt[:, nphe]
 
         P1 = np.outer(p1, np.ones(len(seglist)))
         P2 = np.outer(p2, np.ones(len(seglist)))
@@ -2782,24 +2905,31 @@ class Layout(object):
         bo = geu.intersect(P1, P2, Pta, Phe)
 
         seglist = seglist[bo]
+
         #
         # Calculate normal angle angle of incidence
         #
         tail = self.tahe[0, seglist]
         head = self.tahe[1, seglist]
-        vn = np.vstack((self.pt[1, head] - self.pt[1, tail],
+
+        vn  = np.vstack((self.pt[1, head] - self.pt[1, tail],
                         self.pt[0, head] - self.pt[0, tail]))
         mvn = np.outer(np.ones(2), np.sqrt(np.sum(vn * vn, axis=0)))
+
         n = vn / mvn
         uu = np.outer(un, np.ones(len(seglist)))
         unn = abs(np.sum(uu * n, axis=0))
         theta = np.arccos(unn)
+
         #print vn
         #print mvn
         #print 'n :',n
         #print 'un : ',unn
         #print 'theta (deg)',the*180./pi
-        seglist = seglist+1
+
+        # seglist = seglist+1
+        seglist = map(lambda x : self.tsg[x],seglist)
+
         return(seglist, theta)
 
     def layeronlink(self, p1, p2):
@@ -2874,13 +3004,14 @@ class Layout(object):
 
 
 
-    def segpt(self, ptlist=np.array([0])):
+    def segpt2(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
 
         Parameters
         ----------
 
         ptlist
+
             array(1xNp) Point number array
 
         Returns
@@ -2899,12 +3030,148 @@ class Layout(object):
         array([0, 1, 5, 7])
 
         """
+
+        #seglist = np.array([], dtype=int)
+        ut = map(lambda x : np.hstack((np.nonzero(self.tahe[0,:]==x)[0],
+                                       np.nonzero(self.tahe[1,:]==x)[0])), ptlist) 
+        utstack = reduce(lambda x,y : np.hstack((x,y)),ut)
+        #uvstack = reduce(lambda x,y : np.hstack((x,y)),uv)
+        #for i in ptlist:
+        #    ut = np.nonzero(self.tahe[0, :] == i)[0]
+        #    uv = np.nonzero(self.tahe[1, :] == i)[0]
+        #    seglist = np.hstack((seglist, ut, uv))
+        seglist = np.unique(utstack)
+
+        return(seglist)
+
+    def segpt(self, ptlist=np.array([0])):
+        """ return the seg list of a sequence of point number
+
+        Parameters
+        ----------
+
+        ptlist
+
+            array(1xNp) Point number array
+
+        Returns
+        -------
+
+        seglist
+            array seglist associated with ptlist
+
+        Examples
+        --------
+
+        >>> from pylayers.gis.layout import *
+        >>> L = Layout('example.str')
+        >>> ptlist  = np.array([0,1])
+        >>> L.segpt(ptlist)
+        array([0, 1, 5, 7])
+
+        Notes
+        -----
+
+        segpt is faster than segpt2
+
+        """
         seglist = np.array([], dtype=int)
         for i in ptlist:
             ut = np.nonzero(self.tahe[0, :] == i)[0]
             uv = np.nonzero(self.tahe[1, :] == i)[0]
             seglist = np.hstack((seglist, ut, uv))
         seglist = np.unique(seglist)
+        return(seglist)
+
+    def extrseg(self):
+        """ calculate extremum of segments
+        Notes
+        -----
+
+        Used in seginframe
+
+        """
+        # 2 x Np
+        pt   = self.pt 
+        # tahe 2 x Nseg
+        th  = zip(self.tahe[0,:],self.tahe[1,:])
+
+        self.max_sx = np.array(map(lambda x : max(pt[0,x[0]],pt[0,x[1]]), th))
+        self.min_sx = np.array(map(lambda x : min(pt[0,x[0]],pt[0,x[1]]), th))
+        self.max_sy = np.array(map(lambda x : max(pt[1,x[0]],pt[1,x[1]]), th))
+        self.min_sy = np.array(map(lambda x : min(pt[1,x[0]],pt[1,x[1]]), th))
+
+    def seginframe2(self, p1, p2):
+        """ return the seg list of a given zone defined by two points
+
+            Parameters
+            ----------
+
+            p1
+                array (2 x N)
+            p2
+                array (2 x N)
+
+            Returns
+            -------
+
+            seglist
+                list of segment number inside a planar region defined by p1 an p2
+
+
+            Examples
+            --------
+
+            >>> from pylayers.gis.layout import *
+            >>> L = Layout('TA-Office.ini')
+            >>> p1 = np.array([[0,0,0],[0,0,0]])
+            >>> p2 = np.array([[10,10,10],[10,10,10]])
+            >>> seglist = L.seginframe2(p1,p2)
+            >>> edlist  = L.tsg[seglist[0]]
+            >>> L.showGs(edlist=edlist)
+
+        """
+
+        sh1 = np.shape(p1)
+        sh2 = np.shape(p2)
+
+        assert sh1[0]==2
+        assert sh2[0]==2
+
+        if (len(sh1)<2) & (len(sh2)>1):
+            p1 = np.outer(p1,np.ones(sh2[1]))
+
+        if (len(sh2)<2) & (len(sh1)>1):    
+            p2 = np.outer(p2,np.ones(sh1[1]))
+
+        if (len(sh2)<2) & (len(sh1)<2):    
+            p1 = np.outer(p1,np.ones(1))
+            p2 = np.outer(p2,np.ones(1))
+
+        # clipping conditions to keep segment 
+        #
+        # max_sx > min_x
+        # min_sx < max_x
+        # max_sy > min_y
+        # min_sy < max_y
+
+
+            # N x 1
+
+        max_x = map(lambda x : max(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+        min_x = map(lambda x : min(x[1],x[0]),zip(p1[0,:], p2[0,:]))
+        max_y = map(lambda x : max(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+        min_y = map(lambda x : min(x[1],x[0]),zip(p1[1,:], p2[1,:]))
+
+        seglist = map(lambda x : np.nonzero( (self.max_sx > x[0]) &
+                                         (self.min_sx < x[1]) & 
+                                         (self.max_sy > x[2]) &  
+                                         (self.min_sy < x[3]) )[0], zip(min_x,max_x,min_y,max_y))
+        # np.array stacking 
+        # -1 acts as a deliminiter (not a segment number)
+
+        seglist = reduce(lambda x,y : np.hstack((x,array([-1]),y)),seglist) 
+
         return(seglist)
 
     def seginframe(self, p1, p2):
@@ -2969,7 +3236,7 @@ class Layout(object):
 
         return(seglist)
 
-        def layerongrid(self, grid, Tx):
+    def layerongrid(self, grid, Tx):
             """ grid Nx,Ny,2
             Tx   1x2
             .. todo:: layeron grid Not finished
@@ -3008,7 +3275,9 @@ class Layout(object):
         line = sh.LineString((p1,p2))
 
         
-        els = self.seginframe(p1,p2)
+        # els = self.seginframe(p1,p2)
+        # new implementation of seginframe is faster
+        els = self.seginframe2(p1,p2)
         elg = self.tsg[els]
 
         lc = []
@@ -3413,11 +3682,13 @@ class Layout(object):
         for k, nc in enumerate(self.Gt.node.keys()):
             poly = self.Gt.node[nc]['polyg']
             a = poly.signedarea()
+
             if mode == 'area':
                 if a < 0:
                     poly.plot(color='red',alpha=0.5)
                 else:
                     poly.plot(color='green', alpha=0.5)
+
             if mode == 'start':
                 if poly.vnodes[0] < 0:
                     poly.plot(color='blue',alpha=0.5)
@@ -4669,6 +4940,7 @@ class Layout(object):
             kwargs['ax']=ax
 
         args = {'fig':fig,'ax':ax,'show':False}
+
         if kwargs['mode']=='cycle':
             for k, ncy in enumerate(self.Gt.node.keys()):
                 fig,ax = self.Gt.node[ncy]['polyg'].plot(**args)

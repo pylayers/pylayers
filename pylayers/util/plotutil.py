@@ -10,10 +10,25 @@ import pdb
 def mulcplot(x,y,**kwargs):
     """ handling multiple complex variable plots
 
+    Parameters
+    ----------
+
     x : ndarray  (Nc x Nx)
     y : ndarray  (Nv x Ny)
 
-    type : "modulus | phase"
+    types : 'm'   : modulus 
+            'v'   : value
+            'l10' : dB (10 log10)
+            'l20' : dB (20 log10)
+            'd'   : phase degrees
+            'r'   : phase radians
+            'du'  : phase degrees unwrap 
+            'ru'  : phase radians unwrap 
+            'gdn' : group delay (ns) 
+            'gdm' : group distance (m) 
+            're'  : real part
+            'im'  : imaginary part 
+
     dB : bool
         False
     fig = []    
@@ -21,13 +36,27 @@ def mulcplot(x,y,**kwargs):
     nlg  : int 
         number of lines 
 
+    Examples
+    --------
+
+    >>> from pylayers.util.plotutil import *
+    >>> import numpy as np
+
+    Notes
+    -----
+
+    If len(y.shape) > 2 the two first axes are used as nlin and ncol this
+    takes the priority over the pased values nlin and ncol 
+
+
     """
     defaults = {'types':['l20'],
                 'titles':[''],
                 'labels':[''],
                 'xlabels':['Amplitude (dB)'],
-                'ncol':2,
-                'nlin':2,
+                'ylabels':['Amplitude (dB)'],
+                'ncol':1,
+                'nlin':1,
                 'fig':[],
                 'ax':[],
                }
@@ -37,6 +66,10 @@ def mulcplot(x,y,**kwargs):
 
     # smart placement of legend box
     plt.rcParams['legend.loc'] = 'best'
+    
+    grid = False
+    if 'nlin' in kwargs:
+        grid=True
 
     for key, value in defaults.items():
         if key not in kwargs:
@@ -61,6 +94,14 @@ def mulcplot(x,y,**kwargs):
                 ylabels.append('Unwrapped Phase (deg)'),
             if t=='ru':
                 ylabels.append('Unwrapped Phase (rad)'),
+            if t=='re':
+                ylabels.append('Real part'),
+            if t=='im':
+                ylabels.append('Imaginary part'),
+            if t=='gdn':
+                ylabels.append('Group delay (ns)'),
+            if t=='gdm':
+                ylabels.append('Group distance (m)'),
     else:
         ylabels = kwargs['ylabels']
 
@@ -73,11 +114,11 @@ def mulcplot(x,y,**kwargs):
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
 
-    ntypes = len(types)
-    ntitles = len(titles)
-    nlabels = len(labels)
-    nxlabels = len(xlabels)
-    nylabels = len(ylabels)
+    ntypes = np.prod(np.array(types).shape)
+    ntitles = np.prod(np.array(titles).shape)
+    nlabels = np.prod(np.array(labels).shape)
+    nxlabels = np.prod(np.array(xlabels).shape)
+    nylabels = np.prod(np.array(ylabels).shape)
 
 
     # filtering kwargs argument for plot function 
@@ -86,20 +127,28 @@ def mulcplot(x,y,**kwargs):
         if k not in defaults.keys():
             args[k]=kwargs[k]
 
-    if len(np.shape(x))>1:
-        print np.shape(x)
-        print np.shape(y)
-        assert(np.shape(x)[1]==np.shape(y)[1])
-    else:
-        if len(np.shape(y))>1:
-            assert(np.shape(x)[0]==np.shape(y)[1])
-        else:
-            assert(np.shape(x)[0]==np.shape(y)[0])
-            y = y[np.newaxis,:]
-        x = x[np.newaxis,:]
+    shx = x.shape
+    shy = y.shape
 
-    nfigx = np.shape(x)[0]
-    nfigy = np.shape(y)[0]
+    if len(shy)>2:
+        ydim = shy[0:-1]
+        nlin = ydim[0]
+        ncol = ydim[1]
+    else:
+        if not grid:
+            if len(shy)>1:
+                nlin = shy[0]
+                ncol = 1
+            else:
+                nlin = 1
+                ncol = 1
+                y = y[np.newaxis,:]
+
+    
+    # below is the same axis constraint as for Bsignal object
+    assert(shx[0]==shy[-1]), "plotutil : x,y shape incompatibility"
+
+    nfigy = np.prod(np.array(y.shape[0:-1]))
 
     assert((nfigy==ncol*nlin) | (nfigy==1))
     assert((nlabels==nfigy)|(nlabels==1))
@@ -119,32 +168,90 @@ def mulcplot(x,y,**kwargs):
    
     for l in range(nlin):
         for c in range(ncol):
-            k = l*ncol+c
-            if types[k%ntypes]=='v':
-                ax[l,c].plot(x[k%nfigx,:],y[k%nfigy,:],label=labels[k%nlabels],**args)
-            if types[k%ntypes]=='r':
-                ax[l,c].plot(x[k%nfigx,:],np.angle(y[k%nfigy,:]),label=labels[k%nlabels],**args)
-            if types[k%ntypes]=='ru':
-                ax[l,c].plot(x[k%nfigx,:],np.unwrap(np.angle(y[k%nfigy,:])),label=labels[k%nlabels],**args)
-            if types[k%ntypes]=='d':
-                ax[l,c].plot(x[k%nfigx,:],np.angle(y[k%nfigy,:])*rtd,label=labels[k%nlabels],**args)
-            if types[k%ntypes]=='du':
-                ax[l,c].plot(x[k%nfigx,:],np.unwrap(np.angle(y[k%nfigy,:]))*rtd,label=labels[k%nlabels],**args)
-            if types[k%ntypes]=='m':
-                ax[l,c].plot(x[k%nfigx,:],np.abs(y[k%nfigy,:]),label=labels[k%nlabels],**args)
-            if types[k%ntypes]=='l10':
-                ax[l,c].plot(x[k%nfigx,:],10*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
-            if types[k%ntypes]=='l20':
-                ax[l,c].plot(x[k%nfigx,:],20*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+            if len(shy)>2:
+                if nlabels>1:
+                    lablc = labels[l,c]
+                else:
+                    lablc = labels[0]
+                if types[0]=='v':
+                        ax[l,c].plot(x,y[l,c,:],label=lablc,**args)
+                if types[0]=='r':
+                    ax[l,c].plot(x,np.angle(y[l,c,:]),label=lablc,**args)
+                if types[0]=='ru':
+                    ax[l,c].plot(x,np.unwrap(np.angle(y[l,c,:])),label=lablc,**args)
+                if types[0]=='d':
+                    ax[l,c].plot(x,np.angle(y[l,c,:])*rtd,label=lablc,**args)
+                if types[0]=='du':
+                    ax[l,c].plot(x,np.unwrap(np.angle(y[l,c,:]))*rtd,label=lablc,**args)
+                if types[0]=='m':
+                    ax[l,c].plot(x,np.abs(y[l,c,:]),label=lablc,**args)
+                if types[0]=='l10':
+                    ax[l,c].plot(x,10*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
+                if types[0]=='l20':
+                    ax[l,c].plot(x,20*np.log10(np.abs(y[l,c,:])),label=lablc,**args)
+                if types[0]=='re':
+                    ax[l,c].plot(x,np.real(y[l,c,:]),label=lablc,**args)
+                if types[0]=='im':
+                    ax[l,c].plot(x,np.imag(y[l,c,:]),label=lablc,**args)
+                if types[0]=='gdn':
+                    df  = x[1]-x[0]
+                    ax[l,c].plot(x[0:-1],-np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
+                if types[0]=='gdm':
+                    df  = x[1]-x[0]
+                    ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
+                
+                if nxlabels>1:
+                    ax[l,c].set_xlabel(xlabels[l,c])
+                else:
+                    ax[l,c].set_xlabel(xlabels[0])
+                if nylabels>1:
+                    ax[l,c].set_ylabel(ylabels[l,c])
+                else:
+                    ax[l,c].set_ylabel(ylabels[0])
+                if ntitles>1:    
+                    ax[l,c].set_title(titles[l,c])
+                else:
+                    ax[l,c].set_title(titles[0])
+                ax[l,c].legend()
+                   
+            else:
+                k = l*ncol+c
+                if types[k%ntypes]=='v':
+                    #ax[l,c].plot(x[k%nfigx,:],y[k%nfigy,:],label=labels[k%nlabels],**args)
+                    ax[l,c].plot(x,y[k%nfigy,:],label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='r':
+                    ax[l,c].plot(x,np.angle(y[k%nfigy,:]),label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='ru':
+                    ax[l,c].plot(x,np.unwrap(np.angle(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='d':
+                    ax[l,c].plot(x,np.angle(y[k%nfigy,:])*rtd,label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='du':
+                    ax[l,c].plot(x,np.unwrap(np.angle(y[k%nfigy,:]))*rtd,label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='m':
+                    ax[l,c].plot(x,np.abs(y[k%nfigy,:]),label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='l10':
+                    ax[l,c].plot(x,10*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='l20':
+                    ax[l,c].plot(x,20*np.log10(np.abs(y[k%nfigy,:])),label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='re':
+                    ax[l,c].plot(x,np.real(y[k%nfigy,:]),label=labels[k%nlabels],**args)
+                if types[k%ntypes]=='im':
+                    ax[l,c].plot(x,np.imag(y[k%nfigy,:]),label=labels[k%nlabels],**args)
+                if types[0]=='gdn':
+                    df  = x[1]-x[0]
+                    ax[l,c].plot(x[0:-1],-np.diff(np.unwrap(np.angle(y[k%nfigy,:])))/(2*np.pi*df),label=labels[k%nlabels],**args)
+                if types[0]=='gdm':
+                    df  = x[1]-x[0]
+                    ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[k%nfigy,:])))/(2*np.pi*df),label=labels[k%nlabels],**args)
 
-            ax[l,c].set_xlabel(xlabels[k%nxlabels])
-            ax[l,c].set_ylabel(ylabels[k%nylabels])
-            ax[l,c].set_title(titles[k%ntitles])
-            ax[l,c].legend()
-            ax[l,c].get_xaxis().set_visible(False)
-            ax[l,c].get_yaxis().set_visible(False)
+                ax[l,c].set_xlabel(xlabels[k%nxlabels])
+                ax[l,c].set_ylabel(ylabels[k%nylabels])
+                ax[l,c].set_title(titles[k%ntitles])
+                ax[l,c].legend()
+                #ax[l,c].get_xaxis().set_visible(False)
+                #ax[l,c].get_yaxis().set_visible(False)
 
-    plt.tight_layout()
+    #plt.tight_layout()
 
     return(fig,ax)                  
 
