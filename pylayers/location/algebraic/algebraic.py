@@ -52,6 +52,16 @@ class algloc(object):
     """
 
     def __init__(self, nodes={}, ldp={}):
+        """
+        Parameters
+        ----------
+
+        nodes : dict 
+
+        ldp : dict 
+
+        """
+
         self.nodes = nodes
         self.ldp = ldp
         self.c = 0.2997924583
@@ -257,15 +267,20 @@ class algloc(object):
 
                 if sh[1] >= sh[0]:
                     # Construct the vector K (see theory)
-                    k1 = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa),
-                          axis=0))
+                    # Overcoming Singularities In TDOA Based Location
+                    # Estimation Using Total Least Square
+                    #
+                    # (xn-xref)**2+(yn-yref)**2 - r(n,ref)**2
+                    #
+                    k1 = (np.sum(rn_tdoa*rn_tdoa,axis=0) - np.sum(rnr_tdoa * rnr_tdoa, axis=0))
                     drg = self.c * tdoa_ns
                     k2 = drg*drg
                     K = k1 - k2
                     # Construct the matrix A (see theory)
                     A = np.hstack((rn_tdoa.T-rnr_tdoa.T,drg.reshape(np.shape(tdoa_ns)[0],1)))
                     # Apply LS operator
-                    Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    #Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    Pr = 0.5 * np.dot(nplg.pinv(A),K)
                     P = Pr[:sh[0]].reshape(sh[0], 1)
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
@@ -1062,11 +1077,27 @@ def scenario():
     
     Returns
     -------
+        nodes : dictionnary 
+            'BN' 
+            'RN_RSS'
+            'RN_TDOA'
+            'RN_TOA'
+            'RNr_TDOA'
+        ldp   : all ldps of bn0
+            'PL0'
+            'RSS'
+            'RSS_np'
+            'RSS_std'
+            'TDOA'
+            'TDOA_std'
+            'TOA'
+            'TOA_std'
+        bn0   : The true position of blind node
 
-        CRB : float
 
     Examples
     --------
+
     .. plot::
         :include-source:
 

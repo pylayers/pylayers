@@ -93,8 +93,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
     content = fid.read()
     content_memory = content
 
-    NrecordFirstParameterblock, content = getNumber(
-        content, 1)     # Reading record number of parameter section
+    NrecordFirstParameterblock, content = getNumber(content, 1)     # Reading record number of parameter section
 
     key, content = getNumber(content, 1)
 

@@ -115,7 +115,7 @@ class BodyCylinder(object):
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):    
-            st = st +'nframes :' + str(self.nframes) +'\n'
+            st = st +'nframes : ' + str(self.nframes) +'\n'
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
         if 'topos' in dir(self):
@@ -125,7 +125,7 @@ class BodyCylinder(object):
         return(st)    
 
     def center(self):
-        """ centering body 
+        """ centering the body 
 
         Returns
         -------
@@ -141,8 +141,8 @@ class BodyCylinder(object):
         plane 0xy is calculated
 
         """
-        # self.d  : 3x16xNf
-        # self.pg : 3xNf
+        # self.d  : 3 x 16 x Nf
+        # self.pg : 3 x Nf
         self.pg = np.sum(self.d,axis=1)/self.npoints
         self.pg[2,:] = 0
         self.d = self.d - self.pg[:,np.newaxis,:]
@@ -173,7 +173,7 @@ class BodyCylinder(object):
         """
 
         tf = Tstep/(1.0*self.nframes) # frame sampling period  
-        kt = int(np.floor(tk))
+        kt = int(np.floor(tk/tf))
         kf = int(np.floor(np.mod(tk,Tstep)/tf))
         # self.pg : 3 x Nframes 
         # traj : Nptraj x 3 (t,x,y)
@@ -251,11 +251,11 @@ class BodyCylinder(object):
         B = np.zeros((3,1))                
         A[0:-1,0:-1]=a                
         B[0:-1,:]=b
-        print kf
+
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
         
     
-    def loadC3D(self, filename='07_01.c3d', nframes=126):
+    def loadC3D(self, filename='07_01.c3d', nframes=126 ,unit='cm'):
         """ load nframes of motion capture C3D file 
 
         Parameters
@@ -268,13 +268,16 @@ class BodyCylinder(object):
 
         """
 
+        if 'pg' in dir(self):
+            del self.pg
+
         self.nframes = nframes
         self.filename = filename
 
         s, p, f = c3d.read_c3d(filename)
 
-        #pdb.set_trace()
         CM_TO_M = 0.01
+        #
         # self.d 3 x np x nf
         # 
         self.d = np.ndarray(shape=(3, self.npoints, np.shape(f)[0]))
@@ -285,30 +288,42 @@ class BodyCylinder(object):
 
         # f.T : 3 x np x nf
         self.d = f[0:nframes, ind, :].T
-        self.d = self.d*CM_TO_M
+        if unit=='cm':
+            self.d = self.d*CM_TO_M
         self.g.pos = {}
         for i in range(self.npoints):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
         #
         # Extension of cylinder
         #
+
         self.g.add_node(15)
+        self.npoints = 16
+
         pm  = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
         pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
         pmf = pmf[:,np.newaxis,:]
+
         self.d = np.concatenate((self.d,pmf),axis=1)
+
         self.g.add_edge(0, 15)
         self.g.pos[15] = (pm[1],pm[2])
         self.g[0][15]['radius']=0.1
 
     def movie(self,topos=False,tk=[],traj=[]):
-        """
+        """ Create a geomview movie
+
         Parameters
         ----------
 
         topos : Boolean
-        tk    : 
-        traj  :     
+        tk    : np.array time index in s 
+        traj  : np.array Npt x 3 (t,x,y)    
+
+        See Also
+        --------
+
+        BodyCylinder.geomfile
 
         """
 
@@ -389,6 +404,11 @@ class BodyCylinder(object):
         topos : boolean 
         tag : string 
 
+        Notes
+        -----
+
+
+
         """
         cyl = geu.Geomoff('cylinder')
         pt = cyl.loadpt()
@@ -397,6 +417,9 @@ class BodyCylinder(object):
         else:    
             _filebody = tag+'-body.list'
         filebody = pyu.getlong(_filebody,"geom")
+        #
+        # To be change : The defauly layout is DLR.off
+        # 
         filestruc = pyu.getlong('DLR.off',"geom")
         fo = open(filebody,"w")
         fo.write("LIST\n")
@@ -575,7 +598,7 @@ def Global_Trajectory(cycle, traj):
     Parameters
     ----------
 
-    cycle :  walking step cycle (2 step), shape = (3,npoints  = 15, nframes = 126)
+    cycle :  walking step cycle (2 step), shape = (3,npoints  = 16, nframes = 126)
     traj  : trajectory described by the gravity center, shape =(3,nposition)
 
     We assume that the body moves straight between two successive positions
