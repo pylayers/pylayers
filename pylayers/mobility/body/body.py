@@ -2,6 +2,7 @@ import numpy as np
 import scipy.stats as sp
 
 from pylayers.mobility.body import c3d
+from pylayers.mobility import trajectory 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
