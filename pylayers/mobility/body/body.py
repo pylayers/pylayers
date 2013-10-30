@@ -171,6 +171,8 @@ class BodyCylinder(object):
         wtn 
 
         """
+        # tk should be in the trajectory time range
+        assert ((tk<traj[-1,0]) & (tk>traj[0,0])),'posvel: tk not in trajectory time range'
 
         tf = Tstep/(1.0*self.nframes) # frame sampling period  
         kt = int(np.floor(tk/tf))
@@ -201,7 +203,8 @@ class BodyCylinder(object):
         traj : ndarray (3,N)
             t,x,y
         tk : float 
-            time for evaluation of topos (seconds)
+            time for evaluation of topos (seconds) this value should be in the
+            range of the trajectory timestamp
         Tstep : float 
            duration of the periodic motion sequence (seconds)
 
@@ -224,7 +227,14 @@ class BodyCylinder(object):
 
         topos is the current spatial global position of a body configuration.
 
+
+        See Also 
+        --------
+
+        pylayers.util.geomutil.affine
+
         """
+
         #
         #
         # psa : origin source
@@ -249,8 +259,8 @@ class BodyCylinder(object):
         a,b = geu.affine(X,Y)
         A = np.eye(3)                
         B = np.zeros((3,1))                
-        A[0:-1,0:-1]=a                
-        B[0:-1,:]=b
+        A[0:-1,0:-1] = a                
+        B[0:-1,:] = b
 
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
         
