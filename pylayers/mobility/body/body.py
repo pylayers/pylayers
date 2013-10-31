@@ -323,6 +323,7 @@ class BodyCylinder(object):
         self.g.add_edge(0, 15)
         self.g.pos[15] = (pm[1],pm[2])
         self.g[0][15]['radius']=0.1
+        self.nodes_Id[15]='bottom'
 
     def movie(self,topos=False,tk=[],traj=[]):
         """ Create a geomview movie
@@ -485,8 +486,6 @@ class BodyCylinder(object):
 
         self.basis0 : ndarray (nc,3,3)
         
-
-
         Notes
         -----
 
@@ -551,6 +550,7 @@ class BodyCylinder(object):
         x = r * np.cos(alpha)
         y = r * np.sin(alpha)
         z = l
+
         if frameId == 0:
             u0 = self.basis0[cylinderId, 0:3]
             v0 = self.basis0[cylinderId, 3:6]
@@ -561,7 +561,7 @@ class BodyCylinder(object):
             u0 = self.basisk[cylinderId, 0:3]
             v0 = self.basisk[cylinderId, 3:6]
             w0 = self.basisk[cylinderId, 6:]
-        #~ #pdb.set_trace()
+
         self.ant = x.reshape((len(x)), 1) * u0 + \
                    y.reshape((len(y)), 1) * w0 + \
                    z.reshape((len(z)), 1) * v0
