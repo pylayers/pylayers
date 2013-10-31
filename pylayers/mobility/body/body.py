@@ -13,7 +13,7 @@ import pylayers.util.geomutil as geu
 import doctest
 
 def ChangeBasis(u0, v0, w0, v1):
-    """
+    """ 
 
     Parameters
     ----------
@@ -155,7 +155,7 @@ class BodyCylinder(object):
         Parameters
         ----------
 
-        traj : ndarray
+        traj : Tajectory DataFrame 
             nx3
         tk : float 
             time for evaluation of topos
@@ -173,7 +173,7 @@ class BodyCylinder(object):
 
         """
         # tk should be in the trajectory time range
-        assert ((tk<traj[-1,0]) & (tk>traj[0,0])),'posvel: tk not in trajectory time range'
+        assert ((tk>traj.tmin) & (tk<traj.tmax)),'posvel: tk not in trajectory time range'
 
         tf = Tstep/(1.0*self.nframes) # frame sampling period  
         kt = int(np.floor(tk/tf))
@@ -189,7 +189,8 @@ class BodyCylinder(object):
         #
         # vt : speed vector along trajectory 
         #
-        vt = traj[kt+1,1:] - traj[kt,1:]
+        #vt = traj[kt+1,1:] - traj[kt,1:]
+        vt  = np.array([traj['vx'][kt],traj['vy'][kt]])
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
         
@@ -250,7 +251,7 @@ class BodyCylinder(object):
         psb = psa + vsn
         psc = psa + wsn
 
-        pta = traj[kt,1:]
+        pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
 
@@ -258,11 +259,13 @@ class BodyCylinder(object):
         Y   = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
 
         a,b = geu.affine(X,Y)
+
         A = np.eye(3)                
         B = np.zeros((3,1))                
         A[0:-1,0:-1] = a                
         B[0:-1,:] = b
 
+        self.toposFrameId = kf 
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
         
     
@@ -385,6 +388,7 @@ class BodyCylinder(object):
             ax.plot(np.array([pA[0][0],pB[0][0]]),np.array([pA[1][0],pB[1][0]]),
                     np.array([pA[2][0],pB[2][0]]),zdir='z',c=col)
         #ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
+        ax.autoscale(enable=True)
         return(fig,ax)
                     
     def show3(self,iframe=0,topos=True,tag=''): 
@@ -472,7 +476,7 @@ class BodyCylinder(object):
         ----------
 
         frameId : int 
-            default 0 
+            frame id in the mocap dataframe (default 0) 
         topos : boolean     
             default True
 
@@ -480,17 +484,19 @@ class BodyCylinder(object):
         -------
 
         self.basis0 : ndarray (nc,3,3)
+        
+
 
         Notes
         -----
 
-        There are as many basis as cylinders (body graph edges) 
+        There are as many frame as cylinders (body graph edges) 
 
         """
 
         nc = len(self.g.edges())
         #
-        # basis0 : nc x 9 
+        # basis0 : nc x 3 x 3  
         #
         self.basis0 = np.ndarray(shape=(nc,3,3))
 
@@ -508,7 +514,12 @@ class BodyCylinder(object):
             self.basis0[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
-        """
+        """ 
+        Parameters 
+        ----------
+
+        frameId : int  
+
         """
         nc = self.c.shape[0]
         self.basisk = np.ndarray(shape=(nc, 9))
@@ -524,7 +535,16 @@ class BodyCylinder(object):
             self.basisk[i, 6:] = wk
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
-        """
+        """ 
+        Parameters
+        ----------
+
+        cylinderId : int 
+            index of cylinder 
+        l : distance from origin of cylider
+        alpha : angle from reference direction 
+        frameId : frameId 
+
         """
         r = self.c[cylinderId, 7, frameId]
 
@@ -542,8 +562,9 @@ class BodyCylinder(object):
             v0 = self.basisk[cylinderId, 3:6]
             w0 = self.basisk[cylinderId, 6:]
         #~ #pdb.set_trace()
-        self.ant = x.reshape((len(x)), 1) * u0 + y.reshape(
-            (len(y)), 1) * w0 + z.reshape((len(z)), 1) * v0
+        self.ant = x.reshape((len(x)), 1) * u0 + \
+                   y.reshape((len(y)), 1) * w0 + \
+                   z.reshape((len(z)), 1) * v0
 
 
 def translate(cycle, new_origin):

@@ -7,10 +7,30 @@ import pandas as pd
 
 class Trajectory(pd.DataFrame):
     def __init__(self,t,pt,unit='s'):
-        index = pd.to_datetime(t,unit=unit)
-        pd.DataFrame.__init__(self,{'x':pt[:,0],'y':pt[:,1]},index=index)
+
+        t = pd.to_datetime(t,unit=unit)
+        #v = np.vstack((pt[1:,:]-pt[0:-1,:],np.array([np.nan,np.nan])))
+        #a = np.vstack((v[1:,:]-v[0:-1,:],np.array([np.nan,np.nan])))
+        v = pt[1:,:]-pt[0:-1,:]
+        a = v[1:,:]-v[0:-1,:]
+        d = np.sqrt(np.sum(v*v,axis=1))
+        s = np.cumsum(d)
+        #vy = self['y'][1:].values-self['y'][0:-1].values
+        pd.DataFrame.__init__(self,{'t':t[:-2],
+                                    'x':pt[:-2,0],
+                                    'y':pt[:-2,1],
+                                    'vx':v[:-1,0],
+                                    'vy':v[:-1,1],
+                                    'ax':a[:,0],
+                                    'ay':a[:,1],
+                                    's' :s[:-1]},columns=['t','x','y','vx','vy','ax','ay','s'])
+
+        N = len(t) 
+        self.tmin = t[0].second+t[0].microsecond/1e6
+        self.tmax = t[N-2].second+t[N-2].microsecond/1e6
         if np.shape(pt)[1]>2:
             self['z'] = pt[:,2]
+    
 
     def plot(self,fig=[],ax=[],Nlabels=5):
 
@@ -22,7 +42,8 @@ class Trajectory(pd.DataFrame):
         ax.plot(self['x'],self['y'])
         for k in np.linspace(0,len(self),Nlabels,endpoint=False):
             k = int(k)
-            ax.text(self['x'][k],self['y'][k],str(self.index[k].strftime("%H:%M:%S")))
+            ax.text(self['x'][k],self['y'][k],str(self['t'][k].strftime("%M:%S")))
+            ax.plot(self['x'][k],self['y'][k],'*r')
 
         plt.xlabel('x (meters')
         plt.ylabel('y (meters')
