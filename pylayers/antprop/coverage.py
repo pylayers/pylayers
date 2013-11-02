@@ -152,8 +152,10 @@ class Coverage(object):
         self.grid=np.array((list(np.broadcast(*np.ix_(x, y)))))
 
         
-    def cover(self):
+    def coverold(self):
         """ start the coverage calculation
+        
+        Deprecated : slow implementation
 
         Examples
         --------
@@ -175,7 +177,7 @@ class Coverage(object):
         self.snro = self.prdbmo - self.pndbm
         self.snrp = self.prdbmp - self.pndbm
 
-    def cover2(self):
+    def cover(self):
         """ start the coverage calculation
 
         Examples
@@ -191,7 +193,7 @@ class Coverage(object):
 
         """
         #self.Lwo,self.Lwp,self.Edo,self.Edp = Loss0_v2(self.L,self.grid,self.model.f,self.tx)
-        self.Lwo,self.Lwp = Losst(self.L,self.fGHz,self.grid.T,self.tx)
+        self.Lwo,self.Lwp,self.Edo,self.Edp = Losst(self.L,self.fGHz,self.grid.T,self.tx)
         self.freespace = PL(self.fGHz,self.grid,self.tx)
         self.prdbmo = self.ptdbm - self.freespace - self.Lwo
         self.prdbmp = self.ptdbm - self.freespace - self.Lwp
@@ -200,18 +202,19 @@ class Coverage(object):
 
 
     
-    def showEd(self,polarization='o'):
-        """ show direct path excess of delay map
+    def showEd(self,polar='o'):
+        """ shows a map of direct path excess delay 
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover()
-            >>> C.showEdo()
+            >>> C.showEd(polar='o')
         """
 
         fig = plt.figure()
@@ -221,13 +224,13 @@ class Coverage(object):
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
-        if polarization=='o':
+        if polar=='o':
             cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,
                       extent=(l,r,b,t),
                       origin='lower')
             titre = "Map of LOS excess delay, polar orthogonal"
 
-        if polarization=='p':
+        if polar=='p':
             cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,
                       extent=(l,r,b,t),
                       origin='lower')
@@ -245,7 +248,7 @@ class Coverage(object):
             plt.show()
         return fig,ax
 
-    def showPower(self,rxsens=True,nfl=True,polarization='o'):
+    def showPower(self,rxsens=True,nfl=True,polar='o'):
         """ show the map of received power
 
         Parameters
@@ -255,7 +258,7 @@ class Coverage(object):
               clip the map with rx sensitivity set in self.rxsens
         nfl : bool
               clip the map with noise floor set in self.pndbm
-        polarization : string
+        polar : string
             'o'|'p'
 
         Examples
@@ -279,9 +282,9 @@ class Coverage(object):
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
-        if polarization=='o':
+        if polar=='o':
             prdbm=self.prdbmo
-        if polarization=='p':
+        if polar=='p':
             prdbm=self.prdbmp
 
 #        tCM = plt.cm.get_cmap('jet')
@@ -350,15 +353,18 @@ class Coverage(object):
         return fig,ax
 
         
-    def showTransistionRegion(self,polarization='o'):
+    def showTransistionRegion(self,polar='o'):
         """
+
         Notes
         -----
-        See  : Analyzing the Transitional Region in Low Power Wireless Links
-                  Marco Zuniga and Bhaskar Krishnamachari
+
+        See  : "Analyzing the Transitional Region in Low Power Wireless Links"
+                Marco Zuniga and Bhaskar Krishnamachari
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -368,14 +374,17 @@ class Coverage(object):
             >>> C.showTransitionRegion()
 
         """
+
         frameLength = self.framelengthbytes
+
         PndBm = self.pndbm
         gammaU = 10*np.log10(-1.28*np.log(2*(1-0.9**(1./(8*frameLength)))))
         gammaL = 10*np.log10(-1.28*np.log(2*(1-0.1**(1./(8*frameLength)))))
+
         PrU = PndBm + gammaU
         PrL = PndBm + gammaL
 
-        fig=plt.figure()
+        fig = plt.figure()
         fig,ax = self.L.showGs(fig=fig)
 
         l = self.grid[0,0]
@@ -383,15 +392,17 @@ class Coverage(object):
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
-        if polarization=='o':
+        if polar=='o':
             prdbm=self.prdbmo
-        if polarization=='p':
+        if polar=='p':
             prdbm=self.prdbmp
 
-        zones = np.zeros(len(prdbm))
-        uconnected  = np.nonzero(prdbm>PrU)[0]
-        utransition = np.nonzero((prdbm < PrU)&(prdbm > PrL))[0]
-        udisconnected = np.nonzero(prdbm < PrL)[0]
+        zones = np.zeros(np.shape(prdbm))
+        #pdb.set_trace()
+
+        uconnected  = np.nonzero(prdbm>PrU)
+        utransition = np.nonzero((prdbm < PrU)&(prdbm > PrL))
+        udisconnected = np.nonzero(prdbm < PrL)
 
         zones[uconnected] = 1
         zones[utransition] = (prdbm[utransition]-PrL)/(PrU-PrL)
@@ -408,12 +419,13 @@ class Coverage(object):
         if self.show:
             plt.show()
 
-    def showLoss(self,polarization='o'):
+    def showLoss(self,polar='o'):
         """ show losses map
 
         Parameters
         ----------
-        polarization : string 
+
+        polar : string 
             'o'|'p'|'both'
 
         Examples
@@ -424,8 +436,8 @@ class Coverage(object):
             >>> from pylayers.antprop.coverage import *
             >>> C = Coverage()
             >>> C.cover()
-            >>> C.showLoss(polarization='o')
-            >>> C.showLoss(polarization='p')
+            >>> C.showLoss(polar='o')
+            >>> C.showLoss(polar='p')
         """
         fig = plt.figure()
         fig,ax=self.L.showGs(fig=fig)
@@ -434,12 +446,12 @@ class Coverage(object):
         b=self.grid[0,1]
         t=self.grid[-1,-1]
 
-        if polarization=='o':
+        if polar=='o':
             cov = ax.imshow(self.Lwo.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
                             origin='lower')
             title = ('Map of losses, orthogonal (V) polarization') 
-        if polarization=='p':
+        if polar=='p':
             cov = ax.imshow(self.Lwp.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
                             origin='lower')
@@ -462,10 +474,10 @@ if (__name__ == "__main__"):
     C=Coverage()
     C.cover()
     C.showPower()
-    C.showLoss(polarization='o')
-    C.showLoss(polarization='p')
-    C.showTransistionRegion(polarization='o')
-    C.showEd(polarization='o')
+    C.showLoss(polar='o')
+    C.showLoss(polar='p')
+    C.showTransistionRegion(polar='o')
+    C.showEd(polar='o')
 #    C.L.dumpr()
 #    sigar,sig=C.L.signature(C.grid[2],C.tx)
 

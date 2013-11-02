@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 #from numpy import *
 import doctest
+import logging 
 import numpy as np 
 from scipy import io
 import matplotlib.pylab as plt 
@@ -205,9 +206,9 @@ def Losst(L,fGHz,p1,p2):
         >>> S.layout('Lstruc.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
-        >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
+        >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx,Rx[1,0:2])
         >>> fig,ax = S.L.showGs()
-        >>> tit = plt.title('test Loss0_v2')
+        >>> tit = plt.title('test Losst')
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
         >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
         >>> plt.show()
@@ -227,7 +228,7 @@ def Losst(L,fGHz,p1,p2):
         Nlink = sh2[1]
     if (len(sh1)<2) & (len(sh2)<2):
         Nlink = 1
-
+    
     data = L.angleonlink2(p1,p2)
 
     # as many slabs as segments 
@@ -237,6 +238,8 @@ def Losst(L,fGHz,p1,p2):
     
     LossWallo = np.zeros((len(fGHz),Nlink))
     LossWallp = np.zeros((len(fGHz),Nlink))
+    EdWallo = np.zeros((len(fGHz),Nlink))
+    EdWallp = np.zeros((len(fGHz),Nlink))
 
     for slname in cslab:
         # u index of slabs of name slname
@@ -247,6 +250,10 @@ def Losst(L,fGHz,p1,p2):
         # calculate Loss for slab slname
         #
         lko,lkp  = L.sl[slname].losst(fGHz,data['a'][u])
+        #
+        # calculate Excess delay for slab slname
+        #
+        do , dp  = L.sl[slname].excess_grdelay(theta=data['a'][u])
         # data['i'][u] links number 
         indexu = data['i'][u]
         # reduce to involved links 
@@ -259,11 +266,17 @@ def Losst(L,fGHz,p1,p2):
         #
         Wallo = np.array(map(lambda x: np.sum(lko[:,indices[x]:indicep[x]],axis=1),irange)).T
         Wallp = np.array(map(lambda x: np.sum(lkp[:,indices[x]:indicep[x]],axis=1),irange)).T
+        
+        Edo = np.array(map(lambda x: np.sum(do[indices[x]:indicep[x]]),irange)).T
+        Edp = np.array(map(lambda x: np.sum(dp[indices[x]:indicep[x]]),irange)).T
 
         LossWallo[:,involved_links] = LossWallo[:,involved_links] + Wallo
         LossWallp[:,involved_links] = LossWallp[:,involved_links] + Wallp
 
-    return(LossWallo,LossWallp)
+        EdWallo[:,involved_links] = EdWallo[:,involved_links] + Edo
+        EdWallp[:,involved_links] = EdWallp[:,involved_links] + Edp
+
+    return(LossWallo,LossWallp,EdWallo,EdWallp)
 #    i = 0
 #    for k in seglist:
 #        if k != 0:
@@ -320,6 +333,14 @@ def Loss0_v2(L,Pts,fGHz,p):
            frequency 
     p  : point
         source points
+    
+    Returns
+    -------
+    
+    Lwo : Losses in wall polarization o
+    Lwp : Losses in wall polarization p
+    Edo :  polarization o
+    Edp :  polarization p
 
     Examples
     --------
@@ -332,7 +353,7 @@ def Loss0_v2(L,Pts,fGHz,p):
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.multiwall import *
         >>> S = Simul()
-        >>> S.layout('Lstruc.str','matDB.ini','slabDB.ini')
+        >>> S.layout('Lstruc.ini','matDB.ini','slabDB.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
         >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
@@ -341,8 +362,16 @@ def Loss0_v2(L,Pts,fGHz,p):
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
         >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
         >>> plt.show()
+       
+    Notes
+    -----
+
+    DEPRECATED : Use losst instead 
 
     """
+
+    logging.warning('DEPRECATED function')     
+
     N   = np.shape(Pts)[0]
     Lwo = np.array([])
     Lwp = np.array([])

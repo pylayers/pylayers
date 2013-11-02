@@ -1,4 +1,3 @@
-from pylayers.coverage import *
 import time
 from pylayers.util.project import *
 import pylayers.util.pyutil as pyu

@@ -43,9 +43,9 @@ class PLSmodel(object):
         self.f  = f
         self.d0  = d0
         self.rssnp  = rssnp
-        self.sigrss=sigrss
+        self.sigrss = sigrss
         self.getPL0()
-        self.method=method
+        self.method = method
         self.param = dict(f=self.f,
                       d0=self.d0,
                       rssnp=self.rssnp,
@@ -60,11 +60,6 @@ class PLSmodel(object):
         st = st +  'PL0 (dB): '+str(self.PL0)
         return(st)
 
-    def info(self):
-        print 'frequency (f in GHz) : ',self.f
-        print 'path loss exponent (n) : ',self.rssnp
-        print 'PL0 : ',self.PL0
-
     def getPL0(self,Gt=0,Gr=0):
         """ get Path Loss at reference distance d0
 
@@ -72,19 +67,24 @@ class PLSmodel(object):
         ----------
         
         PL0_c : PL0 compute
-        f  : frequency GHz
         Gt : transmitting antenna gain dB (default 0 dB) 
         Gr : receiving antenna gain dB (default 0 dB) 
 
+        Examples
+        --------
+            >>> from pylayers.network.model import *   
+            >>> plm = PLSmodel()
+            >>> plm.getPL0()
+
         """
+
         Gt  = 10**(Gt/10.)
         Gr  = 10**(Gr/10.)
         ld  = 0.3/self.f
+
         self.PL0 = -20*np.log10(ld/(4.0*np.pi*self.d0)) 
 
     
-
-
     def OneSlope(self,r):
         """
         OneSlope model : give Power Level from distance  with OneSlope method
@@ -93,6 +93,12 @@ class PLSmodel(object):
         ----------
 
         r : range (meters)
+
+        Returns
+        -------
+    
+        PL : 
+            path loss values
 
         """
         try:
@@ -105,14 +111,17 @@ class PLSmodel(object):
     def iOneSlope(self,PL):
         """ goes from PL to estimated distance
 
+        inverse OneSlope model : give distance from Power Level with OneSlope method
+
         Parameters
         ----------
 
-        PL 
-        inverse OneSlope model : give distance from Power Level with OneSlope method
+        PL : 
+            path loss in dB 
 
-        f : frequency  GHz
-        n : path loss exponent
+        Returns
+        -------
+
         r : range array 
 
         """
@@ -122,11 +131,11 @@ class PLSmodel(object):
         except: 
             self.getPL0()
             r = 10**((PL-self.PL0)/(10*self.rssnp))
+
         return(r)
 
     def getPLmean(self, d):
-        """
-            Compute PL mean
+        """ compute PL mean
 
         Notes
         -----

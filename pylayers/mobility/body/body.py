@@ -392,7 +392,8 @@ class BodyCylinder(object):
         ax.autoscale(enable=True)
         return(fig,ax)
                     
-    def show3(self,iframe=0,topos=True,tag=''): 
+    #def show3(self,iframe=0,topos=True,tag=''): 
+    def show3(self,**kwargs): 
         """ create geomfile for frame iframe 
 
         Parameters
@@ -401,73 +402,161 @@ class BodyCylinder(object):
         iframe : int 
             frame number (useless if topos == True)
         topos : boolean 
-            if True show the current body topos
+            if True shows the current body topos
         tag : aditional string for naming file .off (useless if topos==False)
 
         """
-        self.geomfile(iframe=0,topos=topos,tag=tag)
-        bdy = geu.Geomlist('body'+str(iframe))
+
+        defaults = { 'iframe': 0,
+                    'verbose':False,
+                    'topos':False,
+                    'tag':'',
+                    'wire':False,
+                    'ccs':False,
+                    'lccs':[],
+                    'ccsa':False,
+                    'struc':False,
+                    'filestruc':'DLR.off'
+                  }
+
+        for key, value in defaults.items(): 
+            if key not in kwargs: 
+                kwargs[key] = value
+
+        bdy = self.geomfile(**kwargs)
         bdy.show3()
 
-    def geomfile(self,iframe=0,verbose=False,topos=False,tag=''):
+    #def geomfile(self,iframe=0,verbose=False,topos=False,tag=''):
+    def geomfile(self,**kwargs):
         """ create a geomview file from a body configuration 
 
         Parameters
         ----------
 
         iframe : int 
+            frame id (useless if topos==True)
         verbose : boolean
         topos : boolean 
+            frame id or topos
+        wire : boolean 
+            body as a wire or cylinder
+        ccs : boolean
+            display cylinder coordinate system
+        cacs : boolean
+            display cylinder antenna coordinate system
+        acs : boolean
+            display antenna coordinate system
+        struc : boolean
+            displat structure layout
         tag : string 
+        filestruc : string
+            name of the Layout 
 
         Notes
         -----
 
+        This function creates either a 3d representation of the frame iframe
+        or if topos==True a representation of the current topos. 
+
 
 
         """
-        cyl = geu.Geomoff('cylinder')
-        pt = cyl.loadpt()
-        if not topos:
-            _filebody = str(iframe).zfill(4)+'body.list'
+
+        defaults = { 'iframe': 0,
+                    'verbose':False,
+                    'topos':False,
+                    'tag':'',
+                    'wire': False,
+                    'ccs': False,
+                    'lccs': [],
+                    'ccsa': False,
+                    'lccsa': [],
+                    'struc':False,
+                    'filestruc':'DLR.off'
+
+                  }
+
+        for key, value in defaults.items(): 
+            if key not in kwargs: 
+                kwargs[key] = value
+
+        if kwargs['lccs']==[]:
+            lccs = np.arange(11)
+        else:
+            lccs = kwargs['lccs']
+
+        if not kwargs['wire']:
+            cyl = geu.Geomoff('cylinder')
+            pt = cyl.loadpt()
+
+        if not kwargs['topos']:
+            _filebody = str(iframe).zfill(4)+'body'
         else:    
-            _filebody = tag+'-body.list'
-        filebody = pyu.getlong(_filebody,"geom")
-        #
-        # To be change : The defauly layout is DLR.off
-        # 
-        filestruc = pyu.getlong('DLR.off',"geom")
-        fo = open(filebody,"w")
-        fo.write("LIST\n")
-        fo.write('{<'+filestruc+'}\n')
-        if verbose:
+            if kwargs['tag']<>'':
+                _filebody = kwargs['tag']+'-body'
+            else:
+                _filebody = 'body'
+
+        bodylist = geu.Geomlist(_filebody)
+        filestruc = pyu.getlong(kwargs['filestruc'],"geom")
+
+        bodylist.append("LIST\n")
+
+        # add layout 
+        if kwargs['struc']:
+            bodylist.append('{<'+filestruc+'}\n')
+        if kwargs['verbose']:
             print ("LIST\n")
+        
+        dbody = {}
         for k,e in enumerate(self.g.edges()):
             e0 = e[0]
             e1 = e[1]
-            if not topos:
+            if not kwargs['topos']:
                 pA = self.d[:,e0,iframe].reshape(3,1)
                 pB = self.d[:,e1,iframe].reshape(3,1)
             else:    
                 pA = self.topos[:,e0].reshape(3,1)
                 pB = self.topos[:,e1].reshape(3,1)
             pM = (pA+pB)/2.
-            T = geu.onbfromaxe(pA,pB)
-            R = self.g[e0][e1]['radius']
-            Y = np.hstack((pM,pA,pB,pM+R*T[0,:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[0,:,0].reshape(3,1)))
-            A,B = geu.cylmap(Y)
-            ptn = np.dot(A,pt.T)+B
-            if not topos:
-                _filename = 'edge'+str(k)+'-'+str(iframe)+'.off'
-            else:
-                _filename = tag+'-edge'+str(k)+'.off'
-            filename = pyu.getlong(_filename,"geom")
-            cyl.savept(ptn.T,_filename)
-            fo.write('{<'+filename+'}\n')
-            if verbose:
-                print('{<'+filename+'}\n')
-        fo.close()
+            Rcyl = self.g[e0][e1]['radius']
 
+            if kwargs['wire']:
+                dbody[k]=(pA,pB)
+            else:
+                # affine transformation of cylinder 
+                T = geu.onbfromaxe(pA,pB)
+                Y = np.hstack((pM,pA,pB,pM+Rcyl*T[0,:,0].reshape(3,1),
+                                        pM+Rcyl*T[0,:,1].reshape(3,1),
+                                        pB+Rcyl*T[0,:,0].reshape(3,1)))
+                # idem geu.affine for a specific cylinder
+                A,B = geu.cylmap(Y)
+                ptn = np.dot(A,pt.T)+B
+                if not kwargs['topos']:
+                    _filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
+                else:
+                    _filename = kwargs['tag']+'-edge'+str(k)+'.off'
+
+                filename = pyu.getlong(_filename,"geom")
+                cyl.savept(ptn.T,_filename)
+                bodylist.append('{<'+filename+'}\n')
+                if kwargs['verbose']:
+                    print('{<'+filename+'}\n')
+            # display selected cylinder coordinate system       
+            if kwargs['ccs']:
+                if k in lccs:
+                    filename = kwargs['tag']+'ccs'+str(k)
+                    geov = geu.GeomVect(filename)
+                    pt = pA[:,0]+Rcyl*self.basis0[k,:,1]
+                    geov.geomBase(self.basis0[k,:,:],pt=pt,scale=0.1)
+                    bodylist.append('{<'+filename+'.vect'+"}\n")
+        # wireframe body             
+        if kwargs['wire']:
+            bodygv = geu.GeomVect('bodywire')
+            bodygv.segments(dbody,i2d=False,linewidth=5)
+            bodylist.append('{<bodywire.vect}\n')
+
+        return(bodylist)    
 
 
     def updbasis0(self,frameId=0,topos=True):

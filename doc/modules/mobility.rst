@@ -4,10 +4,14 @@
 mobility
 ========
 
+
+.. module:: pylayers.mobility
+
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     mobility.agent.rst
+    mobility.trajectory.rst
     mobility.transit.path.rst
     mobility.transit.person3.rst
     mobility.transit.stateprocess.rst

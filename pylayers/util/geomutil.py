@@ -1303,13 +1303,11 @@ def affine(X,Y):
     return(A,B)
 
 def cylmap(Y):
-    """ find affine transformation 
+    """ find affine transformation for a specific cylinder
 
     Parameters
     ----------
 
-    X  : np.array
-        3xN
     Y
         3xN
 

@@ -23,6 +23,9 @@ from   pylayers.network.model import PLSmodel
 import networkx as nx
 
 class Localization(object):
+    """
+
+    """
 
     def __init__(self,**args):
 

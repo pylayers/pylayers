@@ -33,7 +33,7 @@ import pylayers.util.project
 import pylayers.antprop.slab
 
 from pylayers.gis.layout import Layout
-from pylayers.antprop.multiwall import *
+import pylayers.antprop.multiwall as mw
 from pylayers.util.project import *
 from pylayers.network.model import PLSmodel
 
@@ -43,24 +43,22 @@ import pdb
 
 class EMSolver(object):
     """ Invoque an electromagnetic solver
+
     """
 
     def __init__(self,L=Layout()):
-
-        self.config     = ConfigParser.ConfigParser()
-        self.fileini='EMSolver.ini'
+        self.config  = ConfigParser.ConfigParser()
+        self.fileini ='EMSolver.ini'
         self.config.read(pyu.getlong(self.fileini,pstruc['DIRSIMUL']))
         self.ems_opt = dict(self.config.items('EMS_config'))
         self.toa_opt = dict(self.config.items('TOA'))
 
-
-
         self.EMS_method = self.ems_opt['method']
-        self.sigmaTOA      = float(self.toa_opt['sigmatoa']) # meters !!!!!!
+        self.sigmaTOA = float(self.toa_opt['sigmatoa']) # meters !!!!!!
 
-        self.model={}
+        self.model = {}
 
-        self.L=L
+        self.L = L
 
 
     def save_model(self,RAT,model):
@@ -69,9 +67,10 @@ class EMSolver(object):
         Parameters
         ----------
 
-        RAT :
-
-        model :
+        RAT : string 
+            RAT name 
+        model : dictionnary
+            
             
         """
         fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
@@ -94,11 +93,15 @@ class EMSolver(object):
         Parameters
         ----------
 
-        RAT  : 
+        RAT  : string 
+            RAT name 
 
 
         """
+
         ratopt = dict(self.config.items(RAT+'_PLM'))
+        
+        # Path Loss Shadowing model 
         self.model[RAT] = PLSmodel(f = eval(ratopt['f']),
                                    rssnp = eval(ratopt['rssnp']),
                                    d0 = eval(ratopt['d0']),
@@ -106,13 +109,14 @@ class EMSolver(object):
                                    method = ratopt['method'])
 
 
-
-
     def solve(self,p,e,LDP,RAT,epwr,sens):
         """compute and return a LDP value thanks to a given method
 
         Parameters
         ----------
+        
+        p 
+        e 
 
         n1p : np.array
             node 1 position
@@ -121,6 +125,7 @@ class EMSolver(object):
         LDP : string
             Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
         epwr : list of nodes emmited power
+        sens : list of nodes sensitivity
                 
         Returns
         -------
@@ -133,16 +138,17 @@ class EMSolver(object):
                                 * A received power in dBm for LDP ='Pr'
 
         """
+
         try:
             model= self.model[RAT]
         except:
             try:
                 self.load_model(RAT)
-                model=self.model[RAT]
+                model = self.model[RAT]
             except:
-                self.model[RAT]=PLSmodel()
+                self.model[RAT] = PLSmodel()
                 self.save_model(RAT,self.model[RAT])
-                model=self.model[RAT]
+                model = self.model[RAT]
 
 
 #        if self.EMS_method == 'direct':
@@ -175,34 +181,34 @@ class EMSolver(object):
             dd={} # distance dictionnary
             if len(e) > 0:
 
-                lp=np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
-                d=np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
-                slp=np.shape(lp)[1]
+                lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
+                d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
+                slp = np.shape(lp)[1]
 
 
 
-
+                # evaluation of all LDPs
                 if LDP=='all':
-
                     pa = np.vstack(p.values())
                     lpa = len(pa)
-                    Pr=[]
-                    TOA=[]
-                    lsens=np.array(())
-                    loss=np.array(())
-                    frees=np.array(())
-                    lepwr=np.array(())
-                    for i in range(lpa-1):
+                    Pr = []
+                    TOA = []
+                    lsens = np.array(())
+                    loss = np.array(())
+                    frees = np.array(())
+                    lepwr = np.array(())
 
+                    for i in range(lpa-1):
                         # excess time of flight + losses computation
-                        MW=Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) 
+                        MW = mw.Losst(self.L,model.f,pa[i+1:lpa].T,pa[i]) 
+                        #MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) 
                         # loss free space
-                        frees=np.hstack((frees,PL(pa[i+1:lpa],model.f,pa[i],model.rssnp) ))
+                        frees=np.hstack((frees,mw.PL(model.f,pa[i+1:lpa],pa[i],model.rssnp) ))
 #                        Pr.extend(lepwr - MW[0] - frees)
                         # save losses computation 
-                        loss=np.hstack((loss,MW[0]))
+                        loss = np.hstack((loss,MW[0][0]))
                         # save excess tof computation 
-                        TOA=np.hstack((TOA,MW[2]))
+                        TOA  = np.hstack((TOA,MW[2][0]))
 
                     # emmited power for the first nodes of computed edges 
                     lepwr1 = [epwr[i[0]][RAT] for i in e]
@@ -210,8 +216,8 @@ class EMSolver(object):
                     Pr = lepwr1 - loss - frees
                     # concatenate reverse link
                     Pr = np.hstack((Pr, lepwr2 - loss - frees))
-                    P=np.outer(Pr,[1,1])
-                    P[:,1]=model.sigrss
+                    P = np.outer(Pr,[1,1])
+                    P[:,1] = model.sigrss
                     lsens = [sens[i[0]][RAT] for i in e] + [sens[i[1]][RAT] for i in e]
                     # visibility or not 
                     v = P[:,0] > lsens

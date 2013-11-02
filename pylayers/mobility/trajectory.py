@@ -33,6 +33,16 @@ class Trajectory(pd.DataFrame):
     
 
     def plot(self,fig=[],ax=[],Nlabels=5):
+        """ plot trajectory
+
+        Parameters
+        ----------
+
+        fig 
+        ax 
+        Nlabels : int 
+
+        """
 
         if fig==[]:
             fig = plt.gcf()

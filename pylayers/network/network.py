@@ -917,7 +917,7 @@ class Network(nx.MultiDiGraph):
         """
         save node positions into csv file
 
-        PArameters 
+        Parameters 
         ----------
         
         filename : string 

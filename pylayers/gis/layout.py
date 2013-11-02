@@ -1716,12 +1716,16 @@ class Layout(object):
 
         Parameters
         ----------
-        p is a (1x2) tuple
 
-        >>> from pylayers.gis.layout import *
-        >>> L = Layout('example.str')
-        >>> L.add_fnod((10.0,10.0))
-        -9
+        p :  (1x2) tuple
+
+        Example
+        -------
+
+            >>> from pylayers.gis.layout import *
+            >>> L = Layout('example.str')
+            >>> L.add_fnod((10.0,10.0))
+            -9
 
 
         """
@@ -1775,6 +1779,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         ns  : int
             segment number
         alpha : parameterization of the point

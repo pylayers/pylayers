@@ -311,12 +311,12 @@ class Interface(object):
              >>> lmat  = [mat['AIR'],mat['WOOD']]
              >>> II    = MatInterface(lmat,0,fGHz,theta)
              >>> II.RT()
-             >>> fig,ax = II.plotwrt('a',kv=10,types=['m'])
+             >>> fig,ax = II.plotwrt(var='a',kv=10,types=['m'])
              >>> air = mat['AIR']
              >>> brick  = mat['BRICK']
              >>> II  = MatInterface([air,brick],0,fGHz,theta)
              >>> II.RT()
-             >>> fig,ax = II.plotwrt('f',color='k',types=['m'])
+             >>> fig,ax = II.plotwrt(var='f',color='k',types=['m'])
              >>> plt.show()
 
 
@@ -1165,7 +1165,7 @@ class Slab(dict, Interface):
             >>> theta = np.arange(0,np.pi/2,0.01)
             >>> fGHz = np.array([57.5])
             >>> sl['placo'].ev(fGHz,theta)
-            >>> fig,ax=sl['placo'].plotwrt(axis=1,types=['m'])
+            >>> fig,ax=sl['placo'].plotwrt(var='a',types=['m'])
             >>> plt.show()
 
         """
@@ -1237,6 +1237,7 @@ class Slab(dict, Interface):
 
         Parameters
         ----------
+
         fGHz  : frequency GHz ( np.array([1.0]) )
         theta : np.array
             incidence angle (from normal) radians
@@ -1252,12 +1253,12 @@ class Slab(dict, Interface):
 
         nf = len(fGHz)
         nt = len(theta)
-        thetai = theta[0]
-        thetaf = theta[-1]
+        #thetai = theta[0]
+        #thetaf = theta[-1]
         ### WARNING thetas can be NOT sorted. 
         ### thetai should be min(theta)
         ### thetaf should be max(theta)
-        th1  = np.linspace(thetai,thetaf,nt)
+        #th1  = np.linspace(thetai,thetaf,nt)
 
         metalic = False
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
@@ -1402,30 +1403,57 @@ class Slab(dict, Interface):
         wout = Wafeform()
         return(wout)
 
-    def excess_grdelay(self,fGHz=np.arange(2.4,4.0,0.1),theta=0):
+    def excess_grdelay(self,fGHz=np.arange(2.4,4.0,0.1),theta=np.array([0])):
         """ calculate transmission excess delay in ns
 
-        >>> from pylayers.antprop.slab import *
-        >>> from matplotlib.pylab import *
-        >>> import numpy as np 
-        >>> sl = SlabDB('matDB.ini','slabDB.ini')
-        >>> s1 = sl['PARTITION']
-        >>> fGHz = np.arange(3.1,10.6,0.1)
-        >>> delayo,delayp = s1.excess_grdelay(fGHz,0)
-        >>> lineo = plt.plot(fGHz[0:-1],delayo)
-        >>> linep = plt.plot(fGHz[0:-1],delayp)
-        >>> plt.show()
+        Parameters
+        ----------
+
+        fGHz : array
+            default arange(2.4,4,0.1)
+        theta : default 0 
+
+        Returns
+        -------
+        
+        delayo : excess delay polarization o
+        delayp : excess delay polarization p
+
+
+        Examples
+        --------
+
+            >>> from pylayers.antprop.slab import *
+            >>> from matplotlib.pylab import *
+            >>> import numpy as np 
+            >>> sl = SlabDB('matDB.ini','slabDB.ini')
+            >>> s1 = sl['PARTITION']
+            >>> fGHz = np.arange(3.1,10.6,0.1)
+            >>> delayo,delayp = s1.excess_grdelay(fGHz,0)
+            >>> lineo = plt.plot(fGHz[0:-1],delayo)
+            >>> linep = plt.plot(fGHz[0:-1],delayp)
+            >>> plt.show()
 
         """
+        
+        assert len(fGHz)>2 , "fGHz too short needs more than one frequency point"
+
         df = fGHz[1]-fGHz[0]
-        self.ev(fGHz,theta=np.array([theta]),compensate=True)
+
+        self.ev(fGHz,theta=theta,compensate=True)
+        
+        # f x th x p x q 
         T   = self.T
-        To  = T[:,0,0,0]
-        Tp  = T[:,0,1,1]
-        ao  = np.unwrap(np.angle(To))
-        ap  = np.unwrap(np.angle(Tp))
-        delayo = np.diff(ao)/(2*np.pi*df)
-        delayp = np.diff(ap)/(2*np.pi*df)
+
+        To  = T[:,:,0,0]
+        Tp  = T[:,:,1,1]
+
+        ao  = np.unwrap(np.angle(To),axis=0)
+        ap  = np.unwrap(np.angle(Tp),axis=0)
+
+        delayo = -np.mean(np.diff(ao,axis=0)/(2*np.pi*df),axis=0)
+        delayp = -np.mean(np.diff(ap,axis=0)/(2*np.pi*df),axis=0)
+
         return (delayo,delayp)
 
     def tocolor(self, fGHz=np.array([2.4])):
@@ -1564,6 +1592,7 @@ class Slab(dict, Interface):
 
         Parameters
         ----------
+        
         fGHz : float
         theta : np.array
         dtype :
@@ -1571,10 +1600,12 @@ class Slab(dict, Interface):
             {'modulus'}
         dB  : boolean
             False
+
         """
         self.ev(fGHz, theta)
         if self['evaluated']:
-            fig,ax=self.M.plotwrt(axis=1,types=['l20'])
+            fig,ax=self.M.plotwrt(var='a',types=['l20'])
+
         return fig,ax
 
 class SlabDB(dict):
@@ -1700,7 +1731,7 @@ class SlabDB(dict):
         """
         slab = self[name]
         slab.ev(fGHz=fGHz)
-        fig,ax = slab.M.plotwrt(axis=1)
+        fig,ax = slab.M.plotwrt(var='a')
         return fig,ax
 
     def add(self, name, lname, lthick, color='black'):
@@ -1744,10 +1775,10 @@ class SlabDB(dict):
                 0.0029,0.0102,0.0029])
             theta = np.linspace(20,60,100)*np.pi/180
             sl['ConcreteJc'].ev(120,theta)
-            sl['ConcreteJc'].plotwrt(axis=1,types=['l20'])
+            sl['ConcreteJc'].plotwrt(var='a',types=['l20'])
             fig = plt.figure()
             sl['DoubleGlass'].ev(120,theta)
-            sl['DoubleGlass'].plotwrt(axis=1,types=['l20'])
+            sl['DoubleGlass'].plotwrt(var='a',types=['l20'])
             freq = np.linspace(110,135,50)
             fig = plt.figure()
             sl['DoubleGlass'].ev(freq,theta)
