@@ -236,9 +236,8 @@ class SelectL(object):
         if self.state == 'SSS':
             nse = self.selected_edge1
             segdico = self.L.Gs.node[nse]
-            zmin    = segdico['ss_zmin']
-            zmax    = segdico['ss_zmax']
-            ax.title.set_text('SSS : '+self.L.Gs.node[nse]['name']+' ['+str(zmin)+','+str(zmax)+']')
+            z  = segdico['ss_z']
+            ax.title.set_text('SSS : '+self.L.Gs.node[nse]['name']+' ['+str(z[0])+']')
             self.segment[0].set_color('blue')
         #
         # Create Point state
