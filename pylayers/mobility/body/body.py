@@ -46,7 +46,7 @@ def dist(A, B):
     return d
 
 
-class BodyCylinder(object):
+class Body(object):
     """ Class to manage the Body model 
     """
 
@@ -147,7 +147,11 @@ class BodyCylinder(object):
         self.pg = np.sum(self.d,axis=1)/self.npoints
         self.pg[2,:] = 0
         self.d = self.d - self.pg[:,np.newaxis,:]
-
+        # speed vector of the gravity centernp. 
+        self.vg = self.pg[:,1:]-self.pg[:,0:-1] 
+        # duplicate last spped vector for size homogeneity  
+        #self.vg = np.hstack((self.vg,self.vg[:,-1]))
+        self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
 
     def posvel(self,traj,tk,Tstep):
         """ position and velocity
@@ -166,9 +170,9 @@ class BodyCylinder(object):
         
         kf 
         kt 
-        vsn
-        wsn 
-        vtn 
+        vsn : normalized speed vector along motion capture trajectory 
+        wsn :  
+        vtn : normalized speed vector along motion trajectory 
         wtn 
 
         """
@@ -219,7 +223,7 @@ class BodyCylinder(object):
         >>> x = v*time
         >>> y = np.zeros(len(time))
         >>> traj = np.vstack((time.T,x.T,y.T))
-        >>> bc = BodyCylinder()
+        >>> bc = Body()
         >>> bc.loadC3D(filename='07_01.c3d')
         >>> bc.center()
         >>> bc.settopos(traj,2.3,2)
@@ -267,6 +271,7 @@ class BodyCylinder(object):
 
         self.toposFrameId = kf 
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
         
     
     def loadC3D(self, filename='07_01.c3d', nframes=126 ,unit='cm'):
@@ -338,7 +343,7 @@ class BodyCylinder(object):
         See Also
         --------
 
-        BodyCylinder.geomfile
+        Body.geomfile
 
         """
 
@@ -525,7 +530,7 @@ class BodyCylinder(object):
                 dbody[k]=(pA,pB)
             else:
                 # affine transformation of cylinder 
-                T = geu.onbfromaxe(pA,pB)
+                T = geu.onb(pA,pB,v)
                 Y = np.hstack((pM,pA,pB,pM+Rcyl*T[0,:,0].reshape(3,1),
                                         pM+Rcyl*T[0,:,1].reshape(3,1),
                                         pB+Rcyl*T[0,:,0].reshape(3,1)))
@@ -594,11 +599,13 @@ class BodyCylinder(object):
             if not topos:
                 pA = self.d[:,e0,iframe].reshape(3,1)
                 pB = self.d[:,e1,iframe].reshape(3,1)
+                vg = self.vg[:,iframe]
             else:    
                 pA = self.topos[:,e0].reshape(3,1)
                 pB = self.topos[:,e1].reshape(3,1)
+                vg = self.vtopos
             pM = (pA+pB)/2.
-            T = geu.onbfromaxe(pA,pB)
+            T = geu.onb(pA,pB,vg)
             self.basis0[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
@@ -774,7 +781,7 @@ if __name__ == '__main__':
     doctest.testmod()
 
 #    nframes = 126
-#    Bc = BodyCylinder()
+#    Bc = Body()
 #    Bc.loadC3D()
 #    c10_1t = Bc.d
 #    #nx.draw(B.g)

@@ -856,8 +856,8 @@ def pvecn(v1, v2):
         print("error divide by zero in pvecn")
     return(v4)
 
-def onbfromaxe(A, B):
-    """ orthonormal basis from 2 points defining an axe
+def onb(A,B,v):
+    """ orthonormal basis from 2 points defining an axe and a vector 
 
     Parameters
     ----------
@@ -865,6 +865,8 @@ def onbfromaxe(A, B):
     A : np.array 
         3 x n
     B : np.array
+        3 x n 
+    v : np.array
         3 x n 
 
     Returns
@@ -881,22 +883,23 @@ def onbfromaxe(A, B):
 
     >>> A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
     >>> B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
-    >>> onbfromaxe(A,B)
-    array([[[ 0.79158384, -0.61106057,  0.        ],
-            [ 0.61106057,  0.79158384,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]],
+    >>> v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])
+    >>> onb(A,B,v)
+    array([[[ 1., 0.,  0. ],
+            [ 0., 1.,  0. ],
+            [ 0., 0.,  1. ]]
     <BLANKLINE>
-           [[ 0.74214568, -0.67023861,  0.        ],
-            [ 0.67023861,  0.74214568,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]],
+           [[ 1., 0.,  0. ],
+            [ 0., 1.,  0. ],
+            [ 0., 0.,  1. ]],
     <BLANKLINE>
-           [[ 0.80923784, -0.58748116,  0.        ],
-            [ 0.58748116,  0.80923784,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]],
+           [[ 1., 0.,  0. ],
+            [ 0., 1.,  0. ],
+            [ 0., 0.,  1. ]],
     <BLANKLINE>
-           [[ 0.52138786, -0.85331981,  0.        ],
-            [ 0.85331981,  0.52138786,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]]])
+           [[ 1., 0.,  0. ],
+            [ 0., 1.,  0. ],
+            [ 0., 0.,  1. ]]])
 
 
     see also
@@ -906,19 +909,20 @@ def onbfromaxe(A, B):
     pylayers.util.mobility.body
 
     """
-    np.random.seed(0)
+    #np.random.seed(0)
     N = np.shape(A)[1] 
     # modab 1xN
     modab = np.sqrt(np.sum((B-A)*(B-A),axis=0))
     # wn 3xN
     wn = (B - A) / modab
-    random_vector = np.random.rand(3,N)
-    u = random_vector - np.sum(random_vector*wn,axis=0)*wn
+    #random_vector = np.random.rand(3,N)
+    u = v - np.sum(v*wn,axis=0)*wn
     modu = np.sqrt(np.sum(u*u,axis=0))
     # un : 3xN
     un = u /modu 
     # vn : 3xN
     vn = np.cross(wn,un,axis=0)
+    #pdb.set_trace()
     T  = np.dstack((un,vn,wn))
     # reshape dimension for having index of cylinder axe first
     # N x 3 x 3
