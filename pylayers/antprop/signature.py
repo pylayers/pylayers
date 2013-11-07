@@ -1224,7 +1224,9 @@ class Signatures(dict):
         i : list or -1 (default = all groups)
             list of interaction group numbers 
         s : list or -1 (default = all sig) 
-            list of indices of ray in interaction group 
+            list of indices of signature in interaction group 
+        ctx : cycle of tx (optional)
+        crx : cycle of rx (optional)
         graph : type of graph to be displayed
 
 
