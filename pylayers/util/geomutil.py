@@ -97,8 +97,6 @@ class Geomview(object):
     def __init__(self, _filename):
         filename = pyu.getlong(_filename, "geom")
         self.filename = filename
-        fd = open(self.filename,'w')
-        fd.close()           
 
     def show3(self):
         """
@@ -188,17 +186,14 @@ class GeomVect(Geomview):
 
     def segments(self, ds, i2d=True, linewidth=2):
         """
-
         Parameters
         ----------
-
         ds   : dictionnary
             len ds
         i2d  : boolean (defaut True)
             2d indicator
         linewidth : float
             default 2
-
         """
         fo = open(self.filename, "w")
         fo.write("appearance { linewidth %d }\n" % linewidth)
@@ -222,8 +217,8 @@ class GeomVect(Geomview):
                 fo.write("%6.3f %6.3f %6.3f\n" % (phe[0], phe[1], phe[2]))
         fo.close()
 
-    def geomBase(self, M, pt=np.array([0., 0., 0.]), col=np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]]),
-                 linewidth=3,scale=1):
+    def geomBase(self, M, pt=np.array([0., 0., 0.]),
+                 col=np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]]), linewidth=3):
         """ Construct a geomview vect file for vizualisation of a frame
             by default the geomview filename is base0.vect
 
@@ -252,7 +247,6 @@ class GeomVect(Geomview):
         >>> #gv.show3()
 
         """
-        M = M * scale
         fo = open(self.filename, "w")
         fo.write("appearance { linewidth %d }\n" % linewidth)
         fo.write("VECT\n")
@@ -260,7 +254,7 @@ class GeomVect(Geomview):
         fo.write("2 2 2\n")   # 2 points per lines
         fo.write("1 1 1\n")   # 1 color per line
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0], pt[1], pt[2]))
-        fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 0], pt[1] + 
+        fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 0], pt[1] +
                                           M[1, 0], pt[2] + M[2, 0]))
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0], pt[1], pt[2]))
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 1], pt[1] +
@@ -1303,11 +1297,13 @@ def affine(X,Y):
     return(A,B)
 
 def cylmap(Y):
-    """ find affine transformation for a specific cylinder
+    """ find affine transformation 
 
     Parameters
     ----------
 
+    X  : np.array
+        3xN
     Y
         3xN
 

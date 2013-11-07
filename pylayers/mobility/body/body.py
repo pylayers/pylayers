@@ -2,7 +2,6 @@ import numpy as np
 import scipy.stats as sp
 
 from pylayers.mobility.body import c3d
-from pylayers.mobility import trajectory 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
@@ -13,7 +12,7 @@ import pylayers.util.geomutil as geu
 import doctest
 
 def ChangeBasis(u0, v0, w0, v1):
-    """ 
+    """
 
     Parameters
     ----------
@@ -116,7 +115,7 @@ class BodyCylinder(object):
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
         if 'nframes' in dir(self):    
-            st = st +'nframes : ' + str(self.nframes) +'\n'
+            st = st +'nframes :' + str(self.nframes) +'\n'
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
         if 'topos' in dir(self):
@@ -126,7 +125,7 @@ class BodyCylinder(object):
         return(st)    
 
     def center(self):
-        """ centering the body 
+        """ centering body 
 
         Returns
         -------
@@ -142,8 +141,8 @@ class BodyCylinder(object):
         plane 0xy is calculated
 
         """
-        # self.d  : 3 x 16 x Nf
-        # self.pg : 3 x Nf
+        # self.d  : 3x16xNf
+        # self.pg : 3xNf
         self.pg = np.sum(self.d,axis=1)/self.npoints
         self.pg[2,:] = 0
         self.d = self.d - self.pg[:,np.newaxis,:]
@@ -155,7 +154,7 @@ class BodyCylinder(object):
         Parameters
         ----------
 
-        traj : Tajectory DataFrame 
+        traj : ndarray
             nx3
         tk : float 
             time for evaluation of topos
@@ -172,11 +171,9 @@ class BodyCylinder(object):
         wtn 
 
         """
-        # tk should be in the trajectory time range
-        assert ((tk>traj.tmin) & (tk<traj.tmax)),'posvel: tk not in trajectory time range'
 
         tf = Tstep/(1.0*self.nframes) # frame sampling period  
-        kt = int(np.floor(tk/tf))
+        kt = int(np.floor(tk))
         kf = int(np.floor(np.mod(tk,Tstep)/tf))
         # self.pg : 3 x Nframes 
         # traj : Nptraj x 3 (t,x,y)
@@ -189,8 +186,7 @@ class BodyCylinder(object):
         #
         # vt : speed vector along trajectory 
         #
-        #vt = traj[kt+1,1:] - traj[kt,1:]
-        vt  = np.array([traj['vx'][kt],traj['vy'][kt]])
+        vt = traj[kt+1,1:] - traj[kt,1:]
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
         
@@ -205,8 +201,7 @@ class BodyCylinder(object):
         traj : ndarray (3,N)
             t,x,y
         tk : float 
-            time for evaluation of topos (seconds) this value should be in the
-            range of the trajectory timestamp
+            time for evaluation of topos (seconds)
         Tstep : float 
            duration of the periodic motion sequence (seconds)
 
@@ -229,14 +224,7 @@ class BodyCylinder(object):
 
         topos is the current spatial global position of a body configuration.
 
-
-        See Also 
-        --------
-
-        pylayers.util.geomutil.affine
-
         """
-
         #
         #
         # psa : origin source
@@ -251,7 +239,7 @@ class BodyCylinder(object):
         psb = psa + vsn
         psc = psa + wsn
 
-        pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
+        pta = traj[kt,1:]
         ptb = pta + vtn
         ptc = pta + wtn
 
@@ -259,17 +247,15 @@ class BodyCylinder(object):
         Y   = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
 
         a,b = geu.affine(X,Y)
-
         A = np.eye(3)                
         B = np.zeros((3,1))                
-        A[0:-1,0:-1] = a                
-        B[0:-1,:] = b
-
-        self.toposFrameId = kf 
+        A[0:-1,0:-1]=a                
+        B[0:-1,:]=b
+        print kf
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
         
     
-    def loadC3D(self, filename='07_01.c3d', nframes=126 ,unit='cm'):
+    def loadC3D(self, filename='07_01.c3d', nframes=126):
         """ load nframes of motion capture C3D file 
 
         Parameters
@@ -282,16 +268,13 @@ class BodyCylinder(object):
 
         """
 
-        if 'pg' in dir(self):
-            del self.pg
-
         self.nframes = nframes
         self.filename = filename
 
         s, p, f = c3d.read_c3d(filename)
 
+        #pdb.set_trace()
         CM_TO_M = 0.01
-        #
         # self.d 3 x np x nf
         # 
         self.d = np.ndarray(shape=(3, self.npoints, np.shape(f)[0]))
@@ -302,43 +285,30 @@ class BodyCylinder(object):
 
         # f.T : 3 x np x nf
         self.d = f[0:nframes, ind, :].T
-        if unit=='cm':
-            self.d = self.d*CM_TO_M
+        self.d = self.d*CM_TO_M
         self.g.pos = {}
         for i in range(self.npoints):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
         #
         # Extension of cylinder
         #
-
         self.g.add_node(15)
-        self.npoints = 16
-
         pm  = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
         pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
         pmf = pmf[:,np.newaxis,:]
-
         self.d = np.concatenate((self.d,pmf),axis=1)
-
         self.g.add_edge(0, 15)
         self.g.pos[15] = (pm[1],pm[2])
         self.g[0][15]['radius']=0.1
-        self.nodes_Id[15]='bottom'
 
     def movie(self,topos=False,tk=[],traj=[]):
-        """ Create a geomview movie
-
+        """
         Parameters
         ----------
 
         topos : Boolean
-        tk    : np.array time index in s 
-        traj  : np.array Npt x 3 (t,x,y)    
-
-        See Also
-        --------
-
-        BodyCylinder.geomfile
+        tk    : 
+        traj  :     
 
         """
 
@@ -389,11 +359,9 @@ class BodyCylinder(object):
             ax.plot(np.array([pA[0][0],pB[0][0]]),np.array([pA[1][0],pB[1][0]]),
                     np.array([pA[2][0],pB[2][0]]),zdir='z',c=col)
         #ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
-        ax.autoscale(enable=True)
         return(fig,ax)
                     
-    #def show3(self,iframe=0,topos=True,tag=''): 
-    def show3(self,**kwargs): 
+    def show3(self,iframe=0,topos=True,tag=''): 
         """ create geomfile for frame iframe 
 
         Parameters
@@ -402,161 +370,65 @@ class BodyCylinder(object):
         iframe : int 
             frame number (useless if topos == True)
         topos : boolean 
-            if True shows the current body topos
+            if True show the current body topos
         tag : aditional string for naming file .off (useless if topos==False)
 
         """
-
-        defaults = { 'iframe': 0,
-                    'verbose':False,
-                    'topos':False,
-                    'tag':'',
-                    'wire':False,
-                    'ccs':False,
-                    'lccs':[],
-                    'ccsa':False,
-                    'struc':False,
-                    'filestruc':'DLR.off'
-                  }
-
-        for key, value in defaults.items(): 
-            if key not in kwargs: 
-                kwargs[key] = value
-
-        bdy = self.geomfile(**kwargs)
+        self.geomfile(iframe=0,topos=topos,tag=tag)
+        bdy = geu.Geomlist('body'+str(iframe))
         bdy.show3()
 
-    #def geomfile(self,iframe=0,verbose=False,topos=False,tag=''):
-    def geomfile(self,**kwargs):
+    def geomfile(self,iframe=0,verbose=False,topos=False,tag=''):
         """ create a geomview file from a body configuration 
 
         Parameters
         ----------
 
         iframe : int 
-            frame id (useless if topos==True)
         verbose : boolean
         topos : boolean 
-            frame id or topos
-        wire : boolean 
-            body as a wire or cylinder
-        ccs : boolean
-            display cylinder coordinate system
-        cacs : boolean
-            display cylinder antenna coordinate system
-        acs : boolean
-            display antenna coordinate system
-        struc : boolean
-            displat structure layout
         tag : string 
-        filestruc : string
-            name of the Layout 
-
-        Notes
-        -----
-
-        This function creates either a 3d representation of the frame iframe
-        or if topos==True a representation of the current topos. 
-
-
 
         """
-
-        defaults = { 'iframe': 0,
-                    'verbose':False,
-                    'topos':False,
-                    'tag':'',
-                    'wire': False,
-                    'ccs': False,
-                    'lccs': [],
-                    'ccsa': False,
-                    'lccsa': [],
-                    'struc':False,
-                    'filestruc':'DLR.off'
-
-                  }
-
-        for key, value in defaults.items(): 
-            if key not in kwargs: 
-                kwargs[key] = value
-
-        if kwargs['lccs']==[]:
-            lccs = np.arange(11)
-        else:
-            lccs = kwargs['lccs']
-
-        if not kwargs['wire']:
-            cyl = geu.Geomoff('cylinder')
-            pt = cyl.loadpt()
-
-        if not kwargs['topos']:
-            _filebody = str(iframe).zfill(4)+'body'
+        cyl = geu.Geomoff('cylinder')
+        pt = cyl.loadpt()
+        if not topos:
+            _filebody = str(iframe).zfill(4)+'body.list'
         else:    
-            if kwargs['tag']<>'':
-                _filebody = kwargs['tag']+'-body'
-            else:
-                _filebody = 'body'
-
-        bodylist = geu.Geomlist(_filebody)
-        filestruc = pyu.getlong(kwargs['filestruc'],"geom")
-
-        bodylist.append("LIST\n")
-
-        # add layout 
-        if kwargs['struc']:
-            bodylist.append('{<'+filestruc+'}\n')
-        if kwargs['verbose']:
+            _filebody = tag+'-body.list'
+        filebody = pyu.getlong(_filebody,"geom")
+        filestruc = pyu.getlong('DLR.off',"geom")
+        fo = open(filebody,"w")
+        fo.write("LIST\n")
+        fo.write('{<'+filestruc+'}\n')
+        if verbose:
             print ("LIST\n")
-        
-        dbody = {}
         for k,e in enumerate(self.g.edges()):
             e0 = e[0]
             e1 = e[1]
-            if not kwargs['topos']:
+            if not topos:
                 pA = self.d[:,e0,iframe].reshape(3,1)
                 pB = self.d[:,e1,iframe].reshape(3,1)
             else:    
                 pA = self.topos[:,e0].reshape(3,1)
                 pB = self.topos[:,e1].reshape(3,1)
             pM = (pA+pB)/2.
-            Rcyl = self.g[e0][e1]['radius']
-
-            if kwargs['wire']:
-                dbody[k]=(pA,pB)
+            T = geu.onbfromaxe(pA,pB)
+            R = self.g[e0][e1]['radius']
+            Y = np.hstack((pM,pA,pB,pM+R*T[0,:,0].reshape(3,1),pM+R*T[0,:,1].reshape(3,1),pB+R*T[0,:,0].reshape(3,1)))
+            A,B = geu.cylmap(Y)
+            ptn = np.dot(A,pt.T)+B
+            if not topos:
+                _filename = 'edge'+str(k)+'-'+str(iframe)+'.off'
             else:
-                # affine transformation of cylinder 
-                T = geu.onbfromaxe(pA,pB)
-                Y = np.hstack((pM,pA,pB,pM+Rcyl*T[0,:,0].reshape(3,1),
-                                        pM+Rcyl*T[0,:,1].reshape(3,1),
-                                        pB+Rcyl*T[0,:,0].reshape(3,1)))
-                # idem geu.affine for a specific cylinder
-                A,B = geu.cylmap(Y)
-                ptn = np.dot(A,pt.T)+B
-                if not kwargs['topos']:
-                    _filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
-                else:
-                    _filename = kwargs['tag']+'-edge'+str(k)+'.off'
+                _filename = tag+'-edge'+str(k)+'.off'
+            filename = pyu.getlong(_filename,"geom")
+            cyl.savept(ptn.T,_filename)
+            fo.write('{<'+filename+'}\n')
+            if verbose:
+                print('{<'+filename+'}\n')
+        fo.close()
 
-                filename = pyu.getlong(_filename,"geom")
-                cyl.savept(ptn.T,_filename)
-                bodylist.append('{<'+filename+'}\n')
-                if kwargs['verbose']:
-                    print('{<'+filename+'}\n')
-            # display selected cylinder coordinate system       
-            if kwargs['ccs']:
-                if k in lccs:
-                    filename = kwargs['tag']+'ccs'+str(k)
-                    geov = geu.GeomVect(filename)
-                    pt = pA[:,0]+Rcyl*self.basis0[k,:,1]
-                    geov.geomBase(self.basis0[k,:,:],pt=pt,scale=0.1)
-                    bodylist.append('{<'+filename+'.vect'+"}\n")
-        # wireframe body             
-        if kwargs['wire']:
-            bodygv = geu.GeomVect('bodywire')
-            bodygv.segments(dbody,i2d=False,linewidth=5)
-            bodylist.append('{<bodywire.vect}\n')
-
-        return(bodylist)    
 
 
     def updbasis0(self,frameId=0,topos=True):
@@ -566,7 +438,7 @@ class BodyCylinder(object):
         ----------
 
         frameId : int 
-            frame id in the mocap dataframe (default 0) 
+            default 0 
         topos : boolean     
             default True
 
@@ -574,17 +446,17 @@ class BodyCylinder(object):
         -------
 
         self.basis0 : ndarray (nc,3,3)
-        
+
         Notes
         -----
 
-        There are as many frame as cylinders (body graph edges) 
+        There are as many basis as cylinders (body graph edges) 
 
         """
 
         nc = len(self.g.edges())
         #
-        # basis0 : nc x 3 x 3  
+        # basis0 : nc x 9 
         #
         self.basis0 = np.ndarray(shape=(nc,3,3))
 
@@ -602,12 +474,7 @@ class BodyCylinder(object):
             self.basis0[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
-        """ 
-        Parameters 
-        ----------
-
-        frameId : int  
-
+        """
         """
         nc = self.c.shape[0]
         self.basisk = np.ndarray(shape=(nc, 9))
@@ -623,23 +490,13 @@ class BodyCylinder(object):
             self.basisk[i, 6:] = wk
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
-        """ 
-        Parameters
-        ----------
-
-        cylinderId : int 
-            index of cylinder 
-        l : distance from origin of cylider
-        alpha : angle from reference direction 
-        frameId : frameId 
-
+        """
         """
         r = self.c[cylinderId, 7, frameId]
 
         x = r * np.cos(alpha)
         y = r * np.sin(alpha)
         z = l
-
         if frameId == 0:
             u0 = self.basis0[cylinderId, 0:3]
             v0 = self.basis0[cylinderId, 3:6]
@@ -650,10 +507,9 @@ class BodyCylinder(object):
             u0 = self.basisk[cylinderId, 0:3]
             v0 = self.basisk[cylinderId, 3:6]
             w0 = self.basisk[cylinderId, 6:]
-
-        self.ant = x.reshape((len(x)), 1) * u0 + \
-                   y.reshape((len(y)), 1) * w0 + \
-                   z.reshape((len(z)), 1) * v0
+        #~ #pdb.set_trace()
+        self.ant = x.reshape((len(x)), 1) * u0 + y.reshape(
+            (len(y)), 1) * w0 + z.reshape((len(z)), 1) * v0
 
 
 def translate(cycle, new_origin):
@@ -719,7 +575,7 @@ def Global_Trajectory(cycle, traj):
     Parameters
     ----------
 
-    cycle :  walking step cycle (2 step), shape = (3,npoints  = 16, nframes = 126)
+    cycle :  walking step cycle (2 step), shape = (3,npoints  = 15, nframes = 126)
     traj  : trajectory described by the gravity center, shape =(3,nposition)
 
     We assume that the body moves straight between two successive positions

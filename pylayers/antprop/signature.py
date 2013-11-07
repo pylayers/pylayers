@@ -16,7 +16,7 @@ from pylayers.antprop.rays import Rays
 import copy
 #from numba import autojit
 
-def showsig(L,s,tx,rx):
+def showsig(L,s,tx=[],rx=[]):
     """
     """
     L.display['thin']=True
@@ -24,8 +24,10 @@ def showsig(L,s,tx,rx):
     L.display['thin']=False
     L.display['edlabel']=True
     L.showGs(fig=fig,ax=ax,edlist=s,width=4)
-    plt.plot(tx[0],tx[1],'x')
-    plt.plot(rx[0],rx[1],'+')
+    if tx !=[]:
+        plt.plot(tx[0],tx[1],'x')
+    if rx !=[]:
+        plt.plot(rx[0],rx[1],'+')
     plt.title(str(s))
     plt.show()
     L.display['edlabel']=False
@@ -1210,6 +1212,77 @@ class Signatures(dict):
         return nx.shortest_path(self.L.Gt,source=cs,target=ct)
 
 
+
+    def show(self,L,**kwargs):
+        """  plot signatures within the simulated environment
+
+
+        Parameters
+        ----------
+
+        L : Layout
+        i : list or -1 (default = all groups)
+            list of interaction group numbers 
+        s : list or -1 (default = all sig) 
+            list of indices of ray in interaction group 
+        graph : type of graph to be displayed
+
+
+        """
+        defaults = {'i':-1,
+                   's':-1,
+                   'fig':[],
+                   'ax':[],
+                   'graph':'s',
+                    'color':'black',
+                    'alphasig':1,
+                    'widthsig':0.1,
+                    'colsig':'black',
+                    'ms':5,
+                    'ctx':-1,
+                    'crx':-1
+                   }
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        #if kwargs['fig'] ==[]:
+        #    fig = plt.figure()
+        #if kwargs['ax'] ==[]:    
+        #    ax = fig.add_subplot(111)
+
+        fig,ax = L.showG(**kwargs)
+        if kwargs['ctx']!=-1:
+            T=self.L.Gt.node[kwargs['ctx']]['polyg']
+            T.coul='r'
+            T.plot(fig=kwargs['fig'],ax=kwargs['ax'],color='r')
+        if kwargs['crx']!=-1:
+            R=self.L.Gt.node[kwargs['crx']]['polyg']
+            R.plot(fig=kwargs['fig'],ax=kwargs['ax'],color='g')
+        # i=-1 all rays
+        # else block of interactions i
+        if kwargs['i']==-1:
+            lgrint = self.keys()
+        else:
+            lgrint = [kwargs['i']]
+            
+
+        for i in lgrint:
+            if kwargs['s']==-1:
+                lsig = range(len(self[i])/2)
+            else:
+                lsig = [kwargs['s']]
+            for j in lsig: 
+                sig=map(lambda x: self.L.Gs.pos[x],self[i][2*j])
+                siga=np.array(sig)
+                # sig = np.hstack((self.pTx[0:2].reshape((2, 1)),
+                #                  np.hstack((self[i]['pt'][0:2, :, j],
+                #                  self.pRx[0:2].reshape((2, 1))))
+                #                  ))
+                ax.plot(siga[:,0], siga[:,1],
+                        alpha=kwargs['alphasig'],color=kwargs['colsig'],linewidth=kwargs['widthsig'])
+                ax.axis('off')
+        return(fig,ax)  
 
     def showi(self,uni=0,us=0):
         """ interactive show
