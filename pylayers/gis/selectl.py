@@ -13,11 +13,19 @@ from pylayers.util.easygui import *
 class SelectL(object):
     """ Associates a Layout and a figure
 
-    o : toggle overlay
-    p : create point
-    x : save graph in .str2 file
-    w : show all layers
-    z : change display parameter (GUI)
+    'l'  : select activelayer
+    'i'  : back to init state
+    'e'  : edit segment
+    't'  : translate  structure
+    'h'  : add subsegment
+    'd'  : delete subsegment
+    'r'  : refresh
+    'o'  : toggle overlay
+    'm'  : toggle mode (point or segment)
+    'z'  : change display parameters
+    'q'  : quit interactive mode
+    'x'  : save .str2 file
+    'w'  : display all layers
 
 
     """
@@ -236,9 +244,8 @@ class SelectL(object):
         if self.state == 'SSS':
             nse = self.selected_edge1
             segdico = self.L.Gs.node[nse]
-            zmin    = segdico['ss_zmin']
-            zmax    = segdico['ss_zmax']
-            ax.title.set_text('SSS : '+self.L.Gs.node[nse]['name']+' ['+str(zmin)+','+str(zmax)+']')
+            z  = segdico['ss_z']
+            ax.title.set_text('SSS : '+self.L.Gs.node[nse]['name']+' ['+str(z[0])+']')
             self.segment[0].set_color('blue')
         #
         # Create Point state
@@ -306,17 +313,26 @@ class SelectL(object):
 
         'l'  : select activelayer
         'i'  : back to init state
+        'j'  : vertical and horizontal scaling
         'e'  : edit segment
+        'b'  : edit segment keyboard
         't'  : translate  structure
         'h'  : add subsegment
         'd'  : delete subsegment
         'r'  : refresh
-        'o'  : toggle overlay
+        'o'  : toggle overlay (<> CP mode)
+               set origin (CP mode) 
         'm'  : toggle mode (point or segment)
+        'n'  : toggle node label display 
         'z'  : change display parameters
         'q'  : quit interactive mode
-        'x'  : save .str2 file
+        'x'  : save .str2 and .ini file
         'w'  : display all layers
+        'v'  : flip layout w.r.t y axis
+        'f'  : toggle points nodes display
+        'g'  : toggle segments nodes display
+        '='  : increment layer 
+        '$'  : decrement layer 
 
         """
         fig = plt.gcf()
@@ -335,7 +351,7 @@ class SelectL(object):
             self.update_state()
             return
         #
-        # offset layout
+        # translation of layout (open a box)
         #
         if self.evt == 't':
             offx,offy = offsetbox()
@@ -525,8 +541,6 @@ class SelectL(object):
                 x1 = ax.get_xbound()
                 y1 = ax.get_ybound()
                 ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
-                #print x1,y1
-                #print ndlist
                 self.L.del_points(ndlist)
                 self.update_state()
                 return
@@ -620,6 +634,7 @@ class SelectL(object):
         # select point 1 : Init -> SP1
         #
             if self.state=='Init':
+                # yellow point 
                 self.state = 'SP1'
                 self.update_state()
                 return
@@ -629,17 +644,21 @@ class SelectL(object):
 
             if self.state=='SP1':
                 if self.nsel != self.selected_pt1:
+                    # green point 
                     self.state = 'SP2'
                     self.update_state()
                     return
         #
         # Create point on selected segment orthogonaly to segment starting in
         # selected point
+        # 
+        # Not finished 
         #
             if self.state=='SS':
+                # get the connection of the selected segment
                 connect = self.L.Gs.node[self.selected_edge1]['connect']
                 if (self.nsel != connect[0]) & (self.nsel != connect[1]): 
-                   #self.L.add_nfpe(self.nsel,conn
+                   self.L.add_nfpe(self.nsel,self.nsel,self.selected_edge1,self.selected_edge2)
                    pass
 
         #

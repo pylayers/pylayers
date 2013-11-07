@@ -67,6 +67,7 @@ class Cycles(nx.DiGraph):
 
         Warning
         -------
+
             The inclusion test works only for cycles which share
             at least one portion of their cycle.
             If one cycle is completely included in the other the return

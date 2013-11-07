@@ -2736,8 +2736,8 @@ class Layout(object):
                
         fo.close()
 
-    def angleonlink2(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
-        """ angleonlink2(self,p1,p2) return (seglist,angle) between p1 and p2
+    def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
+        """ angleonlink(self,p1,p2) return (seglist,angle) between p1 and p2
 
         Parameters
         ----------
@@ -2759,8 +2759,11 @@ class Layout(object):
         >>> L = Layout('DLR.ini')
         >>> p1 = np.array([0,0])
         >>> p2 = np.array([10,3])
-        >>> L.angleonlink2(p1,p2)
-        (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
+        >>> alpha = L.angleonlink(p1,p2)
+
+        #array([(0, 141, 1.2793395519256592), (0, 62, 0.29145678877830505),
+               (0, 65, 0.29145678877830505)],
+              dtype=[('i', '<i8'), ('s', '<i8'), ('a', '<f4')]) 
 
 
         """
@@ -2857,7 +2860,7 @@ class Layout(object):
         data['a'] = angle 
         return(data)
 
-    def angleonlink(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
+    def angleonlinkold(self, p1=np.array([0, 0]), p2=np.array([10, 3])):
         """ angleonlink(self,p1,p2) returns seglist between p1 and p2
 
         Parameters
@@ -2878,15 +2881,20 @@ class Layout(object):
         Examples
         --------
 
-        >>> from pylayers.gis.layout import *
-        >>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
-        >>> p1 = np.array([0,0])
-        >>> p2 = np.array([10,3])
-        >>> L.angleonlink(p1,p2)
-        (array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
+        #>>> from pylayers.gis.layout import *
+        #>>> L = Layout('DLR.ini','matDB.ini','slabDB.ini')
+        #>>> p1 = np.array([0,0])
+        #>>> p2 = np.array([10,3])
+        #>>> L.angleonlinkold(p1,p2)
+        #(array([59, 62, 65]), array([ 1.27933953,  0.29145679,  0.29145679]))
+        
+        Notes
+        -----
 
 
         """
+
+        logging.warning('This function is deprecated use')
 
         u = p1 - p2
         nu = np.sqrt(np.dot(u, u))
@@ -2933,7 +2941,7 @@ class Layout(object):
         #print 'theta (deg)',the*180./pi
 
         # seglist = seglist+1
-        seglist = map(lambda x : self.tsg[x],seglist)
+        seglist = np.array(map(lambda x : self.tsg[x],seglist))
 
         return(seglist, theta)
 
@@ -3132,8 +3140,8 @@ class Layout(object):
             >>> p1 = np.array([[0,0,0],[0,0,0]])
             >>> p2 = np.array([[10,10,10],[10,10,10]])
             >>> seglist = L.seginframe2(p1,p2)
-            >>> edlist  = L.tsg[seglist[0]]
-            >>> L.showGs(edlist=edlist)
+            >>> edlist  = map(lambda x: L.tsg[x],seglist)
+            >>> fig,ax = L.showGs(edlist=edlist)
 
         """
 
@@ -3751,16 +3759,21 @@ class Layout(object):
             ax.cla()
         # display overlay image
         if self.display['overlay']:
+            imok = False 
             if len(self.display['fileoverlay'].split('http:'))>1:
                 img_file = urllib.urlopen(self.display['fileoverlay'])
                 im = StringIO(img_file.read())
                 image = Image.open(im)
+                imok =True
             else:
-                image = Image.open(strdir + '/' + self.display['fileoverlay'])
-            if self.display['inverse']:    
-                ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
-            else:                
-                ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
+                if self.display['fileoverlay']<>'':
+                    image = Image.open(strdir + '/' + self.display['fileoverlay'])
+                    imok =True
+            if imok:
+                if self.display['inverse']:    
+                    ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
+                else:                
+                    ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
 
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
@@ -3839,12 +3852,15 @@ class Layout(object):
 
         Parameters
         ----------
+
+        graph : string composed of
             't' : Gt
             'r' : Gr
             'w" : Gw
             's' : Gs
             'v' : Gv
             'i' : Gi
+
         """
 
         if 't' in graph:
@@ -4315,16 +4331,17 @@ class Layout(object):
 
         Parameters
         ----------
-        display : boolean
+
+        show : boolean
             default False
 
         Examples
         --------
 
         >>> from pylayers.gis.layout import *
-        >>> L = Layout('example.str')
+        >>> L = Layout('example.ini')
         >>> L.buildGt()
-        >>> L.buildGr()
+        >>> Ga = L.buildGr()
         >>> L.buildGv()
 
         Notes
@@ -4808,20 +4825,18 @@ class Layout(object):
 
             >>> from pylayers.gis.layout import  *
             >>> import matplotlib.pyplot as plt
-            >>> L = Layout('example.str')
-            >>> L.buildGt()
-            >>> L.buildGr()
-            >>> L.buildGv()
+            >>> L = Layout('example.ini')
+            >>> L.build()
             >>> fig = plt.figure(figsize=(10,10))
             >>> ax = fig.add_subplot(221)
             >>> fig,ax = L.showG('s',fig=fig,ax=ax)
             >>> tis = plt.title("Gs")
             >>> ax = fig.add_subplot(222)
-            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+            >>> fig,ax = L.showG('t',fig=fig,ax=ax)
             >>> tit = plt.title("Gt")
             >>> ax = fig.add_subplot(223)
-            >>> fig,ax = L.showG('c',fig=fig,ax=ax)
-            >>> tic = plt.title("Gc")
+            >>> fig,ax = L.showG('r',fig=fig,ax=ax)
+            >>> tic = plt.title("Gr")
             >>> ax = fig.add_subplot(224)
             >>> fig,ax = L.showG('v',fig=fig,ax=ax)
             >>> tiv = plt.title("Gv")
@@ -5253,11 +5268,13 @@ class Layout(object):
 
         Parameters
         ----------
+
         room : int
 
         Returns
         -------
-        nod : list
+
+        nod : sorted list
 
         """
 
@@ -5269,6 +5286,7 @@ class Layout(object):
             raise NameError(str(room)+" is not in not on Gr")
         u = np.where(nod<0)
         nod = nod[u]
+
         return np.sort(nod.tolist())
 
 
@@ -5290,6 +5308,11 @@ class Layout(object):
 
     def buildGr(self):
         """ build the graph of rooms Gr 
+
+        Returns
+        -------
+
+        Ga : graph of adjascent rooms
 
         Notes
         -----

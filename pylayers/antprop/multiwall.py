@@ -229,7 +229,7 @@ def Losst(L,fGHz,p1,p2):
     if (len(sh1)<2) & (len(sh2)<2):
         Nlink = 1
     
-    data = L.angleonlink2(p1,p2)
+    data = L.angleonlink(p1,p2)
 
     # as many slabs as segments 
     slabs = L.sla[data['s']]
@@ -384,7 +384,7 @@ def Loss0_v2(L,Pts,fGHz,p):
         edo = 0.0
         edp = 0.0
         pi = Pts[i,:]
-        seglist,theta = L.angleonlink(p,pi)
+        seglist,theta = L.angleonlinkold(p,pi)
         i = 0
         for k in seglist:
             if k != 0:
@@ -443,7 +443,7 @@ def Loss0_v2_separe(S,pi,f,p):
     lwo   = np.array([])
     lwp   = np.array([])
     Theta = np.array([])
-    seglist,theta = S.L.angleonlink(p,pi)
+    seglist,theta = S.L.angleonlinkold(p,pi)
     i = 0
     for k in seglist:
         if k in S.L.ce.keys():
@@ -469,7 +469,7 @@ def Loss_mur_the(S,pi,f,p):
     """
 
     """
-    seglist,theta = S.L.angleonlink(p,pi)
+    seglist,theta = S.L.angleonlinkold(p,pi)
     return(seglist,theta)
 
 def Loss0(S,rx,ry,f,p):
@@ -493,7 +493,7 @@ def Loss0(S,rx,ry,f,p):
         for y in ry:
             L = 0
             pxy = np.array([x,y])
-            seglist,theta = S.L.angleonlink(p,pxy)
+            seglist,theta = S.L.angleonlinkold(p,pxy)
             for k in seglist:
                 name = S.L.name[k]
                 lk = S.sl[name].loss0(f)

@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.stats as sp
 
+import ConfigParser
 from pylayers.mobility.body import c3d
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -45,29 +46,29 @@ def dist(A, B):
     return d
 
 
-class BodyCylinder(object):
+class Body(object):
     """ Class to manage the Body model 
     """
 
-    def __init__(self):
-        self.g = nx.Graph()
-        self.npoints = 15 
-        self.nodes_Id = {
-            0:'STRN', 
-            1:'CLAV',
-            2:'RFHD', 
-            3:'RSHO', 
-            4:'LSHO',
-            5:'RELB', 
-            6:'LELB', 
-            7:'RWRB', 
-            8:'LWRB',
-            9:'RFWT',
-            10:'LFWT', 
-            11:'RKNE',
-            12:'LKNE', 
-            13:'RANK', 
-            14:'LANK'}
+    def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
+        #self.g = nx.Graph()
+        #self.npoints = 15 
+        #self.nodes_Id = {
+        #    0:'STRN', 
+        #    1:'CLAV',
+        #    2:'RFHD', 
+        #    3:'RSHO', 
+        #    4:'LSHO',
+        #    5:'RELB', 
+        #    6:'LELB', 
+        #    7:'RWRB', 
+        #    8:'LWRB',
+        #    9:'RFWT',
+        #    10:'LFWT', 
+        #    11:'RKNE',
+        #    12:'LKNE', 
+        #    13:'RANK', 
+        #    14:'LANK'}
 #            15:'LFIN'}
 #            16:'LELB',
 #            17:'RUPA',
@@ -83,31 +84,86 @@ class BodyCylinder(object):
 #            27:'LTOE',
 #            28:'RTOE',
 #            29:'RMT5'}
-        self.g.add_nodes_from(self.nodes_Id.keys())
-        self.g.add_edge(0, 1,radius =1)
-        self.g[0][1]['radius']=0.18
-        #self.g.add_edge(0, 9)
-        #self.g.add_edge(0, 10)
-        self.g.add_edge(1, 2)
-        self.g[1][2]['radius']=0.12
-        #self.g.add_edge(1, 3)
-        #self.g.add_edge(1, 4)
-        self.g.add_edge(3, 5)
-        self.g[3][5]['radius']=0.05
-        self.g.add_edge(4, 6)
-        self.g[4][6]['radius']=0.05
-        self.g.add_edge(5, 7)
-        self.g[5][7]['radius']=0.05
-        self.g.add_edge(6, 8)
-        self.g[6][8]['radius']=0.05
-        self.g.add_edge(9, 11)
-        self.g[9][11]['radius']=0.05
-        self.g.add_edge(10, 12)
-        self.g[10][12]['radius']=0.05
-        self.g.add_edge(11, 13)
-        self.g[11][13]['radius']=0.05
-        self.g.add_edge(12, 14)
-        self.g[12][14]['radius']=0.05
+#        self.g.add_nodes_from(self.nodes_Id.keys())
+#        self.g.add_edge(0, 1,radius =1)
+#        self.g[0][1]['radius']=0.18
+#        #self.g.add_edge(0, 9)
+#        #self.g.add_edge(0, 10)
+#        self.g.add_edge(1, 2)
+#        self.g[1][2]['radius']=0.12
+#        #self.g.add_edge(1, 3)
+#        #self.g.add_edge(1, 4)
+#        self.g.add_edge(3, 5)
+#        self.g[3][5]['radius']=0.05
+#        self.g.add_edge(4, 6)
+#        self.g[4][6]['radius']=0.05
+#        self.g.add_edge(5, 7)
+#        self.g[5][7]['radius']=0.05
+##        self.g.add_edge(6, 8)
+#        self.g[6][8]['radius']=0.05
+#        self.g.add_edge(9, 11)
+#        self.g[9][11]['radius']=0.05
+#        self.g.add_edge(10, 12)
+#        self.g[10][12]['radius']=0.05
+#        self.g.add_edge(11, 13)
+#        self.g[11][13]['radius']=0.05
+#        self.g.add_edge(12, 14)
+#        self.g[12][14]['radius']=0.05
+        di = self.load(_filebody)
+        self.loadC3D(filename=_filemocap)
+
+    def load(self,_filebody='John.ini'):
+        """ load a body ini file
+
+        Parameters
+        ----------
+
+        _filebody : body short filename
+        
+        Notes
+        -----
+
+        A body .ini file contains 4 sections
+
+        + section [nodes]
+            Node number = Node name 
+        + section [cylinder]    
+            Cylinder number = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
+        + section [antennas]    
+            Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
+
+        """
+        filebody = pyu.getlong(_filebody,'ini')
+        config = ConfigParser.ConfigParser()
+        config.read(filebody)
+        sections = config.sections()
+        di = {}
+        for section in sections:
+            di[section] = {}
+            options = config.options(section)
+            for option in options:
+                try:
+                    if section=='nodes':
+                        di[section][option] = config.get(section,option)
+                    else:
+                        di[section][option] = eval(config.get(section,option))
+                except:
+                    print section,option
+
+        self.g = nx.Graph()
+        keys = map(lambda x : eval(x),di['nodes'].keys())
+        self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
+
+        #pdb.set_trace()
+        self.g.add_nodes_from(keys)
+        for cyl in di['cylinder'].keys():
+            t = di['cylinder'][cyl]['t']
+            h = di['cylinder'][cyl]['h']
+            r = di['cylinder'][cyl]['r']
+            self.g.add_edge(t,h)
+            self.g[t][h]['radius']= r 
+
+        return(di)
 
     def __repr__(self):
         st = ''
@@ -146,7 +202,11 @@ class BodyCylinder(object):
         self.pg = np.sum(self.d,axis=1)/self.npoints
         self.pg[2,:] = 0
         self.d = self.d - self.pg[:,np.newaxis,:]
-
+        # speed vector of the gravity centernp. 
+        self.vg = self.pg[:,1:]-self.pg[:,0:-1] 
+        # duplicate last spped vector for size homogeneity  
+        #self.vg = np.hstack((self.vg,self.vg[:,-1]))
+        self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
 
     def posvel(self,traj,tk,Tstep):
         """ position and velocity
@@ -165,9 +225,9 @@ class BodyCylinder(object):
         
         kf 
         kt 
-        vsn
-        wsn 
-        vtn 
+        vsn : normalized speed vector along motion capture trajectory 
+        wsn :  
+        vtn : normalized speed vector along motion trajectory 
         wtn 
 
         """
@@ -214,7 +274,7 @@ class BodyCylinder(object):
         >>> x = v*time
         >>> y = np.zeros(len(time))
         >>> traj = np.vstack((time.T,x.T,y.T))
-        >>> bc = BodyCylinder()
+        >>> bc = Body()
         >>> bc.loadC3D(filename='07_01.c3d')
         >>> bc.center()
         >>> bc.settopos(traj,2.3,2)
@@ -253,6 +313,7 @@ class BodyCylinder(object):
         B[0:-1,:]=b
         print kf
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
+        self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
         
     
     def loadC3D(self, filename='07_01.c3d', nframes=126):
@@ -277,11 +338,13 @@ class BodyCylinder(object):
         CM_TO_M = 0.01
         # self.d 3 x np x nf
         # 
+        self.npoints = 15
         self.d = np.ndarray(shape=(3, self.npoints, np.shape(f)[0]))
         #if self.d[2,:,:].max()>50:
         ind = []
         for i in self.nodes_Id:
-            ind.append(p.index(s[0] + self.nodes_Id[i]))
+            if self.nodes_Id[i]<>'BOTT':
+                ind.append(p.index(s[0] + self.nodes_Id[i]))
 
         # f.T : 3 x np x nf
         self.d = f[0:nframes, ind, :].T
@@ -292,14 +355,27 @@ class BodyCylinder(object):
         #
         # Extension of cylinder
         #
-        self.g.add_node(15)
+
+
+        #self.g.add_node(15)
+        self.npoints = 16
+
+# >>>>>>> pylayers/master
         pm  = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
         pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
         pmf = pmf[:,np.newaxis,:]
         self.d = np.concatenate((self.d,pmf),axis=1)
-        self.g.add_edge(0, 15)
+# <<<<<<< HEAD
+#         self.g.add_edge(0, 15)
+#         self.g.pos[15] = (pm[1],pm[2])
+#         self.g[0][15]['radius']=0.1
+# =======
+
+        #self.g.add_edge(0, 15)
         self.g.pos[15] = (pm[1],pm[2])
-        self.g[0][15]['radius']=0.1
+        #self.g[0][15]['radius']=0.1
+        #self.nodes_Id[15]='bottom'
+# >>>>>>> pylayers/master
 
     def movie(self,topos=False,tk=[],traj=[]):
         """
@@ -307,8 +383,14 @@ class BodyCylinder(object):
         ----------
 
         topos : Boolean
-        tk    : 
-        traj  :     
+
+        tk    : np.array time index in s 
+        traj  : np.array Npt x 3 (t,x,y)    
+
+        See Also
+        --------
+
+        Body.geomfile
 
         """
 
@@ -421,14 +503,40 @@ class BodyCylinder(object):
             if not topos:
                 _filename = 'edge'+str(k)+'-'+str(iframe)+'.off'
             else:
-                _filename = tag+'-edge'+str(k)+'.off'
-            filename = pyu.getlong(_filename,"geom")
-            cyl.savept(ptn.T,_filename)
-            fo.write('{<'+filename+'}\n')
-            if verbose:
-                print('{<'+filename+'}\n')
-        fo.close()
 
+                # affine transformation of cylinder 
+                T = geu.onb(pA,pB,v)
+                Y = np.hstack((pM,pA,pB,pM+Rcyl*T[0,:,0].reshape(3,1),
+                                        pM+Rcyl*T[0,:,1].reshape(3,1),
+                                        pB+Rcyl*T[0,:,0].reshape(3,1)))
+                # idem geu.affine for a specific cylinder
+                A,B = geu.cylmap(Y)
+                ptn = np.dot(A,pt.T)+B
+                if not kwargs['topos']:
+                    _filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
+                else:
+                    _filename = kwargs['tag']+'-edge'+str(k)+'.off'
+
+                filename = pyu.getlong(_filename,"geom")
+                cyl.savept(ptn.T,_filename)
+                bodylist.append('{<'+filename+'}\n')
+                if kwargs['verbose']:
+                    print('{<'+filename+'}\n')
+            # display selected cylinder coordinate system       
+            if kwargs['ccs']:
+                if k in lccs:
+                    filename = kwargs['tag']+'ccs'+str(k)
+                    geov = geu.GeomVect(filename)
+                    pt = pA[:,0]+Rcyl*self.basis0[k,:,1]
+                    geov.geomBase(self.basis0[k,:,:],pt=pt,scale=0.1)
+                    bodylist.append('{<'+filename+'.vect'+"}\n")
+        # wireframe body             
+        if kwargs['wire']:
+            bodygv = geu.GeomVect('bodywire')
+            bodygv.segments(dbody,i2d=False,linewidth=5)
+            bodylist.append('{<bodywire.vect}\n')
+
+        return(bodylist)    
 
 
     def updbasis0(self,frameId=0,topos=True):
@@ -466,11 +574,13 @@ class BodyCylinder(object):
             if not topos:
                 pA = self.d[:,e0,iframe].reshape(3,1)
                 pB = self.d[:,e1,iframe].reshape(3,1)
+                vg = self.vg[:,iframe]
             else:    
                 pA = self.topos[:,e0].reshape(3,1)
                 pB = self.topos[:,e1].reshape(3,1)
+                vg = self.vtopos
             pM = (pA+pB)/2.
-            T = geu.onbfromaxe(pA,pB)
+            T = geu.onb(pA,pB,vg)
             self.basis0[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
@@ -630,7 +740,7 @@ if __name__ == '__main__':
     doctest.testmod()
 
 #    nframes = 126
-#    Bc = BodyCylinder()
+#    Bc = Body()
 #    Bc.loadC3D()
 #    c10_1t = Bc.d
 #    #nx.draw(B.g)
