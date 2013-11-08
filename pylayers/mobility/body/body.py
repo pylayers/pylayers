@@ -56,12 +56,12 @@ class Body(object):
     center
     posvel
     loadC3D
-    movie
-    plot3d
-    geomfile
     settopos 
     setccs
     setaccs
+    geomfile
+    plot3d
+    movie
     cylinder_basis_k
     cyl_antenna
 
@@ -90,6 +90,13 @@ class Body(object):
             st = st +'nframes : ' + str(self.nframes) +'\n'
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
+        if 'mocapinfo' in dir(self):
+            st = st + str(self.mocapinfo)+'\n'
+        if 'tmocap' in dir(self):
+            st = st + 'Mocap Duration : ' + str(self.Tmocap)+'\n'
+        if 'vmocap' in dir(self):
+            st = st + 'Mocap Speed : ' + str(self.vmocap)+'\n'
+
         if 'topos' in dir(self):
             st = st + 'topos : True'+'\n'
         else:    
@@ -178,10 +185,13 @@ class Body(object):
         # speed vector of the gravity centernp. 
         self.vg = self.pg[:,1:]-self.pg[:,0:-1] 
         # duplicate last spped vector for size homogeneity  
-        #self.vg = np.hstack((self.vg,self.vg[:,-1]))
         self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
+        # length of trajectory
+        d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+        self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
+        self.vmocap = self.smocap[-1]/self.Tmocap
 
-    def posvel(self,traj,tk,Tstep):
+    def posvel(self,traj,tk):
         """ position and velocity
 
         Parameters
@@ -191,7 +201,6 @@ class Body(object):
             nx3
         tk : float 
             time for evaluation of topos
-        Tstep : flloat 
         
         Returns
         -------
@@ -205,11 +214,14 @@ class Body(object):
 
         """
         # tk should be in the trajectory time range
-        assert ((tk>traj.tmin) & (tk<traj.tmax)),'posvel: tk not in trajectory time range'
+        assert ((tk>=traj.tmin) & (tk<=traj.tmax)),'posvel: tk not in trajectory time range'
 
-        tf = Tstep/(1.0*self.nframes) # frame sampling period  
-        kt = int(np.floor(tk/tf))
-        kf = int(np.floor(np.mod(tk,Tstep)/tf))
+        tf = self.Tmocap/(1.0*self.nframes) # frame sampling period  
+        timetraj = traj.time()
+        tt = timetraj[1]-timetraj[0]
+
+        kt = int(np.floor(tk/tt))
+        kf = int(np.floor(np.mod(tk,self.Tmocap)/tf))
         # self.pg : 3 x Nframes 
         # traj : Nptraj x 3 (t,x,y)
 
@@ -222,13 +234,15 @@ class Body(object):
         # vt : speed vector along trajectory 
         #
         #vt = traj[kt+1,1:] - traj[kt,1:]
+        if kt==998:
+            pdb.set_trace()
         vt  = np.array([traj['vx'][kt],traj['vy'][kt]])
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
         
         return(kf,kt,vsn,wsn,vtn,wtn)
 
-    def settopos(self,traj,tk=0,Tstep=3):
+    def settopos(self,traj,tk=0):
         """ translate the body on a time stamped trajectory
 
         Parameters
@@ -239,8 +253,6 @@ class Body(object):
         tk : float 
             time for evaluation of topos (seconds) this value should be in the
             range of the trajectory timestamp
-        Tstep : float 
-           duration of the periodic motion sequence (seconds)
 
         Examples
         --------
@@ -254,7 +266,7 @@ class Body(object):
         >>> y = np.zeros(len(time))
         >>> traj = tr.Trajectory()
         >>> bc = Body()
-        >>> bc.settopos(traj,2.3,2)
+        >>> bc.settopos(traj,2.3)
         >>> nx.draw(bc.g,bc.g.pos)
         >>> axe = plt.axis('scaled')
         >>> plt.show()
@@ -280,7 +292,7 @@ class Body(object):
         # pta : target translation 
         # ptb = pta+vtn : a point in the direction of trajectory 
         
-        kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,tk,Tstep)
+        kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,tk)
 
         psa = np.array([0,0])
         psb = psa + vsn
@@ -337,7 +349,7 @@ class Body(object):
             # getting antenna placement information 
 
             Id = self.ant[ant]['cyl']
-            alpha = self.ant[ant]['a']
+            alpha = self.ant[ant]['a']*np.pi/180.
             l = self.ant[ant]['l']
             h = self.ant[ant]['h']
 
@@ -346,18 +358,21 @@ class Body(object):
             ed = self.g.edges()[Id]
             kta = ed[0]
             khe = ed[1]
+            Rcyl = self.g[kta][khe]['radius']
             phe = np.array(self.topos[:,khe])
             pta = np.array(self.topos[:,kta])
             dl = phe - pta 
             lmax = np.sqrt(np.dot(dl,dl))
             CCS = self.ccs[Id,:,:]
+
             #self.nodes_Id[kta],self.nodes_Id[khe]
 
             # applying rotation and translation 
 
             Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
             CCSr = np.dot(CCS,Rot)
-            neworigin = pta + CCSr[:,2]*l + CCSr[:,0]*h
+            neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
+
             self.accs[ant] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
     def loadC3D(self, filename='07_01.c3d', nframes=126 ,unit='cm'):
@@ -376,27 +391,56 @@ class Body(object):
         if 'pg' in dir(self):
             del self.pg
 
-        self.nframes = nframes
-        self.filename = filename
 
-        s, p, f = c3d.read_c3d(filename)
+        s, p, f, info = c3d.read_c3d(filename)
+
+        self.mocapinfo = info
+        
+        self.filename = filename
+        if nframes<>-1:
+            self.nframes  = nframes
+        else:
+            self.nframes = np.shape(f)[0] 
+        #
+        # s : prefix 
+        # p : list of points name 
+        # f : nframe x npoints x 3 
+        #
 
         CM_TO_M = 0.01
+        
+        # duration of the motion capture snapshot
+
+        self.Tmocap = self.nframes / info['VideoFrameRate']
+
         #
-        # self.d 3 x np x nf
+        # motion capture data 
+        #
+        # self.d   :   3 x npoints x nframes
         # 
+
         self.npoints = 15
-        self.d = np.ndarray(shape=(3, self.npoints, np.shape(f)[0]))
+
+        self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
+
         #if self.d[2,:,:].max()>50:
+        # extract only known nodes in nodes_Id     
         ind = []
         for i in self.nodes_Id:
             if self.nodes_Id[i]<>'BOTT':
                 ind.append(p.index(s[0] + self.nodes_Id[i]))
 
-        # f.T : 3 x np x nf
+        # f.T : 3 x npoints x nframe 
+        #
+        # cm to meter conversion if required 
+        #
         self.d = f[0:nframes, ind, :].T
         if unit=='cm':
             self.d = self.d*CM_TO_M
+        
+        #
+        # Creating the body graph structure 
+        #
         self.g.pos = {}
         for i in range(self.npoints):
             self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
@@ -418,14 +462,12 @@ class Body(object):
         #self.g[0][15]['radius']=0.1
         #self.nodes_Id[15]='bottom'
 
-    def movie(self,topos=False,tk=[],traj=[]):
+    def movie(self,**kwargs):
         """ Create a geomview movie
 
         Parameters
         ----------
 
-        topos : Boolean
-        tk    : np.array time index in s 
         traj  : np.array Npt x 3 (t,x,y)    
 
         See Also
@@ -435,14 +477,36 @@ class Body(object):
 
         """
 
-        if not topos:
+        defaults = {'lframe':[],
+                    'verbose':False,
+                    'topos': True,
+                    'wire': True,
+                    'ccs': False,
+                    'accs': False,
+                    'struc':True,
+                    'traj':[],
+                    'filestruc':'DLR.off'
+                   }
+
+
+        for key, value in defaults.items(): 
+            if key not in kwargs: 
+                kwargs[key] = value
+
+        if not kwargs['topos']:
             for k in range(self.nframes):
                 self.geomfile(iframe=k,verbose=True)
         else:
+            tk = kwargs['traj'].time()
             for k,ttk in enumerate(tk):
                 stk = str(k).zfill(6) # for string alignement 
-                self.settopos(traj=traj,tk=ttk,Tstep=1)
-                self.geomfile(topos=True,verbose=False,tag=stk)
+                self.settopos(traj=kwargs['traj'],tk=ttk)
+                if kwargs['ccs']:
+                    self.setccs(topos=True)
+                if kwargs['accs']:
+                    self.setaccs()
+                kwargs['tag']=stk
+                self.geomfile(**kwargs)
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
         """ scatter 3d plot 
@@ -486,6 +550,15 @@ class Body(object):
         return(fig,ax)
                     
     #def show3(self,iframe=0,topos=True,tag=''): 
+    
+    def showg(self,frameId):
+
+        for i in range(self.npoints):
+            self.g.pos[i] = (self.d[1, i, frameId], self.d[2, i, frameId])
+
+        nx.draw(self.g,self.g.pos)
+        plt.axis('scaled')
+        plt.show()
 
     def show3(self,**kwargs): 
         """ create geomfile for frame iframe 
@@ -508,7 +581,7 @@ class Body(object):
                     'wire':False,
                     'ccs':False,
                     'lccs':[],
-                    'ccsa':False,
+                    'accs':False,
                     'struc':False,
                     'filestruc':'DLR.off'
                   }
@@ -563,8 +636,8 @@ class Body(object):
                     'wire': False,
                     'ccs': False,
                     'lccs': [],
-                    'ccsa': False,
-                    'lccsa': [],
+                    'accs': False,
+                    'laccs': [],
                     'struc':False,
                     'filestruc':'DLR.off'
 
@@ -649,19 +722,24 @@ class Body(object):
                     pt = pA[:,0]+Rcyl*self.ccs[k,:,0]
                     geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
                     bodylist.append('{<'+fileccs+'.vect'+"}\n")
-            if kwargs['ccsa']:
-                for key in self.accs.keys():
-                    fileccsa = kwargs['tag']+'ccsa'+str(k)
-                    U = self.accs[key]
-                    print U
-                    geoa = geu.GeomVect(fileccsa)
-                    geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
-                    bodylist.append('{<'+fileccsa+'.vect'+"}\n")
+
+        if kwargs['accs']:
+            for key in self.accs.keys():
+                fileaccs = kwargs['tag']+'accs-'+key
+                U = self.accs[key]
+                geoa = geu.GeomVect(fileaccs)
+                geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
+                bodylist.append('{<'+fileaccs+'.vect'+"}\n")
+
         # wireframe body             
         if kwargs['wire']:
-            bodygv = geu.GeomVect('bodywire',clear=True)
+            if not kwargs['topos']:
+                _filebody = 'body'+str(kwargs['iframe'])
+            else:
+                _filebody = kwargs['tag']+'bwire'
+            bodygv = geu.GeomVect(_filebody,clear=True)
             bodygv.segments(dbody,i2d=False,linewidth=5)
-            bodylist.append('{<bodywire.vect}\n')
+            bodylist.append('{<'+_filebody+'.vect}\n')
 
         return(bodylist)    
 
@@ -882,7 +960,13 @@ def Global_Trajectory(cycle, traj):
 if __name__ == '__main__':
 #    plt.ion()
 #    doctest.testmod()
-    bd = Body()
+    bd = Body(_filemocap='walk.c3d')
+    traj = tr.Trajectory()
+    bd.settopos(traj,0.3)
+    bd.setccs(topos=True)
+    bd.setaccs()
+    bd.show3(wire=True,accs=True,topos=True)
+    #bd.movie(traj=traj)
 
 #    nframes = 126
 #    Bc = Body()

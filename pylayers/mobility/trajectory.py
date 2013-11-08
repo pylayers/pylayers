@@ -31,6 +31,15 @@ class Trajectory(pd.DataFrame):
         if np.shape(pt)[1]>2:
             self['z'] = pt[:,2]
     
+    
+    def time(self,unit=0):
+        """
+        """
+        lt = self['t']
+        t  = np.array(map(lambda x : x.value,lt))
+        conv = 10**(unit-9)
+        t = t * conv
+        return (t)
 
     def plot(self,fig=[],ax=[],Nlabels=5):
         """ plot trajectory

@@ -603,6 +603,7 @@ def Cg2Cl(Cg, Tt, Tr):
     Cl = copy.deepcopy(Cg)
     # get frequency axes    
     fGHz = Cl.fGHz
+    # get angular axes    
     Rt, tangl = BTB_tx(Cg.tang, Tt)
     Rr, rangl = BTB_rx(Cg.rang, Tr)
 

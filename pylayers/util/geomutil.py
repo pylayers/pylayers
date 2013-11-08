@@ -1025,6 +1025,7 @@ def normalize(vec):
 
     Parameters
     ----------
+
     vec : ndarray (N x ndim)
         N ndim vectors
 
@@ -1051,6 +1052,7 @@ def normalize(vec):
     N = np.shape(vec)[0]
     m = np.sqrt(np.sum(vec*vec,axis=1)).reshape(N,1)
     vecn = vec/m
+
     return(vecn)
 
 def ptonseg(pta, phe, pt):
@@ -1592,11 +1594,16 @@ def BTB_tx(a_g, T):
 
     """
     G = SphericalBasis(a_g)
+
     th_g = G[0, :, :]
     ph_g = G[1, :, :]
+
     B_gT = dstack((th_g, ph_g)).transpose((2, 0, 1))
+
     s_l = np.dot(T.T, G[2, :, :]).T
+
     al = angledir(s_l)
+
     L = SphericalBasis(al)
     th_l = L[0, :, :]
     ph_l = L[1, :, :]
