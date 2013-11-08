@@ -1,13 +1,13 @@
 import numpy as np 
 import scipy as sp 
+import pdb
 import matplotlib.pyplot as plt 
 from matplotlib.path import Path 
 import pandas as pd 
 
 
 class Trajectory(pd.DataFrame):
-    def __init__(self,t,pt,unit='s'):
-
+    def __init__(self,t=np.arange(0,10,0.01),pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000))).T,unit='s'):
         t = pd.to_datetime(t,unit=unit)
         #v = np.vstack((pt[1:,:]-pt[0:-1,:],np.array([np.nan,np.nan])))
         #a = np.vstack((v[1:,:]-v[0:-1,:],np.array([np.nan,np.nan])))

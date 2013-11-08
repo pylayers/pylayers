@@ -94,11 +94,12 @@ class Geomview(object):
     -------
     show3
     """
-    def __init__(self, _filename):
+    def __init__(self, _filename,clear=False):
         filename = pyu.getlong(_filename, "geom")
         self.filename = filename
-        fd = open(self.filename,'w')
-        fd.close()           
+        if clear:
+            fd = open(self.filename,'w')
+            fd.close()           
 
     def show3(self):
         """
@@ -114,9 +115,9 @@ class Geomlist(Geomview):
     """
 
     """
-    def __init__(self, _filename):
+    def __init__(self, _filename,clear=False):
         _filename = _filename + '.list'
-        Geomview.__init__(self, _filename)
+        Geomview.__init__(self, _filename,clear=clear)
 
     def append(self, strg):
         """
@@ -182,9 +183,9 @@ class GeomVect(Geomview):
         display a set of points
 
     """
-    def __init__(self, _filename='geomdef'):
+    def __init__(self, _filename='geomdef',clear=False):
         _filename = _filename + '.vect'
-        Geomview.__init__(self, _filename)
+        Geomview.__init__(self, _filename,clear=clear)
 
     def segments(self, ds, i2d=True, linewidth=2):
         """
@@ -393,7 +394,8 @@ class Geomoff(Geomview):
         Geomview.__init__(self, _filename)
 
     def loadpt(self):
-        """
+        """ load points 
+            
         """
         fo = open(self.filename,'r')
         lis = fo.readlines()

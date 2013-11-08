@@ -1,9 +1,8 @@
 import numpy as np
 import scipy.stats as sp
-
 import ConfigParser
 from pylayers.mobility.body import c3d
-from pylayers.mobility import trajectory 
+import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
@@ -49,69 +48,54 @@ def dist(A, B):
 
 class Body(object):
     """ Class to manage the Body model 
+
+    Methods
+    -------
+
+    load
+    center
+    posvel
+    loadC3D
+    movie
+    plot3d
+    geomfile
+    settopos 
+    setccs
+    setaccs
+    cylinder_basis_k
+    cyl_antenna
+
+    Notes
+    -----
+
+        nodes_Id = {0:'STRN',1:'CLAV',2:'RFHD',3:'RSHO',
+        4:'LSHO', 5:'RELB',6:'LELB', 7:'RWRB',8:'LWRB', 9:'RFWT',
+        10:'LFWT', 11:'RKNE', 12:'LKNE',13:'RANK',  14:'LANK' , 
+        15:'LFIN' ,16:'LELB', 17:'RUPA',18:'LUPA',  19:'RFRM', 
+        20:'LFRM', 21:'LSHN', 22:'RSHN',23:'LTHI',  24:'RTHI', 
+        25:'LHEE', 26:'RHEE', 27:'LTOE',28:'RTOE',  29:'RMT5'}
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
-        #self.g = nx.Graph()
-        #self.npoints = 15 
-        #self.nodes_Id = {
-        #    0:'STRN', 
-        #    1:'CLAV',
-        #    2:'RFHD', 
-        #    3:'RSHO', 
-        #    4:'LSHO',
-        #    5:'RELB', 
-        #    6:'LELB', 
-        #    7:'RWRB', 
-        #    8:'LWRB',
-        #    9:'RFWT',
-        #    10:'LFWT', 
-        #    11:'RKNE',
-        #    12:'LKNE', 
-        #    13:'RANK', 
-        #    14:'LANK'}
-#            15:'LFIN'}
-#            16:'LELB',
-#            17:'RUPA',
-#            18:'LUPA',
-#            19:'RFRM',
-#            20:'LFRM',
-#            21:'LSHN',
-#            22:'RSHN',
-#            23:'LTHI',
-#            24:'RTHI',
-#            25:'LHEE',
-#            26:'RHEE',
-#            27:'LTOE',
-#            28:'RTOE',
-#            29:'RMT5'}
-#        self.g.add_nodes_from(self.nodes_Id.keys())
-#        self.g.add_edge(0, 1,radius =1)
-#        self.g[0][1]['radius']=0.18
-#        #self.g.add_edge(0, 9)
-#        #self.g.add_edge(0, 10)
-#        self.g.add_edge(1, 2)
-#        self.g[1][2]['radius']=0.12
-#        #self.g.add_edge(1, 3)
-#        #self.g.add_edge(1, 4)
-#        self.g.add_edge(3, 5)
-#        self.g[3][5]['radius']=0.05
-#        self.g.add_edge(4, 6)
-#        self.g[4][6]['radius']=0.05
-#        self.g.add_edge(5, 7)
-#        self.g[5][7]['radius']=0.05
-##        self.g.add_edge(6, 8)
-#        self.g[6][8]['radius']=0.05
-#        self.g.add_edge(9, 11)
-#        self.g[9][11]['radius']=0.05
-#        self.g.add_edge(10, 12)
-#        self.g[10][12]['radius']=0.05
-#        self.g.add_edge(11, 13)
-#        self.g[11][13]['radius']=0.05
-#        self.g.add_edge(12, 14)
-#        self.g[12][14]['radius']=0.05
         di = self.load(_filebody)
         self.loadC3D(filename=_filemocap)
+        self.center()
+
+    def __repr__(self):
+        st = ''
+        
+        if 'filename' in dir(self):
+            st = st +'filename : '+ self.filename +'\n'
+        if 'nframes' in dir(self):    
+            st = st +'nframes : ' + str(self.nframes) +'\n'
+        if 'pg' in dir(self):
+            st = st + 'Centered : True'+'\n'
+        if 'topos' in dir(self):
+            st = st + 'topos : True'+'\n'
+        else:    
+            st = st + 'topos : False'+'\n'
+        return(st)    
+
 
     def load(self,_filebody='John.ini'):
         """ load a body ini file
@@ -155,7 +139,6 @@ class Body(object):
         keys = map(lambda x : eval(x),di['nodes'].keys())
         self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
 
-        #pdb.set_trace()
         self.g.add_nodes_from(keys)
         for cyl in di['cylinder'].keys():
             t = di['cylinder'][cyl]['t']
@@ -163,23 +146,12 @@ class Body(object):
             r = di['cylinder'][cyl]['r']
             self.g.add_edge(t,h)
             self.g[t][h]['radius']= r 
+       
+        self.ant={}
+        for ant in di['antenna'].keys():
+            self.ant[ant]=di['antenna'][ant]
 
         return(di)
-
-    def __repr__(self):
-        st = ''
-        
-        if 'filename' in dir(self):
-            st = st +'filename : '+ self.filename +'\n'
-        if 'nframes' in dir(self):    
-            st = st +'nframes : ' + str(self.nframes) +'\n'
-        if 'pg' in dir(self):
-            st = st + 'Centered : True'+'\n'
-        if 'topos' in dir(self):
-            st = st + 'topos : True'+'\n'
-        else:    
-            st = st + 'topos : False'+'\n'
-        return(st)    
 
     def center(self):
         """ centering the body 
@@ -274,15 +246,18 @@ class Body(object):
         --------
 
         >>> import numpy as np 
+        >>> import pylayers.mobility.trajectory as tr  
+        >>> import matplotlib.pyplot as plt
         >>> time = np.arange(0,10,0.1)
         >>> v = 4000/3600.
         >>> x = v*time
         >>> y = np.zeros(len(time))
-        >>> traj = np.vstack((time.T,x.T,y.T))
+        >>> traj = tr.Trajectory()
         >>> bc = Body()
-        >>> bc.loadC3D(filename='07_01.c3d')
-        >>> bc.center()
         >>> bc.settopos(traj,2.3,2)
+        >>> nx.draw(bc.g,bc.g.pos)
+        >>> axe = plt.axis('scaled')
+        >>> plt.show()
 
         Notes
         -----
@@ -330,6 +305,61 @@ class Body(object):
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
         
     
+    def setaccs(self):
+        """ set antenna cylinder coordinate system (accs) from a topos
+
+        This method evaluates the set of all accs.
+        It provides the information necessary for antenna placement on 
+        the body. 
+
+        If N is the number of antenna an accs  is an MDA of size 3x4xN
+        
+        >>> import numpy as np 
+        >>> import pylayers.mobility.trajectory as tr  
+        >>> import matplotlib.pyplot as plt
+        >>> time = np.arange(0,10,0.1)
+        >>> v = 4000/3600.
+        >>> x = v*time
+        >>> y = np.zeros(len(time))
+        >>> traj = tr.Trajectory()
+        >>> bc = Body()
+        >>> bc.settopos(traj,2.3,2)
+        >>> bc.setccs(topos=True)
+        >>> bc.setaccs()
+        >>> nx.draw(bc.g,bc.g.pos)
+        >>> axe = plt.axis('scaled')
+        >>> plt.show()
+
+        """
+        self.accs = {}
+        for ant in self.ant.keys():
+
+            # getting antenna placement information 
+
+            Id = self.ant[ant]['cyl']
+            alpha = self.ant[ant]['a']
+            l = self.ant[ant]['l']
+            h = self.ant[ant]['h']
+
+            # getting cylinder information  
+
+            ed = self.g.edges()[Id]
+            kta = ed[0]
+            khe = ed[1]
+            phe = np.array(self.topos[:,khe])
+            pta = np.array(self.topos[:,kta])
+            dl = phe - pta 
+            lmax = np.sqrt(np.dot(dl,dl))
+            CCS = self.ccs[Id,:,:]
+            #self.nodes_Id[kta],self.nodes_Id[khe]
+
+            # applying rotation and translation 
+
+            Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
+            CCSr = np.dot(CCS,Rot)
+            neworigin = pta + CCSr[:,2]*l + CCSr[:,0]*h
+            self.accs[ant] = np.hstack((neworigin[:,np.newaxis],CCSr))
+
     def loadC3D(self, filename='07_01.c3d', nframes=126 ,unit='cm'):
         """ load nframes of motion capture C3D file 
 
@@ -456,6 +486,7 @@ class Body(object):
         return(fig,ax)
                     
     #def show3(self,iframe=0,topos=True,tag=''): 
+
     def show3(self,**kwargs): 
         """ create geomfile for frame iframe 
 
@@ -539,15 +570,18 @@ class Body(object):
 
                   }
 
+
         for key, value in defaults.items(): 
             if key not in kwargs: 
                 kwargs[key] = value
+
+        iframe = kwargs['iframe']
 
         if kwargs['lccs']==[]:
             lccs = np.arange(11)
         else:
             lccs = kwargs['lccs']
-
+        
         if not kwargs['wire']:
             cyl = geu.Geomoff('cylinder')
             pt = cyl.loadpt()
@@ -560,7 +594,7 @@ class Body(object):
             else:
                 _filebody = 'body'
 
-        bodylist = geu.Geomlist(_filebody)
+        bodylist = geu.Geomlist(_filebody,clear=True)
         filestruc = pyu.getlong(kwargs['filestruc'],"geom")
 
         bodylist.append("LIST\n")
@@ -578,9 +612,11 @@ class Body(object):
             if not kwargs['topos']:
                 pA = self.d[:,e0,iframe].reshape(3,1)
                 pB = self.d[:,e1,iframe].reshape(3,1)
+                vg = self.vg[:,iframe][:,np.newaxis]
             else:    
                 pA = self.topos[:,e0].reshape(3,1)
                 pB = self.topos[:,e1].reshape(3,1)
+                vg = self.vtopos
             pM = (pA+pB)/2.
             Rcyl = self.g[e0][e1]['radius']
 
@@ -588,7 +624,7 @@ class Body(object):
                 dbody[k]=(pA,pB)
             else:
                 # affine transformation of cylinder 
-                T = geu.onb(pA,pB,v)
+                T = geu.onb(pA,pB,vg)
                 Y = np.hstack((pM,pA,pB,pM+Rcyl*T[0,:,0].reshape(3,1),
                                         pM+Rcyl*T[0,:,1].reshape(3,1),
                                         pB+Rcyl*T[0,:,0].reshape(3,1)))
@@ -608,22 +644,30 @@ class Body(object):
             # display selected cylinder coordinate system       
             if kwargs['ccs']:
                 if k in lccs:
-                    filename = kwargs['tag']+'ccs'+str(k)
-                    geov = geu.GeomVect(filename)
-                    pt = pA[:,0]+Rcyl*self.basis0[k,:,1]
-                    geov.geomBase(self.basis0[k,:,:],pt=pt,scale=0.1)
-                    bodylist.append('{<'+filename+'.vect'+"}\n")
+                    fileccs = kwargs['tag']+'ccs'+str(k)
+                    geov = geu.GeomVect(fileccs)
+                    pt = pA[:,0]+Rcyl*self.ccs[k,:,0]
+                    geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
+                    bodylist.append('{<'+fileccs+'.vect'+"}\n")
+            if kwargs['ccsa']:
+                for key in self.accs.keys():
+                    fileccsa = kwargs['tag']+'ccsa'+str(k)
+                    U = self.accs[key]
+                    print U
+                    geoa = geu.GeomVect(fileccsa)
+                    geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
+                    bodylist.append('{<'+fileccsa+'.vect'+"}\n")
         # wireframe body             
         if kwargs['wire']:
-            bodygv = geu.GeomVect('bodywire')
+            bodygv = geu.GeomVect('bodywire',clear=True)
             bodygv.segments(dbody,i2d=False,linewidth=5)
             bodylist.append('{<bodywire.vect}\n')
 
         return(bodylist)    
 
 
-    def updbasis0(self,frameId=0,topos=True):
-        """ update basis0
+    def setccs(self,frameId=0,topos=False):
+        """ set cylinder coordinate system 
 
         Parameters
         ----------
@@ -636,7 +680,7 @@ class Body(object):
         Returns
         -------
 
-        self.basis0 : ndarray (nc,3,3)
+        self.ccs : ndarray (nc,3,3)
         
         Notes
         -----
@@ -647,27 +691,28 @@ class Body(object):
 
         nc = len(self.g.edges())
         #
-        # basis0 : nc x 3 x 3  
+        # ccs : nc x 3 x 3  
         #
-        self.basis0 = np.ndarray(shape=(nc,3,3))
+        self.ccs = np.ndarray(shape=(nc,3,3))
 
         for k,e in enumerate(self.g.edges()):
             e0 = e[0]
             e1 = e[1]
             if not topos:
-                pA = self.d[:,e0,iframe].reshape(3,1)
-                pB = self.d[:,e1,iframe].reshape(3,1)
-                vg = self.vg[:,iframe]
+                pA = self.d[:,e0,frameId].reshape(3,1)
+                pB = self.d[:,e1,frameId].reshape(3,1)
+                vg = self.vg[:,frameId][:,np.newaxis]
             else:    
                 pA = self.topos[:,e0].reshape(3,1)
                 pB = self.topos[:,e1].reshape(3,1)
                 vg = self.vtopos
             pM = (pA+pB)/2.
             T = geu.onb(pA,pB,vg)
-            self.basis0[k,:,:] = T 
+            self.ccs[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
         """ 
+
         Parameters 
         ----------
 
@@ -677,9 +722,9 @@ class Body(object):
         nc = self.c.shape[0]
         self.basisk = np.ndarray(shape=(nc, 9))
         for i in range(nc):
-            u0 = self.basis0[i, 0:3]
-            v0 = self.basis0[i, 3:6]
-            w0 = self.basis0[i, 6:]
+            u0 = self.ccs[i, 0:3]
+            v0 = self.ccs[i, 3:6]
+            w0 = self.ccs[i, 6:]
             v1 = self.c[i, 4:7, frameId] - self.c[i, 1:4, frameId]
             v1 = v1 / np.linalg.norm(v1)
             uk, vk, wk = ChangeBasis(u0, v0, w0, v1)
@@ -706,9 +751,9 @@ class Body(object):
         z = l
 
         if frameId == 0:
-            u0 = self.basis0[cylinderId, 0:3]
-            v0 = self.basis0[cylinderId, 3:6]
-            w0 = self.basis0[cylinderId, 6:]
+            u0 = self.ccs[cylinderId, 0:3]
+            v0 = self.ccs[cylinderId, 3:6]
+            w0 = self.ccs[cylinderId, 6:]
 
         else:
             self.cylinder_basis_k(frameId)
@@ -835,8 +880,9 @@ def Global_Trajectory(cycle, traj):
 
 
 if __name__ == '__main__':
-    plt.ion()
-    doctest.testmod()
+#    plt.ion()
+#    doctest.testmod()
+    bd = Body()
 
 #    nframes = 126
 #    Bc = Body()
