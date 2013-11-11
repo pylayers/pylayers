@@ -93,7 +93,9 @@ class Geomview(object):
 
     Methods
     -------
+
     show3
+
     """
     def __init__(self, _filename,clear=False):
         filename = pyu.getlong(_filename, "geom")
@@ -585,6 +587,108 @@ class Geomoff(Geomview):
         fo.write("4 3 2 6 7 1 0 0 0.3\n")
         fo.write("4 6 5 4 7 1 0 0 0.3\n")
         fo.close()
+
+    def pattern(self,theta,phi,E,**kwargs):
+        """ export antenna pattern in a geomview format
+
+        Parameters
+        ----------
+
+        theta : np.array (1 x Ntheta)
+        phi   : np.array (1 x Nphi)
+        E     : np.array complex  (Ntheta,Nphi)
+        po    : origin (1x3)
+        R     : rotation matrix (3x3)
+        minr  : radius of minimum
+        maxr  : radius of maximum
+        ilog  : True (log) False (linear)
+
+        Examples
+        --------
+
+           >>> from pylayers.util.geomutil import *
+           >>> import numpy as np 
+           >>> th = np.arange(0,np.pi,0.05)[:,np.newaxis]
+           >>> ph = np.arange(0,2*np.pi,0.05)[np.newaxis,:]
+           >>> E  = 1.5*np.sin(th)*np.cos(0*ph)
+           >>> g = Geomoff('dipole')
+           >>> g.pattern(th,ph,E)
+           >>> g.show3()
+
+        """
+
+        defaults = { 'po': np.array([0,0,0]),
+                     'T' : np.eye(3), 
+                     'minr' : 0.1, 
+                     'maxr' : 1 , 
+                     'tag' : 'Pat', 
+                     'ilog' : False}
+        
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        minr = kwargs['minr']
+        maxr = kwargs['maxr']
+        tag  = kwargs['tag']
+        ilog = kwargs['ilog']
+        po = kwargs['po']
+        T  = kwargs['T']
+                    
+        Nt = np.shape(theta)[0]
+        Np = np.shape(phi)[1]
+
+        if ilog:
+            R = 10 * np.log10(abs(E))
+        else:
+            R = abs(E)
+
+        #Th = np.outer(theta, np.ones(Np))
+        #Ph = np.outer(np.ones(Nt), phi)
+
+        U = (R - R.min()) / (R.max() - R.min())
+        Ry = minr + (maxr-minr) * U
+        x = Ry * np.sin(theta) * np.cos(phi) + po[0]
+        y = Ry * np.sin(theta) * np.sin(phi) + po[1]
+        z = Ry * np.cos(theta) + po[2]
+        
+        Npoints = Nt * Np
+        Nfaces = (Nt - 1) * Np
+        Nedge = 0
+        #
+        # Colormap
+        #
+        colmap = plt.get_cmap()
+        Ncol = colmap.N
+        cmap = colmap(np.arange(Ncol))
+        g = np.round(U * (Ncol - 1))
+        fd = open(self.filename, 'w')
+        fd.write('COFF\n')
+        chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
+        fd.write(chaine)
+        
+        for ii in range(Nt):
+            for jj in range(Np):
+                cpos = str(x[ii, jj]) + ' ' + str(y[ii, jj]) + ' ' + str(z[ii, jj])
+                cpos = cpos.replace(',', '.')
+                ik = g[ii, jj]
+                ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
+                    ' ' + str(cmap[ik, 2])
+                ccol = ccol.replace(',', '.')
+                fd.write(cpos + ' ' + ccol + ' 0.8\n')
+
+        for ii in range(Nt - 1):
+            for jj in range(Np):
+                p1 = ii * Np + jj
+                p2 = ii * Np + np.mod(jj + 1, Np)
+                p3 = (ii + 1) * Np + jj
+                p4 = (ii + 1) * Np + np.mod(jj + 1, Np)
+                chaine = '4 ' + str(p1) + ' ' + str(p2) + ' ' + \
+                    str(p4) + ' ' + str(p3) + ' 0.5\n'
+                fd.write(chaine)
+
+        fd.close()
+
 #class Polygon2(object):
 #        def __init__(self,p):
 #                self.p = p
@@ -922,21 +1026,21 @@ def onb(A,B,v):
     >>> B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
     >>> v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])
     >>> onb(A,B,v)
-    array([[[ 1., 0.,  0. ],
-            [ 0., 1.,  0. ],
-            [ 0., 0.,  1. ]]
+    array([[[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]]
     <BLANKLINE>
-           [[ 1., 0.,  0. ],
-            [ 0., 1.,  0. ],
-            [ 0., 0.,  1. ]],
+           [[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]],
     <BLANKLINE>
-           [[ 1., 0.,  0. ],
-            [ 0., 1.,  0. ],
-            [ 0., 0.,  1. ]],
+           [[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]],
     <BLANKLINE>
-           [[ 1., 0.,  0. ],
-            [ 0., 1.,  0. ],
-            [ 0., 0.,  1. ]]])
+           [[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]]])
 
 
     see also

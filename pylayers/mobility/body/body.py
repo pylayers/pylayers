@@ -647,6 +647,7 @@ class Body(object):
                     'accs': False,
                     'laccs': [],
                     'struc':False,
+                    'pattern':False,
                     'filestruc':'DLR.off'
 
                   }
@@ -742,6 +743,9 @@ class Body(object):
                 geoa = geu.GeomVect(fileaccs)
                 geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
                 bodylist.append('{<'+fileaccs+'.vect'+"}\n")
+                if kwargs['pattern']:
+                    A =  antenna(self.ant['filename'])
+                    A.show3_geom(pt=U[:,0],T=U[:,1:])
 
         # wireframe body             
         if kwargs['wire']:
@@ -752,6 +756,8 @@ class Body(object):
             bodygv = geu.GeomVect(_filebody,clear=True)
             bodygv.segments(dbody,i2d=False,linewidth=5)
             bodylist.append('{<'+_filebody+'.vect}\n')
+
+
 
         return(bodylist)    
 
@@ -980,7 +986,7 @@ if __name__ == '__main__':
     #bd.show3(wire=True,accs=True,topos=True)
     #bd.show3(wire=False,accs=True,topos=True)
     lt = tr.importsn()
-    bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
+    #bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
 
 #    nframes = 126
 #    Bc = Body()

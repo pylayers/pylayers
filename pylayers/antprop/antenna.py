@@ -34,6 +34,7 @@ import scipy.special as special
 from scipy import io
 import matplotlib.pylab as plt
 import pylayers.util.pyutil as pyu
+import pylayers.util.geomutil as geu
 from pylayers.util.project import *
 from pylayers.antprop.spharm import *
 from matplotlib.font_manager import FontProperties
@@ -309,14 +310,13 @@ class Antenna(object):
         #Th = np.kron(theta, np.ones(Np))
         #Ph = np.kron(np.ones(Nt), phi)
         if typ =='s1':
-            Fth, Fph = self.Fsynth1(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth1(theta, phi,pattern=True)
         if typ =='s2':
-            Fth, Fph = self.Fsynth2b(theta,phi,pattern=True)
+            FTh, FPh = self.Fsynth2b(theta,phi,pattern=True)
         if typ =='s3':
-            Fth, Fph = self.Fsynth3(theta, phi,pattern=True )
-
-        FTh = Fth.reshape(Nf, Nt, Np)
-        FPh = Fph.reshape(Nf, Nt, Np)
+            FTh, FPh = self.Fsynth3(theta, phi,pattern=True )
+        #FTh = Fth.reshape(Nf, Nt, Np)
+        #FPh = Fph.reshape(Nf, Nt, Np)
 
         return(FTh,FPh)
 
@@ -367,14 +367,14 @@ class Antenna(object):
         #Ph = np.kron(np.ones(Nt), phi)
 
         if typ =='s1':
-            Fth, Fph = self.Fsynth1(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth1(theta, phi,pattern=True)
         if typ =='s2':
-            Fth, Fph = self.Fsynth2b(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth2b(theta, phi,pattern=True)
         if typ =='s3':
-            Fth, Fph = self.Fsynth3(theta, phi,pattern=True)
+            FTh, FPh = self.Fsynth3(theta, phi,pattern=True)
 
-        FTh = Fth.reshape(self.Nf, Nt, Np)
-        FPh = Fph.reshape(self.Nf, Nt, Np)
+        #FTh = Fth.reshape(self.Nf, Nt, Np)
+        #FPh = Fph.reshape(self.Nf, Nt, Np)
         #
         #  Jacobian
         #
@@ -809,20 +809,19 @@ class Antenna(object):
         if typ == 'Fphi':
             V = self.Fphi[k, :, :]
 
-        minr = abs(V).min()
-        maxr = abs(V).max()
-        
         if po ==[]:
             po = np.array([0, 0, 0])
         if T ==[]:    
             T = np.eye(3)
-
-        filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
+        
+        _filename = 'antbody' 
+        geo = geu.Geomoff(_filename)
+        geo.pattern(self.theta,self.phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
+        #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
+        #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
 
         if not silent:
-            chaine = "geomview -nopanel -b 1 1 1 " + filename + \
-                " 2>/dev/null &"
-            os.system(chaine)
+            geo.show3()
 
     def show3(self, k=0, typ='Gain', col=True):
         """
@@ -1053,10 +1052,12 @@ class Antenna(object):
 
         """
 
-        if pattern:
-            theta = np.kron(theta, np.ones(len(phi)))
-            phi = np.kron(np.ones(len(theta)),phi)
+        Nt = len(theta)
+        Np = len(phi)
 
+        if pattern:
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
 
         nray = len(theta)
 
@@ -1112,6 +1113,11 @@ class Antenna(object):
         #    np.dot(Ci, np.imag(V.T)) + \
         #    np.dot(Bi, np.real(W.T)) + \
         #    np.dot(Br, np.imag(W.T))
+
+        if pattern:
+            Nf = len(self.fa)
+            Fth = Fth.reshape(Nf, Nt, Np)
+            Fph = Fph.reshape(Nf, Nt, Np)
 
         return Fth, Fph
 
@@ -1236,9 +1242,12 @@ class Antenna(object):
 
         """
 
+        Nt = len(theta)
+        Np = len(phi)
+
         if pattern:
-            theta = np.kron(theta, np.ones(len(phi)))
-            phi = np.kron(np.ones(len(theta)),phi)
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
 
         Br = self.C.Br.s2 # Nf x K2
         Bi = self.C.Bi.s2 # Nf x K2
@@ -1271,6 +1280,11 @@ class Antenna(object):
         Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
               np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
+        if pattern:
+            Nf = len(self.fa)
+            Fth = Fth.reshape(Nf, Nt, Np)
+            Fph = Fph.reshape(Nf, Nt, Np)
+
         return Fth, Fph
 
     def Fsynth2(self, theta, phi,pattern=False):
@@ -1293,9 +1307,12 @@ class Antenna(object):
 
         """
 
+        Nt = len(theta)
+        Np = len(phi)
+
         if pattern:
-            theta = np.kron(theta, np.ones(len(phi)))
-            phi = np.kron(np.ones(len(theta)),phi)
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
 
         Br = self.C.Br.s2
         Bi = self.C.Bi.s2
@@ -1326,6 +1343,11 @@ class Antenna(object):
             np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
         Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
             np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
+
+        if pattern:
+            Nf = len(self.fa)
+            Fth = Fth.reshape(Nf, Nt, Np)
+            Fph = Fph.reshape(Nf, Nt, Np)
 
         return Fth, Fph
 
@@ -1370,9 +1392,14 @@ class Antenna(object):
 
         """
 
+        Nt = len(theta)
+        Np = len(phi)
+
         if pattern:
-            theta = np.kron(theta, np.ones(len(phi)))
-            phi = np.kron(np.ones(len(theta)),phi)
+            self.theta = theta[:,np.newaxis]
+            self.phi = phi[np.newaxis,:] 
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
 
         nray = len(theta)
 
@@ -1389,12 +1416,7 @@ class Antenna(object):
         L = lBr.max()
         M = mBr.max()
 
-
-        #x = -np.cos(theta)
-
-        #Pmm1n, Pmp1n = AFLegendre3(20, 20, x)
-        #Pmm1n, Pmp1n = AFLegendre3(L, L, x)
-        #V, W = VW0(lBr, mBr, x, phi, Pmm1n, Pmp1n)
+        # vector spherical harmonics basis functions
 
         V, W = VW(lBr, mBr, theta, phi)
 
@@ -1408,6 +1430,15 @@ class Antenna(object):
             np.dot(Ci, np.imag(V.T)) + \
             np.dot(Bi, np.real(W.T)) + \
             np.dot(Br, np.imag(W.T))
+        
+        if pattern:
+            Nf = len(self.fa)
+            Fth = Fth.reshape(Nf, Nt, Np)
+            Fph = Fph.reshape(Nf, Nt, Np)
+            self.Ftheta = Fth
+            self.Fphi = Fph
+            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+            self.SqG = np.sqrt(G)
 
         return Fth, Fph
 
@@ -1731,6 +1762,7 @@ class Antenna(object):
         Fph = -Fx * np.sin(ph) + Fy * np.cos(th)
 
         SqG = np.sqrt(np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth)))
+
         self.SqG[:, ith, :] = SqG
         self.Ftheta[:, ith, :] = Fth
         self.Fphi[:, ith, :] = Fph
@@ -2239,9 +2271,12 @@ def show3D(F, theta, phi, k, col=True):
 
     Warnings
     --------
-            len(theta) must be equal with shape(F)[1]
-            len(phi) must be equal with shape(F)[2]
+
+        len(theta) must be equal with shape(F)[1]
+        len(phi) must be equal with shape(F)[2]
+
     """
+
     nth = len(theta)
     nph = len(phi)
 
@@ -2276,86 +2311,6 @@ def show3D(F, theta, phi, k, col=True):
     else:
         ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
 
-def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
-    """ export antenna pattern in a geomview format
-
-    Parameters
-    ----------
-
-    theta : np.array (1 x Ntheta)
-    phi   : np.array (1 x Nphi)
-    E     : np.array complex  (Ntheta,Nphi)
-    f     : frequency
-    po    : origin (1x3)
-    minr  : radius of minimum
-    maxr  : radius of maximum
-    ilog  : True (log) False (linear)
-
-    Returns
-    -------
-
-    filename
-
-
-    """
-
-    Nt = len(theta)
-    Np = len(phi)
-
-    if ilog:
-        R = 10 * np.log10(abs(E))
-    else:
-        R = abs(E)
-
-    Th = np.outer(theta, np.ones(Np))
-    Ph = np.outer(np.ones(Nt), phi)
-
-    T = (R - minr) / (maxr - minr)
-    Ry = 5 + 2 * T
-    x = Ry * np.sin(Th) * np.cos(Ph) + p[0]
-    y = Ry * np.sin(Th) * np.sin(Ph) + p[1]
-    z = Ry * np.cos(Th) + p[2]
-
-    Npoints = Nt * Np
-    Nfaces = (Nt - 1) * Np
-    Nedge = 0
-    #
-    # Colormap
-    #
-    colmap = plt.get_cmap()
-    Ncol = colmap.N
-    cmap = colmap(np.arange(Ncol))
-    g = np.round((R - minr) * (Ncol - 1) / (maxr - minr))
-
-    _filename = racine + str(1000 + f)[1:] + '.off'
-    filename = pyu.getlong(_filename, pstruc['DIRGEOM'])
-    fd = open(filename, 'w')
-    fd.write('COFF\n')
-    chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
-    fd.write(chaine)
-
-    for ii in range(Nt):
-        for jj in range(Np):
-            cpos = str(x[ii, jj]) + ' ' + str(y[ii, jj]) + ' ' + str(z[ii, jj])
-            cpos = cpos.replace(',', '.')
-            ik = g[ii, jj]
-            ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
-                ' ' + str(cmap[ik, 2])
-            ccol = ccol.replace(',', '.')
-            fd.write(cpos + ' ' + ccol + ' 0.8\n')
-
-    for ii in range(Nt - 1):
-        for jj in range(Np):
-            p1 = ii * Np + jj
-            p2 = ii * Np + np.mod(jj + 1, Np)
-            p3 = (ii + 1) * Np + jj
-            p4 = (ii + 1) * Np + np.mod(jj + 1, Np)
-            chaine = '4 ' + str(p1) + ' ' + str(p2) + ' ' + \
-                str(p4) + ' ' + str(p3) + ' 0.5\n'
-            fd.write(chaine)
-
-    fd.close()
-    return(filename)
 
 if (__name__ == "__main__"):
     plt.ion()
