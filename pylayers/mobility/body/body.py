@@ -583,6 +583,7 @@ class Body(object):
                     'lccs':[],
                     'accs':False,
                     'struc':False,
+                    'pattern':False,
                     'filestruc':'DLR.off'
                   }
 
