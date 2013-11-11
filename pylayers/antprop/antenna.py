@@ -289,17 +289,18 @@ class Antenna(object):
         Nt = len(theta)
         Np = len(phi)
         Nf = len(self.fa)
-
-        Th = np.kron(theta, np.ones(Np))
-        Ph = np.kron(np.ones(Nt), phi)
+        #Th = np.kron(theta, np.ones(Np))
+        #Ph = np.kron(np.ones(Nt), phi)
         if typ =='s1':
-            Fth, Fph = self.Fsynth1(Th, Ph)
+            Fth, Fph = self.Fsynth1(theta, phi,pattern=True)
         if typ =='s2':
-            Fth, Fph = self.Fsynth2b(Th, Ph)
+            Fth, Fph = self.Fsynth2b(theta,phi,pattern=True)
         if typ =='s3':
-            Fth, Fph = self.Fsynth3(Th, Ph)
+            Fth, Fph = self.Fsynth3(theta, phi,pattern=True )
+
         FTh = Fth.reshape(Nf, Nt, Np)
         FPh = Fph.reshape(Nf, Nt, Np)
+
         return(FTh,FPh)
 
     def errel(self,kf=-1, dsf=1, typ='s3'):
@@ -345,15 +346,15 @@ class Antenna(object):
         Nt = len(theta)
         Np = len(phi)
 
-        Th = np.kron(theta, np.ones(Np))
-        Ph = np.kron(np.ones(Nt), phi)
+        #Th = np.kron(theta, np.ones(Np))
+        #Ph = np.kron(np.ones(Nt), phi)
 
         if typ =='s1':
-            Fth, Fph = self.Fsynth1(Th, Ph)
+            Fth, Fph = self.Fsynth1(theta, phi,pattern=True)
         if typ =='s2':
-            Fth, Fph = self.Fsynth2b(Th, Ph)
+            Fth, Fph = self.Fsynth2b(theta, phi,pattern=True)
         if typ =='s3':
-            Fth, Fph = self.Fsynth3(Th, Ph)
+            Fth, Fph = self.Fsynth3(theta, phi,pattern=True)
 
         FTh = Fth.reshape(self.Nf, Nt, Np)
         FPh = Fph.reshape(self.Nf, Nt, Np)
@@ -673,7 +674,7 @@ class Antenna(object):
                 >>> import matplotlib.pyplot as plt
                 >>> from pylayers.antprop.antenna import *
                 >>> A = Antenna('defant.trx')
-                >>> A.polar(k=[0,10,50])
+                >>> fig,ax = A.polar(k=[0,10,50])
                 >>> plt.show()
 
         """
@@ -1000,17 +1001,23 @@ class Antenna(object):
         print "compdiag(20,A,A.theta,A.phi,FTh,FPh) "
 
     #def Fsynth1(self, theta, phi, k=0):
-    def Fsynth1(self, theta, phi):
+    def Fsynth1(self, theta, phi,pattern=False):
         """ calculate complex antenna pattern  from VSH Coefficients (shape 1)
 
         Parameters
         ----------
+
         theta  : ndarray (1xNdir)
         phi    : ndarray (1xNdir)
         k      : int
             frequency index
 
         """
+
+        if pattern:
+            theta = np.kron(theta, np.ones(len(phi)))
+            phi = np.kron(np.ones(len(theta)),phi)
+
 
         nray = len(theta)
 
@@ -1172,13 +1179,14 @@ class Antenna(object):
 
         return np.array(tEBr),np.array(tEBi),np.array(tECr),np.array(tECi)
 
-    def Fsynth2b(self, theta, phi):
+    def Fsynth2b(self, theta, phi,pattern=False):
         """  pattern synthesis from shape 2 vsh coefficients
 
         Parameters
         ----------
-        theta
-        phi
+
+        theta : 1 x Nt 
+        phi   : 1 x Np
 
         Notes
         -----
@@ -1188,6 +1196,10 @@ class Antenna(object):
         theta and phi arrays needs to have the same size
 
         """
+
+        if pattern:
+            theta = np.kron(theta, np.ones(len(phi)))
+            phi = np.kron(np.ones(len(theta)),phi)
 
         Br = self.C.Br.s2 # Nf x K2
         Bi = self.C.Bi.s2 # Nf x K2
@@ -1222,13 +1234,16 @@ class Antenna(object):
 
         return Fth, Fph
 
-    def Fsynth2(self, theta, phi):
+    def Fsynth2(self, theta, phi,pattern=False):
         """  pattern synthesis from shape 2 vsh coeff
 
         Parameters
         ----------
-        theta
-        phi
+
+        theta : array 1 x Nt 
+        phi : 
+        pattern : boolean 
+
 
         Notes
         -----
@@ -1238,6 +1253,10 @@ class Antenna(object):
         theta and phi arrays needs to have the same size
 
         """
+
+        if pattern:
+            theta = np.kron(theta, np.ones(len(phi)))
+            phi = np.kron(np.ones(len(theta)),phi)
 
         Br = self.C.Br.s2
         Bi = self.C.Bi.s2
@@ -1272,7 +1291,7 @@ class Antenna(object):
         return Fth, Fph
 
 
-    def Fsynth3(self, theta, phi):
+    def Fsynth3(self, theta, phi, pattern=False):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Let Ndir be the number of directions
@@ -1282,6 +1301,8 @@ class Antenna(object):
 
         theta : ndarray (1xNdir)
         phi   : ndarray (1xNdir)
+        pattern : boolean
+            if True theta and phi are reorganized for building the pattern
 
         Returns
         -------
@@ -1309,6 +1330,10 @@ class Antenna(object):
         once the V,W function
 
         """
+
+        if pattern:
+            theta = np.kron(theta, np.ones(len(phi)))
+            phi = np.kron(np.ones(len(theta)),phi)
 
         nray = len(theta)
 
@@ -1432,27 +1457,28 @@ class Antenna(object):
 
         """
 
-        th = np.kron(self.theta, np.ones(self.Np))
-        ph = np.kron(np.ones(self.Nt), self.phi)
+        #th = np.kron(self.theta, np.ones(self.Np))
+        #ph = np.kron(np.ones(self.Nt), self.phi)
 
-        Fth3, Fph3 = self.Fsynth3(th, ph)
+        Fth3, Fph3 = self.Fsynth3(self.theta, self.phi,pattern=True)
         Err = self.mse(Fth3, Fph3, 0)
 
         Enc = self.C.ens3()
         n = len(Enc)
         pos = 0
+
         while (pos < n) & (Err[0] < emax):
 
             Emin = Enc[pos]
             d = self.C.drag3(Emin)
-            Fth3, Fph3 = self.Fsynth3(th, ph)
+            Fth3, Fph3 = self.Fsynth3(self.theta, self.phi,pattern=True)
             Err = self.mse(Fth3, Fph3, 0)
 
             if Err[0] >= emax:
                 i = d[0][0]
                 i3 = d[1][0]
                 self.C.put3(i, i3)
-                Fth3, Fph3 = self.Fsynth3(th, ph)
+                Fth3, Fph3 = self.Fsynth3(self.theta,self.phi,pattern=True)
                 Err = self.mse(Fth3, Fph3, 0)
 
             pos = pos + 1

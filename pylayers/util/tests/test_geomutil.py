@@ -10,7 +10,8 @@ class Tesonb(TestCase):
         print "testing geomutil.onbfrmaxe"
         A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
         B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
-        T = onbfromaxe(A,B)
+        v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])
+        T = onb(A,B,v)
         print np.shape(T)
         print T[:,0,:]
         print T[:,1,:]
