@@ -2583,6 +2583,6 @@ class Simul(object):
                 self.CIRa.append(CIRa)
 
 
-#if (__name__ == "__main__"):
-#    plt.ion()
-#    doctest.testmod()
+if (__name__ == "__main__"):
+    plt.ion()
+    doctest.testmod()
