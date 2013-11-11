@@ -14,7 +14,6 @@ import copy
 
 
 import pickle
-
 import pdb
 import os
 
@@ -23,11 +22,13 @@ import os
 
 class Save(Process):
     """
+
     Save all variable of a simulnet simulation.
     Save process can be setup with the save.ini file from /<project>/ini
         
     Attributes
     ----------
+
     net : pylayers.network.network()
     sim : SimPy.SimulationRT()
 
@@ -51,10 +52,10 @@ class Save(Process):
 
     """
     def __init__(self, **args):
+
         defaults = {'L': None,
                     'net': None,
                     'sim': None}
-
 
 ##       initialize attributes
         for key, value in defaults.items():
@@ -74,20 +75,16 @@ class Save(Process):
         self.pos = dict(self.C.items('position'))
         self.ldp = dict(self.C.items('ldp'))
         self.rat = dict(self.C.items('rat'))
-        self.lpos=eval(self.pos['position'])
-        self.lldp=eval(self.ldp['ldp'])
-        self.lrat=eval(self.rat['rat'])
+        self.lpos = eval(self.pos['position'])
+        self.lldp = eval(self.ldp['ldp'])
+        self.lrat = eval(self.rat['rat'])
 
 
-        self.sim=args['sim']
-        self.net=args['net']
-
-
-
+        self.sim = args['sim']
+        self.net = args['net']
 
     def load(self,filename=[]):
-        """
-        Load a saved trace simulation
+        """ Load a saved trace simulation
 
         Examples
         --------
@@ -175,9 +172,9 @@ class Save(Process):
 
         ### init save dictionnary
         self.save['saveopt']['Layout'] = self.L.filename
-        self.save['saveopt']['type']=nx.get_node_attributes(self.net,'type')
-        self.save['saveopt']['epwr']=nx.get_node_attributes(self.net,'epwr')
-        self.save['saveopt']['sens']=nx.get_node_attributes(self.net,'sens')
+        self.save['saveopt']['type'] = nx.get_node_attributes(self.net,'type')
+        self.save['saveopt']['epwr'] = nx.get_node_attributes(self.net,'epwr')
+        self.save['saveopt']['sens'] = nx.get_node_attributes(self.net,'sens')
 
 
         self.save['saveopt']['subnet']={}
@@ -186,7 +183,8 @@ class Save(Process):
 
         [self.save.update({n:{}}) for n in self.net.nodes()]
 
-        # find the size of save array regarding the simulation duration and the save sample time
+        # find the size of save array regarding the simulation duration and
+        # the saved sample time
         nb_sample=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
 
 

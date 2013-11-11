@@ -4,6 +4,7 @@ from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 import shapely.geometry as sh
 import scipy.linalg as la
 import pdb
+import logging 
 #! /usr/bin/python
 # geomutil.py
 """ functions related to geometry
@@ -402,23 +403,16 @@ class Geomoff(Geomview):
         typ,nv,nf,ne=lis[0].split(' ')
         if typ<>'OFF':
             logging.critical('not an off file')
-        else:
-            try:
-                nv = eval(nv)
-                nf = eval(nf)
-                ne = eval(ne)
-            except:
-                logging.critical('load off wrong number of values')
-        #print nv,nf,ne
+        nv = eval(nv)
+        nf = eval(nf) 
+        ne = eval(ne)
         for k in range(nv):
-            x,y,z = lis[k+1].split(' ')
-            x = eval(x)
-            y = eval(y)
-            z = eval(z)
+            #x,y,z = lis[k+1].split(' ')
+            pt = np.fromstring(lis[k+1],dtype=float,sep=' ')
             try:
-                t = np.vstack((t,np.array([x,y,z])))
+                t = np.vstack((t,pt))
             except:
-                t = np.array([x,y,z])
+                t = pt
         return(t)
 
     def savept(self,ptnew,_fileoff):
@@ -504,6 +498,47 @@ class Geomoff(Geomview):
                 fo.write("%i  " % (k + 1))
             #fo.write(%6.3f %6.3f %6.3f 0.4\n" % (col[0],col[1],col[2]))
             fo.write("1.0 0.0 1.0 0.4\n")
+        fo.close()
+
+    def cylinder(self,r,l,nphi=20,nl=3,col=[1.,0.0,1.0],alpha=0.1):
+        """ create a cylinder 
+
+        Parameters
+        ----------
+
+        r : radius
+        l : length 
+        nphi : number of phi 
+        nl : number of l 
+        col : list [r,g,b]
+        alpha : transparency 
+
+        """
+        tphi = np.linspace(0,2*np.pi,nphi,endpoint=False)
+        tz = np.linspace(-l/2.,l/2.,nl)
+        npoly = nphi*(nl-1)
+        nedges = nphi*(2*nl-1)
+        fo = open(self.filename, 'w')
+        #fo.write("OFF\n")
+        fo.write("OFF %d %d %d\n" % (nphi*nl+1, npoly,nedges))
+        fo.write("0.000 0.000 0.000 \n")
+        for z in tz:
+            for phi in tphi: 
+               x = r*np.cos(phi)
+               y = r*np.sin(phi)
+               fo.write("%6.3f %6.3f %6.3f \n" % (x, y, z))
+        for k in range(npoly):
+            il = k/nphi
+            iphi = k % nphi
+            a = il*nphi+iphi
+            b = il*nphi+(iphi+1)%nphi
+            c = (il+1)*nphi+iphi
+            d = (il+1)*nphi+(iphi+1)%nphi
+
+            fo.write("4 %i %i %i %i " %(a+1,b+1,d+1,c+1))
+            str1 = str(col[0])+' '+str(col[1])+' '+str(col[2])+' '+ str(alpha)+'\n'
+            fo.write(str1)
+
         fo.close()
 
     def box(self, extrem = np.array([-1,1,-1,1,-3,3])):
@@ -1310,7 +1345,7 @@ def affine(X,Y):
     A = np.dot(Yc,pX)
     return(A,B)
 
-def cylmap(Y):
+def cylmap(Y,r=0.0625,l=0.5):
     """ find affine transformation for a specific cylinder
 
     Parameters
@@ -1333,7 +1368,8 @@ def cylmap(Y):
     Y = A X + B 
 
     """
-    X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
+    #X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
+    X = np.array([[0,0,0],[0,0,-l/2],[0,0,l/2],[r,0,0],[0,r,0],[r,0,l/2]]).T
     B = Y[:,0][:,np.newaxis]
     Yc = Y-B
     pX = la.pinv(X)

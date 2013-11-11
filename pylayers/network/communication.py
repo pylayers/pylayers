@@ -274,14 +274,6 @@ class TX(Process):
                         self.devt[eval(key)].signal()
 
 
-
-
-
-
-
-
-
-
 class RX(Process):
     """
     RX process

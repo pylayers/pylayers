@@ -22,7 +22,8 @@
 #####################################################################
 
 from IPython.display import clear_output, display
-from SimPy.SimulationRT import Process, hold
+from SimPy.SimulationRT import Process, hold  # sympy 2
+#import simpy # simpy 3
 import numpy as np
 import scipy as sp
 import networkx as nx

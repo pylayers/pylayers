@@ -468,7 +468,15 @@ class Body(object):
         Parameters
         ----------
 
-        traj  : np.array Npt x 3 (t,x,y)    
+        lframe : []
+        verbose : False
+        topos : True
+        wire : True
+        ccs : False
+        accs : False
+        struc : True
+        traj : []
+        filestruc:'DLR.off'
 
         See Also
         --------
@@ -593,7 +601,6 @@ class Body(object):
         bdy = self.geomfile(**kwargs)
         bdy.show3()
 
-    #def geomfile(self,iframe=0,verbose=False,topos=False,tag=''):
     def geomfile(self,**kwargs):
         """ create a geomview file from a body configuration 
 
@@ -656,7 +663,9 @@ class Body(object):
             lccs = kwargs['lccs']
         
         if not kwargs['wire']:
-            cyl = geu.Geomoff('cylinder')
+            # load reference cylinder
+            #cyl = geu.Geomoff('cylinder')
+            cyl = geu.Geomoff('toto')
             pt = cyl.loadpt()
 
         if not kwargs['topos']:
@@ -702,7 +711,7 @@ class Body(object):
                                         pM+Rcyl*T[0,:,1].reshape(3,1),
                                         pB+Rcyl*T[0,:,0].reshape(3,1)))
                 # idem geu.affine for a specific cylinder
-                A,B = geu.cylmap(Y)
+                A,B = geu.cylmap(Y,r=2,l=6)
                 ptn = np.dot(A,pt.T)+B
                 if not kwargs['topos']:
                     _filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
@@ -714,6 +723,7 @@ class Body(object):
                 bodylist.append('{<'+filename+'}\n')
                 if kwargs['verbose']:
                     print('{<'+filename+'}\n')
+
             # display selected cylinder coordinate system       
             if kwargs['ccs']:
                 if k in lccs:
@@ -723,6 +733,7 @@ class Body(object):
                     geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
                     bodylist.append('{<'+fileccs+'.vect'+"}\n")
 
+        # display antenna cylinder coordinate system
         if kwargs['accs']:
             for key in self.accs.keys():
                 fileaccs = kwargs['tag']+'accs-'+key
@@ -965,8 +976,10 @@ if __name__ == '__main__':
     bd.settopos(traj,0.3)
     bd.setccs(topos=True)
     bd.setaccs()
-    bd.show3(wire=True,accs=True,topos=True)
-    #bd.movie(traj=traj)
+    #bd.show3(wire=True,accs=True,topos=True)
+    #bd.show3(wire=False,accs=True,topos=True)
+    lt = tr.importsn()
+    bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
 
 #    nframes = 126
 #    Bc = Body()

@@ -109,7 +109,7 @@ class Antenna(object):
         Notes
         -----
 
-        There are various supported data format for reading antenna patterns
+        There are various supported data formats for storing antenna patterns
 
         'mat': Matlab File
         'vsh2': un thresholdes vector spherical coefficients
@@ -133,6 +133,22 @@ class Antenna(object):
             self.loadtrx(directory)
         if typ == 'mat':
             self.loadmat(directory)
+
+    def __repr__(self):
+        st = ''
+        st = st + self._filename+'\n'
+        st = st + self.typ+'\n'
+        if self.typ == 'mat':
+            st = st + self.DataFile + '\n'
+            st = st + self.AntennaName + '\n'
+            st = st + self.Date +'\n'
+            st = st + self.StartTime +'\n'
+            st = st + self.Notes+'\n'
+            st = st + str(self.Serie)+'\n'
+            st = st + str(self.Run)+'\n'
+            st = st + "Nb theta (lat) :"+ str(self.Nt)+'\n'
+            st = st + "Nb phi (lon) :"+ str(self.Np)+'\n'
+        return(st)
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
@@ -276,10 +292,11 @@ class Antenna(object):
         self.Nf = 104
 
     def pattern(self,theta,phi,typ='s3'):
-        """ return radiation multidimensionnal patterns 
+        """ return multidimensionnal radiation patterns 
         
         Parameters
         ----------
+
         theta   : array
             1xNt
         phi     : array
@@ -292,12 +309,14 @@ class Antenna(object):
 
         Th = np.kron(theta, np.ones(Np))
         Ph = np.kron(np.ones(Nt), phi)
+
         if typ =='s1':
             Fth, Fph = self.Fsynth1(Th, Ph)
         if typ =='s2':
             Fth, Fph = self.Fsynth2b(Th, Ph)
         if typ =='s3':
             Fth, Fph = self.Fsynth3(Th, Ph)
+
         FTh = Fth.reshape(Nf, Nt, Np)
         FPh = Fph.reshape(Nf, Nt, Np)
         return(FTh,FPh)
@@ -651,6 +670,7 @@ class Antenna(object):
 
             Parameters
             ----------
+
             k : list of int
                 frequency index  (default 0)
             it  : int
@@ -664,6 +684,12 @@ class Antenna(object):
             alpha  : float
                 default 0.1
 
+            Returns    
+            -------
+
+            fig 
+            ax 
+
             Examples
             --------
 
@@ -673,7 +699,7 @@ class Antenna(object):
                 >>> import matplotlib.pyplot as plt
                 >>> from pylayers.antprop.antenna import *
                 >>> A = Antenna('defant.trx')
-                >>> A.polar(k=[0,10,50])
+                >>> fig,ax = A.polar(k=[0,10,50])
                 >>> plt.show()
 
         """
@@ -748,19 +774,31 @@ class Antenna(object):
         ax.legend()
         return(fig,ax)
 
-    def show3_geom(self, k=0, typ='Gain', mode='linear', silent=False):
+    def show3_geom(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
         """ show3 geomview
 
         Parameters
         ----------
 
             k : frequency index
+            po : poition of the antenna
+            T  : GCS of the antenna
             typ : string
                 'Gain' | 'Ftheta' | 'Fphi'
             mode : string
                 'linear'| 'not implemented'
             silent : boolean 
                 True    | False
+
+        Examples
+        --------
+
+            >>> from pylayers.antprop.antenna import *
+            >>> import numpy as np
+            >>> import matplotlib.pylab as plt
+            >>> A = Antenna('defant.vsh3')
+            >>> A.show3_geom()
+
         """
 
         f = self.fa[k]
@@ -774,8 +812,11 @@ class Antenna(object):
 
         minr = abs(V).min()
         maxr = abs(V).max()
-
-        po = np.array([0, 0, 0])
+        
+        if po ==[]:
+            po = np.array([0, 0, 0])
+        if T ==[]:    
+            T = np.eye(3)
 
         filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
 
@@ -1275,7 +1316,7 @@ class Antenna(object):
     def Fsynth3(self, theta, phi):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
-        Let Ndir be the number of directions
+        Ndir is the number of directions
 
         Parameters
         ----------
@@ -2212,10 +2253,11 @@ def show3D(F, theta, phi, k, col=True):
         ax.plot3D(np.ravel(X), np.ravel(Y), np.ravel(Z))
 
 def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
-    """ export antenna pattern in geomview format
+    """ export antenna pattern in a geomview format
 
     Parameters
     ----------
+
     theta : np.array (1 x Ntheta)
     phi   : np.array (1 x Nphi)
     E     : np.array complex  (Ntheta,Nphi)
@@ -2232,6 +2274,7 @@ def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
 
 
     """
+
     Nt = len(theta)
     Np = len(phi)
 
@@ -2291,4 +2334,5 @@ def geom_pattern(theta, phi, E, f, p, minr, maxr, racine, ilog=False):
     return(filename)
 
 if (__name__ == "__main__"):
+    plt.ion()
     doctest.testmod()
