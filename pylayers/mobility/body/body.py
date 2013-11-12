@@ -713,7 +713,8 @@ class Body(object):
                                         pM+Rcyl*T[0,:,1].reshape(3,1),
                                         pB+Rcyl*T[0,:,0].reshape(3,1)))
                 # idem geu.affine for a specific cylinder
-                A,B = geu.cylmap(Y,r=2,l=6)
+                #A,B = geu.cylmap(Y,r=2,l=6)
+                A,B = geu.cylmap(Y)
                 ptn = np.dot(A,pt.T)+B
                 if not kwargs['topos']:
                     _filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
