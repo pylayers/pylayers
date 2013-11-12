@@ -163,6 +163,7 @@ if basename<>pylayersdir+'/data':
                 if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
                     pass
                 else:
+                    pdb.set_trace()
                     shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
             
 

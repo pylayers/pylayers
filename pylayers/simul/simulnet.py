@@ -27,6 +27,7 @@ warnings.filterwarnings('ignore')
 
 #import SimPy.Simulation
 from SimPy.SimulationRT import SimulationRT, Process, hold
+#import simpy # simpy 3
 import numpy as np
 import scipy as sp
 import networkx as nx
@@ -55,7 +56,8 @@ from pylayers.util.save import *
 import pdb
 import os
 
-class Simul(SimulationRT):
+class Simul(SimulationRT): # Sympy 2
+#class Simul(sympy.RealtimeEnvironment):
     """
 
     Attributes
@@ -77,7 +79,8 @@ class Simul(SimulationRT):
 
     """
     def __init__(self):
-        SimulationRT.__init__(self)
+        SimulationRT.__init__(self) #Sympy 2
+        #sympy.RealtimeEnvironment.__init__(self)  #simpy 3
         self.initialize()
         self.config = ConfigParser.ConfigParser()
         filename = pyu.getlong('simulnet.ini','ini')
@@ -99,11 +102,13 @@ class Simul(SimulationRT):
 
     def create_layout(self):
         """
-        Create Layout in Simpy the_world thantks to Tk backend
+        Create Layout in Simpy the_world thanks to Tk backend
 
         """
 
-        self.the_world = world(width=float(self.lay_opt['the_world_width']), height=float(self.lay_opt['the_world_height']), scale=float(self.lay_opt['the_world_scale']))
+        self.the_world = world(width = float(self.lay_opt['the_world_width']), 
+                               height = float(self.lay_opt['the_world_height']),
+                               scale=float(self.lay_opt['the_world_scale']))
 
         # tk = self.the_world.tk
         # canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
@@ -290,6 +295,9 @@ class Simul(SimulationRT):
 
 
     def create_show(self):
+        """ 
+        """
+
         plt.ion()
         fig_net = 'network'
         fig_table = 'table'
@@ -299,11 +307,11 @@ class Simul(SimulationRT):
                 notebook=True
             else:
                 notebook =False
-            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,notebook=notebook)
+            self.sh = ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,notebook=notebook)
             self.activate(self.sh,self.sh.run(),1.0)
 
         if str2bool(self.net_opt['show_table']):
-            self.sht=ShowTable(net=self.net,lAg=self.lAg,sim=self,fname=fig_table)
+            self.sht = ShowTable(net=self.net,lAg=self.lAg,sim=self,fname=fig_table)
             self.activate(self.sht,self.sht.run(),1.0)
 
 
@@ -311,7 +319,9 @@ class Simul(SimulationRT):
         """ Run simulation
         """
 
-        self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
+        self.simulate(until=float(self.sim_opt['duration']),
+                      real_time=True,
+                      rel_speed=float(self.sim_opt['speedratio']))
 #        self.simulate(until=float(self.sim_opt['duration']))
         if self.save_opt['savep']:
             print 'Processing save results, please wait'

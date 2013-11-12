@@ -4,7 +4,7 @@ import matplotlib.pylab as plt
 from numpy import *
 import pdb
 """
-This test : 
+This example : 
     
     1 : loads a measured antenna
     2 : applies an electrical delay obtained from data with getdelay method

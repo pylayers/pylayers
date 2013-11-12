@@ -1078,6 +1078,8 @@ class Rays(dict):
         ----------
 
         fGHz : array
+            frequency in GHz array
+        ib : 
             
         """
 
