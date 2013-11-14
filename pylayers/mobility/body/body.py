@@ -986,7 +986,7 @@ if __name__ == '__main__':
     #bd.show3(wire=True,accs=True,topos=True)
     #bd.show3(wire=False,accs=True,topos=True)
     lt = tr.importsn()
-    #bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
+    bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
 
 #    nframes = 126
 #    Bc = Body()
