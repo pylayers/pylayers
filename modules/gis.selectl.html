@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="gis" href="gis.html" />
     <link rel="next" title="antprop" href="antprop.html" />
-    <link rel="prev" title="furniture" href="gis.furniture.html" /> 
+    <link rel="prev" title="Cycles" href="gis.cycles.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="antprop.html" title="antprop"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="gis.furniture.html" title="furniture"
+          <a href="gis.cycles.html" title="Cycles"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
@@ -59,8 +59,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="gis.furniture.html"
-                        title="previous chapter">furniture</a></p>
+  <p class="topless"><a href="gis.cycles.html"
+                        title="previous chapter">Cycles</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="antprop.html"
                         title="next chapter">antprop</a></p>
@@ -92,11 +92,19 @@
 <dt id="pylayers.gis.selectl.SelectL">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.selectl.</tt><tt class="descname">SelectL</tt><big>(</big><em>L</em>, <em>fig</em>, <em>ax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/selectl.html#SelectL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.selectl.SelectL" title="Permalink to this definition">¶</a></dt>
 <dd><p>Associates a Layout and a figure</p>
-<p>o : toggle overlay
-p : create point
-x : save graph in .str2 file
-w : show all layers
-z : change display parameter (GUI)</p>
+<p>&#8216;l&#8217;  : select activelayer
+&#8216;i&#8217;  : back to init state
+&#8216;e&#8217;  : edit segment
+&#8216;t&#8217;  : translate  structure
+&#8216;h&#8217;  : add subsegment
+&#8216;d&#8217;  : delete subsegment
+&#8216;r&#8217;  : refresh
+&#8216;o&#8217;  : toggle overlay
+&#8216;m&#8217;  : toggle mode (point or segment)
+&#8216;z&#8217;  : change display parameters
+&#8216;q&#8217;  : quit interactive mode
+&#8216;x&#8217;  : save .str2 file
+&#8216;w&#8217;  : display all layers</p>
 <dl class="method">
 <dt id="pylayers.gis.selectl.SelectL.OnClick">
 <tt class="descname">OnClick</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/selectl.html#SelectL.OnClick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.selectl.SelectL.OnClick" title="Permalink to this definition">¶</a></dt>
@@ -117,17 +125,28 @@ z : change display parameter (GUI)</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>&#8216;l&#8217;</strong> : select activelayer</p>
 <p><strong>&#8216;i&#8217;</strong> : back to init state</p>
+<p><strong>&#8216;j&#8217;</strong> : vertical and horizontal scaling</p>
 <p><strong>&#8216;e&#8217;</strong> : edit segment</p>
+<p><strong>&#8216;b&#8217;</strong> : edit segment keyboard</p>
 <p><strong>&#8216;t&#8217;</strong> : translate  structure</p>
 <p><strong>&#8216;h&#8217;</strong> : add subsegment</p>
 <p><strong>&#8216;d&#8217;</strong> : delete subsegment</p>
 <p><strong>&#8216;r&#8217;</strong> : refresh</p>
-<p><strong>&#8216;o&#8217;</strong> : toggle overlay</p>
+<p><strong>&#8216;o&#8217;</strong> : toggle overlay (&lt;&gt; CP mode)</p>
+<blockquote>
+<div><p>set origin (CP mode)</p>
+</div></blockquote>
 <p><strong>&#8216;m&#8217;</strong> : toggle mode (point or segment)</p>
+<p><strong>&#8216;n&#8217;</strong> : toggle node label display</p>
 <p><strong>&#8216;z&#8217;</strong> : change display parameters</p>
 <p><strong>&#8216;q&#8217;</strong> : quit interactive mode</p>
-<p><strong>&#8216;x&#8217;</strong> : save .str2 file</p>
-<p class="last"><strong>&#8216;w&#8217;</strong> : display all layers</p>
+<p><strong>&#8216;x&#8217;</strong> : save .str2 and .ini file</p>
+<p><strong>&#8216;w&#8217;</strong> : display all layers</p>
+<p><strong>&#8216;v&#8217;</strong> : flip layout w.r.t y axis</p>
+<p><strong>&#8216;f&#8217;</strong> : toggle points nodes display</p>
+<p><strong>&#8216;g&#8217;</strong> : toggle segments nodes display</p>
+<p><strong>&#8216;=&#8217;</strong> : increment layer</p>
+<p class="last"><strong>&#8216;$&#8217;</strong> : decrement layer</p>
 </td>
 </tr>
 </tbody>
@@ -176,7 +195,7 @@ z : change display parameter (GUI)</p>
           <a href="antprop.html" title="antprop"
              >next</a></li>
         <li class="right" >
-          <a href="gis.furniture.html" title="furniture"
+          <a href="gis.cycles.html" title="Cycles"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>

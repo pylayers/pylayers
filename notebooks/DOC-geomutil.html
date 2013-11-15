@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="User Manual" href="index.html" />
     <link rel="next" title="User references" href="../modules/index.html" />
-    <link rel="prev" title="Robust Geometric Positioning Algorithm" href="DOC-RGPA.html" /> 
+    <link rel="prev" title="Robust Geometric Positioning Algorithm presented in ``_" href="DOC-RGPA.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="../modules/index.html" title="User references"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="DOC-RGPA.html" title="Robust Geometric Positioning Algorithm"
+          <a href="DOC-RGPA.html" title="Robust Geometric Positioning Algorithm presented in ``_"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>
@@ -76,6 +76,7 @@
 <li><a class="reference internal" href="#linet">linet</a></li>
 <li><a class="reference internal" href="#dptseg-p-pt-ph">dptseg(p,pt,ph)</a></li>
 <li><a class="reference internal" href="#ptconvex">ptconvex</a></li>
+<li><a class="reference internal" href="#intersect">intersect</a></li>
 </ul>
 </li>
 </ul>
@@ -84,7 +85,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="DOC-RGPA.html"
-                        title="previous chapter">Robust Geometric Positioning Algorithm</a></p>
+                        title="previous chapter">Robust Geometric Positioning Algorithm presented in ``_</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../modules/index.html"
                         title="next chapter">User references</a></p>
@@ -143,7 +144,7 @@ to initialize a Polygon with different object
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">poly3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;#000000&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_011.png" src="../_images/_fig_011.png" />
+<img alt="../_images/_fig_01.png" src="../_images/_fig_01.png" />
 </div>
 <div class="section" id="buildgv">
 <h2>buildGv<a class="headerlink" href="#buildgv" title="Permalink to this headline">¶</a></h2>
@@ -258,7 +259,7 @@ environement.</p>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_073.png" src="../_images/_fig_073.png" />
+<img alt="../_images/_fig_071.png" src="../_images/_fig_071.png" />
 </div>
 <div class="section" id="dptseg-p-pt-ph">
 <h3>dptseg(p,pt,ph)<a class="headerlink" href="#dptseg-p-pt-ph" title="Permalink to this headline">¶</a></h3>
@@ -284,7 +285,7 @@ environement.</p>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_092.png" src="../_images/_fig_092.png" />
+<img alt="../_images/_fig_091.png" src="../_images/_fig_091.png" />
 <p>ptonseg(pta,phe,pt)</p>
 <hr class="docutils" />
 <p>used in select.py</p>
@@ -309,16 +310,89 @@ environement.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>
 <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">polyg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">tcc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
     <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
-<span class="n">polyg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_112.png" src="../_images/_fig_112.png" />
+<img alt="../_images/_fig_111.png" src="../_images/_fig_111.png" />
+<img alt="../_images/_fig_132.png" src="../_images/_fig_132.png" />
+</div>
+<div class="section" id="intersect">
+<h3>intersect<a class="headerlink" href="#intersect" title="Permalink to this headline">¶</a></h3>
+<p>intersect(A,B,C,D) wether or not the N segments (AB) intersects N
+segments (CD). The intersection is tested only for the segpment of same
+index in the ndarray.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
+<span class="n">N1</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">N2</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N1</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N1</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N1</span><span class="p">)</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">N1</span><span class="p">)</span>
+<span class="n">b1</span> <span class="o">=</span> <span class="n">intersect</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pt1</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="n">ph1</span> <span class="o">=</span> <span class="n">B</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="n">pt2</span> <span class="o">=</span> <span class="n">C</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="n">ph2</span> <span class="o">=</span> <span class="n">D</span><span class="p">[:,</span><span class="n">b1</span><span class="p">]</span>
+<span class="n">pt3</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,(</span><span class="mi">1</span><span class="o">-</span><span class="n">b1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span>
+<span class="n">ph3</span> <span class="o">=</span> <span class="n">B</span><span class="p">[:,(</span><span class="mi">1</span><span class="o">-</span><span class="n">b1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span>
+<span class="n">pt4</span> <span class="o">=</span> <span class="n">C</span><span class="p">[:,(</span><span class="mi">1</span><span class="o">-</span><span class="n">b1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span>
+<span class="n">ph4</span> <span class="o">=</span> <span class="n">D</span><span class="p">[:,(</span><span class="mi">1</span><span class="o">-</span><span class="n">b1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span>
+<span class="n">f1</span><span class="p">,</span><span class="n">a1</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span><span class="n">ph1</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">f2</span><span class="p">,</span><span class="n">a2</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt2</span><span class="p">,</span><span class="n">ph2</span><span class="p">,</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">f3</span><span class="p">,</span><span class="n">a3</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt3</span><span class="p">,</span><span class="n">ph3</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">)</span>
+<span class="n">f4</span><span class="p">,</span><span class="n">a4</span> <span class="o">=</span> <span class="n">displot</span><span class="p">(</span><span class="n">pt4</span><span class="p">,</span><span class="n">ph4</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;test intersect&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/_fig_162.png" src="../_images/_fig_162.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">b1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;bool&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">False</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+</pre></div>
+</div>
+<p>One want to evaluate all the intersection of a set of segments of</p>
+<p>r un rayon (multi line) constitué de Ns segments</p>
+<ol class="arabic simple">
+<li>trouver la boite englobante b d&#8217;une multi-line</li>
+<li>à partir de b trouver l&#8217;ensemble des segments intervenant dans la
+boite</li>
+<li></li>
+</ol>
 </div>
 </div>
 </div>
@@ -336,7 +410,7 @@ environement.</p>
           <a href="../modules/index.html" title="User references"
              >next</a></li>
         <li class="right" >
-          <a href="DOC-RGPA.html" title="Robust Geometric Positioning Algorithm"
+          <a href="DOC-RGPA.html" title="Robust Geometric Positioning Algorithm presented in ``_"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="index.html">Documentation </a> |&nbsp;</li>

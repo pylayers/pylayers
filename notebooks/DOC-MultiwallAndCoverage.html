@@ -111,6 +111,8 @@
 <span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x42fc890&gt;</pre>
+</div>
 <div class="section" id="loading-the-layout">
 <h2>Loading the layout<a class="headerlink" href="#loading-the-layout" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
@@ -124,7 +126,8 @@
 </div>
 <div class="section" id="defining-a-radio-link">
 <h2>Defining a radio link<a class="headerlink" href="#defining-a-radio-link" title="Permalink to this headline">¶</a></h2>
-<p>We define :</p>
+<p>The 2 extremities of the radio link are coordinates in <tt class="docutils literal"><span class="pre">numpy.array</span></tt>
+of transmitter and receiver.</p>
 <ul class="simple">
 <li>A a transmitter</li>
 <li>B a receiver</li>
@@ -136,51 +139,74 @@
 </div>
 <div class="section" id="ploting-the-scene">
 <h2>Ploting the scene<a class="headerlink" href="#ploting-the-scene" title="Permalink to this headline">¶</a></h2>
+<p>The scene is plotted with the <tt class="docutils literal"><span class="pre">showG</span></tt> method of the Layout</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># figure instanciation</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
-<span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">)</span>
-
+<span class="c"># plotting the Layout</span>
+<span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="n">fig</span><span class="o">=</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="n">graph</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="c"># plotting the Tx and Rx</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+<span class="c"># plotting the LOS</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">r</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_01.png" src="../_images/_fig_01.png" />
+<img alt="../_images/_fig_023.png" src="../_images/_fig_023.png" />
 <div class="section" id="find-the-intersection-between-the-direct-path-and-the-walls">
 <h3>Find the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#find-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
-<p>The function <em>angleonlink</em> returns the list of intersected segments and
-the corresponding incidence angles with respect to the segment normal.</p>
+<p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
+and the corresponding incidence angles (in radians) with respect to the
+segment normal.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">nstr</span><span class="p">,</span><span class="n">thrad</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">angleonlink</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">nstr</span>
-<span class="k">print</span> <span class="n">thrad</span>
+<span class="k">print</span> <span class="n">nstr</span><span class="p">,</span><span class="n">thrad</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[34 36 41 67 72]
-[ 0.40024066  0.40024066  0.40024066  1.17055567  1.17055567]</pre>
+<div class="highlight-python"><pre>[34, 36, 41, 67, 72] [ 0.40024066  0.40024066  0.40024066  1.17055567  1.17055567]</pre>
+</div>
+<p>The new implementation of angleonlink is faster</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">data</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">angleonlink2</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">data</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mf">0.4002406597137451</span><span class="p">)</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mf">0.4002406597137451</span><span class="p">)</span>
+ <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mf">0.4002406597137451</span><span class="p">)</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mf">1.1705557107925415</span><span class="p">)</span>
+ <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="mf">1.1705557107925415</span><span class="p">)]</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="computing-the-multi-wall-model">
 <h3>Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
 <p>The multi-wall model computation returns losses and LOS excess delay for
 orthogonal and parallel polarization</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span>   <span class="o">=</span> <span class="mf">2.4</span>
-<span class="n">r</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="mf">2.4</span>
 
-<span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="p">,</span><span class="n">Edo</span><span class="p">,</span><span class="n">Edp</span><span class="o">=</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">A</span><span class="p">)</span>
+<span class="c"># observation grid</span>
 
-<span class="k">print</span> <span class="s">&#39;Losses orthogonal polarization </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> dBm&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="k">print</span> <span class="s">&#39;Losses parallel polarization </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s">  dBm&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Lwp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">B</span><span class="p">,</span><span class="n">B</span><span class="p">))</span>
+
+<span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="p">,</span><span class="n">Edo</span><span class="p">,</span><span class="n">Edp</span><span class="o">=</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">A</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&#39;Losses orthogonal polarization </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> dB&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">Lwo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span> <span class="s">&#39;Losses parallel polarization </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s">  dB&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Lwp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="k">print</span> <span class="s">&#39;Excess delay orthogonal polarization  </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">Edo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="k">print</span> <span class="s">&#39;Excess delay parallel polarization   </span><span class="se">\t</span><span class="s"> </span><span class="si">%g</span><span class="s"> ns&#39;</span> <span class="o">%</span><span class="n">Edp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Losses orthogonal polarization       27.7333 dBm
-Losses parallel polarization         16.0573  dBm
+<div class="highlight-python"><pre>Losses orthogonal polarization       27.7333 dB
+Losses parallel polarization         16.0573  dB
 Excess delay orthogonal polarization         2.23113 ns
 Excess delay parallel polarization           2.12364 ns</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="o">=</span><span class="n">Losst</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">r</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">Lwo</span>
+<span class="k">print</span> <span class="n">Lwp</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[[ 27.73328738  27.73328738]]
+[[ 16.05731085  16.05731085]]</pre>
 </div>
 </div>
 </div>
@@ -206,22 +232,96 @@ coverage of a Layout given a transmitter position.</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Coverage performed in  15.3641560078 s</pre>
+<div class="highlight-python"><pre>Coverage performed in  9.56859111786 s</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">grid</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="o">-</span><span class="mf">0.495</span>     <span class="p">,</span>  <span class="o">-</span><span class="mf">8.267</span>     <span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">0.495</span>     <span class="p">,</span>  <span class="o">-</span><span class="mf">7.82764103</span><span class="p">],</span>
+       <span class="p">[</span> <span class="o">-</span><span class="mf">0.495</span>     <span class="p">,</span>  <span class="o">-</span><span class="mf">7.38828205</span><span class="p">],</span>
+       <span class="o">...</span><span class="p">,</span>
+       <span class="p">[</span> <span class="mf">32.576</span>     <span class="p">,</span>   <span class="mf">7.98928205</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">32.576</span>     <span class="p">,</span>   <span class="mf">8.42864103</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">32.576</span>     <span class="p">,</span>   <span class="mf">8.868</span>     <span class="p">]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">L</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>----------------
+TA-Office.ini
+Image('/home/uguen/Bureau/P1/struc/TA-Office.png')
+----------------
+
+Number of points  : 71
+Number of segments  : 87
+Number of sub segments  : 16
+Number of cycles  : 17
+Number of rooms  : 17
+degree 0 : []
+degree 1 : []
+degree 2 : 39
+degree 3 : 32
+
+xrange :(0.0, 40.0)
+yrange :(0.0, 15.0)
+
+Useful dictionnaries
+----------------
+di {interaction : [nstr,typi]}
+sl {slab name : slab dictionary}
+name :  {slab :seglist}
+
+Useful arrays
+----------------
+tsg : get segment index in Gs from tahe
+tgs : get segment index in tahe from Gs
+lsss : list of segments with sub-segment
+sla : associated slab name
+stridess : stride for adressing sub segment
+degree : degree of nodes</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">t1</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">cover2</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Coverage performed in  0.548146009445 s</pre>
 </div>
 <p>For Orthogonal polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_071.png" src="../_images/_fig_071.png" />
-<img alt="../_images/_fig_09.png" src="../_images/_fig_09.png" />
+<img alt="../_images/_fig_13.png" src="../_images/_fig_13.png" />
+<div class="highlight-python"><pre>---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+&lt;ipython-input-12-ed76c9db2e5f&gt; in &lt;module&gt;()
+      1 C.showPower(polarization='o')
+----&gt; 2 C.showEd(polarization='o')
+
+/home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/coverage.pyc in showEd(self, polarization)
+    217
+    218         if polarization=='o':
+--&gt; 219             cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,
+    220                       extent=(l,r,b,t),
+    221                       origin='lower')
+
+AttributeError: 'Coverage' object has no attribute 'Edo'</pre>
+</div>
+<img alt="../_images/_fig_151.png" src="../_images/_fig_151.png" />
 <p>For parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_11.png" src="../_images/_fig_11.png" />
-<img alt="../_images/_fig_13.png" src="../_images/_fig_13.png" />
+<img alt="../_images/_fig_17.png" src="../_images/_fig_17.png" />
+<img alt="../_images/_fig_191.png" src="../_images/_fig_191.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x4f02a50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x5f6c810&gt;)</pre>
+</div>
 </div>
 
 

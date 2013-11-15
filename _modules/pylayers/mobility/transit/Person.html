@@ -94,15 +94,15 @@
 <span class="c"># &quot;near collision avoidance&quot; inspired from</span>
 <span class="c">#   http://people.revoledu.com/kardi/publication/Kouchi2001.pdf</span>
 
-<span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
+<div class="viewcode-block" id="truncate"><a class="viewcode-back" href="../../../../modules/mobility.transit.person.html#pylayers.mobility.transit.Person.truncate">[docs]</a><span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="nb">max</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vec3</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 <span class="n">vec3</span><span class="o">.</span><span class="n">truncate</span> <span class="o">=</span> <span class="n">truncate</span>
 
-<span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">size</span>
+<div class="viewcode-block" id="scale"><a class="viewcode-back" href="../../../../modules/mobility.transit.person.html#pylayers.mobility.transit.Person.scale">[docs]</a><span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">size</span></div>
 <span class="n">vec3</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
 
 <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

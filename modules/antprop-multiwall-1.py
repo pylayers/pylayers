@@ -3,7 +3,7 @@ from pylayers.simul.simulem import *
 from pylayers.measures.mesuwb import *
 from pylayers.antprop.multiwall import *
 S = Simul()
-S.layout('Lstruc.str','matDB.ini','slabDB.ini')
+S.layout('Lstruc.ini','matDB.ini','slabDB.ini')
 fGHz = 4 
 Tx,Rx = ptw1()
 Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])

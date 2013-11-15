@@ -14,6 +14,10 @@ Multi-wall model
     from pylayers.antprop.coverage import *
     from pylayers.network.model import *
 
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x42fc890>
+
 Loading the layout 
 -------------------
 
@@ -30,7 +34,8 @@ Loading the layout
 Defining a radio link
 ---------------------
 
-We define :
+The 2 extremities of the radio link are coordinates in ``numpy.array``
+of transmitter and receiver.
 
 -  A a transmitter
 
@@ -47,6 +52,8 @@ We define :
 Ploting the scene
 -----------------
 
+The scene is plotted with the ``showG`` method of the Layout
+
 
 .. code-block:: python
 
@@ -54,33 +61,49 @@ Ploting the scene
     f = plt.figure(figsize=(25,25))
     ax = f.add_subplot(111)
     r = np.array((A,B))
-    f,ax = L.showG(fig=f,ax=ax,graph='s')
-    
+    # plotting the Layout
+    f,ax = L.showG(fig=f,ax=ax,graph='s',nodes=False)
+    # plotting the Tx and Rx
     ax.plot(A[0],A[1],'ob')
     ax.plot(B[0],B[1],'or')
+    # plotting the LOS
     ax.plot(r[:,0],r[:,1])
     a = plt.axis('off')
 
-.. image:: DOC-MultiwallAndCoverage_files/_fig_01.png
+.. image:: DOC-MultiwallAndCoverage_files/_fig_02.png
 
 Find the intersection between the "direct" path and the walls
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The function *angleonlink* returns the list of intersected segments and
-the corresponding incidence angles with respect to the segment normal.
+The function ``angleonlink`` returns the list of intersected segments
+and the corresponding incidence angles (in radians) with respect to the
+segment normal.
 
 
 .. code-block:: python
 
     nstr,thrad=L.angleonlink(A,B)
-    print nstr
-    print thrad
+    print nstr,thrad
 
 
 .. parsed-literal::
 
-    [34 36 41 67 72]
-    [ 0.40024066  0.40024066  0.40024066  1.17055567  1.17055567]
+    [34, 36, 41, 67, 72] [ 0.40024066  0.40024066  0.40024066  1.17055567  1.17055567]
+
+The new implementation of angleonlink is faster
+
+
+.. code-block:: python
+
+    data = L.angleonlink2(A,B)
+    print data
+
+
+.. parsed-literal::
+
+    [(0, 34, 0.4002406597137451) (0, 36, 0.4002406597137451)
+     (0, 41, 0.4002406597137451) (0, 93, 1.1705557107925415)
+     (0, 96, 1.1705557107925415)]
 
 Computing the Multi-wall model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,23 +114,39 @@ orthogonal and parallel polarization
 
 .. code-block:: python
 
-    f   = 2.4
-    r= np.array((B,B))
+    fGHz = 2.4
     
-    Lwo,Lwp,Edo,Edp=Loss0_v2(L,r,f,A)
+    # observation grid
     
-    print 'Losses orthogonal polarization \t %g dBm' %(Lwo[0])
-    print 'Losses parallel polarization \t %g  dBm' % (Lwp[0])
+    r = np.array((B,B))
+    
+    Lwo,Lwp,Edo,Edp=Loss0_v2(L,r,fGHz,A)
+    
+    print 'Losses orthogonal polarization \t %g dB' %(Lwo[0])
+    print 'Losses parallel polarization \t %g  dB' % (Lwp[0])
     print 'Excess delay orthogonal polarization  \t %g ns' % (Edo[0])
     print 'Excess delay parallel polarization   \t %g ns' %Edp[0]
 
 
 .. parsed-literal::
 
-    Losses orthogonal polarization 	 27.7333 dBm
-    Losses parallel polarization 	 16.0573  dBm
+    Losses orthogonal polarization 	 27.7333 dB
+    Losses parallel polarization 	 16.0573  dB
     Excess delay orthogonal polarization  	 2.23113 ns
     Excess delay parallel polarization   	 2.12364 ns
+
+
+.. code-block:: python
+
+    Lwo,Lwp=Losst(L,fGHz,r.T,A.T)
+    print Lwo
+    print Lwp
+
+
+.. parsed-literal::
+
+    [[ 27.73328738  27.73328738]]
+    [[ 16.05731085  16.05731085]]
 
 Coverage class
 ==============
@@ -149,7 +188,80 @@ Compute the coverage
 
 .. parsed-literal::
 
-    Coverage performed in  15.3641560078 s
+    Coverage performed in  9.56859111786 s
+
+
+.. code-block:: python
+
+    C.grid
+
+
+.. parsed-literal::
+
+    array([[ -0.495     ,  -8.267     ],
+           [ -0.495     ,  -7.82764103],
+           [ -0.495     ,  -7.38828205],
+           ..., 
+           [ 32.576     ,   7.98928205],
+           [ 32.576     ,   8.42864103],
+           [ 32.576     ,   8.868     ]])
+
+
+
+.. code-block:: python
+
+    C.L
+
+
+.. parsed-literal::
+
+    
+    ----------------
+    TA-Office.ini
+    Image('/home/uguen/Bureau/P1/struc/TA-Office.png')
+    ----------------
+    
+    Number of points  : 71
+    Number of segments  : 87
+    Number of sub segments  : 16
+    Number of cycles  : 17
+    Number of rooms  : 17
+    degree 0 : []
+    degree 1 : []
+    degree 2 : 39
+    degree 3 : 32
+    
+    xrange :(0.0, 40.0)
+    yrange :(0.0, 15.0)
+    
+    Useful dictionnaries
+    ----------------
+    di {interaction : [nstr,typi]}
+    sl {slab name : slab dictionary}
+    name :  {slab :seglist} 
+    
+    Useful arrays
+    ----------------
+    tsg : get segment index in Gs from tahe
+    tgs : get segment index in tahe from Gs
+    lsss : list of segments with sub-segment
+    sla : associated slab name
+    stridess : stride for adressing sub segment 
+    degree : degree of nodes 
+
+
+
+.. code-block:: python
+
+    t1=time.time()
+    C.cover2()
+    t2=time.time()
+    print 'Coverage performed in ', t2-t1, 's'   
+
+
+.. parsed-literal::
+
+    Coverage performed in  0.548146009445 s
 
 Coverage Map
 ~~~~~~~~~~~~
@@ -164,9 +276,25 @@ For Orthogonal polarization
     C.showEd(polarization='o')
 
 
-.. image:: DOC-MultiwallAndCoverage_files/_fig_07.png
+.. image:: DOC-MultiwallAndCoverage_files/_fig_13.png
 
-.. image:: DOC-MultiwallAndCoverage_files/_fig_09.png
+::
+
+    ---------------------------------------------------------------------------
+    AttributeError                            Traceback (most recent call last)
+    <ipython-input-12-ed76c9db2e5f> in <module>()
+          1 C.showPower(polarization='o')
+    ----> 2 C.showEd(polarization='o')
+    
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/antprop/coverage.pyc in showEd(self, polarization)
+        217 
+        218         if polarization=='o':
+    --> 219             cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,
+        220                       extent=(l,r,b,t),
+        221                       origin='lower')
+
+    AttributeError: 'Coverage' object has no attribute 'Edo'
+.. image:: DOC-MultiwallAndCoverage_files/_fig_15.png
 
 For parallel polarization
 
@@ -176,7 +304,14 @@ For parallel polarization
     C.showPower(polarization='p')
     C.showEd(polarization='p')
 
-.. image:: DOC-MultiwallAndCoverage_files/_fig_11.png
+.. image:: DOC-MultiwallAndCoverage_files/_fig_17.png
 
-.. image:: DOC-MultiwallAndCoverage_files/_fig_13.png
+.. image:: DOC-MultiwallAndCoverage_files/_fig_19.png
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x4f02a50>,
+     <matplotlib.axes.AxesSubplot at 0x5f6c810>)
+
 

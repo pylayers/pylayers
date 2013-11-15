@@ -94,16 +94,16 @@
 <span class="kn">import</span> <span class="nn">pdb</span> 
 
 
-<span class="k">class</span> <span class="nc">Seek</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
+<div class="viewcode-block" id="Seek"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Seek">[docs]</a><span class="k">class</span> <span class="nc">Seek</span><span class="p">:</span>
+<div class="viewcode-block" id="Seek.calculate"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Seek.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">displacement</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">destination</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
         <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
         <span class="n">steering</span> <span class="o">=</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
         <span class="k">if</span> <span class="n">displacement</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.15</span><span class="p">:</span>
             <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">steering</span>
-
-<span class="k">class</span> <span class="nc">Arrive</span><span class="p">:</span>
+</div></div>
+<div class="viewcode-block" id="Arrive"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Arrive">[docs]</a><span class="k">class</span> <span class="nc">Arrive</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">current_speed</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">current_speed</span> <span class="o">&lt;</span> <span class="mf">0.0001</span><span class="p">:</span>
@@ -118,8 +118,8 @@
         <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">boid</span><span class="o">.</span><span class="n">radius</span><span class="p">:</span>
             <span class="n">boid</span><span class="o">.</span><span class="n">arrived</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">steering</span>
-
-<span class="k">class</span> <span class="nc">Wander</span><span class="p">:</span>
+</div>
+<div class="viewcode-block" id="Wander"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Wander">[docs]</a><span class="k">class</span> <span class="nc">Wander</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">wander_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="s">&#39;wander_value&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">wander_value</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
@@ -130,8 +130,8 @@
         <span class="n">desired_velocity</span> <span class="o">=</span> <span class="p">(</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">boid</span><span class="o">.</span><span class="n">localx</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">wander_value</span><span class="p">))</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
         <span class="k">return</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
         
-
-<span class="k">class</span> <span class="nc">FollowWaypoints</span><span class="p">:</span>
+</div>
+<div class="viewcode-block" id="FollowWaypoints"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.FollowWaypoints">[docs]</a><span class="k">class</span> <span class="nc">FollowWaypoints</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">waypoints</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">waypoints</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">waypoints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -142,8 +142,8 @@
             <span class="k">del</span> <span class="n">waypoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">desired_velocity</span> <span class="o">=</span> <span class="n">displacement</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="o">*</span> <span class="n">boid</span><span class="o">.</span><span class="n">desired_speed</span>
         <span class="k">return</span> <span class="n">desired_velocity</span> <span class="o">-</span> <span class="n">boid</span><span class="o">.</span><span class="n">velocity</span>
-
-<span class="k">class</span> <span class="nc">Separation</span><span class="p">:</span>
+</div>
+<div class="viewcode-block" id="Separation"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Separation">[docs]</a><span class="k">class</span> <span class="nc">Separation</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
         <span class="n">others</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">boids</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">)</span>
@@ -160,8 +160,8 @@
 <span class="c">#                force2 = vec3(-force[1],force[0],0)</span>
                 <span class="n">acceleration</span> <span class="o">+=</span> <span class="n">force2</span>
         <span class="k">return</span> <span class="n">acceleration</span>
-
-<span class="k">class</span> <span class="nc">Queuing</span><span class="p">:</span>
+</div>
+<div class="viewcode-block" id="Queuing"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Queuing">[docs]</a><span class="k">class</span> <span class="nc">Queuing</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
         <span class="n">others</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">boids</span><span class="p">(</span><span class="n">boid</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
@@ -174,8 +174,8 @@
                 <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">speed</span><span class="p">:</span>
                     <span class="k">return</span> <span class="o">-</span><span class="n">boid</span><span class="o">.</span><span class="n">localy</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">speed</span> <span class="o">/</span> <span class="n">boid</span><span class="o">.</span><span class="n">max_speed</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vec3</span><span class="p">()</span>
-
-<span class="k">class</span> <span class="nc">Containment</span><span class="p">:</span>
+</div>
+<div class="viewcode-block" id="Containment"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Containment">[docs]</a><span class="k">class</span> <span class="nc">Containment</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
         <span class="n">walls</span> <span class="o">=</span> <span class="n">the_world</span><span class="o">.</span><span class="n">obstacles</span><span class="p">(</span><span class="n">boid</span><span class="p">)</span>
@@ -270,7 +270,7 @@
 <span class="c">#        else:</span>
 <span class="c">#            return False, None, None</span>
 
-    <span class="k">def</span> <span class="nf">test_intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Containment.test_intersection"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.Containment.test_intersection">[docs]</a>    <span class="k">def</span> <span class="nf">test_intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span><span class="p">):</span>
         <span class="c"># From http://astronomy.swin.edu.au/~pbourke/geometry/lineline2d/</span>
         <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span> <span class="o">=</span> <span class="n">wall</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;direct&#39;</span><span class="p">:</span>
@@ -321,8 +321,8 @@
             <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="n">distance_along_check</span><span class="p">,</span> <span class="n">direction</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">None</span>
-   
-<span class="k">class</span> <span class="nc">InterpenetrationConstraint</span><span class="p">:</span>
+   </div></div>
+<div class="viewcode-block" id="InterpenetrationConstraint"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.InterpenetrationConstraint">[docs]</a><span class="k">class</span> <span class="nc">InterpenetrationConstraint</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boid</span><span class="p">):</span>
         <span class="n">the_world</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">world</span>
         <span class="n">position</span> <span class="o">=</span> <span class="n">boid</span><span class="o">.</span><span class="n">position</span>
@@ -357,7 +357,7 @@
 
         <span class="k">return</span> <span class="n">vec3</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">distance_from_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="InterpenetrationConstraint.distance_from_line"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.InterpenetrationConstraint.distance_from_line">[docs]</a>    <span class="k">def</span> <span class="nf">distance_from_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="n">line_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">vec3</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">vec3</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
         <span class="n">u</span> <span class="o">=</span> <span class="p">((</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
              <span class="o">+</span> <span class="p">(</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span> \
@@ -370,7 +370,7 @@
             <span class="n">distance</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
             <span class="k">return</span> <span class="bp">True</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">vector</span>
         <span class="k">return</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
-
+</div></div>
 <div class="viewcode-block" id="default_steering_mind"><a class="viewcode-back" href="../../../../modules/mobility.transit.steeringbehavior.html#pylayers.mobility.transit.SteeringBehavior.default_steering_mind">[docs]</a><span class="k">def</span> <span class="nf">default_steering_mind</span><span class="p">(</span><span class="n">boid</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simple sum of all steering vectors.&quot;&quot;&quot;</span>
     <span class="n">acceleration</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">()</span>

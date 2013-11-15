@@ -75,10 +75,8 @@
 <tt class="descname">EMSolver(L=</tt></dt>
 <dt>
 <tt class="descname">----------------</tt></dt>
-<dt id="pylayers.network.emsolver.defstr3.ini">
-<em class="property">class </em><tt class="descclassname">defstr3.</tt><tt class="descname">ini</tt><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini" title="Permalink to this definition">¶</a></dt>
-<dt id="pylayers.network.emsolver.Image">
-<em class="property">class </em><tt class="descclassname">pylayers.network.emsolver.</tt><tt class="descname">Image</tt><big>(</big><em>'/home/uguen/Bureau/P1/struc/TA-Office.png'</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.Image" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.emsolver.defstr.ini">
+<em class="property">class </em><tt class="descclassname">defstr.</tt><tt class="descname">ini</tt><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini" title="Permalink to this definition">¶</a></dt>
 <dt>
 <tt class="descname">----------------</tt></dt>
 <dt>
@@ -88,17 +86,25 @@
 <dt>
 <tt class="descname">Number of segments  : 9</tt></dt>
 <dt>
-<tt class="descname">Number of sub segments  : 3</tt></dt>
+<tt class="descname">Number of sub segments  : 1</tt></dt>
 <dt>
 <tt class="descname">Number of cycles  : 0</tt></dt>
 <dt>
 <tt class="descname">Number of rooms  : 0</tt></dt>
 <dt>
+<tt class="descname">degree 0 : []</tt></dt>
+<dt>
+<tt class="descname">degree 1 : []</tt></dt>
+<dt>
+<tt class="descname">degree 2 : 6</tt></dt>
+<dt>
+<tt class="descname">degree 3 : 2</tt></dt>
+<dt>
 <tt class="descname"></tt></dt>
 <dt>
-<tt class="descname">xrange :(758.49, 768.516)</tt></dt>
+<tt class="descname">xrange :(0.0, 10.0)</tt></dt>
 <dt>
-<tt class="descname">yrange :(1111.9, 1115.963)</tt></dt>
+<tt class="descname">yrange :(-2.0, 2.0)</tt></dt>
 <dt>
 <tt class="descname"></tt></dt>
 <dt>
@@ -106,9 +112,9 @@
 <dt>
 <tt class="descname">----------------</tt></dt>
 <dt>
-<tt class="descname">sl k=slab name v=dictionary</tt></dt>
+<tt class="descname">sl {slab name : slab dictionary}</tt></dt>
 <dt>
-<tt class="descname">name :  k=slab v=seglist</tt></dt>
+<tt class="descname">name :  {slab :seglist}</tt></dt>
 <dt>
 <tt class="descname"></tt></dt>
 <dt>
@@ -126,31 +132,21 @@
 <dt>
 <tt class="descname">stridess : stride for adressing sub segment</tt></dt>
 <dt>
+<tt class="descname">degree : degree of nodes</tt></dt>
+<dt>
 <tt class="descname">)</tt></dt>
 <dd><p>Invoque an electromagnetic solver</p>
 <dl class="method">
-<dt id="pylayers.network.emsolver.defstr3.ini.EMSolver.load_model">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">load_model</tt><big>(</big><em>RAT</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini.EMSolver.load_model" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.emsolver.defstr.ini.EMSolver.load_model">
+<tt class="descclassname">EMSolver.</tt><tt class="descname">load_model</tt><big>(</big><em>RAT</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini.EMSolver.load_model" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>RAT  :</strong> :</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.network.emsolver.defstr3.ini.EMSolver.save_model">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">save_model</tt><big>(</big><em>RAT</em>, <em>model</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini.EMSolver.save_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>save a RAT model</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>RAT :</strong> :</p>
-<p class="last"><strong>model :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>RAT</strong> : string</p>
+<blockquote class="last">
+<div><p>RAT name</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -158,14 +154,35 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.network.emsolver.defstr3.ini.EMSolver.solve">
-<tt class="descclassname">EMSolver.</tt><tt class="descname">solve</tt><big>(</big><em>p</em>, <em>e</em>, <em>LDP</em>, <em>RAT</em>, <em>epwr</em>, <em>sens</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr3.ini.EMSolver.solve" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.network.emsolver.defstr.ini.EMSolver.save_model">
+<tt class="descclassname">EMSolver.</tt><tt class="descname">save_model</tt><big>(</big><em>RAT</em>, <em>model</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini.EMSolver.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>save a RAT model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>RAT</strong> : string</p>
+<blockquote>
+<div><p>RAT name</p>
+</div></blockquote>
+<p class="last"><strong>model</strong> : dictionnary</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.network.emsolver.defstr.ini.EMSolver.solve">
+<tt class="descclassname">EMSolver.</tt><tt class="descname">solve</tt><big>(</big><em>p</em>, <em>e</em>, <em>LDP</em>, <em>RAT</em>, <em>epwr</em>, <em>sens</em><big>)</big><a class="headerlink" href="#pylayers.network.emsolver.defstr.ini.EMSolver.solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>compute and return a LDP value thanks to a given method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>n1p</strong> : np.array</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>p</strong> :</p>
+<p><strong>e</strong> :</p>
+<p><strong>n1p</strong> : np.array</p>
 <blockquote>
 <div><p>node 1 position</p>
 </div></blockquote>
@@ -178,6 +195,7 @@
 <div><p>Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</p>
 </div></blockquote>
 <p><strong>epwr</strong> : list of nodes emmited power</p>
+<p><strong>sens</strong> : list of nodes sensitivity</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>

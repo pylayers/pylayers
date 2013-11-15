@@ -21,10 +21,6 @@ default configuration file named **default.ini** is loaded.
     import pylayers.util.pyutil as pyu
     import pylayers.signal.bsignal as bs
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4e51390>
-
 A first step consists in loading a layout associated with the
 simulation. Here the ``WHERE1.ini`` layout is chosen along with the
 corresponding slabs and materials files ``matDB.ini`` and
@@ -66,8 +62,6 @@ dictionnary member of the Layout object.which allows to configure the
     fig,ax=S.L.showGs()    
 
 
-.. image:: DOC-RayTracing2_files/_fig_02.png
-
 Adding coordinates of transmiting and receiving points
 
 -------------------------------------------------------
@@ -102,13 +96,6 @@ method of the Simulation object
 
     fig,ax = S.show()
 
-
-.. parsed-literal::
-
-    Warning : no furniture file loaded
-
-.. image:: DOC-RayTracing2_files/_fig_05.png
-
 The different object of the simulation cans be accessed to obtain
 different information. Below the number of transmitter and receiver.
 
@@ -117,12 +104,6 @@ different information. Below the number of transmitter and receiver.
 
     print 'number of Tx :',len(S.tx.points.keys())
     print 'number of rx :',len(S.rx.points.keys())
-
-
-.. parsed-literal::
-
-    number of Tx : 302
-    number of rx : 4
 
 The decomposition of the layout in a set of disjoint cycles is
 represented below. Not all cycles are rooms.
@@ -136,28 +117,12 @@ represented below. Not all cycles are rooms.
     plt.axis('off')
 
 
-.. parsed-literal::
-
-    (-40.0, 40.0, 2.0, 18.0)
-
-
-.. image:: DOC-RayTracing2_files/_fig_09.png
-
-
 .. code-block:: python
 
     figsize(10,10)
     fig =plt.figure(figsize=(10,10))
     fig,ax=S.L.showG('t',fig=fig)
     plt.axis('off')
-
-
-.. parsed-literal::
-
-    (-40.0, 40.0, 2.0, 18.0)
-
-
-.. image:: DOC-RayTracing2_files/_fig_12.png
 
 Signatures, rays and propagation and transmission channel
 ---------------------------------------------------------
@@ -177,12 +142,6 @@ Signatures, rays and propagation and transmission channel
 
     tx
 
-
-.. parsed-literal::
-
-    array([-24.867 ,  12.3097,   1.2   ])
-
-
 A signature is a sequence of layout objects (points and segments) which
 are involved in a given optical ray, relating the transmiter and the
 receiver. The signatutre is calculated from a layout cycle to an other
@@ -197,12 +156,6 @@ point to cycle function.
     crx=S.L.pt2cy(rx)
     print 'tx point belongs to cycle ',ctx
     print 'rx point belongs to cycle ',crx
-
-
-.. parsed-literal::
-
-    tx point belongs to cycle  5
-    rx point belongs to cycle  4
 
 Then the signature between cycle 5 and cycle 4 can be calculated. This
 is done by instantiating a Signature object with a given layout and the
@@ -219,20 +172,6 @@ number of signatures for each number of interactions.
     Si.run1(cutoff=3)
     Si
 
-
-.. parsed-literal::
-
-    Signatures : 
-    ------------------
-    248
-    from : 5 to 4
-    1 : 2
-    2 : 40
-    3 : 264
-    4 : 1274
-
-
-
 Once the signature has been obtained, 2D rays are calculated with the
 ``rays()`` method of the signature **Si**. The coordinates of a
 transmitter and a receiver should be parameters of the function. **r2d**
@@ -246,13 +185,6 @@ object has a ``show`` and ``show3`` method
     r2d.show(S.L)
 
 
-.. parsed-literal::
-
-    12 [4, 5]
-
-.. image:: DOC-RayTracing2_files/_fig_18.png
-
-
 .. code-block:: python
 
     r2d.show3(strucname='WHERE1')
@@ -263,8 +195,13 @@ the reflection on ceil and floor.
 
 .. code-block:: python
 
-    r3d=r2d.to3D()
+    r3d=r2d.to3D(S.L)
     r3d.show3(strucname='WHERE1')
+
+
+.. code-block:: python
+
+    r3d=r2d.to3D
 
 Once the 3D rays are obtained the local basis are determined
 
@@ -288,30 +225,9 @@ Below ``ni`` is the number of interactions
     r3d
 
 
-.. parsed-literal::
-
-    1 / 1 : [0]
-    2 / 5 : [1 2 3 4 5]
-    3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-    4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-    5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-    6 / 8 : [57 58 59 60 61 62 63 64]
-    -----
-    ni : 268
-    nl : 601
-
-
-
-
 .. code-block:: python
 
     6*8+5*18+20*4+13*3+5*2+1
-
-
-.. parsed-literal::
-
-    268
-
 
 Calulating the Propagation Channel 
 -----------------------------------
@@ -326,34 +242,6 @@ with a frequency array as argument.
     S.fGHz
 
 
-.. parsed-literal::
-
-    array([  2.  ,   2.05,   2.1 ,   2.15,   2.2 ,   2.25,   2.3 ,   2.35,
-             2.4 ,   2.45,   2.5 ,   2.55,   2.6 ,   2.65,   2.7 ,   2.75,
-             2.8 ,   2.85,   2.9 ,   2.95,   3.  ,   3.05,   3.1 ,   3.15,
-             3.2 ,   3.25,   3.3 ,   3.35,   3.4 ,   3.45,   3.5 ,   3.55,
-             3.6 ,   3.65,   3.7 ,   3.75,   3.8 ,   3.85,   3.9 ,   3.95,
-             4.  ,   4.05,   4.1 ,   4.15,   4.2 ,   4.25,   4.3 ,   4.35,
-             4.4 ,   4.45,   4.5 ,   4.55,   4.6 ,   4.65,   4.7 ,   4.75,
-             4.8 ,   4.85,   4.9 ,   4.95,   5.  ,   5.05,   5.1 ,   5.15,
-             5.2 ,   5.25,   5.3 ,   5.35,   5.4 ,   5.45,   5.5 ,   5.55,
-             5.6 ,   5.65,   5.7 ,   5.75,   5.8 ,   5.85,   5.9 ,   5.95,
-             6.  ,   6.05,   6.1 ,   6.15,   6.2 ,   6.25,   6.3 ,   6.35,
-             6.4 ,   6.45,   6.5 ,   6.55,   6.6 ,   6.65,   6.7 ,   6.75,
-             6.8 ,   6.85,   6.9 ,   6.95,   7.  ,   7.05,   7.1 ,   7.15,
-             7.2 ,   7.25,   7.3 ,   7.35,   7.4 ,   7.45,   7.5 ,   7.55,
-             7.6 ,   7.65,   7.7 ,   7.75,   7.8 ,   7.85,   7.9 ,   7.95,
-             8.  ,   8.05,   8.1 ,   8.15,   8.2 ,   8.25,   8.3 ,   8.35,
-             8.4 ,   8.45,   8.5 ,   8.55,   8.6 ,   8.65,   8.7 ,   8.75,
-             8.8 ,   8.85,   8.9 ,   8.95,   9.  ,   9.05,   9.1 ,   9.15,
-             9.2 ,   9.25,   9.3 ,   9.35,   9.4 ,   9.45,   9.5 ,   9.55,
-             9.6 ,   9.65,   9.7 ,   9.75,   9.8 ,   9.85,   9.9 ,   9.95,
-            10.  ,  10.05,  10.1 ,  10.15,  10.2 ,  10.25,  10.3 ,  10.35,
-            10.4 ,  10.45,  10.5 ,  10.55,  10.6 ,  10.65,  10.7 ,  10.75,
-            10.8 ,  10.85,  10.9 ,  10.95,  11.  ])
-
-
-
 .. code-block:: python
 
     print "fmin : ",S.fGHz.min()
@@ -361,61 +249,19 @@ with a frequency array as argument.
     print "Nf : ", len(S.fGHz)
 
 
-.. parsed-literal::
-
-    fmin :  2.0
-    fmax :  11.0
-    Nf :  181
-
-
 .. code-block:: python
 
     r3d
 
 
-.. parsed-literal::
-
-    1 / 1 : [0]
-    2 / 5 : [1 2 3 4 5]
-    3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-    4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-    5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-    6 / 8 : [57 58 59 60 61 62 63 64]
-    -----
-    ni : 268
-    nl : 601
-
-
-
-
 .. code-block:: python
 
     r3d
-
-
-.. parsed-literal::
-
-    1 / 1 : [0]
-    2 / 5 : [1 2 3 4 5]
-    3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-    4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-    5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-    6 / 8 : [57 58 59 60 61 62 63 64]
-    -----
-    ni : 268
-    nl : 601
-
-
 
 
 .. code-block:: python
 
     Ct = r3d.eval(S.fGHz)
-
-
-.. parsed-literal::
-
-    Rays evaluation
 
 
 .. code-block:: python
@@ -428,14 +274,6 @@ with a frequency array as argument.
     legend(('Co-pol','X-pol'))
     axis((0,80,-60,20))
 
-
-.. parsed-literal::
-
-    (0, 80, -60, 20)
-
-
-.. image:: DOC-RayTracing2_files/_fig_28.png
-
 The multipath doa/dod diagram can be obtained via the method ``doadod``.
 The colorbar corresponds to the total energy of the path.
 
@@ -444,22 +282,10 @@ The colorbar corresponds to the total energy of the path.
 
     Ct.doadod()
 
-.. image:: DOC-RayTracing2_files/_fig_30.png
-
 
 .. code-block:: python
 
     Ct.info()
-
-
-.. parsed-literal::
-
-    Nf   : 181
-    Nray : 130
-    shape Ctt : (130, 181)
-    shape Ctp : (130, 181)
-    shape Cpt : (130, 181)
-    shape Cpp : (130, 181)
 
 Apply waveform
 --------------
@@ -487,8 +313,6 @@ array as it is illustrated below.
     #wav = wvf.Waveform({'type' : 'generic','band': 0.499,'fc': 4.493, 'fe': 100, 'thresh': 3, 'tw': 30})
     wav.show()
 
-.. image:: DOC-RayTracing2_files/_fig_33.png
-
 Finally, the received UWB waveform can be synthesize in applyng the
 waveform to the transmission channel.
 
@@ -514,10 +338,19 @@ waveform to the transmission channel.
     title('with antenna')
     a=axis((0,90,-0.002,0.002))
 
-.. image:: DOC-RayTracing2_files/_fig_35.png
+
+.. code-block:: python
+
+    tx=np.array([0,1])
+
 
 
 .. code-block:: python
 
-    
+    tx[0:2]
+
+
+.. code-block:: python
+
+    L.Gv
 

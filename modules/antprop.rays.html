@@ -95,7 +95,15 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>to3D(H=3,N=1)</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>rays   :</strong> :</p>
+<p><strong>nbrays :</strong> :</p>
+<p><strong>rayidx :</strong> :</p>
+<p><strong>sig    :</strong> :</p>
+<p><strong>pt     :</strong> :</p>
+<p><strong>alpha  :</strong> :</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>to3D(H=3,N=1)</strong> :</p>
 <blockquote>
 <div><p>for k in self:   # for all interaction group k
 for k in self:   # for all interaction group k</p>
@@ -117,7 +125,7 @@ for k in self:   # for all interaction group k</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Rays object is obtained from a signature.
+<p>The Rays object is obtained from a signature.
 It is a container for a set of rays between a source 
 and a target point defining a radio link.</p>
 <p>Once a Rays object has been obtained in 2D, it is transform 
@@ -140,7 +148,12 @@ be evaluated via the <strong>eval</strong> method</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>fGHz</strong> : array</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : array</p>
+<blockquote>
+<div><p>frequency in GHz array</p>
+</div></blockquote>
+<p class="last"><strong>ib :</strong> :</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -262,7 +275,7 @@ k : zp  v: alphap</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.show">
-<tt class="descname">show</tt><big>(</big><em>L</em>, <em>i=-1</em>, <em>r=-1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>L</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot 2D rays within the simulated environment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -271,12 +284,13 @@ k : zp  v: alphap</p>
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
 <p><strong>i</strong> : list or -1 (default = all groups)</p>
 <blockquote>
-<div><p>list of interaction group number</p>
+<div><p>list of interaction group numbers</p>
 </div></blockquote>
 <p><strong>r</strong> : list or -1 (default = all rays)</p>
-<blockquote class="last">
-<div><p>list of index of ray in interaction group</p>
+<blockquote>
+<div><p>list of indices of ray in interaction group</p>
 </div></blockquote>
+<p class="last"><strong>graph</strong> : type of graph to be displayed</p>
 </td>
 </tr>
 </tbody>
@@ -296,24 +310,21 @@ k : zp  v: alphap</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>bdis</strong> : boolean</p>
-<blockquote class="last">
-<div><blockquote>
+<blockquote>
 <div><p>True</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>bstruc <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd><p class="first last">True</p>
-</dd>
-</dl>
-<p>id : int 
-strucname : string</p>
+<p><strong>bstruc</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>id</strong> : int</p>
+<p><strong>strucname</strong> : string</p>
 <blockquote>
 <div><p>&#8216;defstr&#8217;</p>
 </div></blockquote>
-<p>ilist : list of group of interactions
-raylist : list of index rays 
-pg : centroid of the structure</p>
-</div></blockquote>
+<p><strong>ilist</strong> : list of group of interactions</p>
+<p><strong>raylist</strong> : list of index rays</p>
+<p class="last"><strong>pg</strong> : centroid of the structure</p>
 </td>
 </tr>
 </tbody>
@@ -328,27 +339,31 @@ pg : centroid of the structure</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>bdis :</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ray :</strong> :</p>
+<p><strong>bdis</strong> : Boolean</p>
 <blockquote>
-<div><p>display boolean - if False return .vect filename</p>
+<div><p>if False return .vect filename (True)</p>
 </div></blockquote>
-<p><strong>bbas :</strong> :</p>
+<p><strong>bbas</strong> : Boolean</p>
 <blockquote>
-<div><p>display local basis</p>
+<div><p>display local basis (False)</p>
 </div></blockquote>
-<p><strong>bstruc :</strong> :</p>
+<p><strong>bstruc</strong> : Boolean</p>
 <blockquote>
-<div><p>display structure</p>
+<div><p>display structure (True)</p>
 </div></blockquote>
-<p><strong>col  :</strong> :</p>
+<p><strong>col</strong> : ndarray() 1x3</p>
 <blockquote>
-<div><p>color of the ray</p>
+<div><p>color of the ray  ([1,0,1])</p>
 </div></blockquote>
-<p><strong>id   :</strong> :</p>
+<p><strong>id</strong> : Integer</p>
 <blockquote>
-<div><p>id of the ray</p>
+<div><p>id of the ray (default 0)</p>
 </div></blockquote>
-<p class="last"><strong>linewidth :</strong> :</p>
+<p><strong>linewidth</strong> : Integer</p>
+<blockquote class="last">
+<div><p>default 1</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
@@ -358,7 +373,21 @@ pg : centroid of the structure</p>
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.signature">
 <tt class="descname">signature</tt><big>(</big><em>L</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.signature" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>extract ray signature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>L</strong> : Layout</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>sig</strong> :</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Signature of a ray is store as a member</p>
+<p>r[nint][&#8216;sig&#8217;]</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.to3D">

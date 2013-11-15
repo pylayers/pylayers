@@ -91,37 +91,50 @@
 <dt id="pylayers.antprop.signature.Signature">
 <em class="property">class </em><tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">Signature</tt><big>(</big><em>sig</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature" title="Permalink to this definition">¶</a></dt>
 <dd><p>class Signature</p>
-<p>A signature contains two lists</p>
-<p>seq : list of interaction numbers
-typ : list of interaction type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>seq</strong> : list  of interaction point (edges (&gt;0)  or vertices (&lt;0) [int]</p>
+<p><strong>typ</strong> : list of interaction type 1-R 2-T 3-D  [int]</p>
+<p><strong>pa</strong> : tail point of interaction segmenti (2xN) ndarray</p>
+<p><strong>pb</strong> : head point of interaction segment  (2xN) ndarray</p>
+<p class="last"><strong>pc</strong> : center point of interaction segment (2xN) ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signature.backtrace">
 <tt class="descname">backtrace</tt><big>(</big><em>tx</em>, <em>rx</em>, <em>M</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.backtrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.backtrace" title="Permalink to this definition">¶</a></dt>
-<dd><p>backtracing step: given the image, tx, and rx, this function
+<dd><p>backtrace given image, tx, and rx</p>
+<p>this function
 traces the 2D ray.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tx</strong> :  numpy.ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tx</strong> :  ndarray (2x1)</p>
 <blockquote>
-<div><blockquote>
 <div><p>transmitter</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>rx <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
-<dd><p class="first last">receiver</p>
-</dd>
-<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
-<dd><p class="first last">images obtained using image()</p>
-</dd>
-</dl>
+<p><strong>rx</strong> :  ndarray (2x1)</p>
+<blockquote>
+<div><p>receiver</p>
+</div></blockquote>
+<p><strong>M</strong> :  ndarray (2xN)</p>
+<blockquote>
+<div><p>N image points obtained using self.image method</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Y</strong> : numpy.ndarray</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>isvalid</strong> : bool</p>
+<blockquote>
+<div><p>True if the backtrace ends successfully</p>
+</div></blockquote>
+<p><strong>Y</strong> : ndarray (2 x (N+2))</p>
 <blockquote class="last">
-<div><p>2D ray</p>
+<div><p>sequence of points corresponding to the seek ray</p>
 </div></blockquote>
 </td>
 </tr>
@@ -151,7 +164,7 @@ pages={2307-2311},}</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Y</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isvalid</span><span class="p">,</span><span class="n">Y</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">backtrace</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
@@ -183,21 +196,30 @@ pages={2307-2311},}</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Le type des interactions d extremite reste indetermine a ce stade</p>
+<p>This function converts the sequence of intercation into numpy arrays
+which contains coordinates of segments extremities involved in the 
+signature. At that level the coordinates of extremities (tx and rx) is 
+not known yet.</p>
+<p>members data</p>
+<p>pa  tail of segment  (2xN) 
+pb  head of segment  (2xN)  
+pc  the center of segment (2xN)</p>
+<p>norm normal to the sefment if segment 
+in case the interaction is a point the normal is undefined and then
+set to 0.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signature.evtx">
 <tt class="descname">evtx</tt><big>(</big><em>L</em>, <em>tx</em>, <em>rx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.evtx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.evtx" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>evtx ( deprecated )</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
-<blockquote class="last">
-<div><p>tx : np.array (2xN)
-rx : np.array (2xM)</p>
-</div></blockquote>
+<p><strong>tx</strong> : np.array (2xN)</p>
+<p class="last"><strong>rx</strong> : np.array (2xM)</p>
 </td>
 </tr>
 </tbody>
@@ -223,22 +245,29 @@ Parameters
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signature.sig2ray">
-<tt class="descname">sig2ray</tt><big>(</big><em>L</em>, <em>pTx</em>, <em>pRx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.sig2ray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2ray" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert a signature to a 2D ray
-Parameters
-&#8212;&#8212;&#8212;-</p>
+<tt class="descname">sig2ray</tt><big>(</big><em>L</em>, <em>pTx</em>, <em>pRx</em>, <em>mode='incremental'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.sig2ray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2ray" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert a signature to a 2D ray</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
+<p><strong>pTx</strong> : ndarray</p>
 <blockquote>
-<div><p>L : Layout
-pTx : ndarray</p>
-<blockquote>
-<div>2D transmitter position</div></blockquote>
-<dl class="docutils">
-<dt>pRx <span class="classifier-delimiter">:</span> <span class="classifier">ndarray</span></dt>
-<dd>2D receiver position</dd>
-</dl>
+<div><p>2D transmitter position</p>
 </div></blockquote>
+<p><strong>pRx</strong> : ndarray</p>
 <blockquote>
-<div>Y : numpy.ndarray</div></blockquote>
+<div><p>2D receiver position</p>
+</div></blockquote>
+<p><strong>mod</strong> : if mod==&#8217;incremental&#8217; a set of alternative signatures is return</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Y</strong> : ndarray (2x(N+2))</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -258,15 +287,13 @@ pTx : ndarray</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>L</strong> : gis.Layout</p>
+<p><strong>pTx</strong> : numpy.ndarray</p>
+<blockquote>
+<div><p>position of Tx</p>
+</div></blockquote>
+<p><strong>pRx</strong> : numpy.ndarray</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>pTx <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
-<dd><p class="first last">position of Tx</p>
-</dd>
-<dt>pRx <span class="classifier-delimiter">:</span> <span class="classifier">numpy.ndarray</span></dt>
-<dd><p class="first last">position of Rx</p>
-</dd>
-</dl>
+<div><p>position of Rx</p>
 </div></blockquote>
 </td>
 </tr>
@@ -275,9 +302,17 @@ pTx : ndarray</p>
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.calsig">
 <tt class="descname">calsig</tt><big>(</big><em>G</em>, <em>dia={}</em>, <em>cutoff=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.calsig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.calsig" title="Permalink to this definition">¶</a></dt>
-<dd><p>G   : Gf graph
-dia : dictionnary of interactions
-cutoff : integer</p>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>G</strong> : graph</p>
+<p><strong>dia</strong> : dictionnary of interactions</p>
+<p class="last"><strong>cutoff</strong> : integer</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -292,16 +327,28 @@ cutoff : integer</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.signature.Signatures.num">
+<tt class="descname">num</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.num" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates number of signatures</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.propaths">
-<tt class="descname">propaths</tt><big>(</big><em>G</em>, <em>source</em>, <em>target</em>, <em>cutoff=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.propaths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.propaths" title="Permalink to this definition">¶</a></dt>
-<dd><p>all_simple_paths</p>
+<tt class="descname">propaths</tt><big>(</big><em>G</em>, <em>source</em>, <em>target</em>, <em>cutoff=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.propaths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.propaths" title="Permalink to this definition">¶</a></dt>
+<dd><p>seek all simple_path from source to target</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>G</strong> : networkx Graph Gi</p>
-<p><strong>source</strong> : int</p>
-<p><strong>target</strong> : int</p>
+<p><strong>source</strong> : tuple</p>
+<blockquote>
+<div><p>interaction (node of Gi)</p>
+</div></blockquote>
+<p><strong>target</strong> : tuple</p>
+<blockquote>
+<div><p>interaction (node of Gi)</p>
+</div></blockquote>
 <p class="last"><strong>cutoff</strong> : int</p>
 </td>
 </tr>
@@ -309,19 +356,31 @@ cutoff : integer</p>
 </table>
 <p class="rubric">Notes</p>
 <p>adapted from all_simple_path of networkx</p>
+<p>1- Determine all nodes connected to Gi</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.rays">
-<tt class="descname">rays</tt><big>(</big><em>ptx</em>, <em>prx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.rays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.rays" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">rays</tt><big>(</big><em>ptx=0</em>, <em>prx=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.rays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.rays" title="Permalink to this definition">¶</a></dt>
 <dd><p>from signatures dict to 2D rays</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>dsig</strong> : dict</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>tx</strong> : numpy.array or int</p>
+<blockquote>
+<div><p>Tx coordinates is the center of gravity of the cycle number if
+type(tx)=int</p>
+</div></blockquote>
+<p><strong>rx</strong> :  numpy.array or int</p>
+<blockquote>
+<div><p>Rx coordinates is the center of gravity of the cycle number if
+type(rx)=int</p>
+</div></blockquote>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>rays</strong> : dict</td>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>rays</strong> : dict</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -335,9 +394,14 @@ cutoff : integer</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>cutoff</strong> : limit the exploration of all_simple_path</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cutoff</strong> : int</p>
+<blockquote>
+<div><p>limit the exploration of all_simple_path</p>
+</div></blockquote>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>sigslist = numpy.ndarray</strong> :</td>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>sigslist</strong> :  numpy.ndarray</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -376,6 +440,32 @@ cutoff : integer</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.signature.Signatures.show">
+<tt class="descname">show</tt><big>(</big><em>L</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot signatures within the simulated environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
+<p><strong>i</strong> : list or -1 (default = all groups)</p>
+<blockquote>
+<div><p>list of interaction group numbers</p>
+</div></blockquote>
+<p><strong>s</strong> : list or -1 (default = all sig)</p>
+<blockquote>
+<div><p>list of indices of signature in interaction group</p>
+</div></blockquote>
+<p><strong>ctx</strong> : cycle of tx (optional)</p>
+<p><strong>crx</strong> : cycle of rx (optional)</p>
+<p class="last"><strong>graph</strong> : type of graph to be displayed</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.showi">
 <tt class="descname">showi</tt><big>(</big><em>uni=0</em>, <em>us=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.showi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.showi" title="Permalink to this definition">¶</a></dt>
 <dd><p>interactive show</p>
@@ -393,6 +483,11 @@ cutoff : integer</p>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.signature.Signatures.sp">
+<tt class="descname">sp</tt><big>(</big><em>G</em>, <em>source</em>, <em>target</em>, <em>cutoff=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.sp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.sp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -414,23 +509,47 @@ cutoff : integer</p>
 <dl class="function">
 <dt id="pylayers.antprop.signature.frontline">
 <tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">frontline</tt><big>(</big><em>L</em>, <em>nc</em>, <em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#frontline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.frontline" title="Permalink to this definition">¶</a></dt>
-<dd><p>determine cycle frontline
-Parameters
-&#8212;&#8212;&#8212;-
-L : Layout
-nc : cycle number
-v : direction vector</p>
+<dd><p>determine cycle frontline</p>
+<p>This function calculates the scalar product of the normals of a cycle 
+and returns the indev of segments whith are facing the given direction v.
+scalar product &lt; 0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout</p>
+<p><strong>nc</strong> : cycle number</p>
+<p><strong>v</strong> : direction vector</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>nsegf</strong> : list</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">run3</span></tt></p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="pylayers.antprop.signature.gidl">
 <tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">gidl</tt><big>(</big><em>g</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#gidl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.gidl" title="Permalink to this definition">¶</a></dt>
 <dd><p>gi without diffraction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>gr</strong> :</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pylayers.antprop.signature.showsig">
-<tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">showsig</tt><big>(</big><em>L</em>, <em>s</em>, <em>tx</em>, <em>rx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#showsig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.showsig" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">showsig</tt><big>(</big><em>L</em>, <em>s</em>, <em>tx=</em><span class="optional">[</span><span class="optional">]</span>, <em>rx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#showsig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.showsig" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

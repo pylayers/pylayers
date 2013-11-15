@@ -111,8 +111,6 @@ default configuration file named <strong>default.ini</strong> is loaded.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4e51390&gt;</pre>
-</div>
 <p>A first step consists in loading a layout associated with the
 simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
 corresponding slabs and materials files <tt class="docutils literal"><span class="pre">matDB.ini</span></tt> and
@@ -144,7 +142,6 @@ dictionnary member of the Layout object.which allows to configure the
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_022.png" src="../_images/_fig_022.png" />
 <p>Adding coordinates of transmiting and receiving points</p>
 <hr class="docutils" />
 <p>Coordinates of transmitters and receivers for the simulation are stored
@@ -168,17 +165,11 @@ method of the Simulation object</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
-</div>
-<img alt="../_images/_fig_051.png" src="../_images/_fig_051.png" />
 <p>The different object of the simulation cans be accessed to obtain
 different information. Below the number of transmitter and receiver.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;number of Tx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 <span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>number of Tx : 302
-number of rx : 4</pre>
 </div>
 <p>The decomposition of the layout in a set of disjoint cycles is
 represented below. Not all cycles are rooms.</p>
@@ -188,20 +179,12 @@ represented below. Not all cycles are rooms.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/_fig_093.png" src="../_images/_fig_093.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="o">-</span><span class="mf">40.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">18.0</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/_fig_121.png" src="../_images/_fig_121.png" />
 <div class="section" id="signatures-rays-and-propagation-and-transmission-channel">
 <h2>Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Choose Tx and Rx coordinates</span>
@@ -212,9 +195,6 @@ represented below. Not all cycles are rooms.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">24.867</span> <span class="p">,</span>  <span class="mf">12.3097</span><span class="p">,</span>   <span class="mf">1.2</span>   <span class="p">])</span>
 </pre></div>
 </div>
 <p>A signature is a sequence of layout objects (points and segments) which
@@ -229,9 +209,6 @@ point to cycle function.</p>
 <span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>tx point belongs to cycle  5
-rx point belongs to cycle  4</pre>
-</div>
 <p>Then the signature between cycle 5 and cycle 4 can be calculated. This
 is done by instantiating a Signature object with a given layout and the
 2 cycle number.</p>
@@ -243,15 +220,6 @@ number of signatures for each number of interactions.</p>
 <span class="n">Si</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Signatures :
-------------------
-248
-from : 5 to 4
-1 : 2
-2 : 40
-3 : 264
-4 : 1274</pre>
-</div>
 <p>Once the signature has been obtained, 2D rays are calculated with the
 <tt class="docutils literal"><span class="pre">rays()</span></tt> method of the signature <strong>Si</strong>. The coordinates of a
 transmitter and a receiver should be parameters of the function. <strong>r2d</strong>
@@ -261,17 +229,16 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
 <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">12</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
-</pre></div>
-</div>
-<img alt="../_images/_fig_183.png" src="../_images/_fig_183.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">strucname</span><span class="o">=</span><span class="s">&#39;WHERE1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then, the <strong>r2d</strong> object is transformed in 3D ray, taking into account
 the reflection on ceil and floor.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">r3d</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">strucname</span><span class="o">=</span><span class="s">&#39;WHERE1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span>
 </pre></div>
 </div>
 <p>Once the 3D rays are obtained the local basis are determined</p>
@@ -286,20 +253,7 @@ the reflection on ceil and floor.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>1 / 1 : [0]
-2 / 5 : [1 2 3 4 5]
-3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-6 / 8 : [57 58 59 60 61 62 63 64]
------
-ni : 268
-nl : 601</pre>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">18</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="mi">13</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">268</span>
 </pre></div>
 </div>
 </div>
@@ -311,70 +265,19 @@ with a frequency array as argument.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">2.</span>  <span class="p">,</span>   <span class="mf">2.05</span><span class="p">,</span>   <span class="mf">2.1</span> <span class="p">,</span>   <span class="mf">2.15</span><span class="p">,</span>   <span class="mf">2.2</span> <span class="p">,</span>   <span class="mf">2.25</span><span class="p">,</span>   <span class="mf">2.3</span> <span class="p">,</span>   <span class="mf">2.35</span><span class="p">,</span>
-         <span class="mf">2.4</span> <span class="p">,</span>   <span class="mf">2.45</span><span class="p">,</span>   <span class="mf">2.5</span> <span class="p">,</span>   <span class="mf">2.55</span><span class="p">,</span>   <span class="mf">2.6</span> <span class="p">,</span>   <span class="mf">2.65</span><span class="p">,</span>   <span class="mf">2.7</span> <span class="p">,</span>   <span class="mf">2.75</span><span class="p">,</span>
-         <span class="mf">2.8</span> <span class="p">,</span>   <span class="mf">2.85</span><span class="p">,</span>   <span class="mf">2.9</span> <span class="p">,</span>   <span class="mf">2.95</span><span class="p">,</span>   <span class="mf">3.</span>  <span class="p">,</span>   <span class="mf">3.05</span><span class="p">,</span>   <span class="mf">3.1</span> <span class="p">,</span>   <span class="mf">3.15</span><span class="p">,</span>
-         <span class="mf">3.2</span> <span class="p">,</span>   <span class="mf">3.25</span><span class="p">,</span>   <span class="mf">3.3</span> <span class="p">,</span>   <span class="mf">3.35</span><span class="p">,</span>   <span class="mf">3.4</span> <span class="p">,</span>   <span class="mf">3.45</span><span class="p">,</span>   <span class="mf">3.5</span> <span class="p">,</span>   <span class="mf">3.55</span><span class="p">,</span>
-         <span class="mf">3.6</span> <span class="p">,</span>   <span class="mf">3.65</span><span class="p">,</span>   <span class="mf">3.7</span> <span class="p">,</span>   <span class="mf">3.75</span><span class="p">,</span>   <span class="mf">3.8</span> <span class="p">,</span>   <span class="mf">3.85</span><span class="p">,</span>   <span class="mf">3.9</span> <span class="p">,</span>   <span class="mf">3.95</span><span class="p">,</span>
-         <span class="mf">4.</span>  <span class="p">,</span>   <span class="mf">4.05</span><span class="p">,</span>   <span class="mf">4.1</span> <span class="p">,</span>   <span class="mf">4.15</span><span class="p">,</span>   <span class="mf">4.2</span> <span class="p">,</span>   <span class="mf">4.25</span><span class="p">,</span>   <span class="mf">4.3</span> <span class="p">,</span>   <span class="mf">4.35</span><span class="p">,</span>
-         <span class="mf">4.4</span> <span class="p">,</span>   <span class="mf">4.45</span><span class="p">,</span>   <span class="mf">4.5</span> <span class="p">,</span>   <span class="mf">4.55</span><span class="p">,</span>   <span class="mf">4.6</span> <span class="p">,</span>   <span class="mf">4.65</span><span class="p">,</span>   <span class="mf">4.7</span> <span class="p">,</span>   <span class="mf">4.75</span><span class="p">,</span>
-         <span class="mf">4.8</span> <span class="p">,</span>   <span class="mf">4.85</span><span class="p">,</span>   <span class="mf">4.9</span> <span class="p">,</span>   <span class="mf">4.95</span><span class="p">,</span>   <span class="mf">5.</span>  <span class="p">,</span>   <span class="mf">5.05</span><span class="p">,</span>   <span class="mf">5.1</span> <span class="p">,</span>   <span class="mf">5.15</span><span class="p">,</span>
-         <span class="mf">5.2</span> <span class="p">,</span>   <span class="mf">5.25</span><span class="p">,</span>   <span class="mf">5.3</span> <span class="p">,</span>   <span class="mf">5.35</span><span class="p">,</span>   <span class="mf">5.4</span> <span class="p">,</span>   <span class="mf">5.45</span><span class="p">,</span>   <span class="mf">5.5</span> <span class="p">,</span>   <span class="mf">5.55</span><span class="p">,</span>
-         <span class="mf">5.6</span> <span class="p">,</span>   <span class="mf">5.65</span><span class="p">,</span>   <span class="mf">5.7</span> <span class="p">,</span>   <span class="mf">5.75</span><span class="p">,</span>   <span class="mf">5.8</span> <span class="p">,</span>   <span class="mf">5.85</span><span class="p">,</span>   <span class="mf">5.9</span> <span class="p">,</span>   <span class="mf">5.95</span><span class="p">,</span>
-         <span class="mf">6.</span>  <span class="p">,</span>   <span class="mf">6.05</span><span class="p">,</span>   <span class="mf">6.1</span> <span class="p">,</span>   <span class="mf">6.15</span><span class="p">,</span>   <span class="mf">6.2</span> <span class="p">,</span>   <span class="mf">6.25</span><span class="p">,</span>   <span class="mf">6.3</span> <span class="p">,</span>   <span class="mf">6.35</span><span class="p">,</span>
-         <span class="mf">6.4</span> <span class="p">,</span>   <span class="mf">6.45</span><span class="p">,</span>   <span class="mf">6.5</span> <span class="p">,</span>   <span class="mf">6.55</span><span class="p">,</span>   <span class="mf">6.6</span> <span class="p">,</span>   <span class="mf">6.65</span><span class="p">,</span>   <span class="mf">6.7</span> <span class="p">,</span>   <span class="mf">6.75</span><span class="p">,</span>
-         <span class="mf">6.8</span> <span class="p">,</span>   <span class="mf">6.85</span><span class="p">,</span>   <span class="mf">6.9</span> <span class="p">,</span>   <span class="mf">6.95</span><span class="p">,</span>   <span class="mf">7.</span>  <span class="p">,</span>   <span class="mf">7.05</span><span class="p">,</span>   <span class="mf">7.1</span> <span class="p">,</span>   <span class="mf">7.15</span><span class="p">,</span>
-         <span class="mf">7.2</span> <span class="p">,</span>   <span class="mf">7.25</span><span class="p">,</span>   <span class="mf">7.3</span> <span class="p">,</span>   <span class="mf">7.35</span><span class="p">,</span>   <span class="mf">7.4</span> <span class="p">,</span>   <span class="mf">7.45</span><span class="p">,</span>   <span class="mf">7.5</span> <span class="p">,</span>   <span class="mf">7.55</span><span class="p">,</span>
-         <span class="mf">7.6</span> <span class="p">,</span>   <span class="mf">7.65</span><span class="p">,</span>   <span class="mf">7.7</span> <span class="p">,</span>   <span class="mf">7.75</span><span class="p">,</span>   <span class="mf">7.8</span> <span class="p">,</span>   <span class="mf">7.85</span><span class="p">,</span>   <span class="mf">7.9</span> <span class="p">,</span>   <span class="mf">7.95</span><span class="p">,</span>
-         <span class="mf">8.</span>  <span class="p">,</span>   <span class="mf">8.05</span><span class="p">,</span>   <span class="mf">8.1</span> <span class="p">,</span>   <span class="mf">8.15</span><span class="p">,</span>   <span class="mf">8.2</span> <span class="p">,</span>   <span class="mf">8.25</span><span class="p">,</span>   <span class="mf">8.3</span> <span class="p">,</span>   <span class="mf">8.35</span><span class="p">,</span>
-         <span class="mf">8.4</span> <span class="p">,</span>   <span class="mf">8.45</span><span class="p">,</span>   <span class="mf">8.5</span> <span class="p">,</span>   <span class="mf">8.55</span><span class="p">,</span>   <span class="mf">8.6</span> <span class="p">,</span>   <span class="mf">8.65</span><span class="p">,</span>   <span class="mf">8.7</span> <span class="p">,</span>   <span class="mf">8.75</span><span class="p">,</span>
-         <span class="mf">8.8</span> <span class="p">,</span>   <span class="mf">8.85</span><span class="p">,</span>   <span class="mf">8.9</span> <span class="p">,</span>   <span class="mf">8.95</span><span class="p">,</span>   <span class="mf">9.</span>  <span class="p">,</span>   <span class="mf">9.05</span><span class="p">,</span>   <span class="mf">9.1</span> <span class="p">,</span>   <span class="mf">9.15</span><span class="p">,</span>
-         <span class="mf">9.2</span> <span class="p">,</span>   <span class="mf">9.25</span><span class="p">,</span>   <span class="mf">9.3</span> <span class="p">,</span>   <span class="mf">9.35</span><span class="p">,</span>   <span class="mf">9.4</span> <span class="p">,</span>   <span class="mf">9.45</span><span class="p">,</span>   <span class="mf">9.5</span> <span class="p">,</span>   <span class="mf">9.55</span><span class="p">,</span>
-         <span class="mf">9.6</span> <span class="p">,</span>   <span class="mf">9.65</span><span class="p">,</span>   <span class="mf">9.7</span> <span class="p">,</span>   <span class="mf">9.75</span><span class="p">,</span>   <span class="mf">9.8</span> <span class="p">,</span>   <span class="mf">9.85</span><span class="p">,</span>   <span class="mf">9.9</span> <span class="p">,</span>   <span class="mf">9.95</span><span class="p">,</span>
-        <span class="mf">10.</span>  <span class="p">,</span>  <span class="mf">10.05</span><span class="p">,</span>  <span class="mf">10.1</span> <span class="p">,</span>  <span class="mf">10.15</span><span class="p">,</span>  <span class="mf">10.2</span> <span class="p">,</span>  <span class="mf">10.25</span><span class="p">,</span>  <span class="mf">10.3</span> <span class="p">,</span>  <span class="mf">10.35</span><span class="p">,</span>
-        <span class="mf">10.4</span> <span class="p">,</span>  <span class="mf">10.45</span><span class="p">,</span>  <span class="mf">10.5</span> <span class="p">,</span>  <span class="mf">10.55</span><span class="p">,</span>  <span class="mf">10.6</span> <span class="p">,</span>  <span class="mf">10.65</span><span class="p">,</span>  <span class="mf">10.7</span> <span class="p">,</span>  <span class="mf">10.75</span><span class="p">,</span>
-        <span class="mf">10.8</span> <span class="p">,</span>  <span class="mf">10.85</span><span class="p">,</span>  <span class="mf">10.9</span> <span class="p">,</span>  <span class="mf">10.95</span><span class="p">,</span>  <span class="mf">11.</span>  <span class="p">])</span>
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;fmin : &quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 <span class="k">print</span> <span class="s">&quot;fmax : &quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 <span class="k">print</span> <span class="s">&quot;Nf : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>fmin :  2.0
-fmax :  11.0
-Nf :  181</pre>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>1 / 1 : [0]
-2 / 5 : [1 2 3 4 5]
-3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-6 / 8 : [57 58 59 60 61 62 63 64]
------
-ni : 268
-nl : 601</pre>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>1 / 1 : [0]
-2 / 5 : [1 2 3 4 5]
-3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-6 / 8 : [57 58 59 60 61 62 63 64]
------
-ni : 268
-nl : 601</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>Rays evaluation</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Eco</span><span class="p">,</span><span class="n">Ecross</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eco</span><span class="p">),</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
@@ -385,25 +288,13 @@ nl : 601</pre>
 <span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-</pre></div>
-</div>
-<img alt="../_images/_fig_28.png" src="../_images/_fig_28.png" />
 <p>The multipath doa/dod diagram can be obtained via the method <tt class="docutils literal"><span class="pre">doadod</span></tt>.
 The colorbar corresponds to the total energy of the path.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_30.png" src="../_images/_fig_30.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>Nf   : 181
-Nray : 130
-shape Ctt : (130, 181)
-shape Ctp : (130, 181)
-shape Cpt : (130, 181)
-shape Cpp : (130, 181)</pre>
 </div>
 </div>
 <div class="section" id="apply-waveform">
@@ -424,7 +315,6 @@ array as it is illustrated below.</p>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_33.png" src="../_images/_fig_33.png" />
 <p>Finally, the received UWB waveform can be synthesize in applyng the
 waveform to the transmission channel.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ciro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
@@ -445,8 +335,13 @@ waveform to the transmission channel.</p>
 <span class="n">a</span><span class="o">=</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mf">0.002</span><span class="p">,</span><span class="mf">0.002</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../_images/_fig_35.png" src="../_images/_fig_35.png" />
-<div class="highlight-python"><div class="highlight"><pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gv</span>
 </pre></div>
 </div>
 </div>

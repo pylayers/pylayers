@@ -62,7 +62,6 @@ The following figures should be compared with figure 3a and 3b of [1]
 
 .. code-block:: python
 
-    
     sl['DoubleGlass'].ev(120,theta)
     sl['DoubleGlass'].plotwrta(dB=True)
 

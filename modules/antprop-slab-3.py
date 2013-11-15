@@ -1,12 +1,20 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from pylayers.antprop.slab import *
+import numpy as np
+import matplotlib.pylab as plt
 sl = SlabDB('matDB.ini','slabDB.ini')
-lname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
-lthick = [0.018,0.03,0.018]
-sl.add('placo',lname,lthick)
-theta = np.arange(0,np.pi/2,0.01)
-fGHz = np.array([57.5])
-sl['placo'].ev(fGHz,theta)
-sl['placo'].plotwrta()
-plt.show()
+
+sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
+sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
+sl.add('ConcreteJc',['ConcreteJc'],[0.049])
+sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[
+    0.0029,0.0102,0.0029])
+theta = np.linspace(20,60,100)*np.pi/180
+sl['ConcreteJc'].ev(120,theta)
+sl['ConcreteJc'].plotwrt(var='a',types=['l20'])
+fig = plt.figure()
+sl['DoubleGlass'].ev(120,theta)
+sl['DoubleGlass'].plotwrt(var='a',types=['l20'])
+freq = np.linspace(110,135,50)
+fig = plt.figure()
+sl['DoubleGlass'].ev(freq,theta)
+sl['DoubleGlass'].pcolor(dB=True)

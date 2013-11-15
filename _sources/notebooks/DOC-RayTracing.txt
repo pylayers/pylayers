@@ -5,11 +5,10 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x3c17f90>
+    <matplotlib.figure.Figure at 0x45cfa90>
 
 Ray-tracing
 -----------
-
 
 
 .. code-block:: python
@@ -24,31 +23,28 @@ Setting the transmitter
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
 .. code-block:: python
 
     S.tx = RadioNode(typ='tx')
     S.tx.point([1.2,1,1.4])
 
-Setting receiver
-~~~~~~~~~~~~~~~~
-
+Setting the receiver
+~~~~~~~~~~~~~~~~~~~~
 
 
 .. code-block:: python
 
     S.rx = RadioNode(typ='rx')
-    S.rx.point([8,-1.2,1.5],mode='append')
-    S.rx.point([8,-1.21,1.5],mode='append')
-    S.rx.point([8,-1.22,1.5],mode='append')
-    S.rx.point([8,-1.23,1.5],mode='append')
-    S.rx.point([8,-1.24,1.5],mode='append')
+    S.rx.point([8,1.2,1.5],mode='append')
+    S.rx.point([8,1.31,1.5],mode='append')
+    S.rx.point([8,1.42,1.5],mode='append')
+    S.rx.point([8,1.53,1.5],mode='append')
+    S.rx.point([8,1.64,1.5],mode='append')
     
     S.save()
 
-Adjust simulation parameter (optional)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+Adjust simulation parameters (optional)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 .. code-block:: python
@@ -99,31 +95,38 @@ Run the ray tracing
 ~~~~~~~~~~~~~~~~~~~
 
 
+.. code-block:: python
+
+    S.show()
+
+
+.. parsed-literal::
+
+    Warning : no furniture file loaded
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x4142a90>,
+     <matplotlib.axes.AxesSubplot at 0x2a993d0>)
+
+
+.. image:: DOC-RayTracing_files/_fig_05.png
+
 
 .. code-block:: python
 
-    S.run(1,1)
+    S.launching(1)
+
+
+.. code-block:: python
+
+    S.tracing(1,1,verbose=True)
 
 
 .. parsed-literal::
 
-    run debug  1 1
-    nray :  500
-    nfreq :  181
-    nb rays in .tauk file:  500
-    nb rays 2:  500
-
-
-.. parsed-literal::
-
-    /usr/local/lib/python2.7/dist-packages/scipy/io/matlab/mio.py:267: FutureWarning: Using oned_as default value ('column') This will change to 'row' in future versions
-      oned_as=oned_as)
-
-
-.. parsed-literal::
-
-    True
-
+    tracing -lch TA-Office_slabDB_def_radiotx_1.lch -patra def.patra  -spa radiorx.spa -conf /home/uguen/Bureau/P1/project.conf
 
 Plot CIR
 ~~~~~~~~
@@ -134,12 +137,24 @@ Plot CIR
 
     S.pltcir(1,1)
 
+::
 
+    ---------------------------------------------------------------------------
+    KeyError                                  Traceback (most recent call last)
+    <ipython-input-9-6b9450368cc5> in <module>()
+    ----> 1 S.pltcir(1,1)
+    
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/simul/simulem.py in pltcir(self, itx, irx, mode, noise, color, format, fig, ax)
+       1547         #    ax = fig.gca()
+       1548 
+    -> 1549         _filecir = self.dcir[itx][irx] + '.mat'
+       1550         filecir = pyu.getlong(_filecir, pstruc['DIRCIR']+'/Tx' + str('%0.3d' % itx))
+       1551         D = spio.loadmat(filecir)
+
+    KeyError: 1
 .. parsed-literal::
 
-    Warning : no furniture file loaded
-
-.. image:: DOC-RayTracing_files/_fig_07.png
+    <matplotlib.figure.Figure at 0x45d90d0>
 
 
 .. code-block:: python

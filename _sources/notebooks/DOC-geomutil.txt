@@ -281,15 +281,122 @@ ptconvex
     axis('off')
     axis('equal')
     k = 0
+    polyg.plot()
     for p in points:
         if tcc[k] == 1 :
             plt.plot(p.x, p.y, 'o', color='red',alpha=1)
         else:
             plt.plot(p.x, p.y, 'o', color='blue',alpha=0.3)
         k = k+1
-    polyg.plot()
-    
 
 
 .. image:: DOC-geomutil_files/_fig_11.png
+
+.. image:: DOC-geomutil_files/_fig_13.png
+
+intersect
+~~~~~~~~~
+
+intersect(A,B,C,D) wether or not the N segments (AB) intersects N
+segments (CD). The intersection is tested only for the segpment of same
+index in the ndarray.
+
+
+.. code-block:: python
+
+    from pylayers.util.geomutil import *
+    from pylayers.util.plotutil import *
+    import scipy as sp
+    N1 = 5
+    N2 = 5
+    A = sp.rand(2,N1)
+    B = sp.rand(2,N1)
+    C = sp.rand(2,N1)
+    D = sp.rand(2,N1)
+    b1 = intersect(A,B,C,D)
+
+
+.. code-block:: python
+
+    b1
+
+
+.. parsed-literal::
+
+    array([ True, False, False, False, False], dtype=bool)
+
+
+
+.. code-block:: python
+
+    pt1 = A[:,b1]
+    ph1 = B[:,b1]
+    pt2 = C[:,b1]
+    ph2 = D[:,b1]
+    pt3 = A[:,(1-b1).astype(bool)]
+    ph3 = B[:,(1-b1).astype(bool)]
+    pt4 = C[:,(1-b1).astype(bool)]
+    ph4 = D[:,(1-b1).astype(bool)]
+    f1,a1 = displot(pt1,ph1,'r')
+    f2,a2 = displot(pt2,ph2,'b')
+    f3,a3 = displot(pt3,ph3,'c')
+    f4,a4 = displot(pt4,ph4,'y')
+    ti = plt.title('test intersect')
+
+.. image:: DOC-geomutil_files/_fig_16.png
+
+
+.. code-block:: python
+
+    b1
+
+
+
+.. parsed-literal::
+
+    array([False, False, False,  True,  True,  True, False, False, False, False], dtype=bool)
+
+
+
+.. code-block:: python
+
+    (1-b1).astype('bool')
+
+
+.. parsed-literal::
+
+    array([ True,  True,  True, False, False, False,  True,  True,  True,  True], dtype=bool)
+
+
+
+.. code-block:: python
+
+    b1.all()
+
+
+.. parsed-literal::
+
+    False
+
+
+
+.. code-block:: python
+
+    b1.any()
+
+
+.. parsed-literal::
+
+    True
+
+
+One want to evaluate all the intersection of a set of segments of
+
+r un rayon (multi line) constitué de Ns segments
+
+1. trouver la boite englobante b d'une multi-line
+2. à partir de b trouver l'ensemble des segments intervenant dans la
+   boite
+
+3.
 

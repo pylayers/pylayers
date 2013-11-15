@@ -168,7 +168,7 @@
 
 <dl class="class">
 <dt id="pylayers.util.geomutil.GeomVect">
-<em class="property">class </em><tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">GeomVect</tt><big>(</big><em>_filename='geomdef'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#GeomVect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.GeomVect" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">GeomVect</tt><big>(</big><em>_filename='geomdef'</em>, <em>clear=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#GeomVect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.GeomVect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Geomview VECT file class</p>
 <blockquote>
 <div><ul class="simple">
@@ -251,7 +251,7 @@ The first abs(Nv[0]) of them form the first polyline,</p>
 <dt>
 <tt class="descname">[0, 1, 0],</tt></dt>
 <dt>
-<tt class="descname">[1, 0, 0]]), linewidth=3)</tt></dt>
+<tt class="descname">[1, 0, 0]]), linewidth=3, scale=1)</tt></dt>
 <dd><dl class="docutils">
 <dt>Construct a geomview vect file for vizualisation of a frame</dt>
 <dd>by default the geomview filename is base0.vect</dd>
@@ -304,8 +304,8 @@ The first abs(Nv[0]) of them form the first polyline,</p>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt1</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pt2</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">:(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">2</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="mi">3</span><span class="p">:(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">4</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gv1</span> <span class="o">=</span> <span class="n">GeomVect</span><span class="p">(</span><span class="s">&#39;test1&#39;</span><span class="p">)</span>
@@ -347,7 +347,7 @@ The first abs(Nv[0]) of them form the first polyline,</p>
 
 <dl class="class">
 <dt id="pylayers.util.geomutil.Geomlist">
-<em class="property">class </em><tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">Geomlist</tt><big>(</big><em>_filename</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomlist" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">Geomlist</tt><big>(</big><em>_filename</em>, <em>clear=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomlist" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="pylayers.util.geomutil.Geomlist.append">
 <tt class="descname">append</tt><big>(</big><em>strg</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomlist.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomlist.append" title="Permalink to this definition">¶</a></dt>
@@ -409,9 +409,63 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.util.geomutil.Geomoff.cylinder">
+<tt class="descname">cylinder</tt><big>(</big><em>r, l, nphi=20, nl=3, col=[1.0, 0.0, 1.0], alpha=0.1</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.cylinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a cylinder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>r</strong> : radius</p>
+<p><strong>l</strong> : length</p>
+<p><strong>nphi</strong> : number of phi</p>
+<p><strong>nl</strong> : number of l</p>
+<p><strong>col</strong> : list [r,g,b]</p>
+<p class="last"><strong>alpha</strong> : transparency</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.util.geomutil.Geomoff.loadpt">
 <tt class="descname">loadpt</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.loadpt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>load points</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.util.geomutil.Geomoff.pattern">
+<tt class="descname">pattern</tt><big>(</big><em>theta</em>, <em>phi</em>, <em>E</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.Geomoff.pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>export antenna pattern in a geomview format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>theta</strong> : np.array (1 x Ntheta)</p>
+<p><strong>phi</strong> : np.array (1 x Nphi)</p>
+<p><strong>E</strong> : np.array complex  (Ntheta,Nphi)</p>
+<p><strong>po</strong> : origin (1x3)</p>
+<p><strong>R</strong> : rotation matrix (3x3)</p>
+<p><strong>minr</strong> : radius of minimum</p>
+<p><strong>maxr</strong> : radius of maximum</p>
+<p class="last"><strong>ilog</strong> : True (log) False (linear)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mf">0.05</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">E</span>  <span class="o">=</span> <span class="mf">1.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">th</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">0</span><span class="o">*</span><span class="n">ph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">Geomoff</span><span class="p">(</span><span class="s">&#39;dipole&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">ph</span><span class="p">,</span><span class="n">E</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.util.geomutil.Geomoff.polygon">
@@ -466,7 +520,7 @@ x[NVertices-1],y[NVertices-1],z[NVertices-1]</p>
 
 <dl class="class">
 <dt id="pylayers.util.geomutil.Geomview">
-<em class="property">class </em><tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">Geomview</tt><big>(</big><em>_filename</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomview" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">Geomview</tt><big>(</big><em>_filename</em>, <em>clear=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#Geomview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.Geomview" title="Permalink to this definition">¶</a></dt>
 <dd><p>Geomview file class</p>
 <p>This class is parent of  GeomVect Geomlist Geomoff</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -735,9 +789,15 @@ Author : Martin Laloux 2010</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="gis.layout.html#module-pylayers.gis.layout" title="pylayers.gis.layout"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.gis.layout</span></tt></a></p>
+</div>
 <p class="rubric">Notes</p>
 <p>Segment k and (k+1)%N share segment (k+1)%N
 The degree of a point is dependent from other polygons around</p>
+<p>Topological error can be raised if the point coordinates accuracy
+is not limited.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
@@ -832,6 +892,9 @@ The degree of a point is dependent from other polygons around</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>display</strong> : boolean</p>
+<blockquote>
+<div><p>default False</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>tcc</strong> : np.array (1x Nseg)</p>
@@ -846,14 +909,18 @@ The degree of a point is dependent from other polygons around</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">Lr2n</span></tt></p>
+</div>
 <p class="rubric">Notes</p>
 <p>This function determines the convex and concav points of a polygon.
 As there is no orientation convention for the polygon the sign of the cross
 product can&#8217;t be directly interpreted. So we exploit the following
 property :</p>
 <p>Let N be the number of points of the Polygon. N  = Nx + Nc where
-Nx is the number of convex point and Nc the number of concav points
-We have Nx &gt;= Nc</p>
+Nx is the number of convex points and Nc the number of concav points</p>
+<p>We have Nx &gt;= Nc</p>
 <p>If a point is common to two parallel segments, the cross product is = 0</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
@@ -1005,6 +1072,7 @@ a[:,1] : N x phi     phi angle</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
+<p>Given X and Y find the affine transformation</p>
 <p>Y = A X + B</p>
 </dd></dl>
 
@@ -1086,15 +1154,15 @@ a[:,1] : N x phi     phi angle</p>
 
 <dl class="function">
 <dt id="pylayers.util.geomutil.ccw">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">ccw</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#ccw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.ccw" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">ccw</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#ccw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.ccw" title="Permalink to this definition">¶</a></dt>
 <dd><p>counter clock wise order</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>A</strong> : array(2,N)</p>
-<p><strong>B</strong> : array(2,N)</p>
-<p><strong>C</strong> : array(2,N)</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> : ndarray (2,N)</p>
+<p><strong>b</strong> : ndarray (2,N)</p>
+<p><strong>c</strong> : ndarray (2,N)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>array of booleans</strong> :</p>
@@ -1106,27 +1174,23 @@ a[:,1] : N x phi     phi angle</p>
 <p><a class="reference external" href="http://www.bryceboe.com/2006/10/23/line-segment-intersection-algorithm/">Line Segment Intersection</a></p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="pylayers.util.geomutil.cylmap">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">cylmap</tt><big>(</big><em>Y</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.cylmap" title="Permalink to this definition">¶</a></dt>
-<dd><p>find affine transformation</p>
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">cylmap</tt><big>(</big><em>Y</em>, <em>r=0.0625</em>, <em>l=0.5</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.cylmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>find affine transformation for a specific cylinder</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>X</strong> : np.array</p>
-<blockquote>
-<div><p>3xN</p>
-</div></blockquote>
-<p><strong>Y</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Y</strong> :</p>
 <blockquote>
 <div><p>3xN</p>
 </div></blockquote>
@@ -1182,61 +1246,64 @@ ax : integer (0,1)</div></blockquote>
 
 <dl class="function">
 <dt id="pylayers.util.geomutil.distseg">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">distseg</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, <em>alpha</em>, <em>beta</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.distseg" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">distseg</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, <em>alpha</em>, <em>beta</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.distseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>distance to segments</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>A</strong> : (3xN) initial point segment 1</p>
-<p><strong>B</strong> : (3xN) end point segment 1</p>
-<p><strong>C</strong> : (3xN) starting point segment 2</p>
-<p><strong>D</strong> : (3xN) end point segment 2</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> : (3xN) initial point segment 1</p>
+<p><strong>b</strong> : (3xN) end point segment 1</p>
+<p><strong>c</strong> : (3xN) starting point segment 2</p>
+<p><strong>d</strong> : (3xN) end point segment 2</p>
 <p><strong>alpha :</strong> :</p>
 <p><strong>beta  :</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>f :</strong> :</p>
-<p class="last"><strong>g :</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>f</strong> : square of the distance to the segment</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">dmin3d</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">,</span><span class="n">D</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="go">    &gt;&gt;&gt;    a = 0 </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>   <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="go">    &gt;&gt;&gt;    b = 0 </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>   <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span> 
-<span class="go">    &gt;&gt;&gt; f, g   = dist(A,B,C,D,a,b)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">dmin</span> <span class="o">=</span> <span class="n">dmin3d</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span><span class="p">[</span><span class="n">alpha</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span><span class="p">[</span><span class="n">alpha</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span><span class="p">[</span><span class="n">beta</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span><span class="p">[</span><span class="n">beta</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="go">    &gt;&gt;&gt; f = distseg(a,b,c,d,alpha,beta)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">alpha</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p2</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="p">(</span><span class="n">d</span><span class="o">-</span><span class="n">c</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-</span><span class="n">p2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">f</span><span class="o">-</span><span class="n">g</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_almost_equal</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="pylayers.util.geomutil.dmin3d">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">dmin3d</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.dmin3d" title="Permalink to this definition">¶</a></dt>
-<dd><p>dmin3d evaluate the minimal distance between 2 set of segments</p>
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">dmin3d</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.dmin3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>evaluate the minimal distance between 2 set of segments</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>A</strong> : (3xN) initial point segment 1</p>
-<p><strong>B</strong> : (3xN) end point segment 1</p>
-<p><strong>C</strong> : (3xN) starting point segment 2</p>
-<p><strong>D</strong> : (3xN) end point segment 2</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> : (3xN) initial point segment 1</p>
+<p><strong>b</strong> : (3xN) end point segment 1</p>
+<p><strong>c</strong> : (3xN) starting point segment 2</p>
+<p><strong>d</strong> : (3xN) end point segment 2</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>alpha :</strong> :</p>
-<p><strong>beta  :</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>alpha</strong> : segment parameterization</p>
+<p><strong>beta</strong> : segment parameterization</p>
 <p class="last"><strong>dmin</strong> : minimal distance between 2 segments</p>
 </td>
 </tr>
@@ -1247,7 +1314,7 @@ ax : integer (0,1)</div></blockquote>
 <dl class="function">
 <dt id="pylayers.util.geomutil.dptseg">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">dptseg</tt><big>(</big><em>p</em>, <em>pt</em>, <em>ph</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#dptseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.dptseg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Distance between a set of points and a segment</p>
+<dd><p>distance between a set of points and a segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1307,20 +1374,27 @@ N     : descretization step</p>
 
 <dl class="function">
 <dt id="pylayers.util.geomutil.intersect">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">intersect</tt><big>(</big><em>A</em>, <em>B</em>, <em>C</em>, <em>D</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.intersect" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">intersect</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#intersect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.intersect" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if segment AB intersects segment CD</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>A</strong> : np.array (2xN)</p>
-<p><strong>B</strong> : np.array (2xN)</p>
-<p><strong>C</strong> : np.array (2xN)</p>
-<p class="last"><strong>D</strong> : np.array (2xN)</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> : np.array (2xN)</p>
+<p><strong>b</strong> : np.array (2xN)</p>
+<p><strong>c</strong> : np.array (2xN)</p>
+<p class="last"><strong>d</strong> : np.array (2xN)</p>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#pylayers.util.geomutil.ccw" title="pylayers.util.geomutil.ccw"><tt class="xref py py-obj docutils literal"><span class="pre">ccw</span></tt></a></dt>
+<dd>counter clock wise detection</dd>
+</dl>
+</div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -1572,9 +1646,9 @@ Parameters
 </dd></dl>
 
 <dl class="function">
-<dt id="pylayers.util.geomutil.onbfromaxe">
-<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">onbfromaxe</tt><big>(</big><em>A</em>, <em>B</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.onbfromaxe" title="Permalink to this definition">¶</a></dt>
-<dd><p>orthonormal basis from 2 points defining an axe</p>
+<dt id="pylayers.util.geomutil.onb">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">onb</tt><big>(</big><em>A</em>, <em>B</em>, <em>v</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.onb" title="Permalink to this definition">¶</a></dt>
+<dd><p>orthonormal basis from 2 points defining an axe and a vector</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1584,6 +1658,10 @@ Parameters
 <div><p>3 x n</p>
 </div></blockquote>
 <p><strong>B</strong> : np.array</p>
+<blockquote>
+<div><p>3 x n</p>
+</div></blockquote>
+<p><strong>v</strong> : np.array</p>
 <blockquote>
 <div><p>3 x n</p>
 </div></blockquote>
@@ -1606,22 +1684,23 @@ Parameters
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">onbfromaxe</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
-<span class="go">array([[[ 0.79158384, -0.61106057,  0.        ],</span>
-<span class="go">        [ 0.61106057,  0.79158384,  0.        ],</span>
-<span class="go">        [ 0.        ,  0.        ,  1.        ]],</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">onb</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+<span class="go">array([[[ 1.,  0.,  0.],</span>
+<span class="go">        [ 0.,  1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  1.]]</span>
 
-<span class="go">       [[ 0.74214568, -0.67023861,  0.        ],</span>
-<span class="go">        [ 0.67023861,  0.74214568,  0.        ],</span>
-<span class="go">        [ 0.        ,  0.        ,  1.        ]],</span>
+<span class="go">       [[ 1.,  0.,  0.],</span>
+<span class="go">        [ 0.,  1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  1.]],</span>
 
-<span class="go">       [[ 0.80923784, -0.58748116,  0.        ],</span>
-<span class="go">        [ 0.58748116,  0.80923784,  0.        ],</span>
-<span class="go">        [ 0.        ,  0.        ,  1.        ]],</span>
+<span class="go">       [[ 1.,  0.,  0.],</span>
+<span class="go">        [ 0.,  1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  1.]],</span>
 
-<span class="go">       [[ 0.52138786, -0.85331981,  0.        ],</span>
-<span class="go">        [ 0.85331981,  0.52138786,  0.        ],</span>
-<span class="go">        [ 0.        ,  0.        ,  1.        ]]])</span>
+<span class="go">       [[ 1.,  0.,  0.],</span>
+<span class="go">        [ 0.,  1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  1.]]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1769,7 +1848,7 @@ References
 <dl class="function">
 <dt id="pylayers.util.geomutil.ptonseg">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">ptonseg</tt><big>(</big><em>pta</em>, <em>phe</em>, <em>pt</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#ptonseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.ptonseg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a point on the segment pta pte</p>
+<dd><p>return a point on the segment (pta,pte)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

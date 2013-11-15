@@ -145,6 +145,21 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.coverage.Coverage.coverold">
+<tt class="descname">coverold</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.coverold" title="Permalink to this definition">¶</a></dt>
+<dd><p>start the coverage calculation</p>
+<p>Deprecated : slow implementation</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showPr</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/antprop-coverage-2.py">Source code</a>)</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.coverage.Coverage.creategrid">
 <tt class="descname">creategrid</tt><big>(</big><em>full=True</em>, <em>boundary=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.creategrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.creategrid" title="Permalink to this definition">¶</a></dt>
 <dd><p>create a grid</p>
@@ -158,7 +173,7 @@
 </div></blockquote>
 <p><strong>boundary</strong> : (xmin,ymin,xmax,ymax)</p>
 <blockquote class="last">
-<div><p>if full is False the boundary is used</p>
+<div><p>if full is False the boundary argument is used</p>
 </div></blockquote>
 </td>
 </tr>
@@ -168,40 +183,13 @@
 
 <dl class="method">
 <dt id="pylayers.antprop.coverage.Coverage.showEd">
-<tt class="descname">showEd</tt><big>(</big><em>polarization='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showEd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showEd" title="Permalink to this definition">¶</a></dt>
-<dd><p>show direct path excess of delay map</p>
+<tt class="descname">showEd</tt><big>(</big><em>polar='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showEd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showEd" title="Permalink to this definition">¶</a></dt>
+<dd><p>shows a map of direct path excess delay</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showEdo</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/antprop-coverage-2.py">Source code</a>)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pylayers.antprop.coverage.Coverage.showLoss">
-<tt class="descname">showLoss</tt><big>(</big><em>polarization='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>show losses map</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>polarization</strong> : string</p>
-<blockquote class="last">
-<div><p>&#8216;o&#8217;|&#8217;p&#8217;|&#8217;both&#8217;</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showLoss</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showLoss</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/antprop-coverage-3.py">Source code</a>)</p>
@@ -216,8 +204,38 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.coverage.Coverage.showLoss">
+<tt class="descname">showLoss</tt><big>(</big><em>polar='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>show losses map</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>polar</strong> : string</p>
+<blockquote class="last">
+<div><p>&#8216;o&#8217;|&#8217;p&#8217;|&#8217;both&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showLoss</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showLoss</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/antprop-coverage-4.py">Source code</a>, <a class="reference external" href="../modules/antprop-coverage-4.png">png</a>, <a class="reference external" href="../modules/antprop-coverage-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-coverage-4.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/antprop-coverage-4.png" src="../_images/antprop-coverage-4.png" />
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.coverage.Coverage.showPower">
-<tt class="descname">showPower</tt><big>(</big><em>rxsens=True</em>, <em>nfl=True</em>, <em>polarization='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showPower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showPower" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showPower</tt><big>(</big><em>rxsens=True</em>, <em>nfl=True</em>, <em>polar='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showPower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showPower" title="Permalink to this definition">¶</a></dt>
 <dd><p>show the map of received power</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -231,7 +249,7 @@
 <blockquote>
 <div><p>clip the map with noise floor set in self.pndbm</p>
 </div></blockquote>
-<p><strong>polarization</strong> : string</p>
+<p><strong>polar</strong> : string</p>
 <blockquote class="last">
 <div><p>&#8216;o&#8217;|&#8217;p&#8217;</p>
 </div></blockquote>
@@ -246,18 +264,18 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/antprop-coverage-4.py">Source code</a>, <a class="reference external" href="../modules/antprop-coverage-4.png">png</a>, <a class="reference external" href="../modules/antprop-coverage-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-coverage-4.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/antprop-coverage-5.py">Source code</a>, <a class="reference external" href="../modules/antprop-coverage-5.png">png</a>, <a class="reference external" href="../modules/antprop-coverage-5.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-coverage-5.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/antprop-coverage-4.png" src="../_images/antprop-coverage-4.png" />
+<img alt="../_images/antprop-coverage-5.png" src="../_images/antprop-coverage-5.png" />
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.coverage.Coverage.showTransistionRegion">
-<tt class="descname">showTransistionRegion</tt><big>(</big><em>polarization='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showTransistionRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showTransistionRegion" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showTransistionRegion</tt><big>(</big><em>polar='o'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/coverage.html#Coverage.showTransistionRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.coverage.Coverage.showTransistionRegion" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Notes</p>
 <dl class="docutils">
-<dt>See <span class="classifier-delimiter">:</span> <span class="classifier">Analyzing the Transitional Region in Low Power Wireless Links</span></dt>
+<dt>See <span class="classifier-delimiter">:</span> <span class="classifier">&#8220;Analyzing the Transitional Region in Low Power Wireless Links&#8221;</span></dt>
 <dd>Marco Zuniga and Bhaskar Krishnamachari</dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -267,7 +285,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">showTransitionRegion</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/antprop-coverage-5.py">Source code</a>)</p>
+<p>(<a class="reference external" href="../modules/antprop-coverage-6.py">Source code</a>)</p>
 </dd></dl>
 
 </dd></dl>

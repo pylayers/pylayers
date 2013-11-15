@@ -1,11 +1,3 @@
 
-Reflection coefficient @ 1.05 GHz and theta= 0.1 :
-
- R= [[-0.46812931-0.06286165j  0.00000000+0.j        ]
- [ 0.00000000+0.j          0.46812931+0.06286165j]]
-
-Transmission coefficient @ 1.05 GHz and theta= 0.1 :
-
- T= [[ 0.72738249-0.48850885j  0.00000000+0.j        ]
- [ 0.00000000+0.j          0.72738249-0.48850885j]] 
+Here, slab is evaluted for 80 frequency(ies) and 158 angle(s)
 

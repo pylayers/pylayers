@@ -61,8 +61,8 @@
   <ul>
 <li><a class="reference internal" href="#">Ray-tracing</a><ul>
 <li><a class="reference internal" href="#setting-the-transmitter">Setting the transmitter</a></li>
-<li><a class="reference internal" href="#setting-receiver">Setting receiver</a></li>
-<li><a class="reference internal" href="#adjust-simulation-parameter-optional">Adjust simulation parameter (optional)</a></li>
+<li><a class="reference internal" href="#setting-the-receiver">Setting the receiver</a></li>
+<li><a class="reference internal" href="#adjust-simulation-parameters-optional">Adjust simulation parameters (optional)</a></li>
 <li><a class="reference internal" href="#run-the-ray-tracing">Run the ray tracing</a></li>
 <li><a class="reference internal" href="#plot-cir">Plot CIR</a></li>
 </ul>
@@ -99,7 +99,7 @@
   <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3c17f90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x45cfa90&gt;</pre>
 </div>
 <div class="section" id="ray-tracing">
 <h1>Ray-tracing<a class="headerlink" href="#ray-tracing" title="Permalink to this headline">¶</a></h1>
@@ -117,21 +117,21 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="setting-receiver">
-<h2>Setting receiver<a class="headerlink" href="#setting-receiver" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="setting-the-receiver">
+<h2>Setting the receiver<a class="headerlink" href="#setting-the-receiver" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.21</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.22</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.23</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
-<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="o">-</span><span class="mf">1.24</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="mf">1.31</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="mf">1.42</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="mf">1.53</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">point</span><span class="p">([</span><span class="mi">8</span><span class="p">,</span><span class="mf">1.64</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
 
 <span class="n">S</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="adjust-simulation-parameter-optional">
-<h2>Adjust simulation parameter (optional)<a class="headerlink" href="#adjust-simulation-parameter-optional" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="adjust-simulation-parameters-optional">
+<h2>Adjust simulation parameters (optional)<a class="headerlink" href="#adjust-simulation-parameters-optional" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># print launching parameters</span>
 <span class="n">S</span><span class="o">.</span><span class="n">palch</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 
@@ -174,20 +174,22 @@ typalgo    : Type of algo (default 0)       :  1</pre>
 </div>
 <div class="section" id="run-the-ray-tracing">
 <h2>Run the ray tracing<a class="headerlink" href="#run-the-ray-tracing" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>run debug  1 1
-nray :  500
-nfreq :  181
-nb rays in .tauk file:  500
-nb rays 2:  500</pre>
+<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/scipy/io/matlab/mio.py:267: FutureWarning: Using oned_as default value ('column') This will change to 'row' in future versions
-  oned_as=oned_as)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x4142a90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2a993d0&gt;)</pre>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="bp">True</span>
+<img alt="../_images/_fig_052.png" src="../_images/_fig_052.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">launching</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tracing</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>tracing -lch TA-Office_slabDB_def_radiotx_1.lch -patra def.patra  -spa radiorx.spa -conf /home/uguen/Bureau/P1/project.conf</pre>
 </div>
 </div>
 <div class="section" id="plot-cir">
@@ -195,9 +197,22 @@ nb rays 2:  500</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">pltcir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+<div class="highlight-python"><pre>---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+&lt;ipython-input-9-6b9450368cc5&gt; in &lt;module&gt;()
+----&gt; 1 S.pltcir(1,1)
+
+/home/uguen/Documents/rch/devel/pylayersbug/pylayers/simul/simulem.py in pltcir(self, itx, irx, mode, noise, color, format, fig, ax)
+   1547         #    ax = fig.gca()
+   1548
+-&gt; 1549         _filecir = self.dcir[itx][irx] + '.mat'
+   1550         filecir = pyu.getlong(_filecir, pstruc['DIRCIR']+'/Tx' + str('%0.3d' % itx))
+   1551         D = spio.loadmat(filecir)
+
+KeyError: 1</pre>
 </div>
-<img alt="../_images/_fig_072.png" src="../_images/_fig_072.png" />
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x45d90d0&gt;</pre>
+</div>
 <div class="highlight-python"><div class="highlight"><pre>
 </pre></div>
 </div>

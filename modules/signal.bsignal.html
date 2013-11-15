@@ -113,7 +113,7 @@ else y is smashed</div></blockquote>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.gating">
 <tt class="descname">gating</tt><big>(</big><em>xmin</em>, <em>xmax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.gating"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.gating" title="Permalink to this definition">¶</a></dt>
-<dd><p>gating beween xmin and xmax</p>
+<dd><p>gating between xmin and xmax</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -138,7 +138,7 @@ else y is smashed</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">12</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">TUsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">txt1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;before gating&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -148,7 +148,7 @@ else y is smashed</div></blockquote>
 <img alt="../_images/signal-bsignal-1_00_00.png" src="../_images/signal-bsignal-1_00_00.png" />
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">gating</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">txt2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;after gating&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -161,7 +161,7 @@ else y is smashed</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.imshow">
-<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x44c62d0&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x302afd0&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>imshow of y matrix</p>
 </dd></dl>
 
@@ -187,7 +187,7 @@ else y is smashed</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.plot">
-<tt class="descname">plot</tt><big>(</big><em>iy=0</em>, <em>col='black'</em>, <em>vline=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>hline=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>unit1='V'</em>, <em>unit2='V'</em>, <em>xmin=-100000.0</em>, <em>xmax=100000.0</em>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span>, <em>dB=False</em>, <em>dist=False</em>, <em>display=True</em>, <em>logx=False</em>, <em>logy=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot signal</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -253,17 +253,22 @@ else y is smashed</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&#39;impulse.mat&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">e</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">TUsignal</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#39;impulse.mat&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/signal-bsignal-2.py">Source code</a>, <a class="reference external" href="../modules/signal-bsignal-2.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-2.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-2.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/signal-bsignal-2.py">Source code</a>)</p>
 <div class="figure">
-<img alt="../_images/signal-bsignal-2.png" src="../_images/signal-bsignal-2.png" />
+<img alt="../_images/signal-bsignal-2_00.png" src="../_images/signal-bsignal-2_00.png" />
+<p class="caption">(<a class="reference external" href="../modules/signal-bsignal-2_00.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-2_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-2_00.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../_images/signal-bsignal-2_01.png" src="../_images/signal-bsignal-2_01.png" />
+<p class="caption">(<a class="reference external" href="../modules/signal-bsignal-2_01.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-2_01.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-2_01.pdf">pdf</a>)</p>
 </div>
 </dd></dl>
 
@@ -273,6 +278,7 @@ else y is smashed</div></blockquote>
 <dd><p>setx : set x vector</p>
 <p class="rubric">Notes</p>
 <p>y is set to the corresponding zero vector</p>
+<p>Use __set__ instead</p>
 </dd></dl>
 
 <dl class="method">
@@ -366,8 +372,9 @@ plotri   : plot real part and imaginary part
 plotdB   : plot modulus in dB</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FBsignal.plot">
-<tt class="descname">plot</tt><big>(</big><em>phase=True</em>, <em>dB=True</em>, <em>iy=array([0])</em>, <em>ax=</em><span class="optional">[</span><span class="optional">]</span>, <em>fig=</em><span class="optional">[</span><span class="optional">]</span>, <em>name=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal.plot" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<tt class="descname">plot</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FBsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FBsignal.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot FBsignal</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -387,6 +394,10 @@ plotdB   : plot modulus in dB</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#pylayers.signal.bsignal.Bsignal.plot" title="pylayers.signal.bsignal.Bsignal.plot"><tt class="xref py py-obj docutils literal"><span class="pre">Bsignal.plot</span></tt></a></p>
+</div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
@@ -394,7 +405,7 @@ plotdB   : plot modulus in dB</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">FBsignal</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">S</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -663,7 +674,6 @@ tau1 : additional delay</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tau0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">FUDsignal</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fGHz</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">tau0</span><span class="o">=</span><span class="n">tau0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">plot3d</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -737,6 +747,36 @@ align : align two FUsignal on a same base</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span>  <span class="o">=</span> <span class="n">i1</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.signal.bsignal.FUsignal.chantap">
+<tt class="descname">chantap</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.chantap" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate channel tap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fcGHz</strong> : float</p>
+<blockquote>
+<div><p>center frequency GHz</p>
+</div></blockquote>
+<p><strong>WGHz</strong> :  float</p>
+<blockquote>
+<div><p>bandwidth GHz</p>
+</div></blockquote>
+<p><strong>Ntap</strong> :  number of tap</p>
+<p><strong>baseband</strong> : boolean</p>
+<blockquote class="last">
+<div><p>default : True</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>see <a class="reference external" href="http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf">http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf</a>
+page 26</p>
 </dd></dl>
 
 <dl class="method">
@@ -952,7 +992,8 @@ y is a 2D array</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span>     <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">SH</span>    <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">FHsignal :  (48,)  (2, 48)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -981,15 +1022,12 @@ y is a 2D array</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">U</span> <span class="o">=</span> <span class="n">FUsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fi</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">U</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">U</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="s">&#39;hamming&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">U</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/signal-bsignal-3.py">Source code</a>, <a class="reference external" href="../modules/signal-bsignal-3.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-3.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/signal-bsignal-3.png" src="../_images/signal-bsignal-3.png" />
-</div>
+<p>(<a class="reference external" href="../modules/signal-bsignal-3.py">Source code</a>)</p>
 </dd></dl>
 
 <dl class="method">
@@ -1080,21 +1118,26 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">su100</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">b2u</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fi</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sb</span><span class="o">.</span><span class="n">stem</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">su20</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">su100</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">su20</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">su100</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ti</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;b2u : sb(blue) su20(black) su200(red)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/signal-bsignal-4.py">Source code</a>, <a class="reference external" href="../modules/signal-bsignal-4.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-4.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-4.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/signal-bsignal-4.py">Source code</a>)</p>
 <div class="figure">
-<img alt="../_images/signal-bsignal-4.png" src="../_images/signal-bsignal-4.png" />
+<img alt="../_images/signal-bsignal-4_00.png" src="../_images/signal-bsignal-4_00.png" />
+<p class="caption">(<a class="reference external" href="../modules/signal-bsignal-4_00.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-4_00.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-4_00.pdf">pdf</a>)</p>
+</div>
+<div class="figure">
+<img alt="../_images/signal-bsignal-4_01.png" src="../_images/signal-bsignal-4_01.png" />
+<p class="caption">(<a class="reference external" href="../modules/signal-bsignal-4_01.png">png</a>, <a class="reference external" href="../modules/signal-bsignal-4_01.hires.png">hires.png</a>, <a class="reference external" href="../modules/signal-bsignal-4_01.pdf">pdf</a>)</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.TBsignal.plot">
-<tt class="descname">plot</tt><big>(</big><em>iy=0, col='black', vline=array([], dtype=float64), hline=array([], dtype=float64), showlabel=[True, True], unit1='V', unit2='V', ax=[], tmin=-100000.0, tmax=100000.0, dB=False, dist=False, logx=False, logy=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TBsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TBsignal.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">plot</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#TBsignal.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.TBsignal.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot TBsignal</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1114,7 +1157,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span> <span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span> <span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Bsignal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fi</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ti</span> <span class="o">=</span> <span class="n">title</span><span class="p">(</span><span class="s">&#39;TBsignal : plot&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1146,7 +1189,7 @@ fe     (GHz)   (def = 100GHz)</div></blockquote>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1978,7 +2021,7 @@ This function can be improved regarding time granularity</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i2</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i2</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i3</span> <span class="o">=</span> <span class="n">i1</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">i3</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">i3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -2153,9 +2196,9 @@ This function can be improved regarding time granularity</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.signal</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span> <span class="o">=</span> <span class="n">EnImpulse</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">],</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>

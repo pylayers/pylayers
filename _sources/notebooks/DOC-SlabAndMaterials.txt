@@ -8,6 +8,10 @@ This section explains some features of the class **Slab**.
     from pylayers.gis.layout import *
     import  matplotlib.pyplot as plt
 
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x3185790>
+
 
 .. code-block:: python
 
@@ -22,16 +26,16 @@ This section explains some features of the class **Slab**.
 
 .. code-block:: python
 
-    L.showG('i')
+    L.showG('i',figsize=(8,8))
+    plt.axis('off')
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x47ba350>,
-     <matplotlib.axes.AxesSubplot at 0x478ee10>)
+    (-10.0, 50.0, -5.0, 20.0)
 
 
-.. image:: DOC-SlabAndMaterials_files/_fig_02.png
+.. image:: DOC-SlabAndMaterials_files/_fig_03.png
 
 Slab names
 ~~~~~~~~~~
@@ -111,6 +115,11 @@ The slab 'WOOD' is made of material 'WOOD'
 
     ['WOOD']
 
+
+
+.. code-block:: python
+
+    L
 
 
 .. code-block:: python
@@ -296,9 +305,9 @@ with respect to frequency
     plt.figure()
     L.sl['WOOD'].plotwrtf(typ='phase')
 
-.. image:: DOC-SlabAndMaterials_files/_fig_16.png
+.. image:: DOC-SlabAndMaterials_files/_fig_17.png
 
-.. image:: DOC-SlabAndMaterials_files/_fig_18.png
+.. image:: DOC-SlabAndMaterials_files/_fig_19.png
 
 with respect to angle
 
@@ -309,7 +318,7 @@ with respect to angle
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].plotwrta()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_20.png
+.. image:: DOC-SlabAndMaterials_files/_fig_21.png
 
 wrt to angle and frequency
 
@@ -321,5 +330,5 @@ wrt to angle and frequency
     L.sl['WOOD'].ev(fGHz,theta)
     L.sl['WOOD'].pcolor()
 
-.. image:: DOC-SlabAndMaterials_files/_fig_22.png
+.. image:: DOC-SlabAndMaterials_files/_fig_23.png
 

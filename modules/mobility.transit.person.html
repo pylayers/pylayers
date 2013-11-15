@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; PyLayers</title>
+    <title>Person &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../index.html" /> 
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="mobility" href="mobility.html" />
+    <link rel="next" title="&lt;no title&gt;" href="mobility.transit.stateprocess.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="mobility.transit.path.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,16 +40,30 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="mobility.transit.stateprocess.html" title="&lt;no title&gt;"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="mobility.transit.path.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="mobility.html" accesskey="U">mobility</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mobility.transit.path.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mobility.transit.stateprocess.html"
+                        title="next chapter">&lt;no title&gt;</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -68,7 +85,107 @@
         <div class="bodywrapper">
           <div class="body">
             
-  
+  <div class="section" id="person">
+<span id="id1"></span><h1>Person<a class="headerlink" href="#person" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-pylayers.mobility.transit.Person"></span><dl class="class">
+<dt id="pylayers.mobility.transit.Person.Person">
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.transit.Person.</tt><tt class="descname">Person</tt><big>(</big><em>ID=0</em>, <em>interval=0.05</em>, <em>roomId=0</em>, <em>L=</em><span class="optional">[</span><span class="optional">]</span>, <em>net=&lt;pylayers.network.network.Network object at 0x6ee7c50&gt;</em>, <em>wld=&lt;pylayers.mobility.transit.World.World instance at 0x6050908&gt;</em>, <em>sim=None</em>, <em>moving=True</em>, <em>froom=</em><span class="optional">[</span><span class="optional">]</span>, <em>wait=1.0</em>, <em>cdest='random'</em>, <em>save=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#Person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.Person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Person Process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>ID</strong> : float/hex/str/...</p>
+<blockquote>
+<div><blockquote>
+<div><p>agent Id</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>interval <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">refresh interval of agent mobility</p>
+</dd>
+<dt>roomId <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">room ID where agent start when simulation is launched</p>
+</dd>
+<dt>L <span class="classifier-delimiter">:</span> <span class="classifier">pylayers.gis.layout.Layout()</span></dt>
+<dd><p class="first last">Layout instance, in which the agent is moving</p>
+</dd>
+<dt>net <span class="classifier-delimiter">:</span> <span class="classifier">pylayers.network.Network()</span></dt>
+<dd><p class="first last">Network instance, in which network agent are communicating.
+This is used for fill the true position filed of the graph
+It must be removed in a further version ( when a proper save instance
+would be created)</p>
+</dd>
+<dt>wld <span class="classifier-delimiter">:</span> <span class="classifier">pylayers.mobility.transit.world.world()</span></dt>
+<dd><p class="first last">world instance. equivalent to layout but in the pytk framework. 
+TODO : remove in a further version</p>
+</dd>
+<dt>sim <span class="classifier-delimiter">:</span> <span class="classifier">SimPy.Simulation.Simulation.RT()</span></dt>
+<dd><p class="first last">Simulation instance share by all the pylayer project.</p>
+</dd>
+<dt>moving <span class="classifier-delimiter">:</span> <span class="classifier">bool </span></dt>
+<dd><p class="first last">indicate if the agent is moving or not ( relevant for acces poitns)</p>
+</dd>
+<dt>froom <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">list of forbiden rooms.</p>
+</dd>
+<dt>wait <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">wait time of the agent when he has reach teh desitaion</p>
+</dd>
+<dt>cdest <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">method for choosing setination &#8216;random &#8216; of file read</p>
+</dd>
+<dt>save <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
+<dd><p class="first last">list of save option type .
+It will be removed in a further version ( when a proper save instance
+would be created)</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>Move</strong> : make the agent move</p>
+<blockquote class="last">
+<div><p>update : DEPRECATED used for Tkinter plot</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.mobility.transit.Person.Person.delete">
+<tt class="descname">delete</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#Person.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.Person.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete boid from world.tk</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.mobility.transit.Person.Person.move">
+<tt class="descname">move</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#Person.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.Person.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the Agent</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.mobility.transit.Person.scale">
+<tt class="descclassname">pylayers.mobility.transit.Person.</tt><tt class="descname">scale</tt><big>(</big><em>self</em>, <em>size</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pylayers.mobility.transit.Person.truncate">
+<tt class="descclassname">pylayers.mobility.transit.Person.</tt><tt class="descname">truncate</tt><big>(</big><em>self</em>, <em>max</em><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#truncate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.truncate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>max</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
 
           </div>
         </div>
@@ -78,11 +195,19 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="mobility.transit.stateprocess.html" title="&lt;no title&gt;"
+             >next</a></li>
+        <li class="right" >
+          <a href="mobility.transit.path.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="mobility.html" >mobility</a> &raquo;</li> 
       </ul>
     </div>
 

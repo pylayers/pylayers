@@ -2,19 +2,11 @@ from pylayers.antprop.slab import *
 import numpy as np
 import matplotlib.pylab as plt
 sl = SlabDB('matDB.ini','slabDB.ini')
-
-sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
-sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
-sl.add('ConcreteJc',['ConcreteJc'],[0.049])
-sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[
-    0.0029,0.0102,0.0029])
-theta = np.linspace(20,60,100)*np.pi/180
-sl['ConcreteJc'].ev(120,theta)
-sl['ConcreteJc'].plotwrta(dB=True)
-fig = plt.figure()
-sl['DoubleGlass'].ev(120,theta)
-sl['DoubleGlass'].plotwrta(dB=True)
-freq = np.linspace(110,135,50)
-fig = plt.figure()
-sl['DoubleGlass'].ev(freq,theta)
-sl['DoubleGlass'].pcolor(dB=True)
+sl.mat.add('CoatingPilkington',cval=1,sigma=2.5e6,typ='epsr')
+sl.mat.add('GlassPilkington',cval = 6.9,sigma = 5e-4,typ='epsr')
+sl.add('Optitherm382',['CoatingPilkington',
+    'GlassPilkington'],[100e-9,0.00382])
+fGHz  = np.linspace(0.9,2.2,50)
+theta = np.linspace(0,np.pi/2,100)
+sl['Optitherm382'].ev(fGHz,theta)
+sl['Optitherm382'].pcolor(dB=True)

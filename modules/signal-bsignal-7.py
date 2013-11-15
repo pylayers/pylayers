@@ -1,7 +1,7 @@
 from pylayers.signal import *
 from matplotlib.pylab import *
 ip = EnImpulse()
-ip.plot()
+fig,ax = ip.plot(types=['v'])
 ip.zlr(-10,10)
-ip.plot()
+fig,ax = ip.plot(types=['v'],fig=fig,ax=ax)
 show()

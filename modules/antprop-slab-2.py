@@ -1,13 +1,12 @@
-from pylayers.antprop.slab import *
-import matplotlib.pylab as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from pylayers.antprop.slab import *
+sl = SlabDB('matDB.ini','slabDB.ini')
+lname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
+lthick = [0.018,0.03,0.018]
+sl.add('placo',lname,lthick)
 theta = np.arange(0,np.pi/2,0.01)
-fGHz  = np.arange(0.1,10,0.2)
-sl    = SlabDB('matDB.ini','slabDB.ini')
-mat   = sl.mat
-lmat  = [mat['AIR'],mat['WOOD']]
-II    = MatInterface(lmat,0,fGHz,theta)
-II.RT()
-fig = plt.figure()
-II.plotwrtf(10)
+fGHz = np.array([57.5])
+sl['placo'].ev(fGHz,theta)
+fig,ax=sl['placo'].plotwrt(var='a',types=['m'])
 plt.show()

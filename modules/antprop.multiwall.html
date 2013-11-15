@@ -144,7 +144,7 @@ ymin ymax Ny</p>
 
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.Diffraction_parameter">
-<tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">Diffraction_parameter</tt><big>(</big><em>h</em>, <em>d1</em>, <em>d2</em>, <em>f</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#Diffraction_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.Diffraction_parameter" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">Diffraction_parameter</tt><big>(</big><em>h</em>, <em>d1</em>, <em>d2</em>, <em>fGHz</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#Diffraction_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.Diffraction_parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the diffraction Fresnel parameter</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -222,19 +222,36 @@ segment 1 :</p>
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.LOSS_furniture">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">LOSS_furniture</tt><big>(</big><em>Tx</em>, <em>Rx</em>, <em>furn</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#LOSS_furniture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.LOSS_furniture" title="Permalink to this definition">¶</a></dt>
-<dd><p>Not used</p>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Tx</strong> :</p>
+<p><strong>Rx</strong> :</p>
+<p class="last"><strong>furn</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.Loss0">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">Loss0</tt><big>(</big><em>S</em>, <em>rx</em>, <em>ry</em>, <em>f</em>, <em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#Loss0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.Loss0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate Loss through Layers theta=0 deg
-Parameters
-&#8212;&#8212;&#8212;-
-S</p>
-<blockquote>
-<div>Simulation</div></blockquote>
-<p>f</p>
+<dd><p>Calculate Loss through Layers theta=0 deg</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>S</strong> : Simulation object</p>
+<p><strong>fGHz</strong> : float</p>
+<blockquote class="last">
+<div><p>frequency GHz</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -257,20 +274,28 @@ S</p>
 <div><p>frequency</p>
 </div></blockquote>
 <p><strong>p</strong> : point</p>
-<blockquote class="last">
+<blockquote>
 <div><p>source points</p>
 </div></blockquote>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Lwo</strong> : Losses in wall polarization o</p>
+<p><strong>Lwp</strong> : Losses in wall polarization p</p>
+<p><strong>Edo</strong> :  polarization o</p>
+<p class="last"><strong>Edp</strong> :  polarization p</p>
+</td>
+</tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>DEPRECATED : Use losst instead</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="s">&#39;Lstruc.str&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="s">&#39;Lstruc.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Tx</span><span class="p">,</span><span class="n">Rx</span> <span class="o">=</span> <span class="n">ptw1</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="p">,</span><span class="n">Edo</span><span class="p">,</span><span class="n">Edp</span> <span class="o">=</span> <span class="n">Loss0_v2</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">Tx</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
@@ -324,7 +349,60 @@ S</p>
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.Loss_obstacle">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">Loss_obstacle</tt><big>(</big><em>SS</em>, <em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>Obstacle</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#Loss_obstacle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.Loss_obstacle" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>SS</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pylayers.antprop.multiwall.Losst">
+<tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">Losst</tt><big>(</big><em>L</em>, <em>fGHz</em>, <em>p1</em>, <em>p2</em><big>)</big><a class="headerlink" href="#pylayers.antprop.multiwall.Losst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Loss between links p1  p2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>L</strong> : Layout object</p>
+<p><strong>fGHz</strong> : np.array</p>
+<blockquote>
+<div><p>frequency GHz</p>
+</div></blockquote>
+<p><strong>p1</strong> : source point</p>
+<blockquote>
+<div><p>(2 x Np) array or (2,) array</p>
+</div></blockquote>
+<p><strong>p2</strong> : observation point</p>
+<blockquote class="last">
+<div><p>(2 x Np) array or (2,) array</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="s">&#39;Lstruc.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Tx</span><span class="p">,</span><span class="n">Rx</span> <span class="o">=</span> <span class="n">ptw1</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Lwo</span><span class="p">,</span><span class="n">Lwp</span><span class="p">,</span><span class="n">Edo</span><span class="p">,</span><span class="n">Edp</span> <span class="o">=</span> <span class="n">Losst</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Tx</span><span class="p">,</span><span class="n">Rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tit</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;test Losst&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sc2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">Rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">Rx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sc1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">Tx</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">Tx</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">s</span><span class="o">=</span><span class="n">Edo</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">Edo</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../modules/antprop-multiwall-2.py">Source code</a>)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.OneSlopeMdl">
@@ -360,19 +438,19 @@ S</p>
 
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.PL">
-<tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">PL</tt><big>(</big><em>pts</em>, <em>fGHz</em>, <em>p</em>, <em>n=2.0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#PL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.PL" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path Loss</p>
+<tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">PL</tt><big>(</big><em>fGHz</em>, <em>pts</em>, <em>p</em>, <em>n=2.0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#PL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.PL" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate Path Loss</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pts</strong> : np.array (2xNp)</p>
-<blockquote>
-<div><p>points</p>
-</div></blockquote>
-<p><strong>fGHz</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : float</p>
 <blockquote>
 <div><p>frequency (GHz)</p>
+</div></blockquote>
+<p><strong>pts</strong> : np.array (2xNp)</p>
+<blockquote>
+<div><p>points</p>
 </div></blockquote>
 <p><strong>p</strong> : np.array (2x1)</p>
 <p><strong>n</strong> : float</p>
@@ -394,7 +472,7 @@ S</p>
 <dl class="function">
 <dt id="pylayers.antprop.multiwall.PL0">
 <tt class="descclassname">pylayers.antprop.multiwall.</tt><tt class="descname">PL0</tt><big>(</big><em>fGHz</em>, <em>GtdB=0</em>, <em>GrdB=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/multiwall.html#PL0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.multiwall.PL0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Path Loss at frequency f &#64; 1m</p>
+<dd><p>Path Loss at frequency fGHZ &#64; 1m</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
