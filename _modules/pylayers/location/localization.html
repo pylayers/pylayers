@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pylayers.location.localization &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../../index.html"><img src="../../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for pylayers.location.localization</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span><span class="n">hold</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.util</span> <span class="kn">import</span> <span class="n">utilnet</span>
+<span class="kn">from</span> <span class="nn">pylayers.network.network</span> <span class="kn">import</span> <span class="n">Network</span><span class="p">,</span> <span class="n">Node</span>
+<span class="c">#from pylayers.location.locarule import Take_all,  merge_rules</span>
+
+<span class="kn">import</span> <span class="nn">pdb</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.cla</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.rss</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.toa</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.tdoa</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.location.geometric.constraints.exclude</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.location.algebraic.algebraic</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">pylayers.network.communication</span> <span class="kn">import</span> <span class="n">Gcom</span><span class="p">,</span> <span class="n">TX</span><span class="p">,</span> <span class="n">RX</span>
+
+<span class="kn">from</span>   <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="n">PLSmodel</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
+
+<div class="viewcode-block" id="Localization"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization">[docs]</a><span class="k">class</span> <span class="nc">Localization</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">):</span>
+
+        <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;PN&#39;</span><span class="p">:</span><span class="n">Network</span><span class="p">(),</span><span class="s">&#39;net&#39;</span><span class="p">:</span><span class="n">Network</span><span class="p">(),</span><span class="s">&#39;method&#39;</span><span class="p">:[</span><span class="s">&#39;geo&#39;</span><span class="p">,</span><span class="s">&#39;alg&#39;</span><span class="p">],</span><span class="s">&#39;model&#39;</span><span class="p">:{},</span><span class="s">&#39;ID&#39;</span><span class="p">:</span><span class="s">&#39;0&#39;</span><span class="p">,</span><span class="s">&#39;save&#39;</span><span class="p">:[]}</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;EMSolver.ini&#39;</span><span class="p">,</span> <span class="s">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cla</span> <span class="o">=</span> <span class="n">CLA</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">=</span><span class="n">algloc</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">#    def get_const(self, RAT=None, LDP=None):</span>
+<span class="c">#        &quot;&quot;&quot; get constraints</span>
+<span class="c">#</span>
+<span class="c">#   get the constraint of the networl followinf rule given in self.rule list.</span>
+<span class="c">#            These rules are defined in Loca_Rule</span>
+<span class="c">#</span>
+<span class="c">#                args[key]=value</span>
+<span class="c">#</span>
+<span class="c">#    def get_const(self,RAT=None,LDP=None):</span>
+<span class="c">#        &quot;&quot;&quot; get constraints</span>
+<span class="c">#</span>
+<span class="c">#            get the constraint of the network following rule given in self.rule list.</span>
+<span class="c">#            These rules are defined in Loca_Rule</span>
+<span class="c">#</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#        self.dc= merge_rules(self,RAT=RAT,LDP=LDP)</span>
+
+
+
+
+<div class="viewcode-block" id="Localization.fill_cla"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.fill_cla">[docs]</a>    <span class="k">def</span> <span class="nf">fill_cla</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Fill the constraint layer array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">## loop on edges</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c">## loop on rat</span>
+            <span class="k">for</span> <span class="n">rat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">param</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">rat</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">RSS</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">rat</span><span class="o">+</span><span class="s">&#39;-Pr-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="n">e</span><span class="p">,</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;Pr&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="n">model</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">]),</span> 
+                                             <span class="n">rssnp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;rssnp&#39;</span><span class="p">]),</span>
+                                             <span class="n">d0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]),</span> 
+                                             <span class="n">method</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]),</span>
+                            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">],</span>
+                            <span class="n">origin</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="s">&#39;link&#39;</span><span class="p">:[</span><span class="n">e</span><span class="p">],</span><span class="s">&#39;rat&#39;</span><span class="p">:</span><span class="n">rat</span><span class="p">,</span><span class="s">&#39;ldp&#39;</span><span class="p">:</span><span class="s">&#39;Pr&#39;</span><span class="p">}</span>
+                            <span class="p">)</span>
+                                    <span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">param</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">rat</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">RSS</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">rat</span><span class="o">+</span><span class="s">&#39;-Pr-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="n">e</span><span class="p">,</span>
+                            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">],</span>
+                            <span class="n">origin</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="s">&#39;link&#39;</span><span class="p">:[</span><span class="n">e</span><span class="p">],</span><span class="s">&#39;rat&#39;</span><span class="p">:</span><span class="n">rat</span><span class="p">,</span><span class="s">&#39;ldp&#39;</span><span class="p">:</span><span class="s">&#39;Pr&#39;</span><span class="p">}</span>
+                            <span class="p">)</span>
+                                    <span class="p">)</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">TOA</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">rat</span><span class="o">+</span><span class="s">&#39;-TOA-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="n">e</span><span class="p">,</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">][</span><span class="n">rat</span><span class="p">][</span><span class="s">&#39;TOA&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="n">p</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">],</span>
+                            <span class="n">origin</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="s">&#39;link&#39;</span><span class="p">:[</span><span class="n">e</span><span class="p">],</span><span class="s">&#39;rat&#39;</span><span class="p">:</span><span class="n">rat</span><span class="p">,</span><span class="s">&#39;ldp&#39;</span><span class="p">:</span><span class="s">&#39;TOA&#39;</span><span class="p">}</span>
+                            <span class="p">)</span>
+                                    <span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">TOA</span><span class="p">(</span><span class="nb">id</span> <span class="o">=</span> <span class="n">rat</span><span class="o">+</span><span class="s">&#39;-TOA-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="o">+</span><span class="s">&#39;-&#39;</span><span class="o">+</span><span class="n">e</span><span class="p">,</span>
+                            <span class="n">p</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">],</span>
+                            <span class="n">origin</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="s">&#39;link&#39;</span><span class="p">:[</span><span class="n">e</span><span class="p">],</span><span class="s">&#39;rat&#39;</span><span class="p">:</span><span class="n">rat</span><span class="p">,</span><span class="s">&#39;ldp&#39;</span><span class="p">:</span><span class="s">&#39;TOA&#39;</span><span class="p">}</span>
+                            <span class="p">)</span>
+                                    <span class="p">)</span>
+
+
+<span class="c">#                 elif ldp == &#39;TDOA&#39;:</span>
+<span class="c">#                    pass</span>
+
+
+
+</div>
+<div class="viewcode-block" id="Localization.update"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            update constraints information (anchor position, value and std)</span>
+<span class="sd">            from the network graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rat</span> <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>
+            <span class="n">rat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">SubNet</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ldp</span> <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>
+            <span class="n">ldp</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Pr&#39;</span><span class="p">,</span><span class="s">&#39;TOA&#39;</span><span class="p">,</span><span class="s">&#39;TDOA&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ldp</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+                <span class="n">ldp</span> <span class="o">=</span><span class="p">[</span><span class="n">ldp</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">nodes</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">c</span><span class="p">:</span>
+            <span class="n">crat</span><span class="p">,</span><span class="n">cldp</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">own</span><span class="o">=</span><span class="n">c</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">crat</span> <span class="ow">in</span> <span class="n">rat</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cldp</span> <span class="ow">in</span> <span class="n">ldp</span><span class="p">)</span> <span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">crat</span><span class="p">][</span><span class="s">&#39;vis&#39;</span><span class="p">]:</span>
+                    <span class="n">c</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">crat</span><span class="p">][</span><span class="n">cldp</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">crat</span><span class="p">][</span><span class="n">cldp</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s">&#39;geo&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="p">:</span>
+                        <span class="c"># methods from constraint.py</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">updc</span><span class="p">(</span><span class="s">&#39;std&#39;</span><span class="p">,</span><span class="n">std</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="s">&#39;alg&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="p">:</span>
+                        <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">runable</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;TOA&#39;</span><span class="p">:</span>
+                                <span class="k">try</span> <span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_TOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_TOA&#39;</span><span class="p">],</span><span class="n">pos</span><span class="p">))</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">],</span><span class="n">value</span><span class="p">))</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA_std&#39;</span><span class="p">],</span><span class="n">std</span><span class="p">))</span>
+
+                                <span class="k">except</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_TOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;TOA_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span>
+                            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;Pr&#39;</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_RSS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span><span class="o">.</span><span class="n">T</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;RSS_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">T</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]</span>
+                                <span class="c">####### -pl0 from alg loc ############</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">ldp</span><span class="p">[</span><span class="s">&#39;PL0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">c</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;PL0&#39;</span><span class="p">]</span>
+                <span class="k">else</span> <span class="p">:</span>
+                    <span class="n">c</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">else</span> <span class="p">:</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">usable</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_TOA&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;RN_TOA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c">############&quot;&quot; FOR DEBUG</span>
+        <span class="n">prss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">type</span><span class="p">)</span><span class="o">==</span><span class="s">&#39;RSS&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">c</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">prss</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">usable</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+
+</div>
+<div class="viewcode-block" id="Localization.savep"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.savep">[docs]</a>    <span class="k">def</span> <span class="nf">savep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            write an estimated position into self.net</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">p_pe</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">update_pos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="n">now</span><span class="p">,</span><span class="n">p_pe</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="Localization.compute_geo"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.compute_geo">[docs]</a>    <span class="k">def</span> <span class="nf">compute_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Compute position with the geometric algorithm</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            True if estimated position has been computed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">usable</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">cpe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">pe</span><span class="o">=</span><span class="n">pe</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cpe</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">savep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">pe</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">savep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">pe</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe_geo&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;te&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">now</span> <span class="c"># estimated time</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="c"># in case of lack of observables</span>
+        <span class="k">elif</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">usable</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">cpe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">pe</span><span class="o">=</span><span class="n">pe</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cpe</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">savep</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">pecluster</span><span class="p">),</span><span class="n">now</span><span class="o">=</span><span class="n">now</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe_clust&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;te&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">now</span> <span class="c"># estimated time</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Localization.compute_alg"><a class="viewcode-back" href="../../../modules/location.localization.html#pylayers.location.localization.Localization.compute_alg">[docs]</a>    <span class="k">def</span> <span class="nf">compute_alg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rat</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">pe</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Compute position with the algebraic algorithm</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            True if estimatited position has been computed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cla</span><span class="o">.</span><span class="n">usable</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="n">ldp</span> <span class="o">==</span> <span class="s">&#39;all&#39;</span><span class="p">:</span>
+                <span class="n">ldp</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Pr&#39;</span><span class="p">,</span><span class="s">&#39;TOA&#39;</span><span class="p">,</span><span class="s">&#39;TDOA&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ldp</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+                <span class="n">ldp</span><span class="o">=</span><span class="p">[</span><span class="n">ldp</span><span class="p">]</span>
+
+            <span class="n">pe_alg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algloc</span><span class="o">.</span><span class="n">wls_locate</span><span class="p">(</span><span class="s">&#39;Pr&#39;</span> <span class="ow">in</span> <span class="n">ldp</span><span class="p">,</span> <span class="s">&#39;TOA&#39;</span> <span class="ow">in</span> <span class="n">ldp</span><span class="p">,</span> <span class="s">&#39;TDOA&#39;</span> <span class="ow">in</span> <span class="n">ldp</span><span class="p">,</span> <span class="s">&#39;mode&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">savep</span><span class="p">(</span><span class="n">pe_alg</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="n">now</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;pe_alg&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;PN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;te&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">now</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+
+
+<span class="c">#    def compute_crb(self,rat=&#39;all&#39;,ldp=&#39;all&#39;,now=0.,pe=True):</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#            Compute CramerRao bound</span>
+<span class="c">#        &quot;&quot;&quot;</span>
+<span class="c">#</span>
+<span class="c">#        if ldp == &#39;all&#39;:</span>
+<span class="c">#            ldp=[&#39;Pr&#39;,&#39;TOA&#39;,&#39;TDOA&#39;]</span>
+<span class="c">#        crb = self.algloc.crb(np.zeros((2,1)),&#39;Pr&#39; in ldp, &#39;TOA&#39; in ldp, &#39;TDOA&#39; in ldp)</span>
+<span class="c">#        self.savep(np.array(crb),now=now,name=&#39;crb&#39;)</span>
+
+
+
+</div></div>
+<span class="k">class</span> <span class="nc">PLocalization</span><span class="p">(</span><span class="n">Process</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">Localization</span><span class="p">(),</span> <span class="n">tx</span><span class="o">=</span><span class="n">TX</span><span class="p">()</span> <span class="p">,</span><span class="n">loc_updt_time</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">Process</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Location&#39;</span><span class="p">,</span> <span class="n">sim</span><span class="o">=</span><span class="n">sim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">=</span><span class="n">tx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc_updt_time</span> <span class="o">=</span> <span class="n">loc_updt_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim</span> <span class="o">=</span> <span class="n">sim</span>
+
+
+
+
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="c">#        self.loc.get_const()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">fill_cla</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;TOA&#39;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+
+            <span class="c"># if no previous position have been computed or if position is obsolete</span>
+            <span class="n">bep</span><span class="o">=</span><span class="bp">False</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">ID</span><span class="p">][</span><span class="s">&#39;pe&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">cmdrq</span><span class="o">.</span><span class="n">signal</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;TOA&#39;</span><span class="p">)</span>
+            <span class="c"># try to obtain an estimated position</span>
+            <span class="k">if</span> <span class="s">&#39;geo&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="p">:</span>
+                <span class="n">bep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">compute_geo</span><span class="p">(</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;TOA&#39;</span><span class="p">,</span><span class="n">now</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+<span class="c">#                    if &#39;alg&#39; in self.method and bep:</span>
+<span class="c">#                        bep = self.loc.compute_alg(ldp=&#39;TOA&#39;,now=self.sim.now())</span>
+
+<span class="c">#                     if no position has been computed</span>
+
+<span class="c">#            if not bep or (self.sim.now() - self.loc.net.node[self.loc.ID][&#39;PN&#39;].node[self.loc.ID][&#39;te&#39;]&gt;self.loc_updt_time):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;localization request communication from node&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39;@&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">cmdrq</span><span class="o">.</span><span class="n">signal</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ldp</span><span class="o">=</span><span class="s">&#39;TOA&#39;</span><span class="p">)</span>
+            
+
+            <span class="k">if</span> <span class="n">bep</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">verbose</span> <span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;LOCALIZATION node&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s">&#39; update @&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="k">yield</span> <span class="n">hold</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc_updt_time</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

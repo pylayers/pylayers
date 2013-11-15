@@ -1,0 +1,33 @@
+
+----------------
+TA-Office.ini
+Image('/home/uguen/Bureau/P1/struc/TA-Office.png')
+----------------
+
+Number of points  : 71
+Number of segments  : 87
+Number of sub segments  : 16
+Number of cycles  : 17
+Number of rooms  : 17
+degree 0 : []
+degree 1 : []
+degree 2 : 39
+degree 3 : 32
+
+xrange :(0.0, 40.0)
+yrange :(0.0, 15.0)
+
+Useful dictionnaries
+----------------
+di {interaction : [nstr,typi]}
+sl {slab name : slab dictionary}
+name :  {slab :seglist} 
+
+Useful arrays
+----------------
+tsg : get segment index in Gs from tahe
+tgs : get segment index in tahe from Gs
+lsss : list of segments with sub-segment
+sla : associated slab name
+stridess : stride for adressing sub segment 
+degree : degree of nodes 
