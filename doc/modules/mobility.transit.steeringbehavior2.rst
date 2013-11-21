@@ -5,7 +5,7 @@ Steering Behavior
 =================
 
 
-.. automodule:: pylayers.mobility.transit.SteeringBehavior2.py
+.. automodule:: pylayers.mobility.transit.SteeringBehavior.py
    :members:
    :special-members:
 

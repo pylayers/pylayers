@@ -21,6 +21,14 @@ import pdb
 
 
 class Agent(object):
+    """   Agent 
+
+
+    The init method is doing more than initializing the object
+    
+    
+    
+    """
     def __init__(self, **args):
         """ Mobile Agent Init
 

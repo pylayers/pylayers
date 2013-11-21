@@ -15,6 +15,7 @@ class vec3:
 
     This class can be used to represent points, vectors, normals
     or even colors. The usual vector operations are available.
+
     """
 
     def __init__(self, *args):
