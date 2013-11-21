@@ -590,11 +590,14 @@ class SelectL(object):
         #
         if self.evt == 'delete':
             if self.state=='Init':
+                # get boundary of the region 
                 x1 = ax.get_xbound()
                 y1 = ax.get_ybound()
-                ndlist, edlist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
-                self.L.del_points(ndlist)
+
+                ptlist, seglist = self.L.get_zone([x1[0],x1[1],y1[0],y1[1]])
+                self.L.del_points(ptlist)
                 self.update_state()
+
                 return
 
         #

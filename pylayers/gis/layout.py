@@ -2381,7 +2381,10 @@ class Layout(object):
         if self.have_subseg(e1):
             self.Gs.node[e1].pop('ss_name')
             self.Gs.node[e1].pop('ss_z')
-            self.Gs.node[e1].pop('ss_ce')
+            try:
+                self.Gs.node[e1].pop('ss_ce')
+            except:
+                pass
             self.Gs.node[e1].pop('transition')
             self.Nss -= 1
         else:
@@ -2673,6 +2676,7 @@ class Layout(object):
         xmax = ax[1]
         ymin = ax[2]
         ymax = ax[3]
+
         ptlist = []
         for n in self.Gs.node.keys():
             if n < 0:
@@ -2682,7 +2686,8 @@ class Layout(object):
                     ptlist.append(n)
 
         seglist = self.nd2seg(ptlist)
-        return ndlist, seglist
+
+        return ptlist, seglist
 
     def savestr2(self, _filename='default.str2', furniture=False):
         """ save Layout in .str2 format
