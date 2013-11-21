@@ -42,7 +42,7 @@ from mpl_toolkits.mplot3d import axes3d
 #from scipy import sparse
 from matplotlib import rc
 from matplotlib import cm # colormaps
-
+from pylayers.antprop.antssh import *
 
 class Antenna(object):
     """ Antenna
@@ -210,7 +210,10 @@ class Antenna(object):
         self.SqG = np.sqrt(Gr)
         self.Nt = len(self.theta)
         self.Np = len(self.phi)
-        self.Nf = len(self.fa)
+        if type(self.fa) ==  float:
+            self.Nf = 1
+        else:
+            self.Nf = len(self.fa)
 
     def load_trx(self, directory="ant", nf=104, ntheta=181, nphi=90, ncol=6):
         """ load a trx file (deprecated)
@@ -1291,7 +1294,7 @@ class Antenna(object):
 
         return Fth, Fph
 
-    def Fsynth2(self, theta, phi,pattern=False):
+    def Fsynth2(self, theta, phi,pattern=False, typ = 'vsh'):
         """  pattern synthesis from shape 2 vsh coeff
 
         Parameters
@@ -1313,45 +1316,61 @@ class Antenna(object):
 
         Nt = len(theta)
         Np = len(phi)
+        if typ =='vsh' :
+            
+            if pattern:
+                theta = np.kron(theta, np.ones(Np))
+                phi = np.kron(np.ones(Nt),phi)
 
-        if pattern:
-            theta = np.kron(theta, np.ones(Np))
-            phi = np.kron(np.ones(Nt),phi)
+            Br = self.C.Br.s2
+            Bi = self.C.Bi.s2
+            Cr = self.C.Cr.s2
+            Ci = self.C.Ci.s2
 
-        Br = self.C.Br.s2
-        Bi = self.C.Bi.s2
-        Cr = self.C.Cr.s2
-        Ci = self.C.Ci.s2
+            N = self.C.Br.N2
+            M = self.C.Br.M2
 
-        N = self.C.Br.N2
-        M = self.C.Br.M2
+            #print "N,M",N,M
+            #
+            # The - sign is necessary to get the good reconstruction
+            #     deduced from observation
+            #     May be it comes from a different definition of theta in SPHEREPACK
+            x = -np.cos(theta)
 
-        #print "N,M",N,M
-        #
-        # The - sign is necessary to get the good reconstruction
-        #     deduced from observation
-        #     May be it comes from a different definition of theta in SPHEREPACK
-        x = -np.cos(theta)
+            Pmm1n, Pmp1n = AFLegendre3(N, M, x)
+            ind = index_vsh(N, M)
 
-        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
-        ind = index_vsh(N, M)
+            n = ind[:, 0]
+            m = ind[:, 1]
 
-        n = ind[:, 0]
-        m = ind[:, 1]
-
-        #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
-        V, W = VW(n, m, x, phi)
+            #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+            V, W = VW(n, m, x, phi)
 
 
-        Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
-            np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
-        Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
-            np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
+            Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
+                np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
+            Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
+                np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
-        if pattern:
+            if pattern:
+                Nf = len(self.fa)
+                Fth = Fth.reshape(Nf, Nt, Np)
+                Fph = Fph.reshape(Nf, Nt, Np)
+        else:
             Nf = len(self.fa)
-            Fth = Fth.reshape(Nf, Nt, Np)
-            Fph = Fph.reshape(Nf, Nt, Np)
+            Nt = len(theta)
+            Np = len(phi)                  
+            cx = self.S.Cx.s2
+            cy = self.S.Cy.s2
+            cz = self.S.Cz.s2
+            lmax = self.S.Cx.lmax
+            Y ,indx = SSHFunc(lmax, theta,phi)
+            Ex = np.dot(cx,Y).reshape(Nf,Nt,Np)
+            Ey = np.dot(cy,Y).reshape(Nf,Nt,Np)
+            Ez = np.dot(cz,Y).reshape(Nf,Nt,Np)
+            
+            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True ) 
+            
 
         return Fth, Fph
 
@@ -1446,24 +1465,23 @@ class Antenna(object):
                 self.SqG = np.sqrt(G)
 
             
-        else :
+        else: 
+            Nf = len(self.fa)
             Nt = len(theta)
-            Np = len(phi)            
-            
+            Np = len(phi)                  
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3
             cz = self.S.Cz.s3
+            lmax = self.S.Cx.lmax
+            Y ,indx = SSHFunc(lmax, theta,phi)
+            k = self.S.Cx.k2[:,0]
+           
+            Ex = np.dot(cx,Y[k]).reshape(Nf,Nt,Np)
+            Ey = np.dot(cy,Y[k]).reshape(Nf,Nt,Np)
+            Ez = np.dot(cz,Y[k]).reshape(Nf,Nt,Np)
             
-            
-            
-            
-            
-        
-        
-        
-        
-        
-        
+            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True ) 
+                
         return Fth, Fph
             
 
@@ -1634,9 +1652,13 @@ class Antenna(object):
             coeff = {}
             coeff['fmin'] = self.fa[0]
             coeff['fmax'] = self.fa[-1]
+            
             coeff['Cx.ind'] = self.S.Cx.ind2
             coeff['Cy.ind'] = self.S.Cy.ind2
-            coeff['Cz.ind'] = self.S.Cz.ind2            
+            coeff['Cz.ind'] = self.S.Cz.ind2
+            coeff['Cx.lmax']= self.S.Cx.lmax           
+            coeff['Cy.lmax']= self.S.Cy.lmax           
+            coeff['Cz.lmax']= self.S.Cz.lmax           
             coeff['Cx.s2'] = self.S.Cx.s2
             coeff['Cy.s2'] = self.S.Cy.s2
             coeff['Cz.s2'] = self.S.Cz.s2
@@ -1675,6 +1697,10 @@ class Antenna(object):
             coeff['Cx.k'] = self.S.Cx.k2
             coeff['Cy.k'] = self.S.Cy.k2
             coeff['Cz.k'] = self.S.Cz.k2
+            
+            coeff['Cx.lmax']= self.S.Cx.lmax           
+            coeff['Cy.lmax']= self.S.Cy.lmax           
+            coeff['Cz.lmax']= self.S.Cz.lmax 
             
             coeff['Cx.s3'] = self.S.Cx.s3
             coeff['Cy.s3'] = self.S.Cy.s3
@@ -1749,27 +1775,35 @@ class Antenna(object):
             # Warning modification takes only one dimension for k 
             # if the .sh3 format evolve it may not work anymore 
             #
+                      
+            if type(coeff['Cx.lmax']) == float:
+                lmax = coeff['Cx.lmax']
+            else:
+                lmax = coeff['Cx.lmax'][0][0]
             Cx = SCoeff(typ = 's3',
                         fmin = fmin ,
                         fmax = fmax , 
+                        lmax = lmax,
                         data = coeff['Cx.s3'],
                         ind =  coeff['Cx.ind'],
-                        k =  coeff['Cx.k'][0])
+                        k =  coeff['Cx.k'])
                         
             Cy = SCoeff(typ= 's3', 
                         fmin = fmin ,
                         fmax = fmax , 
+                        lmax = lmax,
                         data = coeff['Cy.s3'],
                         ind =  coeff['Cy.ind'],
-                        k =  coeff['Cy.k'][0])
+                        k =  coeff['Cy.k'])
                         
                          
             Cz = SCoeff(typ = 's3', 
                         fmin = fmin ,
                         fmax = fmax , 
                         data = coeff['Cz.s3'],
+                        lmax = lmax,
                         ind =  coeff['Cz.ind'],
-                        k =  coeff['Cz.k'][0])
+                        k =  coeff['Cz.k'])
             
             if not 'S' in self.__dict__.keys():
                 self.S = SSHCoeff(Cx, Cy,Cz)
@@ -1831,12 +1865,33 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
-            Cx = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
-                         data=coeff['Cx.s2'], ind=coeff['Cx.ind'])
-            Cy = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
-                         data=coeff['Cy.s2'], ind=coeff['Cy.ind'])
-            Cz = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
-                         data=coeff['Cz.s2'], ind=coeff['Cz.ind'])
+                
+            if type(coeff['Cx.lmax']) == float:
+                lmax = coeff['Cx.lmax']
+            else:
+                lmax = coeff['Cx.lmax'][0][0]
+                
+                
+            Cx = SCoeff(typ='s2', 
+                        fmin=fmin, 
+                        fmax=fmax,
+                        lmax = lmax,
+                        data=coeff['Cx.s2'], 
+                        ind=coeff['Cx.ind'])
+                        
+            Cy = SCoeff(typ='s2', 
+                        fmin=fmin, 
+                        fmax=fmax,
+                        lmax = lmax,
+                        data=coeff['Cy.s2'], 
+                        ind=coeff['Cy.ind'])
+            Cz = SCoeff(typ='s2', 
+                        fmin=fmin, 
+                        fmax=fmax,
+                        lmax = lmax,
+                        data=coeff['Cz.s2'], 
+                        ind=coeff['Cz.ind'])
+                         
             self.S = SSHCoeff(Cx, Cy,Cz)
             Nf = np.shape(Cx.s2)[0]
             self.fa = np.linspace(fmin, fmax, Nf)
@@ -1868,6 +1923,8 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
+                
+            
             Br = VCoeff(typ='s2', fmin=fmin, fmax=fmax,
                          data=coeff['Br.s2'], ind=coeff['Br.ind'])
             Bi = VCoeff(typ='s2', fmin=fmin, fmax=fmax,

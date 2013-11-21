@@ -1,7 +1,7 @@
 from pylayers.antprop.antenna import *
-from pylayers.antprop.antvsh import *
 from pylayers.antprop.spharm import *
-
+from pylayers.antprop.antenna import *
+from pylayers.antprop.antenna import *
 import numpy as np
 import scipy as sp
 import pdb
@@ -80,7 +80,7 @@ def SphereToCart (theta, phi, eth, eph, bfreq ):
 
     return ec
 
-def CartToSphere (theta, phi, ex, ey,ez, bfreq ):
+def CartToSphere (theta, phi, ex, ey,ez, bfreq = True ):
 
     """
     Convert from cartesian to spherical  coordinates 
@@ -101,7 +101,7 @@ def CartToSphere (theta, phi, ex, ey,ez, bfreq ):
     es[0] = np.cos(THETA)*np.cos(PHI)*ex + np.cos(THETA)*np.sin(PHI)*ey -np.sin(THETA)*ez
     es[1] = -np.sin(PHI)*ex +np.cos(PHI)*ey
 
-    return es
+    return es[0],es[1]
 
      
 
@@ -163,11 +163,11 @@ def ssh(A, dsf=1, L= 20):
 	cz  =  np.dot(Ez,Ypinv)
 	lmax = L
 
-	Cx = ant.SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cx,ind =ssh_index)
-	Cy = ant.SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cy,ind =ssh_index)
-	Cz = ant.SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cz,ind =ssh_index)
+	Cx = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cx,ind =ssh_index)
+	Cy = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cy,ind =ssh_index)
+	Cz = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cz,ind =ssh_index)
 
-	A.S = ant.SSHCoeff(Cx,Cy,Cz)
+	A.S = SSHCoeff(Cx,Cy,Cz)
 
 	return(A)
 

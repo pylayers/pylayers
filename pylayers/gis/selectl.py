@@ -603,7 +603,7 @@ class SelectL(object):
             racine, ext = os.path.splitext(self.L.filename)
             filename = racine + '.str2'
             fileini = racine + '.ini'
-            self.L.savestr2(filename)
+            #self.L.savestr2(filename)
             self.L.saveini(fileini)
             print "structure saved in ", filename
             print "structure saved in ", fileini

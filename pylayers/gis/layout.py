@@ -1723,7 +1723,7 @@ class Layout(object):
         -------
 
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('example.str')
+            >>> L = Layout('defstr.str')
             >>> L.add_fnod((10.0,10.0))
             -9
 
