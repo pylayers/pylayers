@@ -914,10 +914,9 @@ class Network(nx.MultiDiGraph):
 
 
     def csv_save(self,filename,S):
-        """
-        save node positions into csv file
+        """ save node positions into csv file
 
-        PArameters 
+        Parameters 
         ----------
         
         filename : string 
@@ -927,13 +926,14 @@ class Network(nx.MultiDiGraph):
 
         """
 
-        pos=np.array(nx.get_node_attributes(self,'p').values())
-        pos=np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
-        pos=pos.reshape((1,len(self.nodes())*3))
-        file=open('../save_data/' +filename +'.csv','a')
+        pos = np.array(nx.get_node_attributes(self,'p').values())
+        pos = np.hstack((pos,np.zeros((len(self.nodes()),1))))  # passage en 3D
+        pos = pos.reshape((1,len(self.nodes())*3))
+        filecsv = pyu.getlong(filename,'save_data')+'.csv'
+        #file=open('../save_data/' +filename +'.csv','a')
+        file = open(filecsv,'a')
         file.write(str(S.now()) +',')
         np.savetxt(file,pos,delimiter=',')
-        file.write('\n')
         file.close()
 
 
@@ -1451,13 +1451,15 @@ class PNetwork(Process):
 
 
         if 'csv' in self.save:
-            nbnodes=len(self.net.nodes())
+            nbnodes = len(self.net.nodes())
             entete = 'time'
             inode=self.net.nodes_iter()
             for i in inode:
-                entete=entete + ',' + i +',,'
+                entete = entete +',x'+str(i) +',y'+str(i)+',z'+str(i)
             entete=entete +'\n'
-            file=open('../save_data/' +self.filename +'.csv','w')
+            filecsv = pyu.getlong(self.filename,'save_data')+'.csv'
+            #file=open('../save_data/' +self.filename +'.csv','w')
+            file = open(filecsv,'w')
             file.write(entete)
             file.close()
 
@@ -1488,8 +1490,8 @@ class PNetwork(Process):
 
 #            ############# save network
 #            REPLACED BY A SAVE PROCESS
-#            if 'csv' in self.save:
-#                self.net.csv_save(self.filename,self.sim)
+            if 'csv' in self.save:
+                self.net.csv_save(self.filename,self.sim)
 #            if 'pyray' in self.save:
 #                self.net.pyray_save(self.sim)
 #            if 'matlab' in self.save:

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 # -*- coding: latin1 -*-
 import pdb
 import os
@@ -806,16 +806,18 @@ class Rays(dict):
             else :
                 self[k]['nstrwall'] = np.array(())
                 self[k]['norm'] = np.array(())
-                self[k]['vsi'] = np.array(())
-                # si : (i+1) x r
                 si = np.sqrt(np.sum((self[0]['pt'][:,0]-self[0]['pt'][:,1])**2,axis=0))
                 self[k]['si'] = np.vstack((si,0.))
+                self[k]['vsi'] = (self[0]['pt'][:,0]-self[0]['pt'][:,1])/si
                 self[k]['dis'] = np.array((si))
-                self[k]['aod'] = np.array(())
+                vsi=self[k]['vsi']
+                th = np.arccos(vsi[2])
+                ph = np.arctan2(vsi[1], vsi[0])
+                self[k]['aod'] = np.vstack((th, ph))
                 self[k]['Bo0'] = np.array(())
                 self[k]['scpr'] = np.array(())
                 self[k]['theta'] = np.zeros((1,1))
-                self[k]['aoa'] = np.array(())
+                self[k]['aoa'] =  np.vstack((th, ph))
                 E=np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
 
@@ -1075,6 +1077,8 @@ class Rays(dict):
         ----------
 
         fGHz : array
+            frequency in GHz array
+        ib : 
             
         """
 
@@ -1103,6 +1107,8 @@ class Rays(dict):
             ib=self.keys()
 
         for l in ib:
+            aoa[:,self[l]['rayidx']]=self[l]['aoa']
+            aod[:,self[l]['rayidx']]=self[l]['aod']
             if l != 0:
                 # l stands for the number of interactions
                 r = self[l]['nbrays']
@@ -1121,8 +1127,7 @@ class Rays(dict):
                 sout = self.I.sout[rrl].reshape(r, l,order='F')
 
 
-                aoa[:,self[l]['rayidx']]=self[l]['aoa']
-                aod[:,self[l]['rayidx']]=self[l]['aod']
+
 
                 try:
                     del Z

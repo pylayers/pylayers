@@ -1,6 +1,7 @@
 # -*- coding:Utf-8 -*-
 #from numpy import *
 import doctest
+import logging 
 import numpy as np 
 from scipy import io
 import matplotlib.pylab as plt 
@@ -10,7 +11,11 @@ import pdb
 
 def LOSS_furniture(Tx,Rx,furn):
     """
-      Not used
+    Parameters 
+    ----------
+    Tx
+    Rx 
+    furn 
     """
     for i in range(1,5):
         rx = Rx[i]
@@ -24,7 +29,7 @@ def LOSS_furniture(Tx,Rx,furn):
             position = T.position()
 
 def PL0(fGHz,GtdB=0,GrdB=0):
-    """  Path Loss at frequency f @ 1m 
+    """  Path Loss at frequency fGHZ @ 1m 
 
     Parameters
     ----------
@@ -45,7 +50,7 @@ def PL0(fGHz,GtdB=0,GrdB=0):
     Notes
     -----
 
-        .. math:: PL_0 = -20 log_{10}(\\frac{\\lambda}{4\\pi}) - GtdB -GrdB
+    .. math:: PL_0 = -20 log_{10}(\\frac{\\lambda}{4\\pi}) - GtdB -GrdB
 
     Examples
     --------
@@ -56,7 +61,7 @@ def PL0(fGHz,GtdB=0,GrdB=0):
 
     """
 
-    ld = 0.3/fGHz
+    ld  = 0.3/fGHz
     PL0 = -20*np.log10(ld/(4.0*np.pi))-GtdB-GrdB
 
     return PL0
@@ -138,20 +143,20 @@ def OneSlopeMdl(D,n,fGHz):
 
     """
 
-    PL = PL0(fGHz)+10*n*np.log10(D)
+    PL = PL0(fGHz) + 10*n*np.log10(D)
 
     return(PL)
 
-def PL(pts,fGHz,p,n=2.0):
-    """ Path Loss
+def PL(fGHz,pts,p,n=2.0):
+    """ calculate Path Loss
 
     Parameters
     ----------
 
-    pts    : np.array (2xNp)
-             points
     fGHz   : float
              frequency (GHz)
+    pts    : np.array (2xNp)
+             points
     p      : np.array (2x1)
     n      : float
             path loss exponent (default = 2)
@@ -168,8 +173,150 @@ def PL(pts,fGHz,p,n=2.0):
 
     PL = PL0(fGHz) + 10*n*np.log10(D)
 
-    return(PL)
+    return(PL) 
 
+def Losst(L,fGHz,p1,p2):
+    """  Calculate Loss between links p1  p2 
+
+    Parameters
+    ----------
+
+    L   : Layout object
+    
+    fGHz : np.array
+           frequency GHz
+
+    p1 : source point 
+        (2 x Np) array or (2,) array
+
+    p2 : observation point 
+        (2 x Np) array or (2,) array
+
+    Examples
+    --------
+
+    .. plot::
+        :include-source:
+
+        >>> import matplotlib.pyplot as plt 
+        >>> from pylayers.simul.simulem import * 
+        >>> from pylayers.measures.mesuwb import *
+        >>> from pylayers.antprop.multiwall import *
+        >>> S = Simul()
+        >>> S.layout('Lstruc.ini')
+        >>> fGHz = 4 
+        >>> Tx,Rx = ptw1()
+        >>> Lwo,Lwp,Edo,Edp = Losst(S.L,fGHz,Tx,Rx[1,0:2])
+        >>> fig,ax = S.L.showGs()
+        >>> tit = plt.title('test Losst')
+        >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
+        >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
+        >>> plt.show()
+
+    """
+    if (type(fGHz)==float) | (type(fGHz)==int):
+        fGHz=np.array([fGHz],dtype=float)
+
+    sh1 = np.shape(p1)
+    sh2 = np.shape(p2)
+
+    if (len(sh1)>1) & (len(sh2)>1):
+        Nlink = max(sh1[1],sh2[1])
+    if (len(sh1)>1) & (len(sh2)<2):
+        Nlink = sh1[1]
+    if (len(sh1)<2) & (len(sh2)>1):
+        Nlink = sh2[1]
+    if (len(sh1)<2) & (len(sh2)<2):
+        Nlink = 1
+    
+    data = L.angleonlink(p1,p2)
+
+    # as many slabs as segments 
+    slabs = L.sla[data['s']]
+   
+    cslab = np.unique(slabs)
+    
+    LossWallo = np.zeros((len(fGHz),Nlink))
+    LossWallp = np.zeros((len(fGHz),Nlink))
+    EdWallo = np.zeros((len(fGHz),Nlink))
+    EdWallp = np.zeros((len(fGHz),Nlink))
+
+    for slname in cslab:
+        # u index of slabs of name slname
+        # data['a'][u] angle
+        # data['s'][u] segment number including subsegment
+        u = np.nonzero(slabs==slname)[0]
+        #
+        # calculate Loss for slab slname
+        #
+        lko,lkp  = L.sl[slname].losst(fGHz,data['a'][u])
+        #
+        # calculate Excess delay for slab slname
+        #
+        do , dp  = L.sl[slname].excess_grdelay(theta=data['a'][u])
+        # data['i'][u] links number 
+        indexu = data['i'][u]
+        # reduce to involved links 
+        involved_links, indices = np.unique(indexu,return_index=True)
+        indicep = np.hstack((indices[1:],np.array([len(indexu)])))
+        # range on involved links
+        irange = np.arange(len(involved_links))
+        #
+        # sum contribution of slab of a same link 
+        #
+        Wallo = np.array(map(lambda x: np.sum(lko[:,indices[x]:indicep[x]],axis=1),irange)).T
+        Wallp = np.array(map(lambda x: np.sum(lkp[:,indices[x]:indicep[x]],axis=1),irange)).T
+        
+        Edo = np.array(map(lambda x: np.sum(do[indices[x]:indicep[x]]),irange)).T
+        Edp = np.array(map(lambda x: np.sum(dp[indices[x]:indicep[x]]),irange)).T
+
+        LossWallo[:,involved_links] = LossWallo[:,involved_links] + Wallo
+        LossWallp[:,involved_links] = LossWallp[:,involved_links] + Wallp
+
+        EdWallo[:,involved_links] = EdWallo[:,involved_links] + Edo
+        EdWallp[:,involved_links] = EdWallp[:,involved_links] + Edp
+
+    return(LossWallo,LossWallp,EdWallo,EdWallp)
+#    i = 0
+#    for k in seglist:
+#        if k != 0:
+#            try:
+#                # TODO use z to determine ss_name
+#                name = L.Gs.node[k]['ss_name'][0]
+#            except:
+#                name = L.Gs.node[k]['name']
+#            #if k in S.indoor.ce.keys():
+#            #if k in S.L.ce.keys():
+#            # nom du sous-segment  
+#            #    indss = S.L.ce[k][0]
+#            #    name  = S.L.sl.di[indss]
+#            #    print name
+#            #"else:  
+#            # nom du segment   
+#            #    name = S.L.Gs.node[k]['name'] 
+#            the = theta[i]
+#            # idea paper : comparison multiwall th=0 th=variable
+#            # comparison mesurement
+#            #the = 0
+#
+#            i   = i + 1
+#            #
+#            # Loss0 du slab
+#            #
+#            lko,lkp  = L.sl[name].losst(fGHz,the)
+#            do , dp  = L.sl[name].excess_grdelay(theta=the)
+#            edo = edo - np.mean(do)
+#            edp = edp - np.mean(dp)
+##           print lko
+##           print lkp
+#            Lo   = Lo + lko[0]
+#            Lp   = Lp + lkp[0]
+#    Lwo = np.hstack((Lwo,Lo))
+#    Lwp = np.hstack((Lwp,Lp))
+#    Edo = np.hstack((Edo,edo))
+#    Edp = np.hstack((Edp,edp))
+
+#    return(Lwo,Lwp,Edo,Edp)
 def Loss0_v2(L,Pts,fGHz,p):
     """ 
 
@@ -186,6 +333,14 @@ def Loss0_v2(L,Pts,fGHz,p):
            frequency 
     p  : point
         source points
+    
+    Returns
+    -------
+    
+    Lwo : Losses in wall polarization o
+    Lwp : Losses in wall polarization p
+    Edo :  polarization o
+    Edp :  polarization p
 
     Examples
     --------
@@ -198,7 +353,7 @@ def Loss0_v2(L,Pts,fGHz,p):
         >>> from pylayers.measures.mesuwb import *
         >>> from pylayers.antprop.multiwall import *
         >>> S = Simul()
-        >>> S.layout('Lstruc.str','matDB.ini','slabDB.ini')
+        >>> S.layout('Lstruc.ini','matDB.ini','slabDB.ini')
         >>> fGHz = 4 
         >>> Tx,Rx = ptw1()
         >>> Lwo,Lwp,Edo,Edp = Loss0_v2(S.L,Tx,fGHz,Rx[1,0:2])
@@ -207,23 +362,34 @@ def Loss0_v2(L,Pts,fGHz,p):
         >>> sc2 = ax.scatter(Rx[1,0],Rx[1,1],s=20,marker='x',c='k')
         >>> sc1 = ax.scatter(Tx[:,0],Tx[:,1],s=Edo,c=Edo,linewidth=0)
         >>> plt.show()
+       
+    Notes
+    -----
+
+    DEPRECATED : Use losst instead 
 
     """
+
+    logging.warning('DEPRECATED function')     
+
     N   = np.shape(Pts)[0]
     Lwo = np.array([])
     Lwp = np.array([])
     Edo = np.array([])
     Edp = np.array([])
+
     for i in range(N):
         Lo = 0.0
         Lp = 0.0
         edo = 0.0
         edp = 0.0
         pi = Pts[i,:]
-        seglist,theta = L.angleonlink(p,pi)
+        seglist,theta = L.angleonlinkold(p,pi)
         i = 0
         for k in seglist:
             if k != 0:
+                if k==124:
+                    pdb.set_trace()
                 try:
                     # TODO use z to determine ss_name
                     name = L.Gs.node[k]['ss_name'][0]
@@ -267,16 +433,17 @@ def Loss0_v2_separe(S,pi,f,p):
 
     Parameters
     ----------
+
     S 
     pi ????
     f 
     p 
     """
-    # for calibrate the loss multiwall
+    # for calibration the loss multiwall
     lwo   = np.array([])
     lwp   = np.array([])
     Theta = np.array([])
-    seglist,theta = S.L.angleonlink(p,pi)
+    seglist,theta = S.L.angleonlinkold(p,pi)
     i = 0
     for k in seglist:
         if k in S.L.ce.keys():
@@ -302,16 +469,19 @@ def Loss_mur_the(S,pi,f,p):
     """
 
     """
-    seglist,theta = S.L.angleonlink(p,pi)
+    seglist,theta = S.L.angleonlinkold(p,pi)
     return(seglist,theta)
 
 def Loss0(S,rx,ry,f,p):
     """ Calculate Loss through Layers theta=0 deg
+
     Parameters
     ----------
-    S
-        Simulation 
-    f
+
+    S : Simulation object
+    fGHz : float 
+        frequency GHz
+
     """
     Nx  = len(rx)
     Ny  = len(ry)
@@ -323,7 +493,7 @@ def Loss0(S,rx,ry,f,p):
         for y in ry:
             L = 0
             pxy = np.array([x,y])
-            seglist,theta = S.L.angleonlink(p,pxy)
+            seglist,theta = S.L.angleonlinkold(p,pxy)
             for k in seglist:
                 name = S.L.name[k]
                 lk = S.sl[name].loss0(f)
@@ -345,11 +515,12 @@ def Loss_diff(u):
 
     return(Ld)
 
-def Diffraction_parameter(h,d1,d2,f):
+def Diffraction_parameter(h,d1,d2,fGHz):
     """ Calculate the diffraction Fresnel parameter
 
     Parameters
     ----------
+
     h  : height (meter) 
     d1 : distance 1 (meter)
     d2 : distance 2 (meter) 
@@ -357,9 +528,12 @@ def Diffraction_parameter(h,d1,d2,f):
 
     Notes
     -----
+
     .. math::   \\nu = h \\sqrt{\\frac{2}{\\lambda} \\frac{d_1+d_2}{d_1 d_2}}
+
     """
-    ld  = 0.3/f
+
+    ld  = 0.3/fGHz
     nu  = h*np.sqrt(2*(d1+d2)/(ld*d1*d2))
 
     return(nu)
@@ -489,6 +663,10 @@ def Interline(x1,y1,x2,y2,Obstacle):
           
 def Loss_obstacle(SS,x1,y1,x2,y2,Obstacle):
     """
+    Parameters
+    ----------
+    SS
+
         
     """
     LD =  np.array([])

@@ -17,10 +17,21 @@ import matplotlib.pylab as plt
 import pylayers.util.pyutil as pyu
 
 import pdb
-# "near collision avoidance" inspired from
-#   http://people.revoledu.com/kardi/publication/Kouchi2001.pdf
 
 def truncate(self, max):
+    """
+    Parameters 
+    ----------
+
+    max
+
+    References 
+    ----------
+
+    "near collision avoidance" inspired from
+    http://people.revoledu.com/kardi/publication/Kouchi2001.pdf
+
+    """
     if self.length() > max:
         return self.normalize() * max
     else:
@@ -28,6 +39,9 @@ def truncate(self, max):
 vec3.truncate = truncate
 
 def scale(self, size):
+    """
+
+    """
     return self.normalize() * size
 vec3.scale = scale
 
@@ -36,9 +50,48 @@ def copy(self):
 vec3.copy = copy
 
 class Person(Process):
-    """
-        Person Process
-        handle the mobility of the agent
+    """ Person Process
+
+    Attributes
+    ----------
+
+    ID    : float/hex/str/...
+            agent Id
+    interval : float
+            refresh interval of agent mobility
+    roomId : int
+            room ID where agent start when simulation is launched
+    L : pylayers.gis.layout.Layout()
+        Layout instance, in which the agent is moving
+    net : pylayers.network.Network()
+        Network instance, in which network agent are communicating.
+        This is used for fill the true position filed of the graph
+        It must be removed in a further version ( when a proper save instance
+        would be created)
+    wld : pylayers.mobility.transit.world.world()
+        world instance. equivalent to layout but in the pytk framework. 
+        TODO : remove in a further version
+    sim : SimPy.Simulation.Simulation.RT()
+        Simulation instance share by all the pylayer project. 
+    moving : bool 
+        indicate if the agent is moving or not ( relevant for acces poitns)
+    froom : list
+        list of forbiden rooms. 
+    wait : float
+        wait time of the agent when he has reach teh desitaion
+    cdest : str
+        method for choosing setination 'random ' of file read
+    save : list
+        list of save option type .
+        It will be removed in a further version ( when a proper save instance
+        would be created)
+
+
+    Methods
+    -------
+
+    Move : make the agent move
+
     """
     max_acceleration = 2.0 # m/s/s
     max_speed    = 1.2 # m/s
@@ -53,46 +106,7 @@ class Person(Process):
         wld = world(),sim=None,moving=True,froom=[],wait=1.0,cdest='random',save=[]):
         """ Class Person
             inherits of Simpy.SimulationRT
-        Attributes
-        ----------
-            ID    : float/hex/str/...
-                    agent Id
-            interval : float
-                    refresh interval of agent mobility
-            roomId : int
-                    room ID where agent start when simulation is launched
-            L : pylayers.gis.layout.Layout()
-                Layout instance, in which the agent is moving
-            net : pylayers.network.Network()
-                Network instance, in which network agent are communicating.
-                This is used for fill the true position filed of the graph
-                It must be removed in a further version ( when a proper save instance
-                would be created)
-            wld : pylayers.mobility.transit.world.world()
-                world instance. equivalent to layout but in the pytk framework. 
-                TODO : remove in a further version
-            sim : SimPy.Simulation.Simulation.RT()
-                Simulation instance share by all the pylayer project. 
-            moving : bool 
-                indicate if the agent is moving or not ( relevant for acces poitns)
-            froom : list
-                list of forbiden rooms. 
-            wait : float
-                wait time of the agent when he has reach teh desitaion
-            cdest : str
-                method for choosing setination 'random ' of file read
-            save : list
-                list of save option type .
-                It will be removed in a further version ( when a proper save instance
-                would be created)
-
-
-        Method
-        ------
-            Move : make the agent move
-            update : DEPRECATED used for Tkinter plot
-
-    """
+            """
         #GeomNetType = np.dtype([('Id',int), 
         #        ('time',int), 
         #           ('p',float,(1,3)),
@@ -173,8 +187,8 @@ class Person(Process):
 
 
     def move(self):
-        """
-            Move the Agent
+        """ Move the Agent
+
         """
 
         while True:
@@ -190,11 +204,14 @@ class Person(Process):
                     if zone not in checked:
                         checked.append(zone)
                         zone(self)
+
                 acceleration = self.steering_mind(self) 
                 acceleration = acceleration.truncate(self.max_acceleration)
+
                 self.acceleration = acceleration 
                 velocity = self.velocity + acceleration * self.interval
                 self.velocity = velocity.truncate(self.max_speed) 
+
                 if velocity.length() > 0.2:
                     # record direction only when we've really had some
                     self.localy = velocity.normalize()
@@ -214,14 +231,12 @@ class Person(Process):
                 if 'txt' in self.save:
                     pyu.writemeca(self.ID,self.sim.now(),p,v,a)
                 if self.arrived:
-
                     self.arrived = False
                     if self.endpoint:
                         self.endpoint=False
                         #pr = self.sim.roomlist.index(self.nextroomId)
                         #self.sim.roomlist.pop(pr)
                         self.roomId = self.nextroomId
-
                     #
                     # Si porte on continue
                     #

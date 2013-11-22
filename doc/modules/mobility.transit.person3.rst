@@ -1,8 +1,8 @@
-.. _mobility.transit.path.person2:
+.. _mobility.transit.path.person:
 
 
-Person3
-=======
+Person
+======
 
-.. automodule:: mobility.transit.Person3.py
+.. automodule:: mobility.transit.Person.py
     :members:

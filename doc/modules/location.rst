@@ -4,6 +4,8 @@
 location
 ========
 
+.. module:: pylayers.location
+
 .. toctree::
     :maxdepth: 2
 

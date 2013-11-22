@@ -2,18 +2,18 @@
 #####################################################################
 #This file is part of Network and RGPA.
 
-#Foobar is free software: you can redistribute it and/or modify
+#PyLayers is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation, either version 3 of the License, or
 #(at your option) any later version.
 
-#Foobar is distributed in the hope that it will be useful,
+#PyLayers is distributed in the hope that it will be useful,
 #but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 
 #You should have received a copy of the GNU General Public License
-#along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+#along with PyLayers.  If not, see <http://www.gnu.org/licenses/>.
 
 #-------------------------------------------------------------------
 #authors :
@@ -43,9 +43,9 @@ class PLSmodel(object):
         self.f  = f
         self.d0  = d0
         self.rssnp  = rssnp
-        self.sigrss=sigrss
+        self.sigrss = sigrss
         self.getPL0()
-        self.method=method
+        self.method = method
         self.param = dict(f=self.f,
                       d0=self.d0,
                       rssnp=self.rssnp,
@@ -60,11 +60,6 @@ class PLSmodel(object):
         st = st +  'PL0 (dB): '+str(self.PL0)
         return(st)
 
-    def info(self):
-        print 'frequency (f in GHz) : ',self.f
-        print 'path loss exponent (n) : ',self.rssnp
-        print 'PL0 : ',self.PL0
-
     def getPL0(self,Gt=0,Gr=0):
         """ get Path Loss at reference distance d0
 
@@ -72,19 +67,24 @@ class PLSmodel(object):
         ----------
         
         PL0_c : PL0 compute
-        f  : frequency GHz
         Gt : transmitting antenna gain dB (default 0 dB) 
         Gr : receiving antenna gain dB (default 0 dB) 
 
+        Examples
+        --------
+            >>> from pylayers.network.model import *   
+            >>> plm = PLSmodel()
+            >>> plm.getPL0()
+
         """
+
         Gt  = 10**(Gt/10.)
         Gr  = 10**(Gr/10.)
         ld  = 0.3/self.f
+
         self.PL0 = -20*np.log10(ld/(4.0*np.pi*self.d0)) 
 
     
-
-
     def OneSlope(self,r):
         """
         OneSlope model : give Power Level from distance  with OneSlope method
@@ -93,6 +93,12 @@ class PLSmodel(object):
         ----------
 
         r : range (meters)
+
+        Returns
+        -------
+    
+        PL : 
+            path loss values
 
         """
         try:
@@ -105,14 +111,17 @@ class PLSmodel(object):
     def iOneSlope(self,PL):
         """ goes from PL to estimated distance
 
+        inverse OneSlope model : give distance from Power Level with OneSlope method
+
         Parameters
         ----------
 
-        PL 
-        inverse OneSlope model : give distance from Power Level with OneSlope method
+        PL : 
+            path loss in dB 
 
-        f : frequency  GHz
-        n : path loss exponent
+        Returns
+        -------
+
         r : range array 
 
         """
@@ -122,11 +131,11 @@ class PLSmodel(object):
         except: 
             self.getPL0()
             r = 10**((PL-self.PL0)/(10*self.rssnp))
+
         return(r)
 
     def getPLmean(self, d):
-        """
-            Compute PL mean
+        """ compute PL mean
 
         Notes
         -----

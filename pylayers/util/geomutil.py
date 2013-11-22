@@ -4,6 +4,7 @@ from pylayers.antprop.slab import Slab, SlabDB, Mat, MatDB
 import shapely.geometry as sh
 import scipy.linalg as la
 import pdb
+import logging 
 #! /usr/bin/python
 # geomutil.py
 """ functions related to geometry
@@ -92,11 +93,16 @@ class Geomview(object):
 
     Methods
     -------
+
     show3
+
     """
-    def __init__(self, _filename):
+    def __init__(self, _filename,clear=False):
         filename = pyu.getlong(_filename, "geom")
         self.filename = filename
+        if clear:
+            fd = open(self.filename,'w')
+            fd.close()           
 
     def show3(self):
         """
@@ -112,9 +118,9 @@ class Geomlist(Geomview):
     """
 
     """
-    def __init__(self, _filename):
+    def __init__(self, _filename,clear=False):
         _filename = _filename + '.list'
-        Geomview.__init__(self, _filename)
+        Geomview.__init__(self, _filename,clear=clear)
 
     def append(self, strg):
         """
@@ -180,20 +186,23 @@ class GeomVect(Geomview):
         display a set of points
 
     """
-    def __init__(self, _filename='geomdef'):
+    def __init__(self, _filename='geomdef',clear=False):
         _filename = _filename + '.vect'
-        Geomview.__init__(self, _filename)
+        Geomview.__init__(self, _filename,clear=clear)
 
     def segments(self, ds, i2d=True, linewidth=2):
         """
+
         Parameters
         ----------
+
         ds   : dictionnary
             len ds
         i2d  : boolean (defaut True)
             2d indicator
         linewidth : float
             default 2
+
         """
         fo = open(self.filename, "w")
         fo.write("appearance { linewidth %d }\n" % linewidth)
@@ -217,8 +226,8 @@ class GeomVect(Geomview):
                 fo.write("%6.3f %6.3f %6.3f\n" % (phe[0], phe[1], phe[2]))
         fo.close()
 
-    def geomBase(self, M, pt=np.array([0., 0., 0.]),
-                 col=np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]]), linewidth=3):
+    def geomBase(self, M, pt=np.array([0., 0., 0.]), col=np.array([[0, 0, 1], [0, 1, 0], [1, 0, 0]]),
+                 linewidth=3,scale=1):
         """ Construct a geomview vect file for vizualisation of a frame
             by default the geomview filename is base0.vect
 
@@ -247,6 +256,7 @@ class GeomVect(Geomview):
         >>> #gv.show3()
 
         """
+        M = M * scale
         fo = open(self.filename, "w")
         fo.write("appearance { linewidth %d }\n" % linewidth)
         fo.write("VECT\n")
@@ -254,7 +264,7 @@ class GeomVect(Geomview):
         fo.write("2 2 2\n")   # 2 points per lines
         fo.write("1 1 1\n")   # 1 color per line
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0], pt[1], pt[2]))
-        fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 0], pt[1] +
+        fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 0], pt[1] + 
                                           M[1, 0], pt[2] + M[2, 0]))
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0], pt[1], pt[2]))
         fo.write("%6.3f %6.3f %6.3f\n" % (pt[0] + M[0, 1], pt[1] +
@@ -387,30 +397,24 @@ class Geomoff(Geomview):
         Geomview.__init__(self, _filename)
 
     def loadpt(self):
-        """
+        """ load points 
+            
         """
         fo = open(self.filename,'r')
         lis = fo.readlines()
         typ,nv,nf,ne=lis[0].split(' ')
         if typ<>'OFF':
             logging.critical('not an off file')
-        else:
-            try:
-                nv = eval(nv)
-                nf = eval(nf)
-                ne = eval(ne)
-            except:
-                logging.critical('load off wrong number of values')
-        #print nv,nf,ne
+        nv = eval(nv)
+        nf = eval(nf) 
+        ne = eval(ne)
         for k in range(nv):
-            x,y,z = lis[k+1].split(' ')
-            x = eval(x)
-            y = eval(y)
-            z = eval(z)
+            #x,y,z = lis[k+1].split(' ')
+            pt = np.fromstring(lis[k+1],dtype=float,sep=' ')
             try:
-                t = np.vstack((t,np.array([x,y,z])))
+                t = np.vstack((t,pt))
             except:
-                t = np.array([x,y,z])
+                t = pt
         return(t)
 
     def savept(self,ptnew,_fileoff):
@@ -498,6 +502,47 @@ class Geomoff(Geomview):
             fo.write("1.0 0.0 1.0 0.4\n")
         fo.close()
 
+    def cylinder(self,r,l,nphi=20,nl=3,col=[1.,0.0,1.0],alpha=0.1):
+        """ create a cylinder 
+
+        Parameters
+        ----------
+
+        r : radius
+        l : length 
+        nphi : number of phi 
+        nl : number of l 
+        col : list [r,g,b]
+        alpha : transparency 
+
+        """
+        tphi = np.linspace(0,2*np.pi,nphi,endpoint=False)
+        tz = np.linspace(-l/2.,l/2.,nl)
+        npoly = nphi*(nl-1)
+        nedges = nphi*(2*nl-1)
+        fo = open(self.filename, 'w')
+        #fo.write("OFF\n")
+        fo.write("OFF %d %d %d\n" % (nphi*nl+1, npoly,nedges))
+        fo.write("0.000 0.000 0.000 \n")
+        for z in tz:
+            for phi in tphi: 
+               x = r*np.cos(phi)
+               y = r*np.sin(phi)
+               fo.write("%6.3f %6.3f %6.3f \n" % (x, y, z))
+        for k in range(npoly):
+            il = k/nphi
+            iphi = k % nphi
+            a = il*nphi+iphi
+            b = il*nphi+(iphi+1)%nphi
+            c = (il+1)*nphi+iphi
+            d = (il+1)*nphi+(iphi+1)%nphi
+
+            fo.write("4 %i %i %i %i " %(a+1,b+1,d+1,c+1))
+            str1 = str(col[0])+' '+str(col[1])+' '+str(col[2])+' '+ str(alpha)+'\n'
+            fo.write(str1)
+
+        fo.close()
+
     def box(self, extrem = np.array([-1,1,-1,1,-3,3])):
         """ create a box
 
@@ -542,6 +587,108 @@ class Geomoff(Geomview):
         fo.write("4 3 2 6 7 1 0 0 0.3\n")
         fo.write("4 6 5 4 7 1 0 0 0.3\n")
         fo.close()
+
+    def pattern(self,theta,phi,E,**kwargs):
+        """ export antenna pattern in a geomview format
+
+        Parameters
+        ----------
+
+        theta : np.array (1 x Ntheta)
+        phi   : np.array (1 x Nphi)
+        E     : np.array complex  (Ntheta,Nphi)
+        po    : origin (1x3)
+        R     : rotation matrix (3x3)
+        minr  : radius of minimum
+        maxr  : radius of maximum
+        ilog  : True (log) False (linear)
+
+        Examples
+        --------
+
+           >>> from pylayers.util.geomutil import *
+           >>> import numpy as np 
+           >>> th = np.arange(0,np.pi,0.05)[:,np.newaxis]
+           >>> ph = np.arange(0,2*np.pi,0.05)[np.newaxis,:]
+           >>> E  = 1.5*np.sin(th)*np.cos(0*ph)
+           >>> g = Geomoff('dipole')
+           >>> g.pattern(th,ph,E)
+           >>> g.show3()
+
+        """
+
+        defaults = { 'po': np.array([0,0,0]),
+                     'T' : np.eye(3), 
+                     'minr' : 0.1, 
+                     'maxr' : 1 , 
+                     'tag' : 'Pat', 
+                     'ilog' : False}
+        
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        minr = kwargs['minr']
+        maxr = kwargs['maxr']
+        tag  = kwargs['tag']
+        ilog = kwargs['ilog']
+        po = kwargs['po']
+        T  = kwargs['T']
+                    
+        Nt = np.shape(theta)[0]
+        Np = np.shape(phi)[1]
+
+        if ilog:
+            R = 10 * np.log10(abs(E))
+        else:
+            R = abs(E)
+
+        #Th = np.outer(theta, np.ones(Np))
+        #Ph = np.outer(np.ones(Nt), phi)
+
+        U = (R - R.min()) / (R.max() - R.min())
+        Ry = minr + (maxr-minr) * U
+        x = Ry * np.sin(theta) * np.cos(phi) + po[0]
+        y = Ry * np.sin(theta) * np.sin(phi) + po[1]
+        z = Ry * np.cos(theta) + po[2]
+        
+        Npoints = Nt * Np
+        Nfaces = (Nt - 1) * Np
+        Nedge = 0
+        #
+        # Colormap
+        #
+        colmap = plt.get_cmap()
+        Ncol = colmap.N
+        cmap = colmap(np.arange(Ncol))
+        g = np.round(U * (Ncol - 1))
+        fd = open(self.filename, 'w')
+        fd.write('COFF\n')
+        chaine = str(Npoints) + ' ' + str(Nfaces) + ' ' + str(Nedge) + '\n'
+        fd.write(chaine)
+        
+        for ii in range(Nt):
+            for jj in range(Np):
+                cpos = str(x[ii, jj]) + ' ' + str(y[ii, jj]) + ' ' + str(z[ii, jj])
+                cpos = cpos.replace(',', '.')
+                ik = g[ii, jj]
+                ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
+                    ' ' + str(cmap[ik, 2])
+                ccol = ccol.replace(',', '.')
+                fd.write(cpos + ' ' + ccol + ' 0.8\n')
+
+        for ii in range(Nt - 1):
+            for jj in range(Np):
+                p1 = ii * Np + jj
+                p2 = ii * Np + np.mod(jj + 1, Np)
+                p3 = (ii + 1) * Np + jj
+                p4 = (ii + 1) * Np + np.mod(jj + 1, Np)
+                chaine = '4 ' + str(p1) + ' ' + str(p2) + ' ' + \
+                    str(p4) + ' ' + str(p3) + ' 0.5\n'
+                fd.write(chaine)
+
+        fd.close()
+
 #class Polygon2(object):
 #        def __init__(self,p):
 #                self.p = p
@@ -850,8 +997,8 @@ def pvecn(v1, v2):
         print("error divide by zero in pvecn")
     return(v4)
 
-def onbfromaxe(A, B):
-    """ orthonormal basis from 2 points defining an axe
+def onb(A,B,v):
+    """ orthonormal basis from 2 points defining an axe and a vector 
 
     Parameters
     ----------
@@ -859,6 +1006,8 @@ def onbfromaxe(A, B):
     A : np.array 
         3 x n
     B : np.array
+        3 x n 
+    v : np.array
         3 x n 
 
     Returns
@@ -875,22 +1024,23 @@ def onbfromaxe(A, B):
 
     >>> A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
     >>> B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
-    >>> onbfromaxe(A,B)
-    array([[[ 0.79158384, -0.61106057,  0.        ],
-            [ 0.61106057,  0.79158384,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]],
+    >>> v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])
+    >>> onb(A,B,v)
+    array([[[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]]
     <BLANKLINE>
-           [[ 0.74214568, -0.67023861,  0.        ],
-            [ 0.67023861,  0.74214568,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]],
+           [[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]],
     <BLANKLINE>
-           [[ 0.80923784, -0.58748116,  0.        ],
-            [ 0.58748116,  0.80923784,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]],
+           [[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]],
     <BLANKLINE>
-           [[ 0.52138786, -0.85331981,  0.        ],
-            [ 0.85331981,  0.52138786,  0.        ],
-            [ 0.        ,  0.        ,  1.        ]]])
+           [[ 1.,  0.,  0.],
+            [ 0.,  1.,  0.],
+            [ 0.,  0.,  1.]]])
 
 
     see also
@@ -900,19 +1050,20 @@ def onbfromaxe(A, B):
     pylayers.util.mobility.body
 
     """
-    np.random.seed(0)
+    #np.random.seed(0)
     N = np.shape(A)[1] 
     # modab 1xN
     modab = np.sqrt(np.sum((B-A)*(B-A),axis=0))
     # wn 3xN
     wn = (B - A) / modab
-    random_vector = np.random.rand(3,N)
-    u = random_vector - np.sum(random_vector*wn,axis=0)*wn
+    #random_vector = np.random.rand(3,N)
+    u = v - np.sum(v*wn,axis=0)*wn
     modu = np.sqrt(np.sum(u*u,axis=0))
     # un : 3xN
     un = u /modu 
     # vn : 3xN
     vn = np.cross(wn,un,axis=0)
+    #pdb.set_trace()
     T  = np.dstack((un,vn,wn))
     # reshape dimension for having index of cylinder axe first
     # N x 3 x 3
@@ -1013,6 +1164,7 @@ def normalize(vec):
 
     Parameters
     ----------
+
     vec : ndarray (N x ndim)
         N ndim vectors
 
@@ -1039,6 +1191,7 @@ def normalize(vec):
     N = np.shape(vec)[0]
     m = np.sqrt(np.sum(vec*vec,axis=1)).reshape(N,1)
     vecn = vec/m
+
     return(vecn)
 
 def ptonseg(pta, phe, pt):
@@ -1296,14 +1449,12 @@ def affine(X,Y):
     A = np.dot(Yc,pX)
     return(A,B)
 
-def cylmap(Y):
-    """ find affine transformation 
+def cylmap(Y,r=0.0625,l=0.5):
+    """ find affine transformation for a specific cylinder
 
     Parameters
     ----------
 
-    X  : np.array
-        3xN
     Y
         3xN
 
@@ -1321,7 +1472,8 @@ def cylmap(Y):
     Y = A X + B 
 
     """
-    X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
+    #X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T
+    X = np.array([[0,0,0],[0,0,-l/2],[0,0,l/2],[r,0,0],[0,r,0],[r,0,l/2]]).T
     B = Y[:,0][:,np.newaxis]
     Yc = Y-B
     pX = la.pinv(X)
@@ -1582,11 +1734,16 @@ def BTB_tx(a_g, T):
 
     """
     G = SphericalBasis(a_g)
+
     th_g = G[0, :, :]
     ph_g = G[1, :, :]
+
     B_gT = dstack((th_g, ph_g)).transpose((2, 0, 1))
+
     s_l = np.dot(T.T, G[2, :, :]).T
+
     al = angledir(s_l)
+
     L = SphericalBasis(al)
     th_l = L[0, :, :]
     ph_l = L[1, :, :]

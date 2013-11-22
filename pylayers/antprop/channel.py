@@ -499,7 +499,6 @@ class Ctilde(object):
             Fbp = Fbp.transpose()
             Fbt = bs.FUsignal(b.fa,Fbt)
             Fbp = bs.FUsignal(b.fa,Fbp)
-
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -604,6 +603,7 @@ def Cg2Cl(Cg, Tt, Tr):
     Cl = copy.deepcopy(Cg)
     # get frequency axes    
     fGHz = Cl.fGHz
+    # get angular axes    
     Rt, tangl = BTB_tx(Cg.tang, Tt)
     Rr, rangl = BTB_rx(Cg.rang, Tr)
 
@@ -765,10 +765,33 @@ class Tchannel(bs.FUDAsignal):
                 f = interp1d(h.x, h.y)
                 x_new = arange(h.x[0], h.x[-1], dxw)[0:-1]
                 y_new = f(x_new)
-                h = TUsignal(x_new, y_new)
+                h = bs.TUsignal(x_new, y_new)
 
         ri = h.convolve(w)
         return(ri)
+
+    def chantap(self,**kwargs):
+
+
+        defaults = {
+                    'fcGHz':4.5,
+                    'WGHz':1,
+                    'Ntap':100
+        }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+
+
+        h = bs.FUDsignal(self.x,self.y,self.tau0)
+        htap = h.chantap(**kwargs)
+        return htap
+ 
+        
+
+
 
     def applywavB(self, Wgam):
         """ apply waveform method B (time domain )

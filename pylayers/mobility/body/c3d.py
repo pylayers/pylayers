@@ -93,8 +93,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
     content = fid.read()
     content_memory = content
 
-    NrecordFirstParameterblock, content = getNumber(
-        content, 1)     # Reading record number of parameter section
+    NrecordFirstParameterblock, content = getNumber(content, 1)     # Reading record number of parameter section
 
     key, content = getNumber(content, 1)
 
@@ -176,6 +175,15 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
     VideoFrameRate, content = getFloat(content)
 
     AnalogFrameRate = VideoFrameRate * NanalogFramesPerVideoFrame
+
+    dinfo = {}
+    dinfo['NanalogFramesPerVideoFRame']=NanalogFramesPerVideoFrame
+    dinfo['AnalogFrameRate']= AnalogFrameRate
+    dinfo['VideoFrameRate']= VideoFrameRate
+    dinfo['Scale'] = Scale
+    dinfo['Nmarkers'] = Nmarkers
+    dinfo['StartFrame'] =  StartFrame
+    dinfo['EndFrame'] =  EndFrame
 
     if verbose:
         print "NanalogFramesPerVideoFrame= ", NanalogFramesPerVideoFrame
@@ -545,7 +553,7 @@ def read_c3d(_filename='07_01.c3d',verbose=False):
             Frames[i, j, 0] = -Markers[i][j].x
             Frames[i, j, 1] = -Markers[i][j].y
             Frames[i, j, 2] = -Markers[i][j].z
-    return(Subjects, Point, Frames)
+    return(Subjects, Point, Frames,dinfo)
 #    fr = Frames[0]
 #    """axex = fr[:,0]
 #    axey = fr[:,1]

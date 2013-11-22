@@ -18,9 +18,10 @@ def world(**args):
     Notes
     -----
    
-       `Obstacles in pedestrian simulations <http://e-collection.library.ethz.ch/eserv/eth:27090/eth-27090-01.pdf>`_
+    `Obstacles in pedestrian simulations <http://e-collection.library.ethz.ch/eserv/eth:27090/eth-27090-01.pdf>`_
 
     """
+
     global _world
     if _world is None:
         _world = World(**args)
@@ -38,6 +39,19 @@ def near(boid, items, distance):
 
 
 class World:
+    """ Class World 
+    
+    Methods
+    -------
+
+    boids
+    add_boid
+    remove_boid
+    update_boid
+    obstacles
+    add_wall
+
+    """
     def __init__(self, **args):
         # self.tk = TkWorld(**args)
         self._boids = {}
@@ -45,11 +59,35 @@ class World:
         self._zones = {}
 
     def boids(self, boid, distance=2):
+        """
+        Parameters
+        ----------
+
+        boid 
+        distance : int 
+            default 2
+
+        Returns
+        -------
+
+        other_boids
+
+        """
+
         other_boids = near(boid, self._boids, distance)
         other_boids.remove(boid)
+
         return other_boids
 
     def add_boid(self, boid):
+        """
+
+        Parameters
+        ----------
+
+        boid 
+
+        """
         tile = (int(boid.position.x / tile_size), int(
             boid.position.y / tile_size))
         if tile not in self._boids:
@@ -59,6 +97,13 @@ class World:
         boid.tile = tile
 
     def remove_boid(self, boid):
+        """
+        Parameters
+        ----------
+
+        boid
+
+        """
         self._boids[boid.tile].remove(boid)
 
     def update_boid(self, boid):
@@ -92,16 +137,28 @@ class World:
                         the_obstacles[tile] = [(line_start, line_end)]
 
     def zones(self, boid):
+        """
+        Parameters
+        ----------
+
+        boid 
+
+        """
         tile = (int(boid.position.x / tile_size), int(
             boid.position.y / tile_size))
         return self._zones.get(tile, [])
 
     def add_zone(self, zone):
+        """
+        Parameters 
+        ----------
+
+        zone 
+
+        """
         the_zones = self._zones
-        start_tile_x, start_tile_y = int(zone.lower_left.x /
-                                         tile_size), int(zone.lower_left.y / tile_size)
-        end_tile_x, end_tile_y = int(zone.upper_right.x /
-                                     tile_size), int(zone.upper_right.y / tile_size)
+        start_tile_x, start_tile_y = int(zone.lower_left.x/ tile_size), int(zone.lower_left.y / tile_size)
+        end_tile_x, end_tile_y = int(zone.upper_right.x / tile_size), int(zone.upper_right.y / tile_size)
         for xx in range(start_tile_x, end_tile_x + 1):
             for yy in range(start_tile_y, end_tile_y + 1):
                 tile = (xx, yy)

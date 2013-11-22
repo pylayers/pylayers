@@ -6,11 +6,12 @@ import scipy as sp
 from numpy.testing import ( TestCase, assert_almost_equal, assert_raises, assert_equal, assert_, run_module_suite)
 
 class Tesonb(TestCase):
-    def test_onbfrmaxe(self):
-        print "testing geomutil.onbfrmaxe"
+    def test_onb(self):
+        print "testing geomutil.onb"
         A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])
         B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])
-        T = onbfromaxe(A,B)
+        v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])
+        T = onb(A,B,v)
         print np.shape(T)
         print T[:,0,:]
         print T[:,1,:]
