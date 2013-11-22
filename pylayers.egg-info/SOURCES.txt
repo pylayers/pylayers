@@ -15,6 +15,7 @@ pylayers/antprop/channelc.py
 pylayers/antprop/coverage.py
 pylayers/antprop/interactions.py
 pylayers/antprop/multiwall.py
+pylayers/antprop/poo.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature.py
@@ -86,6 +87,7 @@ pylayers/signal/bsignal.py
 pylayers/signal/waveform.py
 pylayers/simul/__init__.py
 pylayers/simul/exploit.py
+pylayers/simul/exploit_simulnet.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
