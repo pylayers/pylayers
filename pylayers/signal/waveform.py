@@ -27,7 +27,7 @@ class Waveform(dict):
     Methods
     -------
 
-    eval 
+    eval
     show2
     ip_generic
     fromfile

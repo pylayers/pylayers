@@ -2087,7 +2087,7 @@ class Layout(object):
         Parameters
         ----------
 
-        lnc :  cycle number
+        lnc :  list of cycle number
 
         """
 
@@ -2097,21 +2097,27 @@ class Layout(object):
         if (type(lnc) == int):
             lnc = [lnc]
 
+        # for all cycles
         for nc in lnc:
-            #vnodes = np.array(self.Gt.node[nc]['vnodes'])
+            # get nodes of the cycles
             vnodes = np.array(self.Gt.node[nc]['cycle'].cycle)
+            # get neighbors cycles
             neigh = self.Gt.neighbors(nc)
+            # array of nodes of neighbors
             tvn = np.array([])
-
+            # for all neihbor cycles
             for ncy in neigh:
                 #vn = np.array(self.Gt.node[ncy]['vnodes'])
+                # get nodes of neighbor cycle
                 vn = np.array(self.Gt.node[ncy]['cycle'].cycle)
+                # append nodes in tvn
                 try:
                     tvn = np.hstack((tvn, vn))
                 except:
                     tvn = vn
-
+            # remove multiple values        
             utvn = np.unique(tvn)
+            # destroy nodes which are not involved with neighbors
             udel = vnodes[~np.in1d(vnodes, utvn)]
 
             # delete cycle
