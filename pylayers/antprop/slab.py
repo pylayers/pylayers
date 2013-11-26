@@ -77,18 +77,20 @@ class Interface(object):
 
         self.name = name
 
-    def RT(self, metalic=False,RT='RT'):
+    def RT(self, metalic=False, RT='RT'):
         """ evaluate Reflection and Transmission matrix
 
-            .. math::
+        .. math::
 
             R = \\matrix(R_o & 0\\\\0 & R_p)
             T = \\matrix(T_o & 0\\\\0 & T_p)
 
         Notes
         -----
+
         R : np.array   (f , th , 2, 2)
         T : np.array   (f , th , 2, 2)
+
         """
         sh = np.shape(self.Io)
         nf = sh[0]
@@ -97,6 +99,7 @@ class Interface(object):
         #
         # R and T matrices are diagonal
         #
+
         if 'R' in RT:
             self.R = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
         if 'T' in RT:
@@ -424,7 +427,6 @@ class Interface(object):
             args['ncol'] = 1
             args['nlin'] = 2
         if nplot==4:
-            print "test"
             args['ncol'] = 2
             args['nlin'] = 2
 
