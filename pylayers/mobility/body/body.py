@@ -80,6 +80,7 @@ class Body(object):
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
         di = self.load(_filebody)
         self.loadC3D(filename=_filemocap)
+        self.centered = False
         self.center()
 
     def __repr__(self):
@@ -187,17 +188,19 @@ class Body(object):
         """
         # self.d  : 3 x 16 x Nf
         # self.pg : 3 x Nf
-        self.pg = np.sum(self.d,axis=1)/self.npoints
-        self.pg[2,:] = 0
-        self.d = self.d - self.pg[:,np.newaxis,:]
-        # speed vector of the gravity centernp. 
-        self.vg = self.pg[:,1:]-self.pg[:,0:-1] 
-        # duplicate last spped vector for size homogeneity  
-        self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
-        # length of trajectory
-        d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
-        self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
-        self.vmocap = self.smocap[-1]/self.Tmocap
+        if not self.centered:
+            self.pg = np.sum(self.d,axis=1)/self.npoints
+            self.pg[2,:] = 0
+            self.d = self.d - self.pg[:,np.newaxis,:]
+            # speed vector of the gravity centernp. 
+            self.vg = self.pg[:,1:]-self.pg[:,0:-1] 
+            # duplicate last spped vector for size homogeneity  
+            self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
+            # length of trajectory
+            d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
+            self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
+            self.vmocap = self.smocap[-1]/self.Tmocap
+            self.centered = True
 
     def posvel(self,traj,tk):
         """ position and velocity
@@ -675,6 +678,7 @@ class Body(object):
                     'laccs': [],
                     'struc':False,
                     'pattern':False,
+                    'velocity':False,
                     'filestruc':'DLR.off'
 
                   }
@@ -772,7 +776,8 @@ class Body(object):
                 geoa = geu.GeomVect(fileaccs)
                 geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
                 bodylist.append('{<'+fileaccs+'.vect'+"}\n")
-                # display antenna pattern 
+
+        # display antenna pattern 
         if kwargs['pattern']:
             for key in self.accs.keys():
             #A =  antenna(self.ant[key]['file'])
@@ -797,6 +802,14 @@ class Body(object):
             bodylist.append('{<'+_filebody+'.vect}\n')
 
 
+        if kwargs['velocity']:
+            _filevelo = kwargs['tag']+'velo'
+            velo = geu.GeomVect(_filevelo,clear=True)
+            pta = self.pg 
+            phe = self.pg+self.vtopos
+            ds = {0:(pta,phe)}
+            velo.segments(ds,i2d=True,linewidth=3)
+            bodylist.append('{<'+_filevelo+'.vect}\n')
 
         return(bodylist)    
 
