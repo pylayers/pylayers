@@ -8,7 +8,34 @@ import pandas as pd
 
 
 class Trajectory(pd.DataFrame):
-    def __init__(self,t=np.arange(0,10,0.01),pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000))).T,unit='s'):
+    """  Define a trajectory
+
+    This class derives from pandas.DataFrame
+
+    Attributes
+    ----------
+
+    tmin : float
+    tmax : float
+    tttimr :
+    dtot : 
+    meansp :
+
+    Methods
+    -------
+    
+    time 
+    space
+    rescale
+    plot 
+
+
+    """
+    def __init__(self,t=[],pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000))).T,unit='s'):
+        """ initialization 
+        """
+        if t ==[]:
+            t = np.arange(0,1,0.01)
         td = pd.to_datetime(t,unit=unit)
         #v = np.vstack((pt[1:,:]-pt[0:-1,:],np.array([np.nan,np.nan])))
         #a = np.vstack((v[1:,:]-v[0:-1,:],np.array([np.nan,np.nan])))
@@ -72,11 +99,20 @@ class Trajectory(pd.DataFrame):
 
         
 
-    def space(self,unit=0,ndim=2):
-        """
+    def space(self,ndim=2):
+        """ extract space information 
+
         Parameters
         ----------
 
+        ndim : int 
+            number of dimensions (default 2)
+
+        Returns
+        -------
+
+        pt : nd.array()
+        
         """
         if ndim==2:                     
             pt = np.vstack((self['x'].values,self['y'].values)).T
@@ -85,13 +121,20 @@ class Trajectory(pd.DataFrame):
         return(pt)                  
 
     def time(self,unit=0):
-        """ convert time 
+        """ extract time 
 
         Parameters 
         ----------
 
         unit : integer 
             default 0 (s) - 3 (ms) 6 (mus) 9 (ns)
+
+        Returns
+        -------
+
+        t : nd.array
+           time in 10**-unit  s
+
         """
         lt = self['t']
         t  = np.array(map(lambda x : x.value,lt))
@@ -108,6 +151,20 @@ class Trajectory(pd.DataFrame):
         fig 
         ax 
         Nlabels : int 
+        
+        Examples
+        --------
+        
+        .. plot::
+            :include-source:
+
+            >>> t = np.arange(0,10,0.01)
+            >>> x = 2*t*np.cos(t)
+            >>> y = 3*t*np.sin(t) 
+            >>> pt =np.vstack((x,y)).T
+            >>> traj = Trajectory(t,pt)
+            >>> traj.plot()
+            >>> plt.show()
 
         """
 

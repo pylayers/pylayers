@@ -4,6 +4,7 @@ import ConfigParser
 from pylayers.mobility.body import c3d
 import pylayers.mobility.trajectory as tr
 import matplotlib.pyplot as plt
+import pylayers.antprop.antenna as ant
 from mpl_toolkits.mplot3d import Axes3D
 import networkx as nx
 import pdb as pdb
@@ -167,12 +168,19 @@ class Body(object):
         -------
 
         self.pg : center of gravity 
+        self.vg : velocity 
         self.d  : set of centered frames
-
+        self.smocap : integrated distance 
+        self.vmocap : averaged velocity 
 
         Notes
         -----
 
+        The center method creates a centered version of the motion capture data stored in 
+        self.d
+        It also calculates :
+        self.smocap : total distance along trajectory
+        self.vmocap : averaged speed along trajectory 
         Here only the projection of the body centroid in the
         plane 0xy is calculated
 
@@ -227,15 +235,16 @@ class Body(object):
 
         # vs  : speed vector along motion capture frame
         # vsn : unitary speed vector along motion capture frame
+
         vs = self.pg[0:-1,kf] - self.pg[0:-1,kf-1]
         vsn = vs/np.sqrt(np.dot(vs,vs))
         wsn = np.array([vsn[1],-vsn[0]])
+
         #
         # vt : speed vector along trajectory 
         #
         #vt = traj[kt+1,1:] - traj[kt,1:]
-        if kt==998:
-            pdb.set_trace()
+
         vt  = np.array([traj['vx'][kt],traj['vy'][kt]])
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
@@ -253,6 +262,12 @@ class Body(object):
         tk : float 
             time for evaluation of topos (seconds) this value should be in the
             range of the trajectory timestamp
+
+        Returns
+        -------
+
+        self.topos
+        self.vtopos
 
         Examples
         --------
@@ -314,6 +329,7 @@ class Body(object):
 
         self.toposFrameId = kf 
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
+
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
         
     
@@ -325,28 +341,36 @@ class Body(object):
         the body. 
 
         If N is the number of antenna an accs  is an MDA of size 3x4xN
+
+        Returns
+        -------
+
+            self.accs : dictionnary 
         
-        >>> import numpy as np 
-        >>> import pylayers.mobility.trajectory as tr  
-        >>> import matplotlib.pyplot as plt
-        >>> time = np.arange(0,10,0.1)
-        >>> v = 4000/3600.
-        >>> x = v*time
-        >>> y = np.zeros(len(time))
-        >>> traj = tr.Trajectory()
-        >>> bc = Body()
-        >>> bc.settopos(traj,2.3,2)
-        >>> bc.setccs(topos=True)
-        >>> bc.setaccs()
-        >>> nx.draw(bc.g,bc.g.pos)
-        >>> axe = plt.axis('scaled')
-        >>> plt.show()
+        Examples
+        --------
+        
+            >>> import numpy as np 
+            >>> import pylayers.mobility.trajectory as tr  
+            >>> import matplotlib.pyplot as plt
+            >>> time = np.arange(0,10,0.1)
+            >>> v = 4000/3600.
+            >>> x = v*time
+            >>> y = np.zeros(len(time))
+            >>> traj = tr.Trajectory()
+            >>> bc = Body()
+            >>> bc.settopos(traj,2.3,2)
+            >>> bc.setccs(topos=True)
+            >>> bc.setaccs()
+            >>> nx.draw(bc.g,bc.g.pos)
+            >>> axe = plt.axis('scaled')
+            >>> plt.show()
 
         """
         self.accs = {}
         for ant in self.ant.keys():
 
-            # getting antenna placement information 
+            # retrieving antenna placement information from dictionnary ant
 
             Id = self.ant[ant]['cyl']
             alpha = self.ant[ant]['a']*np.pi/180.
@@ -636,6 +660,9 @@ class Body(object):
 
 
         """
+        # temporary code 
+        Ant = ant.Antenna('defant.vsh3')
+        Ant.Fsynth3()
 
         defaults = { 'iframe': 0,
                     'verbose':False,
@@ -668,7 +695,7 @@ class Body(object):
             # load reference cylinder
             #cyl = geu.Geomoff('cylinder')
             cyl = geu.Geomoff('cylinder')
-            pt = cyl.loadpt()
+            ptc = cyl.loadpt()
 
         if not kwargs['topos']:
             _filebody = str(iframe).zfill(4)+'body'
@@ -715,7 +742,8 @@ class Body(object):
                 # idem geu.affine for a specific cylinder
                 #A,B = geu.cylmap(Y,r=2,l=6)
                 A,B = geu.cylmap(Y)
-                ptn = np.dot(A,pt.T)+B
+                ptn = np.dot(A,ptc.T)+B
+
                 if not kwargs['topos']:
                     _filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
                 else:
@@ -744,9 +772,19 @@ class Body(object):
                 geoa = geu.GeomVect(fileaccs)
                 geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
                 bodylist.append('{<'+fileaccs+'.vect'+"}\n")
-                if kwargs['pattern']:
-                    A =  antenna(self.ant['filename'])
-                    A.show3_geom(pt=U[:,0],T=U[:,1:])
+                # display antenna pattern 
+        if kwargs['pattern']:
+            for key in self.accs.keys():
+            #A =  antenna(self.ant[key]['file'])
+                U = self.accs[key]
+                _filepatt = kwargs['tag']+'patt-'+key
+                geo = geu.Geomoff(_filepatt)
+                k = 0 # frequency index
+                V = Ant.SqG[k,:,:]
+                T = U[:,1:]
+                #T = np.eye(3)
+                geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
+                bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
         # wireframe body             
         if kwargs['wire']:
@@ -772,7 +810,7 @@ class Body(object):
         frameId : int 
             frame id in the mocap dataframe (default 0) 
         topos : boolean     
-            default True
+            default False
 
         Returns
         -------
@@ -782,8 +820,13 @@ class Body(object):
         Notes
         -----
 
-        There are as many frame as cylinders (body graph edges) 
+        There are as many frames as cylinders (body graph edges) 
 
+        ccs is a MDA (nc x 3 x 3 ) where nc denotes the number of cylinders
+        For each cylinder there is an attached coordinate systems
+
+        1st vector 
+        2nd
         """
 
         nc = len(self.g.edges())
@@ -793,18 +836,30 @@ class Body(object):
         self.ccs = np.ndarray(shape=(nc,3,3))
 
         for k,e in enumerate(self.g.edges()):
+            # e0 : tail node of cylinder segment 
             e0 = e[0]
+            # e1 : head node of cylinder segment 
             e1 = e[1]
             if not topos:
+                # pA : tail point 
                 pA = self.d[:,e0,frameId].reshape(3,1)
+                # pB : head point 
                 pB = self.d[:,e1,frameId].reshape(3,1)
                 vg = self.vg[:,frameId][:,np.newaxis]
             else:    
+                # pA : tail point 
                 pA = self.topos[:,e0].reshape(3,1)
+                # pB : head point 
                 pB = self.topos[:,e1].reshape(3,1)
+                # vtopos : mean topos velociy 
                 vg = self.vtopos
             pM = (pA+pB)/2.
+            # create an orthonormal basis 
+            # 1 st vector : vg normalized (blue)
+            # 2 nd vector : 3 x 1 
+            # 3 rd vector : PA-PB normalized
             T = geu.onb(pA,pB,vg)
+
             self.ccs[k,:,:] = T 
 
     def cylinder_basis_k(self, frameId):
@@ -987,7 +1042,7 @@ if __name__ == '__main__':
     #bd.show3(wire=True,accs=True,topos=True)
     #bd.show3(wire=False,accs=True,topos=True)
     lt = tr.importsn()
-    #bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
+    bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
 
 #    nframes = 126
 #    Bc = Body()

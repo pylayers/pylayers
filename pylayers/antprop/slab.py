@@ -77,18 +77,20 @@ class Interface(object):
 
         self.name = name
 
-    def RT(self, metalic=False,RT='RT'):
+    def RT(self, metalic=False, RT='RT'):
         """ evaluate Reflection and Transmission matrix
 
-            .. math::
+        .. math::
 
             R = \\matrix(R_o & 0\\\\0 & R_p)
             T = \\matrix(T_o & 0\\\\0 & T_p)
 
         Notes
         -----
+
         R : np.array   (f , th , 2, 2)
         T : np.array   (f , th , 2, 2)
+
         """
         sh = np.shape(self.Io)
         nf = sh[0]
@@ -97,6 +99,7 @@ class Interface(object):
         #
         # R and T matrices are diagonal
         #
+
         if 'R' in RT:
             self.R = np.array(np.zeros([nf, nt, 2, 2]), dtype=complex)
         if 'T' in RT:
@@ -424,7 +427,6 @@ class Interface(object):
             args['ncol'] = 1
             args['nlin'] = 2
         if nplot==4:
-            print "test"
             args['ncol'] = 2
             args['nlin'] = 2
 
@@ -789,6 +791,7 @@ class MatDB(dict):
 
         Parameters
         ----------
+
         name : string
             material name
         cval : float or complex
@@ -797,15 +800,21 @@ class MatDB(dict):
             permeability
         mur  : float
         typ  : string
-            {'epsr'|'ind'|'THz'}
+            {'epsr'|'ind'|,'reim',|'THz'}
 
         Notes
         -----
 
-        There are two manners to enter a material
+        Different ways to enter a material are :
 
-        i)  epsr and sigma
-        ii) indice @ fGHz
+        i)  epsr : epsr and sigma
+            cval = epsr 
+            sigma = sigma 
+        ii) ind : indice @ fGHz
+            cval = indice
+        iii) reim :  real(epsr) and imag(epsr)  @fGHz
+        iv) THZ
+
 
 
         Examples
@@ -828,6 +837,13 @@ class MatDB(dict):
         if typ == 'epsr':
             M['epr'] = cval
             M['sigma'] = sigma
+
+        if typ == 'reim':
+            M['epsr'] = cval
+            M['n'] = np.sqrt(mur*M['epsr']) # warning  check causality
+            M['epr'] = np.real(M['epsr'])
+            M['epr2'] = np.imag(M['epsr'])
+            M['sigma'] = -M['epr2'] * M['fGHz'] / 18
 
         if typ == 'ind':
             M['n'] = cval
@@ -1135,10 +1151,10 @@ class Slab(dict, Interface):
             st = st + '| '
         else:
             st = '| '
-        for k in range(len(self['lmatname'])):
-            st = st + self['lmatname'][k]+' | '
+        for k in range(len(self['lname'])):
+            st = st + self['lname'][k]+' | '
         st = st+'\n|'    
-        for k in range(len(self['lmatname'])):
+        for k in range(len(self['lname'])):
             ntick = int(np.ceil(self['lthick'][k]/0.01))
             for l in range(ntick):
                 st = st+'-'
@@ -1171,21 +1187,19 @@ class Slab(dict, Interface):
         """
         print "------------"
         print "name : ", self
-        print "nbmat : ", len(self['lmatname'])
+        print "nbmat : ", len(self['lname'])
         chaine = "[ "
-        for i in range(len(self['lmatname'])):
-            index_mat = self['imat'][i]
-            name_mat = self['mat'][index_mat]
-            self.mat[name_mat].info()
+        for name in self['lname']:
+            self.mat[name].info()
             if self['evaluated']:
-                epsrc = self.mat[name_mat].epsc(self.fGHz[0])
+                epsrc = self.mat[name].epsc(self.fGHz[0])
                 print "epsrc : ", epsrc
-            chaine = chaine + name_mat + '   '
+            chaine = chaine + name + '   '
             chaine = chaine + ']'
             print chaine
             print "index : ", self['index']
             print "imat   : ", self['imat']
-            print "thickness (m) : ", self['thickness']
+            print "thickness (cm) : ", self['thickness']
             print "color : ", self['color']
             print "linewidth :", self['linewidth']
             if self['evaluated']:
@@ -1891,14 +1905,14 @@ class SlabDB(dict):
             self.di[eval(d)]=di[d]
         for slabname in self.di.values():
             S=Slab(name=slabname,mat=self.mat)
-            S['lmatname']=eval(config.get(slabname,'lmatname'))
-            S['nbmat']=len(S['lmatname'])
+            S['lname']=eval(config.get(slabname,'lname'))
+            S['nbmat']=len(S['lname'])
             S['color']=config.get(slabname,'color')
             S['index']=eval(config.get(slabname,'index'))
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
             imat=[0,0,0,0,0,0,0,0]
-            for i,m in enumerate(S['lmatname']):
+            for i,m in enumerate(S['lname']):
                 imat[i]=S.mat[m]['index']
             S['imat']=tuple(imat)
 
@@ -2036,7 +2050,7 @@ class SlabDB(dict):
                     if lmat ==[]:
                         lmat=['ABSORBENT']
                         break
-            config.set(name, 'lmatname', lmat)
+            config.set(name, 'lname', lmat)
 
         config.write(fd)
         fd.close()

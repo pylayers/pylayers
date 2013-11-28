@@ -16,6 +16,10 @@ pylayers/antprop/channelc.py
 pylayers/antprop/coverage.py
 pylayers/antprop/interactions.py
 pylayers/antprop/multiwall.py
+<<<<<<< HEAD
+=======
+pylayers/antprop/poo.py
+>>>>>>> 4d8cda3d9bffc47d6acfa33b3a36ac11ca8b8227
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature.py
