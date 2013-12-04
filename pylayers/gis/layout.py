@@ -4860,6 +4860,7 @@ class Layout(object):
                     'edgelist': [],
                     'figsize': (5,5),
                     'mode':'cycle',
+                    'alphacy':0.8
                     }
 
         for key, value in defaults.items():
@@ -4963,7 +4964,7 @@ class Layout(object):
 
         if kwargs['mode']=='cycle':
             for k, ncy in enumerate(self.Gt.node.keys()):
-                fig,ax = self.Gt.node[ncy]['polyg'].plot(**args)
+                fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],**args)
                 args['fig']=fig
                 args['ax']=ax
         else:

@@ -202,7 +202,7 @@ class Coverage(object):
 
 
     
-    def showEd(self,polar='o'):
+    def showEd(self,polar='o',**kwargs):
         """ shows a map of direct path excess delay 
 
         Examples
@@ -217,23 +217,51 @@ class Coverage(object):
             >>> C.showEd(polar='o')
         """
 
-        fig = plt.figure()
-        fig,ax = self.L.showGs(fig=fig)
+        fig,ax = self.L.showG('s',**kwargs)
         l = self.grid[0,0]
         r = self.grid[-1,0]
         b = self.grid[0,1]
         t = self.grid[-1,-1]
 
+        cdict = {
+        'red'  :  ((0., 0.5, 0.5), (1., 1., 1.)),
+        'green':  ((0., 0.5, 0.5), (1., 1., 1.)),
+        'blue' :  ((0., 0.5, 0.5), (1., 1., 1.))
+        }
+        #generate the colormap with 1024 interpolated values
+        my_cmap = m.colors.LinearSegmentedColormap('my_colormap', cdict, 1024)
+
         if polar=='o':
-            cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,
-                      extent=(l,r,b,t),
-                      origin='lower')
+            prdbm=self.prdbmo
+        if polar=='p':
+            prdbm=self.prdbmp
+
+
+
+        if polar=='o':
+            mcEdof = np.ma.masked_where(prdbm < self.rxsens,self.Edo)
+            
+            cov=ax.imshow(mcEdof.reshape((self.nx,self.ny)).T,
+                             extent=(l,r,b,t),cmap = 'jet',
+                             origin='lower')
+
+
+
+            # cov=ax.imshow(self.Edo.reshape((self.nx,self.ny)).T,
+            #           extent=(l,r,b,t),
+            #           origin='lower')
             titre = "Map of LOS excess delay, polar orthogonal"
 
         if polar=='p':
-            cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,
-                      extent=(l,r,b,t),
-                      origin='lower')
+            mcEdpf = np.ma.masked_where(prdbm < self.rxsens,self.Edp)
+            
+            cov=ax.imshow(mcEdpf.reshape((self.nx,self.ny)).T,
+                             extent=(l,r,b,t),cmap = my_cmap,
+                             origin='lower')
+
+            # cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,
+            #           extent=(l,r,b,t),
+            #           origin='lower')
             titre = "Map of LOS excess delay, polar parallel"
 
         ax.scatter(self.tx[0],self.tx[1],linewidth=0)
@@ -248,7 +276,7 @@ class Coverage(object):
             plt.show()
         return fig,ax
 
-    def showPower(self,rxsens=True,nfl=True,polar='o'):
+    def showPower(self,rxsens=True,nfl=True,polar='o',**kwargs):
         """ show the map of received power
 
         Parameters
@@ -274,8 +302,7 @@ class Coverage(object):
 
         """
 
-        fig = plt.figure()
-        fig,ax = self.L.showGs(fig=fig)
+        fig,ax = self.L.showG('s',**kwargs)
 
         l = self.grid[0,0]
         r = self.grid[-1,0]
@@ -303,12 +330,13 @@ class Coverage(object):
         my_cmap = m.colors.LinearSegmentedColormap('my_colormap', cdict, 1024)
 
 
-
         if rxsens :
 
-            ### values between the rx sensitivity and noise floor
+            ## values between the rx sensitivity and noise floor
             mcPrf = np.ma.masked_where((prdbm > self.rxsens) 
                                      & (prdbm < self.pndbm),prdbm)
+            # mcPrf = np.ma.masked_where((prdbm > self.rxsens) ,prdbm)
+            
             cov1 = ax.imshow(mcPrf.reshape((self.nx,self.ny)).T,
                              extent=(l,r,b,t),cmap = my_cmap,
                              vmin=self.rxsens,origin='lower')
@@ -384,7 +412,6 @@ class Coverage(object):
         PrU = PndBm + gammaU
         PrL = PndBm + gammaL
 
-        fig = plt.figure()
         fig,ax = self.L.showGs(fig=fig)
 
         l = self.grid[0,0]

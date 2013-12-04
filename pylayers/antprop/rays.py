@@ -424,11 +424,13 @@ class Rays(dict):
                     # Antérieurement il y avait une hypothèse de succesion
                     # immediate d'un point 2D renseigné.
                     #
-                    iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
-                    iintp_f = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_f,iray_f))
-                    iintm_c = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_c,iray_c))
-                    iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_c,iray_c))
-                    
+                    try:
+                        iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
+                        iintp_f = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_f,iray_f))
+                        iintm_c = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_c,iray_c))
+                        iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_c,iray_c))
+                    except:
+                        pdb.set_trace()
                    
                     # Update coordinate in the horizontal plane 
                     #
