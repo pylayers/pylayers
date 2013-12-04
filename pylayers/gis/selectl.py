@@ -449,6 +449,7 @@ class SelectL(object):
             index = self.L.display['layerset'].index(self.L.display['activelayer'])
             self.L.display['activelayer'] = self.L.display['layerset'][(index+1) % N]
             self.current_layer = self.L.display['activelayer']
+            print self.current_layer
             self.update_state()
             return
 
@@ -712,6 +713,11 @@ class SelectL(object):
                     self.state = 'SP2'
                     self.update_state()
                     return
+                else:
+                    self.state = 'Init'
+                    # yellow point 
+                    self.update_state()
+                    return
         #
         # Create point on selected segment orthogonaly to segment starting in
         # selected point
@@ -830,10 +836,19 @@ class SelectL(object):
                     self.update_state()
 
                 return
+
             if self.state == 'SP2':
+
                 ta = self.selected_pt1
                 he = self.selected_pt2
-                self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
+
+                segexist = self.L.isseg(ta,he)
+                print segexist
+                # if segment do not already exist, create it
+                if not segexist: 
+                    self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
+                else:
+                    print "segment ("+str(ta)+","+str(he)+") already exists"
                 self.state = 'Init'
                 self.update_state()
                 return
