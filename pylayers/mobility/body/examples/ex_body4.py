@@ -10,7 +10,7 @@ time = np.arange(0,10,0.01)
 x = v*time
 y = np.zeros(len(time))
 #
-traj = Trajectory(time,np.vstack((x,y)).T)
+traj = Trajectory(time,np.vstack((x,y,y)).T)
 #
 bc.settopos(traj=traj,tk=7)
 bc.setccs(topos=True)

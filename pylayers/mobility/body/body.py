@@ -490,7 +490,7 @@ class Body(object):
         #self.nodes_Id[15]='bottom'
 
     def movie(self,**kwargs):
-        """ Create a geomview movie
+        """ creates a geomview movie
 
         Parameters
         ----------
@@ -519,6 +519,7 @@ class Body(object):
                     'ccs': False,
                     'accs': False,
                     'struc':True,
+                    'pattern':False,
                     'traj':[],
                     'filestruc':'DLR.off'
                    }
@@ -786,7 +787,12 @@ class Body(object):
                 geo = geu.Geomoff(_filepatt)
                 k = 0 # frequency index
                 V = Ant.SqG[k,:,:]
-                T = U[:,1:]
+                #T = U[:,1:]
+                Rab = self.ant[key]['T']
+                #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
+                Rbg = U[:,1:]
+                # combine rotation antenna -> body -> global
+                T = np.dot(Rbg,Rab) 
                 #T = np.eye(3)
                 geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
@@ -1055,7 +1061,7 @@ if __name__ == '__main__':
     #bd.show3(wire=True,accs=True,topos=True)
     #bd.show3(wire=False,accs=True,topos=True)
     lt = tr.importsn()
-    bd.movie(traj=lt[0],wire=False,accs=True,filestruc='TA-Office.off')
+    bd.movie(traj=lt[0],wire=True,accs=True,pattern=True,filestruc='TA-Office.off')
 
 #    nframes = 126
 #    Bc = Body()
