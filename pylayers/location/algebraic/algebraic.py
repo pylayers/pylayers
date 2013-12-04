@@ -78,7 +78,7 @@ class algloc(object):
 
     def __repr__(self):
         st =''
-        st = st + 'Nodes : ' + str(sekl.nodes)+'\n'
+        st = st + 'Nodes : ' + str(self.nodes)+'\n'
         st = st + 'LDPs :' + str(self.ldp)+'\n'
         return(st)
 
