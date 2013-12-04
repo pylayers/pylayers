@@ -1,0 +1,2 @@
+/usr/local/lib/python2.7/dist-packages/scipy-0.11.0-py2.7-linux-i686.egg/scipy/io/matlab/mio.py:266: FutureWarning: Using oned_as default value ('column') This will change to 'row' in future versions
+  oned_as=oned_as)

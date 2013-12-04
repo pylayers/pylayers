@@ -128,6 +128,7 @@ class SelectL(object):
         self.nsel = 0
         self.ptsel = np.array([])
         self.evt = event.key
+        
         if verbose:
             try:
                 print "Evenement :", self.evt,self.ddoc[self.evt]
@@ -137,7 +138,7 @@ class SelectL(object):
 
     def OnClick(self, event):
         """
-        OnClick(event)
+            OnClick(event)
         """
         fig = plt.gcf()
         ax  = plt.gca()
@@ -408,7 +409,11 @@ class SelectL(object):
             self.update_state()
             return
 
-        #
+        if self.evt == '3':
+            self.L.show3()
+            return
+
+        
         # Choose layers to visualized
         #
         if self.evt == 'l':
@@ -658,7 +663,9 @@ class SelectL(object):
             racine, ext = os.path.splitext(self.L.filename)
             filename = racine + '.str2'
             fileini = racine + '.ini'
-            self.L.savestr2(filename)
+            # Commented because ss_ce not updated 
+            #self.L.savestr2(filename)
+
             self.L.saveini(fileini)
             print "structure saved in ", filename
             print "structure saved in ", fileini
