@@ -17,7 +17,7 @@ pylayers/antprop/coverage.py
 pylayers/antprop/interactions.py
 pylayers/antprop/metasignature.py
 pylayers/antprop/multiwall.py
-pylayers/antprop/p1.py
+pylayers/antprop/poo.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature-save.py

@@ -8,22 +8,50 @@ import pandas as pd
 
 
 class Trajectory(pd.DataFrame):
-    def __init__(self,t=np.arange(0,10,0.01),pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000))).T,unit='s'):
+    """  Define a trajectory
+
+    This class derives from pandas.DataFrame
+
+    Attributes
+    ----------
+
+    tmin : float
+    tmax : float
+    tttimr :
+    dtot : 
+    meansp :
+
+    Methods
+    -------
+    
+    time 
+    space
+    rescale
+    plot 
+
+
+    """
+    def __init__(self,t=[],pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000),np.zeros(1000))).T,unit='s'):
+        """ initialization 
+        """
+        npt = np.shape(pt)[0]
+        if t ==[]:
+            t = np.linspace(0,10,npt)
         td = pd.to_datetime(t,unit=unit)
-        #v = np.vstack((pt[1:,:]-pt[0:-1,:],np.array([np.nan,np.nan])))
-        #a = np.vstack((v[1:,:]-v[0:-1,:],np.array([np.nan,np.nan])))
         v = pt[1:,:]-pt[0:-1,:]
         a = v[1:,:]-v[0:-1,:]
         d = np.sqrt(np.sum(v*v,axis=1))
         s = np.cumsum(d)
-        #vy = self['y'][1:].values-self['y'][0:-1].values
         pd.DataFrame.__init__(self,{'t':td[:-2],
                                     'x':pt[:-2,0],
                                     'y':pt[:-2,1],
+                                    #'z':pt[:-2,2],
                                     'vx':v[:-1,0],
                                     'vy':v[:-1,1],
+                                    #'vz':v[:-1,2],
                                     'ax':a[:,0],
                                     'ay':a[:,1],
+                                    #'az':a[:,2],
                                     's' :s[:-1]},columns=['t','x','y','vx','vy','ax','ay','s'])
 
         N = len(t) 
@@ -35,8 +63,8 @@ class Trajectory(pd.DataFrame):
         self.dtot = self['s'].values[-1]
         self.meansp = self.dtot/self.ttime
 
-        if np.shape(pt)[1]>2:
-            self['z'] = pt[:,2]
+        #if np.shape(pt)[1]>2:
+        #    self['z'] = pt[:,2]
 
     def __repr__(self):
 
@@ -72,11 +100,20 @@ class Trajectory(pd.DataFrame):
 
         
 
-    def space(self,unit=0,ndim=2):
-        """
+    def space(self,ndim=2):
+        """ extract space information 
+
         Parameters
         ----------
 
+        ndim : int 
+            number of dimensions (default 2)
+
+        Returns
+        -------
+
+        pt : nd.array()
+        
         """
         if ndim==2:                     
             pt = np.vstack((self['x'].values,self['y'].values)).T
@@ -85,13 +122,20 @@ class Trajectory(pd.DataFrame):
         return(pt)                  
 
     def time(self,unit=0):
-        """ convert time 
+        """ extract time 
 
         Parameters 
         ----------
 
         unit : integer 
             default 0 (s) - 3 (ms) 6 (mus) 9 (ns)
+
+        Returns
+        -------
+
+        t : nd.array
+           time in 10**-unit  s
+
         """
         lt = self['t']
         t  = np.array(map(lambda x : x.value,lt))
@@ -108,6 +152,20 @@ class Trajectory(pd.DataFrame):
         fig 
         ax 
         Nlabels : int 
+        
+        Examples
+        --------
+        
+        .. plot::
+            :include-source:
+
+            >>> t = np.arange(0,10,0.01)
+            >>> x = 2*t*np.cos(t)
+            >>> y = 3*t*np.sin(t) 
+            >>> pt =np.vstack((x,y)).T
+            >>> traj = Trajectory(t,pt)
+            >>> traj.plot()
+            >>> plt.show()
 
         """
 
@@ -158,9 +216,10 @@ if __name__ == '__main__':
     t = np.arange(0,10,0.01)
     x = 2*t*np.cos(t)
     y = 3*t*np.sin(t) 
-    pt =np.vstack((x,y)).T
+    z = np.zeros((1,len(x)))
+    pt =np.vstack((x,y,z)).T
 
-    traj = Trajectory(t,pt)
+    traj = Trajectory(pt=pt)
     traj.plot()
     plt.show()
 

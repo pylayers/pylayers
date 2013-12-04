@@ -1,7 +1,10 @@
 from pylayers.antprop.antenna import *
 import matplotlib.pyplot as plt
 
-A1 = Antenna('trx','defant.trx',directory='ant',nf=121,ntheta=37,nphi=72)
+A = Antenna('defant.vsh3')
+# Create pattern 
+A.Fsynth3()
+A.show3()
 #A2 = Antenna('mat',)
 #A.vshd()
 #A.C.show(typ='s1')

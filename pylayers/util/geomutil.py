@@ -594,11 +594,11 @@ class Geomoff(Geomview):
         Parameters
         ----------
 
-        theta : np.array (1 x Ntheta)
-        phi   : np.array (1 x Nphi)
-        E     : np.array complex  (Ntheta,Nphi)
+        theta : np.array (Nt x 1 )
+        phi   : np.array (1 x Np)
+        E     : np.array complex  (Nt,Np)
         po    : origin (1x3)
-        R     : rotation matrix (3x3)
+        T     : rotation matrix (3x3)
         minr  : radius of minimum
         maxr  : radius of maximum
         ilog  : True (log) False (linear)
@@ -633,8 +633,10 @@ class Geomoff(Geomview):
         tag  = kwargs['tag']
         ilog = kwargs['ilog']
         po = kwargs['po']
+        # T is an unitary matrix 
         T  = kwargs['T']
-                    
+        assert (abs(la.det(T))>0.99)            
+        # retrieving dimensions             
         Nt = np.shape(theta)[0]
         Np = np.shape(phi)[1]
 
@@ -648,10 +650,26 @@ class Geomoff(Geomview):
 
         U = (R - R.min()) / (R.max() - R.min())
         Ry = minr + (maxr-minr) * U
-        x = Ry * np.sin(theta) * np.cos(phi) + po[0]
-        y = Ry * np.sin(theta) * np.sin(phi) + po[1]
-        z = Ry * np.cos(theta) + po[2]
+        # x (Nt,Np)
+        # y (Nt,Np)
+        # z (Nt,Np)
+        x = Ry * np.sin(theta) * np.cos(phi) 
+        y = Ry * np.sin(theta) * np.sin(phi) 
+        z = Ry * np.cos(theta) 
         
+        # p : Nt x Np x 3 
+        p = np.concatenate((x[...,np.newaxis],y[...,np.newaxis],z[...,np.newaxis]),axis=2)
+        #
+        # antenna cs -> glogal cs 
+        # q : Nt x Np x 3                    
+        q = np.einsum('ij,klj->kli',T,p)                   
+        #
+        # translation 
+        #
+        q[...,0]=q[...,0]+po[0]
+        q[...,1]=q[...,1]+po[1]
+        q[...,2]=q[...,2]+po[2]
+
         Npoints = Nt * Np
         Nfaces = (Nt - 1) * Np
         Nedge = 0
@@ -669,13 +687,13 @@ class Geomoff(Geomview):
         
         for ii in range(Nt):
             for jj in range(Np):
-                cpos = str(x[ii, jj]) + ' ' + str(y[ii, jj]) + ' ' + str(z[ii, jj])
+                cpos = str(q[ii, jj,0]) + ' ' + str(q[ii, jj,1]) + ' ' + str(q[ii, jj,2])
                 cpos = cpos.replace(',', '.')
                 ik = g[ii, jj]
                 ccol = str(cmap[ik, 0]) + ' ' + str(cmap[ik, 1]) + \
                     ' ' + str(cmap[ik, 2])
                 ccol = ccol.replace(',', '.')
-                fd.write(cpos + ' ' + ccol + ' 0.8\n')
+                fd.write(cpos + ' ' + ccol + ' 0.2\n')
 
         for ii in range(Nt - 1):
             for jj in range(Np):

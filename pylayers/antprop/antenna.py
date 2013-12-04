@@ -71,15 +71,16 @@ class Antenna(object):
     Methods
     -------
 
-    info()          : Display information about antenna
-    vsh()           : calculates Vector Spherical Harmonics
-    show3_geom()    : Geomview diagram
-    show3()         : 3D diagram plotting using matplotlib toolkit
-    Fsynth2         : Antenna F synthesis from coeff in s2
+    info  : Display information about antenna
+    vsh   : calculates Vector Spherical Harmonics
+    show3 : Geomview diagram
+    plot3d : 3D diagram plotting using matplotlib toolkit
+    Fsynth2 : Antenna F synthesis from coeff in s2
 
     Antenna trx file can be stored in various order
         natural : HFSS
         bcp     : near filed chamber
+
     It is important when initializing an antenna object to be aware of the typ of trx file
 
 
@@ -773,21 +774,21 @@ class Antenna(object):
         ax.legend()
         return(fig,ax)
 
-    def show3_geom(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
+    def show3(self, k=0,po=[],T=[],typ='Gain', mode='linear', silent=False):
         """ show3 geomview
 
         Parameters
         ----------
 
-            k : frequency index
-            po : poition of the antenna
-            T  : GCS of the antenna
-            typ : string
-                'Gain' | 'Ftheta' | 'Fphi'
-            mode : string
-                'linear'| 'not implemented'
-            silent : boolean 
-                True    | False
+        k : frequency index
+        po : poition of the antenna
+        T  : GCS of the antenna
+        typ : string
+            'Gain' | 'Ftheta' | 'Fphi'
+        mode : string
+            'linear'| 'not implemented'
+        silent : boolean 
+            True    | False
 
         Examples
         --------
@@ -796,7 +797,7 @@ class Antenna(object):
             >>> import numpy as np
             >>> import matplotlib.pylab as plt
             >>> A = Antenna('defant.vsh3')
-            >>> A.show3_geom()
+            >>> A.show3()
 
         """
 
@@ -815,6 +816,7 @@ class Antenna(object):
             T = np.eye(3)
         
         _filename = 'antbody' 
+
         geo = geu.Geomoff(_filename)
         geo.pattern(self.theta,self.phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
@@ -823,9 +825,8 @@ class Antenna(object):
         if not silent:
             geo.show3()
 
-    def show3(self, k=0, typ='Gain', col=True):
-        """
-        show3(self,k=0,typ='Gain',col=True)
+    def plot3d(self, k=0, typ='Gain', col=True):
+        """ show in matplotlib 
 
         k : frequency index
 
@@ -835,6 +836,7 @@ class Antenna(object):
 
         if col  -> color coded plot3D
         else    -> simple plot3D
+
         """
 
 
@@ -922,6 +924,7 @@ class Antenna(object):
 
         Parameters
         ----------
+
         Fth  : np.array
         Fph  : np.array
         N    : int
@@ -1352,7 +1355,7 @@ class Antenna(object):
         return Fth, Fph
 
 
-    def Fsynth3(self, theta, phi, pattern=False):
+    def Fsynth3(self, theta = [], phi=[], pattern=True):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
@@ -1362,14 +1365,19 @@ class Antenna(object):
 
         theta : ndarray (1xNdir)
         phi   : ndarray (1xNdir)
+        
         pattern : boolean
             if True theta and phi are reorganized for building the pattern
 
         Returns
         -------
 
-        Fth   : ndarray (1xNdir)
-        Fph   : ndarray (1xNdir)
+        if pattern:
+            Fth   : ndarray (Ntheta x Nphi)
+            Fph   : ndarray (Ntheta x Nphi)
+        else:
+            Fth   : ndarray (1 x Ndir)
+            Fph   : ndarray (1 x Ndir)
 
         Examples
         --------
@@ -1383,25 +1391,28 @@ class Antenna(object):
             >>> A = Antenna('defant.vsh3')
             >>> theta = np.linspace(0,np.pi,70)
             >>> phi = np.linspace(0,2*np.pi,180)
-            >>> th = np.kron(theta,np.ones(len(phi)))
-            >>> ph = np.kron(np.ones(len(theta)),phi)
-            >>> Fth,Fph = A.Fsynth3(th,ph)
+            >>> A.Fsynth3(theta,phi,pattern=True)
 
         All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
         once the V,W function
 
         """
 
+        if theta==[]:
+            theta=np.linspace(0,np.pi,47)
+        if phi == []:
+            phi= np.linspace(0,2*np.pi,91)
+
         Nt = len(theta)
         Np = len(phi)
-
+            
         if pattern:
             self.theta = theta[:,np.newaxis]
             self.phi = phi[np.newaxis,:] 
             theta = np.kron(theta, np.ones(Np))
             phi = np.kron(np.ones(Nt),phi)
 
-        nray = len(theta)
+        #nray = len(theta)
 
         Br  = self.C.Br.s3
         lBr = self.C.Br.ind3[:, 0]

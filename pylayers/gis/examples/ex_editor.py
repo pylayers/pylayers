@@ -3,8 +3,9 @@ import numpy as np
 import networkx as nx 
 from pylayers.util.geomutil import *
 
-#L = Layout('DLR.ini','matDB.ini','slabDB.ini')
-L = Layout()
+L = Layout('TA-Office.ini','matDB.ini','slabDB.ini')
+L.display['fileoverlay']="DLR4991.png"
+#L.editor()
 L.display['fileoverlay']="TA-Office.png"
 #L.saveini('TA-Office.ini')
 # L.build()
@@ -19,3 +20,4 @@ L.display['fileoverlay']="TA-Office.png"
 #plt.show()
 ##L.editor()
 #
+

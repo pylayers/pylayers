@@ -35,7 +35,7 @@ class Constraint(object):
 
 
 
-    attributes
+    Attributes
     ----------
 
     Constraint.C_Id : Contraint Identity automatically increased for new instanciation
@@ -63,7 +63,7 @@ class Constraint(object):
                     ['grav']=True
 
 
-    methods
+    Methods
     -------
 
     info()     : Display information about constraint
@@ -72,6 +72,7 @@ class Constraint(object):
 
     TODO
     ----
+
     ini file for geom view !
 
     """
@@ -112,7 +113,8 @@ class Constraint(object):
         """ update values of a constraint
 
         Example :
-        -------
+        ---------
+
         >>> from pylayers.location.geometric.constraints.toa import *
         >>> T=TOA()
         >>> T.usable
@@ -127,6 +129,7 @@ class Constraint(object):
         >>> T.updc('value',[np.nan])
         >>> T.usable
         False
+
         """
         if np.sum(np.isnan(value))<1 and value.size>0:
             setattr(self,name,value)
@@ -136,13 +139,13 @@ class Constraint(object):
                 self.runable = True
 
             # once value is set and constraint has a std value
-            # condstraint is usable
+            # constraint is usable
             if name =='value':
                 if np.sum(np.isnan(self.std))<1 and self.runable:
                     self.usable = True
 
             # once std is set and constraint has a value
-            # condstraint is usable
+            # constraint is usable
             if name =='std':
                 if np.sum(np.isnan(self.value))<1 and self.runable:
                     self.usable = True
@@ -173,7 +176,7 @@ class Constraint(object):
 
         if self.type == "TOA":
             self.estvol()
-            print "Volume Estimatif", self.estvlm
+            print "Estimated Volume", self.estvlm
             print "Toa (ns)", self.value
             print "std (ns)", self.std
             print "vcw     ", self.vcw
