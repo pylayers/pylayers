@@ -417,7 +417,7 @@ class Ctilde(object):
             which parameter to sort 'tau','att','atp','art','arp','energy'
 
         """
-        if typ=='tau':
+        if typ=='tauk':
             u = np.argsort(self.tauk)
         if typ=='att':
             u = np.argsort(self.tang[:,0])

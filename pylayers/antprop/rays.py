@@ -64,7 +64,7 @@ class Rays(dict):
     the height from floor to ceil, and the number N of 
     multiple reflections to take into account. 
 
-    Once the 3d rays have been calculated, the  
+    Once the 3d rays have been calculated, 
     the local basis are evaluated along those rays. This is
     done through the **locbas** method
 
