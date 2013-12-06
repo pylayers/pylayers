@@ -97,7 +97,7 @@ class Coverage(object):
         try:
             self.L.dumpr('t')
         except:
-            self.L.buildGt()
+            self.L.build('t')
             self.L.dumpw('t')
 
         self.creategrid(full=self.mode,boundary=self.boundary)
@@ -180,6 +180,13 @@ class Coverage(object):
     def cover(self):
         """ start the coverage calculation
 
+        Parameters
+        ----------
+
+        lay_bound : bool
+            If True, the coverage is performed only inside the Layout
+            and clip the values of the grid chosen in coverage.ini
+
         Examples
         --------
 
@@ -216,6 +223,12 @@ class Coverage(object):
             >>> C.cover()
             >>> C.showEd(polar='o')
         """
+        if not kwargs.has_key('alphacy'):
+            kwargs['alphacy']=0.0
+        if not kwargs.has_key('colorcy'):
+            kwargs['colorcy']='w'
+        if not kwargs.has_key('nodes'):
+            kwargs['nodes']=False
 
         fig,ax = self.L.showG('s',**kwargs)
         l = self.grid[0,0]
@@ -256,7 +269,7 @@ class Coverage(object):
             mcEdpf = np.ma.masked_where(prdbm < self.rxsens,self.Edp)
             
             cov=ax.imshow(mcEdpf.reshape((self.nx,self.ny)).T,
-                             extent=(l,r,b,t),cmap = my_cmap,
+                             extent=(l,r,b,t),cmap = 'jet',
                              origin='lower')
 
             # cov=ax.imshow(self.Edp.reshape((self.nx,self.ny)).T,
@@ -301,7 +314,12 @@ class Coverage(object):
             >>> C.showPower()
 
         """
-
+        if not kwargs.has_key('alphacy'):
+            kwargs['alphacy']=0.0
+        if not kwargs.has_key('colorcy'):
+            kwargs['colorcy']='w'
+        if not kwargs.has_key('nodes'):
+            kwargs['nodes']=False
         fig,ax = self.L.showG('s',**kwargs)
 
         l = self.grid[0,0]
