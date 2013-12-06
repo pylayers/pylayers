@@ -1,0 +1,5 @@
+#!/bin/bash 
+for i in `find . -name "*.ipynb"`
+do 
+runipy -o $i 
+done

@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 #
 """
+
     This module run the electromagnetic simulation
-    This module requires pulsray binaries to be installed
+
+
 """
 import doctest
 import os
@@ -746,8 +748,6 @@ class Simul(object):
         except:
             self.updcfg()
         #self.load(self.filesimul)
-
-
 
 
     def gui(self):
@@ -2390,18 +2390,18 @@ class Simul(object):
                             val = par[k][1]
                             if key == "band":
                                 self.wparam[key] = float(val)
-                            if key == "fc":
+                            if key == "fcGHz":
                                 self.wparam[key] = float(val)
-                            if key == "fe":
+                            if key == "feGHz":
                                 self.wparam[key] = float(val)
-                            if key == "thresh":
+                            if key == "threshdB":
                                 self.wparam[key] = float(val)
-                            if key == "tw":
+                            if key == "twns":
                                 self.wparam[key] = float(val)
-                            if key == "type":
+                            if key == "typ":
                                 self.wparam[key] = val
 
-                        self.wav = wvf.Waveform(self.wparam)
+                        self.wav = wvf.Waveform(**self.wparam)
                         alpha = np.sqrt(1. / 30.0)
                         print "run debug ",itx,irx
                         self.cir([itx], [irx],

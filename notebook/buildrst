@@ -1,5 +1,5 @@
 #!/bin/bash
-nbconvert.py rst $1
+ipython nbconvert --to rst $1
 cat ${1%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
 cat f1 | sed 's/code::/code-block::/'  > f2 
 cat f2 | sed "s/image:: /image:: ${1%%.ipynb}_files\//"  > ${1%%.ipynb}.rst

@@ -203,6 +203,8 @@ class Layout(object):
         self.Gt = nx.Graph()
         self.Gm = nx.Graph()
         self.Gs.pos = {}
+        self.tahe = np.zeros(([2, 0]), dtype=int)
+
         #
         # related file names
         #
@@ -246,7 +248,7 @@ class Layout(object):
             self.name[k] = []
         self.load(_filename)
         self.boundary()
-    
+
     def __repr__(self):
         st = '\n'
         st = st + "----------------\n"
@@ -481,11 +483,18 @@ class Layout(object):
 
         """
 
+
         nodes = self.Gs.nodes()
+
+        # nodes include points and segments
+
         useg  = filter(lambda x : x>0,nodes)
         upnt  = filter(lambda x : x<0,nodes)
+
+        # degree of segment nodes
         degseg = map(lambda x : nx.degree(self.Gs,x),useg)
-        assert(np.all(array(degseg)==2)) # all segments should have degree 2
+
+        assert(np.all(array(degseg)==2)) # all segments must have degree 2
 
         # 
         # self.degree : dictionnary (point degree : list of point index) 
@@ -494,11 +503,14 @@ class Layout(object):
         degpnt = np.array(map(lambda x : nx.degree(self.Gs,x),upnt))  # points absolute degrees
         
         # lairwall : list of air wall segments
+
         lairwall = self.name['AIR'] 
+
         #
-        # function to count airwall connected to a point  
-        # probably not the faster solution 
+        # function to count airwall connected to a point   
+        #  probably this is not the faster solution 
         #
+
         def nairwall(nupt):
             lseg = nx.neighbors(self.Gs,nupt)
             n = 0 
@@ -512,19 +524,21 @@ class Layout(object):
         #
         # if a node is connected to N air wall ==> deg = deg - N 
         #
+
         degpnt = degpnt - nairwall
 
         degmax = max(degpnt)
+
         self.degree = {}
         for deg in range(degmax+1):
             num = filter(lambda x : degpnt[x]==deg,range(len(degpnt))) # position of degree 1 point 
             npt = np.array(map(lambda x : upnt[x],num))  # number of degree 1 points
             self.degree[deg] = npt
 
-          
         #
         # convert geometric information in numpy array
         #    
+
         self.pt = np.array(np.zeros([2, len(upnt)]), dtype=float)
         self.tahe = np.array(np.zeros([2, len(useg)]), dtype=int)
         
@@ -540,10 +554,10 @@ class Layout(object):
         self.tahe[0,:] = np.array(map(lambda x : np.nonzero(np.array(upnt)==x)[0][0],ntail))
         self.tahe[1,:] = np.array(map(lambda x : np.nonzero(np.array(upnt)==x)[0][0],nhead))
         
-    
         #
         # transcoding array between graph numbering (discontinuous) and numpy numbering (continuous)
         #
+
         self.tsg = np.array(useg)
         Nsmax = max(self.tsg)
         self.tgs = np.zeros(Nsmax+1,dtype=int)
@@ -553,7 +567,7 @@ class Layout(object):
         #
         # calculate normal to segment ta-he
         #
-        # This could becomes obsolete when the normal will be calculated at
+        # This could becomes obsolete once the normal will be calculated at
         # creation of the segment
         #
 
@@ -1398,8 +1412,8 @@ class Layout(object):
                                                    norm[1, k], 0.]))
             nta = tahe[0, k]
             nhe = tahe[1, k]
-            self.Gs.pos[k + 1] = ((pt[0, nta] + pt[0, nhe]) /
-                                  2., (pt[1, nta] + pt[1, nhe]) / 2.)
+            self.Gs.pos[k + 1] = ((pt[0, nta] + pt[0, nhe]) / 2., 
+                                  (pt[1, nta] + pt[1, nhe]) / 2.)
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
@@ -1624,8 +1638,8 @@ class Layout(object):
             #self.Gs.add_node(k+1,norm=np.array([norm[0,k],norm[1,k],0.]))
             nta = tahe[0, k] - 1
             nhe = tahe[1, k] - 1
-            self.Gs.pos[k + 1] = ((pt[0, nta] + pt[0, nhe]) /
-                                  2., (pt[1, nta] + pt[1, nhe]) / 2.)
+            self.Gs.pos[k + 1] = ((pt[0, nta] + pt[0, nhe]) / 2., 
+                                  (pt[1, nta] + pt[1, nhe]) / 2.)
             self.Gs.add_edge(-(nta + 1), k + 1)
             self.Gs.add_edge(k + 1, -(nhe + 1))
             self.labels[k + 1] = str(k + 1)
@@ -3139,9 +3153,8 @@ class Layout(object):
         Parameters
         ----------
 
-        ptlist
-
-            array(1xNp) Point number array
+        ptlist array(1xNp) 
+            point number array
 
         Returns
         -------
@@ -5751,6 +5764,30 @@ class Layout(object):
 
         fos.write("}\n")
         fos.close()
+
+    def isseg(self,ta,he):
+        """ test if ta<->he is a segment 
+
+        Parameters
+        ----------
+
+        tahe 
+
+        """
+        # transpose point numbering 
+
+        upnt  = filter(lambda x : x<0,self.Gs.nodes())
+        ta = np.nonzero(np.array(upnt)==ta)[0][0]
+        he = np.nonzero(np.array(upnt)==he)[0][0]
+        res = filter(lambda x : (((x[0] == ta) &   (x[1] == he))
+                     |           ((x[0] == he) &   (x[1] == ta)))
+                     , zip(self.tahe[0],self.tahe[1]))
+        if len(res)>0:
+            return True
+        else:
+            return False
+
+
 
     def ispoint(self, pt, tol=0.45):
         """

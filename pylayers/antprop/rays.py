@@ -1187,6 +1187,8 @@ class Rays(dict):
                     ## Dot product interaction X Basis
                     Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
                                   ..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
+                    pdb.set_trace()
+
                     if i == 0:
                     ## First Baspdis added
                         A0 = B0l[:, :,  :, :]
@@ -1199,6 +1201,7 @@ class Rays(dict):
 
                 # fill the C tilde
                 Ct[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
+
                 # delay computation:
                 # sum the distance from antenna to first interaction si0
                 # and the sum of all outgoing segments
