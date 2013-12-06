@@ -4951,7 +4951,7 @@ class Layout(object):
                     'figsize': (5,5),
                     'mode':'cycle',
                     'alphacy':0.8,
-                    'colorcy':'b'
+                    'colorcy':'#abcdef'
                     }
 
         for key, value in defaults.items():
