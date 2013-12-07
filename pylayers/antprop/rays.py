@@ -1187,7 +1187,7 @@ class Rays(dict):
                     ## Dot product interaction X Basis
                     Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
                                   ..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
-                    pdb.set_trace()
+                    #pdb.set_trace()
 
                     if i == 0:
                     ## First Baspdis added

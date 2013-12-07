@@ -1151,10 +1151,10 @@ class Slab(dict, Interface):
             st = st + '| '
         else:
             st = '| '
-        for k in range(len(self['lname'])):
-            st = st + self['lname'][k]+' | '
+        for k in range(len(self['lmatname'])):
+            st = st + self['lmatname'][k]+' | '
         st = st+'\n|'    
-        for k in range(len(self['lname'])):
+        for k in range(len(self['lmatname'])):
             ntick = int(np.ceil(self['lthick'][k]/0.01))
             for l in range(ntick):
                 st = st+'-'
@@ -1175,9 +1175,9 @@ class Slab(dict, Interface):
             >>> import matplotlib.pyplot as plt
             >>> from pylayers.antprop.slab import *
             >>> sl = SlabDB('matDB.ini','slabDB.ini')
-            >>> lname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
+            >>> lmatname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
             >>> lthick = [0.018,0.03,0.018]
-            >>> sl.add('placo',lname,lthick)
+            >>> sl.add('placo',lmatname,lthick)
             >>> theta = np.arange(0,np.pi/2,0.01)
             >>> fGHz = np.array([57.5])
             >>> sl['placo'].ev(fGHz,theta)
@@ -1187,9 +1187,9 @@ class Slab(dict, Interface):
         """
         print "------------"
         print "name : ", self
-        print "nbmat : ", len(self['lname'])
+        print "nbmat : ", len(self['lmatname'])
         chaine = "[ "
-        for name in self['lname']:
+        for name in self['lmatname']:
             self.mat[name].info()
             if self['evaluated']:
                 epsrc = self.mat[name].epsc(self.fGHz[0])
@@ -1748,14 +1748,14 @@ class SlabDB(dict):
         fig,ax = slab.M.plotwrt(var='a')
         return fig,ax
 
-    def add(self, name, lname, lthick, color='black'):
+    def add(self, name, lmatname, lthick, color='black'):
         """ add a slab in dB
 
         Parameters
         ----------
 
         name       : string
-        lname      : list of mat name
+        lmatname      : list of mat name
         lthick     : list ot float
             lthick  is in meters
 
@@ -1833,14 +1833,14 @@ class SlabDB(dict):
 
         U = Slab(self.mat, name)
         maxi = self.maxindex()
-        U['lname'] = lname
+        U['lmatname'] = lmatname
         U['lthick'] = lthick
         U['index'] = maxi + 1
-        U['nbmat'] = len(lname)
+        U['nbmat'] = len(lmatname)
         imat = np.zeros(8).astype(int)
         thickness = np.zeros(8)
-        for i in range(len(lname)):
-            namem = lname[i]
+        for i in range(len(lmatname)):
+            namem = lmatname[i]
             imat[i] = U.mat[namem]['index']
             thickness[i] = lthick[i] * 100  # m ->cm
         U['imat'] = tuple(imat)
@@ -1905,14 +1905,14 @@ class SlabDB(dict):
             self.di[eval(d)]=di[d]
         for slabname in self.di.values():
             S=Slab(name=slabname,mat=self.mat)
-            S['lname']=eval(config.get(slabname,'lmatname'))
-            S['nbmat']=len(S['lname'])
+            S['lmatname']=eval(config.get(slabname,'lmatname'))
+            S['nbmat']=len(S['lmatname'])
             S['color']=config.get(slabname,'color')
             S['index']=eval(config.get(slabname,'index'))
             S['lthick']=eval(config.get(slabname,'lthick'))
             S['linewidth']=eval(config.get(slabname,'linewidth'))
             imat=[0,0,0,0,0,0,0,0]
-            for i,m in enumerate(S['lname']):
+            for i,m in enumerate(S['lmatname']):
                 imat[i]=S.mat[m]['index']
             S['imat']=tuple(imat)
 
@@ -2050,7 +2050,7 @@ class SlabDB(dict):
                     if lmat ==[]:
                         lmat=['ABSORBENT']
                         break
-            config.set(name, 'lname', lmat)
+            config.set(name, 'lmatname', lmat)
 
         config.write(fd)
         fd.close()

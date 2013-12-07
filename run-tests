@@ -2,5 +2,4 @@
 export TMPVAR=$BASENAME
 export BASENAME=$PYLAYERS/data
 make test-code
-rm $PYLAYERS/project.conf
 export BASENAME=$TMPVAR
