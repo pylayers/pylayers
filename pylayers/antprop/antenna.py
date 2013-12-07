@@ -147,7 +147,7 @@ class Antenna(object):
         #st = st + 'file type : ' + self.typ+'\n'
         if self.typ == 'mat':
             #st = st + self.DataFile + '\n'
-            st = st + 'antenna name : ', self.AntennaName + '\n'
+            st = st + 'antenna name : '+ self.AntennaName + '\n'
             st = st + 'date : ' + self.Date +'\n'
             st = st + 'time : ' + self.StartTime +'\n'
             st = st + 'Notes : ' + self.Notes+'\n'
