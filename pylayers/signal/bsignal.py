@@ -288,9 +288,9 @@ class Bsignal(object):
         #
         if ndim > 1:
             yx = self.y[...,u]
-            fig,ax = mulcplot(self.x,yx*conversion,**args)
+            fig,ax = mulcplot(self.x[u],yx*conversion,**args)
         else:
-            fig,ax = mulcplot(self.x,self.y[u]*conversion,**args)
+            fig,ax = mulcplot(self.x[u],self.y[u]*conversion,**args)
         #
         # Draw vertical and horizontal lines
         #
@@ -2590,6 +2590,7 @@ class FUsignal(FBsignal, Usignal):
     plotri   : plot real part and imaginary part
     plotdB   : plot modulus in dB
     get      : get k th ray
+    chantap  : calculates channel taps
 
     """
     def __init__(self, x=np.array([]), y=np.array([])):
@@ -3193,14 +3194,14 @@ class FUsignal(FBsignal, Usignal):
             center frequency GHz
         WGHz :  float   
             bandwidth GHz
-        Ntap :  number of tap 
+        Ntap :  number of taps 
         baseband : boolean
             default : True
 
         Notes
         -----
 
-        see http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf
+        see [Tse] http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf
         page 26
 
         """
@@ -3225,10 +3226,12 @@ class FUsignal(FBsignal, Usignal):
         l  = np.arange(Ntap)[np.newaxis,np.newaxis,:]
         # l : tau x 1 x 1
         tau = self.tau0[:,np.newaxis,np.newaxis]
-        # S : tau x f x tap
+        # S : tau x f x tap (form 2.34 [Tse])
         S   = np.sinc(l-tau*WGHz)
-        # htap : f x tap
+        # sum over tau : htap : f x tap
         htap = np.sum(yb*S,axis=0)
+        # sum over frequency axis : htapi : tap
+        # to be considered !! what about the frequency step 
         htapi = np.sum(htap,axis=0)
 
         return htapi
