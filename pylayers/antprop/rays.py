@@ -953,7 +953,7 @@ class Rays(dict):
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
 
-                ray2nbi=np.ones((nbray))
+                ray2nbi = np.ones((nbray))
 
                 
                 try:
