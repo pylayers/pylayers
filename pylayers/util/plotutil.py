@@ -114,11 +114,11 @@ def mulcplot(x,y,**kwargs):
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
 
-    ntypes = np.prod(np.array(types).shape)
-    ntitles = np.prod(np.array(titles).shape)
-    nlabels = np.prod(np.array(labels).shape)
-    nxlabels = np.prod(np.array(xlabels).shape)
-    nylabels = np.prod(np.array(ylabels).shape)
+    ntypes = np.prod(np.array(types).shape,dtype='int')
+    ntitles = np.prod(np.array(titles).shape,dtype='int')
+    nlabels = np.prod(np.array(labels).shape,dtype='int')
+    nxlabels = np.prod(np.array(xlabels).shape,dtype='int')
+    nylabels = np.prod(np.array(ylabels).shape,dtype='int')
 
 
     # filtering kwargs argument for plot function 
