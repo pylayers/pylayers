@@ -129,6 +129,10 @@ class Antenna(object):
             self.loadvsh3()
         if typ == 'vsh2':
             self.loadvsh2()
+        if typ == 'sh3':
+            self.loadsh3()
+        if typ == 'sh2':
+            self.loadsh2()
         if typ == 'trx1':
             self.load_trx(directory, nf, ntheta, nphi)
         if typ == 'trx':
@@ -295,7 +299,7 @@ class Antenna(object):
 
     def pattern(self,theta,phi,typ='s3'):
         """ return multidimensionnal radiation patterns 
-        
+
         Parameters
         ----------
 
@@ -1355,7 +1359,10 @@ class Antenna(object):
         return Fth, Fph
 
 
-    def Fsynth3(self, theta = [], phi=[], pattern=True):
+    def Fsynth3(self, theta = [], phi=[], pattern=True,typ='vsh'):
+=======
+    def Fsynth3(self, theta, phi, pattern=False,typ = 'vsh'):
+>>>>>>> a576d8cb4084c7fa8a5695a8a690068f7a2a3cc3
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
@@ -1398,60 +1405,74 @@ class Antenna(object):
 
         """
 
-        if theta==[]:
-            theta=np.linspace(0,np.pi,47)
-        if phi == []:
-            phi= np.linspace(0,2*np.pi,91)
-
-        Nt = len(theta)
-        Np = len(phi)
-            
-        if pattern:
-            self.theta = theta[:,np.newaxis]
-            self.phi = phi[np.newaxis,:] 
-            theta = np.kron(theta, np.ones(Np))
-            phi = np.kron(np.ones(Nt),phi)
-
-        #nray = len(theta)
-
-        Br  = self.C.Br.s3
-        lBr = self.C.Br.ind3[:, 0]
-        mBr = self.C.Br.ind3[:, 1]
-
-        Bi  = self.C.Bi.s3
-
-        Cr  = self.C.Cr.s3
-
-        Ci  = self.C.Ci.s3
-
-        L = lBr.max()
-        M = mBr.max()
-
-        # vector spherical harmonics basis functions
-
-        V, W = VW(lBr, mBr, theta, phi)
-
-
-        Fth = np.dot(Br, np.real(V.T)) - \
-            np.dot(Bi, np.imag(V.T)) + \
-            np.dot(Ci, np.real(W.T)) + \
-            np.dot(Cr, np.imag(W.T))
-
-        Fph = -np.dot(Cr, np.real(V.T)) + \
-            np.dot(Ci, np.imag(V.T)) + \
-            np.dot(Bi, np.real(W.T)) + \
-            np.dot(Br, np.imag(W.T))
+        if typ =='vsh':
         
-        if pattern:
-            Nf = len(self.fa)
-            Fth = Fth.reshape(Nf, Nt, Np)
-            Fph = Fph.reshape(Nf, Nt, Np)
-            self.Ftheta = Fth
-            self.Fphi = Fph
-            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
-            self.SqG = np.sqrt(G)
+            if theta==[]:
+                theta=np.linspace(0,np.pi,47)
+            if phi == []:
+                phi= np.linspace(0,2*np.pi,91)
+                  
+            Nt = len(theta)
+            Np = len(phi)
 
+            if pattern:
+                self.theta = theta[:,np.newaxis]
+                self.phi = phi[np.newaxis,:] 
+                theta = np.kron(theta, np.ones(Np))
+                phi = np.kron(np.ones(Nt),phi)
+
+            nray = len(theta)
+
+            Br  = self.C.Br.s3
+            lBr = self.C.Br.ind3[:, 0]
+            mBr = self.C.Br.ind3[:, 1]
+
+            Bi  = self.C.Bi.s3
+
+            Cr  = self.C.Cr.s3
+
+            Ci  = self.C.Ci.s3
+
+            L = lBr.max()
+            M = mBr.max()
+
+            # vector spherical harmonics basis functions
+
+            V, W = VW(lBr, mBr, theta, phi)
+
+
+            Fth = np.dot(Br, np.real(V.T)) - \
+                np.dot(Bi, np.imag(V.T)) + \
+                np.dot(Ci, np.real(W.T)) + \
+                np.dot(Cr, np.imag(W.T))
+
+            Fph = -np.dot(Cr, np.real(V.T)) + \
+                np.dot(Ci, np.imag(V.T)) + \
+                np.dot(Bi, np.real(W.T)) + \
+                np.dot(Br, np.imag(W.T))
+            
+            if pattern:
+                Nf = len(self.fa)
+                Fth = Fth.reshape(Nf, Nt, Np)
+                Fph = Fph.reshape(Nf, Nt, Np)
+                self.Ftheta = Fth
+                self.Fphi = Fph
+                G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+                self.SqG = np.sqrt(G)
+
+            
+        else :
+
+            Nt = len(theta)
+            Np = len(phi)            
+            
+            cx = self.S.Cx.s3
+            cy = self.S.Cy.s3
+            cz = self.S.Cz.s3
+            
+            
         return Fth, Fph
+            
 
     def movie_vsh(self, mode='linear'):
         """
@@ -1599,8 +1620,75 @@ class Antenna(object):
             coeff['Bi.s3'] = self.C.Bi.s3
             coeff['Cr.s3'] = self.C.Cr.s3
             coeff['Ci.s3'] = self.C.Ci.s3
-
             io.savemat(filevsh3, coeff, appendmat=False)
+
+    def savesh2(self):
+        """
+        Create a .sh2 antenna file
+
+        """
+
+        # create sh2 file
+        typ = self._filename.split('.')[1]
+        self.typ = typ
+    
+        _filesh2 = self._filename.replace('.'+ typ, '.sh2')
+        filesh2 = pyu.getlong(_filesh2, pstruc['DIRANT'])
+        if os.path.isfile(filesh2):
+            print filesh2, ' already exist'
+        else:
+            print 'create ', filesh2, ' file'
+            coeff = {}
+            coeff['fmin'] = self.fa[0]
+            coeff['fmax'] = self.fa[-1]
+            coeff['Cx.ind'] = self.S.Cx.ind2
+            coeff['Cy.ind'] = self.S.Cy.ind2
+            coeff['Cz.ind'] = self.S.Cz.ind2            
+            coeff['Cx.s2'] = self.S.Cx.s2
+            coeff['Cy.s2'] = self.S.Cy.s2
+            coeff['Cz.s2'] = self.S.Cz.s2
+            io.savemat(filesh2, coeff, appendmat=False)
+            
+    def savesh3(self):
+        
+        """ 
+        save antenna in sh3 format
+
+        Create a .sh3 antenna file
+
+
+        """
+        
+        
+        # create sh3 file
+        typ = self._filename.split('.')[1]
+        self.typ = typ    
+        _filesh3 = self._filename.replace('.'+ typ, '.sh3')
+        filesh3 = pyu.getlong(_filesh3, pstruc['DIRANT'])
+        if os.path.isfile(filesh3):
+            print filesh3, ' already exist'
+
+       
+        else:
+            print 'create ', filesh3, ' file'
+
+            coeff = {}
+            coeff['fmin'] = self.fa[0]
+            coeff['fmax'] = self.fa[-1]
+            coeff['Cx.ind'] = self.S.Cx.ind3
+            coeff['Cy.ind'] = self.S.Cy.ind3
+            coeff['Cz.ind'] = self.S.Cz.ind3
+            
+            coeff['Cx.k'] = self.S.Cx.k2
+            coeff['Cy.k'] = self.S.Cy.k2
+            coeff['Cz.k'] = self.S.Cz.k2
+            
+            coeff['Cx.s3'] = self.S.Cx.s3
+            coeff['Cy.s3'] = self.S.Cy.s3
+            coeff['Cz.s3'] = self.S.Cz.s3
+         
+
+            io.savemat(filesh3, coeff, appendmat=False)
 
     def loadvsh3(self):
         """ Load antenna's vsh3 file
@@ -1628,13 +1716,13 @@ class Antenna(object):
             # Warning modification take only one dimension for k 
             # if the .vsh3 format evolve it may not work anymore 
             #
-            Br = SHCoeff('s3', fmin, fmax, coeff['Br.s3'],
+            Br = VCoeff('s3', fmin, fmax, coeff['Br.s3'],
                          coeff['Br.ind'], coeff['Br.k'][0])
-            Bi = SHCoeff('s3', fmin, fmax, coeff['Bi.s3'],
+            Bi = VCoeff('s3', fmin, fmax, coeff['Bi.s3'],
                          coeff['Bi.ind'], coeff['Bi.k'][0])
-            Cr = SHCoeff('s3', fmin, fmax, coeff['Cr.s3'],
+            Cr = VCoeff('s3', fmin, fmax, coeff['Cr.s3'],
                          coeff['Cr.ind'], coeff['Cr.k'][0])
-            Ci = SHCoeff('s3', fmin, fmax, coeff['Ci.s3'],
+            Ci = VCoeff('s3', fmin, fmax, coeff['Ci.s3'],
                          coeff['Ci.ind'], coeff['Ci.k'][0])
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
             Nf = np.shape(Br.s3)[0]
@@ -1642,6 +1730,64 @@ class Antenna(object):
         else:
             print _filevsh3, ' does not exist'
 
+    def loadsh3(self):
+        """ Load antenna's sh3 file
+
+            sh3 file contains a thesholded version of ssh coefficients in shape 3
+
+        """
+        _filesh3 = self._filename.split('.')[0]+'.sh3'
+        filesh3 = pyu.getlong(_filesh3, pstruc['DIRANT'])
+
+        if os.path.isfile(filesh3):
+            coeff = io.loadmat(filesh3, appendmat=False)
+
+            #
+            # This test is to fix a problem with 2 different
+            # behavior of io.loadmat
+            #
+            if type(coeff['fmin']) == float:
+                fmin = coeff['fmin']
+                fmax = coeff['fmax']
+            else:
+                fmin = coeff['fmin'][0][0]
+                fmax = coeff['fmax'][0][0]
+            # .. Warning    
+            # Warning modification takes only one dimension for k 
+            # if the .sh3 format evolve it may not work anymore 
+            #
+            Cx = SCoeff(typ = 's3',
+                        fmin = fmin ,
+                        fmax = fmax , 
+                        data = coeff['Cx.s3'],
+                        ind =  coeff['Cx.ind'],
+                        k =  coeff['Cx.k'][0])
+                        
+            Cy = SCoeff(typ= 's3', 
+                        fmin = fmin ,
+                        fmax = fmax , 
+                        data = coeff['Cy.s3'],
+                        ind =  coeff['Cy.ind'],
+                        k =  coeff['Cy.k'][0])
+                        
+                         
+            Cz = SCoeff(typ = 's3', 
+                        fmin = fmin ,
+                        fmax = fmax , 
+                        data = coeff['Cz.s3'],
+                        ind =  coeff['Cz.ind'],
+                        k =  coeff['Cz.k'][0])
+            
+            if not 'S' in self.__dict__.keys():
+                self.S = SSHCoeff(Cx, Cy,Cz)
+            else:
+                self.S.sets3(Cx,Cy,Cz)
+                    
+            Nf = np.shape(Cx.s3)[0]
+            self.fa = np.linspace(fmin, fmax, Nf)
+        else:
+            print _filesh3, ' does not exist'
+            
     def savevsh2(self):
         """
 
@@ -1672,6 +1818,39 @@ class Antenna(object):
             coeff['Ci.s2'] = self.C.Ci.s2
 
             io.savemat(filevsh2, coeff, appendmat=False)
+	
+
+            
+    def loadsh2(self):
+        
+        _filesh2 = self._filename.split('.')[0]+'.sh2'
+        filesh2 = pyu.getlong(_filesh2, pstruc['DIRANT'])
+        
+        if os.path.isfile(filesh2):
+            coeff = io.loadmat(filesh2, appendmat=False)
+            #
+            # This test is to fix a problem with 2 different
+            # behavior of io.loadmat
+            #
+            if type(coeff['fmin']) == float:
+                fmin = coeff['fmin']
+                fmax = coeff['fmax']
+            else:
+                fmin = coeff['fmin'][0][0]
+                fmax = coeff['fmax'][0][0]
+            Cx = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
+                         data=coeff['Cx.s2'], ind=coeff['Cx.ind'])
+            Cy = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
+                         data=coeff['Cy.s2'], ind=coeff['Cy.ind'])
+            Cz = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
+                         data=coeff['Cz.s2'], ind=coeff['Cz.ind'])
+            self.S = SSHCoeff(Cx, Cy,Cz)
+            Nf = np.shape(Cx.s2)[0]
+            self.fa = np.linspace(fmin, fmax, Nf)
+        else:
+            print _filesh2, ' does not exist'
+        
+            
 
     def loadvsh2(self):
         """
@@ -1696,13 +1875,13 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
-            Br = SHCoeff(typ='s2', fmin=fmin, fmax=fmax,
+            Br = VCoeff(typ='s2', fmin=fmin, fmax=fmax,
                          data=coeff['Br.s2'], ind=coeff['Br.ind'])
-            Bi = SHCoeff(typ='s2', fmin=fmin, fmax=fmax,
+            Bi = VCoeff(typ='s2', fmin=fmin, fmax=fmax,
                          data=coeff['Bi.s2'], ind=coeff['Bi.ind'])
-            Cr = SHCoeff(typ='s2', fmin=fmin, fmax=fmax,
+            Cr = VCoeff(typ='s2', fmin=fmin, fmax=fmax,
                          data=coeff['Cr.s2'], ind=coeff['Cr.ind'])
-            Ci = SHCoeff(typ='s2', fmin=fmin, fmax=fmax,
+            Ci = VCoeff(typ='s2', fmin=fmin, fmax=fmax,
                          data=coeff['Ci.s2'], ind=coeff['Ci.ind'])
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
             Nf = np.shape(Br.s2)[0]
@@ -1721,13 +1900,13 @@ class Antenna(object):
         fmax = 8.
         if os.path.isfile(filevsh3):
             coeff = io.loadmat(filevsh3, appendmat=False)
-            Br = SHCoeff('s3', fmin, fmax, coeff['Br.s3'],
+            Br = VCoeff('s3', fmin, fmax, coeff['Br.s3'],
                          coeff['Br.ind'], coeff['Br.k'])
-            Bi = SHCoeff('s3', fmin, fmax, coeff['Bi.s3'],
+            Bi = VCoeff('s3', fmin, fmax, coeff['Bi.s3'],
                          coeff['Bi.ind'], coeff['Bi.k'])
-            Cr = SHCoeff('s3', fmin, fmax, coeff['Cr.s3'],
+            Cr = VCoeff('s3', fmin, fmax, coeff['Cr.s3'],
                          coeff['Cr.ind'], coeff['Cr.k'])
-            Ci = SHCoeff('s3', fmin, fmax, coeff['Ci.s3'],
+            Ci = VCoeff('s3', fmin, fmax, coeff['Ci.s3'],
                          coeff['Ci.ind'], coeff['Ci.k'])
             self.C = VSHCoeff(Br, Bi, Cr, Ci)
             self.fa = np.linspace(fmin, fmax, 121)

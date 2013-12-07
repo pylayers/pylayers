@@ -433,6 +433,7 @@ class Geomoff(Geomview):
             except:
                 logging.critical('load off wrong number of values')
         fo.close()
+
         fileoff = pyu.getlong(_fileoff, "geom")
         fo = open(fileoff,'w')
         fo.write(lis[0])
@@ -1033,9 +1034,9 @@ def onb(A,B,v):
 
 
     T basis (un,vn,wn)
-        3 x n x 3 
+        3 x n x 3
     (un,vn) is a basis in the plane transverse to the axis vn
-    wn is the unitary vector along vector AB 
+    wn is the unitary vector along vector AB
 
     Examples
     --------
@@ -1078,7 +1079,7 @@ def onb(A,B,v):
     u = v - np.sum(v*wn,axis=0)*wn
     modu = np.sqrt(np.sum(u*u,axis=0))
     # un : 3xN
-    un = u /modu 
+    un = u /modu
     # vn : 3xN
     vn = np.cross(wn,un,axis=0)
     #pdb.set_trace()
@@ -1086,7 +1087,7 @@ def onb(A,B,v):
     # reshape dimension for having index of cylinder axe first
     # N x 3 x 3
     T  = T.swapaxes(0,1)
-    return T 
+    return T
 
 
 def vec_sph(th, ph):
