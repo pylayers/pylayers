@@ -1905,7 +1905,7 @@ class SlabDB(dict):
             self.di[eval(d)]=di[d]
         for slabname in self.di.values():
             S=Slab(name=slabname,mat=self.mat)
-            S['lname']=eval(config.get(slabname,'lname'))
+            S['lname']=eval(config.get(slabname,'lmatname'))
             S['nbmat']=len(S['lname'])
             S['color']=config.get(slabname,'color')
             S['index']=eval(config.get(slabname,'index'))

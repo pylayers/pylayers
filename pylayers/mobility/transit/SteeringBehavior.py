@@ -42,7 +42,7 @@ class Seek:
         displacement = boid.destination - boid.position
         desired_velocity = displacement.normalize() * boid.desired_speed
         steering = desired_velocity - boid.velocity
-        if displacement.length() < 0.15:
+        if displacement.length() < 0.25:
             boid.arrived = True
         return steering
 
@@ -128,7 +128,7 @@ class Separation:
                 # create orthogonal vector in order to make boids avoidance
                 force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
 #                force2 = vec3(-force[1],force[0],0)
-                acceleration += force2
+                acceleration += 3*force2
         return acceleration
 
 class Queuing:
