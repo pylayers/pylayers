@@ -12,6 +12,7 @@ typ indicates the antenna file format to read
 
 Examples
 --------
+
     >>> from pylayers.antprop.antenna import *
     >>> A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
 
@@ -142,17 +143,17 @@ class Antenna(object):
 
     def __repr__(self):
         st = ''
-        st = st + self._filename+'\n'
-        st = st + self.typ+'\n'
+        st = st + 'file name : ' + self._filename+'\n'
+        #st = st + 'file type : ' + self.typ+'\n'
         if self.typ == 'mat':
-            st = st + self.DataFile + '\n'
-            st = st + self.AntennaName + '\n'
-            st = st + self.Date +'\n'
-            st = st + self.StartTime +'\n'
-            st = st + self.Notes+'\n'
-            st = st + str(self.Serie)+'\n'
-            st = st + str(self.Run)+'\n'
-            st = st + "Nb theta (lat) :"+ str(self.Nt)+'\n'
+            #st = st + self.DataFile + '\n'
+            st = st + 'antenna name : ', self.AntennaName + '\n'
+            st = st + 'date : ' + self.Date +'\n'
+            st = st + 'time : ' + self.StartTime +'\n'
+            st = st + 'Notes : ' + self.Notes+'\n'
+            st = st + 'Serie : ' + str(self.Serie)+'\n'
+            st = st + 'Run : ' + str(self.Run)+'\n'
+            st = st + "Nb theta (lat) : "+ str(self.Nt)+'\n'
             st = st + "Nb phi (lon) :"+ str(self.Np)+'\n'
         return(st)
 
@@ -1360,9 +1361,6 @@ class Antenna(object):
 
 
     def Fsynth3(self, theta = [], phi=[], pattern=True,typ='vsh'):
-=======
-    def Fsynth3(self, theta, phi, pattern=False,typ = 'vsh'):
->>>>>>> a576d8cb4084c7fa8a5695a8a690068f7a2a3cc3
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
