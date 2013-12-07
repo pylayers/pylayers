@@ -818,7 +818,12 @@ class Antenna(object):
         _filename = 'antbody' 
 
         geo = geu.Geomoff(_filename)
-        geo.pattern(self.theta,self.phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
+        # geo.pattern requires the following shapes  
+        # theta (Ntx1)
+        # phi (1xNp)
+        theta = self.theta[:,np.newaxis] 
+        phi = self.phi[np.newaxis,:]  
+        geo.pattern(theta,phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
 

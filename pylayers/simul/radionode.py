@@ -17,7 +17,6 @@ import scipy as sp
 class RadioNode(object):
     """ container for a Radio Node
 
-     a RadioNode is either a transmitter or a receiver
      This class manages the spatial and temporal behavior of a radio node
 
      Attributes
@@ -151,6 +150,23 @@ class RadioNode(object):
         self.points = {}
         for k in range(npt):
             self.points[k + 1] = self.position[:, k]
+
+    def transform(self,alpha,trans):
+        """ tranform position rotation + translation
+
+        Parameters
+        ----------
+
+        alpha : float 
+            angle (rad)
+        trans : np.array()  (,2)
+
+        """
+        d2r = np.pi/180
+        Rot = np.array([[np.cos(d2r*alpha),-np.sin(d2r*alpha)],
+                        [np.sin(d2r*alpha),np.cos(d2r*alpha)]])
+        self.position[0:2,:] = np.dot(Rot,self.position[0:2,:])
+        self.position[0:2,:] = self.position[0:2,:]+trans[:,np.newaxis]
 
     def info(self):
         """ display RadioNodes informations

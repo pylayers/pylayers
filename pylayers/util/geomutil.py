@@ -610,7 +610,7 @@ class Geomoff(Geomview):
            >>> import numpy as np 
            >>> th = np.arange(0,np.pi,0.05)[:,np.newaxis]
            >>> ph = np.arange(0,2*np.pi,0.05)[np.newaxis,:]
-           >>> E  = 1.5*np.sin(th)*np.cos(0*ph)
+           >>> E = 1.5*np.sin(th)*np.cos(0*ph)
            >>> g = Geomoff('dipole')
            >>> g.pattern(th,ph,E)
            >>> g.show3()

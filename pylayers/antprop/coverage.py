@@ -19,7 +19,7 @@ class Coverage(object):
         Methods
         -------
 
-        create grid()
+        creategrid()
             create a uniform grid for evaluating losses
         cover()
             run the coverage calculation
@@ -475,6 +475,7 @@ class Coverage(object):
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -484,22 +485,33 @@ class Coverage(object):
             >>> C.showLoss(polar='o')
             >>> C.showLoss(polar='p')
         """
+        
         fig = plt.figure()
         fig,ax=self.L.showGs(fig=fig)
-        l=self.grid[0,0]
-        r=self.grid[-1,0]
-        b=self.grid[0,1]
-        t=self.grid[-1,-1]
+        
+        # setting the grid 
 
+        l = self.grid[0,0]
+        r = self.grid[-1,0]
+        b = self.grid[0,1]
+        t = self.grid[-1,-1]
+
+        # orthogonal polarization
         if polar=='o':
             cov = ax.imshow(self.Lwo.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
-                            origin='lower')
+                            origin='lower',
+                            vmin = 0,
+                            vmax = 140)
             title = ('Map of losses, orthogonal (V) polarization') 
+
+        # parallel polarization
         if polar=='p':
             cov = ax.imshow(self.Lwp.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
-                            origin='lower')
+                            origin='lower',
+                            vmin = 0,
+                            vmax = 140)
             title = ('Map of losses, parallel (H) polarization') 
 
         ax.scatter(self.tx[0],self.tx[1],linewidth=0)

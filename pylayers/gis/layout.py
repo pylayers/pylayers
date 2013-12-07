@@ -1546,15 +1546,19 @@ class Layout(object):
         except:
             print "no file named ",filename 
             return
+
         lines = fo.readlines()
         fo.close()
         l1 = lines[0].split()
+
         #
         # Parse the .str2 header NP NSEG NCOSEG
         #
+
         Np = int(l1[0])
         Ns = int(l1[1])
         Nss = int(l1[2])
+
         self.Np = Np
         self.Ns = Ns
         self.Nss = Nss
@@ -1645,8 +1649,7 @@ class Layout(object):
         for k in range(Ns):
             #print k, lname[k]
             self.Gs.add_node(k + 1, name=lname[k])
-            self.Gs.add_node(k + 1, zmin=z[0, k])
-            self.Gs.add_node(k + 1, zmax=z[1, k])
+            self.Gs.add_node(k + 1, z=(z[0, k],z[1, k]))
             #self.Gs.add_node(k+1,norm=np.array([norm[0,k],norm[1,k],0.]))
             nta = tahe[0, k] - 1
             nhe = tahe[1, k] - 1
@@ -1681,6 +1684,7 @@ class Layout(object):
         #for i in self.layl:
         #    self.display['Layer'].append(i)
         #    self.display['ActiveLayer'].append(i)
+
         self.pt = pt
         self.tahe = tahe
         self.display['activelayer'] = self.sl.keys()[0]
@@ -2726,6 +2730,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         _filename : string
             file is  written in the struc directory of the current Project
             directory which is defined through the environment variable $BASENAME
@@ -2754,8 +2759,10 @@ class Layout(object):
             # Create subseg
             #
             pass
+
         sl = self.sl
         filename = pyu.getlong(_filename,pstruc['DIRSTRUC'])
+
         nn = self.Np
         ne = self.Ns
         nss = self.Nss
@@ -2773,11 +2780,13 @@ class Layout(object):
 
         dnode = {}
         ni = 1
+
         #
         # Reorder segments and points
         #
         # ..todo:: do a spatial reordering
         #
+
         nodes = np.array(self.Gs.node.keys())
         useg = np.nonzero(nodes > 0)
         upoint = np.nonzero(nodes < 0)
@@ -2822,16 +2831,24 @@ class Layout(object):
             
             if 'ss_name' in self.Gs.node[i]:
                 
-                
                 name = str(self.Gs.node[i]['ss_name'])
                 try:
                     core = str(sl[name]['index'])
                 except:    
                     core = str(sl[eval(name)[0]]['index'])
-                ce1 = str(self.Gs.node[i]['ss_ce'][0][0])
-                ce2 = str(self.Gs.node[i]['ss_ce'][0][1])
-                zmin = str(self.Gs.node[i]['ss_z'][0][0])
-                zmax = str(self.Gs.node[i]['ss_z'][0][1])
+                
+                if self.Gs.node[i].has_key('ss_ce1'):
+                    ce1 = str(self.Gs.node[i]['ss_ce1'][0][0])
+                else:
+                    ce1 = str(0)
+
+                if self.Gs.node[i].has_key('ss_ce2'):
+                    ce2 = str(self.Gs.node[i]['ss_ce2'][0][1])
+                else:
+                    ce2 = str(0)
+
+                ss_zmin = str(self.Gs.node[i]['ss_z'][0][0])
+                ss_zmax = str(self.Gs.node[i]['ss_z'][0][1])
                 chaine = str(k + 1) + " " + core + " " + ce1 + \
                     " " + ce2 + " " + ss_zmin + " " + ss_zmax +  "\n"
                 fo.write(chaine)
@@ -6385,6 +6402,7 @@ class Layout(object):
 
         Returns
         -------
+
         p_Tx : numpy.ndarray
              A point of the placement of the Tx
         p_Rx : numpy.ndarray
@@ -6421,6 +6439,7 @@ class Layout(object):
 
         Parameters
         ----------
+
         dx : float
             x offset (default 0)
         dy : float
