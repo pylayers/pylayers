@@ -53,7 +53,7 @@ def mulcplot(x,y,**kwargs):
     defaults = {'types':['l20'],
                 'titles':[''],
                 'labels':[''],
-                'xlabels':['Amplitude (dB)'],
+                'xlabels':['time (ns)'],
                 'ylabels':['Amplitude (dB)'],
                 'ncol':1,
                 'nlin':1,

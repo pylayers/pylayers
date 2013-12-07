@@ -1,0 +1,7 @@
+#!/bin/bash 
+for i in `find . -name "*.ipynb"`;
+do 
+echo $i    
+python ../script/remove_output.py $i > tmp
+mv tmp $i
+done

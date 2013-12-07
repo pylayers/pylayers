@@ -1,7 +1,6 @@
 README
 setup.py
 pylayers/__init__.py
-pylayers/clean_pyproject.py
 pylayers.egg-info/PKG-INFO
 pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt
@@ -17,7 +16,6 @@ pylayers/antprop/coverage.py
 pylayers/antprop/interactions.py
 pylayers/antprop/metasignature.py
 pylayers/antprop/multiwall.py
-pylayers/antprop/poo.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
 pylayers/antprop/signature-save.py
