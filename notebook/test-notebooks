@@ -1,5 +1,9 @@
 #!/bin/bash 
 for i in `find . -name "*.ipynb"`
 do 
-runipy -o $i 
+echo $i    
+runipy -o $i > /dev/null
+echo $?
+ipython nbconvert --to html $i
 done
+

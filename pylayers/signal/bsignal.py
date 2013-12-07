@@ -3082,8 +3082,7 @@ class FUsignal(FBsignal, Usignal):
         return tc
 
     def ift(self, Nz=1, ffts=0):
-        """
-            return the associated TUsignal
+        """ inverse Fourier transform returns the associated TUsignal
 
         Algorithm
         ---------
@@ -3094,8 +3093,9 @@ class FUsignal(FBsignal, Usignal):
 
         Parameters
         ----------
-            Nz   : Number of zeros (-1) No forcing
-            ffts : 0 (no fftshift 1:fftshift)
+
+        Nz   : Number of zeros (-1) No forcing
+        ffts : 0 (no fftshift 1:fftshift)
 
         >>> e  = EnImpulse()
         >>> E  = e.fft()
@@ -3116,7 +3116,7 @@ class FUsignal(FBsignal, Usignal):
         Summary
         -------
 
-            apply the inverse fftshift operator to come back in time
+        apply the inverse fftshift operator to come back in time
 
         """
         if (Nz == -1):

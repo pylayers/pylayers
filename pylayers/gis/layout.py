@@ -301,7 +301,7 @@ class Layout(object):
         ----------
 
         typ : string optional
-            {'str'|'ini'|'osm'|'str2'}
+            {'str'|'ini'|'osm'|'str2'|'wrl'}
 
         Returns
         -------
@@ -325,13 +325,25 @@ class Layout(object):
 
         """
 
-        pathname = strdir + '/*.' + typ
+        if typ=='str':
+            pathname = pstruc['DIRSTRUC'] + '/*.' + typ
+        if typ=='str2':
+            pathname = pstruc['DIRSTRUC'] + '/*.' + typ
+        if typ=='ini':
+            pathname = pstruc['DIRINI'] + '/*.' + typ
+        if typ=='osm':
+            pathname = pstruc['DIROSM'] + '/*.' + typ
+        if typ=='wrl':
+            pathname = pstruc['DIRWRL'] + '/*.' + typ
+
+        lfile_l = glob.glob(pathname)
         lfile_l = glob.glob(pathname)
         lfile_s = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
             lfile_s.append(fis)
         lfile_s.sort()
+
         return lfile_s
 
     def delete(self):
