@@ -8,4 +8,3 @@ for k in range(4):
     filename = 'onbasis'+str(k) 
     gv = GeomVect(filename)
     gv.geomBase(T[k,:,:])
-   
