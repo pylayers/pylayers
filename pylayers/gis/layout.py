@@ -203,6 +203,8 @@ class Layout(object):
         self.Gt = nx.Graph()
         self.Gm = nx.Graph()
         self.Gs.pos = {}
+        self.tahe = np.zeros(([2, 0]), dtype=int)
+
         #
         # related file names
         #
@@ -246,7 +248,7 @@ class Layout(object):
             self.name[k] = []
         self.load(_filename)
         self.boundary()
-    
+
     def __repr__(self):
         st = '\n'
         st = st + "----------------\n"
@@ -4013,7 +4015,8 @@ class Layout(object):
                 except:
                     raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
-        write_gpickle(getattr(self,'di'),basename+'/struc/gpickle/di_'+self.filename+'.gpickle')
+        if 'i' in graph:
+            write_gpickle(getattr(self,'di'),basename+'/struc/gpickle/di_'+self.filename+'.gpickle')
         write_gpickle(getattr(self,'dca'),basename+'/struc/gpickle/dca_'+self.filename+'.gpickle')
 
 
@@ -4947,6 +4950,8 @@ class Layout(object):
                     'edgelist': [],
                     'figsize': (5,5),
                     'mode':'cycle',
+                    'alphacy':0.8,
+                    'colorcy':'#abcdef'
                     }
 
         for key, value in defaults.items():
@@ -5050,7 +5055,7 @@ class Layout(object):
 
         if kwargs['mode']=='cycle':
             for k, ncy in enumerate(self.Gt.node.keys()):
-                fig,ax = self.Gt.node[ncy]['polyg'].plot(**args)
+                fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
                 args['fig']=fig
                 args['ax']=ax
         else:
