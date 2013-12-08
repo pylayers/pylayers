@@ -47,7 +47,7 @@
           <a href="signal.html" title="signal"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
@@ -161,7 +161,7 @@ else y is smashed</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.signal.bsignal.Bsignal.imshow">
-<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x302afd0&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">imshow</tt><big>(</big><em>interpolation=None</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x41cd690&gt;</em>, <em>aspect='auto'</em>, <em>dB=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#Bsignal.imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.Bsignal.imshow" title="Permalink to this definition">¶</a></dt>
 <dd><p>imshow of y matrix</p>
 </dd></dl>
 
@@ -728,7 +728,8 @@ tau1 : additional delay</p>
 <p><strong>plot</strong> : plot modulus and phase</p>
 <p><strong>plotri</strong> : plot real part and imaginary part</p>
 <p><strong>plotdB</strong> : plot modulus in dB</p>
-<p class="last"><strong>get</strong> : get k th ray</p>
+<p><strong>get</strong> : get k th ray</p>
+<p class="last"><strong>chantap</strong> : calculates channel taps</p>
 </td>
 </tr>
 </tbody>
@@ -765,7 +766,7 @@ align : align two FUsignal on a same base</p>
 <blockquote>
 <div><p>bandwidth GHz</p>
 </div></blockquote>
-<p><strong>Ntap</strong> :  number of tap</p>
+<p><strong>Ntap</strong> :  number of taps</p>
 <p><strong>baseband</strong> : boolean</p>
 <blockquote class="last">
 <div><p>default : True</p>
@@ -775,7 +776,7 @@ align : align two FUsignal on a same base</p>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>see <a class="reference external" href="http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf">http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf</a>
+<p>see [Tse] <a class="reference external" href="http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf">http://www.eecs.berkeley.edu/~dtse/Chapters_PDF/Fundamentals_Wireless_Communication_chapter2.pdf</a>
 page 26</p>
 </dd></dl>
 
@@ -866,16 +867,13 @@ N : int</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUsignal.ift">
 <tt class="descname">ift</tt><big>(</big><em>Nz=1</em>, <em>ffts=0</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.ift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.ift" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>return the associated TUsignal</div></blockquote>
+<dd><p>inverse Fourier transform returns the associated TUsignal</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>Nz</strong> : Number of zeros (-1) No forcing</p>
-<blockquote>
-<div><p>ffts : 0 (no fftshift 1:fftshift)</p>
-</div></blockquote>
+<p><strong>ffts</strong> : 0 (no fftshift 1:fftshift)</p>
 <p><strong>&gt;&gt;&gt; e  = EnImpulse()</strong> :</p>
 <p><strong>&gt;&gt;&gt; E  = e.fft()</strong> :</p>
 <p class="last"><strong>&gt;&gt;&gt; EU = E.unrex()</strong> :</p>
@@ -888,8 +886,7 @@ N : int</p>
 <dl class="method">
 <dt id="pylayers.signal.bsignal.FUsignal.iftshift">
 <tt class="descname">iftshift</tt><big>(</big><em>Nz=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/signal/bsignal.html#FUsignal.iftshift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.signal.bsignal.FUsignal.iftshift" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>apply the inverse fftshift operator to come back in time</div></blockquote>
+<dd><p>apply the inverse fftshift operator to come back in time</p>
 </dd></dl>
 
 <dl class="method">
@@ -2239,7 +2236,7 @@ This function can be improved regarding time granularity</p>
           <a href="signal.html" title="signal"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 

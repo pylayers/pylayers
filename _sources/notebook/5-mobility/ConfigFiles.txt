@@ -1,0 +1,609 @@
+
+.. code-block:: python
+
+    import ConfigParser
+    import pylayers.util.pyutil as pyu
+Network Simulation Configuration
+================================
+
+
+PyLayers is designed to provide indoor radio channel simulation for
+mobile agents.
+
+The goal is to adress mobility in indoor environement heterogeneous
+network, with human being carriers of a mobile User Equipement (UE)
+which possibly embeds several Radio Acess Technology (RAT).
+
+Several human can be created and their motion in the environement should
+be as realistic as possible, because for many applications it turns out
+that many parameter of interest are stongly dependent of the dynamic
+topology of the mobile network.
+
+In the following the configuration files for proceeding with those high
+level ``PyLayers`` simulation are described.
+
+The configuration file is ``simulnet.ini``
+
+Simulnet.ini
+~~~~~~~~~~~~
+
+
+This file is located in ``$BASENAME/ini``
+
+.. code-block:: python
+
+    !cat $BASENAME/ini/simulnet.ini
+
+.. parsed-literal::
+
+    [Mysql]
+    host = localhost
+    user = root
+    passwd = sqlsql
+    dbname = test
+    dumpdb =True
+    
+    [Save]
+    save=[]
+    ;save=['csv','mysql','matlab','pyray','txt','ini']
+    savep=True
+    
+    [Layout]
+    filename = TA-Office.ini
+    
+    x_offset  = 30
+    y_offset = 2
+    
+    the_world_width	 = 65
+    the_world_height = 20
+    the_world_scale	 = 20 
+    
+    [Mechanics]
+    ; update time for agent movement
+    mecanic_update_time = 0.1
+    ; select how agnt choose destiantion
+    ;'random' ; file
+    choose_destination = 'random'
+    
+    
+    [Network]
+    ; refresh TOA regulary 'synchro 'or with distance 'autionomous'
+    Communication_mode='autonomous'
+    ; update time for refreshing network
+    network_update_time = 0.1
+    ; show nodes moving & radio link
+    show = False
+    ; show in ipython notebook
+    ipython_nb_show = False
+    ; show signature ( not fully functionnal)
+    show_sg = False
+    ; show 2 tables : mecanic & network
+    show_table = False
+    ; show the same information but in terminal
+    dispinfo = False
+    
+    [Localization]
+    ; perform localization
+    localization = True
+    ; time to refresh localization
+    localization_update_time = 1.0
+    ; list of used methods method = ['alg','geo']
+    method = ['alg']
+    
+    
+    
+    [Simulation]
+    ; Simulation duration
+    duration = 10.0
+    ; speed ratio 
+    speedratio = 1.
+    ; time for refreshing tk plot ( obsolete)
+    show_interval = 0.5
+    ; show scene using tk renderer ( obsolete)
+    showtk   = False
+    ; choose seed for random mobiliity
+    seed = 1
+    ; verbose output
+    verbose = True
+    
+
+
+.. code-block:: python
+
+    Cp = ConfigParser.ConfigParser()
+    Cp.read(pyu.getlong('simulnet.ini','ini'))
+
+
+
+.. parsed-literal::
+
+    ['/home/uguen/Bureau/P1/ini/simulnet.ini']
+
+
+
+Simulnet.ini contains the following sections
+
+.. code-block:: python
+
+    Cp.sections()
+
+
+
+.. parsed-literal::
+
+    ['Mysql',
+     'Save',
+     'Layout',
+     'Mechanics',
+     'Network',
+     'Localization',
+     'Simulation']
+
+
+
+Save section
+~~~~~~~~~~~~
+
+
+This section define the save options.
+
+.. code-block:: python
+
+    dict(Cp.items('Save'))
+
+
+
+.. parsed-literal::
+
+    {'save': '[]', 'savep': 'True'}
+
+
+
+The ``savep`` boolean enable/disable saving of the simulation.
+
+.. code-block:: python
+
+    dict(Cp.items('Save'))['savep']
+
+
+
+.. parsed-literal::
+
+    'True'
+
+
+
+The log file which contains all traces from the dynamic are in
+``$BASENAME/netsave``
+
+.. code-block:: python
+
+    ls /home/Bureau/P1/netsave/
+
+.. parsed-literal::
+
+    ls: impossible d'accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type
+
+
+Layout
+------
+
+This section allow setup the layout for the simulation
+
+.. code-block:: python
+
+    dict(Cp.items('Layout'))
+
+
+
+.. parsed-literal::
+
+    {'filename': 'TA-Office.ini',
+     'the_world_height': '20',
+     'the_world_scale': '20',
+     'the_world_width': '65',
+     'x_offset': '30',
+     'y_offset': '2'}
+
+
+
+Choose the used Layout for simulation
+
+.. code-block:: python
+
+    dict(Cp.items('Layout'))['filename']
+
+
+
+.. parsed-literal::
+
+    'TA-Office.ini'
+
+
+
+Setup an offset on the origin of axis
+
+.. code-block:: python
+
+    print dict(Cp.items('Layout'))['x_offset']
+    print dict(Cp.items('Layout'))['y_offset']
+
+.. parsed-literal::
+
+    30
+    2
+
+
+Network
+-------
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))
+
+
+
+.. parsed-literal::
+
+    {'communication_mode': "'autonomous'",
+     'dispinfo': 'False',
+     'ipython_nb_show': 'False',
+     'network_update_time': '0.1',
+     'show': 'False',
+     'show_sg': 'False',
+     'show_table': 'False'}
+
+
+
+Setup communication mode between node:
+
+-  autonomous : the data exchange between nodes is driven by the
+   localization layer. If more information is required to estimate the
+   position a communication request is send to the communication stae
+-  synchro : the data exchange between nodes is periodic. LDPs are
+   periodically refreshed at the network\_update\_time
+
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['communication_mode']
+
+
+
+.. parsed-literal::
+
+    "'autonomous'"
+
+
+
+Time step for the refresh network information
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['network_update_time']
+
+
+
+.. parsed-literal::
+
+    '0.1'
+
+
+
+Vizualization of the simulation using matplotlib
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['show']
+
+
+
+.. parsed-literal::
+
+    'False'
+
+
+
+Vizualization of a table summing up the data exchange of the nodes
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['show_table']
+
+
+
+.. parsed-literal::
+
+    'False'
+
+
+
+Vizualization of the simulation inside ipython notebook
+
+.. code-block:: python
+
+    dict(Cp.items('Network'))['ipython_nb_show']
+
+
+
+.. parsed-literal::
+
+    'False'
+
+
+
+Mechanics
+---------
+
+This section allow to setup the agent movement during simulation
+
+.. code-block:: python
+
+    dict(Cp.items('Mechanics'))
+
+
+
+.. parsed-literal::
+
+    {'choose_destination': "'random'", 'mecanic_update_time': '0.1'}
+
+
+
+Setup how agent choose their target:
+
+-  random : the agnet move into the layout randomly
+-  file : the agent follow the sequence specified in
+   /nodes\_destination.ini
+
+
+.. code-block:: python
+
+    dict(Cp.items('Mechanics'))['choose_destination']
+
+
+
+.. parsed-literal::
+
+    "'random'"
+
+
+
+Time step for refreshing the mechanical layer (ground truth position)
+
+.. code-block:: python
+
+    dict(Cp.items('Mechanics'))['mecanic_update_time']
+
+
+
+.. parsed-literal::
+
+    '0.1'
+
+
+
+Localization
+------------
+
+Setup Localization algorithms
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))
+
+
+
+.. parsed-literal::
+
+    {'localization': 'True',
+     'localization_update_time': '1.0',
+     'method': "['alg']"}
+
+
+
+enable/disable localizaiton of the agents
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))['localization']
+
+
+
+.. parsed-literal::
+
+    'True'
+
+
+
+Select localization methods :
+
+-  Algebraic : hétérogeneous localization algorithm
+-  Geometric : RGPA
+
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))['method']
+
+
+
+.. parsed-literal::
+
+    "['alg']"
+
+
+
+Time step for localization update
+
+.. code-block:: python
+
+    dict(Cp.items('Localization'))['localization_update_time']
+
+
+
+.. parsed-literal::
+
+    '1.0'
+
+
+
+Simulation
+----------
+
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))
+
+
+
+
+.. parsed-literal::
+
+    {'duration': '10.0',
+     'seed': '1',
+     'show_interval': '0.5',
+     'showtk': 'False',
+     'speedratio': '1.',
+     'verbose': 'True'}
+
+
+
+Setup simulation duration in second
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))['duration']
+
+
+
+
+.. parsed-literal::
+
+    '10.0'
+
+
+
+Setup random seed for simulation
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))['seed']
+
+
+
+
+.. parsed-literal::
+
+    '1'
+
+
+
+Display messages during simulation
+
+.. code-block:: python
+
+    dict(Cp.items('Simulation'))['verbose']
+
+
+
+
+.. parsed-literal::
+
+    'True'
+
+
+
+.. code-block:: python
+
+    from IPython.display import FileLink
+    FileLink('Mobility.ipynb')
+
+
+
+.. raw:: html
+
+    Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of being generated, or you may have the incorrect path.
+
+
+
+.. code-block:: python
+
+    from IPython.core.display import HTML
+    
+    def css_styling():
+        styles = open("../styles/custom.css", "r").read()
+        return HTML(styles)
+    css_styling()
+
+
+
+.. raw:: html
+
+    <style>
+        @font-face {
+            font-family: "Computer Modern";
+            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+        }
+        div.cell{
+            width:800px;
+            margin-left:16% !important;
+            margin-right:auto;
+        }
+        h1 {
+            font-family: Helvetica, serif;
+        }
+        h4{
+            margin-top:12px;
+            margin-bottom: 3px;
+           }
+        div.text_cell_render{
+            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+            line-height: 145%;
+            font-size: 130%;
+            width:800px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .CodeMirror{
+                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+        }
+        .prompt{
+            display: None;
+        }
+        .text_cell_render h5 {
+            font-weight: 300;
+            font-size: 22pt;
+            color: #4057A1;
+            font-style: italic;
+            margin-bottom: .5em;
+            margin-top: 0.5em;
+            display: block;
+        }
+        
+        .warning{
+            color: rgb( 240, 20, 20 )
+            }  
+    </style>
+    <script>
+        MathJax.Hub.Config({
+                            TeX: {
+                               extensions: ["AMSmath.js"]
+                               },
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'center', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 4}}
+                    }
+            });
+    </script>
+
+
+
+.. code-block:: python
+
+    

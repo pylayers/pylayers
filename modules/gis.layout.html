@@ -47,7 +47,7 @@
           <a href="gis.html" title="gis"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
@@ -191,7 +191,7 @@ contains additional visibility relationships between vertices and edges.</p>
 <p><strong>loadstr</strong> :</p>
 <p><strong>loadstr2</strong> :</p>
 <p><strong>ls</strong> :</p>
-<p><strong>nd2ed</strong> :</p>
+<p><strong>nd2seg</strong> :</p>
 <p><strong>onseg</strong> :</p>
 <p><strong>plot_segments</strong> :</p>
 <p><strong>pt2cy</strong> :</p>
@@ -232,13 +232,13 @@ contains additional visibility relationships between vertices and edges.</p>
 <p>This class exploits <cite>networkx</cite> to store Layout information</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.add_door">
-<tt class="descname">add_door</tt><big>(</big><em>e1</em>, <em>zmin</em>, <em>zmax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_door"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_door" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_door</tt><big>(</big><em>s1</em>, <em>zmin</em>, <em>zmax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_door"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_door" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a door on segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
 <blockquote>
 <div><p>segment number</p>
 </div></blockquote>
@@ -319,17 +319,15 @@ contains additional visibility relationships between vertices and edges.</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.add_nfpe">
-<tt class="descname">add_nfpe</tt><big>(</big><em>np0</em>, <em>e1</em>, <em>e2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_nfpe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_nfpe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add node on e1 from projection of np0 along e2</p>
+<tt class="descname">add_nfpe</tt><big>(</big><em>np0</em>, <em>s1</em>, <em>s2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_nfpe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_nfpe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add node on s1 from projection of np0 along s2</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>np0</strong> : point number</p>
-<blockquote class="last">
-<div><p>e1   : edge number 1
-e2   : edge number 2</p>
-</div></blockquote>
+<p><strong>s1</strong> : edge number 1</p>
+<p class="last"><strong>s2</strong> : edge number 2</p>
 </td>
 </tr>
 </tbody>
@@ -431,13 +429,13 @@ connect : list of point number</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.add_subseg">
-<tt class="descname">add_subseg</tt><big>(</big><em>e1</em>, <em>name='DOOR'</em>, <em>zmin=0</em>, <em>zmax=2.24</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_subseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_subseg" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_subseg</tt><big>(</big><em>s1</em>, <em>name='DOOR'</em>, <em>zmin=0</em>, <em>zmax=2.24</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_subseg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_subseg" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a subsegment on a segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
 <blockquote>
 <div><p>edge number &gt; 0</p>
 </div></blockquote>
@@ -451,7 +449,7 @@ connect : list of point number</p>
 </div></blockquote>
 <p><strong>zmax</strong> : float</p>
 <blockquote class="last">
-<div><p>default 2.4 m</p>
+<div><p>default 2.24 m</p>
 </div></blockquote>
 </td>
 </tr>
@@ -461,13 +459,13 @@ connect : list of point number</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.add_window">
-<tt class="descname">add_window</tt><big>(</big><em>e1</em>, <em>z</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_window" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_window</tt><big>(</big><em>s1</em>, <em>z</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.add_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.add_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a window on segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>s1</strong> : integer</p>
 <blockquote>
 <div><p>segment number</p>
 </div></blockquote>
@@ -874,7 +872,7 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>nc</strong> :  cycle number</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>lnc</strong> :  list of cycle number</td>
 </tr>
 </tbody>
 </table>
@@ -1079,27 +1077,27 @@ al2</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.edit_segment">
-<tt class="descname">edit_segment</tt><big>(</big><em>e1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.edit_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_segment" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">edit_segment</tt><big>(</big><em>e1</em>, <em>gui=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.edit_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.edit_segment" title="Permalink to this definition">¶</a></dt>
 <dd><p>edit segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>e1</strong> : integer</p>
-<blockquote class="last">
+<blockquote>
 <div><p>edge number</p>
 </div></blockquote>
+<p class="last"><strong>gui</strong> : boolean</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
 <dl class="docutils">
-<dt>A segment has the following compulsory properties :</dt>
+<dt>A segment has the following properties :</dt>
 <dd><ul class="first last simple">
 <li>name  : string</li>
-<li>zmin  : float (meters)</li>
-<li>zmax  : float (meters)</li>
+<li>z  :  tuple</li>
 <li>transition : boolean (default FALSE)</li>
 </ul>
 </dd>
@@ -1117,11 +1115,11 @@ added :</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.editor">
 <tt class="descname">editor</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.editor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.editor" title="Permalink to this definition">¶</a></dt>
-<dd><p>layout graphical editor</p>
+<dd><p>invoke interactive layout graphical editor</p>
 <p class="rubric">Notes</p>
 <p>point edition</p>
 <blockquote>
-<div><p>p create point</p>
+<div><p>m  toggle point edition mode  (CP : Create Point)</p>
 <blockquote>
 <div>lclic same x
 rclic same y
@@ -1262,7 +1260,7 @@ self.lsss : list of subsegments</p>
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.get_zone">
 <tt class="descname">get_zone</tt><big>(</big><em>ax</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.get_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.get_zone" title="Permalink to this definition">¶</a></dt>
-<dd><p>get node list and edge list in a rectangular zone</p>
+<dd><p>get point list and segment list in a rectangular zone</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1273,7 +1271,7 @@ self.lsss : list of subsegments</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>ndlist,edlist</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>ptlist,seglist</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -1297,9 +1295,18 @@ self.lsss : list of subsegments</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.gis.layout.Layout.info_edge">
-<tt class="descname">info_edge</tt><big>(</big><em>e1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.info_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.info_edge" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="pylayers.gis.layout.Layout.info_segment">
+<tt class="descname">info_segment</tt><big>(</big><em>s1</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.info_segment" title="Permalink to this definition">¶</a></dt>
+<dd><p>information about segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>s1</strong> : segment number</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.ispoint">
@@ -1307,6 +1314,20 @@ self.lsss : list of subsegments</p>
 <dd><p>ispoint(pt,tol) : verify if pt is a point of Layout</p>
 <p>if True the point number (numbered from 1) is return
 else -1 is return</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.gis.layout.Layout.isseg">
+<tt class="descname">isseg</tt><big>(</big><em>ta</em>, <em>he</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.isseg" title="Permalink to this definition">¶</a></dt>
+<dd><p>test if ta&lt;-&gt;he is a segment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>tahe</strong> :</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1521,7 +1542,7 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>typ</strong> : string optional</p>
 <blockquote>
-<div><p>{&#8216;str&#8217;|&#8217;ini&#8217;|&#8217;osm&#8217;|&#8217;str2&#8217;}</p>
+<div><p>{&#8216;str&#8217;|&#8217;ini&#8217;|&#8217;osm&#8217;|&#8217;str2&#8217;|&#8217;wrl&#8217;}</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1545,8 +1566,8 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.gis.layout.Layout.nd2ed">
-<tt class="descname">nd2ed</tt><big>(</big><em>ndlist</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.nd2ed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.nd2ed" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.gis.layout.Layout.nd2seg">
+<tt class="descname">nd2seg</tt><big>(</big><em>ndlist</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.nd2seg" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert node list to edge list</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1558,7 +1579,7 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>edlist</strong> : ndarray</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>seglist</strong> : ndarray</p>
 <blockquote class="last">
 <div><p>edge list</p>
 </div></blockquote>
@@ -1566,6 +1587,8 @@ segId_Nss SlabCode_Nss wall_floor_ceil_Nss prop_d_Nss zmin_Nss zmax_Nss</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>previously nd2ed</p>
 </dd></dl>
 
 <dl class="method">
@@ -1912,9 +1935,9 @@ p2 : numpy.ndarray</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ptlist</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ptlist array(1xNp)</strong> :</p>
 <blockquote>
-<div><p>array(1xNp) Point number array</p>
+<div><p>point number array</p>
 </div></blockquote>
 </td>
 </tr>
@@ -2207,7 +2230,7 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x8fe2390&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x92813d0&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2431,6 +2454,14 @@ T4 : limit the ndt to only edges and nodes in visibility from Tx</dd>
 <dt id="pylayers.gis.layout.Layout.translate">
 <tt class="descname">translate</tt><big>(</big><em>vec</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.translate" title="Permalink to this definition">¶</a></dt>
 <dd><p>translate layout</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>vec :</strong> :</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2544,7 +2575,7 @@ Occultation 8  situations
           <a href="gis.html" title="gis"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 

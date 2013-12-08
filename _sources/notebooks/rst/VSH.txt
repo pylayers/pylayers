@@ -1,0 +1,704 @@
+Vector Spherical Harmonics
+==========================
+
+
+In a first step the VSH coefficients are calculated from raw data
+describing the full sampled complex radiation pattern over the whole
+sphere and for the two orthogonal linear polarizations.
+
+This step can be done once off-line to build an antenna database which
+exploits the sparse VSH decomposition.
+
+.. math::
+
+
+   S_1 : \mathbb{C}^{2 \times N_{\theta} \times N_{\phi} \times N_{f}}
+   \rightarrow
+   \mathbb{C}^{4 \times N_{c} }
+
+In a second step field quantities are generated from the VSH
+coefficients for a given set of directions corresponding to the DOD/DOA
+of the rays coming out the RT engine.
+
+.. math::
+
+
+   S_2 : \mathbb{C}^{4 \times N_{c} }
+   \rightarrow
+   \mathbb{C}^{2 \times N_{r} \times N_{f}}
+
+
+
+One of the interest in doing this decomposition comes from the fact that
+the number of directions of interest :math:`N_r` is by far lower than
+the number required for the exhaustive sampling of the sphere needed at
+the starting point of the synthesis step. In practice, for a given
+channel, we do not need to calculate the field in all directions but
+only for a limited number of them. The alternative approach would
+consist in going through an interpolation procedure into the initial
+data structure, what could be either slower if the grid is tight or
+poorly accurate.
+
+We are dealing with a set of complex quantities that belongs to
+where :math:`N_{\theta}`\ ,:math:`N_{\phi}`\ ,:math:`N_f` states
+respectively for the number of angle :math:`\theta` :math:`\phi` and
+frequency point. In practice in a ray tracing tool a direction of
+
+.. math:: \mathbb{C}^{2 \times N_{r} \times N_{f}}
+
+ :math:`N_r` is the number of rays.
+
+.. math::
+
+   % use packages: array
+   \mathbf{F}(f,\theta,\phi) =
+   \left[
+   \begin{array}{l} 
+   F_{\theta}(f,\theta,\phi)\\ 
+   F_{\phi}(f,\theta,\phi)
+   \end{array}
+   \right]
+
+
+
+Vector spherical Harmonics function
+-----------------------------------
+
+The vector spherical harmonics are based on the function
+:math:`\bar{V}_l^{(m)}` and :math:`\bar{W}_l^{(m)}`
+
+.. math::
+
+   \bar{V}_l^{(m)}(x)=(-1)^{n} \frac{\sqrt{1-x^2}}{\sqrt{l(l+1)}}\bar{P}_l^{(m)'}(x)
+
+.. math::
+
+
+   \bar{V}_l^{(m)}(x)
+   = \frac{ (-1)^n } {  2\sqrt{l(l+1) } }
+     \left( 
+     \sqrt{(l+m)(l-m+1)} \bar{P}_l^{(m-1)}(x)
+   -  \sqrt{(l-m)(l+m+1)} \bar{P}_l^{(m+1)}(x)
+     \right)
+
+.. math::
+
+
+   \bar{W}_l^{(m)}(x)=\frac{(-1)^{n} m}{\sqrt{1-x^2}\sqrt{l(l+1)}}\bar{P}_l^{(m)}(x)
+
+.. math::
+
+
+   \bar{W}_l^{(m)}(x)=  
+   \frac{(-1)^{n}}{2x\sqrt{l(l+1)}}
+   \left[
+   \sqrt{(l+m)(l-m+1)}
+   \bar{P}_l^{(m-1)}(x)+
+   \sqrt{  (l-m) (l+m+1)}   
+   \bar{P}_l^{(m+1)}(x)
+   \right]
+
+
+
+Vector Spherical Harmonics transform step
+------------------------------------------
+
+This transform is implemented in the spherepack library in Fortran. The
+input is the measured complex pattern and the outpur are
+
+4 complex coefficients arrays which are obtained through the following
+projection relations.
+
+.. math::
+
+    br_l^{(m)}  =  \alpha_l^{(m)} \int_{0}^{2\pi} 
+    \int_{-\pi/2}^{-\pi/2}
+   ( F_{\theta}(\theta,\phi) V_l^{(m)}  \cos{m\phi} - 
+     F_{\phi}  (\theta,\phi) W_l^{(m)}  \sin{m\phi})
+   \sin{\theta} d\theta d\phi 
+
+.. math::
+
+
+   bi_l^{(m)}  =  \alpha_l^{(m)} \int_{0}^{2\pi}
+   \int_{-\pi/2}^{-\pi/2}{
+   ( F_{\phi}  (\theta,\phi)  W_l^{(m)} \cos{m\phi} +
+     F_{\theta}(\theta,\phi)  V_l^{(m)} \sin{m\phi})
+   \sin{\theta} d\theta d\phi}
+
+.. math::
+
+
+   cr_l^{(m)} =  \alpha_l^{(m)} \int_{0}^{2\pi} \int_{-\pi/2}^{-\pi/2}
+   (  F_{\phi}  (\theta,\phi) V_l^{(m)} \cos{m\phi} +
+      F_{\theta}(\theta,\phi) W_l^{(m)} \sin{m\phi})
+   \sin{\theta} d\theta d\phi
+
+.. math::
+
+   ci_l^{(m)} =  \alpha_l^{(m)} \int_{0}^{2\pi} \int_{-\pi/2}^{-\pi/2}
+   (  -F_{\theta}(\theta,\phi) W_l^{(m)}  \cos{m\phi} +
+       F_{\phi}(\theta,\phi)   V_l^{(m)}  \sin{m\phi})
+   \sin{\theta} d\theta d\phi
+
+
+
+The normalized Legendre polynomial respectively of order :math:`l` and
+:math:`l-1` are satisfying the following relations
+
+The first step consists in evaluating the vector spherical coefficient
+for a set of frequencies over the antenna bandwidth.
+
+The two components of the radiated far field are given by the following
+expansion which makes use of 4 coefficients.
+
+The problem here addressed is the one of reconstructing as fast as
+possible the radiated field from this set of coefficients.
+
+.. math::
+
+
+   F_{\phi}(\theta,\phi) = 
+   \sum_{l=0}^{L}\sum_{m=0}^l  
+     W_l^{(m)}(bi_l^{(m)} \cos{m\phi} - br_l^{(m)}\sin{m\phi})  +
+     V_l^{(m)}(cr_l^{(m)} \cos{m\phi} + ci_l^{(m)}\sin{m\phi})
+
+.. math::
+
+
+   F_{\theta}(\theta,\phi) = 
+   \sum_{l=0}^{L}\sum_{m=0}^n 
+       V_l^{(m)} ( br_l^{(m)} \cos{m\phi} + bi_l^{(m)} \sin{m\phi})  +
+           W_l^{(m)} (-ci_l^{(m)} \cos{m\phi} + cr_l^{(m)} \sin{m\phi})
+
+
+
+In those expressions the expansion functions along the angular parameter
+:math:`\theta` :math:`V_l^{(m)}` and :math:`W_l^{(m)}`
+
+.. math::
+
+
+   \sqrt{l(l+1)} V_l^{(m)}(\theta) = 
+   \frac{dP_l^{(m)}}{d\theta}      =
+   \frac{1}{2}  P_l^{(m+1)} -(l+m)(l-m+1) P_l^{(m-1)}
+
+.. math::
+
+
+   \sqrt{l(l+1)} W_l^{(m)}(\theta) =
+   \frac{m}{\cos\theta}P_l^{(m)}   = 
+   \frac{1}{2} P_{l-1}^{(m+1)} + (l+m)(l+m-1)P_{l-1}^{(m-1)}
+
+Why :math:`x` and :math:`\cos(\theta)` ?
+
+.. math::
+
+
+   P_l^{(m)} (x)  =  \frac{1}{2^n l!}  (-\cos\theta)^m 
+   \frac{d^{l+m}}  {dx^{l+m}} (x^2-1)^n
+
+.. math::
+
+
+   P_{l-1}^{(m)} (x) = \frac{1}{2^{l-1} l!}(-\cos\theta)^m
+   \frac{d^{l+m-1}} {dx^{l+m-1}} (x^2-1)^{n
+   -1}
+
+
+
+Associated Legendre Function
+----------------------------
+
+The SciPy function *lpmn(m,n,z)* is an implementation of the Associated
+Legendre functions of the first kind, :math:`P_l^{(m)}(z)` and its
+derivative, :math:`P_l^{'(m)}(z)` of order :math:`m` and degree
+:math:`n`\ .
+
+It returns two arrays of size :math:`(m+1,l+1)` containing
+:math:`P_l^{(m)}(z)` and :math:`P_l^{'(m)}(z)` for all orders from
+:math:`0 \ldots m` and degrees from :math:`0 \ldots n`\ . The :math:`z`
+argument can be complex.
+
+In[ ]:
+
+.. code:: python
+
+    from scipy.special import *
+
+In[ ]:
+
+.. code:: python
+
+    m = 3
+    n = 3
+    z = 0.5
+    lpmn(m,n,z)
+
+Out[ ]:
+
+.. parsed-literal::
+
+    (array([[ 1.        ,  0.5       , -0.125     , -0.4375    ],
+           [ 0.        , -0.8660254 , -1.29903811, -0.32475953],
+           [ 0.        ,  0.        ,  2.25      ,  5.625     ],
+           [ 0.        ,  0.        ,  0.        , -9.74278579]]),
+     array([[  0.        ,   1.        ,   1.5       ,   0.375     ],
+           [  0.        ,   0.57735027,  -1.73205081,  -6.27868418],
+           [  0.        ,   0.        ,  -3.        ,   3.75      ],
+           [  0.        ,   0.        ,   0.        ,  19.48557159]]))
+
+Definition
+~~~~~~~~~~
+
+
+In this scipy implementation the Condol-Shortley phase :math:`(-1)^m` is
+already included, thus the expression of the implemented function is
+given by :
+
+.. math::
+
+
+   P_l^{(m)}(x) = \frac{(-1)^m}{2^{n}l!}(1-x^2)^{\frac{m}{2}} \frac{d^{l+m}}{dx^{l+m}}(x^2-1)^n
+
+
+
+Properties
+~~~~~~~~~~
+
+For associated the two orthogonality relations respectively for
+associated Legendre function of different
+
+Derivation of Recurrence Formulas on :math:`\bar{P}_l^{(m)}(x)`
+---------------------------------------------------------------
+
+
+For the Legendre function of the first kind, we have the following
+recurrence property
+
+.. math::
+
+
+   2mx P_l^{(m)}(x)=-\sqrt{1-x^2}
+   \left[
+   P_l^{(m+1)}(x)+(l+m)(l-m+1)P_l^{(m-1)}(x)
+   \right]
+
+Introducing the relation which relates :math:`P_l^{(m)}(x)` to
+:math:`\bar{P}_l^{(m)(x)}`
+
+.. math::
+
+
+    P_l^{(m)}(x)= \sqrt{ \frac{2}{2 l+1}  \frac{(l+m)!}{(l-m)!} }  
+   \bar{P}_l^{(m)}(x)
+
+
+
+.. math::
+
+    \frac{2mx}{\sqrt{1-x^2}} \sqrt{\frac{(l+m)!}{(l-m)!} } \bar{P}_l^{(m)}(x) 
+   =- \left[ \sqrt{  \frac{(l+m+1)!}{(l-m-1)!} }   \bar{P}_l^{(m+1)}(x)
+   + (l+m)(l-m+1) \sqrt{  \frac{(l+m-1)!}{(l-m+1)!} }   \bar{P}_l^{(m-1)}(x) \right] 
+
+
+
+.. math::
+
+
+    \frac{2mx}{\sqrt{1-x^2}}   
+   \bar{P}_l^{(m)}(x) =-
+   \sqrt{   \frac{(l-m)!}{(l+m)!} }\left[
+   \sqrt{  \frac{(l+m+1)!}{(l-m-1)!} }  
+   \bar{P}_l^{(m+1)}(x)
+   +
+   (l+m)(l-m+1)
+   \sqrt{  \frac{(l+m-1)!}{(l-m+1)!} }  
+   \bar{P}_l^{(m-1)}(x)
+   \right]
+
+
+
+.. math::
+
+
+   \bar{P}_l^{(m)}(x) = -
+   \frac{\sqrt{1-x^2}}{2mx}
+   \left[
+   \sqrt{  (l-m) (l+m+1)}   
+   \bar{P}_l^{(m+1)}(x)
+   +
+    \sqrt{(l+m)(l-m+1)} 
+   \bar{P}_l^{(m-1)}(x)
+   \right]
+
+
+
+Derivation of Recurrence formulas on :math:`\frac{d\bar{P}_l^{(m)}}{dx}(x)`
+---------------------------------------------------------------------------
+
+
+.. math::
+
+
+   P_l^{(m)'}(x) = \frac{1}{x^2-1}
+   \left[
+   -(l+m)(l-m+1)\sqrt{1-x^2}
+   P_l^{(m-1)}(x)
+   -m x 
+   P_l^{(m)}(x)
+   \right]
+
+.. math::
+
+
+   P_l^{(m)'}(x) = \frac{1}{\sqrt{1-x^2}}
+   \left[
+   (l+m)(l-m+1)
+   P_l^{(m-1)}(x)
+   + \frac{m x}{\sqrt{1-x^2}} 
+   P_l^{(m)}(x)
+   \right]
+
+
+
+.. math::
+
+
+   %P_l^{(m)'}(x) 
+   \sqrt{   \frac{(l+m)!}{(l-m)!} }  
+   \bar{P}_l^{(m)'}(x)
+   = \frac{1}{\sqrt{1-x^2}}
+   \left[
+   (l+m)(l-m+1)
+   \sqrt{  \frac{(l+m-1)!}{(l-m+1)!} }  
+   \bar{P}_l^{(m-1)}(x)
+   %P_l^{(m-1)}(x)
+   + \frac{m x}{\sqrt{1-x^2}} 
+   %P_l^{(m)}(x)
+   \sqrt{   \frac{(l+m)!}{(l-m)!} }  
+   \bar{P}_l^{(m)}(x)
+   \right]
+
+
+
+.. math::
+
+
+   %P_l^{(m)'}(x) 
+   \bar{P}_l^{(m)'}(x)
+   = \frac{1}{\sqrt{1-x^2}}
+   \sqrt{   \frac{(l-m)!} {(l+m)!}}  
+   \left[
+   (l+m)(l-m+1)
+   \sqrt{  \frac{(l+m-1)!}{(l-m+1)!} }  
+   \bar{P}_l^{(m-1)}(x)
+   %P_l^{(m-1)}(x)
+   + \frac{m x}{\sqrt{1-x^2}} 
+   %P_l^{(m)}(x)
+   \sqrt{   \frac{(l+m)!}{(l-m)!} }  
+   \bar{P}_l^{(m)}(x)
+   \right]
+
+
+
+.. math::
+
+     \bar{P}_l^{(m)'}(x) = \frac{1}{\sqrt{1-x^2}}  
+   \left[
+       \sqrt{(l+m)(l-m+1)}
+       \bar{P}_l^{(m-1)}(x)
+           P_l^{(m-1)}(x)
+       + 
+       \frac{m x}{\sqrt{1-x^2}} P_l^{(m)}(x)
+       \bar{P}_l^{(m)}(x)
+   \right]
+
+
+
+.. math::  \bar{P}_l^{(m)'}(x) = \frac{1}{2\sqrt{1-x^2}} \left[ \sqrt{(l+m) (l-m+1 )}\bar{P}_l^{(m-1)}(x)-\sqrt{(l-m)(l+m+1)} \bar{P}_l^{(m+1)}(x)  \right]
+
+
+
+
+
+Evaluation of negative order
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. math::
+
+
+   P_l^{(-m)}(x)=(-1)^{m}\frac{(l-m)!}{(l+m)!}P_l^{(m)}(x)
+
+
+
+.. math::
+
+
+   \sqrt{  \frac{(l-m)!}{(l+m)!} }  
+   \bar{P}_l^{(-m)}(x)
+   =(-1)^{m}
+   \frac{(l-m)!}{(l+m)!}
+   \sqrt{   \frac{(l+m)!}{(l-m)!} }  
+   \bar{P}_l^{(m)}(x)
+
+
+
+.. math::
+
+
+   \bar{P}_l^{(-m)}(x)
+   =(-1)^{m}
+   \frac{(l-m)!}{(l+m)!}
+   \sqrt{   \frac{(l+m)!}{(l-m)!}  
+    \frac{(l+m)!}{(l-m)!} }  
+   \bar{P}_l^{(m)}(x)
+
+
+
+We get the nice and simple relation
+
+.. math::
+
+
+   \bar{P}_l^{(-m)}(x)
+   =(-1)^{m}
+   \bar{P}_l^{(m)}(x)
+
+
+
+Practical Implementation
+------------------------
+
+
+.. math::
+
+
+   \Re\{F\_{\theta}(\theta,\phi)\} = 
+   \Re \{ \frac{1}{2} \sum\_{l=0}^{L} 
+   (br_l^{(0)}\bar{V}_l^{(0)}- j cr_l^{(0)}\bar{W}_l^{(0)})
+   + \sum\_{m=1}^{M}\sum\_{l=m}^{N}
+     (br_l^{(m)} \bar{V}_l^{m}
+   -j cr_l^{(m)} \bar{W}_l^{m})
+   e^{jm\phi}\}
+
+
+
+.. math::
+
+
+   \Im\{F\_{\theta}(\theta,\phi)\} = \Re \{ \frac{1}{2} \sum\_{l=0}^{L} 
+   (bi_{0,n}\bar{V}_l^{0}- j ci_l^{(0)}\bar{W}_l^{(0)})
+   + \sum\_{m=1}^{M}\sum\_{l=m}^{N}(bi_l^{(m)}\bar{V}_l^{m}
+   -j ci_l^{(m)}\bar{W}_l^{m})
+   e^{jm\phi}\}
+
+
+
+.. math::
+
+
+   \Re\{F\_{\phi}(\theta,\phi)\} = \Re \{ \frac{1}{2} \sum\_{l=0}^{N} 
+   (j br_l^{(0)}\bar{W}_l^{(0)}+ cr_l^{(0)}  \bar{V}_l^{(0)})
+   + \sum\_{m=1}^{M}\sum\_{l=0}^{N}(j br_l^{(m)} \bar{W}_l^{m}
+   +cr_l^{(m)}\bar{V}_l^{m})e^{jm\phi})\}
+
+
+
+.. math::
+
+
+   \Im\{F\_{\phi}(\theta,\phi)\} = \Re \{ \frac{1}{2} \sum\_{l=0}^{N} 
+   (j bi_l^{(0)}\bar{W}_l^{(0)} + ci_l^{(0)}\bar{V}_l^{(0)})
+   + \sum\_{m=1}^{M}\sum\_{l=0}^{N}(j bi_l^{(m)}\bar{W}_l^{m}
+   + ci_l^{(m)}\bar{V}_l^{m} )
+   e^{jm\phi}\}
+
+
+
+The Vector Spherical Harmonics Functions :math:`\bar{V}_l^{(m)}`
+----------------------------------------------------------------
+
+
+.. math::
+
+
+   \bar{V}_l^{(m)}(x)
+   = \frac{ (-1)^n } {  2\sqrt{l(l+1) } }
+     \left( 
+     \sqrt{(l+m)(l-m+1)} \bar{P}_l^{(m-1)}(x)
+   -  \sqrt{(l-m)(l+m+1)} \bar{P}_l^{(m+1)}(x)
+     \right)
+
+
+
+Calculation of :math:`\bar{W}_l^{(m)}`
+--------------------------------------
+
+
+.. math::
+
+
+   \bar{W}_l^{(m)}(x)=\frac{(-1)^{n} m}{\sqrt{1-x^2}\sqrt{l(l+1)}}\bar{P}_l^{(m)}(x)
+
+
+
+.. math::
+
+
+   \bar{W}_l^{(m)}(x)=(-1)^{n} \frac{m}{\sqrt{1-x^2}\sqrt{l(l+1)}}
+   \frac{\sqrt{1-x^2}}{2mx}
+   \left[
+   \sqrt{  (l-m) (l+m+1)}   
+   \bar{P}_l^{(m+1)}(x)
+   +
+    \sqrt{(l+m)(l-m+1)} 
+   \bar{P}_l^{(m-1)}(x)
+   \right]
+
+
+
+.. math::
+
+
+   \bar{W}_l^{(m)}(x)= \frac{(-1)^{n}}{2x\sqrt{l(l+1)}}
+   \left[
+   \sqrt{  (l-m) (l+m+1)}   
+   \bar{P}_l^{(m+1)}(x)
+   +
+    \sqrt{(l+m)(l-m+1)} 
+   \bar{P}_l^{(m-1)}(x)
+   \right]
+
+
+
+.. math::
+
+
+   \bar{W}_l^{(m)}(\theta)
+   = \frac{ (-1)^n } {  2 \cos \theta \sqrt{l(l+1) } }
+     \left[
+     \sqrt{(l-m)(l+m+1)} \bar{P}_l^{(m+1)}(\cos \theta) +
+     \sqrt{(l+m)(l-m+1)} \bar{P}_l^{(m-1)}(\cos \theta)
+     \right]
+
+
+
+There is a singularity of :math:`\bar{W}_l^{(m)}(\theta)` in
+:math:`\theta=\pi/2`
+
+.. math::
+
+
+   \bar{W}_l^{(m)}(\theta)
+   = \frac{ (-1)^n } {  2 \cos \theta \sqrt{l(l+1) } }
+     \left[
+     \sqrt{(l-m)(l+m+1)} \bar{P}_l^{(m+1)}(\cos \theta) +
+     \sqrt{(l+m)(l-m+1)} \bar{P}_l^{(m-1)}(\cos \theta)
+     \right]
+
+
+
+Norm of :math:`V_l^{(m)}(x)`
+----------------------------
+
+Those basis functions are not unitary
+
+.. math::
+
+
+    \int_{-1}^{1} 
+    \bar{V}_l^{2(m)}(x) dx = 
+   \frac{1 } {  4 l(l+1)  }
+    \int_{-1}^{1} 
+     \left( 
+     \sqrt{(l+m)(l-m+1)} \bar{P}_l^{(m-1)}(x)
+   - \sqrt{(l-m)(l+m+1)} \bar{P}_l^{(m+1)}(x)
+     \right)^2
+    dx
+
+
+
+.. math::
+
+
+    \int_{-1}^{1} 
+    \bar{V}_l^{2(m)}(x) dx = 
+   \frac{1 } {  4 l(l+1)  }
+    \int_{-1}^{1} 
+    ( 
+     (l+m)(l-m+1) \bar{P}_l^{2(m-1)}(x)
+   + (l-m)(l+m+1) \bar{P}_l^{2(m+1)}(x)\\
+   - 2\sqrt{(l+m)(l-m+1)(l-m)(l+m+1)}
+    \bar{P}_l^{(m-1)}(x)
+    \bar{P}_l^{(m+1)}(x)
+    )
+    dx
+
+
+
+.. math::
+
+
+    \int_{-1}^{1} 
+    \bar{V}\_l^{2(m)}(x) dx = 
+   \frac{1 } {  4 l(l+1)  }
+    \left( (l+m)(l-m+1) 
+   + (l-m)(l+m+1)\\
+   - 2\sqrt{(l+m)(l-m+1)(l-m)(l+m+1)}
+   \int_{-1}^{1}  
+   \bar{P}\_l^{(m-1)}(x)
+    \bar{P}\_l^{(m+1)}(x) dx
+   \right)
+
+
+
+.. math::
+
+
+    \int_{-1}^{1} 
+    \bar{V}\_l^{2(m)}(x) dx = 
+   \frac{1 } {  4 l(l+1)  }
+    \left( (l^2-m^2+l+m)
+   +  (l^2-m^2+l-m)\\
+   - 2\sqrt{(l^2-m^2+l+m)(l^2-m^2+l-m)}
+   \int_{-1}^{1}  
+   \bar{P}\_l^{(m-1)}(x)
+    \bar{P}\_l^{(m+1)}(x) dx
+   \right )
+
+
+
+.. math::
+
+
+    \int_{-1}^{1} 
+    \bar{V}_l^{2(m)}(x) dx = 
+   \frac{l^2-m^2+l } {  2 l(l+1)  }
+    \left( 1 
+   - \sqrt{1-\frac{m^2}{(l^2-m^2+l)^2}}
+   \int_{-1}^{1}  
+   \bar{P}\_l^{(m-1)}(x)
+    \bar{P}\_l^{(m+1)}(x) dx
+    \right)
+
+
+
+Norm of :math:`\bar{W}_l^{(m)}(x)`
+----------------------------------
+
+
+.. math::
+
+
+    \int_{-1}^{1} 
+    \bar{W}_l^{2(m)}(x) dx = 
+   \frac{ l^2-m^2+l } { l(l+1) } 
+   \left(
+     1
+   - \sqrt{1-\frac{m^2}{(l^2-m^2+l)^2}}
+     \int_{-1}^{1} \bar{P}_l^{(m-1)}(x)\bar{P}_l^{(m+1)}(x) dx
+     \right)
+
+

@@ -1,0 +1,26 @@
+Workflow for integrating notebook in other format
+=================================================
+
+Titre 2
+-------
+
+Titre 3 
+````````
+
+Titre 4
+'''''''
+
+In[2]:
+
+.. code:: python
+
+    from numpy import *
+    from matplotlib.pyplot import *
+    x = arange(10)
+    plot(x)
+    show()
+
+.. image:: Worflow_files/Worflow_fig_00.png
+
+
+This is a latex equation :math:`\sqrt{x}`

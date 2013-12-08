@@ -1,0 +1,174 @@
+
+Chapter 2
+=========
+
+--------------
+
+Transmision and Reflection on a Slab
+------------------------------------
+
+
+A slab is an object which represents an arbitrary multi layer of
+dielectric materials. It is handle in the ``pylayers.antprop.slab``
+module.
+
+.. code-block:: python
+
+    from pylayers.antprop.slab import *
+In practice when describing a specific building, it is necessary to
+specify a set of different slabs with different characteristics. The
+structure which gathers this set is ``SlabDB``. If no argument is
+provided, this structure is initialized with the default file:
+`slabDB.ini <https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini>`_
+
+One can just now create such a collection ``sl``.
+
+.. code-block:: python
+
+    sl = SlabDB()
+To add a new material
+
+.. code-block:: python
+
+    sl.mat.add(name='TESS-p50',cval=3+0j,sigma=0.06,typ='epsr')
+.. code-block:: python
+
+    
+    sl.add(name='TESS-p50-5cm',lname=['TESS-p50'],lthick=[0.05])
+    sl.add(name='TESS-p50-10cm',lname=['TESS-p50'],lthick=[0.10])
+    sl.add(name='TESS-p50-15cm',lname=['TESS-p50'],lthick=[0.15])
+.. code-block:: python
+
+    fGHz=4
+    theta = np.arange(0,pi/2,0.01)
+.. code-block:: python
+
+    figsize(8,8)
+    # These Tessereau page 50 
+    
+    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
+    
+    # by default var='a' and kv = 0 
+    
+    fig,ax = sl['TESS-p50-5cm'].plotwrt(color='k',labels=[''])
+    fig,ax = sl['TESS-p50-10cm'].plotwrt(color='k',labels=[''],linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt(color='k',labels=[''],linestyle='dashdot',fig=fig,ax=ax)
+
+
+.. image:: DEV-Slab_files/DEV-Slab_files/DEV-Slab_9_0.png
+
+
+.. code-block:: python
+
+    figsize(12,8)
+    fGHz = np.arange(2,16,0.1)
+    theta = 0 
+    
+    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=False)
+    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=False)
+    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=False)
+        
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k')
+    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
+    
+    sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
+    sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
+    
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',types=['ru'],labels=['5cm compensated',''],color='r',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=['10cm compensated',''],color='r',linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=['15cm not compensated',''],color='r',linestyle='dashdot',fig=fig,ax=ax) 
+
+
+
+.. image:: DEV-Slab_files/DEV-Slab_files/DEV-Slab_10_0.png
+
+
+.. code-block:: python
+
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',labels=[''],color='k')
+    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
+
+
+.. image:: DEV-Slab_files/DEV-Slab_files/DEV-Slab_11_0.png
+
+
+.. code-block:: python
+
+    from IPython.core.display import HTML
+    
+    def css_styling():
+        styles = open("./styles/custom.css", "r").read()
+        return HTML(styles)
+    css_styling()
+
+
+
+.. raw:: html
+
+    <style>
+        @font-face {
+            font-family: "Computer Modern";
+            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+        }
+        div.cell{
+            width:800px;
+            margin-left:16% !important;
+            margin-right:auto;
+        }
+        h1 {
+            font-family: Helvetica, serif;
+        }
+        h4{
+            margin-top:12px;
+            margin-bottom: 3px;
+           }
+        div.text_cell_render{
+            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+            line-height: 145%;
+            font-size: 130%;
+            width:800px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .CodeMirror{
+                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+        }
+        .prompt{
+            display: None;
+        }
+        .text_cell_render h5 {
+            font-weight: 300;
+            font-size: 22pt;
+            color: #4057A1;
+            font-style: italic;
+            margin-bottom: .5em;
+            margin-top: 0.5em;
+            display: block;
+        }
+        
+        .warning{
+            color: rgb( 240, 20, 20 )
+            }  
+    </style>
+    <script>
+        MathJax.Hub.Config({
+                            TeX: {
+                               extensions: ["AMSmath.js"]
+                               },
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'center', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 4}}
+                    }
+            });
+    </script>
+
+

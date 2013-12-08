@@ -47,7 +47,7 @@
           <a href="antprop.signature.html" title="signature"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
@@ -124,12 +124,95 @@ o  : axis = 2   orhogonal axis</div></blockquote>
 <dt id="pylayers.antprop.slab.Interface.RT">
 <tt class="descname">RT</tt><big>(</big><em>metalic=False</em>, <em>RT='RT'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.RT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.RT" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Reflection and Transmission matrix</p>
-<blockquote>
-<div><div class="math">
-<p><img src="../_images/math/bf55b0fcce0907a58d78344a6ca1a17eac01d8f4.png" alt=""/></p>
-</div><p>R = matrix(R_o &amp; 0\0 &amp; R_p)
-T = matrix(T_o &amp; 0\0 &amp; T_p)</p>
-</div></blockquote>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">R = \matrix(R_o &amp; 0\\0 &amp; R_p)
+T = \matrix(T_o &amp; 0\\0 &amp; T_p)</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2009/09/24&gt;
+Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
+ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
+9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
+skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
+orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
+, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
+rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
+(/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
+(/home/uguen/texmf/tex/latex/ucs/ucs.sty
+(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?&#8217; option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texmf-texlive/tex/latex/tools/bm.sty)
+No file math.aux.
+(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
+
+! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
+
+See the amsmath package documentation for explanation.
+Type  H &lt;return&gt;  for immediate help.
+ ...                                              
+                                                  
+l.15 \end{gather}
+                 
+
+! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
+
+See the amsmath package documentation for explanation.
+Type  H &lt;return&gt;  for immediate help.
+ ...                                              
+                                                  
+l.15 \end{gather}
+                 
+! Extra alignment tab has been changed to \cr.
+&lt;template&gt; }$\hfill \endtemplate 
+                                 
+l.15 \end{gather}
+                 
+
+! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
+
+See the amsmath package documentation for explanation.
+Type  H &lt;return&gt;  for immediate help.
+ ...                                              
+                                                  
+l.15 \end{gather}
+                 
+
+! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
+
+See the amsmath package documentation for explanation.
+Type  H &lt;return&gt;  for immediate help.
+ ...                                              
+                                                  
+l.15 \end{gather}
+                 
+! Extra alignment tab has been changed to \cr.
+&lt;template&gt; }$\hfill \endtemplate 
+                                 
+l.15 \end{gather}
+                 
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 460 bytes).
+Transcript written on math.log.
+</div>
 <p class="rubric">Notes</p>
 <p>R : np.array   (f , th , 2, 2)
 T : np.array   (f , th , 2, 2)</p>
@@ -402,17 +485,22 @@ sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)</p>
 <p><strong>mur</strong> : float</p>
 <p><strong>typ</strong> : string</p>
 <blockquote class="last">
-<div><p>{&#8216;epsr&#8217;|&#8217;ind&#8217;|&#8217;THz&#8217;}</p>
+<div><p>{&#8216;epsr&#8217;|&#8217;ind&#8217;<a href="#id1"><span class="problematic" id="id2">|,&#8217;reim&#8217;,|</span></a>&#8216;THz&#8217;}</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>There are two manners to enter a material</p>
+<p>Different ways to enter a material are :</p>
 <ol class="lowerroman simple">
-<li>epsr and sigma</li>
-<li>indice &#64; fGHz</li>
+<li>epsr : epsr and sigma
+cval = epsr 
+sigma = sigma</li>
+<li>ind : indice &#64; fGHz
+cval = indice</li>
+<li>reim :  real(epsr) and imag(epsr)  &#64;fGHz</li>
+<li>THZ</li>
 </ol>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
@@ -780,9 +868,9 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lname</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lmatname</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;PLATRE-57GHz&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lthick</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.018</span><span class="p">,</span><span class="mf">0.03</span><span class="p">,</span><span class="mf">0.018</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;placo&#39;</span><span class="p">,</span><span class="n">lname</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;placo&#39;</span><span class="p">,</span><span class="n">lmatname</span><span class="p">,</span><span class="n">lthick</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">57.5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
@@ -961,14 +1049,14 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 </table>
 <dl class="method">
 <dt id="pylayers.antprop.slab.SlabDB.add">
-<tt class="descname">add</tt><big>(</big><em>name</em>, <em>lname</em>, <em>lthick</em>, <em>color='black'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add</tt><big>(</big><em>name</em>, <em>lmatname</em>, <em>lthick</em>, <em>color='black'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#SlabDB.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.SlabDB.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a slab in dB</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<p><strong>lname</strong> : list of mat name</p>
+<p><strong>lmatname</strong> : list of mat name</p>
 <p><strong>lthick</strong> : list ot float</p>
 <blockquote class="last">
 <div><p>lthick  is in meters</p>
@@ -1228,7 +1316,7 @@ The surface impedance is <img class="math" src="../_images/math/0a17504d2da9d0f1
           <a href="antprop.signature.html" title="signature"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 

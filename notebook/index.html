@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User Manual &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="next" title="Introduction" href="1-introduction/Introduction.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="1-introduction/Introduction.html" title="Introduction"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="#">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1-introduction/Introduction.html"
+                        title="next chapter">Introduction</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="user-manual">
+<span id="usermanual"></span><h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html#what-pylayers-is-about">What PyLayers is about ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html#how-to-install-pylayers">How to install PyLayers ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html#how-to-cite-the-pylayers-project">How to cite the PyLayers Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/DEV-Layout.html">The <tt class="docutils literal"><span class="pre">ls()</span></tt> method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html">The Layout class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#structure-of-a-layout">Structure of a Layout</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#subsegments">Subsegments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-different-layout-format">The different layout format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#reading-an-exiting-layout">Reading an exiting Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-display-options-dictionnary">The display options dictionnary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#layers">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#strings">Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#sizes">Sizes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#booleans">Booleans</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#interactive-editor">Interactive editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-interactive-editor-l-editor">The interactive editor L.editor()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#image-overlay">Image overlay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#segments-and-subsegments">Segments and Subsegments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/MultiSubsegments.html">Multi sub-segments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/MultiSubsegments.html#channel-variability-due-to-different-layout-constitutive-materials">Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-antprop/Antennas.html">Handling Antennas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/Antennas.html#unwraping-the-phase">Unwraping the phase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/Antennas.html#evaluation-of-vector-spherical-harmonics-coefficients">Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3-antprop/Coverage.html">Coverage with a Multi Wall model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-antprop/Coverage.html#calculating-received-power-coverage">Calculating Received Power Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-antprop/MultiwallModel.html">Multi-wall model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/MultiwallModel.html#defining-a-radio-link">Defining a radio link</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/MultiwallModel.html#ploting-the-scene">Ploting the scene</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-antprop/MultiwallModel.html#finding-the-intersection-between-the-direct-path-and-the-walls">Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="3-antprop/MultiwallModel.html#computing-the-multi-wall-model">Computing the Multi-wall model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3-antprop/MultiwallModel.html#coverage-class">Coverage class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-antprop/Signatures.html">Ray Signatures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html">Slabs and Materials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#defining-a-new-slab-and-a-new-material">Defining a new Slab and a new Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#slab-information">Slab Information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#slab-evaluation">Slab evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#transmission-and-reflexion-coefficients">Transmission and Reflexion coefficients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#ploting-coefficients">Ploting Coefficients</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5-mobility/ConfigFiles.html">Network Simulation Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5-mobility/ConfigFiles.html#simulnet-ini">Simulnet.ini</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5-mobility/ConfigFiles.html#save-section">Save section</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#layout">Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#network">Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#mechanics">Mechanics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#localization">Localization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="5-mobility/ConfigFiles.html#simulation">Simulation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7-location/DEV-Algebraic.html">Algebraic Localization Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html">Robust Geometric Positioning Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#rgpa">RGPA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html#toa">TOA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html#rss">RSS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html#tdoa">TDOA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-util/Workflow.html">Workflow for integrating notebook in other format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="a-util/Workflow.html#titre-2">Titre 2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="a-util/Workflow.html#titre-3">Titre 3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="1-introduction/Introduction.html" title="Introduction"
+             >next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="#">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

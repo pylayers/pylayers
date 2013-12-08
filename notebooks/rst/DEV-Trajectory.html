@@ -1,0 +1,571 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>&lt;no title&gt; &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5080e10&gt;</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    S</span>
+<span class="sd">    tx</span>
+<span class="sd">    rx</span>
+<span class="sd">    wav</span>
+<span class="sd">    cutoff</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">crxp</span> <span class="o">=-</span><span class="mi">1</span>
+    <span class="n">ctxp</span> <span class="o">=-</span><span class="mi">1</span>
+    <span class="n">tcir</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
+    <span class="n">Ntx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
+    <span class="n">Nrx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c">#for kt in range(1,Ntx-1):</span>
+    <span class="c">#print kt+1</span>
+    <span class="n">kt</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">kr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrx</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">print</span> <span class="n">kr</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">crx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ctx</span><span class="o">&lt;&gt;</span><span class="n">ctxp</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">crx</span><span class="o">&lt;&gt;</span><span class="n">crxp</span><span class="p">):</span>
+            <span class="n">Si</span>  <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+            <span class="n">ctxp</span> <span class="o">=</span> <span class="n">ctx</span>
+            <span class="n">crxp</span> <span class="o">=</span> <span class="n">crx</span>
+            <span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+        <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+        <span class="c">#r2d.show(S.L)</span>
+
+        <span class="n">r3d</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">()</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">Ct</span>  <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="n">sca</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">cir</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+        <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">cir</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">tcir</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;DLR&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;DLR WP4 WHERE2 measurement site&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DEV-Trajectory_files/_fig_02.png" src="notebooks/rst/DEV-Trajectory_files/_fig_02.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
+<span class="c"># Measures from WHERE2 WP4 measurement campaign @ DLR</span>
+<span class="c">#</span>
+
+<span class="n">MT_DLR_RDTMaster</span><span class="o">=</span><span class="p">{</span> <span class="mi">2</span><span class="p">:[</span><span class="mf">2.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">3</span><span class="p">:[</span><span class="mf">3.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">4</span><span class="p">:[</span><span class="mf">4.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">5</span><span class="p">:[</span><span class="mf">5.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">6</span><span class="p">:[</span><span class="mf">6.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">7</span><span class="p">:[</span><span class="mf">7.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">8</span><span class="p">:[</span><span class="mf">8.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">9</span><span class="p">:[</span><span class="mf">9.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">10</span><span class="p">:[</span><span class="mf">10.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">11</span><span class="p">:[</span><span class="mf">11.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">12</span><span class="p">:[</span><span class="mf">12.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">13</span><span class="p">:[</span><span class="mf">13.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">14</span><span class="p">:[</span><span class="mf">14.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">15</span><span class="p">:[</span><span class="mf">15.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">16</span><span class="p">:[</span><span class="mf">16.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">17</span><span class="p">:[</span><span class="mf">17.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">18</span><span class="p">:[</span><span class="mf">18.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">19</span><span class="p">:[</span><span class="mf">19.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">20</span><span class="p">:[</span><span class="mf">20.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">21</span><span class="p">:[</span><span class="mf">21.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">22</span><span class="p">:[</span><span class="mf">22.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">23</span><span class="p">:[</span><span class="mf">23.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">24</span><span class="p">:[</span><span class="mf">24.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">25</span><span class="p">:[</span><span class="mf">25.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">26</span><span class="p">:[</span><span class="mf">26.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">27</span><span class="p">:[</span><span class="mf">27.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">28</span><span class="p">:[</span><span class="mf">28.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">29</span><span class="p">:[</span><span class="mf">29.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">30</span><span class="p">:[</span><span class="mf">30.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">31</span><span class="p">:[</span><span class="mf">31.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">33</span><span class="p">:[</span><span class="mf">30.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">62</span><span class="p">:[</span><span class="mf">24.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">63</span><span class="p">:[</span><span class="mf">24.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">64</span><span class="p">:[</span><span class="mf">25.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">65</span><span class="p">:[</span><span class="mf">25.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">66</span><span class="p">:[</span><span class="mf">26.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">67</span><span class="p">:[</span><span class="mf">26.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">68</span><span class="p">:[</span><span class="mf">27.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">69</span><span class="p">:[</span><span class="mf">27.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">70</span><span class="p">:[</span><span class="mf">28.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">71</span><span class="p">:[</span><span class="mf">28.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">72</span><span class="p">:[</span><span class="mf">29.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">73</span><span class="p">:[</span><span class="mf">29.62</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">34</span><span class="p">:[</span><span class="mf">30.12</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">35</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">1.38</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">36</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">1.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">37</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">2.38</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">38</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">2.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span>
+                  <span class="mi">39</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">3.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">40</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">4.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">],</span> <span class="mi">41</span><span class="p">:[</span><span class="mi">30</span><span class="p">,</span><span class="mf">5.88</span><span class="p">,</span><span class="mf">1.275</span><span class="p">]}</span>
+
+<span class="c">#</span>
+
+<span class="n">TrolleyMT_ACO_04</span><span class="o">=</span><span class="p">{</span> <span class="mi">2</span><span class="p">:</span><span class="mi">60</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">59</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span>
+                  <span class="mi">11</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span><span class="mi">58</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span><span class="mi">57</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span><span class="mi">52</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span><span class="mi">51</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span><span class="mi">11</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span>
+                  <span class="mi">19</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">53</span><span class="p">,</span> <span class="mi">21</span><span class="p">:</span><span class="mi">54</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span><span class="mi">55</span><span class="p">,</span> <span class="mi">23</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">24</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">25</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">26</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
+                  <span class="mi">27</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">28</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">29</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">31</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">33</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">62</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">63</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
+                  <span class="mi">64</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">65</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">66</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">67</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">68</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">69</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">70</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">71</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
+                  <span class="mi">72</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">73</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">34</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">35</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">36</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">37</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">38</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">39</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span>
+                  <span class="mi">40</span><span class="p">:</span><span class="mi">56</span><span class="p">,</span> <span class="mi">41</span><span class="p">:</span><span class="mi">56</span><span class="p">}</span>
+
+<span class="c">#</span>
+
+<span class="n">MT_ACO_04</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">60</span><span class="p">:</span> <span class="p">[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">59</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">58</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.28</span> <span class="p">],</span>
+    <span class="mi">57</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">52</span> <span class="p">:[</span><span class="mf">12.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">12</span> <span class="p">:[</span><span class="mi">12</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">51</span> <span class="p">:[</span> <span class="mf">11.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">11</span> <span class="p">:[</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">50</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">10</span> <span class="p">:[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">53</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">54</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">55</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+    <span class="mi">56</span> <span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c">#</span>
+
+<span class="n">Dongle</span> <span class="o">=</span> <span class="mi">389</span>
+<span class="n">AnchorNodes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">390</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_05&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.81</span><span class="p">,</span><span class="mf">1.64</span><span class="p">]},</span>
+               <span class="mi">386</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_08&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">30.574</span><span class="p">,</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.291</span><span class="p">]},</span>
+               <span class="mi">391</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_07&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">11.78</span><span class="p">,</span><span class="o">-</span><span class="mf">5.553</span><span class="p">,</span><span class="mf">1.5</span><span class="p">]},</span>
+               <span class="mi">385</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;MT_ACO_01&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">19.52</span><span class="p">,</span><span class="o">-</span><span class="mf">0.69</span><span class="p">,</span><span class="mf">1.446</span><span class="p">]},</span>
+               <span class="mi">387</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_03&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">28.606</span><span class="p">,</span><span class="o">-</span><span class="mf">0.74</span><span class="p">,</span><span class="mf">1.467</span><span class="p">]},</span>
+               <span class="mi">400</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_02&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">30.574</span><span class="p">,</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.291</span><span class="p">]},</span>
+               <span class="mi">1</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_DLR_RTDSlave&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">0.85</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.18</span><span class="p">]}</span>
+              <span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#</span>
+<span class="c">#</span>
+<span class="c">#  Define here the link to be selected</span>
+<span class="c">#</span>
+<span class="n">A</span> <span class="o">=</span> <span class="mi">390</span>
+<span class="n">B</span> <span class="o">=</span> <span class="mi">386</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
+<span class="n">da</span> <span class="o">=</span><span class="p">{}</span>
+<span class="n">dm</span> <span class="o">=</span><span class="p">{}</span>
+<span class="c">#</span>
+<span class="c"># add new points in tx and rx</span>
+<span class="c">#</span>
+<span class="c">#for c,k in enumerate(AnchorNodes):</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">AnchorNodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">c</span><span class="p">]</span>
+<span class="n">pta</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="c">#</span>
+<span class="c"># To add a point</span>
+<span class="c">#</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&quot;add&quot;</span><span class="p">)</span>
+<span class="n">da</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">=</span><span class="n">k</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x57efe10&gt;]</pre>
+</div>
+<img alt="notebooks/rst/DEV-Trajectory_files/_fig_05.png" src="notebooks/rst/DEV-Trajectory_files/_fig_05.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#for c,k in enumerate(MT_DLR_RDTMaster):</span>
+<span class="c">#    ptm = array([MT_DLR_RDTMaster[k][0],MT_DLR_RDTMaster[k][1],MT_DLR_RDTMaster[k][2]]).reshape(3,1)</span>
+<span class="c">#    dm[c]=k</span>
+<span class="c">#    S.rx.point(ptm,mode=&quot;add&quot;)</span>
+<span class="c">#    plt.plot(ptm[0,:],ptm[1,:],&#39;ob&#39;)</span>
+<span class="c">#</span>
+<span class="c"># In the DLR environement goes from the origin on the left along the corridor</span>
+<span class="c"># then goes up in the room</span>
+<span class="c">#</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.275</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="n">ps</span><span class="p">,</span><span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+<span class="c">#print S.tx.position</span>
+<span class="c">#print S.rx.position</span>
+
+<span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c">#p = S.L.Gr.node[0][&#39;polyg&#39;]</span>
+
+<span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">({</span><span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;W1compensate&#39;</span><span class="p">})</span>
+<span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tcir</span><span class="p">,</span><span class="nb">file</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Warning : no furniture file loaded
+1
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+2
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+3
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+4
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+5
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+6
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+7
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+8
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+9
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+10
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+11
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+12
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+13
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+14
+37 [1, 18]
+41 [14, 18]
+Rays evaluation
+15
+41 [14, 18]
+Rays evaluation
+16
+41 [14, 18]
+Rays evaluation
+17
+41 [14, 18]
+Rays evaluation
+18
+41 [14, 18]
+Rays evaluation
+19
+41 [14, 18]
+Rays evaluation
+20
+41 [14, 18]
+Rays evaluation
+21
+41 [14, 18]
+Rays evaluation
+22
+41 [14, 18]
+Rays evaluation
+23
+41 [14, 18]
+Rays evaluation
+24
+41 [14, 18]
+Rays evaluation
+25
+41 [14, 18]
+Rays evaluation
+26
+41 [14, 18]
+Rays evaluation
+27
+41 [14, 18]
+Rays evaluation
+28
+41 [14, 18]
+Rays evaluation
+29
+41 [14, 18]
+Rays evaluation
+30
+Rays evaluation
+31
+Rays evaluation
+32
+Rays evaluation
+33
+Rays evaluation
+34
+Rays evaluation
+35
+Rays evaluation
+36
+Rays evaluation
+37
+Rays evaluation
+38
+Rays evaluation
+39
+Rays evaluation
+40
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+41
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+42
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+43
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+44
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+45
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+46
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+47
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+48
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+49
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+50
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+51
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+52
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+53
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+54
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+55
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+56
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+57
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+58
+98 [9, 14]
+99 [8, 9]
+Rays evaluation
+59
+98 [9, 14]
+99 [8, 9]
+Rays evaluation</pre>
+</div>
+<img alt="notebooks/rst/DEV-Trajectory_files/_fig_08.png" src="notebooks/rst/DEV-Trajectory_files/_fig_08.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">tcir</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c">#</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">cir</span> <span class="o">=</span> <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">cir</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">150</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ttcir</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">ttcir</span><span class="p">,</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">ttcir</span><span class="o">=</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">dmax</span><span class="o">=</span><span class="mi">150</span><span class="o">*</span><span class="mf">0.3</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ttcir</span><span class="p">),</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">150</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">dmax</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">69</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;delay $\times$ c (meters)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="c">#plt.ylabel(r&#39;distance along trajectory (meters)&#39;,fontsize=20)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;trajectory index number&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">clb</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;level (dB)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>-c:3: RuntimeWarning: divide by zero encountered in log10
+-c:3: RuntimeWarning: invalid value encountered in log10</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DEV-Trajectory_files/_fig_12.png" src="notebooks/rst/DEV-Trajectory_files/_fig_12.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x712cad0&gt;</pre>
+</div>
+<img alt="notebooks/rst/DEV-Trajectory_files/_fig_15.png" src="notebooks/rst/DEV-Trajectory_files/_fig_15.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">40</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x70a1f90&gt;</pre>
+</div>
+<img alt="notebooks/rst/DEV-Trajectory_files/_fig_18.png" src="notebooks/rst/DEV-Trajectory_files/_fig_18.png" />
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

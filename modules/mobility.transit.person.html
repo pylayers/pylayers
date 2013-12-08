@@ -47,7 +47,7 @@
           <a href="mobility.transit.path.html" title="&lt;no title&gt;"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
@@ -89,7 +89,7 @@
 <span id="id1"></span><h1>Person<a class="headerlink" href="#person" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-pylayers.mobility.transit.Person"></span><dl class="class">
 <dt id="pylayers.mobility.transit.Person.Person">
-<em class="property">class </em><tt class="descclassname">pylayers.mobility.transit.Person.</tt><tt class="descname">Person</tt><big>(</big><em>ID=0</em>, <em>interval=0.05</em>, <em>roomId=0</em>, <em>L=</em><span class="optional">[</span><span class="optional">]</span>, <em>net=&lt;pylayers.network.network.Network object at 0x6ee7c50&gt;</em>, <em>wld=&lt;pylayers.mobility.transit.World.World instance at 0x6050908&gt;</em>, <em>sim=None</em>, <em>moving=True</em>, <em>froom=</em><span class="optional">[</span><span class="optional">]</span>, <em>wait=1.0</em>, <em>cdest='random'</em>, <em>save=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#Person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.Person" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.mobility.transit.Person.</tt><tt class="descname">Person</tt><big>(</big><em>ID=0</em>, <em>interval=0.05</em>, <em>roomId=0</em>, <em>L=</em><span class="optional">[</span><span class="optional">]</span>, <em>net=&lt;pylayers.network.network.Network object at 0x4555090&gt;</em>, <em>wld=&lt;pylayers.mobility.transit.World.World instance at 0xa539878&gt;</em>, <em>sim=None</em>, <em>moving=True</em>, <em>froom=</em><span class="optional">[</span><span class="optional">]</span>, <em>wait=1.0</em>, <em>cdest='random'</em>, <em>save=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/mobility/transit/Person.html#Person"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.mobility.transit.Person.Person" title="Permalink to this definition">¶</a></dt>
 <dd><p>Person Process</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -97,57 +97,61 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>ID</strong> : float/hex/str/...</p>
 <blockquote>
-<div><blockquote>
 <div><p>agent Id</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>interval <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">refresh interval of agent mobility</p>
-</dd>
-<dt>roomId <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">room ID where agent start when simulation is launched</p>
-</dd>
-<dt>L <span class="classifier-delimiter">:</span> <span class="classifier">pylayers.gis.layout.Layout()</span></dt>
-<dd><p class="first last">Layout instance, in which the agent is moving</p>
-</dd>
-<dt>net <span class="classifier-delimiter">:</span> <span class="classifier">pylayers.network.Network()</span></dt>
-<dd><p class="first last">Network instance, in which network agent are communicating.
+<p><strong>interval</strong> : float</p>
+<blockquote>
+<div><p>refresh interval of agent mobility</p>
+</div></blockquote>
+<p><strong>roomId</strong> : int</p>
+<blockquote>
+<div><p>room ID where agent start when simulation is launched</p>
+</div></blockquote>
+<p><strong>L</strong> : pylayers.gis.layout.Layout()</p>
+<blockquote>
+<div><p>Layout instance, in which the agent is moving</p>
+</div></blockquote>
+<p><strong>net</strong> : pylayers.network.Network()</p>
+<blockquote>
+<div><p>Network instance, in which network agent are communicating.
 This is used for fill the true position filed of the graph
 It must be removed in a further version ( when a proper save instance
 would be created)</p>
-</dd>
-<dt>wld <span class="classifier-delimiter">:</span> <span class="classifier">pylayers.mobility.transit.world.world()</span></dt>
-<dd><p class="first last">world instance. equivalent to layout but in the pytk framework. 
+</div></blockquote>
+<p><strong>wld</strong> : pylayers.mobility.transit.world.world()</p>
+<blockquote>
+<div><p>world instance. equivalent to layout but in the pytk framework. 
 TODO : remove in a further version</p>
-</dd>
-<dt>sim <span class="classifier-delimiter">:</span> <span class="classifier">SimPy.Simulation.Simulation.RT()</span></dt>
-<dd><p class="first last">Simulation instance share by all the pylayer project.</p>
-</dd>
-<dt>moving <span class="classifier-delimiter">:</span> <span class="classifier">bool </span></dt>
-<dd><p class="first last">indicate if the agent is moving or not ( relevant for acces poitns)</p>
-</dd>
-<dt>froom <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd><p class="first last">list of forbiden rooms.</p>
-</dd>
-<dt>wait <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">wait time of the agent when he has reach teh desitaion</p>
-</dd>
-<dt>cdest <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">method for choosing setination &#8216;random &#8216; of file read</p>
-</dd>
-<dt>save <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd><p class="first last">list of save option type .
+</div></blockquote>
+<p><strong>sim</strong> : SimPy.Simulation.Simulation.RT()</p>
+<blockquote>
+<div><p>Simulation instance share by all the pylayer project.</p>
+</div></blockquote>
+<p><strong>moving</strong> : bool</p>
+<blockquote>
+<div><p>indicate if the agent is moving or not ( relevant for acces poitns)</p>
+</div></blockquote>
+<p><strong>froom</strong> : list</p>
+<blockquote>
+<div><p>list of forbiden rooms.</p>
+</div></blockquote>
+<p><strong>wait</strong> : float</p>
+<blockquote>
+<div><p>wait time of the agent when he has reach teh desitaion</p>
+</div></blockquote>
+<p><strong>cdest</strong> : str</p>
+<blockquote>
+<div><p>method for choosing setination &#8216;random &#8216; of file read</p>
+</div></blockquote>
+<p><strong>save</strong> : list</p>
+<blockquote>
+<div><p>list of save option type .
 It will be removed in a further version ( when a proper save instance
 would be created)</p>
-</dd>
-</dl>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>Move</strong> : make the agent move</p>
-<blockquote class="last">
-<div><p>update : DEPRECATED used for Tkinter plot</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first last"><strong>Move</strong> : make the agent move</p>
 </td>
 </tr>
 </tbody>
@@ -182,6 +186,9 @@ would be created)</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">References</p>
+<p>&#8220;near collision avoidance&#8221; inspired from
+<a class="reference external" href="http://people.revoledu.com/kardi/publication/Kouchi2001.pdf">http://people.revoledu.com/kardi/publication/Kouchi2001.pdf</a></p>
 </dd></dl>
 
 </div>
@@ -202,7 +209,7 @@ would be created)</p>
           <a href="mobility.transit.path.html" title="&lt;no title&gt;"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 

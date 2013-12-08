@@ -1,0 +1,8 @@
+.. _trajectory:
+
+trajectory
+===========
+
+.. automodule:: pylayers.mobility.trajectory
+   :members:
+

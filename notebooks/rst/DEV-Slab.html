@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Chapter 2 &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Chapter 2</a><ul>
+<li><a class="reference internal" href="#transmision-and-reflection-on-a-slab">Transmision and Reflection on a Slab</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="chapter-2">
+<h1>Chapter 2<a class="headerlink" href="#chapter-2" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<div class="section" id="transmision-and-reflection-on-a-slab">
+<h2>Transmision and Reflection on a Slab<a class="headerlink" href="#transmision-and-reflection-on-a-slab" title="Permalink to this headline">¶</a></h2>
+<p>A slab is an object which represents an arbitrary multi layer of
+dielectric materials. It is handle in the <tt class="docutils literal"><span class="pre">pylayers.antprop.slab</span></tt>
+module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>In practice when describing a specific building, it is necessary to
+specify a set of different slabs with different characteristics. The
+structure which gathers this set is <tt class="docutils literal"><span class="pre">SlabDB</span></tt>. If no argument is
+provided, this structure is initialized with the default file:
+<a class="reference external" href="https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini">slabDB.ini</a></p>
+<p>One can just now create such a collection <tt class="docutils literal"><span class="pre">sl</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To add a new material</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mi">3</span><span class="o">+</span><span class="mi">0</span><span class="n">j</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;epsr&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">,</span><span class="n">lname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">])</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">,</span><span class="n">lname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.10</span><span class="p">])</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">,</span><span class="n">lname</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;TESS-p50&#39;</span><span class="p">],</span><span class="n">lthick</span><span class="o">=</span><span class="p">[</span><span class="mf">0.15</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="c"># These Tessereau page 50</span>
+
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># by default var=&#39;a&#39; and kv = 0</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DEV-Slab_files/DEV-Slab_files/DEV-Slab_9_0.png" src="notebooks/rst/DEV-Slab_files/DEV-Slab_files/DEV-Slab_9_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;5cm compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;10cm compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;15cm not compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DEV-Slab_files/DEV-Slab_files/DEV-Slab_10_0.png" src="notebooks/rst/DEV-Slab_files/DEV-Slab_files/DEV-Slab_10_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DEV-Slab_files/DEV-Slab_files/DEV-Slab_11_0.png" src="notebooks/rst/DEV-Slab_files/DEV-Slab_files/DEV-Slab_11_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;./styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

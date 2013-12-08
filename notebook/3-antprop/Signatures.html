@@ -1,0 +1,561 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ray Signatures &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="User Manual" href="../index.html" />
+    <link rel="next" title="Slabs and Materials" href="SlabsAndMaterials.html" />
+    <link rel="prev" title="Multi-wall model" href="MultiwallModel.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SlabsAndMaterials.html" title="Slabs and Materials"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="MultiwallModel.html" title="Multi-wall model"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../index.html" accesskey="U">User Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="MultiwallModel.html"
+                        title="previous chapter">Multi-wall model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SlabsAndMaterials.html"
+                        title="next chapter">Slabs and Materials</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ray-signatures">
+<h1>Ray Signatures<a class="headerlink" href="#ray-signatures" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Showing the graph of rooms with 2 rooms separated by a DOOR segment</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The graph of interactions is shown below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+<span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All the interactions of a given cycle are stored as meta information in
+nodes of <tt class="docutils literal"><span class="pre">Gt</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;inter&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;(3, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(4, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(7, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(7, 0, 1)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(7, 1, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(9, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(9, 0, 1)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(9, 1, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(8, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(8, 0, 1)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(8, 1, 0)&#39;</span><span class="p">,</span>
+ <span class="s">&#39;(2, 0)&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The signature is calculated with as parameters the Layout object and two
+cycle numbers. In example below it is 0 and 1.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The cold start determination of the signature is done with <tt class="docutils literal"><span class="pre">run1</span></tt>
+function. The code is not finished here and there is room for
+significant acceleration in incorporating propagation based heuristics.
+The mitigation of combinatorics explosion is done in setting a cutoff
+vlaue which limits the exploration in the interaction graph.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An exhaustive search of signatures when no prior information is given is
+a combinatory hard problem. The number of signatures grows rapidly with
+the cutoff parameter.</p>
+<p>The representaion method of a signature gives informations about the
+different signatures. Signatures are grouped by number of interactions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Signatures
+----------
+from cycle : 0 to cycle 1
+1 : 3
+   [7 9 8]
+   [2 2 2]
+2 : 18
+   [7 7 7 9 9 9 8 8 8 3 3 3 4 4 4 2 2 2]
+   [2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1]
+   [6 5 1 6 5 1 6 5 1 7 9 8 7 9 8 7 9 8]
+   [1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2]
+3 : 69
+   [7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+ 3 4 4 4 4 4 4 4 4 4 4 4 4 7 7 9 9 9 8 8 2 2 2 2 2 2 2 2 2 2 2 2]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+   [5 1 1 6 6 5 6 5 1 6 1 6 6 6 5 6 5 1 6 1 6 6 5 4 2 4 2 4 2 9 8 7 9 8 7 9 8
+ 7 2 3 2 3 2 9 7 8 7 9 7 8 3 3 3 3 3 3 3 3 4 3 4 4 9 8 7 9 8 7 8]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+ 2 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2]
+   [6 6 5 9 8 1 1 6 6 5 5 7 9 8 1 1 6 6 5 5 7 9 1 7 7 9 9 8 8 6 6 6 5 5 5 1 1
+ 1 7 9 9 8 8 6 6 6 5 1 1 1 9 8 7 9 8 7 9 7 7 9 9 8 6 6 6 5 5 5 1]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1
+ 1 2 2 2 2 2 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1]
+4 : 258
+   [7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+ 9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 3 3 3 3 3 3
+ 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+ 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+ 4 4 4 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9
+ 9 9 9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+   [5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 5 1 6 6 6 1 5 6 6 1 1 5 5 6 6 1
+ 1 5 5 6 6 1 5 6 6 6 5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 4 2 4 2 4 2
+ 9 9 8 8 4 4 4 7 7 2 2 2 9 9 8 8 4 7 2 2 2 9 8 9 8 7 9 7 9 9 8 4 4 4 7 7 2
+ 3 2 9 3 7 2 9 3 7 9 3 3 9 7 7 2 2 2 8 3 3 9 9 7 2 2 2 8 8 9 8 9 7 8 9 7 3
+ 3 9 7 7 2 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 3 2 2 4 3 3 2 2 4 4 3 3
+ 2 4 4 3 3 3 3 3 3 3 3 3 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 8 9 3 4 8
+ 9 3 4 9 3 3 9 8 8 4 4 4 7 3 3 9 8 8 4 9 8 9 8 7 9 7 3 3 9 9 8 4 4 4 7 7]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 2 2 2 2 1 1 1 2 2 1 1 1 2 2 2 2 1 2 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 1 1 2 2 2 2 2 2 2 2 2 1
+ 1 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 2 2 2 2 2 2 2 1 1 2 2 2 1 1 1 2 2]
+   [1 5 9 1 6 1 1 5 6 1 6 1 5 6 1 6 1 5 6 9 8 1 5 7 9 1 6 1 1 5 5 6 1 6 1 5 5
+ 6 1 6 1 5 5 6 9 8 5 1 5 7 9 6 1 5 5 6 1 6 5 5 6 1 6 5 5 6 9 5 2 4 2 4 2 4
+ 5 1 5 1 9 7 8 5 1 9 8 7 6 1 6 1 7 1 9 8 7 6 6 6 6 6 6 6 5 6 5 9 7 8 5 6 8
+ 2 3 3 2 3 3 3 2 3 3 9 8 1 5 1 9 8 7 1 9 8 6 1 1 9 8 7 6 1 6 6 6 6 6 6 6 9
+ 8 6 5 6 8 2 3 4 2 2 3 4 3 2 2 4 3 2 9 8 9 8 9 8 4 2 3 4 2 4 2 3 4 3 2 4 2
+ 4 3 2 9 8 7 9 8 7 9 8 7 4 3 4 2 4 3 4 3 2 4 4 3 2 9 7 9 7 9 7 4 3 3 4 3 3
+ 3 4 3 3 9 7 5 5 1 9 7 8 5 9 7 6 6 1 7 6 6 6 6 6 6 6 9 7 5 6 5 9 7 8 5 6]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 2 2 2 1 1 2 2 2 1 1 1 1 2 1 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 2
+ 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 2 2 1 1 1 1 1 1 1 1 1 2
+ 2 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1
+ 1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 1]
+   [6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 6 6 5 5 5 5 7 7 7 7 7 9 9 9 9 9
+ 9 8 8 8 8 8 1 1 1 1 6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 7 7 9 9 8 8
+ 6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1
+ 7 7 7 9 9 9 9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1
+ 1 1 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 7 7 9 9 9 9 9 9 8 8
+ 8 8 8 6 6 6 5 5 5 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 9 9 9
+ 9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1 1]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
+ 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="mi">1</span><span class="p">:</span> <span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="o">-</span><span class="mi">0</span><span class="p">)}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ptx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">prx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ptx</span>
+<span class="k">print</span> <span class="n">prx</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[ 7.98038874  0.4402418 ]
+[ 3.47525751  0.1715783 ]</pre>
+</div>
+<p>Evaluate performances of signature and ray evaluation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tt1</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">tt2</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">tint</span><span class="o">=</span><span class="p">{}</span>
+<span class="n">tsig</span><span class="o">=</span><span class="p">{}</span> <span class="c"># number of sig</span>
+<span class="n">tray</span><span class="o">=</span><span class="p">{}</span> <span class="c"># number of rays</span>
+<span class="n">maxcutoff</span><span class="o">=</span><span class="mi">7</span>
+<span class="k">for</span> <span class="n">cutoff</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxcutoff</span><span class="p">):</span>
+     <span class="k">del</span> <span class="n">Si</span>
+
+     <span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+     <span class="n">tic1</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+     <span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+     <span class="n">tic2</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+     <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">ptx</span><span class="p">,</span><span class="n">prx</span><span class="p">)</span>
+     <span class="n">tic3</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+     <span class="n">Si</span><span class="o">.</span><span class="n">num</span><span class="p">()</span>
+     <span class="n">Nr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">r2d</span><span class="p">)</span>
+     <span class="n">tt1</span><span class="p">[</span><span class="n">cutoff</span><span class="p">]</span><span class="o">=</span><span class="n">tic2</span><span class="o">-</span><span class="n">tic1</span>
+     <span class="n">tt2</span><span class="p">[</span><span class="n">cutoff</span><span class="p">]</span><span class="o">=</span><span class="n">tic3</span><span class="o">-</span><span class="n">tic2</span>
+     <span class="n">tint</span><span class="p">[</span><span class="n">cutoff</span><span class="p">]</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">nint</span>
+     <span class="n">tsig</span><span class="p">[</span><span class="n">cutoff</span><span class="p">]</span><span class="o">=</span><span class="n">Si</span><span class="o">.</span><span class="n">nsig</span>
+     <span class="n">tray</span><span class="p">[</span><span class="n">cutoff</span><span class="p">]</span><span class="o">=</span><span class="n">Nr</span>
+     <span class="k">print</span> <span class="n">cutoff</span><span class="p">,</span><span class="n">tt2</span><span class="p">[</span><span class="n">cutoff</span><span class="p">]</span>
+<span class="c">#    L.display[&#39;ednodes&#39;]=False</span>
+<span class="c">#    r2d.show(L)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>0 0.00186395645142
+1 0.0105199813843
+2 0.0518472194672
+3 0.209164142609
+4 0.670965909958
+5 1.79627203941
+6 4.44250202179</pre>
+</div>
+<p>It appears that the increasing number of signatures obatined with the
+run1 algorithm do not yield necessarily a significant increase in the
+number of rays.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span><span class="o">=</span><span class="n">semilogy</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tray</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
+<span class="n">p2</span><span class="o">=</span><span class="n">semilogy</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tsig</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">((</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),(</span><span class="s">&#39;rays&#39;</span><span class="p">,</span><span class="s">&#39;signature&#39;</span><span class="p">),</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;cutoff&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-12-09699c645975&gt; in &lt;module&gt;()
+----&gt; 1 p1=semilogy(tt1.keys(),tray.values(),'ob')
+      2 p2=semilogy(tt1.keys(),tsig.values(),'or')
+      3 legend((p1[0],p2[0]),('rays','signature'),loc='best')
+      4 xlabel('cutoff')
+      5 ylabel('#')
+
+
+NameError: name 'semilogy' is not defined</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=bar(tt2.keys(),tt2.values(),color=&#39;red&#39;)</span>
+<span class="c">#b2=bar(tt1.keys(),tt1.values(),color=&#39;blue&#39;)</span>
+<span class="c">#b1=semilogx(tt2.keys(),log10(tt2.values()),color=&#39;red&#39;)</span>
+<span class="c">#b2=semilogx(tt1.keys(),log10(tt1.values()),color=&#39;blue&#39;)</span>
+<span class="c">#b3=semilogx(tt1.keys(),log10(0.1*(arange(10))**3),color=&#39;green&#39;)</span>
+<span class="n">b1</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="s">&#39;k.&#39;</span><span class="p">)</span>
+<span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tt1</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="s">&#39;r.&#39;</span><span class="p">)</span>
+<span class="n">b3</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="mf">0.1</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="n">maxcutoff</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">b4</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="mf">0.001</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="n">maxcutoff</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">b5</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="mf">0.1</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="n">maxcutoff</span><span class="p">)</span><span class="o">**</span><span class="mf">4.4</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">((</span><span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b4</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b5</span><span class="p">[</span><span class="mi">0</span><span class="p">]),(</span><span class="s">&#39;rays&#39;</span><span class="p">,</span><span class="s">&#39;signature&#39;</span><span class="p">,</span><span class="s">r&#39;$O(N^3)$&#39;</span><span class="p">,</span><span class="s">r&#39;$O(N^2)$&#39;</span><span class="p">,</span><span class="s">r&#39;$O(N^{4.4})$&#39;</span><span class="p">),</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;cutoff&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;time (s)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5535b90&gt;</pre>
+</div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_22_1.png" src="notebook/3-antprop/Signatures_files/Signatures_22_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tsig</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+<span class="c">#b3=loglog(tt1.keys(),arange(maxcutoff)**3,color=&#39;green&#39;)</span>
+<span class="c">#b4=loglog(tt1.keys(),arange(maxcutoff)**2,color=&#39;green&#39;)</span>
+<span class="c">#legend((b1[0],b2[0],b3[0],b4[0]),(&#39;interactions&#39;,&#39;signatures&#39;,r&#39;$O(N^3)$&#39;,r&#39;$O(N^2)$&#39;),loc=&#39;best&#39;)</span>
+<span class="n">legend</span><span class="p">((</span><span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),(</span><span class="s">&#39;interactions&#39;</span><span class="p">,</span><span class="s">&#39;signatures&#39;</span><span class="p">),</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;cutoff&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f33011904d0&gt;</pre>
+</div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_23_1.png" src="notebook/3-antprop/Signatures_files/Signatures_23_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=loglog(tsig.values(),tt1.values(),color=&#39;red&#39;)</span>
+<span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">b3</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="mf">0.0004</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">**</span><span class="mf">0.88</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;# Interactions&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f330144b710&gt;</pre>
+</div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_24_1.png" src="notebook/3-antprop/Signatures_files/Signatures_24_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="mf">0.0004</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">**</span><span class="mf">0.88</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f3301e2c810&gt;]</pre>
+</div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_25_1.png" src="notebook/3-antprop/Signatures_files/Signatures_25_1.png" />
+<p>The computation time in rays grows exponentially with the number of
+interactions.</p>
+<p><div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">$$T_{rays}=\alpha N_i^{0.88} [s]$$</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2009/09/24&gt;
+Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
+ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
+9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
+skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
+orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
+, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
+rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
+(/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
+(/home/uguen/texmf/tex/latex/ucs/ucs.sty
+(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?&#8217; option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texmf-texlive/tex/latex/tools/bm.sty) (./math.aux)
+(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
+! Display math should end with $$.
+&lt;to be read again&gt; 
+                   T
+l.12 $$$T
+         _{rays}=\alpha N_i^{0.88} [s]$$$
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.12 $$$T_
+          {rays}=\alpha N_i^{0.88} [s]$$$
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.13 \end{document}
+                   
+! Display math should end with $$.
+&lt;to be read again&gt; 
+                   \par 
+l.13 \end{document}
+                   
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 404 bytes).
+Transcript written on math.log.
+</div>
+</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">array</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">**</span><span class="mi">5</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_27_0.png" src="notebook/3-antprop/Signatures_files/Signatures_27_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxcutoff</span><span class="p">):</span>
+    <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_28_0.png" src="notebook/3-antprop/Signatures_files/Signatures_28_0.png" />
+<img alt="notebook/3-antprop/Signatures_files/Signatures_28_1.png" src="notebook/3-antprop/Signatures_files/Signatures_28_1.png" />
+<img alt="notebook/3-antprop/Signatures_files/Signatures_28_2.png" src="notebook/3-antprop/Signatures_files/Signatures_28_2.png" />
+<img alt="notebook/3-antprop/Signatures_files/Signatures_28_3.png" src="notebook/3-antprop/Signatures_files/Signatures_28_3.png" />
+<img alt="notebook/3-antprop/Signatures_files/Signatures_28_4.png" src="notebook/3-antprop/Signatures_files/Signatures_28_4.png" />
+<img alt="notebook/3-antprop/Signatures_files/Signatures_28_5.png" src="notebook/3-antprop/Signatures_files/Signatures_28_5.png" />
+<img alt="notebook/3-antprop/Signatures_files/Signatures_28_6.png" src="notebook/3-antprop/Signatures_files/Signatures_28_6.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="c">#fig,ax=r2d.show(L,i=8,colray=&#39;green&#39;,widthray=0.5,fig=fig,ax=ax)</span>
+<span class="c">#fig,ax=r2d.show(L,i=9,colray=&#39;green&#39;,widthray=0.5,fig=fig,ax=ax)</span>
+</pre></div>
+</div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_29_0.png" src="notebook/3-antprop/Signatures_files/Signatures_29_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script></div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SlabsAndMaterials.html" title="Slabs and Materials"
+             >next</a></li>
+        <li class="right" >
+          <a href="MultiwallModel.html" title="Multi-wall model"
+             >previous</a> |</li>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="../index.html" >User Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

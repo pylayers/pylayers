@@ -47,7 +47,7 @@
           <a href="simul.html" title="simul"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
@@ -89,10 +89,9 @@
 <span id="id1"></span><h1>radionode<a class="headerlink" href="#radionode" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-simul.radionode"></span><dl class="class">
 <dt id="simul.radionode.RadioNode">
-<em class="property">class </em><tt class="descclassname">simul.radionode.</tt><tt class="descname">RadioNode</tt><big>(</big><em>name=''</em>, <em>typ='undefined'</em>, <em>_fileini='radionode.ini'</em>, <em>_fileant='defant.vsh3'</em>, <em>_filestr='defstr.str2'</em><big>)</big><a class="reference internal" href="../_modules/simul/radionode.html#RadioNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.radionode.RadioNode" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">simul.radionode.</tt><tt class="descname">RadioNode</tt><big>(</big><em>name=''</em>, <em>typ='undefined'</em>, <em>_fileini='radionode.ini'</em>, <em>_filetraj='pos.csv'</em>, <em>_fileant='defant.vsh3'</em>, <em>_filestr='defstr.str2'</em><big>)</big><a class="reference internal" href="../_modules/simul/radionode.html#RadioNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.radionode.RadioNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>container for a Radio Node</p>
-<p>a RadioNode is either a transmitter or a receiver
-This class manages the spatial and temporal behavior of a radio node</p>
+<p>This class manages the spatial and temporal behavior of a radio node</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -571,6 +570,25 @@ This class manages the spatial and temporal behavior of a radio node</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="simul.radionode.RadioNode.transform">
+<tt class="descname">transform</tt><big>(</big><em>alpha</em>, <em>trans</em><big>)</big><a class="headerlink" href="#simul.radionode.RadioNode.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>tranform position rotation + translation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>angle (rad)</p>
+</div></blockquote>
+<p class="last"><strong>trans</strong> : np.array()  (,2)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="simul.radionode.RadioNode.volume">
 <tt class="descname">volume</tt><big>(</big><em>N1=2, N2=2, N3=2, p0=[0, 0, 0], p1=[1, 0, 0], p2=[0, 1, 0], p3=[0, 0, 1], mode='subst'</em><big>)</big><a class="reference internal" href="../_modules/simul/radionode.html#RadioNode.volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simul.radionode.RadioNode.volume" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a volume to RadioNode</p>
@@ -639,7 +657,7 @@ This class manages the spatial and temporal behavior of a radio node</p>
           <a href="simul.html" title="simul"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 

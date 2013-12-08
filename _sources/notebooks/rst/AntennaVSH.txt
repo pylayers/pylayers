@@ -1,0 +1,286 @@
+Vector Spherical sparse representation of full polar complex antenna patterns 
+------------------------------------------------------------------------------
+
+
+.. code-block:: python
+
+    from pylayers.antprop.antenna import *
+    from pylayers.antprop.antvsh import *
+
+The first step consists in reading the raw data from a .mat file
+obtained from a UWB antenna Thomson 1 in near field chamber.
+
+
+.. code-block:: python
+
+    A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
+
+
+.. code-block:: python
+
+    A.info()
+
+
+.. parsed-literal::
+
+    S1R1.mat
+    type :  mat
+    S1R1
+    Th1
+    04/12/12
+    15:55
+    Mohamed at the log
+    
+    1
+    1
+    Nb theta (lat) : 91
+    Nb phi (lon) : 180
+    No vsh coefficient calculated yet
+
+
+.. code-block:: python
+
+    A.show3(k=0,typ='Gain',col=True)
+
+.. image:: AntennaVSH_files/_fig_02.png
+
+
+.. code-block:: python
+
+    A.show3(k=60,typ='Gain',col=False)
+
+.. image:: AntennaVSH_files/_fig_04.png
+
+Unwraping the phase 
+--------------------
+
+
+.. code-block:: python
+
+    freq = A.fa.reshape(104,1,1)
+    ed = A.getdelay(freq)
+    I = A.Ftheta[:,:,:]*exp(2*1j*pi*freq*ed)
+
+
+.. code-block:: python
+
+    shape(A.Fphi)
+    im=imshow(angle(I[:,45,:]))
+    cb = colorbar()
+    cb.set_label('phase rad')
+    xlabel('theta')
+
+
+
+.. parsed-literal::
+
+    <matplotlib.text.Text at 0x7f38bf1af050>
+
+
+.. image:: AntennaVSH_files/_fig_07.png
+
+
+.. code-block:: python
+
+    plot(freq[:,0,0]*1e9,unwrap(angle(I[:,45,85])))
+    xlabel('frequency (GHz)')
+
+
+.. parsed-literal::
+
+    <matplotlib.text.Text at 0x3cab0d0>
+
+
+.. image:: AntennaVSH_files/_fig_10.png
+
+The following figure represents all the radiation patten in the azimuth
+plane for each of the 104 frequencies
+
+
+.. code-block:: python
+
+    print 'Ntheta',A.Nt
+    print 'Nphi',A.Np
+    print 'Nf',A.Nf
+
+
+.. parsed-literal::
+
+    Ntheta 91
+    Nphi 180
+    Nf 104
+
+
+.. code-block:: python
+
+    A.info()
+
+
+.. parsed-literal::
+
+    S1R1.mat
+    type :  mat
+    S1R1
+    Th1
+    04/12/12
+    15:55
+    Mohamed at the log
+    
+    1
+    1
+    Nb theta (lat) : 91
+    Nb phi (lon) : 180
+    No vsh coefficient calculated yet
+
+Evaluation of Vector Spherical Harmonics Coefficients
+=====================================================
+
+At that stage the Vector Spherical Harmonics coefficients are computed.
+
+The vsh fdunction is in the module antvsh.py and is relying on the
+spherepack package.
+
+
+.. code-block:: python
+
+    A = vsh(A)
+
+The information about the antenna indicates now the presence of
+spherical coefficients, in format vsh1. N1 = 90 and M1 = 89. There is
+the same number of coefficient for :math:`$B_r$`,:math:`$B_i$`,
+:math:`$C_r$`, :math:`$C_i$` independantly to their importance.
+
+
+.. code-block:: python
+
+    A.C.info()
+
+
+.. parsed-literal::
+
+    Br
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    Bi
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    Cr
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    Ci
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+
+
+.. code-block:: python
+
+    A.C.s1tos2(30)
+
+
+.. code-block:: python
+
+    A.C.info()
+
+
+.. parsed-literal::
+
+    Br
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+    Bi
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+    Cr
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+    Ci
+    -------------
+    Nf   :  104
+    fmin (GHz) :  0.8
+    fmax (GHz) :  5.95
+    N1  :  90
+    M1  :  89
+    Ncoeff s1  8010
+    NCoeff s2  :  495
+
+
+.. code-block:: python
+
+    figsize(10,10)
+    A.C.show(typ='s2',k=300)
+
+.. image:: AntennaVSH_files/_fig_16.png
+
+Transformation in shape 3 - energy thresholding
+
+
+.. code-block:: python
+
+    A.C.s2tos3(1e-5)
+
+
+.. code-block:: python
+
+    A.C.show('s3')
+
+.. image:: AntennaVSH_files/_fig_18.png
+
+
+.. code-block:: python
+
+    th    = kron(A.theta,ones(A.Np))   
+    ph    = kron(ones(A.Nt),A.phi)  
+    Fth2,Fph2 = A.Fsynth3(th,ph) 
+
+
+.. code-block:: python
+
+    FTh2 = Fth2.reshape(A.Nf,A.Nt,A.Np)
+    FPh2 = Fph2.reshape(A.Nf,A.Nt,A.Np)
+    compdiag(0,A,A.theta,A.phi,FTh2,FPh2,'modulus')
+
+.. image:: AntennaVSH_files/_fig_20.png
+
+
+.. code-block:: python
+
+    
+

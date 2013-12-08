@@ -1,0 +1,708 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example of a trajectory synthesis in DLR WHERE2 environment &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example of a trajectory synthesis in DLR WHERE2 environment</a><ul>
+<li><a class="reference internal" href="#loading-the-layout">loading the Layout</a></li>
+<li><a class="reference internal" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">Aggregated CIR along a synthetic trajectory (line in the corridor)</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-of-a-trajectory-synthesis-in-dlr-where2-environment">
+<h1>Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4300650&gt;</pre>
+</div>
+<p>This function has to be moved in simulem module. It is a temporary
+implementation. Signatures can be handled much more efficiently here. It
+run a full simulation and returns a list of channel impulse response.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    S</span>
+<span class="sd">    tx</span>
+<span class="sd">    rx</span>
+<span class="sd">    wav</span>
+<span class="sd">    cutoff</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">crxp</span> <span class="o">=-</span><span class="mi">1</span>
+    <span class="n">ctxp</span> <span class="o">=-</span><span class="mi">1</span>
+    <span class="n">tcir</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
+    <span class="n">Ntx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
+    <span class="n">Nrx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c">#for kt in range(1,Ntx-1):</span>
+    <span class="c">#print kt+1</span>
+    <span class="n">kt</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">kr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrx</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mod</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">print</span> <span class="n">kr</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">crx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ctx</span><span class="o">&lt;&gt;</span><span class="n">ctxp</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">crx</span><span class="o">&lt;&gt;</span><span class="n">crxp</span><span class="p">):</span>
+            <span class="n">Si</span>  <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+            <span class="n">ctxp</span> <span class="o">=</span> <span class="n">ctx</span>
+            <span class="n">crxp</span> <span class="o">=</span> <span class="n">crx</span>
+            <span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+        <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+        <span class="c">#r2d.show(S.L)</span>
+
+        <span class="n">r3d</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">Ct</span>  <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="n">sca</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">cir</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+        <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">cir</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">tcir</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="loading-the-layout">
+<h2>loading the Layout<a class="headerlink" href="#loading-the-layout" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;DLR2&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;DLR WP4 WHERE2 measurement site&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DOC-trajectory_files/_fig_02.png" src="notebooks/rst/DOC-trajectory_files/_fig_02.png" />
+<p>We have a list of static Anchor Nodes. Those values correspond to the
+actual anchor nodes coordinates of the WHERE2 project DLR measurement
+campaign.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">AnchorNodes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">390</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_05&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.81</span><span class="p">,</span><span class="mf">1.64</span><span class="p">]},</span>
+               <span class="mi">386</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_08&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">30.574</span><span class="p">,</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.291</span><span class="p">]},</span>
+               <span class="mi">391</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_07&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">11.78</span><span class="p">,</span><span class="o">-</span><span class="mf">5.553</span><span class="p">,</span><span class="mf">1.5</span><span class="p">]},</span>
+               <span class="mi">385</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;MT_ACO_01&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">19.52</span><span class="p">,</span><span class="o">-</span><span class="mf">0.69</span><span class="p">,</span><span class="mf">1.446</span><span class="p">]},</span>
+               <span class="mi">387</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_03&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">28.606</span><span class="p">,</span><span class="o">-</span><span class="mf">0.74</span><span class="p">,</span><span class="mf">1.467</span><span class="p">]},</span>
+               <span class="mi">400</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_02&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">30.574</span><span class="p">,</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.291</span><span class="p">]},</span>
+               <span class="mi">1</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_DLR_RTDSlave&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">0.85</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.18</span><span class="p">]}</span>
+              <span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
+<span class="n">da</span> <span class="o">=</span><span class="p">{}</span>
+<span class="n">dm</span> <span class="o">=</span><span class="p">{}</span>
+</pre></div>
+</div>
+<p>Vizualization of the simulated scenario</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="c">#</span>
+<span class="c"># add new points in tx and rx</span>
+<span class="c">#</span>
+<span class="c">#for c,k in enumerate(AnchorNodes):</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># first anchor nodes</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">AnchorNodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">c</span><span class="p">]</span>
+<span class="n">pta</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="c">#</span>
+<span class="c"># To add a point</span>
+<span class="c">#</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&quot;add&quot;</span><span class="p">)</span>
+<span class="n">da</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">=</span><span class="n">k</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fa3345da7d0&gt;]</pre>
+</div>
+<img alt="notebooks/rst/DOC-trajectory_files/_fig_05.png" src="notebooks/rst/DOC-trajectory_files/_fig_05.png" />
+<p>In the following a trajectory for the receiver is defined.</p>
+<p><tt class="docutils literal"><span class="pre">linevect</span></tt> function allows to define a linear trajectory from <tt class="docutils literal"><span class="pre">ptt</span></tt>
+along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.275</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="n">ps</span><span class="p">,</span><span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Looking what is does</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;Trajectory to be simulated&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x49d0790&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fa335217410&gt;)</pre>
+</div>
+<img alt="notebooks/rst/DOC-trajectory_files/_fig_09.png" src="notebooks/rst/DOC-trajectory_files/_fig_09.png" />
+<p>Choosing a UWB waveform for the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
+<span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DOC-trajectory_files/_fig_11.png" src="notebooks/rst/DOC-trajectory_files/_fig_11.png" />
+<p>running the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>1
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+11
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+21
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+31
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+41
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+51
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+61
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+71
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+81
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+no T interaction to evaluate
+Rays evaluation
+Rays evaluation
+91
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+101
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+111
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+121
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+131
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+141
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+151
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+161
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation
+Rays evaluation</pre>
+</div>
+<p>The full trajectory simulation took <strong>56.8s</strong> on a Dell M6700. It is
+stored as a dictionnary of 59 entries containing object from class
+Usignal of length 9930 points.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>{1: {1: Usignal :  (6292,)  (6292,),
+  2: Usignal :  (6324,)  (6324,),
+  3: Usignal :  (6356,)  (6356,),
+  4: Usignal :  (6388,)  (6388,),
+  5: Usignal :  (6420,)  (6420,),
+  6: Usignal :  (6453,)  (6453,),
+  7: Usignal :  (6485,)  (6485,),
+  8: Usignal :  (6517,)  (6517,),
+  9: Usignal :  (6549,)  (6549,),
+  10: Usignal :  (6582,)  (6582,),
+  11: Usignal :  (6614,)  (6614,),
+  12: Usignal :  (6646,)  (6646,),
+  13: Usignal :  (6679,)  (6679,),
+  14: Usignal :  (6711,)  (6711,),
+  15: Usignal :  (6743,)  (6743,),
+  16: Usignal :  (5607,)  (5607,),
+  17: Usignal :  (5575,)  (5575,),
+  18: Usignal :  (5605,)  (5605,),
+  19: Usignal :  (5636,)  (5636,),
+  20: Usignal :  (5668,)  (5668,),
+  21: Usignal :  (5700,)  (5700,),
+  22: Usignal :  (5732,)  (5732,),
+  23: Usignal :  (5764,)  (5764,),
+  24: Usignal :  (5795,)  (5795,),
+  25: Usignal :  (5827,)  (5827,),
+  26: Usignal :  (5859,)  (5859,),
+  27: Usignal :  (5891,)  (5891,),
+  28: Usignal :  (5923,)  (5923,),
+  29: Usignal :  (5955,)  (5955,),
+  30: Usignal :  (5987,)  (5987,),
+  31: Usignal :  (6019,)  (6019,),
+  32: Usignal :  (6051,)  (6051,),
+  33: Usignal :  (6083,)  (6083,),
+  34: Usignal :  (6115,)  (6115,),
+  35: Usignal :  (6147,)  (6147,),
+  36: Usignal :  (6179,)  (6179,),
+  37: Usignal :  (6211,)  (6211,),
+  38: Usignal :  (6243,)  (6243,),
+  39: Usignal :  (6275,)  (6275,),
+  40: Usignal :  (6307,)  (6307,),
+  41: Usignal :  (6339,)  (6339,),
+  42: Usignal :  (6371,)  (6371,),
+  43: Usignal :  (4759,)  (4759,),
+  44: Usignal :  (4728,)  (4728,),
+  45: Usignal :  (4697,)  (4697,),
+  46: Usignal :  (4666,)  (4666,),
+  47: Usignal :  (4635,)  (4635,),
+  48: Usignal :  (4604,)  (4604,),
+  49: Usignal :  (4574,)  (4574,),
+  50: Usignal :  (4543,)  (4543,),
+  51: Usignal :  (4512,)  (4512,),
+  52: Usignal :  (4482,)  (4482,),
+  53: Usignal :  (4451,)  (4451,),
+  54: Usignal :  (4390,)  (4390,),
+  55: Usignal :  (4359,)  (4359,),
+  56: Usignal :  (4328,)  (4328,),
+  57: Usignal :  (4298,)  (4298,),
+  58: Usignal :  (4267,)  (4267,),
+  59: Usignal :  (4236,)  (4236,),
+  60: Usignal :  (4206,)  (4206,),
+  61: Usignal :  (4175,)  (4175,),
+  62: Usignal :  (4145,)  (4145,),
+  63: Usignal :  (4114,)  (4114,),
+  64: Usignal :  (4084,)  (4084,),
+  65: Usignal :  (4054,)  (4054,),
+  66: Usignal :  (4024,)  (4024,),
+  67: Usignal :  (3994,)  (3994,),
+  68: Usignal :  (3963,)  (3963,),
+  69: Usignal :  (3934,)  (3934,),
+  70: Usignal :  (3904,)  (3904,),
+  71: Usignal :  (3874,)  (3874,),
+  72: Usignal :  (3844,)  (3844,),
+  73: Usignal :  (3814,)  (3814,),
+  74: Usignal :  (3785,)  (3785,),
+  75: Usignal :  (3755,)  (3755,),
+  76: Usignal :  (3726,)  (3726,),
+  77: Usignal :  (3697,)  (3697,),
+  78: Usignal :  (3668,)  (3668,),
+  79: Usignal :  (3639,)  (3639,),
+  80: Usignal :  (3610,)  (3610,),
+  81: Usignal :  (3581,)  (3581,),
+  82: Usignal :  (3552,)  (3552,),
+  83: Usignal :  (3524,)  (3524,),
+  84: Usignal :  (3495,)  (3495,),
+  85: Usignal :  (3467,)  (3467,),
+  86: Usignal :  (3439,)  (3439,),
+  87: Usignal :  (3411,)  (3411,),
+  88: Usignal :  (3387,)  (3387,),
+  89: Usignal :  (4694,)  (4694,),
+  90: Usignal :  (4678,)  (4678,),
+  91: Usignal :  (4662,)  (4662,),
+  92: Usignal :  (4647,)  (4647,),
+  93: Usignal :  (4631,)  (4631,),
+  94: Usignal :  (4616,)  (4616,),
+  95: Usignal :  (4602,)  (4602,),
+  96: Usignal :  (4587,)  (4587,),
+  97: Usignal :  (4573,)  (4573,),
+  98: Usignal :  (4560,)  (4560,),
+  99: Usignal :  (4546,)  (4546,),
+  100: Usignal :  (4533,)  (4533,),
+  101: Usignal :  (4802,)  (4802,),
+  102: Usignal :  (4804,)  (4804,),
+  103: Usignal :  (4805,)  (4805,),
+  104: Usignal :  (4592,)  (4592,),
+  105: Usignal :  (4809,)  (4809,),
+  106: Usignal :  (4812,)  (4812,),
+  107: Usignal :  (4815,)  (4815,),
+  108: Usignal :  (4818,)  (4818,),
+  109: Usignal :  (4822,)  (4822,),
+  110: Usignal :  (4825,)  (4825,),
+  111: Usignal :  (4830,)  (4830,),
+  112: Usignal :  (4834,)  (4834,),
+  113: Usignal :  (4839,)  (4839,),
+  114: Usignal :  (4844,)  (4844,),
+  115: Usignal :  (4850,)  (4850,),
+  116: Usignal :  (4855,)  (4855,),
+  117: Usignal :  (4861,)  (4861,),
+  118: Usignal :  (5253,)  (5253,),
+  119: Usignal :  (5221,)  (5221,),
+  120: Usignal :  (5190,)  (5190,),
+  121: Usignal :  (5158,)  (5158,),
+  122: Usignal :  (5126,)  (5126,),
+  123: Usignal :  (5095,)  (5095,),
+  124: Usignal :  (5063,)  (5063,),
+  125: Usignal :  (5032,)  (5032,),
+  126: Usignal :  (5000,)  (5000,),
+  127: Usignal :  (4969,)  (4969,),
+  128: Usignal :  (4937,)  (4937,),
+  129: Usignal :  (4906,)  (4906,),
+  130: Usignal :  (4874,)  (4874,),
+  131: Usignal :  (4843,)  (4843,),
+  132: Usignal :  (4811,)  (4811,),
+  133: Usignal :  (4780,)  (4780,),
+  134: Usignal :  (4749,)  (4749,),
+  135: Usignal :  (4718,)  (4718,),
+  136: Usignal :  (4686,)  (4686,),
+  137: Usignal :  (4655,)  (4655,),
+  138: Usignal :  (4624,)  (4624,),
+  139: Usignal :  (4593,)  (4593,),
+  140: Usignal :  (4562,)  (4562,),
+  141: Usignal :  (4531,)  (4531,),
+  142: Usignal :  (4500,)  (4500,),
+  143: Usignal :  (4469,)  (4469,),
+  144: Usignal :  (4438,)  (4438,),
+  145: Usignal :  (4407,)  (4407,),
+  146: Usignal :  (4376,)  (4376,),
+  147: Usignal :  (4588,)  (4588,),
+  148: Usignal :  (4606,)  (4606,),
+  149: Usignal :  (4623,)  (4623,),
+  150: Usignal :  (4623,)  (4623,),
+  151: Usignal :  (4598,)  (4598,),
+  152: Usignal :  (4287,)  (4287,),
+  153: Usignal :  (4294,)  (4294,),
+  154: Usignal :  (4297,)  (4297,),
+  155: Usignal :  (4301,)  (4301,),
+  156: Usignal :  (4305,)  (4305,),
+  157: Usignal :  (4310,)  (4310,),
+  158: Usignal :  (6310,)  (6310,),
+  159: Usignal :  (6313,)  (6313,),
+  160: Usignal :  (6322,)  (6322,),
+  161: Usignal :  (7216,)  (7216,),
+  162: Usignal :  (7219,)  (7219,),
+  163: Usignal :  (7222,)  (7222,),
+  164: Usignal :  (7226,)  (7226,),
+  165: Usignal :  (7230,)  (7230,),
+  166: Usignal :  (7234,)  (7234,),
+  167: Usignal :  (7238,)  (7238,),
+  168: Usignal :  (7243,)  (7243,),
+  169: Usignal :  (7247,)  (7247,)}}</pre>
+</div>
+<p>Saving the data in pickle format</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tcir</span><span class="p">,</span><span class="nb">file</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Reading the data from the above file</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">del</span> <span class="n">tcir</span>
+<span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">tcir</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c">#</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">cir</span> <span class="o">=</span> <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">cir</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">150</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ttcir</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">ttcir</span><span class="p">,</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">ttcir</span><span class="o">=</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">
+<h2>Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">dmax</span><span class="o">=</span><span class="mi">150</span><span class="o">*</span><span class="mf">0.3</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ttcir</span><span class="o">+</span><span class="mf">1e-20</span><span class="p">),</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">dmax</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">69</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;delay $\times$ c (meters)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="c">#plt.ylabel(r&#39;distance along trajectory (meters)&#39;,fontsize=20)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;trajectory index number&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">clb</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;level (dB)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="notebooks/rst/DOC-trajectory_files/_fig_16.png" src="notebooks/rst/DOC-trajectory_files/_fig_16.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x712cad0&gt;</pre>
+</div>
+<img alt="notebooks/rst/DOC-trajectory_files/_fig_19.png" src="notebooks/rst/DOC-trajectory_files/_fig_19.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">40</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x70a1f90&gt;</pre>
+</div>
+<img alt="notebooks/rst/DOC-trajectory_files/_fig_22.png" src="notebooks/rst/DOC-trajectory_files/_fig_22.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

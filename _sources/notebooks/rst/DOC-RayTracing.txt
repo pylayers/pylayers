@@ -1,0 +1,163 @@
+
+.. code-block:: python
+
+    from pylayers.simul.simulem import *
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x45cfa90>
+
+Ray-tracing
+-----------
+
+
+.. code-block:: python
+
+    S = Simul()
+    # loading a layout 
+    filestr = 'TA-Office'
+    # load the material and slab dictionnaries
+    S.layout(filestr+'.str','matDB.ini','slabDB.ini')
+
+Setting the transmitter
+~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. code-block:: python
+
+    S.tx = RadioNode(typ='tx')
+    S.tx.point([1.2,1,1.4])
+
+Setting the receiver
+~~~~~~~~~~~~~~~~~~~~
+
+
+.. code-block:: python
+
+    S.rx = RadioNode(typ='rx')
+    S.rx.point([8,1.2,1.5],mode='append')
+    S.rx.point([8,1.31,1.5],mode='append')
+    S.rx.point([8,1.42,1.5],mode='append')
+    S.rx.point([8,1.53,1.5],mode='append')
+    S.rx.point([8,1.64,1.5],mode='append')
+    
+    S.save()
+
+Adjust simulation parameters (optional)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. code-block:: python
+
+    
+    # print launching parameters
+    S.palch.info()
+    
+    # ang Tx : angular step from Tx
+    S.palch.angTx  = 1
+    
+    # ISB ang Incident Shadow Boundary angle (degree) 
+    S.palch.ISBang = 90  
+    
+    # ray elimination Threshold 
+    S.palch.ethreshold = 0.001
+    
+    # maximum depth
+    S.palch.maxdeep  = 10
+    
+    # typealgo = 0 (include diffraction) 1 (no diffraction)
+    S.palch.typalgo = 1
+    title = str(S.palch.angTx) + '-' +\
+            str(S.palch.ISBang) + '-' +\
+            str(S.palch.ethreshold) + '-' + \
+            str(S.palch.maxdeep) + '-' + \
+            str(S.palch.typalgo)
+    
+    S.palch.save()
+    S.pafreq.fghzmin=2
+    S.pafreq.fghzmax=11
+    S.pafreq.nf=181
+    S.pafreq.save()
+
+
+.. parsed-literal::
+
+    ----------------------------------------------
+                Launching Parameter               
+    ----------------------------------------------
+    angTx      : Tx angular step ( degrees)     :  1
+    ISBang     : ISB angular sector ( degrees ) :  90
+    ethreshold : Exploration Threshold (linear) :  0.001
+    maxdeep    : Tree deep max (integer value)  :  10
+    typalgo    : Type of algo (default 0)       :  1
+
+Run the ray tracing
+~~~~~~~~~~~~~~~~~~~
+
+
+.. code-block:: python
+
+    S.show()
+
+
+.. parsed-literal::
+
+    Warning : no furniture file loaded
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x4142a90>,
+     <matplotlib.axes.AxesSubplot at 0x2a993d0>)
+
+
+.. image:: DOC-RayTracing_files/_fig_05.png
+
+
+.. code-block:: python
+
+    S.launching(1)
+
+
+.. code-block:: python
+
+    S.tracing(1,1,verbose=True)
+
+
+.. parsed-literal::
+
+    tracing -lch TA-Office_slabDB_def_radiotx_1.lch -patra def.patra  -spa radiorx.spa -conf /home/uguen/Bureau/P1/project.conf
+
+Plot CIR
+~~~~~~~~
+
+
+
+.. code-block:: python
+
+    S.pltcir(1,1)
+
+::
+
+    ---------------------------------------------------------------------------
+    KeyError                                  Traceback (most recent call last)
+    <ipython-input-9-6b9450368cc5> in <module>()
+    ----> 1 S.pltcir(1,1)
+    
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/simul/simulem.py in pltcir(self, itx, irx, mode, noise, color, format, fig, ax)
+       1547         #    ax = fig.gca()
+       1548 
+    -> 1549         _filecir = self.dcir[itx][irx] + '.mat'
+       1550         filecir = pyu.getlong(_filecir, pstruc['DIRCIR']+'/Tx' + str('%0.3d' % itx))
+       1551         D = spio.loadmat(filecir)
+
+    KeyError: 1
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x45d90d0>
+
+
+.. code-block:: python
+
+    
+

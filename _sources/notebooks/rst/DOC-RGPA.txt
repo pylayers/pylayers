@@ -1,0 +1,294 @@
+Robust Geometric Positioning Algorithm presented in ``_
+-------------------------------------------------------
+
+
+.. code-block:: python
+
+    from pylayers.location.geometric.constraints.cla import *
+    from pylayers.location.geometric.constraints.toa import *
+    from pylayers.location.geometric.constraints.tdoa import *
+    from pylayers.location.geometric.constraints.rss import *
+    from pylayers.network.model import *
+    
+    import matplotlib.pyplot as plt
+
+
+
+.. code-block:: python
+
+    ptoa1=np.array(([0,0]))
+    ptoa2=np.array(([10,15]))
+    ptoa3=np.array(([5,28]))
+    ptoa4=np.array(([-10,-10]))
+    
+    p = np.array((0,5))
+
+Display the scene
+
+
+.. code-block:: python
+
+    f=plt.figure()
+    ax=f.add_subplot(111)
+    ax.plot(ptoa1[0],ptoa1[1],'or',label='anchor 1')
+    ax.plot(ptoa2[0],ptoa2[1],'or',label='anchor 2')
+    ax.plot(ptoa3[0],ptoa3[1],'or',label='anchor 3')
+    ax.plot(ptoa4[0],ptoa4[1],'or',label='anchor 4')
+    ax.plot(p[0],p[1],'xb',label='p')
+    
+    
+    ax.legend(loc='best')
+
+
+.. parsed-literal::
+
+    <matplotlib.legend.Legend at 0x326a350>
+
+
+.. image:: DOC-RGPA_files/_fig_02.png
+
+compute the true distance and the associated TOAs
+
+
+.. code-block:: python
+
+    d1=np.sqrt(np.sum((ptoa1-p)**2))
+    d2=np.sqrt(np.sum((ptoa2-p)**2))
+    d3=np.sqrt(np.sum((ptoa3-p)**2))
+    d4=np.sqrt(np.sum((ptoa4-p)**2))
+    
+    toa1=d1/0.3
+    toa2=d2/0.3
+    toa3=d3/0.3
+    toa4=d4/0.3
+    
+    print 'distance p-1=',d1, '/ toa1=',toa1
+    print 'distance p-2=',d2, '/ toa2=',toa2
+    print 'distance p-3=',d3, '/ toa3=',toa3
+    print 'distance p-4=',d4, '/ toa3=',toa4
+
+
+.. parsed-literal::
+
+    distance p-1= 5.0 / toa1= 16.6666666667
+    distance p-2= 14.1421356237 / toa2= 47.1404520791
+    distance p-3= 23.5372045919 / toa3= 78.4573486396
+    distance p-4= 18.0277563773 / toa3= 60.0925212577
+
+# RGPA
+======
+
+TOA
+---
+
+
+instanciate the constraint layer array which gathers all the geometric
+constraints of the considered scenario.
+
+
+.. code-block:: python
+
+    C=CLA()
+
+Instanciate TOA objects Watch out their id are differnts
+
+
+.. code-block:: python
+
+    T1=TOA(id=0,value = toa1, std = 1.0, p = ptoa1)
+    T2=TOA(id=1,value = toa2, std = 1.0, p = ptoa2)
+    T3=TOA(id=2,value = toa3, std = 1.0, p = ptoa3)
+    T4=TOA(id=3,value = toa4, std = 1.0, p = ptoa4)
+
+Add TOA contrstraints to the CLA
+
+
+.. code-block:: python
+
+    C.append(T1)
+    C.append(T2)
+    C.append(T3)
+    C.append(T4)
+
+List all constraints of the CLA
+
+
+.. code-block:: python
+
+    C.c
+
+
+.. parsed-literal::
+
+    [<pylayers.location.geometric.constraints.toa.TOA at 0x31c5850>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x3258ad0>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x31c5fd0>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x31c5d90>]
+
+
+Get information on the cla :
+
+-  type : TOA / RSS
+-  p : Position of the origin of the constraint
+-  value : power ( RSS ) / time in ns ( TOA)
+-  std : standard deviation :math:`$\sigma^2$` of value
+-  runable : does the constraint has a position p ?
+-  obsolete : does the value has been obtained recently ?
+-  usuable : runbale AND NOT obsolete
+-  evlauated : obsolete
+
+
+
+.. code-block:: python
+
+    C.info2()
+
+
+.. parsed-literal::
+
+    type , p         , value     , std    , runable, usable, obsolete, evaluated
+    TOA , [0 0]     , 16.6666666667,     1.0, 0, 1, 0, 0
+    type , p         , value     , std    , runable, usable, obsolete, evaluated
+    TOA , [10 15]   , 47.1404520791,     1.0, 1, 1, 0, 0
+    type , p         , value     , std    , runable, usable, obsolete, evaluated
+    TOA , [ 5 28]   , 78.4573486396,     1.0, 1, 1, 0, 0
+    type , p         , value     , std    , runable, usable, obsolete, evaluated
+    TOA , [-10 -10] , 60.0925212577,     1.0, 1, 1, 0, 0
+
+Update the CLA
+
+
+.. code-block:: python
+
+    C.update()
+
+
+Compute the cla
+
+
+.. code-block:: python
+
+    C.compute()
+
+
+.. parsed-literal::
+
+    True
+
+
+show the estimated position
+
+
+.. code-block:: python
+
+    C.pe
+
+
+.. parsed-literal::
+
+    array([ -4.735e-03,   4.992e+00])
+
+
+RSS
+---
+
+
+The RSS is a quantity with related to distance.To model the Path Loss
+shadowing model is widely used. To define a path loss shadowing model
+
+
+.. code-block:: python
+
+    M=Model(f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mode')
+
+For simulation purpose : get RSS from distances wit the given model
+
+
+.. code-block:: python
+
+    toa1
+
+
+.. parsed-literal::
+
+    16.666666666666668
+
+
+
+.. code-block:: python
+
+    M.getPL(toa1,1)
+
+::
+
+    ---------------------------------------------------------------------------
+    IndexError                                Traceback (most recent call last)
+    <ipython-input-15-a6871920bb98> in <module>()
+    ----> 1 M.getPL(toa1,1)
+    
+    /home/uguen/Documents/rch/devel/pylayersbug/pylayers/network/model.pyc in getPL(self, r, RSSStd)
+        138             PLmean          = self.getPLmean(r)
+        139             shPLmean        = np.shape(PLmean)
+    --> 140             Xrand           = RSSStd*sp.randn(shPLmean[0])
+        141             PL        = PLmean+Xrand
+        142 
+
+    IndexError: tuple index out of range
+TDOA
+----
+
+
+
+.. code-block:: python
+
+    Td1=TDOA(id=0,value = toa1-toa2, std = 1.0, p = np.array([ptoa1,ptoa2]))
+    Td2=TDOA(id=1,value = toa1-toa3, std = 1.0, p = np.array([ptoa1,ptoa3]))
+    Td3=TDOA(id=2,value = toa1-toa4, std = 1.0, p = np.array([ptoa1,ptoa4]))
+
+
+
+.. code-block:: python
+
+    C=CLA()
+    C.append(Td1)
+    C.append(Td2)
+    C.append(Td3)
+
+
+.. code-block:: python
+
+    C.compute()
+
+
+.. parsed-literal::
+
+    TDOA 2.0
+    TDOA 2.0
+    TDOA 2.0
+    TDOA 1.5
+    TDOA 1.5
+    TDOA 1.5
+    TDOA 1.375
+    TDOA 1.375
+    TDOA 1.375
+    TDOA 1.375
+    TDOA 1.375
+    TDOA 1.375
+
+
+.. parsed-literal::
+
+    True
+
+
+
+.. code-block:: python
+
+    C.pe
+
+
+.. parsed-literal::
+
+    array([ 0.021,  4.987])
+
+

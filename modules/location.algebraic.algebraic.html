@@ -47,7 +47,7 @@
           <a href="location.locarule.html" title="locarule"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
@@ -96,16 +96,19 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>nodes</strong> : dictionnary</p>
-<blockquote class="last">
-<div><p>ldp : dictionnary</p>
-</div></blockquote>
+<p><strong>ldp</strong> : dictionnary</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>plot</strong> : plot scenario</p>
+<p><strong>show</strong> : plot scenario</p>
+<p class="last"><strong>get_range</strong> :</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>This class regroup various implementation of location algorithms.
-The instantiated object has :</p>
+<p>This class gathers various implementation of location algorithms.
+The object has :</p>
 <blockquote>
 <div><ul class="simple">
 <li>a dictionnary of nodes</li>
@@ -235,11 +238,9 @@ position P.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
-<blockquote>
-<div><p>toa : boolean
-tdoa : boolean
-Rest : string</p>
-</div></blockquote>
+<p><strong>toa</strong> : boolean</p>
+<p><strong>tdoa</strong> : boolean</p>
+<p><strong>Rest</strong> : string</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>P</strong> : numpy.ndarray</p>
@@ -331,9 +332,16 @@ tdoa : boolean</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
+<blockquote>
+<div><p>False</p>
+</div></blockquote>
+<p><strong>toa</strong> : boolean</p>
+<blockquote>
+<div><p>True</p>
+</div></blockquote>
+<p><strong>tdoa</strong> : boolean</p>
 <blockquote class="last">
-<div><p>toa : boolean
-tdoa : boolean</p>
+<div><p>False</p>
 </div></blockquote>
 </td>
 </tr>
@@ -350,10 +358,8 @@ tdoa : boolean</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rss</strong> : boolean</p>
-<blockquote class="last">
-<div><p>toa : boolean
-tdoa : boolean</p>
-</div></blockquote>
+<p><strong>toa</strong> : boolean</p>
+<p class="last"><strong>tdoa</strong> : boolean</p>
 </td>
 </tr>
 </tbody>
@@ -527,7 +533,7 @@ Defines a sample scenario for testing</p>
           <a href="location.locarule.html" title="locarule"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
-        <li><a href="../notebooks/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 

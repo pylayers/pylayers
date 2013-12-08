@@ -1,0 +1,520 @@
+
+.. code-block:: python
+
+    from pylayers.simul.simulem import *
+    from pylayers.antprop.rays import *
+    from pylayers.antprop.channel import *
+    from pylayers.antprop.signature import *
+    import pylayers.util.pyutil as pyu
+    from pylayers.gis.layout import *
+    from pylayers.util.project import *
+    import pylayers.signal.bsignal as bs
+    from datetime import datetime
+    import time
+    import pdb
+    import pickle
+    import numpy as np
+    import matplotlib.pyplot as plt 
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x5080e10>
+
+
+.. code-block:: python
+
+    def evalcir(S,wav,cutoff=4):
+        """
+        Parameters
+        ----------
+    
+        S 
+        tx
+        rx
+        wav
+        cutoff
+    
+        """
+    
+        crxp =-1
+        ctxp =-1
+        tcir = {}
+        tx = S.tx.position 
+        Ntx = len(tx[0])
+        rx = S.rx.position
+        Nrx = len(rx[0])
+    
+        #for kt in range(1,Ntx-1):
+        #print kt+1
+        kt=0
+        tcir[kt+1] = {}
+        t = np.array([S.tx.position[0,kt+1],S.tx.position[1,kt+1],S.tx.position[2,kt+1]])
+        for kr in range(Nrx-1):
+            print kr+1
+            r = np.array([S.rx.position[0,kr+1],S.rx.position[1,kr+1],S.rx.position[2,kr+1]])
+            ctx = S.L.pt2cy(t)
+            crx = S.L.pt2cy(r)
+            if (ctx<>ctxp)|(crx<>crxp):
+                Si  = Signatures(S.L,ctx,crx)
+                ctxp = ctx
+                crxp = crx
+                Si.run1(cutoff=cutoff)
+            r2d = Si.rays(t,r)
+            #r2d.show(S.L)
+    
+            r3d = r2d.to3D()
+            r3d.locbas(S.L)
+            r3d.fillinter(S.L)
+            Ct  = r3d.eval(S.fGHz)
+            sca = Ct.prop2tran(S.tx.A,S.rx.A)
+            cir = sca.applywavB(wav.sfg)
+            tcir[kt+1][kr+1]=cir
+        return(tcir)
+
+
+.. code-block:: python
+
+    S = Simul()
+    filestr = 'DLR'
+    S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
+    try:
+        S.L.dumpr()
+    except:
+        S.L.build()
+        S.L.dumpw()
+
+
+.. code-block:: python
+
+    S.L.display['ednodes']=False
+    S.L.display['nodes']=False
+    S.L.display['title']='DLR WP4 WHERE2 measurement site'
+    S.L.display['overlay']=False
+    fig,ax = S.L.showGs()    
+
+.. image:: DEV-Trajectory_files/_fig_02.png
+
+
+.. code-block:: python
+
+    # 
+    # Measures from WHERE2 WP4 measurement campaign @ DLR
+    # 
+    
+    MT_DLR_RDTMaster={ 2:[2.12,0,1.275], 3:[3.12,0,1.275], 4:[4.12,0,1.275],
+                      5:[5.12,0,1.275], 6:[6.12,0,1.275], 7:[7.12,0,1.275],
+                      8:[8.12,0,1.275], 9:[9.12,0,1.275], 10:[10.12,0,1.275],
+                      11:[11.12,0,1.275], 12:[12.12,0,1.275], 13:[13.12,0,1.275],
+                      14:[14.12,0,1.275], 15:[15.12,0,1.275], 16:[16.12,0,1.275],
+                      17:[17.12,0,1.275], 18:[18.12,0,1.275], 19:[19.12,0,1.275],
+                      20:[20.12,0,1.275], 21:[21.12,0,1.275], 22:[22.12,0,1.275],
+                      23:[23.12,0,1.275], 24:[24.12,0,1.275], 25:[25.12,0,1.275],
+                      26:[26.12,0,1.275], 27:[27.12,0,1.275], 28:[28.12,0,1.275],
+                      29:[29.12,0,1.275], 30:[30.12,0,1.275], 31:[31.12,0,1.275],
+                      33:[30.12,0,1.275], 62:[24.12,0,1.275], 63:[24.62,0,1.275],
+                      64:[25.12,0,1.275], 65:[25.62,0,1.275], 66:[26.12,0,1.275],
+                      67:[26.62,0,1.275], 68:[27.12,0,1.275], 69:[27.62,0,1.275],
+                      70:[28.12,0,1.275], 71:[28.62,0,1.275], 72:[29.12,0,1.275],
+                      73:[29.62,0,1.275], 34:[30.12,0,1.275], 35:[30,1.38,1.275],
+                      36:[30,1.88,1.275], 37:[30,2.38,1.275], 38:[30,2.88,1.275],
+                      39:[30,3.88,1.275], 40:[30,4.88,1.275], 41:[30,5.88,1.275]}
+    
+    # 
+    
+    TrolleyMT_ACO_04={ 2:60, 3:59, 4:58, 5:58, 6:58, 7:58, 8:58, 9:58, 10:58,
+                      11:58, 12:58, 13:57, 14:52, 15:12, 16:51, 17:11, 18:50,
+                      19:10, 20:53, 21:54, 22:55, 23:56, 24:56, 25:56, 26:56,
+                      27:56, 28:56, 29:56, 30:56, 31:56, 33:56, 62:56, 63:56,
+                      64:56, 65:56, 66:56, 67:56, 68:56, 69:56, 70:56, 71:56,
+                      72:56, 73:56, 34:56, 35:56, 36:56, 37:56, 38:56, 39:56,
+                      40:56, 41:56} 
+    
+    # 
+    
+    MT_ACO_04 = { 
+        60: [12.5, 2, 1.28],
+        59 :[12.5, 1.5, 1.28],
+        58 :[12.5, 1, 1.28 ],
+        57 :[12.5, 0.5, 1.28],
+        52 :[12.5, 0, 1.28],
+        12 :[12,  0,  1.28],
+        51 :[ 11.5, 0, 1.28],
+        11 :[ 11, 0, 1.28],
+        50 : [10.5, 0, 1.28],
+        10 :[10, 0, 1.28],
+        53 : [10, -0.5, 1.28],
+        54 : [10, -1, 1.28],
+        55 : [10, -1.5, 1.28],
+        56 : [10, -2, 1.28],
+    }
+    
+    # 
+    
+    Dongle = 389
+    AnchorNodes = {390:{'name':'MT_ACO_05','coord':[6,0.81,1.64]},
+                   386:{'name':'MT_ACO_08','coord':[30.574,2.8,1.291]},
+                   391:{'name':'MT_ACO_07','coord':[11.78,-5.553,1.5]},
+                   385:{'name': 'MT_ACO_01','coord':[19.52,-0.69,1.446]},
+                   387:{'name':'MT_ACO_03','coord':[28.606,-0.74,1.467]},
+                   400:{'name':'MT_ACO_02','coord':[30.574,2.8,1.291]},
+                   1:{'name':'MT_DLR_RTDSlave','coord':[0.85,0,1.18]}
+                  }
+    
+    
+
+
+
+.. code-block:: python
+
+    # 
+    #
+    #  Define here the link to be selected
+    #
+    A = 390
+    B = 386
+
+
+.. code-block:: python
+
+    fig,ax=S.L.showG('s',nodes=False)
+    plt.axis('off')
+    S.tx.clear()
+    S.rx.clear()
+    S.tx.filant='def.vsh3'
+    S.rx.filant='def.vsh3'
+    da ={}
+    dm ={}
+    #
+    # add new points in tx and rx
+    #
+    #for c,k in enumerate(AnchorNodes):
+    c = 0
+    k = AnchorNodes.keys()[c]
+    pta = array([AnchorNodes[k]['coord'][0],AnchorNodes[k]['coord'][1],AnchorNodes[k]['coord'][2]]).reshape(3,1)
+    #
+    # To add a point 
+    #
+    S.tx.point(pta,mode="add")
+    da[c]=k
+    plt.plot(pta[0,:],pta[1,:],'or')
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x57efe10>]
+
+
+.. image:: DEV-Trajectory_files/_fig_05.png
+
+
+.. code-block:: python
+
+    #for c,k in enumerate(MT_DLR_RDTMaster):
+    #    ptm = array([MT_DLR_RDTMaster[k][0],MT_DLR_RDTMaster[k][1],MT_DLR_RDTMaster[k][2]]).reshape(3,1)
+    #    dm[c]=k
+    #    S.rx.point(ptm,mode="add")
+    #    plt.plot(ptm[0,:],ptm[1,:],'ob')
+    #
+    # In the DLR environement goes from the origin on the left along the corridor
+    # then goes up in the room
+    #
+    S.rx.linevect(npt=50, step=0.6, ptt=[0, 0, 1.275], vec=[1, 0, 0], mode='subst')
+    ps = S.rx.position[:,-1]
+    S.rx.linevect(npt=10, step=0.2, ptt=ps,vec=[0,1,0],mode='append')
+    #print S.tx.position
+    #print S.rx.position
+    
+    S.show(s=20)
+    
+    #p = S.L.Gr.node[0]['polyg']
+    
+    wav = wvf.Waveform({'type':'W1compensate'})
+    tcir = evalcir(S,wav,cutoff=3)
+    file = open("tcir5.pickle","w")
+    pickle.dump(tcir,file)
+    file.close()
+
+
+.. parsed-literal::
+
+    Warning : no furniture file loaded
+    1
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    2
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    3
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    4
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    5
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    6
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    7
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    8
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    9
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    10
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    11
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    12
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    13
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    14
+    37 [1, 18]
+    41 [14, 18]
+    Rays evaluation
+    15
+    41 [14, 18]
+    Rays evaluation
+    16
+    41 [14, 18]
+    Rays evaluation
+    17
+    41 [14, 18]
+    Rays evaluation
+    18
+    41 [14, 18]
+    Rays evaluation
+    19
+    41 [14, 18]
+    Rays evaluation
+    20
+    41 [14, 18]
+    Rays evaluation
+    21
+    41 [14, 18]
+    Rays evaluation
+    22
+    41 [14, 18]
+    Rays evaluation
+    23
+    41 [14, 18]
+    Rays evaluation
+    24
+    41 [14, 18]
+    Rays evaluation
+    25
+    41 [14, 18]
+    Rays evaluation
+    26
+    41 [14, 18]
+    Rays evaluation
+    27
+    41 [14, 18]
+    Rays evaluation
+    28
+    41 [14, 18]
+    Rays evaluation
+    29
+    41 [14, 18]
+    Rays evaluation
+    30
+    Rays evaluation
+    31
+    Rays evaluation
+    32
+    Rays evaluation
+    33
+    Rays evaluation
+    34
+    Rays evaluation
+    35
+    Rays evaluation
+    36
+    Rays evaluation
+    37
+    Rays evaluation
+    38
+    Rays evaluation
+    39
+    Rays evaluation
+    40
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    41
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    42
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    43
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    44
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    45
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    46
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    47
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    48
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    49
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    50
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    51
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    52
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    53
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    54
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    55
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    56
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    57
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    58
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+    59
+    98 [9, 14]
+    99 [8, 9]
+    Rays evaluation
+
+.. image:: DEV-Trajectory_files/_fig_08.png
+
+
+.. code-block:: python
+
+    file=open("tcir5.pickle","r")
+    tcir=pickle.load(file)
+    file.close()
+    #
+    for i in tcir[1].keys():
+        cir = tcir[1][i]
+        cir.zlr(0,150)
+        try:
+            ttcir=np.vstack((ttcir,cir.y))
+        except:
+            ttcir=cir.y
+
+
+.. code-block:: python
+
+    figsize(10,10)
+    dmax=150*0.3
+    plt.imshow(20*np.log10(ttcir),vmax=-40,vmin=-150,origin='lower',extent=[0,dmax,1,69])
+    plt.xlabel(r'delay $\times$ c (meters)',fontsize=20)
+    #plt.ylabel(r'distance along trajectory (meters)',fontsize=20)
+    plt.ylabel(r'trajectory index number',fontsize=20)
+    clb=plt.colorbar()
+    clb.set_label('level (dB)',fontsize=20)
+    
+    plt.axis('tight')
+
+
+.. parsed-literal::
+
+    -c:3: RuntimeWarning: divide by zero encountered in log10
+    -c:3: RuntimeWarning: invalid value encountered in log10
+
+
+.. parsed-literal::
+
+    (0.0, 45.0, 1.0, 69.0)
+
+
+.. image:: DEV-Trajectory_files/_fig_12.png
+
+
+.. code-block:: python
+
+    figsize(10,5)
+    tcir[1][1].plot()
+    xlabel('Delay (ns)')
+    ylabel('Level (V)')
+    title('Received Waveform')
+
+
+.. parsed-literal::
+
+    <matplotlib.text.Text at 0x712cad0>
+
+
+.. image:: DEV-Trajectory_files/_fig_15.png
+
+
+.. code-block:: python
+
+    tcir[1][40].plot()
+    xlabel('Delay (ns)')
+    ylabel('Level (V)')
+    title('Received Waveform')
+
+
+.. parsed-literal::
+
+    <matplotlib.text.Text at 0x70a1f90>
+
+
+.. image:: DEV-Trajectory_files/_fig_18.png
+
