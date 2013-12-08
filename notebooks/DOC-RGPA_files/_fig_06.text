@@ -1,8 +1,0 @@
-type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [0 0]     , 16.6666666667,     1.0, 0, 1, 0, 0
-type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [10 15]   , 47.1404520791,     1.0, 1, 1, 0, 0
-type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [ 5 28]   , 78.4573486396,     1.0, 1, 1, 0, 0
-type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [-10 -10] , 60.0925212577,     1.0, 1, 1, 0, 0

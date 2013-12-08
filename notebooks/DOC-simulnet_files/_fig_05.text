@@ -1,8 +1,0 @@
-{'PN': <pylayers.network.network.Network at 0x44cec90>,
- 'RAT': ['rat1'],
- 'epwr': {'rat1': 0},
- 'p': array([ 30.05326114,   2.77717435]),
- 'pe': array([], dtype=float64),
- 'sens': {'rat1': -80},
- 't': 9.999999999999984,
- 'type': 'ag'}
