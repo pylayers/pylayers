@@ -198,7 +198,7 @@ theta : [ 0.]:[ 1.57]:158
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_15_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_15_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_15_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_15_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">=</span><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -341,7 +341,7 @@ Parameters
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;R&#39;</span><span class="p">,</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_36_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_36_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_36_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_36_0.png" />
 <p>with respect to angle</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])</span>
@@ -351,14 +351,14 @@ Parameters
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f4a3f382990&gt;</pre>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_38_1.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_38_1.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_38_1.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_38_1.png" />
 <p>wrt to angle and frequency</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">5.2</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">S</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_40_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_40_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_40_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_40_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
@@ -375,8 +375,8 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_41_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_41_0.png" />
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_41_1.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_41_1.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_41_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_41_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_41_1.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_41_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">## Adding new materials</span>
 </pre></div>
 </div>
@@ -427,9 +427,9 @@ Parameters
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_43_1.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_43_1.png" />
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_43_2.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_43_2.png" />
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_43_3.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_43_3.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_43_1.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_43_1.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_43_2.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_43_2.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_43_3.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_43_3.png" />
 <p>Double Glass example from litterature [1] in sub TeraHertz D-band &#64;
 120GHz
 &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</p>
@@ -442,25 +442,25 @@ Parameters
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_45_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_45_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_45_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_45_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">,[</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;GlassJc&#39;</span><span class="p">],[</span><span class="mf">0.0029</span><span class="p">,</span><span class="mf">0.0102</span><span class="p">,</span><span class="mf">0.0029</span><span class="p">])</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">dB</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_46_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_46_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_46_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_46_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_47_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_47_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_47_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_47_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">)</span>  <span class="c"># @20°</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_48_0.png" src="notebook/3-antprop/SlabsAndMaterials_files/SlabsAndMaterials_48_0.png" />
+<img alt="./SlabsAndMaterials_files/SlabsAndMaterials_48_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_48_0.png" />
 </div>
 </div>
 <div class="section" id="references">

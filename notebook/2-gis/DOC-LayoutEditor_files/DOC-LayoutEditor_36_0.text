@@ -1,0 +1,17 @@
+filestr :  DLR.osm
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  DLR.off
+boundaries  (758.35005883924691, 794.77088532257221, 1111.8980005947324, 1138.9865273726507)
+number of Points : 105
+number of Segments : 124
+number of Sub-Segments : 30
+Gs Nodes :  229
+Gs Edges :  248
+Gt Nodes :  20
+Gt Edges :  48
+vnodes = Gt.node[Nc]['cycles'].cycle 
+poly = Gt.node[Nc]['cycle'].polyg 
+Gr Nodes    : 16
+Gr Edges    : 16
+Nc  = Gr.node[nroom]['cycles']  

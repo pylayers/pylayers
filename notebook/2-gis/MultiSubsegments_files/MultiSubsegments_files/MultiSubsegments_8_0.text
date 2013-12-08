@@ -1,0 +1,47 @@
+default.ini
+------------------------------------------
+Layout Info : 
+filestr :  defstr3.ini
+filematini :  matDB.ini
+fileslabini :  slabDB.ini
+filegeom :  defstr3.off
+boundaries  (758.49, 768.516, 1111.9, 1115.963)
+number of Points : 8
+number of Segments : 9
+number of Sub-Segments : 3
+Gs Nodes :  17
+Gs Edges :  18
+Gt Nodes :  2
+Gt Edges :  1
+vnodes = Gt.node[Nc]['cycles'].cycle 
+poly = Gt.node[Nc]['cycle'].polyg 
+Gr Nodes    : 2
+Gr Edges    : 1
+Nc  = Gr.node[nroom]['cycles']  
+None
+Tx Info :
+npos       :  1
+position   :  [[  7.59000000e+02]
+ [  1.11400000e+03]
+ [  1.00000000e+00]]
+name       :  
+type       :  tx
+fileini    :  radiotx.ini
+filespa    :  radiotx.spa
+filegeom   :  radiotx.vect
+fileant    :  defant.vsh3
+filestr    :  defstr.str2
+None
+Rx Info :
+npos       :  1
+position   :  [[  767. ]
+ [ 1114. ]
+ [    1.5]]
+name       :  
+type       :  rx
+fileini    :  radiorx.ini
+filespa    :  radiorx.spa
+filegeom   :  radiorx.vect
+fileant    :  defant.vsh3
+filestr    :  defstr.str2
+None
