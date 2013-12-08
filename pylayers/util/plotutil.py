@@ -46,7 +46,7 @@ def mulcplot(x,y,**kwargs):
     -----
 
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
-    takes the priority over the pased values nlin and ncol 
+    takes the priority over the passed values nlin and ncol 
 
 
     """
@@ -54,7 +54,6 @@ def mulcplot(x,y,**kwargs):
                 'titles':[''],
                 'labels':[''],
                 'xlabels':['time (ns)'],
-                'ylabels':['Amplitude (dB)'],
                 'ncol':1,
                 'nlin':1,
                 'fig':[],
@@ -74,7 +73,10 @@ def mulcplot(x,y,**kwargs):
     for key, value in defaults.items():
         if key not in kwargs:
             kwargs[key] = value
-   
+    #
+    # ylabels is deduced from types 
+    # ==> do not set any ylabels defaults
+    #
     if 'ylabels' not in kwargs:
         ylabels = []
         for t in kwargs['types']:

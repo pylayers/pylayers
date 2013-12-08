@@ -1,7 +1,9 @@
 import pylayers.util.geomutil as geu
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
-#from imposm.parser import OSMParser
+# imposm is required for handling osm files
+# the installation of imposm is not straightforward
+from imposm.parser import OSMParser
 import networkx as nx
 import numpy as np
 import pdb

@@ -338,8 +338,7 @@ class Layout(object):
         if typ=='wrl':
             pathname = pstruc['DIRWRL'] + '/*.' + typ
 
-        lfile_l = glob.glob(pathname)
-        lfile_l = glob.glob(pathname)
+        lfile_l = glob.glob(basename+'/'+pathname)
         lfile_s = []
         for fi in lfile_l:
             fis = pyu.getshort(fi)
