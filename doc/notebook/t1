@@ -1,0 +1,28 @@
+#!/bin/bash
+#convert in rst 
+echo $1
+runipy -o $1 --pylab >> log 2>>logerr 
+file=`basename $1`
+path=`dirname $1`
+echo $path
+echo $file
+ipython nbconvert --to rst $1
+# supress In[ ]
+cat ${file%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
+#cat ${1%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
+# replace code with code-block
+#echo ${1%%.ipynb}.rst
+cat f1 | sed 's/code::/code-block::/'  > ${1%%.ipynb}.rst 
+# link to images 
+#cat f2 | sed "s/image:: /image:: ${1%%.ipynb}_files\//"  > 
+#rm -Rf ../doc/notebooks/${1%%.ipynb}_files 
+#rm -Rf ../../website/html/notebooks/${1%%.ipynb}_files 
+#mv -f ${1%%.ipynb}.rst $PYLAYERS/doc/notebooks
+#cp -Rf ${1%%.ipynb}_files $PYLAYERS/doc/notebooks
+echo $WEBSITE
+mv ${file%%.ipynb}_files $WEBSITE/${1%%.ipynb}_files 
+#mv -f ${file%%.ipynb}_files ${1%%.ipynb}_files
+rm ${file%%.ipynb}.rst
+rm f1
+
+#rm f2

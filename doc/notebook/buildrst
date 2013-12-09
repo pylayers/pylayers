@@ -1,0 +1,22 @@
+#!/bin/bash
+for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
+do
+    echo $i
+    runipy -o $i --pylab >>log 2>> log-err
+    if test ${?} -eq 0; 
+    then
+        file=`basename $i`
+        echo $file
+        ipython nbconvert --to rst $i >> log 2>>log-err 
+        # supress In[ ]
+        cat ${file%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
+        # code --> code-block
+        cat f1 | sed 's/code::/code-block::/'  > ${i%%.ipynb}.rst 
+        mv -f ${file%%.ipynb}_files $WEBSITE/${i%%.ipynb}_files 
+        rm ${file%%.ipynb}.rst
+        rm f1
+    else
+        echo "problem in  ",$i
+    fi     
+    #rm f2
+done

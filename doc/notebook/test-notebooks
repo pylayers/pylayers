@@ -1,0 +1,11 @@
+#!/bin/bash 
+#
+# 
+#
+for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`
+do 
+echo $i    
+runipy -o $i 
+ipython nbconvert --to html $i
+done
+
