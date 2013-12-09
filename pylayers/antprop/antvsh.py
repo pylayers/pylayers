@@ -94,10 +94,10 @@ def vsh(A, dsf=1):
     #print "A.fa[0] = ",A.fa[0]
     #print "A.fa[-1] = ",A.fa[-1]
 
-    Br = ant.SHCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Br)
-    Bi = ant.SHCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Bi)
-    Cr = ant.SHCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Cr)
-    Ci = ant.SHCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Ci)
+    Br = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Br)
+    Bi = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Bi)
+    Cr = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Cr)
+    Ci = ant.VCoeff(typ='s1', fmin=A.fa[0], fmax=A.fa[-1], data=Ci)
     A.C = ant.VSHCoeff(Br, Bi, Cr, Ci)
     return(A)
 

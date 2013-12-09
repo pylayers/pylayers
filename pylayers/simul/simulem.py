@@ -1158,6 +1158,7 @@ class Simul(object):
 
         Parameters
         ----------
+
         _filesimul   : file in the simul directory of the Project
 
         """
@@ -1191,6 +1192,10 @@ class Simul(object):
 
         try:
             self.filestr = self.config.get("files", "struc")
+            # force .str extension
+            f,e = self.filestr.split['.']
+            self.filestr = f+'.str'
+            print self.filestr
         except: 
             raise NameError('Error in section struc from '+ _filesimul)
 
@@ -1945,7 +1950,9 @@ class Simul(object):
             transmiter index
 
         """
+
         filestr = os.path.splitext(self.filestr)[0] + '.str'
+
         if not os.path.exists(pyu.getlong(filestr,pstruc['DIRSTRUC'])):
             chaine = 'newstruc -str2 ' + filestr +'2 ' + filestr + ' -conf ' + basename +'/'+self.fileconf
             os.system(chaine)
@@ -1956,6 +1963,7 @@ class Simul(object):
             " -palch " + self.filepalch + \
             " -spa " + self.tx.filespa + \
             " -conf " + basename + '/' + self.fileconf
+
         if verbose:
             print chaine
 
