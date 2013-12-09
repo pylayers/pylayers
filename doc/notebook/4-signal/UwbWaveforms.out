@@ -1,7 +1,0 @@
-\BOOKMARK [1][-]{section.1}{Generation of an Impulse of normalized energy}{}
-\BOOKMARK [2][-]{subsection.1.1}{Verification of energy normalization in both domains}{section.1}
-\BOOKMARK [2][-]{subsection.1.2}{Calculation of UWB channel impulse response}{section.1}
-\BOOKMARK [1][-]{section.2}{Construction of the propagation channel}{}
-\BOOKMARK [2][-]{subsection.2.1}{Construction of the transmission channel}{section.2}
-\BOOKMARK [2][-]{subsection.2.2}{Calculate UWB Channel Impulse Response}{section.2}
-\BOOKMARK [1][-]{section.3}{Hermitian symetry enforcment}{}

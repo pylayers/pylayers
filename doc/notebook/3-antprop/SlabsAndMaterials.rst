@@ -27,7 +27,7 @@ module.
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x422a510>
+    <matplotlib.figure.Figure at 0x3ee34d0>
 
 
 The Class ``SlabDB`` contains a dictionnary of all available Slab. This
@@ -372,7 +372,7 @@ with respect to angle
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0xb796b90>
+    <matplotlib.figure.Figure at 0x48e6390>
 
 
 

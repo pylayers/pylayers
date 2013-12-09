@@ -2160,3 +2160,1119 @@ bc.movie(traj=t[0])
 12/09/2013 12:53:25 AM Exiting with nonzero exit status
 /usr/local/lib/python2.7/dist-packages/IPython/utils/path.py:304: UserWarning: IPython parent '/home/uguen' is not a writable location, using a temp directory.
   " using a temp directory."%parent)
+12/09/2013 08:46:29 PM Reading notebook ./1-introduction/Introduction.ipynb
+12/09/2013 08:46:29 PM Saving to ./1-introduction/Introduction.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./1-introduction/Introduction.ipynb to rst
+[NbConvertApp] Support files will be in Introduction_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Writing 2268 bytes to Introduction.rst
+12/09/2013 08:46:31 PM Reading notebook ./2-gis/DEV-Layout.ipynb
+12/09/2013 08:46:31 PM Running cell:
+from pylayers.gis.layout import *
+from IPython.display import Image
+import os
+
+12/09/2013 08:46:32 PM Cell returned
+12/09/2013 08:46:32 PM Running cell:
+L=Layout()
+L.ls()
+
+12/09/2013 08:46:32 PM Cell returned
+12/09/2013 08:46:32 PM Running cell:
+L.ls(typ='osm')
+
+12/09/2013 08:46:32 PM Cell returned
+12/09/2013 08:46:32 PM Running cell:
+L=Layout('DLR.osm')
+
+
+12/09/2013 08:46:35 PM Cell returned
+12/09/2013 08:46:35 PM Running cell:
+L.Gs.node[1]
+
+12/09/2013 08:46:35 PM Cell returned
+12/09/2013 08:46:35 PM Running cell:
+L.saveosm('DLR.osm')
+
+12/09/2013 08:46:37 PM Cell returned
+12/09/2013 08:46:37 PM Running cell:
+Image('../../data/struc/images/TA-Office.png')
+
+12/09/2013 08:46:37 PM Cell returned
+12/09/2013 08:46:37 PM Running cell:
+fig,ax=L.showGs()
+
+12/09/2013 08:46:38 PM Cell returned
+12/09/2013 08:46:38 PM Running cell:
+L=Layout('TA-Office.ini')
+
+12/09/2013 08:46:38 PM Cell returned
+12/09/2013 08:46:38 PM Running cell:
+L.showGs()
+
+12/09/2013 08:46:38 PM Cell returned
+12/09/2013 08:46:38 PM Running cell:
+L=Layout('11D-E1.ini')
+L
+
+12/09/2013 08:46:38 PM Cell returned
+12/09/2013 08:46:38 PM Running cell:
+L.showG('s',figsize=(20,10))
+
+12/09/2013 08:46:38 PM Cell returned
+12/09/2013 08:46:38 PM Running cell:
+L=Layout('klepal.ini')
+L
+
+12/09/2013 08:46:39 PM Cell returned
+12/09/2013 08:46:39 PM Running cell:
+L.showGs()
+
+12/09/2013 08:46:39 PM Cell returned
+12/09/2013 08:46:39 PM Running cell:
+L=Layout('W2PTIN.ini')
+
+12/09/2013 08:46:39 PM Cell returned
+12/09/2013 08:46:39 PM Running cell:
+L.showGs()
+
+12/09/2013 08:46:39 PM Cell returned
+12/09/2013 08:46:39 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:46:40 PM Cell returned
+12/09/2013 08:46:40 PM Saving to ./2-gis/DEV-Layout.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./2-gis/DEV-Layout.ipynb to rst
+[NbConvertApp] Support files will be in DEV-Layout_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory DEV-Layout_files
+[NbConvertApp] Writing 6945 bytes to DEV-Layout.rst
+12/09/2013 08:46:41 PM Reading notebook ./2-gis/DOC-LayoutEditor.ipynb
+12/09/2013 08:46:41 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:46:42 PM Cell returned
+12/09/2013 08:46:42 PM Running cell:
+from pylayers.gis.layout import *
+from pylayers.util.project import *
+
+12/09/2013 08:46:42 PM Cell returned
+12/09/2013 08:46:42 PM Running cell:
+print pstruc['DIRSTRUC']
+
+12/09/2013 08:46:42 PM Cell returned
+12/09/2013 08:46:42 PM Running cell:
+pstruc
+
+12/09/2013 08:46:43 PM Cell returned
+12/09/2013 08:46:43 PM Running cell:
+%%bash 
+
+    cd $BASENAME/struc
+    ls *.osm
+
+
+12/09/2013 08:46:43 PM Cell returned
+12/09/2013 08:46:43 PM Running cell:
+%%bash 
+    cd $BASENAME/struc
+    head DLR.osm
+    echo '---'
+    tail -17 DLR.osm
+
+12/09/2013 08:46:43 PM Cell returned
+12/09/2013 08:46:43 PM Running cell:
+L=Layout('DLR.osm')
+
+12/09/2013 08:46:45 PM Cell returned
+12/09/2013 08:46:45 PM Running cell:
+fig,ax=L.showGs()
+
+12/09/2013 08:46:45 PM Cell returned
+12/09/2013 08:46:45 PM Running cell:
+L.info()
+
+12/09/2013 08:46:45 PM Cell returned
+12/09/2013 08:46:45 PM Running cell:
+L.build()
+
+12/09/2013 08:46:54 PM Cell returned
+12/09/2013 08:46:54 PM Running cell:
+f,a=L.showG('t')
+b=plt.axis('off')
+
+12/09/2013 08:46:54 PM Cell returned
+12/09/2013 08:46:54 PM Running cell:
+f,a=L.showG('r')
+b=plt.axis('off')
+
+12/09/2013 08:46:55 PM Cell returned
+12/09/2013 08:46:55 PM Running cell:
+f,a=L.showG('w')
+b=plt.axis('off')
+
+12/09/2013 08:46:55 PM Cell returned
+12/09/2013 08:46:55 PM Running cell:
+f,a=L.showG('v')
+b=plt.axis('off')
+
+12/09/2013 08:46:55 PM Cell returned
+12/09/2013 08:46:55 PM Running cell:
+f=plt.figure(figsize=(15,15))
+a = f.gca()
+f,a=L.showG('i',fig=f,ax=a)
+b= plt.axis('off')
+
+12/09/2013 08:46:56 PM Cell returned
+12/09/2013 08:46:56 PM Running cell:
+L.info()
+
+12/09/2013 08:46:56 PM Cell returned
+12/09/2013 08:46:56 PM Running cell:
+L.display
+
+12/09/2013 08:46:56 PM Cell returned
+12/09/2013 08:46:56 PM Running cell:
+L=Layout()
+L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
+
+12/09/2013 08:46:56 PM Cell returned
+12/09/2013 08:46:56 PM Running cell:
+L.display['overlay']=True
+L.display['alpha']=1
+L.display['scaled']=False
+L.display['ticksoff']=False
+L.display['inverse']=True
+
+12/09/2013 08:46:56 PM Cell returned
+12/09/2013 08:46:56 PM Running cell:
+plt.figure(figsize=(10,10))
+L.showGs()
+
+12/09/2013 08:46:58 PM Cell returned
+12/09/2013 08:46:58 PM Running cell:
+L = Layout('TA-Office.ini')
+L.dumpr()
+fig = plt.figure(figsize=(25,25))
+ax = fig.gca()
+fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
+a = plt.axis('off')
+
+12/09/2013 08:46:59 PM Cell returned
+12/09/2013 08:46:59 PM Running cell:
+
+
+12/09/2013 08:46:59 PM Cell returned
+12/09/2013 08:46:59 PM Saving to ./2-gis/DOC-LayoutEditor.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./2-gis/DOC-LayoutEditor.ipynb to rst
+[NbConvertApp] Support files will be in DOC-LayoutEditor_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory DOC-LayoutEditor_files
+[NbConvertApp] Writing 16747 bytes to DOC-LayoutEditor.rst
+12/09/2013 08:47:01 PM Reading notebook ./2-gis/MultiSubsegments.ipynb
+12/09/2013 08:47:01 PM Running cell:
+from pylayers.simul.simulem import *
+from pylayers.antprop.rays import *
+from pylayers.gis.layout import *
+from pylayers.antprop.signature import *
+import pylayers.signal.bsignal as bs
+import pylayers.signal.waveform as wvf 
+from pylayers.simul.simulem import *
+import matplotlib.pyplot as plt 
+
+12/09/2013 08:47:04 PM Cell returned
+12/09/2013 08:47:04 PM Running cell:
+S = Simul()
+filestr = 'defstr3'
+S.layout(filestr+'.ini','matDB.ini','slabDB.ini')
+
+12/09/2013 08:47:04 PM Cell returned
+12/09/2013 08:47:04 PM Running cell:
+S.L.chgmss(1,ss_name=['AIR','AIR','WOOD'])
+S.L.build()
+
+12/09/2013 08:47:05 PM Cell returned
+12/09/2013 08:47:05 PM Running cell:
+S.L.Gs.node
+
+12/09/2013 08:47:05 PM Cell returned
+12/09/2013 08:47:05 PM Running cell:
+S.info()
+
+12/09/2013 08:47:05 PM Cell returned
+12/09/2013 08:47:05 PM Running cell:
+S.tx.clear()
+S.rx.clear()
+
+# 
+tx=np.array([759,1114,1.0])
+rx=np.array([767,1114,1.5])
+#
+S.tx.point(tx)
+S.rx.point(rx)
+# getting cycles from tx 
+ctx = S.L.pt2cy(S.tx.position[:,0])
+# getting cycles from rx 
+crx = S.L.pt2cy(S.rx.position[:,0])
+f,a = S.show()
+
+
+12/09/2013 08:47:05 PM Cell returned
+12/09/2013 08:47:05 PM Running cell:
+fGHz=np.arange(2,6,0.5)
+wav = wvf.Waveform(fcGHz=4,bandGHz=1.5)
+wav.show()
+
+12/09/2013 08:47:05 PM Cell returned
+12/09/2013 08:47:05 PM Running cell:
+Si = Signatures(S.L,ctx,crx)
+Si.run1(cutoff=5)
+r2d = Si.rays(tx,rx)
+r3d = r2d.to3D(S.L)
+r3d.locbas(S.L)
+r3d.fillinter(S.L)
+
+12/09/2013 08:47:07 PM Cell returned
+12/09/2013 08:47:07 PM Running cell:
+r3d
+
+12/09/2013 08:47:07 PM Cell returned
+12/09/2013 08:47:07 PM Running cell:
+layer = ['AIR','AIR','AIR']
+S.L.chgmss(1,ss_name=layer)
+S.L.Gs.node[1]['ss_name']=layer
+S.L.g2npy()
+# graph to numpy 
+r3d.fillinter(S.L,append=True)
+Cair = r3d.eval(fGHz)
+scair = Cair.prop2tran(a='theta',b='theta')
+cirair = scair.applywavB(wav.sfg)
+#cirair = evcir(r3d,wav)
+fig,ax = cirair.plot(types=['v'],xmin=20,xmax=60)
+title = plt.title(str(layer))
+
+12/09/2013 08:47:07 PM Cell returned
+12/09/2013 08:47:07 PM Running cell:
+type(cirair)
+
+12/09/2013 08:47:07 PM Cell returned
+12/09/2013 08:47:07 PM Running cell:
+layer = ['PARTITION','PARTITION','PARTITION']
+S.L.chgmss(1,ss_name=layer)
+S.L.Gs.node[1]['ss_name']=layer
+S.L.g2npy()
+# graph to numpy 
+r3d.fillinter(S.L,append=True)
+Cwood=r3d.eval(fGHz)
+scwood=Cwood.prop2tran(a='theta',b='theta')
+cirwood = scwood.applywavB(wav.sfg)
+cirwood.plot(types=['v'],xmin=20,xmax=60)
+plt.title(str(layer))
+
+12/09/2013 08:47:07 PM Cell returned
+12/09/2013 08:47:07 PM Running cell:
+layer = ['METAL','METAL','METAL']
+S.L.chgmss(1,ss_name=layer)
+S.L.Gs.node[1]['ss_name']=layer
+# graph to numpy 
+S.L.g2npy()
+r3d.fillinter(S.L,append=True)
+Cmetal=r3d.eval(fGHz)
+scmetal=Cmetal.prop2tran(a='theta',b='theta')
+cirmetal = scmetal.applywavB(wav.sfg)
+cirmetal.plot(types=['v'],xmin=20,xmax=60)
+plt.title(str(layer))
+plt.show()
+
+12/09/2013 08:47:08 PM Cell returned
+12/09/2013 08:47:08 PM Running cell:
+#fig2=plt.figure()
+f,a=cirair.plot(types=['l20'],color='b')
+plt.axis([0,100,-120,-40])
+plt.title('A simple illustration of shadowing effect')
+plt.legend(['air'])
+f,a=cirwood.plot(types=['l20'],color='k')
+plt.axis([0,100,-120,-40])
+plt.legend(['wood'])
+f,a=cirmetal.plot(types=['l20'],color='r')
+plt.axis([0,100,-120,-40])
+plt.legend(['metal'])
+
+12/09/2013 08:47:08 PM Cell returned
+12/09/2013 08:47:08 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:47:08 PM Cell returned
+12/09/2013 08:47:08 PM Saving to ./2-gis/MultiSubsegments.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./2-gis/MultiSubsegments.ipynb to rst
+[NbConvertApp] Support files will be in MultiSubsegments_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory MultiSubsegments_files
+[NbConvertApp] Writing 10921 bytes to MultiSubsegments.rst
+12/09/2013 08:47:10 PM Reading notebook ./3-antprop/Antennas.ipynb
+12/09/2013 08:47:10 PM Running cell:
+from pylayers.antprop.antenna import *
+from pylayers.antprop.antvsh import *
+
+12/09/2013 08:47:11 PM Cell returned
+12/09/2013 08:47:11 PM Running cell:
+A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
+
+12/09/2013 08:47:12 PM Cell returned
+12/09/2013 08:47:12 PM Running cell:
+A
+
+12/09/2013 08:47:12 PM Cell returned
+12/09/2013 08:47:12 PM Running cell:
+%pfile A.show3
+
+12/09/2013 08:47:12 PM Cell returned
+12/09/2013 08:47:12 PM Running cell:
+#A.show3(k=0,typ='Gain')
+
+12/09/2013 08:47:12 PM Cell returned
+12/09/2013 08:47:12 PM Running cell:
+#A.show3(k=60,typ='Gain')
+
+12/09/2013 08:47:12 PM Cell returned
+12/09/2013 08:47:12 PM Running cell:
+freq = A.fa.reshape(104,1,1)
+ed = A.getdelay(freq)
+I = A.Ftheta[:,:,:]*np.exp(2*1j*np.pi*freq*ed)
+
+12/09/2013 08:47:13 PM Cell returned
+12/09/2013 08:47:13 PM Running cell:
+np.shape(A.Fphi)
+im= plt.imshow(np.angle(I[:,45,:]))
+cb = plt.colorbar()
+cb.set_label('phase rad')
+plt.xlabel('theta')
+
+
+12/09/2013 08:47:13 PM Cell returned
+12/09/2013 08:47:13 PM Running cell:
+plt.plot(freq[:,0,0]*1e9,np.unwrap(np.angle(I[:,45,85])))
+plt.xlabel('frequency (GHz)')
+
+12/09/2013 08:47:13 PM Cell returned
+12/09/2013 08:47:13 PM Running cell:
+print 'Ntheta',A.Nt
+print 'Nphi',A.Np
+print 'Nf',A.Nf
+
+12/09/2013 08:47:13 PM Cell returned
+12/09/2013 08:47:13 PM Running cell:
+A.info()
+
+12/09/2013 08:47:13 PM Cell returned
+12/09/2013 08:47:13 PM Running cell:
+A = vsh(A)
+
+12/09/2013 08:47:14 PM Cell returned
+12/09/2013 08:47:14 PM Running cell:
+A.C
+
+12/09/2013 08:47:14 PM Cell returned
+12/09/2013 08:47:14 PM Running cell:
+A.C.s1tos2(30)
+
+12/09/2013 08:47:14 PM Cell returned
+12/09/2013 08:47:14 PM Running cell:
+A.C
+
+12/09/2013 08:47:14 PM Cell returned
+12/09/2013 08:47:14 PM Running cell:
+plt.figure(figsize=(10,10))
+A.C.show(typ='s2',k=300)
+
+12/09/2013 08:47:22 PM Cell returned
+12/09/2013 08:47:22 PM Running cell:
+A.C.s2tos3(1e-5)
+
+12/09/2013 08:47:22 PM Cell returned
+12/09/2013 08:47:22 PM Running cell:
+plt.figure(figsize=(10,10))
+A.C.show('s3')
+
+12/09/2013 08:47:24 PM Cell returned
+12/09/2013 08:47:24 PM Running cell:
+print len(A.theta)
+print len(A.phi)
+
+12/09/2013 08:47:24 PM Cell returned
+12/09/2013 08:47:24 PM Running cell:
+Fth2,Fph2 = A.Fsynth3(A.theta,A.phi,pattern=True) 
+
+12/09/2013 08:47:29 PM Cell returned
+12/09/2013 08:47:29 PM Running cell:
+compdiag(0,A,A.theta,A.phi,Fth2,Fph2,'modulus')
+
+12/09/2013 08:47:36 PM Cell returned
+12/09/2013 08:47:36 PM Running cell:
+A
+
+12/09/2013 08:47:36 PM Cell returned
+12/09/2013 08:47:36 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:47:36 PM Cell returned
+12/09/2013 08:47:36 PM Saving to ./3-antprop/Antennas.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./3-antprop/Antennas.ipynb to rst
+[NbConvertApp] Support files will be in Antennas_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory Antennas_files
+[NbConvertApp] Writing 6974 bytes to Antennas.rst
+12/09/2013 08:47:38 PM Reading notebook ./3-antprop/Coverage.ipynb
+12/09/2013 08:47:38 PM Running cell:
+from pylayers.antprop.coverage import *
+import time
+
+12/09/2013 08:47:39 PM Cell returned
+12/09/2013 08:47:39 PM Running cell:
+!cat $BASENAME/ini/coverage.ini
+
+12/09/2013 08:47:39 PM Cell returned
+12/09/2013 08:47:39 PM Running cell:
+# Create a Coverage object from coverag.ini file
+C = Coverage()
+
+12/09/2013 08:47:44 PM Cell returned
+12/09/2013 08:47:44 PM Running cell:
+C
+
+12/09/2013 08:47:44 PM Cell returned
+12/09/2013 08:47:44 PM Running cell:
+# evaluate coverage 
+C.cover()
+
+12/09/2013 08:47:49 PM Cell returned
+12/09/2013 08:47:49 PM Running cell:
+C.L.display['nodes']=False
+C.L.display['ednodes']=False
+C.L.showGs()
+
+12/09/2013 08:47:49 PM Cell returned
+12/09/2013 08:47:49 PM Running cell:
+C.fGHz=0.915
+C.cover()
+C.showPower()
+
+12/09/2013 08:47:52 PM Cell returned
+12/09/2013 08:47:52 PM Running cell:
+C.fGHz=2.4
+C.cover()
+C.showPower()
+
+12/09/2013 08:47:56 PM Cell returned
+12/09/2013 08:47:56 PM Running cell:
+C.fGHz=0.1
+C.cover()
+C.showPower()
+
+12/09/2013 08:47:59 PM Cell returned
+12/09/2013 08:47:59 PM Running cell:
+C.tx
+
+12/09/2013 08:47:59 PM Cell returned
+12/09/2013 08:47:59 PM Running cell:
+C.tx = np.array((21,2))
+
+%timeit
+C.cover()
+
+C.showLoss(polar='o')
+C.showPower(polar='o')
+C.showLoss(polar='p')
+C.showPower(polar='p')
+
+12/09/2013 08:48:04 PM Cell returned
+12/09/2013 08:48:04 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:48:04 PM Cell returned
+12/09/2013 08:48:04 PM Saving to ./3-antprop/Coverage.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./3-antprop/Coverage.ipynb to rst
+[NbConvertApp] Support files will be in Coverage_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory Coverage_files
+[NbConvertApp] Writing 6515 bytes to Coverage.rst
+12/09/2013 08:48:05 PM Reading notebook ./3-antprop/MultiwallModel.ipynb
+12/09/2013 08:48:05 PM Running cell:
+import time
+from pylayers.util.project import *
+import pylayers.util.pyutil as pyu
+from pylayers.util.utilnet import str2bool
+from pylayers.gis.layout import Layout
+from pylayers.antprop.multiwall import *
+from pylayers.antprop.coverage import *
+from pylayers.network.model import *
+
+12/09/2013 08:48:06 PM Cell returned
+12/09/2013 08:48:06 PM Running cell:
+L=Layout('TA-Office.ini')
+
+12/09/2013 08:48:06 PM Cell returned
+12/09/2013 08:48:06 PM Running cell:
+A=np.array((4,1)) # defining transmitter position 
+B=np.array((30,12)) # defining receiver position
+
+12/09/2013 08:48:06 PM Cell returned
+12/09/2013 08:48:06 PM Running cell:
+# figure instanciation
+f = plt.figure(figsize=(25,25))
+ax = f.add_subplot(111)
+r = np.array((A,B))
+# plotting the Layout
+f,ax = L.showG(fig=f,ax=ax,graph='s',nodes=False)
+# plotting the Tx and Rx
+ax.plot(A[0],A[1],'ob')
+ax.plot(B[0],B[1],'or')
+# plotting the LOS
+ax.plot(r[:,0],r[:,1])
+a = plt.axis('off')
+
+12/09/2013 08:48:07 PM Cell returned
+12/09/2013 08:48:07 PM Running cell:
+%pdef L.angleonlink
+
+12/09/2013 08:48:07 PM Cell returned
+12/09/2013 08:48:07 PM Running cell:
+data=L.angleonlink(A,B)
+
+12/09/2013 08:48:07 PM Cell returned
+12/09/2013 08:48:07 PM Running cell:
+fGHz = 2.4
+# observation grid
+
+r = np.array((B,B))
+
+Lwo,Lwp,Edo,Edp = Losst(L,fGHz,r.T,A)
+
+print 'Losses orthogonal polarization \t %g dB' %(Lwo[0][0])
+print 'Losses parallel polarization \t %g  dB' % (Lwp[0][0])
+print 'Excess delay orthogonal polarization  \t %g ns' %(Edo[0][0])
+print 'Excess delay parallel polarization   \t %g ns' %(Edp[0][0])
+
+12/09/2013 08:48:07 PM Cell returned
+12/09/2013 08:48:07 PM Running cell:
+C = Coverage()
+C.L  = L # set layout
+C.tx = A # set the transmitter
+
+12/09/2013 08:48:12 PM Cell returned
+12/09/2013 08:48:12 PM Running cell:
+C.L
+
+12/09/2013 08:48:12 PM Cell returned
+12/09/2013 08:48:12 PM Running cell:
+C.creategrid()
+
+12/09/2013 08:48:12 PM Cell returned
+12/09/2013 08:48:12 PM Running cell:
+C.grid
+
+12/09/2013 08:48:12 PM Cell returned
+12/09/2013 08:48:12 PM Running cell:
+t1=time.time()
+C.cover()
+t2=time.time()
+print 'Coverage performed in ', t2-t1, 's'
+
+12/09/2013 08:48:14 PM Cell returned
+12/09/2013 08:48:14 PM Running cell:
+fig1=plt.figure(figsize=(10,10))
+C.showPower(polar='o',fig=fig1)
+
+fig2=plt.figure(figsize=(10,10))
+C.showEd(polar='o',fig=fig2)
+
+
+12/09/2013 08:48:14 PM Cell returned
+12/09/2013 08:48:14 PM Running cell:
+fig1=plt.figure(figsize=(10,10))
+C.showPower(polar='p',fig=fig1)
+
+fig2=plt.figure(figsize=(10,10))
+C.showEd(polar='p',fig=fig2)
+
+12/09/2013 08:48:15 PM Cell returned
+12/09/2013 08:48:15 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:48:15 PM Cell returned
+12/09/2013 08:48:15 PM Saving to ./3-antprop/MultiwallModel.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./3-antprop/MultiwallModel.ipynb to rst
+[NbConvertApp] Support files will be in MultiwallModel_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory MultiwallModel_files
+[NbConvertApp] Writing 7870 bytes to MultiwallModel.rst
+12/09/2013 08:48:16 PM Reading notebook ./3-antprop/Signatures.ipynb
+12/09/2013 08:48:16 PM Running cell:
+import time
+from pylayers.gis.layout import *
+from pylayers.antprop.signature import *
+from pylayers.antprop.rays import *
+
+12/09/2013 08:48:17 PM Cell returned
+12/09/2013 08:48:17 PM Running cell:
+L = Layout()
+try:
+    L.dumpr()
+except:
+    L.build()
+    L.dumpw()
+
+12/09/2013 08:48:18 PM Cell returned
+12/09/2013 08:48:18 PM Running cell:
+L.showG('v')
+a=plt.axis('off')
+
+12/09/2013 08:48:18 PM Cell returned
+12/09/2013 08:48:18 PM Running cell:
+L.showG('i',figsize=(20,20))
+a=plt.axis('off')
+
+12/09/2013 08:48:18 PM Cell returned
+12/09/2013 08:48:18 PM Running cell:
+L.Gt.node[0]['inter']
+
+12/09/2013 08:48:18 PM Cell returned
+12/09/2013 08:48:18 PM Running cell:
+Si = Signatures(L,0,1)
+
+12/09/2013 08:48:18 PM Cell returned
+12/09/2013 08:48:18 PM Running cell:
+Si.run1(cutoff=3)
+
+12/09/2013 08:48:18 PM Cell returned
+12/09/2013 08:48:18 PM Running cell:
+Si
+
+12/09/2013 08:48:18 PM Cell returned
+12/09/2013 08:48:18 PM Running cell:
+L.Gt.pos
+
+12/09/2013 08:48:19 PM Cell returned
+12/09/2013 08:48:19 PM Running cell:
+ptx = np.array(L.Gt.pos[0])+np.random.rand(2)
+prx = np.array(L.Gt.pos[1])+np.random.rand(2)
+print ptx
+print prx
+
+12/09/2013 08:48:19 PM Cell returned
+12/09/2013 08:48:19 PM Running cell:
+tt1 = {}
+tt2 = {}
+tint={}
+tsig={} # number of sig
+tray={} # number of rays
+maxcutoff=7
+for cutoff in range(maxcutoff):
+     del Si
+        
+     Si = Signatures(L,0,1)
+     tic1=time.time()
+     Si.run1(cutoff=cutoff)
+     tic2=time.time()
+     r2d = Si.rays(ptx,prx)   
+     tic3=time.time()
+     Si.num()   
+     Nr = len(r2d)   
+     tt1[cutoff]=tic2-tic1
+     tt2[cutoff]=tic3-tic2   
+     tint[cutoff]=Si.nint   
+     tsig[cutoff]=Si.nsig
+     tray[cutoff]=Nr
+     print cutoff,tt2[cutoff]
+#    L.display['ednodes']=False
+#    r2d.show(L)
+
+12/09/2013 08:48:28 PM Cell returned
+12/09/2013 08:48:28 PM Running cell:
+p1=semilogy(tt1.keys(),tray.values(),'ob')
+p2=semilogy(tt1.keys(),tsig.values(),'or')
+legend((p1[0],p2[0]),('rays','signature'),loc='best')
+xlabel('cutoff')
+ylabel('#')
+
+12/09/2013 08:48:28 PM Cell returned
+12/09/2013 08:48:28 PM Running cell:
+#b1=bar(tt2.keys(),tt2.values(),color='red')
+#b2=bar(tt1.keys(),tt1.values(),color='blue')
+#b1=semilogx(tt2.keys(),log10(tt2.values()),color='red')
+#b2=semilogx(tt1.keys(),log10(tt1.values()),color='blue')
+#b3=semilogx(tt1.keys(),log10(0.1*(arange(10))**3),color='green')
+b1=loglog(tt2.keys(),tt2.values(),'k.')
+b2=loglog(tt1.keys(),tt1.values(),'r.')
+b3=loglog(tt1.keys(),0.1*arange(maxcutoff)**3,color='green')
+b4=loglog(tt1.keys(),0.001*arange(maxcutoff)**2,color='green')
+b5=loglog(tt1.keys(),0.1*arange(maxcutoff)**4.4,color='cyan')
+legend((b1[0],b2[0],b3[0],b4[0],b5[0]),('rays','signature',r'$O(N^3)$',r'$O(N^2)$',r'$O(N^{4.4})$'),loc='best')
+xlabel('cutoff')
+ylabel('time (s)')
+
+12/09/2013 08:48:29 PM Cell returned
+12/09/2013 08:48:29 PM Running cell:
+b1=loglog(tt2.keys(),tint.values(),color='red')
+b2=loglog(tt1.keys(),tsig.values(),color='blue')
+#b3=loglog(tt1.keys(),arange(maxcutoff)**3,color='green')
+#b4=loglog(tt1.keys(),arange(maxcutoff)**2,color='green')
+#legend((b1[0],b2[0],b3[0],b4[0]),('interactions','signatures',r'$O(N^3)$',r'$O(N^2)$'),loc='best')
+legend((b1[0],b2[0]),('interactions','signatures'),loc='best')
+xlabel('cutoff')
+ylabel('#')
+
+12/09/2013 08:48:30 PM Cell returned
+12/09/2013 08:48:30 PM Running cell:
+#b1=loglog(tsig.values(),tt1.values(),color='red')
+b2=loglog(tint.values(),tt2.values(),color='red')
+b3=loglog(tint.values(),0.0004*array(tint.values())**0.88,color='blue')
+xlabel('# Interactions')
+
+12/09/2013 08:48:30 PM Cell returned
+12/09/2013 08:48:30 PM Running cell:
+plot(tint.values(),tt2.values(),color='red')
+plot(tint.values(),0.0004*array(tint.values())**0.88,color='blue')
+
+12/09/2013 08:48:30 PM Cell returned
+12/09/2013 08:48:30 PM Running cell:
+b1=loglog(tt2.keys(),tint.values(),color='red')
+b2=loglog(tt2.keys(),array(tt2.keys())**5,color='blue')
+
+12/09/2013 08:48:31 PM Cell returned
+12/09/2013 08:48:31 PM Running cell:
+for k in range(maxcutoff):
+    r2d.show(L,i=k+1,colray='red',widthray=0.5)
+    title(str(k+1))
+
+12/09/2013 08:48:31 PM Cell returned
+12/09/2013 08:48:31 PM Running cell:
+fig,ax=r2d.show(L,i=1,figsize=(20,10),colray='red',widthray=3)
+fig,ax=r2d.show(L,i=1,colray='green',widthray=2,fig=fig,ax=ax)
+fig,ax=r2d.show(L,i=2,colray='blue',widthray=1,fig=fig,ax=ax)
+fig,ax=r2d.show(L,i=3,colray='black',widthray=1,fig=fig,ax=ax)
+fig,ax=r2d.show(L,i=4,colray='green',widthray=0.5,fig=fig,ax=ax)
+fig,ax=r2d.show(L,i=5,colray='green',widthray=0.5,fig=fig,ax=ax)
+fig,ax=r2d.show(L,i=6,colray='green',widthray=0.5,fig=fig,ax=ax)
+fig,ax=r2d.show(L,i=7,colray='green',widthray=0.5,fig=fig,ax=ax)
+#fig,ax=r2d.show(L,i=8,colray='green',widthray=0.5,fig=fig,ax=ax)
+#fig,ax=r2d.show(L,i=9,colray='green',widthray=0.5,fig=fig,ax=ax)
+
+12/09/2013 08:48:32 PM Cell returned
+12/09/2013 08:48:32 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:48:32 PM Cell returned
+12/09/2013 08:48:32 PM Saving to ./3-antprop/Signatures.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./3-antprop/Signatures.ipynb to rst
+[NbConvertApp] Support files will be in Signatures_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory Signatures_files
+[NbConvertApp] Writing 15001 bytes to Signatures.rst
+12/09/2013 08:48:33 PM Reading notebook ./3-antprop/SlabsAndMaterials.ipynb
+12/09/2013 08:48:33 PM Running cell:
+from pylayers.antprop.slab import *
+fig = plt.figure(figsize=(10,10))
+
+12/09/2013 08:48:34 PM Cell returned
+12/09/2013 08:48:34 PM Running cell:
+S = SlabDB()
+
+12/09/2013 08:48:34 PM Cell returned
+12/09/2013 08:48:34 PM Running cell:
+S.keys()
+
+12/09/2013 08:48:34 PM Cell returned
+12/09/2013 08:48:34 PM Running cell:
+S.mat.add(name='wall2',typ='reim',cval=2.6-0.026*1j,fGHz=4)
+
+12/09/2013 08:48:34 PM Cell returned
+12/09/2013 08:48:34 PM Running cell:
+S.add('slab2',['wall2'],[0.15])
+
+12/09/2013 08:48:35 PM Cell returned
+12/09/2013 08:48:35 PM Running cell:
+S.mat['wall2']
+
+12/09/2013 08:48:35 PM Cell returned
+12/09/2013 08:48:35 PM Running cell:
+S['slab2']['lmatname']
+
+12/09/2013 08:48:35 PM Cell returned
+12/09/2013 08:48:35 PM Running cell:
+fGHz= np.arange(3,5,0.01)
+theta = np.arange(0,np.pi/2,0.01)
+S['slab2'].ev(fGHz,theta)
+
+12/09/2013 08:48:35 PM Cell returned
+12/09/2013 08:48:35 PM Running cell:
+S['slab2'].ev
+
+12/09/2013 08:48:35 PM Cell returned
+12/09/2013 08:48:35 PM Running cell:
+S['slab2'].pcolor()
+
+12/09/2013 08:48:40 PM Cell returned
+12/09/2013 08:48:40 PM Running cell:
+A=S['slab2']
+
+12/09/2013 08:48:40 PM Cell returned
+12/09/2013 08:48:40 PM Running cell:
+R=A.R
+
+12/09/2013 08:48:40 PM Cell returned
+12/09/2013 08:48:40 PM Running cell:
+S['WOOD']['lmatname']
+
+12/09/2013 08:48:40 PM Cell returned
+12/09/2013 08:48:40 PM Running cell:
+S['WOOD']['lthick']
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+S['WOOD']['color']
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+S['WOOD']['linewidth']
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+S['3D_WINDOW_GLASS']['lmatname']
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+S['3D_WINDOW_GLASS']['lthick']
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+S['3D_WINDOW_GLASS']['lmat']
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+fGHz = np.arange(3,5,0.01)
+theta = np.arange(0,pi/2,0.01)
+
+S['WOOD'].ev(fGHz,theta,compensate=True)
+sR = np.shape(S['WOOD'].R) 
+print '\nHere, slab is evaluted for',sR[0],'frequency(ies)', 'and',sR[1], 'angle(s)\n'
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+ifreq=1
+ithet=10
+
+print '\nReflection coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n R=',S['WOOD'].R[0,0]
+print '\nTransmission coefficient @',fGHz[ifreq],'GHz and theta=',theta[ithet],':\n\n T=',S['WOOD'].T[0,0],'\n'
+
+
+12/09/2013 08:48:41 PM Cell returned
+12/09/2013 08:48:41 PM Running cell:
+fig,ax = S['WOOD'].plotwrt(var='f',coeff='R',polar='p')
+
+12/09/2013 08:48:42 PM Cell returned
+12/09/2013 08:48:42 PM Running cell:
+fig = plt.figure(figsize=(20,20))
+fGHz= np.array([2.4])
+S['WOOD'].ev(fGHz,theta)
+fig,ax = S['WOOD'].plotwrt(var='a',coeff='R',fig=fig)
+
+12/09/2013 08:48:42 PM Cell returned
+12/09/2013 08:48:42 PM Running cell:
+fGHz= np.arange(0.7,5.2,0.1)
+S['WOOD'].ev(fGHz,theta)
+S['WOOD'].pcolor()
+
+12/09/2013 08:48:44 PM Cell returned
+12/09/2013 08:48:44 PM Running cell:
+theta = np.arange(0,np.pi/2,0.01)
+fGHz = np.arange(0.1,10,0.2)
+sl = SlabDB('matDB.ini','slabDB.ini')
+mat   = sl.mat
+lmat  = [mat['AIR'],mat['WOOD']]
+II    = MatInterface(lmat,0,fGHz,theta)
+II.RT()
+fig,ax = II.plotwrt(var='a',kv=10,types=['m'])
+air = mat['AIR']
+brick  = mat['BRICK']
+II  = MatInterface([air,brick],0,fGHz,theta)
+II.RT()
+fig,ax = II.plotwrt(var='f',color='k',types=['m'])
+plt.show()
+
+12/09/2013 08:48:45 PM Cell returned
+12/09/2013 08:48:45 PM Running cell:
+## Adding new materials
+
+12/09/2013 08:48:45 PM Cell returned
+12/09/2013 08:48:45 PM Running cell:
+sl.mat.add(name='TESS-p50',cval=3+0j,sigma=0.06,typ='epsr')
+
+sl.add(name='TESS-p50-5cm',lmatname=['TESS-p50'],lthick=[0.05])
+sl.add(name='TESS-p50-10cm',lmatname=['TESS-p50'],lthick=[0.10])
+sl.add(name='TESS-p50-15cm',lmatname=['TESS-p50'],lthick=[0.15])
+fGHz=4
+theta = np.arange(0,np.pi/2,0.01)
+#figure(figsize=(8,8))
+# These Tessereau page 50 
+
+sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
+sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
+sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
+
+# by default var='a' and kv = 0 
+
+fig,ax = sl['TESS-p50-5cm'].plotwrt(color='k',labels=[''])
+fig,ax = sl['TESS-p50-10cm'].plotwrt(color='k',labels=[''],linestyle='dashed',fig=fig,ax=ax)
+fig,ax = sl['TESS-p50-15cm'].plotwrt(color='k',labels=[''],linestyle='dashdot',fig=fig,ax=ax)
+
+fGHz = np.arange(2,16,0.1)
+theta = 0 
+
+sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=False)
+sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=False)
+sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=False)
+    
+fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k')
+fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
+fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
+
+sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
+sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
+sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
+
+fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',types=['ru'],labels=['5cm compensated',''],color='r',fig=fig,ax=ax)
+fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=['10cm compensated',''],color='r',linestyle='dashed',fig=fig,ax=ax)
+fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=['15cm not compensated',''],color='r',linestyle='dashdot',fig=fig,ax=ax) 
+
+fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',labels=[''],color='k')
+fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
+fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
+
+12/09/2013 08:48:46 PM Cell returned
+12/09/2013 08:48:46 PM Running cell:
+sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
+sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
+sl.add('ConcreteJc',['ConcreteJc'],[0.049])
+
+theta = np.linspace(20,60,100)*np.pi/180
+sl['ConcreteJc'].ev(120,theta)
+fig,ax = sl['ConcreteJc'].plotwrt('a')
+
+
+
+12/09/2013 08:48:46 PM Cell returned
+12/09/2013 08:48:46 PM Running cell:
+fGHz = np.linspace(110,135,50)
+sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[0.0029,0.0102,0.0029])
+sl['DoubleGlass'].ev(fGHz,theta)
+sl['DoubleGlass'].pcolor(dB=True)
+
+12/09/2013 08:48:48 PM Cell returned
+12/09/2013 08:48:48 PM Running cell:
+sl['DoubleGlass'].ev(120,theta)
+fig,ax = sl['DoubleGlass'].plotwrt('a')
+
+12/09/2013 08:48:48 PM Cell returned
+12/09/2013 08:48:48 PM Running cell:
+freq = np.linspace(110,135,50)
+sl['DoubleGlass'].ev(freq,theta)
+fig,ax = sl['DoubleGlass'].plotwrt('f')  # @20°
+
+12/09/2013 08:48:49 PM Cell returned
+12/09/2013 08:48:49 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 08:48:49 PM Cell returned
+12/09/2013 08:48:49 PM Saving to ./3-antprop/SlabsAndMaterials.ipynb
+[NbConvertApp] Using existing profile dir: u'/home/uguen/.config/ipython/profile_default'
+[NbConvertApp] Converting notebook ./3-antprop/SlabsAndMaterials.ipynb to rst
+[NbConvertApp] Support files will be in SlabsAndMaterials_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory SlabsAndMaterials_files
+[NbConvertApp] Writing 14579 bytes to SlabsAndMaterials.rst
+12/09/2013 08:48:51 PM Reading notebook ./4-signal/DEV-Bsignal.ipynb
+12/09/2013 08:48:51 PM Running cell:
+from pylayers.signal.bsignal import *
+from pylayers.simul.simulem import *
+figsize(8,8)
+
+12/09/2013 08:48:52 PM Cell returned
+12/09/2013 08:48:52 PM Running cell:
+fc     = 4 
+band   = 2
+thresh = 10
+fe     = 100 
+ip =EnImpulse([],fc,band,thresh,fe)
+
+12/09/2013 08:48:52 PM Cell returned
+12/09/2013 08:48:52 PM Running cell:
+ip.info()
+
+12/09/2013 08:48:52 PM Cell returned
+12/09/2013 08:48:52 PM Running cell:
+E1= sum(ip.y*ip.y)*ip.dx()
+print "Integration in time",E1
+
+12/09/2013 08:48:52 PM Cell returned
+12/09/2013 08:48:52 PM Running cell:
+P = ip.esd()
+E2 = sum(P.y)*P.dx()
+print "Integration in frequency domain ",E2
+
+12/09/2013 08:48:53 PM Cell returned
+12/09/2013 08:48:53 PM Running cell:
+S= Simul()
+S.load('where2.ini')
+
+12/09/2013 08:48:53 PM Cell raised uncaught exception: NameError
+12/09/2013 08:48:53 PM Saving to ./4-signal/DEV-Bsignal.ipynb
+12/09/2013 08:48:53 PM Exiting with nonzero exit status

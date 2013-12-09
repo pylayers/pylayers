@@ -153,10 +153,10 @@ def mulcplot(x,y,**kwargs):
     nfigy = np.prod(np.array(y.shape[0:-1]))
 
     assert((nfigy==ncol*nlin) | (nfigy==1))
-    assert((nlabels==nfigy)|(nlabels==1))
-    assert((ntitles==ncol*nlin)|(ntitles==1))
-    assert((nxlabels==nfigy)|(nxlabels==1))
-    assert((nylabels==nfigy)|(nxlabels==1))
+    assert((nlabels==nfigy) | (nlabels==1))
+    assert((ntitles==ncol*nlin) | (ntitles==1))
+    assert((nxlabels==nfigy) | (nxlabels==1))
+    assert((nylabels==nfigy) | (nxlabels==1))
 
     if ax==[]:    
         fig,ax=plt.subplots(nlin,ncol,sharey=True,sharex=True)
@@ -248,6 +248,7 @@ def mulcplot(x,y,**kwargs):
 
                 ax[l,c].set_xlabel(xlabels[k%nxlabels])
                 ax[l,c].set_ylabel(ylabels[k%nylabels])
+
                 ax[l,c].set_title(titles[k%ntitles])
                 ax[l,c].legend()
                 #ax[l,c].get_xaxis().set_visible(False)

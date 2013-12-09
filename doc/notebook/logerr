@@ -138,3 +138,40 @@ css_styling()
 
 12/08/2013 11:54:19 PM Cell returned
 12/08/2013 11:54:19 PM Saving to 2-gis/MultiSubsegments.ipynb
+12/09/2013 07:07:46 PM Reading notebook 4-signal/DEV-Bsignal.ipynb
+12/09/2013 07:07:46 PM Running cell:
+from pylayers.signal.bsignal import *
+from pylayers.simul.simulem import *
+figsize(8,8)
+
+12/09/2013 07:07:48 PM Cell returned
+12/09/2013 07:07:48 PM Running cell:
+fc     = 4 
+band   = 2
+thresh = 10
+fe     = 100 
+ip =EnImpulse([],fc,band,thresh,fe)
+
+12/09/2013 07:07:48 PM Cell returned
+12/09/2013 07:07:48 PM Running cell:
+ip.info()
+
+12/09/2013 07:07:48 PM Cell returned
+12/09/2013 07:07:48 PM Running cell:
+E1= sum(ip.y*ip.y)*ip.dx()
+print "Integration in time",E1
+
+12/09/2013 07:07:48 PM Cell returned
+12/09/2013 07:07:48 PM Running cell:
+P = ip.esd()
+E2 = sum(P.y)*P.dx()
+print "Integration in frequency domain ",E2
+
+12/09/2013 07:07:48 PM Cell returned
+12/09/2013 07:07:48 PM Running cell:
+S= Simul()
+S.load('where2.ini')
+
+12/09/2013 07:07:49 PM Cell raised uncaught exception: NameError
+12/09/2013 07:07:49 PM Saving to 4-signal/DEV-Bsignal.ipynb
+12/09/2013 07:07:49 PM Exiting with nonzero exit status

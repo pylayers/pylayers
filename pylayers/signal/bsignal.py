@@ -2465,7 +2465,7 @@ class FBsignal(Bsignal):
         """
 
         if 'types' not in kwargs:
-            kwargs['types'] = 'l20'
+            kwargs['types'] = ['l20']
 
         fig,ax = Bsignal.plot(self,**kwargs)
 

@@ -17,7 +17,7 @@ Multi sub-segments
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x549d690>
+    <matplotlib.figure.Figure at 0x58d3650>
 
 
 .. code-block:: python
@@ -143,9 +143,9 @@ structure
     None
     Tx Info :
     npos       :  1
-    position   :  [[  7.59000000e+02]
-     [  1.11400000e+03]
-     [  1.00000000e+00]]
+    position   :  [[ 1.2]
+     [ 1. ]
+     [ 1.4]]
     name       :  
     type       :  tx
     fileini    :  radiotx.ini
@@ -155,10 +155,10 @@ structure
     filestr    :  defstr.str2
     None
     Rx Info :
-    npos       :  1
-    position   :  [[  767. ]
-     [ 1114. ]
-     [    1.5]]
+    npos       :  6
+    position   :  [[ 0.    8.    8.    8.    8.    8.  ]
+     [ 0.    1.2   1.31  1.42  1.53  1.64]
+     [ 0.    1.5   1.5   1.5   1.5   1.5 ]]
     name       :  
     type       :  rx
     fileini    :  radiorx.ini
@@ -322,7 +322,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f7564952b90>
+    <matplotlib.text.Text at 0x60e2c10>
 
 
 
@@ -372,7 +372,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x7f756503c890>
+    <matplotlib.legend.Legend at 0x63c2910>
 
 
 

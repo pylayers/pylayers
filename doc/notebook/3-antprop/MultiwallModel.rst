@@ -17,7 +17,7 @@ Multi-wall model
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x3f4da90>
+    <matplotlib.figure.Figure at 0x3d67a50>
 
 
 The layout is loaded from an ini file. If the graphs are not available,
@@ -214,7 +214,7 @@ Compute the coverage
 
 .. parsed-literal::
 
-    Coverage performed in  1.45672392845 s
+    Coverage performed in  1.40038108826 s
 
 
 Coverage Map
@@ -244,8 +244,8 @@ For Orthogonal polarization
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4ec6c90>,
-     <matplotlib.axes.AxesSubplot at 0x4d07810>)
+    (<matplotlib.figure.Figure at 0x4defc90>,
+     <matplotlib.axes.AxesSubplot at 0x7f74240db7d0>)
 
 
 
@@ -271,8 +271,8 @@ For parallel polarization
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5b5af90>,
-     <matplotlib.axes.AxesSubplot at 0x5579ed0>)
+    (<matplotlib.figure.Figure at 0x5b53f50>,
+     <matplotlib.axes.AxesSubplot at 0x5533810>)
 
 
 
