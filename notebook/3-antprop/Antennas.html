@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="User Manual" href="../index.html" />
+    <link rel="next" title="Coverage with a Multi Wall model" href="Coverage.html" />
+    <link rel="prev" title="Multi sub-segments" href="../2-gis/MultiSubsegments.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,11 +40,18 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Coverage.html" title="Coverage with a Multi Wall model"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../2-gis/MultiSubsegments.html" title="Multi sub-segments"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../index.html" accesskey="U">User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -56,6 +66,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../2-gis/MultiSubsegments.html"
+                        title="previous chapter">Multi sub-segments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Coverage.html"
+                        title="next chapter">Coverage with a Multi Wall model</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -139,14 +155,14 @@ the antenna pattern is obtained in using a <tt class="docutils literal"><span cl
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4510790&gt;</pre>
 </div>
-<img alt="notebook/3-antprop/Antennas_files/Antennas_13_1.png" src="notebook/3-antprop/Antennas_files/Antennas_13_1.png" />
+<img alt="./Antennas_files/Antennas_13_1.png" src="./Antennas_files/Antennas_13_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x47fc650&gt;</pre>
 </div>
-<img alt="notebook/3-antprop/Antennas_files/Antennas_14_1.png" src="notebook/3-antprop/Antennas_files/Antennas_14_1.png" />
+<img alt="./Antennas_files/Antennas_14_1.png" src="./Antennas_files/Antennas_14_1.png" />
 <p>The following figure represents all the radiation patterns in the
 azimuth plane for each of the 104 measured frequencies</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;Ntheta&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span>
@@ -256,7 +272,7 @@ NCoeff s2  : 495</pre>
 <span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/Antennas_files/Antennas_24_0.png" src="notebook/3-antprop/Antennas_files/Antennas_24_0.png" />
+<img alt="./Antennas_files/Antennas_24_0.png" src="./Antennas_files/Antennas_24_0.png" />
 <p>Transformation in shape 3 - energy thresholding</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">s2tos3</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">)</span>
 </pre></div>
@@ -265,7 +281,7 @@ NCoeff s2  : 495</pre>
 <span class="n">A</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/Antennas_files/Antennas_27_0.png" src="notebook/3-antprop/Antennas_files/Antennas_27_0.png" />
+<img alt="./Antennas_files/Antennas_27_0.png" src="./Antennas_files/Antennas_27_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
 <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
 </pre></div>
@@ -280,7 +296,7 @@ NCoeff s2  : 495</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">compdiag</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">Fth2</span><span class="p">,</span><span class="n">Fph2</span><span class="p">,</span><span class="s">&#39;modulus&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/Antennas_files/Antennas_30_0.png" src="notebook/3-antprop/Antennas_files/Antennas_30_0.png" />
+<img alt="./Antennas_files/Antennas_30_0.png" src="./Antennas_files/Antennas_30_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
 </pre></div>
 </div>
@@ -374,11 +390,18 @@ Nb phi (lon) :180</pre>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Coverage.html" title="Coverage with a Multi Wall model"
+             >next</a></li>
+        <li class="right" >
+          <a href="../2-gis/MultiSubsegments.html" title="Multi sub-segments"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
