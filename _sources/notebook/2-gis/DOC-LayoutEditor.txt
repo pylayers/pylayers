@@ -167,6 +167,13 @@ following :
 
     from pylayers.gis.layout import *
     from pylayers.util.project import *
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x3de6fd0>
+
+
 Reading an exiting Layout
 -------------------------
 
@@ -285,6 +292,11 @@ To read a new layout in osm format :
 .. code-block:: python
 
     fig,ax=L.showGs()
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_21_0.png
+
+
 .. code-block:: python
 
     L.info()
@@ -328,6 +340,11 @@ overlapping cycles.
 
     f,a=L.showG('t')
     b=plt.axis('off')
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_26_0.png
+
+
 The graph of room :math:`$\mathcal{G}_r$`. Two rooms which share at
 least a wall are connected. Two rooms which share only a corner
 (punctual connection) are not connected
@@ -336,6 +353,11 @@ least a wall are connected. Two rooms which share only a corner
 
     f,a=L.showG('r')
     b=plt.axis('off')
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_28_0.png
+
+
 The graph of waypath :math:`$\mathcal{G}_w$`. This graph is used for
 agent mobility. This allows to determine the shortest path between 2
 rooms. This information could be included in the osm file. This is not
@@ -345,12 +367,22 @@ the case yet
 
     f,a=L.showG('w')
     b=plt.axis('off')
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_30_0.png
+
+
 The graph of visibility :math:`$\mathcal{G_v}$`
 
 .. code-block:: python
 
     f,a=L.showG('v')
     b=plt.axis('off')
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_32_0.png
+
+
 The graph of interactions :math:`$\mathcal{G}_i$` used to determine the
 ray signatures.
 
@@ -360,6 +392,11 @@ ray signatures.
     a = f.gca()
     f,a=L.showG('i',fig=f,ax=a)
     b= plt.axis('off')
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_34_0.png
+
+
 The display options dictionnary
 -------------------------------
 
@@ -570,9 +607,13 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f3505e25bd0>,
-     <matplotlib.axes.AxesSubplot at 0x7f3505e256d0>)
+    (<matplotlib.figure.Figure at 0x3df2690>,
+     <matplotlib.axes.AxesSubplot at 0x2fbbf50>)
 
+
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_55_1.png
 
 
 Scaling the figure overlay
@@ -632,6 +673,11 @@ Vizualisation of the layout
     ax = fig.gca()
     fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
     a = plt.axis('off')
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png
+
+
 Each node of :math:`$\mathcal{G}_s$` with a negative index is a point.
 
 Each node of :math:`$\mathcal{G}_s$` with a positive index corresponds

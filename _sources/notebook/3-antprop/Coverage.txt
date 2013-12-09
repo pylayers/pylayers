@@ -16,6 +16,13 @@ First let's import the ``coverage`` module
 
     from pylayers.antprop.coverage import *
     import time
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x46d1a10>
+
+
 Instantiate a coverage object. By defaut, ``TA-Office.str`` layout
 strucure is loaded.
 
@@ -134,9 +141,13 @@ method
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x441d3d0>,
-     <matplotlib.axes.AxesSubplot at 0x5245750>)
+    (<matplotlib.figure.Figure at 0x5439510>,
+     <matplotlib.axes.AxesSubplot at 0x3982d50>)
 
+
+
+
+.. image:: Coverage_files/Coverage_12_1.png
 
 
 The shadowing map coverage results can be displayed by invoquing various
@@ -153,11 +164,15 @@ functions.
     C.showPower()
 
 
+.. image:: Coverage_files/Coverage_14_0.png
+
+
+
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5245550>,
-     <matplotlib.axes.AxesSubplot at 0x5245650>)
+    (<matplotlib.figure.Figure at 0x56f5d10>,
+     <matplotlib.axes.AxesSubplot at 0x54bb410>)
 
 
 
@@ -168,11 +183,15 @@ functions.
     C.showPower()
 
 
+.. image:: Coverage_files/Coverage_15_0.png
+
+
+
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0xb441590>,
-     <matplotlib.axes.AxesSubplot at 0xb441a50>)
+    (<matplotlib.figure.Figure at 0x54e4990>,
+     <matplotlib.axes.AxesSubplot at 0x5e15b10>)
 
 
 
@@ -183,11 +202,15 @@ functions.
     C.showPower()
 
 
+.. image:: Coverage_files/Coverage_16_0.png
+
+
+
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5883990>,
-     <matplotlib.axes.AxesSubplot at 0x5883f10>)
+    (<matplotlib.figure.Figure at 0x5e000d0>,
+     <matplotlib.axes.AxesSubplot at 0x6741390>)
 
 
 
@@ -221,11 +244,27 @@ accordingly
     C.showPower(polar='p')
 
 
+.. image:: Coverage_files/Coverage_20_0.png
+
+
+
+.. image:: Coverage_files/Coverage_20_1.png
+
+
+
+.. image:: Coverage_files/Coverage_20_2.png
+
+
+
+.. image:: Coverage_files/Coverage_20_3.png
+
+
+
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x6d260d0>,
-     <matplotlib.axes.AxesSubplot at 0xbb8bcd0>)
+    (<matplotlib.figure.Figure at 0xe24b950>,
+     <matplotlib.axes.AxesSubplot at 0xb620890>)
 
 
 

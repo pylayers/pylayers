@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Ray Signatures" href="Signatures.html" />
-    <link rel="prev" title="Coverage with a Multi Wall model" href="Coverage.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -40,18 +37,11 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="Signatures.html" title="Ray Signatures"
-             accesskey="N">next</a></li>
-        <li class="right" >
-          <a href="Coverage.html" title="Coverage with a Multi Wall model"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../index.html" accesskey="U">User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
@@ -71,12 +61,6 @@
 <li><a class="reference internal" href="#coverage-class">Coverage class</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="Coverage.html"
-                        title="previous chapter">Coverage with a Multi Wall model</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Signatures.html"
-                        title="next chapter">Ray Signatures</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -109,6 +93,8 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3d67a50&gt;</pre>
 </div>
 <p>The layout is loaded from an ini file. If the graphs are not available,
 they are built.</p>
@@ -145,6 +131,7 @@ of transmitter and receiver.</p>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="notebook/3-antprop/MultiwallModel_files/MultiwallModel_9_0.png" src="notebook/3-antprop/MultiwallModel_files/MultiwallModel_9_0.png" />
 <div class="section" id="finding-the-intersection-between-the-direct-path-and-the-walls">
 <h3>Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
 <p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
@@ -253,7 +240,7 @@ the coverage.ini file</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Coverage performed in  1.50879597664 s</pre>
+<div class="highlight-python"><pre>Coverage performed in  1.40038108826 s</pre>
 </div>
 <p>For Orthogonal polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -263,8 +250,10 @@ the coverage.ini file</p>
 <span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7eff182af990&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7eff182af910&gt;)</pre>
+<img alt="notebook/3-antprop/MultiwallModel_files/MultiwallModel_26_0.png" src="notebook/3-antprop/MultiwallModel_files/MultiwallModel_26_0.png" />
+<img alt="notebook/3-antprop/MultiwallModel_files/MultiwallModel_26_1.png" src="notebook/3-antprop/MultiwallModel_files/MultiwallModel_26_1.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x4defc90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f74240db7d0&gt;)</pre>
 </div>
 <p>For parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -274,8 +263,10 @@ the coverage.ini file</p>
 <span class="n">C</span><span class="o">.</span><span class="n">showEd</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig2</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7eff1878e810&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7eff1878e790&gt;)</pre>
+<img alt="notebook/3-antprop/MultiwallModel_files/MultiwallModel_28_0.png" src="notebook/3-antprop/MultiwallModel_files/MultiwallModel_28_0.png" />
+<img alt="notebook/3-antprop/MultiwallModel_files/MultiwallModel_28_1.png" src="notebook/3-antprop/MultiwallModel_files/MultiwallModel_28_1.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5b53f50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x5533810&gt;)</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
@@ -355,18 +346,11 @@ the coverage.ini file</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="Signatures.html" title="Ray Signatures"
-             >next</a></li>
-        <li class="right" >
-          <a href="Coverage.html" title="Coverage with a Multi Wall model"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../index.html" >User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Handling Antennas" href="../3-antprop/Antennas.html" />
+    <link rel="next" title="User references" href="../../modules/index.html" />
     <link rel="prev" title="The Layout class" href="DOC-LayoutEditor.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../3-antprop/Antennas.html" title="Handling Antennas"
+          <a href="../../modules/index.html" title="User references"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="DOC-LayoutEditor.html" title="The Layout class"
@@ -67,8 +67,8 @@
   <p class="topless"><a href="DOC-LayoutEditor.html"
                         title="previous chapter">The Layout class</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../3-antprop/Antennas.html"
-                        title="next chapter">Handling Antennas</a></p>
+  <p class="topless"><a href="../../modules/index.html"
+                        title="next chapter">User references</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -102,7 +102,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x499a690&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x58d3650&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 <span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;defstr3&#39;</span>
@@ -180,10 +180,10 @@ structure</p>
   <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
   <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
 </pre></div>
@@ -214,9 +214,9 @@ Nc  = Gr.node[nroom]['cycles']
 None
 Tx Info :
 npos       :  1
-position   :  [[  7.59000000e+02]
- [  1.11400000e+03]
- [  1.00000000e+00]]
+position   :  [[ 1.2]
+ [ 1. ]
+ [ 1.4]]
 name       :
 type       :  tx
 fileini    :  radiotx.ini
@@ -226,10 +226,10 @@ fileant    :  defant.vsh3
 filestr    :  defstr.str2
 None
 Rx Info :
-npos       :  1
-position   :  [[  767. ]
- [ 1114. ]
- [    1.5]]
+npos       :  6
+position   :  [[ 0.    8.    8.    8.    8.    8.  ]
+ [ 0.    1.2   1.31  1.42  1.53  1.64]
+ [ 0.    1.5   1.5   1.5   1.5   1.5 ]]
 name       :
 type       :  rx
 fileini    :  radiorx.ini
@@ -257,13 +257,13 @@ None</pre>
 </div>
 <div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_9_1.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_9_1.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_9_1.png" src="./MultiSubsegments_files/MultiSubsegments_9_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_10_0.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_10_0.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_10_0.png" src="./MultiSubsegments_files/MultiSubsegments_10_0.png" />
 <p>The different steps are :</p>
 <ul class="simple">
 <li>determine the signatures</li>
@@ -324,7 +324,7 @@ nl : 2353</pre>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_16_2.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_16_2.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_16_2.png" src="./MultiSubsegments_files/MultiSubsegments_16_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">type</span><span class="p">(</span><span class="n">cirair</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -346,9 +346,9 @@ nl : 2353</pre>
 </div>
 <div class="highlight-python"><pre>Rays evaluation</pre>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f47bc68fbd0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x60e2c10&gt;</pre>
 </div>
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_18_2.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_18_2.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_18_2.png" src="./MultiSubsegments_files/MultiSubsegments_18_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="n">layer</span><span class="p">)</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;ss_name&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">layer</span>
@@ -365,7 +365,7 @@ nl : 2353</pre>
 </div>
 <div class="highlight-python"><pre>Rays evaluation</pre>
 </div>
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_19_1.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_19_1.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_19_1.png" src="./MultiSubsegments_files/MultiSubsegments_19_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#fig2=plt.figure()</span>
 <span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">cirair</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">])</span>
@@ -379,11 +379,11 @@ nl : 2353</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x7f47bcde0890&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x63c2910&gt;</pre>
 </div>
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_20_1.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_20_1.png" />
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_20_2.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_20_2.png" />
-<img alt="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_20_3.png" src="notebook/2-gis/MultiSubsegments_files/MultiSubsegments_20_3.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_20_1.png" src="./MultiSubsegments_files/MultiSubsegments_20_1.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_20_2.png" src="./MultiSubsegments_files/MultiSubsegments_20_2.png" />
+<img alt="./MultiSubsegments_files/MultiSubsegments_20_3.png" src="./MultiSubsegments_files/MultiSubsegments_20_3.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
@@ -463,7 +463,7 @@ nl : 2353</pre>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../3-antprop/Antennas.html" title="Handling Antennas"
+          <a href="../../modules/index.html" title="User references"
              >next</a></li>
         <li class="right" >
           <a href="DOC-LayoutEditor.html" title="The Layout class"

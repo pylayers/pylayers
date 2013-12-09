@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Multi-wall model" href="MultiwallModel.html" />
-    <link rel="prev" title="Handling Antennas" href="Antennas.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -40,18 +37,11 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="MultiwallModel.html" title="Multi-wall model"
-             accesskey="N">next</a></li>
-        <li class="right" >
-          <a href="Antennas.html" title="Handling Antennas"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../index.html" accesskey="U">User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
@@ -63,12 +53,6 @@
 <li><a class="reference internal" href="#calculating-received-power-coverage">Calculating Received Power Coverage</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="Antennas.html"
-                        title="previous chapter">Handling Antennas</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="MultiwallModel.html"
-                        title="next chapter">Multi-wall model</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -103,6 +87,8 @@ which heavily relies on the core module <tt class="docutils literal"><span class
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x46d1a10&gt;</pre>
 </div>
 <p>Instantiate a coverage object. By defaut, <tt class="docutils literal"><span class="pre">TA-Office.str</span></tt> layout
 strucure is loaded.</p>
@@ -194,9 +180,10 @@ method</p>
 <span class="n">C</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x441d3d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x5245750&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5439510&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x3982d50&gt;)</pre>
 </div>
+<img alt="notebook/3-antprop/Coverage_files/Coverage_12_1.png" src="notebook/3-antprop/Coverage_files/Coverage_12_1.png" />
 <p>The shadowing map coverage results can be displayed by invoquing various
 functions.</p>
 <ul class="simple">
@@ -208,24 +195,27 @@ functions.</p>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5245550&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x5245650&gt;)</pre>
+<img alt="notebook/3-antprop/Coverage_files/Coverage_14_0.png" src="notebook/3-antprop/Coverage_files/Coverage_14_0.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x56f5d10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x54bb410&gt;)</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xb441590&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0xb441a50&gt;)</pre>
+<img alt="notebook/3-antprop/Coverage_files/Coverage_15_0.png" src="notebook/3-antprop/Coverage_files/Coverage_15_0.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x54e4990&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x5e15b10&gt;)</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">fGHz</span><span class="o">=</span><span class="mf">0.1</span>
 <span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5883990&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x5883f10&gt;)</pre>
+<img alt="notebook/3-antprop/Coverage_files/Coverage_16_0.png" src="notebook/3-antprop/Coverage_files/Coverage_16_0.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5e000d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x6741390&gt;)</pre>
 </div>
 <p>The transmitter coordinates are :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">tx</span>
@@ -247,8 +237,12 @@ accordingly</p>
 <span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x6d260d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0xbb8bcd0&gt;)</pre>
+<img alt="notebook/3-antprop/Coverage_files/Coverage_20_0.png" src="notebook/3-antprop/Coverage_files/Coverage_20_0.png" />
+<img alt="notebook/3-antprop/Coverage_files/Coverage_20_1.png" src="notebook/3-antprop/Coverage_files/Coverage_20_1.png" />
+<img alt="notebook/3-antprop/Coverage_files/Coverage_20_2.png" src="notebook/3-antprop/Coverage_files/Coverage_20_2.png" />
+<img alt="notebook/3-antprop/Coverage_files/Coverage_20_3.png" src="notebook/3-antprop/Coverage_files/Coverage_20_3.png" />
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0xe24b950&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0xb620890&gt;)</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
@@ -329,18 +323,11 @@ accordingly</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="MultiwallModel.html" title="Multi-wall model"
-             >next</a></li>
-        <li class="right" >
-          <a href="Antennas.html" title="Handling Antennas"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../index.html" >User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

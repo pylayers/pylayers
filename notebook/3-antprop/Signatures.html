@@ -23,10 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" />
-    <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Slabs and Materials" href="SlabsAndMaterials.html" />
-    <link rel="prev" title="Multi-wall model" href="MultiwallModel.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -40,29 +37,16 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="SlabsAndMaterials.html" title="Slabs and Materials"
-             accesskey="N">next</a></li>
-        <li class="right" >
-          <a href="MultiwallModel.html" title="Multi-wall model"
-             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../index.html" accesskey="U">User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="MultiwallModel.html"
-                        title="previous chapter">Multi-wall model</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="SlabsAndMaterials.html"
-                        title="next chapter">Slabs and Materials</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -92,6 +76,8 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x335c050&gt;</pre>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
@@ -105,11 +91,13 @@
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_4_0.png" src="notebook/3-antprop/Signatures_files/Signatures_4_0.png" />
 <p>The graph of interactions is shown below.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
 <span class="n">a</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_6_0.png" src="notebook/3-antprop/Signatures_files/Signatures_6_0.png" />
 <p>All the interactions of a given cycle are stored as meta information in
 nodes of <tt class="docutils literal"><span class="pre">Gt</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;inter&#39;</span><span class="p">]</span>
@@ -244,8 +232,8 @@ from cycle : 0 to cycle 1
 <span class="k">print</span> <span class="n">prx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[ 7.98038874  0.4402418 ]
-[ 3.47525751  0.1715783 ]</pre>
+<div class="highlight-python"><pre>[ 7.71597394  0.75891616]
+[ 2.98535781  0.88475396]</pre>
 </div>
 <p>Evaluate performances of signature and ray evaluation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tt1</span> <span class="o">=</span> <span class="p">{}</span>
@@ -275,13 +263,13 @@ from cycle : 0 to cycle 1
 <span class="c">#    r2d.show(L)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>0 0.00186395645142
-1 0.0105199813843
-2 0.0518472194672
-3 0.209164142609
-4 0.670965909958
-5 1.79627203941
-6 4.44250202179</pre>
+<div class="highlight-python"><pre>0 0.00187706947327
+1 0.0103240013123
+2 0.050666809082
+3 0.204124927521
+4 0.659407138824
+5 1.75280785561
+6 4.32636713982</pre>
 </div>
 <p>It appears that the increasing number of signatures obatined with the
 run1 algorithm do not yield necessarily a significant increase in the
@@ -293,19 +281,9 @@ number of rays.</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>---------------------------------------------------------------------------
-NameError                                 Traceback (most recent call last)
-
-&lt;ipython-input-12-09699c645975&gt; in &lt;module&gt;()
-----&gt; 1 p1=semilogy(tt1.keys(),tray.values(),'ob')
-      2 p2=semilogy(tt1.keys(),tsig.values(),'or')
-      3 legend((p1[0],p2[0]),('rays','signature'),loc='best')
-      4 xlabel('cutoff')
-      5 ylabel('#')
-
-
-NameError: name 'semilogy' is not defined</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x41c1890&gt;</pre>
 </div>
+<img alt="notebook/3-antprop/Signatures_files/Signatures_21_1.png" src="notebook/3-antprop/Signatures_files/Signatures_21_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=bar(tt2.keys(),tt2.values(),color=&#39;red&#39;)</span>
 <span class="c">#b2=bar(tt1.keys(),tt1.values(),color=&#39;blue&#39;)</span>
 <span class="c">#b1=semilogx(tt2.keys(),log10(tt2.values()),color=&#39;red&#39;)</span>
@@ -321,9 +299,9 @@ NameError: name 'semilogy' is not defined</pre>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;time (s)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5535b90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4459210&gt;</pre>
 </div>
-<img alt="notebook/3-antprop/Signatures_files/Signatures_22_1.png" src="notebook/3-antprop/Signatures_files/Signatures_22_1.png" />
+<img alt="../../_images/Signatures_22_1.png" src="../../_images/Signatures_22_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tsig</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 <span class="c">#b3=loglog(tt1.keys(),arange(maxcutoff)**3,color=&#39;green&#39;)</span>
@@ -334,25 +312,25 @@ NameError: name 'semilogy' is not defined</pre>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f33011904d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x41dee90&gt;</pre>
 </div>
-<img alt="notebook/3-antprop/Signatures_files/Signatures_23_1.png" src="notebook/3-antprop/Signatures_files/Signatures_23_1.png" />
+<img alt="../../_images/Signatures_23_1.png" src="../../_images/Signatures_23_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=loglog(tsig.values(),tt1.values(),color=&#39;red&#39;)</span>
 <span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">b3</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="mf">0.0004</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">**</span><span class="mf">0.88</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;# Interactions&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f330144b710&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x46941d0&gt;</pre>
 </div>
-<img alt="notebook/3-antprop/Signatures_files/Signatures_24_1.png" src="notebook/3-antprop/Signatures_files/Signatures_24_1.png" />
+<img alt="../../_images/Signatures_24_1.png" src="../../_images/Signatures_24_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="mf">0.0004</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">**</span><span class="mf">0.88</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f3301e2c810&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x4888c10&gt;]</pre>
 </div>
-<img alt="notebook/3-antprop/Signatures_files/Signatures_25_1.png" src="notebook/3-antprop/Signatures_files/Signatures_25_1.png" />
+<img alt="../../_images/Signatures_25_1.png" src="../../_images/Signatures_25_1.png" />
 <p>The computation time in rays grows exponentially with the number of
 interactions.</p>
 <p><div class="system-message">
@@ -387,7 +365,8 @@ For additional information on amsmath, use the `?&#8217; option.
 (/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
 (/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
 (/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
-(/usr/share/texmf-texlive/tex/latex/tools/bm.sty) (./math.aux)
+(/usr/share/texmf-texlive/tex/latex/tools/bm.sty)
+No file math.aux.
 (/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
@@ -421,19 +400,19 @@ Transcript written on math.log.
 <span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">array</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">**</span><span class="mi">5</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/Signatures_files/Signatures_27_0.png" src="notebook/3-antprop/Signatures_files/Signatures_27_0.png" />
+<img alt="../../_images/Signatures_27_0.png" src="../../_images/Signatures_27_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxcutoff</span><span class="p">):</span>
     <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/Signatures_files/Signatures_28_0.png" src="notebook/3-antprop/Signatures_files/Signatures_28_0.png" />
-<img alt="notebook/3-antprop/Signatures_files/Signatures_28_1.png" src="notebook/3-antprop/Signatures_files/Signatures_28_1.png" />
-<img alt="notebook/3-antprop/Signatures_files/Signatures_28_2.png" src="notebook/3-antprop/Signatures_files/Signatures_28_2.png" />
-<img alt="notebook/3-antprop/Signatures_files/Signatures_28_3.png" src="notebook/3-antprop/Signatures_files/Signatures_28_3.png" />
-<img alt="notebook/3-antprop/Signatures_files/Signatures_28_4.png" src="notebook/3-antprop/Signatures_files/Signatures_28_4.png" />
-<img alt="notebook/3-antprop/Signatures_files/Signatures_28_5.png" src="notebook/3-antprop/Signatures_files/Signatures_28_5.png" />
-<img alt="notebook/3-antprop/Signatures_files/Signatures_28_6.png" src="notebook/3-antprop/Signatures_files/Signatures_28_6.png" />
+<img alt="../../_images/Signatures_28_0.png" src="../../_images/Signatures_28_0.png" />
+<img alt="../../_images/Signatures_28_1.png" src="../../_images/Signatures_28_1.png" />
+<img alt="../../_images/Signatures_28_2.png" src="../../_images/Signatures_28_2.png" />
+<img alt="../../_images/Signatures_28_3.png" src="../../_images/Signatures_28_3.png" />
+<img alt="../../_images/Signatures_28_4.png" src="../../_images/Signatures_28_4.png" />
+<img alt="../../_images/Signatures_28_5.png" src="../../_images/Signatures_28_5.png" />
+<img alt="../../_images/Signatures_28_6.png" src="../../_images/Signatures_28_6.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
@@ -446,7 +425,7 @@ Transcript written on math.log.
 <span class="c">#fig,ax=r2d.show(L,i=9,colray=&#39;green&#39;,widthray=0.5,fig=fig,ax=ax)</span>
 </pre></div>
 </div>
-<img alt="notebook/3-antprop/Signatures_files/Signatures_29_0.png" src="notebook/3-antprop/Signatures_files/Signatures_29_0.png" />
+<img alt="../../_images/Signatures_29_0.png" src="../../_images/Signatures_29_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
@@ -525,18 +504,11 @@ Transcript written on math.log.
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="SlabsAndMaterials.html" title="Slabs and Materials"
-             >next</a></li>
-        <li class="right" >
-          <a href="MultiwallModel.html" title="Multi-wall model"
-             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
-
-          <li><a href="../index.html" >User Manual</a> &raquo;</li> 
+ 
       </ul>
     </div>
 

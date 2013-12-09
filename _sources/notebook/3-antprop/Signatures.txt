@@ -9,6 +9,13 @@ Ray Signatures
     from pylayers.gis.layout import *
     from pylayers.antprop.signature import *
     from pylayers.antprop.rays import *
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x335c050>
+
+
 .. code-block:: python
 
     L = Layout()
@@ -23,12 +30,22 @@ Showing the graph of rooms with 2 rooms separated by a DOOR segment
 
     L.showG('v')
     a=plt.axis('off')
+
+
+.. image:: Signatures_files/Signatures_4_0.png
+
+
 The graph of interactions is shown below.
 
 .. code-block:: python
 
     L.showG('i',figsize=(20,20))
     a=plt.axis('off')
+
+
+.. image:: Signatures_files/Signatures_6_0.png
+
+
 All the interactions of a given cycle are stored as meta information in
 nodes of ``Gt``
 
@@ -191,8 +208,8 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. parsed-literal::
 
-    [ 7.98038874  0.4402418 ]
-    [ 3.47525751  0.1715783 ]
+    [ 7.71597394  0.75891616]
+    [ 2.98535781  0.88475396]
 
 
 Evaluate performances of signature and ray evaluation
@@ -227,13 +244,13 @@ Evaluate performances of signature and ray evaluation
 
 .. parsed-literal::
 
-    0 0.00186395645142
-    1 0.0105199813843
-    2 0.0518472194672
-    3 0.209164142609
-    4 0.670965909958
-    5 1.79627203941
-    6 4.44250202179
+    0 0.00187706947327
+    1 0.0103240013123
+    2 0.050666809082
+    3 0.204124927521
+    4 0.659407138824
+    5 1.75280785561
+    6 4.32636713982
 
 
 It appears that the increasing number of signatures obatined with the
@@ -248,21 +265,16 @@ number of rays.
     xlabel('cutoff')
     ylabel('#')
 
-::
 
 
-    ---------------------------------------------------------------------------
-    NameError                                 Traceback (most recent call last)
+.. parsed-literal::
 
-    <ipython-input-12-09699c645975> in <module>()
-    ----> 1 p1=semilogy(tt1.keys(),tray.values(),'ob')
-          2 p2=semilogy(tt1.keys(),tsig.values(),'or')
-          3 legend((p1[0],p2[0]),('rays','signature'),loc='best')
-          4 xlabel('cutoff')
-          5 ylabel('#')
+    <matplotlib.text.Text at 0x41c1890>
 
 
-    NameError: name 'semilogy' is not defined
+
+
+.. image:: Signatures_files/Signatures_21_1.png
 
 
 .. code-block:: python
@@ -285,7 +297,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5535b90>
+    <matplotlib.text.Text at 0x4459210>
 
 
 
@@ -308,7 +320,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f33011904d0>
+    <matplotlib.text.Text at 0x41dee90>
 
 
 
@@ -327,7 +339,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f330144b710>
+    <matplotlib.text.Text at 0x46941d0>
 
 
 
@@ -344,7 +356,7 @@ number of rays.
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f3301e2c810>]
+    [<matplotlib.lines.Line2D at 0x4888c10>]
 
 
 

@@ -88,7 +88,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="DEV-Layout.html"
-                        title="previous chapter">The <tt class="docutils literal docutils literal docutils literal"><span class="pre">ls()</span></tt> method</a></p>
+                        title="previous chapter">The <tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">ls()</span></tt> method</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="MultiSubsegments.html"
                         title="next chapter">Multi sub-segments</a></p>
@@ -252,6 +252,8 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3de6fd0&gt;</pre>
+</div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
 <h2>Reading an exiting Layout<a class="headerlink" href="#reading-an-exiting-layout" title="Permalink to this headline">¶</a></h2>
@@ -346,6 +348,7 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_21_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_21_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -380,6 +383,7 @@ overlapping cycles.</p>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_26_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_26_0.png" />
 <p>The graph of room <img class="math" src="../../_images/math/b16c4406d54a8f8201b41ab4cc7381f211b81782.png" alt="$\mathcal{G}_r$"/>. Two rooms which share at
 least a wall are connected. Two rooms which share only a corner
 (punctual connection) are not connected</p>
@@ -387,6 +391,7 @@ least a wall are connected. Two rooms which share only a corner
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_28_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_28_0.png" />
 <p>The graph of waypath <img class="math" src="../../_images/math/01fae7c16f24ce4f0e1492668333229fcb15841b.png" alt="$\mathcal{G}_w$"/>. This graph is used for
 agent mobility. This allows to determine the shortest path between 2
 rooms. This information could be included in the osm file. This is not
@@ -395,11 +400,13 @@ the case yet</p>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_30_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_30_0.png" />
 <p>The graph of visibility <img class="math" src="../../_images/math/2fed76dfec266db4718197a48249b74bdde77563.png" alt="$\mathcal{G_v}$"/></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
 <span class="n">b</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_32_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_32_0.png" />
 <p>The graph of interactions <img class="math" src="../../_images/math/810d51416e7a3e7e86a0c9f086b19f7176d929ca.png" alt="$\mathcal{G}_i$"/> used to determine the
 ray signatures.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
@@ -408,6 +415,7 @@ ray signatures.</p>
 <span class="n">b</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_34_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_34_0.png" />
 </div>
 <div class="section" id="the-display-options-dictionnary">
 <h2>The display options dictionnary<a class="headerlink" href="#the-display-options-dictionnary" title="Permalink to this headline">¶</a></h2>
@@ -585,9 +593,10 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f3505e25bd0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f3505e256d0&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3df2690&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x2fbbf50&gt;)</pre>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_55_1.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_55_1.png" />
 </div>
 <div class="section" id="scaling-the-figure-overlay">
 <h3>Scaling the figure overlay<a class="headerlink" href="#scaling-the-figure-overlay" title="Permalink to this headline">¶</a></h3>
@@ -639,6 +648,7 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png" />
 <p>Each node of <img class="math" src="../../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
 <p>Each node of <img class="math" src="../../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
 to a segment (wall,door,window,...).</p>

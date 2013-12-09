@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction &mdash; PyLayers</title>
+    <title>What PyLayers is about ? &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -59,10 +59,14 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Introduction</a></li>
-<li><a class="reference internal" href="#what-pylayers-is-about">What PyLayers is about ?</a></li>
-<li><a class="reference internal" href="#how-to-install-pylayers">How to install PyLayers ?</a></li>
-<li><a class="reference internal" href="#how-to-cite-the-pylayers-project">How to cite the PyLayers Project</a></li>
+<li><a class="reference internal" href="#">What PyLayers is about ?</a></li>
+<li><a class="reference internal" href="#how-to-install-pylayers">How to install PyLayers ?</a><ul>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#setting-of-environment-variables-basename-and-pylayers">Setting of environment variables $BASENAME and $PYLAYERS</a></li>
+<li><a class="reference internal" href="#installing-pyinterval">Installing PyInterval</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -92,17 +96,84 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="what-pylayers-is-about">
+  <div class="section" id="what-pylayers-is-about">
 <h1>What PyLayers is about ?<a class="headerlink" href="#what-pylayers-is-about" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Indoor Radio Propagation Modelling</li>
+<li>IR UWB (IEEE 802.15.4a and IEEE 802.15.6)</li>
+<li>Wireless Body Area Network</li>
+<li>Indoor Localisation</li>
+<li>Human mobility simulation</li>
+<li>Cooperative Positioning</li>
+</ul>
 </div>
 <div class="section" id="how-to-install-pylayers">
 <h1>How to install PyLayers ?<a class="headerlink" href="#how-to-install-pylayers" title="Permalink to this headline">¶</a></h1>
+<p>If you are working on a Windows platform and you are not familiar with
+the Python ecosystem, a good idea is to install first
+<a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>. It will
+provide you most of the required dependencies.</p>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>Before to install pylayers you need to install the following dependencies
+
+
+numpy&gt;=1.6.1
+scipy&gt;=0.10.1
+networkx&gt;=1.7
+matplotlib&gt;=1.1.0
+shapely&gt;=1.2.14
+descartes&gt;=1.0
+SimPy&gt;=2.2
+PIL&gt;=1.1.5
+bitstring&gt;=3.0.2
+pyintervall&gt;=1.0
+pandas &gt;=0.12.0
+
+The installation of matplotlib basemap requires installation of libraries GEOS
+and PROJ4. The installation procedure is well described in</pre>
 </div>
-<div class="section" id="how-to-cite-the-pylayers-project">
-<h1>How to cite the PyLayers Project<a class="headerlink" href="#how-to-cite-the-pylayers-project" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://matplotlib.org/basemap/users/installing.html">http://matplotlib.org/basemap/users/installing.html</a></p>
+<div class="highlight-python"><pre>For supporting the osm format PyLayers is relying on imposm. The installation
+of imposm is not straighforward it requires to install first Tokyo-Cabinet
+and Google-Protobuf library. PyLayers can work without imposm you need to
+comment the only import to the module in pylayers/gis/osmparser.py.</pre>
+</div>
+<p><a class="reference external" href="http://imposm.org/docs/imposm/latest/install.html#id1">http://imposm.org/docs/imposm/latest/install.html#id1</a></p>
+<div class="highlight-python"><pre>Most of these dependencies are handled in the setup.py script.
+
+python setup.py install</pre>
+</div>
+</div>
+<div class="section" id="setting-of-environment-variables-basename-and-pylayers">
+<h2>Setting of environment variables $BASENAME and $PYLAYERS<a class="headerlink" href="#setting-of-environment-variables-basename-and-pylayers" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>It is required to define the two enviroment variables $PYLAYERS and $BASENAME
+
+in your .bashrc add those 2 lines
+
+#export PYLAYERS = &lt;path to the directory where pylayers is installed&gt;
+
+for example if you install PyLyers in your home directory
+
+export PYLAYERS=~/pylayers
+export BASENAME=~/plproject</pre>
+</div>
+</div>
+<div class="section" id="installing-pyinterval">
+<h2>Installing PyInterval<a class="headerlink" href="#installing-pyinterval" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>get crlibm library first
+http://lipforge.ens-lyon.fr/frs/?group_id=8&amp;release_id=123
+
+if problem for compilation add
+CPPFLAGS= -fPIC in scs_lib/Makefile
+
+sudo easy_install pyinterval</pre>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>make test-code</p>
+</div>
 </div>
 
 

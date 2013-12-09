@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
     <link rel="next" title="The Layout class" href="DOC-LayoutEditor.html" />
-    <link rel="prev" title="Introduction" href="../1-introduction/Introduction.html" /> 
+    <link rel="prev" title="What PyLayers is about ?" href="../1-introduction/Introduction.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="DOC-LayoutEditor.html" title="The Layout class"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="../1-introduction/Introduction.html" title="Introduction"
+          <a href="../1-introduction/Introduction.html" title="What PyLayers is about ?"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
@@ -59,7 +59,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="../1-introduction/Introduction.html"
-                        title="previous chapter">Introduction</a></p>
+                        title="previous chapter">What PyLayers is about ?</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="DOC-LayoutEditor.html"
                         title="next chapter">The Layout class</a></p>
@@ -89,6 +89,8 @@
 <span class="kn">import</span> <span class="nn">os</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3b8df10&gt;</pre>
+</div>
 <div class="section" id="the-ls-method">
 <h1>The <tt class="docutils literal"><span class="pre">ls()</span></tt> method<a class="headerlink" href="#the-ls-method" title="Permalink to this headline">¶</a></h1>
 <p>The <tt class="docutils literal"><span class="pre">ls()</span></tt> method lists the layout file which are available in the
@@ -100,6 +102,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&#39;11D-E1.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DLR.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DLR2.ini&#39;</span><span class="p">,</span>
+ <span class="s">&#39;Lstruc.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;TA-Office.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;W2PTIN.ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;WHERE1.ini&#39;</span><span class="p">,</span>
@@ -138,15 +141,17 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
+<img alt="./DEV-Layout_files/DEV-Layout_9_0.png" src="./DEV-Layout_files/DEV-Layout_9_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;TA-Office.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5383950&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x53b4a50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3b99790&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x5b59210&gt;)</pre>
 </div>
+<img alt="./DEV-Layout_files/DEV-Layout_11_1.png" src="./DEV-Layout_files/DEV-Layout_11_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;11D-E1.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span>
 </pre></div>
@@ -195,9 +200,10 @@ degree : degree of nodes</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x538e950&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x6240e50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x3c99750&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x5b55690&gt;)</pre>
 </div>
+<img alt="./DEV-Layout_files/DEV-Layout_13_1.png" src="./DEV-Layout_files/DEV-Layout_13_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;klepal.ini&#39;</span><span class="p">)</span>
 <span class="n">L</span>
 </pre></div>
@@ -238,18 +244,20 @@ degree : degree of nodes</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x538e950&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x6240e50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f7b40cdeb10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f7b40ccea50&gt;)</pre>
 </div>
+<img alt="./DEV-Layout_files/DEV-Layout_16_1.png" src="./DEV-Layout_files/DEV-Layout_16_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;W2PTIN.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x538e950&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x6240e50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f7b40236590&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f7b40236310&gt;)</pre>
 </div>
+<img alt="./DEV-Layout_files/DEV-Layout_18_1.png" src="./DEV-Layout_files/DEV-Layout_18_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
@@ -332,7 +340,7 @@ degree : degree of nodes</pre>
           <a href="DOC-LayoutEditor.html" title="The Layout class"
              >next</a></li>
         <li class="right" >
-          <a href="../1-introduction/Introduction.html" title="Introduction"
+          <a href="../1-introduction/Introduction.html" title="What PyLayers is about ?"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
