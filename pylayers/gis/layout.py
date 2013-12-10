@@ -2318,10 +2318,26 @@ class Layout(object):
 
 
     def chgmss(self,ns,ss_name=[],ss_z=[]):
-        """
+        """ change a specific multi subseggments properties
 
         Parameters
         ----------
+
+        ns : int
+            segment number 
+
+        ss_name : list of Nss  string     
+            name of the different constitutive SLAB of the multi-segments
+       
+        ss_z : list of Nss tuple (zmin,zmax) 
+
+        Examples 
+        --------
+
+        See Also 
+        --------
+
+        pylayers.gis.layout.g2npy
 
         """
         if ns in self.Gs.node.keys():

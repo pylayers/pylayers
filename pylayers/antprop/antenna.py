@@ -637,9 +637,6 @@ class Antenna(object):
     def info(self):
         """ gives info about antenna object
 
-           >>> A1 = Antenna('defant.trx')
-           >>> A2 = Antenna('defant.vsh3')
-           >>> A3 = Antenna('S1R1.mat','ant/UWBAN/Matfile')
 
         """
         print self._filename
@@ -673,39 +670,38 @@ class Antenna(object):
     def polar(self, k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1,fig=[],ax=[]):
         """ polar plot
 
-            Parameters
-            ----------
+        Parameters
+        ----------
 
-            k : list of int
-                frequency index  (default 0)
-            it  : int
-                theta index      (default 0)
-            ip  : int
-                phi index        (default -1)
-            GmaxdB :
-                Max Gain (dB)
-            dyn    :
-                dynamic number of 5dB step
-            alpha  : float
-                default 0.1
+        k : list of int
+            frequency index  (default 0)
+        it : int
+            theta index      (default 0)
+        ip : int
+            phi index        (default -1)
+        GmaxdB :
+            Max Gain (dB)
+        dyn    :
+            dynamic number of 5dB step
+        alpha  : float
+            default 0.1
 
-            Returns    
-            -------
+        Returns    
+        -------
 
-            fig 
-            ax 
+        fig 
+        ax 
 
-            Examples
-            --------
+        Examples
+        --------
 
-            .. plot::
-                :include-source:
+        .. plot::
+            :include-source:
 
-                >>> import matplotlib.pyplot as plt
-                >>> from pylayers.antprop.antenna import *
-                >>> A = Antenna('defant.trx')
-                >>> fig,ax = A.polar(k=[0,10,50])
-                >>> plt.show()
+            >>> import matplotlib.pyplot as plt
+            >>> from pylayers.antprop.antenna import *
+            >>> A = Antenna('defant.trx')
+            >>> fig,ax = A.polar(k=[0,10,50])
 
         """
 
@@ -801,8 +797,8 @@ class Antenna(object):
             >>> from pylayers.antprop.antenna import *
             >>> import numpy as np
             >>> import matplotlib.pylab as plt
-            >>> A = Antenna('defant.vsh3')
-            >>> A.show3()
+            >>> A = Antenna('defant.trx')
+            >>> #A.show3()
 
         """
 
@@ -1401,7 +1397,7 @@ class Antenna(object):
             >>> A = Antenna('defant.vsh3')
             >>> theta = np.linspace(0,np.pi,70)
             >>> phi = np.linspace(0,2*np.pi,180)
-            >>> A.Fsynth3(theta,phi,pattern=True)
+            >>> F = A.Fsynth3(theta,phi,pattern=True)
 
         All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
         once the V,W function
@@ -1460,6 +1456,8 @@ class Antenna(object):
                 Fph = Fph.reshape(Nf, Nt, Np)
                 self.Ftheta = Fth
                 self.Fphi = Fph
+                self.Nt = Nt 
+                self.Np = Np
                 G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
                 self.SqG = np.sqrt(G)
 
@@ -2452,14 +2450,11 @@ def show3D(F, theta, phi, k, col=True):
         >>> A.Nf  = len(A.fa)
         >>> theta = np.linspace(0,np.pi,A.Nt)
         >>> phi   = np.linspace(0,2*np.pi,A.Np)
-        >>> th    = np.kron(theta,np.ones(A.Np))
-        >>> ph    = np.kron(np.ones(A.Nt),phi)
-        >>> Fth3,Fph3 = A.Fsynth3(th,ph)
+        >>> Fth3,Fph3 = A.Fsynth3(theta,phi)
         >>> FTh3 = Fth3.reshape(A.Nf,A.Nt,A.Np)
         >>> FPh3 = Fph3.reshape(A.Nf,A.Nt,A.Np)
         >>> show3D(FTh3,theta,phi,ifreq)
         >>> txt = plt.title('show3D example')
-        >>> plt.show()
 
 
     Warnings

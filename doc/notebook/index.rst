@@ -31,10 +31,10 @@ Antennas and Propagation
    :maxdepth: 3 
 
    ./3-antprop/Antennas.rst
-   ./3-antprop/Coverage.rst
    ./3-antprop/Signatures.rst
    ./3-antprop/SlabsAndMaterials.rst
    ./3-antprop/MultiwallModel.rst
+   ./3-antprop/Coverage.rst
 
 Mobility 
 ********

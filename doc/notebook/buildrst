@@ -13,7 +13,7 @@ do
         cat ${file%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
         # code --> code-block
         cat f1 | sed 's/code::/code-block::/'  > ${i%%.ipynb}.rst 
-        mv -f ${file%%.ipynb}_files $WEBSITE/${i%%.ipynb}_files 
+        mv -f ${file%%.ipynb}_files $WEBNB/${i%%.ipynb}_files 
         rm ${file%%.ipynb}.rst
         rm f1
     else
