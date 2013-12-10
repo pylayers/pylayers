@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pylayers.util.pyutil as pyu
 from matplotlib.path import Path 
 import pandas as pd 
+import doctest
 
 
 class Trajectory(pd.DataFrame):
@@ -158,13 +159,16 @@ class Trajectory(pd.DataFrame):
         
         .. plot::
             :include-source:
-
+            
+            >>> from pylayers.mobility.trajectory import *
+            >>> import matplotlib.pyplot as plt 
+            >>> import numpy as np 
             >>> t = np.arange(0,10,0.01)
             >>> x = 2*t*np.cos(t)
             >>> y = 3*t*np.sin(t) 
             >>> pt =np.vstack((x,y)).T
             >>> traj = Trajectory(t,pt)
-            >>> traj.plot()
+            >>> f,a = traj.plot()
             >>> plt.show()
 
         """
@@ -180,8 +184,8 @@ class Trajectory(pd.DataFrame):
             ax.text(self['x'][k],self['y'][k],str(self['t'][k].strftime("%M:%S")))
             ax.plot(self['x'][k],self['y'][k],'*r')
 
-        plt.xlabel('x (meters')
-        plt.ylabel('y (meters')
+        plt.xlabel('x (meters)')
+        plt.ylabel('y (meters)')
 
         return fig,ax 
 
@@ -212,15 +216,9 @@ def importsn(_filename='pos.csv'):
     return(lt)    
 
 if __name__ == '__main__':
+    plt.ion()
+    doctest.testmod()
+    
 
-    t = np.arange(0,10,0.01)
-    x = 2*t*np.cos(t)
-    y = 3*t*np.sin(t) 
-    z = np.zeros((1,len(x)))
-    pt =np.vstack((x,y,z)).T
-
-    traj = Trajectory(pt=pt)
-    traj.plot()
-    plt.show()
 
    

@@ -4,7 +4,7 @@
 
 
 gis
-===
+---
 
 This module gathers all classes and functions related to geographical information.
 
