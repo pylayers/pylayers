@@ -91,7 +91,7 @@
 <span class="kn">from</span> <span class="nn">scipy.fftpack</span> <span class="kn">import</span> <span class="n">fftshift</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x54544d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x460b4d0&gt;</pre>
 </div>
 <div class="section" id="generation-of-an-impulse-of-normalized-energy">
 <h1>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h1>
@@ -325,8 +325,8 @@ signal in the middle of the array.</p>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5518090&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x3b09ed0&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x46d2550&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x2c1bdd0&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_13_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_13_2.png" />
 </div>
@@ -356,8 +356,8 @@ object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x597a590&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x56a9610&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f8684175a50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x4902c50&gt;)</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_20_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_20_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1113</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
@@ -456,8 +456,8 @@ No vsh coefficient calculated yet</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5824f90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe220525950&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f8685cfc2d0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f8685a4fb10&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_41_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_41_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#CIR=cir.esd(mode=&#39;unilateral&#39;)</span>
@@ -501,7 +501,7 @@ each path</p>
 </pre></div>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_50_0.png" src="./DEV-Bsignal_files/DEV-Bsignal_50_0.png" />
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x722a510&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f8685fd5d10&gt;</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_50_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_50_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ips</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -517,22 +517,22 @@ each path</p>
 <span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">1000</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe22315b090&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7524510&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_52_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_52_1.png" />
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_52_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_52_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe20c20f450&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe223970890&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x85cf1d0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x85cb250&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_53_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_53_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe220f08350&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x594cf10&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x52e5610&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7d25110&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_54_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_54_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U1</span><span class="o">=</span><span class="n">u0</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
@@ -546,7 +546,7 @@ each path</p>
 <span class="c">#plot(uh.x,s*50+0.003)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe22318eb10&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x72095d0&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_55_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_55_1.png" />
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_55_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_55_2.png" />
@@ -554,21 +554,21 @@ each path</p>
 <span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])),</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe222e91290&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x77f0090&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_56_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_56_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wgam</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe2219d1c90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe223189490&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x574dd90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x780d590&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_57_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_57_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe222e78b10&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe222e5b650&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5901d50&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7207650&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_58_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_58_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
@@ -580,7 +580,7 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe2236d7050&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x5759ed0&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_60_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_60_1.png" />
 <p>Problem <img class="math" src="../../_images/math/bb4162fbb2de454e99f49c666005abf51d4a7838.png" alt="$s$"/> is not real</p>
@@ -592,13 +592,13 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">u0</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe2215414d0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x5a8a190&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_63_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_63_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe22235eb90&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x5d9d7d0&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_64_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_64_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span>
@@ -610,7 +610,7 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x6851810&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f8685fae810&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_66_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_66_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -678,7 +678,7 @@ each path</p>
 <span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7008ad0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f8685356590&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_78_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_78_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">x</span>
@@ -698,8 +698,8 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x68531d0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe2236ccf50&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x6712c90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7aa0d90&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_81_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_81_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>

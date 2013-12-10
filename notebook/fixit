@@ -1,0 +1,10 @@
+cd $WEBNB/2-gis
+./fixit
+cd $WEBNB/3-antprop
+./fixit
+cd $WEBNB/4-signal
+./fixit
+cd $WEBNB/5-mobility
+./fixit
+cd $WEBNB/7-location
+./fixit

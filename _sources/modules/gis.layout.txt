@@ -8,7 +8,7 @@ It manages various input and output data format.
 
 
 The most basic description of a Layout is given in a `.ini` file 
-which contains the points and edges list of the Layout.
+which contains the points and segments list of the Layout.
 
 This `.ini` file can be edited via the interactive command 
 
@@ -16,12 +16,13 @@ This `.ini` file can be edited via the interactive command
     L.editor()
 
 Then different graphs are processed in order to enrich the data structure for 
-further computations as the calculation of signatures.
+further computations as the calculation of signatures. Signatures can be seen 
+as meta rays. 
 
 .. code-block:: python 
     L.build()
 
-As the building can be computed once there is a command for writing anf
+As the building can be computed once there is a command for writing and
 reading the layout additional information from gpickle format files. 
 
 gpickle files are stored in $BASENAME/struc/ directory
@@ -34,10 +35,16 @@ gpickle files are stored in $BASENAME/struc/ directory
         L.dumpw()
 
 The `.ini` file can be converted in a `.str2` format which is used for the 
-C implementation of yhe ray tracing. This format is going to be deprecated. 
+C implementation of the ray tracing. 
+
 
 The `.str2` file is processed to generate a `.str` file which 
 contains additional visibility relationships between vertices and edges. 
+
+
+This format using '.str' and '.str2' is going to be deprecated and replaced 
+gradually with only '.osm' and '.ini' file.  It is still maintained to insure 
+compatibility with a pre existing version of the tool written in C language. 
 
 .. autoclass:: pylayers.gis.layout
     :members:

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>antenna &mdash; PyLayers</title>
+    <title>Antennas &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -60,7 +60,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">antenna</a><ul>
+<li><a class="reference internal" href="#">Antennas</a><ul>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
@@ -93,9 +93,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="antenna">
-<span id="id1"></span><h1>antenna<a class="headerlink" href="#antenna" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-pylayers.antprop.antenna"></span><p>This module handles antennas in pylayers</p>
+  <div class="section" id="module-pylayers.antprop.antenna">
+<span id="antennas"></span><span id="antenna"></span><h1>Antennas<a class="headerlink" href="#module-pylayers.antprop.antenna" title="Permalink to this headline">¶</a></h1>
+<p>This module handles antennas in pylayers</p>
 <p>To instantiate an antenna object :</p>
 <p>typ indicates the antenna file format to read</p>
 <div class="section" id="examples">
@@ -263,7 +263,7 @@ Fph   : ndarray (1 x Ndir)</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">70</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">180</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">F</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/antprop-antenna-1.py">Source code</a>)</p>
@@ -391,11 +391,6 @@ on the phase of diagram math::<tt class="docutils literal"><span class="pre">F_{
 <dt id="pylayers.antprop.antenna.Antenna.info">
 <tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/antenna.html#Antenna.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.antenna.Antenna.info" title="Permalink to this definition">¶</a></dt>
 <dd><p>gives info about antenna object</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A1</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.trx&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A2</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A3</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -695,7 +690,6 @@ else    -&gt; simple plot3D</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.trx&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">polar</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/antprop-antenna-3.py">Source code</a>, <a class="reference external" href="../modules/antprop-antenna-3.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-3.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-3.pdf">pdf</a>)</p>
@@ -761,8 +755,8 @@ else    -&gt; simple plot3D</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;defant.trx&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#A.show3()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -805,7 +799,7 @@ theta : ndarray
 phi   : ndarray
 sf    : boolean</p>
 <blockquote>
-<div>if sf : plotted figures are saved in a <a href="#id2"><span class="problematic" id="id3">*</span></a>.png file
+<div>if sf : plotted figures are saved in a <a href="#id1"><span class="problematic" id="id2">*</span></a>.png file
 else  : plotted figures aren&#8217;t saved</div></blockquote>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
@@ -842,10 +836,6 @@ else  : plotted figures aren&#8217;t saved</div></blockquote>
 <div class="figure">
 <img alt="../_images/antprop-antenna-4_05.png" src="../_images/antprop-antenna-4_05.png" />
 <p class="caption">(<a class="reference external" href="../modules/antprop-antenna-4_05.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-4_05.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-4_05.pdf">pdf</a>)</p>
-</div>
-<div class="figure">
-<img alt="../_images/antprop-antenna-4_06.png" src="../_images/antprop-antenna-4_06.png" />
-<p class="caption">(<a class="reference external" href="../modules/antprop-antenna-4_06.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-4_06.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-4_06.pdf">pdf</a>)</p>
 </div>
 </dd></dl>
 
@@ -895,14 +885,11 @@ len(phi) must be equal with shape(F)[2]</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">phi</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">th</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ph</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">),</span><span class="n">phi</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Fth3</span><span class="p">,</span><span class="n">Fph3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">th</span><span class="p">,</span><span class="n">ph</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fth3</span><span class="p">,</span><span class="n">Fph3</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FTh3</span> <span class="o">=</span> <span class="n">Fth3</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FPh3</span> <span class="o">=</span> <span class="n">Fph3</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">show3D</span><span class="p">(</span><span class="n">FTh3</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">ifreq</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">txt</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;show3D example&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>(<a class="reference external" href="../modules/antprop-antenna-5.py">Source code</a>, <a class="reference external" href="../modules/antprop-antenna-5.png">png</a>, <a class="reference external" href="../modules/antprop-antenna-5.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-antenna-5.pdf">pdf</a>)</p>

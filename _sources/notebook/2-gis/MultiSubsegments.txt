@@ -17,7 +17,7 @@ Multi sub-segments
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x498d650>
+    <matplotlib.figure.Figure at 0x5f18650>
 
 
 .. code-block:: python
@@ -32,8 +32,16 @@ attribute of the subsegment can be changed with the method ``chgmss``
 
 .. code-block:: python
 
-    S.L.chgmss(1,ss_name=['AIR','AIR','WOOD'])
+    S.L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)])
     S.L.build()
+    S.L.save()
+
+.. parsed-literal::
+
+    structure saved in  defstr3.str2
+    structure saved in  defstr3.ini
+
+
 The :math:`$\mathcal{G}_s$` graph dictionnary has the following
 structure
 
@@ -57,8 +65,8 @@ structure
       'name': 'PARTITION',
       'ncycles': [0, 1],
       'norm': array([-0.999982  , -0.00599989,  0.        ]),
-      'ss_name': ['AIR', 'AIR', 'WOOD'],
-      'ss_z': [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],
+      'ss_name': ['WOOD', 'AIR', 'WOOD'],
+      'ss_z': [(0.0, 2.7), (2.7, 2.8), (2.8, 3)],
       'transition': True,
       'z': (0.0, 3.0)},
      2: {'connect': [-8, -2],
@@ -143,9 +151,9 @@ structure
     None
     Tx Info :
     npos       :  1
-    position   :  [[ 1.2]
-     [ 1. ]
-     [ 1.4]]
+    position   :  [[  7.59000000e+02]
+     [  1.11400000e+03]
+     [  1.00000000e+00]]
     name       :  
     type       :  tx
     fileini    :  radiotx.ini
@@ -155,10 +163,10 @@ structure
     filestr    :  defstr.str2
     None
     Rx Info :
-    npos       :  6
-    position   :  [[ 0.    8.    8.    8.    8.    8.  ]
-     [ 0.    1.2   1.31  1.42  1.53  1.64]
-     [ 0.    1.5   1.5   1.5   1.5   1.5 ]]
+    npos       :  1
+    position   :  [[  767. ]
+     [ 1114. ]
+     [    1.5]]
     name       :  
     type       :  rx
     fileini    :  radiorx.ini
@@ -322,7 +330,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f3cb89e7c10>
+    <matplotlib.text.Text at 0x6931b50>
 
 
 
@@ -372,7 +380,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x7f3cb8f54910>
+    <matplotlib.legend.Legend at 0x6e76850>
 
 
 

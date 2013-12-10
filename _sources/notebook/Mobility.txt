@@ -1,0 +1,39 @@
+
+.. code:: python
+
+    from IPython.display import Image, HTML, Latex, YouTubeVideo
+    import numpy as np
+.. code:: python
+
+    #YouTubeVideo('1Qa6xLpU5-M')
+.. code:: python
+
+    import pylayers.mobility.trajectory as traj
+    from pylayers.mobility.body.body import *
+    from pylayers.gis.layout import *
+trajectories can be imported from a simulnet simulation with the
+``importsn`` method
+
+.. code:: python
+
+    L=Layout('TA-Office.ini')
+.. code:: python
+
+    t=traj.importsn()
+.. code:: python
+
+    plt.figure(figsize=(10,10))
+    L.showGs()
+    t[0].plot()
+    t[1].plot()
+    t[2].plot()
+    t[3].plot()
+.. code:: python
+
+    bc=Body('John.ini')
+.. code:: python
+
+    bc.movie(traj=t[0])
+.. code:: python
+
+    tr=traj.Trajectory()

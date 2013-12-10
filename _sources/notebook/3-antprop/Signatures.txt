@@ -13,12 +13,12 @@ Ray Signatures
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x39b0050>
+    <matplotlib.figure.Figure at 0x4d07050>
 
 
 .. code-block:: python
 
-    L = Layout()
+    L = Layout('defstr.ini')
     try:
         L.dumpr()
     except:
@@ -79,10 +79,10 @@ cycle numbers. In example below it is 0 and 1.
 
     Si = Signatures(L,0,1)
 The cold start determination of the signature is done with ``run1``
-function. The code is not finished here and there is room for
+function. The code is not in its final shape here and there is room for
 significant acceleration in incorporating propagation based heuristics.
 The mitigation of combinatorics explosion is done in setting a cutoff
-vlaue which limits the exploration in the interaction graph.
+value which limits the exploration in the interaction graph.
 
 .. code-block:: python
 
@@ -208,8 +208,8 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. parsed-literal::
 
-    [ 7.88647153  0.322159  ]
-    [ 2.88164786  0.68333672]
+    [ 7.51260517  0.58013199]
+    [ 3.3253063   0.14856027]
 
 
 Evaluate performances of signature and ray evaluation
@@ -244,13 +244,13 @@ Evaluate performances of signature and ray evaluation
 
 .. parsed-literal::
 
-    0 0.00191807746887
-    1 0.0103960037231
-    2 0.0516300201416
-    3 0.208976984024
-    4 0.682647943497
-    5 1.92105197906
-    6 4.61728715897
+    0 0.00197982788086
+    1 0.0110919475555
+    2 0.0545499324799
+    3 0.217567920685
+    4 0.700534105301
+    5 1.93160891533
+    6 4.63199615479
 
 
 It appears that the increasing number of signatures obatined with the
@@ -269,7 +269,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x4817790>
+    <matplotlib.text.Text at 0x5b33110>
 
 
 
@@ -297,7 +297,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x4a081d0>
+    <matplotlib.text.Text at 0x5b3ae90>
 
 
 
@@ -320,7 +320,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x4b1aad0>
+    <matplotlib.text.Text at 0x5e20d50>
 
 
 
@@ -339,7 +339,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7ff7f4c066d0>
+    <matplotlib.text.Text at 0x65ab090>
 
 
 
@@ -356,7 +356,7 @@ number of rays.
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7ff7f4f9fa50>]
+    [<matplotlib.lines.Line2D at 0x6c18790>]
 
 
 

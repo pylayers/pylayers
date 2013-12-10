@@ -102,7 +102,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x498d650&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5f18650&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
 <span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;defstr3&#39;</span>
@@ -113,9 +113,13 @@
 separated by a subsegment which has a multi subsegment attribute. The
 attribute of the subsegment can be changed with the method <tt class="docutils literal"><span class="pre">chgmss</span></tt>
 (change multisubsegment)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">chgmss</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ss_name</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span><span class="s">&#39;WOOD&#39;</span><span class="p">],</span><span class="n">ss_z</span> <span class="o">=</span><span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">2.7</span><span class="p">),(</span><span class="mf">2.7</span><span class="p">,</span><span class="mf">2.8</span><span class="p">),(</span><span class="mf">2.8</span><span class="p">,</span><span class="mi">3</span><span class="p">)])</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
+</div>
+<div class="highlight-python"><pre>structure saved in  defstr3.str2
+structure saved in  defstr3.ini</pre>
 </div>
 <p>The <img class="math" src="../../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> graph dictionnary has the following
 structure</p>
@@ -134,8 +138,8 @@ structure</p>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;PARTITION&#39;</span><span class="p">,</span>
   <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
   <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.999982</span>  <span class="p">,</span> <span class="o">-</span><span class="mf">0.00599989</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
-  <span class="s">&#39;ss_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;WOOD&#39;</span><span class="p">],</span>
-  <span class="s">&#39;ss_z&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.7</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
+  <span class="s">&#39;ss_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">,</span> <span class="s">&#39;AIR&#39;</span><span class="p">,</span> <span class="s">&#39;WOOD&#39;</span><span class="p">],</span>
+  <span class="s">&#39;ss_z&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.7</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.7</span><span class="p">,</span> <span class="mf">2.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">2.8</span><span class="p">,</span> <span class="mi">3</span><span class="p">)],</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
  <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
@@ -214,9 +218,9 @@ Nc  = Gr.node[nroom]['cycles']
 None
 Tx Info :
 npos       :  1
-position   :  [[ 1.2]
- [ 1. ]
- [ 1.4]]
+position   :  [[  7.59000000e+02]
+ [  1.11400000e+03]
+ [  1.00000000e+00]]
 name       :
 type       :  tx
 fileini    :  radiotx.ini
@@ -226,10 +230,10 @@ fileant    :  defant.vsh3
 filestr    :  defstr.str2
 None
 Rx Info :
-npos       :  6
-position   :  [[ 0.    8.    8.    8.    8.    8.  ]
- [ 0.    1.2   1.31  1.42  1.53  1.64]
- [ 0.    1.5   1.5   1.5   1.5   1.5 ]]
+npos       :  1
+position   :  [[  767. ]
+ [ 1114. ]
+ [    1.5]]
 name       :
 type       :  rx
 fileini    :  radiorx.ini
@@ -346,7 +350,7 @@ nl : 2353</pre>
 </div>
 <div class="highlight-python"><pre>Rays evaluation</pre>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f3cb89e7c10&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x6931b50&gt;</pre>
 </div>
 <img alt="./MultiSubsegments_files/MultiSubsegments_18_2.png" src="./MultiSubsegments_files/MultiSubsegments_18_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">layer</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">,</span><span class="s">&#39;METAL&#39;</span><span class="p">]</span>
@@ -379,7 +383,7 @@ nl : 2353</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s">&#39;metal&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x7f3cb8f54910&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x6e76850&gt;</pre>
 </div>
 <img alt="./MultiSubsegments_files/MultiSubsegments_20_1.png" src="./MultiSubsegments_files/MultiSubsegments_20_1.png" />
 <img alt="./MultiSubsegments_files/MultiSubsegments_20_2.png" src="./MultiSubsegments_files/MultiSubsegments_20_2.png" />

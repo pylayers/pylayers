@@ -42,8 +42,12 @@ Display the scene
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x36d9550>
+    <matplotlib.legend.Legend at 0x34baa90>
 
+
+
+
+.. image:: DOC-RGPA_files/DOC-RGPA_5_1.png
 
 
 compute the true distance and the associated TOAs
@@ -113,10 +117,10 @@ List all constraints of the CLA
 
 .. parsed-literal::
 
-    [<pylayers.location.geometric.constraints.toa.TOA at 0x36ba090>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x36ba050>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x36ba110>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x36ba550>]
+    [<pylayers.location.geometric.constraints.toa.TOA at 0x33e8350>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x33e8f50>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x33e87d0>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x33e8e50>]
 
 
 
@@ -228,7 +232,7 @@ For simulation purpose : get RSS from distances wit the given model
 
 .. parsed-literal::
 
-    9.3162511544877749
+    10.048035915830724
 
 
 
