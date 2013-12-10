@@ -3,7 +3,10 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 # imposm is required for handling osm files
 # the installation of imposm is not straightforward
-from imposm.parser import OSMParser
+try:
+    from imposm.parser import OSMParser
+except:
+    print "Warning : OSM Parser seems to be not installed"
 import networkx as nx
 import numpy as np
 import pdb

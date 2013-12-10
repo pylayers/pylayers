@@ -138,3 +138,246 @@ css_styling()
 
 12/08/2013 11:54:19 PM Cell returned
 12/08/2013 11:54:19 PM Saving to 2-gis/MultiSubsegments.ipynb
+12/09/2013 05:43:06 PM Reading notebook 2-gis/DEV-Layout.ipynb
+12/09/2013 05:43:06 PM Running cell:
+from pylayers.gis.layout import *
+from IPython.display import Image
+import os
+
+12/09/2013 05:43:08 PM Cell returned
+12/09/2013 05:43:08 PM Running cell:
+L=Layout()
+L.ls()
+
+12/09/2013 05:43:08 PM Cell returned
+12/09/2013 05:43:08 PM Running cell:
+L.ls(typ='osm')
+
+12/09/2013 05:43:08 PM Cell returned
+12/09/2013 05:43:08 PM Running cell:
+L=Layout('DLR.osm')
+
+
+12/09/2013 05:43:12 PM Cell returned
+12/09/2013 05:43:12 PM Running cell:
+L.Gs.node[1]
+
+12/09/2013 05:43:12 PM Cell returned
+12/09/2013 05:43:12 PM Running cell:
+L.saveosm('DLR.osm')
+
+12/09/2013 05:43:16 PM Cell returned
+12/09/2013 05:43:16 PM Running cell:
+Image('../../data/struc/images/TA-Office.png')
+
+12/09/2013 05:43:16 PM Cell returned
+12/09/2013 05:43:16 PM Running cell:
+fig,ax=L.showGs()
+
+12/09/2013 05:43:16 PM Cell returned
+12/09/2013 05:43:16 PM Running cell:
+L=Layout('TA-Office.ini')
+
+12/09/2013 05:43:17 PM Cell returned
+12/09/2013 05:43:17 PM Running cell:
+L.showGs()
+
+12/09/2013 05:43:17 PM Cell returned
+12/09/2013 05:43:17 PM Running cell:
+L=Layout('11D-E1.ini')
+L
+
+12/09/2013 05:43:17 PM Cell returned
+12/09/2013 05:43:17 PM Running cell:
+L.showG('s',figsize=(20,10))
+
+12/09/2013 05:43:17 PM Cell returned
+12/09/2013 05:43:17 PM Running cell:
+L=Layout('klepal.ini')
+L
+
+12/09/2013 05:43:17 PM Cell returned
+12/09/2013 05:43:17 PM Running cell:
+L.showGs()
+
+12/09/2013 05:43:18 PM Cell returned
+12/09/2013 05:43:18 PM Running cell:
+L=Layout('W2PTIN.ini')
+
+12/09/2013 05:43:18 PM Cell returned
+12/09/2013 05:43:18 PM Running cell:
+L.showGs()
+
+12/09/2013 05:43:18 PM Cell returned
+12/09/2013 05:43:18 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 05:43:18 PM Cell returned
+12/09/2013 05:43:18 PM Saving to 2-gis/DEV-Layout.ipynb
+12/09/2013 05:43:40 PM Reading notebook 2-gis/DEV-Layout.ipynb
+12/09/2013 05:43:40 PM Running cell:
+from pylayers.gis.layout import *
+from IPython.display import Image
+import os
+
+12/09/2013 05:43:41 PM Cell returned
+12/09/2013 05:43:41 PM Running cell:
+L=Layout()
+L.ls()
+
+12/09/2013 05:43:41 PM Cell returned
+12/09/2013 05:43:41 PM Running cell:
+L.ls(typ='osm')
+
+12/09/2013 05:43:42 PM Cell returned
+12/09/2013 05:43:42 PM Running cell:
+L=Layout('DLR.osm')
+
+
+12/09/2013 05:43:46 PM Cell returned
+12/09/2013 05:43:46 PM Running cell:
+L.Gs.node[1]
+
+12/09/2013 05:43:46 PM Cell returned
+12/09/2013 05:43:46 PM Running cell:
+L.saveosm('DLR.osm')
+
+12/09/2013 05:43:50 PM Cell returned
+12/09/2013 05:43:50 PM Running cell:
+Image('../../data/struc/images/TA-Office.png')
+
+12/09/2013 05:43:50 PM Cell returned
+12/09/2013 05:43:50 PM Running cell:
+fig,ax=L.showGs()
+
+12/09/2013 05:43:50 PM Cell returned
+12/09/2013 05:43:50 PM Running cell:
+L=Layout('TA-Office.ini')
+
+12/09/2013 05:43:50 PM Cell returned
+12/09/2013 05:43:50 PM Running cell:
+L.showGs()
+
+12/09/2013 05:43:51 PM Cell returned
+12/09/2013 05:43:51 PM Running cell:
+L=Layout('11D-E1.ini')
+L
+
+12/09/2013 05:43:51 PM Cell returned
+12/09/2013 05:43:51 PM Running cell:
+L.showG('s',figsize=(20,10))
+
+12/09/2013 05:43:51 PM Cell returned
+12/09/2013 05:43:51 PM Running cell:
+L=Layout('klepal.ini')
+L
+
+12/09/2013 05:43:51 PM Cell returned
+12/09/2013 05:43:51 PM Running cell:
+L.showGs()
+
+12/09/2013 05:43:52 PM Cell returned
+12/09/2013 05:43:52 PM Running cell:
+L=Layout('W2PTIN.ini')
+
+12/09/2013 05:43:52 PM Cell returned
+12/09/2013 05:43:52 PM Running cell:
+L.showGs()
+
+12/09/2013 05:43:52 PM Cell returned
+12/09/2013 05:43:52 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 05:43:52 PM Cell returned
+12/09/2013 05:43:52 PM Saving to 2-gis/DEV-Layout.ipynb
+12/09/2013 05:45:48 PM Reading notebook 2-gis/DEV-Layout.ipynb
+12/09/2013 05:45:48 PM Running cell:
+from pylayers.gis.layout import *
+from IPython.display import Image
+import os
+
+12/09/2013 05:45:49 PM Cell returned
+12/09/2013 05:45:49 PM Running cell:
+L=Layout()
+L.ls()
+
+12/09/2013 05:45:49 PM Cell returned
+12/09/2013 05:45:49 PM Running cell:
+L.ls(typ='osm')
+
+12/09/2013 05:45:49 PM Cell returned
+12/09/2013 05:45:49 PM Running cell:
+L=Layout('DLR.osm')
+
+
+12/09/2013 05:45:53 PM Cell returned
+12/09/2013 05:45:53 PM Running cell:
+L.Gs.node[1]
+
+12/09/2013 05:45:53 PM Cell returned
+12/09/2013 05:45:53 PM Running cell:
+L.saveosm('DLR.osm')
+
+12/09/2013 05:45:57 PM Cell returned
+12/09/2013 05:45:57 PM Running cell:
+Image('../../data/struc/images/TA-Office.png')
+
+12/09/2013 05:45:57 PM Cell returned
+12/09/2013 05:45:57 PM Running cell:
+fig,ax=L.showGs()
+
+12/09/2013 05:45:58 PM Cell returned
+12/09/2013 05:45:58 PM Running cell:
+L=Layout('TA-Office.ini')
+
+12/09/2013 05:45:58 PM Cell returned
+12/09/2013 05:45:58 PM Running cell:
+L.showGs()
+
+12/09/2013 05:45:58 PM Cell returned
+12/09/2013 05:45:58 PM Running cell:
+L=Layout('11D-E1.ini')
+L
+
+12/09/2013 05:45:58 PM Cell returned
+12/09/2013 05:45:58 PM Running cell:
+L.showG('s',figsize=(20,10))
+
+12/09/2013 05:45:58 PM Cell returned
+12/09/2013 05:45:58 PM Running cell:
+L=Layout('klepal.ini')
+L
+
+12/09/2013 05:45:59 PM Cell returned
+12/09/2013 05:45:59 PM Running cell:
+L.showGs()
+
+12/09/2013 05:45:59 PM Cell returned
+12/09/2013 05:45:59 PM Running cell:
+L=Layout('W2PTIN.ini')
+
+12/09/2013 05:45:59 PM Cell returned
+12/09/2013 05:45:59 PM Running cell:
+L.showGs()
+
+12/09/2013 05:45:59 PM Cell returned
+12/09/2013 05:45:59 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 05:45:59 PM Cell returned
+12/09/2013 05:45:59 PM Saving to 2-gis/DEV-Layout.ipynb
