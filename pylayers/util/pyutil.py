@@ -1176,6 +1176,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Parameters
     ----------
+
     var1 : array_like
         Array_like means all those objects -- lists, nested lists, etc. --
         that can be converted to an array.  We can also refer to
@@ -1189,6 +1190,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Returns
     -------
+
     describe : type
         Explanation
     output : type
@@ -1200,6 +1202,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Other Parameters
     ----------------
+
     only_seldom_used_keywords : type
         Explanation
     common_parameters_listed_above : type
@@ -1207,11 +1210,13 @@ def foo(var1, var2, long_var_name='hi') :
 
     Raises
     ------
+
     BadException
         Because you shouldn't have done that.
 
     See Also
     --------
+
     otherfunc : relationship (optional)
     newfunc : Relationship (optional), which could be fairly long, in which
               case the line wraps here.
@@ -1219,6 +1224,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Notes
     -----
+
     Notes about the implementation algorithm (if needed).
 
     This can have multiple paragraphs.
@@ -1241,6 +1247,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     References
     ----------
+
     Cite the relevant literature, e.g. [1]_.  You may also cite these
     references in the notes section above.
 
@@ -1252,6 +1259,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Examples
     --------
+
     These are written in doctest format, and should illustrate how to
     use the function.
 
@@ -1537,14 +1545,19 @@ def unzipf(path, filepath, zipfilename):
 def rotate_line(A,B,theta):
     """
     rotation of a line [AB] of an angle theta with A fixed
+
     Parameters
     ----------
-        A: ndarray
-        B: ndarray
-        theta: float
+
+    A: ndarray
+    B: ndarray
+    theta: float
+
     Returns
     -------
-        Br: ndarry
+
+    Br: ndarray
+
     """
     if np.shape(B)!=(2,1):
         B.reshape((2,1))

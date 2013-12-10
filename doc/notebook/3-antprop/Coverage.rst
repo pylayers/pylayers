@@ -20,7 +20,7 @@ First let's import the ``coverage`` module
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x46d1a10>
+    <matplotlib.figure.Figure at 0x34aca10>
 
 
 Instantiate a coverage object. By defaut, ``TA-Office.str`` layout
@@ -141,8 +141,8 @@ method
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5439510>,
-     <matplotlib.axes.AxesSubplot at 0x3982d50>)
+    (<matplotlib.figure.Figure at 0x4214950>,
+     <matplotlib.axes.AxesSubplot at 0x4214f90>)
 
 
 
@@ -171,8 +171,8 @@ functions.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x56f5d10>,
-     <matplotlib.axes.AxesSubplot at 0x54bb410>)
+    (<matplotlib.figure.Figure at 0x44ee750>,
+     <matplotlib.axes.AxesSubplot at 0x44ee550>)
 
 
 
@@ -190,8 +190,8 @@ functions.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x54e4990>,
-     <matplotlib.axes.AxesSubplot at 0x5e15b10>)
+    (<matplotlib.figure.Figure at 0x42aa690>,
+     <matplotlib.axes.AxesSubplot at 0x7fa1c8475b90>)
 
 
 
@@ -209,8 +209,8 @@ functions.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5e000d0>,
-     <matplotlib.axes.AxesSubplot at 0x6741390>)
+    (<matplotlib.figure.Figure at 0x44cac90>,
+     <matplotlib.axes.AxesSubplot at 0x4865550>)
 
 
 
@@ -263,8 +263,8 @@ accordingly
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0xe24b950>,
-     <matplotlib.axes.AxesSubplot at 0xb620890>)
+    (<matplotlib.figure.Figure at 0x7fa1c85f4b90>,
+     <matplotlib.axes.AxesSubplot at 0x4800910>)
 
 
 

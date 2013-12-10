@@ -568,62 +568,70 @@ class Layout(object):
         #
         # transcoding array between graph numbering (discontinuous) and numpy numbering (continuous)
         #
-
+        Nsmax = 0 
         self.tsg = np.array(useg)
-        Nsmax = max(self.tsg)
-        self.tgs = np.zeros(Nsmax+1,dtype=int)
-        rag = np.arange(len(useg))
-        self.tgs[self.tsg] = rag
+        try:
+            Nsmax = max(self.tsg)
+        except:
+            logging.warning("No segements yet")
         
-        #
-        # calculate normal to segment ta-he
-        #
-        # This could becomes obsolete once the normal will be calculated at
-        # creation of the segment
-        #
-
-        X = np.vstack((self.pt[0,self.tahe[0,:]],self.pt[0,self.tahe[1,:]]))
-        Y = np.vstack((self.pt[1,self.tahe[0,:]],self.pt[1,self.tahe[1,:]]))
-
-        normx = Y[0,:]-Y[1,:]
-        normy = X[1,:]-X[0,:]
-
-        scale = np.sqrt(normx*normx+normy*normy)
-        assert (scale.all()>0)
-        self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
-
-        #for ks in ds:
-        #
-        # lsss : list of subsegment 
-        #
-        nsmax  = max(self.Gs.node.keys())
-        # nsmax can be different from the total number of segments
-        self.lsss = []
-        self.isss = []
-        self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
-        self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
-        
-        # Storing segment normals 
-        # Handling of subsegments
         # 
-        # index is for indexing subsegment after the nsmax value
+        # handling of segment related arrays
         #
-        index = nsmax+1
-        for ks in useg:
-            k = self.tgs[ks]                        # index numpy 
-            self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal 
-            self.sla[ks]=self.Gs.node[ks]['name']   # update sla array 
-            self.stridess[ks]=0                     # initialize stridess[ks]
-            if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
-                nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
-                self.stridess[ks]=index-1           # update stridess[ks] dict
-                for slabname in self.Gs.node[ks]['ss_name']:
-                    self.lsss.append(ks)
-                    self.sla[index] = slabname
-                    self.isss.append(index)
-                    index = index+1
-        # calculate extremum of segments            
-        self.extrseg()
+        if Nsmax >0:
+            self.tgs = np.zeros(Nsmax+1,dtype=int)
+            rag = np.arange(len(useg))
+            self.tgs[self.tsg] = rag
+        
+            #
+            # calculate normal to segment ta-he
+            #
+            # This could becomes obsolete once the normal will be calculated at
+            # creation of the segment
+            #
+
+            X = np.vstack((self.pt[0,self.tahe[0,:]],self.pt[0,self.tahe[1,:]]))
+            Y = np.vstack((self.pt[1,self.tahe[0,:]],self.pt[1,self.tahe[1,:]]))
+
+            normx = Y[0,:]-Y[1,:]
+            normy = X[1,:]-X[0,:]
+
+            scale = np.sqrt(normx*normx+normy*normy)
+            assert (scale.all()>0)
+            self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
+
+            #for ks in ds:
+            #
+            # lsss : list of subsegment 
+            #
+            nsmax  = max(self.Gs.node.keys())
+            # nsmax can be different from the total number of segments
+            self.lsss = []
+            self.isss = []
+            self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
+            self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
+            
+            # Storing segment normals 
+            # Handling of subsegments
+            # 
+            # index is for indexing subsegment after the nsmax value
+            #
+            index = nsmax+1
+            for ks in useg:
+                k = self.tgs[ks]                        # index numpy 
+                self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal 
+                self.sla[ks]=self.Gs.node[ks]['name']   # update sla array 
+                self.stridess[ks]=0                     # initialize stridess[ks]
+                if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
+                    nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
+                    self.stridess[ks]=index-1           # update stridess[ks] dict
+                    for slabname in self.Gs.node[ks]['ss_name']:
+                        self.lsss.append(ks)
+                        self.sla[index] = slabname
+                        self.isss.append(index)
+                        index = index+1
+            # calculate extremum of segments            
+            self.extrseg()
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
