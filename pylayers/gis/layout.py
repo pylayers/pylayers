@@ -1024,7 +1024,7 @@ class Layout(object):
         else:
             raise NameError('layout filename extension not recognized')
 
-        #  construct geomfile (.off) for vizalisation with geomview
+        #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
         if os.path.exists(filename):
             try:
@@ -5991,7 +5991,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> L.geomfile()
+        >>> pg = L.geomfile()
 
         """
     
@@ -6127,16 +6127,24 @@ class Layout(object):
             fos.write("4 %i %i %i %i %6.3f %6.3f %6.3f 0.4\n" % (q +
                 1, q + 2, q + 3, q + 4, col[0], col[1], col[2]))
         fos.close()
+        return pg 
 
-    def show3(self, bdis=True):
+    def show3(self, bdis=True,centered=True):
         """ geomview display of the indoor structure
 
         Parameters
         ----------
-            bdis
-                boolean (default True)
+
+        bdis boolean (default True)
+            boolean display (call geowview if True)
+        centered : boolean     
+            if True center the layout before display
+        
+        
         """
-        self.geomfile()
+
+        pg = self.geomfile(centered=centered)
+
         filename = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
         if (bdis):
             #chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
@@ -6144,6 +6152,8 @@ class Layout(object):
             os.system(chaine)
         else:
             return(filename)
+
+        return(pg)
 
     def signature(self, iTx, iRx):
         """ Determine signature between node iTx and node iRx
