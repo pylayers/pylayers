@@ -1,6 +1,7 @@
 
 What PyLayers is about ?
 ------------------------
+<<<<<<< HEAD
 
 
 -  Indoor Radio Propagation Modelling
@@ -11,12 +12,24 @@ What PyLayers is about ?
 
 -  Cooperative Positioning
 
+=======
+>>>>>>> 964dfcf95e3ef8fe011e741d5de1b64b65094db6
 
+-  Indoor Radio Propagation Modelling
+-  IR UWB (IEEE 802.15.4a and IEEE 802.15.6)
+-  Wireless Body Area Network
+-  Indoor Localisation
+-  Human mobility simulation
+
+-  Cooperative Positioning
 
 How to install PyLayers ?
 -------------------------
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 964dfcf95e3ef8fe011e741d5de1b64b65094db6
 If you are working on a Windows platform and you are not familiar with
 the Python ecosystem, a good idea is to install first
 `Anaconda <https://store.continuum.io/cshop/anaconda/>`_. It will

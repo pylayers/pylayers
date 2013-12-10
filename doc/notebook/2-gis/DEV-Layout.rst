@@ -8,12 +8,15 @@
 
 .. parsed-literal::
 
+<<<<<<< HEAD
     <matplotlib.figure.Figure at 0x41f3f10>
+=======
+    <matplotlib.figure.Figure at 0xa34cf4c>
+>>>>>>> 964dfcf95e3ef8fe011e741d5de1b64b65094db6
 
 
 The ``ls()`` method
 -------------------
-
 
 The ``ls()`` method lists the layout file which are available in the
 ``struc`` directory of the current project.
@@ -27,18 +30,13 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    ['11D-E1.ini',
-     'DLR.ini',
+    ['DLR.ini',
      'DLR2.ini',
-     'Lstruc.ini',
      'TA-Office.ini',
      'W2PTIN.ini',
      'WHERE1.ini',
-     'defstr.ini',
-     'defstr3.ini',
-     'klepal.ini',
-     'w2ptin.ini',
-     'where1.ini']
+     'WHERE1_old.ini',
+     'defstr3.ini']
 
 
 
@@ -50,7 +48,7 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    ['DLR.osm', 'DLR2.osm', 'where1.osm']
+    ['DLR.osm']
 
 
 
@@ -105,8 +103,13 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
+<<<<<<< HEAD
     (<matplotlib.figure.Figure at 0x42ff6d0>,
      <matplotlib.axes.AxesSubplot at 0x3484fd0>)
+=======
+    (<matplotlib.figure.Figure at 0xac84f6c>,
+     <matplotlib.axes.AxesSubplot at 0xac8404c>)
+>>>>>>> 964dfcf95e3ef8fe011e741d5de1b64b65094db6
 
 
 
@@ -123,48 +126,7 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    
-    ----------------
-    11D-E1.ini
-    ----------------
-    
-    Number of points  : 214
-    Number of segments  : 199
-    Number of sub segments  : 0
-    Number of cycles  : 0
-    Number of rooms  : 0
-    degree 0 : []
-    degree 1 : [  -1 -214 -213 -212 -211 -210 -206 -205 -204 -202 -201 -200 -198 -197 -196
-     -195 -194 -193 -191 -188 -184 -183 -182 -180 -179 -178 -177 -175 -174 -172
-     -171 -167 -166 -164 -162 -161 -159 -156 -154 -152 -150 -148 -147 -145 -144
-     -142 -140 -139 -137 -135 -134 -132 -130 -129 -128 -126 -124 -123 -122 -120
-     -118 -116 -115 -113 -112 -110 -109 -107 -105 -103 -102 -100  -98  -96  -94
-      -92  -90  -88  -87  -85  -83  -81  -80  -78  -76  -75  -73  -71  -70  -68
-      -67  -65  -63  -62  -59  -57  -55  -54  -52  -51  -49  -48  -46  -43  -41
-      -40  -39  -37  -36  -33  -31  -30  -28  -26  -25  -24  -21  -20  -18  -17
-      -15  -13  -12  -10   -9   -8   -7   -6   -5   -4   -3   -2]
-    degree 2 : 9
-    degree 3 : 44
-    degree 4 : [-190 -185 -181 -176 -173 -170 -163 -160 -149 -143 -138 -131 -127 -121 -114
-     -108 -101  -82  -79  -72  -66  -53  -50  -38  -35  -22  -19  -14  -11]
-    
-    xrange :(-10.462, 73.369)
-    yrange :(-0.096, 15.004)
-    
-    Useful dictionnaries
-    ----------------
-    sl {slab name : slab dictionary}
-    name :  {slab :seglist} 
-    
-    Useful arrays
-    ----------------
-    tsg : get segment index in Gs from tahe
-    tgs : get segment index in tahe from Gs
-    lsss : list of segments with sub-segment
-    sla : associated slab name
-    stridess : stride for adressing sub segment 
-    degree : degree of nodes 
-
+    <repr(<pylayers.gis.layout.Layout at 0xa8e398c>) failed: AttributeError: 'Layout' object has no attribute 'degree'>
 
 
 
@@ -176,8 +138,13 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
+<<<<<<< HEAD
     (<matplotlib.figure.Figure at 0x293b850>,
      <matplotlib.axes.AxesSubplot at 0x61d6110>)
+=======
+    (<matplotlib.figure.Figure at 0xa8c052c>,
+     <matplotlib.axes.AxesSubplot at 0xac84aac>)
+>>>>>>> 964dfcf95e3ef8fe011e741d5de1b64b65094db6
 
 
 
@@ -194,39 +161,7 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    
-    ----------------
-    klepal.ini
-    Image('/home/uguen/Bureau/P1/struc/images/IMG-Layout-Klepal.png')
-    ----------------
-    
-    Number of points  : 25
-    Number of segments  : 11
-    Number of sub segments  : 0
-    Number of cycles  : 0
-    Number of rooms  : 0
-    degree 0 : [-25 -24 -23 -22 -21 -20 -19 -13  -5  -4  -3  -1]
-    degree 1 : [ -2 -18 -17 -16 -15 -14]
-    degree 2 : 5
-    degree 3 : 2
-    
-    xrange :(-17.872, 18.155)
-    yrange :(-6.869, 6.51)
-    
-    Useful dictionnaries
-    ----------------
-    sl {slab name : slab dictionary}
-    name :  {slab :seglist} 
-    
-    Useful arrays
-    ----------------
-    tsg : get segment index in Gs from tahe
-    tgs : get segment index in tahe from Gs
-    lsss : list of segments with sub-segment
-    sla : associated slab name
-    stridess : stride for adressing sub segment 
-    degree : degree of nodes 
-
+    <repr(<pylayers.gis.layout.Layout at 0xa47354c>) failed: AttributeError: 'Layout' object has no attribute 'degree'>
 
 
 
@@ -240,8 +175,13 @@ This Layout is still in construction
 
 .. parsed-literal::
 
+<<<<<<< HEAD
     (<matplotlib.figure.Figure at 0x7f6271f91b10>,
      <matplotlib.axes.AxesSubplot at 0x7f6271f905d0>)
+=======
+    (<matplotlib.figure.Figure at 0xa53d78c>,
+     <matplotlib.axes.AxesSubplot at 0xa543c0c>)
+>>>>>>> 964dfcf95e3ef8fe011e741d5de1b64b65094db6
 
 
 
@@ -260,8 +200,13 @@ This Layout is still in construction
 
 .. parsed-literal::
 
+<<<<<<< HEAD
     (<matplotlib.figure.Figure at 0x7f6271f59f10>,
      <matplotlib.axes.AxesSubplot at 0x61bebd0>)
+=======
+    (<matplotlib.figure.Figure at 0xa7cff6c>,
+     <matplotlib.axes.AxesSubplot at 0xa7cf6ec>)
+>>>>>>> 964dfcf95e3ef8fe011e741d5de1b64b65094db6
 
 
 

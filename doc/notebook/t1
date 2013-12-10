@@ -20,7 +20,7 @@ cat f1 | sed 's/code::/code-block::/'  > ${1%%.ipynb}.rst
 #mv -f ${1%%.ipynb}.rst $PYLAYERS/doc/notebooks
 #cp -Rf ${1%%.ipynb}_files $PYLAYERS/doc/notebooks
 echo $WEBSITE
-mv ${file%%.ipynb}_files $WEBSITE/${1%%.ipynb}_files 
+mv ${file%%.ipynb}_files $WEBSITE/notebook/${1%%.ipynb}_files 
 #mv -f ${file%%.ipynb}_files ${1%%.ipynb}_files
 rm ${file%%.ipynb}.rst
 rm f1
