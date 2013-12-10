@@ -1,4 +1,5 @@
 #!/bin/bash
+# for all notebooks below
 for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
 do
     echo $i

@@ -2160,3 +2160,219 @@ bc.movie(traj=t[0])
 12/09/2013 12:53:25 AM Exiting with nonzero exit status
 /usr/local/lib/python2.7/dist-packages/IPython/utils/path.py:304: UserWarning: IPython parent '/home/uguen' is not a writable location, using a temp directory.
   " using a temp directory."%parent)
+12/09/2013 05:40:28 PM Reading notebook ./1-introduction/Introduction.ipynb
+12/09/2013 05:40:28 PM Saving to ./1-introduction/Introduction.ipynb
+[NbConvertApp] Using existing profile dir: u'/private/staff/t/ot/niamiot/.ipython/profile_default'
+[NbConvertApp] Converting notebook ./1-introduction/Introduction.ipynb to rst
+[NbConvertApp] Support files will be in Introduction_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Writing 2264 bytes to Introduction.rst
+12/09/2013 05:40:30 PM Reading notebook ./2-gis/DEV-Layout.ipynb
+12/09/2013 05:40:30 PM Running cell:
+from pylayers.gis.layout import *
+from IPython.display import Image
+import os
+
+12/09/2013 05:40:31 PM Cell returned
+12/09/2013 05:40:31 PM Running cell:
+L=Layout()
+L.ls()
+
+12/09/2013 05:40:31 PM Cell returned
+12/09/2013 05:40:31 PM Running cell:
+L.ls(typ='osm')
+
+12/09/2013 05:40:32 PM Cell returned
+12/09/2013 05:40:32 PM Running cell:
+L=Layout('DLR.osm')
+
+
+12/09/2013 05:40:36 PM Cell returned
+12/09/2013 05:40:36 PM Running cell:
+L.Gs.node[1]
+
+12/09/2013 05:40:36 PM Cell returned
+12/09/2013 05:40:36 PM Running cell:
+L.saveosm('DLR.osm')
+
+12/09/2013 05:40:40 PM Cell returned
+12/09/2013 05:40:40 PM Running cell:
+Image('../../data/struc/images/TA-Office.png')
+
+12/09/2013 05:40:40 PM Cell returned
+12/09/2013 05:40:40 PM Running cell:
+fig,ax=L.showGs()
+
+12/09/2013 05:40:40 PM Cell returned
+12/09/2013 05:40:40 PM Running cell:
+L=Layout('TA-Office.ini')
+
+12/09/2013 05:40:40 PM Cell returned
+12/09/2013 05:40:40 PM Running cell:
+L.showGs()
+
+12/09/2013 05:40:41 PM Cell returned
+12/09/2013 05:40:41 PM Running cell:
+L=Layout('11D-E1.ini')
+L
+
+12/09/2013 05:40:41 PM Cell returned
+12/09/2013 05:40:41 PM Running cell:
+L.showG('s',figsize=(20,10))
+
+12/09/2013 05:40:41 PM Cell returned
+12/09/2013 05:40:41 PM Running cell:
+L=Layout('klepal.ini')
+L
+
+12/09/2013 05:40:41 PM Cell returned
+12/09/2013 05:40:41 PM Running cell:
+L.showGs()
+
+12/09/2013 05:40:41 PM Cell returned
+12/09/2013 05:40:41 PM Running cell:
+L=Layout('W2PTIN.ini')
+
+12/09/2013 05:40:42 PM Cell returned
+12/09/2013 05:40:42 PM Running cell:
+L.showGs()
+
+12/09/2013 05:40:42 PM Cell returned
+12/09/2013 05:40:42 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 05:40:42 PM Cell returned
+12/09/2013 05:40:42 PM Saving to ./2-gis/DEV-Layout.ipynb
+[NbConvertApp] Using existing profile dir: u'/private/staff/t/ot/niamiot/.ipython/profile_default'
+[NbConvertApp] Converting notebook ./2-gis/DEV-Layout.ipynb to rst
+[NbConvertApp] Support files will be in DEV-Layout_files/
+[NbConvertApp] Loaded template rst.tpl
+[NbConvertApp] Making directory DEV-Layout_files
+[NbConvertApp] Writing 4550 bytes to DEV-Layout.rst
+12/09/2013 05:40:43 PM Reading notebook ./2-gis/DOC-LayoutEditor.ipynb
+12/09/2013 05:40:43 PM Running cell:
+from IPython.core.display import HTML
+
+def css_styling():
+    styles = open("../styles/custom.css", "r").read()
+    return HTML(styles)
+css_styling()
+
+12/09/2013 05:40:44 PM Cell returned
+12/09/2013 05:40:44 PM Running cell:
+from pylayers.gis.layout import *
+from pylayers.util.project import *
+
+12/09/2013 05:40:44 PM Cell returned
+12/09/2013 05:40:44 PM Running cell:
+print pstruc['DIRSTRUC']
+
+12/09/2013 05:40:45 PM Cell returned
+12/09/2013 05:40:45 PM Running cell:
+pstruc
+
+12/09/2013 05:40:45 PM Cell returned
+12/09/2013 05:40:45 PM Running cell:
+%%bash 
+
+    cd $BASENAME/struc
+    ls *.osm
+
+
+12/09/2013 05:40:45 PM Cell returned
+12/09/2013 05:40:45 PM Running cell:
+%%bash 
+    cd $BASENAME/struc
+    head DLR.osm
+    echo '---'
+    tail -17 DLR.osm
+
+12/09/2013 05:40:46 PM Cell returned
+12/09/2013 05:40:46 PM Running cell:
+L=Layout('DLR.osm')
+
+12/09/2013 05:40:50 PM Cell returned
+12/09/2013 05:40:50 PM Running cell:
+fig,ax=L.showGs()
+
+12/09/2013 05:40:50 PM Cell returned
+12/09/2013 05:40:50 PM Running cell:
+L.info()
+
+12/09/2013 05:40:50 PM Cell returned
+12/09/2013 05:40:50 PM Running cell:
+L.build()
+
+Traceback (most recent call last):
+  File "/usr/local/bin/runipy", line 8, in <module>
+    load_entry_point('runipy==0.0.4', 'console_scripts', 'runipy')()
+  File "/usr/local/lib/python2.7/site-packages/runipy/main.py", line 49, in main
+    nb_runner.run_notebook(skip_exceptions=args.skip_exceptions)
+  File "/usr/local/lib/python2.7/site-packages/runipy/notebook_runner.py", line 147, in run_notebook
+    self.run_cell(cell)
+  File "/usr/local/lib/python2.7/site-packages/runipy/notebook_runner.py", line 70, in run_cell
+    reply = self.shell.get_msg()
+  File "/usr/local/lib/python2.7/site-packages/IPython/kernel/blocking/channels.py", line 44, in get_msg
+    return self._in_queue.get(block, timeout)
+  File "/usr/local/lib/python2.7/Queue.py", line 177, in get
+    self.not_empty.wait(remaining)
+  File "/usr/local/lib/python2.7/threading.py", line 262, in wait
+    _sleep(delay)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/usr/local/bin/runipy", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "build/bdist.linux-i686/egg/pkg_resources.py", line 2623, in <module>
+    
+  File "build/bdist.linux-i686/egg/pkg_resources.py", line 679, in subscribe
+    class Environment(object):
+  File "build/bdist.linux-i686/egg/pkg_resources.py", line 2623, in <lambda>
+    
+  File "build/bdist.linux-i686/egg/pkg_resources.py", line 2169, in activate
+    def _get_metadata(self,name):
+  File "build/bdist.linux-i686/egg/pkg_resources.py", line 2266, in insert_on
+    """Insert self.location in path before its nearest parent directory"""
+  File "build/bdist.linux-i686/egg/pkg_resources.py", line 1833, in _normalize_cached
+    parts = packageName.split('.')
+KeyboardInterrupt
+12/09/2013 05:40:52 PM Reading notebook ./3-antprop/Antennas.ipynb
+12/09/2013 05:40:52 PM Running cell:
+from pylayers.antprop.antenna import *
+from pylayers.antprop.antvsh import *
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+Traceback (most recent call last):
+  File "/usr/local/bin/runipy", line 8, in <module>
+    load_entry_point('runipy==0.0.4', 'console_scripts', 'runipy')()
+  File "/usr/local/lib/python2.7/site-packages/runipy/main.py", line 49, in main
+    nb_runner.run_notebook(skip_exceptions=args.skip_exceptions)
+  File "/usr/local/lib/python2.7/site-packages/runipy/notebook_runner.py", line 147, in run_notebook
+    self.run_cell(cell)
+  File "/usr/local/lib/python2.7/site-packages/runipy/notebook_runner.py", line 70, in run_cell
+    reply = self.shell.get_msg()
+  File "/usr/local/lib/python2.7/site-packages/IPython/kernel/blocking/channels.py", line 44, in get_msg
+    return self._in_queue.get(block, timeout)
+  File "/usr/local/lib/python2.7/Queue.py", line 177, in get
+  File "/usr/local/lib/python2.7/site-packages/IPython/__init__.py", line 43, in <module>
+    self.not_empty.wait(remaining)
+  File "/usr/local/lib/python2.7/threading.py", line 262, in wait
+    _sleep(delay)
+KeyboardInterrupt
+    from .config.loader import Config
+  File "/usr/local/lib/python2.7/site-packages/IPython/config/__init__.py", line 16, in <module>
+    from .application import *
+  File "/usr/local/lib/python2.7/site-packages/IPython/config/application.py", line 32, in <module>
+    from IPython.config.configurable import SingletonConfigurable
+  File "/usr/local/lib/python2.7/site-packages/IPython/config/configurable.py", line 31, in <module>
+    from .loader import Config, LazyConfigValue
+  File "/usr/local/lib/python2.7/site-packages/IPython/config/loader.py", line 26, in <module>
+    import argparse
+  File "/usr/local/lib/python2.7/argparse.py", line 112, in <module>
+    class _AttributeHolder(object):
+
