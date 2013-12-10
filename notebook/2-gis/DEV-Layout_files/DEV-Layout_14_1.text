@@ -1,0 +1,26 @@
+
+----------------
+klepal.ini
+Image('/home/uguen/Bureau/P1/struc/images/IMG-Layout-Klepal.png')
+----------------
+
+Number of points  : 31
+Number of segments  : 0
+Number of sub segments  : 0
+Number of cycles  : 0
+Number of rooms  : 0
+degree 0 : [-34 -33 -32 -31 -30 -29 -28 -27 -26 -25 -24 -23 -22 -21 -20 -19 -18 -17
+ -16 -15 -14 -13 -12 -11 -10  -9  -8  -7  -6  -5  -4]
+
+xrange :(0.044, 48.915)
+yrange :(0.145, 14.205)
+
+Useful dictionnaries
+----------------
+sl {slab name : slab dictionary}
+name :  {slab :seglist} 
+
+Useful arrays
+----------------
+tsg : get segment index in Gs from tahe
+degree : degree of nodes 

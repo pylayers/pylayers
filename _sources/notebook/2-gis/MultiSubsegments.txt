@@ -17,7 +17,7 @@ Multi sub-segments
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x58d3650>
+    <matplotlib.figure.Figure at 0x498d650>
 
 
 .. code-block:: python
@@ -103,10 +103,10 @@ structure
       'norm': array([ 0.00639987, -0.99997952,  0.        ]),
       'transition': False,
       'z': (0.0, 3.0)},
-     9: {'connect': [-2, -1],
+     9: {'connect': [-1, -2],
       'name': 'WALL',
       'ncycles': [1],
-      'norm': array([ 0.00639987, -0.99997952,  0.        ]),
+      'norm': array([-0.00639987,  0.99997952,  0.        ]),
       'transition': False,
       'z': (0.0, 3.0)}}
 
@@ -322,7 +322,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x60e2c10>
+    <matplotlib.text.Text at 0x7f3cb89e7c10>
 
 
 
@@ -372,7 +372,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x63c2910>
+    <matplotlib.legend.Legend at 0x7f3cb8f54910>
 
 
 

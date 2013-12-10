@@ -1,0 +1,9 @@
+for i in *.html;
+do 
+cat $i | sed "s/notebook\/3-antprop/\./g" > tmp
+if [ $? -eq 0 ]
+then 
+mv tmp $i
+echo $i
+fi
+done

@@ -1,0 +1,6 @@
+#!/bin/bash 
+
+for i in `find . -name "*_files"`;
+do 
+rm -Rf $i
+done

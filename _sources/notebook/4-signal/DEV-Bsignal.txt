@@ -1,0 +1,907 @@
+
+.. code-block:: python
+
+    from pylayers.signal.bsignal import *
+    from pylayers.simul.simulem import *
+    from pylayers.antprop.signature import *
+    from pylayers.antprop.channel import *
+    from scipy.fftpack import fftshift
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x54544d0>
+
+
+Generation of an Impulse of normalized energy
+=============================================
+
+One possible manner to define an ernergy normalized short UWB impulse is
+as follows.
+
+:math:`$$ p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2} $$`
+with
+
+:math:`$$ \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$`
+
+where :math:`$B$` is the desired bandwidth defined at
+:math:`$\gamma_{dB}$` below the spectrum maximum and :math:`$f_c$` is
+the central frequency of the pulse.
+
+This waveform is a gaussian windowing of a sine wave of frequency
+:math:`$f_c$`. The normalization term depends on the exponential scaling
+factor :math:`$\tau$`.
+
+.. code-block:: python
+
+    fc     = 4 
+    band   = 2
+    thresh = 10
+    fe     = 100 
+    ip =EnImpulse([],fc,band,thresh,fe)
+.. code-block:: python
+
+    ip.info()
+
+.. parsed-literal::
+
+    TUsignal
+    --------
+    shx :  (343,)
+    shy :  (343,)
+    dx :   0.01
+    xmin : -1.71
+    xmax : 1.71
+    ymin : -1.89545539648
+    ymax : 2.16154131873
+
+
+Verification of energy normalization in both domains
+----------------------------------------------------
+
+
+.. code-block:: python
+
+    E1= sum(ip.y*ip.y)*ip.dx()
+    print "Integration in time",E1
+
+.. parsed-literal::
+
+    Integration in time 1.0
+
+
+.. code-block:: python
+
+    P = ip.esd()
+    E2 = sum(P.y)*P.dx()
+    print "Integration in frequency domain ",E2
+
+.. parsed-literal::
+
+    Integration in frequency domain  1.0
+
+
+Calcul of UWB channel impulse response
+--------------------------------------
+
+
+.. code-block:: python
+
+    S= Simul()
+    S.L=Layout('defstr3.ini')
+.. code-block:: python
+
+    st = S.wav.st
+    sf = S.wav.sf
+    S.wav.info()
+
+.. parsed-literal::
+
+    fcGHz  :  4.493
+    typ  :  generic
+    feGHz  :  100
+    Np  :  3000
+    twns  :  30
+    te  :  0.01
+    threshdB  :  3
+    bandGHz  :  0.499
+
+
+Here the time domain waveform is measured and the anticausal part of the
+signal is artificially set to 0.
+
+To handle properly the time domain wavefom it is required to center the
+signal in the middle of the array.
+
+``st`` stands for signal in time domain
+
+Ploting the waveform
+--------------------
+
+
+In time domain
+--------------
+
+
+.. code-block:: python
+
+    S.wav.st.plot()
+
+.. parsed-literal::
+
+    /usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+      warnings.warn("No labeled objects found. "
+
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x5518090>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x3b09ed0>]], dtype=object))
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_13_2.png
+
+
+in frequency domain
+-------------------
+
+
+The frequency domain version of the signal is embedded in the same
+object.
+
+``sf`` stands for signal in frequency domain.
+
+.. code-block:: python
+
+    S.wav.sf.y
+
+
+
+.. parsed-literal::
+
+    array([  3.19744231e-16 +1.99840144e-17j,
+             3.01980663e-16 +5.19029264e-17j,
+             2.59792188e-16 +7.85482790e-17j, ...,
+            -3.84550395e-16 -4.44080525e-17j,
+            -3.88050658e-16 +2.00867054e-18j,  -3.78965724e-16 +5.14718889e-17j])
+
+
+
+.. code-block:: python
+
+    f,ax=S.wav.sf.plot()
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_17_0.png
+
+
+Construction of the propagation channel
+---------------------------------------
+
+
+The link between Txid = 1 and Rxid =1 is simply loaded as
+
+.. code-block:: python
+
+    S.L.showGs()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x597a590>,
+     <matplotlib.axes.AxesSubplot at 0x56a9610>)
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_20_1.png
+
+
+.. code-block:: python
+
+    tx = np.array([759,1113,1.5])
+    rx = np.array([768,1112,1.6])
+.. code-block:: python
+
+    S.L.build()
+.. code-block:: python
+
+    Si = Signatures(S.L,0,1)
+The following representation shows the spatial spreading of the
+propagation channel. On the left are scattered the intensity of rays wrt
+to angles of departure (in azimut and elevation). On the right is the
+intensity of rays wrt to angles of arrival. It misses the application
+between the 2 planes as well as the delay dimension of the propagation
+channel.
+
+.. code-block:: python
+
+    Si.run1(cutoff=3)
+
+.. code-block:: python
+
+    r2d = Si.rays(tx,rx)
+.. code-block:: python
+
+    r3d=r2d.to3D(S.L)
+.. code-block:: python
+
+    r3d.locbas(S.L)
+    r3d.fillinter(S.L)
+.. code-block:: python
+
+    fGHz=np.arange(2,11,0.1)
+    wav = wvf.Waveform(fcGHz=5,bandGHz=3)
+.. code-block:: python
+
+    r3d.eval(fGHz)
+
+.. parsed-literal::
+
+    Rays evaluation
+
+
+
+
+.. parsed-literal::
+
+    Ctilde
+    ---------
+    (20, 90)
+    Nray : 20
+    fmin(GHz) : 2.0
+    fmax(GHz): 10.9
+    Nfreq : 90
+    
+     methods :
+    ---------
+    prop2tran(a=theta,b=phi)
+    energy()
+    doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))
+    mobility(v,dt)
+    show(mode=linear)
+    sort()
+
+
+
+
+Construction of the transmission channel
+----------------------------------------
+
+
+The transmission channel is obtain from the combianation of the
+propagation channel and the vector antenna pattern at bot side of the
+radio link
+
+.. code-block:: python
+
+    vc = r3d.eval(fGHz)
+
+.. parsed-literal::
+
+    Rays evaluation
+
+
+The ScalChannel object contains all the information about the ray
+transfer functions. The transmission channel is obtained by applying a
+vector radiation pattern using an antenna file. In the presented case,
+it comes from a real antenna which has been used during the FP7 WHERE1
+measurement campaign M1.
+
+.. code-block:: python
+
+    S.tx.A.info()
+
+.. parsed-literal::
+
+    defant.vsh3
+    type :  vsh3
+    No vsh coefficient calculated yet
+
+
+.. code-block:: python
+
+    sc = vc.prop2tran()
+The antenna can also been taken into account
+
+.. code-block:: python
+
+    sca = vc.prop2tran(S.tx.A,S.rx.A)
+    f,a = sca.plot()
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_38_0.png
+
+
+Calculate UWB Channel Impulse Response
+--------------------------------------
+
+
+.. code-block:: python
+
+    cir = sc.applywavB(S.wav.sfg)
+.. code-block:: python
+
+    cir.plot()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x5824f90>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe220525950>]], dtype=object))
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_41_1.png
+
+
+.. code-block:: python
+
+    #CIR=cir.esd(mode='unilateral')
+    #CIR.plot()
+Hermitian symetry enforcment
+----------------------------
+
+
+If the number of point for the transmission channel and the waveform
+were the same the mathematical operation is an Hadamrd-Shur product
+between :math:`$\mathbf{Y}$` and :math:`$\mathbf{W}$`.
+
+:math:`$\mathbf{Y} = \mathbf{S} \odot \mathbf{W}$`
+
+In practice this is what is done after a resampling of the time base
+with the greater time step.
+
+The process which consists in going from time domain to frequency domain
+is delegated to a specialized class which maintains the proper binding
+between signal samples and their indexation either in time or in
+frequency domain.
+
+.. code-block:: python
+
+    wgam = S.wav.sfg
+    Y    = sc.apply(wgam)
+    tau  = Y.tau0
+The transmission channel has a member data which is the time delay of
+each path
+
+.. code-block:: python
+
+    print 'tau =', tau
+
+.. parsed-literal::
+
+    tau = [  30.1864576    31.904371     31.69472441   36.02622502   36.39444402
+       63.71988972   96.7106799    64.55146019   97.26058952   64.44810067
+       97.19202097   99.31575898   66.68501341   98.68952464   66.88465953
+       98.82453613   99.85132272   99.78453445  101.2436993   101.3753092 ]
+
+
+symHz force the Hermitian symetry of Y with zero padding of 500
+
+.. code-block:: python
+
+    UH   = Y.symHz(500)
+    uh   = UH.ifft(1)
+    UH.plot()
+    plt.figure()
+    f,a = uh.plot()
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_50_0.png
+
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x722a510>
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_50_2.png
+
+
+.. code-block:: python
+
+    ips  = Y.ift(500,1)
+    t    = ips.x 
+    ip0  = TUsignal(t,ips.y[0,:])
+.. code-block:: python
+
+    plot(UH.x,real(UH.y[0,:]),UH.x,imag(UH.y[0,:]))
+    U0 = FHsignal(UH.x,UH.y[0,:])
+    u0 = U0.ifft(1)
+    u1 = sp.ifft(U0.y)
+    plt.figure()
+    plot(uh.x,uh.y[0,:]*1000+3)
+
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x7fe22315b090>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_52_1.png
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_52_2.png
+
+
+.. code-block:: python
+
+    S.wav.st.plot()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x7fe20c20f450>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe223970890>]], dtype=object))
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_53_1.png
+
+
+.. code-block:: python
+
+    U0.plot()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x7fe220f08350>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x594cf10>]], dtype=object))
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_54_1.png
+
+
+.. code-block:: python
+
+    U1=u0.fft()
+    g = sp.fft(u1)
+    plt.plot(abs(g))
+    plt.figure()
+    s  = fftshift(u1)
+    plot(abs(g))
+    #plt.figure()
+    #plot(uh.x,uh.y[0,:])
+    #plot(uh.x,s*50+0.003)
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x7fe22318eb10>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_55_1.png
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_55_2.png
+
+
+.. code-block:: python
+
+    plot(abs(sp.fft(s)),'r')
+    plot(abs(sp.fft(uh.y[0,:])),'g')
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x7fe222e91290>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_56_1.png
+
+
+.. code-block:: python
+
+    wgam.plot()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x7fe2219d1c90>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe223189490>]], dtype=object))
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_57_1.png
+
+
+.. code-block:: python
+
+    S.wav.sf.plot()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x7fe222e78b10>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe222e5b650>]], dtype=object))
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_58_1.png
+
+
+.. code-block:: python
+
+    print uh.y[0,:]
+
+.. parsed-literal::
+
+    [ -1.09464891e-19  -8.92462148e-19  -2.47064158e-18 ...,  -7.66796340e-18
+      -3.77917867e-18  -9.85776944e-19]
+
+
+.. code-block:: python
+
+    plot(imag(s))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x7fe2236d7050>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_60_1.png
+
+
+Problem :math:`$s$` is not real
+
+.. code-block:: python
+
+    u0
+
+
+
+.. parsed-literal::
+
+    TUsignal :  (1656,)  (1656,)
+
+
+
+.. code-block:: python
+
+    plot(real(u0.y))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x7fe2215414d0>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_63_1.png
+
+
+.. code-block:: python
+
+    plot(imag(s))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x7fe22235eb90>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_64_1.png
+
+
+.. code-block:: python
+
+    U0.y
+
+
+
+.. parsed-literal::
+
+    array([ 0.+0.j,  0.+0.j,  0.+0.j, ...,  0.+0.j,  0.+0.j,  0.+0.j])
+
+
+
+.. code-block:: python
+
+    plot(real(U0.y))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x6851810>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_66_1.png
+
+
+.. code-block:: python
+
+    U0.y[0]
+
+
+
+.. parsed-literal::
+
+    0j
+
+
+
+.. code-block:: python
+
+    U0.y[50]
+
+
+
+.. parsed-literal::
+
+    0j
+
+
+
+.. code-block:: python
+
+    U0.y[-50]
+
+
+
+.. parsed-literal::
+
+    0j
+
+
+
+.. code-block:: python
+
+    UH.y[0,2]
+
+
+
+.. parsed-literal::
+
+    0j
+
+
+
+.. code-block:: python
+
+    UH.y[0,-2]
+
+
+
+.. parsed-literal::
+
+    0j
+
+
+
+.. code-block:: python
+
+    N = len(UH.y)
+
+.. code-block:: python
+
+    v1 = UH.y[1:(N-1)/2.]
+    v2 = UH.y[N:-1:(N-1)/2.]
+.. code-block:: python
+
+    
+    len(v1)
+
+
+
+.. parsed-literal::
+
+    8
+
+
+
+.. code-block:: python
+
+    len(v2)
+
+
+
+.. parsed-literal::
+
+    0
+
+
+
+.. code-block:: python
+
+    UH.y[0,-1]
+
+
+
+.. parsed-literal::
+
+    0j
+
+
+
+.. code-block:: python
+
+    UH.y[0,1]
+
+
+
+.. parsed-literal::
+
+    0j
+
+
+
+.. code-block:: python
+
+    plot(real(UH.y[0,:]))
+    plot(imag(UH.y[1,:]))
+
+
+
+.. parsed-literal::
+
+    [<matplotlib.lines.Line2D at 0x7008ad0>]
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_78_1.png
+
+
+.. code-block:: python
+
+    cir.x
+
+
+
+
+.. parsed-literal::
+
+    array([ -14.99094203,  -14.97282609,  -14.95471014, ...,  116.29528986,
+            116.3134058 ,  116.33152174])
+
+
+
+.. code-block:: python
+
+    cir.y
+
+
+
+.. parsed-literal::
+
+    array([  0.00000000e+00,   0.00000000e+00,   0.00000000e+00, ...,
+            -9.60384352e-18,  -3.63909750e-18,  -2.02607248e-19])
+
+
+
+.. code-block:: python
+
+    cir.plot()
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x68531d0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe2236ccf50>]], dtype=object))
+
+
+
+
+.. image:: DEV-Bsignal_files/DEV-Bsignal_81_1.png
+
+
+.. code-block:: python
+
+    from IPython.core.display import HTML
+    
+    def css_styling():
+        styles = open("../styles/custom.css", "r").read()
+        return HTML(styles)
+    css_styling()
+
+
+
+.. raw:: html
+
+    <style>
+        @font-face {
+            font-family: "Computer Modern";
+            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+        }
+        div.cell{
+            width:800px;
+            margin-left:16% !important;
+            margin-right:auto;
+        }
+        h1 {
+            font-family: Helvetica, serif;
+        }
+        h4{
+            margin-top:12px;
+            margin-bottom: 3px;
+           }
+        div.text_cell_render{
+            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+            line-height: 145%;
+            font-size: 130%;
+            width:800px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .CodeMirror{
+                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+        }
+        .prompt{
+            display: None;
+        }
+        .text_cell_render h5 {
+            font-weight: 300;
+            font-size: 22pt;
+            color: #4057A1;
+            font-style: italic;
+            margin-bottom: .5em;
+            margin-top: 0.5em;
+            display: block;
+        }
+        
+        .warning{
+            color: rgb( 240, 20, 20 )
+            }  
+    </style>
+    <script>
+        MathJax.Hub.Config({
+                            TeX: {
+                               extensions: ["AMSmath.js"]
+                               },
+                    tex2jax: {
+                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                    },
+                    displayAlign: 'center', // Change this to 'center' to center equations.
+                    "HTML-CSS": {
+                        styles: {'.MathJax_Display': {"margin": 4}}
+                    }
+            });
+    </script>
+
+

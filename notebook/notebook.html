@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User Manual &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="next" title="Introduction" href="1-introduction/Introduction.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="1-introduction/Introduction.html" title="Introduction"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="&lt;no title&gt;"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">User Manual</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#description-of-the-environment">Description of the Environment</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#antenna-and-propagation">Antenna and Propagation</a></li>
+<li><a class="reference internal" href="#user-mobility">User Mobility</a></li>
+<li><a class="reference internal" href="#user-localisation">User Localisation</a></li>
+<li><a class="reference internal" href="#miscellanous">Miscellanous</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="1-introduction/Introduction.html"
+                        title="next chapter">Introduction</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="user-manual">
+<span id="usermanual"></span><h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html#what-pylayers-is-about">What PyLayers is about ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html#how-to-install-pylayers">How to install PyLayers ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-introduction/Introduction.html#how-to-cite-the-pylayers-project">How to cite the PyLayers Project</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="description-of-the-environment">
+<h2>Description of the Environment<a class="headerlink" href="#description-of-the-environment" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/DEV-Layout.html">The <tt class="docutils literal"><span class="pre">ls()</span></tt> method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html">The Layout class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#structure-of-a-layout">Structure of a Layout</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#subsegments">Subsegments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-different-layout-format">The different layout format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#reading-an-exiting-layout">Reading an exiting Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-display-options-dictionnary">The display options dictionnary</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#layers">Layers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#strings">Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#sizes">Sizes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#booleans">Booleans</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#interactive-editor">Interactive editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#the-interactive-editor-l-editor">The interactive editor L.editor()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#image-overlay">Image overlay</a></li>
+<li class="toctree-l3"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#scaling-the-figure-overlay">Scaling the figure overlay</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#segments-and-subsegments">Segments and Subsegments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/MultiSubsegments.html">Multi sub-segments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2-gis/MultiSubsegments.html#channel-variability-due-to-different-layout-constitutive-materials">Channel variability due to different <tt class="docutils literal"><span class="pre">Layout</span></tt> constitutive materials</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="antenna-and-propagation">
+<h2>Antenna and Propagation<a class="headerlink" href="#antenna-and-propagation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="user-mobility">
+<h2>User Mobility<a class="headerlink" href="#user-mobility" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="user-localisation">
+<h2>User Localisation<a class="headerlink" href="#user-localisation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="miscellanous">
+<h2>Miscellanous<a class="headerlink" href="#miscellanous" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="1-introduction/Introduction.html" title="Introduction"
+             >next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="&lt;no title&gt;"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

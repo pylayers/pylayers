@@ -27,7 +27,7 @@ module.
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x3ee34d0>
+    <matplotlib.figure.Figure at 0x40364d0>
 
 
 The Class ``SlabDB`` contains a dictionnary of all available Slab. This
@@ -372,7 +372,7 @@ with respect to angle
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x48e6390>
+    <matplotlib.figure.Figure at 0x7fbf807e9a10>
 
 
 
@@ -546,79 +546,3 @@ on <http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5505315&query
 [2]. `R.Piesiewicz 'Terahertz characterization of building materials'
 Electronics .Letters Jan 2005 Vol 41
 N°18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http://www-ece.rice.edu/~daniel/papers/normanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`_
-
-.. code-block:: python
-
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
-
-
-
-.. raw:: html
-
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
-
-

@@ -92,7 +92,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x335c050&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x39b0050&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
 <span class="k">try</span><span class="p">:</span>
@@ -248,8 +248,8 @@ from cycle : 0 to cycle 1
 <span class="k">print</span> <span class="n">prx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[ 7.71597394  0.75891616]
-[ 2.98535781  0.88475396]</pre>
+<div class="highlight-python"><pre>[ 7.88647153  0.322159  ]
+[ 2.88164786  0.68333672]</pre>
 </div>
 <p>Evaluate performances of signature and ray evaluation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tt1</span> <span class="o">=</span> <span class="p">{}</span>
@@ -279,13 +279,13 @@ from cycle : 0 to cycle 1
 <span class="c">#    r2d.show(L)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>0 0.00187706947327
-1 0.0103240013123
-2 0.050666809082
-3 0.204124927521
-4 0.659407138824
-5 1.75280785561
-6 4.32636713982</pre>
+<div class="highlight-python"><pre>0 0.00191807746887
+1 0.0103960037231
+2 0.0516300201416
+3 0.208976984024
+4 0.682647943497
+5 1.92105197906
+6 4.61728715897</pre>
 </div>
 <p>It appears that the increasing number of signatures obatined with the
 run1 algorithm do not yield necessarily a significant increase in the
@@ -297,7 +297,7 @@ number of rays.</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x41c1890&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4817790&gt;</pre>
 </div>
 <img alt="./Signatures_files/Signatures_21_1.png" src="./Signatures_files/Signatures_21_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=bar(tt2.keys(),tt2.values(),color=&#39;red&#39;)</span>
@@ -315,7 +315,7 @@ number of rays.</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;time (s)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4459210&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4a081d0&gt;</pre>
 </div>
 <img alt="../../_images/Signatures_22_1.png" src="../../_images/Signatures_22_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
@@ -328,7 +328,7 @@ number of rays.</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x41dee90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4b1aad0&gt;</pre>
 </div>
 <img alt="../../_images/Signatures_23_1.png" src="../../_images/Signatures_23_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=loglog(tsig.values(),tt1.values(),color=&#39;red&#39;)</span>
@@ -337,14 +337,14 @@ number of rays.</p>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;# Interactions&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x46941d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7ff7f4c066d0&gt;</pre>
 </div>
 <img alt="../../_images/Signatures_24_1.png" src="../../_images/Signatures_24_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="mf">0.0004</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">**</span><span class="mf">0.88</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x4888c10&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7ff7f4f9fa50&gt;]</pre>
 </div>
 <img alt="../../_images/Signatures_25_1.png" src="../../_images/Signatures_25_1.png" />
 <p>The computation time in rays grows exponentially with the number of

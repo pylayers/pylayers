@@ -1,0 +1,810 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Generation of an Impulse of normalized energy &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Generation of an Impulse of normalized energy</a><ul>
+<li><a class="reference internal" href="#verification-of-energy-normalization-in-both-domains">Verification of energy normalization in both domains</a></li>
+<li><a class="reference internal" href="#calcul-of-uwb-channel-impulse-response">Calcul of UWB channel impulse response</a></li>
+<li><a class="reference internal" href="#ploting-the-waveform">Ploting the waveform</a></li>
+<li><a class="reference internal" href="#in-time-domain">In time domain</a></li>
+<li><a class="reference internal" href="#in-frequency-domain">in frequency domain</a></li>
+<li><a class="reference internal" href="#construction-of-the-propagation-channel">Construction of the propagation channel</a></li>
+<li><a class="reference internal" href="#construction-of-the-transmission-channel">Construction of the transmission channel</a></li>
+<li><a class="reference internal" href="#calculate-uwb-channel-impulse-response">Calculate UWB Channel Impulse Response</a></li>
+<li><a class="reference internal" href="#hermitian-symetry-enforcment">Hermitian symetry enforcment</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">scipy.fftpack</span> <span class="kn">import</span> <span class="n">fftshift</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x54544d0&gt;</pre>
+</div>
+<div class="section" id="generation-of-an-impulse-of-normalized-energy">
+<h1>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h1>
+<p>One possible manner to define an ernergy normalized short UWB impulse is
+as follows.</p>
+<p><div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">$$ p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2} $$</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2009/09/24&gt;
+Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
+ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
+9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
+skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
+orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
+, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
+rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
+(/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
+(/home/uguen/texmf/tex/latex/ucs/ucs.sty
+(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?&#8217; option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texmf-texlive/tex/latex/tools/bm.sty) (./math.aux)
+(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
+! Display math should end with $$.
+&lt;to be read again&gt; 
+                    
+l.12 $$$ 
+         p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-...
+
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
+                                                   \cos(2\pi f_c t) e^{-(\fr...
+
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
+                                                   \cos(2\pi f_c t) e^{-(\fr...
+
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
+                                                   \cos(2\pi f_c t) e^{-(\fr...
+
+! Extra }, or forgotten $.
+\frac  #1#2-&gt;{\begingroup #1\endgroup \&#64;&#64;over #2}
+                                                 
+l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
+                                                   \cos(2\pi f_c t) e^{-(\fr...
+
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.13 \end{document}
+                   
+! Display math should end with $$.
+&lt;to be read again&gt; 
+                   \par 
+l.13 \end{document}
+                   
+[1] (./math.aux) )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 12 ({)
+### bottom level
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 800 bytes).
+Transcript written on math.log.
+</div>
+
+with</p>
+<p><div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">$$ \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2009/09/24&gt;
+Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
+ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
+9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
+skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
+orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
+, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
+rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
+(/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
+(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
+(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
+(/home/uguen/texmf/tex/latex/ucs/ucs.sty
+(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?&#8217; option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texmf-texlive/tex/latex/tools/bm.sty) (./math.aux)
+(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
+! Display math should end with $$.
+&lt;to be read again&gt; 
+                    
+l.12 $$$ 
+         \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$$
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.12 $$$ \tau
+              = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$$
+! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+l.13 \end{document}
+                   
+! Display math should end with $$.
+&lt;to be read again&gt; 
+                   \par 
+l.13 \end{document}
+                   
+[1] (./math.aux) )
+(see the transcript file for additional information)
+Output written on math.dvi (1 page, 580 bytes).
+Transcript written on math.log.
+</div>
+</p>
+<p>where <img class="math" src="../../_images/math/b39d396ed6190261ffce7e93c9fbc4b013151fec.png" alt="$B$"/> is the desired bandwidth defined at
+<img class="math" src="../../_images/math/803d0909241bbb575dae1791ce49e4024e4c06d3.png" alt="$\gamma_{dB}$"/> below the spectrum maximum and <img class="math" src="../../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/> is
+the central frequency of the pulse.</p>
+<p>This waveform is a gaussian windowing of a sine wave of frequency
+<img class="math" src="../../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/>. The normalization term depends on the exponential scaling
+factor <img class="math" src="../../_images/math/d4946ec46154b310da1d30f828360388c4231983.png" alt="$\tau$"/>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
+<span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">fe</span>     <span class="o">=</span> <span class="mi">100</span>
+<span class="n">ip</span> <span class="o">=</span><span class="n">EnImpulse</span><span class="p">([],</span><span class="n">fc</span><span class="p">,</span><span class="n">band</span><span class="p">,</span><span class="n">thresh</span><span class="p">,</span><span class="n">fe</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ip</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>TUsignal
+--------
+shx :  (343,)
+shy :  (343,)
+dx :   0.01
+xmin : -1.71
+xmax : 1.71
+ymin : -1.89545539648
+ymax : 2.16154131873</pre>
+</div>
+<div class="section" id="verification-of-energy-normalization-in-both-domains">
+<h2>Verification of energy normalization in both domains<a class="headerlink" href="#verification-of-energy-normalization-in-both-domains" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">E1</span><span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Integration in time&quot;</span><span class="p">,</span><span class="n">E1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Integration in time 1.0</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">P</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">esd</span><span class="p">()</span>
+<span class="n">E2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">P</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Integration in frequency domain &quot;</span><span class="p">,</span><span class="n">E2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Integration in frequency domain  1.0</pre>
+</div>
+</div>
+<div class="section" id="calcul-of-uwb-channel-impulse-response">
+<h2>Calcul of UWB channel impulse response<a class="headerlink" href="#calcul-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">st</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span>
+<span class="n">sf</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span>
+<span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>fcGHz  :  4.493
+typ  :  generic
+feGHz  :  100
+Np  :  3000
+twns  :  30
+te  :  0.01
+threshdB  :  3
+bandGHz  :  0.499</pre>
+</div>
+<p>Here the time domain waveform is measured and the anticausal part of the
+signal is artificially set to 0.</p>
+<p>To handle properly the time domain wavefom it is required to center the
+signal in the middle of the array.</p>
+<p><tt class="docutils literal"><span class="pre">st</span></tt> stands for signal in time domain</p>
+</div>
+<div class="section" id="ploting-the-waveform">
+<h2>Ploting the waveform<a class="headerlink" href="#ploting-the-waveform" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="in-time-domain">
+<h2>In time domain<a class="headerlink" href="#in-time-domain" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+  warnings.warn("No labeled objects found. "</pre>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5518090&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x3b09ed0&gt;]], dtype=object))</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_13_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_13_2.png" />
+</div>
+<div class="section" id="in-frequency-domain">
+<h2>in frequency domain<a class="headerlink" href="#in-frequency-domain" title="Permalink to this headline">¶</a></h2>
+<p>The frequency domain version of the signal is embedded in the same
+object.</p>
+<p><tt class="docutils literal"><span class="pre">sf</span></tt> stands for signal in frequency domain.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">3.19744231e-16</span> <span class="o">+</span><span class="mf">1.99840144e-17</span><span class="n">j</span><span class="p">,</span>
+         <span class="mf">3.01980663e-16</span> <span class="o">+</span><span class="mf">5.19029264e-17</span><span class="n">j</span><span class="p">,</span>
+         <span class="mf">2.59792188e-16</span> <span class="o">+</span><span class="mf">7.85482790e-17</span><span class="n">j</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">3.84550395e-16</span> <span class="o">-</span><span class="mf">4.44080525e-17</span><span class="n">j</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">3.88050658e-16</span> <span class="o">+</span><span class="mf">2.00867054e-18</span><span class="n">j</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.78965724e-16</span> <span class="o">+</span><span class="mf">5.14718889e-17</span><span class="n">j</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_17_0.png" src="./DEV-Bsignal_files/DEV-Bsignal_17_0.png" />
+</div>
+<div class="section" id="construction-of-the-propagation-channel">
+<h2>Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<p>The link between Txid = 1 and Rxid =1 is simply loaded as</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x597a590&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x56a9610&gt;)</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_20_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_20_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1113</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
+<span class="n">rx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">768</span><span class="p">,</span><span class="mi">1112</span><span class="p">,</span><span class="mf">1.6</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The following representation shows the spatial spreading of the
+propagation channel. On the left are scattered the intensity of rays wrt
+to angles of departure (in azimut and elevation). On the right is the
+intensity of rays wrt to angles of arrival. It misses the application
+between the 2 planes as well as the delay dimension of the propagation
+channel.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+<span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="n">fcGHz</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">bandGHz</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Rays evaluation</pre>
+</div>
+<div class="highlight-python"><pre>Ctilde
+---------
+(20, 90)
+Nray : 20
+fmin(GHz) : 2.0
+fmax(GHz): 10.9
+Nfreq : 90
+
+ methods :
+---------
+prop2tran(a=theta,b=phi)
+energy()
+doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))
+mobility(v,dt)
+show(mode=linear)
+sort()</pre>
+</div>
+</div>
+<div class="section" id="construction-of-the-transmission-channel">
+<h2>Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<p>The transmission channel is obtain from the combianation of the
+propagation channel and the vector antenna pattern at bot side of the
+radio link</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vc</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Rays evaluation</pre>
+</div>
+<p>The ScalChannel object contains all the information about the ray
+transfer functions. The transmission channel is obtained by applying a
+vector radiation pattern using an antenna file. In the presented case,
+it comes from a real antenna which has been used during the FP7 WHERE1
+measurement campaign M1.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>defant.vsh3
+type :  vsh3
+No vsh coefficient calculated yet</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sc</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The antenna can also been taken into account</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sca</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_38_0.png" src="./DEV-Bsignal_files/DEV-Bsignal_38_0.png" />
+</div>
+<div class="section" id="calculate-uwb-channel-impulse-response">
+<h2>Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5824f90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe220525950&gt;]], dtype=object))</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_41_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_41_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#CIR=cir.esd(mode=&#39;unilateral&#39;)</span>
+<span class="c">#CIR.plot()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hermitian-symetry-enforcment">
+<h2>Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
+<p>If the number of point for the transmission channel and the waveform
+were the same the mathematical operation is an Hadamrd-Shur product
+between <img class="math" src="../../_images/math/56fa5db7f63f540dec899854bd2ffe6e445d15df.png" alt="$\mathbf{Y}$"/> and <img class="math" src="../../_images/math/7df94652f9f0a7c4f1f225b7bf793949758ae804.png" alt="$\mathbf{W}$"/>.</p>
+<p><img class="math" src="../../_images/math/a8b683440c1f8c6a69dd6547dfbe1f4fd9e9f0e4.png" alt="$\mathbf{Y} = \mathbf{S} \odot \mathbf{W}$"/></p>
+<p>In practice this is what is done after a resampling of the time base
+with the greater time step.</p>
+<p>The process which consists in going from time domain to frequency domain
+is delegated to a specialized class which maintains the proper binding
+between signal samples and their indexation either in time or in
+frequency domain.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wgam</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span>
+<span class="n">Y</span>    <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">wgam</span><span class="p">)</span>
+<span class="n">tau</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">tau0</span>
+</pre></div>
+</div>
+<p>The transmission channel has a member data which is the time delay of
+each path</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;tau =&#39;</span><span class="p">,</span> <span class="n">tau</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>tau = [  30.1864576    31.904371     31.69472441   36.02622502   36.39444402
+   63.71988972   96.7106799    64.55146019   97.26058952   64.44810067
+   97.19202097   99.31575898   66.68501341   98.68952464   66.88465953
+   98.82453613   99.85132272   99.78453445  101.2436993   101.3753092 ]</pre>
+</div>
+<p>symHz force the Hermitian symetry of Y with zero padding of 500</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">UH</span>   <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">symHz</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">uh</span>   <span class="o">=</span> <span class="n">UH</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">UH</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">f</span><span class="p">,</span><span class="n">a</span> <span class="o">=</span> <span class="n">uh</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_50_0.png" src="./DEV-Bsignal_files/DEV-Bsignal_50_0.png" />
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x722a510&gt;</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_50_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_50_2.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ips</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">t</span>    <span class="o">=</span> <span class="n">ips</span><span class="o">.</span><span class="n">x</span>
+<span class="n">ip0</span>  <span class="o">=</span> <span class="n">TUsignal</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">ips</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">real</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]),</span><span class="n">UH</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">imag</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span>
+<span class="n">U0</span> <span class="o">=</span> <span class="n">FHsignal</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+<span class="n">u0</span> <span class="o">=</span> <span class="n">U0</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">u1</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">1000</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe22315b090&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_52_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_52_1.png" />
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_52_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_52_2.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe20c20f450&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe223970890&gt;]], dtype=object))</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_53_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_53_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe220f08350&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x594cf10&gt;]], dtype=object))</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_54_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_54_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">U1</span><span class="o">=</span><span class="n">u0</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">s</span>  <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+<span class="c">#plt.figure()</span>
+<span class="c">#plot(uh.x,uh.y[0,:])</span>
+<span class="c">#plot(uh.x,s*50+0.003)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe22318eb10&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_55_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_55_1.png" />
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_55_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_55_2.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">s</span><span class="p">)),</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])),</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe222e91290&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_56_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_56_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wgam</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe2219d1c90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe223189490&gt;]], dtype=object))</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_57_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_57_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe222e78b10&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe222e5b650&gt;]], dtype=object))</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_58_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_58_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[ -1.09464891e-19  -8.92462148e-19  -2.47064158e-18 ...,  -7.66796340e-18
+  -3.77917867e-18  -9.85776944e-19]</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe2236d7050&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_60_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_60_1.png" />
+<p>Problem <img class="math" src="../../_images/math/bb4162fbb2de454e99f49c666005abf51d4a7838.png" alt="$s$"/> is not real</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">u0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>TUsignal :  (1656,)  (1656,)</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">u0</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe2215414d0&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_63_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_63_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe22235eb90&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_64_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_64_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span>  <span class="mf">0.</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span>  <span class="mf">0.</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">0.</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span>  <span class="mf">0.</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">,</span>  <span class="mf">0.</span><span class="o">+</span><span class="mf">0.</span><span class="n">j</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x6851810&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_66_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_66_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span><span class="n">j</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span><span class="n">j</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span><span class="n">j</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span><span class="n">j</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span><span class="n">j</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">v1</span> <span class="o">=</span> <span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">]</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">:(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">8</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span><span class="n">j</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span><span class="n">j</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7008ad0&gt;]</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_78_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_78_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span> <span class="o">-</span><span class="mf">14.99094203</span><span class="p">,</span>  <span class="o">-</span><span class="mf">14.97282609</span><span class="p">,</span>  <span class="o">-</span><span class="mf">14.95471014</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">116.29528986</span><span class="p">,</span>
+        <span class="mf">116.3134058</span> <span class="p">,</span>  <span class="mf">116.33152174</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([</span>  <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span>   <span class="mf">0.00000000e+00</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>
+        <span class="o">-</span><span class="mf">9.60384352e-18</span><span class="p">,</span>  <span class="o">-</span><span class="mf">3.63909750e-18</span><span class="p">,</span>  <span class="o">-</span><span class="mf">2.02607248e-19</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x68531d0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe2236ccf50&gt;]], dtype=object))</pre>
+</div>
+<img alt="./DEV-Bsignal_files/DEV-Bsignal_81_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_81_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
+    <span class="n">styles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;../styles/custom.css&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="n">styles</span><span class="p">)</span>
+<span class="n">css_styling</span><span class="p">()</span>
+</pre></div>
+</div>
+<style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 22pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

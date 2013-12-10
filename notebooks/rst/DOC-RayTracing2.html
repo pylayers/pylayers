@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example of an UWB channel Ray Tracing simulation &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../../index.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../../index.html"><img src="../../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example of an UWB channel Ray Tracing simulation</a><ul>
+<li><a class="reference internal" href="#signatures-rays-and-propagation-and-transmission-channel">Signatures, rays and propagation and transmission channel</a></li>
+<li><a class="reference internal" href="#calulating-the-propagation-channel">Calulating the Propagation Channel</a></li>
+<li><a class="reference internal" href="#apply-waveform">Apply waveform</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="example-of-an-uwb-channel-ray-tracing-simulation">
+<h1>Example of an UWB channel Ray Tracing simulation<a class="headerlink" href="#example-of-an-uwb-channel-ray-tracing-simulation" title="Permalink to this headline">¶</a></h1>
+<p>In the following, all steps required for going from the descrpition of
+the radio scene until the calculation of the UWB channel impulse
+response is described on a simple example.</p>
+<p>A ray-tracing simulation is controlled via a configuration file which is
+stored in the <em>ini</em> directory of the project directory. By default, a
+default configuration file named <strong>default.ini</strong> is loaded.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.measures.mesuwb</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+</pre></div>
+</div>
+<p>A first step consists in loading a layout associated with the
+simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
+corresponding slabs and materials files <tt class="docutils literal"><span class="pre">matDB.ini</span></tt> and
+<tt class="docutils literal"><span class="pre">slabDB.ini</span></tt>.</p>
+<p>This layout corresponds to the office building where the first WHERE1
+UWB measurement campaign has been conducted.</p>
+<p>The layout method loads those in a member layout object <strong>L</strong> of the
+simulation object <strong>S</strong>.</p>
+<p>If not already available, the layout associated graphs are built.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="c"># loading a layout</span>
+<span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;WHERE1&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The layout display is fully parameterized via the embedded <strong>display</strong>
+dictionnary member of the Layout object.which allows to configure the
+<tt class="docutils literal"><span class="pre">showGs()</span></tt> method behavior.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;WHERE1 Project Office Measurement Site&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Adding coordinates of transmiting and receiving points</p>
+<hr class="docutils" />
+<p>Coordinates of transmitters and receivers for the simulation are stored
+in <strong>.ini</strong> files. Transmitter and Receiver are instances of the class
+RadioNode which offers different methods for specifying nodes positions.
+The stucture of this <strong>.ini</strong> file presented below. The node Id is
+associated with the 3 coordinates <img class="math" src="../../_images/math/a1ed2201b0110fcd83e4262119c177dd39364adf.png" alt="$x,y,z$"/> separated by white
+spaces.</p>
+<div class="highlight-python"><pre>[coordinates]
+1 = -12.2724 7.76319999993 1.2
+2 = -18.7747 15.1779999998 1.2
+3 = -4.14179999998 8.86029999983 1.2
+4 = -9.09139999998 15.1899000001 1.2</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1rx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="n">RadioNode</span><span class="p">(</span><span class="n">_fileini</span><span class="o">=</span><span class="s">&#39;w2m1tx.ini&#39;</span><span class="p">,</span><span class="n">_fileant</span><span class="o">=</span><span class="s">&#39;defant.vsh3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The whole simulation setup can then be displayed using the <strong>show</strong>
+method of the Simulation object</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The different object of the simulation cans be accessed to obtain
+different information. Below the number of transmitter and receiver.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&#39;number of Tx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="k">print</span> <span class="s">&#39;number of rx :&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The decomposition of the layout in a set of disjoint cycles is
+represented below. Not all cycles are rooms.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="signatures-rays-and-propagation-and-transmission-channel">
+<h2>Signatures, rays and propagation and transmission channel<a class="headerlink" href="#signatures-rays-and-propagation-and-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Choose Tx and Rx coordinates</span>
+<span class="n">itx</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">irx</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">tx</span><span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">itx</span><span class="p">]</span>
+<span class="n">rx</span><span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">irx</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span>
+</pre></div>
+</div>
+<p>A signature is a sequence of layout objects (points and segments) which
+are involved in a given optical ray, relating the transmiter and the
+receiver. The signatutre is calculated from a layout cycle to an other
+layout cycle. This means that is is required first to retrieve the cycle
+number from point coordinates. This is done thanks to the <strong>pt2cy</strong>,
+point to cycle function.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ctx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+<span class="n">crx</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;tx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">ctx</span>
+<span class="k">print</span> <span class="s">&#39;rx point belongs to cycle &#39;</span><span class="p">,</span><span class="n">crx</span>
+</pre></div>
+</div>
+<p>Then the signature between cycle 5 and cycle 4 can be calculated. This
+is done by instantiating a Signature object with a given layout and the
+2 cycle number.</p>
+<p>The representaion of a signature object provides information about the
+number of signatures for each number of interactions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">timeit</span>
+<span class="n">Si</span> <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+<span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">Si</span>
+</pre></div>
+</div>
+<p>Once the signature has been obtained, 2D rays are calculated with the
+<tt class="docutils literal"><span class="pre">rays()</span></tt> method of the signature <strong>Si</strong>. The coordinates of a
+transmitter and a receiver should be parameters of the function. <strong>r2d</strong>
+object has a <tt class="docutils literal"><span class="pre">show</span></tt> and <tt class="docutils literal"><span class="pre">show3</span></tt> method</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">rx</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">strucname</span><span class="o">=</span><span class="s">&#39;WHERE1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, the <strong>r2d</strong> object is transformed in 3D ray, taking into account
+the reflection on ceil and floor.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+<span class="n">r3d</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">strucname</span><span class="o">=</span><span class="s">&#39;WHERE1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span>
+</pre></div>
+</div>
+<p>Once the 3D rays are obtained the local basis are determined</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and the the interaction matrices are filled.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Below <tt class="docutils literal"><span class="pre">ni</span></tt> is the number of interactions</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">18</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="mi">13</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calulating-the-propagation-channel">
+<h2>Calulating the Propagation Channel<a class="headerlink" href="#calulating-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<p>The propagation channel is a <tt class="docutils literal"><span class="pre">Ctilde</span></tt> object. This object can be
+evaluated for different frequency point thanks to the <tt class="docutils literal"><span class="pre">eval()</span></tt> method
+with a frequency array as argument.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="s">&quot;fmin : &quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;fmax : &quot;</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Nf : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span> <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Eco</span><span class="p">,</span><span class="n">Ecross</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Eco</span><span class="p">),</span><span class="s">&#39;ob&#39;</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">Ct</span><span class="o">.</span><span class="n">tauk</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Ecross</span><span class="p">),</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;path energy (dB)&#39;</span><span class="p">)</span>
+<span class="n">legend</span><span class="p">((</span><span class="s">&#39;Co-pol&#39;</span><span class="p">,</span><span class="s">&#39;X-pol&#39;</span><span class="p">))</span>
+<span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The multipath doa/dod diagram can be obtained via the method <tt class="docutils literal"><span class="pre">doadod</span></tt>.
+The colorbar corresponds to the total energy of the path.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">doadod</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="apply-waveform">
+<h2>Apply waveform<a class="headerlink" href="#apply-waveform" title="Permalink to this headline">¶</a></h2>
+<p>Once the propagation channel is obtained the transmission channel is
+calculated with the method <tt class="docutils literal"><span class="pre">prop2tran</span></tt></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ct</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">fGHz</span>
+<span class="n">sco</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
+<span class="n">sca</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The applied waveform which is here loaded from a measurement file, and
+compensated for a small time shift. It is important for the latter
+treatment for the applied waveform to be centered on the middle of the
+array as it is illustrated below.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">({</span><span class="s">&#39;type&#39;</span><span class="p">:</span><span class="s">&#39;W1compensate&#39;</span><span class="p">})</span>
+<span class="c">#wav = wvf.Waveform({&#39;type&#39; : &#39;generic&#39;,&#39;band&#39;: 0.499,&#39;fc&#39;: 4.493, &#39;fe&#39;: 100, &#39;thresh&#39;: 3, &#39;tw&#39;: 30})</span>
+<span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Finally, the received UWB waveform can be synthesize in applyng the
+waveform to the transmission channel.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ciro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+<span class="n">cira</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">ciro</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;voltage (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;without antenna&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0002</span><span class="p">,</span><span class="mf">0.0002</span><span class="p">))</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">cira</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;delay(ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;voltage (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;with antenna&#39;</span><span class="p">)</span>
+<span class="n">a</span><span class="o">=</span><span class="n">axis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="o">-</span><span class="mf">0.002</span><span class="p">,</span><span class="mf">0.002</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gv</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+ 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>

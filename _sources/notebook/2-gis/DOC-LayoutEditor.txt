@@ -171,7 +171,7 @@ following :
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x3de6fd0>
+    <matplotlib.figure.Figure at 0x4699fd0>
 
 
 Reading an exiting Layout
@@ -607,8 +607,8 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x3df2690>,
-     <matplotlib.axes.AxesSubplot at 0x2fbbf50>)
+    (<matplotlib.figure.Figure at 0x46b0b50>,
+     <matplotlib.axes.AxesSubplot at 0x47b3f50>)
 
 
 
