@@ -43,6 +43,8 @@ Mobility
    :maxdepth: 3 
 
    ./5-mobility/ConfigFiles.rst
+   ./5-mobility/Mobility.rst
+   ./5-mobility/Trajectory.rst
 
 Localization 
 ************

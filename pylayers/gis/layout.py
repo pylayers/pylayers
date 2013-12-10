@@ -573,7 +573,7 @@ class Layout(object):
         try:
             Nsmax = max(self.tsg)
         except:
-            logging.warning("No segements yet")
+            logging.warning("No segments in Layout yet")
         
         # 
         # handling of segment related arrays
@@ -1879,12 +1879,16 @@ class Layout(object):
 
         """
 
-        if ((n1 < 0) & (n2 < 0)):
-            nn = np.array(self.Gs.node.keys())  ## nn : node list array
-            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)
-            lp = len(up)                        ## lp : number of segment
-            e1 = np.arange(lp) + 1              ## e1 : ordered list of segment number
-            e2 = nn[up]                         ## e2 : current list of of segment number
+        # if 2 points are selected
+        if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
+            nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
+            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
+            lp = len(up)                        ## lp : number of segments  (can be zero)
+            if lp>0:
+                e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+            else:
+                e1 = np.array([1])
+            e2 = nn[up]                         ## e2 : current list of segment number
             c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
             tn = e1[c]                          ## tn[c] free segment number 
             #print tn
@@ -2009,34 +2013,37 @@ class Layout(object):
                 except:
                     raise NameError('No such furniture type - '+typ+'-') 
 
-    def del_points(self, ln):
-        """ delete points in list ln
+    def del_points(self, lp):
+        """ delete points in list lp
 
         Parameters
         ----------
 
-        ln : list 
+        lp : list 
             node list 
 
         """
         
         # test if array
-        if (type(ln) == np.ndarray):
+        if (type(lp) == np.ndarray):
             ln = list(ln)
 
         # test if list 
-        if (type(ln) <> list):
-            ln = [ln]
-
-        ls = self.nd2seg(ln)
+        if (type(lp) <> list):
+            lp = [lp]
         
-        # first delete involved segments 
-
+        print "lp : ",lp
+        # get segments involved in points list
+        ls = self.nd2seg(lp)
+          
+        print "ls : ",ls
+        # 1) delete involved segments 
         for k in ls: 
             assert(k>0)
             self.del_segment(k)
 
-        for n1 in ln:
+        # 2) delete involved points 
+        for n1 in lp:
             assert(n1<0)
             nbrs = self.Gs.neighbors(n1)
             #nbrc = self.Gc.neighbors(n1)
@@ -2044,16 +2051,7 @@ class Layout(object):
             del self.Gs.pos[n1]
             self.labels.pop(n1)
             self.Np = self.Np - 1
-            #try:
-            #    self.Gc.remove_node(n1)
-            #except:
-            #    print "No Gc node",n1
-            #for k in nbrs:
-            #    assert(k>0)
-            #    self.del_segment(k)
-            #
-            #
-        # updating structures     
+        # 3) updating structures     
         self.g2npy()
             
     def del_segment(self,le):
@@ -3728,42 +3726,67 @@ class Layout(object):
             nx.draw_networkx_labels(
                 self.Gs, dicopos, dicolab, font_size=font_size)
 
-    def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
+    #def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
+    def show_segment(self,**kwargs): 
         """ show segment
 
         Parameters
         ----------
 
-            edlist
-            alpha
-            width
-            color
-            dnodes
-            dlabels
-            font_size
-
+        edlist : list 
+            segment list 
+        alpha : float
+            transparency 0< alpha < 1
+        width : float 
+            line width (default 1) 
+        color : string
+            default 'black'
+        dnodes : boolean 
+            display nodes ( Default False)
+        dlabels : boolean
+            display labels ( Default False)
+        font_size : int 
+            Default 15
 
         """
+        
+        defaults = {'edlist': [],
+                    'alpha':1,
+                    'width':1,
+                    'color':'black',
+                    'dnodes':False,
+                    'dlabels':False,
+                    'font_size':15
+                   }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
         clrlist = []
         cold = pyu.coldict()
-
-        if color[0]<>'#':
-            clrlist.append(cold[color])
+        
+        # html color or string 
+        if kwargs['color'][0]<>'#':
+            clrlist.append(cold[kwargs['color']])
         else:
             clrlist.append(color)
 
         ecmap = clr.ListedColormap(clrlist)
-        U = self.Gs.edges(edlist)
-        ue = (np.ones(2 * len(edlist))).astype('int').tolist()
-        nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
-                               edge_color=ue, edge_cmap=ecmap, alpha=alpha, width=width)
-        if dlabels:
+
+        U = self.Gs.edges(kwargs['edlist'])
+        ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
+        if len(U) >0:
+            nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
+                               edge_color=ue, edge_cmap=ecmap,
+                               alpha=kwargs['alpha'], width=kwargs['width'])
+        if kwargs['dlabels']:
                # print edlist
                # nodelist = self.ed2nd(edlist)
-            self.show_nodes(ndlist=edlist, dlabels=dlabels,
-                            color='b', font_size=font_size)
-        if dnodes:
-            self.show_nodes(ndlist=edlist, color='b')
+            self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
+                            color='b', font_size=kwargs['font_size'])
+        if kwargs['dnodes']:
+            self.show_nodes(ndlist=kwargs['edlist'], color='b')
 
     def show_layer(self, name, edlist=[], alpha=1, width=0,
                    color='black', dnodes=False, dthin=False,
@@ -3815,7 +3838,7 @@ class Layout(object):
                 else:
                     color = 'black' 
 
-            self.show_segment(edlist, alpha=1,
+            self.show_segment(edlist=edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
 
