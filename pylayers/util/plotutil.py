@@ -13,8 +13,9 @@ def mulcplot(x,y,**kwargs):
     Parameters
     ----------
 
-    x : ndarray  (Nc x Nx)
-    y : ndarray  (Nv x Ny)
+    x : ndarray  
+        
+    y : ndarray  
 
     types : 'm'   : modulus 
             'v'   : value
@@ -129,19 +130,25 @@ def mulcplot(x,y,**kwargs):
         if k not in defaults.keys():
             args[k]=kwargs[k]
 
+    #
+    # shape of entries
+    #
     shx = x.shape
     shy = y.shape
 
-    if len(shy)>2:
-        ydim = shy[0:-1]
+    # 
+    # This is for handling MDA of shape 
+    #
+    if len(shy)>2: # 3
+        ydim = shy[0:-1]   
         nlin = ydim[0]
         ncol = ydim[1]
     else:
         if not grid:
-            if len(shy)>1:
+            if len(shy)>1: #2   1 column 
                 nlin = shy[0]
                 ncol = 1
-            else:
+            else:          #0   1 line / 1 column 
                 nlin = 1
                 ncol = 1
                 y = y[np.newaxis,:]
@@ -159,14 +166,17 @@ def mulcplot(x,y,**kwargs):
     assert((nylabels==nfigy) | (nxlabels==1))
 
     if ax==[]:    
-        fig,ax=plt.subplots(nlin,ncol,sharey=True,sharex=True)
-        if (nlin==1)&(ncol==1):
-            ax = np.array(ax)[np.newaxis,np.newaxis]
-        else:    
-            if nlin==1:
-                ax = ax[np.newaxis,:]
-            if ncol==1:
-                ax = ax[:,np.newaxis]
+        # nlin , ncol subplot 
+        fig,ax = plt.subplots(nlin,ncol,sharey=True,sharex=True)
+
+    if (nlin==1)&(ncol==1):
+        ax = np.array(ax)[np.newaxis,np.newaxis]
+    else:    
+        if nlin==1:
+            ax = ax[np.newaxis,:]
+        if ncol==1:
+            ax = ax[:,np.newaxis]
+
    
     for l in range(nlin):
         for c in range(ncol):

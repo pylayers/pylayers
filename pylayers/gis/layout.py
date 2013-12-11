@@ -942,11 +942,13 @@ class Layout(object):
 
         Parameters
         ----------
+
         _filefur  : string
             short name of the furniture ini file
 
         Notes
         -----
+
             Furniture objects are stored in self.lfur list
 
         Examples
@@ -3911,16 +3913,9 @@ class Layout(object):
         if not isinstance(ax, plt.Axes):
             ax  = fig.add_subplot(111)
 
-        if furniture:
-            if 'lfur' in self.__dict__:
-                for fur1 in self.lfur:
-                    if fur1.Matname == 'METAL':
-                        fur1.show(fig, ax)
-            else:
-                print "Warning : no furniture file loaded"
-
         if self.display['clear']:
             ax.cla()
+
         # display overlay image
         if self.display['overlay']:
             imok = False 
@@ -3997,6 +3992,15 @@ class Layout(object):
             ax.yaxis.set_ticks([])
             for loc, spine in ax.spines.iteritems():
                 spine.set_color('none')
+
+        if furniture:
+            if 'lfur' in self.__dict__:
+                for fur1 in self.lfur:
+                    if fur1.Matname == 'METAL':
+                        fig,ax = fur1.show(fig, ax)
+            else:
+                print "Warning : no furniture file loaded"
+
 
         for nr in roomlist:
             ncy = self.Gr.node[nr]['cycle']

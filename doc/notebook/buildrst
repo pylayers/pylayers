@@ -17,7 +17,7 @@ do
         #rm ${file%%.ipynb}.rst
         rm f1
     else
-        #echo "problem in  ",$i
+        echo "Problem in  ",$i
         exit
     fi     
     #rm f2

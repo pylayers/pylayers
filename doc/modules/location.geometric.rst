@@ -3,7 +3,7 @@
 geometric algorithms
 ====================
 
-.. automodule:: pylayers.location.geometric.exploit_CDF
+.. automodule:: pylayers.location.constraints.toa
     :members:
 
 .. automodule:: pylayers.location.geometric.Scenario_base
@@ -11,10 +11,6 @@ geometric algorithms
 
 .. toctree::
     :maxdepth: 2
-
-    pylayers.location.geometric.cdf.rst
-
-    pylayers.location.geometric.geom.rst
 
     pylayers.location.geometric.constraints.rst
 
