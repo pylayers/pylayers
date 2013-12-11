@@ -1221,6 +1221,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     See Also
     --------
+
     otherfunc : relationship (optional)
     newfunc : Relationship (optional), which could be fairly long, in which
               case the line wraps here.
@@ -1554,17 +1555,19 @@ def unzipf(path, filepath, zipfilename):
 def rotate_line(A,B,theta):
     """
     rotation of a line [AB] of an angle theta with A fixed
+
     Parameters
     ----------
 
-        A: ndarray
-        B: ndarray
-        theta: float
+    A: ndarray
+    B: ndarray
+    theta: float
 
     Returns
     -------
 
-        Br: ndarry
+    Br: ndarray
+
     """
     if np.shape(B)!=(2,1):
         B.reshape((2,1))

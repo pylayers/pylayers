@@ -575,7 +575,6 @@ class SelectL(object):
 
             if  self.state == 'SP1':
                 self.state = 'Init'
-                # TODO : delete segment first 
                 self.L.del_points(self.selected_pt1)
                 self.update_state()
                 return

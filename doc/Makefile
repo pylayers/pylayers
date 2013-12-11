@@ -1,4 +1,4 @@
-# Makefile for Sphinx documentation
+#Makefile for Sphinx documentation
 #
 
 # You can set these variables from the command line.
@@ -6,6 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = ../../website
+FIXIT         = $(BUILDDIR)/html/notebook/fixit 
 PDFBUILDDIR   = /tmp
 PDF           = ../PyLayersManual.pdf
 
@@ -44,6 +45,7 @@ html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+	$(FIXIT)
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml

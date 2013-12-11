@@ -568,62 +568,70 @@ class Layout(object):
         #
         # transcoding array between graph numbering (discontinuous) and numpy numbering (continuous)
         #
-
+        Nsmax = 0 
         self.tsg = np.array(useg)
-        Nsmax = max(self.tsg)
-        self.tgs = np.zeros(Nsmax+1,dtype=int)
-        rag = np.arange(len(useg))
-        self.tgs[self.tsg] = rag
+        try:
+            Nsmax = max(self.tsg)
+        except:
+            logging.warning("No segments in Layout yet")
         
-        #
-        # calculate normal to segment ta-he
-        #
-        # This could becomes obsolete once the normal will be calculated at
-        # creation of the segment
-        #
-
-        X = np.vstack((self.pt[0,self.tahe[0,:]],self.pt[0,self.tahe[1,:]]))
-        Y = np.vstack((self.pt[1,self.tahe[0,:]],self.pt[1,self.tahe[1,:]]))
-
-        normx = Y[0,:]-Y[1,:]
-        normy = X[1,:]-X[0,:]
-
-        scale = np.sqrt(normx*normx+normy*normy)
-        assert (scale.all()>0)
-        self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
-
-        #for ks in ds:
-        #
-        # lsss : list of subsegment 
-        #
-        nsmax  = max(self.Gs.node.keys())
-        # nsmax can be different from the total number of segments
-        self.lsss = []
-        self.isss = []
-        self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
-        self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
-        
-        # Storing segment normals 
-        # Handling of subsegments
         # 
-        # index is for indexing subsegment after the nsmax value
+        # handling of segment related arrays
         #
-        index = nsmax+1
-        for ks in useg:
-            k = self.tgs[ks]                        # index numpy 
-            self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal 
-            self.sla[ks]=self.Gs.node[ks]['name']   # update sla array 
-            self.stridess[ks]=0                     # initialize stridess[ks]
-            if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
-                nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
-                self.stridess[ks]=index-1           # update stridess[ks] dict
-                for slabname in self.Gs.node[ks]['ss_name']:
-                    self.lsss.append(ks)
-                    self.sla[index] = slabname
-                    self.isss.append(index)
-                    index = index+1
-        # calculate extremum of segments            
-        self.extrseg()
+        if Nsmax >0:
+            self.tgs = np.zeros(Nsmax+1,dtype=int)
+            rag = np.arange(len(useg))
+            self.tgs[self.tsg] = rag
+        
+            #
+            # calculate normal to segment ta-he
+            #
+            # This could becomes obsolete once the normal will be calculated at
+            # creation of the segment
+            #
+
+            X = np.vstack((self.pt[0,self.tahe[0,:]],self.pt[0,self.tahe[1,:]]))
+            Y = np.vstack((self.pt[1,self.tahe[0,:]],self.pt[1,self.tahe[1,:]]))
+
+            normx = Y[0,:]-Y[1,:]
+            normy = X[1,:]-X[0,:]
+
+            scale = np.sqrt(normx*normx+normy*normy)
+            assert (scale.all()>0)
+            self.normal = np.vstack((normx,normy,np.zeros(len(scale))))/scale
+
+            #for ks in ds:
+            #
+            # lsss : list of subsegment 
+            #
+            nsmax  = max(self.Gs.node.keys())
+            # nsmax can be different from the total number of segments
+            self.lsss = []
+            self.isss = []
+            self.stridess = np.array(np.zeros(nsmax+1),dtype=int)
+            self.sla  = np.zeros((nsmax+1+self.Nss), dtype='S20')
+            
+            # Storing segment normals 
+            # Handling of subsegments
+            # 
+            # index is for indexing subsegment after the nsmax value
+            #
+            index = nsmax+1
+            for ks in useg:
+                k = self.tgs[ks]                        # index numpy 
+                self.Gs.node[ks]['norm'] = self.normal[:,k]  # update normal 
+                self.sla[ks]=self.Gs.node[ks]['name']   # update sla array 
+                self.stridess[ks]=0                     # initialize stridess[ks]
+                if self.Gs.node[ks].has_key('ss_name'): # if segment has sub segment 
+                    nss = len(self.Gs.node[ks]['ss_name'])  # retrieve number of sseg
+                    self.stridess[ks]=index-1           # update stridess[ks] dict
+                    for slabname in self.Gs.node[ks]['ss_name']:
+                        self.lsss.append(ks)
+                        self.sla[index] = slabname
+                        self.isss.append(index)
+                        index = index+1
+            # calculate extremum of segments            
+            self.extrseg()
 
     def loadosm(self, _fileosm):
         """ load layout from an osm file format
@@ -1016,7 +1024,7 @@ class Layout(object):
         else:
             raise NameError('layout filename extension not recognized')
 
-        #  construct geomfile (.off) for vizalisation with geomview
+        #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
         if os.path.exists(filename):
             try:
@@ -1871,12 +1879,16 @@ class Layout(object):
 
         """
 
-        if ((n1 < 0) & (n2 < 0)):
-            nn = np.array(self.Gs.node.keys())  ## nn : node list array
-            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)
-            lp = len(up)                        ## lp : number of segment
-            e1 = np.arange(lp) + 1              ## e1 : ordered list of segment number
-            e2 = nn[up]                         ## e2 : current list of of segment number
+        # if 2 points are selected
+        if ((n1 < 0) & (n2 < 0) & (n1 != n2)):
+            nn = np.array(self.Gs.node.keys())  ## nn : node list array     (can be empty)
+            up = np.nonzero(nn > 0)[0]          ## up : segment index (>O)  (can be empty)
+            lp = len(up)                        ## lp : number of segments  (can be zero)
+            if lp>0:
+                e1 = np.arange(lp) + 1          ## e1 : ordered list of segment number
+            else:
+                e1 = np.array([1])
+            e2 = nn[up]                         ## e2 : current list of segment number
             c = ~np.in1d(e1, e2)                ## c  : e1 not in e2 (free segment number)
             tn = e1[c]                          ## tn[c] free segment number 
             #print tn
@@ -2001,34 +2013,37 @@ class Layout(object):
                 except:
                     raise NameError('No such furniture type - '+typ+'-') 
 
-    def del_points(self, ln):
-        """ delete points in list ln
+    def del_points(self, lp):
+        """ delete points in list lp
 
         Parameters
         ----------
 
-        ln : list 
+        lp : list 
             node list 
 
         """
         
         # test if array
-        if (type(ln) == np.ndarray):
+        if (type(lp) == np.ndarray):
             ln = list(ln)
 
         # test if list 
-        if (type(ln) <> list):
-            ln = [ln]
-
-        ls = self.nd2seg(ln)
+        if (type(lp) <> list):
+            lp = [lp]
         
-        # first delete involved segments 
-
+        print "lp : ",lp
+        # get segments involved in points list
+        ls = self.nd2seg(lp)
+          
+        print "ls : ",ls
+        # 1) delete involved segments 
         for k in ls: 
             assert(k>0)
             self.del_segment(k)
 
-        for n1 in ln:
+        # 2) delete involved points 
+        for n1 in lp:
             assert(n1<0)
             nbrs = self.Gs.neighbors(n1)
             #nbrc = self.Gc.neighbors(n1)
@@ -2036,16 +2051,7 @@ class Layout(object):
             del self.Gs.pos[n1]
             self.labels.pop(n1)
             self.Np = self.Np - 1
-            #try:
-            #    self.Gc.remove_node(n1)
-            #except:
-            #    print "No Gc node",n1
-            #for k in nbrs:
-            #    assert(k>0)
-            #    self.del_segment(k)
-            #
-            #
-        # updating structures     
+        # 3) updating structures     
         self.g2npy()
             
     def del_segment(self,le):
@@ -2310,10 +2316,26 @@ class Layout(object):
 
 
     def chgmss(self,ns,ss_name=[],ss_z=[]):
-        """
+        """ change a specific multi subseggments properties
 
         Parameters
         ----------
+
+        ns : int
+            segment number 
+
+        ss_name : list of Nss  string     
+            name of the different constitutive SLAB of the multi-segments
+       
+        ss_z : list of Nss tuple (zmin,zmax) 
+
+        Examples 
+        --------
+
+        See Also 
+        --------
+
+        pylayers.gis.layout.g2npy
 
         """
         if ns in self.Gs.node.keys():
@@ -3704,42 +3726,67 @@ class Layout(object):
             nx.draw_networkx_labels(
                 self.Gs, dicopos, dicolab, font_size=font_size)
 
-    def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
+    #def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
+    def show_segment(self,**kwargs): 
         """ show segment
 
         Parameters
         ----------
 
-            edlist
-            alpha
-            width
-            color
-            dnodes
-            dlabels
-            font_size
-
+        edlist : list 
+            segment list 
+        alpha : float
+            transparency 0< alpha < 1
+        width : float 
+            line width (default 1) 
+        color : string
+            default 'black'
+        dnodes : boolean 
+            display nodes ( Default False)
+        dlabels : boolean
+            display labels ( Default False)
+        font_size : int 
+            Default 15
 
         """
+        
+        defaults = {'edlist': [],
+                    'alpha':1,
+                    'width':1,
+                    'color':'black',
+                    'dnodes':False,
+                    'dlabels':False,
+                    'font_size':15
+                   }
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
         clrlist = []
         cold = pyu.coldict()
-
-        if color[0]<>'#':
-            clrlist.append(cold[color])
+        
+        # html color or string 
+        if kwargs['color'][0]<>'#':
+            clrlist.append(cold[kwargs['color']])
         else:
             clrlist.append(color)
 
         ecmap = clr.ListedColormap(clrlist)
-        U = self.Gs.edges(edlist)
-        ue = (np.ones(2 * len(edlist))).astype('int').tolist()
-        nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
-                               edge_color=ue, edge_cmap=ecmap, alpha=alpha, width=width)
-        if dlabels:
+
+        U = self.Gs.edges(kwargs['edlist'])
+        ue = (np.ones(2 * len(kwargs['edlist']))).astype('int').tolist()
+        if len(U) >0:
+            nx.draw_networkx_edges(self.Gs, self.Gs.pos, edgelist=U,
+                               edge_color=ue, edge_cmap=ecmap,
+                               alpha=kwargs['alpha'], width=kwargs['width'])
+        if kwargs['dlabels']:
                # print edlist
                # nodelist = self.ed2nd(edlist)
-            self.show_nodes(ndlist=edlist, dlabels=dlabels,
-                            color='b', font_size=font_size)
-        if dnodes:
-            self.show_nodes(ndlist=edlist, color='b')
+            self.show_nodes(ndlist=kwargs['edlist'], dlabels=kwargs['dlabels'],
+                            color='b', font_size=kwargs['font_size'])
+        if kwargs['dnodes']:
+            self.show_nodes(ndlist=kwargs['edlist'], color='b')
 
     def show_layer(self, name, edlist=[], alpha=1, width=0,
                    color='black', dnodes=False, dthin=False,
@@ -3791,7 +3838,7 @@ class Layout(object):
                 else:
                     color = 'black' 
 
-            self.show_segment(edlist, alpha=1,
+            self.show_segment(edlist=edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
 
@@ -5983,7 +6030,7 @@ class Layout(object):
 
         >>> from pylayers.gis.layout import *
         >>> L = Layout('DLR.ini')
-        >>> L.geomfile()
+        >>> pg = L.geomfile()
 
         """
     
@@ -6119,16 +6166,24 @@ class Layout(object):
             fos.write("4 %i %i %i %i %6.3f %6.3f %6.3f 0.4\n" % (q +
                 1, q + 2, q + 3, q + 4, col[0], col[1], col[2]))
         fos.close()
+        return pg 
 
-    def show3(self, bdis=True):
+    def show3(self, bdis=True,centered=True):
         """ geomview display of the indoor structure
 
         Parameters
         ----------
-            bdis
-                boolean (default True)
+
+        bdis boolean (default True)
+            boolean display (call geowview if True)
+        centered : boolean     
+            if True center the layout before display
+        
+        
         """
-        self.geomfile()
+
+        pg = self.geomfile(centered=centered)
+
         filename = pyu.getlong(self.filegeom, pstruc['DIRGEOM'])
         if (bdis):
             #chaine = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
@@ -6136,6 +6191,8 @@ class Layout(object):
             os.system(chaine)
         else:
             return(filename)
+
+        return(pg)
 
     def signature(self, iTx, iRx):
         """ Determine signature between node iTx and node iRx
