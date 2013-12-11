@@ -4,7 +4,7 @@
 
 
 gis
-===
+---
 
 This module gathers all classes and functions related to geographical information.
 
@@ -20,3 +20,5 @@ This module gathers all classes and functions related to geographical informatio
    gis.cycles.rst 
 
    gis.selectl.rst 
+
+   gis.osmparser.rst

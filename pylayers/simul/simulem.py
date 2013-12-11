@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 #
 """
+
     This module run the electromagnetic simulation
-    This module requires pulsray binaries to be installed
+
+
 """
 import doctest
 import os
@@ -748,8 +750,6 @@ class Simul(object):
         #self.load(self.filesimul)
 
 
-
-
     def gui(self):
         """ gui to modify the simulation file
         """
@@ -1158,6 +1158,7 @@ class Simul(object):
 
         Parameters
         ----------
+
         _filesimul   : file in the simul directory of the Project
 
         """
@@ -1191,6 +1192,10 @@ class Simul(object):
 
         try:
             self.filestr = self.config.get("files", "struc")
+            # force .str extension
+            f,e = self.filestr.split['.']
+            self.filestr = f+'.str'
+            print self.filestr
         except: 
             raise NameError('Error in section struc from '+ _filesimul)
 
@@ -1945,7 +1950,9 @@ class Simul(object):
             transmiter index
 
         """
+
         filestr = os.path.splitext(self.filestr)[0] + '.str'
+
         if not os.path.exists(pyu.getlong(filestr,pstruc['DIRSTRUC'])):
             chaine = 'newstruc -str2 ' + filestr +'2 ' + filestr + ' -conf ' + basename +'/'+self.fileconf
             os.system(chaine)
@@ -1956,6 +1963,7 @@ class Simul(object):
             " -palch " + self.filepalch + \
             " -spa " + self.tx.filespa + \
             " -conf " + basename + '/' + self.fileconf
+
         if verbose:
             print chaine
 
@@ -2327,6 +2335,7 @@ class Simul(object):
 
 
         """
+
         self.updcfg()
         #t0 = time.clock()
         if type(srx) == int:
@@ -2390,18 +2399,18 @@ class Simul(object):
                             val = par[k][1]
                             if key == "band":
                                 self.wparam[key] = float(val)
-                            if key == "fc":
+                            if key == "fcGHz":
                                 self.wparam[key] = float(val)
-                            if key == "fe":
+                            if key == "feGHz":
                                 self.wparam[key] = float(val)
-                            if key == "thresh":
+                            if key == "threshdB":
                                 self.wparam[key] = float(val)
-                            if key == "tw":
+                            if key == "twns":
                                 self.wparam[key] = float(val)
-                            if key == "type":
+                            if key == "typ":
                                 self.wparam[key] = val
 
-                        self.wav = wvf.Waveform(self.wparam)
+                        self.wav = wvf.Waveform(**self.wparam)
                         alpha = np.sqrt(1. / 30.0)
                         print "run debug ",itx,irx
                         self.cir([itx], [irx],

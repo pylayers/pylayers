@@ -1,7 +1,7 @@
 from pylayers.antprop.antenna import *
+from pylayers.antprop.antvsh import *
 from pylayers.antprop.spharm import *
-from pylayers.antprop.antenna import *
-from pylayers.antprop.antenna import *
+
 import numpy as np
 import scipy as sp
 import pdb
@@ -80,33 +80,32 @@ def SphereToCart (theta, phi, eth, eph, bfreq ):
 
     return ec
 
-def CartToSphere (theta, phi, ex, ey,ez, bfreq = True ):
+
+def CartToSphere (theta, phi, ex, ey,ez, bfreq ):
+
 
     """
     Convert from cartesian to spherical  coordinates 
     bfreq : boolean parameter to indicate if the conversion is done for all frequencies of only one.
     """
-	
 
     if bfreq == False:
         PHI = phi.reshape((1,len(phi)))
         THETA = theta.reshape((len(theta),1))
         es = np.ndarray(shape = (2, len(theta),len(phi)) , dtype  = complex  )
-        ex = ex.reshape((len(theta), len(phi)))
-        ey = ey.reshape((len(theta), len(phi)))
-        ez = ez.reshape((len(theta), len(phi)))
+
+
     else:
-		PHI = phi.reshape((1,1,len(phi)))
-		THETA = theta.reshape((1,len(theta),1))
-		es = np.ndarray(shape = (2, ex.shape[0], len(theta),len(phi)) , dtype  = complex  )
-		ex = ex.reshape((ex.shape[0],len(theta), len(phi)))
-		ey = ey.reshape((ex.shape[0],len(theta), len(phi)))
-		ez = ez.reshape((ex.shape[0],len(theta), len(phi)))
+        PHI = phi.reshape((1,1,len(phi)))
+        THETA = theta.reshape((1,len(theta),1))
+        es = np.ndarray(shape = (2, ex.shape[0], len(theta),len(phi)) , dtype  = complex  )
+
 
     es[0] = np.cos(THETA)*np.cos(PHI)*ex + np.cos(THETA)*np.sin(PHI)*ey -np.sin(THETA)*ez
     es[1] = -np.sin(PHI)*ex +np.cos(PHI)*ey
 
     return es[0],es[1]
+
 
      
 
@@ -173,6 +172,7 @@ def ssh(A, dsf=1, L= 20):
 	Cz = SCoeff(typ='s2', fmin=A.fa[0], fmax=A.fa[-1],lmax = lmax, data=cz,ind =ssh_index)
 
 	A.S = SSHCoeff(Cx,Cy,Cz)
+
 
 	return(A)
 

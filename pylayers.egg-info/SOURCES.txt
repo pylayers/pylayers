@@ -1,7 +1,6 @@
 README
 setup.py
 pylayers/__init__.py
-pylayers/clean_pyproject.py
 pylayers.egg-info/PKG-INFO
 pylayers.egg-info/SOURCES.txt
 pylayers.egg-info/dependency_links.txt

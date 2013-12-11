@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% set title = 'Overview' %}
+{% set script_files = script_files + ["_static/force/d3js/d3.min.js"] %}
+{% set script_files = script_files + ["_static/force/d3js/d3.geom.min.js"] %}
+{% set script_files = script_files + ["_static/force/d3js/d3.layout.min.js"] %}
+{% set css_files = css_files + ["_static/force/force.css"] %}
+{% block body %}
+<h2>Python Indoor Propagation Simulator for Mobile Localization </h2>
+
+<table align="left" style="margin-left: 0px">
+<tr>
+  <td width="60%">
+<blockquote>
+<p>PyLayers is an indoor mobile radio propagation simulator. The purpose is
+to help the design and the evaluation of localization and positioning
+algorithms in heterogeneous network and RTLS systems using Ultra Wide Band radio technology. 
+</p>
+</blockquote>
+  </td>
+    <td width="40%">
+</td></tr>
+</table>
+
+<table class="contentstable" align="center" style="margin-left: 30px"><tr>
+  <td width="25%">
+    <p class="biglink"><a class="biglink" href="{{ pathto("notebook/index") }}">Documentation</a><br/>
+       <span class="linkdescr"></span></p>
+  </td>
+  <!--
+  <td width="25%">
+    <p cl ass="biglink"><a class="biglink" href="{{ pathto("examples") }}">Examples</a><br/>
+       <span class="linkdescr"></span></p>
+  </td>
+  //-->
+  <td width="25%">
+      <p class="biglink"><a class="biglink" href="{{pathto("modules/index")
+          }}">Module References</a><br/>
+        <span class="linkdescr"></span></p>
+  </td>
+  <td width="25%">
+    <p clas s="biglink"><a class="biglink"
+        href="{{ pathto("acknowledgments")}}">Acknowledgements</a><br/>
+       <span class="linkdescr"></span></p>
+  </td></tr>
+</table>
+
+<h2>Main Features</h2>
+<ul class="simple">
+<li> Open Street Map format layout edition with <a href=http://josm.openstreetmap.de/>JOSM</a>
+<li> Standalone python modules for handling material,slab,antennas,channel,mobility,algorithms, ...
+<li> Handling of Impulse Radio Ultra Wideband Band (IR-UWB) waveforms
+<li> Compact UWB Antenna modeling using spherical harmonics representations 
+<li> Fast indoor coverage using a Motley Keenan Multiwall Model
+<li> Incremental ray tracing tool based on layout graph extraction and evaluation of ray signatures 
+<li> Agent mobility based on <a href=http://simpy.sourceforge.net/> SimPy </a>
+<li> Localization algorithms (geometric and algebraic) 
+<li> (Ongoing) Human mobility input from motion capture files and from <a href=https://github.com/martinling/imusim/blob/master/docs/tutorial.rst>IMUSIM</a>
+<li> (Ongoing) Output for event-driven simulator <a href=http://wsnet.gforge.inria.fr/>WSNET</a>
+<li> Open source GPL license
+</li>
+</ul>
+
+<h2>Acknowledments</h2>
+<ul class="simple">
+<a class="reference external image-reference"
+    href="http://www.kn-s.dlr.de/where2/news.php">
+    <img alt="_images/WHERE2_Logo.jpg" src="_images/WHERE2_Logo.jpg" style="width: 100.0px " /></a>
+<a class="reference internal image-reference" href="http://www-leti.cea.fr/fr/Les-actualites/Le-projet-CORMORAN-explore-de-nouvelles-pistes2"><img alt="_images/logo_CORMORAN.png" src="_images/logo_CORMORAN.png" style="width: 100.0px" /></a>
+</ul>
+
+<h2>News</h2>
+<ul>
+    <li> <b>June 9, 2013 </b>: PyLayers has been presented in session Radio Channel
+    Modeling for Localization of <a
+        href="http://icc2013.spsc.tugraz.at/Schedule">ICC2013 Workshop on
+        Advances in Network Localization and Navigation</a> in Budapest<br>
+   N.Amiot,M.Laaraiedh,B.Uguen,"PyLayers: An Open Source Dynamic Simulator for Indoor Propagation and Localization"
+    <li> <b>August  23, 2013 </b>: PyLayers has been presented at
+    `EuroScipy 2013` <a href='https://www.euroscipy.org/schedule/presentation/16/'> PyLayers :
+        A Graph Based Python Open Source Indoor Propagation Simulator</a>
+</ul>    
+
+{% endblock %}

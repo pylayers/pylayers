@@ -423,11 +423,13 @@ class Rays(dict):
                     # Antérieurement il y avait une hypothèse de succesion
                     # immediate d'un point 2D renseigné.
                     #
-                    iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
-                    iintp_f = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_f,iray_f))
-                    iintm_c = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_c,iray_c))
-                    iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_c,iray_c))
-                    
+                    try:
+                        iintm_f = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_f,iray_f))
+                        iintp_f = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_f,iray_f))
+                        iintm_c = map(lambda x : np.where( (siges[1,0:x[0],x[1]]<>4) & (siges[1,0:x[0],x[1]]<>5))[0][-1], zip(iint_c,iray_c))
+                        iintp_c = map(lambda x : np.where( (siges[1,x[0]:,x[1]]<>4) & (siges[1,x[0]:,x[1]]<>5))[0][0]+x[0], zip(iint_c,iray_c))
+                    except:
+                        pdb.set_trace()
                    
                     # Update coordinate in the horizontal plane 
                     #
@@ -606,7 +608,8 @@ class Rays(dict):
 
 
     def locbas(self, L):
-        """
+        """ calculate ray local basis
+
         Parameters
         ----------
 
@@ -623,8 +626,12 @@ class Rays(dict):
 
         # nsegment x k
         key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
+        
+        # maximum number for refering to segment 
+        # not to be confused with a number of segment 
 
         nsmax = max(L.Gs.node.keys())
+
         mapping = np.zeros(nsmax+1, dtype=int)
         mapping[key] = np.arange(len(key), dtype=int)
 
@@ -636,16 +643,30 @@ class Rays(dict):
         #  nstrs is the nstr of the segment if subsegment : 
         #  nstr  is the glabal which allows to recover the slab values 
         #
+
         for k in self:
+            #
+            # k is the number of interactions
+            #
             if k <> 0:
                 nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
                 ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment 
-                #print nstr
+                # print nstr
+                # 
+                # uss : index of subsegment 
+                # subsegments are not nodes of Gs but have positive nst index 
+                #
+
                 uss   = np.where(nstr>nsmax)
-                #print uss
+
+                # print uss
+
                 nstrs = copy.copy(nstr)
+                #
+                # if subsegments have been found
+                #
                 if len(uss)>0:
                     ind   = nstr[uss]-nsmax
                     nstrs[uss] = np.array(L.lsss)[ind] 
@@ -951,7 +972,7 @@ class Rays(dict):
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
 
-                ray2nbi=np.ones((nbray))
+                ray2nbi = np.ones((nbray))
 
                 
                 try:
@@ -1185,6 +1206,8 @@ class Rays(dict):
                     ## Dot product interaction X Basis
                     Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
                                   ..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
+                    #pdb.set_trace()
+
                     if i == 0:
                     ## First Baspdis added
                         A0 = B0l[:, :,  :, :]
@@ -1197,6 +1220,7 @@ class Rays(dict):
 
                 # fill the C tilde
                 Ct[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
+
                 # delay computation:
                 # sum the distance from antenna to first interaction si0
                 # and the sum of all outgoing segments

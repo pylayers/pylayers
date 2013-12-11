@@ -128,6 +128,7 @@ class SelectL(object):
         self.nsel = 0
         self.ptsel = np.array([])
         self.evt = event.key
+        
         if verbose:
             try:
                 print "Evenement :", self.evt,self.ddoc[self.evt]
@@ -137,7 +138,7 @@ class SelectL(object):
 
     def OnClick(self, event):
         """
-        OnClick(event)
+            OnClick(event)
         """
         fig = plt.gcf()
         ax  = plt.gca()
@@ -408,7 +409,11 @@ class SelectL(object):
             self.update_state()
             return
 
-        #
+        if self.evt == '3':
+            self.L.show3()
+            return
+
+        
         # Choose layers to visualized
         #
         if self.evt == 'l':
@@ -444,6 +449,7 @@ class SelectL(object):
             index = self.L.display['layerset'].index(self.L.display['activelayer'])
             self.L.display['activelayer'] = self.L.display['layerset'][(index+1) % N]
             self.current_layer = self.L.display['activelayer']
+            print self.current_layer
             self.update_state()
             return
 
@@ -569,7 +575,6 @@ class SelectL(object):
 
             if  self.state == 'SP1':
                 self.state = 'Init'
-                # TODO : delete segment first 
                 self.L.del_points(self.selected_pt1)
                 self.update_state()
                 return
@@ -658,7 +663,10 @@ class SelectL(object):
             racine, ext = os.path.splitext(self.L.filename)
             filename = racine + '.str2'
             fileini = racine + '.ini'
+
+            # Commented because ss_ce not updated 
             #self.L.savestr2(filename)
+
             self.L.saveini(fileini)
             print "structure saved in ", filename
             print "structure saved in ", fileini
@@ -703,6 +711,11 @@ class SelectL(object):
                 if self.nsel != self.selected_pt1:
                     # green point 
                     self.state = 'SP2'
+                    self.update_state()
+                    return
+                else:
+                    self.state = 'Init'
+                    # yellow point 
                     self.update_state()
                     return
         #
@@ -823,10 +836,19 @@ class SelectL(object):
                     self.update_state()
 
                 return
+
             if self.state == 'SP2':
+
                 ta = self.selected_pt1
                 he = self.selected_pt2
-                self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
+
+                segexist = self.L.isseg(ta,he)
+                print segexist
+                # if segment do not already exist, create it
+                if not segexist: 
+                    self.nsel  = self.L.add_segment(ta, he,name=self.current_layer)
+                else:
+                    print "segment ("+str(ta)+","+str(he)+") already exists"
                 self.state = 'Init'
                 self.update_state()
                 return

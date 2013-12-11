@@ -46,15 +46,14 @@ def mulcplot(x,y,**kwargs):
     -----
 
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
-    takes the priority over the pased values nlin and ncol 
+    takes the priority over the passed values nlin and ncol 
 
 
     """
     defaults = {'types':['l20'],
                 'titles':[''],
                 'labels':[''],
-                'xlabels':['Amplitude (dB)'],
-                'ylabels':['Amplitude (dB)'],
+                'xlabels':['time (ns)'],
                 'ncol':1,
                 'nlin':1,
                 'fig':[],
@@ -74,7 +73,10 @@ def mulcplot(x,y,**kwargs):
     for key, value in defaults.items():
         if key not in kwargs:
             kwargs[key] = value
-   
+    #
+    # ylabels is deduced from types 
+    # ==> do not set any ylabels defaults
+    #
     if 'ylabels' not in kwargs:
         ylabels = []
         for t in kwargs['types']:
@@ -114,11 +116,11 @@ def mulcplot(x,y,**kwargs):
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
 
-    ntypes = np.prod(np.array(types).shape)
-    ntitles = np.prod(np.array(titles).shape)
-    nlabels = np.prod(np.array(labels).shape)
-    nxlabels = np.prod(np.array(xlabels).shape)
-    nylabels = np.prod(np.array(ylabels).shape)
+    ntypes = np.prod(np.array(types).shape,dtype='int')
+    ntitles = np.prod(np.array(titles).shape,dtype='int')
+    nlabels = np.prod(np.array(labels).shape,dtype='int')
+    nxlabels = np.prod(np.array(xlabels).shape,dtype='int')
+    nylabels = np.prod(np.array(ylabels).shape,dtype='int')
 
 
     # filtering kwargs argument for plot function 
@@ -151,10 +153,10 @@ def mulcplot(x,y,**kwargs):
     nfigy = np.prod(np.array(y.shape[0:-1]))
 
     assert((nfigy==ncol*nlin) | (nfigy==1))
-    assert((nlabels==nfigy)|(nlabels==1))
-    assert((ntitles==ncol*nlin)|(ntitles==1))
-    assert((nxlabels==nfigy)|(nxlabels==1))
-    assert((nylabels==nfigy)|(nxlabels==1))
+    assert((nlabels==nfigy) | (nlabels==1))
+    assert((ntitles==ncol*nlin) | (ntitles==1))
+    assert((nxlabels==nfigy) | (nxlabels==1))
+    assert((nylabels==nfigy) | (nxlabels==1))
 
     if ax==[]:    
         fig,ax=plt.subplots(nlin,ncol,sharey=True,sharex=True)
@@ -246,6 +248,7 @@ def mulcplot(x,y,**kwargs):
 
                 ax[l,c].set_xlabel(xlabels[k%nxlabels])
                 ax[l,c].set_ylabel(ylabels[k%nylabels])
+
                 ax[l,c].set_title(titles[k%ntitles])
                 ax[l,c].legend()
                 #ax[l,c].get_xaxis().set_visible(False)

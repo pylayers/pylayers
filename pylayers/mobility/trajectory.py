@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pylayers.util.pyutil as pyu
 from matplotlib.path import Path 
 import pandas as pd 
+import doctest
 
 
 class Trajectory(pd.DataFrame):
@@ -31,26 +32,27 @@ class Trajectory(pd.DataFrame):
 
 
     """
-    def __init__(self,t=[],pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000))).T,unit='s'):
+    def __init__(self,t=[],pt=np.vstack((np.arange(0,10,0.01),np.zeros(1000),np.zeros(1000))).T,unit='s'):
         """ initialization 
         """
+        npt = np.shape(pt)[0]
         if t ==[]:
-            t = np.arange(0,1,0.01)
+            t = np.linspace(0,10,npt)
         td = pd.to_datetime(t,unit=unit)
-        #v = np.vstack((pt[1:,:]-pt[0:-1,:],np.array([np.nan,np.nan])))
-        #a = np.vstack((v[1:,:]-v[0:-1,:],np.array([np.nan,np.nan])))
         v = pt[1:,:]-pt[0:-1,:]
         a = v[1:,:]-v[0:-1,:]
         d = np.sqrt(np.sum(v*v,axis=1))
         s = np.cumsum(d)
-        #vy = self['y'][1:].values-self['y'][0:-1].values
         pd.DataFrame.__init__(self,{'t':td[:-2],
                                     'x':pt[:-2,0],
                                     'y':pt[:-2,1],
+                                    #'z':pt[:-2,2],
                                     'vx':v[:-1,0],
                                     'vy':v[:-1,1],
+                                    #'vz':v[:-1,2],
                                     'ax':a[:,0],
                                     'ay':a[:,1],
+                                    #'az':a[:,2],
                                     's' :s[:-1]},columns=['t','x','y','vx','vy','ax','ay','s'])
 
         N = len(t) 
@@ -62,8 +64,8 @@ class Trajectory(pd.DataFrame):
         self.dtot = self['s'].values[-1]
         self.meansp = self.dtot/self.ttime
 
-        if np.shape(pt)[1]>2:
-            self['z'] = pt[:,2]
+        #if np.shape(pt)[1]>2:
+        #    self['z'] = pt[:,2]
 
     def __repr__(self):
 
@@ -157,13 +159,16 @@ class Trajectory(pd.DataFrame):
         
         .. plot::
             :include-source:
-
+            
+            >>> from pylayers.mobility.trajectory import *
+            >>> import matplotlib.pyplot as plt 
+            >>> import numpy as np 
             >>> t = np.arange(0,10,0.01)
             >>> x = 2*t*np.cos(t)
             >>> y = 3*t*np.sin(t) 
             >>> pt =np.vstack((x,y)).T
             >>> traj = Trajectory(t,pt)
-            >>> traj.plot()
+            >>> f,a = traj.plot()
             >>> plt.show()
 
         """
@@ -179,8 +184,8 @@ class Trajectory(pd.DataFrame):
             ax.text(self['x'][k],self['y'][k],str(self['t'][k].strftime("%M:%S")))
             ax.plot(self['x'][k],self['y'][k],'*r')
 
-        plt.xlabel('x (meters')
-        plt.ylabel('y (meters')
+        plt.xlabel('x (meters)')
+        plt.ylabel('y (meters)')
 
         return fig,ax 
 
@@ -211,14 +216,9 @@ def importsn(_filename='pos.csv'):
     return(lt)    
 
 if __name__ == '__main__':
+    plt.ion()
+    doctest.testmod()
+    
 
-    t = np.arange(0,10,0.01)
-    x = 2*t*np.cos(t)
-    y = 3*t*np.sin(t) 
-    pt =np.vstack((x,y)).T
-
-    traj = Trajectory(t,pt)
-    traj.plot()
-    plt.show()
 
    

@@ -1154,6 +1154,7 @@ slab name
         for k in range(len(self['lmatname'])):
             st = st + self['lmatname'][k]+' | '
         st = st+'\n|'
+
         for k in range(len(self['lmatname'])):
             ntick = int(np.ceil(self['lthick'][k]/0.01))
             for l in range(ntick):
@@ -1165,24 +1166,25 @@ slab name
     def info(self):
         """ Display Slab Info
 
-Examples
---------
 
-.. plot::
-:include-source:
+        Examples
+        --------
 
->>> import numpy as np
->>> import matplotlib.pyplot as plt
->>> from pylayers.antprop.slab import *
->>> sl = SlabDB('matDB.ini','slabDB.ini')
->>> lmatname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
->>> lthick = [0.018,0.03,0.018]
->>> sl.add('placo',lmatname,lthick)
->>> theta = np.arange(0,np.pi/2,0.01)
->>> fGHz = np.array([57.5])
->>> sl['placo'].ev(fGHz,theta)
->>> fig,ax=sl['placo'].plotwrt(var='a',types=['m'])
->>> plt.show()
+        .. plot::
+            :include-source:
+
+            >>> import numpy as np
+            >>> import matplotlib.pyplot as plt
+            >>> from pylayers.antprop.slab import *
+            >>> sl = SlabDB('matDB.ini','slabDB.ini')
+            >>> lmatname = ['PLATRE-57GHz','AIR','PLATRE-57GHz']
+            >>> lthick = [0.018,0.03,0.018]
+            >>> sl.add('placo',lmatname,lthick)
+            >>> theta = np.arange(0,np.pi/2,0.01)
+            >>> fGHz = np.array([57.5])
+            >>> sl['placo'].ev(fGHz,theta)
+            >>> fig,ax=sl['placo'].plotwrt(var='a',types=['m'])
+            >>> plt.show()
 
 """
         print "------------"
@@ -1747,83 +1749,85 @@ fGHz : np.array
     def add(self, name, lmatname, lthick, color='black'):
         """ add a slab in dB
 
-Parameters
-----------
 
-name : string
-lmatname : list of mat name
-lthick : list ot float
-lthick is in meters
+        Parameters
+        ----------
 
-Warnings
---------
+        name       : string
+        lmatname      : list of mat name
+        lthick     : list ot float
+            lthick  is in meters
 
-thickness is in cm in .slab
+        Warnings
+        --------
 
-Examples
---------
+        thickness is in cm in .slab
 
-Example from the paper:
-"Reflection ant Transmission Properties of Building Materials in D-Band
-for Modeling Future mm-Wave Communication Systems "
-Martin Jacob and Thomas Kurner and Robert Geise and Radoslaw Piesiewicz
-EUCAP 2010
+        Examples
+        --------
 
-.. plot::
-:include-source:
+        Example from the paper:
+        "Reflection ant Transmission Properties of Building Materials in D-Band
+        for Modeling Future mm-Wave Communication Systems "
+        Martin Jacob and Thomas Kurner and Robert Geise and Radoslaw Piesiewicz
+        EUCAP 2010
+
+        .. plot::
+            :include-source:
 
 
-from pylayers.antprop.slab import *
-import numpy as np
-import matplotlib.pylab as plt
-sl = SlabDB('matDB.ini','slabDB.ini')
+            from pylayers.antprop.slab import *
+            import numpy as np
+            import matplotlib.pylab as plt
+            sl = SlabDB('matDB.ini','slabDB.ini')
 
-sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
-sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
-sl.add('ConcreteJc',['ConcreteJc'],[0.049])
-sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[
-0.0029,0.0102,0.0029])
-theta = np.linspace(20,60,100)*np.pi/180
-sl['ConcreteJc'].ev(120,theta)
-sl['ConcreteJc'].plotwrt(var='a',types=['l20'])
-fig = plt.figure()
-sl['DoubleGlass'].ev(120,theta)
-sl['DoubleGlass'].plotwrt(var='a',types=['l20'])
-freq = np.linspace(110,135,50)
-fig = plt.figure()
-sl['DoubleGlass'].ev(freq,theta)
-sl['DoubleGlass'].pcolor(dB=True)
+            sl.mat.add('ConcreteJc',cval=3.5,alpha_cmm1=1.9,fGHz=120,typ='THz')
+            sl.mat.add('GlassJc',cval=2.55,alpha_cmm1=2.4,fGHz=120,typ='THz')
+            sl.add('ConcreteJc',['ConcreteJc'],[0.049])
+            sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[
+                0.0029,0.0102,0.0029])
+            theta = np.linspace(20,60,100)*np.pi/180
+            sl['ConcreteJc'].ev(120,theta)
+            sl['ConcreteJc'].plotwrt(var='a',types=['l20'])
+            fig = plt.figure()
+            sl['DoubleGlass'].ev(120,theta)
+            sl['DoubleGlass'].plotwrt(var='a',types=['l20'])
+            freq = np.linspace(110,135,50)
+            fig = plt.figure()
+            sl['DoubleGlass'].ev(freq,theta)
+            sl['DoubleGlass'].pcolor(dB=True)
 
-Exemple from paper `"[Kiani2007] Glass Characterization for Designing
-Frequency Selective Surfaces to Improve Transmission through Energy saving
-glass windows Kiani 2007"
-<http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=4554974&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974>`_
-The surface impedance is :math:`R = 4 \Omega`, the thicknesss is :math:`d = 100 nm`
+        Exemple from paper `"[Kiani2007] Glass Characterization for Designing
+        Frequency Selective Surfaces to Improve Transmission through Energy saving
+        glass windows  Kiani 2007"
+        <http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=4554974&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D4554974>`_
+        The surface impedance is :math:`R = 4 \Omega`, the thicknesss is :math:`d = 100 nm`
 
-`Pilkington Spectrum OnLine applet <http://www.pilkington.com/spectrum2/default.aspx?country_code=FR>`_
+        `Pilkington Spectrum OnLine applet <http://www.pilkington.com/spectrum2/default.aspx?country_code=FR>`_
 
-`Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz
-<http://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=530536&fileOId=624944>`_
+        `Design of Energy Saving Windows with high Transmission at 900MHz and 1800 MHz
+        <http://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=530536&fileOId=624944>`_
 
-.. math::
+        .. math::
 
-\sigma = \\frac{1}{Rd} = 2.5 10^{6} S/m
+            \sigma =  \\frac{1}{Rd} = 2.5 10^{6} S/m
 
-.. plot::
-:include-source:
+        .. plot::
+            :include-source:
 
-from pylayers.antprop.slab import *
-import numpy as np
-import matplotlib.pylab as plt
-sl = SlabDB('matDB.ini','slabDB.ini')
-sl.mat.add('CoatingPilkington',cval=1,sigma=2.5e6,typ='epsr')
-sl.mat.add('GlassPilkington',cval = 6.9,sigma = 5e-4,typ='epsr')
-sl.add('Optitherm382',['CoatingPilkington',
-'GlassPilkington'],[100e-9,0.00382])
-fGHz = np.linspace(0.9,2.2,50)
-theta = np.linspace(0,np.pi/2,100)
-sl['Optitherm382'].ev(fGHz,theta)
-sl['Optitherm382'].pcolor(dB=True)
+            from pylayers.antprop.slab import *
+            import numpy as np
+            import matplotlib.pylab as plt
+            sl = SlabDB('matDB.ini','slabDB.ini')
+            sl.mat.add('CoatingPilkington',cval=1,sigma=2.5e6,typ='epsr')
+            sl.mat.add('GlassPilkington',cval = 6.9,sigma = 5e-4,typ='epsr')
+            sl.add('Optitherm382',['CoatingPilkington',
+                'GlassPilkington'],[100e-9,0.00382])
+            fGHz  = np.linspace(0.9,2.2,50)
+            theta = np.linspace(0,np.pi/2,100)
+            sl['Optitherm382'].ev(fGHz,theta)
+            sl['Optitherm382'].pcolor(dB=True)
+
 
 """
 
@@ -1925,11 +1929,11 @@ name
     def loadsl(self, _filename):
         """ load a .slab file (PulsRay format)
 
-Parameters
-----------
-_filename
+		Parameters
+		----------
+		_filename
 
-"""
+		"""
         filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
         try:
             fo = open(filename, "rb")

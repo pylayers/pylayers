@@ -8,6 +8,7 @@ import pylayers.util.easygui as eg
 import pylayers.util.pyutil as pyu
 import pylayers.util.geomutil as geo
 from pylayers.antprop.antenna import *
+from pylayers.mobility.trajectory import *
 from pylayers.util.project import *
 import numpy as np
 import scipy as sp
@@ -16,7 +17,6 @@ import scipy as sp
 class RadioNode(object):
     """ container for a Radio Node
 
-     a RadioNode is either a transmitter or a receiver
      This class manages the spatial and temporal behavior of a radio node
 
      Attributes
@@ -56,6 +56,7 @@ class RadioNode(object):
 
     def __init__(self, name = '',typ='undefined',
                  _fileini='radionode.ini',
+                 _filetraj='pos.csv',
                  _fileant='defant.vsh3',
                  _filestr='defstr.str2'):
         """
@@ -82,6 +83,7 @@ class RadioNode(object):
         The point [0,0,0] is defined as the first point (index 0)
 
         """
+
         self.position = np.array([], dtype=float)
         self.position = np.array([0, 0, 0]).reshape(3, 1)
         self.time = np.array([], dtype=float)
@@ -148,6 +150,23 @@ class RadioNode(object):
         self.points = {}
         for k in range(npt):
             self.points[k + 1] = self.position[:, k]
+
+    def transform(self,alpha,trans):
+        """ tranform position rotation + translation
+
+        Parameters
+        ----------
+
+        alpha : float 
+            angle (rad)
+        trans : np.array()  (,2)
+
+        """
+        d2r = np.pi/180
+        Rot = np.array([[np.cos(d2r*alpha),-np.sin(d2r*alpha)],
+                        [np.sin(d2r*alpha),np.cos(d2r*alpha)]])
+        self.position[0:2,:] = np.dot(Rot,self.position[0:2,:])
+        self.position[0:2,:] = self.position[0:2,:]+trans[:,np.newaxis]
 
     def info(self):
         """ display RadioNodes informations
@@ -497,6 +516,8 @@ class RadioNode(object):
                                            self.points[k].reshape(3,1)))
             except:
                 self.position = self.points[k].reshape(3,1)
+                
+        self.traj=Trajectory(pt=self.position.T)        
         
     def loadspa(self, _filespa, rep=pstruc['DIRLCH']):
         """ load a spa file
@@ -900,4 +921,5 @@ class RadioNode(object):
         self.loadvsh()
 
 if (__name__ == "__main__"):
+    tx = RadioNode(_fileini='w2m1rx.ini')
     doctest.testmod()
