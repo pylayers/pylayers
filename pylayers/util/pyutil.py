@@ -54,14 +54,17 @@ def delay(p1,p2):
     return(tau)
 #####################
 def lt2dic(lt):
-    """ convert list of tuple to dictionnary 
+    """ convert list of tuple to dictionary 
 
     Parameters
     ----------
+
     lt : list of tuple
-        the first element of tuple is th ekey dictionnary
+        the first element of tuple is th ekey dictionary
+
     Examples
     --------
+
        >>> lt = [ ('1','1 2 3'),('2','1.5 2'),('3','4.78 89.0 2')]
        >>> d = lt2dic(lt)
     """
@@ -71,14 +74,16 @@ def lt2dic(lt):
     return(dic)    
 
 def lt2idic(lt):
-    """ convert list of tuple to dictionnary 
+    """ convert list of tuple to dictionary 
 
     Parameters
     ----------
+
     lt : list 
 
     Examples 
     --------
+
     >>> from pylayers.util.pyutil import *
     >>> lt = [ ('1','1 2 3'),('2','1.5 2 3'),('3','4.78 89.0 2')]
     >>> d = lt2idic(lt)
@@ -398,7 +403,7 @@ def randcol(Nc):
 
 
 def coldict(): 
-    """ Color dictionnary 
+    """ Color dictionary 
     html color 
 
     Notes 
@@ -1176,6 +1181,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Parameters
     ----------
+
     var1 : array_like
         Array_like means all those objects -- lists, nested lists, etc. --
         that can be converted to an array.  We can also refer to
@@ -1189,6 +1195,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Returns
     -------
+
     describe : type
         Explanation
     output : type
@@ -1200,6 +1207,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Other Parameters
     ----------------
+
     only_seldom_used_keywords : type
         Explanation
     common_parameters_listed_above : type
@@ -1207,6 +1215,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Raises
     ------
+
     BadException
         Because you shouldn't have done that.
 
@@ -1219,6 +1228,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Notes
     -----
+
     Notes about the implementation algorithm (if needed).
 
     This can have multiple paragraphs.
@@ -1241,6 +1251,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     References
     ----------
+
     Cite the relevant literature, e.g. [1]_.  You may also cite these
     references in the notes section above.
 
@@ -1252,6 +1263,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Examples
     --------
+
     These are written in doctest format, and should illustrate how to
     use the function.
 
@@ -1267,6 +1279,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
 
     Parameters
     ----------
+
     x :  np.array  (N)
     color : string 
         color symbol 
@@ -1281,6 +1294,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
 
     Examples
     --------
+
     .. plot::
         :include-source:
 
@@ -1476,6 +1490,7 @@ def zipd(path, zipfilename):
     add a folder to a zipfile
     Parameters
     ----------
+
         filepath : string
         zipfilename : string
     """
@@ -1496,6 +1511,7 @@ def unzipd(path, zipfilename):
     unzip a zipfile to a folder
     Parameters
     ----------
+
         filepath : string
         zipfilename : string
     """
@@ -1518,6 +1534,7 @@ def unzipf(path, filepath, zipfilename):
     unzip a file from zipfile to a folder
     Parameters
     ----------
+
         filepath : string
         zipfilename : string
     """
@@ -1539,11 +1556,14 @@ def rotate_line(A,B,theta):
     rotation of a line [AB] of an angle theta with A fixed
     Parameters
     ----------
+
         A: ndarray
         B: ndarray
         theta: float
+
     Returns
     -------
+
         Br: ndarry
     """
     if np.shape(B)!=(2,1):
