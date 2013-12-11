@@ -54,14 +54,17 @@ def delay(p1,p2):
     return(tau)
 #####################
 def lt2dic(lt):
-    """ convert list of tuple to dictionnary 
+    """ convert list of tuple to dictionary 
 
     Parameters
     ----------
+
     lt : list of tuple
-        the first element of tuple is th ekey dictionnary
+        the first element of tuple is th ekey dictionary
+
     Examples
     --------
+
        >>> lt = [ ('1','1 2 3'),('2','1.5 2'),('3','4.78 89.0 2')]
        >>> d = lt2dic(lt)
     """
@@ -71,14 +74,16 @@ def lt2dic(lt):
     return(dic)    
 
 def lt2idic(lt):
-    """ convert list of tuple to dictionnary 
+    """ convert list of tuple to dictionary 
 
     Parameters
     ----------
+
     lt : list 
 
     Examples 
     --------
+
     >>> from pylayers.util.pyutil import *
     >>> lt = [ ('1','1 2 3'),('2','1.5 2 3'),('3','4.78 89.0 2')]
     >>> d = lt2idic(lt)
@@ -398,7 +403,7 @@ def randcol(Nc):
 
 
 def coldict(): 
-    """ Color dictionnary 
+    """ Color dictionary 
     html color 
 
     Notes 
@@ -1168,7 +1173,7 @@ def corrcy(a,b):
     return(tk)
 
 def foo(var1, var2, long_var_name='hi') :
-    r"""A one-line summary that does not use variable names or the
+    """A one-line summary that does not use variable names or the
     function name.
 
     Several sentences providing an extended description. Refer to
@@ -1275,6 +1280,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
 
     Parameters
     ----------
+
     x :  np.array  (N)
     color : string 
         color symbol 
@@ -1289,6 +1295,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
 
     Examples
     --------
+
     .. plot::
         :include-source:
 
@@ -1484,6 +1491,7 @@ def zipd(path, zipfilename):
     add a folder to a zipfile
     Parameters
     ----------
+
         filepath : string
         zipfilename : string
     """
@@ -1504,6 +1512,7 @@ def unzipd(path, zipfilename):
     unzip a zipfile to a folder
     Parameters
     ----------
+
         filepath : string
         zipfilename : string
     """
@@ -1526,6 +1535,7 @@ def unzipf(path, filepath, zipfilename):
     unzip a file from zipfile to a folder
     Parameters
     ----------
+
         filepath : string
         zipfilename : string
     """
@@ -1612,6 +1622,33 @@ def fill_block_diag(A, blocks,M,k=0):
     for i in range(0,len(A)-abs(k)*M,M):
         A[i+ro:i+ro+M,i+co:i+co+M]=blocks[int(i/M),:,:] 
     return A
+
+
+BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
+
+#following from Python cookbook, #475186
+def has_colours(stream):
+    if not hasattr(stream, "isatty"):
+        return False
+    if not stream.isatty():
+        return False # auto color only on TTYs
+    try:
+        import curses
+        curses.setupterm()
+        return curses.tigetnum("colors") > 2
+    except:
+        # guess false in case of error
+        return False
+has_colours = has_colours(sys.stdout)
+
+
+def printout(text, colour=WHITE):
+        if has_colours:
+                seq = "\x1b[1;%dm" % (30+colour) + text + "\x1b[0m"
+                sys.stdout.write(seq)
+        else:
+                sys.stdout.write(text)
+
 
 if __name__ == "__main__":
     doctest.testmod()

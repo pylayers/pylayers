@@ -2470,7 +2470,7 @@ class Layout(object):
                                             (name, zmin, zmax))
 
         self.Gs.node[s1]['ss_name'] = [data[0]]
-        self.Gs.node[s1]['ss_z'] = [eval(data[1]),eval(data[2])]
+        self.Gs.node[s1]['ss_z'] = [(eval(data[1]),eval(data[2]))]
         self.Gs.node[s1]['ss_ce'] = [ (0,0) ] 
         self.Gs.node[s1]['transition'] = True
         self.Nss += 1
@@ -4031,7 +4031,7 @@ class Layout(object):
             self.buildGt()
         if 'r' in graph:
             self.buildGr()
-        if 'w' in graph:
+        if 'w' in graph and len(self.Gr.nodes())>1:
             self.buildGw()
         #if 'c' in graph:
         #    self.buildGc()
