@@ -952,6 +952,27 @@ class Tchannel(bs.FUDAsignal):
 
         # on s'arrange que Hk.x[0]==Wk.x[0]
 
+    def RSSI(self,ufreq=0) :
+        """ Compute RSSI value from a 
+        specific frequency of the transmission channel
+    
+        Parameters
+        ----------
+        
+        ufreq : int
+            index in the frequency range
+
+
+        Returns
+        -------
+            RSSI: float
+                RSSI value
+
+        """
+    
+        Tk=np.real(self.y[:,ufreq])
+        return(20*np.log(np.sum(Tk**2)))
+
 if __name__ == "__main__":
     plt.ion()
     doctest.testmod()

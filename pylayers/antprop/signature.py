@@ -1456,6 +1456,7 @@ class Signatures(dict):
                                                             1),dtype=int)}
                         rays[nint]['pt'][0:2, :, 0] = Yi[:, 1:-1]
                         rays[nint]['sig'][:, :, 0] = sig
+
         return rays
 
 class Signature(object):
