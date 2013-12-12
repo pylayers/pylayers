@@ -30,12 +30,8 @@ def mulcplot(x,y,**kwargs):
             're'  : real part
             'im'  : imaginary part 
 
-    dB : bool
-        False
-    fig = []    
-    ax  = []    
-    nlg  : int 
-        number of lines 
+    
+    fig and ax are numpy arrays of fig and ax
 
     Examples
     --------
@@ -227,6 +223,7 @@ def mulcplot(x,y,**kwargs):
                 ax[l,c].legend()
                    
             else:
+                pdb.set_trace()
                 k = l*ncol+c
                 if types[k%ntypes]=='v':
                     #ax[l,c].plot(x[k%nfigx,:],y[k%nfigy,:],label=labels[k%nlabels],**args)

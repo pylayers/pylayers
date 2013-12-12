@@ -2,7 +2,8 @@
 #
 # Class Layout
 #
-# This class handle the description of buildings
+# This class handle the description of indoor layout
+#
 #
 import pdb
 import os
@@ -4785,9 +4786,9 @@ class Layout(object):
     #                                else:
     #                                    print node1, node2
                                         #pdb_set_trace()
-                            else:                   # R-D
-                                node1 = str(n)
-                                node2 = str(nb)
+                            else:                 # D diffraction
+                                node1 = str(n)  #  
+                                node2 = str(nb) #
                                 if ((node1 in self.Gi.node.keys())
                                  & (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)

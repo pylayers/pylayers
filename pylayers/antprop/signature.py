@@ -1446,7 +1446,9 @@ class Signatures(dict):
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
         rays = Rays(ptx,prx)
+        #
         # detect LOS situation
+        #
         lc  = self.L.cycleinline(self.source,self.target)
         # if source  and target in the same cycle
         if len(lc) == 1:
@@ -1468,7 +1470,7 @@ class Signatures(dict):
 
 #        rays[0]['pt']
         for k in self:
-            # get signature for k interactions
+            # get signature block with k interactions
             tsig = self[k]
             shsig = np.shape(tsig)
             for l in range(shsig[0]/2):
@@ -1840,6 +1842,22 @@ class Signature(object):
         else:
             isvalid = False 
             return isvalid,(k,alpha,beta) 
+
+
+    def sig2beam(self, L, p, mode='incremental'):
+        """
+        """
+        try:
+            L.Gr
+        except:
+            L.build()
+        
+        # ev transforms a sequence of segment into numpy arrays (points)
+        # necessary for image calculation
+        self.ev(L)
+        # calculates images from pTx
+        M = self.image(pTx)
+        
 
     def sig2ray(self, L, pTx, pRx, mode='incremental'):
         """ convert a signature to a 2D ray
