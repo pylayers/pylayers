@@ -2,7 +2,7 @@
 
 
 User references
-===============
+***************
 
 :Release: |version|
 :Date: |today|
@@ -15,22 +15,68 @@ included in PyLayers, describing what they are and what they do.
 This documentation is generated automatically from the source code. 
 
 
+Geo Related Information 
+=======================
+
 .. toctree::
    :maxdepth: 2
     
    gis.rst 
 
+Antennas and Propagation 
+========================
+
+.. toctree::
+   :maxdepth: 2
+
    antprop.rst
+
+Mobility 
+========
+
+.. toctree::
+   :maxdepth: 2
+
+   mobility.rst
+
+Signal Processing 
+=================
+
+.. toctree::
+   :maxdepth: 2
 
    signal.rst
 
-   network.rst
+Running Simulations
+===================
+
+.. toctree::
+   :maxdepth: 2
 
    simul.rst 
 
+Network 
+=======
+
+.. toctree::
+   :maxdepth: 2
+   
+   network.rst
+
+Positioning And Localization Algorithms 
+=======================================
+
+.. toctree::
+   :maxdepth: 2
+
    location.rst
    
-   mobility.rst
+
+Utilitary Functions
+===================
+
+.. toctree::
+   :maxdepth: 2
 
    util.rst 
 

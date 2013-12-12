@@ -81,7 +81,7 @@ class Rays(dict):
         self.nray = 0
         self.raypt = 0
         self.los=False
-
+        self.is3D=False
     def __len__(self):
         Nray = 0
         for k in self.keys():
@@ -94,16 +94,39 @@ class Rays(dict):
         s = ''
         ni = 0
         nl = 0
+        size={}
+
         try:
-            for k in self:
-                r = self[k]['rayidx']
-                nr = len(r)
-                s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
-                ni = ni + nr*k
-                nl = nl + nr*(2*k+1)
-            s = s + '-----'+'\n'
-            s = s+'ni : '+str(ni)+'\n'
-            s = s+'nl : '+str(nl)+'\n'
+            if self.is3D:
+                s = self.__class__.__name__ + '3D\n' + '----------'+'\n'
+
+                for k in self:
+                    r = self[k]['rayidx']
+                    nr = len(r)
+                    s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
+                    ni = ni + nr*k
+                    nl = nl + nr*(2*k+1)
+                s = s + '-----'+'\n'
+                s = s+'ni : '+str(ni)+'\n'
+                s = s+'nl : '+str(nl)+'\n'
+            # else:
+            #     s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
+
+            #     nray=np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
+            #     s = 'total number of 2D rays : '+ str(nray) + '\n'
+
+            #     for k in self:
+            #          size[k] = np.shape(self[k]['sig'])[2]
+            #     s = s + 'from pTx : '+ str(self.pTx) + ' to pRx ' + str(self.pRx)+'\n'
+            #     pdb.set_trace()
+            #     for k in self:
+            #         s = s + str(k) + ' : ' + str(size[k]) + '\n'
+            #         a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
+            #         # nl x 2 x nsig
+            #         for i in range(k):
+            #             s = s + '   '+ str(a[i,0,:]) + '\n'
+            #             s = s + '   '+ str(a[i,1,:]) + '\n'
+
         except:
             return(s)
 
@@ -608,7 +631,8 @@ class Rays(dict):
 
 
     def locbas(self, L):
-        """
+        """ calculate ray local basis
+
         Parameters
         ----------
 
@@ -625,8 +649,12 @@ class Rays(dict):
 
         # nsegment x k
         key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
+        
+        # maximum number for refering to segment 
+        # not to be confused with a number of segment 
 
         nsmax = max(L.Gs.node.keys())
+
         mapping = np.zeros(nsmax+1, dtype=int)
         mapping[key] = np.arange(len(key), dtype=int)
 
@@ -638,18 +666,32 @@ class Rays(dict):
         #  nstrs is the nstr of the segment if subsegment : 
         #  nstr  is the glabal which allows to recover the slab values 
         #
+
         for k in self:
+            #
+            # k is the number of interactions
+            #
             if k <> 0:
                 nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
                 ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment 
-                #print nstr
+                # print nstr
+                # 
+                # uss : index of subsegment 
+                # subsegments are not nodes of Gs but have positive nst index 
+                #
+
                 uss   = np.where(nstr>nsmax)
-                #print uss
+
+                # print uss
+
                 nstrs = copy.copy(nstr)
+                #
+                # if subsegments have been found
+                #
                 if len(uss)>0:
-                    ind   = nstr[uss]-nsmax
+                    ind   = nstr[uss]-nsmax-1
                     nstrs[uss] = np.array(L.lsss)[ind] 
                 #    print nstr
                 #print nstrs

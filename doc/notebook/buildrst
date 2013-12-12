@@ -1,4 +1,5 @@
 #!/bin/bash
+# for all notebooks below
 for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
 do
     echo $i
@@ -12,11 +13,12 @@ do
         cat ${file%%.ipynb}.rst | sed '/^In\[.*\]:/d' > f1
         # code --> code-block
         cat f1 | sed 's/code::/code-block::/'  > ${i%%.ipynb}.rst 
-        mv -f ${file%%.ipynb}_files $WEBSITE/${i%%.ipynb}_files 
-        rm ${file%%.ipynb}.rst
+        mv -f ${file%%.ipynb}_files $WEBNB/${i%%.ipynb}_files 
+        #rm ${file%%.ipynb}.rst
         rm f1
     else
-        echo "problem in  ",$i
+        #echo "problem in  ",$i
+        exit
     fi     
     #rm f2
 done
