@@ -202,33 +202,36 @@ class CLA(object):
     
         Parameters
         ----------
-            pe : boolean 
-               set to True to compute the position estimation store into self.pe
-            mergeRSS : boolean
-                True : if there is RSS in cla, they are used to find the smallest merge
-                False (default): even if there is RSS in cla, they are neglected during the merge process
-            refineRSS :boolean
-                True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous
-                                during the refine process
-                False: if there is RSS in cla, they are ignore during the refine process 
-            NBOXMAX : integer 
-                Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)
-            NBOXMAX : float 
-                Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)
-            HT : boolean
-                True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
-                        in estpos2 method 
-                False : no HT methos is applied 
 
-            Hybrid positioning based on hypothesis thesting
-            N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
-            A Hybrid Positioning Method Based on Hypothesis Testing
-            ,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
+
+        pe : boolean 
+           set to True to compute the position estimation store into self.pe
+        mergeRSS : boolean
+            True : if there is RSS in cla, they are used to find the smallest merge
+            False (default): even if there is RSS in cla, they are neglected during the merge process
+        refineRSS :boolean
+            True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous
+                            during the refine process
+            False: if there is RSS in cla, they are ignore during the refine process 
+        NBOXMAX : integer 
+            Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)
+        NBOXMAX : float 
+            Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)
+        HT : boolean
+            True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
+                    in estpos2 method 
+            False : no HT methos is applied 
+
+        Hybrid positioning based on hypothesis thesting
+        N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+        A Hybrid Positioning Method Based on Hypothesis Testing
+        ,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
 
         Returns
         -------
-            boolean
-                True if the position estimation has been performed.
+
+        boolean
+            True if the position estimation has been performed.
 
         """
         self.merge2(RSS=mergeRSS)
@@ -269,12 +272,14 @@ class CLA(object):
 
         Parameters
         ----------
-                f_vcw : a scale factor of the current vcw of the constraint.
-                cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None
+
+        f_vcw : a scale factor of the current vcw of the constraint.
+        cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None
 
         Returns
         -------
-                Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c.
+        
+        Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c.
         """
         #print "rescale",vcw
 

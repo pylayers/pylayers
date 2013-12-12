@@ -244,13 +244,46 @@ class Signatures(dict):
     def info(self):
         """
         """
-        print "Signatures for scenario defined by :"
-        print "Layout"
-        print "======"
-        L = self.L.info()
-        print "================================"
-        print "source : ", self.source
-        print "target : ", self.target
+        # print "Signatures for scenario defined by :"
+        # print "Layout"
+        # print "======"
+        # L = self.L.info()
+        # print "================================"
+        # print "source : ", self.source
+        # print "target : ", self.target
+        size = {}
+        print self.__class__.__name__ + '\n' + '----------'+'\n'
+        #s = s + str(self.__sizeof__())+'\n'
+        for k in self:
+            size[k] = len(self[k])/2
+        print 'from cycle : '+ str(self.source) + ' to cycle ' + str(self.target)+'\n'
+        pyu.printout('Reflection',pyu.BLUE)
+        print '  '
+        pyu.printout('Transmission',pyu.GREEN)
+        print '  '
+        pyu.printout('Diffraction',pyu.RED)
+        print '  \n'
+        for k in self:
+            print str(k) + ' : ' + str(size[k]) 
+            a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
+            # nl x 2 x nsig
+            for i in range(k):
+
+                nstr=a[i,0,:]
+                typ=a[i,1,:]
+                print '[',
+                for n,t in zip(nstr,typ):
+                    if t==1:
+                        pyu.printout(str(n),pyu.BLUE)
+                    if t==2:
+                        pyu.printout(str(n),pyu.GREEN)
+                    if t==3:
+                        pyu.printout(str(n),pyu.RED)
+                print ']'
+            print'\n'
+                # s = s + '   '+ str(a[i,0,:]) + '\n'
+
+                # s = s + '   '+ str(a[i,1,:]) + '\n'
 
 
     def sp(self,G, source, target, cutoff=None):
@@ -1456,6 +1489,7 @@ class Signatures(dict):
                                                             1),dtype=int)}
                         rays[nint]['pt'][0:2, :, 0] = Yi[:, 1:-1]
                         rays[nint]['sig'][:, :, 0] = sig
+
         return rays
 
 class Signature(object):
