@@ -160,13 +160,13 @@ def mulcplot(x,y,**kwargs):
 
     if ax==[]:    
         fig,ax=plt.subplots(nlin,ncol,sharey=True,sharex=True)
-        if (nlin==1)&(ncol==1):
-            ax = np.array(ax)[np.newaxis,np.newaxis]
-        else:    
-            if nlin==1:
-                ax = ax[np.newaxis,:]
-            if ncol==1:
-                ax = ax[:,np.newaxis]
+    if (nlin==1)&(ncol==1):
+        ax = np.array(ax)[np.newaxis,np.newaxis]
+    else:    
+        if nlin==1:
+            ax = ax[np.newaxis,:]
+        if ncol==1:
+            ax = ax[:,np.newaxis]
    
     for l in range(nlin):
         for c in range(ncol):

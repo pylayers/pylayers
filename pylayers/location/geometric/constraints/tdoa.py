@@ -29,28 +29,64 @@ from pylayers.location.geometric.constraints.constraint import *
 
 
 class TDOA(Constraint):
-    def __init__(self,id='0', value=45, std=4, vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]]), origin={}):
-        """
+    """
+
+
+    Parameters
+    ----------
+
+    value   : float
+            Constraint value in ns. 
+    std     : np.array
+            Value standard deviation in ns. 
+    vcw     : float
+            scale factor.
+    p       : np.array 2 x ndim
+            constraint centers
+
+    Attributes
+    ----------
+
+    drange   : difference of distance conversion from time self.value.
+    sstd    : difference of distance conversion from time self.std
+    runable : True NOT USED
+    evaluated :False NOT USED
+    self.Id : Constraint ID
+
+    from annulus bound:
+    min     : minimum value of observable
+    max     : maximum value of observable
+    mean    : mean value of observable
+
+    Methods
+    -------
+
+    annulus_bound(self)     : Compute the minimum and maximum distance of the enclosing annulus of the constraint
+
+    tdoa_box(vcw)           : find the enclosing box of TDOA constraint for a given vcw
+
+    rescale(self,vcw)       : rescale contraint boundary with a given scale factor 'vcw'
+
+    inclusive(self,b)       : Is constraint center is inside a box ?
+
+    valid(self,b)           : Test if Lbox is compatible with the constraint
+
+    valid_v(self,lv)        : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.bd2coordinates()
+    
+    estvol(self)            : Constraint Volume estimation
+
+    See Also
+    --------
+
+    pylayers.location.geometric.constraints.Constraint
+
+
+    """
 
 
 
-        Attributes
-        ----------
+    def __init__(self,id='0', value=45, std=np.array((4.0)), vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]]), origin={}):
 
-        tdoa = (|F1M| - |F2M|)/0.3 = (|p1M| - |p2M|)/0.3    (ns)
-
-
-        value : Time difference of Arrival  (ns)    30 ns  = 9 m
-        std   : Standard deviation on tdoa  (ns)    1 ns   = 30cm
-        vcw   : constraint with factor
-
-
-        Methods
-        -------
-
-        vrai(deltar)  : check constraint validity
-
-        """
         Constraint.__init__(self, 'TDOA', id=id, p=p, origin=origin)
 
         #

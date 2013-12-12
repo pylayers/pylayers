@@ -34,9 +34,18 @@ class PLSmodel(object):
     Attributes
     ----------
 
-    f : frequency in GHz
-    n : path loss exponent
+    f : float
+        frequency in GHz
+    rssnp : float
+        path loss exponent
+    d0    : float
+        PL0 distance
+    sigrss : float
+        shadowing variance
+        
     method : used model
+
+
 
     """
     def __init__(self,f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mode'):
