@@ -37,22 +37,18 @@ from pylayers.network.model import *
 class RSS(Constraint):
     """     RSS Constraint
 
-    Description and evaluation of TOA constraints
+    Description and evaluation of RSS constraints
 
     Parameters
     ----------
 
     value   : float
             Constraint value in dB. Default = 40
-
     std     : float
             Value standard deviation in dB. default = 1.0
-
     vcw     : float
            scale factor. Default = 1.0
-
     model   : pylayers.network.model.PLSmodel
-          
     p       : np.array 1 x ndim
             constraint center
 
@@ -75,15 +71,10 @@ class RSS(Constraint):
     -------
 
     annulus_bound(self)     : Compute the minimum and maximum distance of the enclosing annulus of the constraint
-
     rescale(self,vcw)       : rescale contraint boundary with a given scale factor 'vcw'
-
     inclusive(self,b)       : Is constraint center is inside a box ?
-
     valid(self,b)           : Test if Lbox is compatible with the constraint
-
     valid_v(self,lv)        : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.bd2coordinates()
-
     estvol(self)            : Constraint Volume estimation
 
     See Also
@@ -95,7 +86,6 @@ class RSS(Constraint):
 
     def __init__(self, id='0', value=0, std=np.array((1.0)), vcw=3, p=np.array([]), model={}, origin={}):
         Constraint.__init__(self, type='RSS', id=id, p=p, origin=origin)
-#               Constraint.C_id = Constraint.C_id+1   # constraint counter is incremented
         self.value = value  # attennation (dB)
         self.std = std
         self.vcw = vcw
@@ -120,8 +110,7 @@ class RSS(Constraint):
         self.update()
 
     def update(self):
-        """
-        update constraint inforamtion
+        """  update constraint inforamtion
         """
         # if self.p.any():
         #     self.runable = True
@@ -139,8 +128,7 @@ class RSS(Constraint):
         self.annulus_bound()
 
     def annulus_bound(self):
-        """
-        annulus_bound():
+        """ annulus_bound():
         Compute the minimum and maximum distance of the enclosing annulus of the constraint
 
         Returns

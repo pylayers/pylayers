@@ -40,8 +40,7 @@ import sys
 
 
 class CLA(object):
-    """
-    Constraint Layer Array class
+    """  Constraint Layer Array class
     The Constraint Layer Array gather all constraints and process them.
 
     Attributes
