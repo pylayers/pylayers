@@ -13,7 +13,7 @@ Ray Signatures
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4d07050>
+    <matplotlib.figure.Figure at 0x4222210>
 
 
 .. code-block:: python
@@ -24,6 +24,12 @@ Ray Signatures
     except:
         L.build()
         L.dumpw()
+
+.. parsed-literal::
+
+    G s  not saved
+
+
 Showing the graph of rooms with 2 rooms separated by a DOOR segment
 
 .. code-block:: python
@@ -189,6 +195,99 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. code-block:: python
 
+    Si
+
+
+
+.. parsed-literal::
+
+    Signatures
+    ----------
+    from cycle : 0 to cycle 1
+    1 : 3
+       [7 9 8]
+       [2 2 2]
+    2 : 18
+       [7 7 7 9 9 9 8 8 8 3 3 3 4 4 4 2 2 2]
+       [2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1]
+       [6 5 1 6 5 1 6 5 1 7 9 8 7 9 8 7 9 8]
+       [1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2]
+    3 : 69
+       [7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+     3 4 4 4 4 4 4 4 4 4 4 4 4 7 7 9 9 9 8 8 2 2 2 2 2 2 2 2 2 2 2 2]
+       [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+       [5 1 1 6 6 5 6 5 1 6 1 6 6 6 5 6 5 1 6 1 6 6 5 4 2 4 2 4 2 9 8 7 9 8 7 9 8
+     7 2 3 2 3 2 9 7 8 7 9 7 8 3 3 3 3 3 3 3 3 4 3 4 4 9 8 7 9 8 7 8]
+       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+     2 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2]
+       [6 6 5 9 8 1 1 6 6 5 5 7 9 8 1 1 6 6 5 5 7 9 1 7 7 9 9 8 8 6 6 6 5 5 5 1 1
+     1 7 9 9 8 8 6 6 6 5 1 1 1 9 8 7 9 8 7 9 7 7 9 9 8 6 6 6 5 5 5 1]
+       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1
+     1 2 2 2 2 2 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1]
+    4 : 258
+       [7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+     9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 3 3 3 3 3 3
+     3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+     4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+     4 4 4 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9
+     9 9 9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 2 2 2 2 2 2
+     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2]
+       [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+       [5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 5 1 6 6 6 1 5 6 6 1 1 5 5 6 6 1
+     1 5 5 6 6 1 5 6 6 6 5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 4 2 4 2 4 2
+     9 9 8 8 4 4 4 7 7 2 2 2 9 9 8 8 4 7 2 2 2 9 8 9 8 7 9 7 9 9 8 4 4 4 7 7 2
+     3 2 9 3 7 2 9 3 7 9 3 3 9 7 7 2 2 2 8 3 3 9 9 7 2 2 2 8 8 9 8 9 7 8 9 7 3
+     3 9 7 7 2 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 3 2 2 4 3 3 2 2 4 4 3 3
+     2 4 4 3 3 3 3 3 3 3 3 3 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 8 9 3 4 8
+     9 3 4 9 3 3 9 8 8 4 4 4 7 3 3 9 8 8 4 9 8 9 8 7 9 7 3 3 9 9 8 4 4 4 7 7]
+       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     2 2 2 2 1 1 1 2 2 1 1 1 2 2 2 2 1 2 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 1
+     1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 1 1 2 2 2 2 2 2 2 2 2 1
+     1 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 2 2 2 2 2 2 2 1 1 2 2 2 1 1 1 2 2]
+       [1 5 9 1 6 1 1 5 6 1 6 1 5 6 1 6 1 5 6 9 8 1 5 7 9 1 6 1 1 5 5 6 1 6 1 5 5
+     6 1 6 1 5 5 6 9 8 5 1 5 7 9 6 1 5 5 6 1 6 5 5 6 1 6 5 5 6 9 5 2 4 2 4 2 4
+     5 1 5 1 9 7 8 5 1 9 8 7 6 1 6 1 7 1 9 8 7 6 6 6 6 6 6 6 5 6 5 9 7 8 5 6 8
+     2 3 3 2 3 3 3 2 3 3 9 8 1 5 1 9 8 7 1 9 8 6 1 1 9 8 7 6 1 6 6 6 6 6 6 6 9
+     8 6 5 6 8 2 3 4 2 2 3 4 3 2 2 4 3 2 9 8 9 8 9 8 4 2 3 4 2 4 2 3 4 3 2 4 2
+     4 3 2 9 8 7 9 8 7 9 8 7 4 3 4 2 4 3 4 3 2 4 4 3 2 9 7 9 7 9 7 4 3 3 4 3 3
+     3 4 3 3 9 7 5 5 1 9 7 8 5 9 7 6 6 1 7 6 6 6 6 6 6 6 9 7 5 6 5 9 7 8 5 6]
+       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 2 2 2 1 1 2 2 2 1 1 1 1 2 1 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 2
+     1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 2 2 1 1 1 1 1 1 1 1 1 2
+     2 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1
+     1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 1]
+       [6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 6 6 5 5 5 5 7 7 7 7 7 9 9 9 9 9
+     9 8 8 8 8 8 1 1 1 1 6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 7 7 9 9 8 8
+     6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1
+     7 7 7 9 9 9 9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1
+     1 1 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 7 7 9 9 9 9 9 9 8 8
+     8 8 8 6 6 6 5 5 5 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 9 9 9
+     9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1 1]
+       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2
+     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+     1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
+     2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
+     2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+
+
+
+
+.. code-block:: python
+
     L.Gt.pos
 
 
@@ -208,8 +307,8 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. parsed-literal::
 
-    [ 7.51260517  0.58013199]
-    [ 3.3253063   0.14856027]
+    [ 8.16264781  0.23099004]
+    [ 3.31234063  0.74387872]
 
 
 Evaluate performances of signature and ray evaluation
@@ -244,13 +343,13 @@ Evaluate performances of signature and ray evaluation
 
 .. parsed-literal::
 
-    0 0.00197982788086
-    1 0.0110919475555
-    2 0.0545499324799
-    3 0.217567920685
-    4 0.700534105301
-    5 1.93160891533
-    6 4.63199615479
+    0 0.00196981430054
+    1 0.0107138156891
+    2 0.0531568527222
+    3 0.213968992233
+    4 0.672088861465
+    5 1.83813500404
+    6 4.49210691452
 
 
 It appears that the increasing number of signatures obatined with the
@@ -269,12 +368,12 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5b33110>
+    <matplotlib.text.Text at 0x7fa220198450>
 
 
 
 
-.. image:: Signatures_files/Signatures_21_1.png
+.. image:: Signatures_files/Signatures_22_1.png
 
 
 .. code-block:: python
@@ -297,12 +396,12 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5b3ae90>
+    <matplotlib.text.Text at 0x7fa220408810>
 
 
 
 
-.. image:: Signatures_files/Signatures_22_1.png
+.. image:: Signatures_files/Signatures_23_1.png
 
 
 .. code-block:: python
@@ -320,12 +419,12 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5e20d50>
+    <matplotlib.text.Text at 0x7fa2206c8cd0>
 
 
 
 
-.. image:: Signatures_files/Signatures_23_1.png
+.. image:: Signatures_files/Signatures_24_1.png
 
 
 .. code-block:: python
@@ -339,12 +438,12 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x65ab090>
+    <matplotlib.text.Text at 0x7fa220bc70d0>
 
 
 
 
-.. image:: Signatures_files/Signatures_24_1.png
+.. image:: Signatures_files/Signatures_25_1.png
 
 
 .. code-block:: python
@@ -356,12 +455,12 @@ number of rays.
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x6c18790>]
+    [<matplotlib.lines.Line2D at 0x7fa220f6c450>]
 
 
 
 
-.. image:: Signatures_files/Signatures_25_1.png
+.. image:: Signatures_files/Signatures_26_1.png
 
 
 The computation time in rays grows exponentially with the number of
@@ -375,7 +474,7 @@ interactions.
     b2=loglog(tt2.keys(),array(tt2.keys())**5,color='blue')
 
 
-.. image:: Signatures_files/Signatures_27_0.png
+.. image:: Signatures_files/Signatures_28_0.png
 
 
 .. code-block:: python
@@ -385,31 +484,31 @@ interactions.
         title(str(k+1))
 
 
-.. image:: Signatures_files/Signatures_28_0.png
+.. image:: Signatures_files/Signatures_29_0.png
 
 
 
-.. image:: Signatures_files/Signatures_28_1.png
+.. image:: Signatures_files/Signatures_29_1.png
 
 
 
-.. image:: Signatures_files/Signatures_28_2.png
+.. image:: Signatures_files/Signatures_29_2.png
 
 
 
-.. image:: Signatures_files/Signatures_28_3.png
+.. image:: Signatures_files/Signatures_29_3.png
 
 
 
-.. image:: Signatures_files/Signatures_28_4.png
+.. image:: Signatures_files/Signatures_29_4.png
 
 
 
-.. image:: Signatures_files/Signatures_28_5.png
+.. image:: Signatures_files/Signatures_29_5.png
 
 
 
-.. image:: Signatures_files/Signatures_28_6.png
+.. image:: Signatures_files/Signatures_29_6.png
 
 
 .. code-block:: python
@@ -426,7 +525,7 @@ interactions.
     #fig,ax=r2d.show(L,i=9,colray='green',widthray=0.5,fig=fig,ax=ax)
 
 
-.. image:: Signatures_files/Signatures_29_0.png
+.. image:: Signatures_files/Signatures_30_0.png
 
 
 .. code-block:: python

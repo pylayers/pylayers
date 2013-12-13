@@ -8,7 +8,7 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x517bf10>
+    <matplotlib.figure.Figure at 0x37e4110>
 
 
 The ``ls()`` method
@@ -36,6 +36,7 @@ The ``ls()`` method lists the layout file which are available in the
      'WHERE1.ini',
      'defstr.ini',
      'defstr3.ini',
+     'example.ini',
      'klepal.ini',
      'w2ptin.ini',
      'where1.ini']
@@ -105,8 +106,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7ff481f4fb50>,
-     <matplotlib.axes.AxesSubplot at 0x7ff4800a0a10>)
+    (<matplotlib.figure.Figure at 0x38ecbd0>,
+     <matplotlib.axes.AxesSubplot at 0x37e4bd0>)
 
 
 
@@ -176,8 +177,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7ff481f79fd0>,
-     <matplotlib.axes.AxesSubplot at 0x2ac9d90>)
+    (<matplotlib.figure.Figure at 0x5788f10>,
+     <matplotlib.axes.AxesSubplot at 0x5790b50>)
 
 
 
@@ -190,11 +191,6 @@ The ``ls()`` method lists the layout file which are available in the
     L=Layout('klepal.ini')
     L
 
-.. parsed-literal::
-
-    WARNING:root:No segements yet
-
-
 
 
 .. parsed-literal::
@@ -205,16 +201,19 @@ The ``ls()`` method lists the layout file which are available in the
     Image('/home/uguen/Bureau/P1/struc/images/IMG-Layout-Klepal.png')
     ----------------
     
-    Number of points  : 31
-    Number of segments  : 0
+    Number of points  : 53
+    Number of segments  : 65
     Number of sub segments  : 0
     Number of cycles  : 0
     Number of rooms  : 0
-    degree 0 : [-34 -33 -32 -31 -30 -29 -28 -27 -26 -25 -24 -23 -22 -21 -20 -19 -18 -17
-     -16 -15 -14 -13 -12 -11 -10  -9  -8  -7  -6  -5  -4]
+    degree 0 : [-85 -84 -79 -32]
+    degree 1 : []
+    degree 2 : 24
+    degree 3 : 18
+    degree 4 : [-69 -68 -67 -66 -65 -64 -42]
     
-    xrange :(0.044, 48.915)
-    yrange :(0.145, 14.205)
+    xrange :(0.043999999999999997, 48.914999999999999)
+    yrange :(0.14499999999999999, 14.205)
     
     Useful dictionnaries
     ----------------
@@ -224,6 +223,10 @@ The ``ls()`` method lists the layout file which are available in the
     Useful arrays
     ----------------
     tsg : get segment index in Gs from tahe
+    tgs : get segment index in tahe from Gs
+    lsss : list of segments with sub-segment
+    sla : associated slab name
+    stridess : stride for adressing sub segment 
     degree : degree of nodes 
 
 
@@ -239,8 +242,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7ff481f82050>,
-     <matplotlib.axes.AxesSubplot at 0x7ff481dc7d50>)
+    (<matplotlib.figure.Figure at 0x7f1cc9e7acd0>,
+     <matplotlib.axes.AxesSubplot at 0x37e47d0>)
 
 
 
@@ -259,8 +262,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7ff48081d310>,
-     <matplotlib.axes.AxesSubplot at 0x7ff481f761d0>)
+    (<matplotlib.figure.Figure at 0x7f1cc8374ad0>,
+     <matplotlib.axes.AxesSubplot at 0x7f1cc835c050>)
 
 
 

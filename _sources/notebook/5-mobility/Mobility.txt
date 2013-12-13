@@ -11,6 +11,13 @@
     import pylayers.mobility.trajectory as traj
     from pylayers.mobility.body.body import *
     from pylayers.gis.layout import *
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x5ba6410>
+
+
 trajectories can be imported from a simulnet simulation with the
 ``importsn`` method
 
@@ -20,20 +27,18 @@ trajectories can be imported from a simulnet simulation with the
 .. code-block:: python
 
     t=traj.importsn()
+The 2 following trajectories have been calculated with
+``pylayers.simul.simulnet``
+
 .. code-block:: python
 
-    plt.figure(figsize=(10,10))
-    L.showGs()
-    t[0].plot()
-    t[1].plot()
-    t[2].plot()
-    t[3].plot()
-.. code-block:: python
+    plt.figure(figsize=(20,20))
+    f,a = L.showGs()
+    f,a = t[0].plot()
+    f,a = t[1].plot()
+    f,a = t[2].plot()
+    f,a = t[3].plot()
 
-    bc=Body('John.ini')
-.. code-block:: python
 
-    bc.movie(traj=t[0])
-.. code-block:: python
+.. image:: Mobility_files/Mobility_7_0.png
 
-    tr=traj.Trajectory()

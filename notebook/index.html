@@ -67,6 +67,9 @@
 <li><a class="reference internal" href="#antennas-and-propagation">Antennas and Propagation</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#signal">Signal</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#mobility">Mobility</a><ul>
 </ul>
 </li>
@@ -152,7 +155,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="2-gis/DOC-LayoutEditor.html#segments-and-subsegments">Segments and Subsegments</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="2-gis/MultiSubsegments.html">Multi sub-segments</a></li>
@@ -178,6 +180,7 @@
 <li class="toctree-l3"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#ploting-coefficients">Ploting Coefficients</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#evaluation-without-phase-compensation">Evaluation without phase compensation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="3-antprop/SlabsAndMaterials.html#references">References</a></li>
 </ul>
 </li>
@@ -193,6 +196,34 @@
 <li class="toctree-l1"><a class="reference internal" href="3-antprop/MultiwallModel.html#coverage-class">Coverage class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-antprop/Coverage.html">Coverage with a Multi Wall model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-antprop/Coverage.html#calculating-received-power-coverage">Calculating Received Power Coverage</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="signal">
+<h2>Signal<a class="headerlink" href="#signal" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="4-signal/UwbWaveforms.html">Generation of an Impulse of normalized energy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/UwbWaveforms.html#verification-of-energy-normalization-in-both-domains">Verification of energy normalization in both domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/UwbWaveforms.html#calculation-of-uwb-channel-impulse-response">Calculation of UWB channel impulse response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/UwbWaveforms.html#construction-of-the-propagation-channel">Construction of the propagation channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/UwbWaveforms.html#construction-of-the-transmission-channel">Construction of the transmission channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/UwbWaveforms.html#calculate-uwb-channel-impulse-response">Calculate UWB Channel Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/UwbWaveforms.html#hermitian-symetry-enforcment">Hermitian symetry enforcment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4-signal/DEV-Bsignal.html">Generation of an Impulse of normalized energy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#verification-of-energy-normalization-in-both-domains">Verification of energy normalization in both domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#calcul-of-uwb-channel-impulse-response">Calcul of UWB channel impulse response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#ploting-the-waveform">Ploting the waveform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#in-time-domain">In time domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#in-frequency-domain">in frequency domain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#construction-of-the-propagation-channel">Construction of the propagation channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#construction-of-the-transmission-channel">Construction of the transmission channel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#calculate-uwb-channel-impulse-response">Calculate UWB Channel Impulse Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4-signal/DEV-Bsignal.html#hermitian-symetry-enforcment">Hermitian symetry enforcment</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -225,13 +256,12 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="7-location/DEV-Algebraic.html">Algebraic Localization Class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html">Robust Geometric Positioning Algorithm</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#rgpa">RGPA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html">RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#exploiting-time-of-arrival-toa-only">Exploiting Time of Arrival (ToA) only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#rss">RSS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7-location/DOC-RGPA.html#tdoa">TDOA</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html#toa">TOA</a></li>
-<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html#rss">RSS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="7-location/DOC-RGPA.html#tdoa">TDOA</a></li>
 </ul>
 </div>
 </div>

@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="antprop" href="antprop.html" />
     <link rel="next" title="rays" href="antprop.rays.html" />
-    <link rel="prev" title="antenna" href="antprop.antenna.html" /> 
+    <link rel="prev" title="interactions" href="antprop.interactions.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="antprop.rays.html" title="rays"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="antprop.antenna.html" title="antenna"
+          <a href="antprop.interactions.html" title="interactions"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -59,8 +59,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="antprop.antenna.html"
-                        title="previous chapter">antenna</a></p>
+  <p class="topless"><a href="antprop.interactions.html"
+                        title="previous chapter">interactions</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="antprop.rays.html"
                         title="next chapter">rays</a></p>
@@ -143,7 +143,7 @@
 
 <dl class="method">
 <dt id="pylayers.antprop.channel.Ctilde.doadod">
-<tt class="descname">doadod</tt><big>(</big><em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x41ca210&gt;</em>, <em>s=30</em>, <em>fontsize=12</em>, <em>phi=(0</em>, <em>360)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">doadod</tt><big>(</big><em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object at 0x413e310&gt;</em>, <em>s=30</em>, <em>fontsize=12</em>, <em>phi=(0</em>, <em>360)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Ctilde.doadod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Ctilde.doadod" title="Permalink to this definition">¶</a></dt>
 <dd><p>scatter plot of the DoA-DoD channel structure
 the energy is colorcoded over all couples of DoA-DoD</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -356,6 +356,31 @@ with realistic antennas transfer function</p>
 channel and the antenna transfer functions from both transmitter and
 receiver.</p>
 <dl class="method">
+<dt id="pylayers.antprop.channel.Tchannel.RSSI">
+<tt class="descname">RSSI</tt><big>(</big><em>ufreq=0</em><big>)</big><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.RSSI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute RSSI value from a 
+specific frequency of the transmission channel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ufreq</strong> : int</p>
+<blockquote>
+<div><p>index in the frequency range</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>RSSI: float</strong> :</p>
+<blockquote class="last">
+<div><p>RSSI value</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.channel.Tchannel.apply">
 <tt class="descname">apply</tt><big>(</big><em>W</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/channel.html#Tchannel.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.channel.Tchannel.apply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a FUsignal W to the ScalChannel.</p>
@@ -518,7 +543,7 @@ w is apply on the overall CIR</p>
           <a href="antprop.rays.html" title="rays"
              >next</a></li>
         <li class="right" >
-          <a href="antprop.antenna.html" title="antenna"
+          <a href="antprop.interactions.html" title="interactions"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>

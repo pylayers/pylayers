@@ -3,12 +3,12 @@ Coverage with a Multi Wall model
 ================================
 
 
-    Sometimes it might be useful to get a rough information about losses
-    in a given indoor environment. Ray tracing is generallay quite time
-    consuming and depending on the purpose of the study it could be
-    sometimes also relevant to proceed with a simpler approach while
-    stil site-specific. This is why ``PyLayers`` provides such a tool
-    which heavily relies on the core module ``slab.py``
+    Sometimes it might be useful to get a fast estimate about losses in
+    a given indoor environment. Ray tracing is generally time consuming
+    and depending on the purpose of the study it could be relevant to
+    proceed with a simpler approach while staying site-specific.
+    ``PyLayers`` provides such a tool which heavily relies on the core
+    module ``slab.py``
 
 First let's import the ``coverage`` module
 
@@ -20,7 +20,7 @@ First let's import the ``coverage`` module
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4370a10>
+    <matplotlib.figure.Figure at 0x3e5db10>
 
 
 Instantiate a coverage object. By defaut, ``TA-Office.str`` layout
@@ -51,8 +51,8 @@ Below is an example of how the content of the file looks like
     full = True
     
     [layout]
-    ;filename = TA-Office.ini
-    filename = W2PTIN.ini
+    filename = TA-Office.ini
+    ;filename = W2PTIN.ini
     ;filename = Lstruc.str
     
     [tx]
@@ -81,7 +81,7 @@ Below is an example of how the content of the file looks like
 
 .. parsed-literal::
 
-    WARNING:root:first decompose run failed
+    G s  not saved
 
 
 The coverage object has a ``__repr__`` which summarizes the different
@@ -95,7 +95,7 @@ parameters of the current coverage object
 
 .. parsed-literal::
 
-    Layout file : W2PTIN.ini
+    Layout file : TA-Office.ini
     
     -----Tx------
     tx (coord) : [25  5]
@@ -128,9 +128,6 @@ Calculating Received Power Coverage
 ===================================
 
 
-Then, the coverage calculation can be launched in calling the ``cover``
-method
-
 .. code-block:: python
 
     C.L.display['nodes']=False
@@ -141,77 +138,86 @@ method
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x50d4d10>,
-     <matplotlib.axes.AxesSubplot at 0x50d4bd0>)
+    (<matplotlib.figure.Figure at 0x7f78cc13be10>,
+     <matplotlib.axes.AxesSubplot at 0x4bb6590>)
 
 
 
 
-.. image:: Coverage_files/Coverage_12_1.png
+.. image:: Coverage_files/Coverage_11_1.png
 
+
+Then, the coverage calculation is launched by calling the ``cover()``
+method
 
 The shadowing map coverage results can be displayed by invoquing various
 functions.
 
 -  showLoss : display the path loss
--  showPower : display the received power
+-  showPower : display the received powercover
 
+
+The following examples represent the estimated received power for 3
+different frequencies
 
 .. code-block:: python
 
-    C.fGHz=0.915
+    C.fGHz=0.400
+    tic = time.time()
     C.cover()
-    C.showPower()
+    C.showPower(figsize=(10,10))
+    toc =time.time()
+    print 'Elapsed time : {0:.2f} seconds'.format(toc-tic)
+
+.. parsed-literal::
+
+    /usr/local/lib/python2.7/dist-packages/numpy/ma/core.py:3791: UserWarning: Warning: converting a masked element to nan.
+      warnings.warn("Warning: converting a masked element to nan.")
 
 
-.. image:: Coverage_files/Coverage_14_0.png
 
-
+.. image:: Coverage_files/Coverage_15_1.png
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f1edc3b1750>,
-     <matplotlib.axes.AxesSubplot at 0x7f1edc3b1790>)
-
+    Elapsed time : 1.12 seconds
 
 
 .. code-block:: python
 
     C.fGHz=2.4
+    tic = time.time()
     C.cover()
-    C.showPower()
-
-
-.. image:: Coverage_files/Coverage_15_0.png
-
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x7f1edc15ef50>,
-     <matplotlib.axes.AxesSubplot at 0x5486b10>)
-
-
-
-.. code-block:: python
-
-    C.fGHz=0.1
-    C.cover()
-    C.showPower()
+    C.showPower(figsize=(10,10))
+    toc =time.time()
+    print 'Elapsed time : {0:.2f} seconds'.format(toc-tic)
 
 
 .. image:: Coverage_files/Coverage_16_0.png
 
 
+.. parsed-literal::
+
+    Elapsed time : 1.10 seconds
+
+
+.. code-block:: python
+
+    C.fGHz=2.4
+    tic = time.time()
+    C.cover()
+    C.showPower(figsize=(10,10))
+    toc =time.time()
+    print 'Elapsed time : {0:.2f} seconds'.format(toc-tic)
+
+
+.. image:: Coverage_files/Coverage_17_0.png
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f1edc393cd0>,
-     <matplotlib.axes.AxesSubplot at 0x7f1edd88d1d0>)
-
+    Elapsed time : 1.10 seconds
 
 
 The transmitter coordinates are :
@@ -233,38 +239,28 @@ accordingly
 
 .. code-block:: python
 
+    C.fGHz=100
     C.tx = np.array((21,2))
     
     %timeit
     C.cover()
-    
-    C.showLoss(polar='o')
-    C.showPower(polar='o')
-    C.showLoss(polar='p')
-    C.showPower(polar='p')
+    C.showPower(polar='o',figsize=(10,10))
+    C.showPower(polar='p',figsize=(10,10))
 
 
-.. image:: Coverage_files/Coverage_20_0.png
+.. image:: Coverage_files/Coverage_21_0.png
 
 
 
-.. image:: Coverage_files/Coverage_20_1.png
-
-
-
-.. image:: Coverage_files/Coverage_20_2.png
-
-
-
-.. image:: Coverage_files/Coverage_20_3.png
+.. image:: Coverage_files/Coverage_21_1.png
 
 
 
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f1ede25e410>,
-     <matplotlib.axes.AxesSubplot at 0x5603d90>)
+    (<matplotlib.figure.Figure at 0x7f78cef74c90>,
+     <matplotlib.axes.AxesSubplot at 0x7f78cef6db90>)
 
 
 

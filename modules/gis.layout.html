@@ -105,6 +105,12 @@ contains additional visibility relationships between vertices and edges.</p>
 <p>This format using &#8216;.str&#8217; and &#8216;.str2&#8217; is going to be deprecated and replaced
 gradually with only &#8216;.osm&#8217; and &#8216;.ini&#8217; file.  It is still maintained to insure
 compatibility with a pre existing version of the tool written in C language.</p>
+<dl class="attribute">
+<dt id="pylayers.gis.layout">
+<tt class="descclassname">pylayers.gis.</tt><tt class="descname">layout</tt><a class="headerlink" href="#pylayers.gis.layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#module-pylayers.gis.layout" title="pylayers.gis.layout"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.gis.layout</span></tt></a></p>
+</dd></dl>
+
 <span class="target" id="module-pylayers.gis.layout"></span><dl class="class">
 <dt id="pylayers.gis.layout.Layout">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.layout.</tt><tt class="descname">Layout</tt><big>(</big><em>_filename='defstr.ini'</em>, <em>_filematini='matDB.ini'</em>, <em>_fileslabini='slabDB.ini'</em>, <em>_filefur=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout" title="Permalink to this definition">¶</a></dt>
@@ -872,6 +878,31 @@ the AAS (Allowed Angular Sector)</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.gis.layout.Layout.cy2pt">
+<tt class="descname">cy2pt</tt><big>(</big><em>cy=0</em>, <em>h=1.2</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.cy2pt" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a point into a given cycle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cy :</strong> :</p>
+<blockquote>
+<div><p>cycle</p>
+</div></blockquote>
+<p><strong>h</strong> : float</p>
+<blockquote>
+<div><p>point height</p>
+</div></blockquote>
+<p><strong>Returns</strong> :</p>
+<p><strong>&#8212;&#8212;-</strong> :</p>
+<p class="last"><strong>point</strong> : nd.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.gis.layout.Layout.cycleinline">
 <tt class="descname">cycleinline</tt><big>(</big><em>c1</em>, <em>c2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.cycleinline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.cycleinline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the intersection between a given line and all segments
@@ -900,13 +931,13 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.del_points">
-<tt class="descname">del_points</tt><big>(</big><em>ln</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.del_points" title="Permalink to this definition">¶</a></dt>
-<dd><p>delete points in list ln</p>
+<tt class="descname">del_points</tt><big>(</big><em>lp</em><big>)</big><a class="headerlink" href="#pylayers.gis.layout.Layout.del_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete points in list lp</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>ln</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>lp</strong> : list</p>
 <blockquote class="last">
 <div><p>node list</p>
 </div></blockquote>
@@ -1008,49 +1039,31 @@ al2</p>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.dumpr">
-<tt class="descname">dumpr</tt><big>(</big><em>graph='trwcvi'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpr" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumpr</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpr" title="Permalink to this definition">¶</a></dt>
 <dd><p>read a dump of given Graph</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>graph</strong> : string</p>
-<blockquote>
-<div><p>&#8216;t&#8217; : Gt
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>graph <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd>&#8216;t&#8217; : Gt
 &#8216;r&#8217; : Gr
 &#8216;s&#8217; : Gs
 &#8216;v&#8217; : Gv
-&#8216;i&#8217; : Gi</p>
-</div></blockquote>
-<p><strong>Notes</strong> :</p>
-<p><strong>&#8212;&#8211;</strong> :</p>
-<p><strong>.gpickle files are store under the struc directory of the project</strong> :</p>
-<p class="last"><strong>specified by the $BASENAME environment variable</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
+&#8216;i&#8217; : Gi</dd>
+</dl>
+<p>.gpickle files are store under the struc directory of the project
+specified by the $BASENAME environment variable</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.dumpw">
-<tt class="descname">dumpw</tt><big>(</big><em>graph='trwcvi'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">dumpw</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.dumpw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.dumpw" title="Permalink to this definition">¶</a></dt>
 <dd><p>write a dump of given Graph</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>&#8216;t&#8217;</strong> : Gt</p>
-<blockquote class="last">
-<div><p>&#8216;r&#8217; : Gr
+<p class="rubric">Notes</p>
+<p>&#8216;t&#8217; : Gt
+&#8216;r&#8217; : Gr
 &#8216;s&#8217; : Gs
 &#8216;v&#8217; : Gv 
 &#8216;i&#8217; : Gi</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -2248,7 +2261,7 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.showSig">
-<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x729ef10&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">showSig</tt><big>(</big><em>sigarr</em>, <em>Tx=None</em>, <em>Rx=None</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0x856b2d0&gt;</em>, <em>ax=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.showSig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.showSig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show signature</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2373,20 +2386,39 @@ p2 : numpy.ndarray</div></blockquote>
 
 <dl class="method">
 <dt id="pylayers.gis.layout.Layout.show_segment">
-<tt class="descname">show_segment</tt><big>(</big><em>edlist=</em><span class="optional">[</span><span class="optional">]</span>, <em>alpha=1</em>, <em>width=1</em>, <em>color='black'</em>, <em>dnodes=False</em>, <em>dlabels=False</em>, <em>font_size=15</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_segment" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show_segment</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/layout.html#Layout.show_segment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.layout.Layout.show_segment" title="Permalink to this definition">¶</a></dt>
 <dd><p>show segment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>edlist</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>edlist</strong> : list</p>
+<blockquote>
+<div><p>segment list</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>transparency 0&lt; alpha &lt; 1</p>
+</div></blockquote>
+<p><strong>width</strong> : float</p>
+<blockquote>
+<div><p>line width (default 1)</p>
+</div></blockquote>
+<p><strong>color</strong> : string</p>
+<blockquote>
+<div><p>default &#8216;black&#8217;</p>
+</div></blockquote>
+<p><strong>dnodes</strong> : boolean</p>
+<blockquote>
+<div><p>display nodes ( Default False)</p>
+</div></blockquote>
+<p><strong>dlabels</strong> : boolean</p>
+<blockquote>
+<div><p>display labels ( Default False)</p>
+</div></blockquote>
+<p><strong>font_size</strong> : int</p>
 <blockquote class="last">
-<div><p>alpha
-width
-color
-dnodes
-dlabels
-font_size</p>
+<div><p>Default 15</p>
 </div></blockquote>
 </td>
 </tr>

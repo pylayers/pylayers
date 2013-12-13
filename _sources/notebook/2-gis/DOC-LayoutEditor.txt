@@ -171,7 +171,7 @@ following :
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4cf1fd0>
+    <matplotlib.figure.Figure at 0x4eac1d0>
 
 
 Reading an exiting Layout
@@ -217,6 +217,9 @@ in ``PyLayers``
      'DIRNETSAVE': 'netsave',
      'DIROSM': 'struc/osm',
      'DIRPICKLE': 'struc/gpickle',
+     'DIRR2D': 'output/r2d',
+     'DIRR3D': 'output/r3d',
+     'DIRSIG': 'output/sig',
      'DIRSIMUL': 'ini',
      'DIRSLAB': 'ini',
      'DIRSLAB2': 'ini',
@@ -607,8 +610,8 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f44801484d0>,
-     <matplotlib.axes.AxesSubplot at 0x7f4480148c50>)
+    (<matplotlib.figure.Figure at 0x4f45090>,
+     <matplotlib.axes.AxesSubplot at 0x7fd9a4da7fd0>)
 
 
 
@@ -674,8 +677,13 @@ Vizualisation of the layout
     fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
     a = plt.axis('off')
 
+.. parsed-literal::
 
-.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png
+    G s  not saved
+
+
+
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_61_1.png
 
 
 Each node of :math:`$\mathcal{G}_s$` with a negative index is a point.
@@ -685,12 +693,5 @@ to a segment (wall,door,window,...).
 
 The segment name is the key of the **slab** dictionnary.
 
-Segments and Subsegments
-------------------------
-
-
-`Multi Subsegments <MultiSubsegments.ipynb>`_
-
-.. code-block:: python
 
     

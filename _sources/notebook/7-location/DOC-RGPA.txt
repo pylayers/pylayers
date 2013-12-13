@@ -1,7 +1,5 @@
 
 Robust Geometric Positioning Algorithm
---------------------------------------
-
 
 .. code-block:: python
 
@@ -23,7 +21,8 @@ Let's define 4 anchors in the plane.
     pt4=np.array(([-10,-10]))
     # the unknown point is p
     p = np.array((0,5))
-Display the scene
+Then displaying the scene with ancho nodes (in red) and blind nodes in
+blue
 
 .. code-block:: python
 
@@ -42,7 +41,7 @@ Display the scene
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x34baa90>
+    <matplotlib.legend.Legend at 0x2a5ea50>
 
 
 
@@ -50,7 +49,8 @@ Display the scene
 .. image:: DOC-RGPA_files/DOC-RGPA_5_1.png
 
 
-compute the true distance and the associated TOAs
+The euclidian distance betwenn blind node :math:`$p$` and anchors ans
+the corresponding Time of flight are evaluated.
 
 .. code-block:: python
 
@@ -77,21 +77,21 @@ compute the true distance and the associated TOAs
     distance p-4= 18.0277563773 / toa3= 60.0925212577
 
 
-RGPA
-====
+RGPA (Robust Geometric Positioning Algorithm)
+=============================================
 
 
-TOA
----
+Exploiting Time of Arrival (ToA) only
+-------------------------------------
 
 
-instanciate the constraint layer array which gathers all the geometric
-constraints of the considered scenario.
+We call ``Constraint Layer Array`` (CLA) the object which gathers all
+the geometric constraints of a considered scenario.
 
 .. code-block:: python
 
     C=CLA()
-Instanciate TOA objects, notice that their id are differents
+Instanciate TOA constraints, notice that their id are differents
 
 .. code-block:: python
 
@@ -99,7 +99,7 @@ Instanciate TOA objects, notice that their id are differents
     T2=TOA(id=1,value = toa2, std = np.array([1.0]), p = pt2)
     T3=TOA(id=2,value = toa3, std = np.array([1.0]), p = pt3)
     T4=TOA(id=3,value = toa4, std = np.array([1.0]), p = pt4)
-Add TOA contrstraints to the CLA
+Add TOA contraints to the CLA
 
 .. code-block:: python
 
@@ -107,7 +107,7 @@ Add TOA contrstraints to the CLA
     C.append(T2)
     C.append(T3)
     C.append(T4)
-List all constraints of the CLA
+All the constraints of the CLA can be listed as follows
 
 .. code-block:: python
 
@@ -117,10 +117,10 @@ List all constraints of the CLA
 
 .. parsed-literal::
 
-    [<pylayers.location.geometric.constraints.toa.TOA at 0x33e8350>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x33e8f50>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x33e87d0>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x33e8e50>]
+    [<pylayers.location.geometric.constraints.toa.TOA at 0x298a8d0>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x298a0d0>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x298a5d0>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x298a210>]
 
 
 
@@ -138,7 +138,7 @@ Get information on the cla :
 
 .. code-block:: python
 
-    C.info2()
+    C.info()
 
 .. parsed-literal::
 
@@ -157,7 +157,6 @@ Update the CLA
 .. code-block:: python
 
     C.update()
-
 Compute the cla
 
 .. code-block:: python
@@ -204,13 +203,19 @@ RSS
 ---
 
 
-The RSS is a quantity with related to distance.To model the Path Loss
-shadowing model is widely used. To define a path loss shadowing model
+The RSS is a quantity which is weakly related to distance via a
+parametric model. The bettet the model, better would be tthe inference
+ab out tthe associated distance. t To model the Path Loss shadowing
+model is widely used.
+
+To define the classical path loss shadowing model widely used in this
+context the ``PLSmodel`` class has been defined.
 
 .. code-block:: python
 
     M = PLSmodel(f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mode')
-For simulation purpose : get RSS from distances wit the given model
+For simulation purpose : get RSS from distances (or associated delay)
+with the above model
 
 .. code-block:: python
 
@@ -232,7 +237,7 @@ For simulation purpose : get RSS from distances wit the given model
 
 .. parsed-literal::
 
-    10.048035915830724
+    10.957922862972042
 
 
 
@@ -367,7 +372,3 @@ TDOA
     </script>
 
 
-
-.. code-block:: python
-
-    

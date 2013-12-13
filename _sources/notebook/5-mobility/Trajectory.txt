@@ -3,7 +3,7 @@ Example of a trajectory synthesis in DLR WHERE2 environment
 -----------------------------------------------------------
 
 
-.. code:: python
+.. code-block:: python
 
     from pylayers.simul.simulem import *
     from pylayers.antprop.rays import *
@@ -23,14 +23,14 @@ Example of a trajectory synthesis in DLR WHERE2 environment
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x56b5a90>
+    <matplotlib.figure.Figure at 0x4fc1bd0>
 
 
 This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
 run a full simulation and returns a list of channel impulse response.
 
-.. code:: python
+.. code-block:: python
 
     def evalcir(S,wav,cutoff=4):
         """
@@ -84,7 +84,7 @@ loading the Layout
 ^^^^^^^^^^^^^^^^^^
 
 
-.. code:: python
+.. code-block:: python
 
     S = Simul()
     filestr = 'DLR2'
@@ -94,7 +94,13 @@ loading the Layout
     except:
         S.L.build()
         S.L.dumpw()
-.. code:: python
+
+.. parsed-literal::
+
+    G s  not saved
+
+
+.. code-block:: python
 
     S.L.display['ednodes']=False
     S.L.display['nodes']=False
@@ -110,7 +116,7 @@ We have a list of static Anchor Nodes. Those values correspond to the
 actual anchor nodes coordinates of the WHERE2 project DLR measurement
 campaign.
 
-.. code:: python
+.. code-block:: python
 
     AnchorNodes = {390:{'name':'MT_ACO_05','coord':[6,0.81,1.64]},
                    386:{'name':'MT_ACO_08','coord':[30.574,2.8,1.291]},
@@ -120,7 +126,7 @@ campaign.
                    400:{'name':'MT_ACO_02','coord':[30.574,2.8,1.291]},
                    1:{'name':'MT_DLR_RTDSlave','coord':[0.85,0,1.18]}
                   }
-.. code:: python
+.. code-block:: python
 
     S.tx.clear()
     S.rx.clear()
@@ -130,7 +136,7 @@ campaign.
     dm ={}
 Vizualization of the simulated scenario
 
-.. code:: python
+.. code-block:: python
 
     fig,ax=S.L.showG('s',nodes=False)
     plt.axis('off')
@@ -152,7 +158,7 @@ Vizualization of the simulated scenario
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f018c3c1e10>]
+    [<matplotlib.lines.Line2D at 0x7fa43cdb5210>]
 
 
 
@@ -165,14 +171,14 @@ In the following a trajectory for the receiver is defined.
 ``linevect`` function allows to define a linear trajectory from ``ptt``
 along direction ``vec``.
 
-.. code:: python
+.. code-block:: python
 
     S.rx.linevect(npt=150, step=0.2, ptt=[0, 0, 1.275], vec=[1, 0, 0], mode='subst')
     ps = S.rx.position[:,-1]
     S.rx.linevect(npt=20, step=0.2, ptt=ps,vec=[0,1,0],mode='append')
 Looking what is does
 
-.. code:: python
+.. code-block:: python
 
     S.L.display['ednodes']=False
     S.L.display['edges']=True
@@ -189,8 +195,8 @@ Looking what is does
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f018c3e9c10>,
-     <matplotlib.axes.AxesSubplot at 0x2537d50>)
+    (<matplotlib.figure.Figure at 0x7fa43cdddd10>,
+     <matplotlib.axes.AxesSubplot at 0x7fa43cc9fb50>)
 
 
 
@@ -200,7 +206,7 @@ Looking what is does
 
 Choosing a UWB waveform for the simulation
 
-.. code:: python
+.. code-block:: python
 
     wav = wvf.Waveform(type='W1compensate')
     wav.show()
@@ -211,7 +217,7 @@ Choosing a UWB waveform for the simulation
 
 running the simulation
 
-.. code:: python
+.. code-block:: python
 
     tcir = evalcir(S,wav,cutoff=3)
 
@@ -412,14 +418,14 @@ Usignal of length 9930 points.
 
 Saving the data in pickle format
 
-.. code:: python
+.. code-block:: python
 
     file = open("tcir5.pickle","w")
     pickle.dump(tcir,file)
     file.close()
 Reading the data from the above file
 
-.. code:: python
+.. code-block:: python
 
     del tcir
     file=open("tcir5.pickle","r")
@@ -437,7 +443,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-.. code:: python
+.. code-block:: python
 
     plt.figure(figsize=(10,10))
     dmax=150*0.3
@@ -462,7 +468,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 .. image:: Trajectory_files/Trajectory_26_1.png
 
 
-.. code:: python
+.. code-block:: python
 
     tcir[1][1].plot(types=['v'])
 
@@ -476,8 +482,8 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f018c2cf110>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x63dce90>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x7fa43cca3fd0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fa43cc27410>]], dtype=object))
 
 
 
@@ -485,7 +491,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 .. image:: Trajectory_files/Trajectory_27_2.png
 
 
-.. code:: python
+.. code-block:: python
 
     plt.figure(figsize=(10,5))
     tcir[1][1].plot(types=['v'])
@@ -497,21 +503,21 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f018d68e590>
+    <matplotlib.text.Text at 0x7fa43d9ad950>
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7f018d0c2550>
+    <matplotlib.figure.Figure at 0x58f6e50>
 
 
 
 .. image:: Trajectory_files/Trajectory_28_2.png
 
 
-.. code:: python
+.. code-block:: python
 
     tcir[1][40].plot(types=['v'])
     xlabel('Delay (ns)')
@@ -522,7 +528,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f018d6b4710>
+    <matplotlib.text.Text at 0x7fa43d9d4ad0>
 
 
 

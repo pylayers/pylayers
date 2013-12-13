@@ -10,7 +10,7 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x460b4d0>
+    <matplotlib.figure.Figure at 0x49f76d0>
 
 
 Generation of an Impulse of normalized energy
@@ -19,18 +19,18 @@ Generation of an Impulse of normalized energy
 One possible manner to define an ernergy normalized short UWB impulse is
 as follows.
 
-:math:`$$ p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2} $$`
+:math:`p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}`
 with
 
-:math:`$$ \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$`
+:math:`\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}`
 
-where :math:`$B$` is the desired bandwidth defined at
-:math:`$\gamma_{dB}$` below the spectrum maximum and :math:`$f_c$` is
+where :math:`B` is the desired bandwidth defined at
+:math:`\gamma_{dB}` below the spectrum maximum and :math:`f_c` is
 the central frequency of the pulse.
 
 This waveform is a gaussian windowing of a sine wave of frequency
-:math:`$f_c$`. The normalization term depends on the exponential scaling
-factor :math:`$\tau$`.
+:math:`f_c`. The normalization term depends on the exponential scaling
+factor :math:`\tau`.
 
 .. code-block:: python
 
@@ -137,8 +137,8 @@ In time domain
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x46d2550>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x2c1bdd0>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x4ac1410>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe5be9da1d0>]], dtype=object))
 
 
 
@@ -193,8 +193,8 @@ The link between Txid = 1 and Rxid =1 is simply loaded as
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f8684175a50>,
-     <matplotlib.axes.AxesSubplot at 0x4902c50>)
+    (<matplotlib.figure.Figure at 0x4d7c890>,
+     <matplotlib.axes.AxesSubplot at 0x4d70b10>)
 
 
 
@@ -333,8 +333,8 @@ Calculate UWB Channel Impulse Response
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f8685cfc2d0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7f8685a4fb10>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x5306590>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x531b510>]], dtype=object))
 
 
 
@@ -401,7 +401,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7f8685fd5d10>
+    <matplotlib.figure.Figure at 0x5467990>
 
 
 
@@ -427,7 +427,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7524510>]
+    [<matplotlib.lines.Line2D at 0x7fe5ae4b6790>]
 
 
 
@@ -447,8 +447,8 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x85cf1d0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x85cb250>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x7fe5997e1b50>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe599262390>]], dtype=object))
 
 
 
@@ -464,8 +464,8 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x52e5610>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7d25110>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x7fe5aef8c9d0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe5ae31b390>]], dtype=object))
 
 
 
@@ -489,7 +489,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x72095d0>]
+    [<matplotlib.lines.Line2D at 0x7fe5aeaea6d0>]
 
 
 
@@ -510,7 +510,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x77f0090>]
+    [<matplotlib.lines.Line2D at 0x7fe5ae957c90>]
 
 
 
@@ -526,8 +526,8 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x574dd90>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x780d590>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x7fe598ebabd0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe5983d1850>]], dtype=object))
 
 
 
@@ -543,8 +543,8 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5901d50>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7207650>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x5471c90>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe5983cc890>]], dtype=object))
 
 
 
@@ -570,7 +570,7 @@ symHz force the Hermitian symetry of Y with zero padding of 500
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x5759ed0>]
+    [<matplotlib.lines.Line2D at 0x7fe598c6a910>]
 
 
 
@@ -600,7 +600,7 @@ Problem :math:`$s$` is not real
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x5a8a190>]
+    [<matplotlib.lines.Line2D at 0x7fe5aeccd450>]
 
 
 
@@ -616,7 +616,7 @@ Problem :math:`$s$` is not real
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x5d9d7d0>]
+    [<matplotlib.lines.Line2D at 0x7fe5aeb0ea10>]
 
 
 
@@ -644,7 +644,7 @@ Problem :math:`$s$` is not real
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f8685fae810>]
+    [<matplotlib.lines.Line2D at 0x53b43d0>]
 
 
 
@@ -778,7 +778,7 @@ Problem :math:`$s$` is not real
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7f8685356590>]
+    [<matplotlib.lines.Line2D at 0x7fe5ad23ed50>]
 
 
 
@@ -821,8 +821,8 @@ Problem :math:`$s$` is not real
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x6712c90>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7aa0d90>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x7fe598c85890>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7fe5aee17b90>]], dtype=object))
 
 
 

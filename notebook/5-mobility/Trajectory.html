@@ -95,34 +95,173 @@
             
   <div class="section" id="example-of-a-trajectory-synthesis-in-dlr-where2-environment">
 <h1>Example of a trajectory synthesis in DLR WHERE2 environment<a class="headerlink" href="#example-of-a-trajectory-synthesis-in-dlr-where2-environment" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x56b5a90&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.signature</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4fc1bd0&gt;</pre>
 </div>
 <p>This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
 run a full simulation and returns a list of channel impulse response.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    S</span>
+<span class="sd">    tx</span>
+<span class="sd">    rx</span>
+<span class="sd">    wav</span>
+<span class="sd">    cutoff</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">crxp</span> <span class="o">=-</span><span class="mi">1</span>
+    <span class="n">ctxp</span> <span class="o">=-</span><span class="mi">1</span>
+    <span class="n">tcir</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span>
+    <span class="n">Ntx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span>
+    <span class="n">Nrx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c">#for kt in range(1,Ntx-1):</span>
+    <span class="c">#print kt+1</span>
+    <span class="n">kt</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">kr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nrx</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mod</span><span class="p">(</span><span class="n">kr</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">print</span> <span class="n">kr</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">crx</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">pt2cy</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ctx</span><span class="o">&lt;&gt;</span><span class="n">ctxp</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">crx</span><span class="o">&lt;&gt;</span><span class="n">crxp</span><span class="p">):</span>
+            <span class="n">Si</span>  <span class="o">=</span> <span class="n">Signatures</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">ctx</span><span class="p">,</span><span class="n">crx</span><span class="p">)</span>
+            <span class="n">ctxp</span> <span class="o">=</span> <span class="n">ctx</span>
+            <span class="n">crxp</span> <span class="o">=</span> <span class="n">crx</span>
+            <span class="n">Si</span><span class="o">.</span><span class="n">run1</span><span class="p">(</span><span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">)</span>
+        <span class="n">r2d</span> <span class="o">=</span> <span class="n">Si</span><span class="o">.</span><span class="n">rays</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+        <span class="c">#r2d.show(S.L)</span>
+
+        <span class="n">r3d</span> <span class="o">=</span> <span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">Ct</span>  <span class="o">=</span> <span class="n">r3d</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="n">sca</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">prop2tran</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">cir</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
+        <span class="n">tcir</span><span class="p">[</span><span class="n">kt</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">kr</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">cir</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">tcir</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="section" id="loading-the-layout">
 <h2>loading the Layout<a class="headerlink" href="#loading-the-layout" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
+<span class="n">filestr</span> <span class="o">=</span> <span class="s">&#39;DLR2&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">layout</span><span class="p">(</span><span class="n">filestr</span><span class="o">+</span><span class="s">&#39;.ini&#39;</span><span class="p">,</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>G s  not saved</pre>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;DLR WP4 WHERE2 measurement site&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;overlay&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
+</pre></div>
+</div>
 <img alt="./Trajectory_files/Trajectory_6_0.png" src="./Trajectory_files/Trajectory_6_0.png" />
 <p>We have a list of static Anchor Nodes. Those values correspond to the
 actual anchor nodes coordinates of the WHERE2 project DLR measurement
 campaign.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">AnchorNodes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">390</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_05&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mi">6</span><span class="p">,</span><span class="mf">0.81</span><span class="p">,</span><span class="mf">1.64</span><span class="p">]},</span>
+               <span class="mi">386</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_08&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">30.574</span><span class="p">,</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.291</span><span class="p">]},</span>
+               <span class="mi">391</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_07&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">11.78</span><span class="p">,</span><span class="o">-</span><span class="mf">5.553</span><span class="p">,</span><span class="mf">1.5</span><span class="p">]},</span>
+               <span class="mi">385</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;MT_ACO_01&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">19.52</span><span class="p">,</span><span class="o">-</span><span class="mf">0.69</span><span class="p">,</span><span class="mf">1.446</span><span class="p">]},</span>
+               <span class="mi">387</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_03&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">28.606</span><span class="p">,</span><span class="o">-</span><span class="mf">0.74</span><span class="p">,</span><span class="mf">1.467</span><span class="p">]},</span>
+               <span class="mi">400</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_ACO_02&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">30.574</span><span class="p">,</span><span class="mf">2.8</span><span class="p">,</span><span class="mf">1.291</span><span class="p">]},</span>
+               <span class="mi">1</span><span class="p">:{</span><span class="s">&#39;name&#39;</span><span class="p">:</span><span class="s">&#39;MT_DLR_RTDSlave&#39;</span><span class="p">,</span><span class="s">&#39;coord&#39;</span><span class="p">:[</span><span class="mf">0.85</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.18</span><span class="p">]}</span>
+              <span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">filant</span><span class="o">=</span><span class="s">&#39;def.vsh3&#39;</span>
+<span class="n">da</span> <span class="o">=</span><span class="p">{}</span>
+<span class="n">dm</span> <span class="o">=</span><span class="p">{}</span>
+</pre></div>
+</div>
 <p>Vizualization of the simulated scenario</p>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f018c3c1e10&gt;]</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span><span class="n">nodes</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
+<span class="c">#</span>
+<span class="c"># add new points in tx and rx</span>
+<span class="c">#</span>
+<span class="c">#for c,k in enumerate(AnchorNodes):</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># first anchor nodes</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">AnchorNodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">c</span><span class="p">]</span>
+<span class="n">pta</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">AnchorNodes</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s">&#39;coord&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="c">#</span>
+<span class="c"># To add a point</span>
+<span class="c">#</span>
+<span class="n">S</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s">&quot;add&quot;</span><span class="p">)</span>
+<span class="n">da</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">=</span><span class="n">k</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fa43cdb5210&gt;]</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_11_1.png" src="./Trajectory_files/Trajectory_11_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
 <p><tt class="docutils literal"><span class="pre">linevect</span></tt> function allows to define a linear trajectory from <tt class="docutils literal"><span class="pre">ptt</span></tt>
 along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.275</span><span class="p">],</span> <span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;subst&#39;</span><span class="p">)</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">position</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">S</span><span class="o">.</span><span class="n">rx</span><span class="o">.</span><span class="n">linevect</span><span class="p">(</span><span class="n">npt</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ptt</span><span class="o">=</span><span class="n">ps</span><span class="p">,</span><span class="n">vec</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Looking what is does</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;Trajectory to be simulated&#39;</span>
+<span class="n">S</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f018c3e9c10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x2537d50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fa43cdddd10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fa43cc9fb50&gt;)</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_15_2.png" src="./Trajectory_files/Trajectory_15_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
+<span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 <img alt="./Trajectory_files/Trajectory_17_0.png" src="./Trajectory_files/Trajectory_17_0.png" />
 <p>running the simulation</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span> <span class="o">=</span> <span class="n">evalcir</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">wav</span><span class="p">,</span><span class="n">cutoff</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-python"><pre>1
 Rays evaluation
 Rays evaluation
@@ -315,27 +454,74 @@ Rays evaluation</pre>
 stored as a dictionnary of 59 entries containing object from class
 Usignal of length 9930 points.</p>
 <p>Saving the data in pickle format</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tcir</span><span class="p">,</span><span class="nb">file</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>Reading the data from the above file</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">del</span> <span class="n">tcir</span>
+<span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;tcir5.pickle&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">tcir</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="c">#</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">cir</span> <span class="o">=</span> <span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">cir</span><span class="o">.</span><span class="n">zlr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">150</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ttcir</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">ttcir</span><span class="p">,</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">ttcir</span><span class="o">=</span><span class="n">cir</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor">
 <h2>Aggregated CIR along a synthetic trajectory (line in the corridor)<a class="headerlink" href="#aggregated-cir-along-a-synthetic-trajectory-line-in-the-corridor" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">dmax</span><span class="o">=</span><span class="mi">150</span><span class="o">*</span><span class="mf">0.3</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ttcir</span><span class="o">+</span><span class="mf">1e-20</span><span class="p">),</span><span class="n">vmax</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">vmin</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">dmax</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">69</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;delay $\times$ c (meters)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="c">#plt.ylabel(r&#39;distance along trajectory (meters)&#39;,fontsize=20)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">r&#39;trajectory index number&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">clb</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">clb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;level (dB)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;tight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">69.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="./Trajectory_files/Trajectory_26_1.png" src="./Trajectory_files/Trajectory_26_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f018c2cf110&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x63dce90&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fa43cca3fd0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fa43cc27410&gt;]], dtype=object))</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_27_2.png" src="./Trajectory_files/Trajectory_27_2.png" />
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f018d68e590&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f018d0c2550&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fa43d9ad950&gt;</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x58f6e50&gt;</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_28_2.png" src="./Trajectory_files/Trajectory_28_2.png" />
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7f018d6b4710&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">40</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Delay (ns)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Level (V)&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fa43d9d4ad0&gt;</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_29_1.png" src="./Trajectory_files/Trajectory_29_1.png" />
 </div>

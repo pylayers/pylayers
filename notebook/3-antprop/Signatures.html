@@ -92,7 +92,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4d07050&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4222210&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr.ini&#39;</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
@@ -101,6 +101,8 @@
     <span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
+</div>
+<div class="highlight-python"><pre>G s  not saved</pre>
 </div>
 <p>Showing the graph of rooms with 2 rooms separated by a DOOR segment</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
@@ -236,6 +238,91 @@ from cycle : 0 to cycle 1
  2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
  2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]</pre>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Si</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>Signatures
+----------
+from cycle : 0 to cycle 1
+1 : 3
+   [7 9 8]
+   [2 2 2]
+2 : 18
+   [7 7 7 9 9 9 8 8 8 3 3 3 4 4 4 2 2 2]
+   [2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1]
+   [6 5 1 6 5 1 6 5 1 7 9 8 7 9 8 7 9 8]
+   [1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2]
+3 : 69
+   [7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+ 3 4 4 4 4 4 4 4 4 4 4 4 4 7 7 9 9 9 8 8 2 2 2 2 2 2 2 2 2 2 2 2]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+   [5 1 1 6 6 5 6 5 1 6 1 6 6 6 5 6 5 1 6 1 6 6 5 4 2 4 2 4 2 9 8 7 9 8 7 9 8
+ 7 2 3 2 3 2 9 7 8 7 9 7 8 3 3 3 3 3 3 3 3 4 3 4 4 9 8 7 9 8 7 8]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+ 2 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2]
+   [6 6 5 9 8 1 1 6 6 5 5 7 9 8 1 1 6 6 5 5 7 9 1 7 7 9 9 8 8 6 6 6 5 5 5 1 1
+ 1 7 9 9 8 8 6 6 6 5 1 1 1 9 8 7 9 8 7 9 7 7 9 9 8 6 6 6 5 5 5 1]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1
+ 1 2 2 2 2 2 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1]
+4 : 258
+   [7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+ 9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 3 3 3 3 3 3
+ 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+ 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+ 4 4 4 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9
+ 9 9 9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2]
+   [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
+   [5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 5 1 6 6 6 1 5 6 6 1 1 5 5 6 6 1
+ 1 5 5 6 6 1 5 6 6 6 5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 4 2 4 2 4 2
+ 9 9 8 8 4 4 4 7 7 2 2 2 9 9 8 8 4 7 2 2 2 9 8 9 8 7 9 7 9 9 8 4 4 4 7 7 2
+ 3 2 9 3 7 2 9 3 7 9 3 3 9 7 7 2 2 2 8 3 3 9 9 7 2 2 2 8 8 9 8 9 7 8 9 7 3
+ 3 9 7 7 2 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 3 2 2 4 3 3 2 2 4 4 3 3
+ 2 4 4 3 3 3 3 3 3 3 3 3 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 8 9 3 4 8
+ 9 3 4 9 3 3 9 8 8 4 4 4 7 3 3 9 8 8 4 9 8 9 8 7 9 7 3 3 9 9 8 4 4 4 7 7]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 2 2 2 2 1 1 1 2 2 1 1 1 2 2 2 2 1 2 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 1 1 2 2 2 2 2 2 2 2 2 1
+ 1 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 2 2 2 2 2 2 2 1 1 2 2 2 1 1 1 2 2]
+   [1 5 9 1 6 1 1 5 6 1 6 1 5 6 1 6 1 5 6 9 8 1 5 7 9 1 6 1 1 5 5 6 1 6 1 5 5
+ 6 1 6 1 5 5 6 9 8 5 1 5 7 9 6 1 5 5 6 1 6 5 5 6 1 6 5 5 6 9 5 2 4 2 4 2 4
+ 5 1 5 1 9 7 8 5 1 9 8 7 6 1 6 1 7 1 9 8 7 6 6 6 6 6 6 6 5 6 5 9 7 8 5 6 8
+ 2 3 3 2 3 3 3 2 3 3 9 8 1 5 1 9 8 7 1 9 8 6 1 1 9 8 7 6 1 6 6 6 6 6 6 6 9
+ 8 6 5 6 8 2 3 4 2 2 3 4 3 2 2 4 3 2 9 8 9 8 9 8 4 2 3 4 2 4 2 3 4 3 2 4 2
+ 4 3 2 9 8 7 9 8 7 9 8 7 4 3 4 2 4 3 4 3 2 4 4 3 2 9 7 9 7 9 7 4 3 3 4 3 3
+ 3 4 3 3 9 7 5 5 1 9 7 8 5 9 7 6 6 1 7 6 6 6 6 6 6 6 9 7 5 6 5 9 7 8 5 6]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 2 2 2 1 1 2 2 2 1 1 1 1 2 1 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 2
+ 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 2 2 1 1 1 1 1 1 1 1 1 2
+ 2 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1
+ 1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 1]
+   [6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 6 6 5 5 5 5 7 7 7 7 7 9 9 9 9 9
+ 9 8 8 8 8 8 1 1 1 1 6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 7 7 9 9 8 8
+ 6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1
+ 7 7 7 9 9 9 9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1
+ 1 1 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 7 7 9 9 9 9 9 9 8 8
+ 8 8 8 6 6 6 5 5 5 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 9 9 9
+ 9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1 1]
+   [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
+ 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]</pre>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">Gt</span><span class="o">.</span><span class="n">pos</span>
 </pre></div>
 </div>
@@ -248,8 +335,8 @@ from cycle : 0 to cycle 1
 <span class="k">print</span> <span class="n">prx</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[ 7.51260517  0.58013199]
-[ 3.3253063   0.14856027]</pre>
+<div class="highlight-python"><pre>[ 8.16264781  0.23099004]
+[ 3.31234063  0.74387872]</pre>
 </div>
 <p>Evaluate performances of signature and ray evaluation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tt1</span> <span class="o">=</span> <span class="p">{}</span>
@@ -279,13 +366,13 @@ from cycle : 0 to cycle 1
 <span class="c">#    r2d.show(L)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>0 0.00197982788086
-1 0.0110919475555
-2 0.0545499324799
-3 0.217567920685
-4 0.700534105301
-5 1.93160891533
-6 4.63199615479</pre>
+<div class="highlight-python"><pre>0 0.00196981430054
+1 0.0107138156891
+2 0.0531568527222
+3 0.213968992233
+4 0.672088861465
+5 1.83813500404
+6 4.49210691452</pre>
 </div>
 <p>It appears that the increasing number of signatures obatined with the
 run1 algorithm do not yield necessarily a significant increase in the
@@ -297,9 +384,9 @@ number of rays.</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5b33110&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fa220198450&gt;</pre>
 </div>
-<img alt="./Signatures_files/Signatures_21_1.png" src="./Signatures_files/Signatures_21_1.png" />
+<img alt="../../_images/Signatures_22_1.png" src="../../_images/Signatures_22_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=bar(tt2.keys(),tt2.values(),color=&#39;red&#39;)</span>
 <span class="c">#b2=bar(tt1.keys(),tt1.values(),color=&#39;blue&#39;)</span>
 <span class="c">#b1=semilogx(tt2.keys(),log10(tt2.values()),color=&#39;red&#39;)</span>
@@ -315,9 +402,9 @@ number of rays.</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;time (s)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5b3ae90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fa220408810&gt;</pre>
 </div>
-<img alt="../../_images/Signatures_22_1.png" src="../../_images/Signatures_22_1.png" />
+<img alt="../../_images/Signatures_23_1.png" src="../../_images/Signatures_23_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">b1</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt1</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">tsig</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 <span class="c">#b3=loglog(tt1.keys(),arange(maxcutoff)**3,color=&#39;green&#39;)</span>
@@ -328,25 +415,25 @@ number of rays.</p>
 <span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5e20d50&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fa2206c8cd0&gt;</pre>
 </div>
-<img alt="../../_images/Signatures_23_1.png" src="../../_images/Signatures_23_1.png" />
+<img alt="../../_images/Signatures_24_1.png" src="../../_images/Signatures_24_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#b1=loglog(tsig.values(),tt1.values(),color=&#39;red&#39;)</span>
 <span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">b3</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="mf">0.0004</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">**</span><span class="mf">0.88</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;# Interactions&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x65ab090&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fa220bc70d0&gt;</pre>
 </div>
-<img alt="../../_images/Signatures_24_1.png" src="../../_images/Signatures_24_1.png" />
+<img alt="../../_images/Signatures_25_1.png" src="../../_images/Signatures_25_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">tt2</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span><span class="mf">0.0004</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">tint</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">**</span><span class="mf">0.88</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x6c18790&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fa220f6c450&gt;]</pre>
 </div>
-<img alt="../../_images/Signatures_25_1.png" src="../../_images/Signatures_25_1.png" />
+<img alt="./Signatures_files/Signatures_26_1.png" src="./Signatures_files/Signatures_26_1.png" />
 <p>The computation time in rays grows exponentially with the number of
 interactions.</p>
 <p><div class="system-message">
@@ -416,19 +503,19 @@ Transcript written on math.log.
 <span class="n">b2</span><span class="o">=</span><span class="n">loglog</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span><span class="n">array</span><span class="p">(</span><span class="n">tt2</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">**</span><span class="mi">5</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Signatures_27_0.png" src="../../_images/Signatures_27_0.png" />
+<img alt="../../_images/Signatures_28_0.png" src="../../_images/Signatures_28_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxcutoff</span><span class="p">):</span>
     <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../_images/Signatures_28_0.png" src="../../_images/Signatures_28_0.png" />
-<img alt="../../_images/Signatures_28_1.png" src="../../_images/Signatures_28_1.png" />
-<img alt="../../_images/Signatures_28_2.png" src="../../_images/Signatures_28_2.png" />
-<img alt="../../_images/Signatures_28_3.png" src="../../_images/Signatures_28_3.png" />
-<img alt="../../_images/Signatures_28_4.png" src="../../_images/Signatures_28_4.png" />
-<img alt="../../_images/Signatures_28_5.png" src="../../_images/Signatures_28_5.png" />
-<img alt="../../_images/Signatures_28_6.png" src="../../_images/Signatures_28_6.png" />
+<img alt="../../_images/Signatures_29_0.png" src="../../_images/Signatures_29_0.png" />
+<img alt="./Signatures_files/Signatures_29_1.png" src="./Signatures_files/Signatures_29_1.png" />
+<img alt="./Signatures_files/Signatures_29_2.png" src="./Signatures_files/Signatures_29_2.png" />
+<img alt="./Signatures_files/Signatures_29_3.png" src="./Signatures_files/Signatures_29_3.png" />
+<img alt="./Signatures_files/Signatures_29_4.png" src="./Signatures_files/Signatures_29_4.png" />
+<img alt="./Signatures_files/Signatures_29_5.png" src="./Signatures_files/Signatures_29_5.png" />
+<img alt="./Signatures_files/Signatures_29_6.png" src="./Signatures_files/Signatures_29_6.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">colray</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="n">widthray</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
@@ -441,7 +528,7 @@ Transcript written on math.log.
 <span class="c">#fig,ax=r2d.show(L,i=9,colray=&#39;green&#39;,widthray=0.5,fig=fig,ax=ax)</span>
 </pre></div>
 </div>
-<img alt="../../_images/Signatures_29_0.png" src="../../_images/Signatures_29_0.png" />
+<img alt="./Signatures_files/Signatures_30_0.png" src="./Signatures_files/Signatures_30_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>

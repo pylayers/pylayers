@@ -106,58 +106,20 @@ href="http://pylayers.github.com/documentation/development/_downloads/PyLayers.p
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">from</span> <span class="nn">pylayers.antprop.coverage</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="gp">In [2]: </span><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">AttributeError                            Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-2-424ec4f497fe&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 C = Coverage()</span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayers/pylayers/antprop/coverage.pyc in __init__(self, _fileini)</span>
-<span class="go">     99         except:</span>
-<span class="go">    100             self.L.buildGt()</span>
-<span class="go">--&gt; 101             self.L.dumpw(&#39;t&#39;)</span>
-<span class="go">    102 </span>
-<span class="go">    103         self.creategrid(full=self.mode,boundary=self.boundary)</span>
-
-<span class="go">/home/uguen/Documents/rch/devel/pylayers/pylayers/gis/layout.pyc in dumpw(self, graph)</span>
-<span class="go">   4003                     raise NameError(&#39;G&#39;+g+&#39; graph cannot be saved, probably because it has not been built&#39;)</span>
-<span class="go">   4004         # save dictionnary which maps string interaction to [interactionnode, interaction type]</span>
-<span class="go">-&gt; 4005         write_gpickle(getattr(self,&#39;di&#39;),basename+&#39;/struc/gpickle/di_&#39;+self.filename+&#39;.gpickle&#39;)</span>
-<span class="go">   4006         write_gpickle(getattr(self,&#39;dca&#39;),basename+&#39;/struc/gpickle/dca_&#39;+self.filename+&#39;.gpickle&#39;)</span>
-<span class="go">   4007 </span>
-
-<span class="go">AttributeError: &#39;Layout&#39; object has no attribute &#39;di&#39;</span>
 
 <span class="gp">In [3]: </span><span class="n">C</span><span class="o">.</span><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-3-aa4519a18027&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 C.tx = np.array((30,12))</span>
-
-<span class="go">NameError: name &#39;C&#39; is not defined</span>
 
 <span class="gp">In [4]: </span><span class="n">C</span><span class="o">.</span><span class="n">cover</span><span class="p">()</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-4-0e75a4f1a346&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 C.cover()</span>
-
-<span class="go">NameError: name &#39;C&#39; is not defined</span>
 
 <span class="gp">In [5]: </span><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">)</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-5-f96993ff725d&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 C.showPower(polarization=&#39;o&#39;)</span>
-
-<span class="go">NameError: name &#39;C&#39; is not defined</span>
+<span class="gr">Out[5]: </span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x5cf9a90&gt;,</span>
+<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0x2ae3fc1f63d0&gt;)</span>
 
 <span class="gp">In [6]: </span><span class="n">C</span><span class="o">.</span><span class="n">showPower</span><span class="p">(</span><span class="n">polarization</span><span class="o">=</span><span class="s">&#39;p&#39;</span><span class="p">)</span>
-<span class="go">---------------------------------------------------------------------------</span>
-<span class="go">NameError                                 Traceback (most recent call last)</span>
-<span class="go">&lt;ipython-input-6-f5b6c1ac9c21&gt; in &lt;module&gt;()</span>
-<span class="go">----&gt; 1 C.showPower(polarization=&#39;p&#39;)</span>
-
-<span class="go">NameError: name &#39;C&#39; is not defined</span>
+<span class="gr">Out[6]: </span>
+<span class="go">(&lt;matplotlib.figure.Figure at 0x2ae3fc1f6210&gt;,</span>
+<span class="go"> &lt;matplotlib.axes.AxesSubplot at 0x2ae3fc450990&gt;)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/coverexampleo.png"><img alt="_images/coverexampleo.png" src="_images/coverexampleo.png" style="width: 5in;" /></a>

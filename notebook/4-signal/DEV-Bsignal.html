@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="User Manual" href="../index.html" />
+    <link rel="next" title="Network Simulation Configuration" href="../5-mobility/ConfigFiles.html" />
+    <link rel="prev" title="Generation of an Impulse of normalized energy" href="UwbWaveforms.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,11 +40,18 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../5-mobility/ConfigFiles.html" title="Network Simulation Configuration"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="UwbWaveforms.html" title="Generation of an Impulse of normalized energy"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../index.html" accesskey="U">User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -63,6 +73,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="UwbWaveforms.html"
+                        title="previous chapter">Generation of an Impulse of normalized energy</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../5-mobility/ConfigFiles.html"
+                        title="next chapter">Network Simulation Configuration</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -91,167 +107,21 @@
 <span class="kn">from</span> <span class="nn">scipy.fftpack</span> <span class="kn">import</span> <span class="n">fftshift</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x460b4d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x49f76d0&gt;</pre>
 </div>
 <div class="section" id="generation-of-an-impulse-of-normalized-energy">
 <h1>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h1>
 <p>One possible manner to define an ernergy normalized short UWB impulse is
 as follows.</p>
-<p><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">$$ p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2} $$</tt>)</p>
-latex exited with error
-[stdout]
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
-entering extended mode
-(./math.tex
-LaTeX2e &lt;2009/09/24&gt;
-Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
-yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
-ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
-9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
-skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
-orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
-, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
-rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
-(/usr/share/texmf-texlive/tex/latex/base/article.cls
-Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
-(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
-(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
-(/home/uguen/texmf/tex/latex/ucs/ucs.sty
-(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
-For additional information on amsmath, use the `?&#8217; option.
-(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
-(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
-(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
-(/usr/share/texmf-texlive/tex/latex/tools/bm.sty) (./math.aux)
-(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
-! Display math should end with $$.
-&lt;to be read again&gt; 
-                    
-l.12 $$$ 
-         p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
-                                                   \cos(2\pi f_c t) e^{-(\fr...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
-                                                   \cos(2\pi f_c t) e^{-(\fr...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
-                                                   \cos(2\pi f_c t) e^{-(\fr...
-
-! Extra }, or forgotten $.
-\frac  #1#2-&gt;{\begingroup #1\endgroup \&#64;&#64;over #2}
-                                                 
-l.12 ...)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}}
-                                                   \cos(2\pi f_c t) e^{-(\fr...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-l.13 \end{document}
-                   
-! Display math should end with $$.
-&lt;to be read again&gt; 
-                   \par 
-l.13 \end{document}
-                   
-[1] (./math.aux) )
-(\end occurred inside a group at level 1)
-
-### simple group (level 1) entered at line 12 ({)
-### bottom level
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 800 bytes).
-Transcript written on math.log.
-</div>
-
+<p><img class="math" src="../../_images/math/f803a11deebcbb42ad4227624bb8bb4b52c28ff6.png" alt="p(t)= \frac{\sqrt{2\sqrt{2}}}{\tau\sqrt{\pi}} \cos(2\pi f_c t) e^{-(\frac{t}{\tau})^2}"/>
 with</p>
-<p><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">$$ \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$</tt>)</p>
-latex exited with error
-[stdout]
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
-entering extended mode
-(./math.tex
-LaTeX2e &lt;2009/09/24&gt;
-Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
-yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
-ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
-9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
-skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
-orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
-, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
-rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
-(/usr/share/texmf-texlive/tex/latex/base/article.cls
-Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
-(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
-(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
-(/home/uguen/texmf/tex/latex/ucs/ucs.sty
-(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
-For additional information on amsmath, use the `?&#8217; option.
-(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
-(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
-(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
-(/usr/share/texmf-texlive/tex/latex/tools/bm.sty) (./math.aux)
-(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
-! Display math should end with $$.
-&lt;to be read again&gt; 
-                    
-l.12 $$$ 
-         \tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$$
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-l.12 $$$ \tau
-              = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}} $$$
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-l.13 \end{document}
-                   
-! Display math should end with $$.
-&lt;to be read again&gt; 
-                   \par 
-l.13 \end{document}
-                   
-[1] (./math.aux) )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 580 bytes).
-Transcript written on math.log.
-</div>
-</p>
-<p>where <img class="math" src="../../_images/math/b39d396ed6190261ffce7e93c9fbc4b013151fec.png" alt="$B$"/> is the desired bandwidth defined at
-<img class="math" src="../../_images/math/803d0909241bbb575dae1791ce49e4024e4c06d3.png" alt="$\gamma_{dB}$"/> below the spectrum maximum and <img class="math" src="../../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/> is
+<p><img class="math" src="../../_images/math/491345c98120d863f6e2ba488e86c55a33595d9a.png" alt="\tau = \frac{2}{B\pi}\sqrt{\frac{\gamma_{dB}\ln{10}}{20}}"/></p>
+<p>where <img class="math" src="../../_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"/> is the desired bandwidth defined at
+<img class="math" src="../../_images/math/29353fe0f6571b3f689f9bb4d39e7a764faae01e.png" alt="\gamma_{dB}"/> below the spectrum maximum and <img class="math" src="../../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/> is
 the central frequency of the pulse.</p>
 <p>This waveform is a gaussian windowing of a sine wave of frequency
-<img class="math" src="../../_images/math/fe1e55c9be7bbc4c2d028f11d54d3964de4e797f.png" alt="$f_c$"/>. The normalization term depends on the exponential scaling
-factor <img class="math" src="../../_images/math/d4946ec46154b310da1d30f828360388c4231983.png" alt="$\tau$"/>.</p>
+<img class="math" src="../../_images/math/5190caf4999f2c15c41331f1172ce648ecd030fa.png" alt="f_c"/>. The normalization term depends on the exponential scaling
+factor <img class="math" src="../../_images/math/1dc1c0119a604b91be9142370dc3159b6a9bbcb9.png" alt="\tau"/>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fc</span>     <span class="o">=</span> <span class="mi">4</span>
 <span class="n">band</span>   <span class="o">=</span> <span class="mi">2</span>
 <span class="n">thresh</span> <span class="o">=</span> <span class="mi">10</span>
@@ -325,8 +195,8 @@ signal in the middle of the array.</p>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x46d2550&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x2c1bdd0&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x4ac1410&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe5be9da1d0&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_13_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_13_2.png" />
 </div>
@@ -356,8 +226,8 @@ object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f8684175a50&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x4902c50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x4d7c890&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x4d70b10&gt;)</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_20_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_20_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">759</span><span class="p">,</span><span class="mi">1113</span><span class="p">,</span><span class="mf">1.5</span><span class="p">])</span>
@@ -456,8 +326,8 @@ No vsh coefficient calculated yet</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f8685cfc2d0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f8685a4fb10&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5306590&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x531b510&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_41_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_41_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#CIR=cir.esd(mode=&#39;unilateral&#39;)</span>
@@ -501,7 +371,7 @@ each path</p>
 </pre></div>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_50_0.png" src="./DEV-Bsignal_files/DEV-Bsignal_50_0.png" />
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f8685fd5d10&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5467990&gt;</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_50_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_50_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ips</span>  <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">ift</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -517,22 +387,22 @@ each path</p>
 <span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">1000</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7524510&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe5ae4b6790&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_52_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_52_1.png" />
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_52_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_52_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x85cf1d0&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x85cb250&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe5997e1b50&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe599262390&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_53_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_53_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x52e5610&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7d25110&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe5aef8c9d0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe5ae31b390&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_54_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_54_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U1</span><span class="o">=</span><span class="n">u0</span><span class="o">.</span><span class="n">fft</span><span class="p">()</span>
@@ -546,7 +416,7 @@ each path</p>
 <span class="c">#plot(uh.x,s*50+0.003)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x72095d0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe5aeaea6d0&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_55_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_55_1.png" />
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_55_2.png" src="./DEV-Bsignal_files/DEV-Bsignal_55_2.png" />
@@ -554,21 +424,21 @@ each path</p>
 <span class="n">plot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])),</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x77f0090&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe5ae957c90&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_56_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_56_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">wgam</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x574dd90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x780d590&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe598ebabd0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe5983d1850&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_57_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_57_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5901d50&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7207650&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5471c90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe5983cc890&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_58_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_58_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
@@ -580,7 +450,7 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x5759ed0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe598c6a910&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_60_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_60_1.png" />
 <p>Problem <img class="math" src="../../_images/math/bb4162fbb2de454e99f49c666005abf51d4a7838.png" alt="$s$"/> is not real</p>
@@ -592,13 +462,13 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">u0</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x5a8a190&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe5aeccd450&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_63_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_63_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x5d9d7d0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe5aeb0ea10&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_64_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_64_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span>
@@ -610,7 +480,7 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f8685fae810&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x53b43d0&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_66_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_66_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">U0</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -678,7 +548,7 @@ each path</p>
 <span class="n">plot</span><span class="p">(</span><span class="n">imag</span><span class="p">(</span><span class="n">UH</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f8685356590&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe5ad23ed50&gt;]</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_78_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_78_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">x</span>
@@ -698,8 +568,8 @@ each path</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x6712c90&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7aa0d90&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe598c85890&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe5aee17b90&gt;]], dtype=object))</pre>
 </div>
 <img alt="./DEV-Bsignal_files/DEV-Bsignal_81_1.png" src="./DEV-Bsignal_files/DEV-Bsignal_81_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
@@ -781,11 +651,18 @@ each path</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../5-mobility/ConfigFiles.html" title="Network Simulation Configuration"
+             >next</a></li>
+        <li class="right" >
+          <a href="UwbWaveforms.html" title="Generation of an Impulse of normalized energy"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
 

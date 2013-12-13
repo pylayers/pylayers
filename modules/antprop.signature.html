@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../index.html" />
     <link rel="up" title="antprop" href="antprop.html" />
-    <link rel="next" title="slab" href="antprop.slab.html" />
-    <link rel="prev" title="multiwall" href="antprop.multiwall.html" /> 
+    <link rel="next" title="multiwall" href="antprop.multiwall.html" />
+    <link rel="prev" title="rays" href="antprop.rays.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -41,10 +41,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="antprop.slab.html" title="slab"
+          <a href="antprop.multiwall.html" title="multiwall"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="antprop.multiwall.html" title="multiwall"
+          <a href="antprop.rays.html" title="rays"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
@@ -59,11 +59,11 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="antprop.multiwall.html"
-                        title="previous chapter">multiwall</a></p>
+  <p class="topless"><a href="antprop.rays.html"
+                        title="previous chapter">rays</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="antprop.slab.html"
-                        title="next chapter">slab</a></p>
+  <p class="topless"><a href="antprop.multiwall.html"
+                        title="next chapter">multiwall</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -244,6 +244,11 @@ Parameters
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.signature.Signature.sig2beam">
+<tt class="descname">sig2beam</tt><big>(</big><em>L</em>, <em>p</em>, <em>mode='incremental'</em><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2beam" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.signature.Signature.sig2ray">
 <tt class="descname">sig2ray</tt><big>(</big><em>L</em>, <em>pTx</em>, <em>pRx</em>, <em>mode='incremental'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.sig2ray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2ray" title="Permalink to this definition">¶</a></dt>
 <dd><p>convert a signature to a 2D ray</p>
@@ -280,7 +285,7 @@ Parameters
 
 <dl class="class">
 <dt id="pylayers.antprop.signature.Signatures">
-<em class="property">class </em><tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">Signatures</tt><big>(</big><em>L</em>, <em>source</em>, <em>target</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.antprop.signature.</tt><tt class="descname">Signatures</tt><big>(</big><em>L</em>, <em>source</em>, <em>target</em>, <em>cutoff=3</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>gathers all signatures from a layout given tx and rx</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -324,6 +329,12 @@ Parameters
 <dt id="pylayers.antprop.signature.Signatures.lineofcycle">
 <tt class="descname">lineofcycle</tt><big>(</big><em>cs=</em><span class="optional">[</span><span class="optional">]</span>, <em>ct=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.lineofcycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.lineofcycle" title="Permalink to this definition">¶</a></dt>
 <dd><p>shortest path between 2 cycle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.signature.Signatures.load">
+<tt class="descname">load</tt><big>(</big><em>filename=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load signatures</p>
 </dd></dl>
 
 <dl class="method">
@@ -391,7 +402,7 @@ type(rx)=int</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.run1">
-<tt class="descname">run1</tt><big>(</big><em>cutoff=1</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run1" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">run1</tt><big>(</big><em>cutoff=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run1" title="Permalink to this definition">¶</a></dt>
 <dd><p>get signatures (in one list of arrays) between tx and rx</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -440,6 +451,12 @@ type(rx)=int</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.antprop.signature.Signatures.save">
+<tt class="descname">save</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save signatures</p>
 </dd></dl>
 
 <dl class="method">
@@ -567,10 +584,10 @@ scalar product &lt; 0.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="antprop.slab.html" title="slab"
+          <a href="antprop.multiwall.html" title="multiwall"
              >next</a></li>
         <li class="right" >
-          <a href="antprop.multiwall.html" title="multiwall"
+          <a href="antprop.rays.html" title="rays"
              >previous</a> |</li>
         <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>

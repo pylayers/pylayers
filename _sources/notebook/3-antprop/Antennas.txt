@@ -14,15 +14,15 @@ Handling Antennas
     from pylayers.antprop.antvsh import *
 The first step consists in reading the raw data from an antenna ``.mat``
 file. In the example below the antenna has been measured in a
-`SATIMO <http://satimo.com/>`_ near field chamber. Antenna are by
+`SATIMO <http://satimo.com/>`_ near field chamber. Antennas are by
 default read in a directory specified relativeley to the curent project
 pointed by the ``$BASENAME`` environment variable.
 
 .. code-block:: python
 
     A = Antenna('S1R1.mat','ant/UWBAN/Matfile')
-The antenna has a **repr** method which provides information about the
-curent object.
+The Antenna class has a **repr** method which provides information about
+the curent object.
 
 .. code-block:: python
 
@@ -48,7 +48,7 @@ curent object.
 
 .. code-block:: python
 
-    %pfile A.show3
+    #%pfile A.show3
 If `geomview <http://www.geomview.org/>`_ is installed a vizalization of
 the antenna pattern is obtained in using a ``show3`` method
 
@@ -80,7 +80,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x42097d0>
+    <matplotlib.text.Text at 0x5957a90>
 
 
 
@@ -97,7 +97,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x44f4690>
+    <matplotlib.text.Text at 0x5360650>
 
 
 

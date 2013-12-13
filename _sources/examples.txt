@@ -18,6 +18,7 @@ Example of Indoor Multi Wall simulation
                                           
     @savefig coverexamplep.png width=5in
     In [4]: C.showPower(polarization='p')
+
     
 ..    In [1]: import pylayers.simul.simulem as sem
 ..    In [1]: S = sem.Simul()

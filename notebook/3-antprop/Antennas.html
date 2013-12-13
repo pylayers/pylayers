@@ -106,14 +106,14 @@ the complex antenna radiation pattern.</div></blockquote>
 </div>
 <p>The first step consists in reading the raw data from an antenna <tt class="docutils literal"><span class="pre">.mat</span></tt>
 file. In the example below the antenna has been measured in a
-<a class="reference external" href="http://satimo.com/">SATIMO</a> near field chamber. Antenna are by
+<a class="reference external" href="http://satimo.com/">SATIMO</a> near field chamber. Antennas are by
 default read in a directory specified relativeley to the curent project
 pointed by the <tt class="docutils literal"><span class="pre">$BASENAME</span></tt> environment variable.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">=</span> <span class="n">Antenna</span><span class="p">(</span><span class="s">&#39;S1R1.mat&#39;</span><span class="p">,</span><span class="s">&#39;ant/UWBAN/Matfile&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The antenna has a <strong>repr</strong> method which provides information about the
-curent object.</p>
+<p>The Antenna class has a <strong>repr</strong> method which provides information about
+the curent object.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
 </pre></div>
 </div>
@@ -128,7 +128,7 @@ Run : 1
 Nb theta (lat) : 91
 Nb phi (lon) :180</pre>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">%</span><span class="n">pfile</span> <span class="n">A</span><span class="o">.</span><span class="n">show3</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#%pfile A.show3</span>
 </pre></div>
 </div>
 <p>If <a class="reference external" href="http://www.geomview.org/">geomview</a> is installed a vizalization of
@@ -153,14 +153,14 @@ the antenna pattern is obtained in using a <tt class="docutils literal"><span cl
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x42097d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5957a90&gt;</pre>
 </div>
 <img alt="./Antennas_files/Antennas_13_1.png" src="./Antennas_files/Antennas_13_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x44f4690&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5360650&gt;</pre>
 </div>
 <img alt="./Antennas_files/Antennas_14_1.png" src="./Antennas_files/Antennas_14_1.png" />
 <p>The following figure represents all the radiation patterns in the

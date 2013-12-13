@@ -81,7 +81,6 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
-<li><a class="reference internal" href="#segments-and-subsegments">Segments and Subsegments</a></li>
 </ul>
 </li>
 </ul>
@@ -252,7 +251,7 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4cf1fd0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4eac1d0&gt;</pre>
 </div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
@@ -286,6 +285,9 @@ in <tt class="docutils literal"><span class="pre">PyLayers</span></tt></p>
  <span class="s">&#39;DIRNETSAVE&#39;</span><span class="p">:</span> <span class="s">&#39;netsave&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIROSM&#39;</span><span class="p">:</span> <span class="s">&#39;struc/osm&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRPICKLE&#39;</span><span class="p">:</span> <span class="s">&#39;struc/gpickle&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRR2D&#39;</span><span class="p">:</span> <span class="s">&#39;output/r2d&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRR3D&#39;</span><span class="p">:</span> <span class="s">&#39;output/r3d&#39;</span><span class="p">,</span>
+ <span class="s">&#39;DIRSIG&#39;</span><span class="p">:</span> <span class="s">&#39;output/sig&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRSIMUL&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRSLAB&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
  <span class="s">&#39;DIRSLAB2&#39;</span><span class="p">:</span> <span class="s">&#39;ini&#39;</span><span class="p">,</span>
@@ -593,8 +595,8 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f44801484d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f4480148c50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x4f45090&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fd9a4da7fd0&gt;)</pre>
 </div>
 <img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_55_1.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_55_1.png" />
 </div>
@@ -648,18 +650,13 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png" />
+<div class="highlight-python"><pre>G s  not saved</pre>
+</div>
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_1.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_1.png" />
 <p>Each node of <img class="math" src="../../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
 <p>Each node of <img class="math" src="../../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
 to a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
-</div>
-<div class="section" id="segments-and-subsegments">
-<h2>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="MultiSubsegments.ipynb">Multi Subsegments</a></p>
-<div class="highlight-python"><div class="highlight"><pre>
-</pre></div>
-</div>
 </div>
 </div>
 

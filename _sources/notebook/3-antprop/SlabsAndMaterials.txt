@@ -27,7 +27,7 @@ module.
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x27e7510>
+    <matplotlib.figure.Figure at 0x33a9510>
 
 
 The Class ``SlabDB`` contains a dictionnary of all available Slab. This
@@ -368,11 +368,12 @@ with respect to angle
     fGHz= np.array([2.4])
     S['WOOD'].ev(fGHz,theta)
     fig,ax = S['WOOD'].plotwrt(var='a',coeff='R',fig=fig)
+    plt.tight_layout()
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x328f910>
+    <matplotlib.figure.Figure at 0x7fd60eb464d0>
 
 
 
@@ -383,6 +384,7 @@ wrt to angle and frequency
 
 .. code-block:: python
 
+    plt.figure(figsize=(10,10))
     fGHz= np.arange(0.7,5.2,0.1)
     S['WOOD'].ev(fGHz,theta)
     S['WOOD'].pcolor()
@@ -401,12 +403,13 @@ wrt to angle and frequency
     II    = MatInterface(lmat,0,fGHz,theta)
     II.RT()
     fig,ax = II.plotwrt(var='a',kv=10,types=['m'])
+    tight_layout()
     air = mat['AIR']
     brick  = mat['BRICK']
     II  = MatInterface([air,brick],0,fGHz,theta)
     II.RT()
     fig,ax = II.plotwrt(var='f',color='k',types=['m'])
-    plt.show()
+    tight_layout()
 
 
 .. image:: SlabsAndMaterials_files/SlabsAndMaterials_41_0.png
@@ -440,7 +443,24 @@ wrt to angle and frequency
     fig,ax = sl['TESS-p50-5cm'].plotwrt(color='k',labels=[''])
     fig,ax = sl['TESS-p50-10cm'].plotwrt(color='k',labels=[''],linestyle='dashed',fig=fig,ax=ax)
     fig,ax = sl['TESS-p50-15cm'].plotwrt(color='k',labels=[''],linestyle='dashdot',fig=fig,ax=ax)
-    
+    plt.tight_layout()
+
+.. parsed-literal::
+
+    /usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+      warnings.warn("No labeled objects found. "
+
+
+
+.. image:: SlabsAndMaterials_files/SlabsAndMaterials_43_1.png
+
+
+Evaluation without phase compensation
+-------------------------------------
+
+
+.. code-block:: python
+
     fGHz = np.arange(2,16,0.1)
     theta = 0 
     
@@ -449,8 +469,24 @@ wrt to angle and frequency
     sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=False)
         
     fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k')
-    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
-    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
+    print ax
+    #fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
+    #fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashdot')
+    plt.tight_layout()
+
+.. parsed-literal::
+
+    [[<matplotlib.axes.AxesSubplot object at 0x7fd618691350>]
+     [<matplotlib.axes.AxesSubplot object at 0x7fd61866c710>]]
+
+
+
+.. image:: SlabsAndMaterials_files/SlabsAndMaterials_45_1.png
+
+
+.. code-block:: python
+
+    
     
     sl['TESS-p50-5cm'].ev(fGHz,theta,compensate=True)
     sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
@@ -464,22 +500,8 @@ wrt to angle and frequency
     fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
     fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashdot',fig=fig,ax=ax)
 
-.. parsed-literal::
 
-    /usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
-      warnings.warn("No labeled objects found. "
-
-
-
-.. image:: SlabsAndMaterials_files/SlabsAndMaterials_43_1.png
-
-
-
-.. image:: SlabsAndMaterials_files/SlabsAndMaterials_43_2.png
-
-
-
-.. image:: SlabsAndMaterials_files/SlabsAndMaterials_43_3.png
+.. image:: SlabsAndMaterials_files/SlabsAndMaterials_46_0.png
 
 
 Double Glass example from litterature [1] in sub TeraHertz D-band @
@@ -500,7 +522,7 @@ Double Glass example from litterature [1] in sub TeraHertz D-band @
 
 
 
-.. image:: SlabsAndMaterials_files/SlabsAndMaterials_45_0.png
+.. image:: SlabsAndMaterials_files/SlabsAndMaterials_48_0.png
 
 
 .. code-block:: python
@@ -511,26 +533,35 @@ Double Glass example from litterature [1] in sub TeraHertz D-band @
     sl['DoubleGlass'].pcolor(dB=True)
 
 
-.. image:: SlabsAndMaterials_files/SlabsAndMaterials_46_0.png
+.. image:: SlabsAndMaterials_files/SlabsAndMaterials_49_0.png
 
 
 .. code-block:: python
 
+    plt.figure(figsize=(10,10))
     sl['DoubleGlass'].ev(120,theta)
     fig,ax = sl['DoubleGlass'].plotwrt('a')
+    tight_layout()
 
 
-.. image:: SlabsAndMaterials_files/SlabsAndMaterials_47_0.png
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x7fd60eb26c10>
+
+
+
+.. image:: SlabsAndMaterials_files/SlabsAndMaterials_50_1.png
 
 
 .. code-block:: python
 
     freq = np.linspace(110,135,50)
     sl['DoubleGlass'].ev(freq,theta)
-    fig,ax = sl['DoubleGlass'].plotwrt('f')  # @20°
+    fig,ax = sl['DoubleGlass'].plotwrt('f',figsize=(10,10))  # @20°
+    tight_layout()
 
 
-.. image:: SlabsAndMaterials_files/SlabsAndMaterials_48_0.png
+.. image:: SlabsAndMaterials_files/SlabsAndMaterials_51_0.png
 
 
 References
