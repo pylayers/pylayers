@@ -1,13 +1,7 @@
 .. _geometric:
 
-geometric algorithms
+Geometric Algorithms
 ====================
-
-.. automodule:: pylayers.location.constraints.toa
-    :members:
-
-.. automodule:: pylayers.location.geometric.Scenario_base
-    :members:
 
 .. toctree::
     :maxdepth: 2
@@ -15,3 +9,5 @@ geometric algorithms
     pylayers.location.geometric.constraints.rst
 
     pylayers.location.geometric.util.rst
+
+
