@@ -40,14 +40,43 @@ class Constraint(object):
 
     Constraint.C_Id : Contraint Identity automatically increased for new instanciation
 
-    type    : contraint type
-    time    : time stamp
-    lbox    : LBoxN intialisation
-    runable : boolean. information on constraint center ( TO DO)
-    p       : Constraint center
-    validity: validity duration ( not use yet)
-    self.Id : Constraint.C_Id
-    ndim    : Constraint dimension
+    type    : str
+        contraint type (TOA,TDOA,RSS)
+
+    p       : nd.array
+        Constraint center
+    
+    self.Id : str
+        Constraint.C_Id
+
+    ndim    : int
+        Constraint dimension (2D/3D)
+
+    origin : dict
+        origin of the contraint, (used for simulnet simulation 
+        'id' : id of the node generating the constraint
+        'link' : edge of network graph Gr
+        'rat' : RAT on which constraint has been obtained
+        'ldp' : type of observable
+
+
+    Parameters
+    ----------
+
+    time    : float
+        time stamp
+    lbox    : LBoxN
+        LBoxN intialisation
+        self.usable = True
+        self.visible = True
+        self.obsolete = False
+
+    runable : boolean
+        A constriat is runable if it has a center
+    usable: boolean
+        a constraint is usable is it has a std AND a value AND is visible
+    visible : boolean
+        is the constraint visible (used for simulnet simulation 
 
 
     parmsh : dictionary
@@ -69,11 +98,12 @@ class Constraint(object):
     info()     : Display information about constraint
     show3()    : display constraint on Geomview. Parameters tahnks to self.parmsh
 
+    See Also
+    --------
 
-    TODO
-    ----
+    pylayers.simul.simulnet
+    pylayers.location.localization
 
-    ini file for geom view !
 
     """
     def __init__(self, type, id='0', p=np.array(()), origin={}):

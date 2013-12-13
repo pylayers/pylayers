@@ -489,10 +489,8 @@ class Usignal(Bsignal):
         >>> assert(u.dx()==0.1)
 
         """
-        if len(self.x)>1:
-            return(self.x[1] - self.x[0])
-        else:
-            return (1.)
+        
+        return(self.x[1] - self.x[0])
 
     def width(self):
         """ get the extension support of the Usignal
