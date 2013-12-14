@@ -2,8 +2,16 @@
 # for all notebooks below
 for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
 do
+    # display filename
     echo $i
-    runipy -o $i --pylab >>log 2>> log-err
+    if [ -f ${i%%.ipynb}.rst ]; 
+    then
+           # rst file exists
+           echo "${i%%.ipynb}.rst exists"
+    else
+            # regenerate out put cell 
+            runipy -o $i --pylab >>log 2>> log-err
+    fi
     if test ${?} -eq 0; 
     then
         file=`basename $i`

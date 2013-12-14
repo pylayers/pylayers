@@ -4083,11 +4083,13 @@ class Layout(object):
 
         Notes
         -----
-            't' : Gt
-            'r' : Gr
-            's' : Gs
-            'v' : Gv 
-            'i' : Gi 
+
+        't' : Gt
+        'r' : Gr
+        's' : Gs
+        'v' : Gv 
+        'i' : Gi 
+
         """
         for g in self.lbltg:
             try:

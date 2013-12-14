@@ -95,10 +95,10 @@ class Coverage(object):
         except:
             pass
         try:
-            self.L.dumpr('t')
+            self.L.dumpr()
         except:
-            self.L.build('t')
-            self.L.dumpw('t')
+            self.L.build()
+            self.L.dumpw()
 
         self.creategrid(full=self.mode,boundary=self.boundary)
 
@@ -337,7 +337,7 @@ class Coverage(object):
 #        alphas = np.abs(np.linspace(.0,1.0, tCM.N))
 #        tCM._lut[:-3,-1] = alphas
 
-        title='Map of received power - Pt = ' + str(self.ptdbm) + ' dBm'
+        title='Map of received power - Pt = ' + str(self.ptdbm) + ' dBm'+str(' fGHz =') + str(self.fGHz) + ' polar = '+polar
 
         cdict = {
         'red'  :  ((0., 0.5, 0.5), (1., 1., 1.)),
@@ -393,6 +393,7 @@ class Coverage(object):
         cax = divider.append_axes("right", size="5%", pad=0.05)
         clb = fig.colorbar(cov,cax)
         clb.set_label('Power (dBm)')
+
         if self.show:
             plt.show()
 

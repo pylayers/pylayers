@@ -178,7 +178,7 @@ class RSS(Constraint):
 
 
     def valid_v(self, v):
-         """ Test if a list of vertexes from a box is compatible with the constraint. 
+        """ Test if a list of vertexes from a box is compatible with the constraint. 
         
         vertices are obtained with LBoxN.bd2coordinates()
 

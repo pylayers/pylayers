@@ -392,7 +392,6 @@ class CLA(object):
         for c in self.c:
             c.rescale(vcw)
 
-    cdef
 
     def merge2(self, vcw_init=1.0, RSS=False):
         """Merge all constraints from the CLA2_reduc2

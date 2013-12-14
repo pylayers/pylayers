@@ -55,6 +55,7 @@ def mulcplot(x,y,**kwargs):
                 'nlin':1,
                 'fig':[],
                 'ax':[],
+                'figsize':(8,8)
                }
 
     # radians to degree coefficient   
@@ -112,6 +113,7 @@ def mulcplot(x,y,**kwargs):
     titles = kwargs['titles']
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
+    figsize = kwargs['figsize']
 
     ntypes = np.prod(np.array(types).shape,dtype='int')
     ntitles = np.prod(np.array(titles).shape,dtype='int')
@@ -163,16 +165,18 @@ def mulcplot(x,y,**kwargs):
 
     if ax==[]:    
         # nlin , ncol subplot 
-        fig,ax = plt.subplots(nlin,ncol,sharey=True,sharex=True)
+        fig,ax = plt.subplots(nlin,ncol,sharey=True,sharex=True,figsize=kwargs['figsize'])
 
-    if (nlin==1)&(ncol==1):
-        ax = np.array(ax)[np.newaxis,np.newaxis]
-    else:    
-        if nlin==1:
-            ax = ax[np.newaxis,:]
-        if ncol==1:
-            ax = ax[:,np.newaxis]
-
+        if (nlin==1)&(ncol==1):
+            ax = np.array(ax)[np.newaxis,np.newaxis]
+        else:    
+            if nlin==1:
+                ax = ax[np.newaxis,:]
+            if ncol==1:
+                ax = ax[:,np.newaxis]
+    else:
+        if (nlin==1)&(ncol==1):
+            ax = np.array(ax)[np.newaxis,np.newaxis]
    
     for l in range(nlin):
         for c in range(ncol):
@@ -223,7 +227,6 @@ def mulcplot(x,y,**kwargs):
                 ax[l,c].legend()
                    
             else:
-                pdb.set_trace()
                 k = l*ncol+c
                 if types[k%ntypes]=='v':
                     #ax[l,c].plot(x[k%nfigx,:],y[k%nfigy,:],label=labels[k%nlabels],**args)
@@ -270,6 +273,7 @@ def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
 
     Parameters
     ----------
+
     pt:
         tail points array (2 x (2*Nseg))
     ph :
@@ -279,6 +283,7 @@ def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
 
     Returns
     -------
+
     f,a
         fig and ax
 
@@ -320,6 +325,7 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
 
     Parameters
     ----------
+
     rho  : np.array
           t  x p
     theta : np.array
@@ -327,17 +333,19 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
     phi  : np.array
           1 x p
 
-    Example
-    -------
+    Examples
+    --------
 
-    >>> from pylayers.util.plotutil import *
-    >>> import numpy as np
-    >>> theta = np.linspace(0,np.pi,90)
-    >>> phi = np.linspace(0,2*np.pi,180)
-    >>> rho = np.ones((len(theta),len(phi)))
-    >>> fig=plt.figure()
-    >>> pol3D(fig,rho,theta,phi)
-    >>> plt.show()
+    .. plot:: 
+
+        >>> from pylayers.util.plotutil import *
+        >>> import numpy as np
+        >>> theta = np.linspace(0,np.pi,90)
+        >>> phi = np.linspace(0,2*np.pi,180)
+        >>> rho = np.ones((len(theta),len(phi)))
+        >>> fig=plt.figure()
+        >>> pol3D(fig,rho,theta,phi)
+        >>> plt.show()
 
     """
     ax = axes3d.Axes3D(fig)
