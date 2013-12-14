@@ -60,6 +60,8 @@
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">What PyLayers is about ?</a></li>
+<li><a class="reference internal" href="#pylayers-keywords">PyLayers Keywords</a></li>
+<li><a class="reference internal" href="#warnings">Warnings</a></li>
 <li><a class="reference internal" href="#how-to-install-pylayers">How to install PyLayers ?</a><ul>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li><a class="reference internal" href="#setting-of-environment-variables-basename-and-pylayers">Setting of environment variables $BASENAME and $PYLAYERS</a></li>
@@ -98,21 +100,106 @@
             
   <div class="section" id="what-pylayers-is-about">
 <h1>What PyLayers is about ?<a class="headerlink" href="#what-pylayers-is-about" title="Permalink to this headline">¶</a></h1>
+<p>The scientific face of the Python world is vibrant nowadays and the
+collection of all recentlty developped tools is facilitating studies of
+advanced problems.
+<tt class="docutils literal"><span class="pre">Ipython,numpy,numba,scipy,matplotlib,shapely,networkx,pandas,scikit-image,scikit-learn,mayavi,vispy,simpy,sympy,..</span></tt>
+Each of those projects is terrific, the collection of them is changing
+the world ( ...not only of data science ).</p>
+<p>PyLayers is an ongoing endeavour to build a versatile, intuitive and
+efficient open source platform for cross layer studies deeply rooted in
+the physics of wireless propagation and which will be soon connected to
+the stratospherically powerful and inspiring
+<a class="reference external" href="http://scikit-learn.org">scikit-learn</a> advanced machine learning
+library.</p>
+<p>In the short term, the major targeted appplications are in the field of
+wireless indoor radio localization and navigation. However it is
+anticipated that provided a sufficient amount of contributors (students,
+experts,...) hopefully may join, the evolution of the PyLayers platform
+could also help for tackling other related problems as designing energy
+efficient wireless 5G networks, smart grids and cities in a modern,
+cooperative, parcimonious and resiliant way.</p>
+<p>PyLayers owes immensly to two former FP7 European Projects brillantly
+led by Ronald Raulefs from DLR (WHERE1 and
+<a class="reference external" href="http://www.kn-s.dlr.de/where2/">WHERE2</a> ) and to the amazing
+expertise and frienship which was there concentrated on the topic of
+Indoor localization between 2008 and 2013. Most of the examples provided
+and currently studied comes out from those 2 projects.</p>
+<p>PyLayers is currently developped in the frame of the CORMORAN French ANR
+project.</p>
+<p>An other obvious purpose of PyLayers is transmission and engineering
+education. So, if you are a curious student who can see the fun of
+surfing radio waves with python, please try to catch it, have a look
+inside !</p>
+<p>PyLayers needs you.</p>
+<p>Bernard Uguen</p>
+<p>Professor &#64; University of Rennes , ESIR , IETR CNRS , Brittany Region ,
+France</p>
+</div>
+<div class="section" id="pylayers-keywords">
+<h1>PyLayers Keywords<a class="headerlink" href="#pylayers-keywords" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
+<li>Python scientific framework</li>
+<li>Ray Tracing</li>
+<li>Electromagnetism</li>
 <li>Indoor Radio Propagation Modelling</li>
-<li>IR UWB (IEEE 802.15.4a and IEEE 802.15.6)</li>
-<li>Wireless Body Area Network</li>
+<li>Impulse Radio Ultra Wide Band IR-UWB (IEEE 802.15.4a)</li>
+<li>Efficient handling of antenna patterns for UWB scenario</li>
 <li>Indoor Localisation</li>
-<li>Human mobility simulation</li>
+<li>Exploiting Multi Path Components (MPC) for positioning</li>
 <li>Cooperative Positioning</li>
+<li>Robust Geometric Positioning Algorithm (RGPA)</li>
+<li>Radio channel modeling (site specific and statistical)</li>
+<li>Channel Sounding</li>
+<li>MIMO channel</li>
+<li>PHY/MAC/NET</li>
+<li>Wireless Body Area Network (IEEE 802.15.6)</li>
+<li>Human mobility simulation</li>
+<li>Motion capture</li>
 </ul>
+</div>
+<div class="section" id="warnings">
+<h1>Warnings<a class="headerlink" href="#warnings" title="Permalink to this headline">¶</a></h1>
+<p>This documentation is generated automatically with sphinx from the
+PyLayers source code files on github
+(<a class="reference external" href="https://github.com/pylayers/pylayers">https://github.com/pylayers/pylayers</a>). It contains at that stage a
+significant number of typos, wrong english expressions, and unfinished
+examples and unsufficiently explained features which remains in the
+source code. The collection of notebooks is used as a complementary
+battery of tests using <a class="reference external" href="https://pypi.python.org/pypi/runipy">runipy</a>.</p>
+<p>It is expected that the magic of <tt class="docutils literal"><span class="pre">git</span></tt> (an other gi(f)t from Linus
+Torvalds) will gradually improves this document and the code at the same
+time.</p>
+<p>Nothing here is warantee, nothing should be taken for granted. This
+document is by far not sufficiently peer reviewed at that time to have
+reach a sufficient level of quality. Is is expected that there exist out
+there engineers and scientists interested by the endeavour and curious
+to have a try, provide feed back and contribute to the necessary
+continuous improvement of the PyLayers platform.</p>
+<p>So, if you see any wrong assertion or have seen any thing that could be
+improved, please do not hesitate to provide a feed back on the <a class="reference external" href="https://github.com/pylayers/pylayers/issues?milestone=1&amp;state=open">issue
+page of the
+project</a></p>
+<p>If you find any bug, please keep preciously track of it in a notebook
+and <tt class="docutils literal"><span class="pre">gist</span></tt> it and send the link on the issue page.</p>
+<p>PyLayers developpers are not experts in computer science, sorry for
+that, but are keen to learn more simple and efficient (== pythonic)
+manners to do things. So any feedback from Python soldiers, gurus,
+shamans, masters, wizzards is more than welcome for any suggestions of
+improvement about the source code.</p>
+<p>If you have any interest to be involved and participate to the
+<tt class="docutils literal"><span class="pre">PyLayers</span></tt> journey, the best way is to open a github account and to
+fork the project on your own machine. Use the tool for your own studies
+and needs and provide feedback to the project with a <strong>pull request</strong>,
+if you wish ...</p>
 </div>
 <div class="section" id="how-to-install-pylayers">
 <h1>How to install PyLayers ?<a class="headerlink" href="#how-to-install-pylayers" title="Permalink to this headline">¶</a></h1>
-<p>If you are working on a Windows platform and you are not familiar with
-the Python ecosystem, a good idea is to install first
-<a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>. It will
-provide you most of the required dependencies.</p>
+<p>PyLayers is developped on Linux platform. If you are working on a
+Windows platform and you are not familiar with the Python ecosystem, a
+good idea is to install first
+<a class="reference external" href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>. It provides
+you most of the required dependencies.</p>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><pre>Before to install pylayers you need to install the following dependencies
