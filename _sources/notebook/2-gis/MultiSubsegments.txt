@@ -17,7 +17,7 @@ Multi sub-segments
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x496c850>
+    <matplotlib.figure.Figure at 0x4bd8850>
 
 
 .. code-block:: python
@@ -332,7 +332,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5667fd0>
+    <matplotlib.text.Text at 0x7f2facc62050>
 
 
 
@@ -382,7 +382,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x5c1bcd0>
+    <matplotlib.legend.Legend at 0x7f2fac940cd0>
 
 
 

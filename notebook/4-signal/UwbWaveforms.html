@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Generation of an Impulse of normalized energy &mdash; PyLayers</title>
+    <title>Synthesis of Ultra Wide Band Waveforms &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Generation of an Impulse of normalized energy" href="DEV-Bsignal.html" />
+    <link rel="next" title="Network Simulation Configuration" href="../5-mobility/ConfigFiles.html" />
     <link rel="prev" title="Coverage with a Multi Wall model" href="../3-antprop/Coverage.html" /> 
   </head>
   <body>
@@ -41,7 +41,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="DEV-Bsignal.html" title="Generation of an Impulse of normalized energy"
+          <a href="../5-mobility/ConfigFiles.html" title="Network Simulation Configuration"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="../3-antprop/Coverage.html" title="Coverage with a Multi Wall model"
@@ -59,7 +59,10 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Generation of an Impulse of normalized energy</a><ul>
+<li><a class="reference internal" href="#">Synthesis of Ultra Wide Band Waveforms</a><ul>
+<li><a class="reference internal" href="#generation-of-an-impulse-of-normalized-energy">Generation of an Impulse of normalized energy</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#verification-of-energy-normalization-in-both-domains">Verification of energy normalization in both domains</a></li>
 <li><a class="reference internal" href="#calculation-of-uwb-channel-impulse-response">Calculation of UWB channel impulse response</a></li>
 <li><a class="reference internal" href="#construction-of-the-propagation-channel">Construction of the propagation channel</a></li>
@@ -67,15 +70,13 @@
 <li><a class="reference internal" href="#calculate-uwb-channel-impulse-response">Calculate UWB Channel Impulse Response</a></li>
 <li><a class="reference internal" href="#hermitian-symetry-enforcment">Hermitian symetry enforcment</a></li>
 </ul>
-</li>
-</ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../3-antprop/Coverage.html"
                         title="previous chapter">Coverage with a Multi Wall model</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="DEV-Bsignal.html"
-                        title="next chapter">Generation of an Impulse of normalized energy</a></p>
+  <p class="topless"><a href="../5-mobility/ConfigFiles.html"
+                        title="next chapter">Network Simulation Configuration</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -97,14 +98,29 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+  <div class="section" id="synthesis-of-ultra-wide-band-waveforms">
+<h1>Synthesis of Ultra Wide Band Waveforms<a class="headerlink" href="#synthesis-of-ultra-wide-band-waveforms" title="Permalink to this headline">¶</a></h1>
+<p>Once the propagation channel has been evaluated. This is done in the
+<tt class="docutils literal"><span class="pre">pylayers.antprop.channel</span></tt> module. The received signal is evaluated in
+applying a convolution product of each ray tranfer function with an
+IR-UWB waveform. The two necessary modules are</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">pylayers.signal.bsignal</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">pylayers.signal.waveform</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">pylayers.signal.channel</span></tt></li>
+</ul>
+<p>The module <tt class="docutils literal"><span class="pre">pylayers.simul.simulem</span></tt> imports all those required
+submodules.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.signal.waveform</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pylayers.antprop.channel</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.simul.simulem</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5c264d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x46ef890&gt;</pre>
 </div>
 <div class="section" id="generation-of-an-impulse-of-normalized-energy">
-<h1>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h1>
+<h2>Generation of an Impulse of normalized energy<a class="headerlink" href="#generation-of-an-impulse-of-normalized-energy" title="Permalink to this headline">¶</a></h2>
 <p>One possible manner to define an energy normalized short UWB impulse is
 as follows. This UWB waveform is generated with <tt class="docutils literal"><span class="pre">bsignal.EnImpulse</span></tt>
 function.</p>
@@ -136,8 +152,10 @@ xmax : 1.71
 ymin : -1.89545539648
 ymax : 2.16154131873</pre>
 </div>
+</div>
+</div>
 <div class="section" id="verification-of-energy-normalization-in-both-domains">
-<h2>Verification of energy normalization in both domains<a class="headerlink" href="#verification-of-energy-normalization-in-both-domains" title="Permalink to this headline">¶</a></h2>
+<h1>Verification of energy normalization in both domains<a class="headerlink" href="#verification-of-energy-normalization-in-both-domains" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">E1</span><span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">ip</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
 <span class="k">print</span> <span class="s">&quot;Integration in time&quot;</span><span class="p">,</span><span class="n">E1</span>
 </pre></div>
@@ -153,9 +171,9 @@ ymax : 2.16154131873</pre>
 </div>
 </div>
 <div class="section" id="calculation-of-uwb-channel-impulse-response">
-<h2>Calculation of UWB channel impulse response<a class="headerlink" href="#calculation-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<h1>Calculation of UWB channel impulse response<a class="headerlink" href="#calculation-of-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
-<span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
+<span class="n">S</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="s">&#39;defstr3.ini&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">Gs</span><span class="o">.</span><span class="n">node</span>
@@ -219,10 +237,10 @@ ymax : 2.16154131873</pre>
   <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)},</span>
- <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span>
+ <span class="mi">9</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;connect&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
   <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;WALL&#39;</span><span class="p">,</span>
   <span class="s">&#39;ncycles&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">0.00639987</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
+  <span class="s">&#39;norm&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.00639987</span><span class="p">,</span>  <span class="mf">0.99997952</span><span class="p">,</span>  <span class="mf">0.</span>        <span class="p">]),</span>
   <span class="s">&#39;transition&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
   <span class="s">&#39;z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)}}</span>
 </pre></div>
@@ -257,7 +275,21 @@ bandGHz  :  0.499</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="./UwbWaveforms_files/UwbWaveforms_12_0.png" src="./UwbWaveforms_files/UwbWaveforms_12_0.png" />
+<img alt="./UwbWaveforms_files/UwbWaveforms_14_0.png" src="./UwbWaveforms_files/UwbWaveforms_14_0.png" />
+<p>Above the waveforme is a generic UWB waveform. The interested user can
+add easyly any other mathematical expression of UWB waveform for
+investigation on pulse waveform modulation for example. The waveform can
+also comes from measurement.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wavmeasured</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1compensate&#39;</span><span class="p">)</span>
+<span class="n">wavmeasured</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="./UwbWaveforms_files/UwbWaveforms_16_0.png" src="./UwbWaveforms_files/UwbWaveforms_16_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">wavmeasured</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;W1offset&#39;</span><span class="p">)</span>
+<span class="n">wavmeasured</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="./UwbWaveforms_files/UwbWaveforms_17_0.png" src="./UwbWaveforms_files/UwbWaveforms_17_0.png" />
 <p>Here the time domain waveform is measured and the anticausal part of the
 signal is artificially set to 0.</p>
 <p>To handle properly the time domain wavefom it is required to center the
@@ -283,7 +315,7 @@ object.</p>
 </div>
 </div>
 <div class="section" id="construction-of-the-propagation-channel">
-<h2>Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h2>
+<h1>Construction of the propagation channel<a class="headerlink" href="#construction-of-the-propagation-channel" title="Permalink to this headline">¶</a></h1>
 <p>The link between Txid = 1 and Rxid =1 is simply loaded as</p>
 <p>The following representation shows the spatial spreading of the
 propagation channel. On the left are scattered the intensity of rays wrt
@@ -365,7 +397,7 @@ degree : degree of nodes</pre>
 </div>
 </div>
 <div class="section" id="construction-of-the-transmission-channel">
-<h2>Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h2>
+<h1>Construction of the transmission channel<a class="headerlink" href="#construction-of-the-transmission-channel" title="Permalink to this headline">¶</a></h1>
 <p>The transmission channel is obtain from the combination of the
 propagation channel and the vector antenna pattern at bot side of the
 radio link</p>
@@ -404,7 +436,7 @@ modulus and phase of the ray transfer function.</p>
 </div>
 </div>
 <div class="section" id="calculate-uwb-channel-impulse-response">
-<h2>Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h2>
+<h1>Calculate UWB Channel Impulse Response<a class="headerlink" href="#calculate-uwb-channel-impulse-response" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">cir</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -416,12 +448,12 @@ modulus and phase of the ray transfer function.</p>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5ea5150&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x4e34cd0&gt;</pre>
 </div>
-<img alt="./UwbWaveforms_files/UwbWaveforms_41_2.png" src="./UwbWaveforms_files/UwbWaveforms_41_2.png" />
+<img alt="./UwbWaveforms_files/UwbWaveforms_46_2.png" src="./UwbWaveforms_files/UwbWaveforms_46_2.png" />
 </div>
 <div class="section" id="hermitian-symetry-enforcment">
-<h2>Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h2>
+<h1>Hermitian symetry enforcment<a class="headerlink" href="#hermitian-symetry-enforcment" title="Permalink to this headline">¶</a></h1>
 <p>If the number of point for the transmission channel and the waveform
 were the same the mathematical operation is an Hadamrd-Shur product
 between <img class="math" src="../../_images/math/56fa5db7f63f540dec899854bd2ffe6e445d15df.png" alt="$\mathbf{Y}$"/> and <img class="math" src="../../_images/math/7df94652f9f0a7c4f1f225b7bf793949758ae804.png" alt="$\mathbf{W}$"/>.</p>
@@ -586,17 +618,17 @@ padding of 500 points</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f375cedb390&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5912510&gt;</pre>
 </div>
-<img alt="./UwbWaveforms_files/UwbWaveforms_54_1.png" src="./UwbWaveforms_files/UwbWaveforms_54_1.png" />
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7f375cedb390&gt;</pre>
+<img alt="./UwbWaveforms_files/UwbWaveforms_59_1.png" src="./UwbWaveforms_files/UwbWaveforms_59_1.png" />
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5912510&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">uh</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">uh</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="mi">1000</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7f375ceeb110&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x591c990&gt;]</pre>
 </div>
-<img alt="./UwbWaveforms_files/UwbWaveforms_55_1.png" src="./UwbWaveforms_files/UwbWaveforms_55_1.png" />
+<img alt="./UwbWaveforms_files/UwbWaveforms_60_1.png" src="./UwbWaveforms_files/UwbWaveforms_60_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
 <span class="k">def</span> <span class="nf">css_styling</span><span class="p">():</span>
@@ -664,11 +696,7 @@ padding of 500 points</p>
                     styles: {'.MathJax_Display': {"margin": 4}}
                 }
         });
-</script><div class="highlight-python"><div class="highlight"><pre>
-</pre></div>
-</div>
-</div>
-</div>
+</script></div>
 
 
           </div>
@@ -680,7 +708,7 @@ padding of 500 points</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="DEV-Bsignal.html" title="Generation of an Impulse of normalized energy"
+          <a href="../5-mobility/ConfigFiles.html" title="Network Simulation Configuration"
              >next</a></li>
         <li class="right" >
           <a href="../3-antprop/Coverage.html" title="Coverage with a Multi Wall model"

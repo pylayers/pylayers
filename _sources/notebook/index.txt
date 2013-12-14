@@ -43,7 +43,6 @@ Signal
     :maxdepth: 3
 
     ./4-signal/UwbWaveforms
-    ./4-signal/DEV-Bsignal 
 
 Mobility 
 ********

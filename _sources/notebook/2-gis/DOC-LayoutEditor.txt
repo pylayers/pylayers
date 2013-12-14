@@ -171,7 +171,7 @@ following :
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4eac1d0>
+    <matplotlib.figure.Figure at 0x42a21d0>
 
 
 Reading an exiting Layout
@@ -610,8 +610,8 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4f45090>,
-     <matplotlib.axes.AxesSubplot at 0x7fd9a4da7fd0>)
+    (<matplotlib.figure.Figure at 0x7f70bcb35cd0>,
+     <matplotlib.axes.AxesSubplot at 0x7f70bcb4fa50>)
 
 
 
@@ -693,5 +693,12 @@ to a segment (wall,door,window,...).
 
 The segment name is the key of the **slab** dictionnary.
 
+Segments and Subsegments
+------------------------
+
+
+`Multi Subsegments <MultiSubsegments.ipynb>`_
+
+.. code-block:: python
 
     

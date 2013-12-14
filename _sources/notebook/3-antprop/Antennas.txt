@@ -80,7 +80,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5957a90>
+    <matplotlib.text.Text at 0x3e09a90>
 
 
 
@@ -97,7 +97,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5360650>
+    <matplotlib.text.Text at 0x3813510>
 
 
 

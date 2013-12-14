@@ -13,7 +13,7 @@ Ray Signatures
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4222210>
+    <matplotlib.figure.Figure at 0x4b2e210>
 
 
 .. code-block:: python
@@ -307,8 +307,8 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. parsed-literal::
 
-    [ 8.16264781  0.23099004]
-    [ 3.31234063  0.74387872]
+    [ 7.63541734  0.29143101]
+    [ 3.31720954  0.38780847]
 
 
 Evaluate performances of signature and ray evaluation
@@ -343,13 +343,13 @@ Evaluate performances of signature and ray evaluation
 
 .. parsed-literal::
 
-    0 0.00196981430054
-    1 0.0107138156891
-    2 0.0531568527222
-    3 0.213968992233
-    4 0.672088861465
-    5 1.83813500404
-    6 4.49210691452
+    0 0.00195384025574
+    1 0.010556936264
+    2 0.0523240566254
+    3 0.209676027298
+    4 0.678270101547
+    5 1.85021901131
+    6 4.41791605949
 
 
 It appears that the increasing number of signatures obatined with the
@@ -368,7 +368,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fa220198450>
+    <matplotlib.text.Text at 0x7fda74160150>
 
 
 
@@ -396,7 +396,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fa220408810>
+    <matplotlib.text.Text at 0x7fda74168cd0>
 
 
 
@@ -419,7 +419,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fa2206c8cd0>
+    <matplotlib.text.Text at 0x7fda7452b290>
 
 
 
@@ -438,7 +438,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fa220bc70d0>
+    <matplotlib.text.Text at 0x7fda74a95dd0>
 
 
 
@@ -455,7 +455,7 @@ number of rays.
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7fa220f6c450>]
+    [<matplotlib.lines.Line2D at 0x5e73b90>]
 
 
 

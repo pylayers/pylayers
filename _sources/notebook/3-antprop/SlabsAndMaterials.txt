@@ -27,7 +27,7 @@ module.
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x33a9510>
+    <matplotlib.figure.Figure at 0x4222510>
 
 
 The Class ``SlabDB`` contains a dictionnary of all available Slab. This
@@ -373,7 +373,7 @@ with respect to angle
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7fd60eb464d0>
+    <matplotlib.figure.Figure at 0x45db350>
 
 
 
@@ -476,8 +476,8 @@ Evaluation without phase compensation
 
 .. parsed-literal::
 
-    [[<matplotlib.axes.AxesSubplot object at 0x7fd618691350>]
-     [<matplotlib.axes.AxesSubplot object at 0x7fd61866c710>]]
+    [[<matplotlib.axes.AxesSubplot object at 0x7f65bc6e44d0>]
+     [<matplotlib.axes.AxesSubplot object at 0x6fafe10>]]
 
 
 
@@ -546,7 +546,7 @@ Double Glass example from litterature [1] in sub TeraHertz D-band @
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7fd60eb26c10>
+    <matplotlib.figure.Figure at 0x45d6e10>
 
 
 
