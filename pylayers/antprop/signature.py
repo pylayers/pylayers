@@ -14,6 +14,9 @@ from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
 from pylayers.antprop.rays import Rays
 import copy
+import pickle
+import logging
+
 #from numba import autojit
 
 def showsig(L,s,tx=[],rx=[]):
@@ -185,7 +188,7 @@ class Signatures(dict):
 
     """
 
-    def __init__(self,L,source,target):
+    def __init__(self,L,source,target,cutoff=3):
         """
         Parameters
         ----------
@@ -199,6 +202,8 @@ class Signatures(dict):
         self.L = L
         self.source = source
         self.target = target
+        self.cutoff = cutoff
+        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
     def __repr__(self):
         def fun1(x):
@@ -285,6 +290,45 @@ class Signatures(dict):
 
                 # s = s + '   '+ str(a[i,1,:]) + '\n'
 
+    def save(self):
+        """ Save signatures
+        """
+        L=copy.deepcopy(self.L)
+        del(self.L)
+        filename=pyu.getlong(self.filename,pstruc['DIRSIG'])
+        with open(filename, 'wb') as handle:
+          pickle.dump(self, handle)
+        self.L=L
+
+    def load(self,filename=[]):
+        """ Load signatures
+        """
+
+
+        if filename == []:
+            _filename = self.filename
+        else :
+            _filename = filename
+
+        filename=pyu.getlong(_filename,pstruc['DIRSIG'])
+        try:
+            handle=open(filename, 'rb')
+            sitmp = pickle.load(handle)
+        except: 
+            raise NameError(filename +' does not exist')
+
+
+        # to load a dictionary, use update 
+        self.update(sitmp)
+        
+
+        _fileL=pyu.getshort(filename).split('_')[0]+'.ini'
+        self.L=layout.Layout(_fileL)
+        try:
+            self.L.dumpr()
+        except:
+            self.L.build()
+            self.L.dumpw()
 
     def sp(self,G, source, target, cutoff=None):
         """ 
@@ -456,7 +500,7 @@ class Signatures(dict):
             print 'run2'
             self.run2(cutoff=cutoff,dcut=dcut)
 
-    def run1(self,cutoff=1):
+    def run1(self,cutoff=2):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -471,6 +515,9 @@ class Signatures(dict):
         sigslist :  numpy.ndarray
 
         """
+
+        self.cutoff   = cutoff
+        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
 
         try:
             self.L.dGi
@@ -1446,7 +1493,9 @@ class Signatures(dict):
         if type(prx)==int:
             prx = np.array(self.L.Gt.pos[prx])
         rays = Rays(ptx,prx)
+        #
         # detect LOS situation
+        #
         lc  = self.L.cycleinline(self.source,self.target)
         # if source  and target in the same cycle
         if len(lc) == 1:
@@ -1468,7 +1517,7 @@ class Signatures(dict):
 
 #        rays[0]['pt']
         for k in self:
-            # get signature for k interactions
+            # get signature block with k interactions
             tsig = self[k]
             shsig = np.shape(tsig)
             for l in range(shsig[0]/2):
@@ -1840,6 +1889,22 @@ class Signature(object):
         else:
             isvalid = False 
             return isvalid,(k,alpha,beta) 
+
+
+    def sig2beam(self, L, p, mode='incremental'):
+        """
+        """
+        try:
+            L.Gr
+        except:
+            L.build()
+        
+        # ev transforms a sequence of segment into numpy arrays (points)
+        # necessary for image calculation
+        self.ev(L)
+        # calculates images from pTx
+        M = self.image(pTx)
+        
 
     def sig2ray(self, L, pTx, pRx, mode='incremental'):
         """ convert a signature to a 2D ray

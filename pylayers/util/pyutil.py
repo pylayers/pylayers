@@ -1487,13 +1487,14 @@ def writeDetails(t,description='simulation', location ='Rennes'):
     file.close()
 
 def zipd(path, zipfilename):
-    """
-    add a folder to a zipfile
+    """ add a folder to a zipfile
+
     Parameters
     ----------
 
-        filepath : string
-        zipfilename : string
+    filepath : string
+    zipfilename : string
+
     """
     zip_file = zipfile.ZipFile(zipfilename, 'a')
     for (dirpath, dirnames, filenames) in os.walk(path):
@@ -1508,13 +1509,14 @@ def zipd(path, zipfilename):
     zip_file.close()
 
 def unzipd(path, zipfilename):
-    """
-    unzip a zipfile to a folder
+    """ unzip a zipfile to a folder
+
     Parameters
     ----------
 
-        filepath : string
-        zipfilename : string
+    filepath : string
+    zipfilename : string
+
     """
     zip_file = zipfile.ZipFile(zipfilename)
     if not os.path.isdir(path):
@@ -1531,13 +1533,14 @@ def unzipd(path, zipfilename):
                 'wb').write(zip_file.read(each))
 
 def unzipf(path, filepath, zipfilename):
-    """
-    unzip a file from zipfile to a folder
+    """ unzip a file from zipfile to a folder
+
     Parameters
     ----------
 
-        filepath : string
-        zipfilename : string
+    filepath : string
+    zipfilename : string
+
     """
     zip_file = zipfile.ZipFile(zipfilename)
     if not os.path.isdir(path):

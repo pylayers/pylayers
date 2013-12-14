@@ -47,43 +47,44 @@ class LBoxN(object):
 	---------
 
 
-		box	: np.array
-			array containing BoxN object. default void
-		vol	: list
-			volume of each boxes from self.box. default void
-		bd	: np.arrays	2*len(box) x ndim
-			contains all the boundaries of boxes from self.box. default void
-		ndim    : int	
-			dimension of the nbox	
-		parmsh	: dictionnary
-			keys ['display']	=True
-			     ['interactive']	=False
+	box	: np.array
+		array containing BoxN object. default void
+	vol	: list
+		volume of each boxes from self.box. default void
+	bd	: np.arrays	2*len(box) x ndim
+		contains all the boundaries of boxes from self.box. default void
+	ndim    : int	
+		dimension of the nbox	
+	parmsh	: dictionnary
+		keys ['display']	=True
+		     ['interactive']	=False
 
 	Parameters
 	----------	
-		LB : LBoxN 
-			Create a BoxN object from another one. default : None, the LBoxN obebject created is void.
+	LB : LBoxN 
+		Create a BoxN object from another one. default : None, the LBoxN obebject created is void.
 
 	Methods		
 	-------
-		mesure(self):
-			 measure intervals of box
-		append(self,b):
-			append a box 'b' to a Lbox
-		append_l(self,lb):
-			append a lbox 'lb' to a lbox
-		info(self):
-			display LBoxN information 
-		bd2coord(self,Mapping = False):
-			convert boundaries of Lbox to their vertexes coordintates
-		octant(self):
-			quadtree on Lboxes
-		volume(self):
-			estimate volume of LBoxes
-		intersect(self,lb):
-			EXPERIMENTAL find the intersection of LBoxN
-		show3(self,col='b',Id=0):		
-			required file generation for geomview display
+	mesure(self):
+		 measure intervals of box
+	append(self,b):
+		append a box 'b' to a Lbox
+	append_l(self,lb):
+		append a lbox 'lb' to a lbox
+	info(self):
+		display LBoxN information 
+	bd2coord(self,Mapping = False):
+		convert boundaries of Lbox to their vertexes coordintates
+	octant(self):
+		quadtree on Lboxes
+	volume(self):
+		estimate volume of LBoxes
+	intersect(self,lb):
+		EXPERIMENTAL find the intersection of LBoxN
+	show3(self,col='b',Id=0):		
+		required file generation for geomview display
+
 	"""
 	#__slots__=('box','vol','bd','ndim','ctr','grav','parmsh')
 
@@ -119,7 +120,7 @@ class LBoxN(object):
 		Obtain measure of :
 		- size of each interval from each dimension for each boxes
 		- center of each interval from each dimension for each boxes
-		- !!!! BUGGED Volume of the BoxN for each boxes
+		-  Volume of the BoxN for each boxes (NOT WORKING)
 		
 		"""
 		
@@ -144,12 +145,12 @@ class LBoxN(object):
 
 		Parameters
 		----------
-			b	: BoxN
-				box to added
+		b	: BoxN
+			box to added
 
 		Returns
 		-------	
-			Nothing but update self.box status
+		Nothing but update self.box status
 
 		"""
 
@@ -181,12 +182,14 @@ class LBoxN(object):
 
 		Parameters
 		----------
-			lb	: LBoxN
-				lbox to be added
+
+		lb	: LBoxN
+			lbox to be added
 
 		Returns
 		-------
-			Nothing but update self.box status
+
+		Nothing but update self.box status
 		
 		"""
 #		for i in xrange(len(lb.box)):self.append(lb.box[i])
@@ -257,13 +260,15 @@ class LBoxN(object):
 
 		Parameters
 		----------
-			Mapping : Boolean
-				return a mapping of the vertex in regards of Lbox. Default = False
+
+		Mapping : Boolean
+			return a mapping of the vertex in regards of Lbox. Default = False
 
 		Returns
 		-------		
-			P : array 2^ndim x ndim
-				coordinates of box vertex 
+
+		P : array 2^ndim x ndim
+			coordinates of box vertex 
 
 		"""
 		
@@ -338,8 +343,9 @@ class LBoxN(object):
 
 		Returns
 		-------
-			lb	: LBoxN 2^ndim*self.box x ndim
-				return theLBoxn from quadtree process
+
+		lb	: LBoxN 2^ndim*self.box x ndim
+			return theLBoxn from quadtree process
 		"""
 
 		if self.ndim == 3:
@@ -414,7 +420,9 @@ class LBoxN(object):
 
 	def intersect(self,lb):
 		""" EXPERIMENTAL
+
 		Intersection of 2 LBOXN 
+
 		"""
 		new_lb=LBoxN(ndim=self.ndim)
 		for k in range(len(self.box)):
@@ -433,15 +441,17 @@ class LBoxN(object):
 
 		Parameters
 		----------
-			col	: string
-				choose box color. compliant with matplotlib colorConverter. default 'r'
-			Id	: list
-				Identity of boxes to show.Default : [0]
+
+		col	: string
+			choose box color. compliant with matplotlib colorConverter. default 'r'
+		Id	: list
+			Identity of boxes to show.Default : [0]
 			
 		Returns
 		-------
-			filename	: string
-				name of the generated file
+
+		filename	: string
+			name of the generated file
 
 		"""
 		filename  = "lbox"+str(Id)+".list"
@@ -471,47 +481,49 @@ class BoxN(object):
 	A box is determined by its boundary interval along each dimension
 
 	
-	TODO
-	----
-		remove parmsh and replace it by a ini file
 
 	Attributes
 	----------
 
-		bd	: numpy array 2 x ndim  
-			box boundary 
+	bd	: numpy array 2 x ndim  
+		box boundary 
+	
+	ndim	: int
+		dimension of the box (2D, 3D,...)
+
+	self.parmsh : dictionnary
+		display dictionnary for show 3 method TO BE CHANGE !!!
+		keys	:['display']=True
+			['interactive']=False
+
+
+	OBTAIN FROM mesure()
+	self.mes	: array 1 x ndim 
+		size of intervals of each dimension
+	self.ctr	: array 1 x ndim 
+		center of intervals of each dimension 
+	self.vol	: float
+		Volume of box
+
 		
-		ndim	: int
-			dimension of the box (2D, 3D,...)
-
-		self.parmsh : dictionnary
-			display dictionnary for show 3 method TO BE CHANGE !!!
-			keys	:['display']=True
-				['interactive']=False
-
-
-		OBTAIN FROM mesure()
-		self.mes	: array 1 x ndim 
-			size of intervals of each dimension
-		self.ctr	: array 1 x ndim 
-			center of intervals of each dimension 
-		self.vol	: float
-			Volume of box
-
-		
-
-
 	Methods
 	-------
-		info()         : info about class 
-		def mesure(self):
-			 measure intervals of box
-		volume()       : evaluate volume 
-		inbox(p)       : is p in box ?
-		intersect(box) : intersection of two boxes   			
-		show3()        : geomview vizualization 
-		cut()          : cut a box along given direction 
 
+	info()         : info about class 
+	def mesure(self):
+		 measure intervals of box
+	volume()       : evaluate volume 
+	inbox(p)       : is p in box ?
+	intersect(box) : intersection of two boxes   			
+	show3()        : geomview vizualization 
+	cut()          : cut a box along given direction 
+
+
+
+	TODO
+	----
+
+	Eemove parmsh and replace it by a ini file
 
 		
 	"""
@@ -607,9 +619,10 @@ class BoxN(object):
 
 		Returns
 		-------		
-			P : array 2^ndim x ndim
-				coordinates of box vertex 
-		
+
+		P : array 2^ndim x ndim
+			coordinates of box vertex 
+	
 		"""	
 
 		if self.ndim == 3:
@@ -632,17 +645,20 @@ class BoxN(object):
 
 	def coord2bd(self,coord):
 		"""
+
 		Coordinates to boundary
 		update boundary array from numpy array  of coordinates
 		
 		Parameters
 		----------
-			coord : array 2^ndim x ndim
-				vertexes coordinates of a boxN
+
+		coord : array 2^ndim x ndim
+			vertexes coordinates of a boxN
 
 		Returns
 		-------
-			Nothing but fills self.bd
+
+		Nothing but fills self.bd
 		
 		"""
 		self.bd[0,:]=np.min(coord,axis=0)
@@ -687,13 +703,17 @@ class BoxN(object):
 	def intersect(self,box):
 		""" Find intersection between current box and a given one
 		
-		:Parameter:
-			box	: BoxN
-				a BoxN object
+		Parameters
+		----------
+
+		box	: BoxN
+			a BoxN object
+
 		Returns
 		-------
-			new_box	: BoxN
-				a BoxN object
+
+		new_box	: BoxN
+			a BoxN object
 
 		"""
 
@@ -735,18 +755,21 @@ class BoxN(object):
 
 		Parameters
 		----------
-			dim	: tuple
-				chose dimension to display. default : (0,1,2)
-			col	: string
-				choose box color. compliant with matplotlib colorConverter. default 'r'
-			Id	: list
-				Identity of boxes to show.Default : [0]
-			alpha   : float
-				set transparency. Default 0.2
+
+		dim	: tuple
+			chose dimension to display. default : (0,1,2)
+		col	: string
+			choose box color. compliant with matplotlib colorConverter. default 'r'
+		Id	: list
+			Identity of boxes to show.Default : [0]
+		alpha   : float
+			set transparency. Default 0.2
+
 		Returns
 		-------
-			fname	: string
-				name of the generated file
+	
+		fname	: string
+			name of the generated file
 
 		"""
 		#for k in range(len(self.bb)):

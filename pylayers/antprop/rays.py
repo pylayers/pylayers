@@ -94,7 +94,6 @@ class Rays(dict):
         s = ''
         ni = 0
         nl = 0
-        size={}
 
         try:
             if self.is3D:
@@ -109,23 +108,17 @@ class Rays(dict):
                 s = s + '-----'+'\n'
                 s = s+'ni : '+str(ni)+'\n'
                 s = s+'nl : '+str(nl)+'\n'
-            # else:
-            #     s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
+            else:
+                s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
 
-            #     nray=np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
-            #     s = 'total number of 2D rays : '+ str(nray) + '\n'
+                nray=np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
+                s = 'number of 2D rays : '+ str(nray) + '\n'
 
-            #     for k in self:
-            #          size[k] = np.shape(self[k]['sig'])[2]
-            #     s = s + 'from pTx : '+ str(self.pTx) + ' to pRx ' + str(self.pRx)+'\n'
-            #     pdb.set_trace()
-            #     for k in self:
-            #         s = s + str(k) + ' : ' + str(size[k]) + '\n'
-            #         a = np.swapaxes(self[k].reshape(size[k],2,k),0,2)
-            #         # nl x 2 x nsig
-            #         for i in range(k):
-            #             s = s + '   '+ str(a[i,0,:]) + '\n'
-            #             s = s + '   '+ str(a[i,1,:]) + '\n'
+                s = s + 'from pTx : '+ str(self.pTx) + '\n to pRx ' + str(self.pRx)+'\n'
+                
+                for k in self:
+                    size[k] = np.shape(self[k]['sig'])[2]
+                    s = s + str(size[k]) + 'rays with' + str(k) + ' interactions'                     
 
         except:
             return(s)

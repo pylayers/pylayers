@@ -72,6 +72,9 @@ pstruc['DIRTRA'] = 'output'
 pstruc['DIRCIR'] = 'output'
 pstruc['DIRMES'] = 'meas'
 pstruc['DIRNETSAVE'] = 'netsave'
+pstruc['DIRSIG'] = 'output/sig'
+pstruc['DIRR2D'] = 'output/r2d'
+pstruc['DIRR3D'] = 'output/r3d'
 
 
 # if basename directory does not exit it is created 
@@ -156,7 +159,12 @@ for nm,nv in pstruc.items():
 #
 
 if basename<>pylayersdir+'/data':
-    dirlist=['ini','struc','struc/furnitures','struc/osm','struc/str','struc/wrl','struc/images','struc/ini','ant','output/Tx001','output','geom']
+    dirlist=['ini','struc','struc/furnitures'
+    ,'struc/osm','struc/str','struc/wrl'
+    ,'struc/images','struc/ini'
+    ,'ant','output/Tx001','output'
+    ,'geom','output/sig','output/r2d'
+    ,'output/r3d']
     for dl in dirlist:
         filelist = os.listdir(pylayersdir+'/data/' + dl)
         for fi in filelist:

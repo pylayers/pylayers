@@ -13,16 +13,18 @@ propagation channel description.
    :maxdepth: 2
 
    antprop.antenna.rst
+   
+   antprop.slab.rst
+
+   antprop.interactions.rst
 
    antprop.channel.rst
 
    antprop.rays.rst
 
-   antprop.coverage.rst
+   antprop.signature.rst
 
    antprop.multiwall.rst
 
-   antprop.signature.rst
-
-   antprop.slab.rst
+   antprop.coverage.rst
 

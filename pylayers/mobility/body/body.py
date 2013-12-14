@@ -79,9 +79,8 @@ class Body(object):
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
         di = self.load(_filebody)
-        self.loadC3D(filename=_filemocap)
         self.centered = False
-        self.center()
+        self.loadC3D(filename=_filemocap,centered=True)
 
     def __repr__(self):
         st = ''
@@ -402,7 +401,7 @@ class Body(object):
 
             self.accs[ant] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
-    def loadC3D(self, filename='07_01.c3d', nframes=126 ,unit='cm'):
+    def loadC3D(self, filename='07_01.c3d', nframes=126 ,unit='cm',centered = False):
         """ load nframes of motion capture C3D file 
 
         Parameters
@@ -412,12 +411,17 @@ class Body(object):
             file name 
         nframes  : int 
             number of frames 
+        
+        Notes 
+        -----
+
+        The body is centered at the 
 
         """
+        
 
-        if 'pg' in dir(self):
-            del self.pg
-
+        #if 'pg' in dir(self):
+        #    del self.pg
 
         s, p, f, info = c3d.read_c3d(filename)
 
@@ -488,6 +492,9 @@ class Body(object):
         self.g.pos[15] = (pm[1],pm[2])
         #self.g[0][15]['radius']=0.1
         #self.nodes_Id[15]='bottom'
+        if centered:
+            self.centered = False
+            self.center()
 
     def movie(self,**kwargs):
         """ creates a geomview movie

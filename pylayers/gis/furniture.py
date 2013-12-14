@@ -117,6 +117,7 @@ class Furniture(object):
 
         Parameters
         ----------
+
         p : ndarray (1x2)
 
         """
