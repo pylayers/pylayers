@@ -23,7 +23,10 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="PyLayers" href="../../index.html" /> 
+    <link rel="top" title="PyLayers" href="../../index.html" />
+    <link rel="up" title="User Manual" href="../index.html" />
+    <link rel="next" title="Example of an UWB channel Ray Tracing simulation" href="DOC-RayTracing2.html" />
+    <link rel="prev" title="RGPA (Robust Geometric Positioning Algorithm)" href="../7-location/DOC-RGPA.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -37,11 +40,18 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-RayTracing2.html" title="Example of an UWB channel Ray Tracing simulation"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../7-location/DOC-RGPA.html" title="RGPA (Robust Geometric Positioning Algorithm)"
+             accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../index.html" accesskey="U">User Manual</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -57,6 +67,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../7-location/DOC-RGPA.html"
+                        title="previous chapter">RGPA (Robust Geometric Positioning Algorithm)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="DOC-RayTracing2.html"
+                        title="next chapter">Example of an UWB channel Ray Tracing simulation</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -92,7 +108,7 @@ there is a default configuration names <strong>default.ini</strong>.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5b53810&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x50e87d0&gt;</pre>
 </div>
 <p>A first step consists in loading a layout associated with the
 simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
@@ -125,7 +141,7 @@ dictionnary member of the Layout object.</p>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_6_0.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_6_0.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_6_0.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_6_0.png" />
 <div class="section" id="adding-coordinates-of-transmiting-and-receiving-points">
 <h2>Adding coordinates of transmiting and receiving points<a class="headerlink" href="#adding-coordinates-of-transmiting-and-receiving-points" title="Permalink to this headline">¶</a></h2>
 <p>Coordinates of transmitters and receivers for the simulation to be
@@ -151,7 +167,7 @@ method of the Simulation object</p>
 </div>
 <div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_12_1.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_12_1.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_12_1.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_12_1.png" />
 <p>Select Tx and Rx positions</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
 <span class="mi">10</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">17</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">19</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
@@ -238,13 +254,13 @@ Rxs OK</pre>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">showG</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_18_0.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_18_0.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_18_0.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_18_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">tx</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;tx&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">M</span><span class="o">.</span><span class="n">rx</span><span class="p">[</span><span class="n">irx</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="s">&#39;ob&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;rx&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x7fbac2420fd0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x7725190&gt;</pre>
 </div>
 </div>
 <div class="section" id="signatures-rays-and-channel">
@@ -335,10 +351,10 @@ from cycle : 5 to cycle 4
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fbac2097050&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fbac2096990&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7d1cc90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7d29390&gt;)</pre>
 </div>
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_26_1.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_26_1.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_26_1.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_26_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">.</span><span class="n">locbas</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">r3d</span><span class="o">.</span><span class="n">fillinter</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 <span class="n">r3d</span>
@@ -401,7 +417,7 @@ nl : 373</pre>
 <span class="n">wav</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_32_0.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_32_0.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_32_0.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_32_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ciro</span> <span class="o">=</span> <span class="n">sco</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 <span class="n">cira</span> <span class="o">=</span> <span class="n">sca</span><span class="o">.</span><span class="n">applywavB</span><span class="p">(</span><span class="n">wav</span><span class="o">.</span><span class="n">sfg</span><span class="p">)</span>
 </pre></div>
@@ -437,12 +453,12 @@ nl : 373</pre>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x79d4e50&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x6226b50&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x911ac90&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x7f16205f76d0&gt;]], dtype=object))</pre>
 </div>
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_37_2.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_37_2.png" />
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_37_3.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_37_3.png" />
-<img alt="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_37_4.png" src="notebook/8-simul/DEV-RayTracingW1_files/DEV-RayTracingW1_37_4.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_37_2.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_37_2.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_37_3.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_37_3.png" />
+<img alt="./DEV-RayTracingW1_files/DEV-RayTracingW1_37_4.png" src="./DEV-RayTracingW1_files/DEV-RayTracingW1_37_4.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">v</span> <span class="o">=</span> <span class="n">tx</span><span class="o">-</span><span class="n">rx</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
 
@@ -506,11 +522,18 @@ rotation matrix# [0] type: B
     <div class="related">
       <h3>Navigation</h3>
       <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DOC-RayTracing2.html" title="Example of an UWB channel Ray Tracing simulation"
+             >next</a></li>
+        <li class="right" >
+          <a href="../7-location/DOC-RGPA.html" title="RGPA (Robust Geometric Positioning Algorithm)"
+             >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
         <li><a href="../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
- 
+
+          <li><a href="../index.html" >User Manual</a> &raquo;</li> 
       </ul>
     </div>
 

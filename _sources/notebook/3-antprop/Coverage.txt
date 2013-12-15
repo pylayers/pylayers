@@ -20,7 +20,7 @@ First let's import the ``coverage`` module
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x523fb50>
+    <matplotlib.figure.Figure at 0x38dfb10>
 
 
 Instantiate a coverage object. By defaut, ``TA-Office.str`` layout
@@ -138,8 +138,8 @@ Calculating Received Power Coverage
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fd6a00a3dd0>,
-     <matplotlib.axes.AxesSubplot at 0x5f9e810>)
+    (<matplotlib.figure.Figure at 0x46ded90>,
+     <matplotlib.axes.AxesSubplot at 0x463d510>)
 
 
 
@@ -181,7 +181,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.14 seconds
+    Elapsed time : 1.31 seconds
 
 
 .. code-block:: python
@@ -199,7 +199,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.14 seconds
+    Elapsed time : 1.18 seconds
 
 
 .. code-block:: python
@@ -217,7 +217,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.17 seconds
+    Elapsed time : 1.21 seconds
 
 
 The transmitter coordinates are :
@@ -259,8 +259,8 @@ accordingly
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fd6a141fd90>,
-     <matplotlib.axes.AxesSubplot at 0x7fd6a1420210>)
+    (<matplotlib.figure.Figure at 0x7fd4c808ad50>,
+     <matplotlib.axes.AxesSubplot at 0x7fd4c8079b90>)
 
 
 

@@ -8,3 +8,5 @@ cd $WEBNB/5-mobility
 ./fixit
 cd $WEBNB/7-location
 ./fixit
+cd $WEBNB/8-simul
+./fixit
