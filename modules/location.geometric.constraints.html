@@ -1,0 +1,1237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>geometric constraints &mdash; PyLayers</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="PyLayers" href="../index.html" />
+    <link rel="up" title="Geometric Algorithms" href="location.geometric.html" />
+    <link rel="next" title="geometric util" href="location.geometric.util.html" />
+    <link rel="prev" title="Geometric Algorithms" href="location.geometric.html" /> 
+  </head>
+  <body>
+<div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
+    PyLayers
+<!--
+<a href="../index.html"><img src="../_static/logo.png" height="200" border="0"
+    alt="pylayers"/></a>
+-->
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="location.geometric.util.html" title="geometric util"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="location.geometric.html" title="Geometric Algorithms"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="location.html" >location</a> &raquo;</li>
+          <li><a href="location.geometric.html" accesskey="U">Geometric Algorithms</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="location.geometric.html"
+                        title="previous chapter">Geometric Algorithms</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="location.geometric.util.html"
+                        title="next chapter">geometric util</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pylayers.location.geometric.constraints.cla">
+<span id="geometric-constraints"></span><span id="constraints"></span><h1>geometric constraints<a class="headerlink" href="#module-pylayers.location.geometric.constraints.cla" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pylayers.location.geometric.constraints.cla.CLA">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.cla.</tt><tt class="descname">CLA</tt><big>(</big><em>parmsh={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constraint Layer Array class
+The Constraint Layer Array gather all constraints and process them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>c</strong> : list</p>
+<blockquote>
+<div><p>contraints contained in CLA</p>
+</div></blockquote>
+<p><strong>type</strong> : list</p>
+<blockquote>
+<div><p>types of contraints contained in CLA</p>
+</div></blockquote>
+<p><strong>std</strong> : list</p>
+<blockquote>
+<div><p>standard deviation of constraints</p>
+</div></blockquote>
+<p><strong>vcw</strong> : list</p>
+<blockquote>
+<div><p>scale factor of constraints</p>
+</div></blockquote>
+<p><strong>Nc</strong> : integer</p>
+<blockquote>
+<div><p>Layer number of current processing</p>
+</div></blockquote>
+<p><strong>pe</strong> :  np.array</p>
+<blockquote>
+<div><p>Position estimated</p>
+</div></blockquote>
+<p><strong>dlayer</strong> : dictionnary</p>
+<blockquote>
+<div><p>key : Layer number
+value : list of Enclosed (0) and ambiguous (1) boxes.</p>
+</div></blockquote>
+<p><strong>iter</strong> : integer</p>
+<blockquote>
+<div><p>current iteration of refine process</p>
+</div></blockquote>
+<p><strong>erronous</strong> : list</p>
+<blockquote>
+<div><p>fills with number constraint which are not compatibleselfselfselfself.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>info(self)</strong> : Give info</p>
+<p><strong>rescale(self,f_vcw,cid=None)</strong> : rescale Constraint Box</p>
+<p><strong>annulus_bound(self,cid=None)</strong> : rescale Constraint</p>
+<p><strong>append(self,c)</strong> : Append a Constraint to CLA</p>
+<p><strong>setvcw(self,vcw):</strong> : Set vcw for all constraint</p>
+<p><strong>merge2(self,vcw_init=1.0)</strong> : Merge all constraint from the CLA</p>
+<p><strong>valid_v(self,lv,N)</strong> : Test vertexes with all constraints</p>
+<p><strong>refine(self,l,NBOXMAX=100,VOLMIN=0.1)</strong> : reduce the validity zone</p>
+<p><strong>show3(self,l=-1,amb=False,sc=&#8217;all&#8217;)</strong> : show3</p>
+<p><strong>prob(self,c,d)</strong> : Compute DDP for the given vertexes</p>
+<p><strong>gapdetect(self,l,dlindx)</strong> : Gap detection for bimodal solution</p>
+<p><strong>min_dist(self,a,b)</strong> : OBSOLETE</p>
+<p class="last"><strong>estpos2(self,l=-1,amb=False)</strong> : Position estimation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.annulus_bound">
+<tt class="descname">annulus_bound</tt><big>(</big><em>cid=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>adapt cmin and cmax of constraints</p>
+<p>Update cmin and cmax of constraints for a given self.vcw</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body">cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body">Nothing but update boxe size either for each constraints from cid list either for all contraints in the CLA list self.c.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.append">
+<tt class="descname">append</tt><big>(</big><em>c</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a constraint into the CLA</p>
+<p>add a constraint into the CLA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>c</strong> : any constraint wichi heritates from Constraint object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>Nothing but fills self.c list of constraints</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.compute">
+<tt class="descname">compute</tt><big>(</big><em>pe=True</em>, <em>mergeRSS=False</em>, <em>refineRSS=True</em>, <em>NBOXMAX=50</em>, <em>VOLMIN=0.001</em>, <em>HT=True</em>, <em>forceamb=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.compute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.compute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the cla to estimate the postion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pe</strong> : boolean</p>
+<blockquote>
+<div><p>set to True to compute the position estimation store into self.pe</p>
+</div></blockquote>
+<p><strong>mergeRSS</strong> : boolean</p>
+<blockquote>
+<div><p>True : if there is RSS in cla, they are used to find the smallest merge
+False (default): even if there is RSS in cla, they are neglected during the merge process</p>
+</div></blockquote>
+<p><strong>refineRSS :boolean</strong> :</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous</dt>
+<dd><p class="first last">during the refine process</p>
+</dd>
+</dl>
+<p>False: if there is RSS in cla, they are ignore during the refine process</p>
+</div></blockquote>
+<p><strong>NBOXMAX</strong> : integer</p>
+<blockquote>
+<div><p>Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)</p>
+</div></blockquote>
+<p><strong>NVOLMIN</strong> : float</p>
+<blockquote>
+<div><p>Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)</p>
+</div></blockquote>
+<p><strong>HT</strong> : boolean</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True <span class="classifier-delimiter">:</span> <span class="classifier">if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</span></dt>
+<dd><p class="first last">in estpos2 method</p>
+</dd>
+</dl>
+<p>False : no HT methos is applied</p>
+<p>Description of the hypothesis testing (HT) method in:
+Hybrid positioning based on hypothesis thesting
+N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+A Hybrid Positioning Method Based on Hypothesis Testing
+,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
+<a class="reference external" href="http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&amp;arnumber=6205594">http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&amp;arnumber=6205594</a></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>return</strong> : boolean</p>
+<blockquote class="last">
+<div><p>True if the position estimation has been performed.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.estpos">
+<tt class="descname">estpos</tt><big>(</big><em>l=-1</em>, <em>amb=False</em>, <em>test=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.estpos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.estpos" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED !
+estpos(l,amb=True) : estimate position</p>
+<p>l : layer number
+amb : if True include ambigous boxes of VA in gravity center computation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.estpos2">
+<tt class="descname">estpos2</tt><big>(</big><em>l=-1</em>, <em>amb=False</em>, <em>HT=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.estpos2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.estpos2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position estimation</p>
+<p>estimate position from the enclosed or/and ambibuous boxes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>l</strong> : Layer of the estimation. If -1 estimation is made on the highest available layer</p>
+<p><strong>amb</strong> : Use ambiguous boxes (if available) to perform the position estimation. default = False</p>
+<p><strong>HT</strong> : boolean</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>True <span class="classifier-delimiter">:</span> <span class="classifier">if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied</span></dt>
+<dd><p class="first last">in estpos2 method</p>
+</dd>
+</dl>
+<p>False : no HT methos is applied</p>
+<p>Hybrid positioning based on hypothesis thesting
+N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+A Hybrid Positioning Method Based on Hypothesis Testing
+,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing but fills self.pe with an array</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.gapdetect">
+<tt class="descname">gapdetect</tt><big>(</big><em>l</em>, <em>dlindx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.gapdetect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.gapdetect" title="Permalink to this definition">¶</a></dt>
+<dd><p>basic gap detection</p>
+<p>Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
+This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>l</strong> : layer number</p>
+<p><strong>dlindx</strong> : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes</p>
+<p><strong>Returns</strong> :</p>
+<p><strong>&#8212;&#8212;</strong> :</p>
+<p><strong>clust</strong> : a list of array. each array contains boxes from the same cluster</p>
+<p class="last"><strong>axis</strong> : axis/axes where gap has/have been detectes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.gapdetect2">
+<tt class="descname">gapdetect2</tt><big>(</big><em>l</em>, <em>dlindx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.gapdetect2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.gapdetect2" title="Permalink to this definition">¶</a></dt>
+<dd><p>basic gap detection</p>
+<p>Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
+This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.
+requiere  pyinterval class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>l</strong> : layer number</p>
+<p class="last"><strong>dlindx</strong> : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.info_old">
+<tt class="descname">info_old</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.info_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.info_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>gives info on the CLA</p>
+<p>DEPECRATED</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.merge2">
+<tt class="descname">merge2</tt><big>(</big><em>vcw_init=1.0</em>, <em>RSS=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.merge2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.merge2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge all constraints from the CLA2_reduc2</p>
+<p>Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.</p>
+<ul class="simple">
+<li>if the result of this merging is empty (no common intersections between all the boxes), all the constraints&#8217;s vcw are increased (x2) and this processing is operated until an intersection exists (physically intersection MUST exist)</li>
+<li>if the result of this merging is not empty (intersection exists between all the boxes), all the constraints&#8217;s vcw are decreased and this processing is operated until no intersection exists. the previous value of vcw is thus used for all constraints.</li>
+</ul>
+<p>This method ensure to find the smallest instersection box satisfaying all the constraints</p>
+<p>Also here is initialized self.dlayer.
+use of dlayer dictionnary:</p>
+<p>self.dlayer[Layer][type of boxes]</p>
+<p>Layer = number of intersecting constraints
+type of boxes : 0 = enclose boxes (EB)</p>
+<blockquote>
+<div>1 = ambiguous boxes (AB)</div></blockquote>
+<p>After the merging, all constraints boxes are store as AB list. EB list is void.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>vcw_init</strong> : float</p>
+<blockquote>
+<div><p>intial value of scale factor vcw. This value is updated during the process and affect all constraints ! default =1.0</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.min_dist">
+<tt class="descname">min_dist</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.min_dist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.min_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>OBSOLETE</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.prob">
+<tt class="descname">prob</tt><big>(</big><em>c</em>, <em>d</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.prob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>determine probability of list of vertex</p>
+<p>Return the probability of each vertex from an array in regard of the constraint origin, standard deviation and vcw</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>c</strong> : contraint number in the self.c list</p>
+<p><strong>d</strong> : an array of vertex</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>v</strong> : probability of each vertex</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.refine">
+<tt class="descname">refine</tt><big>(</big><em>l</em>, <em>NBOXMAX=50</em>, <em>VOLMIN=0.001</em>, <em>RSS=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.refine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.refine" title="Permalink to this definition">¶</a></dt>
+<dd><p>refine the l layer of the CLA</p>
+<p>Refine the l layer of the CLA  until the maximum number of boxes (NBOXMAX) or the minimal volume of boxes (VOLMIN) has been reached.</p>
+<p>Once the CLA has been merged, this method aims to enclose the solution thanks to an octree/quadtreee process</p>
+<p>self.dlayer[l][0] : LBox which contains boxes inside of the validity area (VA)
+self.dlayer[l][1] : LBox which contains ambiguous boxes (partially inside of the VA == at least 1 edge inside the VA)
+All boxes partially inside of the VA are divided into octants. Each octants are tested into the self.valid.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>l</strong> : the layer number</p>
+<p><strong>NBOXMAX</strong> : the maximum number of obtained boxes</p>
+<p><strong>VOLMIN</strong> :  the minimum volume achievable by the obtained boxes</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing, but fills self.dlayer[l][0] and self.dlayer[l][1] respectively with enclosed boxes and ambiguous boxes</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.remove">
+<tt class="descname">remove</tt><big>(</big><em>k</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>OBSOLETE/ TO BE DEVELOPPED</p>
+<p>remove(k) : remove a constraint to cla</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.rescale">
+<tt class="descname">rescale</tt><big>(</big><em>f_vcw</em>, <em>cid=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>idem setvcw but update current vcw with a multiplier factor</p>
+<p>change vcw for all constraints of the CLA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>f_vcw</strong> : a scale factor of the current vcw of the constraint.</p>
+<p><strong>cid</strong> : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.setvcw">
+<tt class="descname">setvcw</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.setvcw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.setvcw" title="Permalink to this definition">¶</a></dt>
+<dd><p>update scale factor of all constraint</p>
+<p>rescale all the constraints&#8217;s boxes according to the given vcw</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>vcw</strong> : a vcw value</p>
+<p><strong>RSS</strong> : boolean</p>
+<blockquote>
+<div><p>True : RSS are considered in merging
+False : RSS are excluded from merging</p>
+</div></blockquote>
+<p><strong>Returns</strong> :</p>
+<p><strong>&#8212;&#8212;-</strong> :</p>
+<p class="last"><strong>Nothing but update all constraint from the CLA</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.show3">
+<tt class="descname">show3</tt><big>(</big><em>l=-1</em>, <em>amb=False</em>, <em>sc='all'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display constraints and theirs boxes through geomview.</p>
+<p>geomview parameters are the following</p>
+<p>self.parmsh[&#8216;display&#8217;]=False            # launch geomview interactively
+self.parmsh[&#8216;scene&#8217;]=True               # display whole scene
+self.parmsh[&#8216;boxes&#8217;]=True               # display constraint box
+self.parmsh[&#8216;constr_boxes&#8217;]=False       # display constraint box
+self.parmsh[&#8216;estimated&#8217;]=True           # display estimated point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>l</strong> : layer number to observe. If -1 estimation is made on the highest available layer. default = -1</p>
+<p><strong>amb</strong> : display ambiguous boxes. default = false</p>
+<p><strong>sc</strong> : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default &#8216;all&#8217;</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>Nothing but calls a geomview instance</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update all constraints of the CLA</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.cla.CLA.valid_v">
+<tt class="descname">valid_v</tt><big>(</big><em>lv</em>, <em>N</em>, <em>RSS=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>test a vertex list with constraints</p>
+<p>Each vertexes from boxes pass into the list are tested to determine if the box is out (OB), ambiguous (AB) or enclosed (EB)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>lv</strong> : a vertex list from BOXN.octants</p>
+<p><strong>N</strong> : number of constraints aka layer number</p>
+<p><strong>RSS</strong> : boolean</p>
+<blockquote>
+<div><p>True : RSS constraints are kept as any other constraints for boxes evaluation (ambigous /enclosed)
+False : RSS constraints are ignored in boxes evaluation (ambigous /enclosed)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>AB</strong> : a list with the numerous of Ambiguous Boxes</p>
+<p class="last"><strong>EB</strong> : a list with the numerous of Enclosed Boxes</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-pylayers.location.geometric.constraints.constraint"></span><dl class="class">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.constraint.</tt><tt class="descname">Constraint</tt><big>(</big><em>type</em>, <em>id='0'</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constraint class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>time</strong> : float</p>
+<blockquote>
+<div><p>time stamp</p>
+</div></blockquote>
+<p><strong>lbox</strong> : LBoxN</p>
+<blockquote>
+<div><p>LBoxN intialisation
+self.usable = True
+self.visible = True
+self.obsolete = False</p>
+</div></blockquote>
+<p><strong>runable</strong> : boolean</p>
+<blockquote>
+<div><p>A constriat is runable if it has a center</p>
+</div></blockquote>
+<p><strong>usable: boolean</strong> :</p>
+<blockquote>
+<div><p>a constraint is usable is it has a std AND a value AND is visible</p>
+</div></blockquote>
+<p><strong>visible</strong> : boolean</p>
+<blockquote>
+<div><p>is the constraint visible (used for simulnet simulation</p>
+</div></blockquote>
+<p><strong>parmsh</strong> : dictionary</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>keys <span class="classifier-delimiter">:</span> <span class="classifier">[&#8216;display&#8217;]=True     # launch geomview interactively</span></dt>
+<dd><p class="first last">[&#8216;mode&#8217;]=&#8217;Current&#8217;   # display current box or full constraint
+[&#8216;scene&#8217;]=True      # display whole scene
+[&#8216;point&#8217;]=True       # display constraint point(s)
+[&#8216;boxes&#8217;]=True       # display constraint box
+[&#8216;estimated&#8217;]=True  # display estimated point
+[&#8216;estimated_LS&#8217;]=False # display estimated point with LS method
+[&#8216;quadric&#8217;]=True   # display sphere or hyperbola
+[&#8216;grid&#8217;]=True       # display grid
+[&#8216;grav&#8217;]=True</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>Constraint.C_Id</strong> : Contraint Identity automatically increased for new instanciation</p>
+<p><strong>type</strong> : str</p>
+<blockquote>
+<div><p>contraint type (TOA,TDOA,RSS)</p>
+</div></blockquote>
+<p><strong>p</strong> : nd.array</p>
+<blockquote>
+<div><p>Constraint center</p>
+</div></blockquote>
+<p><strong>self.Id</strong> : str</p>
+<blockquote>
+<div><p>Constraint.C_Id</p>
+</div></blockquote>
+<p><strong>ndim</strong> : int</p>
+<blockquote>
+<div><p>Constraint dimension (2D/3D)</p>
+</div></blockquote>
+<p><strong>origin</strong> : dict</p>
+<blockquote>
+<div><p>origin of the contraint, (used for simulnet simulation 
+&#8216;id&#8217; : id of the node generating the constraint
+&#8216;link&#8217; : edge of network graph Gr
+&#8216;rat&#8217; : RAT on which constraint has been obtained
+&#8216;ldp&#8217; : type of observable</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>info()</strong> : Display information about constraint</p>
+<p class="last"><strong>show3()</strong> : display constraint on Geomview. Parameters tahnks to self.parmsh</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.simulnet</span></tt>, <a class="reference internal" href="location.localization.html#module-pylayers.location.localization" title="pylayers.location.localization"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.location.localization</span></tt></a></p>
+</div>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.info">
+<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>display info on constraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.show3">
+<tt class="descname">show3</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.show3" title="Permalink to this definition">¶</a></dt>
+<dd><p>display constraint on Geomview</p>
+<p>The filename is boxes{Id}.list</p>
+<p>Id is the Id of the current constraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.updc">
+<tt class="descname">updc</tt><big>(</big><em>name='p'</em>, <em>value=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.updc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.updc" title="Permalink to this definition">¶</a></dt>
+<dd><p>update values of a constraint</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-pylayers.location.geometric.constraints.exclude"></span><dl class="class">
+<dt id="pylayers.location.geometric.constraints.exclude.Exclude">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.exclude.</tt><tt class="descname">Exclude</tt><big>(</big><em>nodes</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/exclude.html#Exclude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.exclude.Exclude" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pylayers.location.geometric.constraints.exclude.Exclude.annulus_bound">
+<tt class="descname">annulus_bound</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/exclude.html#Exclude.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.exclude.Exclude.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>annulus_bound():
+Compute the minimum and maximum distance of the enclosing annulus of the constraint for a given self.vcw</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.exclude.Exclude.limit_valid_v">
+<tt class="descname">limit_valid_v</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/exclude.html#Exclude.limit_valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.exclude.Exclude.limit_valid_v" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.exclude.Exclude.valid">
+<tt class="descname">valid</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/exclude.html#Exclude.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.exclude.Exclude.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>valid(b) : check if box b is valid for the given constraint</p>
+<p>A box is valid if it not not valid</p>
+<dl class="docutils">
+<dt>A box is not valid if all distances are greater than rangemax</dt>
+<dd>or all distances are less than rangemin</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.exclude.Exclude.valid_v">
+<tt class="descname">valid_v</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/exclude.html#Exclude.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.exclude.Exclude.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-pylayers.location.geometric.constraints.rss"></span><dl class="class">
+<dt id="pylayers.location.geometric.constraints.rss.RSS">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.rss.</tt><tt class="descname">RSS</tt><big>(</big><em>id='0'</em>, <em>value=0</em>, <em>std=array(1.0)</em>, <em>vcw=3</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>model={}</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS" title="Permalink to this definition">¶</a></dt>
+<dd><p>RSS Constraint</p>
+<p>Description and evaluation of RSS constraints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote>
+<div><p>Constraint value in dB. Default = 40</p>
+</div></blockquote>
+<p><strong>std</strong> : float</p>
+<blockquote>
+<div><p>Value standard deviation in dB. default = 1.0</p>
+</div></blockquote>
+<p><strong>vcw</strong> : float</p>
+<blockquote>
+<div><p>scale factor. Default = 1.0</p>
+</div></blockquote>
+<p><strong>model</strong> : pylayers.network.model.PLSmodel</p>
+<p><strong>p</strong> : np.array 1 x ndim</p>
+<blockquote>
+<div><p>constraint center</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>range</strong> : distance conversion from time self.value.</p>
+<p><strong>sstd</strong> : distance conversion from time self.std</p>
+<p><strong>runable</strong> : True NOT USED</p>
+<p><strong>evaluated :False NOT USED</strong> :</p>
+<p><strong>self.id</strong> : Constraint ID</p>
+<p><strong>from annulus bound:</strong> :</p>
+<p><strong>min</strong> : minimum value of observable</p>
+<p><strong>max</strong> : maximum value of observable</p>
+<p><strong>mean</strong> : mean value of observable</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>annulus_bound(self)</strong> : Compute the minimum and maximum distance of the enclosing annulus of the constraint</p>
+<p><strong>rescale(self,vcw)</strong> : rescale contraint boundary with a given scale factor &#8216;vcw&#8217;</p>
+<p><strong>inclusive(self,b)</strong> : Is constraint center is inside a box ?</p>
+<p><strong>valid(self,b)</strong> : Test if Lbox is compatible with the constraint</p>
+<p><strong>valid_v(self,lv)</strong> : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.bd2coordinates()</p>
+<p class="last"><strong>estvol(self)</strong> : Constraint Volume estimation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.location.geometric.constraints.Constraint</span></tt></p>
+</div>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.annulus_bound">
+<tt class="descname">annulus_bound</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>annulus_bound():
+Compute the minimum and maximum distance of the enclosing annulus of the constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>Nothing but update cmin, cmax</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.estvol">
+<tt class="descname">estvol</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.estvol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.estvol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constraint Volume estimation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.inclusive">
+<tt class="descname">inclusive</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.inclusive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.inclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is constraint center is inside a box ?
+Parameters
+&#8212;&#8212;&#8212;-</p>
+<p>b       : LBoxN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>Boolean</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.rescale">
+<tt class="descname">rescale</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>rescale bounds of the constraint with vcw factor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>vcw</strong> : float</p>
+<blockquote class="last">
+<div><p>scale factor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraint inforamtion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.valid">
+<tt class="descname">valid</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if a box is valid for the given constraint</p>
+<p>DEPRECATED
+Parameters
+&#8212;&#8212;&#8212;-
+b       : LBoxN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>True</strong> : if box is enclosed</p>
+<p><strong>False</strong> : if the box is ambiguous</p>
+<p class="last"><strong>&#8216;Out&#8217;</strong> : if the box is out</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.rss.RSS.valid_v">
+<tt class="descname">valid_v</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if a list of vertexes from a box is compatible with the constraint.</p>
+<p>vertices are obtained with LBoxN.bd2coordinates()</p>
+<p>valid_v(v) : check if a set of vertices are valid for the given constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>v</strong> : np.arrays</p>
+<blockquote>
+<div><p>a vertexes arrays</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>DDbound</strong> : np.array 2 x vertexes containing boolean</p>
+<blockquote>
+<div><p>Test Lboxn boundaries  with contraint</p>
+</div></blockquote>
+<p><strong>TB</strong> : np.array 4 v vertexes</p>
+<blockquote>
+<div><p>Multiple test for error checker in Lboxn boundaries  with contraint</p>
+</div></blockquote>
+<p><strong>DDbound = list[[tested vertex DD&gt;self.cmin],[tested vertex DD&lt;self.cmax]]</strong> :</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>nb box</p>
+</div></blockquote>
+<p>&lt;&#8212;&#8212;&#8212;&#8212;&#8211;&gt;</p>
+</div></blockquote>
+<p>pmin&lt;cmin       |
+pmin&lt;cmax       |</p>
+</div></blockquote>
+<p><strong>TB =    pmax&lt;cmin       |</strong> :</p>
+<blockquote>
+<div><p>pmin&lt;cmax       |</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>nb vertexes</p>
+</div></blockquote>
+<p>&lt;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-&gt;</p>
+</div></blockquote>
+<p>pmin&lt;Dmin       |
+pmin&lt;Dmax       |</p>
+</div></blockquote>
+</div></blockquote>
+<p><strong>DDbound =       pmax&lt;Dmin       |</strong> :</p>
+<blockquote class="last">
+<div><p>pmin&lt;Dmax       |</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-pylayers.location.geometric.constraints.toa"></span><dl class="class">
+<dt id="pylayers.location.geometric.constraints.toa.TOA">
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.toa.</tt><tt class="descname">TOA</tt><big>(</big><em>id='0'</em>, <em>value=30</em>, <em>std=array(1.0)</em>, <em>vcw=3</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA" title="Permalink to this definition">¶</a></dt>
+<dd><p>TOA Constraint</p>
+<p>Description and evaluation of TOA constraints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote>
+<div><p>Constraint value in ns. Default = 30</p>
+</div></blockquote>
+<p><strong>std</strong> : np.array</p>
+<blockquote>
+<div><p>Value standard deviation in ns. default = 1.0</p>
+</div></blockquote>
+<p><strong>vcw</strong> : float</p>
+<blockquote>
+<div><p>scale factor. Default = 1.0</p>
+</div></blockquote>
+<p><strong>p</strong> : np.array 1 x ndim</p>
+<blockquote>
+<div><p>constraint center</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>range</strong> : distance conversion from time self.value.</p>
+<p><strong>sstd</strong> : distance conversion from time self.std</p>
+<p><strong>runable</strong> : True NOT USED</p>
+<p><strong>evaluated :False NOT USED</strong> :</p>
+<p><strong>self.Id</strong> : Constraint ID</p>
+<p><strong>from annulus bound:</strong> :</p>
+<p><strong>min</strong> : minimum value of observable</p>
+<p><strong>max</strong> : maximum value of observable</p>
+<p><strong>mean</strong> : mean value of observable</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>annulus_bound(self)</strong> : Compute the minimum and maximum distance of the enclosing annulus of the constraint</p>
+<p><strong>rescale(self,vcw)</strong> : rescale contraint boundary with a given scale factor &#8216;vcw&#8217;</p>
+<p><strong>inclusive(self,b)</strong> : Is constraint center is inside a box ?</p>
+<p><strong>valid(self,b)</strong> : Test if Lbox is compatible with the constraint</p>
+<p><strong>valid_v(self,lv)</strong> : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.bd2coordinates()</p>
+<p class="last"><strong>estvol(self)</strong> : Constraint Volume estimation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.location.geometric.constraints.Constraint</span></tt></p>
+</div>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.toa.TOA.annulus_bound">
+<tt class="descname">annulus_bound</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>annulus_bound():</p>
+<p>Compute the minimum and maximum distance of the enclosing annulus of the constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><strong>Nothing but update cmin, cmax and mean</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.toa.TOA.estvol">
+<tt class="descname">estvol</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA.estvol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA.estvol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constraint Volume estimation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.toa.TOA.inclusive">
+<tt class="descname">inclusive</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA.inclusive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA.inclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>answer whether constraint center is inside a box</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>b</strong> : LBoxN</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>Boolean</strong> :</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.toa.TOA.rescale">
+<tt class="descname">rescale</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>rescale bounds of the constraint with vcw factor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>vcw</strong> : float</p>
+<blockquote class="last">
+<div><p>scale factor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.toa.TOA.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraint information</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.toa.TOA.valid">
+<tt class="descname">valid</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if a box is valid for the given constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>b</strong> : LBoxN</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>True</strong> : if box is enclosed</p>
+<p><strong>False</strong> : if the box is ambiguous</p>
+<p class="last"><strong>&#8216;Out&#8217;</strong> : if the box is out</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.toa.TOA.valid_v">
+<tt class="descname">valid_v</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test if a list of vertexes from a box is compatible with the constraint.</p>
+<p>vertices are obtained with LBoxN.bd2coordinates()</p>
+<p>valid_v(v) : check if a set of vertices are valid for the given constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>v</strong> : np.arrays</p>
+<blockquote>
+<div><p>a vertexes arrays</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>DDbound</strong> : np.array 2 x vertexes containing boolean</p>
+<blockquote>
+<div><p>Test Lboxn boundaries  with contraint</p>
+</div></blockquote>
+<p><strong>TB</strong> : np.array 4 v vertexes</p>
+<blockquote>
+<div><p>Multiple test for error checker in Lboxn boundaries  with contraint</p>
+</div></blockquote>
+<p><strong>DDbound = list[[tested vertex DD&gt;self.cmin],[tested vertex DD&lt;self.cmax]]</strong> :</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>nb box</p>
+</div></blockquote>
+<p>&lt;&#8212;&#8212;&#8212;&#8212;&#8211;&gt;</p>
+</div></blockquote>
+<p>pmin&lt;cmin       |
+pmin&lt;cmax       |</p>
+</div></blockquote>
+<p><strong>TB =    pmax&lt;cmin       |</strong> :</p>
+<blockquote>
+<div><p>pmin&lt;cmax       |</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div><p>nb vertexes</p>
+</div></blockquote>
+<p>&lt;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-&gt;</p>
+</div></blockquote>
+<p>pmin&lt;Dmin       |
+pmin&lt;Dmax       |</p>
+</div></blockquote>
+</div></blockquote>
+<p><strong>DDbound =       pmax&lt;Dmin       |</strong> :</p>
+<blockquote class="last">
+<div><p>pmin&lt;Dmax       |</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-pylayers.location.geometric.constraints.tdoa"></span><dl class="class">
+<dt>
+<tt class="descname">TDOA(id='0', value=45, std=array(4.0), vcw=3, p=array([[ 0,  0,  0],</tt></dt>
+<dt>
+<tt class="descname">[10, 10, 10]]), origin={})</tt></dt>
+<dd><p>TDOA Constraint</p>
+<p>Description and evaluation of TDOA constraints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>value</strong> : float</p>
+<blockquote>
+<div><p>Constraint value in ns.</p>
+</div></blockquote>
+<p><strong>std</strong> : np.array</p>
+<blockquote>
+<div><p>Value standard deviation in ns.</p>
+</div></blockquote>
+<p><strong>vcw</strong> : float</p>
+<blockquote>
+<div><p>scale factor.</p>
+</div></blockquote>
+<p><strong>p</strong> : np.array 2 x ndim</p>
+<blockquote>
+<div><p>constraint centers</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>drange</strong> : difference of distance conversion from time self.value.</p>
+<p><strong>sstd</strong> : difference of distance conversion from time self.std</p>
+<p><strong>runable</strong> : True NOT USED</p>
+<p><strong>evaluated :False NOT USED</strong> :</p>
+<p><strong>self.Id</strong> : Constraint ID</p>
+<p><strong>from annulus bound:</strong> :</p>
+<p><strong>min</strong> : minimum value of observable</p>
+<p><strong>max</strong> : maximum value of observable</p>
+<p><strong>mean</strong> : mean value of observable</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>annulus_bound(self)</strong> : Compute the minimum and maximum distance of the enclosing annulus of the constraint</p>
+<p><strong>tdoa_box(vcw)</strong> : find the enclosing box of TDOA constraint for a given vcw</p>
+<p><strong>rescale(self,vcw)</strong> : rescale contraint boundary with a given scale factor &#8216;vcw&#8217;</p>
+<p><strong>inclusive(self,b)</strong> : Is constraint center is inside a box ?</p>
+<p><strong>valid(self,b)</strong> : Test if Lbox is compatible with the constraint</p>
+<p><strong>valid_v(self,lv)</strong> : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.</p>
+<p><strong>bd2coordinates()</strong> :</p>
+<p class="last"><strong>estvol(self)</strong> : Constraint Volume estimation</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.location.geometric.constraints.Constraint</span></tt></p>
+</div>
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.annulus_bound">
+<tt class="descclassname">TDOA.</tt><tt class="descname">annulus_bound</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.annulus_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.annulus_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the minimum and maximum distance of the enclosing annulus of the constraint for a given self.vcw</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.inclusive">
+<tt class="descclassname">TDOA.</tt><tt class="descname">inclusive</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.inclusive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.inclusive" title="Permalink to this definition">¶</a></dt>
+<dd><p>A box b is inclusive for the constraint if self.p is included in the box</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.repart">
+<tt class="descclassname">TDOA.</tt><tt class="descname">repart</tt><big>(</big><em>DD</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.repart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.repart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.rescale">
+<tt class="descclassname">TDOA.</tt><tt class="descname">rescale</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.rescale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.rescale" title="Permalink to this definition">¶</a></dt>
+<dd><p>rescale(vcw) :  rescale constraint with vcw factor</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_axes">
+<tt class="descclassname">TDOA.</tt><tt class="descname">tdoa_axes</tt><big>(</big><em>p</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.tdoa_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_axes" title="Permalink to this definition">¶</a></dt>
+<dd><p>triedre [vn,wn,tn], support of the contraint</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_box">
+<tt class="descclassname">TDOA.</tt><tt class="descname">tdoa_box</tt><big>(</big><em>vcw</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.tdoa_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.tdoa_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the inclusive box for a given vcw</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.update">
+<tt class="descclassname">TDOA.</tt><tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update constraint inforamtion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.valid">
+<tt class="descclassname">TDOA.</tt><tt class="descname">valid</tt><big>(</big><em>b</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>valid(b) : check if box b is valid for the given constraint</p>
+<p>A box is valid if it not not valid</p>
+<dl class="docutils">
+<dt>A box is not valid if all distances are greater than rangemax</dt>
+<dd>or all distances are less than rangemin</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pylayers.location.geometric.constraints.tdoa.TDOA.valid_v">
+<tt class="descclassname">TDOA.</tt><tt class="descname">valid_v</tt><big>(</big><em>v</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/tdoa.html#TDOA.valid_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.tdoa.TDOA.valid_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if vertex are valid for the given constraint</p>
+<p>A box is valid if it not not valid</p>
+<dl class="docutils">
+<dt>A box is not valid if all distances are greater than rangemax</dt>
+<dd>or all distances are less than rangemin</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="location.geometric.util.html" title="geometric util"
+             >next</a></li>
+        <li class="right" >
+          <a href="location.geometric.html" title="Geometric Algorithms"
+             >previous</a> |</li>
+        <li><a href="../index.html">PyLayers Home </a> |&nbsp;</li>
+        <li><a href="../notebook/index.html">Documentation </a> |&nbsp;</li>
+        <li><a href="../download.html">Download </a> |&nbsp; </li>
+        <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
+
+          <li><a href="index.html" >User references</a> &raquo;</li>
+          <li><a href="location.html" >location</a> &raquo;</li>
+          <li><a href="location.geometric.html" >Geometric Algorithms</a> &raquo;</li> 
+      </ul>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2013, PyLayers developer team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34943220-1']);
+  _gaq.push(['_setDomainName', 'pylayers.github.io']);
+  _gaq.push(['_setAllowLinker', true]);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })(); 
+</script> 
+ 
+  </body>
+</html>
