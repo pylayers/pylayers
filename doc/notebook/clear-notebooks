@@ -2,9 +2,9 @@
 for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
 do 
 echo $i    
-echo  ${i%%.ipynb}.rst
-if [ $? -eq 0 ]
+if [ -f  ${i%%.ipynb}.rst ]
 then 
+    echo "deleting "  ${i%%.ipynb}.rst 
     rm ${i%%.ipynb}.rst 
 fi
 python $PYLAYERS/script/remove_output.py $i > tmp
