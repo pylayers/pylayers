@@ -8,7 +8,7 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4dd70d0>
+    <matplotlib.figure.Figure at 0x46cf0d0>
 
 
 The ``ls()`` method
@@ -106,8 +106,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fc3c0088190>,
-     <matplotlib.axes.AxesSubplot at 0x7fc3c0088f10>)
+    (<matplotlib.figure.Figure at 0x3955fd0>,
+     <matplotlib.axes.AxesSubplot at 0x47d7850>)
 
 
 
@@ -177,8 +177,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fc3c1f46d10>,
-     <matplotlib.axes.AxesSubplot at 0x7fc3c1f6d0d0>)
+    (<matplotlib.figure.Figure at 0x47d73d0>,
+     <matplotlib.axes.AxesSubplot at 0x669b0d0>)
 
 
 
@@ -242,8 +242,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fc3c1df3710>,
-     <matplotlib.axes.AxesSubplot at 0x7fc3c1f4e050>)
+    (<matplotlib.figure.Figure at 0x7f862cb43690>,
+     <matplotlib.axes.AxesSubplot at 0x7f862cb46a10>)
 
 
 
@@ -262,8 +262,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fc3c1f4e4d0>,
-     <matplotlib.axes.AxesSubplot at 0x7fc3c0d262d0>)
+    (<matplotlib.figure.Figure at 0x7f862c8f9ed0>,
+     <matplotlib.axes.AxesSubplot at 0x7f862c8f5f90>)
 
 
 
