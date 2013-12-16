@@ -1,5 +1,8 @@
 #!/bin/bash
+# clean website 
+#. $WEBNB/cleanfiles
 # for all notebooks below
+
 for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
 do
     # display filename
