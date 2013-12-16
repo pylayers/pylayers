@@ -91,8 +91,8 @@ anchor nodes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOA</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.7954218</span> <span class="p">,</span>  <span class="mf">0.16876022</span><span class="p">,</span>  <span class="mf">0.65633484</span><span class="p">,</span>  <span class="mf">0.45043979</span><span class="p">,</span>  <span class="mf">0.49316679</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.2841033</span> <span class="p">,</span>  <span class="mf">0.2656847</span> <span class="p">,</span>  <span class="mf">0.27377311</span><span class="p">,</span>  <span class="mf">0.82897223</span><span class="p">,</span>  <span class="mf">0.53357009</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.20333264</span><span class="p">,</span>  <span class="mf">0.73722758</span><span class="p">,</span>  <span class="mf">0.20702517</span><span class="p">,</span>  <span class="mf">0.89621686</span><span class="p">,</span>  <span class="mf">0.13750788</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.59147947</span><span class="p">,</span>  <span class="mf">0.28330879</span><span class="p">,</span>  <span class="mf">0.75316203</span><span class="p">,</span>  <span class="mf">0.28140455</span><span class="p">,</span>  <span class="mf">0.02001101</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOAr1</span>
@@ -105,8 +105,8 @@ anchor nodes.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">AN_TDOAr2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.49316679</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.53357009</span><span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.13750788</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.02001101</span><span class="p">]])</span>
 </pre></div>
 </div>
 <p>The figure below illustrates the situation, in red the anchor nodes, the
@@ -135,10 +135,9 @@ blue star is the blind node.</p>
 <span class="k">print</span> <span class="n">tdoa2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[  7.35994442e-01  -1.09476736e+00   2.74174196e-01   7.01421509e-01
-   2.22044605e-16]
-[ 0.78359612 -1.04716568  0.32177588  0.74902319  0.04760168]
-[ 0.73599444 -1.09476736  0.2741742   0.70142151  0.        ]</pre>
+<div class="highlight-python"><pre>[ 0.01540109  0.83536202  0.55446095  1.36528985  0.        ]
+[-0.23018867  0.58977226  0.30887119  1.11970009 -0.24558976]
+[ 0.01540109  0.83536202  0.55446095  1.36528985  0.        ]</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">node</span><span class="o">=</span><span class="p">{}</span>
 <span class="n">nodes</span><span class="p">[</span><span class="s">&#39;BN&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">BN</span>
@@ -155,12 +154,11 @@ blue star is the blind node.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Nodes :  {'RN_TDOA': array([[ 0.7954218 ,  0.16876022,  0.65633484,  0.45043979,  0.49316679],
-       [ 0.2841033 ,  0.2656847 ,  0.27377311,  0.82897223,  0.53357009]]), 'BN': array([[ 0.2],
-       [ 0.3]]), 'RNr_TDOA': array([[ 0.49316679],
-       [ 0.53357009]])}
-Location dependent parameters :  {'TDOA': array([  7.35994442e-01,  -1.09476736e+00,   2.74174196e-01,
-         7.01421509e-01,   2.22044605e-16]), 'TDOA_std': array([ 1.,  1.,  1.,  1.,  1.])}</pre>
+<div class="highlight-python"><pre>Nodes :  {'RN_TDOA': array([[ 0.20333264,  0.73722758,  0.20702517,  0.89621686,  0.13750788],
+       [ 0.59147947,  0.28330879,  0.75316203,  0.28140455,  0.02001101]]), 'BN': array([[ 0.2],
+       [ 0.3]]), 'RNr_TDOA': array([[ 0.13750788],
+       [ 0.02001101]])}
+Location dependent parameters :  {'TDOA': array([ 0.01540109,  0.83536202,  0.55446095,  1.36528985,  0.        ]), 'TDOA_std': array([ 1.,  1.,  1.,  1.,  1.])}</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span> <span class="o">=</span> <span class="n">algloc</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span><span class="n">ldp</span><span class="p">)</span>
 </pre></div>
@@ -168,8 +166,8 @@ Location dependent parameters :  {'TDOA': array([  7.35994442e-01,  -1.09476736e
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">toa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.19957344</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mf">0.2997624</span> <span class="p">]])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">array</span><span class="p">([[</span> <span class="mf">0.20000498</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">0.29997771</span><span class="p">]])</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">nodes</span><span class="p">[</span><span class="s">&#39;BN&#39;</span><span class="p">]</span>

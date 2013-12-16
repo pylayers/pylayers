@@ -112,7 +112,7 @@ default configuration file named <strong>default.ini</strong> is loaded.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x46147d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5e3b7d0&gt;</pre>
 </div>
 <p>A first step consists in loading a layout associated with the
 simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
@@ -252,17 +252,17 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
 <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x70269d0&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x727d9d0&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f4c703a4f10&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x8a03dd0&gt;)</pre>
 </div>
 <img alt="./DOC-RayTracing2_files/DOC-RayTracing2_27_1.png" src="./DOC-RayTracing2_files/DOC-RayTracing2_27_1.png" />
-<div class="highlight-python"><div class="highlight"><pre><span class="n">r2d</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">strucname</span><span class="o">=</span><span class="s">&#39;WHERE1&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># r2d.show3(strucname=&#39;WHERE1&#39;)</span>
 </pre></div>
 </div>
 <p>Then, the <strong>r2d</strong> object is transformed in 3D ray, taking into account
 the reflection on ceil and floor.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span><span class="o">=</span><span class="n">r2d</span><span class="o">.</span><span class="n">to3D</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
-<span class="n">r3d</span><span class="o">.</span><span class="n">show3</span><span class="p">(</span><span class="n">strucname</span><span class="o">=</span><span class="s">&#39;WHERE1&#39;</span><span class="p">)</span>
+<span class="c"># r3d.show3(strucname=&#39;WHERE1&#39;)</span>
 </pre></div>
 </div>
 <p>Once the 3D rays are obtained the local basis are determined</p>

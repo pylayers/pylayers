@@ -41,7 +41,7 @@ blue
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x3f15990>
+    <matplotlib.legend.Legend at 0x428aa10>
 
 
 
@@ -117,10 +117,10 @@ All the constraints of the CLA can be listed as follows
 
 .. parsed-literal::
 
-    [<pylayers.location.geometric.constraints.toa.TOA at 0x3e279d0>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x3e27b50>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x3e27c50>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x3e27d50>]
+    [<pylayers.location.geometric.constraints.toa.TOA at 0x419eb90>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x419e9d0>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x419ec90>,
+     <pylayers.location.geometric.constraints.toa.TOA at 0x419ebd0>]
 
 
 
@@ -237,7 +237,7 @@ with the above model
 
 .. parsed-literal::
 
-    9.3628421232985062
+    9.7936193514215493
 
 
 
