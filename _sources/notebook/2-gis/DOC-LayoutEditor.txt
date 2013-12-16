@@ -693,12 +693,3 @@ to a segment (wall,door,window,...).
 
 The segment name is the key of the **slab** dictionnary.
 
-Segments and Subsegments
-------------------------
-
-
-`Multi Subsegments <MultiSubsegments.ipynb>`_
-
-.. code-block:: python
-
-    
