@@ -110,6 +110,11 @@ class Agent(object):
         self.epwr = args['epwr']
         self.gcom = args['gcom']
         self.sim = args['sim']
+        self.RAT = args['RAT']
+        self.epwr = args['epwr']
+        self.sens = sens=args['sens']
+
+
         try:
             self.dcond = args['dcond']
         except:
@@ -223,3 +228,21 @@ class Agent(object):
                                       tx=self.tx,
                                       sim=args['sim'])
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+
+    def __repr__(self):
+      s = 'General info \n------------\n'
+      s = s + 'name : ' + self.name + '\n'
+      s = s + 'type: '  + self.type + '\n'
+
+      s = s+ '\nMeca info \n--------\n'
+      s = s + 'roomId ' + str(self.meca.roomId) + '\n'
+      s = s + 'pos ' + str(self.meca.position) + '\n'
+
+      s = s+ '\nNetwork info \n------------\n'
+      s = s + 'ID: ' + str(self.ID) + '\n'
+
+      for i,r in enumerate(self.RAT):
+        s = s + 'RAT : ' + r + ' epwr : ' + str(self.epwr[r]) + ' sens : ' + str(self.sens[r]) + '\n'
+
+      return s
+
