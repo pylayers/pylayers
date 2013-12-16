@@ -87,12 +87,12 @@ class Agent(object):
                     'loc_method': ['geo'],
                     'Layout': Layout(),
                     'net': Network(),
-                    'RAT': ['wifi'],
+                    'RAT': ['rat1'],
                     'world': world(),
                     'save': [],
                     'sim': Simulation(),
-                    'epwr':{},
-                    'sens': {},
+                    'epwr':{'rat1':0},
+                    'sens': {'rat1':0},
                     'dcond': {},
                     'gcom': Gcom(),
                     'comm_mode':'autonomous'}
@@ -230,19 +230,15 @@ class Agent(object):
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
-      s = 'General info \n------------\n'
+      s = 'General info \n*************\n'
       s = s + 'name : ' + self.name + '\n'
-      s = s + 'type: '  + self.type + '\n'
+      s = s + 'ID: '  + self.ID + '\n'
+      s = s + 'type: '  + self.type + '\n\n'
+      
 
-      s = s+ '\nMeca info \n--------\n'
-      s = s + 'roomId ' + str(self.meca.roomId) + '\n'
-      s = s + 'pos ' + str(self.meca.position) + '\n'
+      s = s+ self.net.__repr__() + '\n'
+      s = s+ self.meca.__repr__() + '\n'
 
-      s = s+ '\nNetwork info \n------------\n'
-      s = s + 'ID: ' + str(self.ID) + '\n'
-
-      for i,r in enumerate(self.RAT):
-        s = s + 'RAT : ' + r + ' epwr : ' + str(self.epwr[r]) + ' sens : ' + str(self.sens[r]) + '\n'
-
+      
       return s
 
