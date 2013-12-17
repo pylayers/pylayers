@@ -383,6 +383,14 @@ class Rays(dict):
                     ks = np.argsort(a1e, axis=0) 
                     # a1es : extended sorted horizontal + vertical parameterization
                     a1es = np.sort(a1e, axis=0)  
+
+                    # #### Check if it exist same parameter value  in horizontal plane
+                    # #### and vertical plane. Move parameter is so.
+                    # da1es = np.diff(a1es,axis=0)
+                    # pda1es = np.where(da1es<1e-10)
+                    # a1es[pda1es]=a1es[pda1es]-1e-3
+                    
+
                     # prepare an extended sequence of points ( ndim x  (Nint+k+2) x Nrayk )
                     ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))     
                     
@@ -723,6 +731,9 @@ class Rays(dict):
 
                 v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
                 lsi = np.sqrt(np.sum(v*v, axis=0))
+                if (len(np.where(lsi==0.))==0) :
+                    pdb.set_trace()
+
                 si = v/lsi             # ndim , nint - 1 , nray
 
                 # vsi : 3 x (i+1) x r
