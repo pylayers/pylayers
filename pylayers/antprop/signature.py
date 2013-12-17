@@ -136,6 +136,7 @@ def edgeout(L,g):
 
 
         output = []
+        # nstr1 : segment number of final interaction
         if nstr1>0:
             # segment unitary vector
 
@@ -157,8 +158,10 @@ def edgeout(L,g):
                 v12 = p2-p1
                 v12m = np.sqrt(np.dot(v12,v12))
                 v12n = v12/v12m
+
                 d1 = np.dot(v01n,l1)
                 d2 = np.dot(l1,v12n)
+
 #                if nstr0==32 and nstr1 == 42  and nstr2 ==50:
 #                    pdb.set_trace()
                 if d1*d2>=0 and typ == 1:
@@ -1857,8 +1860,9 @@ class Signature(object):
         k = 0     # intercation counter
         beta = .5 # to enter into the loop
         isvalid = True # signature is valid by default 
-
-        while (((beta <= 1) & (beta >= 0)) & (k < N)):
+        epsilon = 1e-2
+        # while (((beta <= 1) & (beta >= 0)) & (k < N)):
+        while (((beta <= 1-epsilon) & (beta >= epsilon)) & (k < N)):
             if int(typ[k]) != 3: # not a diffraction 
                 # Formula (30) of paper Eucap 2012
                 l0 = np.hstack((I2, pkm1 - M[:, N - (k + 1)].reshape(2, 1), z0
