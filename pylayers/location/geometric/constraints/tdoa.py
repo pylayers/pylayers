@@ -29,37 +29,58 @@ from pylayers.location.geometric.constraints.constraint import *
 
 
 class TDOA(Constraint):
-    def __init__(self,id='0', value=45, std=4, vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]]), origin={}):
-        """
+    """      TDOA Constraint
+
+    Description and evaluation of TDOA constraints
+
+    Parameters
+    ----------
+
+    value   : float
+            Constraint value in ns. 
+    std     : np.array
+            Value standard deviation in ns. 
+    vcw     : float
+            scale factor.
+    p       : np.array 2 x ndim
+            constraint centers
+
+    Attributes
+    ----------
+
+    drange   : difference of distance conversion from time self.value.
+    sstd    : difference of distance conversion from time self.std
+    runable : True NOT USED
+    evaluated :False NOT USED
+    self.Id : Constraint ID
+
+    from annulus bound:
+    min     : minimum value of observable
+    max     : maximum value of observable
+    mean    : mean value of observable
+
+    Methods
+    -------
+
+    annulus_bound(self)     : Compute the minimum and maximum distance of the enclosing annulus of the constraint
+    tdoa_box(vcw)           : find the enclosing box of TDOA constraint for a given vcw
+    rescale(self,vcw)       : rescale contraint boundary with a given scale factor 'vcw'
+    inclusive(self,b)       : Is constraint center is inside a box ?
+    valid(self,b)           : Test if Lbox is compatible with the constraint
+    valid_v(self,lv)        : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.
+    bd2coordinates()
+    estvol(self)            : Constraint Volume estimation
+
+    See Also
+    --------
+
+    pylayers.location.geometric.constraints.Constraint
 
 
-
-        Attributes
-        ----------
-
-        tdoa = (|F1M| - |F2M|)/0.3 = (|p1M| - |p2M|)/0.3    (ns)
-
-
-        value : Time difference of Arrival  (ns)    30 ns  = 9 m
-        std   : Standard deviation on tdoa  (ns)    1 ns   = 30cm
-        vcw   : constraint with factor
-
-
-        Methods
-        -------
-
-        vrai(deltar)  : check constraint validity
-
-        """
-        Constraint.__init__(self, 'TDOA', id=id, p=p, origin=origin)
-
-        #
-        # (vn,wn,tn) triedre orthonormal
-        #
-    #       self.Dmax = 25 # limit of tdoa box in meter
-        ##
+    """
+    def __init__(self, id='0', value=45, std=np.array((4.0)), vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]]), origin={}):
+        Constraint.__init__(self, type='TDOA', id=id, p=p, origin=origin)
         self.tdoa_axes(p)
-
         self.f = self.nv / 2
         self.Dmax = self.nv
         self.value = min(value, 2 * self.f / 0.3)
@@ -69,43 +90,27 @@ class TDOA(Constraint):
         self.drange = self.value * 0.3
         self.sstd = self.std * 0.3
         self.tdoa_box(vcw)
-#               if self.ndim == 3:
-#                       BOUND1 = np.array([0.0,0.0,-2.0])
-#                       BOUND2 = np.array([20.0,20.0,2.0])
-#                       box         = BoxN(np.vstack((BOUND1,BOUND2)),ndim=np.shape(self.p)[1])
-#               else:
-#                       BOUND1 = np.array([0.0,0.0])
-#                       BOUND2 = np.array([20.0,20.0])
-#                       box         = BoxN(np.vstack((BOUND1,BOUND2)),ndim=np.shape(self.p)[1])
-
-#               self.lbox    = LBoxN([box],ndim=np.shape(self.p)[1])
-
         self.annulus_bound()
-        self.visible = True
-        self.obsolete = False
-        self.usable = True
 
 
     def update(self):
+        """ update constraint inforamtion
         """
-        update constraint inforamtion
-        """
-        if self.p.any():
-            self.runable = True
-        else:
-            self.runable = False
-
+        # if self.p.any():
+        #     self.runable = True
+        # else:
+        #     self.runable = False
+        self.updc('p',value=self.p)
+        self.updc('value',value=self.value)
+        self.updc('std',value=self.std)
         self.sstd=self.std * 0.3
         self.range=self.value *0.3
         self.rescale(self.vcw)
         self.evaluated = False
         self.annulus_bound()
 
-
-
     def tdoa_axes(self, p):
-        """
-        tdoa_axes(self,p) : triedre [vn,wn,tn], support of the contraint
+        """triedre [vn,wn,tn], support of the contraint
         """
         #
         # Dmax
@@ -139,8 +144,7 @@ class TDOA(Constraint):
             self.triedre = [wn, vn]
 
     def tdoa_box(self, vcw):
-        """
-        tdoa_box(self,vcw) : create the inclusive box for a given vcw
+        """create the inclusive box for a given vcw
         """
 
         if self.ndim == 3:
@@ -216,9 +220,7 @@ class TDOA(Constraint):
             [BoxN(np.vstack((imin, imax)), ndim=np.shape(self.p)[1])])
 
     def annulus_bound(self):
-        """
-        annulus_bound():
-        Compute the minimum and maximum distance of the enclosing annulus of the constraint for a given self.vcw
+        """ Compute the minimum and maximum distance of the enclosing annulus of the constraint for a given self.vcw
         """
         if self.value > 0:
             self.cmin = self.drange - self.vcw * self.sstd
@@ -230,6 +232,8 @@ class TDOA(Constraint):
         self.mean = (self.cmin + self.cmax) / 2
 
     def repart(self, DD):
+        """
+        """
         return(1. / (self.sstd * np.sqrt(2 * np.pi)) * np.exp(-(DD - self.mean) ** 2 / (2 * self.sstd ** 2)))
 
     def rescale(self, vcw):
@@ -243,15 +247,20 @@ class TDOA(Constraint):
         print 'TDOA', self.vcw
         #self.estvol() <= TO BE DONE IN TDOA
 
-    def inclusive(self, b):
-        """
-        inclusive(b) : A box b is inclusive for the constraint if self.p is included in the box
+    # def inclusive(self, b):
+    #     """A box b is inclusive for the constraint if self.p is included in the box
 
-        """
-        if b.inbox(self.p):
-            return True
-        else:
-            return False
+    #     Parameters
+    #     ----------
+
+    #     b : BoxN
+    #         test if self.p is included in box b
+
+    #     """
+    #     if b.inbox(self.p):
+    #         return True
+    #     else:
+    #         return False
 
     def valid(self, b):
         """
@@ -285,8 +294,7 @@ class TDOA(Constraint):
             return(False)
 
     def valid_v(self, v):
-        """
-        valid_v(v) : check if vertex are valid for the given constraint
+        """check if vertex are valid for the given constraint
 
         A box is valid if it not not valid
 
@@ -342,8 +350,7 @@ class TDOA(Constraint):
 #
 #               return DD2
     def inclusive(self, b):
-        """
-        inclusive(b) : A box b is inclusive for the constraint if self.p is included in the box
+        """ A box b is inclusive for the constraint if self.p is included in the box
 
         """
         if b.inbox(self.p[0]) | b.inbox(self.p[1]):

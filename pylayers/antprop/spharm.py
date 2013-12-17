@@ -26,6 +26,56 @@ from scipy import sparse
 from matplotlib import rc
 from matplotlib import cm
 
+def indexssh(L,mirror=True):
+    """ create [l,m] indexation from Lmax
+
+    Parameters
+    ----------
+
+    L : maximum order
+    mirror : boolean 
+        if True the output contains negative m indices
+
+    Returns
+    -------
+
+    t : np.array
+        [l,m]   Ncoeff x 2
+
+    Examples
+    --------
+
+        >>> from pylayers.antprop.spharm import *
+        >>> indexssh(2)
+        array([[ 0.,  0.],
+               [ 1.,  0.],
+               [ 2.,  0.],
+               [ 1.,  1.],
+               [ 2.,  1.],
+               [ 2.,  2.],
+               [ 2., -2.],
+               [ 2., -1.],
+               [ 1., -1.]])
+
+    """
+
+    for k in range(L+1):
+        l = np.arange(k,L+1)
+        m = k*np.ones(L+1-k)
+        v = np.vstack((l,m)).T
+        try:
+            t = np.vstack((t,v))
+        except:
+            t = v
+
+    if mirror:
+        u =  t[L+1:,:]
+        v =  np.vstack((u[:,0],-u[:,1])).T
+        #v = v[::-1,:]
+        t = np.vstack((t,v))
+
+    return t
+
 def indexvsh(L):
     """ indexvsh(L)
 
@@ -74,6 +124,7 @@ def index_vsh(L, M):
 
     Parameters
     ----------
+
     L : int
         degree max   sum(1..L)   L points
     M : int
@@ -83,6 +134,16 @@ def index_vsh(L, M):
 
     ind[0] = n
     ind[1] = m
+
+    Notes
+    -----
+
+    This function is more generic than indexvsh because it allows to have M<>L
+
+    See Also
+    --------
+
+    indexvsh
 
     """
     if M > L:
@@ -109,7 +170,7 @@ class VectorCoeff(object):
                  ind=np.array([]), k=np.array([])):
 
 		self.s1 = np.array([])
-		self.s2 = np.array([])
+		self.s4 = np.array([])
 		self.s3 = np.array([])
 		self.fmin = fmin
 		self.fmax = fmax
@@ -125,21 +186,500 @@ class VectorCoeff(object):
 		self.Nf = sh[0]
 
 class SSHCoeff(object):
-   
-    def __init__(self, Ax,Ay,Az):
+	
+    def __init__(self, Cx,Cy,Cz):
         """
+
         Parameters
         ----------
-            Br
-            Bi
-            Cr
-            Ci
-        """
-        self.Ax = Ax
-        self.Ay = Ay
-        self.Az = Az
+        
+        Cx : SCoeff
+        Cy : SCoeff
+        Cz : SCoeff 
 
-class SHCoeff(object):
+        """
+
+        self.Cx = Cx
+        self.Cy = Cy
+        self.Cz = Cz
+        
+  
+		   
+    def s2tos3(self, threshold=1e-5):
+        
+
+        """ 
+        convert scalar spherical coefficients from shape 2 to shape 3
+
+        Parameters
+        ----------
+
+        threshold : float
+            default 1e-20
+
+        Energy thresholded coefficients
+
+        """
+
+        Ex = np.sum(np.abs(self.Cx.s2) ** 2, axis=0) # integrates energy over freq axis = 0 
+        Ey = np.sum(np.abs(self.Cy.s2) ** 2, axis=0)
+        Ez = np.sum(np.abs(self.Cz.s2) ** 2, axis=0)
+        
+
+        E = Ex + Ey + Ez
+
+        ind = np.nonzero(E > (E.max() * threshold))[0]
+
+        self.Cx.ind3 = self.Cx.ind2[ind]
+        self.Cx.s3 = self.Cx.s2[:, ind]
+        self.Cx.k2 = ind
+
+        self.Cy.ind3 = self.Cy.ind2[ind]
+        self.Cy.s3 = self.Cy.s2[:, ind]
+        self.Cy.k2 = ind
+
+        self.Cz.ind3 = self.Cz.ind2[ind]
+        self.Cz.s3 = self.Cz.s2[:, ind]
+        self.Cz.k2 = ind
+        
+    def sets3(self,Cx,Cy,Cz):
+        """
+
+         Parameters
+        ----------
+
+        Cx : SCoeff
+        Cy : SCoeff
+        Cz : SCoeff 
+
+        """
+
+        self.Cx.ind3 = Cx.ind3 
+        self.Cx.s3 = Cx.s3
+        self.Cx.k2 = Cx.k2
+
+        self.Cy.ind3 = Cy.ind3
+        self.Cy.s3 = Cy.s3
+        self.Cy.k2 = Cy.k2
+
+        self.Cz.ind3 = Cz.ind3
+        self.Cz.s3 = Cz.s3
+        self.Cz.k2 = Cz.k2
+        
+
+class SCoeff(object):
+    """ Scalar Spherical Harmonics Coefficient
+
+    d = np.array [Nf,N+1,M+1]
+
+    Attributes
+    ----------
+
+    
+    s2  shape 2   np.array [ Nf x (N+1)*(M+1)   ]
+    s3  shape 3   np.array [ Nf x K     ]
+    ind [ K x 2]
+
+    """
+
+    def __init__(self, typ='s2', fmin=0.6, fmax=6,lmax=20,  data=np.array([]),
+                 ind=np.array([]), k=np.array([])):
+    
+    #~ def __init__(self, **kwargs):
+        """ init VCoeff
+
+         Parameters
+         ----------
+         typ : string
+            's2' | 's3'
+         fmin : float
+         fmax : float
+         data : ndarray
+         ind  : ndarray
+         k    : ndarray
+
+         s2 , s3 containers are created
+        """
+        
+        #~ defaults = { 'typ': 's2',
+                    #~ 'fmin' : 0.6,
+                    #~ 'fmax' : 6,
+                    #~ 'lmax' : 20,
+                    #~ 'data' : [],
+                    #~ 'ind' : [],
+                    #~ 'k'   : [] }
+#~ 
+        #~ for key, value in defaults.items():
+            #~ if key not in kwargs:
+                #~ kwargs[key] = value
+
+        
+        
+        self.fmin = fmin
+        self.fmax = fmax
+        self.lmax = lmax
+        	
+        if typ == 's2':
+			self.s2 = np.array([])
+			self.inits2(data,ind)
+        if typ == 's3':
+			self.s3 = np.array([])
+			self.inits3(data, ind, k)
+
+    def __repr__(self):
+
+		st = "Nf   : " +  str(self.Nf) + "\n"
+		st = st +  "fmin (GHz) : "+  str(self.fmin) + "\n"
+		st = st +  "fmax (GHz) : "+  str(self.fmax) + "\n"
+   
+		if 's2' in self.__dict__.keys():
+			sh2 = np.shape(self.s2)
+			if sh2[0] != 0:
+				st = st + "NCoeff s2  : " + str(len(self.ind2))+ "\n"
+				
+		if 's3' in self.__dict__.keys():
+			sh3 = np.shape(self.s3)
+			if sh3[0] != 0:
+				st = st + "Ncoeff s3 : " + str(len(self.ind3))+ "\n"
+        
+        
+
+		return(st)
+
+    def inits2(self, data,ind):
+        """ initialize shape 2 format
+
+        Parameters
+        ----------
+
+        data : shape 2 data
+
+        """
+
+        sh = np.shape(data)
+        # first axis is frequency
+        self.Nf = sh[0]
+        # second axis is the maximum number of coeff
+
+        self.s2 = data
+
+        #self.ind2 = indexssh(lmax)
+        self.ind2 = ind
+
+    def inits3(self, data, ind, k):
+        """ initialize shape 3 format
+
+        Parameters
+        ----------
+
+        data  : shape 3 data
+        ind   : shape 3 indexing
+        k     : k
+
+        """
+
+        sh = np.shape(data)
+        self.Nf = sh[0]
+        self.s3 = data
+        self.ind3 = ind
+        self.k2 = k
+
+    def delete(self, ind, typ):
+        """ delete coeff
+
+        Parameters
+        ----------
+
+        ind   : int
+        typ   : int
+                2  shape 2  (Nf , N*M   )
+                3  shape 3  (Nf , K )  T ( K x 2 )
+        """
+
+        if typ == 2:
+            ind2 = self.ind2[ind]
+            s2 = self.s2[:, ind]
+
+            a = delete(self.ind2, ind, axis=0)
+            b = delete(self.s2, ind, axis=1)
+            self.ind2 = a
+            self.s2 = b
+
+        if typ == 3:
+
+            ind3 = self.ind3[ind]
+            k2 = self.k2[ind]
+            s3 = self.s3[:, ind]
+
+            a = delete(self.ind3, ind, axis=0)
+            b = delete(self.k2, ind)
+            c = delete(self.s3, ind, axis=1)
+
+            self.ind3 = a
+            self.k2 = b
+            self.s3 = c
+
+    def put(self, typ):
+        """ recover last deleted coeff
+
+        Parameters
+        ----------
+
+        typ : int
+                2 : shape 2  (Nf , N*M   )
+                3 : shape 3  (Nf , K )  T ( K x 2 )
+        """
+
+        if typ == 2:
+
+            file_ind = pyu.getlong("outfile_i2.txt", pstruc['DIRANT'])
+            aux = load(file_ind)
+            ind = aux[0]
+            ind2 = np.array([aux[1], aux[2]])
+
+            file_s2 = pyu.getlong("outfile_s2.txt", pstruc['DIRANT'])
+            s2 = load(file_s2)
+
+            self.s2p = s2
+
+            a = insert(self.ind2, ind, ind2, axis=0)
+            b = insert(self.s2, ind, s2, axis=1)
+
+            self.ind2 = a
+            self.s2 = b
+
+        if typ == 3:
+
+            file_ind = pyu.getlong("outfile_i3.txt", pstruc['DIRANT'])
+            aux = load(file_ind)
+            ind = aux[0]
+            ind3 = np.array([aux[1], aux[2]])
+            k2 = aux[3]
+
+            file_s3 = pyu.getlong("outfile_s3.txt", pstruc['DIRANT'])
+            s3 = load(file_s3)
+
+            a = insert(self.ind3, ind, ind3, axis=0)
+            b = insert(self.k2, ind, k2)
+            c = insert(self.s3, ind, s3[0], axis=1)
+
+            self.ind3 = a
+            self.k2 = b
+            self.s3 = c
+
+            os.remove(file_ind)
+            os.remove(file_s3)
+
+    def delete3(self, ind):
+        """ delete3(self,ind): delete coeff.s3
+
+        Parameters
+        ----------
+        ind :
+
+        """
+        a = delete(self.ind3, ind, axis=0)
+        b = delete(self.k2, ind)
+        c = delete(self.s3, ind, axis=1)
+        self.ind3 = a
+        self.k2 = b
+        self.s3 = c
+
+    def put3(self, i, i3):
+        """ put3
+
+        Parameters
+        ----------
+        i  :
+        i3 :
+        """
+
+        k2 = i3[0] * (i3[0] + 1) / 2 + i3[1]
+        ind3 = self.ind2[k2]
+        s3 = self.s2[:, k2]
+
+        a = insert(self.ind3, i, ind3, axis=0)
+        b = insert(self.k2, i, k2)
+        c = insert(self.s3, i, s3, axis=1)
+
+        self.ind3 = a
+        self.k2 = b
+        self.s3 = c
+
+    def s3tos2(self):
+        """ transform shape3 to shape 2
+
+        s2  shape 2   array [ Nf x (L+1)*(M+1) ]
+        s3  shape 3   array [ Nf x K     ] ind [ K x 2]
+
+        Notes
+        -----
+
+        The shape of s2 is (Lmax+1)*(Lmax+2)/2
+
+        k2  : is the list of conserved indices in shape 3
+        ind3 : np.array (K3, 2) are the conserved (l,m) indices 
+
+        ind3 and k2 have one common dimension
+
+        """
+        # retrieve Nf and Lmax to build a void s2 structure
+        Nf   = np.shape(self.s3)[0]
+        Lmax = max(self.ind3[:,0])
+        K2   = (Lmax+1)*(Lmax+2)/2
+        self.s2 = np.zeros((Nf,K2),dtype=complex)
+
+        # fill s2 with s3 at proper coefficient location
+        self.s2[:,self.k2] = self.s3
+        self.N2 = Lmax
+        self.M2 = Lmax
+        self.ind2 = indexvsh(Lmax)
+
+    def plot(self,typ='s3',title='',xl=False,yl=False,log=False,stem=True,color='b'):
+        """
+        """
+        if typ=='s3':
+            indices = self.ind3
+            tl = indices[:,0]
+            C =[]
+            for l in np.unique(tl):
+                k = np.where(tl==l)
+                a = np.real(np.sum(self.s3[:,k]*np.conj(self.s3[:,k])))
+                C.append(a)
+            C = np.real(np.array(C))
+            Cs = np.sqrt(C)
+            if log:
+                Cs = 20*log10(Cs)
+            if stem:
+                plt.stem(np.unique(tl),Cs,markerfmt=color+'o')
+            else:
+                plt.plot(np.unique(tl),Cs,color=color)
+            #plt.axis([0,max(tl),0,5])
+            plt.title(title)
+            if xl:
+                plt.xlabel('degree l')
+            if yl:
+                plt.ylabel('Integrated Module of coeff')
+
+    def show(self,
+             typ='s1',
+             k = 0,
+             N = -1,
+             M = -1,
+             kmax = 1000,
+             seuildb = 50,
+             titre = 'SHC',
+             xl = True,
+             yl = True,
+             fontsize=14,
+             dB = True,
+             cmap = plt.cm.hot_r,
+             anim = True):
+        """ show coeff
+
+        Parameters
+        ----------
+        typ :  string 
+            default ('s1')
+            's1'  shape 1  (Nf , N , M )
+            's2'  shape 2  (Nf , N*M   )
+            's3'  shape 3  (Nf , K )  T ( K x 2 )
+
+        k  : integer 
+            frequency index default 0
+
+        N, M = maximal value for degree, mode respectively
+        (not to be defined if 's2' or 's3')
+
+        """
+
+        fa = np.linspace(self.fmin, self.fmax, self.Nf)
+        if typ == 's1':
+            if N == -1:
+                N = self.N1
+            if M == -1:
+                M = self.M1
+            Mg, Ng = plt.meshgrid(np.arange(M), np.arange(N))
+            if anim:
+                fig = plt.gcf()
+                ax = fig.gca()
+                v = np.abs(self.s1[k, 0:N, 0:M])
+                if dB:
+                    v = 20 * np.log10(v)
+                p = plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap,
+                            linewidth=0, vmin=-seuildb, vmax=0)
+                plt.colorbar()
+                plt.draw()
+            else:
+                v = np.abs(self.s1[k, 0:N, 0:M])
+                if dB:
+                    vdB = 20 * np.log10(v + 1e-15)
+                    plt.scatter(Mg, Ng, c=vdB, s=30, cmap=cmap, linewidth=0,
+                                vmin=-seuildb, vmax=0)
+                    plt.title(titre)
+                    plt.colorbar()
+                else:
+                    plt.scatter(Mg, Ng, c=v, s=30, cmap=cmap, linewidth=0)
+                    plt.title(titre)
+                    plt.colorbar()
+
+                if xl:
+                    plt.xlabel('m', fontsize=fontsize)
+                if yl:
+                    plt.ylabel('n', fontsize=fontsize)
+
+        if typ == 's2':
+            if np.shape(self.s2)[1] <= 1:
+                plt.plot(fa, 10 * np.log10(abs(self.s2[:, 0])))
+            else:
+                K = np.shape(self.s2)[1]
+            kmax = min(kmax,K)
+            db = 20 * np.log10(abs(self.s2[:, 0:kmax] + 1e-15))
+            col = 1 - (db > -seuildb) * (db + seuildb) / seuildb
+            #
+            #gray
+            #
+            #pcolor(np.arange(K+1)[0:kmax],self.fa,col,cmap=cm.gray_r,vmin=0.0,vmax=1.0)
+            #
+            #color
+            #
+            plt.pcolor(np.arange(K + 1)[0:kmax], fa, col, cmap=plt.cm.hot, vmin=0.0, vmax=1.0)
+            if xl:
+                plt.xlabel('index', fontsize=fontsize)
+            if yl:
+                plt.ylabel('Frequency (GHz)', fontsize=fontsize)
+
+        if typ == 's3':
+            if np.shape(self.s3)[1] <= 1:
+                plt.plot(fa, 10 * np.log10(abs(self.s3[:, 0])))
+            else:
+                K = np.shape(self.s3)[1]
+
+            kmax = min(kmax,K)
+            db = 20 * np.log10(abs(self.s3[:, 0:kmax] + 1e-15))
+            col = 1 - (db > -seuildb) * (db + seuildb) / seuildb
+            plt.pcolor(np.arange(K + 1)[0:kmax], fa, col,
+                   cmap=plt.cm.hot, vmin=0.0, vmax=1.0)
+            if xl:
+                plt.xlabel('index', fontsize=fontsize)
+            if yl:
+                plt.ylabel('Frequency (GHz)', fontsize=fontsize)
+
+                #echelle=[str(0), str(-10), str(-20), str(-30), str(-40), str(-50)]
+        if (typ == 's2') | (typ =='s3') :
+
+            echelle = [str(0), str(-seuildb + 40), str(-seuildb + 30), 
+                       str(-seuildb + 20), str(-seuildb + 10), str(-seuildb)]
+            cbar = plt.colorbar(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1])
+            cbar.ax.set_yticklabels(echelle)
+            cbar.ax.set_ylim(1, 0)
+            for t in cbar.ax.get_yticklabels():
+                t.set_fontsize(fontsize)
+            plt.xticks(fontsize=fontsize)
+            plt.yticks(fontsize=fontsize)
+            plt.title(titre, fontsize=fontsize + 2)
+
+class VCoeff(object):
     """ Spherical Harmonics Coefficient
 
     d = np.array [Nf,N+1,M+1]
@@ -156,7 +696,7 @@ class SHCoeff(object):
 
     def __init__(self, typ, fmin=0.6, fmax=6, data=np.array([]),
                  ind=np.array([]), k=np.array([])):
-        """ init SHCoeff
+        """ init VCoeff
 
          Parameters
          ----------
@@ -184,6 +724,27 @@ class SHCoeff(object):
         if typ == 's3':
             self.inits3(data, ind, k)
 
+    def __repr__(self):
+
+        st = "Nf   : " +  str(self.Nf) + "\n"
+        st = st +  "fmin (GHz) : "+  str(self.fmin) + "\n"
+        st = st +  "fmax (GHz) : "+  str(self.fmax) + "\n"
+
+        sh1 = np.shape(self.s1)
+        sh2 = np.shape(self.s2)
+        sh3 = np.shape(self.s3)
+
+        if sh1[0] != 0:
+            st =  "N1  : " + str(self.N1) + "\n"
+            st = st + "M1  : " + str(self.M1)+ "\n"
+            st = st + "Ncoeff s1 " + str(self.M1* self.N1)+ "\n"
+        if sh2[0] != 0:
+            st = st + "NCoeff s2  : " + str(len(self.ind2))+ "\n"
+        if sh3[0] != 0:
+            st = st + "Ncoeff s3 : " + str(len(self.ind3))+ "\n"
+
+        return(st)
+
     def inits1(self, data):
         """ initialize shape 1 format
 
@@ -196,7 +757,7 @@ class SHCoeff(object):
         N = sh[1] - 1
         M = sh[2] - 1
         if M > N:
-            print('SHCoeff : M>N ')
+            print('VCoeff : M>N ')
             exit()
         else:
             self.s1 = data
@@ -272,7 +833,7 @@ class SHCoeff(object):
             self.ind2 = index_vsh(N2, M2)
             self.s2 = self.s1[:, self.ind2[:, 0], self.ind2[:, 1]]
         else:
-            print('error SHCoeff s1tos2: N2>N1')
+            print('error VCoeff s1tos2: N2>N1')
 
     def delete(self, ind, typ):
         """ delete coeff
@@ -422,29 +983,6 @@ class SHCoeff(object):
         self.N2 = Lmax
         self.M2 = Lmax
         self.ind2 = indexvsh(Lmax)
-
-    def info(self):
-        """ info about SHCoeff
-        """
-
-        print "Nf   : ", self.Nf
-        print "fmin (GHz) : ", self.fmin
-        print "fmax (GHz) : ", self.fmax
-
-        sh1 = np.shape(self.s1)
-        sh2 = np.shape(self.s2)
-        sh3 = np.shape(self.s3)
-
-        if sh1[0] != 0:
-            print "N1  : ", self.N1
-            print "M1  : ", self.M1
-            print "Ncoeff s1 ", self.M1 * self.N1
-
-        if sh2[0] != 0:
-            print "NCoeff s2  : ", len(self.ind2)
-
-        if sh3[0] != 0:
-            print "Ncoeff s3 : ", len(self.ind3)
 
     def plot(self,typ='s3',title='',xl=False,yl=False,log=False,stem=True,color='b'):
         """
@@ -607,11 +1145,13 @@ class VSHCoeff(object):
     Notes
     ------
 
-    Br = SHCoeff(br)
-    Bi = SHCoeff(bi)
-    Cr = SHCoeff(cr)
-    Ci = SHCoeff(ci)
+    Br = VCoeff(br)
+    Bi = VCoeff(bi)
+    Cr = VCoeff(cr)
+    Ci = VCoeff(ci)
+
     C  = VSHCoeff(Br,Bi,Cr,Ci)
+
     """
     def __init__(self, Br, Bi, Cr, Ci):
         """
@@ -622,26 +1162,28 @@ class VSHCoeff(object):
             Cr
             Ci
         """
+
         self.Br = Br
         self.Bi = Bi
         self.Cr = Cr
         self.Ci = Ci
 
-    def info(self):
-        """ VSH information
+    def __repr__(self):
+        """ 
         """
-        print "Br"
-        print "-------------"
-        self.Br.info()
-        print "Bi"
-        print "-------------"
-        self.Bi.info()
-        print "Cr"
-        print "-------------"
-        self.Cr.info()
-        print "Ci"
-        print "-------------"
-        self.Ci.info()
+        st = "Br"+'\n'
+        st = st + "-------------"+'\n'
+        st = st + self.Br.__repr__()+'\n'
+        st = st + "Bi"+'\n'
+        st = st + "-------------"+'\n'
+        st = st + self.Bi.__repr__()+'\n'
+        st = st + "Cr"+'\n'
+        st = st + "-------------"+'\n'
+        st = st + self.Cr.__repr__()+'\n'
+        st = st + "Ci"+'\n'
+        st = st + "-------------"+'\n'
+        st = st + self.Ci.__repr__()
+        return(st) 
     
     def plot(self,typ='s3',titre='titre',log=False,stem=True,subp=True):
         """
@@ -1286,7 +1828,10 @@ def VW(l, m, theta ,phi):
     L = np.max(l)
     M = np.max(m)
  
-    #theta[np.where(abs(theta-np.pi/2)<1e-5)[0]]=np.pi/2-0.01
+    # dirty fix
+    index = np.where(abs(theta-np.pi/2)<1e-5)[0]
+    if len(index)>0:
+        theta[index]=np.pi/2-0.01
     x = -np.cos(theta)
 
     # The - sign is necessary to get the good reconstruction
@@ -1384,7 +1929,9 @@ def VW0(n, m, x, phi, Pmm1n, Pmp1n):
 
 def plotVW(l, m, theta, phi, sf=False):
     """ plot VSH transform vsh basis in 3D plot
+
         (V in fig1 and W in fig2)
+
     Parameters
     ----------
     n,m   : integer values (m<=n)

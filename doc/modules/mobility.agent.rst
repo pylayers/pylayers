@@ -1,10 +1,8 @@
-.. _agent:
+.. _constraints:
 
-agent
-=====
+constraints
+===========
 
-
-.. automodule:: pylayers.mobility.agent
+.. automodule:: pylayers.location.constraints
    :members:
-   :special-members:
 

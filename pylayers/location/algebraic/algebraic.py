@@ -38,40 +38,69 @@ class algloc(object):
     Attributes
     ----------
 
-        nodes : dictionnary
-        ldp : dictionnary
+    nodes : dictionnary
+    ldp : dictionnary
+
+    Methods
+    --------
+
+    plot : plot scenario
+    show : plot scenario
+    get_range
+
 
     Notes
     -----
-    This class regroup various implementation of location algorithms.
-    The instantiated object has :
+
+    This class gathers various implementation of location algorithms.
+    The object has :
         + a dictionnary of nodes
         + a dictionnary of location dependent parameters
 
-
+    
     """
 
     def __init__(self, nodes={}, ldp={}):
+        """
+
+        Parameters
+        ----------
+
+        nodes : dict
+
+        ldp : dict
+
+        """
+
         self.nodes = nodes
         self.ldp = ldp
         self.c = 0.2997924583
 
+    def __repr__(self):
+        st =''
+        st = st + 'Nodes : ' + str(self.nodes)+'\n'
+        st = st + 'LDPs :' + str(self.ldp)+'\n'
+        return(st)
+
     def info(self):
-        """
-        Display scenario information
+        """ Display scenario information
         """
         print "Nodes : ", self.nodes
         print "Location dependent parameters : ", self.ldp
 
     def plot(self, rss = False , toa = True, tdoa = False):
-
         """ plot scenario
 
         Parameters
         ----------
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
+
+        rss : boolean
+            False
+        toa : boolean
+            True
+        tdoa : boolean
+            False
+
         """
 
         if not rss and not toa and not tdoa:
@@ -107,17 +136,21 @@ class algloc(object):
                     plt.plot(rn[0, :], rn[1, :], 'bD', label='TDOA node')
                     plt.plot(rnr[0, :], rnr[1, :], 'kD', label='Ref TDOA node')
 
+        return(fig,ax)
+
     def show(self, rss=False, toa=True, tdoa=False):
         """ Plot scenario
 
         Parameters
         ----------
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
+
+        rss : boolean
+        toa : boolean
+        tdoa : boolean
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -126,6 +159,7 @@ class algloc(object):
             >>> S.show(1,1,1)
             >>> plt.show()
         """
+
         self.plot(rss, toa, tdoa)
         plt.legend(numpoints=1)
         plt.show()
@@ -135,11 +169,13 @@ class algloc(object):
 
         Parameters
         ----------
-            Rest : string
+
+         Rest : string
 
         Returns
         -------
-            rg : numpy.ndarray
+
+        rg : numpy.ndarray
 
         Examples
         --------
@@ -154,6 +190,7 @@ class algloc(object):
             >>> r_mean = S.get_range('mean')
 
         """
+
         rss_db = self.ldp['RSS']
         rss_std = self.ldp['RSS_std']
         rss_np = self.ldp['RSS_np']
@@ -196,6 +233,7 @@ class algloc(object):
             >>> rs_median = S.get_range_std('median')
             >>> rs_mean = S.get_range_std('mean')
         """
+
         rss_db = self.ldp['RSS']
         rss_std = self.ldp['RSS_std']
         rss_np = self.ldp['RSS_np']
@@ -203,6 +241,7 @@ class algloc(object):
         pl0 = self.ldp['PL0']
         s = (np.log(10) / 10) * rss_std / rss_np
         m = (np.log(10) / 10) * (pl0 - rss_db) / rss_np + np.log(d0)
+
         if string.lower(Rest) == 'mode':
             rg_std = np.sqrt((np.exp(2*m - 2*s**2))*(1 - np.exp(-s**2)))
         elif string.lower(Rest) == 'median':
@@ -221,17 +260,20 @@ class algloc(object):
 
         Parameters
         ----------
-            rss : boolean
-            toa : boolean
-            tdoa : boolean
-            Rest : string
+
+        rss : boolean
+        toa : boolean
+        tdoa : boolean
+        Rest : string
 
         Returns
         -------
-            P : numpy.ndarray
+
+        P : numpy.ndarray
 
         Examples
         --------
+
         .. plot::
             :include-source:
 
@@ -257,15 +299,20 @@ class algloc(object):
 
                 if sh[1] >= sh[0]:
                     # Construct the vector K (see theory)
-                    k1 = (np.sum((rn_tdoa - rnr_tdoa) * (rn_tdoa - rnr_tdoa),
-                          axis=0))
+                    # Overcoming Singularities In TDOA Based Location
+                    # Estimation Using Total Least Square
+                    #
+                    # (xn-xref)**2+(yn-yref)**2 - r(n,ref)**2
+                    #
+                    k1 = (np.sum(rn_tdoa*rn_tdoa,axis=0) - np.sum(rnr_tdoa * rnr_tdoa, axis=0))
                     drg = self.c * tdoa_ns
                     k2 = drg*drg
                     K = k1 - k2
                     # Construct the matrix A (see theory)
                     A = np.hstack((rn_tdoa.T-rnr_tdoa.T,drg.reshape(np.shape(tdoa_ns)[0],1)))
                     # Apply LS operator
-                    Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    #Pr = 0.5 * np.dot(nplg.inv(np.dot(A.T, A)), np.dot(A.T, K))
+                    Pr = 0.5 * np.dot(nplg.pinv(A),K)
                     P = Pr[:sh[0]].reshape(sh[0], 1)
                 else:
                     raise ValueError("Data are not sufficient to perform localization")
@@ -1062,11 +1109,27 @@ def scenario():
     
     Returns
     -------
+        nodes : dictionnary 
+            'BN' 
+            'RN_RSS'
+            'RN_TDOA'
+            'RN_TOA'
+            'RNr_TDOA'
+        ldp   : all ldps of bn0
+            'PL0'
+            'RSS'
+            'RSS_np'
+            'RSS_std'
+            'TDOA'
+            'TDOA_std'
+            'TOA'
+            'TOA_std'
+        bn0   : The true position of blind node
 
-        CRB : float
 
     Examples
     --------
+
     .. plot::
         :include-source:
 

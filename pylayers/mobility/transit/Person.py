@@ -6,7 +6,7 @@ from random import normalvariate,uniform
 from pylayers.mobility.transit.vec3 import vec3
 from pylayers.mobility.transit.World import world
 from pylayers.mobility.transit.SteeringBehavior import default_steering_mind
-from random import uniform,gauss
+from random import uniform,gauss,sample
 import numpy as np
 
 from pylayers.network.network import Network
@@ -17,10 +17,21 @@ import matplotlib.pylab as plt
 import pylayers.util.pyutil as pyu
 
 import pdb
-# "near collision avoidance" inspired from
-#   http://people.revoledu.com/kardi/publication/Kouchi2001.pdf
 
 def truncate(self, max):
+    """
+    Parameters 
+    ----------
+
+    max
+
+    References 
+    ----------
+
+    "near collision avoidance" inspired from
+    http://people.revoledu.com/kardi/publication/Kouchi2001.pdf
+
+    """
     if self.length() > max:
         return self.normalize() * max
     else:
@@ -28,6 +39,9 @@ def truncate(self, max):
 vec3.truncate = truncate
 
 def scale(self, size):
+    """
+
+    """
     return self.normalize() * size
 vec3.scale = scale
 
@@ -36,9 +50,48 @@ def copy(self):
 vec3.copy = copy
 
 class Person(Process):
-    """
-        Person Process
-        handle the mobility of the agent
+    """ Person Process
+
+    Attributes
+    ----------
+
+    ID    : float/hex/str/...
+            agent Id
+    interval : float
+            refresh interval of agent mobility
+    roomId : int
+            room ID where agent start when simulation is launched
+    L : pylayers.gis.layout.Layout()
+        Layout instance, in which the agent is moving
+    net : pylayers.network.Network()
+        Network instance, in which network agent are communicating.
+        This is used for fill the true position filed of the graph
+        It must be removed in a further version ( when a proper save instance
+        would be created)
+    wld : pylayers.mobility.transit.world.world()
+        world instance. equivalent to layout but in the pytk framework. 
+        TODO : remove in a further version
+    sim : SimPy.Simulation.Simulation.RT()
+        Simulation instance share by all the pylayer project. 
+    moving : bool 
+        indicate if the agent is moving or not ( relevant for acces poitns)
+    froom : list
+        list of forbiden rooms. 
+    wait : float
+        wait time of the agent when he has reach teh desitaion
+    cdest : str
+        method for choosing setination 'random ' of file read
+    save : list
+        list of save option type .
+        It will be removed in a further version ( when a proper save instance
+        would be created)
+
+
+    Methods
+    -------
+
+    Move : make the agent move
+
     """
     max_acceleration = 2.0 # m/s/s
     max_speed    = 1.2 # m/s
@@ -53,46 +106,7 @@ class Person(Process):
         wld = world(),sim=None,moving=True,froom=[],wait=1.0,cdest='random',save=[]):
         """ Class Person
             inherits of Simpy.SimulationRT
-        Attributes
-        ----------
-            ID    : float/hex/str/...
-                    agent Id
-            interval : float
-                    refresh interval of agent mobility
-            roomId : int
-                    room ID where agent start when simulation is launched
-            L : pylayers.gis.layout.Layout()
-                Layout instance, in which the agent is moving
-            net : pylayers.network.Network()
-                Network instance, in which network agent are communicating.
-                This is used for fill the true position filed of the graph
-                It must be removed in a further version ( when a proper save instance
-                would be created)
-            wld : pylayers.mobility.transit.world.world()
-                world instance. equivalent to layout but in the pytk framework. 
-                TODO : remove in a further version
-            sim : SimPy.Simulation.Simulation.RT()
-                Simulation instance share by all the pylayer project. 
-            moving : bool 
-                indicate if the agent is moving or not ( relevant for acces poitns)
-            froom : list
-                list of forbiden rooms. 
-            wait : float
-                wait time of the agent when he has reach teh desitaion
-            cdest : str
-                method for choosing setination 'random ' of file read
-            save : list
-                list of save option type .
-                It will be removed in a further version ( when a proper save instance
-                would be created)
-
-
-        Method
-        ------
-            Move : make the agent move
-            update : DEPRECATED used for Tkinter plot
-
-    """
+            """
         #GeomNetType = np.dtype([('Id',int), 
         #        ('time',int), 
         #           ('p',float,(1,3)),
@@ -112,9 +126,11 @@ class Person(Process):
         self.forbidroomId = froom 
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
-            self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+            # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+            self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId): # or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
-                self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
             #self.sim.roomlist.append(self.nextroomId) # list of all destiantion of all nodes in object sim
         elif self.cdest == 'file':
            cfg = ConfigParser.ConfigParser()
@@ -141,6 +157,7 @@ class Person(Process):
         self.stuck = 0           
         self.destination = self.waypoints[0]
         self.velocity = vec3()
+        self.acceleration = vec3()
         self.localx = vec3(1, 0)
         self.localy = vec3(0, 1)
         self.world.add_boid(self)
@@ -169,10 +186,27 @@ class Person(Process):
            self.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
            self.date = datetime.datetime.now()
 
+    def __repr__(self):
+        s = 'Mechanical information\n***********************\n'
+        s = s + 'agent ID: ' + str(self.ID) +'\n'
+        s = s + '\nposition: ' + str(conv_vecarr(self.position)) +'\n'
+        s = s + 'velocity: ' + str(conv_vecarr(self.velocity)) +'\n'
+        s = s + 'acceleration: ' + str(conv_vecarr(self.acceleration)) +'\n'
+
+        s = s + '\ncurrent room ID -----> destination room ID\n'
+        s = s + str(self.roomId).ljust(15) +' -----> ' + str(self.nextroomId) + '\n'
+
+        s = s + 'pos destination room ID: ' + str(conv_vecarr(self.destination)) +'\n'
+        s = s + 'forbiden room list: ' + str(self.forbidroomId) +'\n'
+        return s
+
+        
+
+
 
     def move(self):
-        """
-            Move the Agent
+        """ Move the Agent
+
         """
 
         while True:
@@ -188,11 +222,14 @@ class Person(Process):
                     if zone not in checked:
                         checked.append(zone)
                         zone(self)
+
                 acceleration = self.steering_mind(self) 
                 acceleration = acceleration.truncate(self.max_acceleration)
+
                 self.acceleration = acceleration 
                 velocity = self.velocity + acceleration * self.interval
                 self.velocity = velocity.truncate(self.max_speed) 
+
                 if velocity.length() > 0.2:
                     # record direction only when we've really had some
                     self.localy = velocity.normalize()
@@ -212,14 +249,12 @@ class Person(Process):
                 if 'txt' in self.save:
                     pyu.writemeca(self.ID,self.sim.now(),p,v,a)
                 if self.arrived:
-
                     self.arrived = False
                     if self.endpoint:
                         self.endpoint=False
                         #pr = self.sim.roomlist.index(self.nextroomId)
                         #self.sim.roomlist.pop(pr)
                         self.roomId = self.nextroomId
-
                     #
                     # Si porte on continue
                     #
@@ -229,12 +264,14 @@ class Person(Process):
                     #adjroom  = self.L.Gr.neighbors(self.roomId)
                     #Nadjroom = len(adjroom)
                         if self.cdest == 'random':
-                            self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                            # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                            self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
                             # test 1 ) next != actualroom
                             #      2 ) nextroom != fordiden room
                             #      3 ) room not share without another agent
                             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId):# or (self.nextroomId in self.sim.roomlist):
-                                self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                                # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
+                                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
                         elif self.cdest == 'file':
                            self.room_counter=self.room_counter+1
                            if self.room_counter >= self.nb_room:

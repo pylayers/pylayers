@@ -5,11 +5,11 @@ import scipy as sp
 import matplotlib.pylab as plt 
 import scipy.special as spe
 import doctest
+import logging
 from   bitstring  import BitString
 import datetime as dat
 from pylayers.util.project import *
 import shutil
-import pdb
 import sys
 import zipfile
 #
@@ -54,14 +54,17 @@ def delay(p1,p2):
     return(tau)
 #####################
 def lt2dic(lt):
-    """ convert list of tuple to dictionnary 
+    """ convert list of tuple to dictionary 
 
     Parameters
     ----------
+
     lt : list of tuple
-        the first element of tuple is th ekey dictionnary
+        the first element of tuple is th ekey dictionary
+
     Examples
     --------
+
        >>> lt = [ ('1','1 2 3'),('2','1.5 2'),('3','4.78 89.0 2')]
        >>> d = lt2dic(lt)
     """
@@ -71,14 +74,16 @@ def lt2dic(lt):
     return(dic)    
 
 def lt2idic(lt):
-    """ convert list of tuple to dictionnary 
+    """ convert list of tuple to dictionary 
 
     Parameters
     ----------
+
     lt : list 
 
     Examples 
     --------
+
     >>> from pylayers.util.pyutil import *
     >>> lt = [ ('1','1 2 3'),('2','1.5 2 3'),('3','4.78 89.0 2')]
     >>> d = lt2idic(lt)
@@ -90,7 +95,7 @@ def lt2idic(lt):
         dic[int(tup[0])]=np.array([float(val[0]),float(val[1]),float(val[2])])
     return(dic)    
 
-def getlong(shortname,dir):
+def getlong(shortname,directory):
     """  get a long name
 
     This function allows to construct the long file name relatively
@@ -102,15 +107,17 @@ def getlong(shortname,dir):
     shortname : string
         short name of the file
 
-    dir       : directory in $BASENAME
+    dir       : directory in $BASENAME or $PYLAYERS
+    source    : string 
 
     """
-
     try:
         basename=os.environ['BASENAME']
     except:
-        basename=os.environ['HOME']+"/Pyproject"
-    longname = basename+'/'+dir+'/'+shortname
+        logging.critical("BASENAME environment variable should be defined")
+        #basename=os.environ['HOME']+"/Pyproject"
+
+    longname = basename+'/'+directory+'/'+shortname
     return(longname)
 
 def getshort(longname):
@@ -396,7 +403,7 @@ def randcol(Nc):
 
 
 def coldict(): 
-    """ Color dictionnary 
+    """ Color dictionary 
     html color 
 
     Notes 
@@ -1166,7 +1173,7 @@ def corrcy(a,b):
     return(tk)
 
 def foo(var1, var2, long_var_name='hi') :
-    r"""A one-line summary that does not use variable names or the
+    """A one-line summary that does not use variable names or the
     function name.
 
     Several sentences providing an extended description. Refer to
@@ -1174,6 +1181,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Parameters
     ----------
+
     var1 : array_like
         Array_like means all those objects -- lists, nested lists, etc. --
         that can be converted to an array.  We can also refer to
@@ -1187,6 +1195,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Returns
     -------
+
     describe : type
         Explanation
     output : type
@@ -1198,6 +1207,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Other Parameters
     ----------------
+
     only_seldom_used_keywords : type
         Explanation
     common_parameters_listed_above : type
@@ -1205,11 +1215,13 @@ def foo(var1, var2, long_var_name='hi') :
 
     Raises
     ------
+
     BadException
         Because you shouldn't have done that.
 
     See Also
     --------
+
     otherfunc : relationship (optional)
     newfunc : Relationship (optional), which could be fairly long, in which
               case the line wraps here.
@@ -1217,6 +1229,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Notes
     -----
+
     Notes about the implementation algorithm (if needed).
 
     This can have multiple paragraphs.
@@ -1239,6 +1252,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     References
     ----------
+
     Cite the relevant literature, e.g. [1]_.  You may also cite these
     references in the notes section above.
 
@@ -1250,6 +1264,7 @@ def foo(var1, var2, long_var_name='hi') :
 
     Examples
     --------
+
     These are written in doctest format, and should illustrate how to
     use the function.
 
@@ -1265,6 +1280,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
 
     Parameters
     ----------
+
     x :  np.array  (N)
     color : string 
         color symbol 
@@ -1279,6 +1295,7 @@ def cdf(x,color='b',label=" ",lw=1,xlabel="x",ylabel="CDF",logx=False):
 
     Examples
     --------
+
     .. plot::
         :include-source:
 
@@ -1470,12 +1487,14 @@ def writeDetails(t,description='simulation', location ='Rennes'):
     file.close()
 
 def zipd(path, zipfilename):
-    """
-    add a folder to a zipfile
+    """ add a folder to a zipfile
+
     Parameters
     ----------
-        filepath : string
-        zipfilename : string
+
+    filepath : string
+    zipfilename : string
+
     """
     zip_file = zipfile.ZipFile(zipfilename, 'a')
     for (dirpath, dirnames, filenames) in os.walk(path):
@@ -1490,12 +1509,14 @@ def zipd(path, zipfilename):
     zip_file.close()
 
 def unzipd(path, zipfilename):
-    """
-    unzip a zipfile to a folder
+    """ unzip a zipfile to a folder
+
     Parameters
     ----------
-        filepath : string
-        zipfilename : string
+
+    filepath : string
+    zipfilename : string
+
     """
     zip_file = zipfile.ZipFile(zipfilename)
     if not os.path.isdir(path):
@@ -1512,12 +1533,14 @@ def unzipd(path, zipfilename):
                 'wb').write(zip_file.read(each))
 
 def unzipf(path, filepath, zipfilename):
-    """
-    unzip a file from zipfile to a folder
+    """ unzip a file from zipfile to a folder
+
     Parameters
     ----------
-        filepath : string
-        zipfilename : string
+
+    filepath : string
+    zipfilename : string
+
     """
     zip_file = zipfile.ZipFile(zipfilename)
     if not os.path.isdir(path):
@@ -1535,14 +1558,19 @@ def unzipf(path, filepath, zipfilename):
 def rotate_line(A,B,theta):
     """
     rotation of a line [AB] of an angle theta with A fixed
+
     Parameters
     ----------
-        A: ndarray
-        B: ndarray
-        theta: float
+
+    A: ndarray
+    B: ndarray
+    theta: float
+
     Returns
     -------
-        Br: ndarry
+
+    Br: ndarray
+
     """
     if np.shape(B)!=(2,1):
         B.reshape((2,1))
@@ -1597,6 +1625,33 @@ def fill_block_diag(A, blocks,M,k=0):
     for i in range(0,len(A)-abs(k)*M,M):
         A[i+ro:i+ro+M,i+co:i+co+M]=blocks[int(i/M),:,:] 
     return A
+
+
+BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
+
+#following from Python cookbook, #475186
+def has_colours(stream):
+    if not hasattr(stream, "isatty"):
+        return False
+    if not stream.isatty():
+        return False # auto color only on TTYs
+    try:
+        import curses
+        curses.setupterm()
+        return curses.tigetnum("colors") > 2
+    except:
+        # guess false in case of error
+        return False
+has_colours = has_colours(sys.stdout)
+
+
+def printout(text, colour=WHITE):
+        if has_colours:
+                seq = "\x1b[1;%dm" % (30+colour) + text + "\x1b[0m"
+                sys.stdout.write(seq)
+        else:
+                sys.stdout.write(text)
+
 
 if __name__ == "__main__":
     doctest.testmod()

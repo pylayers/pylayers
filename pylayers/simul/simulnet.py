@@ -27,6 +27,7 @@ warnings.filterwarnings('ignore')
 
 #import SimPy.Simulation
 from SimPy.SimulationRT import SimulationRT, Process, hold
+#import simpy # simpy 3
 import numpy as np
 import scipy as sp
 import networkx as nx
@@ -55,7 +56,8 @@ from pylayers.util.save import *
 import pdb
 import os
 
-class Simul(SimulationRT):
+class Simul(SimulationRT): # Sympy 2
+#class Simul(sympy.RealtimeEnvironment):
     """
 
     Attributes
@@ -77,10 +79,12 @@ class Simul(SimulationRT):
 
     """
     def __init__(self):
-        SimulationRT.__init__(self)
+        SimulationRT.__init__(self) #Sympy 2
+        #sympy.RealtimeEnvironment.__init__(self)  #simpy 3
         self.initialize()
         self.config = ConfigParser.ConfigParser()
-        self.config.read(pyu.getlong('simulnet.ini','ini'))
+        filename = pyu.getlong('simulnet.ini','ini')
+        self.config.read(filename)
         self.sim_opt = dict(self.config.items('Simulation'))
         self.lay_opt = dict(self.config.items('Layout'))
         self.meca_opt = dict(self.config.items('Mechanics'))
@@ -94,13 +98,17 @@ class Simul(SimulationRT):
             self.verbose = False
         self.roomlist=[]
 
+        self.create()
+
     def create_layout(self):
         """
-        Create Layout in Simpy the_world thantks to Tk backend
+        Create Layout in Simpy the_world thanks to Tk backend
 
         """
 
-        self.the_world = world(width=float(self.lay_opt['the_world_width']), height=float(self.lay_opt['the_world_height']), scale=float(self.lay_opt['the_world_scale']))
+        self.the_world = world(width = float(self.lay_opt['the_world_width']), 
+                               height = float(self.lay_opt['the_world_height']),
+                               scale=float(self.lay_opt['the_world_scale']))
 
         # tk = self.the_world.tk
         # canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
@@ -109,22 +117,22 @@ class Simul(SimulationRT):
         _filename = self.lay_opt['filename']
         #sl=Slab.SlabDB(self.lay_opt['slab'],self.lay_opt['slabmat'])
         #G1   = Graph.Graph(sl=sl,filename=_filename)
-        self.L = Layout()
-        if _filename.split('.')[1] == 'str':
-            self.L.loadstr(_filename)
-        elif _filename.split('.')[1] == 'str2':
-            self.L.loadstr2(_filename)
-        elif _filename.split('.')[1] == 'ini':
-            self.L.loadini(_filename)
+        self.L = Layout(_filename)
+        #if _filename.split('.')[1] == 'str':
+        #    self.L.loadstr(_filename)
+        #elif _filename.split('.')[1] == 'str2':
+        #    self.L.loadstr2(_filename)
+        #elif _filename.split('.')[1] == 'ini':
+        #    self.L.loadini(_filename)
 
 
         try:
             self.L.dumpr()
-            print 'Layout graphs are loaded from ',basename,'/struc'
+            print 'Layout graphs are loaded from ',basename,'/struc/ini'
         except:
         #self.L.sl = sl
         #self.L.loadGr(G1)
-            print 'This is the first time your use this layout file.\
+            print 'This is the first time the layout file is used\
             Layout graphs are curently being built, it may take few minutes.'
             self.L.build()     
             self.L.dumpw()
@@ -242,7 +250,8 @@ class Simul(SimulationRT):
         self.activate(self.visu, self.visu.execute(), 0.0)
 
     def create(self):
-        """ Create the simulation, to be ready to run
+        """ Create the simulation 
+            This method is called at the end of __init__
 
         """
 
@@ -252,6 +261,7 @@ class Simul(SimulationRT):
                 os.popen('mysql -u ' + self.sql_opt['user'] + ' -p ' + self.sql_opt['dbname'] +\
                 '< /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql' )
 
+        ## TODO supprimer la ref en dur 
         if 'txt' in self.save_opt['save']:
             pyu.writeDetails(self)
             if os.path.isfile(basename+'/output/Nodes.txt'):
@@ -266,9 +276,6 @@ class Simul(SimulationRT):
                         except:
                             pass
                         
-
-
-
         self.create_layout()
         self.create_EMS()
         self.create_network()
@@ -288,6 +295,9 @@ class Simul(SimulationRT):
 
 
     def create_show(self):
+        """ 
+        """
+
         plt.ion()
         fig_net = 'network'
         fig_table = 'table'
@@ -297,19 +307,21 @@ class Simul(SimulationRT):
                 notebook=True
             else:
                 notebook =False
-            self.sh=ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,notebook=notebook)
+            self.sh = ShowNet(net=self.net, L=self.L,sim=self,fname=fig_net,notebook=notebook)
             self.activate(self.sh,self.sh.run(),1.0)
 
         if str2bool(self.net_opt['show_table']):
-            self.sht=ShowTable(net=self.net,lAg=self.lAg,sim=self,fname=fig_table)
+            self.sht = ShowTable(net=self.net,lAg=self.lAg,sim=self,fname=fig_table)
             self.activate(self.sht,self.sht.run(),1.0)
 
 
     def runsimul(self):
         """ Run simulation
         """
-        self.create()
-        self.simulate(until=float(self.sim_opt['duration']),real_time=True,rel_speed=float(self.sim_opt['speedratio']))
+
+        self.simulate(until=float(self.sim_opt['duration']),
+                      real_time=True,
+                      rel_speed=float(self.sim_opt['speedratio']))
 #        self.simulate(until=float(self.sim_opt['duration']))
         if self.save_opt['savep']:
             print 'Processing save results, please wait'
@@ -319,6 +331,6 @@ class Simul(SimulationRT):
 if __name__ == '__main__':
 
     S = Simul()
-    seed(eval(S.sim_opt['seed']))
+    #seed(eval(S.sim_opt['seed']))
     S.runsimul()
 

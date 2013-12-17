@@ -4,7 +4,7 @@
 antprop
 =======
 
-This module contains all the classes and functions related to antennas and
+This module contains all classes and functions related to antennas and
 propagation channel description. 
 
 .. module:: pylayers.antprop
@@ -13,15 +13,18 @@ propagation channel description.
    :maxdepth: 2
 
    antprop.antenna.rst
+   
+   antprop.slab.rst
+
+   antprop.interactions.rst
 
    antprop.channel.rst
 
    antprop.rays.rst
 
-   antprop.coverage.rst
+   antprop.signature.rst
 
    antprop.multiwall.rst
 
-   antprop.signature.rst
+   antprop.coverage.rst
 
-   antprop.slab.rst

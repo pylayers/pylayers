@@ -1,0 +1,5 @@
+#!/bin/bash 
+export TMPVAR=$BASENAME
+export BASENAME=$PYLAYERS/data
+make test-code
+export BASENAME=$TMPVAR

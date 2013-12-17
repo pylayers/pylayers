@@ -1,56 +1,17 @@
-# -*- coding: utf-8 -*-
-# <nbformat>3.0</nbformat>
-
-# <markdowncell>
-
-# # Initialization
-
-# <codecell>
-
-from pylayers.antprop.coverage import *
 import time
-
-# <markdowncell>
-
-# Instantiate a coverage object.
-# By defaut, the TA-Office.str layout strucure is loaded.
-# 
-# This information can be modified into the **coverage.ini** file intothe project directory.
-
-# <codecell>
-
-C = Coverage()
-C.L.filename
-
-# <markdowncell>
-
-# # Coverage
-
-# <markdowncell>
-
-# Coverage required Layout graphs.
-# 
-# - If the graphs for the given layout have already been build, they are load from the project directory. 
-# - Otherwise, they are build now **(it may take few minutes )** and will be stored into the project directory for the next execution.
-
-# <codecell>
-
-try :
-    C.L.dumpr()
-except:
-    C.L.build()
+from pylayers.util.project import *
+import pylayers.util.pyutil as pyu
+from pylayers.util.utilnet import str2bool
+from pylayers.gis.layout import Layout
+from pylayers.antprop.multiwall import *
+from pylayers.antprop.coverage import *
+from pylayers.network.model import *
 
 
-# <markdowncell>
-
-# Transmitter position can be modified.
-# After, the coverage operation can be started and siplayed:
-
-C.tx = np.array((39,1))
-start = time.time()
-C.cover()
-finish = time.time()
-C.showPower()
-print 'Tx position: ',C.tx 
-print 'Coverage in %1.2f seconds' % (finish-start)
+L = Layout('TA-Office.ini')
+L.dumpr()
+A=np.array((4,1)) # defining transmitter position 
+B=np.array((30,12)) # defining receiver position
+fGHz = 2.4
+r = np.array((B,B))
 

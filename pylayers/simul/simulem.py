@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 #
 """
+
     This module run the electromagnetic simulation
-    This module requires pulsray binaries to be installed
+
+
 """
 import doctest
 import os
@@ -34,7 +36,7 @@ from pylayers.gis.layout import Layout
 # Handle Rays
 from pylayers.antprop.raysc import GrRay3D, GrRayTud
 # Handle VectChannel and ScalChannel
-from pylayers.antprop import channelc
+from pylayers.antprop import channelc,signature
 #from   Channel import *
 # Handle directory hierarchy
 from pylayers.util.project import *
@@ -739,15 +741,13 @@ class Simul(object):
         self.fileconf = "project.conf"
         self.cfield = []
 #        self.freq = np.linspace(2, 11, 181, endpoint=True)
-        self.freq = np.linspace(2, 11, 181, endpoint=True)
+        self.fGHz = np.linspace(2, 11, 181, endpoint=True)
         self.wav = wvf.Waveform()
         try:
             self.load(_filesimul)
         except:
             self.updcfg()
         #self.load(self.filesimul)
-
-
 
 
     def gui(self):
@@ -799,18 +799,18 @@ class Simul(object):
         # frequency section
         #
 
-        self.config.set("frequency", "fghzmin", self.freq[0])
-        self.config.set("frequency", "fghzmax", self.freq[-1])
-        self.config.set("frequency", "nf", str(len(self.freq)))
+        self.config.set("frequency", "fghzmin", self.fGHz[0])
+        self.config.set("frequency", "fghzmax", self.fGHz[-1])
+        self.config.set("frequency", "nf", str(len(self.fGHz)))
         #
         # waveform section
         #
-        self.config.set("waveform", "tw", str(self.wav.parameters['tw']))
-        self.config.set("waveform", "band", str(self.wav.parameters['band']))
-        self.config.set("waveform", "fc", str(self.wav.parameters['fc']))
-        self.config.set("waveform", "thresh", str(self.wav.parameters['thresh']))
-        self.config.set("waveform", "type", str(self.wav.parameters['type']))
-        self.config.set("waveform", "fe", str(self.wav.parameters['fe']))
+        self.config.set("waveform", "tw", str(self.wav['twns']))
+        self.config.set("waveform", "band", str(self.wav['bandGHz']))
+        self.config.set("waveform", "fc", str(self.wav['fcGHz']))
+        self.config.set("waveform", "thresh", str(self.wav['threshdB']))
+        self.config.set("waveform", "type", str(self.wav['typ']))
+        self.config.set("waveform", "fe", str(self.wav['feGHz']))
         #
         # output section
         #
@@ -1158,6 +1158,7 @@ class Simul(object):
 
         Parameters
         ----------
+
         _filesimul   : file in the simul directory of the Project
 
         """
@@ -1191,6 +1192,10 @@ class Simul(object):
 
         try:
             self.filestr = self.config.get("files", "struc")
+            # force .str extension
+            f,e = self.filestr.split['.']
+            self.filestr = f+'.str'
+            print self.filestr
         except: 
             raise NameError('Error in section struc from '+ _filesimul)
 
@@ -1261,7 +1266,7 @@ class Simul(object):
 #
         if "frequency" in sections:
             try:
-                self.freq = np.linspace(float(self.config.getfloat("frequency", "fghzmin")),
+                self.fGHz = np.linspace(float(self.config.getfloat("frequency", "fghzmin")),
                                         float(self.config.getfloat("frequency", "fghzmax")),
                                         int(self.config.getint("frequency", "nf")),
                                         endpoint=True)
@@ -1861,6 +1866,7 @@ class Simul(object):
     def freq(self, GUI=False):
         """
             return the frequency base from the content of filefreq
+
         Parameters
         ----------
         GUI
@@ -1877,7 +1883,7 @@ class Simul(object):
         Nf = eval(l[2])
         fo.close()
         if GUI:
-            val = multenterbox('Enter frequency ramp', '',
+            val = multenterbox('Enter frequency (GHz)', '',
                                ('start', 'stop', 'N'),
                                (str(fmin), str(fmax), str(Nf)))
             fmin = eval(val[0])
@@ -1888,8 +1894,8 @@ class Simul(object):
             fo.write(data)
             fo.close()
 
-        freq = np.linspace(fmin, fmax, Nf, endpoint=True)
-        return(freq)
+        fGHz = np.linspace(fmin, fmax, Nf, endpoint=True)
+        return(fGHz)
 
     def getlaunch(self, k=1):
         """
@@ -1944,7 +1950,9 @@ class Simul(object):
             transmiter index
 
         """
+
         filestr = os.path.splitext(self.filestr)[0] + '.str'
+
         if not os.path.exists(pyu.getlong(filestr,pstruc['DIRSTRUC'])):
             chaine = 'newstruc -str2 ' + filestr +'2 ' + filestr + ' -conf ' + basename +'/'+self.fileconf
             os.system(chaine)
@@ -1955,6 +1963,7 @@ class Simul(object):
             " -palch " + self.filepalch + \
             " -spa " + self.tx.filespa + \
             " -conf " + basename + '/' + self.fileconf
+
         if verbose:
             print chaine
 
@@ -2164,10 +2173,14 @@ class Simul(object):
 
         Parameters
         ----------
-            ntx
+
+        ntx : integer
                  launching index
-            nrx
+        nrx : integer
                  tracing index
+        verbose : Boolean
+            
+
         """
         chaine = "evalfield -tud " + self.dtud[itx][irx] + \
                  " -slab " + self.fileslab + \
@@ -2210,6 +2223,91 @@ class Simul(object):
             raise NameError('error writing output ini file')
         fd.close()
 
+
+    def run2(self, link, cirforce=True,verbose=False,cutoff=4):
+        """ run the simulation for 1 tx and a set of rx
+
+            Parameters
+            ----------
+
+            itx      : tx index
+            srx      : list of rx index
+            cirforce : boolean
+
+            Warnings
+            --------
+
+            index point start with 1
+
+            Example
+            -------
+
+            >>> from pylayers.simul.simulem import *
+            >>> itx = 1
+            >>> srx = [1,2,3]
+            >>> S   = Simul()
+            >>> S.load('where2.ini')
+            >>> out = S.run(itx,srx)
+
+
+        """
+
+        prefix = self.filesimul.replace('.ini', '') 
+        #
+        #
+        #
+        lsig = []
+        for k,il  in enumerate(link):
+            tx = self.tx.points[il[0]]
+            rx = self.rx.points[il[1]]
+
+            ctx = S.L.pt2cy(tx)
+            crx = S.L.pt2cy(rx)
+            
+            _filecir = prefix +'-cir-'+str(k)+'-'+str(link)+'-'+str((ctx,crx))
+            D = {}
+            D['Tx'] = tx
+            D['Rx'] = rx
+
+            if (ctx,crx) not in lsig:
+                Si  = Signatures(S.L,ctx,crx)
+                #
+                # Change the run number depending on
+                # the algorithm used for signature determination
+                #
+                Si.run1(cutoff=cutoff)
+                # keep track and save signature
+                _filesir = prefix + '-sig-'+str((ctx,crx))
+                fd = open(filesig,'w')
+                pickle.dump(Si,filesig)
+                fd.close()
+                lsig.appeng((ctx,crx))
+                Si.dump(S.L,(ctx,crx))
+
+
+
+            r2d = Si.rays(tx,rx)
+            r2d.show(S.L)
+    
+            r3d = r2d.to3D()
+            r3d.locbas(S.L)
+            r3d.fillinter(S.L)
+
+            Ct  = r3d.eval(S.freq)
+            sco = Ct.prop2tran(a='theta',b='phi')
+            sca = Ct.prop2tran(a=S.tx.A,b=S.rx.A)
+
+            ciro = sco.applywavB(self.wav.sfg)
+            cira = sca.applywavB(self.wav.sfg)
+
+            D['to'] = ciro.x
+            D['ciro'] = ciro.y
+            D['t'] = cira.x
+            D['cir'] = cira.y
+
+            filename = pyu.getlong(_filename, cirdir)
+            spio.savemat(filename, D)
+            
     def run(self, itx, srx=[], cirforce=True,verbose=False):
         """ run the simulation for 1 tx and a set of rx
 
@@ -2237,6 +2335,7 @@ class Simul(object):
 
 
         """
+
         self.updcfg()
         #t0 = time.clock()
         if type(srx) == int:
@@ -2300,18 +2399,18 @@ class Simul(object):
                             val = par[k][1]
                             if key == "band":
                                 self.wparam[key] = float(val)
-                            if key == "fc":
+                            if key == "fcGHz":
                                 self.wparam[key] = float(val)
-                            if key == "fe":
+                            if key == "feGHz":
                                 self.wparam[key] = float(val)
-                            if key == "thresh":
+                            if key == "threshdB":
                                 self.wparam[key] = float(val)
-                            if key == "tw":
+                            if key == "twns":
                                 self.wparam[key] = float(val)
-                            if key == "type":
+                            if key == "typ":
                                 self.wparam[key] = val
 
-                        self.wav = wvf.Waveform(self.wparam)
+                        self.wav = wvf.Waveform(**self.wparam)
                         alpha = np.sqrt(1. / 30.0)
                         print "run debug ",itx,irx
                         self.cir([itx], [irx],
@@ -2321,7 +2420,6 @@ class Simul(object):
                         return(False)
 
         return(True)
-
     def gt(self, itx, irx):
         """ gtud
         """
@@ -2457,7 +2555,7 @@ class Simul(object):
                     CSCO.append(SCO)
                     #SCA = VCl.vec2scalA(self.tx.A, self.rx.A, alpha=alpha)
                     #
-                    #  Appliquer le facteur alpha sur la forme d'onde !!!
+                    #  Apply the apha factor on waveform 
                     #
                     SCA = VCl.prop2tran(a=self.tx.A,b=self.rx.A)
                     CSCA.append(SCA)
@@ -2494,7 +2592,6 @@ class Simul(object):
                 self.CIRa.append(CIRa)
 
 
-
-
 if (__name__ == "__main__"):
+    plt.ion()
     doctest.testmod()

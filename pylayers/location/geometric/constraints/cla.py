@@ -28,6 +28,11 @@ import time
 from pylayers.location.geometric.util.boxn import *
 from pylayers.location.geometric.util import geomview as g
 from pylayers.location.geometric.util.scene import *
+try:
+    from interval import interval,inf
+    pyinterval_installed=True
+except:
+    pyinterval_installed=False
 import os
 import sys
 
@@ -35,59 +40,63 @@ import sys
 
 
 class CLA(object):
-    """
-    Constraint Layer Array class
+    """  Constraint Layer Array class
     The Constraint Layer Array gather all constraints and process them.
 
-    :Parameters:
-    ============
-            c  : list
-                    contraints contained in CLA
-            type : list
-                    types of contraints contained in CLA
-            std  : list
-                    standard deviation of constraints
-            vcw   : list
-                    scale factor of constraints
-            Nc : integer
-                    Layer number of current processing
-            pe :  np.array
-                    Position estimated
-            dlayer  : dictionnary
-                    key : Layer number
-                    value : list of Enclosed (0) and ambiguous (1) boxes.
-            iter : integer
-                    current iteration of refine process
-            erronous : list
-                    fills with number constraint which are not compatibleselfselfselfself.
+    Attributes
+    ----------
 
-    :Methods:
-    =========
-            info(self)                              : Give info
+    c  : list
+            contraints contained in CLA
+    type : list
+            types of contraints contained in CLA
+    std  : list
+            standard deviation of constraints
+    vcw   : list
+            scale factor of constraints
+    Nc : integer
+            Layer number of current processing
+    pe :  np.array
+            Position estimated
+    dlayer  : dictionnary
+            key : Layer number
+            value : list of Enclosed (0) and ambiguous (1) boxes.
+    iter : integer
+            current iteration of refine process
+    erronous : list
+            fills with number constraint which are not compatibleselfselfselfself.
 
-            rescale(self,f_vcw,cid=None)            : rescale Constraint Box
+    Methods
+    -------
 
-            annulus_bound(self,cid=None)            : rescale Constraint
+    info(self)                              : Give info
 
-            append(self,c)                          : Append a Constraint to CLA
+    compute(pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
+                                              compute the CLA to estimate the positon.
+    
+    rescale(self,f_vcw,cid=None)            : rescale Constraint Box
 
-            setvcw(self,vcw):                       : Set vcw for all constraint
+    annulus_bound(self,cid=None)            : rescale Constraint
 
-            merge2(self,vcw_init=1.0)               : Merge all constraint from the CLA
+    append(self,c)                          : Append a Constraint to CLA
 
-            valid_v(self,lv,N)                      : Test vertexes with all constraints
+    setvcw(self,vcw):                       : Set vcw for all constraint
 
-            refine(self,l,NBOXMAX=100,VOLMIN=0.1)   : reduce the validity zone
+    merge2(self,vcw_init=1.0)               : Merge all constraint from the CLA
 
-            show3(self,l=-1,amb=False,sc='all')     : show3
+    valid_v(self,lv,N)                      : Test vertexes with all constraints
 
-            prob(self,c,d)                          : Compute DDP for the given vertexes
+    refine(self,l,NBOXMAX=100,VOLMIN=0.1)   : reduce the validity zone
 
-            gapdetect(self,l,dlindx)                : Gap detection for bimodal solution
+    show3(self,l=-1,amb=False,sc='all')     : show3
 
-            min_dist(self,a,b)                      : OBSOLETE
+    prob(self,c,d)                          : Compute DDP for the given vertexes
 
-            estpos2(self,l=-1,amb=False)            : Position estimation
+    gapdetect(self,l,dlindx)                : Gap detection for bimodal solution
+
+    min_dist(self,a,b)                      : OBSOLETE
+
+    estpos2(self,l=-1,amb=False)            : Position estimation
     """
 #       MEMBERS
 #               Nc        : number of constraints
@@ -165,12 +174,10 @@ class CLA(object):
 #            print "Constraint N° ", k
 #            self.c[k].info()
 
-    def info(self):
+    def info_old(self):
         """gives info on the CLA
 
-        .. todo::
-
-                improve info
+            DEPECRATED
 
         """
         N = len(self.c)
@@ -180,7 +187,7 @@ class CLA(object):
             print "Constraint N° ", k
             self.c[k].info()
 
-    def info2(self):
+    def info(self):
         for c in self.c:
             c.info2()
 
@@ -195,60 +202,97 @@ class CLA(object):
         self.visible=[c.visible for c in self.c]
         self.usable=[c.usable for c in self.c]
 
-    def compute(self,pe=True):
+    def compute(self,pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
         """
         Compute the cla to estimate the postion
     
         Parameters
         ----------
-            pe : boolean 
-               set to True to compute the position estimation store into self.pe
+
+
+        pe : boolean 
+           set to True to compute the position estimation store into self.pe
+
+        mergeRSS : boolean
+            True : if there is RSS in cla, they are used to find the smallest merge
+            False (default): even if there is RSS in cla, they are neglected during the merge process
+
+        refineRSS :boolean
+            True (default): if there is RSS in cla, they are used to decide if boxes are enclosed of ambiguous
+                            during the refine process
+            False: if there is RSS in cla, they are ignore during the refine process 
+
+        NBOXMAX : integer 
+            Choose the maximum boxes generated during the refine process (escape value of the while and recursive function)
+
+        NVOLMIN : float 
+            Choose the minimum volume of the boxes obtained  during the refine process (escape value of the while and recursive function)
+
+        HT : boolean
+            True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
+                    in estpos2 method 
+            False : no HT methos is applied 
+
+            Description of the hypothesis testing (HT) method in:
+            Hybrid positioning based on hypothesis thesting
+            N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+            A Hybrid Positioning Method Based on Hypothesis Testing
+            ,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
+            http://ieeexplore.ieee.org.passerelle.univ-rennes1.fr/stamp/stamp.jsp?tp=&arnumber=6205594
+
 
         Returns
         -------
-            boolean
-                True if the position estimation has been performed.
+
+        return : boolean
+            True if the position estimation has been performed.
+
+        update a self.pe which contain the estimated position   
+
 
         """
-        self.merge2()
-        self.refine(self.Nc)
+        self.merge2(RSS=mergeRSS)
+        self.refine(l=self.Nc,NBOXMAX=NBOXMAX, VOLMIN=VOLMIN,RSS=refineRSS)
         self.update()
         if (sum(self.usable) >= 3) and (pe == True):
-            self.estpos2()
+            self.estpos2(HT=HT)
             self.Nc=len(np.where(self.usable)[0])
             return True
+        elif forceamb:
+            self.estpos2(HT=HT)
+            return False
+
         else:
             self.Nc=len(np.where(self.usable)[0])
             return False
 
 
 
-    def compute_amb(self,pe=True):
-        self.merge2()
-        self.refine(self.Nc)
-        self.estpos2()
-        self.Nc=len(np.where(self.usable)[0])
-        return True
+#    def compute_amb(self,pe=True,HT=True):
+
+#        self.merge2(RSS=False)
+#        self.refine(self.Nc,RSS=False)
+#        self.estpos2(HT=HT)
+#        self.Nc=len(np.where(self.usable)[0])
+#        return True
 
     def rescale(self, f_vcw, cid=None):
         """idem setvcw but update current vcw with a multiplier factor
 
         change vcw for all constraints of the CLA
 
-        ...
-
-        .. todo::
-
-                Thing to PROPERLY merge with self.setvcw
 
         Parameters
         ----------
-                f_vcw : a scale factor of the current vcw of the constraint.
-                cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None
+
+        f_vcw : a scale factor of the current vcw of the constraint.
+        cid : a list of constraints for which the self.vcw will be applied. If cid=None, all constraints are updates. default=None
 
         Returns
         -------
-                Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c.
+        
+        Nothing but update vcw either for each constraints from cid list either for all contraints in the CLA list self.c
+
         """
         #print "rescale",vcw
 
@@ -262,7 +306,7 @@ class CLA(object):
 
         Update cmin and cmax of constraints for a given self.vcw
 
-        ...
+        
 
 
         :Parameters:
@@ -282,13 +326,15 @@ class CLA(object):
 
         add a constraint into the CLA
 
-        ...
+        
 
 
-        :Parameters:
+        Parameters
+        ----------
                 c       : any constraint wichi heritates from Constraint object
 
-        :Returns:
+        Returns
+        -------
                 Nothing but fills self.c list of constraints
 
         """
@@ -315,7 +361,7 @@ class CLA(object):
     def remove(self, k):
         """OBSOLETE/ TO BE DEVELOPPED
 
-        ...
+        
 
         remove(k) : remove a constraint to cla
         """
@@ -335,23 +381,25 @@ class CLA(object):
 
         rescale all the constraints's boxes according to the given vcw
 
-        ...
 
+        Parameters
+        -----------
 
-        .. todo::
+        vcw     : a vcw value
+        RSS : boolean
+            True : RSS are considered in merging
+            False : RSS are excluded from merging
+        Returns
+        -------
 
-                rename 'setvcw' or trying to merge with 'self.rescale' in order to be homogene with all constraints (TOA,TDOA,RSS)
+        Nothing but update all constraint from the CLA
 
-        :Parameters:
-                vcw     : a vcw value
-
-        :Returns:
-                Nothing but update all constraint from the CLA
         """
         for c in self.c:
             c.rescale(vcw)
 
-    def merge2(self, vcw_init=1.0):
+
+    def merge2(self, vcw_init=1.0, RSS=False):
         """Merge all constraints from the CLA2_reduc2
 
         Inteligent merging of  constraints in the CLA and look for the smallest intersection box of all the constraints through a dichotomous process.
@@ -374,14 +422,15 @@ class CLA(object):
         After the merging, all constraints boxes are store as AB list. EB list is void.
 
 
-        ...
+        Parameters
+        ----------
 
+        vcw_init : float
+            intial value of scale factor vcw. This value is updated during the process and affect all constraints ! default =1.0
 
-        :Parameters:
-                vcw_init        : intial value of scale factor vcw. This value is updated during the process and affect all constraints ! default =1.0
-
-        :Returns:
-                Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints
+        Returns
+        -------
+        Nothing but fills self.dlayer[Nc][0] (with a void list)  and self.dlayer[Nc][1] (with the intial restricted box). Nc is the number of intersecting constraints
         """
 
 #        Nc = self.Nc - len(np.nonzero(np.array(self.type) == 'RSS')[0]) - len(np.nonzero(np.array(self.runable) == False)[0]) 
@@ -402,6 +451,7 @@ class CLA(object):
                 if 'TOA' not in self.type:
                     onlyRSS = True
 
+
         while (step > 0.05) | (vcw1 == vcwmin):
 
             self.setvcw(vcw1)
@@ -412,17 +462,19 @@ class CLA(object):
             except:
                 pass
 
+        
+
             for c in self.c:                # find intersection between all constraints for the current vcw
                 if (c.type != 'Exclude'):
-#                    if (c.type != 'RSS') or onlyRSS:
-                    if c.usable:
-                        lb = c.lbox
-                        try:
-                            tlb = tlb.intersect(lb)
-                        except:
-                            tlb = lb
-                    else:
-                        pass
+                    if (c.type != 'RSS') or onlyRSS or RSS:
+                        if c.usable:
+                            lb = c.lbox
+                            try:
+                                tlb = tlb.intersect(lb)
+                            except:
+                                tlb = lb
+                        else:
+                            pass
                 else:
                     ex = c
             try:
@@ -433,11 +485,11 @@ class CLA(object):
             if len(tlb.box) == 0:             # if the list is empty (no intersection ) vcw1 is increased
                 vcw1 = vcw1 + step
                 step = step * 1.2
-                print step, vcw1
+                #print step, vcw1
             else:                           # if the list is not empty (intersection exist) vcw1 is decreased
                 vcw1 = max(vcw1 - step / 2., vcwmin)  # vcw > vcwmin
                 step = step / 4.
-                print step, vcw1
+                #print step, vcw1
         try:
             if (np.diff(tlb.box[0].bd, axis=0)[0][0] == 0) | (np.diff(tlb.box[0].bd, axis=0)[0][1] == 0):
                 self.setvcw(vcw1 + 1.0)
@@ -453,22 +505,27 @@ class CLA(object):
         self.dlayer[Nc] = [LBoxN([]), tlb]
         self.dlayer[Nc][1].volume()
 
-    def valid_v(self, lv, N):
+    def valid_v(self, lv, N, RSS=True):
         """test a vertex list with constraints
 
         Each vertexes from boxes pass into the list are tested to determine if the box is out (OB), ambiguous (AB) or enclosed (EB)
 
-        ...
 
+        Parameters
+        ----------
 
-        :Parameters:
-                self
-                lv : a vertex list from BOXN.octants
-                N  : number of constraints aka layer number
+        lv : a vertex list from BOXN.octants
+        N  : number of constraints aka layer number
+        RSS : boolean
+            True : RSS constraints are kept as any other constraints for boxes evaluation (ambigous /enclosed)
+            False : RSS constraints are ignored in boxes evaluation (ambigous /enclosed)
 
-        :Returns:
-                AB : a list with the numerous of Ambiguous Boxes
-                EB : a list with the numerous of Enclosed Boxes
+        Returns
+        -------
+
+        AB : a list with the numerous of Ambiguous Boxes
+        EB : a list with the numerous of Enclosed Boxes
+
         """
         assert N <= self.Nc, " N > Number of Constraints "
 
@@ -484,8 +541,12 @@ class CLA(object):
         TT = []
         Ds = []
 
+        if RSS:
+            loop_condition="(c.type != 'Exclude') & (c.usable)"
+        else :
+            loop_condition="(c.type != 'RSS') & (c.type != 'Exclude') & (c.usable)"
         for c in self.c:                # for each constraints
-            if (c.type != 'RSS') & (c.type != 'Exclude') & (c.usable):
+            if eval(loop_condition):
 
                 DDB, TB = c.valid_v(
                     lv)  # .reshape(2,len(lv)/4,pow(2,self.ndim))
@@ -524,7 +585,7 @@ class CLA(object):
             AB  = np.unique(np.hstack((AB,ABt)))
             return (EB, AB)
 
-    def refine(self, l, NBOXMAX=50, VOLMIN=0.001):
+    def refine(self, l, NBOXMAX=50, VOLMIN=0.001,RSS=True):
 
         """refine the l layer of the CLA
 
@@ -537,18 +598,21 @@ class CLA(object):
         All boxes partially inside of the VA are divided into octants. Each octants are tested into the self.valid.
 
 
-        ...
+        
+        Parameters
+        ----------
 
-        :Parameters:
-                self
-                l : the layer number
-                NBOXMAX : the maximum number of obtained boxes
-                VOLMIN :  the minimum volume achievable by the obtained boxes
+        l : the layer number
+        NBOXMAX : the maximum number of obtained boxes
+        VOLMIN :  the minimum volume achievable by the obtained boxes
 
 
-        :Returns:
-                Nothing, but fills self.dlayer[l][0] and self.dlayer[l][1] respectively with enclosed boxes and ambiguous boxes
+        Returns
+        -------
+
+        Nothing, but fills self.dlayer[l][0] and self.dlayer[l][1] respectively with enclosed boxes and ambiguous boxes
         """
+
 
         self.iter = self.iter + 1
         Nc = self.Nc
@@ -564,7 +628,7 @@ class CLA(object):
 
         lv = B.bd2coord()
 
-        EB, AB = self.valid_v(lv, l)
+        EB, AB = self.valid_v(lv, l,RSS=RSS)
         del lv
         self.erronous.append(self.erro)
 
@@ -573,7 +637,7 @@ class CLA(object):
 
 #        print nbox
 #        print nboxamb
-        # if all boxes are out of the VA...
+        # if all boxes are out of the VA
 #               if  ((nboxamb==0)&(nbox==0)) and len(self.dlayer[l][0].box) == 0:
 
         if  ((nboxamb == 0) & (nbox == 0)) and len(self.dlayer[l][0].box) == 0:
@@ -590,7 +654,7 @@ class CLA(object):
                     self.rescale(1.2)
                     self.annulus_bound()
 
-                self.refine(l)
+                self.refine(l,NBOXMAX, VOLMIN,RSS)
 
             else:
 
@@ -601,7 +665,7 @@ class CLA(object):
 
                 assert l >= 0, pdb.set_trace()
 
-                self.refine(l)
+                self.refine(l,NBOXMAX, VOLMIN,RSS)
 
         # if it exists at least a box ambiguous or not in the VA
         else:
@@ -611,7 +675,7 @@ class CLA(object):
 
             # Update EB
             if len(EB) != 0:
-                self.dlayer[l][0].append_l(LBoxN(B.box[EB]))
+                self.dlayer[l][0].append_l(LBoxN(B.box[EB], ndim=self.ndim))
 
             # Update AB
             self.dlayer[l][1] = LBoxN(B.box[AB], ndim=self.ndim)
@@ -627,7 +691,7 @@ class CLA(object):
             # else  self.refine is over.
 
             if (((nboxamb + nbox) < NBOXMAX) and (self.dlayer[l][lv].box[-1].vol > VOLMIN)) and self.FINISHED == 0:
-                self.refine(l)
+                self.refine(l,NBOXMAX, VOLMIN,RSS)
             else:
                 self.iter = 0
                 self.Nc = l
@@ -644,20 +708,20 @@ class CLA(object):
         self.parmsh['constr_boxes']=False       # display constraint box
         self.parmsh['estimated']=True           # display estimated point
 
-        ...
+        
 
 
-        .. todo:
+        Parameters
+        ----------
 
-                create a .ini file for geomview parameters
+        l       : layer number to observe. If -1 estimation is made on the highest available layer. default = -1
+        amb     : display ambiguous boxes. default = false
+        sc      : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default 'all'
 
-        :Parameters:
-                l       : layer number to observe. If -1 estimation is made on the highest available layer. default = -1
-                amb     : display ambiguous boxes. default = false
-                sc      : display all constraint or give a list with the constrinat number to observe ex: [0,1,3]. default 'all'
+        Returns
+        -------        
 
-        :Returns:
-                Nothing but calls a geomview instance
+        Nothing but calls a geomview instance
 
 
         """
@@ -666,38 +730,53 @@ class CLA(object):
         fd = open(filename, "w")
         fd.write("LIST\n")
         par = self.parmsh
-        if par['constr_boxes']:
+        
 
-            if l == -1:
-                if sc == 'all':
-                    for c in self.c:
-                        if c.runable:
-                            c.parmsh['display'] = False
-                            c.parmsh['scene'] = False
-                            fname = c.show3()
-                            fd.write("{<" + fname + ".list}\n")
-
-                else:
-                    try:
-                        for vsc in sc:
-                            if self.c[vsc].runable:
-                                self.c[vsc].parmsh['display'] = False
-                                self.c[vsc].parmsh['scene'] = False
-                                fname = self.c[vsc].show3()
-                                fd.write("{<" + fname + ".list}\n")
-                    except:
-                        if self.c[sc].runable:
-                            self.c[sc].parmsh['display'] = False
-                            self.c[sc].parmsh['scene'] = False
-                            fname = self.c[sc].show3()
-                            fd.write("{<" + fname + ".list}\n")
+        if l == -1:
+            if sc == 'all':
+                for c in self.c:
+                    if c.runable:
+                        c.parmsh['display'] = False
+                        c.parmsh['scene'] = False
+                        # if constrinat boxes has to be displayed 
+                        if par['constr_boxes']:
+                            c.parmsh['boxes'] = False
+                        else :
+                            c.parmsh['boxes'] = True
+                        fname = c.show3()
+                        fd.write("{<" + fname + ".list}\n")
 
             else:
-                if c[l].runable:
-                    self.c[l].parmsh['dispay'] = False
-                    self.c[l].parmsh['scene'] = False
-                    fname = self.c[l].show3()
-                    fd.write("{<" + fname + ".list}\n")
+                try:
+                    for vsc in sc:
+                        if self.c[vsc].runable:
+                            self.c[vsc].parmsh['display'] = False
+                            self.c[vsc].parmsh['scene'] = False
+                        if par['constr_boxes']:
+                            self.c[vsc].parmsh['boxes'] = False
+                        else :
+                            self.c[vsc].parmsh['boxes'] = True
+                            fname = self.c[vsc].show3()
+                            fd.write("{<" + fname + ".list}\n")
+                except:
+                    if self.c[sc].runable:
+                        self.c[sc].parmsh['display'] = False
+                        self.c[sc].parmsh['scene'] = False
+                        if par['constr_boxes']:
+                            self.c[sc].parmsh['boxes'] = False
+                        else :
+                            self.c[sc].parmsh['boxes'] = True
+                        fname = self.c[sc].show3()
+                        fd.write("{<" + fname + ".list}\n")
+
+        else:
+            if c[l].runable:
+                self.c[l].parmsh['dispay'] = False
+                self.c[l].parmsh['scene'] = False
+                fname = self.c[l].show3()
+                fd.write("{<" + fname + ".list}\n")
+
+
 
         col = ['r', 'b', 'g', 'm', 'y', 'b', 'r']
 
@@ -747,15 +826,19 @@ class CLA(object):
 
         Return the probability of each vertex from an array in regard of the constraint origin, standard deviation and vcw
 
-        ...
+        
 
 
-        :Parameters:
-                c       : contraint number in the self.c list
-                d       : an array of vertex
+        Parameters
+        ----------
 
-        Retun:
-                v       : probability of each vertex
+        c       : contraint number in the self.c list
+        d       : an array of vertex
+
+        Returns
+        -------
+
+        v       : probability of each vertex
 
         """
 
@@ -782,6 +865,66 @@ class CLA(object):
 #                       v = 1/(d*np.sqrt(2*np.pi))*np.exp(-(np.log(d)-mean)**2/(2*std**2))
         return(v)
 
+#    def gapdetect(self, l, dlindx):
+#        """basic gap detection
+
+#        Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
+#        This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.
+
+
+#        
+
+
+#        Parameters
+#        ----------
+#                l       : layer numbero
+#                dlindx  : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes
+
+#        Return
+#        ------
+#                clust   : a list of array. each array contains boxes from the same cluster
+#                axis    : axis/axes where gap has/have been detectes
+
+#        """
+
+#        gcoord = []
+#        axis = np.zeros(self.ndim, dtype='int8')
+#        clust = []
+##        c2={}
+#        for i in range(self.ndim):
+#            uni, inv, idd = np.unique(self.dlayer[l][dlindx]
+#                                      .bd[:, i], return_inverse=True, return_index=True)
+##                       uni,inv,idd =np.unique(self.dlayer[l][dlindx].ctr[:,i],return_inverse=True,return_index=True)
+
+#            slope = np.diff(np.diff(uni))
+
+##            if len(slope) != 0:
+#            if len(slope) >1:
+#                if abs(np.min(slope)) > 1e-9:
+##                    c2[i]=[]
+#                    gidx = np.nonzero(np.min(slope) == slope)[0]
+##                                       print 'GAP DETECTED in AXIS',i
+#                    axis[i] = 1
+
+#                    try:
+#                        # divisé par 2 pour pouvoir aveir les index  de cluster comme les centre des box
+#                        clust.append(np.nonzero(uni[gidx[0]] < self.dlayer[l]
+#                                                [dlindx].bd[:, i])[0] / 2)
+#                        clust.append(np.nonzero(uni[gidx[0]] > self.dlayer[l]
+#                                                [dlindx].bd[:, i])[0] / 2)
+##                        c2[i].append(np.nonzero(uni[gidx[0]] < self.dlayer[l]
+##                                                [dlindx].bd[:, i])[0] / 2)
+##                        c2[i].append(np.nonzero(uni[gidx[0]] < self.dlayer[l]
+##                                                [dlindx].bd[:, i])[0] / 2)
+#                    except:
+#                        pdb.set_trace()
+#            else:
+#                clust = []
+#        if clust !=[]:
+#            pdb.set_trace()
+#        return clust, axis
+
+
     def gapdetect(self, l, dlindx):
         """basic gap detection
 
@@ -789,53 +932,195 @@ class CLA(object):
         This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.
 
 
-        ...
-
+        
 
         Parameters
         ----------
-                l       : layer number
-                dlindx  : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes
 
-        Return
+        l       : layer number
+        dlindx  : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes
+
+        Returns
         ------
-                clust   : a list of array. each array contains boxes from the same cluster
-                axis    : axis/axes where gap has/have been detectes
+
+        clust   : a list of array. each array contains boxes from the same cluster
+        axis    : axis/axes where gap has/have been detectes
+
+        Example
+        -------
+
+        >>> from pylayers.location.geometric.constraints.cla import *
+        >>> from pylayers.location.geometric.constraints.toa import *
+        >>> from pylayers.location.geometric.constraints.exclude import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+
+        >>> a=np.array(([1,0,0]))
+        >>> b=np.array(([10,0,0]))
+        >>> nodes=np.array(([-10,10],[-10,10],[-1,1]))
+        >>> n= np.array((5,5,0))
+        >>> d1=np.sqrt(np.sum((a-n)**2))
+        >>> d2=np.sqrt(np.sum((b-n)**2))
+        >>> T1=TOA(id=1,value=d1/0.3,std=0.5,p=a)
+        >>> T2=TOA(id=2,value=d2/0.3,std=0.5,p=b)
+        >>> E=Exclude(nodes.T)
+        >>> T1.runable=True
+        >>> T2.runable=True
+        >>> C=CLA()
+        >>> C.append(T1)
+        >>> C.append(T2)
+        >>> C.append(E)
+        >>> C.merge2()
+        >>> C.refine(C.Nc)
+        >>> C.gapdetect(C.Nc,1)
+        
 
         """
-
         gcoord = []
         axis = np.zeros(self.ndim, dtype='int8')
         clust = []
+        c2={}
+        axis=np.zeros(self.ndim, dtype='int8')
+
         for i in range(self.ndim):
-            uni, inv, idd = np.unique(self.dlayer[l][dlindx]
-                                      .bd[:, i], return_inverse=True, return_index=True)
-#                       uni,inv,idd =np.unique(self.dlayer[l][dlindx].ctr[:,i],return_inverse=True,return_index=True)
+            # find all begining point on axis i
+            uA,iuA=np.unique(self.dlayer[l][dlindx].bd[::2,i],return_index=True)
+            # find all ending point on axis i
+            uB,iuB=np.unique(self.dlayer[l][dlindx].bd[1::2,i],return_index=True)
+            # remove 1st point in uA
+            uAA = uA[1:]
+            iuAA = iuA[1:]
+            # remove last point in uA
+            uBB = uB[:-1]
+            iuBB = iuB[:-1]
 
-            slope = np.diff(np.diff(uni))
-            if len(slope) != 0:
-                if abs(np.min(slope)) > 1e-9:
+#            u=[]
+#            # find center of all these segment  
+#            [u.append((uA[k]+uA[k+1])/2) for k in range(len(uA)-1) ]
 
-                    gidx = np.nonzero(np.min(slope) == slope)[0]
-#                                       print 'GAP DETECTED in AXIS',i
-                    axis[i] = 1
+#            # get all center of the boxes
+#            C=self.dlayer[l][dlindx].ctr[:,i]
+#            v=np.unique(C)
 
-                    try:
-                        # divisé par 2 pour pouvoir aveir les index  de cluster comme les centre des box
-                        clust.append(np.nonzero(uni[gidx[0]] < self.dlayer[l]
-                                                [dlindx].bd[:, i])[0] / 2)
-                        clust.append(np.nonzero(uni[gidx[0]] > self.dlayer[l]
-                                                [dlindx].bd[:, i])[0] / 2)
 
-                    except:
-                        pdb.set_trace()
-            else:
-                clust = []
+            # if no gap, all begining point must also be ending point, otherwise,
+            # a gap exists
+            igap=[]
+#            [igap.append(ik) for ik,k in enumerate(u) if k not in v]
+            [igap.append(ik) for ik,k in enumerate(uAA) if k not in uBB]
+            if len(igap) > 1:
+                igap=[igap[0]]
+            # if a segment has a center which is not a box center , there is a gap
+            # indexes are split into 2 set
+            if not len(igap) ==0:
 
-        return clust, axis
+                # in a futur version it will be more convenient to stock each 
+                # detected cluster in a given axis with a dictionary as the given
+                # axis as a key.
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=cm[igap]))
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>cm[igap]))
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=gap)[0]/2)
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>gap)[0]/2)
+
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=uA[igap])[0]/2)
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>uA[igap])[0]/2)
+                axis[i]=1
+#            else :
+#                clust = []
+        return clust,axis
+
+
+    def gapdetect2(self, l, dlindx):
+        """basic gap detection
+
+        Detects if separated clusters of boxes are observables. his situation is usual in under determined estimation.
+        This only test on each axis if all boxes are contiguous. If not, a gap is declared and clusters are created.
+        requiere  pyinterval class 
+
+        
+
+        Parameters
+        ----------
+
+        l       : layer number
+        dlindx  : select the boxes type ( from self.dlayer) for gap detection 0=enclose or 1=ambigous boxes
+
+        Return
+        ------
+
+        clust   : a list of array. each array contains boxes from the same cluster
+        axis    : axis/axes where gap has/have been detectes
+
+        Example
+        -------
+
+        >>> from pylayers.location.geometric.constraints.cla import *
+        >>> from pylayers.location.geometric.constraints.toa import *
+        >>> from pylayers.location.geometric.constraints.exclude import *
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+
+        >>> a=np.array(([1,0,0]))
+        >>> b=np.array(([10,0,0]))
+        >>> nodes=np.array(([-10,10],[-10,10],[-1,1]))
+        >>> n= np.array((5,5,0))
+        >>> d1=np.sqrt(np.sum((a-n)**2))
+        >>> d2=np.sqrt(np.sum((b-n)**2))
+        >>> T1=TOA(id=1,value=d1/0.3,std=np.array((0.5)),p=a)
+        >>> T2=TOA(id=2,value=d2/0.3,std=np.array((0.5)),p=b)
+        >>> E=Exclude(nodes.T)
+        >>> T1.runable=True
+        >>> T2.runable=True
+        >>> C=CLA()
+        >>> C.append(T1)
+        >>> C.append(T2)
+        >>> C.append(E)
+        >>> C.merge2()
+        >>> C.refine(C.Nc)
+        >>> C.gapdetect2(C.Nc,1)
+        
+
+        """
+        gcoord = []
+        axis = np.zeros(self.ndim, dtype='int8')
+        clust = []
+        c2={}
+        axis=np.zeros(self.ndim, dtype='int8')
+
+        for i in range(self.ndim):
+            # reshape boxes to be compliant with interval
+            Z=self.dlayer[l][dlindx].bd[:,i]
+            Zr=Z.reshape(len(Z)/2,2)
+            # create intervals
+            I=[interval(Zr[k]) for k in range(len(Zr))]
+            ii=interval()
+
+            # gather interval
+            for j in I:
+                ii=ii|j
+            # if a gap appears (more than a unique interval) 
+            if len(ii)>1:
+
+                # in a futur version it will be more convenient to stock each 
+                # detected cluster in a given axis with a dictionary as the given
+                # axis as a key.
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=cm[igap]))
+#               c2[i].append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>cm[igap]))
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=gap)[0]/2)
+#                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>gap)[0]/2)
+
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]<=ii[0][1])[0]/2)
+                clust.append(np.nonzero(self.dlayer[l][dlindx].bd[:,i]>=ii[1][0])[0]/2)
+                axis[i]=1
+
+
+        return clust,axis
+
 
     def min_dist(self, a, b):
-        """OBSOLETE
+        """
+        OBSOLETE
+
         """
         print 'min dist'
         pdb.set_trace()
@@ -847,6 +1132,8 @@ class CLA(object):
 
     def estpos(self, l=-1, amb=False, test=False):
         """
+
+        DEPRECATED !
         estpos(l,amb=True) : estimate position
 
         l : layer number
@@ -876,21 +1163,33 @@ class CLA(object):
 
         self.pe = np.sum(PP, axis=0) / np.sum(self.saveP)
 
-    def estpos2(self, l=-1, amb=False):
+    def estpos2(self, l=-1, amb=False,HT=False):
         """ Position estimation
 
         estimate position from the enclosed or/and ambibuous boxes
 
-        ...
+        
 
 
-        :Parameters:
+        Parameters
+        ----------
 
-                l       : Layer of the estimation. If -1 estimation is made on the highest available layer
-                amb     : Use ambiguous boxes (if available) to perform the position estimation. default = False
+        l       : Layer of the estimation. If -1 estimation is made on the highest available layer
+        amb     : Use ambiguous boxes (if available) to perform the position estimation. default = False
+        HT      : boolean
+                True : if a cluster ppears (2 sets of distinct boxes ) an hypthesis testuing method is applied
+                        in estpos2 method 
+                False : no HT methos is applied 
 
-        :Returns :
-                Nothing but fills self.pe with an array
+                Hybrid positioning based on hypothesis thesting
+                N. Amiot, T. Pedersen, M. Laaraiedh, B. Uguen. 
+                A Hybrid Positioning Method Based on Hypothesis Testing
+                ,Wireless Communications Letters, IEEE, vol.1, no.4, pp.348-351, August 2012
+
+        Returns 
+        -------
+
+        Nothing but fills self.pe with an array
 
         """
 
@@ -908,11 +1207,16 @@ class CLA(object):
 #            print 'Amiguous pos estim'
         self.saveP = np.zeros((len(self.dlayer[l][dlindx].box)))
 
-        clust, axis = self.gapdetect(l, dlindx)
+        if pyinterval_installed:
+            clust, axis = self.gapdetect2(l, dlindx)
+        else:
+            clust, axis = self.gapdetect(l, dlindx)
 
         box_center = self.dlayer[l][dlindx].ctr
         uc = np.where(self.usable)[0]
 
+        
+        # proba computation for all center of each boxes
         for j in uc:#range(len(self.c)):
             #if self.c[j].type != 'Exclude':
             if (self.c[j].type != 'Exclude') & (self.c[j].usable):
@@ -941,7 +1245,9 @@ class CLA(object):
 ##########################################
         self.pecluster=[]
         if clust != []:
-            self.pecluster=[]
+
+
+
             print 'cluster'
             lclust = []
             dd = []
@@ -959,18 +1265,16 @@ class CLA(object):
                                           * (pow(2, saxis - p)), p)
                     p = p + 1
             count = count.T
-
+            lpc=[]
             for i in range(len(clust)):
                 if len(clust) < 3:
                     clusters = clust[i]
                 else:
 
                     if len(np.shape(count)) > 1:
-                        clusters = np.intersect1d(clust[count[i,
-                                                              0]], clust[count[i, 1]])
+                        clusters = np.intersect1d(clust[count[i,0]], clust[count[i, 1]])
                     else:
-                        clusters = np.intersect1d(clust[count[
-                            0]], clust[count[1]])
+                        clusters = np.intersect1d(clust[count[0]], clust[count[1]])
 
                 clust_vol = np.sum(np.array(self.dlayer[l][
                     dlindx].vol)[np.unique(clusters)])
@@ -983,278 +1287,118 @@ class CLA(object):
                         estclu = clusters
 
 
-
-                if clust_vol != 0 and len(np.where(self.usable)[0]) == 2:
+                itoas=np.where(np.array(self.type)=='TOA')[0]
+                if clust_vol != 0 and len(itoas) == 2:
                     lclust.append(clusters)
                     pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
+                    lpc.append(pc)
                     # verifier que les contraintes utilisées sont les bonne ( ce n'est pas le cas)
                     # ne marche que si 2 constriantes genere le cluster ( a robustifier)   
                     pu = np.where(self.usable)[0]
+                    # try:
+                    #     dd.append(np.sqrt(np.sum((pc - self.c[itoas[0]].p) ** 2)))
+                    # except:
+                    #     dd.append(np.sqrt(np.sum((pc - self.c[itoas[1]].p) ** 2)))
+                    # print pc
                     try:
-                        dd.append(np.sqrt(np.sum((pc - self.c[pu[0]].p) ** 2)))
+                        dd.append(np.sqrt(np.sum((pc - self.c[itoas[0]].p) ** 2)))
                     except:
-                        dd.append(np.sqrt(np.sum((pc - self.c[pu[1]].p) ** 2)))
-#                       try:
+                        dd.append(np.sqrt(np.sum((pc - self.c[itoas[1]].p) ** 2)))
+                    print pc
+            #                       try:
 #                               vmax=[]
 #                               for i in range(len(lclust)):
 #                                       vmax.append(np.max(poids[np.unique(lclust[i])]))
 #                               peindx = np.nonzero(poids==max(vmax))[0][0]
 #                               self.pe = self.dlayer[l][dlindx].ctr[peindx]
 
-            try:
-                M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)
-                      ) / (10. * self.c[0].model['RSSnp']))[0]
-                LL = np.log(dd[1] / dd[0]) * (1 + np.log(
-                    dd[0] * dd[1]) - 2 * M)
+            if HT:
 
-                if LL > 0:
-#                                       vmax = np.max(poids[np.unique(lclust[0])])
-#                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
-#                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[0])[peindx]]
-
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[0])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[0])])
-                    pestdmin = np.min(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[0])])
-                    self.pestd = pestdmax - pestdmin
-                else:
-#                                       vmax = np.max(poids[np.unique(lclust[1])])
-#                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
-#                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[1])[peindx]]
-                    
-
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[1])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[1])])
-                    pestdmin = np.min(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[1])])
-                    self.pestd = pestdmax - pestdmin
-
-                    for cl in lclust:
-                        self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(cl)], axis=0))
-
-            except:
-
-                if np.sum(poids) > 0.:
-                    self.pe = np.sum(poids * self.dlayer[l][dlindx]
-                        .ctr.T, axis=1) / np.sum(poids)
-                else:
-                    self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
-                        len(self.dlayer[l][dlindx].ctr)
-                pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
-                pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
-                self.pestd = pestdmax - pestdmin
-                for cl in lclust:	
-                    self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
-                    np.unique(cl)], axis=0))
-                #self.pe = np.sum(self.dlayer[l][dlindx].ctr,axis=0)/len(self.dlayer[l][dlindx].ctr)
-#                       try:
-#                               print 'clust vol',clust_vol
-#                               self.pe = np.mean(self.dlayer[l][dlindx].ctr[estclu],axis=0)
-#
-#                       except:
-#                               pdb.set_trace()
-#
-#                               PP=self.saveP[clust[estclu]/2]*self.dlayer[l][dlindx].ctr[clust[estclu]/2].T
-#                               self.pe = np.sum(PP.T,axis=0)/np.sum(self.saveP[clust[estclu]/2])
-#                               pdb.set_trace()
-        else:
-            if np.sum(poids) > 0.:
-                self.pe = np.sum(poids * self.dlayer[l][
-                    dlindx].ctr.T, axis=1) / np.sum(poids)
-            else:
-                self.pe = np.sum(self.dlayer[l][dlindx].ctr,
-                                 axis=0) / len(self.dlayer[l][dlindx].ctr)
-            pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
-            pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
-            self.pestd = pestdmax - pestdmin
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def estpos_amb(self, l=-1, amb=False):
-        """ Position estimation ambiguity
-        TEST FUNCTION
-       estimate position from the enclosed or/and ambibuous boxes for situations 
-       where discontinuous sets of solution appears
-
-        ...
-
-
-        :Parameters:
-
-                l       : Layer of the estimation. If -1 estimation is made on the highest available layer
-                amb     : Use ambiguous boxes (if available) to perform the position estimation. default = False
-
-        :Returns :
-                Nothing but fills self.pe with an array
-
-        """
-
-        if l == -1:
-            l = np.max(self.dlayer.keys())
-
-        PP = []
-        poids = []
-
-        if len(self.dlayer[l][0].box) != 0:  # si enclosed box exists
-            dlindx = 0
-#            print 'Enclosed pos estim'
-        else:
-            dlindx = 1
-#            print 'Amiguous pos estim'
-        self.saveP = np.zeros((len(self.dlayer[l][dlindx].box)))
-
-        clust, axis = self.gapdetect(l, dlindx)
-
-        box_center = self.dlayer[l][dlindx].ctr
-        
-        uc = np.where(self.c.usable)[0]
-        for j in uc:#range(len(self.c)):
-            #if self.c[j].type != 'Exclude':
-            if (self.c[j].type != 'Exclude') & (self.c[j].usable):
-                # compute distance between contraint center and all vertexes
-                if self.c[j].type == 'TOA' or self.c[j].type == 'RSS':
-                    d = np.sqrt(np.sum((box_center - self.c[j].p * np.ones((len(box_center), 1))) ** 2, axis=1))
-                elif self.c[j].type == 'TDOA':
-                    F1v = np.sqrt(np.sum((self.c[j].p[0] - box_center) * (self.c[j].p[0] - box_center), axis=1))
-                    F2v = np.sqrt(np.sum((self.c[j].p[1] - box_center) * (self.c[j].p[1] - box_center), axis=1))
-                    d = (F1v - F2v)
-
+                print "enter in HT processing"
                 try:
-                    poids = (poids * (self.prob(j, d)))
-                    poids = (poids * poids.T) / len(poids)
 
-                except:
-                    poids = (self.prob(j, d))
-                    poids = (poids * poids.T) / len(poids)
-#                                       poids.append(self.prob(j,d))
+                    # for now, it is supposed that all RSS share the same model
+                    rssvalues=[]
+                    icr=np.where(np.array(self.type)=='RSS')[0]
+                    for irss in range(len(icr)):
+                        d0=np.sqrt(np.sum((self.c[icr[irss]].p-lpc[0])**2))
+                        d1=np.sqrt(np.sum((self.c[icr[irss]].p-lpc[1])**2))
+                        rssvalues.append(self.c[icr[irss]].value)
+                        try:
+                            drss= np.vstack((drss,np.array((d0,d1))))
+                        except:
+                            drss= np.array((d0,d1))
+                    if len(np.shape(drss))==1:
+                        drss=drss.reshape(1,2)    
 
-#                       pdb.set_trace()
-#                       P=sum(np.array(poids)*np.array(poids))/(len(poids))
-#                       self.saveP[i]=P
-        self.saveP = poids
-#                       PP.append(P*self.dlayer[l][dlindx].box[i].ctr)
-##########################################
-        self.pecluster=[]
-        if clust != []:
-
-            print 'cluster'
-            lclust = []
-            dd = []
-            mps = -1.0
-            saxis = sum(axis)
-
-            p = 1
-
-            for i in range(len(axis)):
-                if axis[i] != 0:
-                    try:
-                        count = np.vstack((count, np.repeat(range(2 * (p - 1), (2 * (p - 1)) + 2) * (pow(2, saxis - p)), p)))
-                    except:
-                        count = np.repeat(range(2 * (p - 1), (2 * (p - 1)) + 2)
-                                          * (pow(2, saxis - p)), p)
-                    p = p + 1
-            count = count.T
-
-            for i in range(len(clust)):
-                if len(clust) < 3:
-                    clusters = clust[i]
-                else:
-
-                    if len(np.shape(count)) > 1:
-                        clusters = np.intersect1d(clust[count[i,
-                                                              0]], clust[count[i, 1]])
-                    else:
-                        clusters = np.intersect1d(clust[count[
-                            0]], clust[count[1]])
-
-                clust_vol = np.sum(np.array(self.dlayer[l][
-                    dlindx].vol)[np.unique(clusters)])
-
-                if len(clusters) != 0:
-                    mp = np.max(self.saveP[clusters])
-
-                    if mps < mp:
-                        mps = mp
-                        estclu = clusters
-
-                if clust_vol != 0:
-                    lclust.append(clusters)
-                    pc = np.sum(np.array(self.dlayer[l][dlindx].ctr)[np.unique(clusters)], axis=0) / len(np.unique(clusters))
-                    try:
-                        dd.append(np.sqrt(np.sum((pc - self.c[0].p) ** 2)))
-                    except:
-                        dd.append(np.sqrt(np.sum((pc - self.c[1].p) ** 2)))
-#                       try:
-#                               vmax=[]
-#                               for i in range(len(lclust)):
-#                                       vmax.append(np.max(poids[np.unique(lclust[i])]))
-#                               peindx = np.nonzero(poids==max(vmax))[0][0]
-#                               self.pe = self.dlayer[l][dlindx].ctr[peindx]
-#            for cl in lclust:
-#                self.pecluster.append(np.mean(self.dlayer[2][0].ctr[cl],axis=0))
-#            pdb.set_trace()
-
-            try:
-                M = (((-self.c[0].model['PL0'] - self.c[0].value) * np.log(10)
-                      ) / (10. * self.c[0].model['RSSnp']))[0]
-                LL = np.log(dd[1] / dd[0]) * (1 + np.log(
-                    dd[0] * dd[1]) - 2 * M)
-
-                if LL > 0:
-#                                       vmax = np.max(poids[np.unique(lclust[0])])
-#                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
-#                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[0])[peindx]]
-
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[0])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[0])])
-                    pestdmin = np.min(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[0])])
-                    self.pestd = pestdmax - pestdmin
-                else:
-#                                       vmax = np.max(poids[np.unique(lclust[1])])
-#                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
-#                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[1])[peindx]]
+                    M = (((-self.c[icr[0]].model.PL0 - self.c[icr[0]].value) * np.log(10) ) / (10. * self.c[icr[0]].model.rssnp))
+                    PL0= -self.c[icr[0]].model.PL0 
+                    NP = self.c[icr[0]].model.rssnp
                     
+                    mu1=PL0-10*NP*np.log10(drss[:,0])
+                    mu2=PL0-10*NP*np.log10(drss[:,1])
+                    sig=self.c[icr[0]].model.sigrss
+                    values=np.array((rssvalues))
+                    LT=np.sum(1/(2.*sig**2)*(mu2**2-mu1**2))
+                    RT=np.sum((1/(1.*sig))*values*(mu1-mu2))
 
-                    self.pe = np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(lclust[1])], axis=0)
-                    pestdmax = np.max(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[1])])
-                    pestdmin = np.min(self.dlayer[l][
-                        dlindx].ctr[np.unique(lclust[1])])
+
+                    # LL = np.log(dd[1] / dd[0]) * (1 + np.log(dd[0] * dd[1]) - 2 * M)
+
+
+                    # if LL > 0:
+                    if LT>RT:
+    #                                       vmax = np.max(poids[np.unique(lclust[0])])
+    #                                       peindx=np.nonzero(poids[vmax]==poids)[0][0]
+    #                                       self.pe = self.dlayer[l][dlindx].ctr[np.unique(lclust[0])[peindx]]
+
+                        #if LL>0  cluster 0 is selctionned and tits centroids is chosen as position estimation
+
+                        self.pe = np.mean(self.dlayer[l][dlindx].ctr[
+                            np.unique(lclust[0])], axis=0)
+                        print "HT processing done"
+                        pestdmax = np.max(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[0])])
+                        pestdmin = np.min(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[0])])
+                        self.pestd = pestdmax - pestdmin
+
+
+                    else:
+
+
+                        #if LL<0  cluster 1 is selctionned and tits centroids is chosen as position estimation
+
+                        self.pe = np.mean(self.dlayer[l][dlindx].ctr[
+                            np.unique(lclust[1])], axis=0)
+                        pestdmax = np.max(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[1])])
+                        pestdmin = np.min(self.dlayer[l][
+                            dlindx].ctr[np.unique(lclust[1])])
+                        self.pestd = pestdmax - pestdmin
+
+
+                # if HT fail for some reasons , a classical position estimation  is performed 
+                except:
+                    print "!!!!! HT FAIL !!!!!!!"
+                    print "2 first constraint of CLA have to be TOA and others RSS in order to use HT"
+
+                    if np.sum(poids) > 0.:
+                        self.pe = np.sum(poids * self.dlayer[l][dlindx]
+                            .ctr.T, axis=1) / np.sum(poids)
+                    else:
+                        self.pe = np.sum(self.dlayer[l][dlindx].ctr, axis=0) / \
+                            len(self.dlayer[l][dlindx].ctr)
+                    pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
+                    pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
                     self.pestd = pestdmax - pestdmin
 
-                    for cl in lclust:
-                        self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
-                        np.unique(cl)], axis=0))
+ 
 
-            except:
 
+
+            # if no HT
+            else:
                 if np.sum(poids) > 0.:
                     self.pe = np.sum(poids * self.dlayer[l][dlindx]
                         .ctr.T, axis=1) / np.sum(poids)
@@ -1264,21 +1408,15 @@ class CLA(object):
                 pestdmax = np.max(self.dlayer[l][dlindx].bd, axis=0)
                 pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
                 self.pestd = pestdmax - pestdmin
-                print 'out cluster!!!!!!!!!!!!!!!!!!!'
-                for cl in lclust:	
-                    self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
-                    np.unique(cl)], axis=0))
-                #self.pe = np.sum(self.dlayer[l][dlindx].ctr,axis=0)/len(self.dlayer[l][dlindx].ctr)
-#                       try:
-#                               print 'clust vol',clust_vol
-#                               self.pe = np.mean(self.dlayer[l][dlindx].ctr[estclu],axis=0)
-#
-#                       except:
-#                               pdb.set_trace()
-#
-#                               PP=self.saveP[clust[estclu]/2]*self.dlayer[l][dlindx].ctr[clust[estclu]/2].T
-#                               self.pe = np.sum(PP.T,axis=0)/np.sum(self.saveP[clust[estclu]/2])
-#                               pdb.set_trace()
+
+
+            # store the centroid of clusters into self.peclsuter
+            for cl in lclust:	
+                self.pecluster.append(np.mean(self.dlayer[l][dlindx].ctr[
+                np.unique(cl)], axis=0))
+
+
+        # if not cluster
         else:
             if np.sum(poids) > 0.:
                 self.pe = np.sum(poids * self.dlayer[l][
@@ -1290,5 +1428,4 @@ class CLA(object):
             pestdmin = np.min(self.dlayer[l][dlindx].bd, axis=0)
             self.pestd = pestdmax - pestdmin
             self.pecluster=[self.pe]
-
 

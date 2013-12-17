@@ -2,18 +2,18 @@
 #####################################################################
 #This file is part of Network and RGPA.
 
-#Foobar is free software: you can redistribute it and/or modify
+#PyLayers is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation, either version 3 of the License, or
 #(at your option) any later version.
 
-#Foobar is distributed in the hope that it will be useful,
+#PyLayers is distributed in the hope that it will be useful,
 #but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 
 #You should have received a copy of the GNU General Public License
-#along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+#along with PyLayers.  If not, see <http://www.gnu.org/licenses/>.
 
 #-------------------------------------------------------------------
 #authors :
@@ -25,25 +25,36 @@ import numpy as np
 import scipy as sp 
 
 import pdb
+import doctest 
 
 
-class Model(object):
-    """ RSS model
+class PLSmodel(object):
+    """ Path Loss Shadowing model
 
     Attributes
+    ----------
 
-    f : frequency in GHz
-    n : path loss exponent
+    f : float
+        frequency in GHz
+    rssnp : float
+        path loss exponent
+    d0    : float
+        PL0 distance
+    sigrss : float
+        shadowing variance
+        
     method : used model
+
+
 
     """
     def __init__(self,f=3.0,rssnp=2.64,d0=1.0,sigrss=3.0,method='mode'):
         self.f  = f
         self.d0  = d0
         self.rssnp  = rssnp
-        self.sigrss=sigrss
+        self.sigrss = sigrss
         self.getPL0()
-        self.method=method
+        self.method = method
         self.param = dict(f=self.f,
                       d0=self.d0,
                       rssnp=self.rssnp,
@@ -58,33 +69,45 @@ class Model(object):
         st = st +  'PL0 (dB): '+str(self.PL0)
         return(st)
 
-    def info(self):
-        print 'frequency (f in GHz) : ',self.f
-        print 'path loss exponent (n) : ',self.rssnp
-        print 'PL0 : ',self.PL0
-
     def getPL0(self,Gt=0,Gr=0):
-        """
+        """ get Path Loss at reference distance d0
+
+        Parameters
+        ----------
+        
         PL0_c : PL0 compute
-        f  : frequency GHz
         Gt : transmitting antenna gain dB (default 0 dB) 
         Gr : receiving antenna gain dB (default 0 dB) 
+
+        Examples
+        --------
+            >>> from pylayers.network.model import *   
+            >>> plm = PLSmodel()
+            >>> plm.getPL0()
+
         """
+
         Gt  = 10**(Gt/10.)
         Gr  = 10**(Gr/10.)
         ld  = 0.3/self.f
+
         self.PL0 = -20*np.log10(ld/(4.0*np.pi*self.d0)) 
 
     
-
-
     def OneSlope(self,r):
         """
         OneSlope model : give Power Level from distance  with OneSlope method
 
-        f : frequency  GHz
-        n : path loss exponent
-        D : range array 
+        Parameters
+        ----------
+
+        r : range (meters)
+
+        Returns
+        -------
+    
+        PL : 
+            path loss values
 
         """
         try:
@@ -95,11 +118,19 @@ class Model(object):
         return(PL)
 
     def iOneSlope(self,PL):
-        """
+        """ goes from PL to estimated distance
+
         inverse OneSlope model : give distance from Power Level with OneSlope method
 
-        f : frequency  GHz
-        n : path loss exponent
+        Parameters
+        ----------
+
+        PL : 
+            path loss in dB 
+
+        Returns
+        -------
+
         r : range array 
 
         """
@@ -109,35 +140,52 @@ class Model(object):
         except: 
             self.getPL0()
             r = 10**((PL-self.PL0)/(10*self.rssnp))
+
         return(r)
 
     def getPLmean(self, d):
-        """
-        Compute PL mean
-        """
+        """ compute PL mean
 
+        Notes
+        -----
 
-        return          self.PL0-10*self.rssnp*np.log10(d/self.d0)
+            $$\bar{PL}=PL_0 - 10 n_p \log_{10}{\frac{d}{d_0}}$$
+
+        """
+        
+        PLmean = self.PL0-10*self.rssnp*np.log10(d/self.d0)
+
+        return  PLmean  
 
 
     def getPL(self,r,RSSStd):
         """
         Get Power Level from a given distance
+        
+        Parameters
+        ----------
 
         r : range
         RSSStd : range standard deviation
+
+        Examples
+        --------
+
+        >>> M = PLSmodel(f=0.3,rssnp=2.64,d0=1,sigrss=3,method='mode')
+        >>> PL =  M.getPL(16,1)
+
         """
-
-
 
         if self.method =='OneSlope':
             PL=self.OneSlope(r)
 
-
         elif self.method == 'mode' or self.method == 'median' or self.method == 'mean':
             PLmean          = self.getPLmean(r)
-            shPLmean        = np.shape(PLmean)
-            Xrand           = RSSStd*sp.randn(shPLmean[0])
+            try:
+                shPLmean        = np.shape(PLmean)
+                Xrand           = RSSStd*sp.randn(shPLmean[0])
+            except:
+                Xrand           = RSSStd*sp.randn()
             PL        = PLmean+Xrand
 
         else :
@@ -205,7 +253,8 @@ class Model(object):
         return (r)
 
 
-
+if __name__=='__main__':
+    doctest.testmod()
 
 
 

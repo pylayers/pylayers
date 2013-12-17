@@ -14,7 +14,6 @@ import copy
 
 
 import pickle
-
 import pdb
 import os
 
@@ -23,11 +22,13 @@ import os
 
 class Save(Process):
     """
+
     Save all variable of a simulnet simulation.
     Save process can be setup with the save.ini file from /<project>/ini
         
     Attributes
     ----------
+
     net : pylayers.network.network()
     sim : SimPy.SimulationRT()
 
@@ -51,10 +52,10 @@ class Save(Process):
 
     """
     def __init__(self, **args):
+
         defaults = {'L': None,
                     'net': None,
                     'sim': None}
-
 
 ##       initialize attributes
         for key, value in defaults.items():
@@ -74,29 +75,16 @@ class Save(Process):
         self.pos = dict(self.C.items('position'))
         self.ldp = dict(self.C.items('ldp'))
         self.rat = dict(self.C.items('rat'))
-        self.lpos=eval(self.pos['position'])
-        self.lldp=eval(self.ldp['ldp'])
-        self.lrat=eval(self.rat['rat'])
+        self.lpos = eval(self.pos['position'])
+        self.lldp = eval(self.ldp['ldp'])
+        self.lrat = eval(self.rat['rat'])
 
 
-        self.sim=args['sim']
-        self.net=args['net']
-
-
-        self.save={}
-        self.filename = eval(self.opt['filename'])
-        self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'write')
-        self.save['saveopt']={}
-        self.save['saveopt']['lpos']=self.lpos
-        self.save['saveopt']['lldp']=self.lldp
-        self.save['saveopt']['lrat']=self.lrat
-        pickle.dump(self.save, self.file)
-        self.file.close()
-        self.idx=0
+        self.sim = args['sim']
+        self.net = args['net']
 
     def load(self,filename=[]):
-        """
-        Load a saved trace simulation
+        """ Load a saved trace simulation
 
         Examples
         --------
@@ -140,8 +128,11 @@ class Save(Process):
             self.savemat['node_'+n]=self.save[n]
             for n2 in nodes:
                 if n2 != n:
-                    self.savemat['node_'+n]['node_'+n2]=self.save[n][n2]
-                    del self.savemat[n][n2]
+                    try:
+                        self.savemat['node_'+n]['node_'+n2]=self.save[n][n2]
+                        del self.savemat[n][n2]
+                    except:
+                        pass
             del self.savemat[n]
 
             for o in self.save['saveopt']:
@@ -164,13 +155,26 @@ class Save(Process):
         """
             Run the save Result process
         """
+        self.save={}
+        self.filename = eval(self.opt['filename'])
+        self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'write')
+        self.save['saveopt']={}
+        self.save['saveopt']['lpos']=self.lpos
+        self.save['saveopt']['lldp']=self.lldp
+        self.save['saveopt']['lrat']=self.lrat
+        self.save['saveopt']['nbsamples']=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
+        self.save['saveopt']['duration']=eval(self.sim.sim_opt['duration'])
+        self.save['saveopt']['save_update_time']=eval(self.opt['save_update_time'])
 
+        pickle.dump(self.save, self.file)
+        self.file.close()
+        self.idx=0
 
         ### init save dictionnary
         self.save['saveopt']['Layout'] = self.L.filename
-        self.save['saveopt']['type']=nx.get_node_attributes(self.net,'type')
-        self.save['saveopt']['epwr']=nx.get_node_attributes(self.net,'epwr')
-        self.save['saveopt']['sens']=nx.get_node_attributes(self.net,'sens')
+        self.save['saveopt']['type'] = nx.get_node_attributes(self.net,'type')
+        self.save['saveopt']['epwr'] = nx.get_node_attributes(self.net,'epwr')
+        self.save['saveopt']['sens'] = nx.get_node_attributes(self.net,'sens')
 
 
         self.save['saveopt']['subnet']={}
@@ -179,7 +183,8 @@ class Save(Process):
 
         [self.save.update({n:{}}) for n in self.net.nodes()]
 
-        # find the size of save array regarding the simulation duration and the save sample time
+        # find the size of save array regarding the simulation duration and
+        # the saved sample time
         nb_sample=np.ceil(eval(self.sim.sim_opt['duration'])/eval(self.opt['save_update_time']))+1
 
 
@@ -217,9 +222,11 @@ class Save(Process):
             for e in self.net.edges():
                 for rat in self.lrat:
                     for ldp in self.lldp:
-                        self.save[e[0]][e[1]][rat][ldp][self.idx]=rl[rat+ldp][e]
-                        self.save[e[1]][e[0]][rat][ldp][self.idx]=rl[rat+ldp][e]
-
+                        try:
+                            self.save[e[0]][e[1]][rat][ldp][self.idx]=rl[rat+ldp][e]
+                            self.save[e[1]][e[0]][rat][ldp][self.idx]=rl[rat+ldp][e]
+                        except:
+                            pass
             self.file=open(basename+'/' + pstruc['DIRNETSAVE'] +'/' +self.filename,'a')
             pickle.dump(self.save, self.file)
             self.file.close()

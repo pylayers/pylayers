@@ -18,15 +18,43 @@ import pdb
 
 
 class Seek:
+    """ class Seek 
+
+    Methods
+    -------
+
+    calculate 
+
+    """
     def calculate(self, boid):
+        """
+        Parameters
+        ----------
+
+        boid 
+
+        Notes 
+        -----
+
+
+
+        """
         displacement = boid.destination - boid.position
         desired_velocity = displacement.normalize() * boid.desired_speed
         steering = desired_velocity - boid.velocity
-        if displacement.length() < 0.15:
+        if displacement.length() < 0.25:
             boid.arrived = True
         return steering
 
 class Arrive:
+    """ Class Arrive 
+
+    Methods 
+    -------
+
+    calculate 
+
+    """
     def calculate(self, boid):
         current_speed = boid.velocity.length()
         if current_speed < 0.0001:
@@ -43,6 +71,14 @@ class Arrive:
         return steering
 
 class Wander:
+    """ Class Wander
+
+    Methods 
+    -------
+
+    calculate
+
+    """
     def calculate(self, boid):
         wander_value = getattr(boid, 'wander_value', 0.0) + uniform(-0.5, 0.5)
         if wander_value < -2:
@@ -55,6 +91,14 @@ class Wander:
         
 
 class FollowWaypoints:
+    """ Class FollowWaypoints
+
+    Methods 
+    -------
+
+    calculate 
+
+    """
     def calculate(self, boid):
         waypoints = boid.waypoints
         if len(waypoints) == 0:
@@ -67,6 +111,9 @@ class FollowWaypoints:
         return desired_velocity - boid.velocity
 
 class Separation:
+    """ Class Separation 
+
+    """
     def calculate(self, boid):
         the_world = boid.world
         others = the_world.boids(boid, 6.0)
@@ -81,10 +128,13 @@ class Separation:
                 # create orthogonal vector in order to make boids avoidance
                 force2 = (-1**randint(0,1))*vec3(-force[1],force[0],0)
 #                force2 = vec3(-force[1],force[0],0)
-                acceleration += force2
+                acceleration += 3*force2
         return acceleration
 
 class Queuing:
+    """ Class Queuing 
+
+    """
     def calculate(self, boid):
         the_world = boid.world
         others = the_world.boids(boid, 4)
@@ -99,6 +149,11 @@ class Queuing:
         return vec3()
 
 class Containment:
+    """ Class Containment 
+
+
+
+    """
     def calculate(self, boid):
         the_world = boid.world
         walls = the_world.obstacles(boid)
@@ -194,6 +249,23 @@ class Containment:
 #            return False, None, None
 
     def test_intersection(self, boid, wall, position, vector, method = 'direct'):
+        """ test intersection 
+
+        Parameters
+        ----------
+
+        boid 
+        wall 
+        position 
+        vector 
+
+
+        References
+        ----------
+
+        http://astronomy.swin.edu.au/~pbourke/geometry/lineline2d/
+
+        """
         # From http://astronomy.swin.edu.au/~pbourke/geometry/lineline2d/
         point1, point2 = wall
         if method == 'direct':
@@ -246,6 +318,9 @@ class Containment:
             return False, 0.0, None
    
 class InterpenetrationConstraint:
+    """ Class InterpenetrationConstaint 
+
+    """
     def calculate(self, boid):
         the_world = boid.world
         position = boid.position
@@ -281,6 +356,22 @@ class InterpenetrationConstraint:
         return vec3()
 
     def distance_from_line(self, position, line):
+        """ distance from line 
+
+        Parameters 
+        ----------
+
+        position 
+        line 
+
+        Returns 
+        -------
+
+        True  , distance , vector
+        or 
+        False , None , None 
+
+        """
         line_length = (vec3(line[1]) - vec3(line[0])).length()
         u = ((position.x - line[0][0]) * (line[1][0] - line[0][0])
              + (position.y - line[0][1]) * (line[1][1] - line[0][1])) \
@@ -295,8 +386,17 @@ class InterpenetrationConstraint:
         return False, None, None
 
 def default_steering_mind(boid):
-    """Simple sum of all steering vectors."""
+    """ Sum all steering vectors.
+
+    Notes 
+    -----
+
+    This is the place where all acceleration from all behaviors are summed.
+
+    """
+    
     acceleration = vec3()
+
     for behavior in boid.behaviors:
         acceleration += behavior.calculate(boid)
     return acceleration
@@ -306,7 +406,9 @@ def queue_steering_mind(boid):
 
     The Separation steering vector will be ignored if any prior
     steering behavior gave a non-zero acceleration, typically
-    Containment."""
+    Containment.
+    
+    """
 
     acceleration = vec3()
     for behavior in boid.behaviors:

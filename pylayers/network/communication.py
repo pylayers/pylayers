@@ -2,12 +2,12 @@
 #####################################################################
 #This file is part of Network.
 
-#Foobar is free software: you can redistribute it and/or modify
+#pylayers is free software: you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
 #the Free Software Foundation, either version 3 of the License, or
 #(at your option) any later version.
 
-#Foobar is distributed in the hope that it will be useful,
+#pylayers is distributed in the hope that it will be useful,
 #but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
@@ -207,35 +207,40 @@ class TX(Process):
         n={}
         # loop on rat
         for rat in self.dec['rat']:
+            try:
             # get all nodes connecteed to self.ID on subnetwork rat
-            n[rat]=np.array(self.PN.SubNet[rat].edges())[:,1]
-            # initialize remained nodes to True
-            rn = [True]*len(n[rat])
+                n[rat]=np.array(self.PN.SubNet[rat].edges())[:,1]
 
-            # loop on condition
-            for r in self.dec['rule']:
+                # initialize remained nodes to True
+                rn = [True]*len(n[rat])
+                # loop on condition
+                for r in self.dec['rule']:
 
-                if r == 'always':
-                    pass
+                    if r == 'always':
+                        pass
 
-            # mettre boolean dans variable pour condition a plus d41 regle
-                if 'rssth' in r:
-                    # rssth<100
-                    rntmp = np.array(nx.get_edge_attributes(self.PN.SubNet[rat],'Pr').values())
-                    if len(r.split('<')) > 1:
-                        rn = rn and ( rntmp  < eval(r.split('<')[1]) )
-                    elif len(r.split('>')) > 1:
-                        rn = rn and ( rntmp  > eval(r.split('>')[1]) )
+                # mettre boolean dans variable pour condition a plus d41 regle
+                    if 'rssth' in r:
+                        # rssth<100
+                        rntmp = np.array(nx.get_edge_attributes(self.PN.SubNet[rat],'Pr').values())
+                        if len(r.split('<')) > 1:
+                            rn = rn and ( rntmp  < eval(r.split('<')[1]) )
+                        elif len(r.split('>')) > 1:
+                            rn = rn and ( rntmp  > eval(r.split('>')[1]) )
 
-#                elif 'distance' in r :
-#                    # distance < 10
-#                    rntmp = np.array(nx.get_edge_attributes(self.net.SubNet[rat],'d').values())
-#                    if len(r.split('<')) > 1:
-#                        rn = rn and ( rntmp  < eval(r.split('<')[1]) )
-#                    elif len(r.split('>')) > 1:
-#                        rn = rn and ( rntmp  > eval(r.split('<')[1]) )
+    #                elif 'distance' in r :
+    #                    # distance < 10
+    #                    rntmp = np.array(nx.get_edge_attributes(self.net.SubNet[rat],'d').values())
+    #                    if len(r.split('<')) > 1:
+    #                        rn = rn and ( rntmp  < eval(r.split('<')[1]) )
+    #                    elif len(r.split('>')) > 1:
+    #                        rn = rn and ( rntmp  > eval(r.split('<')[1]) )
 
-            n[rat][np.where(rn)]
+                n[rat][np.where(rn)]
+
+            except:
+                n[rat]=np.array(())
+
         # retrun only node id which are compliant with rules
         return (n)
 
@@ -267,14 +272,6 @@ class TX(Process):
                         # to force signalization ( probably a SimPy bug)
                         self.devt[eval(key)].signal()
                         self.devt[eval(key)].signal()
-
-
-
-
-
-
-
-
 
 
 class RX(Process):

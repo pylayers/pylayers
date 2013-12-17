@@ -1,0 +1,59 @@
+Introduction
+------------
+
+For testing PyLayers, various configuration files are required.
+To guarantee, on each platform, that tests are relying 
+on the same input file the $BASENAME is modified during testing 
+in order to use the default files shipped with PyLayers.
+
+PyLayers structure has a reserved directory $PYLAYERS/data which 
+contains a template for project directory tree and the corresponding 
+configuration examples or input files.
+In order to run tests with those data files as input, we decorate the makefile
+with a tempory switch of the $BASENAME directory, which indicates 
+the current directory to used as default for input/output file operations.
+
+Content of $PYLAYERS/run-tests file
+
+#!/bin/bash 
+export TMPVAR=$BASENAME
+export BASENAME=$PYLAYERS/data
+make test-code
+export BASENAME=$TMPVAR
+
+
+To test the code 
+chmod +x $PYLAYERS/run-tests
+$PYLAYERS/run-tests
+
+Rules for introducing new tests
+-------------------------------
+
+A test files is in a tests directory and starts with test_
+An example files is in a examples directory and starts with ex_
+
+Each directory of $PYLAYERS/pylayers contains a tests and examples directory.
+
++ Examples files may have long loops, and figure output. 
++ Tests should be short execution time and as unitary as possible. 
+
+Below is an inspiring example extracted from the numpy test suite
+
+import numpy.polynomial.chebyshev as cheb
+
+from numpy.testing import (
+        TestCase, assert_almost_equal, assert_raises,
+                assert_equal, assert_, run_module_suite)
+
+class Testxxx(TestCase):
+    def test_fonctionxxx(self)
+        cheb.fonctionxxx
+  
+assert_equal(res, tgt)
+assert_almost_equal(rse,tgt,err_msg=msg)
+assert_raises(ValueError, cheb.chebval3d, x1, x2, x3[:2], self.c3d)
+
+if __name__ == "__main__":
+    run_module_suite()
+
+

@@ -1,10 +1,13 @@
 PyLayers
-=======
+========
 
-PyLayers is an open source site-specific propagation simulator suited for
-evaluating indoor localization applications 
+PyLayers is a site-specific propagation simulator developed for
+evaluating indoor localization algorithms. 
 
 WebSite : http://www.pylayers.org
+
+The code is developped at the University of Rennes 1 in the laboratory
+Institute of Electronics and Telecommunication of Rennes. 
 
 
 git pull pylayers master

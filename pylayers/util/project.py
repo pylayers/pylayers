@@ -45,15 +45,19 @@ except:
     os.mkdir(basename+'/figures')
 
 
-
 # Dictionnary which associate PULSRAY environment variable with sub direrories
 # of the project 
 #
 pstruc = {}
 pstruc['DIRSIMUL'] ='ini'
-pstruc['DIRSTRUC'] ='struc'
-pstruc['DIRSTRUC2'] = 'struc'
+pstruc['DIRSTRUC'] ='struc/str'
+pstruc['DIRWRL'] ='struc/wrl'
+pstruc['DIRINI'] ='struc/ini'
+pstruc['DIROSM'] ='struc/osm'
+pstruc['DIRSTRUC2'] = 'struc/str'
 pstruc['DIRFUR'] = 'struc/furnitures'
+pstruc['DIRIMAGE'] = 'struc/images'
+pstruc['DIRPICKLE'] = 'struc/gpickle'
 pstruc['DIRSLAB'] = 'ini'
 pstruc['DIRSLAB2'] = 'ini'
 pstruc['DIRMAT'] = 'ini'
@@ -62,11 +66,15 @@ pstruc['DIRANT'] = 'ant'
 pstruc['DIRTRA'] = 'output'
 pstruc['DIRLCH'] = 'output'
 pstruc['DIRTUD'] = 'output'
+pstruc['DIRTx'] = 'output/Tx001'
 pstruc['DIRGEOM'] = 'geom'
 pstruc['DIRTRA'] = 'output'
 pstruc['DIRCIR'] = 'output'
 pstruc['DIRMES'] = 'meas'
 pstruc['DIRNETSAVE'] = 'netsave'
+pstruc['DIRSIG'] = 'output/sig'
+pstruc['DIRR2D'] = 'output/r2d'
+pstruc['DIRR3D'] = 'output/r3d'
 
 
 # if basename directory does not exit it is created 
@@ -81,17 +89,49 @@ except:
 #
 fd = open(basename+'/project.conf','w')
 fd.close()
-for nm in pstruc.keys():
+#for nm in pstruc.keys():
+for nm,nv in pstruc.items():
     dirname =  basename + '/'+pstruc[nm] 
-    try:
-        os.chdir(dirname)
-        os.chdir('..')
-    except:
-        print "create "+ dirname
-        os.mkdir(dirname)
-        os.chdir('..')
+    spl = nv.split('/') # never again a variable called sp 
+    if len(spl)>1:
+        if not os.path.isdir(basename + '/'+spl[0]):     
+            os.mkdir(basename + '/'+spl[0])
+            os.mkdir(basename + '/'+nv)
+            print "create ",basename + '/'+nv
+        else:
+            if not os.path.isdir(basename + '/'+nv):
+                os.mkdir(basename + '/'+nv)
+                print "create ",basename + '/'+nv
+    else :
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
+            print "create ",dirname
+        
 
 
+#    try:
+#        os.chdir(dirname)
+#        os.chdir('..')
+#    except:
+#        pdb.set_trace()
+#        sp = nv.split('/')  
+#        if len(sp)>1:
+#            try:
+#                os.chdir(basename + '/'+sp[0])
+#                os.chdir('..')
+#            except:
+#                os.mkdir(basename + '/'+sp[0])
+#                os.chdir(basename + '/'+sp[0])
+#                os.mkdir(basename + '/'+sp[1])
+#                os.chdir('..')
+#        else:
+#            print "create "+ dirname
+#            os.mkdir(dirname)
+#            os.chdir('..')
+
+
+    if nm == 'DIRANT':
+        antdir = dirname 
     if nm == 'DIRSTRUC':
         strdir = dirname
     if nm == 'DIRFUR':
@@ -113,20 +153,26 @@ for nm in pstruc.keys():
     fd = open(basename+'/project.conf','a')
     fd.write(nm+' '+dirname +'\n')
     fd.close()
+
 #
 # copy files from /data/ini in project directory 
 #
 
-
-dirlist=['ini','struc','struc/furnitures','ant','output','geom']
-for dl in dirlist:
-    filelist = os.listdir(pylayersdir+'/data/' + dl)
-    for fi in filelist:
-        if not os.path.isdir(basename+'/'+dl+'/'+fi):
-            if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
-                pass
-            else:
-                shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
-
+if basename<>pylayersdir+'/data':
+    dirlist=['ini','struc','struc/furnitures'
+    ,'struc/osm','struc/str','struc/wrl'
+    ,'struc/images','struc/ini'
+    ,'ant','output/Tx001','output'
+    ,'geom','output/sig','output/r2d'
+    ,'output/r3d']
+    for dl in dirlist:
+        filelist = os.listdir(pylayersdir+'/data/' + dl)
+        for fi in filelist:
+            if not os.path.isdir(basename+'/'+dl+'/'+fi):
+                if os.path.isfile(basename+'/' + dl +'/' +fi): # file already exists
+                    pass
+                else:
+                    shutil.copy(pylayersdir+'/data/' + dl + '/'+fi,basename+'/' + dl +'/'+fi)
+            
 
 os.chdir(currentdir)

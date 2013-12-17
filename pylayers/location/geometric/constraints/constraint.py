@@ -35,19 +35,48 @@ class Constraint(object):
 
 
 
-    attributes
+    Attributes
     ----------
 
     Constraint.C_Id : Contraint Identity automatically increased for new instanciation
 
-    type    : contraint type
-    time    : time stamp
-    lbox    : LBoxN intialisation
-    runable : boolean. information on constraint center ( TO DO)
-    p       : Constraint center
-    validity: validity duration ( not use yet)
-    self.Id : Constraint.C_Id
-    ndim    : Constraint dimension
+    type    : str
+        contraint type (TOA,TDOA,RSS)
+
+    p       : nd.array
+        Constraint center
+    
+    self.Id : str
+        Constraint.C_Id
+
+    ndim    : int
+        Constraint dimension (2D/3D)
+
+    origin : dict
+        origin of the contraint, (used for simulnet simulation 
+        'id' : id of the node generating the constraint
+        'link' : edge of network graph Gr
+        'rat' : RAT on which constraint has been obtained
+        'ldp' : type of observable
+
+
+    Parameters
+    ----------
+
+    time    : float
+        time stamp
+    lbox    : LBoxN
+        LBoxN intialisation
+        self.usable = True
+        self.visible = True
+        self.obsolete = False
+
+    runable : boolean
+        A constriat is runable if it has a center
+    usable: boolean
+        a constraint is usable is it has a std AND a value AND is visible
+    visible : boolean
+        is the constraint visible (used for simulnet simulation 
 
 
     parmsh : dictionary
@@ -63,16 +92,18 @@ class Constraint(object):
                     ['grav']=True
 
 
-    methods
+    Methods
     -------
 
     info()     : Display information about constraint
     show3()    : display constraint on Geomview. Parameters tahnks to self.parmsh
 
+    See Also
+    --------
 
-    TODO
-    ----
-    ini file for geom view !
+    pylayers.simul.simulnet
+    pylayers.location.localization
+
 
     """
     def __init__(self, type, id='0', p=np.array(()), origin={}):
@@ -85,6 +116,9 @@ class Constraint(object):
             self.runable = True
         else:
             self.runable = False
+        self.usable = True
+        self.visible = True
+        self.obsolete = False
         self.p = p
         self.validity = 20                  # not used
         self.id = id  # Id of constraint is set to counter + 1
@@ -109,7 +143,8 @@ class Constraint(object):
         """ update values of a constraint
 
         Example :
-        -------
+        ---------
+
         >>> from pylayers.location.geometric.constraints.toa import *
         >>> T=TOA()
         >>> T.usable
@@ -124,6 +159,7 @@ class Constraint(object):
         >>> T.updc('value',[np.nan])
         >>> T.usable
         False
+
         """
         if np.sum(np.isnan(value))<1 and value.size>0:
             setattr(self,name,value)
@@ -133,13 +169,13 @@ class Constraint(object):
                 self.runable = True
 
             # once value is set and constraint has a std value
-            # condstraint is usable
+            # constraint is usable
             if name =='value':
                 if np.sum(np.isnan(self.std))<1 and self.runable:
                     self.usable = True
 
             # once std is set and constraint has a value
-            # condstraint is usable
+            # constraint is usable
             if name =='std':
                 if np.sum(np.isnan(self.value))<1 and self.runable:
                     self.usable = True
@@ -170,7 +206,7 @@ class Constraint(object):
 
         if self.type == "TOA":
             self.estvol()
-            print "Volume Estimatif", self.estvlm
+            print "Estimated Volume", self.estvlm
             print "Toa (ns)", self.value
             print "std (ns)", self.std
             print "vcw     ", self.vcw
@@ -233,11 +269,11 @@ class Constraint(object):
                 color = ['m', 'g', 'c', 'y', 'm', 'b', 'r',
                          'm', 'g', 'c', 'y', 'orange', 'skyblue']
                 #color = ['skyblue','skyblue','orange']
-
-                lb = self.lbox
-                lb.parmsh['display'] = False
-                filename2 = lb.show3(Id=[self.id], col='m')  # )color[self.Id])
-                fd.write("{<" + filename2 + "}\n")
+                if self.parmsh['boxes']:
+                    lb = self.lbox
+                    lb.parmsh['display'] = False
+                    filename2 = lb.show3(Id=[self.id], col='m')  # )color[self.Id])
+                    fd.write("{<" + filename2 + "}\n")
                 #
                 # Display Spherical Constraint
                 #

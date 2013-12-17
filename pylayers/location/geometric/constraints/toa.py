@@ -35,9 +35,10 @@ class TOA(Constraint):
 
     Parameters
     ----------
+
     value   : float
             Constraint value in ns. Default = 30
-    std     : float
+    std     : np.array
             Value standard deviation in ns. default = 1.0
     vcw     : float
             scale factor. Default = 1.0
@@ -46,6 +47,7 @@ class TOA(Constraint):
 
     Attributes
     ----------
+
     range   : distance conversion from time self.value.
     sstd    : distance conversion from time self.std
     runable : True NOT USED
@@ -59,6 +61,7 @@ class TOA(Constraint):
 
     Methods
     -------
+
     annulus_bound(self)     : Compute the minimum and maximum distance of the enclosing annulus of the constraint
     rescale(self,vcw)       : rescale contraint boundary with a given scale factor 'vcw'
     inclusive(self,b)       : Is constraint center is inside a box ?
@@ -66,17 +69,20 @@ class TOA(Constraint):
     valid_v(self,lv)        : Test if a liste of a vertexes from a box is compatible with the constraint. vertexes are obtained thanks to LBoxN.bd2coordinates()
     estvol(self)            : Constraint Volume estimation
 
+
+    See Also
+    --------
+
+    pylayers.location.geometric.constraints.Constraint
+
     """
-    def __init__(self, id='0', value=30, std=1.0, vcw=3, p=np.array([]), origin={}):
+    def __init__(self, id='0', value=30, std=np.array((1.0)), vcw=3, p=np.array([]), origin={}):
         Constraint.__init__(self, type='TOA', id=id, p=p, origin=origin)
         self.vcw = vcw
         self.value = value
         self.std = std
         self.range = self.value * 0.3
         self.sstd = self.std * 0.3
-        self.visible = True
-        self.obsolete = False
-        self.usable = True
         self.update()
 #               self.rescale(vcw)
 #               self.runable = False
@@ -84,28 +90,31 @@ class TOA(Constraint):
 #               self.annulus_bound()
 
     def update(self):
+        """ update constraint information
+        
         """
-        update constraint inforamtion
-        """
-        if self.p.any():
-            self.runable = True
-        else:
-            self.runable = False
-
+        # if self.p.any():
+        #     self.runable = True
+        # else:
+        #     self.runable = False
+        self.updc('p',value=self.p)
+        self.updc('value',value=self.value)
+        self.updc('std',value=self.std)
         self.sstd=self.std * 0.3
-        self.range=self.value *0.3
+        self.range = self.value *0.3
         self.rescale(self.vcw)
         self.evaluated = False
         self.annulus_bound()
 
     def annulus_bound(self):
-        """
-        annulus_bound():
+        """ annulus_bound():
+
         Compute the minimum and maximum distance of the enclosing annulus of the constraint
 
         Returns
         -------
-                Nothing but update cmin, cmax and mean
+
+        Nothing but update cmin, cmax and mean
         """
         self.cmin = max(0.0, self.range - self.vcw * self.sstd)
         self.cmax = self.range + self.vcw * self.sstd
@@ -114,9 +123,10 @@ class TOA(Constraint):
         """rescale bounds of the constraint with vcw factor
 
         Parameters
-        -------
-                vcw : float
-                        scale factor
+        ----------
+
+        vcw : float
+           scale factor
 
         """
         self.vcw = vcw
@@ -134,14 +144,17 @@ class TOA(Constraint):
         self.estvol()
 
     def inclusive(self, b):
-        """ Is constraint center is inside a box ?
+        """ answer whether constraint center is inside a box 
+
         Parameters
-        -------
-                b       : LBoxN
+        -----------
+
+        b       : LBoxN
 
         Returns
         -------
-                Boolean
+
+        Boolean
 
         """
         if b.inbox(self.p):
@@ -153,14 +166,16 @@ class TOA(Constraint):
         """check if a box is valid for the given constraint
 
         Parameters
-        -------
-                b       : LBoxN
+        ----------
+
+        b       : LBoxN
 
         Returns
         -------
-                True    : if box is enclosed
-                False   : if the box is ambiguous
-                'Out'   : if the box is out
+
+        True    : if box is enclosed
+        False   : if the box is ambiguous
+        'Out'   : if the box is out
 
         """
         p0 = self.p
@@ -181,15 +196,28 @@ class TOA(Constraint):
             return(False)
 
     def valid_v(self, v):
-        """ Test if a liste of a vertexes from a box is compatible with the constraint. Vertexes are obtained thanks to LBoxN.bd2coordinates()
+        """ Test if a list of vertexes from a box is compatible with the constraint. 
+        
+        vertices are obtained with LBoxN.bd2coordinates()
 
-        valid_v(v) : check if a set of vertex are valid for the given constraint
+        valid_v(v) : check if a set of vertices are valid for the given constraint
+
+       
+        Parameters
+        ----------
+
+        v       : np.arrays
+                a vertexes arrays
 
         Returns
+        -------
 
-        - DDbound ( boxes validity)
-        - TB    for error checker
+        DDbound : np.array 2 x vertexes containing boolean
+                Test Lboxn boundaries  with contraint
+        TB      : np.array 4 v vertexes
+                Multiple test for error checker in Lboxn boundaries  with contraint
 
+        
         DDbound = list[[tested vertex DD>self.cmin],[tested vertex DD<self.cmax]]
 
 
@@ -208,21 +236,6 @@ class TOA(Constraint):
                         pmin<Dmax       |
         DDbound =       pmax<Dmin       |
                         pmin<Dmax       |
-
-
-        Parameters
-        ----------
-                v       : np.arrays
-                        a vertexes arrays
-
-        Returns
-        -------
-
-                DDbound : np.array 2 x vertexes containing boolean
-                        Test Lboxn boundaries  with contraint
-                TB      : np.array 4 v vertexes
-                        Multiple test for error checker in Lboxn boundaries  with contraint
-
 
 
         """
@@ -265,7 +278,8 @@ class TOA(Constraint):
 #               return BV
 
     def estvol(self):
-        """ Constraint Volume estimation
+        """ 
+        Constraint Volume estimation
 
         """
         R2 = self.range + self.vcw * self.sstd
