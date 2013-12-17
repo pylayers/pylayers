@@ -82,6 +82,9 @@ class Rays(dict):
         self.raypt = 0
         self.los=False
         self.is3D=False
+        self.filled = False
+        self.evaluated = False
+        
     def __len__(self):
         Nray = 0
         for k in self.keys():
@@ -175,6 +178,8 @@ class Rays(dict):
         for i in lgrint:
             if kwargs['r']==-1:
                 lray = range(len(self[i]['pt'][0, 0, :]))
+                if self.filled :
+                    ax.set_title('rays index :'+ str(self[i]['rayidx']))
             else:
                 lray = [kwargs['r']]
             for j in lray: 
@@ -185,6 +190,8 @@ class Rays(dict):
                 ax.plot(ray[0, :], ray[1, :],
                         alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
                 ax.axis('off')
+                if self.filled :
+                    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         return(fig,ax)       
 
     def mirror(self, H=3, N=1):
@@ -1105,7 +1112,7 @@ class Rays(dict):
         self.I.add([T, R])
         self.B = B
         self.B0 = B0
-
+        self.filled = True
 
     def eval(self,fGHz=np.array([2.4]),ib=[]):
         """  docstring for eval
@@ -1287,6 +1294,8 @@ class Rays(dict):
         # r x 2
         Cn.rang = aoa.T
         # add aoa and aod 
+
+        self.evaluated = True
         return(Cn)
 
 
@@ -1329,48 +1338,51 @@ class Rays(dict):
             ray index
 
         '''
-        print '-------------------------'
-        print 'Informations of ray #', r
-        print '-------------------------\n'
 
-        ray = self.ray(r)
-        typ = self.typ(r)
-        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index',
-                                                                    'type',
-                                                                    'slab', 'th(rad)', 'alpha', 'gamma2')
-        print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
-        for iidx, i in enumerate(typ):
-            if i == 'T' or i == 'R':
-                I = getattr(self.I, i)
-                for slab in I.dusl.keys():
-#                    print slab
-                    midx = I.dusl[slab]
-#                    print midx
-                    Iidx = np.array((I.idx))[midx]
-                    th = I.data[I.dusl[slab], 0]
-                    gamma = I.gamma[midx]
-                    alpha = I.alpha[midx]
-                    for ii, Ii in enumerate(Iidx):
-                        if Ii == ray[iidx]:
-                            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])
+        if self.evaluated:
+            print '-------------------------'
+            print 'Informations of ray #', r
+            print '-------------------------\n'
 
-            # else:
-            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
-            #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
+            ray = self.ray(r)
+            typ = self.typ(r)
+            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index',
+                                                                        'type',
+                                                                        'slab', 'th(rad)', 'alpha', 'gamma2')
+            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
+            for iidx, i in enumerate(typ):
+                if i == 'T' or i == 'R':
+                    I = getattr(self.I, i)
+                    for slab in I.dusl.keys():
+    #                    print slab
+                        midx = I.dusl[slab]
+    #                    print midx
+                        Iidx = np.array((I.idx))[midx]
+                        th = I.data[I.dusl[slab], 0]
+                        gamma = I.gamma[midx]
+                        alpha = I.alpha[midx]
+                        for ii, Ii in enumerate(Iidx):
+                            if Ii == ray[iidx]:
+                                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])
 
-        print '\n----------------------------------------'
-        print ' Matrix of ray #', r, 'at f=', self.I.fGHz[0]
-        print '----------------------------------------'
+                # else:
+                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
+                #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
-        print 'rotation matrix#', 'type: B0'
-        print self.B0.data[r,:,:]
-        for iidx, i in enumerate(typ):
-            print 'interaction #', ray[iidx], 'type:', i
-            # f x l x 2 x 2
-            print self.I.I[0, ray[iidx], :, :]
-            print 'rotation matrix#',[ray[iidx]], 'type: B'
-            print self.B.data[ray[iidx], :, :]
+            print '\n----------------------------------------'
+            print ' Matrix of ray #', r, 'at f=', self.I.fGHz[0]
+            print '----------------------------------------'
 
+            print 'rotation matrix#', 'type: B0'
+            print self.B0.data[r,:,:]
+            for iidx, i in enumerate(typ):
+                print 'interaction #', ray[iidx], 'type:', i
+                # f x l x 2 x 2
+                print self.I.I[0, ray[iidx], :, :]
+                print 'rotation matrix#',[ray[iidx]], 'type: B'
+                print self.B.data[ray[iidx], :, :]
+        else: 
+            print 'Rays have not been evaluated yet'
 
     def signature(self, L):
         """ extract ray signature
@@ -1476,12 +1488,12 @@ class Rays(dict):
             return(filename)
 
     def show3(self, 
+              L=[],
               bdis=True, 
               bstruc=True, 
-              id=0, 
-              strucname='defstr', 
+              id=0,
               ilist=[], 
-              raylist=[],pg=np.array([[0],[0],[0]])):
+              raylist=[],centered=True):
         """ plot 3D rays within the simulated environment
 
         Parameters
@@ -1492,14 +1504,28 @@ class Rays(dict):
         bstruc : boolean
             True
         id : int 
-        strucname : string 
-            'defstr'
+        L : Layout object
+            Layout to be displayed
         ilist : list of group of interactions
         raylist : list of index rays 
-        pg : centroid of the structure 
+        centered : boolean     
+            if True center the layout before display
          
 
         """
+
+        try:
+            L.filename
+        except:
+            raise NameError('L argument must be a layout object')
+
+        if not centered:
+            pg=np.array([[0],[0],[0]])
+
+        strucname= L.filename.split('.')[0]
+        pg = L.geomfile(centered=centered)
+        pg = np.hstack((pg,0.)).reshape(3,1)
+
         if ilist == []:
             ilist = self.keys()
         pTx = self.pTx.reshape((3, 1))-pg
@@ -1531,6 +1557,62 @@ class Rays(dict):
             os.system(chaine)
         else:
             return(filename)
+   # def show3(self, 
+   #            bdis=True, 
+   #            bstruc=True, 
+   #            id=0, 
+   #            strucname='defstr', 
+   #            ilist=[], 
+   #            raylist=[],pg=np.array([[0],[0],[0]])):
+   #      """ plot 3D rays within the simulated environment
+
+   #      Parameters
+   #      ----------
+
+   #      bdis : boolean
+   #          True
+   #      bstruc : boolean
+   #          True
+   #      id : int 
+   #      strucname : string 
+   #          'defstr'
+   #      ilist : list of group of interactions
+   #      raylist : list of index rays 
+   #      pg : centroid of the structure 
+         
+
+   #      """
+   #      if ilist == []:
+   #          ilist = self.keys()
+   #      pTx = self.pTx.reshape((3, 1))-pg
+   #      pRx = self.pRx.reshape((3, 1))-pg
+   #      filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
+   #      fo = open(filename, "w")
+   #      fo.write("LIST\n")
+   #      if bstruc:
+   #          fo.write("{<"+strucname+".off}\n")
+   #          # fo.write("{<strucTxRx.off}\n")
+   #          k = 0
+   #          for i in ilist:
+   #              if raylist == []:
+   #                  rlist = range(np.shape(self[i]['pt'])[2])
+   #              else:
+   #                  rlist = raylist
+   #              for j in rlist:
+   #                  ray = np.hstack((pTx,np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
+   #                  # ray = rays[i]['pt'][:,:,j]
+   #                  col = np.array([2, 0, 1])
+   #                  # print ray
+   #                  fileray = self.show3d(ray=ray, bdis=False,
+   #                                        bstruc=False, col=col, id=k)
+   #                  k += 1
+   #                  fo.write("{< " + fileray + " }\n")
+   #      fo.close()
+   #      if (bdis):
+   #          chaine = "geomview " + filename + " 2>/dev/null &"
+   #          os.system(chaine)
+   #      else:
+   #          return(filename)
 
 
 if __name__ == "__main__":
