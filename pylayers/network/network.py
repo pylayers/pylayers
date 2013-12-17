@@ -142,7 +142,7 @@ class Network(nx.MultiDiGraph):
     connect(self)                    : Connect each node from a rat together
     create(self)                    : compute get_RAT(),get_pos() and connect()
     update_LDP(self,n1,n2,RAT,LDP=None,value=[])    : update Location Dependent Parameter  
-    compute_LDP(self,n1,n2,RAT,LDP,method='direct') : compute the LDP value thanks to a ElectroMag Solver 
+    compute_LDP(self,RAT) : compute the LDP value thanks to a ElectroMag Solver 
     update_pos(self,n,p=np.array)            : update node (or node list) position
     get_pos(self,RAT=None)                : get node positions
     pp(self)                    : pretty print on std out all edtges informations
@@ -166,6 +166,43 @@ class Network(nx.MultiDiGraph):
         self.relink={}
         self.idx = 0
         self.lidx = 0
+        self.isPN=PN
+
+    def __repr__(self):
+
+        if not self.isPN :
+            s = 'Network information\n******************\n'
+        else:
+            s = 'Personnal Network of node ' +str(self.owner)+ ' information\n********************************\n'
+        s = s + 'number of agents: ' + str(len(self.nodes())) +'\n'
+        s = s + str(self.nodes()) + '\n'
+        typ = nx.get_node_attributes(self,'type').values() 
+
+        nodes = np.array(nx.get_node_attributes(self,'type').items())
+
+        nb_ag = len(np.where(nodes=='ag')[0])
+        nb_ap = len(np.where(nodes=='ap')[0])
+
+        pag=np.where(nodes=='ag')
+        pap=np.where(nodes=='ap')
+
+        s = s +  '\n' + str(nb_ag) + ' Mobile Agents\n -------------\n'
+        s = s + 'Agents IDs : ' + str([nodes[i,0] for i in pag[0]]) +'\n'
+
+
+        s = s +  '\n' + str(nb_ap) + ' Access points\n ------------\n'
+        s = s + 'number of access point  : ' + '\n'
+        s = s + 'access points  IDs : ' + str([nodes[i,0] for i in pap[0]]) +'\n'
+
+        if len(self.SubNet.keys()) != 0:
+            s = s + '\n\nSubNetworks :' +str(self.SubNet.keys()) + '\n===========\n'
+            for sub in self.SubNet.keys():
+                s = s + '\t'+ sub + '\n' +  self.SubNet[sub].__repr__() + '\n'
+
+        return s
+
+
+
 
     def perm(self,iterable,r,key,d=dict()):
         """ combi = itertools.permutation(iterable,r) adapted 
@@ -520,7 +557,8 @@ class Network(nx.MultiDiGraph):
                 for nn in Sn[1].nodes():
                     if nn != n:
                         try:
-                            Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
+                            if Sn[0] not in Sn[1].node[n]['PN'].node[nn]['RAT'] : 
+                                Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
                         except:
                             Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=0.),type=Sn[1].node[nn]['type'])
 #                pdb.set_trace()
@@ -610,7 +648,7 @@ class Network(nx.MultiDiGraph):
 
 
 
-    def compute_LDPs(self,ln,RAT):
+    def compute_LDPs(self,RAT):
         """compute edge LDP
 
         Parameters
@@ -622,11 +660,11 @@ class Network(nx.MultiDiGraph):
             node ID
         RAT     : string
             A specific RAT which exist in the network ( if not , raises an error)
-        value    : list : [LDP value , LDP standard deviation] 
-        method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
-
-
         """
+        # value    : list : [LDP value , LDP standard deviation] 
+        # method    : ElectroMagnetic Solver method ( 'direct', 'Multiwall', 'PyRay'
+
+
         p=nx.get_node_attributes(self.SubNet[RAT],'p')
         epwr=nx.get_node_attributes(self.SubNet[RAT],'epwr')
         sens=nx.get_node_attributes(self.SubNet[RAT],'sens')
@@ -1438,7 +1476,7 @@ class PNetwork(Process):
         ####################################################################################
         # first iteration requested to correctely initiatilzing Personnal Networks's Subnets 
         for rat in self.net.RAT.iterkeys():
-            self.net.compute_LDPs(self.net.nodes(),rat)
+            self.net.compute_LDPs(rat)
         for n in self.net.nodes():
             self.net.node[n]['PN'].get_RAT()
             self.net.node[n]['PN'].get_SubNet()
@@ -1469,7 +1507,7 @@ class PNetwork(Process):
 
             ############### compute LDP
             for rat in self.net.RAT.iterkeys():
-                self.net.compute_LDPs(self.net.nodes(),rat)
+                self.net.compute_LDPs(rat)
             
             if self.show_sg:
                 ############### compute Signature (Sg)

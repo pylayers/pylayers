@@ -87,12 +87,12 @@ class Agent(object):
                     'loc_method': ['geo'],
                     'Layout': Layout(),
                     'net': Network(),
-                    'RAT': ['wifi'],
+                    'RAT': ['rat1'],
                     'world': world(),
                     'save': [],
                     'sim': Simulation(),
-                    'epwr':{},
-                    'sens': {},
+                    'epwr':{'rat1':0},
+                    'sens': {'rat1':0},
                     'dcond': {},
                     'gcom': Gcom(),
                     'comm_mode':'autonomous'}
@@ -110,6 +110,11 @@ class Agent(object):
         self.epwr = args['epwr']
         self.gcom = args['gcom']
         self.sim = args['sim']
+        self.RAT = args['RAT']
+        self.epwr = args['epwr']
+        self.sens = sens=args['sens']
+
+
         try:
             self.dcond = args['dcond']
         except:
@@ -223,3 +228,17 @@ class Agent(object):
                                       tx=self.tx,
                                       sim=args['sim'])
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+
+    def __repr__(self):
+      s = 'General info \n*************\n'
+      s = s + 'name : ' + self.name + '\n'
+      s = s + 'ID: '  + self.ID + '\n'
+      s = s + 'type: '  + self.type + '\n\n'
+      
+
+      s = s+ self.net.__repr__() + '\n'
+      s = s+ self.meca.__repr__() + '\n'
+
+      
+      return s
+

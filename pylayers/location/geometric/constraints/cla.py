@@ -71,6 +71,9 @@ class CLA(object):
 
     info(self)                              : Give info
 
+    compute(pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):
+                                              compute the CLA to estimate the positon.
+    
     rescale(self,f_vcw,cid=None)            : rescale Constraint Box
 
     annulus_bound(self,cid=None)            : rescale Constraint
@@ -243,6 +246,9 @@ class CLA(object):
 
         return : boolean
             True if the position estimation has been performed.
+
+        update a self.pe which contain the estimated position   
+
 
         """
         self.merge2(RSS=mergeRSS)
