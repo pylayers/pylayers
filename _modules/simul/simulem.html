@@ -75,8 +75,10 @@
 <span class="c"># -*- coding: utf-8 -*-</span>
 <span class="c">#</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">    This module run the electromagnetic simulation</span>
-<span class="sd">    This module requires pulsray binaries to be installed</span>
+
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -821,8 +823,6 @@
         <span class="c">#self.load(self.filesimul)</span>
 
 
-
-
 <div class="viewcode-block" id="Simul.gui"><a class="viewcode-back" href="../../modules/simul.simulem.html#simul.simulem.Simul.gui">[docs]</a>    <span class="k">def</span> <span class="nf">gui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gui to modify the simulation file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -878,12 +878,12 @@
         <span class="c">#</span>
         <span class="c"># waveform section</span>
         <span class="c">#</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;tw&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;tw&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;band&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;band&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;fc&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fc&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;thresh&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;thresh&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;fe&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fe&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;tw&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="s">&#39;twns&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;band&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="s">&#39;bandGHz&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;fc&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;thresh&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="s">&#39;threshdB&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">,</span> <span class="s">&quot;fe&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wav</span><span class="p">[</span><span class="s">&#39;feGHz&#39;</span><span class="p">]))</span>
         <span class="c">#</span>
         <span class="c"># output section</span>
         <span class="c">#</span>
@@ -1231,6 +1231,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        _filesimul   : file in the simul directory of the Project</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1264,6 +1265,10 @@
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;files&quot;</span><span class="p">,</span> <span class="s">&quot;struc&quot;</span><span class="p">)</span>
+            <span class="c"># force .str extension</span>
+            <span class="n">f</span><span class="p">,</span><span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="o">.</span><span class="n">split</span><span class="p">[</span><span class="s">&#39;.&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span> <span class="o">=</span> <span class="n">f</span><span class="o">+</span><span class="s">&#39;.str&#39;</span>
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">filestr</span>
         <span class="k">except</span><span class="p">:</span> 
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;Error in section struc from &#39;</span><span class="o">+</span> <span class="n">_filesimul</span><span class="p">)</span>
 
@@ -2018,7 +2023,9 @@
 <span class="sd">            transmiter index</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">filestr</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filestr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.str&#39;</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">filestr</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSTRUC&#39;</span><span class="p">])):</span>
             <span class="n">chaine</span> <span class="o">=</span> <span class="s">&#39;newstruc -str2 &#39;</span> <span class="o">+</span> <span class="n">filestr</span> <span class="o">+</span><span class="s">&#39;2 &#39;</span> <span class="o">+</span> <span class="n">filestr</span> <span class="o">+</span> <span class="s">&#39; -conf &#39;</span> <span class="o">+</span> <span class="n">basename</span> <span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">fileconf</span>
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
@@ -2029,6 +2036,7 @@
             <span class="s">&quot; -palch &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filepalch</span> <span class="o">+</span> \
             <span class="s">&quot; -spa &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx</span><span class="o">.</span><span class="n">filespa</span> <span class="o">+</span> \
             <span class="s">&quot; -conf &quot;</span> <span class="o">+</span> <span class="n">basename</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileconf</span>
+
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="k">print</span> <span class="n">chaine</span>
 
@@ -2238,10 +2246,14 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            ntx</span>
+
+<span class="sd">        ntx : integer</span>
 <span class="sd">                 launching index</span>
-<span class="sd">            nrx</span>
+<span class="sd">        nrx : integer</span>
 <span class="sd">                 tracing index</span>
+<span class="sd">        verbose : Boolean</span>
+<span class="sd">            </span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;evalfield -tud &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtud</span><span class="p">[</span><span class="n">itx</span><span class="p">][</span><span class="n">irx</span><span class="p">]</span> <span class="o">+</span> \
                  <span class="s">&quot; -slab &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileslab</span> <span class="o">+</span> \
@@ -2396,6 +2408,7 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">updcfg</span><span class="p">()</span>
         <span class="c">#t0 = time.clock()</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">srx</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
@@ -2459,18 +2472,18 @@
                             <span class="n">val</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
                             <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;band&quot;</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;fc&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;fcGHz&quot;</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;fe&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;feGHz&quot;</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;thresh&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;threshdB&quot;</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;tw&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;twns&quot;</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;type&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;typ&quot;</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
 
-                        <span class="bp">self</span><span class="o">.</span><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">wav</span> <span class="o">=</span> <span class="n">wvf</span><span class="o">.</span><span class="n">Waveform</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">wparam</span><span class="p">)</span>
                         <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="mf">30.0</span><span class="p">)</span>
                         <span class="k">print</span> <span class="s">&quot;run debug &quot;</span><span class="p">,</span><span class="n">itx</span><span class="p">,</span><span class="n">irx</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">cir</span><span class="p">([</span><span class="n">itx</span><span class="p">],</span> <span class="p">[</span><span class="n">irx</span><span class="p">],</span>
@@ -2650,8 +2663,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">CIRo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CIRo</span><span class="p">)</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">store_level</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">16</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">CIRa</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CIRa</span><span class="p">)</span>
-
-
 
 </div></div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>

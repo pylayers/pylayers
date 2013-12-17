@@ -85,9 +85,15 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="module-pylayers.antprop.interactions">
-<span id="interactions"></span><h1>interactions<a class="headerlink" href="#module-pylayers.antprop.interactions" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+  <div class="section" id="interactions">
+<h1>interactions<a class="headerlink" href="#interactions" title="Permalink to this headline">¶</a></h1>
+<dl class="attribute">
+<dt id="pylayers.antprop.interactions">
+<tt class="descclassname">pylayers.antprop.</tt><tt class="descname">interactions</tt><a class="headerlink" href="#pylayers.antprop.interactions" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#module-pylayers.antprop.interactions" title="pylayers.antprop.interactions"><tt class="xref py py-class docutils literal"><span class="pre">pylayers.antprop.interactions</span></tt></a></p>
+</dd></dl>
+
+<span class="target" id="module-pylayers.antprop.interactions"></span><dl class="class">
 <dt id="pylayers.antprop.interactions.IntB">
 <em class="property">class </em><tt class="descclassname">pylayers.antprop.interactions.</tt><tt class="descname">IntB</tt><big>(</big><em>data=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>idx=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Local Basis interaction class</p>
@@ -98,30 +104,42 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>data</strong> : np.array:</p>
 <blockquote>
-<div><blockquote>
 <div><p>WARNING np.shape(data) = (ninter x 4)
 the input matrix 2x2 is rehaped as 1x 4</p>
 </div></blockquote>
-<dl class="docutils">
-<dt>idx <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd><p class="first last">index of the corresponding ray and interaction</p>
-</dd>
-</dl>
+<p><strong>idx</strong> : list</p>
+<blockquote>
+<div><p>index of the corresponding ray and interaction</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>np.array:</strong> :</p>
-<blockquote class="last">
-<div><p>(nf,ninter 2, 2)</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first last"><strong>eval</strong> : evaluation of B interaction</p>
 </td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>The interaction object is np.array with shape (nf,ninter 2, 2)</p>
 <dl class="method">
 <dt id="pylayers.antprop.interactions.IntB.eval">
 <tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#IntB.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.IntB.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluation of B interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array()</p>
+<blockquote>
+<div><p>freqeuncy range</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>self.data</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.rays</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">IntB</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
@@ -508,6 +526,14 @@ the input matrix 2x2 is rehaped as 1x 4</p>
 <dt id="pylayers.antprop.interactions.Interactions.eval">
 <tt class="descname">eval</tt><big>(</big><em>fGHz=array([ 2.4])</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Interactions.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Interactions.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate all the interactions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>fGHz</strong> : np.array()</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Notes</p>
 <dl class="docutils">
 <dt>self.I <span class="classifier-delimiter">:</span> <span class="classifier">np.shape(self.I) = (self.nf,self.nimax,2,2)</span></dt>
@@ -520,7 +546,7 @@ self.nimax : the total number of interactions ( of all rays)</dd>
 <dt>self.alpha :</dt>
 <dd>alpha as described into Legendre Thesis</dd>
 <dt>self.gamma :</dt>
-<dd>!! gamma**2 !!! (squared included) as described into J.F Legendre Thesis</dd>
+<dd>!! gamma**2 !!! (squared included) as described</dd>
 </dl>
 </dd></dl>
 

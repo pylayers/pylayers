@@ -1,2 +1,2 @@
-(<matplotlib.figure.Figure at 0x911ac90>,
- array([[<matplotlib.axes.AxesSubplot object at 0x7f16205f76d0>]], dtype=object))
+([],
+ array([[<matplotlib.axes.AxesSubplot object at 0x7100510>]], dtype=object))

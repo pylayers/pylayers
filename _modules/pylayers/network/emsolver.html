@@ -102,45 +102,75 @@
 <span class="kn">import</span> <span class="nn">itertools</span>
 
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
-
 <span class="kn">import</span> <span class="nn">pylayers.util.project</span>
-<span class="kn">from</span>   <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
 <span class="kn">import</span> <span class="nn">pylayers.antprop.slab</span>
-<span class="kn">from</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">import</span> <span class="o">*</span>
 
+<span class="kn">from</span> <span class="nn">pylayers.gis.layout</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">import</span> <span class="nn">pylayers.antprop.multiwall</span> <span class="kn">as</span> <span class="nn">mw</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span>   <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="n">PLSmodel</span>
 
 
 <span class="kn">import</span> <span class="nn">pdb</span>
 
 
-<div class="viewcode-block" id="EMSolver"><a class="viewcode-back" href="../../../modules/network.show.html#pylayers.network.emsolver.EMSolver">[docs]</a><span class="k">class</span> <span class="nc">EMSolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">EMSolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Invoque an electromagnetic solver</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    config </span>
+<span class="sd">    fileini </span>
+<span class="sd">    ems_opt</span>
+<span class="sd">    toa_opt </span>
+<span class="sd">    EMS_method</span>
+<span class="sd">        </span>
+<span class="sd">    sigmaTOA</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    During dynamic simulation, on a regular basis nodes needs radio information</span>
+<span class="sd">    about their neighbors. This radio information can be obtained with</span>
+<span class="sd">    different technique from statistical model to site specific simulation</span>
+<span class="sd">    using ray tracing. </span>
+
+<span class="sd">    EMS_method = { &#39;multiwall&#39;,&#39;raytracing&#39;}</span>
+
+
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="o">=</span><span class="n">Layout</span><span class="p">()):</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span>     <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="o">=</span><span class="s">&#39;EMSolver.ini&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span>  <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileini</span> <span class="o">=</span><span class="s">&#39;EMSolver.ini&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span><span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ems_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;EMS_config&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toa_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;TOA&#39;</span><span class="p">))</span>
 
-
-
         <span class="bp">self</span><span class="o">.</span><span class="n">EMS_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ems_opt</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span>      <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toa_opt</span><span class="p">[</span><span class="s">&#39;sigmatoa&#39;</span><span class="p">])</span> <span class="c"># meters !!!!!!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigmaTOA</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toa_opt</span><span class="p">[</span><span class="s">&#39;sigmatoa&#39;</span><span class="p">])</span> <span class="c"># meters !!!!!!</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
 
 
-<div class="viewcode-block" id="EMSolver.save_model"><a class="viewcode-back" href="../../../modules/network.show.html#pylayers.network.emsolver.EMSolver.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">model</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;save a RAT model</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        RAT : string </span>
+<span class="sd">            RAT name </span>
+<span class="sd">        model : dictionnary</span>
+<span class="sd">            parameters of the PL model </span>
+<span class="sd">            </span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">fileini</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileini</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRSIMUL&#39;</span><span class="p">])</span>
         <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileini</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">)</span>
         <span class="n">nconfig</span>     <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -154,47 +184,66 @@
         <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 
-</div>
+
     <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RAT</span><span class="p">):</span>
-        <span class="n">ratopt</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="o">=</span><span class="n">Model</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">]),</span><span class="n">rssnp</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;rssnp&#39;</span><span class="p">]),</span><span class="n">d0</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]),</span><span class="n">sigrss</span><span class="o">=</span><span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;sigrss&#39;</span><span class="p">]),</span><span class="n">method</span><span class="o">=</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">])</span>
+        <span class="sd">&quot;&quot;&quot; load a path loss shadowing model for a RAT </span>
 
-
-
-
-<div class="viewcode-block" id="EMSolver.solve"><a class="viewcode-back" href="../../../modules/network.show.html#pylayers.network.emsolver.EMSolver.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">LDP</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;compute and return a LDP value thanks to a given method</span>
-
-<span class="sd">        Attributes</span>
+<span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            n1p : np.array</span>
-<span class="sd">                node 1 position</span>
-<span class="sd">            n2p : np.array</span>
-<span class="sd">                node 2 position</span>
-<span class="sd">            LDP : string</span>
-<span class="sd">                Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</span>
-<span class="sd">            epwr : list of nodes emmited power</span>
+
+<span class="sd">        RAT  : string </span>
+<span class="sd">            RAT name </span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ratopt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">RAT</span><span class="o">+</span><span class="s">&#39;_PLM&#39;</span><span class="p">))</span>
+        
+        <span class="c"># Path Loss Shadowing model </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">(</span><span class="n">f</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;f&#39;</span><span class="p">]),</span>
+                                   <span class="n">rssnp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;rssnp&#39;</span><span class="p">]),</span>
+                                   <span class="n">d0</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;d0&#39;</span><span class="p">]),</span>
+                                   <span class="n">sigrss</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;sigrss&#39;</span><span class="p">]),</span>
+                                   <span class="n">method</span> <span class="o">=</span> <span class="n">ratopt</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">])</span>
+
+
+    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">LDP</span><span class="p">,</span><span class="n">RAT</span><span class="p">,</span><span class="n">epwr</span><span class="p">,</span><span class="n">sens</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; computes and returns a LDP value a given method</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        p : np.array</span>
+<span class="sd">        e : np.array</span>
+<span class="sd">        LDP : string</span>
+<span class="sd">            Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)</span>
+<span class="sd">        epwr : list </span>
+<span class="sd">           nodes emmited power</span>
+<span class="sd">        sens : list </span>
+<span class="sd">            nodes sensitivity</span>
 <span class="sd">                </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">            value : float</span>
-<span class="sd">                A LDP value :     * A time in ns for LDP =&#39;TOA&#39;</span>
-<span class="sd">                        * A received power in dBm for LDP =&#39;Pr&#39;</span>
-<span class="sd">            std : float</span>
-<span class="sd">                A LDP value standard deviation:     * A time in ns for LDP =&#39;TOA&#39;</span>
-<span class="sd">                                    * A received power in dBm for LDP =&#39;Pr&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        value : float</span>
+<span class="sd">            A LDP value :     * A time in ns for LDP =&#39;TOA&#39;</span>
+<span class="sd">                    * A received power in dBm for LDP =&#39;Pr&#39;</span>
+<span class="sd">        std : float</span>
+<span class="sd">            A LDP value standard deviation:     * A time in ns for LDP =&#39;TOA&#39;</span>
+<span class="sd">                                * A received power in dBm for LDP =&#39;Pr&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">model</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">RAT</span><span class="p">)</span>
-                <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span><span class="o">=</span><span class="n">Model</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span> <span class="o">=</span> <span class="n">PLSmodel</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">RAT</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">])</span>
-                <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">RAT</span><span class="p">]</span>
 
 
 <span class="c">#        if self.EMS_method == &#39;direct&#39;:</span>
@@ -227,44 +276,54 @@
             <span class="n">dd</span><span class="o">=</span><span class="p">{}</span> <span class="c"># distance dictionnary</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
-                <span class="n">lp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))])</span>
-                <span class="n">d</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-                <span class="n">slp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">lp</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">lp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]],</span><span class="n">p</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">))])</span>
+                <span class="c"># euclidian distance </span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">lp</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">slp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">lp</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
-
-
-
+                <span class="c"># evaluation of all LDPs</span>
                 <span class="k">if</span> <span class="n">LDP</span><span class="o">==</span><span class="s">&#39;all&#39;</span><span class="p">:</span>
-
                     <span class="n">pa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
                     <span class="n">lpa</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span>
-                    <span class="n">Pr</span><span class="o">=</span><span class="p">[]</span>
-                    <span class="n">TOA</span><span class="o">=</span><span class="p">[]</span>
-                    <span class="n">lsens</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
-                    <span class="n">loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
-                    <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
-                    <span class="n">lepwr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
-                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lpa</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">Pr</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">TOA</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">lsens</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
+                    <span class="n">loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
+                    <span class="n">frees</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
+                    <span class="n">lepwr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(())</span>
 
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lpa</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                         <span class="c"># excess time of flight + losses computation</span>
-                        <span class="n">MW</span><span class="o">=</span><span class="n">Loss0_v2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> 
+                        <span class="c"># </span>
+                        <span class="c"># Losst returns 4 parameters   </span>
+                        <span class="c">#   Lo Lp Edo Edp </span>
+                        <span class="c">#</span>
+                        <span class="c">#</span>
+                        <span class="n">MW</span> <span class="o">=</span> <span class="n">mw</span><span class="o">.</span><span class="n">Losst</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> 
+                        <span class="c"># MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) </span>
                         <span class="c"># loss free space</span>
-                        <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">frees</span><span class="p">,</span><span class="n">PL</span><span class="p">(</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">)</span> <span class="p">))</span>
-<span class="c">#                        Pr.extend(lepwr - MW[0] - frees)</span>
+                        <span class="n">frees</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">frees</span><span class="p">,</span><span class="n">mw</span><span class="o">.</span><span class="n">PL</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">f</span><span class="p">,</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">lpa</span><span class="p">],</span><span class="n">pa</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">model</span><span class="o">.</span><span class="n">rssnp</span><span class="p">)</span> <span class="p">))</span>
+                        <span class="c"># Pr.extend(lepwr - MW[0] - frees)</span>
+                        
+                        <span class="c"># WARNING : only one polarization is taken into</span>
+                        <span class="c"># account here</span>
                         <span class="c"># save losses computation </span>
-                        <span class="n">loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">loss</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+                        <span class="n">loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">loss</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
                         <span class="c"># save excess tof computation </span>
-                        <span class="n">TOA</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">TOA</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                        <span class="n">TOA</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">TOA</span><span class="p">,</span><span class="n">MW</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
 
                     <span class="c"># emmited power for the first nodes of computed edges </span>
                     <span class="n">lepwr1</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
                     <span class="n">lepwr2</span> <span class="o">=</span> <span class="p">[</span><span class="n">epwr</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
                     <span class="n">Pr</span> <span class="o">=</span> <span class="n">lepwr1</span> <span class="o">-</span> <span class="n">loss</span> <span class="o">-</span> <span class="n">frees</span>
+
                     <span class="c"># concatenate reverse link</span>
                     <span class="n">Pr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Pr</span><span class="p">,</span> <span class="n">lepwr2</span> <span class="o">-</span> <span class="n">loss</span> <span class="o">-</span> <span class="n">frees</span><span class="p">))</span>
-                    <span class="n">P</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">Pr</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">P</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">sigrss</span>
+                    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">Pr</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">P</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">sigrss</span>
                     <span class="n">lsens</span> <span class="o">=</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">sens</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">RAT</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">]</span>
+
                     <span class="c"># visibility or not </span>
                     <span class="n">v</span> <span class="o">=</span> <span class="n">P</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">lsens</span>
 
@@ -301,13 +360,13 @@
                 <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)))</span>
 
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;Pyray&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;raytracing&#39;</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&#39;Okay, I think we</span><span class="se">\&#39;</span><span class="s">ve got something to append in the TODO list&#39;</span>
 
 
         <span class="k">else</span> <span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;invalid method name&#39;</span><span class="p">)</span>
-</pre></div></div></div>
+</pre></div>
 
           </div>
         </div>

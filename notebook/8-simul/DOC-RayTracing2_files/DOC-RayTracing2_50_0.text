@@ -1,6 +1,6 @@
 Nfreq  : 181
-Nray : 65
-shape Ctt : (65, 181)
-shape Ctp : (65, 181)
-shape Cpt : (65, 181)
-shape Cpp : (65, 181)
+Nray : 60
+shape Ctt : (60, 181)
+shape Ctp : (60, 181)
+shape Cpt : (60, 181)
+shape Cpp : (60, 181)

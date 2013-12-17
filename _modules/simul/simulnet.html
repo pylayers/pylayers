@@ -100,6 +100,7 @@
 
 <span class="c">#import SimPy.Simulation</span>
 <span class="kn">from</span> <span class="nn">SimPy.SimulationRT</span> <span class="kn">import</span> <span class="n">SimulationRT</span><span class="p">,</span> <span class="n">Process</span><span class="p">,</span> <span class="n">hold</span>
+<span class="c">#import simpy # simpy 3</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
@@ -128,7 +129,8 @@
 <span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<div class="viewcode-block" id="Simul"><a class="viewcode-back" href="../../modules/simul.simulnet.html#simul.simulnet.Simul">[docs]</a><span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="n">SimulationRT</span><span class="p">):</span>
+<div class="viewcode-block" id="Simul"><a class="viewcode-back" href="../../modules/simul.simulnet.html#simul.simulnet.Simul">[docs]</a><span class="k">class</span> <span class="nc">Simul</span><span class="p">(</span><span class="n">SimulationRT</span><span class="p">):</span> <span class="c"># Sympy 2</span>
+<span class="c">#class Simul(sympy.RealtimeEnvironment):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Attributes</span>
@@ -150,10 +152,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">SimulationRT</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">SimulationRT</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c">#Sympy 2</span>
+        <span class="c">#sympy.RealtimeEnvironment.__init__(self)  #simpy 3</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="s">&#39;simulnet.ini&#39;</span><span class="p">,</span><span class="s">&#39;ini&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meca_opt</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
@@ -166,15 +170,18 @@
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;ipython_nb_show&#39;</span><span class="p">]):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">roomlist</span><span class="o">=</span><span class="p">[]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Simul.create_layout"><a class="viewcode-back" href="../../modules/simul.simulnet.html#simul.simulnet.Simul.create_layout">[docs]</a>    <span class="k">def</span> <span class="nf">create_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create Layout in Simpy the_world thantks to Tk backend</span>
+<span class="sd">        Create Layout in Simpy the_world thanks to Tk backend</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span> <span class="o">=</span> <span class="n">world</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;the_world_width&#39;</span><span class="p">]),</span> <span class="n">height</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;the_world_height&#39;</span><span class="p">]),</span> <span class="n">scale</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;the_world_scale&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">the_world</span> <span class="o">=</span> <span class="n">world</span><span class="p">(</span><span class="n">width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;the_world_width&#39;</span><span class="p">]),</span> 
+                               <span class="n">height</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;the_world_height&#39;</span><span class="p">]),</span>
+                               <span class="n">scale</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;the_world_scale&#39;</span><span class="p">]))</span>
 
         <span class="c"># tk = self.the_world.tk</span>
         <span class="c"># canvas, x_, y_ = tk.canvas, tk.x_, tk.y_</span>
@@ -183,22 +190,22 @@
         <span class="n">_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lay_opt</span><span class="p">[</span><span class="s">&#39;filename&#39;</span><span class="p">]</span>
         <span class="c">#sl=Slab.SlabDB(self.lay_opt[&#39;slab&#39;],self.lay_opt[&#39;slabmat&#39;])</span>
         <span class="c">#G1   = Graph.Graph(sl=sl,filename=_filename)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;str&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">loadstr</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;str2&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">loadstr2</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;ini&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">loadini</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="c">#if _filename.split(&#39;.&#39;)[1] == &#39;str&#39;:</span>
+        <span class="c">#    self.L.loadstr(_filename)</span>
+        <span class="c">#elif _filename.split(&#39;.&#39;)[1] == &#39;str2&#39;:</span>
+        <span class="c">#    self.L.loadstr2(_filename)</span>
+        <span class="c">#elif _filename.split(&#39;.&#39;)[1] == &#39;ini&#39;:</span>
+        <span class="c">#    self.L.loadini(_filename)</span>
 
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpr</span><span class="p">()</span>
-            <span class="k">print</span> <span class="s">&#39;Layout graphs are loaded from &#39;</span><span class="p">,</span><span class="n">basename</span><span class="p">,</span><span class="s">&#39;/struc&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;Layout graphs are loaded from &#39;</span><span class="p">,</span><span class="n">basename</span><span class="p">,</span><span class="s">&#39;/struc/ini&#39;</span>
         <span class="k">except</span><span class="p">:</span>
         <span class="c">#self.L.sl = sl</span>
         <span class="c">#self.L.loadGr(G1)</span>
-            <span class="k">print</span> <span class="s">&#39;This is the first time your use this layout file.</span><span class="se">\</span>
+            <span class="k">print</span> <span class="s">&#39;This is the first time the layout file is used</span><span class="se">\</span>
 <span class="s">            Layout graphs are curently being built, it may take few minutes.&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>     
             <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
@@ -316,7 +323,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">visu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">visu</span><span class="o">.</span><span class="n">execute</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Simul.create"><a class="viewcode-back" href="../../modules/simul.simulnet.html#simul.simulnet.Simul.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Create the simulation, to be ready to run</span>
+        <span class="sd">&quot;&quot;&quot; Create the simulation </span>
+<span class="sd">            This method is called at the end of __init__</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -326,6 +334,7 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s">&#39;mysql -u &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; -p &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sql_opt</span><span class="p">[</span><span class="s">&#39;dbname&#39;</span><span class="p">]</span> <span class="o">+</span>\
                 <span class="s">&#39;&lt; /private/staff/t/ot/niamiot/svn2/devel/simulator/pyray/SimWHERE2.sql&#39;</span> <span class="p">)</span>
 
+        <span class="c">## TODO supprimer la ref en dur </span>
         <span class="k">if</span> <span class="s">&#39;txt&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;save&#39;</span><span class="p">]:</span>
             <span class="n">pyu</span><span class="o">.</span><span class="n">writeDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">basename</span><span class="o">+</span><span class="s">&#39;/output/Nodes.txt&#39;</span><span class="p">):</span>
@@ -340,9 +349,6 @@
                         <span class="k">except</span><span class="p">:</span>
                             <span class="k">pass</span>
                         
-
-
-
         <span class="bp">self</span><span class="o">.</span><span class="n">create_layout</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_EMS</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_network</span><span class="p">()</span>
@@ -362,6 +368,9 @@
 
 </div>
 <div class="viewcode-block" id="Simul.create_show"><a class="viewcode-back" href="../../modules/simul.simulnet.html#simul.simulnet.Simul.create_show">[docs]</a>    <span class="k">def</span> <span class="nf">create_show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
         <span class="n">fig_net</span> <span class="o">=</span> <span class="s">&#39;network&#39;</span>
         <span class="n">fig_table</span> <span class="o">=</span> <span class="s">&#39;table&#39;</span>
@@ -371,11 +380,11 @@
                 <span class="n">notebook</span><span class="o">=</span><span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">notebook</span> <span class="o">=</span><span class="bp">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="o">=</span><span class="n">ShowNet</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">fname</span><span class="o">=</span><span class="n">fig_net</span><span class="p">,</span><span class="n">notebook</span><span class="o">=</span><span class="n">notebook</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">ShowNet</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">fname</span><span class="o">=</span><span class="n">fig_net</span><span class="p">,</span><span class="n">notebook</span><span class="o">=</span><span class="n">notebook</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span><span class="mf">1.0</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">str2bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net_opt</span><span class="p">[</span><span class="s">&#39;show_table&#39;</span><span class="p">]):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="o">=</span><span class="n">ShowTable</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="n">lAg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">fname</span><span class="o">=</span><span class="n">fig_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sht</span> <span class="o">=</span> <span class="n">ShowTable</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">,</span><span class="n">lAg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lAg</span><span class="p">,</span><span class="n">sim</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span><span class="n">fname</span><span class="o">=</span><span class="n">fig_table</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sht</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span><span class="mf">1.0</span><span class="p">)</span>
 
 </div>
@@ -383,7 +392,9 @@
         <span class="sd">&quot;&quot;&quot; Run simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">until</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]),</span><span class="n">real_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">rel_speed</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;speedratio&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">until</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]),</span>
+                      <span class="n">real_time</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                      <span class="n">rel_speed</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;speedratio&#39;</span><span class="p">]))</span>
 <span class="c">#        self.simulate(until=float(self.sim_opt[&#39;duration&#39;]))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_opt</span><span class="p">[</span><span class="s">&#39;savep&#39;</span><span class="p">]:</span>
             <span class="k">print</span> <span class="s">&#39;Processing save results, please wait&#39;</span>
@@ -393,7 +404,7 @@
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 
     <span class="n">S</span> <span class="o">=</span> <span class="n">Simul</span><span class="p">()</span>
-    <span class="n">seed</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">sim_opt</span><span class="p">[</span><span class="s">&#39;seed&#39;</span><span class="p">]))</span>
+    <span class="c">#seed(eval(S.sim_opt[&#39;seed&#39;]))</span>
     <span class="n">S</span><span class="o">.</span><span class="n">runsimul</span><span class="p">()</span>
 </pre></div>
 

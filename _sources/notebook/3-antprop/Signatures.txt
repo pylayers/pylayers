@@ -13,7 +13,7 @@ Ray Signatures
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x38a21d0>
+    <matplotlib.figure.Figure at 0x4dd2210>
 
 
 .. code-block:: python
@@ -24,12 +24,6 @@ Ray Signatures
     except:
         L.build()
         L.dumpw()
-
-.. parsed-literal::
-
-    G s  not saved
-
-
 Showing the graph of rooms with 2 rooms separated by a DOOR segment
 
 .. code-block:: python
@@ -307,8 +301,8 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. parsed-literal::
 
-    [ 7.76736187  0.16240267]
-    [ 2.8717041  0.9585657]
+    [ 7.99288215  0.27757884]
+    [ 2.67932184  0.55618627]
 
 
 Evaluate performances of signature and ray evaluation
@@ -343,13 +337,13 @@ Evaluate performances of signature and ray evaluation
 
 .. parsed-literal::
 
-    0 0.00193500518799
-    1 0.0108859539032
-    2 0.0519587993622
-    3 0.206576108932
-    4 0.669840097427
-    5 1.78868603706
-    6 4.40745401382
+    0 0.00189018249512
+    1 0.0104110240936
+    2 0.0499429702759
+    3 0.205840110779
+    4 0.652987957001
+    5 1.77520799637
+    6 4.35679721832
 
 
 It appears that the increasing number of signatures obatined with the
@@ -368,7 +362,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x4680d50>
+    <matplotlib.text.Text at 0x7fc4b81b2750>
 
 
 
@@ -396,7 +390,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f349faf1e50>
+    <matplotlib.text.Text at 0x5a7a990>
 
 
 
@@ -419,7 +413,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x4b951d0>
+    <matplotlib.text.Text at 0x5f78550>
 
 
 
@@ -438,7 +432,7 @@ number of rays.
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x53d2110>
+    <matplotlib.text.Text at 0x7fc4b85784d0>
 
 
 
@@ -455,7 +449,7 @@ number of rays.
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x57652d0>]
+    [<matplotlib.lines.Line2D at 0x68dd5d0>]
 
 
 

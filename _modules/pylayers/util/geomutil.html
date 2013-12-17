@@ -77,6 +77,7 @@
 <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">sh</span>
 <span class="kn">import</span> <span class="nn">scipy.linalg</span> <span class="kn">as</span> <span class="nn">la</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">logging</span> 
 <span class="c">#! /usr/bin/python</span>
 <span class="c"># geomutil.py</span>
 <span class="sd">&quot;&quot;&quot; functions related to geometry</span>
@@ -104,9 +105,9 @@
 
 <span class="sd">     linet(sp,p1,p2,al,col,lwidth)</span>
 
-<span class="sd">     ccw(A,B,C)</span>
+<span class="sd">     ccw(a,b,c)</span>
 
-<span class="sd">     intersect(A,B,C,D)</span>
+<span class="sd">     intersect(a,b,c,d)</span>
 
 <span class="sd">     mul3(A,B)</span>
 
@@ -165,11 +166,16 @@
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
+
 <span class="sd">    show3</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="s">&quot;geom&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="k">if</span> <span class="n">clear</span><span class="p">:</span>
+            <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>           
 
 <div class="viewcode-block" id="Geomview.show3"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomview.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -185,12 +191,9 @@
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">_filename</span> <span class="o">=</span> <span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39;.list&#39;</span>
-        <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">)</span>
-        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
-        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;LIST</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="n">clear</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Geomlist.append"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomlist.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strg</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -256,20 +259,23 @@
 <span class="sd">        display a set of points</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span><span class="s">&#39;geomdef&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="o">=</span><span class="s">&#39;geomdef&#39;</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="n">_filename</span> <span class="o">=</span> <span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39;.vect&#39;</span>
-        <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">)</span>
+        <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="n">clear</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GeomVect.segments"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.GeomVect.segments">[docs]</a>    <span class="k">def</span> <span class="nf">segments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">i2d</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        ds   : dictionnary</span>
 <span class="sd">            len ds</span>
 <span class="sd">        i2d  : boolean (defaut True)</span>
 <span class="sd">            2d indicator</span>
 <span class="sd">        linewidth : float</span>
 <span class="sd">            default 2</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;appearance { linewidth </span><span class="si">%d</span><span class="s"> }</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">linewidth</span><span class="p">)</span>
@@ -293,8 +299,8 @@
                 <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">phe</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">phe</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">phe</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
-    <span class="k">def</span> <span class="nf">geomBase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span>
-                 <span class="n">col</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">geomBase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span> <span class="n">col</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span>
+                 <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Construct a geomview vect file for vizualisation of a frame</span>
 <span class="sd">            by default the geomview filename is base0.vect</span>
 
@@ -323,6 +329,7 @@
 <span class="sd">        &gt;&gt;&gt; #gv.show3()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">M</span> <span class="o">*</span> <span class="n">scale</span>
         <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;appearance { linewidth </span><span class="si">%d</span><span class="s"> }</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">linewidth</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;VECT</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
@@ -330,7 +337,7 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;2 2 2</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>   <span class="c"># 2 points per lines</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;1 1 1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>   <span class="c"># 1 color per line</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> 
                                           <span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">M</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span>
@@ -356,17 +363,18 @@
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
-<span class="sd">            &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">            &gt;&gt;&gt; import scipy as sp</span>
-<span class="sd">            &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
-<span class="sd">            &gt;&gt;&gt; pt1 = sp.rand(3,10)</span>
-<span class="sd">            &gt;&gt;&gt; pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}</span>
-<span class="sd">            &gt;&gt;&gt; gv1 = GeomVect(&#39;test1&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; gv1.points(pt1)</span>
-<span class="sd">            &gt;&gt;&gt; #gv1.show3()</span>
-<span class="sd">            &gt;&gt;&gt; gv2 = GeomVect(&#39;test2&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; gv2.points(pt2)</span>
-<span class="sd">            &gt;&gt;&gt; #gv2.show3()</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
+<span class="sd">        &gt;&gt;&gt; import scipy as sp</span>
+<span class="sd">        &gt;&gt;&gt; pt1 = sp.rand(3,10)</span>
+<span class="sd">        &gt;&gt;&gt; pt2 = { 1:(0,0,0),2:(10,10,10),3:(0,10,0),4:(10,0,0)}</span>
+<span class="sd">        &gt;&gt;&gt; gv1 = GeomVect(&#39;test1&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; gv1.points(pt1)</span>
+<span class="sd">        &gt;&gt;&gt; #gv1.show3()</span>
+<span class="sd">        &gt;&gt;&gt; gv2 = GeomVect(&#39;test2&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; gv2.points(pt2)</span>
+<span class="sd">        &gt;&gt;&gt; #gv2.show3()</span>
 
 <span class="sd">        .. todo::</span>
 <span class="sd">            colorbar depending of a value associated with point</span>
@@ -461,6 +469,53 @@
         <span class="n">_filename</span> <span class="o">=</span> <span class="n">_filename</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
         <span class="n">Geomview</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_filename</span><span class="p">)</span>
 
+<div class="viewcode-block" id="Geomoff.loadpt"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomoff.loadpt">[docs]</a>    <span class="k">def</span> <span class="nf">loadpt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; load points </span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">lis</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">typ</span><span class="p">,</span><span class="n">nv</span><span class="p">,</span><span class="n">nf</span><span class="p">,</span><span class="n">ne</span><span class="o">=</span><span class="n">lis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">&lt;&gt;</span><span class="s">&#39;OFF&#39;</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;not an off file&#39;</span><span class="p">)</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">nv</span><span class="p">)</span>
+        <span class="n">nf</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">nf</span><span class="p">)</span> 
+        <span class="n">ne</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ne</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nv</span><span class="p">):</span>
+            <span class="c">#x,y,z = lis[k+1].split(&#39; &#39;)</span>
+            <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">lis</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">t</span><span class="p">,</span><span class="n">pt</span><span class="p">))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">pt</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Geomoff.savept"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomoff.savept">[docs]</a>    <span class="k">def</span> <span class="nf">savept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ptnew</span><span class="p">,</span><span class="n">_fileoff</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">lis</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">typ</span><span class="p">,</span><span class="n">nv</span><span class="p">,</span><span class="n">nf</span><span class="p">,</span><span class="n">ne</span><span class="o">=</span><span class="n">lis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">&lt;&gt;</span><span class="s">&#39;OFF&#39;</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;not an off file&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">nv</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">nv</span><span class="p">)</span>
+                <span class="n">nf</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">nf</span><span class="p">)</span>
+                <span class="n">ne</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">ne</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;load off wrong number of values&#39;</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">fileoff</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_fileoff</span><span class="p">,</span> <span class="s">&quot;geom&quot;</span><span class="p">)</span>
+        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileoff</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">lis</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nv</span><span class="p">):</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ptnew</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ptnew</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">ptnew</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="n">lis</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">2</span><span class="p">:]:</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
 <div class="viewcode-block" id="Geomoff.polygon"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomoff.polygon">[docs]</a>    <span class="k">def</span> <span class="nf">polygon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">poly</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  create geomview off for polygon</span>
 
@@ -521,8 +576,49 @@
             <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;1.0 0.0 1.0 0.4</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
+<div class="viewcode-block" id="Geomoff.cylinder"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomoff.cylinder">[docs]</a>    <span class="k">def</span> <span class="nf">cylinder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">nphi</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">nl</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; create a cylinder </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        r : radius</span>
+<span class="sd">        l : length </span>
+<span class="sd">        nphi : number of phi </span>
+<span class="sd">        nl : number of l </span>
+<span class="sd">        col : list [r,g,b]</span>
+<span class="sd">        alpha : transparency </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">nphi</span><span class="p">,</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">tz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">l</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">l</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="n">nl</span><span class="p">)</span>
+        <span class="n">npoly</span> <span class="o">=</span> <span class="n">nphi</span><span class="o">*</span><span class="p">(</span><span class="n">nl</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">nedges</span> <span class="o">=</span> <span class="n">nphi</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">nl</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">fo</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="c">#fo.write(&quot;OFF\n&quot;)</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;OFF </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="s"> </span><span class="si">%d</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">nphi</span><span class="o">*</span><span class="n">nl</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">npoly</span><span class="p">,</span><span class="n">nedges</span><span class="p">))</span>
+        <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;0.000 0.000 0.000 </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">tz</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="n">tphi</span><span class="p">:</span> 
+               <span class="n">x</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+               <span class="n">y</span> <span class="o">=</span> <span class="n">r</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+               <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="si">%6.3f</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npoly</span><span class="p">):</span>
+            <span class="n">il</span> <span class="o">=</span> <span class="n">k</span><span class="o">/</span><span class="n">nphi</span>
+            <span class="n">iphi</span> <span class="o">=</span> <span class="n">k</span> <span class="o">%</span> <span class="n">nphi</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">il</span><span class="o">*</span><span class="n">nphi</span><span class="o">+</span><span class="n">iphi</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">il</span><span class="o">*</span><span class="n">nphi</span><span class="o">+</span><span class="p">(</span><span class="n">iphi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">nphi</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">il</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">nphi</span><span class="o">+</span><span class="n">iphi</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">il</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">nphi</span><span class="o">+</span><span class="p">(</span><span class="n">iphi</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">nphi</span>
+
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;4 </span><span class="si">%i</span><span class="s"> </span><span class="si">%i</span><span class="s"> </span><span class="si">%i</span><span class="s"> </span><span class="si">%i</span><span class="s"> &quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">str1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span>
+
+        <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
 <div class="viewcode-block" id="Geomoff.box"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomoff.box">[docs]</a>    <span class="k">def</span> <span class="nf">box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extrem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])):</span>
-        <span class="sd">&quot;&quot;&quot; Geomview file for creating a box</span>
+        <span class="sd">&quot;&quot;&quot; create a box</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -530,11 +626,11 @@
 <span class="sd">        extrem : ndarray</span>
 <span class="sd">                 (1x6) [xmin,xmax,ymin,ymax,zmin,zmax]</span>
 
-<span class="sd">        Example</span>
-<span class="sd">        -------</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
 
-<span class="sd">            &gt;&gt;&gt; geo = Geomoff(&#39;test&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; geo.box()</span>
+<span class="sd">        &gt;&gt;&gt; geo = Geomoff(&#39;test&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; geo.box()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">xmin</span> <span class="o">=</span> <span class="n">extrem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -565,6 +661,126 @@
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;4 3 2 6 7 1 0 0 0.3</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;4 6 5 4 7 1 0 0 0.3</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Geomoff.pattern"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Geomoff.pattern">[docs]</a>    <span class="k">def</span> <span class="nf">pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; export antenna pattern in a geomview format</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        theta : np.array (Nt x 1 )</span>
+<span class="sd">        phi   : np.array (1 x Np)</span>
+<span class="sd">        E     : np.array complex  (Nt,Np)</span>
+<span class="sd">        po    : origin (1x3)</span>
+<span class="sd">        T     : rotation matrix (3x3)</span>
+<span class="sd">        minr  : radius of minimum</span>
+<span class="sd">        maxr  : radius of maximum</span>
+<span class="sd">        ilog  : True (log) False (linear)</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">           &gt;&gt;&gt; from pylayers.util.geomutil import *</span>
+<span class="sd">           &gt;&gt;&gt; import numpy as np </span>
+<span class="sd">           &gt;&gt;&gt; th = np.arange(0,np.pi,0.05)[:,np.newaxis]</span>
+<span class="sd">           &gt;&gt;&gt; ph = np.arange(0,2*np.pi,0.05)[np.newaxis,:]</span>
+<span class="sd">           &gt;&gt;&gt; E = 1.5*np.sin(th)*np.cos(0*ph)</span>
+<span class="sd">           &gt;&gt;&gt; g = Geomoff(&#39;dipole&#39;)</span>
+<span class="sd">           &gt;&gt;&gt; g.pattern(th,ph,E)</span>
+<span class="sd">           &gt;&gt;&gt; g.show3()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;po&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]),</span>
+                     <span class="s">&#39;T&#39;</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> 
+                     <span class="s">&#39;minr&#39;</span> <span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> 
+                     <span class="s">&#39;maxr&#39;</span> <span class="p">:</span> <span class="mi">1</span> <span class="p">,</span> 
+                     <span class="s">&#39;tag&#39;</span> <span class="p">:</span> <span class="s">&#39;Pat&#39;</span><span class="p">,</span> 
+                     <span class="s">&#39;ilog&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">}</span>
+        
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="n">minr</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;minr&#39;</span><span class="p">]</span>
+        <span class="n">maxr</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;maxr&#39;</span><span class="p">]</span>
+        <span class="n">tag</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;tag&#39;</span><span class="p">]</span>
+        <span class="n">ilog</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;ilog&#39;</span><span class="p">]</span>
+        <span class="n">po</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;po&#39;</span><span class="p">]</span>
+        <span class="c"># T is an unitary matrix </span>
+        <span class="n">T</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;T&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">la</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">T</span><span class="p">))</span><span class="o">&gt;</span><span class="mf">0.99</span><span class="p">)</span>            
+        <span class="c"># retrieving dimensions             </span>
+        <span class="n">Nt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">theta</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">phi</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">ilog</span><span class="p">:</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+
+        <span class="c">#Th = np.outer(theta, np.ones(Np))</span>
+        <span class="c">#Ph = np.outer(np.ones(Nt), phi)</span>
+
+        <span class="n">U</span> <span class="o">=</span> <span class="p">(</span><span class="n">R</span> <span class="o">-</span> <span class="n">R</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">R</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+        <span class="n">Ry</span> <span class="o">=</span> <span class="n">minr</span> <span class="o">+</span> <span class="p">(</span><span class="n">maxr</span><span class="o">-</span><span class="n">minr</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span>
+        <span class="c"># x (Nt,Np)</span>
+        <span class="c"># y (Nt,Np)</span>
+        <span class="c"># z (Nt,Np)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">Ry</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> 
+        <span class="n">y</span> <span class="o">=</span> <span class="n">Ry</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> 
+        <span class="n">z</span> <span class="o">=</span> <span class="n">Ry</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> 
+        
+        <span class="c"># p : Nt x Np x 3 </span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span><span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c">#</span>
+        <span class="c"># antenna cs -&gt; glogal cs </span>
+        <span class="c"># q : Nt x Np x 3                    </span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">&#39;ij,klj-&gt;kli&#39;</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>                   
+        <span class="c">#</span>
+        <span class="c"># translation </span>
+        <span class="c">#</span>
+        <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">po</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">Npoints</span> <span class="o">=</span> <span class="n">Nt</span> <span class="o">*</span> <span class="n">Np</span>
+        <span class="n">Nfaces</span> <span class="o">=</span> <span class="p">(</span><span class="n">Nt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Np</span>
+        <span class="n">Nedge</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c">#</span>
+        <span class="c"># Colormap</span>
+        <span class="c">#</span>
+        <span class="n">colmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">()</span>
+        <span class="n">Ncol</span> <span class="o">=</span> <span class="n">colmap</span><span class="o">.</span><span class="n">N</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">colmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ncol</span><span class="p">))</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">U</span> <span class="o">*</span> <span class="p">(</span><span class="n">Ncol</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;COFF</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">chaine</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Npoints</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Nfaces</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Nedge</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nt</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
+                <span class="n">cpos</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">cpos</span> <span class="o">=</span> <span class="n">cpos</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">ik</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span>
+                <span class="n">ccol</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> \
+                    <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+                <span class="n">ccol</span> <span class="o">=</span> <span class="n">ccol</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cpos</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">ccol</span> <span class="o">+</span> <span class="s">&#39; 0.2</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">jj</span>
+                <span class="n">p2</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">jj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+                <span class="n">p3</span> <span class="o">=</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">jj</span>
+                <span class="n">p4</span> <span class="o">=</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">jj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+                <span class="n">chaine</span> <span class="o">=</span> <span class="s">&#39;4 &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="n">p4</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; 0.5</span><span class="se">\n</span><span class="s">&#39;</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
+
+        <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
 <span class="c">#class Polygon2(object):</span>
 <span class="c">#        def __init__(self,p):</span>
 <span class="c">#                self.p = p</span>
@@ -872,6 +1088,79 @@
     <span class="k">except</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;error divide by zero in pvecn&quot;</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">v4</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="onb"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.onb">[docs]</a><span class="k">def</span> <span class="nf">onb</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; orthonormal basis from 2 points defining an axe and a vector </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    A : np.array </span>
+<span class="sd">        3 x n</span>
+<span class="sd">    B : np.array</span>
+<span class="sd">        3 x n </span>
+<span class="sd">    v : np.array</span>
+<span class="sd">        3 x n </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+
+<span class="sd">    T basis (un,vn,wn)</span>
+<span class="sd">        3 x n x 3</span>
+<span class="sd">    (un,vn) is a basis in the plane transverse to the axis vn</span>
+<span class="sd">    wn is the unitary vector along vector AB</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; A = np.array([[0,0,0,0],[1,2,3,4],[0,0,0,0]])</span>
+<span class="sd">    &gt;&gt;&gt; B = np.array([[0,0,0,0],[1,2,3,4],[10,10,10,10]])</span>
+<span class="sd">    &gt;&gt;&gt; v = np.array([[1,1,1,1],[0,0,0,0],[0,0,0,0]])</span>
+<span class="sd">    &gt;&gt;&gt; onb(A,B,v)</span>
+<span class="sd">    array([[[ 1.,  0.,  0.],</span>
+<span class="sd">            [ 0.,  1.,  0.],</span>
+<span class="sd">            [ 0.,  0.,  1.]]</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">           [[ 1.,  0.,  0.],</span>
+<span class="sd">            [ 0.,  1.,  0.],</span>
+<span class="sd">            [ 0.,  0.,  1.]],</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">           [[ 1.,  0.,  0.],</span>
+<span class="sd">            [ 0.,  1.,  0.],</span>
+<span class="sd">            [ 0.,  0.,  1.]],</span>
+<span class="sd">    &lt;BLANKLINE&gt;</span>
+<span class="sd">           [[ 1.,  0.,  0.],</span>
+<span class="sd">            [ 0.,  1.,  0.],</span>
+<span class="sd">            [ 0.,  0.,  1.]]])</span>
+
+
+<span class="sd">    see also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    pylayers.util.geomutil.Geomvect.geomBase</span>
+<span class="sd">    pylayers.util.mobility.body</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#np.random.seed(0)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">A</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> 
+    <span class="c"># modab 1xN</span>
+    <span class="n">modab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">B</span><span class="o">-</span><span class="n">A</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">B</span><span class="o">-</span><span class="n">A</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># wn 3xN</span>
+    <span class="n">wn</span> <span class="o">=</span> <span class="p">(</span><span class="n">B</span> <span class="o">-</span> <span class="n">A</span><span class="p">)</span> <span class="o">/</span> <span class="n">modab</span>
+    <span class="c">#random_vector = np.random.rand(3,N)</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">v</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="n">wn</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">wn</span>
+    <span class="n">modu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">u</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+    <span class="c"># un : 3xN</span>
+    <span class="n">un</span> <span class="o">=</span> <span class="n">u</span> <span class="o">/</span><span class="n">modu</span>
+    <span class="c"># vn : 3xN</span>
+    <span class="n">vn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span><span class="n">un</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c">#pdb.set_trace()</span>
+    <span class="n">T</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">un</span><span class="p">,</span><span class="n">vn</span><span class="p">,</span><span class="n">wn</span><span class="p">))</span>
+    <span class="c"># reshape dimension for having index of cylinder axe first</span>
+    <span class="c"># N x 3 x 3</span>
+    <span class="n">T</span>  <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">T</span>
 
 </div>
 <div class="viewcode-block" id="vec_sph"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.vec_sph">[docs]</a><span class="k">def</span> <span class="nf">vec_sph</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">):</span>
@@ -967,6 +1256,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    vec : ndarray (N x ndim)</span>
 <span class="sd">        N ndim vectors</span>
 
@@ -993,10 +1283,11 @@
     <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">vec</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vec</span><span class="o">*</span><span class="n">vec</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">vecn</span> <span class="o">=</span> <span class="n">vec</span><span class="o">/</span><span class="n">m</span>
+
     <span class="k">return</span><span class="p">(</span><span class="n">vecn</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ptonseg"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.ptonseg">[docs]</a><span class="k">def</span> <span class="nf">ptonseg</span><span class="p">(</span><span class="n">pta</span><span class="p">,</span> <span class="n">phe</span><span class="p">,</span> <span class="n">pt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a point on the segment pta pte</span>
+    <span class="sd">&quot;&quot;&quot; return a point on the segment (pta,pte)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1029,7 +1320,7 @@
     <span class="k">return</span> <span class="n">p</span>
 </div>
 <div class="viewcode-block" id="dptseg"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.dptseg">[docs]</a><span class="k">def</span> <span class="nf">dptseg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">pt</span><span class="p">,</span><span class="n">ph</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Distance between a set of points and a segment</span>
+    <span class="sd">&quot;&quot;&quot; distance between a set of points and a segment</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1130,14 +1421,15 @@
     <span class="k">return</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="ccw"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.ccw">[docs]</a><span class="k">def</span> <span class="nf">ccw</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+<div class="viewcode-block" id="ccw"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.ccw">[docs]</a><span class="k">def</span> <span class="nf">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; counter clock wise order</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : array(2,N)</span>
-<span class="sd">    B : array(2,N)</span>
-<span class="sd">    C : array(2,N)</span>
+
+<span class="sd">    a : ndarray (2,N)</span>
+<span class="sd">    b : ndarray (2,N)</span>
+<span class="sd">    c : ndarray (2,N)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1154,27 +1446,30 @@
 <span class="sd">    --------</span>
 
 <span class="sd">    &gt;&gt;&gt; import scipy as sp</span>
-<span class="sd">    &gt;&gt;&gt; A = sp.rand(2,100)</span>
-<span class="sd">    &gt;&gt;&gt; B = sp.rand(2,100)</span>
-<span class="sd">    &gt;&gt;&gt; C = sp.rand(2,100)</span>
-<span class="sd">    &gt;&gt;&gt; u = ccw(A,B,C)</span>
+<span class="sd">    &gt;&gt;&gt; a = sp.rand(2,100)</span>
+<span class="sd">    &gt;&gt;&gt; b = sp.rand(2,100)</span>
+<span class="sd">    &gt;&gt;&gt; c = sp.rand(2,100)</span>
+<span class="sd">    &gt;&gt;&gt; u = ccw(a,b,c)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span><span class="p">((</span><span class="n">C</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="p">(</span><span class="n">C</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]))</span>
+    <span class="c">#return((c[1, :] - a[1, :]) * (b[0, :] - a[0, :]) &gt; (b[1, :] - a[1, :]) * (c[0, :] - a[0, :]))</span>
+    <span class="k">return</span><span class="p">((</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">&gt;</span> 
+           <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span>
 
 </div>
-<div class="viewcode-block" id="intersect"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.intersect">[docs]</a><span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+<div class="viewcode-block" id="intersect"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.intersect">[docs]</a><span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; check if segment AB intersects segment CD</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : np.array (2xN)</span>
-<span class="sd">    B : np.array (2xN)</span>
-<span class="sd">    C : np.array (2xN)</span>
-<span class="sd">    D : np.array (2xN)</span>
+
+<span class="sd">    a : np.array (2xN)</span>
+<span class="sd">    b : np.array (2xN)</span>
+<span class="sd">    c : np.array (2xN)</span>
+<span class="sd">    d : np.array (2xN)</span>
 
 
-<span class="sd">    Exemples</span>
+<span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 
 <span class="sd">    .. plot::</span>
@@ -1206,10 +1501,76 @@
 <span class="sd">        array([ True], dtype=bool)</span>
 <span class="sd">        &gt;&gt;&gt; intersect(A,B,C,D)[0]</span>
 <span class="sd">        True</span>
+<span class="sd">    </span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    ccw : counter clock wise detection </span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">((</span><span class="n">ccw</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ccw</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">D</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ccw</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span><span class="p">)))</span>
+</div>
+<div class="viewcode-block" id="affine"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.affine">[docs]</a><span class="k">def</span> <span class="nf">affine</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; find affine transformation </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 
+<span class="sd">    X  : np.array</span>
+<span class="sd">        3xN</span>
+<span class="sd">    Y</span>
+<span class="sd">        3xN</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    A : np.array</span>
+<span class="sd">        3x3</span>
+<span class="sd">    B : np.array</span>
+<span class="sd">        3x1</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Given X and Y find the affine transformation </span>
+
+<span class="sd">    Y = A X + B </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">Yc</span> <span class="o">=</span> <span class="n">Y</span><span class="o">-</span><span class="n">B</span>
+    <span class="n">pX</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Yc</span><span class="p">,</span><span class="n">pX</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="cylmap"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.cylmap">[docs]</a><span class="k">def</span> <span class="nf">cylmap</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mf">0.0625</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; find affine transformation for a specific cylinder</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Y</span>
+<span class="sd">        3xN</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    A : np.array</span>
+<span class="sd">        3x3</span>
+<span class="sd">    B : np.array</span>
+<span class="sd">        3x1</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    Y = A X + B </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c">#X = np.array([[0,0,0],[0,0,-0.25],[0,0,0.25],[0.0625,0,0],[0,0.0625,0],[0.0625,0,0.25]]).T</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">],[</span><span class="n">r</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="n">r</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">Yc</span> <span class="o">=</span> <span class="n">Y</span><span class="o">-</span><span class="n">B</span>
+    <span class="n">pX</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Yc</span><span class="p">,</span><span class="n">pX</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="mul3"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.mul3">[docs]</a><span class="k">def</span> <span class="nf">mul3</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1263,21 +1624,22 @@
 </div>
 <div class="viewcode-block" id="MRot3"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.MRot3">[docs]</a><span class="k">def</span> <span class="nf">MRot3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axe</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return a 3D rotation matrix along axe 1|2|3</span>
+<span class="sd">    Return a 3D rotation matrix along axe 0|1|2</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 
 <span class="sd">    a   :  angle (radians)</span>
-<span class="sd">    axe :  1:x 2:y 3:z</span>
+<span class="sd">    axe :  0:x 1:y 2:z</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">M3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">M2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(((</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">))))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">axe</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">axe</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">M3</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">M2</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">axe</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">axe</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
         <span class="n">M3</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">M2</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">axe</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">axe</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
         <span class="n">M3</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">M2</span>
     <span class="k">return</span><span class="p">(</span><span class="n">M3</span><span class="p">)</span>
 
@@ -1287,6 +1649,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    alpha  : float</span>
 <span class="sd">        rotation along axis z</span>
 <span class="sd">    beta : float</span>
@@ -1294,8 +1657,9 @@
 <span class="sd">    gamma : float</span>
 <span class="sd">        rotation along axis y</span>
 
-<span class="sd">    Return</span>
-<span class="sd">    ------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
 <span class="sd">    T    : np.array (3x3)</span>
 <span class="sd">        rotation matrix</span>
 
@@ -1307,15 +1671,17 @@
 
 <span class="sd">    Warnings</span>
 <span class="sd">    --------</span>
+
 <span class="sd">    Bizarre I was expected</span>
 
 <span class="sd">    -1  0  0</span>
 <span class="sd">     0  0  1</span>
 <span class="sd">     0  1  0</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">Ra</span> <span class="o">=</span> <span class="n">MRot3</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">Rb</span> <span class="o">=</span> <span class="n">MRot3</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">Rg</span> <span class="o">=</span> <span class="n">MRot3</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">Ra</span> <span class="o">=</span> <span class="n">MRot3</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">Rb</span> <span class="o">=</span> <span class="n">MRot3</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">Rg</span> <span class="o">=</span> <span class="n">MRot3</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">),</span> <span class="n">Rg</span><span class="p">)</span>
     <span class="c">#T  = np.dot(np.dot(Rg,Rb),Ra)</span>
@@ -1460,11 +1826,16 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">G</span> <span class="o">=</span> <span class="n">SphericalBasis</span><span class="p">(</span><span class="n">a_g</span><span class="p">)</span>
+
     <span class="n">th_g</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
     <span class="n">ph_g</span> <span class="o">=</span> <span class="n">G</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
     <span class="n">B_gT</span> <span class="o">=</span> <span class="n">dstack</span><span class="p">((</span><span class="n">th_g</span><span class="p">,</span> <span class="n">ph_g</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
     <span class="n">s_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span><span class="o">.</span><span class="n">T</span>
+
     <span class="n">al</span> <span class="o">=</span> <span class="n">angledir</span><span class="p">(</span><span class="n">s_l</span><span class="p">)</span>
+
     <span class="n">L</span> <span class="o">=</span> <span class="n">SphericalBasis</span><span class="p">(</span><span class="n">al</span><span class="p">)</span>
     <span class="n">th_l</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
     <span class="n">ph_l</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
@@ -1472,8 +1843,6 @@
     <span class="n">R</span> <span class="o">=</span> <span class="n">mul3</span><span class="p">(</span><span class="n">B_gT</span><span class="p">,</span> <span class="n">mul3</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">B_l</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">R</span><span class="p">,</span> <span class="n">al</span>
-
-
 </div>
 <div class="viewcode-block" id="Plot_shapely"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Plot_shapely">[docs]</a><span class="k">class</span> <span class="nc">Plot_shapely</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;draw Shapely with matplotlib - pylab</span>
@@ -1551,7 +1920,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_line</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;inconnu au bataillon: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-
 </div></div>
 <div class="viewcode-block" id="plot_coords"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.plot_coords">[docs]</a><span class="k">def</span> <span class="nf">plot_coords</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ob</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;#999999&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; plotting coord of a `shapely` object</span>
@@ -1643,9 +2011,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">COLOR</span><span class="p">[</span><span class="n">ob</span><span class="o">.</span><span class="n">is_simple</span><span class="p">]</span>
 
-<span class="c">#--------------------------------------------</span>
-<span class="c">#   Functions used for calculation of Gv</span>
-<span class="c">#-------------------------------------------</span>
 </div>
 <div class="viewcode-block" id="LineString"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.LineString">[docs]</a><span class="k">class</span> <span class="nc">LineString</span><span class="p">(</span><span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Overloaded shapely LineString class</span>
@@ -1664,8 +2029,6 @@
             <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">T</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">tp</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">):</span>
@@ -1675,14 +2038,17 @@
             <span class="n">shg</span><span class="o">.</span><span class="n">LineString</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tu</span><span class="p">)</span>
 
 <div class="viewcode-block" id="LineString.plot"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.LineString.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; plot function</span>
+        <span class="sd">&quot;&quot;&quot; plot LineString</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        color :  string</span>
 <span class="sd">            default #abcdef&quot;</span>
 <span class="sd">        alpha :  float</span>
 <span class="sd">            transparency   (default 0.8)</span>
+<span class="sd">        fig : figure object</span>
+<span class="sd">        ax  : axes object</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -1697,11 +2063,8 @@
 <span class="sd">            &gt;&gt;&gt; L1 = LineString(l1)</span>
 <span class="sd">            &gt;&gt;&gt; l2 = [[3,4,4,3],[1,1,2,2]]</span>
 <span class="sd">            &gt;&gt;&gt; L2 = LineString(l2)</span>
-<span class="sd">            &gt;&gt;&gt; l3 = [np.array([10,10]),np.array([11,10]),np.array([11,11]),np.array([10,11])]</span>
-<span class="sd">            &gt;&gt;&gt; L3 = LineString(l3)</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = L1.plot(color=&#39;red&#39;,alpha=0.3,linewidth=3)</span>
 <span class="sd">            &gt;&gt;&gt; fig,ax = L2.plot(fig=fig,ax=ax,color=&#39;blue&#39;,alpha=0.7,linewidth=2)</span>
-<span class="sd">            &gt;&gt;&gt; fig,ax = L3.plot(fig=fig,ax=ax,color=&#39;green&#39;,alpha=1,linewidth=1)</span>
 <span class="sd">            &gt;&gt;&gt; title = plt.title(&#39;test plotting LineString&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1745,7 +2108,10 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
-</div></div>
+
+<span class="c">#-----------------------------------------------------------</span>
+<span class="c">#   Functions used for calculation of visibility graph Gv</span>
+<span class="c">#-----------------------------------------------------------</span></div></div>
 <div class="viewcode-block" id="Polygon"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.Polygon">[docs]</a><span class="k">class</span> <span class="nc">Polygon</span><span class="p">(</span><span class="n">shg</span><span class="o">.</span><span class="n">Polygon</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Overloaded shapely Polygon class</span>
 
@@ -1765,18 +2131,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">vnodes</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            p : list</span>
-<span class="sd">                2xNp np.array</span>
-<span class="sd">                shg.MultiPoint</span>
-<span class="sd">                shg.Polygon</span>
-<span class="sd">            vnodes : list of alternating points and segments numbers</span>
-<span class="sd">                default = [] in this case a regular ordered sequence</span>
-<span class="sd">                is generated.</span>
+
+<span class="sd">        p : list</span>
+<span class="sd">            2xNp np.array</span>
+<span class="sd">            shg.MultiPoint</span>
+<span class="sd">            shg.Polygon</span>
+<span class="sd">        vnodes : list of alternating points and segments numbers</span>
+<span class="sd">            default = [] in this case a regular ordered sequence</span>
+<span class="sd">            is generated.</span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">            A Polygon as an equal number of points and segments</span>
+
+<span class="sd">        Convention : a Polygon as an equal number of points and segments</span>
+<span class="sd">        There is an implicit closure between first and last point</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1969,6 +2340,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        display   : boolean</span>
 <span class="sd">            default : False</span>
 <span class="sd">        fig       : matplotlib.figure.pyplot</span>
@@ -1977,11 +2349,6 @@
 <span class="sd">            default = []</span>
 <span class="sd">        udeg2     : np.array indexes of points of degree 2</span>
 <span class="sd">            default = []</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">            Topological error can be raised if the point coordinates accuracy</span>
-<span class="sd">            is not limited.</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -2008,6 +2375,13 @@
 <span class="sd">        Segment k and (k+1)%N share segment (k+1)%N</span>
 <span class="sd">        The degree of a point is dependent from other polygons around</span>
 
+<span class="sd">        Topological error can be raised if the point coordinates accuracy</span>
+<span class="sd">        is not limited.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        pylayers.gis.layout</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
@@ -2075,8 +2449,8 @@
         <span class="n">npt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">ipt</span><span class="p">]</span>
         <span class="n">nseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vnodes</span><span class="p">[</span><span class="n">iseg</span><span class="p">]</span>
 
-        <span class="k">assert</span>  <span class="nb">sum</span><span class="p">(</span><span class="n">npt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong&quot;</span>
-        <span class="k">assert</span>  <span class="nb">sum</span><span class="p">(</span><span class="n">nseg</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong&quot;</span>
+        <span class="k">assert</span>  <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">npt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong with points&quot;</span>
+        <span class="k">assert</span>  <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">nseg</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="s">&quot;something wrong with segments&quot;</span>
         <span class="c">#</span>
         <span class="c">#</span>
         <span class="c"># Create middle point on lring</span>
@@ -2110,19 +2484,22 @@
         <span class="n">xr</span><span class="p">,</span> <span class="n">yr</span> <span class="o">=</span> <span class="n">lring</span><span class="o">.</span><span class="n">xy</span>
 
         <span class="c">#</span>
-        <span class="c"># Degree 1 points</span>
+        <span class="c"># Degree 1 points : typically doors</span>
         <span class="c">#</span>
         <span class="c"># Determine diffraction points</span>
         <span class="c">#</span>
         <span class="c"># udeg1 :</span>
-        <span class="c"># deg2 : if null the point is kept</span>
-        <span class="c">#        if convexe the point is kept</span>
-        <span class="c">#        else the point is not kept</span>
+        <span class="c"># deg2 : if null:</span>
+        <span class="c">#           the point is kept</span>
+        <span class="c">#        if convex:</span>
+        <span class="c">#           the point is kept</span>
+        <span class="c">#        else:</span>
+        <span class="c">#           the point is not kept</span>
         <span class="c">#</span>
-        <span class="n">uconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">uzero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">udiffdoor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">uzero</span><span class="p">,</span> <span class="n">udeg2</span><span class="p">)</span>  <span class="c"># les points paralleles de degre 2 sont souvent des portes ou des fenetres</span>
-        <span class="n">udiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">uconvex</span><span class="p">,</span> <span class="n">udiffdoor</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;int&#39;</span><span class="p">)</span>
+        <span class="n">uconvex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># convex point position</span>
+        <span class="n">uzero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>   <span class="c"># planar point (joining two parallel segment)</span>
+        <span class="n">udiffdoor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">uzero</span><span class="p">,</span> <span class="n">udeg2</span><span class="p">)</span>  <span class="c"># degree 2 paralell points are often doors and windows </span>
+        <span class="n">udiff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">uconvex</span><span class="p">,</span> <span class="n">udiffdoor</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;int&#39;</span><span class="p">)</span> <span class="c"># diffracting point </span>
         <span class="c">#print &quot;vnodes&quot;,self.vnodes</span>
         <span class="c">#print &quot;tcc : &quot;,tcc</span>
         <span class="c">#print &quot;uzero : &quot;,uzero</span>
@@ -2137,7 +2514,7 @@
         <span class="c">#if uzero!=[]:</span>
         <span class="c">#    print &quot;zero :&quot;,npt[uzero]</span>
         <span class="c">#</span>
-        <span class="c"># display points and polygon</span>
+        <span class="c"># if show == True display points and polygon</span>
         <span class="c">#</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;show&#39;</span><span class="p">]:</span>
             <span class="n">points1</span> <span class="o">=</span> <span class="n">shg</span><span class="o">.</span><span class="n">MultiPoint</span><span class="p">(</span><span class="n">lring</span><span class="p">)</span>
@@ -2154,13 +2531,13 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
 
         <span class="c">#</span>
-        <span class="c">#  1) Calculate node node visibility</span>
+        <span class="c">#  1) Calculate node-node visibility</span>
         <span class="c">#</span>
-
+        <span class="c"># The following exploits definition of convexity.</span>
         <span class="c">#</span>
-        <span class="c">#  Entre les combinaisons de points convexes</span>
-        <span class="c">#  Il faut elargir aux portes points de degre 2</span>
-        <span class="c">#  eventuellement non convexes cross product nul</span>
+        <span class="c"># Between all combinations of diffracting points </span>
+        <span class="c"># create a segment and check it is fully included in the polygon </span>
+        <span class="c"># if it is true then there is a visibility between the 2 points.</span>
         <span class="c">#</span>
         <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">udiff</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">p1</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">nk</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
@@ -2172,16 +2549,20 @@
         <span class="c">#</span>
         <span class="c">#  2) Calculate edge-edge and node-edge visibility</span>
         <span class="c">#</span>
-        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
-            <span class="n">ptk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">nk</span><span class="p">]</span>
-            <span class="n">phk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">nk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>   <span class="c"># loop on range of number of points </span>
+            <span class="n">ptk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="n">nk</span><span class="p">]</span>     <span class="c"># tail point </span>
+            <span class="n">phk</span> <span class="o">=</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">]</span> <span class="c"># head point (%Np to get 0 as last point)</span>
 
+            <span class="c"># lnk : unitary vector on segment nk</span>
             <span class="n">lk</span> <span class="o">=</span> <span class="n">phk</span> <span class="o">-</span> <span class="n">ptk</span>
             <span class="n">nlk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lk</span><span class="p">,</span> <span class="n">lk</span><span class="p">))</span>
-            <span class="n">lnk</span> <span class="o">=</span> <span class="n">lk</span> <span class="o">/</span> <span class="n">nlk</span>
-
-            <span class="n">epsilonk</span> <span class="o">=</span> <span class="n">nlk</span> <span class="o">/</span> <span class="mf">1000.</span>
-
+            <span class="n">lnk</span> <span class="o">=</span> <span class="n">lk</span> <span class="o">/</span> <span class="n">nlk</span>     
+            
+            <span class="c"># the epsilon is (1/1000) of the segment length </span>
+            <span class="n">epsilonk</span> <span class="o">=</span> <span class="n">nlk</span> <span class="o">/</span> <span class="mf">1000.</span>  <span class="c"># this can be dangerous (epsilon can be large)</span>
+            
+            <span class="c"># x--o----------------------o--x</span>
+            <span class="c">#    +eps                  -eps</span>
             <span class="n">pcornert</span> <span class="o">=</span> <span class="n">ptk</span> <span class="o">+</span> <span class="n">lnk</span> <span class="o">*</span> <span class="n">epsilonk</span>  <span class="c"># + n[:,nk]*epsilon</span>
             <span class="n">pcornerh</span> <span class="o">=</span> <span class="n">phk</span> <span class="o">-</span> <span class="n">lnk</span> <span class="o">*</span> <span class="n">epsilonk</span>  <span class="c"># + n[:,nk]*epsilon</span>
 
@@ -2189,21 +2570,23 @@
         <span class="c"># in any case no ray towark nk</span>
         <span class="c"># if nk is convex no ray toward (nk-1)%Np</span>
         <span class="c">#</span>
+        <span class="c"># start from the two extremity of the segment </span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pcorner</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">pcornert</span><span class="p">,</span> <span class="n">pcornerh</span><span class="p">]):</span>
                 <span class="c">#</span>
-                <span class="c">#  si point tail</span>
-                <span class="c">#           on retire de segment nk</span>
-                <span class="c">#  et si le point est convexe on retire le segment precedent</span>
+                <span class="c">#  if tail point </span>
+                <span class="c">#           remove nk segment </span>
+                <span class="c">#  and if the point is convex</span>
+                <span class="c">#          remove previous segment </span>
                 <span class="c">#</span>
                 <span class="c">#  si point head</span>
                 <span class="c">#</span>
                 <span class="n">listpoint</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">)</span>
-                <span class="n">listpoint</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">nk</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span>
+                <span class="n">listpoint</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">nk</span><span class="p">)</span>   <span class="c"># remove current point </span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c"># first iteration pcornert </span>
+                    <span class="k">if</span> <span class="n">nk</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span>  <span class="c"># == 1</span>
                         <span class="n">listpoint</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">nk</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c"># second iteration pcornerh</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span> <span class="ow">in</span> <span class="n">uconvex</span><span class="p">:</span> <span class="c"># ==1</span>
                         <span class="n">listpoint</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">Np</span><span class="p">)</span>
 
                 <span class="k">for</span> <span class="n">ns</span> <span class="ow">in</span> <span class="n">listpoint</span><span class="p">:</span>
@@ -2369,11 +2752,14 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        display : boolean</span>
+<span class="sd">            default False</span>
 
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        tcc     : np.array (1x Nseg)</span>
 <span class="sd">            1 if convex , -1 if concav , 0 if plane</span>
 <span class="sd">        n       :  array(2xNseg)</span>
@@ -2416,10 +2802,16 @@
 <span class="sd">            property :</span>
 
 <span class="sd">            Let N be the number of points of the Polygon. N  = Nx + Nc where</span>
-<span class="sd">            Nx is the number of convex point and Nc the number of concav points</span>
+<span class="sd">            Nx is the number of convex points and Nc the number of concav points</span>
+
 <span class="sd">            We have Nx &gt;= Nc</span>
 
 <span class="sd">            If a point is common to two parallel segments, the cross product is = 0</span>
+<span class="sd">        </span>
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        Lr2n</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -2446,12 +2838,15 @@
             <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">nk</span><span class="p">,</span> <span class="n">nkp1</span><span class="p">)</span>
             <span class="n">tcc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
-        <span class="c">#print &quot;ptseg tcc &quot;,tcc</span>
         <span class="c">#</span>
         <span class="c"># warning this test is fragile</span>
         <span class="c">#</span>
-        <span class="n">upos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">&gt;</span> <span class="mf">1e-3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">uneg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1e-3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c"># debug : print tcc</span>
+        <span class="c">#</span>
+        <span class="c"># The purpose here is to remove flat transition </span>
+        <span class="c">#</span>
+        <span class="n">upos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">&gt;</span> <span class="mf">1e-2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">uneg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">tcc</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1e-2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">upos</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">uneg</span><span class="p">):</span>
             <span class="n">nconvex</span> <span class="o">=</span> <span class="n">uneg</span>
@@ -2651,9 +3046,6 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 
-<span class="sd">    &gt;&gt;&gt; from pylayers.gis.layout import * </span>
-<span class="sd">    &gt;&gt;&gt; L = Layout()</span>
-<span class="sd">    &gt;&gt;&gt; L.loadstr(&#39;exemple.str&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; x1=-2.</span>
 <span class="sd">    &gt;&gt;&gt; y1=2.</span>
 <span class="sd">    &gt;&gt;&gt; x2=-1.</span>
@@ -2935,16 +3327,18 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        p : numpy.ndarray</span>
-<span class="sd">            point to image</span>
-<span class="sd">        pa : numpy.ndarray</span>
-<span class="sd">            segment tail</span>
-<span class="sd">        pb : numpy.ndarray</span>
-<span class="sd">            segment head </span>
+
+<span class="sd">    p : numpy.ndarray</span>
+<span class="sd">        point to image</span>
+<span class="sd">    pa : numpy.ndarray</span>
+<span class="sd">        segment tail</span>
+<span class="sd">    pb : numpy.ndarray</span>
+<span class="sd">        segment head </span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        M : numpy.ndarray</span>
+<span class="sd">    </span>
+<span class="sd">    M : numpy.ndarray</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -2986,7 +3380,111 @@
     <span class="n">x</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">v0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span>
 </div>
+<div class="viewcode-block" id="distseg"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.distseg">[docs]</a><span class="k">def</span> <span class="nf">distseg</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; distance to segments</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    a : (3xN) initial point segment 1</span>
+<span class="sd">    b : (3xN) end point segment 1</span>
+<span class="sd">    c : (3xN) starting point segment 2</span>
+<span class="sd">    d : (3xN) end point segment 2  </span>
+
+<span class="sd">    alpha : </span>
+<span class="sd">    beta  :</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    f : square of the distance to the segment</span>
+<span class="sd"> </span>
+<span class="sd">    Examples </span>
+<span class="sd">    --------</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np </span>
+<span class="sd">    &gt;&gt;&gt; np.random.seed(0)</span>
+<span class="sd">    &gt;&gt;&gt; a = np.random.rand(3,10)</span>
+<span class="sd">    &gt;&gt;&gt; b = np.random.rand(3,10)</span>
+<span class="sd">    &gt;&gt;&gt; c = np.random.rand(3,10)</span>
+<span class="sd">    &gt;&gt;&gt; d = np.random.rand(3,10)</span>
+<span class="sd">    &gt;&gt;&gt; alpha,beta,dmin = dmin3d(a,b,c,d)</span>
+<span class="sd">    &gt;&gt;&gt; alpha[alpha&lt;0]=0</span>
+<span class="sd">    &gt;&gt;&gt; alpha[alpha&gt;1]=1</span>
+<span class="sd">    &gt;&gt;&gt; beta[beta&lt;0]=0</span>
+<span class="sd">    &gt;&gt;&gt; beta[beta&gt;1]=1</span>
+<span class="sd">	&gt;&gt;&gt; f = distseg(a,b,c,d,alpha,beta)</span>
+<span class="sd">    &gt;&gt;&gt; p1 = a - alpha*(a-b)</span>
+<span class="sd">    &gt;&gt;&gt; p2 = c + beta*(d-c)</span>
+<span class="sd">    &gt;&gt;&gt; v = p1-p2</span>
+<span class="sd">    &gt;&gt;&gt; g = np.sum(v*v,axis=0)</span>
+<span class="sd">    &gt;&gt;&gt; diff = np.sum(f-g,axis=0)</span>
+<span class="sd">    &gt;&gt;&gt; np.testing.assert_almost_equal(diff,0)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span>
+    <span class="n">cd</span> <span class="o">=</span> <span class="n">d</span><span class="o">-</span><span class="n">c</span>
+    <span class="n">ba</span> <span class="o">=</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span>
+    
+    <span class="n">u0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ac</span><span class="o">*</span><span class="n">ac</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ba</span><span class="o">*</span><span class="n">ba</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cd</span><span class="o">*</span><span class="n">cd</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ba</span><span class="o">*</span><span class="n">ac</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cd</span><span class="o">*</span><span class="n">ac</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cd</span><span class="o">*</span><span class="n">ba</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">f</span> <span class="o">=</span> <span class="n">u0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">u1</span><span class="o">+</span><span class="n">beta</span><span class="o">*</span><span class="n">u2</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">*</span><span class="n">u4</span><span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u5</span>
+
+    <span class="c"># m = a - alpha*ba</span>
+    <span class="c"># n = c + beta*cd</span>
+    <span class="c"># g = np.dot(m-n,m-n)</span>
+
+    <span class="k">return</span> <span class="n">f</span>
+</div>
+<div class="viewcode-block" id="dmin3d"><a class="viewcode-back" href="../../../modules/util.geomutil.html#pylayers.util.geomutil.dmin3d">[docs]</a><span class="k">def</span> <span class="nf">dmin3d</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; evaluate the minimal distance between 2 set of segments </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    a : (3xN) initial point segment 1</span>
+<span class="sd">    b : (3xN) end point segment 1</span>
+<span class="sd">    c : (3xN) starting point segment 2</span>
+<span class="sd">    d : (3xN) end point segment 2  </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    alpha : segment parameterization </span>
+<span class="sd">    beta  : segment parameterization</span>
+<span class="sd">    dmin  : minimal distance between 2 segments </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">c</span><span class="o">-</span><span class="n">a</span>
+    <span class="n">cd</span> <span class="o">=</span> <span class="n">d</span><span class="o">-</span><span class="n">c</span>
+    <span class="n">ba</span> <span class="o">=</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span>
+    
+    <span class="n">u0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ac</span><span class="o">*</span><span class="n">ac</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ba</span><span class="o">*</span><span class="n">ba</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cd</span><span class="o">*</span><span class="n">cd</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ba</span><span class="o">*</span><span class="n">ac</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cd</span><span class="o">*</span><span class="n">ac</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cd</span><span class="o">*</span><span class="n">ba</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+       
+    <span class="n">den</span> <span class="o">=</span> <span class="n">u4</span><span class="o">*</span><span class="n">u5</span><span class="o">-</span><span class="n">u3</span><span class="o">*</span><span class="n">u3</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">u2</span><span class="o">*</span><span class="n">u3</span><span class="o">-</span><span class="n">u1</span><span class="o">*</span><span class="n">u5</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="n">den</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="p">(</span><span class="n">u1</span><span class="o">*</span><span class="n">u3</span><span class="o">-</span><span class="n">u2</span><span class="o">*</span><span class="n">u4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">*</span><span class="n">den</span><span class="p">)</span>
+    <span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u0</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">u1</span><span class="o">+</span><span class="n">beta</span><span class="o">*</span><span class="n">u2</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">alpha</span><span class="o">*</span><span class="n">u4</span><span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">u5</span><span class="p">)</span> 
+
+    <span class="k">return</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span><span class="n">beta</span><span class="p">,</span><span class="n">dmin</span><span class="p">)</span>
+</div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 

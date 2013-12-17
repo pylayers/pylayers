@@ -23,7 +23,7 @@ Example of a trajectory synthesis in DLR WHERE2 environment
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x411bb90>
+    <matplotlib.figure.Figure at 0x42a1bd0>
 
 
 This function has to be moved in simulem module. It is a temporary
@@ -94,12 +94,6 @@ loading the Layout
     except:
         S.L.build()
         S.L.dumpw()
-
-.. parsed-literal::
-
-    G s  not saved
-
-
 .. code-block:: python
 
     S.L.display['ednodes']=False
@@ -158,7 +152,7 @@ Vizualization of the simulated scenario
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x7fe8c50e11d0>]
+    [<matplotlib.lines.Line2D at 0x5288290>]
 
 
 
@@ -195,8 +189,8 @@ Looking what is does
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fe8c510c210>,
-     <matplotlib.axes.AxesSubplot at 0x7fe8c4e91b50>)
+    (<matplotlib.figure.Figure at 0x52b33d0>,
+     <matplotlib.axes.AxesSubplot at 0x7fd4f599b150>)
 
 
 
@@ -482,8 +476,8 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fe8c4e85b10>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x7fe8c4e078d0>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x54f9cd0>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x54f7410>]], dtype=object))
 
 
 
@@ -503,14 +497,14 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fe8c6424890>
+    <matplotlib.text.Text at 0x5d30950>
 
 
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x7fe8c640fe10>
+    <matplotlib.figure.Figure at 0x7fd4e4746cd0>
 
 
 
@@ -528,7 +522,7 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7fe8c63b8a90>
+    <matplotlib.text.Text at 0x5d55a10>
 
 
 

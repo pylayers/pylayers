@@ -229,13 +229,17 @@ set to 0.</p>
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signature.image">
 <tt class="descname">image</tt><big>(</big><em>tx</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the images of tx with respect to the signature segments
-Parameters
-&#8212;&#8212;&#8212;-</p>
-<blockquote>
-<div>tx : numpy.ndarray</div></blockquote>
-<blockquote>
-<div>M : numpy.ndarray</div></blockquote>
+<dd><p>Compute the images of tx with respect to the signature segments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>tx</strong> : numpy.ndarray</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><strong>M</strong> : numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -245,7 +249,7 @@ Parameters
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signature.sig2beam">
-<tt class="descname">sig2beam</tt><big>(</big><em>L</em>, <em>p</em>, <em>mode='incremental'</em><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2beam" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">sig2beam</tt><big>(</big><em>L</em>, <em>p</em>, <em>mode='incremental'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signature.sig2beam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signature.sig2beam" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -333,13 +337,19 @@ Parameters
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.load">
-<tt class="descname">load</tt><big>(</big><em>filename=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.load" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">load</tt><big>(</big><em>filename=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load signatures</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.signature.Signatures.meta">
+<tt class="descname">meta</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>determine meta signatures</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.num">
-<tt class="descname">num</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.num" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">num</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.num"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.num" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates the number of signatures</p>
 </dd></dl>
 
@@ -401,6 +411,28 @@ type(rx)=int</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pylayers.antprop.signature.Signatures.run">
+<tt class="descname">run</tt><big>(</big><em>cutoff=1</em>, <em>dcut=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>run calculation of signature</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cutoff</strong> : int</p>
+<blockquote>
+<div><p>1</p>
+</div></blockquote>
+<p><strong>dcut</strong> : int</p>
+<blockquote class="last">
+<div><p>2</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.run1">
 <tt class="descname">run1</tt><big>(</big><em>cutoff=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.run1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.run1" title="Permalink to this definition">¶</a></dt>
 <dd><p>get signatures (in one list of arrays) between tx and rx</p>
@@ -455,13 +487,13 @@ type(rx)=int</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.save">
-<tt class="descname">save</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.save" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">save</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save signatures</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pylayers.antprop.signature.Signatures.show">
-<tt class="descname">show</tt><big>(</big><em>L</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pylayers.antprop.signature.Signatures.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>L</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/signature.html#Signatures.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.signature.Signatures.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot signatures within the simulated environment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -524,6 +556,13 @@ type(rx)=int</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>This function aims at filtering out uncorrect signatures</p>
+<dl class="docutils">
+<dt>for interactions in nodes of Gi </dt>
+<dd>i0 = start interaction
+i1 = end interaction</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">

@@ -78,11 +78,11 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span> 
 <span class="kn">import</span> <span class="nn">scipy.special</span> <span class="kn">as</span> <span class="nn">spe</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span>   <span class="nn">bitstring</span>  <span class="kn">import</span> <span class="n">BitString</span>
 <span class="kn">import</span> <span class="nn">datetime</span> <span class="kn">as</span> <span class="nn">dat</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
 <span class="c">#</span>
@@ -127,14 +127,17 @@
     <span class="k">return</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
 <span class="c">#####################</span></div>
 <div class="viewcode-block" id="lt2dic"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.lt2dic">[docs]</a><span class="k">def</span> <span class="nf">lt2dic</span><span class="p">(</span><span class="n">lt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; convert list of tuple to dictionnary </span>
+    <span class="sd">&quot;&quot;&quot; convert list of tuple to dictionary </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    lt : list of tuple</span>
-<span class="sd">        the first element of tuple is th ekey dictionnary</span>
+<span class="sd">        the first element of tuple is th ekey dictionary</span>
+
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+
 <span class="sd">       &gt;&gt;&gt; lt = [ (&#39;1&#39;,&#39;1 2 3&#39;),(&#39;2&#39;,&#39;1.5 2&#39;),(&#39;3&#39;,&#39;4.78 89.0 2&#39;)]</span>
 <span class="sd">       &gt;&gt;&gt; d = lt2dic(lt)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -144,14 +147,16 @@
     <span class="k">return</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>    
 </div>
 <div class="viewcode-block" id="lt2idic"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.lt2idic">[docs]</a><span class="k">def</span> <span class="nf">lt2idic</span><span class="p">(</span><span class="n">lt</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; convert list of tuple to dictionnary </span>
+    <span class="sd">&quot;&quot;&quot; convert list of tuple to dictionary </span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    lt : list </span>
 
 <span class="sd">    Examples </span>
 <span class="sd">    --------</span>
+
 <span class="sd">    &gt;&gt;&gt; from pylayers.util.pyutil import *</span>
 <span class="sd">    &gt;&gt;&gt; lt = [ (&#39;1&#39;,&#39;1 2 3&#39;),(&#39;2&#39;,&#39;1.5 2 3&#39;),(&#39;3&#39;,&#39;4.78 89.0 2&#39;)]</span>
 <span class="sd">    &gt;&gt;&gt; d = lt2idic(lt)</span>
@@ -163,7 +168,7 @@
         <span class="n">dic</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">2</span><span class="p">])])</span>
     <span class="k">return</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>    
 </div>
-<div class="viewcode-block" id="getlong"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.getlong">[docs]</a><span class="k">def</span> <span class="nf">getlong</span><span class="p">(</span><span class="n">shortname</span><span class="p">,</span><span class="nb">dir</span><span class="p">):</span>
+<div class="viewcode-block" id="getlong"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.getlong">[docs]</a><span class="k">def</span> <span class="nf">getlong</span><span class="p">(</span><span class="n">shortname</span><span class="p">,</span><span class="n">directory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;  get a long name</span>
 
 <span class="sd">    This function allows to construct the long file name relatively</span>
@@ -175,15 +180,17 @@
 <span class="sd">    shortname : string</span>
 <span class="sd">        short name of the file</span>
 
-<span class="sd">    dir       : directory in $BASENAME</span>
+<span class="sd">    dir       : directory in $BASENAME or $PYLAYERS</span>
+<span class="sd">    source    : string </span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">try</span><span class="p">:</span>
         <span class="n">basename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;BASENAME&#39;</span><span class="p">]</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">basename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;HOME&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&quot;/Pyproject&quot;</span>
-    <span class="n">longname</span> <span class="o">=</span> <span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="nb">dir</span><span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="n">shortname</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&quot;BASENAME environment variable should be defined&quot;</span><span class="p">)</span>
+        <span class="c">#basename=os.environ[&#39;HOME&#39;]+&quot;/Pyproject&quot;</span>
+
+    <span class="n">longname</span> <span class="o">=</span> <span class="n">basename</span><span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="n">directory</span><span class="o">+</span><span class="s">&#39;/&#39;</span><span class="o">+</span><span class="n">shortname</span>
     <span class="k">return</span><span class="p">(</span><span class="n">longname</span><span class="p">)</span>
 </div>
 <span class="k">def</span> <span class="nf">getshort</span><span class="p">(</span><span class="n">longname</span><span class="p">):</span>
@@ -469,7 +476,7 @@
 
 </div>
 <div class="viewcode-block" id="coldict"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.coldict">[docs]</a><span class="k">def</span> <span class="nf">coldict</span><span class="p">():</span> 
-    <span class="sd">&quot;&quot;&quot; Color dictionnary </span>
+    <span class="sd">&quot;&quot;&quot; Color dictionary </span>
 <span class="sd">    html color </span>
 
 <span class="sd">    Notes </span>
@@ -1239,7 +1246,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">tk</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="foo"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.foo">[docs]</a><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">,</span> <span class="n">long_var_name</span><span class="o">=</span><span class="s">&#39;hi&#39;</span><span class="p">)</span> <span class="p">:</span>
-    <span class="sd">r&quot;&quot;&quot;A one-line summary that does not use variable names or the</span>
+    <span class="sd">&quot;&quot;&quot;A one-line summary that does not use variable names or the</span>
 <span class="sd">    function name.</span>
 
 <span class="sd">    Several sentences providing an extended description. Refer to</span>
@@ -1247,6 +1254,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    var1 : array_like</span>
 <span class="sd">        Array_like means all those objects -- lists, nested lists, etc. --</span>
 <span class="sd">        that can be converted to an array.  We can also refer to</span>
@@ -1260,6 +1268,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+
 <span class="sd">    describe : type</span>
 <span class="sd">        Explanation</span>
 <span class="sd">    output : type</span>
@@ -1271,6 +1280,7 @@
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
+
 <span class="sd">    only_seldom_used_keywords : type</span>
 <span class="sd">        Explanation</span>
 <span class="sd">    common_parameters_listed_above : type</span>
@@ -1278,11 +1288,13 @@
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+
 <span class="sd">    BadException</span>
 <span class="sd">        Because you shouldn&#39;t have done that.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
+
 <span class="sd">    otherfunc : relationship (optional)</span>
 <span class="sd">    newfunc : Relationship (optional), which could be fairly long, in which</span>
 <span class="sd">              case the line wraps here.</span>
@@ -1290,6 +1302,7 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
+
 <span class="sd">    Notes about the implementation algorithm (if needed).</span>
 
 <span class="sd">    This can have multiple paragraphs.</span>
@@ -1312,6 +1325,7 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    Cite the relevant literature, e.g. [1]_.  You may also cite these</span>
 <span class="sd">    references in the notes section above.</span>
 
@@ -1323,6 +1337,7 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+
 <span class="sd">    These are written in doctest format, and should illustrate how to</span>
 <span class="sd">    use the function.</span>
 
@@ -1338,6 +1353,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+
 <span class="sd">    x :  np.array  (N)</span>
 <span class="sd">    color : string </span>
 <span class="sd">        color symbol </span>
@@ -1352,6 +1368,7 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+
 <span class="sd">    .. plot::</span>
 <span class="sd">        :include-source:</span>
 
@@ -1543,12 +1560,14 @@
     <span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="zipd"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.zipd">[docs]</a><span class="k">def</span> <span class="nf">zipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    add a folder to a zipfile</span>
+    <span class="sd">&quot;&quot;&quot; add a folder to a zipfile</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        filepath : string</span>
-<span class="sd">        zipfilename : string</span>
+
+<span class="sd">    filepath : string</span>
+<span class="sd">    zipfilename : string</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zip_file</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zipfilename</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span><span class="p">)</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -1563,12 +1582,14 @@
     <span class="n">zip_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="unzipd"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.unzipd">[docs]</a><span class="k">def</span> <span class="nf">unzipd</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    unzip a zipfile to a folder</span>
+    <span class="sd">&quot;&quot;&quot; unzip a zipfile to a folder</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        filepath : string</span>
-<span class="sd">        zipfilename : string</span>
+
+<span class="sd">    filepath : string</span>
+<span class="sd">    zipfilename : string</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zip_file</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zipfilename</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -1585,12 +1606,14 @@
                 <span class="s">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">zip_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">each</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="unzipf"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.unzipf">[docs]</a><span class="k">def</span> <span class="nf">unzipf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">zipfilename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    unzip a file from zipfile to a folder</span>
+    <span class="sd">&quot;&quot;&quot; unzip a file from zipfile to a folder</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        filepath : string</span>
-<span class="sd">        zipfilename : string</span>
+
+<span class="sd">    filepath : string</span>
+<span class="sd">    zipfilename : string</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">zip_file</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zipfilename</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -1608,14 +1631,19 @@
 <div class="viewcode-block" id="rotate_line"><a class="viewcode-back" href="../../../modules/util.pyutil.html#pylayers.util.pyutil.rotate_line">[docs]</a><span class="k">def</span> <span class="nf">rotate_line</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    rotation of a line [AB] of an angle theta with A fixed</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        A: ndarray</span>
-<span class="sd">        B: ndarray</span>
-<span class="sd">        theta: float</span>
+
+<span class="sd">    A: ndarray</span>
+<span class="sd">    B: ndarray</span>
+<span class="sd">    theta: float</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        Br: ndarry</span>
+
+<span class="sd">    Br: ndarray</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="o">!=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
@@ -1670,7 +1698,34 @@
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">):</span>
         <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">ro</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">ro</span><span class="o">+</span><span class="n">M</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="n">co</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">co</span><span class="o">+</span><span class="n">M</span><span class="p">]</span><span class="o">=</span><span class="n">blocks</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">M</span><span class="p">),:,:]</span> 
     <span class="k">return</span> <span class="n">A</span>
+
 </div>
+<span class="n">BLACK</span><span class="p">,</span> <span class="n">RED</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="n">BLUE</span><span class="p">,</span> <span class="n">MAGENTA</span><span class="p">,</span> <span class="n">CYAN</span><span class="p">,</span> <span class="n">WHITE</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="c">#following from Python cookbook, #475186</span>
+<span class="k">def</span> <span class="nf">has_colours</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="s">&quot;isatty&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stream</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
+        <span class="k">return</span> <span class="bp">False</span> <span class="c"># auto color only on TTYs</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">curses</span>
+        <span class="n">curses</span><span class="o">.</span><span class="n">setupterm</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">curses</span><span class="o">.</span><span class="n">tigetnum</span><span class="p">(</span><span class="s">&quot;colors&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c"># guess false in case of error</span>
+        <span class="k">return</span> <span class="bp">False</span>
+<span class="n">has_colours</span> <span class="o">=</span> <span class="n">has_colours</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">printout</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">WHITE</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">has_colours</span><span class="p">:</span>
+                <span class="n">seq</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\x1b</span><span class="s">[1;</span><span class="si">%d</span><span class="s">m&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">30</span><span class="o">+</span><span class="n">colour</span><span class="p">)</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\x1b</span><span class="s">[0m&quot;</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>

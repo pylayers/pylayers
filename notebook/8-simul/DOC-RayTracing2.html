@@ -112,7 +112,7 @@ default configuration file named <strong>default.ini</strong> is loaded.</p>
 <span class="kn">import</span> <span class="nn">pylayers.signal.bsignal</span> <span class="kn">as</span> <span class="nn">bs</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5e3b7d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4cfc810&gt;</pre>
 </div>
 <p>A first step consists in loading a layout associated with the
 simulation. Here the <tt class="docutils literal"><span class="pre">WHERE1.ini</span></tt> layout is chosen along with the
@@ -133,8 +133,6 @@ simulation object <strong>S</strong>.</p>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
-</div>
-<div class="highlight-python"><pre>G s  not saved</pre>
 </div>
 <p>The layout display is fully parameterized via the embedded <strong>display</strong>
 dictionnary member of the Layout object.which allows to configure the
@@ -252,8 +250,8 @@ object has a <tt class="docutils literal"><span class="pre">show</span></tt> and
 <span class="n">r2d</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f4c703a4f10&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x8a03dd0&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f574ec62f50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f574e9ab6d0&gt;)</pre>
 </div>
 <img alt="./DOC-RayTracing2_files/DOC-RayTracing2_27_1.png" src="./DOC-RayTracing2_files/DOC-RayTracing2_27_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># r2d.show3(strucname=&#39;WHERE1&#39;)</span>
@@ -282,12 +280,12 @@ the reflection on ceil and floor.</p>
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
 3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-6 / 8 : [57 58 59 60 61 62 63 64]
+4 / 19 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37]
+5 / 16 : [38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53]
+6 / 6 : [54 55 56 57 58 59]
 -----
-ni : 268
-nl : 601</pre>
+ni : 242
+nl : 544</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">6</span><span class="o">*</span><span class="mi">8</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">18</span><span class="o">+</span><span class="mi">20</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="mi">13</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
 </pre></div>
@@ -351,12 +349,12 @@ Nf :  181</pre>
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
 3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-6 / 8 : [57 58 59 60 61 62 63 64]
+4 / 19 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37]
+5 / 16 : [38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53]
+6 / 6 : [54 55 56 57 58 59]
 -----
-ni : 268
-nl : 601</pre>
+ni : 242
+nl : 544</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">r3d</span>
 </pre></div>
@@ -366,12 +364,12 @@ nl : 601</pre>
 1 / 1 : [0]
 2 / 5 : [1 2 3 4 5]
 3 / 13 : [ 6  7  8  9 10 11 12 13 14 15 16 17 18]
-4 / 20 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38]
-5 / 18 : [39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56]
-6 / 8 : [57 58 59 60 61 62 63 64]
+4 / 19 : [19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37]
+5 / 16 : [38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53]
+6 / 6 : [54 55 56 57 58 59]
 -----
-ni : 268
-nl : 601</pre>
+ni : 242
+nl : 544</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Ectt</span><span class="p">,</span><span class="n">Ecpp</span><span class="p">,</span><span class="n">Ectp</span><span class="p">,</span><span class="n">Ecpt</span> <span class="o">=</span> <span class="n">Ct</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
 </pre></div>
@@ -402,11 +400,11 @@ The colorbar corresponds to the total energy of the path.</p>
 </pre></div>
 </div>
 <div class="highlight-python"><pre>Nfreq  : 181
-Nray : 65
-shape Ctt : (65, 181)
-shape Ctp : (65, 181)
-shape Cpt : (65, 181)
-shape Cpp : (65, 181)</pre>
+Nray : 60
+shape Ctt : (60, 181)
+shape Ctp : (60, 181)
+shape Cpt : (60, 181)
+shape Cpp : (60, 181)</pre>
 </div>
 </div>
 <div class="section" id="apply-waveform">

@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="pylayers.antprop" href="../antprop.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,7 +43,8 @@
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../antprop.html" accesskey="U">pylayers.antprop</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -83,7 +84,7 @@
 <span class="sd">    + Slab(dict)</span>
 <span class="sd">    + SlabDB(dict)</span>
 
-<span class="sd">This module exploits numpy broadcasting mecanism :</span>
+<span class="sd">This module exploits heavily numpy broadcasting mechanism :</span>
 
 <span class="sd">    nf : axis = 0   frequency axis</span>
 <span class="sd">    nt : axis = 1   angular axis</span>
@@ -103,6 +104,7 @@
 <span class="kn">import</span> <span class="nn">ConfigParser</span>
 <span class="kn">from</span>   <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.plotutil</span> <span class="kn">as</span> <span class="nn">plu</span>
 <span class="kn">from</span>   <span class="nn">pylayers.util.easygui</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pdb</span>
 
@@ -120,6 +122,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]),</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span> <span class="o">+</span> <span class="mi">0</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span><span class="p">]]),</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">        fGHz  :</span>
 <span class="sd">            frequency in GHz (default 2.4)</span>
 <span class="sd">        theta :</span>
@@ -148,18 +151,20 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-<div class="viewcode-block" id="Interface.RT"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.RT">[docs]</a>    <span class="k">def</span> <span class="nf">RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metalic</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Interface.RT"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.RT">[docs]</a>    <span class="k">def</span> <span class="nf">RT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metalic</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">RT</span><span class="o">=</span><span class="s">&#39;RT&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; evaluate Reflection and Transmission matrix</span>
 
-<span class="sd">            .. math::</span>
+<span class="sd">        .. math::</span>
 
 <span class="sd">            R = \\matrix(R_o &amp; 0\\\\0 &amp; R_p)</span>
 <span class="sd">            T = \\matrix(T_o &amp; 0\\\\0 &amp; T_p)</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
+
 <span class="sd">        R : np.array   (f , th , 2, 2)</span>
 <span class="sd">        T : np.array   (f , th , 2, 2)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Io</span><span class="p">)</span>
         <span class="n">nf</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -168,6 +173,7 @@
         <span class="c">#</span>
         <span class="c"># R and T matrices are diagonal</span>
         <span class="c">#</span>
+
         <span class="k">if</span> <span class="s">&#39;R&#39;</span> <span class="ow">in</span> <span class="n">RT</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">nf</span><span class="p">,</span> <span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
         <span class="k">if</span> <span class="s">&#39;T&#39;</span> <span class="ow">in</span> <span class="n">RT</span><span class="p">:</span>
@@ -240,16 +246,55 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;f (GHz)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
+<div class="viewcode-block" id="Interface.tocolor"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        fGHz : np.array</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># nf x nt x 2 x 2 </span>
+        <span class="n">modTo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">modTp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">N</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">:</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">N</span><span class="o">/</span><span class="mi">3</span>
+            <span class="n">ared</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">])</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">M</span><span class="p">]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">)</span>
+            <span class="n">agreen</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="n">M</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">])</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="n">M</span><span class="p">:</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">)</span>
+            <span class="n">ablue</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">:])</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">:]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">M</span><span class="p">))</span>
+            <span class="n">vred</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ared</span><span class="o">*</span><span class="mi">255</span><span class="p">)))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">vgreen</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">agreen</span><span class="o">*</span><span class="mi">255</span><span class="p">)))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">vblue</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ablue</span><span class="o">*</span><span class="mi">255</span><span class="p">)))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vred</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">vred</span> <span class="o">=</span> <span class="s">&#39;0&#39;</span><span class="o">+</span><span class="n">vred</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vgreen</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">vgreen</span> <span class="o">=</span> <span class="s">&#39;0&#39;</span><span class="o">+</span><span class="n">vgreen</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vblue</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">vblue</span> <span class="o">=</span> <span class="s">&#39;0&#39;</span><span class="o">+</span><span class="n">vblue</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="s">&#39;#&#39;</span><span class="o">+</span><span class="n">vred</span><span class="o">+</span><span class="n">vgreen</span><span class="o">+</span><span class="n">vblue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTo</span><span class="p">)</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">modTp</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="mi">255</span><span class="p">)))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="s">&#39;#&#39;</span><span class="o">+</span><span class="n">val</span><span class="o">+</span><span class="n">val</span><span class="o">+</span><span class="n">val</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>    
+
+</div>
 <div class="viewcode-block" id="Interface.loss0"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluate Loss at normal incidence theta=0</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        fGHz    : np.array  (nf,1)</span>
 <span class="sd">        display : boolean</span>
 <span class="sd">                default (False)</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        Lo : loss in dB polarization orthogonal</span>
 <span class="sd">        Lp : loss in dB polarization parallel</span>
 
@@ -271,7 +316,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Interface.losst"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;  Evaluate Loss</span>
+        <span class="sd">&quot;&quot;&quot;  Evaluate Loss </span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -282,100 +327,50 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        Lo : np.array</span>
+<span class="sd">            Loss orthogonal polarization (dB)</span>
 <span class="sd">        Lp : np.array</span>
+<span class="sd">            Loss parallel polarization (dB)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">modTo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="n">modTp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        
+        <span class="c">#Lo = -20 * np.log10(modTo[:, 0])</span>
+        <span class="c">#Lp = -20 * np.log10(modTp[:, 0])</span>
 
-        <span class="n">Lo</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTo</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">Lp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">Lo</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTo</span><span class="p">)</span>
+        <span class="n">Lp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTp</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">display</span><span class="p">:</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Lo</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">Lo</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
             <span class="c">#plot(f,Lp,&#39;r&#39;)</span>
             <span class="c">#legend((&#39;L0 _|_&#39;,&#39;L0 //&#39;),loc=&#39;upper right&#39;)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;L0 (dB)&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;L0 (dB)&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Interface.plotwrtf"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.plotwrtf">[docs]</a>    <span class="k">def</span> <span class="nf">plotwrtf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;mod&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; plot R &amp; T coefficients with respect to frequency</span>
+<div class="viewcode-block" id="Interface.plotwrt"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.plotwrt">[docs]</a>    <span class="k">def</span> <span class="nf">plotwrt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; plot R &amp; T coefficients with respect to angle or frequency</span>
 
 <span class="sd">         Parameters</span>
 <span class="sd">         ----------</span>
 
-<span class="sd">         k  : int</span>
-<span class="sd">            theta index</span>
-<span class="sd">         typ: string </span>
-<span class="sd">            type of dispaly default (&#39;mod&#39;)</span>
-
-<span class="sd">         Examples</span>
-<span class="sd">         ---------</span>
-
-<span class="sd">         .. plot::</span>
-<span class="sd">             :include-source:</span>
-
-<span class="sd">             &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
-<span class="sd">             &gt;&gt;&gt; import matplotlib.pylab as plt</span>
-<span class="sd">             &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">             &gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)</span>
-<span class="sd">             &gt;&gt;&gt; fGHz  = np.arange(0.1,10,0.2)</span>
-<span class="sd">             &gt;&gt;&gt; sl    = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
-<span class="sd">             &gt;&gt;&gt; mat   = sl.mat</span>
-<span class="sd">             &gt;&gt;&gt; lmat  = [mat[&#39;AIR&#39;],mat[&#39;WOOD&#39;]]</span>
-<span class="sd">             &gt;&gt;&gt; II    = MatInterface(lmat,0,fGHz,theta)</span>
-<span class="sd">             &gt;&gt;&gt; II.RT()</span>
-<span class="sd">             &gt;&gt;&gt; fig = plt.figure()</span>
-<span class="sd">             &gt;&gt;&gt; II.plotwrtf(10)</span>
-<span class="sd">             &gt;&gt;&gt; plt.show()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-        <span class="n">modRo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">modRp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">modTo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">modTp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">angRo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
-        <span class="n">angRp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
-        <span class="n">angTo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
-        <span class="n">angTp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
-        <span class="c">#nom = self.m1.name+&#39;|&#39;+self.m2.name+&#39; &#39;+str(theta[k])+&#39;degrees&#39;</span>
-        <span class="c">#title(&#39;Reflection &amp; Transmission Coefficient  : &#39;+ nom)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;mod&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">modRo</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">modRp</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">angRo</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">angRp</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;R _|_&#39;</span><span class="p">,</span> <span class="s">&#39;R //&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper left&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
-        <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;mod&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">modTo</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">modTp</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">angTo</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">angTp</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;T _|_&#39;</span><span class="p">,</span> <span class="s">&#39;T //&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</div>
-<div class="viewcode-block" id="Interface.plotwrta"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Interface.plotwrta">[docs]</a>    <span class="k">def</span> <span class="nf">plotwrta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="s">&#39;modulus&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; plot R &amp; T coefficients with respect to angle</span>
-
-<span class="sd">         Parameters</span>
-<span class="sd">         -----------</span>
-<span class="sd">         k       : frequency index</span>
-<span class="sd">         display : string</span>
-<span class="sd">            {&#39;modulus&#39;|&#39;phase&#39;}</span>
-<span class="sd">         dB      : boolean</span>
-<span class="sd">            False</span>
+<span class="sd">         kv  : int</span>
+<span class="sd">            variable index</span>
+<span class="sd">         polar: string </span>
+<span class="sd">                &#39;po&#39;, # po | p | o   (parallel+ortho | parallel | ortogonal)</span>
+<span class="sd">         coeff: string </span>
+<span class="sd">                &#39;RT&#39;, # RT | R | T   (Reflexion &amp; Transmission ) | Reflexion | Transmission </span>
+<span class="sd">         var:  string </span>
+<span class="sd">                &#39;a&#39;,    # a | f       angle | frequency </span>
+<span class="sd">         types : string </span>
+<span class="sd">                &#39;m&#39; | &#39;r&#39; | &#39;d&#39; | &#39;l20&#39;</span>
+<span class="sd">                mod   rad    deg   dB</span>
 
 <span class="sd">         Examples</span>
 <span class="sd">         --------</span>
@@ -384,86 +379,134 @@
 <span class="sd">             :include-source:</span>
 
 <span class="sd">             &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
+<span class="sd">             &gt;&gt;&gt; import matplotlib.pylab as plt</span>
 <span class="sd">             &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">             &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">             &gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)</span>
-<span class="sd">             &gt;&gt;&gt; fGHz  = np.arange(0.1,10,0.2)</span>
-<span class="sd">             &gt;&gt;&gt; sl  = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
-<span class="sd">             &gt;&gt;&gt; mat = sl.mat</span>
+<span class="sd">             &gt;&gt;&gt; fGHz = np.arange(0.1,10,0.2)</span>
+<span class="sd">             &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
+<span class="sd">             &gt;&gt;&gt; mat   = sl.mat</span>
+<span class="sd">             &gt;&gt;&gt; lmat  = [mat[&#39;AIR&#39;],mat[&#39;WOOD&#39;]]</span>
+<span class="sd">             &gt;&gt;&gt; II    = MatInterface(lmat,0,fGHz,theta)</span>
+<span class="sd">             &gt;&gt;&gt; II.RT()</span>
+<span class="sd">             &gt;&gt;&gt; fig,ax = II.plotwrt(var=&#39;a&#39;,kv=10,types=[&#39;m&#39;])</span>
 <span class="sd">             &gt;&gt;&gt; air = mat[&#39;AIR&#39;]</span>
 <span class="sd">             &gt;&gt;&gt; brick  = mat[&#39;BRICK&#39;]</span>
 <span class="sd">             &gt;&gt;&gt; II  = MatInterface([air,brick],0,fGHz,theta)</span>
 <span class="sd">             &gt;&gt;&gt; II.RT()</span>
-<span class="sd">             &gt;&gt;&gt; fig = plt.figure()</span>
-<span class="sd">             &gt;&gt;&gt; II.plotwrta(0)</span>
+<span class="sd">             &gt;&gt;&gt; fig,ax = II.plotwrt(var=&#39;f&#39;,color=&#39;k&#39;,types=[&#39;m&#39;])</span>
 <span class="sd">             &gt;&gt;&gt; plt.show()</span>
 
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;types&#39;</span><span class="p">:[</span><span class="s">&#39;l20&#39;</span><span class="p">],</span> 
+                <span class="s">&#39;polar&#39;</span><span class="p">:</span><span class="s">&#39;po&#39;</span><span class="p">,</span> <span class="c"># po | p | o </span>
+                <span class="s">&#39;coeff&#39;</span><span class="p">:</span><span class="s">&#39;RT&#39;</span><span class="p">,</span> <span class="c"># RT | R | T </span>
+               <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="c">#fGHz = self.fGHz[k]</span>
         <span class="n">rtd</span> <span class="o">=</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        
+        <span class="c"># filtering kwargs argument for mulplot function </span>
+        <span class="n">args</span> <span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">args</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="s">&#39;labels&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>        
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            
+        <span class="n">args</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">args</span><span class="p">[</span><span class="s">&#39;types&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;types&#39;</span><span class="p">]</span>
+        
+        <span class="c"># Reflexion </span>
+        <span class="k">if</span> <span class="s">&#39;R&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;coeff&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s">&#39;o&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">]:</span>
+                <span class="n">args</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">u&#39;$R_{\perp}$&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;f&#39;</span><span class="p">:</span>  <span class="c"># wrt frequency </span>
+                    <span class="n">Ro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="n">kv</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">Ro</span>
+                <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="c"># wrt angle</span>
+                    <span class="n">Ro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="n">kv</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">Ro</span>
+            <span class="k">if</span> <span class="s">&#39;p&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">]:</span>
+                <span class="n">args</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">u&#39;$R_{//}$&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;f&#39;</span><span class="p">:</span>  <span class="c"># wrt frequency </span>
+                    <span class="n">Rp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="n">kv</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">Rp</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">Rp</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="o">==</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="c"># wrt angle</span>
+                    <span class="n">Rp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="n">kv</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">Rp</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">Rp</span>
+        <span class="c"># Transmission </span>
+        <span class="k">if</span> <span class="s">&#39;T&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;coeff&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s">&#39;o&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">]:</span>
+                <span class="n">args</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">u&#39;$T_{\perp}$&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;f&#39;</span><span class="p">:</span>  <span class="c"># wrt frequency </span>
+                    <span class="n">To</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">kv</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">To</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">To</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="o">==</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="c"># wrt angle</span>
+                    <span class="n">To</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">kv</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">To</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">To</span>
+            <span class="k">if</span> <span class="s">&#39;p&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;polar&#39;</span><span class="p">]:</span>
+                <span class="n">args</span><span class="p">[</span><span class="s">&#39;titles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">u&#39;$T_{//}$&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;f&#39;</span><span class="p">:</span>  <span class="c"># wrt frequency </span>
+                    <span class="n">Tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="n">kv</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">Tp</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">To</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="o">==</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="c"># wrt angle</span>
+                    <span class="n">Tp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">kv</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span><span class="n">Tp</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">y</span> <span class="o">=</span> <span class="n">To</span>
+        
+        <span class="c"># setting the x axis </span>
+        <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;f&#39;</span><span class="p">:</span>  <span class="c"># wrt frequency </span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c">#x = self.fGHz[np.newaxis,:]</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[:]</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c"># f x a   </span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;xlabels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Frequency (GHz)&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">var</span><span class="o">==</span><span class="s">&#39;a&#39;</span><span class="p">:</span>  <span class="c"># wrt angle</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:][:]</span><span class="o">*</span><span class="n">rtd</span>
+                <span class="c">#x = self.thi[0,:][np.newaxis,:]*rtd</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c"># f x a</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">*</span><span class="n">rtd</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;xlabels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Angle (deg)&#39;</span><span class="p">]</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-        <span class="n">modRo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">modRp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">modTo</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">modTp</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">nplot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">nplot</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;ncol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;nlin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">nplot</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;ncol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;nlin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">nplot</span><span class="o">==</span><span class="mi">4</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;ncol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">args</span><span class="p">[</span><span class="s">&#39;nlin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
 
-        <span class="n">angleRo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">angleRp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-        <span class="n">angleTo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">angleTp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plu</span><span class="o">.</span><span class="n">mulcplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="o">**</span><span class="n">args</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="s">&#39;phase&#39;</span><span class="p">:</span>
-            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, &#39;b&#39;)</span>
-            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleRo[k, :] * rtd, &#39;b&#39;)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
-                <span class="c">#         np.log10(modRo[k, :]), &#39;b&#39;)</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
-                <span class="c">#         np.log10(modRp[k, :]), &#39;r&#39;)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
-                         <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modRo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
-                         <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, modRo[k, :], &#39;b&#39;)</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, modRp[k, :], &#39;r&#39;)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modRo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modRp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;R _|_&#39;</span><span class="p">,</span> <span class="s">&#39;R //&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper left&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta (degrees)&#39;</span><span class="p">)</span>
-        <span class="c">#nom = self.m1.name+&#39;|&#39;+self.m2.name+&#39; &#39;+str(f[k])+&#39;GHz&#39;</span>
-        <span class="n">nom</span> <span class="o">=</span> <span class="s">&#39; f =&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; GHz&#39;</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="n">nom</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">nom</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="s">&#39;phase&#39;</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">angleTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleTo[k, :] * rtd, &#39;b&#39;)</span>
-            <span class="c">#plt.plot(self.theta[0, :] * rtd, angleTp[k, :] * rtd, &#39;r&#39;)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">dB</span><span class="p">:</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
-                <span class="c">#         np.log10(modTo[k, :]), &#39;b&#39;)</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, 20 *</span>
-                <span class="c">#         np.log10(modTp[k, :]), &#39;r&#39;)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
-                         <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span>
-                         <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">modTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, modTo[k, :], &#39;b&#39;)</span>
-                <span class="c">#plt.plot(self.theta[0, :] * rtd, modTp[k, :], &#39;r&#39;)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modTo</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thi</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="n">rtd</span><span class="p">,</span> <span class="n">modTp</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;T _|_&#39;</span><span class="p">,</span> <span class="s">&#39;T //&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta (degrees)&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 
 </div></div>
 <div class="viewcode-block" id="MatInterface"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.MatInterface">[docs]</a><span class="k">class</span> <span class="nc">MatInterface</span><span class="p">(</span><span class="n">Interface</span><span class="p">):</span>
@@ -473,6 +516,7 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
+
 <span class="sd">    This is required for recursive utilization of this function when the</span>
 <span class="sd">    output angle of an interface happens to be the input angle of the</span>
 <span class="sd">    next interface. As this angle depends on materials which themselves</span>
@@ -665,7 +709,7 @@
         <span class="k">return</span><span class="p">(</span><span class="n">epsc</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Mat.info"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Mat.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Display material properties</span>
+        <span class="sd">&quot;&quot;&quot; display material properties</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">print</span> <span class="s">&quot;---------------------------------&quot;</span>
@@ -821,22 +865,30 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        name : string</span>
 <span class="sd">            material name</span>
-<span class="sd">        val  : float or complex</span>
+<span class="sd">        cval : float or complex</span>
 <span class="sd">            epsilon or index</span>
 <span class="sd">        sigma : float or complex</span>
 <span class="sd">            permeability</span>
 <span class="sd">        mur  : float</span>
 <span class="sd">        typ  : string</span>
-<span class="sd">            {&#39;epsr&#39;|&#39;ind&#39;|&#39;THz&#39;}</span>
+<span class="sd">            {&#39;epsr&#39;|&#39;ind&#39;|,&#39;reim&#39;,|&#39;THz&#39;}</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        There are two manners to enter a material</span>
 
-<span class="sd">        i)  epsr and sigma</span>
-<span class="sd">        ii) indice @ fGHz</span>
+<span class="sd">        Different ways to enter a material are :</span>
+
+<span class="sd">        i)  epsr : epsr and sigma</span>
+<span class="sd">            cval = epsr </span>
+<span class="sd">            sigma = sigma </span>
+<span class="sd">        ii) ind : indice @ fGHz</span>
+<span class="sd">            cval = indice</span>
+<span class="sd">        iii) reim :  real(epsr) and imag(epsr)  @fGHz</span>
+<span class="sd">        iv) THZ</span>
+
 
 
 <span class="sd">        Examples</span>
@@ -859,6 +911,13 @@
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;epsr&#39;</span><span class="p">:</span>
             <span class="n">M</span><span class="p">[</span><span class="s">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cval</span>
             <span class="n">M</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigma</span>
+
+        <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;reim&#39;</span><span class="p">:</span>
+            <span class="n">M</span><span class="p">[</span><span class="s">&#39;epsr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cval</span>
+            <span class="n">M</span><span class="p">[</span><span class="s">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mur</span><span class="o">*</span><span class="n">M</span><span class="p">[</span><span class="s">&#39;epsr&#39;</span><span class="p">])</span> <span class="c"># warning  check causality</span>
+            <span class="n">M</span><span class="p">[</span><span class="s">&#39;epr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s">&#39;epsr&#39;</span><span class="p">])</span>
+            <span class="n">M</span><span class="p">[</span><span class="s">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">M</span><span class="p">[</span><span class="s">&#39;epsr&#39;</span><span class="p">])</span>
+            <span class="n">M</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">M</span><span class="p">[</span><span class="s">&#39;epr2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">M</span><span class="p">[</span><span class="s">&#39;fGHz&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">18</span>
 
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;ind&#39;</span><span class="p">:</span>
             <span class="n">M</span><span class="p">[</span><span class="s">&#39;n&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cval</span>
@@ -1138,16 +1197,45 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;NEWSLAB&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        mat : </span>
+<span class="sd">        name : string     </span>
+<span class="sd">            slab name </span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;nbmat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;imat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;thickness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">]</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;black&#39;</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mat</span> <span class="o">=</span> <span class="n">mat</span>
         <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;fGHz :  &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span> <span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span> <span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span> <span class="s">&#39;theta : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;:&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;| &#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;| &#39;</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">])):</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="s">&#39; | &#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">|&#39;</span>    
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">])):</span>
+            <span class="n">ntick</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;lthick&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="mf">0.01</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ntick</span><span class="p">):</span>
+                <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;-&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span><span class="s">&#39;|&#39;</span> 
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+                
 <div class="viewcode-block" id="Slab.info"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Slab.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Display Slab Info</span>
 
@@ -1161,35 +1249,33 @@
 <span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
 <span class="sd">            &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
 <span class="sd">            &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; lname = [&#39;PLATRE-57GHz&#39;,&#39;AIR&#39;,&#39;PLATRE-57GHz&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; lmatname = [&#39;PLATRE-57GHz&#39;,&#39;AIR&#39;,&#39;PLATRE-57GHz&#39;]</span>
 <span class="sd">            &gt;&gt;&gt; lthick = [0.018,0.03,0.018]</span>
-<span class="sd">            &gt;&gt;&gt; sl.add(&#39;placo&#39;,lname,lthick)</span>
+<span class="sd">            &gt;&gt;&gt; sl.add(&#39;placo&#39;,lmatname,lthick)</span>
 <span class="sd">            &gt;&gt;&gt; theta = np.arange(0,np.pi/2,0.01)</span>
 <span class="sd">            &gt;&gt;&gt; fGHz = np.array([57.5])</span>
 <span class="sd">            &gt;&gt;&gt; sl[&#39;placo&#39;].ev(fGHz,theta)</span>
-<span class="sd">            &gt;&gt;&gt; sl[&#39;placo&#39;].plotwrta()</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax=sl[&#39;placo&#39;].plotwrt(var=&#39;a&#39;,types=[&#39;m&#39;])</span>
 <span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="s">&quot;------------&quot;</span>
-        <span class="k">print</span> <span class="s">&quot;name : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-        <span class="k">print</span> <span class="s">&quot;nbmat : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbmat</span>
+        <span class="k">print</span> <span class="s">&quot;name : &quot;</span><span class="p">,</span> <span class="bp">self</span>
+        <span class="k">print</span> <span class="s">&quot;nbmat : &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">])</span>
         <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;[ &quot;</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbmat</span><span class="p">):</span>
-            <span class="n">index_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">imat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">name_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">di</span><span class="p">[</span><span class="n">index_mat</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">name_mat</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]:</span>
-                <span class="n">epsrc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">name_mat</span><span class="p">]</span><span class="o">.</span><span class="n">epsc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">epsrc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">epsc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="k">print</span> <span class="s">&quot;epsrc : &quot;</span><span class="p">,</span> <span class="n">epsrc</span>
-            <span class="n">chaine</span> <span class="o">=</span> <span class="n">chaine</span> <span class="o">+</span> <span class="n">name_mat</span> <span class="o">+</span> <span class="s">&#39;   &#39;</span>
+            <span class="n">chaine</span> <span class="o">=</span> <span class="n">chaine</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;   &#39;</span>
             <span class="n">chaine</span> <span class="o">=</span> <span class="n">chaine</span> <span class="o">+</span> <span class="s">&#39;]&#39;</span>
             <span class="k">print</span> <span class="n">chaine</span>
-            <span class="k">print</span> <span class="s">&quot;index : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
-            <span class="k">print</span> <span class="s">&quot;imat   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imat</span>
-            <span class="k">print</span> <span class="s">&quot;thickness (m) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thickness</span>
-            <span class="k">print</span> <span class="s">&quot;color : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span>
-            <span class="k">print</span> <span class="s">&quot;linewidth :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">linewidth</span>
+            <span class="k">print</span> <span class="s">&quot;index : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="s">&quot;imat   : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;imat&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="s">&quot;thickness (cm) : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;thickness&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="s">&quot;color : &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="s">&quot;linewidth :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;linewidth&#39;</span><span class="p">]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]:</span>
                 <span class="k">print</span> <span class="s">&quot;---------------------&quot;</span>
                 <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">)</span>
@@ -1209,6 +1295,7 @@
 
 <span class="sd">        Warnings</span>
 <span class="sd">        --------</span>
+
 <span class="sd">        In .slab file thickness variable is expressed in cm</span>
 
 <span class="sd">        for lthick distance  are expressed in meters</span>
@@ -1238,6 +1325,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        fGHz  : frequency GHz ( np.array([1.0]) )</span>
 <span class="sd">        theta : np.array</span>
 <span class="sd">            incidence angle (from normal) radians</span>
@@ -1248,15 +1336,17 @@
             <span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">fGHz</span><span class="p">])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">fGHz</span>
 
         <span class="n">nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
         <span class="n">nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-        <span class="n">thetai</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">thetaf</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c">#thetai = theta[0]</span>
+        <span class="c">#thetaf = theta[-1]</span>
         <span class="c">### WARNING thetas can be NOT sorted. </span>
         <span class="c">### thetai should be min(theta)</span>
         <span class="c">### thetaf should be max(theta)</span>
-        <span class="n">th1</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">thetai</span><span class="p">,</span><span class="n">thetaf</span><span class="p">,</span><span class="n">nt</span><span class="p">)</span>
+        <span class="c">#th1  = np.linspace(thetai,thetaf,nt)</span>
 
         <span class="n">metalic</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">name1</span> <span class="o">=</span> <span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;lmat&#39;</span><span class="p">])</span>
@@ -1298,11 +1388,11 @@
                 <span class="n">Io</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
                 <span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="n">Io</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="c">#                _Io=np.eye(2,dtype=complex)+np.eye(2)-1</span>
+<span class="c">#           _Io=np.eye(2,dtype=complex)+np.eye(2)-1</span>
                 <span class="n">Ip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
                 <span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="n">Ip</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="c">#                _Ip=np.eye(2,dtype=complex)+np.eye(2)-1</span>
+<span class="c">#           _Ip=np.eye(2,dtype=complex)+np.eye(2)-1</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
                     <span class="n">II</span> <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">ml</span><span class="p">,</span> <span class="n">mr</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1401,44 +1491,94 @@
         <span class="n">wout</span> <span class="o">=</span> <span class="n">Wafeform</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">wout</span><span class="p">)</span>
 </div>
-    <span class="k">def</span> <span class="nf">excess_grdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">4.0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span><span class="n">theta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">excess_grdelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">2.4</span><span class="p">,</span><span class="mf">4.0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span><span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot; calculate transmission excess delay in ns</span>
-
-<span class="sd">        &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
-<span class="sd">        &gt;&gt;&gt; from matplotlib.pylab import *</span>
-<span class="sd">        &gt;&gt;&gt; import numpy as np </span>
-<span class="sd">        &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; s1 = sl[&#39;PARTITION&#39;]</span>
-<span class="sd">        &gt;&gt;&gt; fGHz = np.arange(3.1,10.6,0.1)</span>
-<span class="sd">        &gt;&gt;&gt; delayo,delayp = s1.excess_grdelay(fGHz,0)</span>
-<span class="sd">        &gt;&gt;&gt; lineo = plt.plot(fGHz[0:-1],delayo)</span>
-<span class="sd">        &gt;&gt;&gt; linep = plt.plot(fGHz[0:-1],delayp)</span>
-<span class="sd">        &gt;&gt;&gt; plt.show()</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">]),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">T</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span>
-        <span class="n">To</span>  <span class="o">=</span> <span class="n">T</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">Tp</span>  <span class="o">=</span> <span class="n">T</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">ao</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">To</span><span class="p">))</span>
-        <span class="n">ap</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">Tp</span><span class="p">))</span>
-        <span class="n">delayo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ao</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">)</span>
-        <span class="n">delayp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ap</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">delayo</span><span class="p">,</span><span class="n">delayp</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="Slab.loss0"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Slab.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate loss for theta=0 at frequency (f)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
+<span class="sd">        fGHz : array</span>
+<span class="sd">            default arange(2.4,4,0.1)</span>
+<span class="sd">        theta : default 0 </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        </span>
+<span class="sd">        delayo : excess delay polarization o</span>
+<span class="sd">        delayp : excess delay polarization p</span>
+
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.antprop.slab import *</span>
+<span class="sd">            &gt;&gt;&gt; from matplotlib.pylab import *</span>
+<span class="sd">            &gt;&gt;&gt; import numpy as np </span>
+<span class="sd">            &gt;&gt;&gt; sl = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; s1 = sl[&#39;PARTITION&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; fGHz = np.arange(3.1,10.6,0.1)</span>
+<span class="sd">            &gt;&gt;&gt; delayo,delayp = s1.excess_grdelay(fGHz,0)</span>
+<span class="sd">            &gt;&gt;&gt; lineo = plt.plot(fGHz[0:-1],delayo)</span>
+<span class="sd">            &gt;&gt;&gt; linep = plt.plot(fGHz[0:-1],delayp)</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span> <span class="p">,</span> <span class="s">&quot;fGHz too short needs more than one frequency point&quot;</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">fGHz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">fGHz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        
+        <span class="c"># f x th x p x q </span>
+        <span class="n">T</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">To</span>  <span class="o">=</span> <span class="n">T</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">Tp</span>  <span class="o">=</span> <span class="n">T</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">ao</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">To</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ap</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">Tp</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">delayo</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ao</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">delayp</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">df</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">delayo</span><span class="p">,</span><span class="n">delayp</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Slab.tocolor"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Slab.tocolor">[docs]</a>    <span class="k">def</span> <span class="nf">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">])):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        fGHz : np.array</span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; sl  = SlabDB(&#39;matDB.ini&#39;,&#39;slabDB.ini&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; s1  = sl[&#39;PARTITION&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; col24 = s1.tocolor(np.array([2.4]))</span>
+<span class="sd">        &gt;&gt;&gt; fGHz = np.arange(0.5,8,100)</span>
+<span class="sd">        &gt;&gt;&gt; col8 = s1.tocolor(fGHz)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]),</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Slab.loss0"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Slab.loss0">[docs]</a>    <span class="k">def</span> <span class="nf">loss0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; calculate loss for theta=0 at frequency (fGHz)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
 <span class="sd">        fGHz : frequency (GHz)  np.array()</span>
 <span class="sd">            default 2.4</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        Lo  : np.array</span>
 <span class="sd">            Loss at 0 deg polarization ortho</span>
 <span class="sd">        Lp :  np.array</span>
@@ -1463,25 +1603,32 @@
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Slab.losst"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.Slab.losst">[docs]</a>    <span class="k">def</span> <span class="nf">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate loss for theta=th at frequency (f)</span>
+        <span class="sd">&quot;&quot;&quot; Calculate loss w.r.t angle and frequency</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        fGHz   :  np.array()</span>
 <span class="sd">            frequency (GHz)</span>
-<span class="sd">        th     :  float</span>
-<span class="sd">            theta angle</span>
+
+<span class="sd">        theta  :  np.array </span>
+<span class="sd">            theta angle (radians)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        Lo  : np.array</span>
 <span class="sd">            Loss orthogonal</span>
+
 <span class="sd">        Lp  : np.array</span>
 <span class="sd">            Loss paralell</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">]))</span>
+        <span class="c"># for backward compatibility </span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span><span class="p">:</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
         <span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span> <span class="o">=</span> <span class="n">Interface</span><span class="o">.</span><span class="n">losst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">Lo</span><span class="p">,</span> <span class="n">Lp</span><span class="p">)</span>
 </div>
@@ -1528,11 +1675,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">linewidth</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dass</span><span class="p">()</span>
 </div>
-    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="s">&#39;modulus&#39;</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fGHz</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show slab Reflection and Transmission coefficient</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        fGHz : float</span>
 <span class="sd">        theta : np.array</span>
 <span class="sd">        dtype :</span>
@@ -1540,11 +1688,13 @@
 <span class="sd">            {&#39;modulus&#39;}</span>
 <span class="sd">        dB  : boolean</span>
 <span class="sd">            False</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;evaluated&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span> <span class="n">dB</span><span class="o">=</span><span class="n">dB</span><span class="p">)</span>
+            <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
 
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
 <div class="viewcode-block" id="SlabDB"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.SlabDB">[docs]</a><span class="k">class</span> <span class="nc">SlabDB</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Slab data base</span>
@@ -1669,18 +1819,23 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">slab</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="n">slab</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="o">=</span><span class="n">fGHz</span><span class="p">)</span>
-        <span class="n">slab</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrta</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span>
 </div>
-<div class="viewcode-block" id="SlabDB.add"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.SlabDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">lname</span><span class="p">,</span> <span class="n">lthick</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SlabDB.add"><a class="viewcode-back" href="../../../modules/antprop.slab.html#pylayers.antprop.slab.SlabDB.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">lmatname</span><span class="p">,</span> <span class="n">lthick</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; add a slab in dB</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        name       : string</span>
-<span class="sd">        lmatname   : list of mat name</span>
+<span class="sd">        lmatname      : list of mat name</span>
 <span class="sd">        lthick     : list ot float</span>
 <span class="sd">            lthick  is in meters</span>
+
 <span class="sd">        Warnings</span>
-<span class="sd">        -------</span>
+<span class="sd">        --------</span>
+
 <span class="sd">        thickness is in cm in .slab</span>
 
 <span class="sd">        Examples</span>
@@ -1708,10 +1863,10 @@
 <span class="sd">                0.0029,0.0102,0.0029])</span>
 <span class="sd">            theta = np.linspace(20,60,100)*np.pi/180</span>
 <span class="sd">            sl[&#39;ConcreteJc&#39;].ev(120,theta)</span>
-<span class="sd">            sl[&#39;ConcreteJc&#39;].plotwrta(dB=True)</span>
+<span class="sd">            sl[&#39;ConcreteJc&#39;].plotwrt(var=&#39;a&#39;,types=[&#39;l20&#39;])</span>
 <span class="sd">            fig = plt.figure()</span>
 <span class="sd">            sl[&#39;DoubleGlass&#39;].ev(120,theta)</span>
-<span class="sd">            sl[&#39;DoubleGlass&#39;].plotwrta(dB=True)</span>
+<span class="sd">            sl[&#39;DoubleGlass&#39;].plotwrt(var=&#39;a&#39;,types=[&#39;l20&#39;])</span>
 <span class="sd">            freq = np.linspace(110,135,50)</span>
 <span class="sd">            fig = plt.figure()</span>
 <span class="sd">            sl[&#39;DoubleGlass&#39;].ev(freq,theta)</span>
@@ -1752,14 +1907,14 @@
 
         <span class="n">U</span> <span class="o">=</span> <span class="n">Slab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="n">maxi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxindex</span><span class="p">()</span>
-        <span class="n">U</span><span class="p">[</span><span class="s">&#39;lname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lname</span>
+        <span class="n">U</span><span class="p">[</span><span class="s">&#39;lmatname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lmatname</span>
         <span class="n">U</span><span class="p">[</span><span class="s">&#39;lthick&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lthick</span>
         <span class="n">U</span><span class="p">[</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxi</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">U</span><span class="p">[</span><span class="s">&#39;nbmat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lname</span><span class="p">)</span>
+        <span class="n">U</span><span class="p">[</span><span class="s">&#39;nbmat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lmatname</span><span class="p">)</span>
         <span class="n">imat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">thickness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lname</span><span class="p">)):</span>
-            <span class="n">namem</span> <span class="o">=</span> <span class="n">lname</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lmatname</span><span class="p">)):</span>
+            <span class="n">namem</span> <span class="o">=</span> <span class="n">lmatname</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">imat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">namem</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span>
             <span class="n">thickness</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lthick</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>  <span class="c"># m -&gt;cm</span>
         <span class="n">U</span><span class="p">[</span><span class="s">&#39;imat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">imat</span><span class="p">)</span>
@@ -2101,7 +2256,11 @@
 
 </div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    <span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;PILLAR&#39;</span><span class="p">]</span>
+    <span class="n">fGHz</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">5.0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -2117,7 +2276,8 @@
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../antprop.html" >pylayers.antprop</a> &raquo;</li> 
       </ul>
     </div>
 

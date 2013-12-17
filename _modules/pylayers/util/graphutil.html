@@ -75,13 +75,32 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span> 
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 <span class="kn">import</span> <span class="nn">doctest</span>
-
+<span class="kn">import</span> <span class="nn">pdb</span>
 
 <div class="viewcode-block" id="draw"><a class="viewcode-back" href="../../../modules/util.graphutil.html#pylayers.util.graphutil.draw">[docs]</a><span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; draw a networkx graph</span>
 <span class="sd">    G : Graph with pos (geometric graph)</span>
 
-
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    show : False</span>
+<span class="sd">    fig : []</span>
+<span class="sd">    ax : []</span>
+<span class="sd">    &#39;nodes&#39;:True,</span>
+<span class="sd">    &#39;edges&#39;:True,</span>
+<span class="sd">    &#39;labels&#39;:True,</span>
+<span class="sd">    &#39;linewidth&#39;: 2,</span>
+<span class="sd">    &#39;node_color&#39;:&#39;w&#39;,</span>
+<span class="sd">    &#39;edge_color&#39;:&#39;k&#39;,</span>
+<span class="sd">    &#39;node_size&#39;: 200,</span>
+<span class="sd">    &#39;linewidth&#39;: 2,</span>
+<span class="sd">    &#39;font_size&#39;: 30,</span>
+<span class="sd">    &#39;alphan&#39;: 0.8,</span>
+<span class="sd">    &#39;alphae&#39;: 1.0,</span>
+<span class="sd">    &#39;nodelist&#39;: [],</span>
+<span class="sd">    &#39;edgelist&#39;: [],</span>
+<span class="sd">    &#39;figsize&#39;: (8,8)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;show&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
@@ -128,8 +147,13 @@
 
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodelist&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
         <span class="n">nodelist</span> <span class="o">=</span>  <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">nodelist</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodelist&#39;</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">]</span><span class="o">==</span><span class="p">[]:</span>
         <span class="n">edgelist</span> <span class="o">=</span>  <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">edgelist</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()[</span><span class="n">x</span><span class="p">],</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;edgelist&#39;</span><span class="p">])</span> <span class="c"># for nx an edge list is a list of tuple</span>
 
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]:</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>

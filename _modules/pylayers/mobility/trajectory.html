@@ -78,25 +78,54 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 <span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="kn">import</span> <span class="n">Path</span> 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span> 
+<span class="kn">import</span> <span class="nn">doctest</span>
 
 
 <span class="k">class</span> <span class="nc">Trajectory</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">),</span><span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;  Define a trajectory</span>
+
+<span class="sd">    This class derives from pandas.DataFrame</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    tmin : float</span>
+<span class="sd">    tmax : float</span>
+<span class="sd">    tttimr :</span>
+<span class="sd">    dtot : </span>
+<span class="sd">    meansp :</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    </span>
+<span class="sd">    time </span>
+<span class="sd">    space</span>
+<span class="sd">    rescale</span>
+<span class="sd">    plot </span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="p">[],</span><span class="n">pt</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s">&#39;s&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; initialization </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">npt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pt</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="n">npt</span><span class="p">)</span>
         <span class="n">td</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
-        <span class="c">#v = np.vstack((pt[1:,:]-pt[0:-1,:],np.array([np.nan,np.nan])))</span>
-        <span class="c">#a = np.vstack((v[1:,:]-v[0:-1,:],np.array([np.nan,np.nan])))</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">-</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:,:]</span><span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-        <span class="c">#vy = self[&#39;y&#39;][1:].values-self[&#39;y&#39;][0:-1].values</span>
         <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,{</span><span class="s">&#39;t&#39;</span><span class="p">:</span><span class="n">td</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span>
                                     <span class="s">&#39;x&#39;</span><span class="p">:</span><span class="n">pt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
                                     <span class="s">&#39;y&#39;</span><span class="p">:</span><span class="n">pt</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="c">#&#39;z&#39;:pt[:-2,2],</span>
                                     <span class="s">&#39;vx&#39;</span><span class="p">:</span><span class="n">v</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
                                     <span class="s">&#39;vy&#39;</span><span class="p">:</span><span class="n">v</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="c">#&#39;vz&#39;:v[:-1,2],</span>
                                     <span class="s">&#39;ax&#39;</span><span class="p">:</span><span class="n">a</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span>
                                     <span class="s">&#39;ay&#39;</span><span class="p">:</span><span class="n">a</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span>
+                                    <span class="c">#&#39;az&#39;:a[:,2],</span>
                                     <span class="s">&#39;s&#39;</span> <span class="p">:</span><span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]},</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">,</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;y&#39;</span><span class="p">,</span><span class="s">&#39;vx&#39;</span><span class="p">,</span><span class="s">&#39;vy&#39;</span><span class="p">,</span><span class="s">&#39;ax&#39;</span><span class="p">,</span><span class="s">&#39;ay&#39;</span><span class="p">,</span><span class="s">&#39;s&#39;</span><span class="p">])</span>
 
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> 
@@ -108,8 +137,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dtot</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meansp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtot</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">ttime</span>
 
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">pt</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c">#if np.shape(pt)[1]&gt;2:</span>
+        <span class="c">#    self[&#39;z&#39;] = pt[:,2]</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -145,11 +174,20 @@
 
         
 </div>
-<div class="viewcode-block" id="Trajectory.space"><a class="viewcode-back" href="../../../modules/mobility.trajectory.html#pylayers.mobility.trajectory.Trajectory.space">[docs]</a>    <span class="k">def</span> <span class="nf">space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ndim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Trajectory.space"><a class="viewcode-back" href="../../../modules/mobility.trajectory.html#pylayers.mobility.trajectory.Trajectory.space">[docs]</a>    <span class="k">def</span> <span class="nf">space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ndim</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; extract space information </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
+<span class="sd">        ndim : int </span>
+<span class="sd">            number of dimensions (default 2)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        pt : nd.array()</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">ndim</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>                     
             <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
@@ -158,13 +196,20 @@
         <span class="k">return</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>                  
 </div>
 <div class="viewcode-block" id="Trajectory.time"><a class="viewcode-back" href="../../../modules/mobility.trajectory.html#pylayers.mobility.trajectory.Trajectory.time">[docs]</a>    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; convert time </span>
+        <span class="sd">&quot;&quot;&quot; extract time </span>
 
 <span class="sd">        Parameters </span>
 <span class="sd">        ----------</span>
 
 <span class="sd">        unit : integer </span>
 <span class="sd">            default 0 (s) - 3 (ms) 6 (mus) 9 (ns)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        t : nd.array</span>
+<span class="sd">           time in 10**-unit  s</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">]</span>
         <span class="n">t</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">value</span><span class="p">,</span><span class="n">lt</span><span class="p">))</span>
@@ -181,6 +226,23 @@
 <span class="sd">        fig </span>
 <span class="sd">        ax </span>
 <span class="sd">        Nlabels : int </span>
+<span class="sd">        </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        </span>
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+<span class="sd">            </span>
+<span class="sd">            &gt;&gt;&gt; from pylayers.mobility.trajectory import *</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt </span>
+<span class="sd">            &gt;&gt;&gt; import numpy as np </span>
+<span class="sd">            &gt;&gt;&gt; t = np.arange(0,10,0.01)</span>
+<span class="sd">            &gt;&gt;&gt; x = 2*t*np.cos(t)</span>
+<span class="sd">            &gt;&gt;&gt; y = 3*t*np.sin(t) </span>
+<span class="sd">            &gt;&gt;&gt; pt =np.vstack((x,y)).T</span>
+<span class="sd">            &gt;&gt;&gt; traj = Trajectory(t,pt)</span>
+<span class="sd">            &gt;&gt;&gt; f,a = traj.plot()</span>
+<span class="sd">            &gt;&gt;&gt; plt.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -195,8 +257,8 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;t&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%M:%S&quot;</span><span class="p">)))</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span><span class="s">&#39;*r&#39;</span><span class="p">)</span>
 
-        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;x (meters&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y (meters&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;x (meters)&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;y (meters)&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> 
 </div>
@@ -227,15 +289,10 @@
     <span class="k">return</span><span class="p">(</span><span class="n">lt</span><span class="p">)</span>    
 </div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    
 
-    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">t</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">t</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> 
-    <span class="n">pt</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
-
-    <span class="n">traj</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">pt</span><span class="p">)</span>
-    <span class="n">traj</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
    
 </pre></div>

@@ -56,9 +56,9 @@
   'norm': array([ 0.00639987, -0.99997952,  0.        ]),
   'transition': False,
   'z': (0.0, 3.0)},
- 9: {'connect': [-2, -1],
+ 9: {'connect': [-1, -2],
   'name': 'WALL',
   'ncycles': [1],
-  'norm': array([ 0.00639987, -0.99997952,  0.        ]),
+  'norm': array([-0.00639987,  0.99997952,  0.        ]),
   'transition': False,
   'z': (0.0, 3.0)}}

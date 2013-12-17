@@ -89,7 +89,7 @@
 <span id="network"></span><span id="network-network"></span><h1>network<a class="headerlink" href="#module-pylayers.network.network" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pylayers.network.network.Network">
-<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0xc6d9e50&gt;</em>, <em>PN=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.network.network.</tt><tt class="descname">Network</tt><big>(</big><em>owner='sim'</em>, <em>EMS=&lt;pylayers.network.emsolver.EMSolver object at 0xf606190&gt;</em>, <em>PN=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network" title="Permalink to this definition">¶</a></dt>
 <dd><p>Network class
 inherit of networkx.Graph()</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -122,7 +122,7 @@ value = node position</p>
 <p><strong>connect(self)</strong> : Connect each node from a rat together</p>
 <p><strong>create(self)</strong> : compute get_RAT(),get_pos() and connect()</p>
 <p><strong>update_LDP(self,n1,n2,RAT,LDP=None,value=[])</strong> : update Location Dependent Parameter</p>
-<p><strong>compute_LDP(self,n1,n2,RAT,LDP,method=&#8217;direct&#8217;)</strong> : compute the LDP value thanks to a ElectroMag Solver</p>
+<p><strong>compute_LDP(self,RAT)</strong> : compute the LDP value thanks to a ElectroMag Solver</p>
 <p><strong>update_pos(self,n,p=np.array)</strong> : update node (or node list) position</p>
 <p><strong>get_pos(self,RAT=None)</strong> : get node positions</p>
 <p><strong>pp(self)</strong> : pretty print on std out all edtges informations</p>
@@ -222,7 +222,7 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.compute_LDPs">
-<tt class="descname">compute_LDPs</tt><big>(</big><em>ln</em>, <em>RAT</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.compute_LDPs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.compute_LDPs" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">compute_LDPs</tt><big>(</big><em>RAT</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.compute_LDPs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.compute_LDPs" title="Permalink to this definition">¶</a></dt>
 <dd><p>compute edge LDP</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -237,11 +237,9 @@ itertools.combinations(range(4), 3) &#8211;&gt; 012 013 023 123</p>
 <div><p>node ID</p>
 </div></blockquote>
 <p><strong>RAT</strong> : string</p>
-<blockquote>
+<blockquote class="last">
 <div><p>A specific RAT which exist in the network ( if not , raises an error)</p>
 </div></blockquote>
-<p><strong>value</strong> : list</p>
-<p class="last"><strong>method</strong> : ElectroMagnetic Solver method ( &#8216;direct&#8217;, &#8216;Multiwall&#8217;, &#8216;PyRay&#8217;</p>
 </td>
 </tr>
 </tbody>
@@ -603,7 +601,7 @@ itertools.permutations(range(4), 3) &#8211;&gt; 012 013 021 023 031 302 102 103 
 
 <dl class="method">
 <dt id="pylayers.network.network.Network.show">
-<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xc6e5110&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">show</tt><big>(</big><em>RAT=None</em>, <em>legend=False</em>, <em>ion=False</em>, <em>info=False</em>, <em>fig=&lt;matplotlib.figure.Figure object at 0xf606410&gt;</em>, <em>ax=None</em>, <em>name=None</em><big>)</big><a class="reference internal" href="../_modules/pylayers/network/network.html#Network.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.network.network.Network.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the network</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

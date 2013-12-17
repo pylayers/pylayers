@@ -137,6 +137,10 @@ value : list of Enclosed (0) and ambiguous (1) boxes.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Methods :</th><td class="field-body"><p class="first"><strong>info(self)</strong> : Give info</p>
+<p><strong>compute(pe=True,mergeRSS=False,refineRSS=True, NBOXMAX=50, VOLMIN=0.001,HT=True,forceamb=False):</strong> :</p>
+<blockquote>
+<div><p>compute the CLA to estimate the positon.</p>
+</div></blockquote>
 <p><strong>rescale(self,f_vcw,cid=None)</strong> : rescale Constraint Box</p>
 <p><strong>annulus_bound(self,cid=None)</strong> : rescale Constraint</p>
 <p><strong>append(self,c)</strong> : Append a Constraint to CLA</p>
@@ -239,9 +243,10 @@ A Hybrid Positioning Method Based on Hypothesis Testing
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>return</strong> : boolean</p>
-<blockquote class="last">
+<blockquote>
 <div><p>True if the position estimation has been performed.</p>
 </div></blockquote>
+<p class="last"><strong>update a self.pe which contain the estimated position</strong> :</p>
 </td>
 </tr>
 </tbody>

@@ -38,8 +38,8 @@ coordinates. Otherwise a singularity problem arises.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4584a10>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x4584f90>)
+    (<matplotlib.figure.Figure at 0x467d9d0>,
+     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x467df90>)
 
 
 
@@ -58,8 +58,8 @@ coordinates. Otherwise a singularity problem arises.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4593e10>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x45a5f90>)
+    (<matplotlib.figure.Figure at 0x468cd90>,
+     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x469fed0>)
 
 
 

@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="pylayers.antprop" href="../antprop.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,7 +43,8 @@
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../antprop.html" accesskey="U">pylayers.antprop</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -85,6 +86,7 @@
 
 <span class="sd">Examples</span>
 <span class="sd">--------</span>
+
 <span class="sd">    &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
 <span class="sd">    &gt;&gt;&gt; A = Antenna(&#39;S1R1.mat&#39;,&#39;ant/UWBAN/Matfile&#39;)</span>
 
@@ -107,6 +109,7 @@
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">io</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
+<span class="kn">import</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">as</span> <span class="nn">geu</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.spharm</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">matplotlib.font_manager</span> <span class="kn">import</span> <span class="n">FontProperties</span>
@@ -143,15 +146,16 @@
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 
-<span class="sd">    info()          : Display information about antenna</span>
-<span class="sd">    vsh()           : calculates Vector Spherical Harmonics</span>
-<span class="sd">    show3_geom()    : Geomview diagram</span>
-<span class="sd">    show3()         : 3D diagram plotting using matplotlib toolkit</span>
-<span class="sd">    Fsynth2         : Antenna F synthesis from coeff in s2</span>
+<span class="sd">    info  : Display information about antenna</span>
+<span class="sd">    vsh   : calculates Vector Spherical Harmonics</span>
+<span class="sd">    show3 : Geomview diagram</span>
+<span class="sd">    plot3d : 3D diagram plotting using matplotlib toolkit</span>
+<span class="sd">    Fsynth2 : Antenna F synthesis from coeff in s2</span>
 
 <span class="sd">    Antenna trx file can be stored in various order</span>
 <span class="sd">        natural : HFSS</span>
 <span class="sd">        bcp     : near filed chamber</span>
+
 <span class="sd">    It is important when initializing an antenna object to be aware of the typ of trx file</span>
 
 
@@ -182,7 +186,7 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        There are various supported data format for reading antenna patterns</span>
+<span class="sd">        There are various supported data formats for storing antenna patterns</span>
 
 <span class="sd">        &#39;mat&#39;: Matlab File</span>
 <span class="sd">        &#39;vsh2&#39;: un thresholdes vector spherical coefficients</span>
@@ -200,12 +204,32 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">loadvsh3</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;vsh2&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadvsh2</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;sh3&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loadsh3</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;sh2&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loadsh2</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;trx1&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load_trx</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">ntheta</span><span class="p">,</span> <span class="n">nphi</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;trx&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadtrx</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;mat&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;file name : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="c">#st = st + &#39;file type : &#39; + self.typ+&#39;\n&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;mat&#39;</span><span class="p">:</span>
+            <span class="c">#st = st + self.DataFile + &#39;\n&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;antenna name : &#39;</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">AntennaName</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;date : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Date</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;time : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">StartTime</span> <span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;Notes : &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Notes</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;Serie : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Serie</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;Run : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Run</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Nb theta (lat) : &quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&quot;Nb phi (lon) :&quot;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Antenna.loadmat"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.loadmat">[docs]</a>    <span class="k">def</span> <span class="nf">loadmat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s">&quot;ant&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; load an antenna stored in a mat file</span>
@@ -349,10 +373,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Nf</span> <span class="o">=</span> <span class="mi">104</span>
 </div>
 <div class="viewcode-block" id="Antenna.pattern"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.pattern">[docs]</a>    <span class="k">def</span> <span class="nf">pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; return radiation multidimensionnal patterns </span>
-<span class="sd">        </span>
+        <span class="sd">&quot;&quot;&quot; return multidimensionnal radiation patterns </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        theta   : array</span>
 <span class="sd">            1xNt</span>
 <span class="sd">        phi     : array</span>
@@ -362,17 +387,17 @@
         <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
         <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
-
-        <span class="n">Th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
-        <span class="n">Ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span> <span class="n">phi</span><span class="p">)</span>
+        <span class="c">#Th = np.kron(theta, np.ones(Np))</span>
+        <span class="c">#Ph = np.kron(np.ones(Nt), phi)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span><span class="s">&#39;s1&#39;</span><span class="p">:</span>
-            <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth1</span><span class="p">(</span><span class="n">Th</span><span class="p">,</span> <span class="n">Ph</span><span class="p">)</span>
+            <span class="n">FTh</span><span class="p">,</span> <span class="n">FPh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth1</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span><span class="s">&#39;s2&#39;</span><span class="p">:</span>
-            <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth2b</span><span class="p">(</span><span class="n">Th</span><span class="p">,</span> <span class="n">Ph</span><span class="p">)</span>
+            <span class="n">FTh</span><span class="p">,</span> <span class="n">FPh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth2b</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span><span class="s">&#39;s3&#39;</span><span class="p">:</span>
-            <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">Th</span><span class="p">,</span> <span class="n">Ph</span><span class="p">)</span>
-        <span class="n">FTh</span> <span class="o">=</span> <span class="n">Fth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
-        <span class="n">FPh</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+            <span class="n">FTh</span><span class="p">,</span> <span class="n">FPh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span> <span class="p">)</span>
+        <span class="c">#FTh = Fth.reshape(Nf, Nt, Np)</span>
+        <span class="c">#FPh = Fph.reshape(Nf, Nt, Np)</span>
+
         <span class="k">return</span><span class="p">(</span><span class="n">FTh</span><span class="p">,</span><span class="n">FPh</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Antenna.errel"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.errel">[docs]</a>    <span class="k">def</span> <span class="nf">errel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">kf</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dsf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;s3&#39;</span><span class="p">):</span>
@@ -418,18 +443,18 @@
         <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
 
-        <span class="n">Th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
-        <span class="n">Ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span> <span class="n">phi</span><span class="p">)</span>
+        <span class="c">#Th = np.kron(theta, np.ones(Np))</span>
+        <span class="c">#Ph = np.kron(np.ones(Nt), phi)</span>
 
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span><span class="s">&#39;s1&#39;</span><span class="p">:</span>
-            <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth1</span><span class="p">(</span><span class="n">Th</span><span class="p">,</span> <span class="n">Ph</span><span class="p">)</span>
+            <span class="n">FTh</span><span class="p">,</span> <span class="n">FPh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth1</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span><span class="s">&#39;s2&#39;</span><span class="p">:</span>
-            <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth2b</span><span class="p">(</span><span class="n">Th</span><span class="p">,</span> <span class="n">Ph</span><span class="p">)</span>
+            <span class="n">FTh</span><span class="p">,</span> <span class="n">FPh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth2b</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span><span class="s">&#39;s3&#39;</span><span class="p">:</span>
-            <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">Th</span><span class="p">,</span> <span class="n">Ph</span><span class="p">)</span>
+            <span class="n">FTh</span><span class="p">,</span> <span class="n">FPh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-        <span class="n">FTh</span> <span class="o">=</span> <span class="n">Fth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
-        <span class="n">FPh</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+        <span class="c">#FTh = Fth.reshape(self.Nf, Nt, Np)</span>
+        <span class="c">#FPh = Fph.reshape(self.Nf, Nt, Np)</span>
         <span class="c">#</span>
         <span class="c">#  Jacobian</span>
         <span class="c">#</span>
@@ -477,9 +502,9 @@
             <span class="n">errTh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dTh2</span><span class="p">)</span>
             <span class="n">errPh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dPh2</span><span class="p">)</span>
 
-        <span class="n">errelTh</span> <span class="o">=</span> <span class="n">errTh</span> <span class="o">/</span> <span class="n">mvTh2</span>
-        <span class="n">errelPh</span> <span class="o">=</span> <span class="n">errPh</span> <span class="o">/</span> <span class="n">mvPh2</span>
-        <span class="n">errel</span> <span class="o">=</span> <span class="p">(</span><span class="n">errTh</span> <span class="o">+</span> <span class="n">errPh</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mvTh2</span> <span class="o">+</span> <span class="n">mvPh2</span><span class="p">)</span>
+        <span class="n">errelTh</span> <span class="o">=</span> <span class="p">(</span><span class="n">errTh</span> <span class="o">/</span> <span class="n">mvTh2</span><span class="p">)</span>
+        <span class="n">errelPh</span> <span class="o">=</span> <span class="p">(</span><span class="n">errPh</span> <span class="o">/</span> <span class="n">mvPh2</span><span class="p">)</span>
+        <span class="n">errel</span> <span class="o">=</span><span class="p">(</span> <span class="p">(</span><span class="n">errTh</span> <span class="o">+</span> <span class="n">errPh</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mvTh2</span> <span class="o">+</span> <span class="n">mvPh2</span><span class="p">))</span>
 
         <span class="k">return</span><span class="p">(</span><span class="n">errelTh</span><span class="p">,</span> <span class="n">errelPh</span><span class="p">,</span> <span class="n">errel</span><span class="p">)</span>
 </div>
@@ -686,9 +711,6 @@
 <div class="viewcode-block" id="Antenna.info"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; gives info about antenna object</span>
 
-<span class="sd">           &gt;&gt;&gt; A1 = Antenna(&#39;defant.trx&#39;)</span>
-<span class="sd">           &gt;&gt;&gt; A2 = Antenna(&#39;defant.vsh3&#39;)</span>
-<span class="sd">           &gt;&gt;&gt; A3 = Antenna(&#39;S1R1.mat&#39;,&#39;ant/UWBAN/Matfile&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span>
@@ -722,32 +744,38 @@
 <div class="viewcode-block" id="Antenna.polar"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.polar">[docs]</a>    <span class="k">def</span> <span class="nf">polar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">it</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ip</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dyn</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">GmaxdB</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="p">[],</span><span class="n">ax</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">&quot;&quot;&quot; polar plot</span>
 
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            k : list of int</span>
-<span class="sd">                frequency index  (default 0)</span>
-<span class="sd">            it  : int</span>
-<span class="sd">                theta index      (default 0)</span>
-<span class="sd">            ip  : int</span>
-<span class="sd">                phi index        (default -1)</span>
-<span class="sd">            GmaxdB :</span>
-<span class="sd">                Max Gain (dB)</span>
-<span class="sd">            dyn    :</span>
-<span class="sd">                dynamic number of 5dB step</span>
-<span class="sd">            alpha  : float</span>
-<span class="sd">                default 0.1</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
-<span class="sd">            Examples</span>
-<span class="sd">            --------</span>
+<span class="sd">        k : list of int</span>
+<span class="sd">            frequency index  (default 0)</span>
+<span class="sd">        it : int</span>
+<span class="sd">            theta index      (default 0)</span>
+<span class="sd">        ip : int</span>
+<span class="sd">            phi index        (default -1)</span>
+<span class="sd">        GmaxdB :</span>
+<span class="sd">            Max Gain (dB)</span>
+<span class="sd">        dyn    :</span>
+<span class="sd">            dynamic number of 5dB step</span>
+<span class="sd">        alpha  : float</span>
+<span class="sd">            default 0.1</span>
 
-<span class="sd">            .. plot::</span>
-<span class="sd">                :include-source:</span>
+<span class="sd">        Returns    </span>
+<span class="sd">        -------</span>
 
-<span class="sd">                &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
-<span class="sd">                &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
-<span class="sd">                &gt;&gt;&gt; A = Antenna(&#39;defant.trx&#39;)</span>
-<span class="sd">                &gt;&gt;&gt; A.polar(k=[0,10,50])</span>
-<span class="sd">                &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        fig </span>
+<span class="sd">        ax </span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        .. plot::</span>
+<span class="sd">            :include-source:</span>
+
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">            &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
+<span class="sd">            &gt;&gt;&gt; A = Antenna(&#39;defant.trx&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; fig,ax = A.polar(k=[0,10,50])</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -821,19 +849,31 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="k">return</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Antenna.show3_geom"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.show3_geom">[docs]</a>    <span class="k">def</span> <span class="nf">show3_geom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.show3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="p">[],</span><span class="n">T</span><span class="o">=</span><span class="p">[],</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show3 geomview</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">            k : frequency index</span>
-<span class="sd">            typ : string</span>
-<span class="sd">                &#39;Gain&#39; | &#39;Ftheta&#39; | &#39;Fphi&#39;</span>
-<span class="sd">            mode : string</span>
-<span class="sd">                &#39;linear&#39;| &#39;not implemented&#39;</span>
-<span class="sd">            silent : boolean </span>
-<span class="sd">                True    | False</span>
+<span class="sd">        k : frequency index</span>
+<span class="sd">        po : poition of the antenna</span>
+<span class="sd">        T  : GCS of the antenna</span>
+<span class="sd">        typ : string</span>
+<span class="sd">            &#39;Gain&#39; | &#39;Ftheta&#39; | &#39;Fphi&#39;</span>
+<span class="sd">        mode : string</span>
+<span class="sd">            &#39;linear&#39;| &#39;not implemented&#39;</span>
+<span class="sd">        silent : boolean </span>
+<span class="sd">            True    | False</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">            &gt;&gt;&gt; from pylayers.antprop.antenna import *</span>
+<span class="sd">            &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">            &gt;&gt;&gt; import matplotlib.pylab as plt</span>
+<span class="sd">            &gt;&gt;&gt; A = Antenna(&#39;defant.trx&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; #A.show3()</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
@@ -845,21 +885,28 @@
         <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span> <span class="s">&#39;Fphi&#39;</span><span class="p">:</span>
             <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
-        <span class="n">minr</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">V</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-        <span class="n">maxr</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">V</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">po</span> <span class="o">==</span><span class="p">[]:</span>
+            <span class="n">po</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">T</span> <span class="o">==</span><span class="p">[]:</span>    
+            <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        
+        <span class="n">_filename</span> <span class="o">=</span> <span class="s">&#39;antbody&#39;</span> 
 
-        <span class="n">po</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">geom_pattern</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">po</span><span class="p">,</span> <span class="n">minr</span><span class="p">,</span> <span class="n">maxr</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
+        <span class="n">geo</span> <span class="o">=</span> <span class="n">geu</span><span class="o">.</span><span class="n">Geomoff</span><span class="p">(</span><span class="n">_filename</span><span class="p">)</span>
+        <span class="c"># geo.pattern requires the following shapes  </span>
+        <span class="c"># theta (Ntx1)</span>
+        <span class="c"># phi (1xNp)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> 
+        <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span>  
+        <span class="n">geo</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="n">phi</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="n">po</span><span class="o">=</span><span class="n">po</span><span class="p">,</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span><span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">minr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span><span class="n">maxr</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="c">#filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)</span>
+        <span class="c">#filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">silent</span><span class="p">:</span>
-            <span class="n">chaine</span> <span class="o">=</span> <span class="s">&quot;geomview -nopanel -b 1 1 1 &quot;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> \
-                <span class="s">&quot; 2&gt;/dev/null &amp;&quot;</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
+            <span class="n">geo</span><span class="o">.</span><span class="n">show3</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Antenna.show3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.show3">[docs]</a>    <span class="k">def</span> <span class="nf">show3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        show3(self,k=0,typ=&#39;Gain&#39;,col=True)</span>
+<div class="viewcode-block" id="Antenna.plot3d"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.plot3d">[docs]</a>    <span class="k">def</span> <span class="nf">plot3d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;Gain&#39;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; show in matplotlib </span>
 
 <span class="sd">        k : frequency index</span>
 
@@ -869,6 +916,7 @@
 
 <span class="sd">        if col  -&gt; color coded plot3D</span>
 <span class="sd">        else    -&gt; simple plot3D</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
 
@@ -956,6 +1004,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        Fth  : np.array</span>
 <span class="sd">        Fph  : np.array</span>
 <span class="sd">        N    : int</span>
@@ -1073,17 +1122,25 @@
         <span class="k">print</span> <span class="s">&quot;compdiag(20,A,A.theta,A.phi,FTh,FPh) &quot;</span>
 
     <span class="c">#def Fsynth1(self, theta, phi, k=0):</span></div>
-<div class="viewcode-block" id="Antenna.Fsynth1"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth1">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.Fsynth1"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth1">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; calculate complex antenna pattern  from VSH Coefficients (shape 1)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        theta  : ndarray (1xNdir)</span>
 <span class="sd">        phi    : ndarray (1xNdir)</span>
 <span class="sd">        k      : int</span>
 <span class="sd">            frequency index</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span><span class="n">phi</span><span class="p">)</span>
 
         <span class="n">nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 
@@ -1109,7 +1166,8 @@
         <span class="n">ind</span> <span class="o">=</span> <span class="n">index_vsh</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">VW</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">Pmm1n</span><span class="p">,</span> <span class="n">Pmp1n</span><span class="p">)</span>
+        <span class="c">#~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)</span>
+        <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">VW</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
         <span class="c">#</span>
         <span class="c"># broadcasting along frequency axis</span>
         <span class="c">#</span>
@@ -1138,6 +1196,11 @@
         <span class="c">#    np.dot(Ci, np.imag(V.T)) + \</span>
         <span class="c">#    np.dot(Bi, np.real(W.T)) + \</span>
         <span class="c">#    np.dot(Br, np.imag(W.T))</span>
+
+        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
+            <span class="n">Fth</span> <span class="o">=</span> <span class="n">Fth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+            <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
 
@@ -1244,13 +1307,14 @@
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tEBr</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tEBi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tECr</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tECi</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Antenna.Fsynth2b"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth2b">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth2b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.Fsynth2b"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth2b">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth2b</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  pattern synthesis from shape 2 vsh coefficients</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        theta</span>
-<span class="sd">        phi</span>
+
+<span class="sd">        theta : 1 x Nt </span>
+<span class="sd">        phi   : 1 x Np</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -1260,6 +1324,13 @@
 <span class="sd">        theta and phi arrays needs to have the same size</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span><span class="n">phi</span><span class="p">)</span>
 
         <span class="n">Br</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">s2</span> <span class="c"># Nf x K2</span>
         <span class="n">Bi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">s2</span> <span class="c"># Nf x K2</span>
@@ -1292,15 +1363,23 @@
         <span class="n">Fph</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Cr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ci</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
               <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
 
+        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
+            <span class="n">Fth</span> <span class="o">=</span> <span class="n">Fth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+            <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
 </div>
-<div class="viewcode-block" id="Antenna.Fsynth2"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth2">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.Fsynth2"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth2">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;  pattern synthesis from shape 2 vsh coeff</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        theta</span>
-<span class="sd">        phi</span>
+
+<span class="sd">        theta : array 1 x Nt </span>
+<span class="sd">        phi : </span>
+<span class="sd">        pattern : boolean </span>
+
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
@@ -1310,6 +1389,13 @@
 <span class="sd">        theta and phi arrays needs to have the same size</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span><span class="n">phi</span><span class="p">)</span>
 
         <span class="n">Br</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">s2</span>
         <span class="n">Bi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">s2</span>
@@ -1332,7 +1418,8 @@
         <span class="n">n</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">VW</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">Pmm1n</span><span class="p">,</span> <span class="n">Pmp1n</span><span class="p">)</span>
+        <span class="c">#~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)</span>
+        <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">VW</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
 
 
         <span class="n">Fth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
@@ -1340,25 +1427,37 @@
         <span class="n">Fph</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Cr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ci</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
             <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
 
+        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
+            <span class="n">Fth</span> <span class="o">=</span> <span class="n">Fth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+            <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
 
 </div>
-<div class="viewcode-block" id="Antenna.Fsynth3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth3">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">):</span>
+<div class="viewcode-block" id="Antenna.Fsynth3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.Fsynth3">[docs]</a>    <span class="k">def</span> <span class="nf">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">phi</span><span class="o">=</span><span class="p">[],</span> <span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="s">&#39;vsh&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; synthesis of a complex antenna pattern from VSH coefficients (shape 3)</span>
 
-<span class="sd">        Let Ndir be the number of directions</span>
+<span class="sd">        Ndir is the number of directions</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        theta : ndarray (1xNdir)</span>
-<span class="sd">        phi   : ndarray (1xNdir)</span>
+<span class="sd">        theta : ndarray (1xNdir if not pattern)  (1xNtheta if pattern)</span>
+<span class="sd">        phi   : ndarray (1xNdir if not pattter)  (1xNphi if pattern)</span>
+<span class="sd">        </span>
+<span class="sd">        pattern : boolean</span>
+<span class="sd">            if True theta and phi are reorganized for building the pattern</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        Fth   : ndarray (1xNdir)</span>
-<span class="sd">        Fph   : ndarray (1xNdir)</span>
+<span class="sd">        if pattern:</span>
+<span class="sd">            Fth   : ndarray (Ntheta x Nphi)</span>
+<span class="sd">            Fph   : ndarray (Ntheta x Nphi)</span>
+<span class="sd">        else:</span>
+<span class="sd">            Fth   : ndarray (1 x Ndir)</span>
+<span class="sd">            Fph   : ndarray (1 x Ndir)</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        --------</span>
@@ -1372,51 +1471,83 @@
 <span class="sd">            &gt;&gt;&gt; A = Antenna(&#39;defant.vsh3&#39;)</span>
 <span class="sd">            &gt;&gt;&gt; theta = np.linspace(0,np.pi,70)</span>
 <span class="sd">            &gt;&gt;&gt; phi = np.linspace(0,2*np.pi,180)</span>
-<span class="sd">            &gt;&gt;&gt; th = np.kron(theta,np.ones(len(phi)))</span>
-<span class="sd">            &gt;&gt;&gt; ph = np.kron(np.ones(len(theta)),phi)</span>
-<span class="sd">            &gt;&gt;&gt; Fth,Fph = A.Fsynth3(th,ph)</span>
+<span class="sd">            &gt;&gt;&gt; F = A.Fsynth3(theta,phi,pattern=True)</span>
 
 <span class="sd">        All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only</span>
 <span class="sd">        once the V,W function</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">typ</span> <span class="o">==</span><span class="s">&#39;vsh&#39;</span><span class="p">:</span>
+        
+            <span class="k">if</span> <span class="n">theta</span><span class="o">==</span><span class="p">[]:</span>
+                <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">47</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">phi</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="n">phi</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">91</span><span class="p">)</span>
+                  
+            <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+            <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
 
-        <span class="n">Br</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">s3</span>
-        <span class="n">lBr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">ind3</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">mBr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">ind3</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span> 
+                <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
+                <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span><span class="n">phi</span><span class="p">)</span>
 
-        <span class="n">Bi</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">nray</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 
-        <span class="n">Cr</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Cr</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">Br</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">lBr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">ind3</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">mBr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Br</span><span class="o">.</span><span class="n">ind3</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">Ci</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">Bi</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">s3</span>
 
-        <span class="n">L</span> <span class="o">=</span> <span class="n">lBr</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">mBr</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">Cr</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Cr</span><span class="o">.</span><span class="n">s3</span>
+
+            <span class="n">Ci</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s3</span>
+
+            <span class="n">L</span> <span class="o">=</span> <span class="n">lBr</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">mBr</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+            <span class="c"># vector spherical harmonics basis functions</span>
+
+            <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">VW</span><span class="p">(</span><span class="n">lBr</span><span class="p">,</span> <span class="n">mBr</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
 
 
-        <span class="c">#x = -np.cos(theta)</span>
+            <span class="n">Fth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">-</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ci</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Cr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
 
-        <span class="c">#Pmm1n, Pmp1n = AFLegendre3(20, 20, x)</span>
-        <span class="c">#Pmm1n, Pmp1n = AFLegendre3(L, L, x)</span>
-        <span class="c">#V, W = VW0(lBr, mBr, x, phi, Pmm1n, Pmp1n)</span>
+            <span class="n">Fph</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Cr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ci</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            
+            <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+                <span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">)</span>
+                <span class="n">Fth</span> <span class="o">=</span> <span class="n">Fth</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+                <span class="n">Fph</span> <span class="o">=</span> <span class="n">Fph</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span> <span class="n">Nt</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span> <span class="o">=</span> <span class="n">Fth</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span> <span class="o">=</span> <span class="n">Fph</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Nt</span> <span class="o">=</span> <span class="n">Nt</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">Np</span> <span class="o">=</span> <span class="n">Np</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Fph</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Fph</span><span class="p">)</span> <span class="o">+</span> <span class="n">Fth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Fth</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
 
-        <span class="n">V</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">VW</span><span class="p">(</span><span class="n">lBr</span><span class="p">,</span> <span class="n">mBr</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span>
+            
+        <span class="k">else</span> <span class="p">:</span>
 
-
-        <span class="n">Fth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">-</span> \
-            <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
-            <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ci</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
-            <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Cr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
-
-        <span class="n">Fph</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Cr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
-            <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ci</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
-            <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Bi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">+</span> \
-            <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
-
+            <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+            <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>            
+            
+            <span class="n">cx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">cy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">cz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s3</span>
+            
+            
         <span class="k">return</span> <span class="n">Fth</span><span class="p">,</span> <span class="n">Fph</span>
+            
 </div>
 <div class="viewcode-block" id="Antenna.movie_vsh"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.movie_vsh">[docs]</a>    <span class="k">def</span> <span class="nf">movie_vsh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;linear&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1503,27 +1634,28 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Np</span><span class="p">))</span>
-        <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Nt</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">)</span>
+        <span class="c">#th = np.kron(self.theta, np.ones(self.Np))</span>
+        <span class="c">#ph = np.kron(np.ones(self.Nt), self.phi)</span>
 
-        <span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">)</span>
+        <span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">Err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mse</span><span class="p">(</span><span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">Enc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">ens3</span><span class="p">()</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Enc</span><span class="p">)</span>
         <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+
         <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">Err</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">emax</span><span class="p">):</span>
 
             <span class="n">Emin</span> <span class="o">=</span> <span class="n">Enc</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
             <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">drag3</span><span class="p">(</span><span class="n">Emin</span><span class="p">)</span>
-            <span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">)</span>
+            <span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">Err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mse</span><span class="p">(</span><span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">Err</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">emax</span><span class="p">:</span>
                 <span class="n">i</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">i3</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">put3</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i3</span><span class="p">)</span>
-                <span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">ph</span><span class="p">)</span>
+                <span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
                 <span class="n">Err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mse</span><span class="p">(</span><span class="n">Fth3</span><span class="p">,</span> <span class="n">Fph3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
@@ -1563,8 +1695,75 @@
             <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.s3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Bi</span><span class="o">.</span><span class="n">s3</span>
             <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.s3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Cr</span><span class="o">.</span><span class="n">s3</span>
             <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.s3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s3</span>
-
             <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filevsh3</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">appendmat</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Antenna.savesh2"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.savesh2">[docs]</a>    <span class="k">def</span> <span class="nf">savesh2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a .sh2 antenna file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># create sh2 file</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>
+    
+        <span class="n">_filesh2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="o">+</span> <span class="n">typ</span><span class="p">,</span> <span class="s">&#39;.sh2&#39;</span><span class="p">)</span>
+        <span class="n">filesh2</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filesh2</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRANT&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filesh2</span><span class="p">):</span>
+            <span class="k">print</span> <span class="n">filesh2</span><span class="p">,</span> <span class="s">&#39; already exist&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;create &#39;</span><span class="p">,</span> <span class="n">filesh2</span><span class="p">,</span> <span class="s">&#39; file&#39;</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.ind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">ind2</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.ind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">ind2</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.ind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">ind2</span>            
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">s2</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s2</span>
+            <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filesh2</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">appendmat</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            </div>
+<div class="viewcode-block" id="Antenna.savesh3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.savesh3">[docs]</a>    <span class="k">def</span> <span class="nf">savesh3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        save antenna in sh3 format</span>
+
+<span class="sd">        Create a .sh3 antenna file</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        
+        <span class="c"># create sh3 file</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">=</span> <span class="n">typ</span>    
+        <span class="n">_filesh3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="o">+</span> <span class="n">typ</span><span class="p">,</span> <span class="s">&#39;.sh3&#39;</span><span class="p">)</span>
+        <span class="n">filesh3</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filesh3</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRANT&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filesh3</span><span class="p">):</span>
+            <span class="k">print</span> <span class="n">filesh3</span><span class="p">,</span> <span class="s">&#39; already exist&#39;</span>
+
+       
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;create &#39;</span><span class="p">,</span> <span class="n">filesh3</span><span class="p">,</span> <span class="s">&#39; file&#39;</span>
+
+            <span class="n">coeff</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.ind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">ind3</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.ind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">ind3</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.ind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">ind3</span>
+            
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.k&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">k2</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.k&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">k2</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.k&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">k2</span>
+            
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.s3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.s3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cy</span><span class="o">.</span><span class="n">s3</span>
+            <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.s3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">Cz</span><span class="o">.</span><span class="n">s3</span>
+         
+
+            <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filesh3</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">appendmat</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Antenna.loadvsh3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.loadvsh3">[docs]</a>    <span class="k">def</span> <span class="nf">loadvsh3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Load antenna&#39;s vsh3 file</span>
@@ -1592,13 +1791,13 @@
             <span class="c"># Warning modification take only one dimension for k </span>
             <span class="c"># if the .vsh3 format evolve it may not work anymore </span>
             <span class="c">#</span>
-            <span class="n">Br</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.s3&#39;</span><span class="p">],</span>
+            <span class="n">Br</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.k&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">Bi</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.s3&#39;</span><span class="p">],</span>
+            <span class="n">Bi</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.k&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">Cr</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.s3&#39;</span><span class="p">],</span>
+            <span class="n">Cr</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.k&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">Ci</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.s3&#39;</span><span class="p">],</span>
+            <span class="n">Ci</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.k&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">VSHCoeff</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">)</span>
             <span class="n">Nf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Br</span><span class="o">.</span><span class="n">s3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1606,6 +1805,64 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">print</span> <span class="n">_filevsh3</span><span class="p">,</span> <span class="s">&#39; does not exist&#39;</span>
 </div>
+<div class="viewcode-block" id="Antenna.loadsh3"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.loadsh3">[docs]</a>    <span class="k">def</span> <span class="nf">loadsh3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load antenna&#39;s sh3 file</span>
+
+<span class="sd">            sh3 file contains a thesholded version of ssh coefficients in shape 3</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_filesh3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;.sh3&#39;</span>
+        <span class="n">filesh3</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filesh3</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRANT&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filesh3</span><span class="p">):</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">filesh3</span><span class="p">,</span> <span class="n">appendmat</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+            <span class="c">#</span>
+            <span class="c"># This test is to fix a problem with 2 different</span>
+            <span class="c"># behavior of io.loadmat</span>
+            <span class="c">#</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+                <span class="n">fmin</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">]</span>
+                <span class="n">fmax</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmax&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fmin</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">fmax</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmax&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c"># .. Warning    </span>
+            <span class="c"># Warning modification takes only one dimension for k </span>
+            <span class="c"># if the .sh3 format evolve it may not work anymore </span>
+            <span class="c">#</span>
+            <span class="n">Cx</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;s3&#39;</span><span class="p">,</span>
+                        <span class="n">fmin</span> <span class="o">=</span> <span class="n">fmin</span> <span class="p">,</span>
+                        <span class="n">fmax</span> <span class="o">=</span> <span class="n">fmax</span> <span class="p">,</span> 
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.s3&#39;</span><span class="p">],</span>
+                        <span class="n">ind</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.ind&#39;</span><span class="p">],</span>
+                        <span class="n">k</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.k&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                        
+            <span class="n">Cy</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span> <span class="s">&#39;s3&#39;</span><span class="p">,</span> 
+                        <span class="n">fmin</span> <span class="o">=</span> <span class="n">fmin</span> <span class="p">,</span>
+                        <span class="n">fmax</span> <span class="o">=</span> <span class="n">fmax</span> <span class="p">,</span> 
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.s3&#39;</span><span class="p">],</span>
+                        <span class="n">ind</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.ind&#39;</span><span class="p">],</span>
+                        <span class="n">k</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.k&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                        
+                         
+            <span class="n">Cz</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span> <span class="o">=</span> <span class="s">&#39;s3&#39;</span><span class="p">,</span> 
+                        <span class="n">fmin</span> <span class="o">=</span> <span class="n">fmin</span> <span class="p">,</span>
+                        <span class="n">fmax</span> <span class="o">=</span> <span class="n">fmax</span> <span class="p">,</span> 
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.s3&#39;</span><span class="p">],</span>
+                        <span class="n">ind</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.ind&#39;</span><span class="p">],</span>
+                        <span class="n">k</span> <span class="o">=</span>  <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.k&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;S&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">SSHCoeff</span><span class="p">(</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">S</span><span class="o">.</span><span class="n">sets3</span><span class="p">(</span><span class="n">Cx</span><span class="p">,</span><span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">)</span>
+                    
+            <span class="n">Nf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Cx</span><span class="o">.</span><span class="n">s3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">_filesh3</span><span class="p">,</span> <span class="s">&#39; does not exist&#39;</span>
+            </div>
 <div class="viewcode-block" id="Antenna.savevsh2"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.savevsh2">[docs]</a>    <span class="k">def</span> <span class="nf">savevsh2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -1636,7 +1893,40 @@
             <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span><span class="o">.</span><span class="n">Ci</span><span class="o">.</span><span class="n">s2</span>
 
             <span class="n">io</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">filevsh2</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">appendmat</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</div>
+	
+
+            </div>
+    <span class="k">def</span> <span class="nf">loadsh2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="n">_filesh2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;.sh2&#39;</span>
+        <span class="n">filesh2</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filesh2</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRANT&#39;</span><span class="p">])</span>
+        
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filesh2</span><span class="p">):</span>
+            <span class="n">coeff</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">filesh2</span><span class="p">,</span> <span class="n">appendmat</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="c">#</span>
+            <span class="c"># This test is to fix a problem with 2 different</span>
+            <span class="c"># behavior of io.loadmat</span>
+            <span class="c">#</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+                <span class="n">fmin</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">]</span>
+                <span class="n">fmax</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmax&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fmin</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">fmax</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmax&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">Cx</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
+                         <span class="n">data</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.s2&#39;</span><span class="p">],</span> <span class="n">ind</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cx.ind&#39;</span><span class="p">])</span>
+            <span class="n">Cy</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
+                         <span class="n">data</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.s2&#39;</span><span class="p">],</span> <span class="n">ind</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cy.ind&#39;</span><span class="p">])</span>
+            <span class="n">Cz</span> <span class="o">=</span> <span class="n">SCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
+                         <span class="n">data</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.s2&#39;</span><span class="p">],</span> <span class="n">ind</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cz.ind&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">S</span> <span class="o">=</span> <span class="n">SSHCoeff</span><span class="p">(</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span><span class="n">Cz</span><span class="p">)</span>
+            <span class="n">Nf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Cx</span><span class="o">.</span><span class="n">s2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">_filesh2</span><span class="p">,</span> <span class="s">&#39; does not exist&#39;</span>
+        
+            
+
 <div class="viewcode-block" id="Antenna.loadvsh2"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.Antenna.loadvsh2">[docs]</a>    <span class="k">def</span> <span class="nf">loadvsh2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            A.loadvsh2()</span>
@@ -1660,13 +1950,13 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fmin</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmin&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">fmax</span> <span class="o">=</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;fmax&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">Br</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
+            <span class="n">Br</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
                          <span class="n">data</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.s2&#39;</span><span class="p">],</span> <span class="n">ind</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.ind&#39;</span><span class="p">])</span>
-            <span class="n">Bi</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
+            <span class="n">Bi</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
                          <span class="n">data</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.s2&#39;</span><span class="p">],</span> <span class="n">ind</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.ind&#39;</span><span class="p">])</span>
-            <span class="n">Cr</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
+            <span class="n">Cr</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
                          <span class="n">data</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.s2&#39;</span><span class="p">],</span> <span class="n">ind</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.ind&#39;</span><span class="p">])</span>
-            <span class="n">Ci</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
+            <span class="n">Ci</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;s2&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="n">fmax</span><span class="p">,</span>
                          <span class="n">data</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.s2&#39;</span><span class="p">],</span> <span class="n">ind</span><span class="o">=</span><span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.ind&#39;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">VSHCoeff</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">)</span>
             <span class="n">Nf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">Br</span><span class="o">.</span><span class="n">s2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1685,13 +1975,13 @@
         <span class="n">fmax</span> <span class="o">=</span> <span class="mf">8.</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filevsh3</span><span class="p">):</span>
             <span class="n">coeff</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">filevsh3</span><span class="p">,</span> <span class="n">appendmat</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-            <span class="n">Br</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.s3&#39;</span><span class="p">],</span>
+            <span class="n">Br</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Br.k&#39;</span><span class="p">])</span>
-            <span class="n">Bi</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.s3&#39;</span><span class="p">],</span>
+            <span class="n">Bi</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Bi.k&#39;</span><span class="p">])</span>
-            <span class="n">Cr</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.s3&#39;</span><span class="p">],</span>
+            <span class="n">Cr</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Cr.k&#39;</span><span class="p">])</span>
-            <span class="n">Ci</span> <span class="o">=</span> <span class="n">SHCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.s3&#39;</span><span class="p">],</span>
+            <span class="n">Ci</span> <span class="o">=</span> <span class="n">VCoeff</span><span class="p">(</span><span class="s">&#39;s3&#39;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.s3&#39;</span><span class="p">],</span>
                          <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.ind&#39;</span><span class="p">],</span> <span class="n">coeff</span><span class="p">[</span><span class="s">&#39;Ci.k&#39;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">VSHCoeff</span><span class="p">(</span><span class="n">Br</span><span class="p">,</span> <span class="n">Bi</span><span class="p">,</span> <span class="n">Cr</span><span class="p">,</span> <span class="n">Ci</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="mi">121</span><span class="p">)</span>
@@ -1737,6 +2027,7 @@
         <span class="n">Fph</span> <span class="o">=</span> <span class="o">-</span><span class="n">Fx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span> <span class="o">+</span> <span class="n">Fy</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">th</span><span class="p">)</span>
 
         <span class="n">SqG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">Fph</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Fph</span><span class="p">)</span> <span class="o">+</span> <span class="n">Fth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">Fth</span><span class="p">)))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">SqG</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">SqG</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fphi</span><span class="p">[:,</span> <span class="n">ith</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">Fph</span>
@@ -2233,21 +2524,21 @@
 <span class="sd">        &gt;&gt;&gt; A.Nf  = len(A.fa)</span>
 <span class="sd">        &gt;&gt;&gt; theta = np.linspace(0,np.pi,A.Nt)</span>
 <span class="sd">        &gt;&gt;&gt; phi   = np.linspace(0,2*np.pi,A.Np)</span>
-<span class="sd">        &gt;&gt;&gt; th    = np.kron(theta,np.ones(A.Np))</span>
-<span class="sd">        &gt;&gt;&gt; ph    = np.kron(np.ones(A.Nt),phi)</span>
-<span class="sd">        &gt;&gt;&gt; Fth3,Fph3 = A.Fsynth3(th,ph)</span>
+<span class="sd">        &gt;&gt;&gt; Fth3,Fph3 = A.Fsynth3(theta,phi)</span>
 <span class="sd">        &gt;&gt;&gt; FTh3 = Fth3.reshape(A.Nf,A.Nt,A.Np)</span>
 <span class="sd">        &gt;&gt;&gt; FPh3 = Fph3.reshape(A.Nf,A.Nt,A.Np)</span>
 <span class="sd">        &gt;&gt;&gt; show3D(FTh3,theta,phi,ifreq)</span>
 <span class="sd">        &gt;&gt;&gt; txt = plt.title(&#39;show3D example&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; plt.show()</span>
 
 
 <span class="sd">    Warnings</span>
 <span class="sd">    --------</span>
-<span class="sd">            len(theta) must be equal with shape(F)[1]</span>
-<span class="sd">            len(phi) must be equal with shape(F)[2]</span>
+
+<span class="sd">        len(theta) must be equal with shape(F)[1]</span>
+<span class="sd">        len(phi) must be equal with shape(F)[2]</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">nth</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
     <span class="n">nph</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
 
@@ -2281,87 +2572,10 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">hot_r</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot3D</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Z</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="geom_pattern"><a class="viewcode-back" href="../../../modules/antprop.antenna.html#pylayers.antprop.antenna.geom_pattern">[docs]</a><span class="k">def</span> <span class="nf">geom_pattern</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">minr</span><span class="p">,</span> <span class="n">maxr</span><span class="p">,</span> <span class="n">racine</span><span class="p">,</span> <span class="n">ilog</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; export antenna pattern in geomview format</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    theta : np.array (1 x Ntheta)</span>
-<span class="sd">    phi   : np.array (1 x Nphi)</span>
-<span class="sd">    E     : np.array complex  (Ntheta,Nphi)</span>
-<span class="sd">    f     : frequency</span>
-<span class="sd">    po    : origin (1x3)</span>
-<span class="sd">    minr  : radius of minimum</span>
-<span class="sd">    maxr  : radius of maximum</span>
-<span class="sd">    ilog  : True (log) False (linear)</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    filename</span>
-
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-    <span class="n">Np</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">ilog</span><span class="p">:</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
-
-    <span class="n">Th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Np</span><span class="p">))</span>
-    <span class="n">Ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Nt</span><span class="p">),</span> <span class="n">phi</span><span class="p">)</span>
-
-    <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">R</span> <span class="o">-</span> <span class="n">minr</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">maxr</span> <span class="o">-</span> <span class="n">minr</span><span class="p">)</span>
-    <span class="n">Ry</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">T</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">Ry</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Th</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Ph</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">Ry</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Th</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">Ph</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">Ry</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">Th</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-
-    <span class="n">Npoints</span> <span class="o">=</span> <span class="n">Nt</span> <span class="o">*</span> <span class="n">Np</span>
-    <span class="n">Nfaces</span> <span class="o">=</span> <span class="p">(</span><span class="n">Nt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Np</span>
-    <span class="n">Nedge</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c">#</span>
-    <span class="c"># Colormap</span>
-    <span class="c">#</span>
-    <span class="n">colmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">()</span>
-    <span class="n">Ncol</span> <span class="o">=</span> <span class="n">colmap</span><span class="o">.</span><span class="n">N</span>
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">colmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ncol</span><span class="p">))</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">R</span> <span class="o">-</span> <span class="n">minr</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">Ncol</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">maxr</span> <span class="o">-</span> <span class="n">minr</span><span class="p">))</span>
-
-    <span class="n">_filename</span> <span class="o">=</span> <span class="n">racine</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="mi">1000</span> <span class="o">+</span> <span class="n">f</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s">&#39;.off&#39;</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="n">pyu</span><span class="o">.</span><span class="n">getlong</span><span class="p">(</span><span class="n">_filename</span><span class="p">,</span> <span class="n">pstruc</span><span class="p">[</span><span class="s">&#39;DIRGEOM&#39;</span><span class="p">])</span>
-    <span class="n">fd</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
-    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;COFF</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-    <span class="n">chaine</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Npoints</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Nfaces</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Nedge</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
-    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nt</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
-            <span class="n">cpos</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">])</span>
-            <span class="n">cpos</span> <span class="o">=</span> <span class="n">cpos</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-            <span class="n">ik</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">]</span>
-            <span class="n">ccol</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">+</span> \
-                <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmap</span><span class="p">[</span><span class="n">ik</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
-            <span class="n">ccol</span> <span class="o">=</span> <span class="n">ccol</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
-            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cpos</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">ccol</span> <span class="o">+</span> <span class="s">&#39; 0.8</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">jj</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Np</span><span class="p">):</span>
-            <span class="n">p1</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">jj</span>
-            <span class="n">p2</span> <span class="o">=</span> <span class="n">ii</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">jj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
-            <span class="n">p3</span> <span class="o">=</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">jj</span>
-            <span class="n">p4</span> <span class="o">=</span> <span class="p">(</span><span class="n">ii</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Np</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">jj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Np</span><span class="p">)</span>
-            <span class="n">chaine</span> <span class="o">=</span> <span class="s">&#39;4 &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> \
-                <span class="nb">str</span><span class="p">(</span><span class="n">p4</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; 0.5</span><span class="se">\n</span><span class="s">&#39;</span>
-            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chaine</span><span class="p">)</span>
-
-    <span class="n">fd</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 </div>
 <span class="k">if</span> <span class="p">(</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
@@ -2378,7 +2592,8 @@
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../antprop.html" >pylayers.antprop</a> &raquo;</li> 
       </ul>
     </div>
 

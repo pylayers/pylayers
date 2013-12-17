@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="pylayers.antprop" href="../antprop.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -43,7 +43,8 @@
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../antprop.html" accesskey="U">pylayers.antprop</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -107,11 +108,30 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            transpose == False   (r,f)</span>
 <span class="sd">            transpose == True    (f,r)</span>
+
+<span class="sd">            A Ctilde object is the output of eval method</span>
+<span class="sd">            of a Rays object.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fail</span> <span class="o">=</span> <span class="bp">False</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Ctilde&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;Ctilde&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">---------</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;Cpp&#39;</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">))</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s">&#39;nray&#39;</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;Nray : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nray</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;fmin(GHz) : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;fmax(GHz): &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;Nfreq : &#39;</span><span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s"> methods :&#39;</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">---------</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;prop2tran(a=theta,b=phi)</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;energy()</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;doadod(cmap=plt.cm.hot_r,s=30,fontsize=12,phi=(0,360))</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;mobility(v,dt)</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;show(mode=linear)</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span> <span class="s">&#39;sort()</span><span class="se">\n</span><span class="s">&#39;</span>
+            
         <span class="k">return</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
 
@@ -143,9 +163,9 @@
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.antprop.channel import *</span>
 <span class="sd">        &gt;&gt;&gt; from pylayers.simul.simulem import *</span>
-<span class="sd">        &gt;&gt;&gt; S=Simul()</span>
+<span class="sd">        &gt;&gt;&gt; S = Simul()</span>
 <span class="sd">        &gt;&gt;&gt; S.load(&#39;default.ini&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; C =Ctilde()</span>
+<span class="sd">        &gt;&gt;&gt; C = Ctilde()</span>
 <span class="sd">        &gt;&gt;&gt; C.load(pyu.getlong(S.dtud[1][1],&#39;output&#39;))</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -241,14 +261,12 @@
             <span class="n">nray_rang</span> <span class="o">=</span> <span class="n">stru</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">buf</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="n">fo</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="c"># coorectif Bug evalfield</span>
+            <span class="c"># corectif Bug evalfield</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nray_rang</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">buffer</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">nray</span><span class="p">,</span> <span class="p">:]</span>
 </div>
 <div class="viewcode-block" id="Ctilde.mobility"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.mobility">[docs]</a>    <span class="k">def</span> <span class="nf">mobility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Modify channel for uniform mobility</span>
-
-<span class="sd">        NOT FINISHED</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -269,7 +287,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 
-<span class="sd">        VC : modified VectChannel</span>
+<span class="sd">        C : modified Ctilde</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -313,9 +331,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tang</span>
         <span class="n">doa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span>
-        <span class="c"># determine Energy in copol and crospol</span>
-        <span class="n">Eco</span><span class="p">,</span> <span class="n">Ecross</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
-        <span class="n">Etot</span> <span class="o">=</span> <span class="n">Eco</span> <span class="o">+</span> <span class="n">Ecross</span>
+        <span class="c"># determine Energy in each channel </span>
+        <span class="n">Ett</span><span class="p">,</span><span class="n">Epp</span><span class="p">,</span><span class="n">Etp</span><span class="p">,</span><span class="n">Ept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+        <span class="n">Etot</span> <span class="o">=</span> <span class="n">Ett</span><span class="o">+</span><span class="n">Epp</span><span class="o">+</span><span class="n">Etp</span><span class="o">+</span><span class="n">Ept</span>
         <span class="n">Emax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span>
         <span class="n">Etot</span> <span class="o">=</span> <span class="n">Etot</span> <span class="o">/</span> <span class="n">Emax</span> <span class="o">+</span> <span class="mf">1e-7</span>
         <span class="n">Emax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">Etot</span><span class="p">))</span>
@@ -436,42 +454,66 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Ctilde.energy"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.energy">[docs]</a>    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Calculate energy on co and cross channel</span>
+        <span class="sd">&quot;&quot;&quot; Calculate energy on each channel</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Eco    : Energy on co channel    tt + pp</span>
-<span class="sd">        Ecross : Energy on cross channel tp + pt</span>
 
+<span class="sd">        ECtt  : Energy on co channel    tt </span>
+<span class="sd">        ECpp  : Energy on co channel    pp </span>
+<span class="sd">        ECtp  : Energy on co channel    tp </span>
+<span class="sd">        ECpt  : Energy on co channel    pt </span>
+
+<span class="sd">        </span>
 <span class="sd">        See Also</span>
 <span class="sd">        --------</span>
 
 <span class="sd">        pylayers.signal.bsignal.FUsignal.energy</span>
+
+<span class="sd">    </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ECtt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">ECtp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">ECpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">ECpp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">Eco</span> <span class="o">=</span> <span class="n">ECtt</span> <span class="o">+</span> <span class="n">ECpp</span>
-        <span class="n">Ecross</span> <span class="o">=</span> <span class="n">ECtp</span> <span class="o">+</span> <span class="n">ECpt</span>
-        <span class="k">return</span> <span class="n">Eco</span><span class="p">,</span> <span class="n">Ecross</span>
+        <span class="c">#Eco = ECtt + ECpp</span>
+        <span class="c">#Ecross = ECtp + ECpt</span>
+        <span class="k">return</span> <span class="n">ECtt</span><span class="p">,</span><span class="n">ECpp</span><span class="p">,</span><span class="n">ECtp</span><span class="p">,</span><span class="n">ECpt</span>
 </div>
-<div class="viewcode-block" id="Ctilde.sort"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tauk</span><span class="p">):</span>
+<div class="viewcode-block" id="Ctilde.sort"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.sort">[docs]</a>    <span class="k">def</span> <span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;tauk&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; sort Ctilde with respect to tauk</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 
-<span class="sd">        tauk : array of delays</span>
+<span class="sd">        typ  : string </span>
+<span class="sd">            which parameter to sort &#39;tau&#39;,&#39;att&#39;,&#39;atp&#39;,&#39;art&#39;,&#39;arp&#39;,&#39;energy&#39;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">argsort</span><span class="p">(</span><span class="n">tauk</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;tauk&#39;</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;att&#39;</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;atp&#39;</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;art&#39;</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;arp&#39;</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">typ</span><span class="o">==</span><span class="s">&#39;energy&#39;</span><span class="p">:</span>
+            <span class="n">Ett</span><span class="p">,</span><span class="n">Epp</span><span class="p">,</span><span class="n">Etp</span><span class="p">,</span><span class="n">Ept</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">()</span>
+            <span class="n">Etot</span> <span class="o">=</span> <span class="n">Ett</span><span class="o">+</span><span class="n">Epp</span><span class="o">+</span><span class="n">Etp</span><span class="o">+</span><span class="n">Ept</span> 
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">Etot</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tauk</span><span class="p">[</span><span class="n">u</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tang</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[</span><span class="n">u</span><span class="p">,:]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="p">:]</span>
 </div>
 <div class="viewcode-block" id="Ctilde.prop2tran"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.prop2tran">[docs]</a>    <span class="k">def</span> <span class="nf">prop2tran</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="s">&#39;theta&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; transform propagation channel into transmission channel</span>
@@ -481,7 +523,7 @@
 
 <span class="sd">        a : string or antenna array</span>
 <span class="sd">            polarization antenna a ( &#39;theta&#39; | &#39;phi&#39; | &#39;ant&#39; ) </span>
-<span class="sd">         : string or antenna array</span>
+<span class="sd">        b : string or antenna array</span>
 <span class="sd">            polarization antenna b ( &#39;theta&#39; | &#39;phi&#39; | &#39;ant&#39; ) </span>
 
 <span class="sd">            0 : theta</span>
@@ -509,7 +551,7 @@
             <span class="n">Fat</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fat</span><span class="p">)</span>
             <span class="n">Fap</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fap</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">Fat</span> <span class="p">,</span> <span class="n">Fap</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">Fat</span> <span class="p">,</span> <span class="n">Fap</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
             <span class="n">Fat</span> <span class="o">=</span> <span class="n">Fat</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
             <span class="n">Fap</span> <span class="o">=</span> <span class="n">Fap</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
             <span class="n">Fat</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">fa</span><span class="p">,</span><span class="n">Fat</span><span class="p">)</span>
@@ -525,14 +567,12 @@
             <span class="n">Fbt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fbt</span><span class="p">)</span>
             <span class="n">Fbp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span><span class="p">,</span><span class="n">Fbp</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">Fbt</span> <span class="p">,</span> <span class="n">Fbp</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
-            <span class="c"># (nray,nfeq) needed</span>
+            <span class="n">Fbt</span> <span class="p">,</span> <span class="n">Fbp</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
             <span class="n">Fbt</span> <span class="o">=</span> <span class="n">Fbt</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
             <span class="n">Fbp</span> <span class="o">=</span> <span class="n">Fbp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
             <span class="n">Fbt</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">fa</span><span class="p">,</span><span class="n">Fbt</span><span class="p">)</span>
             <span class="n">Fbp</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUsignal</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">fa</span><span class="p">,</span><span class="n">Fbp</span><span class="p">)</span>
-
-        <span class="c">#pdb.set_trace()</span>
         <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span> <span class="o">*</span> <span class="n">Fat</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpt</span> <span class="o">*</span> <span class="n">Fap</span>
         <span class="n">t2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span> <span class="o">*</span> <span class="n">Fat</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span> <span class="o">*</span> <span class="n">Fap</span>
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">Fbt</span> <span class="o">+</span> <span class="n">t2</span> <span class="o">*</span> <span class="n">Fbp</span>
@@ -550,7 +590,8 @@
 
 <span class="sd">        Note </span>
 <span class="sd">        ----</span>
-<span class="sd">        deprecated replaced by prop2tran</span>
+
+<span class="sd">        deprecated this is now replaced by the function prop2tran</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fGHz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fGHz</span>
@@ -584,9 +625,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span> <span class="o">=</span> <span class="n">At</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">Ftt</span><span class="p">,</span> <span class="n">Ftp</span> <span class="o">=</span> <span class="n">At</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-        <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span> <span class="o">=</span> <span class="n">Ar</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">Frt</span><span class="p">,</span> <span class="n">Frp</span> <span class="o">=</span> <span class="n">Ar</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span><span class="n">pattern</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
         <span class="n">Ftt</span> <span class="o">=</span> <span class="n">Ftt</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
         <span class="n">Ftp</span> <span class="o">=</span> <span class="n">Ftp</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
@@ -602,10 +643,10 @@
         <span class="k">return</span><span class="p">(</span><span class="n">scalch</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Ctilde.info"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Ctilde.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Info (Nf,Nray,shape(y))</span>
+        <span class="sd">&quot;&quot;&quot; Info (Nf,Nray,shape(y))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">print</span> <span class="s">&quot;Nf   :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span>
+
+        <span class="k">print</span> <span class="s">&quot;Nfreq  :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfreq</span>
         <span class="k">print</span> <span class="s">&quot;Nray :&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nray</span>
         <span class="k">print</span> <span class="s">&quot;shape Ctt :&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="k">print</span> <span class="s">&quot;shape Ctp :&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ctp</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -613,26 +654,33 @@
         <span class="k">print</span> <span class="s">&quot;shape Cpp :&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Cpp</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="VCg2VCl"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.VCg2VCl">[docs]</a><span class="k">def</span> <span class="nf">VCg2VCl</span><span class="p">(</span><span class="n">VCg</span><span class="p">,</span> <span class="n">Tt</span><span class="p">,</span> <span class="n">Tr</span><span class="p">):</span>
+<div class="viewcode-block" id="Cg2Cl"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Cg2Cl">[docs]</a><span class="k">def</span> <span class="nf">Cg2Cl</span><span class="p">(</span><span class="n">Cg</span><span class="p">,</span> <span class="n">Tt</span><span class="p">,</span> <span class="n">Tr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; global reference frame to local reference frame</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        VCg : VectChannel global</span>
-<span class="sd">        Tt  : Tx rotation matrix</span>
-<span class="sd">        Tr  : Rx rotation matrix</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        VCl : VectChannel (local)</span>
+<span class="sd">    Cg  : Ctilde global</span>
+<span class="sd">    Tt  : Tx rotation matrix</span>
+<span class="sd">    Tr  : Rx rotation matrix</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Cl : Ctilde local </span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">copy</span>
-
-    <span class="n">VCl</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">VCg</span><span class="p">)</span>
-    <span class="n">freq</span> <span class="o">=</span> <span class="n">VCl</span><span class="o">.</span><span class="n">fGHz</span>
-    <span class="n">Rt</span><span class="p">,</span> <span class="n">tangl</span> <span class="o">=</span> <span class="n">BTB_tx</span><span class="p">(</span><span class="n">VCg</span><span class="o">.</span><span class="n">tang</span><span class="p">,</span> <span class="n">Tt</span><span class="p">)</span>
-    <span class="n">Rr</span><span class="p">,</span> <span class="n">rangl</span> <span class="o">=</span> <span class="n">BTB_rx</span><span class="p">(</span><span class="n">VCg</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span> <span class="n">Tr</span><span class="p">)</span>
+    <span class="c"># don&#39;t loose the global channel</span>
+    <span class="n">Cl</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Cg</span><span class="p">)</span>
+    <span class="c"># get frequency axes    </span>
+    <span class="n">fGHz</span> <span class="o">=</span> <span class="n">Cl</span><span class="o">.</span><span class="n">fGHz</span>
+    <span class="c"># get angular axes    </span>
+    <span class="n">Rt</span><span class="p">,</span> <span class="n">tangl</span> <span class="o">=</span> <span class="n">BTB_tx</span><span class="p">(</span><span class="n">Cg</span><span class="o">.</span><span class="n">tang</span><span class="p">,</span> <span class="n">Tt</span><span class="p">)</span>
+    <span class="n">Rr</span><span class="p">,</span> <span class="n">rangl</span> <span class="o">=</span> <span class="n">BTB_rx</span><span class="p">(</span><span class="n">Cg</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span> <span class="n">Tr</span><span class="p">)</span>
 
     <span class="n">VCl</span><span class="o">.</span><span class="n">tang</span> <span class="o">=</span> <span class="n">tangl</span>
     <span class="n">VCl</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">rangl</span>
@@ -676,12 +724,13 @@
 <div class="viewcode-block" id="Tchannel"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Tchannel">[docs]</a><span class="k">class</span> <span class="nc">Tchannel</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">FUDAsignal</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Handle the transmission channel </span>
 
-<span class="sd">    The transmission channel TChannel is obtained from combination of the propagation</span>
-<span class="sd">    channel with the antenna transfer functions from both transmitter and</span>
+<span class="sd">    The transmission channel TChannel is obtained through combination of the propagation</span>
+<span class="sd">    channel and the antenna transfer functions from both transmitter and</span>
 <span class="sd">    receiver.</span>
 
 <span class="sd">    Members</span>
 <span class="sd">    -------</span>
+
 <span class="sd">        ray transfer functions  (nray,nfreq)</span>
 <span class="sd">    dod  :</span>
 <span class="sd">        direction of depature (rad) [theta_t,phi_t]  nray x 2</span>
@@ -707,6 +756,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">bs</span><span class="o">.</span><span class="n">FUDAsignal</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">dod</span><span class="p">,</span><span class="n">doa</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span><span class="s">&#39;&#39;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;freq :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;shape  :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;tau :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span> <span class="s">&#39;dist :&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&#39; &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">))</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Tchannel.info"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Tchannel.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; display information</span>
@@ -762,6 +819,7 @@
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
+
 <span class="sd">        The overall received signal is built in time domain</span>
 <span class="sd">        w is apply on the overall CIR</span>
 
@@ -782,20 +840,45 @@
                 <span class="n">f</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
                 <span class="n">x_new</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">h</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dxw</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">y_new</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
-                <span class="n">h</span> <span class="o">=</span> <span class="n">TUsignal</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y_new</span><span class="p">)</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">(</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y_new</span><span class="p">)</span>
 
         <span class="n">ri</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">ri</span><span class="p">)</span>
 </div>
+    <span class="k">def</span> <span class="nf">chantap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&#39;fcGHz&#39;</span><span class="p">:</span><span class="mf">4.5</span><span class="p">,</span>
+                    <span class="s">&#39;WGHz&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="s">&#39;Ntap&#39;</span><span class="p">:</span><span class="mi">100</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+
+        <span class="n">h</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">FUDsignal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tau0</span><span class="p">)</span>
+        <span class="n">htap</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">chantap</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">htap</span>
+ 
+        
+
+
+
 <div class="viewcode-block" id="Tchannel.applywavB"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Tchannel.applywavB">[docs]</a>    <span class="k">def</span> <span class="nf">applywavB</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Wgam</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; apply waveform method B (time domain )</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        Wgam : waveform including gamma factor</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
+
 <span class="sd">        ri  : TUDsignal</span>
 
 <span class="sd">            impulse response for each ray separately</span>
@@ -817,9 +900,8 @@
         <span class="c"># return a FUDsignal</span>
         <span class="c">#</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">Wgam</span><span class="p">)</span>
-        <span class="c">#ri      = Y.ft1(500,0)</span>
-        <span class="c"># Le fftshift est activé</span>
         <span class="n">ri</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">ft1</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
         <span class="k">return</span><span class="p">(</span><span class="n">ri</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Tchannel.applywavA"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Tchannel.applywavA">[docs]</a>    <span class="k">def</span> <span class="nf">applywavA</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Wgam</span><span class="p">,</span> <span class="n">Tw</span><span class="p">):</span>
@@ -944,241 +1026,31 @@
                 <span class="n">Wk</span> <span class="o">=</span> <span class="n">W</span>
 
         <span class="c"># on s&#39;arrange que Hk.x[0]==Wk.x[0]</span>
+</div>
+<div class="viewcode-block" id="Tchannel.RSSI"><a class="viewcode-back" href="../../../modules/antprop.channel.html#pylayers.antprop.channel.Tchannel.RSSI">[docs]</a>    <span class="k">def</span> <span class="nf">RSSI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ufreq</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Compute RSSI value from a </span>
+<span class="sd">        specific frequency of the transmission channel</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+<span class="sd">        ufreq : int</span>
+<span class="sd">            index in the frequency range</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            RSSI: float</span>
+<span class="sd">                RSSI value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">Tk</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[:,</span><span class="n">ufreq</span><span class="p">])</span>
+        <span class="k">return</span><span class="p">(</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Tk</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
 </div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="c">#import tkFileDialog</span>
-    <span class="c">#FD = tkFileDialog</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
-<span class="c">############################</span>
-<span class="c">## test Channel, Simulation, Antenna</span>
-<span class="c">############################</span>
-<span class="c">#</span>
-<span class="c">#     #################################</span>
-<span class="c">#     # initialisation de la simulation</span>
-<span class="c">#     #################################</span>
-<span class="c">#</span>
-<span class="c">#     #</span>
-<span class="c">#     # choix des antennes</span>
-<span class="c">#     #</span>
-<span class="c">#     fileantt = FD.askopenfilename(filetypes = [(&quot;Fichiers vsh3&quot;,&quot;*.vsh3&quot;),</span>
-<span class="c">#     (&quot;All&quot;, &quot;*&quot;)],</span>
-<span class="c">#      title=&quot;Please choose an antenna file&quot;,</span>
-<span class="c">#      initialdir=antdir)</span>
-<span class="c">#</span>
-<span class="c">#     fileantr = FD.askopenfilename(filetypes = [(&quot;Fichiers vsh3&quot;,&quot;*.vsh3&quot;),</span>
-<span class="c">#     (&quot;All&quot;, &quot;*&quot;)],</span>
-<span class="c">#      title=&quot;Please choose an antenna file&quot;,</span>
-<span class="c">#      initialdir=antdir)</span>
-<span class="c">#</span>
-<span class="c">#     #</span>
-<span class="c">#     # creation d&#39;objet Simulation</span>
-<span class="c">#     #</span>
-<span class="c">#     S=Simulation(fileantTx=_fileantt,fileantRx=_fileantr)</span>
-<span class="c">#</span>
-<span class="c">#     #</span>
-<span class="c">#     # choix du fichier field</span>
-<span class="c">#     #</span>
-<span class="c">#     filefield = FD.askopenfilename(filetypes = [(&quot;Fichiers field&quot;,&quot;*.field&quot;),</span>
-<span class="c">#      (&quot;All&quot;, &quot;*&quot;)],</span>
-<span class="c">#      title=&quot;Please choose a field file&quot;,</span>
-<span class="c">#      initialdir=tuddir)</span>
-<span class="c">#</span>
-<span class="c">#     filetauk = filefield.replace(&#39;.field&#39;,&#39;.tauk&#39;)</span>
-<span class="c">#     filetang = filefield.replace(&#39;.field&#39;,&#39;.tang&#39;)</span>
-<span class="c">#     filerang = filefield.replace(&#39;.field&#39;,&#39;.rang&#39;)</span>
-<span class="c">#     filefreq = filefield.replace(&#39;.field&#39;,&#39;.freq&#39;)</span>
-<span class="c">#     # il faudra recuperer aussi filetra</span>
-<span class="c">#</span>
-<span class="c">#      S.filefield.append(getshort(filefield))</span>
-<span class="c">#     S.filetauk.append(getshort(filetauk))</span>
-<span class="c">#     S.filetang.append(getshort(filetang))</span>
-<span class="c">#     S.filerang.append(getshort(filerang))</span>
-<span class="c">#     #S.filetra.append(getshort(filetra))</span>
-
-<span class="c">#     fichsimulin = FD.askopenfilename(filetypes = [(&quot;Fichiers simul &quot;,&quot;*.simul&quot;),</span>
-<span class="c">#          (&quot;All&quot;, &quot;*&quot;)],</span>
-<span class="c">#          title=&quot;Please choose a simulation file&quot;,</span>
-<span class="c">#          initialdir=simuldir)</span>
-<span class="c">##          parent=root)</span>
-<span class="c">#     _fichsimulin = getshort(fichsimulin)</span>
-<span class="c">#     S = Simulation(_fichsimulin)</span>
-<span class="c">#</span>
-<span class="c">#     #</span>
-<span class="c">#     # Frequency range for Siradel measurements</span>
-<span class="c">#     #</span>
-<span class="c">#     f     = arange(2,11.05,0.05)</span>
-<span class="c">#</span>
-<span class="c">#     #################################</span>
-<span class="c">#     # definition de la forme d&#39;onde a l&#39;emission</span>
-<span class="c">#     #################################</span>
-<span class="c">#     Tw = 10</span>
-<span class="c">#     x  = arange(-Tw,Tw,0.005)</span>
-<span class="c">#     w  = EnImpulse(x,5,3,10)</span>
-<span class="c">#</span>
-<span class="c">#     W = w.ft()</span>
-<span class="c">#     f = W.x</span>
-<span class="c">#     ygamma = -1j*0.3/(4*np.pi*f)</span>
-<span class="c">#     gamm  = FUsignal(f,ygamma)</span>
-<span class="c">#     Wgam  = W*gamm</span>
-<span class="c">#     wgam  = Wgam.ift()</span>
-<span class="c">#</span>
-<span class="c">###       #</span>
-<span class="c">###       # plot waveform</span>
-<span class="c">###       #</span>
-<span class="c">###       figure()</span>
-<span class="c">###       plot(w.x,w.y,linewidth=3)</span>
-<span class="c">###       ylabel(&#39;(V)&#39;,fontsize=28)</span>
-<span class="c">###       xlabel(&#39;retard(ns)&#39;,fontsize=28)</span>
-<span class="c">###       xticks(fontsize=26)</span>
-<span class="c">###       yticks(fontsize=26)</span>
-<span class="c">###       title(&#39;w(t)&#39;,fontsize=30)</span>
-<span class="c">###       grid(linewidth=2)</span>
-<span class="c">###       show()</span>
-<span class="c">##</span>
-<span class="c">##      ################################</span>
-<span class="c">##      # recuperation du canal de propagation simule</span>
-<span class="c">##      ################################</span>
-<span class="c">##</span>
-<span class="c">##      VC   = VectChannel(S,0,False)</span>
-<span class="c">##      #</span>
-<span class="c">##      # If file from Siradel</span>
-<span class="c">##      #</span>
-<span class="c">##      #VC   = VectChannel(S,0,True)</span>
-<span class="c">##</span>
-<span class="c">##      ################################</span>
-<span class="c">##      # calcul du canal de transmission</span>
-<span class="c">##      ################################</span>
-<span class="c">##</span>
-<span class="c">##      #</span>
-<span class="c">##      # avec antennes omnis</span>
-<span class="c">##      #</span>
-<span class="c">##      SC      = VC.vec2scal()</span>
-<span class="c">##</span>
-<span class="c">##      #</span>
-<span class="c">##      # avec antennes simulees</span>
-<span class="c">##      #</span>
-<span class="c">##      VCA     = VC</span>
-<span class="c">##      SCA     = VCA.vec2scalA(S.tx.A,S.rx.A)</span>
-<span class="c">##</span>
-<span class="c">##      ################################</span>
-<span class="c">##      # calcul du signal recu</span>
-<span class="c">##      ################################</span>
-<span class="c">##</span>
-<span class="c">##      #</span>
-<span class="c">##      # avec antennes omnis</span>
-<span class="c">##      #</span>
-<span class="c">##      r  = SC.applywavB(Wgam)</span>
-<span class="c">##</span>
-<span class="c">##      #</span>
-<span class="c">##      # avec antennes simulees</span>
-<span class="c">##      #</span>
-<span class="c">##      rA = SCA.applywavB(Wgam)</span>
-<span class="c">##</span>
-<span class="c">##      ################################</span>
-<span class="c">##      # visualisation de resultats</span>
-<span class="c">##      ################################</span>
-<span class="c">##</span>
-<span class="c">##      figure()</span>
-<span class="c">##      # pour monocone on a un gain max de 8.59**2</span>
-<span class="c">##      #plot(r.x,r.y*70,&#39;b-&#39;)</span>
-<span class="c">##      # pour dipole on a un gain max de 1.68**2</span>
-<span class="c">##      #plot(r.x,r.y*2.8,&#39;b-&#39;)</span>
-<span class="c">##</span>
-<span class="c">##      #</span>
-<span class="c">##      # calcul de la valeur maximale du gain d&#39;antenne</span>
-<span class="c">##      #</span>
-<span class="c">##</span>
-<span class="c">##      gain_At=np.sqrt((abs(SCA.Ftt.y))**2+(abs(SCA.Ftp.y))**2)</span>
-<span class="c">##      gain_Ar=np.sqrt((abs(SCA.Frt.y))**2+(abs(SCA.Frp.y))**2)</span>
-<span class="c">##</span>
-<span class="c">##      G=gain_At.max()*gain_Ar.max()</span>
-<span class="c">##</span>
-<span class="c">##      figure()</span>
-<span class="c">##      plot(r.x,r.y*G,&#39;b-&#39;)</span>
-<span class="c">##      plot(rA.x,rA.y,&#39;r-&#39;)</span>
-<span class="c">##      ax=gca()</span>
-<span class="c">##      ax.ticklabel_format(style=&#39;sci&#39;,axis=&#39;y&#39;)</span>
-<span class="c">##      ax.yaxis.major.formatter.set_powerlimits((0,0))</span>
-<span class="c">##      xlabel(&#39;retard (ns)&#39;,fontsize=28)</span>
-<span class="c">##      ylabel(&#39;(V)&#39;,fontsize=28)</span>
-<span class="c">##      xticks(fontsize=24)</span>
-<span class="c">##      yticks(fontsize=24)</span>
-<span class="c">##      title(&#39;r(t)&#39;,fontsize=30)</span>
-<span class="c">##      show()</span>
-<span class="c">##</span>
-<span class="c">###       #legend((&#39;antennes omnis&#39;,&#39;antennes simulees&#39;))</span>
-<span class="c">###       show()</span>
-<span class="c">##</span>
-<span class="c">################################</span>
-<span class="c">### test changement d&#39;antennes</span>
-<span class="c">################################</span>
-<span class="c">##      #S.tx.gantenna()</span>
-<span class="c">##      #S.rx.gantenna()</span>
-<span class="c">##</span>
-<span class="c">##      #SCA   = VCA.vec2scalA(S.tx.A,S.rx.A)</span>
-<span class="c">##      #rA = SCA.applywavB(Wgam)</span>
-<span class="c">##</span>
-<span class="c">##      #gain_At=np.sqrt((abs(SCA.Ftt.y))**2+(abs(SCA.Ftp.y))**2)</span>
-<span class="c">##      #gain_Ar=np.sqrt((abs(SCA.Frt.y))**2+(abs(SCA.Frp.y))**2)</span>
-<span class="c">##</span>
-<span class="c">##      #G=gain_At.max()*gain_Ar.max()</span>
-<span class="c">##</span>
-<span class="c">##      #figure()</span>
-<span class="c">##      #plot(r.x,r.y*G,&#39;b-&#39;)</span>
-<span class="c">##      #plot(rA.x,rA.y,&#39;r-&#39;)</span>
-<span class="c">##      #xlabel(&#39;retard (ns)&#39;,fontsize=28)</span>
-<span class="c">##      #ylabel(&#39;(V)&#39;,fontsize=28)</span>
-<span class="c">##      #xticks(fontsize=24)</span>
-<span class="c">##      #yticks(fontsize=24)</span>
-<span class="c">##      #title(&#39;r(t)&#39;,fontsize=30)</span>
-<span class="c">##</span>
-<span class="c">##      #legend((&#39;ideale&#39;,&#39;dipole&#39;))</span>
-<span class="c">##      #show()</span>
-<span class="c">##</span>
-<span class="c">##</span>
-<span class="c">#</span>
-<span class="c">###############################</span>
-<span class="c">## test passage Rg -&gt; Rl</span>
-<span class="c">###############################</span>
-<span class="c">#     itx=0</span>
-<span class="c">#     irx=0</span>
-<span class="c">#     VCg = VectChannel(S,itx,irx,False)</span>
-<span class="c">#     alpha = np.pi*rand()</span>
-<span class="c">#     beta  = np.pi*rand()</span>
-<span class="c">#     gamma = np.pi*rand()</span>
-<span class="c">#     Ta = MEulerAngle(alpha,beta,gamma)</span>
-<span class="c">#     alpha = np.pi*rand()</span>
-<span class="c">#     beta  = np.pi*rand()</span>
-<span class="c">#     gamma = np.pi*rand()</span>
-<span class="c">#     Tb = MEulerAngle(alpha,beta,gamma)</span>
-<span class="c">#</span>
-<span class="c">#     VCl=VCg2VCl(VCg,Ta,Tb)</span>
-<span class="c">#</span>
-<span class="c">#     SCl  = VCl.vec2scal()</span>
-<span class="c">#</span>
-<span class="c">#     VClA  = VCl</span>
-<span class="c">#     SClA  = VClA.vec2scalA(S.tx.A,S.rx.A)</span>
-<span class="c">#</span>
-<span class="c">#     rl = SCl.applywavB(Wgam)</span>
-<span class="c">#     rlA = SClA.applywavB(Wgam)</span>
-<span class="c">#</span>
-<span class="c">#     gain_At=np.sqrt((abs(SClA.Ftt.y))**2+(abs(SClA.Ftp.y))**2)</span>
-<span class="c">#     gain_Ar=np.sqrt((abs(SClA.Frt.y))**2+(abs(SClA.Frp.y))**2)</span>
-<span class="c">#     G=gain_At.max()*gain_Ar.max()</span>
-<span class="c">#</span>
-<span class="c">#     figure()</span>
-<span class="c">#     plot(rl.x,rl.y*G,&#39;b-&#39;)</span>
-<span class="c">#     plot(rlA.x,rlA.y,&#39;r-&#39;)</span>
-<span class="c">#     ax=gca()</span>
-<span class="c">#     ax.ticklabel_format(style=&#39;sci&#39;,axis=&#39;y&#39;)</span>
-<span class="c">#     ax.yaxis.major.formatter.set_powerlimits((0,0))</span>
-<span class="c">#     xlabel(&#39;retard (ns)&#39;,fontsize=28)</span>
-<span class="c">#     ylabel(&#39;(V)&#39;,fontsize=28)</span>
-<span class="c">#     xticks(fontsize=24)</span>
-<span class="c">#     yticks(fontsize=24)</span>
-<span class="c">#     title(&#39;r(t)&#39;,fontsize=30)</span>
-<span class="c">#     show()</span>
-<span class="c">#</span>
 </pre></div>
 
           </div>
@@ -1194,7 +1066,8 @@
         <li><a href="../../../download.html">Download </a> |&nbsp; </li>
         <li><a href="https://github.com/pylayers/">Developer (Github)</a> </li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../antprop.html" >pylayers.antprop</a> &raquo;</li> 
       </ul>
     </div>
 

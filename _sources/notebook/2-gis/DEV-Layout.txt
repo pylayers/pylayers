@@ -8,7 +8,7 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x46cf0d0>
+    <matplotlib.figure.Figure at 0x4840110>
 
 
 The ``ls()`` method
@@ -106,8 +106,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x3955fd0>,
-     <matplotlib.axes.AxesSubplot at 0x47d7850>)
+    (<matplotlib.figure.Figure at 0x4840c50>,
+     <matplotlib.axes.AxesSubplot at 0x4948f50>)
 
 
 
@@ -129,27 +129,27 @@ The ``ls()`` method lists the layout file which are available in the
     11D-E1.ini
     ----------------
     
-    Number of points  : 214
-    Number of segments  : 199
+    Number of points  : 204
+    Number of segments  : 190
     Number of sub segments  : 0
     Number of cycles  : 0
     Number of rooms  : 0
     degree 0 : []
-    degree 1 : [  -1 -214 -213 -212 -211 -210 -206 -205 -204 -202 -201 -200 -198 -197 -196
-     -195 -194 -193 -191 -188 -184 -183 -182 -180 -179 -178 -177 -175 -174 -172
-     -171 -167 -166 -164 -162 -161 -159 -156 -154 -152 -150 -148 -147 -145 -144
-     -142 -140 -139 -137 -135 -134 -132 -130 -129 -128 -126 -124 -123 -122 -120
-     -118 -116 -115 -113 -112 -110 -109 -107 -105 -103 -102 -100  -98  -96  -94
-      -92  -90  -88  -87  -85  -83  -81  -80  -78  -76  -75  -73  -71  -70  -68
-      -67  -65  -63  -62  -59  -57  -55  -54  -52  -51  -49  -48  -46  -43  -41
-      -40  -39  -37  -36  -33  -31  -30  -28  -26  -25  -24  -21  -20  -18  -17
-      -15  -13  -12  -10   -9   -8   -7   -6   -5   -4   -3   -2]
-    degree 2 : 9
-    degree 3 : 44
-    degree 4 : [-190 -185 -181 -176 -173 -170 -163 -160 -149 -143 -138 -131 -127 -121 -114
-     -108 -101  -82  -79  -72  -66  -53  -50  -38  -35  -22  -19  -14  -11]
+    degree 1 : [-214 -213 -212 -211 -210 -206 -204 -202 -201 -200 -198 -197 -196 -195 -194
+     -193 -191 -188 -184 -183 -182 -179 -178 -177 -175 -174 -172 -171 -167 -166
+     -164 -162 -161 -156 -154 -152 -150 -148 -147 -145 -144 -142 -140 -139 -137
+     -135 -134 -132 -130 -129 -128 -126 -124 -123 -122 -120 -118 -116 -115 -113
+     -112 -110 -109 -107 -105 -103 -102 -100  -98  -96  -94  -92  -90  -88  -87
+      -85  -80  -78  -75  -73  -71  -70  -68  -67  -65  -63  -62  -59  -57  -55
+      -54  -52  -51  -49  -48  -46  -43  -41  -40  -39  -37  -36  -33  -31  -30
+      -28  -25  -24  -21  -20  -18  -15  -13  -12  -10   -9   -8   -7   -6   -5
+       -4   -3]
+    degree 2 : 14
+    degree 3 : 42
+    degree 4 : [-190 -185 -181 -176 -170 -163 -149 -143 -138 -131 -127 -121 -114 -108 -101
+      -79  -72  -66  -53  -50  -38  -35  -22  -19  -14  -11]
     
-    xrange :(-10.462, 73.369)
+    xrange :(-2.536, 73.369)
     yrange :(-0.096, 15.004)
     
     Useful dictionnaries
@@ -177,8 +177,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x47d73d0>,
-     <matplotlib.axes.AxesSubplot at 0x669b0d0>)
+    (<matplotlib.figure.Figure at 0x4948910>,
+     <matplotlib.axes.AxesSubplot at 0x4944210>)
 
 
 
@@ -191,6 +191,11 @@ The ``ls()`` method lists the layout file which are available in the
     L=Layout('klepal.ini')
     L
 
+.. parsed-literal::
+
+    problem to construct geomfile
+
+
 
 
 .. parsed-literal::
@@ -201,15 +206,15 @@ The ``ls()`` method lists the layout file which are available in the
     Image('/home/uguen/Bureau/P1/struc/images/IMG-Layout-Klepal.png')
     ----------------
     
-    Number of points  : 53
-    Number of segments  : 65
+    Number of points  : 54
+    Number of segments  : 67
     Number of sub segments  : 0
     Number of cycles  : 0
     Number of rooms  : 0
     degree 0 : [-85 -84 -79 -32]
     degree 1 : []
-    degree 2 : 24
-    degree 3 : 18
+    degree 2 : 23
+    degree 3 : 20
     degree 4 : [-69 -68 -67 -66 -65 -64 -42]
     
     xrange :(0.043999999999999997, 48.914999999999999)
@@ -242,8 +247,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f862cb43690>,
-     <matplotlib.axes.AxesSubplot at 0x7f862cb46a10>)
+    (<matplotlib.figure.Figure at 0x68244d0>,
+     <matplotlib.axes.AxesSubplot at 0x680bdd0>)
 
 
 
@@ -262,8 +267,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f862c8f9ed0>,
-     <matplotlib.axes.AxesSubplot at 0x7f862c8f5f90>)
+    (<matplotlib.figure.Figure at 0x4a48d50>,
+     <matplotlib.axes.AxesSubplot at 0x680bc10>)
 
 
 

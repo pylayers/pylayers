@@ -200,7 +200,7 @@ else True append new rays to existing structure</p>
 
 <dl class="method">
 <dt id="pylayers.antprop.rays.Rays.length">
-<tt class="descname">length</tt><big>(</big><em>typ=2</em><big>)</big><a class="headerlink" href="#pylayers.antprop.rays.Rays.length" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">length</tt><big>(</big><em>typ=2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate length of rays</p>
 </dd></dl>
 
@@ -299,12 +299,8 @@ k : zp  v: alphap</p>
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">Rays.show3(bdis=True, bstruc=True, id=0, strucname='defstr', ilist=[], raylist=[], pg=array([[0],</tt></dt>
-<dt>
-<tt class="descname">[0],</tt></dt>
-<dt>
-<tt class="descname">[0]]))</tt></dt>
+<dt id="pylayers.antprop.rays.Rays.show3">
+<tt class="descname">show3</tt><big>(</big><em>L=</em><span class="optional">[</span><span class="optional">]</span>, <em>bdis=True</em>, <em>bstruc=True</em>, <em>id=0</em>, <em>ilist=</em><span class="optional">[</span><span class="optional">]</span>, <em>raylist=</em><span class="optional">[</span><span class="optional">]</span>, <em>centered=True</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/rays.html#Rays.show3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.rays.Rays.show3" title="Permalink to this definition">¶</a></dt>
 <dd><p>plot 3D rays within the simulated environment</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -319,13 +315,16 @@ k : zp  v: alphap</p>
 <div><p>True</p>
 </div></blockquote>
 <p><strong>id</strong> : int</p>
-<p><strong>strucname</strong> : string</p>
+<p><strong>L</strong> : Layout object</p>
 <blockquote>
-<div><p>&#8216;defstr&#8217;</p>
+<div><p>Layout to be displayed</p>
 </div></blockquote>
 <p><strong>ilist</strong> : list of group of interactions</p>
 <p><strong>raylist</strong> : list of index rays</p>
-<p class="last"><strong>pg</strong> : centroid of the structure</p>
+<p><strong>centered</strong> : boolean</p>
+<blockquote class="last">
+<div><p>if True center the layout before display</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>

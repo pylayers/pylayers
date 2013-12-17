@@ -75,18 +75,18 @@
 <span class="c">#####################################################################</span>
 <span class="c">#This file is part of Network and RGPA.</span>
 
-<span class="c">#Foobar is free software: you can redistribute it and/or modify</span>
+<span class="c">#PyLayers is free software: you can redistribute it and/or modify</span>
 <span class="c">#it under the terms of the GNU General Public License as published by</span>
 <span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
 <span class="c">#(at your option) any later version.</span>
 
-<span class="c">#Foobar is distributed in the hope that it will be useful,</span>
+<span class="c">#PyLayers is distributed in the hope that it will be useful,</span>
 <span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
 <span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
 <span class="c">#GNU General Public License for more details.</span>
 
 <span class="c">#You should have received a copy of the GNU General Public License</span>
-<span class="c">#along with Foobar.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c">#along with PyLayers.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 
 <span class="c">#-------------------------------------------------------------------</span>
 <span class="c">#authors :</span>
@@ -98,25 +98,36 @@
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="kn">as</span> <span class="nn">sp</span> 
 
 <span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">doctest</span> 
 
 
-<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; RSS model</span>
+<div class="viewcode-block" id="PLSmodel"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel">[docs]</a><span class="k">class</span> <span class="nc">PLSmodel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Path Loss Shadowing model</span>
 
 <span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 
-<span class="sd">    f : frequency in GHz</span>
-<span class="sd">    n : path loss exponent</span>
+<span class="sd">    f : float</span>
+<span class="sd">        frequency in GHz</span>
+<span class="sd">    rssnp : float</span>
+<span class="sd">        path loss exponent</span>
+<span class="sd">    d0    : float</span>
+<span class="sd">        PL0 distance</span>
+<span class="sd">    sigrss : float</span>
+<span class="sd">        shadowing variance</span>
+<span class="sd">        </span>
 <span class="sd">    method : used model</span>
+
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">f</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">rssnp</span><span class="o">=</span><span class="mf">2.64</span><span class="p">,</span><span class="n">d0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">sigrss</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;mode&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f</span>  <span class="o">=</span> <span class="n">f</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d0</span>  <span class="o">=</span> <span class="n">d0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rssnp</span>  <span class="o">=</span> <span class="n">rssnp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sigrss</span><span class="o">=</span><span class="n">sigrss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigrss</span> <span class="o">=</span> <span class="n">sigrss</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">getPL0</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="o">=</span><span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span>
                       <span class="n">d0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">d0</span><span class="p">,</span>
                       <span class="n">rssnp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rssnp</span><span class="p">,</span>
@@ -131,33 +142,45 @@
         <span class="n">st</span> <span class="o">=</span> <span class="n">st</span> <span class="o">+</span>  <span class="s">&#39;PL0 (dB): &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PL0</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">&#39;frequency (f in GHz) : &#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span>
-        <span class="k">print</span> <span class="s">&#39;path loss exponent (n) : &#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">rssnp</span>
-        <span class="k">print</span> <span class="s">&#39;PL0 : &#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">PL0</span>
+<div class="viewcode-block" id="PLSmodel.getPL0"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel.getPL0">[docs]</a>    <span class="k">def</span> <span class="nf">getPL0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Gt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">Gr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get Path Loss at reference distance d0</span>
 
-<div class="viewcode-block" id="Model.getPL0"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model.getPL0">[docs]</a>    <span class="k">def</span> <span class="nf">getPL0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Gt</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">Gr</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
 <span class="sd">        PL0_c : PL0 compute</span>
-<span class="sd">        f  : frequency GHz</span>
 <span class="sd">        Gt : transmitting antenna gain dB (default 0 dB) </span>
 <span class="sd">        Gr : receiving antenna gain dB (default 0 dB) </span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">            &gt;&gt;&gt; from pylayers.network.model import *   </span>
+<span class="sd">            &gt;&gt;&gt; plm = PLSmodel()</span>
+<span class="sd">            &gt;&gt;&gt; plm.getPL0()</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">Gt</span>  <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">Gt</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
         <span class="n">Gr</span>  <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">Gr</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
         <span class="n">ld</span>  <span class="o">=</span> <span class="mf">0.3</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">PL0</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ld</span><span class="o">/</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">d0</span><span class="p">))</span> 
 
-    
-
-</div>
-<div class="viewcode-block" id="Model.OneSlope"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model.OneSlope">[docs]</a>    <span class="k">def</span> <span class="nf">OneSlope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
+    </div>
+<div class="viewcode-block" id="PLSmodel.OneSlope"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel.OneSlope">[docs]</a>    <span class="k">def</span> <span class="nf">OneSlope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        OneSlope model : give Power Level from distance  with OneSlope method</span>
 
-<span class="sd">        f : frequency  GHz</span>
-<span class="sd">        n : path loss exponent</span>
-<span class="sd">        D : range array </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        r : range (meters)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">    </span>
+<span class="sd">        PL : </span>
+<span class="sd">            path loss values</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -167,12 +190,20 @@
             <span class="n">PL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PL0</span><span class="o">+</span><span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">np</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
         <span class="k">return</span><span class="p">(</span><span class="n">PL</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Model.iOneSlope"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model.iOneSlope">[docs]</a>    <span class="k">def</span> <span class="nf">iOneSlope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PL</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PLSmodel.iOneSlope"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel.iOneSlope">[docs]</a>    <span class="k">def</span> <span class="nf">iOneSlope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">PL</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; goes from PL to estimated distance</span>
+
 <span class="sd">        inverse OneSlope model : give distance from Power Level with OneSlope method</span>
 
-<span class="sd">        f : frequency  GHz</span>
-<span class="sd">        n : path loss exponent</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        PL : </span>
+<span class="sd">            path loss in dB </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
 <span class="sd">        r : range array </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -182,35 +213,52 @@
         <span class="k">except</span><span class="p">:</span> 
             <span class="bp">self</span><span class="o">.</span><span class="n">getPL0</span><span class="p">()</span>
             <span class="n">r</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="n">PL</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">PL0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rssnp</span><span class="p">))</span>
+
         <span class="k">return</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="Model.getPLmean"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model.getPLmean">[docs]</a>    <span class="k">def</span> <span class="nf">getPLmean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute PL mean</span>
+<div class="viewcode-block" id="PLSmodel.getPLmean"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel.getPLmean">[docs]</a>    <span class="k">def</span> <span class="nf">getPLmean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; compute PL mean</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">            $$\bar{PL}=PL_0 - 10 n_p \log_{10}{\frac{d}{d_0}}$$</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">PLmean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PL0</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rssnp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">d0</span><span class="p">)</span>
 
-
-        <span class="k">return</span>          <span class="bp">self</span><span class="o">.</span><span class="n">PL0</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">rssnp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">d0</span><span class="p">)</span>
+        <span class="k">return</span>  <span class="n">PLmean</span>  
 
 </div>
-<div class="viewcode-block" id="Model.getPL"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model.getPL">[docs]</a>    <span class="k">def</span> <span class="nf">getPL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">RSSStd</span><span class="p">):</span>
+<div class="viewcode-block" id="PLSmodel.getPL"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel.getPL">[docs]</a>    <span class="k">def</span> <span class="nf">getPL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">RSSStd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get Power Level from a given distance</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 
 <span class="sd">        r : range</span>
 <span class="sd">        RSSStd : range standard deviation</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; M = PLSmodel(f=0.3,rssnp=2.64,d0=1,sigrss=3,method=&#39;mode&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; PL =  M.getPL(16,1)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-
-
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span><span class="s">&#39;OneSlope&#39;</span><span class="p">:</span>
             <span class="n">PL</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">OneSlope</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
-
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;mode&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;median&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;mean&#39;</span><span class="p">:</span>
             <span class="n">PLmean</span>          <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPLmean</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-            <span class="n">shPLmean</span>        <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">PLmean</span><span class="p">)</span>
-            <span class="n">Xrand</span>           <span class="o">=</span> <span class="n">RSSStd</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">shPLmean</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">shPLmean</span>        <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">PLmean</span><span class="p">)</span>
+                <span class="n">Xrand</span>           <span class="o">=</span> <span class="n">RSSStd</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">shPLmean</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">Xrand</span>           <span class="o">=</span> <span class="n">RSSStd</span><span class="o">*</span><span class="n">sp</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span>
             <span class="n">PL</span>        <span class="o">=</span> <span class="n">PLmean</span><span class="o">+</span><span class="n">Xrand</span>
 
         <span class="k">else</span> <span class="p">:</span>
@@ -220,7 +268,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Model.getRange"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model.getRange">[docs]</a>    <span class="k">def</span> <span class="nf">getRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RSS</span><span class="p">,</span><span class="n">RSSStd</span><span class="p">):</span>
+<div class="viewcode-block" id="PLSmodel.getRange"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel.getRange">[docs]</a>    <span class="k">def</span> <span class="nf">getRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">RSS</span><span class="p">,</span><span class="n">RSSStd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get  distance from a given Power Level</span>
 
@@ -251,7 +299,7 @@
 
 
 </div>
-<div class="viewcode-block" id="Model.getRangeStd"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.Model.getRangeStd">[docs]</a>    <span class="k">def</span> <span class="nf">getRangeStd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">RSS</span><span class="p">,</span> <span class="n">RSSStd</span><span class="p">):</span>
+<div class="viewcode-block" id="PLSmodel.getRangeStd"><a class="viewcode-back" href="../../../modules/network.model.html#pylayers.network.model.PLSmodel.getRangeStd">[docs]</a>    <span class="k">def</span> <span class="nf">getRangeStd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">RSS</span><span class="p">,</span> <span class="n">RSSStd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute Ranges std associated to &quot;Rest&quot; estimator</span>
 
 
@@ -276,7 +324,11 @@
             <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;invalid Pathloss method name STD range computation&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span>
-</pre></div></div></div>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
 
           </div>
         </div>

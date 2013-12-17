@@ -22,6 +22,11 @@ Titre 4
     x = arange(10)
     plot(x)
     show()
+
+
+.. image:: Workflow_files/Workflow_4_0.png
+
+
 nbconvert Workflow.ipynb -o latex
 
 padflatex Workflow.tex

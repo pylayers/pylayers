@@ -171,7 +171,7 @@ following :
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4437190>
+    <matplotlib.figure.Figure at 0x51d01d0>
 
 
 Reading an exiting Layout
@@ -610,8 +610,8 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4edab90>,
-     <matplotlib.axes.AxesSubplot at 0x4edad10>)
+    (<matplotlib.figure.Figure at 0x51dc150>,
+     <matplotlib.axes.AxesSubplot at 0x5de2f90>)
 
 
 
@@ -677,13 +677,8 @@ Vizualisation of the layout
     fig,ax = L.showG(fig=fig,ax=ax,graph='s',labels=True,font_size=9,node_size=220,node_color='c')
     a = plt.axis('off')
 
-.. parsed-literal::
 
-    G s  not saved
-
-
-
-.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_61_1.png
+.. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png
 
 
 Each node of :math:`$\mathcal{G}_s$` with a negative index is a point.
@@ -693,3 +688,12 @@ to a segment (wall,door,window,...).
 
 The segment name is the key of the **slab** dictionnary.
 
+Segments and Subsegments
+------------------------
+
+
+`Multi Subsegments <MultiSubsegments.ipynb>`_
+
+.. code-block:: python
+
+    

@@ -81,13 +81,14 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#vizualisation-of-the-layout">Vizualisation of the layout</a></li>
+<li><a class="reference internal" href="#segments-and-subsegments">Segments and Subsegments</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="DEV-Layout.html"
-                        title="previous chapter">The <tt class="docutils literal docutils literal docutils literal"><span class="pre">ls()</span></tt> method</a></p>
+                        title="previous chapter">The <tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">ls()</span></tt> method</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="MultiSubsegments.html"
                         title="next chapter">Multi sub-segments</a></p>
@@ -251,7 +252,7 @@ as the state of the current <tt class="docutils literal"><span class="pre">displ
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4437190&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x51d01d0&gt;</pre>
 </div>
 </div>
 <div class="section" id="reading-an-exiting-layout">
@@ -595,8 +596,8 @@ a filename. In that case the file is stored in</p>
 <span class="n">L</span><span class="o">.</span><span class="n">showGs</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x4edab90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x4edad10&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x51dc150&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x5de2f90&gt;)</pre>
 </div>
 <img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_55_1.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_55_1.png" />
 </div>
@@ -650,13 +651,18 @@ meters) between the two points.</li>
 <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;off&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>G s  not saved</pre>
-</div>
-<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_1.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_1.png" />
+<img alt="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png" src="./DOC-LayoutEditor_files/DOC-LayoutEditor_61_0.png" />
 <p>Each node of <img class="math" src="../../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a negative index is a point.</p>
 <p>Each node of <img class="math" src="../../_images/math/c21e11ffee45708ce48df6d59b8fbf8eed0f3821.png" alt="$\mathcal{G}_s$"/> with a positive index corresponds
 to a segment (wall,door,window,...).</p>
 <p>The segment name is the key of the <strong>slab</strong> dictionnary.</p>
+</div>
+<div class="section" id="segments-and-subsegments">
+<h2>Segments and Subsegments<a class="headerlink" href="#segments-and-subsegments" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="MultiSubsegments.ipynb">Multi Subsegments</a></p>
+<div class="highlight-python"><div class="highlight"><pre>
+</pre></div>
+</div>
 </div>
 </div>
 

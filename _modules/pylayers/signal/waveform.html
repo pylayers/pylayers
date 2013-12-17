@@ -87,27 +87,63 @@
 <span class="kn">from</span> <span class="nn">pylayers.util</span>     <span class="kn">import</span> <span class="n">easygui</span>
 <span class="kn">from</span> <span class="nn">pylayers.measures</span> <span class="kn">import</span> <span class="n">mesuwb</span>
 
-<div class="viewcode-block" id="Waveform"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform">[docs]</a><span class="k">class</span> <span class="nc">Waveform</span><span class="p">:</span>
+<div class="viewcode-block" id="Waveform"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform">[docs]</a><span class="k">class</span> <span class="nc">Waveform</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Waveform Class</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    st  : time domain</span>
+<span class="sd">    sf  : frequency domain</span>
+<span class="sd">    sfg : frequency domain integrated</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    eval</span>
+<span class="sd">    show2</span>
+<span class="sd">    ip_generic</span>
+<span class="sd">    fromfile</span>
+<span class="sd">    fromfile2</span>
+<span class="sd">    read</span>
+<span class="sd">    gui</span>
+<span class="sd">    show</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parameters</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">           wavetype   =   &#39;generic&#39; =   &#39;mbofdm&#39; =   &#39;fromfile&#39;</span>
-<span class="sd">           st  : time domain</span>
-<span class="sd">           sf  : frequency domain</span>
-<span class="sd">           sfg : frequency domain integrated</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        &#39;typ&#39; : string </span>
+<span class="sd">            &#39;generic&#39;,</span>
+<span class="sd">         &#39;bandGHz&#39;: float</span>
+<span class="sd">            0.499</span>
+<span class="sd">         &#39;fcGHz&#39;: float</span>
+<span class="sd">            4.493</span>
+<span class="sd">         &#39;fsGHz&#39;: float</span>
+<span class="sd">            100,</span>
+<span class="sd">         &#39;threshdB&#39;: </span>
+<span class="sd">              3,</span>
+<span class="sd">         &#39;twns&#39;: float</span>
+<span class="sd">            30</span>
+
+<span class="sd">        typ  :  &#39;generic&#39;,&#39;W1compensate&#39;,&#39;W1offset&#39;</span>
+<span class="sd">           </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">param</span><span class="o">=</span> <span class="p">{</span><span class="s">&#39;type&#39;</span> <span class="p">:</span> <span class="s">&#39;generic&#39;</span><span class="p">,</span>
-                <span class="s">&#39;band&#39;</span><span class="p">:</span> <span class="mf">0.499</span><span class="p">,</span>
-                <span class="s">&#39;fc&#39;</span><span class="p">:</span> <span class="mf">4.493</span><span class="p">,</span>
-                <span class="s">&#39;fe&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
-                <span class="s">&#39;thresh&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                <span class="s">&#39;tw&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">parameters</span><span class="o">==</span><span class="p">[]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">param</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;typ&#39;</span><span class="p">:</span><span class="s">&#39;generic&#39;</span><span class="p">,</span>
+                <span class="s">&#39;bandGHz&#39;</span><span class="p">:</span> <span class="mf">0.499</span><span class="p">,</span>
+                <span class="s">&#39;fcGHz&#39;</span><span class="p">:</span> <span class="mf">4.493</span><span class="p">,</span>
+                <span class="s">&#39;feGHz&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+                <span class="s">&#39;threshdB&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s">&#39;twns&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">}</span>
+        
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Waveform.eval"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.eval">[docs]</a>    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -117,16 +153,16 @@
 <span class="sd">            link ( from the Friis formula) is introduced in this function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s">&#39;generic&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s">&#39;generic&#39;</span><span class="p">:</span>
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ip_generic</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>  <span class="o">==</span> <span class="s">&#39;mbofdm&#39;</span><span class="p">:</span>
-            <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mbofdm</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1compensate&#39;</span><span class="p">:</span>
+        <span class="c">#elif self[&#39;typ&#39;]  == &#39;mbofdm&#39;:</span>
+        <span class="c">#    [st,sf]=self.mbofdm()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1compensate&#39;</span><span class="p">:</span>
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fromfile</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1offset&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;W1offset&#39;</span><span class="p">:</span>
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fromfile2</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;waveform type not recognized, check your config </span><span class="se">\</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s">&#39;waveform typ not recognized, check your config </span><span class="se">\</span>
 <span class="s">                             file&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">st</span>       <span class="o">=</span> <span class="n">st</span>
@@ -145,33 +181,25 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.signal.waveform import *</span>
-<span class="sd">        &gt;&gt;&gt; param= {&#39;type&#39; : &#39;generic&#39;,\</span>
-<span class="sd">            &#39;band&#39;: 0.499,\</span>
-<span class="sd">            &#39;fc&#39;: 4.493,\</span>
-<span class="sd">            &#39;fe&#39;: 100,\</span>
-<span class="sd">            &#39;thresh&#39;: 3,\</span>
-<span class="sd">            &#39;tw&#39;: 30}</span>
-<span class="sd">        &gt;&gt;&gt; w = Waveform(param)</span>
-<span class="sd">        &gt;&gt;&gt; # W = {}</span>
-<span class="sd">        &gt;&gt;&gt; # W[&#39;t&#39;]=w.st.x</span>
-<span class="sd">        &gt;&gt;&gt; # W[&#39;p&#39;]=w.st.y</span>
+<span class="sd">        &gt;&gt;&gt; w = Waveform(typ=&#39;generic&#39;,bandGHz=0.499,fcGHz=4.49,feGHz=100,threshdB=3,twns=30)</span>
 <span class="sd">        &gt;&gt;&gt; w.show()</span>
 <span class="sd">        &gt;&gt;&gt; plt.show()         </span>
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;generic&#39;</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">print</span> <span class="n">k</span> <span class="p">,</span> <span class="s">&quot; : &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span><span class="o">==</span><span class="s">&#39;generic&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">print</span> <span class="n">k</span> <span class="p">,</span> <span class="s">&quot; : &quot;</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&quot;type:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
+            <span class="k">print</span> <span class="s">&quot;typ:&quot;</span><span class="p">,</span><span class="bp">self</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Waveform.show2"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.show2">[docs]</a>    <span class="k">def</span> <span class="nf">show2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Tp</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="Waveform.show2"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.show2">[docs]</a>    <span class="k">def</span> <span class="nf">show2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Tpns</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; show2</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        Tp : float</span>
+
+<span class="sd">        Tpns : float</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
@@ -183,20 +211,21 @@
 </div>
 <div class="viewcode-block" id="Waveform.ip_generic"><a class="viewcode-back" href="../../../modules/signal.waveform.html#pylayers.signal.waveform.Waveform.ip_generic">[docs]</a>    <span class="k">def</span> <span class="nf">ip_generic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;    Create an Energy normalized Gaussian impulse (Usignal)</span>
-<span class="sd">            ip_generic(self,parameters)</span>
+
+<span class="sd">        ip_generic(self,parameters)</span>
 <span class="sd">        </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">Tw</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;tw&#39;</span><span class="p">]</span>
-        <span class="n">fc</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fc&#39;</span><span class="p">]</span>
-        <span class="n">band</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;band&#39;</span><span class="p">]</span>
-        <span class="n">thresh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;thresh&#39;</span><span class="p">]</span>
-        <span class="n">fe</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fe&#39;</span><span class="p">]</span>
+        <span class="n">Tw</span>     <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;twns&#39;</span><span class="p">]</span>
+        <span class="n">fc</span>     <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span>
+        <span class="n">band</span>   <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;bandGHz&#39;</span><span class="p">]</span>
+        <span class="n">thresh</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;threshdB&#39;</span><span class="p">]</span>
+        <span class="n">fe</span>     <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;feGHz&#39;</span><span class="p">]</span>
         <span class="n">te</span>     <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">fe</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;te&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">te</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;te&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">te</span>
         <span class="n">Np</span>     <span class="o">=</span> <span class="n">fe</span><span class="o">*</span><span class="n">Tw</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;Np&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">Np</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s">&#39;Np&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">Np</span>
         <span class="n">x</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">Tw</span><span class="o">+</span><span class="n">te</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="o">*</span><span class="n">Tw</span><span class="o">+</span><span class="n">te</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">Np</span><span class="p">,</span><span class="n">endpoint</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="c">#x     = arange(-Tw,Tw,te)</span>
 
@@ -212,11 +241,12 @@
 <span class="sd">        This function is not yet generic</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.signal.waveform import *</span>
-<span class="sd">        &gt;&gt;&gt; wav = Waveform({&#39;type&#39;:&#39;file&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; wav = Waveform(typ=&#39;W1compensate&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; wav.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">M</span> <span class="o">=</span> <span class="n">mesuwb</span><span class="o">.</span><span class="n">UWBMesure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="n">mesuwb</span><span class="o">.</span><span class="n">UWBMesure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">TUsignal</span><span class="p">()</span>
 
         <span class="n">ts</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">RAW_DATA</span><span class="o">.</span><span class="n">timetx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -261,7 +291,7 @@
 <span class="sd">        This function is not yet generic</span>
 
 <span class="sd">        &gt;&gt;&gt; from pylayers.signal.waveform import *</span>
-<span class="sd">        &gt;&gt;&gt; wav = Waveform({&#39;type&#39;:&#39;file&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; wav = Waveform(typ=&#39;W1offset&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; wav.show()</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -309,32 +339,31 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">            config : ConfigParser object</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            w      : waveform</span>
-<span class="sd">         &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">par</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&quot;waveform&quot;</span><span class="p">)</span>
-        <span class="n">wparam</span> <span class="o">=</span>  <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">par</span><span class="p">)):</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">val</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;band&quot;</span><span class="p">:</span>
-                <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;fc&quot;</span><span class="p">:</span>
-                <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;fe&quot;</span><span class="p">:</span>
-                <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;thresh&quot;</span><span class="p">:</span>
-                <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;tw&quot;</span><span class="p">:</span>
-                <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;type&quot;</span><span class="p">:</span>
-                <span class="n">wparam</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;bandGHz&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;fcGHz&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;feGHz&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;threshdB&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;twns&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s">&quot;typ&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
  
-        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">wparam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
 </div>
@@ -342,7 +371,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the Waveform parameter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;generic&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;typ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;generic&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">st</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
             <span class="n">show</span><span class="p">()</span>
             <span class="n">wavegui</span> <span class="o">=</span> <span class="n">multenterbox</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="s">&#39;Waveform Parameter&#39;</span><span class="p">,</span>
@@ -351,18 +380,18 @@
              <span class="s">&#39;band (GHz)&#39;</span><span class="p">,</span>
              <span class="s">&#39;thresh (dB)&#39;</span><span class="p">,</span>
              <span class="s">&#39;fe (GHz) integer value&#39;</span><span class="p">),</span>
-            <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;Tw&#39;</span><span class="p">]</span> <span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fc&#39;</span><span class="p">]</span> <span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;band&#39;</span><span class="p">]</span> <span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;tresh&#39;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fe&#39;</span><span class="p">]</span>
+            <span class="p">(</span> <span class="bp">self</span><span class="p">[</span><span class="s">&#39;twns&#39;</span><span class="p">]</span> <span class="p">,</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span> <span class="p">,</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;bandGHz&#39;</span><span class="p">]</span> <span class="p">,</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;threshdB&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s">&#39;feGHz&#39;</span><span class="p">]</span>
             <span class="p">))</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;Tw&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fc&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;band&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;tresh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fe&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;Twns&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;fcGHz&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;bandGHz&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;threshdB&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;feGHz&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">wavegui</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
 
             <span class="p">[</span><span class="n">st</span><span class="p">,</span><span class="n">sf</span><span class="p">]</span>       <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip_generic</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">st</span>       <span class="o">=</span> <span class="n">st</span>
@@ -377,8 +406,8 @@
         <span class="k">if</span> <span class="n">fig</span> <span class="o">==</span><span class="p">[]:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">title</span> <span class="o">=</span><span class="s">&#39;&#39;</span>
-        <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">val</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">pk</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">val</span>   <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">pk</span><span class="p">]</span>
             <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="n">pk</span> <span class="o">+</span> <span class="s">&#39;: &#39;</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">!=</span> <span class="s">&#39;str&#39;</span><span class="p">:</span>
                 <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span>
@@ -395,6 +424,7 @@
 
 </div></div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
     <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 

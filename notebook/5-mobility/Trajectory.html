@@ -111,7 +111,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x411bb90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x42a1bd0&gt;</pre>
 </div>
 <p>This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
@@ -178,8 +178,6 @@ run a full simulation and returns a list of channel impulse response.</p>
     <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">dumpw</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>G s  not saved</pre>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;ednodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;nodes&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">False</span>
 <span class="n">S</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">display</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span><span class="o">=</span><span class="s">&#39;DLR WP4 WHERE2 measurement site&#39;</span>
@@ -227,7 +225,7 @@ campaign.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">pta</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x7fe8c50e11d0&gt;]</pre>
+<div class="highlight-python"><pre>[&lt;matplotlib.lines.Line2D at 0x5288290&gt;]</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_11_1.png" src="./Trajectory_files/Trajectory_11_1.png" />
 <p>In the following a trajectory for the receiver is defined.</p>
@@ -248,8 +246,8 @@ along direction <tt class="docutils literal"><span class="pre">vec</span></tt>.<
 </div>
 <div class="highlight-python"><pre>Warning : no furniture file loaded</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe8c510c210&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7fe8c4e91b50&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x52b33d0&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7fd4f599b150&gt;)</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_15_2.png" src="./Trajectory_files/Trajectory_15_2.png" />
 <p>Choosing a UWB waveform for the simulation</p>
@@ -499,8 +497,8 @@ Usignal of length 9930 points.</p>
 <div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7fe8c4e85b10&gt;,
- array([[&lt;matplotlib.axes.AxesSubplot object at 0x7fe8c4e078d0&gt;]], dtype=object))</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x54f9cd0&gt;,
+ array([[&lt;matplotlib.axes.AxesSubplot object at 0x54f7410&gt;]], dtype=object))</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_27_2.png" src="./Trajectory_files/Trajectory_27_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
@@ -510,9 +508,9 @@ Usignal of length 9930 points.</p>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fe8c6424890&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5d30950&gt;</pre>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7fe8c640fe10&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x7fd4e4746cd0&gt;</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_28_2.png" src="./Trajectory_files/Trajectory_28_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tcir</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">40</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;v&#39;</span><span class="p">])</span>
@@ -521,7 +519,7 @@ Usignal of length 9930 points.</p>
 <span class="n">title</span><span class="p">(</span><span class="s">&#39;Received Waveform&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x7fe8c63b8a90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x5d55a10&gt;</pre>
 </div>
 <img alt="./Trajectory_files/Trajectory_29_1.png" src="./Trajectory_files/Trajectory_29_1.png" />
 </div>

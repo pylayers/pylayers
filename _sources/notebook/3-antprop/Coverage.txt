@@ -20,7 +20,7 @@ First let's import the ``coverage`` module
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4466b10>
+    <matplotlib.figure.Figure at 0x4b3eb50>
 
 
 Instantiate a coverage object. By defaut, ``TA-Office.str`` layout
@@ -78,12 +78,6 @@ Below is an example of how the content of the file looks like
 
     # Create a Coverage object from coverag.ini file
     C = Coverage()
-
-.. parsed-literal::
-
-    G s  not saved
-
-
 The coverage object has a ``__repr__`` which summarizes the different
 parameters of the current coverage object
 
@@ -138,8 +132,8 @@ Calculating Received Power Coverage
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5268ed0>,
-     <matplotlib.axes.AxesSubplot at 0x51c7710>)
+    (<matplotlib.figure.Figure at 0x5bb5ed0>,
+     <matplotlib.axes.AxesSubplot at 0x4b3ead0>)
 
 
 
@@ -181,7 +175,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.15 seconds
+    Elapsed time : 1.11 seconds
 
 
 .. code-block:: python
@@ -199,7 +193,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.13 seconds
+    Elapsed time : 1.10 seconds
 
 
 .. code-block:: python
@@ -217,7 +211,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.13 seconds
+    Elapsed time : 1.10 seconds
 
 
 The transmitter coordinates are :
@@ -259,8 +253,8 @@ accordingly
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7fbcec1a1950>,
-     <matplotlib.axes.AxesSubplot at 0x7fbcec2a9550>)
+    (<matplotlib.figure.Figure at 0x5b78950>,
+     <matplotlib.axes.AxesSubplot at 0x5b53910>)
 
 
 
