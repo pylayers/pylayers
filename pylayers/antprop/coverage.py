@@ -5,6 +5,7 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.multiwall import *
 from pylayers.network.model import *
 
+import matplotlib.cm  as cm
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -346,6 +347,7 @@ class Coverage(object):
         }
         #generate the colormap with 1024 interpolated values
         my_cmap = m.colors.LinearSegmentedColormap('my_colormap', cdict, 1024)
+        #my_cmap = cm.copper
 
 
         if rxsens :
@@ -365,7 +367,7 @@ class Coverage(object):
                             extent=(l,r,b,t),
                             cmap = 'jet',
                             vmin=self.rxsens,origin='lower')
-            title=title + '\n gray : Pr (dBm) < %.2f' % self.rxsens + ' dBm'
+            title=title + '\n black : Pr (dBm) < %.2f' % self.rxsens + ' dBm'
 
         else :
             cov=ax.imshow(prdbm.reshape((self.nx,self.ny)).T,
