@@ -131,7 +131,6 @@ class Rays(dict):
     def show(self,L,**kwargs):
         """  plot 2D rays within the simulated environment
 
-
         Parameters
         ----------
 
