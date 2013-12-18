@@ -3936,7 +3936,6 @@ class Layout(object):
                     ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
                 else:                
                     ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
-
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
@@ -4147,7 +4146,8 @@ class Layout(object):
                             read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
                 self.lbltg.extend(g)
             except:
-                print 'G',g,' not saved'
+                pass
+                #print 'G',g,' not saved'
 
         #
         # fixing bug #136 
@@ -5040,7 +5040,7 @@ class Layout(object):
                     'node_color':'w',
                     'edge_color':'k',
                     'node_size':20,
-                    'font_size':30,
+                    'font_size':15,
                     'nodelist': [],
                     'edgelist': [],
                     'figsize': (5,5),

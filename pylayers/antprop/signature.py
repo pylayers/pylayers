@@ -111,6 +111,16 @@ def edgeout(L,g):
 
     L : Layout
     g : Digraph Gi
+
+    Notes
+    -----
+
+    This function aims at filtering out uncorrect signatures
+
+    for interactions in nodes of Gi 
+        i0 = start interaction
+        i1 = end interaction 
+
     """
 
     for e in g.edges():
@@ -121,7 +131,6 @@ def edgeout(L,g):
             nstr0 = i0[0]
         except:
             nstr0 = i0
-
 
         try:
             nstr1 = i1[0]
@@ -493,6 +502,16 @@ class Signatures(dict):
         return d
 
     def run(self,cutoff=1,dcut=2):
+        """ run calculation of signature
+
+        Parameters
+        ----------
+
+        cutoff : int 
+            1
+        dcut : int 
+            2
+        """
 
         lcil=self.L.cycleinline(self.source,self.target)
 
@@ -1272,6 +1291,13 @@ class Signatures(dict):
 
 
     def meta(self):
+        """ determine meta signatures
+
+        Notes 
+        -----
+
+
+        """
         G = self.L.Gt
         # metasig = list(nx.all_simple_paths(self.L.Gt,source=self.source,target=self.target,cutoff=cutoff))
         #for cutoff in range(1,5):
@@ -1703,12 +1729,17 @@ class Signature(object):
     def image(self, tx):
         """
         Compute the images of tx with respect to the signature segments
+
         Parameters
         ----------
-            tx : numpy.ndarray
+
+        tx : numpy.ndarray
+
         Returns
         -------
-            M : numpy.ndarray
+
+        M : numpy.ndarray
+
         """
 
         pa = self.pa

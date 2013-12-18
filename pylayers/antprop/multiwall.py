@@ -282,7 +282,7 @@ def Losst(L,fGHz,p1,p2):
 #        if k != 0:
 #            try:
 #                # TODO use z to determine ss_name
-#                name = L.Gs.node[k]['ss_name'][0]
+#                name = L.Gs.node[k]['ss_name'][-2]
 #            except:
 #                name = L.Gs.node[k]['name']
 #            #if k in S.indoor.ce.keys():
