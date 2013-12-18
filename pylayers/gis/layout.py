@@ -3936,7 +3936,6 @@ class Layout(object):
                     ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
                 else:                
                     ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
-
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]

@@ -1,5 +1,13 @@
- #!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: latin1 -*-
+""" Module Rays 
+
+Summary
+-------
+
+This modules contains Rays class 
+
+"""
 import pdb
 import os
 import copy 
