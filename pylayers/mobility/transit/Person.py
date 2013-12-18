@@ -127,7 +127,10 @@ class Person(Process):
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
             # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-            self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+            try :
+                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+            except: 
+                raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId): # or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
                 # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
                 self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]

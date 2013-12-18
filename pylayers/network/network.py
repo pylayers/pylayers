@@ -171,33 +171,57 @@ class Network(nx.MultiDiGraph):
     def __repr__(self):
 
         if not self.isPN :
-            s = 'Network information\n******************\n'
+            s = 'Network information\n*******************\n'
+            s = s + 'number of agents: ' + str(len(self.nodes())) +'\n'
+            s = s + str(self.nodes()) + '\n'
+
+
+            
+            typ = nx.get_node_attributes(self,'type').values() 
+
+            nodes = np.array(nx.get_node_attributes(self,'type').items())
+
+            nb_ag = len(np.where(nodes=='ag')[0])
+            nb_ap = len(np.where(nodes=='ap')[0])
+
+            pag=np.where(nodes=='ag')
+            pap=np.where(nodes=='ap')
+
+            s = s +  '\n' + str(nb_ag) + ' Mobile Agents\n  -------------\n'
+            s = s + 'Agents IDs : ' + str([nodes[i,0] for i in pag[0]]) +'\n'
+
+
+            s = s +  '\n' + str(nb_ap) + ' Access points\n  -------------\n'
+            s = s + 'number of access point  : ' + '\n'
+            s = s + 'access points  IDs : ' + str([nodes[i,0] for i in pap[0]]) +'\n'
+
+            if len(self.SubNet.keys()) != 0 :
+                s = s + '\n\nSubNetworks :' +str(self.SubNet.keys()) + '\n===========\n'
+                for sub in self.SubNet.keys():
+                    s = s + '\t'+ sub + '\n' +  self.SubNet[sub].__repr__() + '\n'
+
         else:
-            s = 'Personnal Network of node ' +str(self.owner)+ ' information\n********************************\n'
-        s = s + 'number of agents: ' + str(len(self.nodes())) +'\n'
-        s = s + str(self.nodes()) + '\n'
-        typ = nx.get_node_attributes(self,'type').values() 
+            s = 'Personnal Network of node ' +str(self.owner)+ ' information\n***************************************\n'
+            s = s + '{0:5} |{1:5} | {2:5} | {3:7}| {4:7}| {5:7}| {6:7}| {7:7}| {8:10}|'.format('peer','rat', 'TOA','std TOA','tTOA', 'Pr', 'std Pr', 'tPr','visibility')
+            for e1,e2 in self.edges():
+                for r in self.edge[e1][e2].keys():
+                    rat = r
+                    TOA = self.edge[e1][e2][r]['TOA'][0]          
+                    stdTOA = self.edge[e1][e2][r]['TOA'][1]          
+                    pr = self.edge[e1][e2][r]['Pr'][0]          
+                    stdpr = self.edge[e1][e2][r]['Pr'][1]  
+                    try :        
+                        tTOA = self.edge[e1][e2][r]['tTOA']
+                    except:
+                        tTOA = 'nan'
+                    try :
+                        tpr = self.edge[e1][e2][r]['tPr']
+                    except:
+                        tpr = 'nan'
+                    vis = self.edge[e1][e2][r]['vis']
+                    np.set_printoptions(precision=3)
 
-        nodes = np.array(nx.get_node_attributes(self,'type').items())
-
-        nb_ag = len(np.where(nodes=='ag')[0])
-        nb_ap = len(np.where(nodes=='ap')[0])
-
-        pag=np.where(nodes=='ag')
-        pap=np.where(nodes=='ap')
-
-        s = s +  '\n' + str(nb_ag) + ' Mobile Agents\n -------------\n'
-        s = s + 'Agents IDs : ' + str([nodes[i,0] for i in pag[0]]) +'\n'
-
-
-        s = s +  '\n' + str(nb_ap) + ' Access points\n ------------\n'
-        s = s + 'number of access point  : ' + '\n'
-        s = s + 'access points  IDs : ' + str([nodes[i,0] for i in pap[0]]) +'\n'
-
-        if len(self.SubNet.keys()) != 0:
-            s = s + '\n\nSubNetworks :' +str(self.SubNet.keys()) + '\n===========\n'
-            for sub in self.SubNet.keys():
-                s = s + '\t'+ sub + '\n' +  self.SubNet[sub].__repr__() + '\n'
+                    s = s + '\n' + '{0:5} |{1:5} | {2:5.2f} | {3:7.2f}| {4:7}| {5:7.2f}| {6:7.2f}| {7:7}| {8:10}|'.format(e2 ,r ,TOA ,stdTOA ,tTOA ,pr , stdpr ,tpr, vis)
 
         return s
 
@@ -497,7 +521,6 @@ class Network(nx.MultiDiGraph):
 
         """
         if Rat == None:
-        #    pdb.set_trace()
             for Rat in self.RAT:            
                 # creating all SubNetworks 
                 self.SubNet[Rat]= self.subgraph(self.RAT[Rat])
@@ -542,15 +565,6 @@ class Network(nx.MultiDiGraph):
 
         """
 
-#        for Sn in self.SubNet.iteritems():
-#            print Sn
-#            for n in Sn[1].nodes():
-#                print Sn
-#                pdb.set_trace()
-#                try:
-#                    [Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0]) for nn in Sn[1].nodes() if nn != n]
-#                except:
-#                    [Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=time.time()),type=Sn[1].node[nn]['type']) for nn in Sn[1].nodes() if nn != n] 
 
         for Sn in self.SubNet.iteritems():
             for n in Sn[1].nodes():
@@ -561,16 +575,11 @@ class Network(nx.MultiDiGraph):
                                 Sn[1].node[n]['PN'].node[nn]['RAT'].append(Sn[0])
                         except:
                             Sn[1].node[n]['PN'].add_node(nn,attr_dict=dict(RAT=[Sn[0]],pe=np.array(()),te=0.),type=Sn[1].node[nn]['type'])
-#                pdb.set_trace()
-
-                ### init edge of PN
+#             
 
                 Z= Sn[1].edges(n,keys=True,data=True)
                 Sn[1].node[n]['PN'].add_edges_from(Z)
-#                if Sn[1].node[n]['PN'].edge[n] == {}:
-#                    Z1=self.swap_lt(Z,n)
-#                    Sn[1].node[n]['PN'].add_edges_from(Z1)
-#                print n,Sn[1].node[n]['PN'].edge[n]
+
 
     def create(self):
         """ create the network
