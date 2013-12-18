@@ -1458,10 +1458,13 @@ def affine(X,Y):
 
     Notes
     -----
+
     Given X and Y find the affine transformation 
 
     Y = A X + B 
+
     """
+
     B = Y[:,0][:,np.newaxis]
     Yc = Y-B
     pX = la.pinv(X)

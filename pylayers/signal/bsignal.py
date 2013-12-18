@@ -37,10 +37,16 @@ class Bsignal(object):
 
     def __init__(self, x=np.array([]), y=np.array([])):
         """
+
         Parameters
         ----------
-        x : ndarray
+
+        x : ndarray (,Nx)
+            time or frequency axis 
+
         y : ndarray
+            values  (Nx,Ny)
+            
 
         """
         self.x = x
@@ -573,11 +579,13 @@ class Usignal(Bsignal):
 
         Parameters
         ----------
+
         posmin  : float
         posmax  : float
 
         Returns
         -------
+
         Usignal
 
         """
@@ -838,7 +846,7 @@ class Usignal(Bsignal):
         else:
             u = np.nonzero(self.x <= xmax)
             self.x = self.x[u[0]]
-            self.y = self.y[u[0]]
+             self.y = self.y[u[0]]
 
 
 class TBsignal(Bsignal):
@@ -3020,6 +3028,7 @@ class FUsignal(FBsignal, Usignal):
 
     def align(self, u2):
         """ align 2 FUsignal
+
         align <=> intersection
         align : align two FUsignal on a same base
             return a list which contains the two aligned signals
