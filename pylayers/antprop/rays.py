@@ -386,9 +386,9 @@ class Rays(dict):
 
                     # #### Check if it exist same parameter value  in horizontal plane
                     # #### and vertical plane. Move parameter is so.
-                    # da1es = np.diff(a1es,axis=0)
-                    # pda1es = np.where(da1es<1e-10)
-                    # a1es[pda1es]=a1es[pda1es]-1e-3
+                    da1es = np.diff(a1es,axis=0)
+                    pda1es = np.where(da1es<1e-10)
+                    a1es[pda1es]=a1es[pda1es]-1e-3
                     
 
                     # prepare an extended sequence of points ( ndim x  (Nint+k+2) x Nrayk )
