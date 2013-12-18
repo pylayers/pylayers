@@ -51,7 +51,7 @@ class Agent(object):
                 enable/disable localization process of the agent
            'loc_updt': float
                 update time interval for localization process
-           'Layout': pylayers.gis.Layout()
+           'L': pylayers.gis.Layout()
            'net':pylayers.network.Network(),
            'RAT': list of string
                 list of used radio access techology of the agent
@@ -85,7 +85,7 @@ class Agent(object):
                     'loc': False,
                     'loc_updt': 0.5,
                     'loc_method': ['geo'],
-                    'Layout': Layout(),
+                    'L': Layout(),
                     'net': Network(),
                     'RAT': ['rat1'],
                     'world': world(),
@@ -124,7 +124,7 @@ class Agent(object):
             # mechanical init
             self.meca = Person(ID=self.ID,
                                 roomId=args['roomId'],
-                                L=args['Layout'],
+                                L=args['L'],
                                 net=self.net,
                                 interval=args['meca_updt'],
                                 wld=args['world'],
@@ -137,8 +137,6 @@ class Agent(object):
             self.meca.behaviors = [Seek(), Containment(),\
                                    Separation(), InterpenetrationConstraint()]
             self.meca.steering_mind = queue_steering_mind
-#            self.meca.steering_mind = queue_steering_mind
-        # filll in network
 
             ## Network init
             self.node = Node(ID=self.ID, p=conv_vecarr(self.meca.position),
@@ -153,7 +151,7 @@ class Agent(object):
 
             if args['comm_mode'] == 'synchro':
                 ## The TOA requests are made every refreshTOA time ( can be modified in agent.ini)
-
+                ## This Mode will be deprecated in future version
                 self.rxr = RX(net=self.net, ID=self.ID,
                               dcond=self.dcond, gcom=self.gcom, sim=self.sim)
                 self.rxt = RX(net=self.net, ID=self.ID,
@@ -189,12 +187,12 @@ class Agent(object):
                                  t=self.sim.now(), RAT=args['RAT'],
                                  epwr=args['epwr'], sens=args['sens'], type=self.type)
             else:
-                pp = np.array(args['Layout'].Gr.pos[self.args['roomId']])
+                pp = np.array(args['L'].Gr.pos[self.args['roomId']])
                 self.node = Node(ID=self.ID, p=pp, t=self.sim.now(), RAT=args['RAT'],
                                  epwr=args['epwr'], sens=args['sens'], type=self.type)
             self.net.add_nodes_from(self.node.nodes(data=True))
             self.sim = args['sim']
-#            self.sim.activate(self.meca, self.meca.move(),0.0)
+
             self.PN = self.net.node[self.ID]['PN']
             self.PN.node[self.ID]['pe'] = self.net.node[self.ID]['p']
             if args['comm_mode'] == 'autonomous':
@@ -230,14 +228,21 @@ class Agent(object):
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
-      s = 'General info \n*************\n'
+      s = 'General Agent info \n********************\n'
       s = s + 'name : ' + self.name + '\n'
       s = s + 'ID: '  + self.ID + '\n'
-      s = s + 'type: '  + self.type + '\n\n'
+      s = s + 'type: '  + self.type 
+
+      s = s + '\n\n More Agent information about:'
+      s = s + '\n+ Mecanichal => self.meca'
+      s = s + '\n+ Network => self.net'
+      s = s + '\n+ Personnal Network => self.PN'
+      s = s + '\n+ Localization => self.loc\n\n'
       
 
-      s = s+ self.net.__repr__() + '\n'
-      s = s+ self.meca.__repr__() + '\n'
+      s = s+ self.PN.__repr__() + '\n\n'
+      s = s+ self.meca.__repr__() + '\n\n'
+      s = s+ self.loc.__repr__() + '\n\n'
 
       
       return s
