@@ -100,6 +100,35 @@ class Simul(SimulationRT): # Sympy 2
 
         self.create()
 
+    def __repr__(self):
+
+        s = 'Simulation information' + '\n----------------------'
+        s = s + '\nLayout: ' + self.lay_opt['filename'] 
+        s = s + '\nSimulation duration: ' + self.sim_opt['duration'] 
+        s = s + '\nRandom seed: ' + self.sim_opt['seed']
+        s = s + '\nSave simulation: ' + self.save_opt['savep']
+
+        s = s + '\n\nUpdate times' + '\n-------------' 
+        s = s + '\nMechanical update: ' + self.meca_opt['mecanic_update_time'] 
+        s = s + '\nNetwork update: ' + self.net_opt['network_update_time'] 
+        s = s + '\nLocalization update: ' + self.net_opt['communication_mode'] 
+
+        s = s + '\n\nAgents' + '\n------' 
+        s = s + '\nNumber of agents :' + str(len(self.lAg))
+        s = s + '\nAgents IDs: ' + str([self.lAg[i].ID for i in range(len(self.lAg))])
+        s = s + '\nDestination of agents choosed: ' + self.meca_opt['choose_destination']
+
+        s = s + '\n\nNetwork' + '\n-------' 
+        s = s + '\nNodes per RATs: ' + str(self.net.RAT)
+
+        s = s + '\n\nLocalization' + '\n------------' 
+        s = s + '\nLocalization enable: ' + self.loc_opt['localization'] 
+        s = s + '\nPostion estimation methods: ' + self.loc_opt['method'] 
+
+        
+        return s
+
+
     def create_layout(self):
         """
         Create Layout in Simpy the_world thanks to Tk backend

@@ -76,7 +76,7 @@ class TOA(Constraint):
     pylayers.location.geometric.constraints.Constraint
 
     """
-    def __init__(self, id='0', value=30, std=np.array((1.0)), vcw=3, p=np.array([]), origin={}):
+    def __init__(self, id='0', value=np.array(([30])), std=np.array((1.0)), vcw=3, p=np.array([]), origin={}):
         Constraint.__init__(self, type='TOA', id=id, p=p, origin=origin)
         self.vcw = vcw
         self.value = value
