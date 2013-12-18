@@ -78,7 +78,7 @@ class TDOA(Constraint):
 
 
     """
-    def __init__(self, id='0', value=45, std=np.array((4.0)), vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]]), origin={}):
+    def __init__(self, id='0', value=np.array(([45])), std=np.array((4.0)), vcw=3, p=np.array([[0, 0, 0], [10, 10, 10]]), origin={}):
         Constraint.__init__(self, type='TDOA', id=id, p=p, origin=origin)
         self.tdoa_axes(p)
         self.f = self.nv / 2
