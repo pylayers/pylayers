@@ -72,6 +72,14 @@ class Simul(SimulationRT): # Sympy 2
     save_opt : dictionary of  configuration option for save
     sql_opt : dictionary of  configuration option for sql
 
+
+    Parameters
+    ----------
+    self.lAg  : list of Agent(Object)
+        list of agents involved in simulation
+    self.L : Layout
+        Layout used in simulation   
+
     Notes
     ------
      All the prvious dictionnary are obtained from the chosen simulnet.ini file
@@ -113,7 +121,7 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\nNetwork update: ' + self.net_opt['network_update_time'] 
         s = s + '\nLocalization update: ' + self.net_opt['communication_mode'] 
 
-        s = s + '\n\nAgents' + '\n------' 
+        s = s + '\n\nAgents => self.lAg[i]' + '\n------' 
         s = s + '\nNumber of agents :' + str(len(self.lAg))
         s = s + '\nAgents IDs: ' + str([self.lAg[i].ID for i in range(len(self.lAg))])
         s = s + '\nDestination of agents choosed: ' + self.meca_opt['choose_destination']
@@ -121,7 +129,7 @@ class Simul(SimulationRT): # Sympy 2
         s = s + '\n\nNetwork' + '\n-------' 
         s = s + '\nNodes per RATs: ' + str(self.net.RAT)
 
-        s = s + '\n\nLocalization' + '\n------------' 
+        s = s + '\n\nLocalization'  + '------------' 
         s = s + '\nLocalization enable: ' + self.loc_opt['localization'] 
         s = s + '\nPostion estimation methods: ' + self.loc_opt['method'] 
 
@@ -139,20 +147,9 @@ class Simul(SimulationRT): # Sympy 2
                                height = float(self.lay_opt['the_world_height']),
                                scale=float(self.lay_opt['the_world_scale']))
 
-        # tk = self.the_world.tk
-        # canvas, x_, y_ = tk.canvas, tk.x_, tk.y_
-        # canvas.create_rectangle(x_(-1), y_(-1), x_(100), y_(100), fill='white')
-
         _filename = self.lay_opt['filename']
-        #sl=Slab.SlabDB(self.lay_opt['slab'],self.lay_opt['slabmat'])
-        #G1   = Graph.Graph(sl=sl,filename=_filename)
         self.L = Layout(_filename)
-        #if _filename.split('.')[1] == 'str':
-        #    self.L.loadstr(_filename)
-        #elif _filename.split('.')[1] == 'str2':
-        #    self.L.loadstr2(_filename)
-        #elif _filename.split('.')[1] == 'ini':
-        #    self.L.loadini(_filename)
+
 
 
         try:
@@ -183,10 +180,6 @@ class Simul(SimulationRT): # Sympy 2
         walls = self.L.thwall(0, 0)
         for wall in walls:
             points = []
-            # for point in wall:
-            #          points.append(x_(point[0]))
-            #          points.append(y_(point[1]))
-            #      canvas.create_polygon(points, fill='maroon', outline='black')
             for ii in range(0, len(wall) - 1):
                 self.the_world.add_wall(wall[ii], wall[ii + 1])
 
@@ -219,7 +212,7 @@ class Simul(SimulationRT): # Sympy 2
                             loc=str2bool(self.loc_opt['localization']),
                             loc_updt=float(self.loc_opt['localization_update_time']),
                             loc_method=eval(self.loc_opt['method']),
-                            Layout=self.L,
+                            L=self.L,
                             net=self.net,
                             epwr=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['epwr']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
                             sens=dict([(eval((ag_opt['rat']))[ep],eval((ag_opt['sensitivity']))[ep]) for ep in range(len(eval((ag_opt['rat']))))]),
@@ -315,13 +308,6 @@ class Simul(SimulationRT): # Sympy 2
         if str2bool(self.save_opt['savep']):
             self.save=Save(L=self.L,net=self.net,sim=self)
             self.activate(self.save,self.save.run(),0.0)
-#        if str2bool(self.save_opt['savep']):
-#            self.save=Save(net=self.net,
-#                    L= self.L,
-#                    sim = self)
-#            self.activate(self.save, self.save.run(), 0.0)
-
-
 
     def create_show(self):
         """ 
@@ -348,6 +334,7 @@ class Simul(SimulationRT): # Sympy 2
         """ Run simulation
         """
 
+        seed(eval(self.sim_opt['seed']))
         self.simulate(until=float(self.sim_opt['duration']),
                       real_time=True,
                       rel_speed=float(self.sim_opt['speedratio']))
@@ -360,6 +347,5 @@ class Simul(SimulationRT): # Sympy 2
 if __name__ == '__main__':
 
     S = Simul()
-    #seed(eval(S.sim_opt['seed']))
     S.runsimul()
 
