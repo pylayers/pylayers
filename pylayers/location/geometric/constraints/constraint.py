@@ -139,6 +139,18 @@ class Constraint(object):
         self.parmsh['grid'] = True       # display grid
         self.parmsh['grav'] = True       # display box gravity center
 
+    def __repr__(self):
+
+        np.set_printoptions(precision=3)
+        s = '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+        if self.type != 'TDOA':
+            s = s + '\n' + '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+        else:
+            s = s + '\n' + '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format(self.type, self.p[0], self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+            s = s + '\n' + '       '+str(self.p[1])
+         
+        return s
+
     def updc(self,name='p',value=np.array(())):
         """ update values of a constraint
 
@@ -161,6 +173,9 @@ class Constraint(object):
         False
 
         """
+        if not isinstance(value,np.ndarray):
+            value = np.array([value])
+
         if np.sum(np.isnan(value))<1 and value.size>0:
             setattr(self,name,value)
 
@@ -188,7 +203,7 @@ class Constraint(object):
                 self.usable = False
 
 
-    def info(self):
+    def info_old(self):
         """ display info on constraint
         """
         print "Type         : ", self.type
@@ -216,14 +231,18 @@ class Constraint(object):
         self.lbox.info()
         print "-------------------"
 
-    def info2(self):
+    # def info(self):
 
 
-        print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+    #     print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+    #     np.set_printoptions(precision=3)
+    #     print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+    def info(self):
+
+
+        print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
         np.set_printoptions(precision=3)
-        print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
-
-
+        print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
 
     def show3(self):
         """ display constraint on Geomview
