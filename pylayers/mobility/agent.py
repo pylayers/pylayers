@@ -73,11 +73,11 @@ class Agent(object):
                 'autonomous': all TOAs are refreshed regulary
                 'synchro' : only visilbe TOAs are refreshed
         """
-        defaults = {'ID': 0,
+        defaults = {'ID': '0',
                     'name': 'johndoe',
                     'type': 'ag',
                     'pos': np.array([]),
-                    'roomId': 0,
+                    'roomId': -1,
                     'froom':[],
                     'wait':[],
                     'cdest':'random',
@@ -119,6 +119,13 @@ class Agent(object):
             self.dcond = args['dcond']
         except:
             pass
+
+
+        # check if node id already given
+        
+        if self.ID in self.net.nodes():
+            raise NameError('another agent has the ID: ' + self.ID + ' .Please use an other ID' )
+
 
         if self.type == 'ag':
             # mechanical init
@@ -225,8 +232,8 @@ class Agent(object):
                                       loc_updt_time=args['loc_updt'],
                                       tx=self.tx,
                                       sim=args['sim'])
-        if args['loc'] :
-            self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+            if args['loc'] :
+                self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
       s = 'General Agent info \n********************\n'
