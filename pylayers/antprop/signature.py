@@ -202,8 +202,10 @@ class Signatures(dict):
 
     def __init__(self,L,source,target,cutoff=3):
         """
+
         Parameters
         ----------
+
         L : Layout
         source : int 
             cycle number 
@@ -249,7 +251,7 @@ class Signatures(dict):
         return(nsig)
 
     def num(self):
-        """ calculates the number of signatures
+        """ determine the number of signatures
         """
         self.nsig = 0
         self.nint = 0
