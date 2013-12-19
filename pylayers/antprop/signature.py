@@ -111,16 +111,6 @@ def edgeout(L,g):
 
     L : Layout
     g : Digraph Gi
-
-    Notes
-    -----
-
-    This function aims at filtering out uncorrect signatures
-
-    for interactions in nodes of Gi 
-        i0 = start interaction
-        i1 = end interaction 
-
     """
 
     for e in g.edges():
@@ -131,6 +121,7 @@ def edgeout(L,g):
             nstr0 = i0[0]
         except:
             nstr0 = i0
+
 
         try:
             nstr1 = i1[0]
@@ -148,7 +139,7 @@ def edgeout(L,g):
         # nstr1 : segment number of final interaction
         if nstr1>0:
             # segment unitary vector
-
+            
             l1 = L.seguv(np.array([nstr1]))
             p0 = np.array(L.Gs.pos[nstr0])
             p1 = np.array(L.Gs.pos[nstr1])
@@ -158,6 +149,7 @@ def edgeout(L,g):
             v10n = -v01n
             # next interaction
             for i2 in nx.neighbors(g,str(i1)):
+
                 i2 = eval(i2)
                 if type(i2)==int:
                     nstr2 = i2
@@ -171,9 +163,11 @@ def edgeout(L,g):
                 d1 = np.dot(v01n,l1)
                 d2 = np.dot(l1,v12n)
 
-#                if nstr0==32 and nstr1 == 42  and nstr2 ==50:
-#                    pdb.set_trace()
-                if d1*d2>=0 and typ == 1:
+                # if nstr0==58 and nstr1 == 1 and nstr2 == 58:
+                #     pdb.set_trace()
+
+                # if (reflexion is forward) or (reflexion return to its origin)
+                if (d1*d2>=0) or (nstr0 == nstr2) and typ == 1:
                     output.append(str(i2))
 #                elif d1*d2>=-0.2 and typ ==2:
                 elif typ == 2 :
@@ -376,6 +370,67 @@ class Signatures(dict):
                 visited.pop()
 
 
+    # def propaths(self,G, source, target, cutoff=1):
+    #     """ seek all simple_path from source to target
+
+    #     Parameters
+    #     ----------
+
+    #     G : networkx Graph Gi
+    #     source : tuple 
+    #         interaction (node of Gi) 
+    #     target : tuple 
+    #         interaction (node of Gi) 
+    #     cutoff : int
+
+    #     Notes
+    #     -----
+
+    #     adapted from all_simple_path of networkx 
+
+    #     1- Determine all nodes connected to Gi 
+
+    #     """
+    #     #print "source :",source
+    #     #print "target :",target
+
+    #     if cutoff < 1:
+    #         return
+
+    #     visited = [source]
+    #     # stack is a list of iterators
+
+
+    #     stack = [iter(G[source])]
+    #     # while the list of iterators is not void
+
+
+    #     while stack: #
+    #         # children is the last iterator of stack
+
+    #         children = stack[-1]
+    #         # next child
+    #         child = next(children, None)
+    #         #print "child : ",child
+    #         #print "visited :",visited
+    #         if child is None  : # if no more child
+    #             stack.pop()   # remove last iterator
+    #             visited.pop() # remove from visited list
+    #         elif len(visited) < cutoff: # if visited list length is less than cutoff 
+    #             if child == target:  # if child is the target point
+    #                 #print visited + [target]
+    #                 yield visited + [target] # output signature
+    #             elif child not in visited: # else visit other node
+    #                 stack.append(iter(G[visited[-1]][child]['output']))
+    #                 visited.append(child)
+
+    #         else: #len(visited) == cutoff (visited list is too long)
+    #             if child == target or target in children:
+    #                 #print visited + [target]
+    #                 yield visited + [target]
+    #             stack.pop()
+    #             visited.pop()
+
     def propaths(self,G, source, target, cutoff=1):
         """ seek all simple_path from source to target
 
@@ -408,35 +463,59 @@ class Signatures(dict):
 
 
         stack = [iter(G[source])]
+
+        # list of airwall position in visited
+        nbaw = []
+        # number of useful segments
+
+
         # while the list of iterators is not void
-
-
         while stack: #
             # children is the last iterator of stack
 
             children = stack[-1]
             # next child
             child = next(children, None)
-            #print "child : ",child
-            #print "visited :",visited
+
+            # update number of useful segments
+            # if there is airwall in visited
+            # 
+            
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-            elif len(visited) < cutoff: # if visited list length is less than cutoff 
+                try:
+                    nbaw.pop()
+                except:
+                    pass
+
+
+            elif len(visited) < (cutoff + sum(nbaw)): # if visited list length is less than cutoff 
+
+                # if '37' in child :
+                #     pdb.set_trace()
+            
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
                     stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
-
+                    # check if child (current segmnent) is a airwall
+                    if self.L.di[child][0] in self.L.name['AIR']:
+                        nbaw.append(1)
+                    else:
+                        nbaw.append(0)
+                    # number of usefull segment (segment != airwalls)
+                    
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
                     #print visited + [target]
                     yield visited + [target]
+
                 stack.pop()
                 visited.pop()
-
+                nbaw.pop()
 
     def calsig(self,G,dia={},cutoff=None):
         """
@@ -502,16 +581,6 @@ class Signatures(dict):
         return d
 
     def run(self,cutoff=1,dcut=2):
-        """ run calculation of signature
-
-        Parameters
-        ----------
-
-        cutoff : int 
-            1
-        dcut : int 
-            2
-        """
 
         lcil=self.L.cycleinline(self.source,self.target)
 
@@ -627,7 +696,6 @@ class Signatures(dict):
 
         Gi = nx.subgraph(self.L.Gi,li)
         Gi.pos = dpos
-
 #        for meta in metasig:
 #        Gi = nx.DiGraph()
 #        for cycle in metasig:
@@ -1291,13 +1359,6 @@ class Signatures(dict):
 
 
     def meta(self):
-        """ determine meta signatures
-
-        Notes 
-        -----
-
-
-        """
         G = self.L.Gt
         # metasig = list(nx.all_simple_paths(self.L.Gt,source=self.source,target=self.target,cutoff=cutoff))
         #for cutoff in range(1,5):
@@ -1568,6 +1629,8 @@ class Signatures(dict):
                         rays[nint]['pt'][0:2, :, 0] = Yi[:, 1:-1]
                         rays[nint]['sig'][:, :, 0] = sig
 
+        rays.nb_origin_sig = len(self)
+
         return rays
 
 class Signature(object):
@@ -1634,7 +1697,7 @@ class Signature(object):
         pb  head of segment  (2xN)  
         pc  the center of segment (2xN) 
 
-        norm normal to the sefment if segment 
+        norm normal to the segment if segment 
         in case the interaction is a point the normal is undefined and then
         set to 0. 
 
@@ -1729,17 +1792,12 @@ class Signature(object):
     def image(self, tx):
         """
         Compute the images of tx with respect to the signature segments
-
         Parameters
         ----------
-
-        tx : numpy.ndarray
-
+            tx : numpy.ndarray
         Returns
         -------
-
-        M : numpy.ndarray
-
+            M : numpy.ndarray
         """
 
         pa = self.pa

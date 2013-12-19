@@ -268,7 +268,8 @@ def mulcplot(x,y,**kwargs):
 
     return(fig,ax)                  
 
-def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
+
+def displot(pt, ph, arrow=False, **kwargs ):
     """ discontinuous plot
 
     Parameters
@@ -278,8 +279,8 @@ def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
         tail points array (2 x (2*Nseg))
     ph :
         head points array (2 x (2*Nseg))
-    col : string 
-        color name
+    arrow : bool
+        display arrow on segments (square = tail, triangle = head)
 
     Returns
     -------
@@ -303,9 +304,25 @@ def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
-    if fig == None:
+    defaults = {   'fig': [],
+                    'ax': [],
+                    
+                }
+
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+
+    args ={}
+    for k in kwargs:
+        if k not in defaults.keys():
+            args[k]=kwargs[k]
+
+    if kwargs['fig']==[]:
         fig = plt.gcf()
-        ax  = fig.gca()
+        if kwargs['ax']==[]:
+            ax  = fig.gca()
+
     Nseg = np.shape(pt)[1]
     pz = np.empty((2,))
     pn = np.zeros((2,))
@@ -317,8 +334,13 @@ def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
     mask = np.kron(np.ones((2, Nseg)), m1)
     pzz = pz[1:, :].T
     vertices = np.ma.masked_array(pzz, mask)
-    ax.plot(vertices[0, :], vertices[1, :], color=color,linewidth=linewidth)
+    ax.plot(vertices[0, :], vertices[1, :],**args)
+    if arrow:
+        ax.scatter(pt[0,:],pt[1,:],marker='s',color='k')
+        ax.scatter(ph[0,:],ph[1,:],marker='^',color='k')
+
     return fig, ax
+
 
 def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
     """ polar 3D  surface plot

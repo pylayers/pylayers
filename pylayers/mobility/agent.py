@@ -73,11 +73,11 @@ class Agent(object):
                 'autonomous': all TOAs are refreshed regulary
                 'synchro' : only visilbe TOAs are refreshed
         """
-        defaults = {'ID': 0,
+        defaults = {'ID': '0',
                     'name': 'johndoe',
                     'type': 'ag',
                     'pos': np.array([]),
-                    'roomId': 0,
+                    'roomId': -1,
                     'froom':[],
                     'wait':[],
                     'cdest':'random',
@@ -119,6 +119,13 @@ class Agent(object):
             self.dcond = args['dcond']
         except:
             pass
+
+
+        # check if node id already given
+        
+        if self.ID in self.net.nodes():
+            raise NameError('another agent has the ID: ' + self.ID + ' .Please use an other ID' )
+
 
         if self.type == 'ag':
             # mechanical init
@@ -217,7 +224,7 @@ class Agent(object):
 
         if 'txt' in args['save']:
             pyu.writenode(self)
-        if args['loc'] and self.type != 'ap':
+        if  self.type != 'ap':
 
             self.loc = Localization(net=self.net, ID=self.ID,
                                     method=args['loc_method'])
@@ -225,7 +232,8 @@ class Agent(object):
                                       loc_updt_time=args['loc_updt'],
                                       tx=self.tx,
                                       sim=args['sim'])
-            self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
+            if args['loc'] :
+                self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
       s = 'General Agent info \n********************\n'
@@ -241,8 +249,9 @@ class Agent(object):
       
 
       s = s+ self.PN.__repr__() + '\n\n'
-      s = s+ self.meca.__repr__() + '\n\n'
-      s = s+ self.loc.__repr__() + '\n\n'
+      if self.type != 'ap':
+        s = s+ self.meca.__repr__() + '\n\n'
+        s = s+ self.loc.__repr__() + '\n\n'
 
       
       return s
