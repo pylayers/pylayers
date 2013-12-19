@@ -217,7 +217,7 @@ class Agent(object):
 
         if 'txt' in args['save']:
             pyu.writenode(self)
-        if args['loc'] and self.type != 'ap':
+        if  self.type != 'ap':
 
             self.loc = Localization(net=self.net, ID=self.ID,
                                     method=args['loc_method'])
@@ -225,6 +225,7 @@ class Agent(object):
                                       loc_updt_time=args['loc_updt'],
                                       tx=self.tx,
                                       sim=args['sim'])
+        if args['loc'] :
             self.sim.activate(self.Ploc, self.Ploc.run(), 1.5)
 
     def __repr__(self):
@@ -241,8 +242,9 @@ class Agent(object):
       
 
       s = s+ self.PN.__repr__() + '\n\n'
-      s = s+ self.meca.__repr__() + '\n\n'
-      s = s+ self.loc.__repr__() + '\n\n'
+      if self.type != 'ap':
+        s = s+ self.meca.__repr__() + '\n\n'
+        s = s+ self.loc.__repr__() + '\n\n'
 
       
       return s
