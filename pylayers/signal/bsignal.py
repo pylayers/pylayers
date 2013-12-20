@@ -883,7 +883,7 @@ class Usignal(Bsignal):
         else:
             u = np.nonzero(self.x <= xmax)
             self.x = self.x[u[0]]
-             self.y = self.y[u[0]]
+            self.y = self.y[u[0]]
 
 
 class TBsignal(Bsignal):
