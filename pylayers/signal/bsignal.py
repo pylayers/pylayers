@@ -1,5 +1,18 @@
 #!/usr/bin/python
 #-*- coding:Utf-8 -*-
+"""
+Module Bsignal 
+
+Summary
+=======
+
+Bsignal
+Usignal
+TUsignal
+FUsignal
+FHsignal
+
+"""
 import doctest
 import os
 import pdb
@@ -31,7 +44,7 @@ class Bsignal(object):
 
     The first axis of x and y have the same length
 
-    By construction len(y):=len(x), len(x) has priority in case of conflict
+    By construction len(y):=len(x), len(x) takes priority in case of observed conflict
 
     """
 
@@ -44,6 +57,7 @@ class Bsignal(object):
         x : ndarray (,Nx)
             time or frequency axis 
 
+        x : ndarray
         y : ndarray
             values  (Nx,Ny)
             
@@ -106,6 +120,7 @@ class Bsignal(object):
 
         Parameters
         ----------
+
         filename : string
 
         """
@@ -119,10 +134,12 @@ class Bsignal(object):
         Parameters
         ----------
 
+        x : np.array
+
         Notes
         -----
 
-        y is set to the corresponding zero vector
+        y is set to a zero vector
 
         Use __set__ instead 
 
@@ -138,6 +155,7 @@ class Bsignal(object):
 
         Parameters
         ----------
+
         function 
 
         """
@@ -149,10 +167,9 @@ class Bsignal(object):
         Parameters
         ----------
 
-        color : string 
+        color : string
             default 'b-'
 
-            
 
         """
         ndim = self.y.ndim
@@ -180,35 +197,54 @@ class Bsignal(object):
                 plt.plot(self.x, self.y[k], color, linestyle='steps')
         else:
             plt.plot(self.x, self.y, color, linestyle='steps')
-    
-    def imshow(self,interpolation=None,cmap=plt.cm.BrBG,aspect='auto',dB=False):
+
+    def imshow(self,**kwargs):
         """ imshow of y matrix
         """
+
+        defaults = {'interpolation':None,
+                    'cmap':plt.cm.BrBg,
+                    'aspect':auto,
+                    'dB':False}
+
+        for k in defaults.keys():
+            if not kwargs.has_key(k):
+                kwargs[k]=defaults[k]
+
+        if not kwargs.has_key('fig'):
+            fig = plt.figure()
+        if not kwargs.has_key('arg'):
+            ax = fig.ad_subplot(111)
+
         if self.y.ndim>1:
-            if not dB:
+            if not kwargs['dB']:
                 vmin = abs(self.y.min())
                 vmax = abs(self.y.max())
                 vm   = max(vmin,vmax)
                 vmin = -vm
                 vmax = +vm
                 val  = self.y
-                cmap = plt.cm.BrBG
+                cmap = kwargs['cmap']
             else:
                 vmin = -100
                 vmax = 10*np.log10(abs(self.y.max()))
                 val  = 10*np.log10(abs(self.y)+1e-10)
-                cmap = plt.cm.hot
-            plt.imshow(val,
+                cmap = kwargs['cmap']
+
+            ax.imshow(val,
                        origin = 'lower',
                        vmin = vmin,
                        vmax = vmax,
-                       aspect = aspect,
+                       aspect = kwargs['aspect'],
                        extent = (self.x[0],self.x[-1],0,self.y.shape[0]),
                        interpolation=interpolation,
                       # cmap=plt.cm.PiYG)
                        cmap=cmap)
-            plt.colorbar()
+            c = ax.colorbar()
             plt.axis('auto')
+            plt.tight_layout()
+
+            return fig,ax
 
     def plot(self, **kwargs):
         """ plot signal
@@ -258,7 +294,8 @@ class Bsignal(object):
 
         for key, value in defaults.items():
             if key not in kwargs:
-                kwargs[key] = value
+                 kwargs[key] = value
+
 
 #       fig = kwargs['fig']
 #       ax  = kwargs['ax']
