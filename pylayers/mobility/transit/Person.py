@@ -102,7 +102,7 @@ class Person(Process):
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),
+    def __init__(self, ID = 0, interval=0.05,roomId=-1, L=[], net=Network(),
         wld = world(),sim=None,moving=True,froom=[],wait=1.0,cdest='random',save=[]):
         """ Class Person
             inherits of Simpy.SimulationRT
@@ -122,7 +122,13 @@ class Person(Process):
         self.manager_args = []
         self.waypoints = []
         self.moving=moving
-        self.roomId    = roomId
+        if roomId < 0:
+            try :
+                self.roomId   = sample(self.L.Gr.nodes(),1)[0]
+            except: 
+                raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
+        else:
+            self.roomId    = roomId
         self.forbidroomId = froom 
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':

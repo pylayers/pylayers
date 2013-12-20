@@ -124,13 +124,14 @@ class Rays(dict):
 
                 nray=np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
                 s = 'number of 2D rays : '+ str(nray) + '\n'
+                s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
+                s = s + 'ratio ray/sig : '+ str( len(self)/(1.*self.nb_origin_sig) ) 
 
-                s = s + 'from pTx : '+ str(self.pTx) + '\n to pRx ' + str(self.pRx)+'\n'
+                s = s + '\nfrom pTx : '+ str(self.pTx) + '\n to pRx ' + str(self.pRx)+'\n'
                 
                 for k in self:
                     size[k] = np.shape(self[k]['sig'])[2]
                     s = s + str(size[k]) + 'rays with' + str(k) + ' interactions'                     
-
         except:
             return(s)
 
