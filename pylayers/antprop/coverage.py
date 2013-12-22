@@ -5,6 +5,7 @@ from pylayers.gis.layout import Layout
 from pylayers.antprop.multiwall import *
 from pylayers.network.model import *
 
+import matplotlib.cm  as cm
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -314,6 +315,7 @@ class Coverage(object):
             >>> C.showPower()
 
         """
+
         if not kwargs.has_key('alphacy'):
             kwargs['alphacy']=0.0
         if not kwargs.has_key('colorcy'):
@@ -344,8 +346,13 @@ class Coverage(object):
         'green':  ((0., 0.5, 0.5), (1., 1., 1.)),
         'blue' :  ((0., 0.5, 0.5), (1., 1., 1.))
         }
-        #generate the colormap with 1024 interpolated values
-        my_cmap = m.colors.LinearSegmentedColormap('my_colormap', cdict, 1024)
+
+        if not kwargs.has_key('cmap'):
+        # generate the colormap with 1024 interpolated values
+            cmap = m.colors.LinearSegmentedColormap('my_colormap', cdict, 1024)
+        else:
+            cmap = kwargs['cmap']
+        #my_cmap = cm.copper
 
 
         if rxsens :
@@ -356,26 +363,26 @@ class Coverage(object):
             # mcPrf = np.ma.masked_where((prdbm > self.rxsens) ,prdbm)
             
             cov1 = ax.imshow(mcPrf.reshape((self.nx,self.ny)).T,
-                             extent=(l,r,b,t),cmap = my_cmap,
+                             extent=(l,r,b,t),cmap = cm.copper,
                              vmin=self.rxsens,origin='lower')
 
             ### values above the sensitivity
             mcPrs = np.ma.masked_where(prdbm < self.rxsens,prdbm)
             cov = ax.imshow(mcPrs.reshape((self.nx,self.ny)).T,
                             extent=(l,r,b,t),
-                            cmap = 'jet',
+                            cmap = cmap,
                             vmin=self.rxsens,origin='lower')
-            title=title + '\n gray : Pr (dBm) < %.2f' % self.rxsens + ' dBm'
+            title=title + '\n black : Pr (dBm) < %.2f' % self.rxsens + ' dBm'
 
         else :
             cov=ax.imshow(prdbm.reshape((self.nx,self.ny)).T,
                           extent=(l,r,b,t),
-                          cmap = 'jet',
+                          cmap = cmap,
                           vmin=self.pndbm,origin='lower')
 
         if nfl:
             ### values under the noise floor 
-            ### we first clip the value below he noise floor
+            ### we first clip the value below the noise floor
             cl = np.nonzero(prdbm<=self.pndbm)
             cPr = prdbm
             cPr[cl] = self.pndbm

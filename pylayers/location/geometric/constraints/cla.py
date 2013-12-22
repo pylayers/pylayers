@@ -159,37 +159,27 @@ class CLA(object):
         else:
             self.parmsh = parmsh
 
-#    def info(self):
-#        """gives info on the CLA
+    def __repr__(self):
+        np.set_printoptions(precision=3)
+        s = '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format('node','peer','type', 'rat', 'p', 'value', 'std', 'runable' , 'usable' )
+        for c in self.c:
+            node = c.origin['id']
+            peer = c.origin['link']
+            rat  = c.origin['rat']
+            if c.type != 'TDOA':
+                s = s + '\n' + '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format(node,peer,c.type,rat, c.p, c.value, c.std, c.runable, c.usable)
+            else:
+                s = s + '\n' + '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format(node,peer,c.type,rat, c.p[0], c.value, c.std, c.runable, c.usable)
+                s = s + '\n' + '                            '+str(c.p[1])
+                # s = s + '\n' + '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format(c.type, c.p[0], c.value, c.std, c.runable, c.usable , c.obsolete , c.evaluated)
+                # s = s + '\n' + '       '+str(c.p[1])
 
-#        .. todo::
-
-#                improve info
-
-#        """
-#        N = len(self.c)
-#        print "CLA : ", N, " constraints"
-#        print "-----------------------"
-#        for k in range(N):
-#            print "Constraint N° ", k
-#            self.c[k].info()
-
-    def info_old(self):
-        """gives info on the CLA
-
-            DEPECRATED
-
-        """
-        N = len(self.c)
-        print "CLA : ", N, " constraints"
-        print "-----------------------"
-        for k in range(N):
-            print "Constraint N° ", k
-            self.c[k].info()
+        s = s + '\n\n' + 'position evaluated by the CLA\n' + str(self.pe)
+        return s
 
     def info(self):
         for c in self.c:
-            c.info2()
+            c.info()
 
 
     def update(self):

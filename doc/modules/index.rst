@@ -9,10 +9,7 @@ User references
 
 .. module:: pylayers
 
-This reference manual details functions, modules, and objects
-included in PyLayers, describing what they are and what they do. 
-
-This documentation is generated automatically from the source code. 
+This references section  generated from the source code details classes and methods of PyLayers. 
 
 
 Geo Related Information 

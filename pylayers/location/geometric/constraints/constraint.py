@@ -135,9 +135,39 @@ class Constraint(object):
         self.parmsh['boxes'] = True       # display constraint box
         self.parmsh['estimated'] = True  # display estimated point
         self.parmsh['estimated_LS'] = False  # display estimated point with LS method
-        self.parmsh['quadric'] = True   # display sphere or hyperbola
+        self.parmsh['quadric'] = True   # display sphere or hyperbola   
         self.parmsh['grid'] = True       # display grid
         self.parmsh['grav'] = True       # display box gravity center
+        if self.origin == {}:
+            if self.type == 'RSS':
+                typ = 'Pr'
+            else :
+                typ =self.type
+            self.origin = {'id':self.id, 'ldp':typ, 'link':'','rat':''}
+
+    def __repr__(self):
+        np.set_printoptions(precision=3)
+        s = '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format('node','peer','type', 'rat', 'p', 'value', 'std', 'runable' , 'usable' )
+        
+        node = self.origin['id']
+        peer = self.origin['link']
+        rat  = self.origin['rat']
+        if self.type != 'TDOA':
+            s = s + '\n' + '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format(node,peer,self.type,rat, self.p, self.value, self.std, self.runable, self.usable)
+        else:
+            s = s + '\n' + '{0:4} | {1:6} |{2:4} | {3:4} | {4:15}| {5:9}| {6:5}| {7:7}| {8:6}|'.format(node,peer,self.type,rat, self.p[0], self.value, self.std, self.runable, self.usable)
+            s = s + '\n' + '                            '+str(self.p[1])
+    
+        return s
+        # np.set_printoptions(precision=3)
+        # s = '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+        # if self.type != 'TDOA':
+        #     s = s + '\n' + '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+        # else:
+        #     s = s + '\n' + '{0:4} | {1:15}| {2:9}| {3:5}| {4:7}| {5:6}| {6:8}| {7:9}'.format(self.type, self.p[0], self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+        #     s = s + '\n' + '       '+str(self.p[1])
+         
+        # return s
 
     def updc(self,name='p',value=np.array(())):
         """ update values of a constraint
@@ -161,6 +191,9 @@ class Constraint(object):
         False
 
         """
+        if not isinstance(value,np.ndarray):
+            value = np.array([value])
+
         if np.sum(np.isnan(value))<1 and value.size>0:
             setattr(self,name,value)
 
@@ -188,7 +221,7 @@ class Constraint(object):
                 self.usable = False
 
 
-    def info(self):
+    def info_old(self):
         """ display info on constraint
         """
         print "Type         : ", self.type
@@ -216,14 +249,18 @@ class Constraint(object):
         self.lbox.info()
         print "-------------------"
 
-    def info2(self):
+    # def info(self):
 
 
-        print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+    #     print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
+    #     np.set_printoptions(precision=3)
+    #     print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
+    def info(self):
+
+
+        print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format('type', 'p', 'value', 'std', 'runable' , 'usable' , 'obsolete' , 'evaluated')
         np.set_printoptions(precision=3)
-        print '{0:3} , {1:10}, {2:10}, {3:7}, {4:1}, {5:1}, {6:1}, {7:1}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
-
-
+        print '{0:4} , {1:15}, {2:5}, {3:5}, {4:7}, {5:6}, {6:8}, {7:9}'.format(self.type, self.p, self.value, self.std, self.runable, self.usable , self.obsolete , self.evaluated)
 
     def show3(self):
         """ display constraint on Geomview

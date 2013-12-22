@@ -217,10 +217,10 @@ class Body(object):
         
         kf 
         kt 
-        vsn : normalized speed vector along motion capture trajectory 
-        wsn :  
-        vtn : normalized speed vector along motion trajectory 
-        wtn 
+        vsn : normalized speed vector along motion capture trajectory (source)
+        wsn : planar vector orthogonal to vsn 
+        vtn : normalized speed vector along motion trajectory (target)  
+        wtn : planar vector orthogonal to wtn  
 
         """
         # tk should be in the trajectory time range
@@ -853,6 +853,7 @@ class Body(object):
 
         1st vector 
         2nd
+
         """
 
         nc = len(self.g.edges())
@@ -1065,10 +1066,10 @@ if __name__ == '__main__':
     bd.settopos(traj,0.3)
     bd.setccs(topos=True)
     bd.setaccs()
-    #bd.show3(wire=True,accs=True,topos=True)
+    bd.show3(wire=True,accs=True,topos=True,pattern=True)
     #bd.show3(wire=False,accs=True,topos=True)
     lt = tr.importsn()
-    bd.movie(traj=lt[0],wire=True,accs=True,pattern=True,filestruc='TA-Office.off')
+    #bd.movie(traj=lt[0],wire=True,accs=True,pattern=True,filestruc='TA-Office.off')
 
 #    nframes = 126
 #    Bc = Body()

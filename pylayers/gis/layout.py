@@ -3202,6 +3202,41 @@ class Layout(object):
 
         return(seglist)
 
+    def seg2pts(self,aseg):
+        """ convert segments array to cooresponding termination points array
+        
+        Parameters
+        ----------
+        
+        aseg : np.array (,Ns) or int for single value:w
+            array of segment number (>0)
+        
+        Returns
+        -------
+        
+        pth : np.array (4 x Ns)
+            pth is a vstacking of tail point (2,Ns) and head point (2,Ns)
+            
+        Examples
+        --------
+        
+        >>> from pylayers.gis.layout import *
+        >>> import numpy as np
+        >>> L = Layout('defstr.ini')
+        >>> aseg = np.array([1,3,6])
+        >>> L.seg2pts(aseg)
+        """
+        
+        if not isinstance(aseg,np.ndarray):
+            aseg = np.array([aseg])
+        assert(len(np.where(aseg<0)[0])==0)
+        utahe = self.tgs[aseg]
+        tahe =  self.tahe[:,utahe]
+        ptail =  self.pt[:,tahe[0,:]]
+        phead = self.pt[:,tahe[1,:]]
+        pth = np.vstack((ptail,phead))
+        return pth
+
     def segpt(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
 
@@ -3239,6 +3274,8 @@ class Layout(object):
             seglist = np.hstack((seglist, ut, uv))
         seglist = np.unique(seglist)
         return(seglist)
+
+
 
     def extrseg(self):
         """ calculate extremum of segments
@@ -3936,7 +3973,6 @@ class Layout(object):
                     ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
                 else:                
                     ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
-
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
@@ -4147,7 +4183,8 @@ class Layout(object):
                             read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
                 self.lbltg.extend(g)
             except:
-                print 'G',g,' not saved'
+                pass
+                #print 'G',g,' not saved'
 
         #
         # fixing bug #136 
@@ -5040,7 +5077,7 @@ class Layout(object):
                     'node_color':'w',
                     'edge_color':'k',
                     'node_size':20,
-                    'font_size':30,
+                    'font_size':15,
                     'nodelist': [],
                     'edgelist': [],
                     'figsize': (5,5),

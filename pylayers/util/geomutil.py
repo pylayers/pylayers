@@ -1437,6 +1437,48 @@ def intersect(a, b, c, d):
     """
     return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
 
+
+def isleft(a,b,c):
+    """ Test point c is at left of the vector a-->b
+
+
+    Parameters
+    ----------
+
+    a : np.array (2xN)
+    b : np.array (2xN)
+    c : np.array (2xN)
+
+
+    Examples
+    --------
+
+    .. plot::
+        :include-source:
+
+        >>>from pylayers.util.plotutil import *
+        >>> import scipy as sp
+        >>> import numpy as np
+        >>> from pylayers.util.geomutil import *
+        >>> from pylayers.util.plotutil import *
+        >>> import matplotlib.pylab as plot
+        >>> N = 20
+        >>> A = sp.rand(2,N)
+        >>> B = sp.rand(2,N)
+        >>> C = np.array(([0.5,0.5])).reshape(2,1)
+        >>> left=isleft(A,B,C)
+        >>> il = np.where(left)[0]
+        >>> inl = np.where(~left)[0]
+        >>> plt.scatter(C[0],C[1],color='b',s=10)
+        >>> displot(A[:,il],B[:,il],arrow=True,color='g')
+        >>> displot(A[:,inl],B[:,inl],arrow=True,color='r')
+
+
+
+    """
+    return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>0
+
+
 def affine(X,Y):
     """ find affine transformation 
     
@@ -1458,10 +1500,13 @@ def affine(X,Y):
 
     Notes
     -----
+
     Given X and Y find the affine transformation 
 
     Y = A X + B 
+
     """
+
     B = Y[:,0][:,np.newaxis]
     Yc = Y-B
     pX = la.pinv(X)

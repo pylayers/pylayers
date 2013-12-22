@@ -1,5 +1,13 @@
- #!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: latin1 -*-
+""" Module Rays 
+
+Summary
+-------
+
+This modules contains Rays class 
+
+"""
 import pdb
 import os
 import copy 
@@ -116,13 +124,14 @@ class Rays(dict):
 
                 nray=np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
                 s = 'number of 2D rays : '+ str(nray) + '\n'
+                s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
+                s = s + 'ratio ray/sig : '+ str( len(self)/(1.*self.nb_origin_sig) ) 
 
-                s = s + 'from pTx : '+ str(self.pTx) + '\n to pRx ' + str(self.pRx)+'\n'
+                s = s + '\nfrom pTx : '+ str(self.pTx) + '\n to pRx ' + str(self.pRx)+'\n'
                 
                 for k in self:
                     size[k] = np.shape(self[k]['sig'])[2]
                     s = s + str(size[k]) + 'rays with' + str(k) + ' interactions'                     
-
         except:
             return(s)
 
@@ -130,7 +139,6 @@ class Rays(dict):
 
     def show(self,L,**kwargs):
         """  plot 2D rays within the simulated environment
-
 
         Parameters
         ----------
@@ -377,7 +385,7 @@ class Rays(dict):
                 Nint = len(d[l])            # number of additional interaction
                 if Nint > 0:                # if new interaction ==> need extension 
                     # a1e : extended horizontal+vertical parameterization
-                    a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*\
+                    a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*
                                           np.ones((1, Nrayk)))) 
                     # get sorted indices
                     ks = np.argsort(a1e, axis=0) 
@@ -386,9 +394,9 @@ class Rays(dict):
 
                     # #### Check if it exist same parameter value  in horizontal plane
                     # #### and vertical plane. Move parameter is so.
-                    # da1es = np.diff(a1es,axis=0)
-                    # pda1es = np.where(da1es<1e-10)
-                    # a1es[pda1es]=a1es[pda1es]-1e-3
+                    da1es = np.diff(a1es,axis=0)
+                    pda1es = np.where(da1es<1e-10)
+                    a1es[pda1es]=a1es[pda1es]-1e-3
                     
 
                     # prepare an extended sequence of points ( ndim x  (Nint+k+2) x Nrayk )
@@ -441,6 +449,7 @@ class Rays(dict):
                     # find the list of the previous and next point around the
                     # new ceil or floor point. The case of successive ceil or
                     # floor reflexion make 
+                    #
                     # Tous les points précédents qui ne sont pas des Ceils ou
                     # des floors et tous les points suivants qui ne sont pas
                     # des points de réflexion ceil ou floor 
@@ -606,16 +615,22 @@ class Rays(dict):
                     r3d[k+Nint]['pt'] = ptees
                     r3d[k+Nint]['sig'] = siges
 
-
+        #
+        # Add Line Of Sight ray information 
+        #   pt =  [tx,rx]
+        #   sig = [0,0]
+        #
         if self.los :
             r3d[0]={}
             r3d[0]['sig']=np.zeros((2,2,1))
             r3d[0]['pt']=np.zeros((3,2,1))
             r3d[0]['pt'][:,0,:]=tx[:,np.newaxis]
             r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
-
+        
+        # lnint : list of number of interactions
         lnint = r3d.keys()
-        #r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint) 
+        # r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint) 
+        # count total number of ray 
         for k in lnint:
             r3d.nray = r3d.nray + np.shape(r3d[k]['sig'])[2]
 
@@ -729,6 +744,12 @@ class Rays(dict):
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
 
+                # 3 : x,y,z
+                # i : interaction index
+                # r : ray index 
+                #
+                # k : group of interactions index 
+                #
                 v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
                 lsi = np.sqrt(np.sum(v*v, axis=0))
                 if (len(np.where(lsi==0.))==0) :

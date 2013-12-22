@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin1 -*-
+# -*- coding: utf8 -*-
 import pdb
 import os
 import pdb
@@ -264,6 +264,11 @@ class Interactions(Inter,dict):
     def eval(self,fGHz=np.array([2.4])):
         ''' evaluate all the interactions
 
+        Parameters
+        ----------
+
+        fGHz : np.array()
+
         Notes
         -----
 
@@ -277,7 +282,7 @@ class Interactions(Inter,dict):
         self.alpha :
             alpha as described into Legendre Thesis
         self.gamma :
-            !! gamma**2 !!! (squared included) as described into J.F Legendre Thesis
+            !! gamma**2 !!! (squared included) as described 
 
         '''
 
@@ -356,19 +361,21 @@ class IntB(Inter):
         Attributes
         ----------
 
-            data : np.array:
-                WARNING np.shape(data) = (ninter x 4)
-                the input matrix 2x2 is rehaped as 1x 4
+        data : np.array:
+            WARNING np.shape(data) = (ninter x 4)
+            the input matrix 2x2 is rehaped as 1x 4
+        idx : list
+            index of the corresponding ray and interaction
 
-
-            idx : list
-                index of the corresponding ray and interaction
-
-        Returns
+        Methods
         -------
 
-        np.array:
-            (nf,ninter 2, 2)
+        eval : evaluation of B interaction 
+
+        Notes 
+        -----
+
+        The interaction object is np.array with shape (nf,ninter 2, 2)
 
     """
     def __init__(self, data=np.array(()), idx=[]): 
@@ -380,6 +387,21 @@ class IntB(Inter):
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluation of B interactions
+
+        Parameters
+        ----------
+
+        fGHz : np.array() 
+            freqeuncy range
+
+
+        Returns
+        -------
+
+        self.data 
+
+        Examples
+        --------
 
         >>> from pylayers.antprop.rays import *
         >>> M = np.eye(2).reshape(4)

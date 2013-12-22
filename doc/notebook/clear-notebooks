@@ -1,11 +1,11 @@
 #!/bin/bash 
 for i in `find . -name "*.ipynb" | grep -v "checkpoints" | sort`;
 do 
-echo $i    
 if [ -f  ${i%%.ipynb}.rst ]
 then 
-    echo "deleting "  ${i%%.ipynb}.rst 
-    rm ${i%%.ipynb}.rst 
+    echo ${i%%.ipynb}.rst    
+    #echo "deleting "  ${i%%.ipynb}.rst 
+    #rm ${i%%.ipynb}.rst 
 fi
 python $PYLAYERS/script/remove_output.py $i > tmp
 if [ $? -eq 0 ]

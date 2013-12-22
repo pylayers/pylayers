@@ -33,8 +33,7 @@ test-code: in
 	$(NOSETESTS) -s pylayers
 test-doc:
 	$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
-	--doctest-extension=inc --doctest-fixtures=_fixture doc/ doc/modules/ \
-	doc/tutorial
+	--doctest-extension=inc --doctest-fixtures=_fixture doc/ doc/modules/ 
 
 test-coverage:
 	rm -rf coverage .coverage

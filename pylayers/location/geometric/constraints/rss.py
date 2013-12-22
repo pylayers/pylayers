@@ -84,7 +84,7 @@ class RSS(Constraint):
 
     """
 
-    def __init__(self, id='0', value=0, std=np.array((1.0)), vcw=3, p=np.array([]), model={}, origin={}):
+    def __init__(self, id='0', value=np.array(([0])), std=np.array((1.0)), vcw=3, p=np.array([]), model={}, origin={}):
         Constraint.__init__(self, type='RSS', id=id, p=p, origin=origin)
         self.value = value  # attennation (dB)
         self.std = std
