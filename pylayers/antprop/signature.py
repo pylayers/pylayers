@@ -21,6 +21,15 @@ import logging
 
 def showsig(L,s,tx=[],rx=[]):
     """
+    
+    Parameters
+    ----------
+
+    L  : Layout 
+    s  : 
+    tx :
+    rx : 
+
     """
     L.display['thin']=True
     fig,ax = L.showGs()
@@ -1792,14 +1801,18 @@ class Signature(object):
 
 
     def image(self, tx):
-        """
-        Compute the images of tx with respect to the signature segments
+        """ Compute the tx's images with respect to the signature segments
+
         Parameters
         ----------
-            tx : numpy.ndarray
+
+        tx : numpy.ndarray
+
         Returns
         -------
-            M : numpy.ndarray
+
+        M : numpy.ndarray
+
         """
 
         pa = self.pa
@@ -1843,6 +1856,7 @@ class Signature(object):
         rsig = np.nonzero(typ[1:] == 1)[0]
         if len(rsig) > 0:
             blocks[rsig, :, :] = S[rsig + 1, :, :]
+
         A = pyu.fill_block_diag(A, blocks, 2, -1)
 
         y = np.zeros(2 * N)
@@ -1853,6 +1867,7 @@ class Signature(object):
             v0 = tx
         if typ[0] == 3:
             v0 = pa[:, 0]
+
         y[0:2] = v0
         for i in range(len(typ[1:])):
             if typ[i + 1] == 1:
@@ -1865,6 +1880,7 @@ class Signature(object):
 
         x = la.solve(A, y)
         M = np.vstack((x[0::2], x[1::2]))
+
         return M
 
     def backtrace(self, tx, rx, M):
@@ -2018,6 +2034,12 @@ class Signature(object):
         -------
 
         Y : ndarray (2x(N+2))
+
+        See Also 
+        --------
+
+        Signatures.image
+        Signatures.backtrace
             
         """
         try:

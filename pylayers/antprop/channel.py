@@ -196,6 +196,7 @@ class Ctilde(object):
 
         Parameters
         ----------
+
         v  : float
             velocity (m/s)
         dt : float
@@ -204,7 +205,7 @@ class Ctilde(object):
         Notes
         -----
 
-        Calculate new channel field from the old one and v(terminal vitese)
+        Calculate a channel field from Ctilde and v(terminal vitese)
         and dt(time of deplacement)
 
         dt en s  (observation time between 2 Rx position)
@@ -213,7 +214,7 @@ class Ctilde(object):
         Returns
         -------
 
-        C : modified Ctilde
+        tau : modified Ctilde
 
         """
 
@@ -304,12 +305,16 @@ class Ctilde(object):
         plt.axis
 
     def show(self, display=False, mode='linear'):
-        """ show
-            Parameters
-            ----------
-            display : True or False
-            mode    : 'linear', 'dB'
+        """ show the propagation channel 
+        
+        Parameters
+        ----------
+        
+        display : True or False
+        mode    : 'linear', 'dB'
+        
         """
+
         f = abs(self.Ctt.x)
         u = np.argsort(self.tauk)
         tt = self.tauk[u]
@@ -380,7 +385,7 @@ class Ctilde(object):
             plt.show()
 
     def energy(self):
-        """ Calculate energy on each channel
+        """ Calculates energy on each channel
 
         Returns
         -------
@@ -399,12 +404,14 @@ class Ctilde(object):
     
 
         """
+
         ECtt = self.Ctt.energy(1)
         ECtp = self.Ctp.energy(1)
         ECpt = self.Cpt.energy(1)
         ECpp = self.Cpp.energy(1)
         #Eco = ECtt + ECpp
         #Ecross = ECtp + ECpt
+
         return ECtt,ECpp,ECtp,ECpt
 
     def sort(self,typ='tauk'):
@@ -414,7 +421,13 @@ class Ctilde(object):
         ----------
 
         typ  : string 
-            which parameter to sort 'tau','att','atp','art','arp','energy'
+            which parameter to sort '
+                tauk : (default)
+                att  : theta Tx
+                atp  : phi Tx
+                art  : theta Rx 
+                arp  : phi Rx 
+                energy 
 
         """
         if typ=='tauk':
@@ -600,11 +613,15 @@ def Cg2Cl(Cg, Tt, Tr):
 
     """
     import copy
+    
     # don't loose the global channel
     Cl = copy.deepcopy(Cg)
+    
     # get frequency axes    
     fGHz = Cl.fGHz
-    # get angular axes    
+    
+    # get angular axes
+
     Rt, tangl = BTB_tx(Cg.tang, Tt)
     Rr, rangl = BTB_rx(Cg.rang, Tr)
 
@@ -912,11 +929,13 @@ class Tchannel(bs.FUDAsignal):
 
         Parameters
         ----------
-            k : ray index
-            W : waveform    (FUsignal)
+        
+        k : ray index
+        W : waveform    (FUsignal)
 
         Notes
         -----
+        
         W is apply on k-th ray and the received signal is built in time domain
 
         """
@@ -951,7 +970,7 @@ class Tchannel(bs.FUDAsignal):
                 dx = dxw
                 Wk = W
 
-        # on s'arrange que Hk.x[0]==Wk.x[0]
+        # qHk.x[0]==Wk.x[0]
 
     def RSSI(self,ufreq=0) :
         """ Compute RSSI value from a 
@@ -971,7 +990,7 @@ class Tchannel(bs.FUDAsignal):
 
         """
     
-        Tk=np.real(self.y[:,ufreq])
+        Tk = np.real(self.y[:,ufreq])
         return(20*np.log(np.sum(Tk**2)))
 
 if __name__ == "__main__":
