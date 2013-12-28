@@ -1,4 +1,12 @@
-#1-*- coding:Utf-8 -*-
+#-*- coding:Utf-8 -*-
+"""
+Module : signature
+
+functions
+
+showsig 
+
+"""
 import doctest
 import numpy as np
 #import scipy as sp
@@ -113,17 +121,29 @@ def frontline(L,nc,v):
     return nsegf
 
 def edgeout(L,g):
-    """
+    """ filter authorized Gi edges output 
 
     Parameters
     ----------
 
     L : Layout
     g : Digraph Gi
+
+    Notes 
+    -----
+
+    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+    This function checks that this sequence is feasible
+    , whatever the type of nstr0 and nstr1.
+    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
+    edge (nstr0,nstr1)
+
+
     """
 
+    # loop over all edges of Gi
     for e in g.edges():
-        # extract  both interactions
+        # extract  both termination interactions nodes
         i0 = eval(e[0])
         i1 = eval(e[1])
         try:
@@ -134,22 +154,27 @@ def edgeout(L,g):
 
         try:
             nstr1 = i1[0]
+            # Transmission
             if len(i1)>2:
                 typ=2
+            # Reflexion    
             else :
                 typ=1
-
+        # Diffraction        
         except:
             nstr1 = i1
             typ = 3
 
-
+        # list of authorized outputs, initialized void
         output = []
         # nstr1 : segment number of final interaction
         if nstr1>0:
             # segment unitary vector
-            
+            # l1 : unitary vector along structure segments  
             l1 = L.seguv(np.array([nstr1]))
+            #
+            # unitary vector along the ray (nstr0,nstr1)
+            #
             p0 = np.array(L.Gs.pos[nstr0])
             p1 = np.array(L.Gs.pos[nstr1])
             v01  = p1-p0
@@ -157,6 +182,7 @@ def edgeout(L,g):
             v01n = v01/v01m
             v10n = -v01n
             # next interaction
+            # considering all neighbors of i1 in Gi 
             for i2 in nx.neighbors(g,str(i1)):
 
                 i2 = eval(i2)
@@ -171,9 +197,6 @@ def edgeout(L,g):
 
                 d1 = np.dot(v01n,l1)
                 d2 = np.dot(l1,v12n)
-
-                # if nstr0==58 and nstr1 == 1 and nstr2 == 58:
-                #     pdb.set_trace()
 
                 # if (reflexion is forward) or (reflexion return to its origin)
                 if (d1*d2>=0) or (nstr0 == nstr2) and typ == 1:
@@ -1587,6 +1610,11 @@ class Signatures(dict):
 
         Todo : Find the best memory implemntation
 
+        See Also
+        --------
+
+        Signature.sig2ray
+
         """
 
         if type(ptx)==int:
@@ -2038,8 +2066,8 @@ class Signature(object):
         See Also 
         --------
 
-        Signatures.image
-        Signatures.backtrace
+        Signature.image
+        Signature.backtrace
             
         """
         try:

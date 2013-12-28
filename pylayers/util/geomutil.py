@@ -1449,6 +1449,10 @@ def isleft(a,b,c):
     b : np.array (2xN)
     c : np.array (2xN)
 
+    Returns
+    -------
+
+    boolean array (1xN)
 
     Examples
     --------
@@ -1473,7 +1477,10 @@ def isleft(a,b,c):
         >>> displot(A[:,il],B[:,il],arrow=True,color='g')
         >>> displot(A[:,inl],B[:,inl],arrow=True,color='r')
 
+    See Also
+    --------
 
+    pylayers.antprop.signature
 
     """
     return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>0
