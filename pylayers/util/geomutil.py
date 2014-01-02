@@ -1438,6 +1438,11 @@ def intersect(a, b, c, d):
     return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
 
 
+
+def isaligned(a,b,c):
+    #return abs(((b[0,:]-a[0,:])*(c[1,:]-a[1,:]) - (b[1,:]-a[1,:])*(c[0,:]-a[0,:])))<1e-8
+    return abs(((b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])))<1e-8
+
 def isleft(a,b,c):
     """ Test point c is at left of the vector a-->b
 
@@ -1484,6 +1489,9 @@ def isleft(a,b,c):
 
     """
     return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>0
+
+def isleftorequal(a,b,c):
+    return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>=0
 
 
 def affine(X,Y):
@@ -2357,12 +2365,15 @@ class Polygon(shg.Polygon):
         Topological error can be raised if the point coordinates accuracy
         is not limited.
 
+        Nodes of polygon are numbered in the global graph in vnodes member.
+
         See Also
         --------
 
         pylayers.gis.layout
 
         """
+
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
@@ -2436,7 +2447,7 @@ class Polygon(shg.Polygon):
         #
         # Warning lring recopy the node at the end of the sequence
         #
-        # A problem comes from the fact that a vnodes sequence
+        # A problem arises from the fact that a vnodes sequence
         # do no necessarily starts with a point (negative node)
         #
         #
@@ -2463,7 +2474,7 @@ class Polygon(shg.Polygon):
         xr, yr = lring.xy
 
         #
-        # Degree 1 points : typically doors
+        # Degree 1 points : (should not exist anymore) 
         #
         # Determine diffraction points
         #
@@ -2515,8 +2526,9 @@ class Polygon(shg.Polygon):
         # The following exploits definition of convexity.
         #
         # Between all combinations of diffracting points 
-        # create a segment and check it is fully included in the polygon 
-        # if it is true then there is a visibility between the 2 points.
+        # create a segment and check whether it is fully included in the
+        # polygon.
+        # If verified then there is a visibility between the 2 points.
         #
         for nk in combinations(udiff, 2):
             p1 = p[:, nk[0]]
@@ -2603,7 +2615,11 @@ class Polygon(shg.Polygon):
                                 #plt.draw()
                             #if i==1:
                             if nseg[nk] != nseg[ns]:
-                                Gv.add_edge(nseg[nk], nseg[ns], weight=1)
+                                # Add B.Uguen 2/01/2014 no visibility relation between
+                                # aligned segments
+                                if ((not isaligned(pts,phs,ptk)) & 
+                                    (not isaligned(pts,phs,phk))):
+                                    Gv.add_edge(nseg[nk], nseg[ns], weight=1)
                                 #if (((nseg[nk]==155) & (nseg[ns]==164)) or ((nseg[nk]==164) & (nseg[ns]==155))):
                                     #plt.plot(np.array([Gv.pos[nseg[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[nseg[nk]][1],Gv.pos[nseg[ns]][1]]),'b')
                                     #plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),'b')
@@ -3302,7 +3318,7 @@ def linepoly_intersection(l,poly):
     return np.array([[psh.x],[psh.y]])
 
 def mirror(p,pa,pb):
-    """ Compute the mirror of p with respect to the segment pa pb
+    """ Compute the image of p wrt the segment pa pb
 
     Parameters
     ----------
@@ -3319,19 +3335,29 @@ def mirror(p,pa,pb):
     
     M : numpy.ndarray
 
-    Example
-    -------
-
-        >>> p = np.array([0,-1])
-        >>> pa  = np.array([-1,0])
-        >>> pb  = np.array([1,0])
+    Examples
+    --------
+    
+    .. plot::
+        :include-source:
+        >>> from pylayers.util.geomutil import *
+        >>> fron pylayers.util.plotutil import *
+        >>> import numpy as np
+        >>> p = np.random.randn((2,1000))
+        >>> pa  = np.array([0,0])
+        >>> pb  = np.array([0,1])
         >>> M = mirror(p,pa,pb) 
+        >>> displot(pa,pb)
+        >>> plot(p[0,:],p[1,:],'or',alpha=0.2)
+        >>> plot(M[0,:],M[1,:],'ob',alpha=0.2)
+
     """
 
     if np.shape(pa)==(2,):
         pa = pa.reshape(2,1)
     if np.shape(pb)==(2,):
         pb = pb.reshape(2,1)
+
     pab = pb - pa
     alpha = np.sum(pab * pab, axis=0)
     zalpha = np.where(alpha == 0.)
@@ -3354,7 +3380,7 @@ def mirror(p,pa,pb):
     S[1, 1] = a
     A = np.eye(2)
     y = np.zeros(2)
-    vc0 = np.array([c[0], d[0]])
+    vc0 = np.array([c[0], d[0]]).reshape(2,1)
     v0 = np.dot(-S, p) + vc0
     x = la.solve(A, v0)
     return x

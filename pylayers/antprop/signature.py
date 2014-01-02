@@ -15,8 +15,10 @@ import pdb
 import networkx as nx
 import pylayers.gis.layout as layout
 import pylayers.util.geomutil as geu
+import pylayers.util.cone as cone
 #import pylayers.util.graphutil as gph
 import pylayers.util.pyutil as pyu
+import pylayers.util.plotutil as plu
 import matplotlib.pyplot as plt
 from pylayers.util.project import *
 from mpl_toolkits.mplot3d import Axes3D
@@ -120,6 +122,101 @@ def frontline(L,nc,v):
     nsegf = map(lambda n: nseg[n],u)
     return nsegf
 
+
+def edgeout2(L,g):
+    """ filter authorized Gi edges output 
+
+    Parameters
+    ----------
+
+    L : Layout
+    g : Digraph Gi
+
+    Notes 
+    -----
+
+    Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+    This function checks that this sequence is feasible
+    , whatever the type of nstr0 and nstr1.
+    The feasible outputs from nstr0 to nstr1 are stored in an output field of 
+    edge (nstr0,nstr1)
+
+
+    """
+
+    # loop over all edges of Gi
+    for e in g.edges():
+        # extract  both termination interactions nodes
+        i0 = eval(e[0])
+        i1 = eval(e[1])
+        try:
+            nstr0 = i0[0]
+        except:
+            nstr0 = i0
+
+
+        try:
+            nstr1 = i1[0]
+            # Transmission
+            if len(i1)>2:
+                typ=2
+            # Reflexion    
+            else :
+                typ=1
+        # Diffraction        
+        except:
+            nstr1 = i1
+            typ = 3
+
+        # list of authorized outputs, initialized void
+        output = []
+        # nstr1 : segment number of final interaction
+        if nstr1>0:
+            pseg1 = L.seg2pts(nstr1).reshape(2,2).T
+            cn = cone.Cone()
+            if nstr0>0:
+                pseg0 = L.seg2pts(nstr0).reshape(2,2).T
+                cn.from2segs(pseg0,pseg1)
+            else:
+                pt = np.array(L.Gs.pos[nstr0])
+                cn.fromptseg(pt,pseg1)
+        
+            # list all potential successor of interaction i1
+            i2 = nx.neighbors(g,str(i1))
+            ipoints = filter(lambda x: eval(x)<0 ,i2)
+            istup = filter(lambda x : type(eval(x))==tuple,i2)
+            isegments = np.unique(map(lambda x : eval(x)[0],istup))
+            if len(isegments)>0:
+                points = L.seg2pts(isegments)
+                pta = points[0:2,:]
+                phe = points[2:,:]
+                #print points
+                #print segments 
+                cn.show()
+                if len(i1)==3:
+                    bs = cn.belong_seg(pta,phe)
+                    if bs.any():
+                        plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    if ~bs.any():
+                        plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+                if len(i1)==2:    
+                    Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
+                    Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
+                    bs = cn.belong_seg(Mpta,Mphe)
+                    if bs.any():
+                        plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    if ~bs.any():
+                        plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+                isegkeep = isegments[bs]     
+                plt.show()
+                pdb.set_trace()
+                output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
+                # keep all segment above nstr1 and in Cone if T 
+                # keep all segment below nstr1 and in Cone if R 
+
+        g.add_edge(str(i0),str(i1),output=output)
+
+    return(g)
 def edgeout(L,g):
     """ filter authorized Gi edges output 
 
@@ -169,6 +266,8 @@ def edgeout(L,g):
         output = []
         # nstr1 : segment number of final interaction
         if nstr1>0:
+            #cn = cone.Cone()
+            #cn.from2segs(pseg0,pseg1)
             # segment unitary vector
             # l1 : unitary vector along structure segments  
             l1 = L.seguv(np.array([nstr1]))
@@ -211,7 +310,6 @@ def edgeout(L,g):
         g.add_edge(str(i0),str(i1),output=output)
 
     return(g)
-
 class Signatures(dict):
     """ gathers all signatures from a layout given tx and rx
 
@@ -746,7 +844,8 @@ class Signatures(dict):
         # remove diffractions from Gi
         Gi = gidl(Gi)
         # add 2nd order output to edges
-        Gi = edgeout(self.L,Gi)
+        #Gi = edgeout(self.L,Gi)
+        Gi = edgeout2(self.L,Gi)
         #for interaction source  in list of source interaction 
         for s in lis:
             #for target interaction in list of target interaction

@@ -3203,7 +3203,7 @@ class Layout(object):
         return(seglist)
 
     def seg2pts(self,aseg):
-        """ convert segments array to cooresponding termination points array
+        """ convert segments array to coresponding termination points array
         
         Parameters
         ----------
@@ -3279,6 +3279,7 @@ class Layout(object):
 
     def extrseg(self):
         """ calculate extremum of segments
+
         Notes
         -----
 
@@ -4567,7 +4568,7 @@ class Layout(object):
 
         self.Gv = nx.Graph()
         #
-        # loop over rooms
+        # loop over cycles
         #
         self.dGv = {}  # dict of Gv graph
         for icycle in self.Gt.node:

@@ -3,9 +3,9 @@
 Module : Cone
 
 To facilitate algorithms implementation, the following conventions have been introduced. 
-A Cone has an apex which is a point in the plane.
-A cone has two vectors which define the cone aperture. 
-Those two vectors can always been distinguished as a right vector (u) and a left vector (v).
+
++ A Cone has an apex which is a point in the plane.
++ A cone has two vectors which define the cone aperture. Those two vectors can always been distinguished as a right vector (u) and a left vector (v).
 The cone region is defined by the convex angular sector from right vector (u) to left vector (v) 
 rotating folllowing the trigonometric convention.
 The modulus of the cross product between u and v is positive.
@@ -69,13 +69,24 @@ class Cone(object):
         + if not all termination points lie in the same side outside the cone.
 
         """
+        # boolean ta aligned with seg
+        #bata = geu.isaligned(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),pta)
+        # boolean he aligned with seg
+        #bahe = geu.isaligned(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),phe)
         # pta being left of segment 1
-        blta = geu.isleft(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),pta)
+        vc  = (self.u+self.v)/2
+        vcn = vc/np.sqrt(np.dot(vc,vc))
+        w  = np.array([vcn[1],-vcn[0]])
+        pa =  self.seg1[:,0].reshape(2,1)  
+        pb = (self.seg1[:,0]+w).reshape(2,1)
+        blta = geu.isleft(pa,pb,pta)
+        blhe = geu.isleft(pa,pb,phe)
+        #blta = geu.isleftorequal(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),pta)
         # phe being left of segment 2
-        blhe = geu.isleft(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),phe)
+        #blhe = geu.isleftorequal(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),phe)
         # segment candidate for being above segment 1
-        bup = blta & blhe
-        #pdb.set_trace()
+        bup = blta & blhe 
+
         bo1,bo2 = self.outside_point(pta[:,bup])
         bo3,bo4 = self.outside_point(phe[:,bup])
 
@@ -83,6 +94,15 @@ class Cone(object):
         bup[bup] = bin
 
         return(bup)
+
+    def aboveseg(self):
+        """
+        """
+        vc  = (self.u+self.v)/2
+        vcn = vc/np.sqrt(dot(vc,vc))
+        w  = np.array([vcn[1],-vcn[0]])
+        self.pa =  self.seg1[:,0].reshape(2,1)  
+        self.pb = (self.seg1[:,0]+w).reshape(2,1)
 
     def outside_point(self,p):
         """
@@ -168,6 +188,43 @@ class Cone(object):
            
         return(bo1,bo2)    
         
+    def fromptseg(self,pt,seg):
+        """ creates a Cone from one point and one segment
+
+        Parameters
+        ----------
+
+        pt : nd.array (,2)
+
+        seg : nd.array (2,2)
+
+        """
+
+        self.apex = pt 
+        a = seg[:,0]
+        b = seg[:,1]
+        v0 = b - pt 
+        v1 = a - pt 
+        v0n = v0/np.sqrt(np.dot(v0,v0))
+        v1n = v1/np.sqrt(np.dot(v1,v1))
+        
+        if np.cross(v0n,v1n) > 0:
+            self.u = v0n
+            self.v = v1n
+            self.seg1 = seg
+        else:  
+            self.u = v1n
+            self.v = v0n
+            self.seg1 = seg[:,::-1]      
+
+        self.dot = np.dot(self.u,self.v)
+        self.cross = np.cross(self.u,self.v)
+       
+
+        if self.cross < 1e-15:
+            self.degenerated=True
+
+
     def from2segs(self,seg0,seg1):
         """ creates a Cone from 2 segments
 
@@ -180,8 +237,7 @@ class Cone(object):
         Notes
         -----
 
-        The only way for the cone to be degenerated when built from two segments is when the two segments 
-        are on the same line.
+        The only way for the cone to be degenerated is when the two segments are on the same line.
 
 
         """ 
@@ -222,16 +278,16 @@ class Cone(object):
         
         if  (not twisted) & (not inversion) :
             #reverse seg1
-            print "reverse seg1"
+            #print "reverse seg1"
             self.seg1 = self.seg1[:,::-1]
         if (inversion) & (not twisted):
             #reverse seg0 
-            print "reverse seg0"
+            #print "reverse seg0"
             self.seg0 = self.seg0[:,::-1]
         if twisted & inversion:
             #reverse seg0 and seg1   
-            print "reverse seg0"
-            print "reverse seg1"
+            #print "reverse seg0"
+            #print "reverse seg1"
             self.seg0 = self.seg0[:,::-1]      
             self.seg1 = self.seg1[:,::-1]
 
@@ -241,13 +297,13 @@ class Cone(object):
         if self.cross < 1e-15:
             self.degenerated=True
         else:    
-            a0u = np.dot(a0,self.u)
-            a0v = np.dot(a0,self.v)
-            b0u = np.dot(b0,self.u)
-            b0v = np.dot(b0,self.v)
+            a0u = np.dot(self.seg0[:,0],self.u)
+            a0v = np.dot(self.seg0[:,0],self.v)
+            b0u = np.dot(self.seg0[:,1],self.u)
+            b0v = np.dot(self.seg0[:,1],self.v)
 
             kb  = ((b0v-a0v)-self.dot*(b0u-a0u))/(self.dot*self.dot-1)
-            self.apex = b0 + kb*self.v
+            self.apex = self.seg0[:,1] + kb*self.v
 
     def show(self, **kwargs):
         """ show cone 
@@ -258,7 +314,7 @@ class Cone(object):
         length : float 
 
         """
-        defaults = {'length': 25.}
+        defaults = {'length': 3.}
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
@@ -276,10 +332,14 @@ class Cone(object):
             ]
 
         else:
-            a0 = self.seg0[:,0]
-            b0 = self.seg0[:,1]
             a1 = self.seg1[:,0]
             b1 = self.seg1[:,1]
+            if 'seg0' not in self.__dict__:    
+                a0 = self.apex
+                b0 = self.apex
+            else:
+                a0 = self.seg0[:,0]
+                b0 = self.seg0[:,1]
 
             if not(self.degenerated):
                 #verts = [tuple(self.apex),
@@ -333,8 +393,9 @@ class Cone(object):
                 [self.apex[1],self.apex[1]+kwargs['length']*self.u[1]],lw=1,color='b')
         ax.plot([self.apex[0],self.apex[0]+kwargs['length']*self.v[0]],
                 [self.apex[1],self.apex[1]+kwargs['length']*self.v[1]],lw=1,color='r')
-        if 'seg1' in self.__dict__:
+        if 'seg0' in self.__dict__:
             ax.plot([a0[0],b0[0]],[a0[1],b0[1]],lw=2,color='b')
+        if 'seg1' in self.__dict__:
             ax.plot([a1[0],b1[0]],[a1[1],b1[1]],lw=2,color='r')
         patch = patches.PathPatch(path, facecolor='orange', lw=2, alpha=0.3)
         ax.add_patch(patch)
