@@ -176,7 +176,13 @@ def edgeout2(L,g):
             cn = cone.Cone()
             if nstr0>0:
                 pseg0 = L.seg2pts(nstr0).reshape(2,2).T
-                cn.from2segs(pseg0,pseg1)
+                # test if nstr0 and nstr1 are connected segments
+                if (len(np.intersect1d(nx.neighbors(L.Gs,nstr0),nx.neighbors(L.Gs,nstr1)))==0):
+                    # not connected
+                    cn.from2segs(pseg0,pseg1)
+                else:
+                    # connected 
+                    cn.from2csegs(pseg0,pseg1)
             else:
                 pt = np.array(L.Gs.pos[nstr0])
                 cn.fromptseg(pt,pseg1)
@@ -192,24 +198,27 @@ def edgeout2(L,g):
                 phe = points[2:,:]
                 #print points
                 #print segments 
-                cn.show()
+                #cn.show()
                 if len(i1)==3:
                     bs = cn.belong_seg(pta,phe)
-                    if bs.any():
-                        plu.displot(pta[:,bs],phe[:,bs],color='g')
-                    if ~bs.any():
-                        plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+                    #if bs.any():
+                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    #if ~bs.any():
+                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
                 if len(i1)==2:    
                     Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
                     Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
                     bs = cn.belong_seg(Mpta,Mphe)
-                    if bs.any():
-                        plu.displot(pta[:,bs],phe[:,bs],color='g')
-                    if ~bs.any():
-                        plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+                    #print i0,i1
+                    #if ((i0 == (6, 0)) & (i1 == (7, 0))):
+                    #    pdb.set_trace()
+                    #if bs.any():
+                    #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                    #if ~bs.any():
+                    #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+                    #    plt.show()
+                    #    pdb.set_trace()
                 isegkeep = isegments[bs]     
-                plt.show()
-                pdb.set_trace()
                 output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
                 # keep all segment above nstr1 and in Cone if T 
                 # keep all segment below nstr1 and in Cone if R 

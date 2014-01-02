@@ -1441,7 +1441,9 @@ def intersect(a, b, c, d):
 
 def isaligned(a,b,c):
     #return abs(((b[0,:]-a[0,:])*(c[1,:]-a[1,:]) - (b[1,:]-a[1,:])*(c[0,:]-a[0,:])))<1e-8
-    return abs(((b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])))<1e-8
+    val = abs(((b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])))
+    cond = val<1e-2 
+    return cond
 
 def isleft(a,b,c):
     """ Test point c is at left of the vector a-->b
@@ -2617,9 +2619,12 @@ class Polygon(shg.Polygon):
                             if nseg[nk] != nseg[ns]:
                                 # Add B.Uguen 2/01/2014 no visibility relation between
                                 # aligned segments
-                                if ((not isaligned(pts,phs,ptk)) & 
-                                    (not isaligned(pts,phs,phk))):
+                                if (not (isaligned(pts,phs,ptk) & isaligned(pts,phs,phk))):
                                     Gv.add_edge(nseg[nk], nseg[ns], weight=1)
+                                #else:
+                                #    print nseg[nk],nseg[ns]
+                                #    print pts,phs
+                                #    print ptk,phk
                                 #if (((nseg[nk]==155) & (nseg[ns]==164)) or ((nseg[nk]==164) & (nseg[ns]==155))):
                                     #plt.plot(np.array([Gv.pos[nseg[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[nseg[nk]][1],Gv.pos[nseg[ns]][1]]),'b')
                                     #plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),'b')

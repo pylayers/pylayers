@@ -20,6 +20,7 @@ import pylayers.util.geomutil as geu
 from matplotlib.path import Path
 import matplotlib.patches as patches
 import pdb
+import logging
 
 
 class Cone(object):
@@ -252,6 +253,10 @@ class Cone(object):
         a1 = seg1[:,0]
         b1 = seg1[:,1]
 
+        # check for connected segments (This could be determined earlier) 
+        # a0 = a1 | b1
+        # b0 = a1 | b1 
+
         # check segment orientation (crossing)
       
         if not (geu.ccw(a0,b0,b1) ^
@@ -304,6 +309,68 @@ class Cone(object):
 
             kb  = ((b0v-a0v)-self.dot*(b0u-a0u))/(self.dot*self.dot-1)
             self.apex = self.seg0[:,1] + kb*self.v
+
+    def from2csegs(self,seg0,seg1):
+        """ creates a Cone from 2 connected segments
+
+        Parameters
+        ----------
+
+        seg0 : 2 x 2  (Ndim x Npoints)
+        seg1 : 2 x 2 
+
+        Notes
+        -----
+
+        The only way for the cone to be degenerated is when the two segments are on the same line.
+
+
+        """ 
+        # bv : (4,1)
+
+
+        self.seg0 = seg0
+        self.seg1 = seg1
+
+        a0 = seg0[:,0]
+        b0 = seg0[:,1]
+        a1 = seg1[:,0]
+        b1 = seg1[:,1]
+        
+        # determine common point 
+        if (np.dot(a0-a1,a0-a1)<1e-8):
+            p = a0 
+            u = b1-p
+            v = p-b0
+        elif (np.dot(a0-b1,a0-b1)<1e-8):
+            p = a0 
+            u = a1-p
+            v = p-b0
+            self.seg1 = self.seg1[:,::-1]
+        elif (np.dot(b0-a1,b0-a1)<1e-8):
+            p = b0 
+            self.seg0 = self.seg0[:,::-1]
+            u = b1-p
+            v = p-a0
+        elif (np.dot(b0-b1,b0-b1)<1e-8):
+            self.seg0 = self.seg0[:,::-1]
+            self.seg1 = self.seg1[:,::-1]
+            p = b0 
+            u = a1-p
+            v = p-a0
+        else:
+            logging.critical('segment are not connected')
+            pdb.set_trace()
+       
+        self.apex = p
+        self.v = v/np.sqrt(np.dot(v,v))
+        self.u = u/np.sqrt(np.dot(u,u))
+
+        self.dot = np.dot(self.u,self.v)
+        self.cross = np.cross(self.u,self.v)
+
+        if self.cross < 1e-15:
+            self.degenerated=True
 
     def show(self, **kwargs):
         """ show cone 
