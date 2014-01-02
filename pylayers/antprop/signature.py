@@ -609,7 +609,6 @@ class Signatures(dict):
         nbaw = []
         # number of useful segments
 
-
         # while the list of iterators is not void
         while stack: #
             # children is the last iterator of stack
@@ -633,16 +632,14 @@ class Signatures(dict):
 
             elif len(visited) < (cutoff + sum(nbaw)): # if visited list length is less than cutoff 
 
-                # if '37' in child :
-                #     pdb.set_trace()
-            
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
+                    # only visit output nodes
                     stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
-                    # check if child (current segmnent) is a airwall
+                    # check if child (current segment) is an airwall
                     if self.L.di[child][0] in self.L.name['AIR']:
                         nbaw.append(1)
                     else:
@@ -722,6 +719,8 @@ class Signatures(dict):
         return d
 
     def run(self,cutoff=1,dcut=2):
+        """ run signature calculation 
+        """
 
         lcil=self.L.cycleinline(self.source,self.target)
 
@@ -731,6 +730,7 @@ class Signatures(dict):
         else :
             print 'run2'
             self.run2(cutoff=cutoff,dcut=dcut)
+
 
     def run1(self,cutoff=2):
         """ get signatures (in one list of arrays) between tx and rx
@@ -773,7 +773,8 @@ class Signatures(dict):
         metasig = metasig + nx.neighbors(self.L.Gt,self.target)
         metasig = list(np.unique(np.array(metasig)))
         metasig = metasig + [self.source] + [self.target]
-
+        
+        #print "metasig",metasig
 
         # add cycles separated by air walls
         lca=[]
@@ -855,6 +856,7 @@ class Signatures(dict):
         # add 2nd order output to edges
         #Gi = edgeout(self.L,Gi)
         Gi = edgeout2(self.L,Gi)
+        #pdb.set_trace()
         #for interaction source  in list of source interaction 
         for s in lis:
             #for target interaction in list of target interaction
@@ -892,6 +894,160 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
+    def run4(self,cutoff=2):
+        """ get signatures (in one list of arrays) between tx and rx
+
+        Parameters
+        ----------
+
+        cutoff : int 
+            limit the exploration of all_simple_path
+
+        Returns
+        -------
+
+        sigslist :  numpy.ndarray
+
+        """
+
+        self.cutoff   = cutoff
+        self.filename = self.L.filename.split('.')[0] +'_' + str(self.source) +'_' + str(self.target) +'_' + str(self.cutoff) +'.sig'
+
+        # Determine meta signature
+        # this limits the number of cycles
+
+        #metasig = nx.neighbors(self.L.Gt,self.source)
+        #metasig = metasig + nx.neighbors(self.L.Gt,self.target)
+        #metasig = list(np.unique(np.array(metasig)))
+        #metasig = metasig + [self.source] + [self.target]
+        
+        # add cycles separated by air walls
+        #lca=[]
+        #for cy in metasig:
+        #    try:
+        #        lca.extend(self.L.dca[cy])
+        #    except:
+        #        pass
+        #metasig = metasig + lca
+        #metasig = list(np.unique(np.array(metasig)))
+
+        # list of interaction source
+        lis = self.L.Gt.node[self.source]['inter']
+        # list of interaction target 
+        lit = self.L.Gt.node[self.target]['inter']
+
+        # source
+        #ndt1 = filter(lambda l: len(eval(l))>2,ndt) # Transmission
+        #ndt2 = filter(lambda l: len(eval(l))<3,ndt) # Reflexion
+
+        lisT = filter(lambda l: len(eval(l))>2,lis) # Transmission
+        lisR = filter(lambda l: len(eval(l))<3,lis) # Reflexion
+
+        # target
+        # ndr1 = filter(lambda l: len(eval(l))>2,ndr) # Transmission
+        # ndr2 = filter(lambda l: len(eval(l))<3,ndr) # Reflexion
+
+        litT = filter(lambda l: len(eval(l))>2,lit) # Transmission
+        litR = filter(lambda l: len(eval(l))<3,lit) # Reflexion
+
+        # tx,rx : attaching rule
+        #
+        # tx attachs to out transmisision point
+        # rx attachs to in transmission point
+
+        #
+        # WARNING : room number <> cycle number
+        #
+
+        #ncytx = self.L.Gr.node[NroomTx]['cycle']
+        #ncyrx = self.L.Gr.node[NroomRx]['cycle']
+
+        #ndt1 = filter(lambda l: eval(l)[2]<>ncytx,ndt1)
+        #ndr1 = filter(lambda l: eval(l)[1]<>ncyrx,ndr1)
+
+        lisT = filter(lambda l: eval(l)[2]<>self.source,lisT)
+        litT = filter(lambda l: eval(l)[1]<>self.target,litT)
+
+        #ndt = ndt1 + ndt2
+        #ndr = ndr1 + ndr2
+        # list of interaction visible from source 
+        lis  = lisT + lisR
+        # list of interaction visible from target 
+        lit  = litT + litR
+
+        #ntr = np.intersect1d(ndt, ndr)
+#        li = np.intersect1d(lis, lit)
+
+        # list of all interactions
+        #li = []
+        #for ms in metasig:
+        #    li = li + self.L.Gt.node[ms]['inter']
+        #li = list(np.unique(np.array(li)))
+        #
+        # dictionnary interaction:position 
+        #dpos = {k:self.L.Gi.pos[k] for k in li}
+        
+        # extracting sub graph of Gi corresponding to metasiganture
+        #Gi = nx.subgraph(self.L.Gi,li)
+        #Gi.pos = dpos
+        Gi = self.L.Gi
+        Gi.pos = self.L.Gi.pos
+#        for meta in metasig:
+#        Gi = nx.DiGraph()
+#        for cycle in metasig:
+#            Gi = nx.compose(Gi,self.L.dGi[cycle])
+
+#        # facultative update positions
+#        Gi.pos = {}
+#        for cycle in metasig:
+#            Gi.pos.update(self.L.dGi[cycle].pos)
+#        pdb.set_trace()
+        #
+        #
+        #
+        # remove diffractions from Gi
+        #Gi = gidl(Gi)
+        # add 2nd order output to edges
+        #Gi = edgeout(self.L,Gi)
+        #Gi = edgeout2(self.L,Gi)
+        #pdb.set_trace()
+
+        #for interaction source  in list of source interaction 
+        for s in lis:
+            #for target interaction in list of target interaction
+            for t in lit:
+
+                if (s != t):
+                    #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                    #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
+                    paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+
+                    #paths = [nx.shortest_path(Gi,source=s,target=t)]
+                else:
+                    #paths = [[nt]]
+                    paths = [[s]]
+                ### supress the followinfg loops .
+                for path in paths:
+
+                    sigarr = np.array([],dtype=int).reshape(2, 0)
+                    for interaction in path:
+
+                        it = eval(interaction)
+                        if type(it) == tuple:
+                            if len(it)==2: #reflexion
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]],[1]],dtype=int)))
+                            if len(it)==3: #transmission
+                                sigarr = np.hstack((sigarr,
+                                                np.array([[it[0]],[2]],dtype=int)))
+                        elif it < 0: #diffraction
+                            sigarr = np.hstack((sigarr,
+                                                np.array([[it],[3]],dtype=int)))
+                    #print sigarr
+                    try:
+                        self[len(path)] = np.vstack((self[len(path)],sigarr))
+                    except:
+                        self[len(path)] = sigarr
 
     def run2(self,cutoff=1,dcut=2):
         """ get signatures (in one list of arrays) between tx and rx
@@ -1292,7 +1448,6 @@ class Signatures(dict):
         for icy in range(len(lcil)-1):
             
 
-            pdb.set_trace()
             io = dfl[lcil[icy]]
             io_ = dfl[lcil[icy+1]]
             print io
