@@ -4217,8 +4217,13 @@ class Layout(object):
         for k in self.Gs.node:
             if k>0:
                 self.Gs.node[k]['ncycles']=[]
+
         for k in self.Gt.node:
             vnodes = self.Gt.node[k]['cycle'].cycle
+            if vnodes[0]<0:
+                self.Gt.node[k]['polyg'].vnodes = vnodes
+            else:
+                self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
             for inode in vnodes:
                 if inode > 0:   # segments
                     if k not in self.Gs.node[inode]['ncycles']:

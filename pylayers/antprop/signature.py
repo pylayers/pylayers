@@ -637,8 +637,11 @@ class Signatures(dict):
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
                     # only visit output nodes
-                    pdb.set_trace()
-                    dintpro = G[visited[-1]][child]['output']
+                    #pdb.set_trace()
+                    try:
+                        dintpro = G[visited[-1]][child]['output']
+                    except:
+                        dintpro ={}
                     stack.append(iter(dintpro.keys()))
                     #stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
@@ -1006,10 +1009,10 @@ class Signatures(dict):
 #            Gi.pos.update(self.L.dGi[cycle].pos)
 #        pdb.set_trace()
         #
-        #
-        #
+        # TODO : This has to be changed for handling diffraction
+        # 
         # remove diffractions from Gi
-        #Gi = gidl(Gi)
+        Gi = gidl(Gi)
         # add 2nd order output to edges
         #Gi = edgeout(self.L,Gi)
         #Gi = edgeout2(self.L,Gi)
