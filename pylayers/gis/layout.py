@@ -3887,6 +3887,26 @@ class Layout(object):
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
 
+    def showGi(self, **kwargs):
+        """
+        en  : int 
+            edge number
+        """
+        int0,int1 = self.Gi.edges()[kwargs['en']]
+        print "int0 : ",int0
+        print "int1 : ",int1
+
+        if ((type(eval(int0))==tuple) & (type(eval(int1))==tuple)):
+            nstr0 = eval(int0)[0]
+            nstr1 = eval(int1)[0]
+            print " output ", self.Gi.edge[int0][int1] 
+            pseg0 = self.seg2pts(nstr0).reshape(2,2).T
+            pseg1 = self.seg2pts(nstr1).reshape(2,2).T
+            cn = cone.Cone()
+            cn.from2segs(pseg0,pseg1)
+            fig,ax = cn.show()
+            fig,ax = self.showG('t',fig=fig,ax=ax)
+
     def showGt(self, ax=[], roomlist=[],mode='area'):
         """ show topological graph Gt
 
@@ -4918,15 +4938,19 @@ class Layout(object):
         """
         assert('Gi' in self.__dict__)
         # loop over all edges of Gi
-        for e in self.Gi.edges():
+        Nedges = len(self.Gi.edges())
+        #print "Gi Nedges :",Nedges
+        for k,e in enumerate(self.Gi.edges()):
+            #if (k%100)==0:
+            #    print "edge :  ",k
             # extract  both termination interactions nodes
             i0 = eval(e[0])
             i1 = eval(e[1])
+
             try:
                 nstr0 = i0[0]
             except:
                 nstr0 = i0
-
 
             try:
                 nstr1 = i1[0]
@@ -4943,7 +4967,7 @@ class Layout(object):
 
             # list of authorized outputs, initialized void
             output = []
-            # nstr1 : segment number of final interaction
+            # nstr1 : segment number of middle interaction
             if nstr1>0:
                 pseg1 = self.seg2pts(nstr1).reshape(2,2).T
                 cn = cone.Cone()
@@ -4965,6 +4989,7 @@ class Layout(object):
                 ipoints = filter(lambda x: eval(x)<0 ,i2)
                 istup = filter(lambda x : type(eval(x))==tuple,i2)
                 isegments = np.unique(map(lambda x : eval(x)[0],istup))
+
                 if len(isegments)>0:
                     points = self.seg2pts(isegments)
                     pta = points[0:2,:]
@@ -4973,7 +4998,7 @@ class Layout(object):
                     #print segments 
                     #cn.show()
                     if len(i1)==3:
-                        bs = cn.belong_seg(pta,phe)
+                        typ,prob = cn.belong_seg(pta,phe)
                         #if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         #if ~bs.any():
@@ -4981,7 +5006,7 @@ class Layout(object):
                     if len(i1)==2:    
                         Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
                         Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
-                        bs = cn.belong_seg(Mpta,Mphe)
+                        typ,prob = cn.belong_seg(Mpta,Mphe)
                         #print i0,i1
                         #if ((i0 == (6, 0)) & (i1 == (7, 0))):
                         #    pdb.set_trace()
@@ -4991,12 +5016,19 @@ class Layout(object):
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                         #    plt.show()
                         #    pdb.set_trace()
-                    isegkeep = isegments[bs]     
+                    isegkeep = isegments[prob>0.1]     
+                    # dict num segment : proba
+                    dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
                     output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
+                    probint  = map(lambda x: dsegprob[eval(x)[0]],output)
+                    # dict interaction : proba
+                    dintprob = {k:v for k,v in zip(output,probint)}
+
+
                     # keep all segment above nstr1 and in Cone if T 
                     # keep all segment below nstr1 and in Cone if R 
 
-            self.Gi.add_edge(str(i0),str(i1),output=output)
+            self.Gi.add_edge(str(i0),str(i1),output=dintprob)
 
 
         

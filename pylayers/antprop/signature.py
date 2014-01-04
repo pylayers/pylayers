@@ -637,7 +637,10 @@ class Signatures(dict):
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
                     # only visit output nodes
-                    stack.append(iter(G[visited[-1]][child]['output']))
+                    pdb.set_trace()
+                    dintpro = G[visited[-1]][child]['output']
+                    stack.append(iter(dintpro.keys()))
+                    #stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
                     # check if child (current segment) is an airwall
                     if self.L.di[child][0] in self.L.name['AIR']:

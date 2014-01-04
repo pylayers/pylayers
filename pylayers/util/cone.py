@@ -32,11 +32,12 @@ class Cone(object):
         b : np.array (,2)        
         apex : np.array (,2)
         """
+
         self.apex = apex
-        # normalizing vectors
+        # normalizing cone vectors 
         an = a/np.sqrt(np.dot(a,a))
         bn = b/np.sqrt(np.dot(b,b))
-        #pdb.set_trace()
+
         if np.cross(an,bn) > 0:
             self.u = an
             self.v = bn
@@ -70,31 +71,84 @@ class Cone(object):
         + if not all termination points lie in the same side outside the cone.
 
         """
-        # boolean ta aligned with seg
-        #bata = geu.isaligned(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),pta)
-        # boolean he aligned with seg
-        #bahe = geu.isaligned(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),phe)
-        # pta being left of segment 1
         vc  = (self.u+self.v)/2
         vcn = vc/np.sqrt(np.dot(vc,vc))
         w  = np.array([vcn[1],-vcn[0]])
-        pa =  self.seg1[:,0].reshape(2,1)  
-        pb = (self.seg1[:,0]+w).reshape(2,1)
+        if 'seg1' in self.__dict__:
+            pa =  self.seg1[:,0].reshape(2,1)  
+            pb = (self.seg1[:,0]+w).reshape(2,1)
+        else:
+            pa = self.apex.reshape(2,1)
+            pb = pa+w.reshape(2,1)
         blta = geu.isleft(pa,pb,pta)
         blhe = geu.isleft(pa,pb,phe)
-        #blta = geu.isleftorequal(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),pta)
-        # phe being left of segment 2
-        #blhe = geu.isleftorequal(self.seg1[:,0].reshape(2,1),self.seg1[:,1].reshape(2,1),phe)
-        # segment candidate for being above segment 1
-        bup = blta & blhe 
+        # segment candidate for being above segment 1 (,Nseg)
+        boup = blta & blhe  
+        # type of segment 
+        proba = np.zeros(np.shape(pta)[1])
+        typ   = np.zeros(np.shape(pta)[1])
+        # is tail out ? bo1 | bo2  
+        # btaol : boolean tail out left 
+        # btaor : boolean tail out right 
+        # bheol : boolean head out left 
+        # bheor : boolean head out right #
+        # among upper segment check position wrt cone
+        #btaol,btaor = self.outside_point(pta)
+        #bheol,bheor = self.outside_point(phe)
+        btaor,btaol = self.outside_point(pta)
+        bheor,bheol = self.outside_point(phe)
+        # tail and head are they out cone on the same side ? 
+        # if the two termination points are not on the same side of the cone
+        # --> segment is in.
+        # boin = (~((btaol&bheol)|(btaor&bheor)))&boup
+        # full interception (proba to reach = 1) 
+        bfull = ((btaol&bheor)|(btaor&bheol))&boup
 
-        bo1,bo2 = self.outside_point(pta[:,bup])
-        bo3,bo4 = self.outside_point(phe[:,bup])
+        proba[bfull] = 1
+        typ[bfull] = 1
 
-        bin = ~((bo1&bo3)|(bo2&bo4))
-        bup[bup] = bin
+        #he.v
+        btalhein  = (btaol & ~bheol & ~bheor)&boup
+        v2  = phe[:,btalhein]-self.apex.reshape(2,1)
+        vn2 = v2/np.sqrt(np.sum(v2*v2,axis=0))
+        pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
+        proba[btalhein] = pr2
+        typ[btalhein] = 2
 
-        return(bup)
+        #ta.v
+        bheltain  = (bheol & ~btaol & ~btaor)&boup
+        v3  = pta[:,bheltain]-self.apex.reshape(2,1)
+        vn3 = v3/np.sqrt(np.sum(v3*v3,axis=0))
+        pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
+        proba[bheltain] = pr3
+        typ[bheltain] = 3
+
+        #ta.u
+        bhertain  = (bheor & ~btaol & ~btaor)&boup
+        v4  = pta[:,bhertain]-self.apex.reshape(2,1)
+        vn4 = v4/np.sqrt(np.sum(v4*v4,axis=0))
+        pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
+        proba[bhertain] = pr4
+        typ[bhertain] = 4
+
+        #he.u
+        btarhein  = (btaor & ~bheol & ~bheor)&boup
+        v5  = phe[:,btarhein]-self.apex.reshape(2,1)
+        vn5 = v5/np.sqrt(np.sum(v5*v5,axis=0))
+        pr5 = np.arccos(np.dot(self.u,vn5))/np.arccos(self.dot)
+        proba[btarhein] = pr5
+        typ[btarhein] = 5
+
+        #ta.he
+        btainhein  = (~btaol & ~btaor & ~bheol & ~bheor)&boup
+        va  = pta[:,btainhein]-self.apex.reshape(2,1)
+        vb  = phe[:,btainhein]-self.apex.reshape(2,1)
+        vna = va/np.sqrt(np.sum(va*va,axis=0))
+        vnb = vb/np.sqrt(np.sum(vb*vb,axis=0))
+        pr6 = np.arccos(np.sum(vna*vnb,axis=0))/np.arccos(self.dot)
+        proba[btainhein] = pr6
+        typ[btainhein] = 6
+        return(typ,proba)
 
     def aboveseg(self):
         """
@@ -106,7 +160,38 @@ class Cone(object):
         self.pb = (self.seg1[:,0]+w).reshape(2,1)
 
     def outside_point(self,p):
-        """
+        """ check if p is outside cone
+
+        Parameters
+        ----------
+
+        p : np.array  (2xNp)
+
+        Returns
+        -------
+        
+        ~b1 & ~b2 : boolean (outside on the left)  (,Np)
+        b1 & b2 : boolean (outside on the right)  (,Np) 
+
+        Examples
+        --------
+
+        Notes
+        -----
+        
+        If one of the two output booleans is True the point is outside 
+        There are 2 output bits but only 3 states due to (uv) convention.
+            v    u 
+        p    \  /       lv & lu
+              \/
+
+             \p /  
+              \/        ~lv & lu
+
+             \  /  p 
+              \/        ~lu & ~lv
+
+              
         """
 
         a = self.apex[:,np.newaxis]
@@ -115,10 +200,10 @@ class Cone(object):
 
         p0a0 = p[0,:]-a[0,:]
         p1a1 = p[1,:]-a[1,:]
-        b1 = ((b[0,:]-a[0,:])* p1a1 - ((b[1,:]-a[1,:])* p0a0 ))>0
-        b2 = ((c[0,:]-a[0,:])* p1a1 - ((c[1,:]-a[1,:])* p0a0 ))>0
+        lu = ((b[0,:]-a[0,:])* p1a1 - ((b[1,:]-a[1,:])* p0a0 ))>0
+        lv = ((c[0,:]-a[0,:])* p1a1 - ((c[1,:]-a[1,:])* p0a0 ))>0
 
-        return(~b1 & ~b2 , b1 & b2) 
+        return(~lu & ~lv , lu & lv) 
 
     def belong_point2(self,p):
         """
@@ -381,7 +466,7 @@ class Cone(object):
         length : float 
 
         """
-        defaults = {'length': 3.}
+        defaults = {'length': 15.}
         for k in defaults:
             if k not in kwargs:
                 kwargs[k] = defaults[k]
