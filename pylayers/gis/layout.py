@@ -3771,7 +3771,6 @@ class Layout(object):
             nx.draw_networkx_labels(
                 self.Gs, dicopos, dicolab, font_size=font_size)
 
-    #def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
     def show_segment(self,**kwargs): 
         """ show segment
 
@@ -3867,8 +3866,12 @@ class Layout(object):
             edlist = list(np.intersect1d(a1, a2))
 
         if self.display['thin']:
-            self.show_segment(edlist, alpha=1, width=1,
-                            color=color, dlabels=dlabels, font_size=font_size)
+            self.show_segment(edlist=edlist,
+                              alpha=1, 
+                              width=1,
+                              color=color,
+                              dlabels=dlabels,
+                              font_size=font_size)
         else:
             slab = self.sl[name]
             if width==0:
@@ -3888,24 +3891,51 @@ class Layout(object):
                             dlabels=dlabels, font_size=font_size)
 
     def showGi(self, **kwargs):
-        """
+        """  show graph of interactions Gi
+
         en  : int 
             edge number
+
         """
+
+        # interactions corresponding to edge en 
         int0,int1 = self.Gi.edges()[kwargs['en']]
+
         print "int0 : ",int0
         print "int1 : ",int1
-
+        
+        # if interaction is tuple (R or T)
         if ((type(eval(int0))==tuple) & (type(eval(int1))==tuple)):
+            # segment number associated to interaction 
             nstr0 = eval(int0)[0]
             nstr1 = eval(int1)[0]
-            print " output ", self.Gi.edge[int0][int1] 
+            output = self.Gi.edge[int0][int1]['output']
+            print " output ", output 
+            lseg = np.unique(np.array(map(lambda x : eval(x)[0],output.keys())))
+            print "lseg", lseg 
+            # termination points from seg0 and seg1 
             pseg0 = self.seg2pts(nstr0).reshape(2,2).T
             pseg1 = self.seg2pts(nstr1).reshape(2,2).T
+            #
+            # create the cone seg0 seg1 
+            #
             cn = cone.Cone()
             cn.from2segs(pseg0,pseg1)
-            fig,ax = cn.show()
-            fig,ax = self.showG('t',fig=fig,ax=ax)
+            # show cone
+            # show Gt 
+            self.display['thin']=True
+            self.display['subseg']=False
+            fig,ax = self.showGs()
+            fig,ax = cn.show(fig = fig,ax = ax)
+            for nse in lseg:
+                ta, he = self.Gs.neighbors(nse)
+                pta = np.array(self.Gs.pos[ta])
+                phe = np.array(self.Gs.pos[he])
+                segment = ax.plot([pta[0],phe[0]],
+                                  [pta[1],phe[1]],
+                                   'g',linewidth=3, visible=True)
+
+        return(fig,ax)   
 
     def showGt(self, ax=[], roomlist=[],mode='area'):
         """ show topological graph Gt
@@ -4970,31 +5000,39 @@ class Layout(object):
                 nstr1 = i1
                 typ = 3
 
+            if i1=='(150, 46)':
+                pdb.set_trace()
             # list of authorized outputs, initialized void
             output = []
             # nstr1 : segment number of middle interaction
             if nstr1>0:
                 pseg1 = self.seg2pts(nstr1).reshape(2,2).T
+                # create a Cone object
                 cn = cone.Cone()
+                # if starting from segment 
                 if nstr0>0:
                     pseg0 = self.seg2pts(nstr0).reshape(2,2).T
-                    # test if nstr0 and nstr1 are connected segments
+                    # if nstr0 and nstr1 are connected segments
                     if (len(np.intersect1d(nx.neighbors(self.Gs,nstr0),nx.neighbors(self.Gs,nstr1)))==0):
-                        # not connected
+                        # from 2 not connected segment
                         cn.from2segs(pseg0,pseg1)
                     else:
-                        # connected 
+                        # from 2 connected segments
                         cn.from2csegs(pseg0,pseg1)
+                # if starting from point  
                 else:
                     pt = np.array(self.Gs.pos[nstr0])
                     cn.fromptseg(pt,pseg1)
             
-                # list all potential successor of interaction i1
+                # list all potential successors of interaction i1
                 i2 = nx.neighbors(self.Gi,str(i1))
                 ipoints = filter(lambda x: eval(x)<0 ,i2)
+                # filter tuple (R | T)
                 istup = filter(lambda x : type(eval(x))==tuple,i2)
+                # map first argument segment number  
                 isegments = np.unique(map(lambda x : eval(x)[0],istup))
 
+                # there are one or more segments
                 if len(isegments)>0:
                     points = self.seg2pts(isegments)
                     pta = points[0:2,:]
@@ -5002,12 +5040,14 @@ class Layout(object):
                     #print points
                     #print segments 
                     #cn.show()
+                    # i1 : interaction T
                     if len(i1)==3:
                         typ,prob = cn.belong_seg(pta,phe)
                         #if bs.any():
                         #    plu.displot(pta[:,bs],phe[:,bs],color='g')
                         #if ~bs.any():
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+                    # i1 : interaction R --> mirror 
                     if len(i1)==2:    
                         Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
                         Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
@@ -5021,7 +5061,7 @@ class Layout(object):
                         #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
                         #    plt.show()
                         #    pdb.set_trace()
-                    isegkeep = isegments[prob>0.1]     
+                    isegkeep = isegments[prob>0]     
                     # dict num segment : proba
                     dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
                     output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
@@ -5329,16 +5369,17 @@ class Layout(object):
 
         args = {'fig':fig,'ax':ax,'show':False}
 
-        if kwargs['mode']=='cycle':
-            for k, ncy in enumerate(self.Gt.node.keys()):
-                fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
-                args['fig']=fig
-                args['ax']=ax
-        else:
-            for k, nro in enumerate(self.Gr.node.keys()):
-                fig,ax = self.Gr.node[nro]['cycle'].show(**args)
-                args['fig']=fig
-                args['ax']=ax
+        if len(kwargs['edgelist'])==0:
+            if kwargs['mode']=='cycle':
+                for k, ncy in enumerate(self.Gt.node.keys()):
+                    fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
+                    args['fig']=fig
+                    args['ax']=ax
+            else:
+                for k, nro in enumerate(self.Gr.node.keys()):
+                    fig,ax = self.Gr.node[nro]['cycle'].show(**args)
+                    args['fig']=fig
+                    args['ax']=ax
 
         ax.axis('scaled')
 

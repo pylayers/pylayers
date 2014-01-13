@@ -1175,7 +1175,7 @@ class Rays(dict):
             
         """
 
-        print 'Rays evaluation'
+        #print 'Rays evaluation'
         
         self.I.eval(fGHz)
         B=self.B.eval(fGHz)

@@ -63,12 +63,26 @@ class Cone(object):
         pta : np.array (2xNseg)
         phe : np.array (2xNseg)
 
+        Returns
+        -------
+
+        typ   : int 
+            0 : no visibility 
+            1 : full visibility 
+            2 : he.v 
+            3 : ta.v
+            4 : ta.u  
+            5 : he.u  
+            6 : inside 
+        proba : float
+            geometric probability 
+
+            
         Notes
         -----
 
-        A segment belongs to the cone 
-
-        + if not all termination points lie in the same side outside the cone.
+        A segment belongs to the cone if not all termination points 
+        lie in the same side outside the cone.
 
         """
         vc  = (self.u+self.v)/2
@@ -466,6 +480,7 @@ class Cone(object):
         length : float 
 
         """
+
         defaults = {'length': 15.}
         for k in defaults:
             if k not in kwargs:
@@ -535,12 +550,17 @@ class Cone(object):
                 ]
 
 
-        
-
         path = Path(verts, codes)
 
-        fig = plt.figure(figsize=(10,10))
-        ax = fig.add_subplot(111)
+        if 'fig' not in kwargs:
+            fig = plt.figure(figsize=(10,10))
+        else:
+            fig = kwargs['fig']
+        if 'ax' not in kwargs:    
+            ax = fig.add_subplot(111)
+        else:
+            ax = kwargs['ax']
+
         ax.plot([self.apex[0],self.apex[0]+kwargs['length']*self.u[0]],
                 [self.apex[1],self.apex[1]+kwargs['length']*self.u[1]],lw=1,color='b')
         ax.plot([self.apex[0],self.apex[0]+kwargs['length']*self.v[0]],
