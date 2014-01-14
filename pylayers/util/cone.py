@@ -86,16 +86,27 @@ class Cone(object):
 
         """
         vc  = (self.u+self.v)/2
-        vcn = vc/np.sqrt(np.dot(vc,vc))
-        w  = np.array([vcn[1],-vcn[0]])
-        if 'seg1' in self.__dict__:
-            pa =  self.seg1[:,0].reshape(2,1)  
-            pb = (self.seg1[:,0]+w).reshape(2,1)
-        else:
-            pa = self.apex.reshape(2,1)
-            pb = pa+w.reshape(2,1)
-        blta = geu.isleft(pa,pb,pta)
-        blhe = geu.isleft(pa,pb,phe)
+        #vcn = vc/np.sqrt(np.dot(vc,vc))
+        w = vc/np.sqrt(np.dot(vc,vc))
+        w = w.reshape(2,1)
+        #w  = np.array([vcn[1],-vcn[0]])
+
+        ptama = pta - self.apex.reshape(2,1)
+        phema = phe - self.apex.reshape(2,1)
+
+        dtaw = np.sum(ptama*w,axis=0)
+        dhew = np.sum(phema*w,axis=0)
+        
+        blta = (dtaw>0)
+        blhe = (dhew>0)
+        #if 'seg1' in self.__dict__:
+        #    pa =  self.seg1[:,0].reshape(2,1)  
+        #    pb = (self.seg1[:,0]+w).reshape(2,1)
+        #else:
+        #    pa = self.apex.reshape(2,1)
+        #    pb = pa+w.reshape(2,1)
+        #blta = geu.isleft(pa,pb,pta)
+        #blhe = geu.isleft(pa,pb,phe)
         # segment candidate for being above segment 1 (,Nseg)
         boup = blta & blhe  
         # type of segment 
@@ -195,6 +206,7 @@ class Cone(object):
         
         If one of the two output booleans is True the point is outside 
         There are 2 output bits but only 3 states due to (uv) convention.
+
             v    u 
         p    \  /       lv & lu
               \/

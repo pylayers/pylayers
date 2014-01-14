@@ -4982,6 +4982,7 @@ class Layout(object):
             i0 = eval(e[0])
             i1 = eval(e[1])
 
+
             try:
                 nstr0 = i0[0]
             except:
@@ -5000,8 +5001,6 @@ class Layout(object):
                 nstr1 = i1
                 typ = 3
 
-            if i1=='(150, 46)':
-                pdb.set_trace()
             # list of authorized outputs, initialized void
             output = []
             # nstr1 : segment number of middle interaction
@@ -5032,6 +5031,8 @@ class Layout(object):
                 # map first argument segment number  
                 isegments = np.unique(map(lambda x : eval(x)[0],istup))
 
+                #if ((i0==(32, 75)) and (i1==(170, 75, 74))):
+                #    pdb.set_trace()
                 # there are one or more segments
                 if len(isegments)>0:
                     points = self.seg2pts(isegments)
