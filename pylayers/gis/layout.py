@@ -37,6 +37,8 @@ from pylayers.util import geomutil as geu
 from pylayers.util import plotutil as plu
 from pylayers.util import pyutil as pyu
 from pylayers.util import graphutil as gru
+from pylayers.util import cone
+
 # Handle furnitures
 import pylayers.gis.furniture as fur
 import pylayers.gis.osmparser as osm
@@ -3203,7 +3205,7 @@ class Layout(object):
         return(seglist)
 
     def seg2pts(self,aseg):
-        """ convert segments array to cooresponding termination points array
+        """ convert segments array to coresponding termination points array
         
         Parameters
         ----------
@@ -3279,6 +3281,7 @@ class Layout(object):
 
     def extrseg(self):
         """ calculate extremum of segments
+
         Notes
         -----
 
@@ -3768,7 +3771,6 @@ class Layout(object):
             nx.draw_networkx_labels(
                 self.Gs, dicopos, dicolab, font_size=font_size)
 
-    #def show_segment(self, edlist=[], alpha=1, width=1, color='black', dnodes=False, dlabels=False, font_size=15):
     def show_segment(self,**kwargs): 
         """ show segment
 
@@ -3864,8 +3866,12 @@ class Layout(object):
             edlist = list(np.intersect1d(a1, a2))
 
         if self.display['thin']:
-            self.show_segment(edlist, alpha=1, width=1,
-                            color=color, dlabels=dlabels, font_size=font_size)
+            self.show_segment(edlist=edlist,
+                              alpha=1, 
+                              width=1,
+                              color=color,
+                              dlabels=dlabels,
+                              font_size=font_size)
         else:
             slab = self.sl[name]
             if width==0:
@@ -3883,6 +3889,76 @@ class Layout(object):
             self.show_segment(edlist=edlist, alpha=1,
                             width=linewidth, color=color, dnodes=dnodes,
                             dlabels=dlabels, font_size=font_size)
+
+    def showGi(self, **kwargs):
+        """  show graph of interactions Gi
+
+        en  : int 
+            edge number
+
+        """
+
+        # interactions corresponding to edge en 
+        int0,int1 = self.Gi.edges()[kwargs['en']]
+
+        print "int0 : ",int0
+        print "int1 : ",int1
+        
+        # if interaction is tuple (R or T)
+        if ((type(eval(int0))==tuple) & (type(eval(int1))==tuple)):
+            # segment number associated to interaction 
+            nstr0 = eval(int0)[0]
+            nstr1 = eval(int1)[0]
+            output = self.Gi.edge[int0][int1]['output']
+            print " output ", output 
+            ltup = filter(lambda x : type(eval(x))==tuple,output.keys())
+            lref = filter(lambda x : len(eval(x))==2,ltup)
+            ltran =filter(lambda x : len(eval(x))==3,ltup)
+            lseg = np.unique(np.array(map(lambda x : eval(x)[0],output.keys())))
+            probR = np.array(map(lambda x : output[x],lref))
+            segR = np.array(map(lambda x : eval(x)[0],lref))
+            probT = np.array(map(lambda x : output[x],ltran))
+            segT = np.array(map(lambda x : eval(x)[0],lref))
+            dprobR = dict(zip(segR,probR))
+            dprobT = dict(zip(segT,probT))
+            print " Sum pR : ",sum(dprobR.values())
+            print " Sum pT : ",sum(dprobT.values())
+            print "lseg", lseg 
+            # termination points from seg0 and seg1 
+            pseg0 = self.seg2pts(nstr0).reshape(2,2).T
+            pseg1 = self.seg2pts(nstr1).reshape(2,2).T
+            #
+            # create the cone seg0 seg1 
+            #
+            cn = cone.Cone()
+            cn.from2segs(pseg0,pseg1)
+            # show cone
+            # show Gt 
+            self.display['thin']=True
+            self.display['subseg']=False
+            fig,ax = self.showGs()
+            fig,ax = cn.show(fig = fig,ax = ax)
+            for nse in lseg:
+                ta, he = self.Gs.neighbors(nse)
+                pta = np.array(self.Gs.pos[ta])
+                phe = np.array(self.Gs.pos[he])
+
+                try: 
+                    pR= dprobR[nse]
+                except: 
+                    pR = 0 
+
+                try:     
+                    pT = dprobT[nse]
+                except:
+                    pT = 0
+
+                alpha = (pR+pT)/2.
+                segment = ax.plot([pta[0],phe[0]],
+                                  [pta[1],phe[1]],
+                                   'g',linewidth=7, visible=True,alpha=alpha)
+
+        return(fig,ax)   
 
     def showGt(self, ax=[], roomlist=[],mode='area'):
         """ show topological graph Gt
@@ -4088,6 +4164,7 @@ class Layout(object):
             self.lbltg.extend('v')
         if 'i' in graph:
             self.buildGi()
+            self.outputGi()
             self.buildGi2()
             self.lbltg.extend('i')
 
@@ -4193,8 +4270,13 @@ class Layout(object):
         for k in self.Gs.node:
             if k>0:
                 self.Gs.node[k]['ncycles']=[]
+
         for k in self.Gt.node:
             vnodes = self.Gt.node[k]['cycle'].cycle
+            if vnodes[0]<0:
+                self.Gt.node[k]['polyg'].vnodes = vnodes
+            else:
+                self.Gt.node[k]['polyg'].vnodes = np.roll(vnodes,-1)
             for inode in vnodes:
                 if inode > 0:   # segments
                     if k not in self.Gs.node[inode]['ncycles']:
@@ -4567,7 +4649,7 @@ class Layout(object):
 
         self.Gv = nx.Graph()
         #
-        # loop over rooms
+        # loop over cycles
         #
         self.dGv = {}  # dict of Gv graph
         for icycle in self.Gt.node:
@@ -4803,8 +4885,10 @@ class Layout(object):
                         self.Gi.pos[str((n, cy1, cy0))] = tuple(self.Gs.pos[n]-ln*delta/2.)
 
                 if len(cy) == 1: # segment which is not a separation between rooms
-                    self.Gi.add_node(str((n, cy[0])))
-                    self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
+                    # On AIR or ABSORBENT there is no reflection
+                    if (name<>'AIR') & (name<>'ABSORBENT'):
+                        self.Gi.add_node(str((n, cy[0])))
+                        self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
 
         #
         # Loop over interactions list
@@ -4890,6 +4974,130 @@ class Layout(object):
         [self.di.update({i:[eval(i)[0],np.mod(len(eval(i))+1,3)+1]}) for i in self.Gi.nodes() if not isinstance((eval(i)),int)]
         [self.di.update({i:[eval(i),3]}) for i in self.Gi.nodes() if isinstance((eval(i)),int)]
 
+
+    def outputGi(self):
+        """ filter authorized Gi edges output 
+
+        Parameters
+        ----------
+
+        L : Layout
+
+        Notes 
+        -----
+
+        Let assume a sequence (nstr0,nstr1,{nstr2A,nstr2B,...}) in a signature.
+        This function checks that this sequence is feasible
+        , whatever the type of nstr0 and nstr1.
+        The feasible outputs from nstr0 to nstr1 are stored in an output field of 
+        edge (nstr0,nstr1)
+
+
+        """
+        assert('Gi' in self.__dict__)
+        # loop over all edges of Gi
+        Nedges = len(self.Gi.edges())
+        #print "Gi Nedges :",Nedges
+        for k,e in enumerate(self.Gi.edges()):
+            #if (k%100)==0:
+            #    print "edge :  ",k
+            # extract  both termination interactions nodes
+            i0 = eval(e[0])
+            i1 = eval(e[1])
+
+
+            try:
+                nstr0 = i0[0]
+            except:
+                nstr0 = i0
+
+            try:
+                nstr1 = i1[0]
+                # Transmission
+                if len(i1)>2:
+                    typ=2
+                # Reflexion    
+                else :
+                    typ=1
+            # Diffraction        
+            except:
+                nstr1 = i1
+                typ = 3
+
+            # list of authorized outputs, initialized void
+            output = []
+            # nstr1 : segment number of middle interaction
+            if nstr1>0:
+                pseg1 = self.seg2pts(nstr1).reshape(2,2).T
+                # create a Cone object
+                cn = cone.Cone()
+                # if starting from segment 
+                if nstr0>0:
+                    pseg0 = self.seg2pts(nstr0).reshape(2,2).T
+                    # if nstr0 and nstr1 are connected segments
+                    if (len(np.intersect1d(nx.neighbors(self.Gs,nstr0),nx.neighbors(self.Gs,nstr1)))==0):
+                        # from 2 not connected segment
+                        cn.from2segs(pseg0,pseg1)
+                    else:
+                        # from 2 connected segments
+                        cn.from2csegs(pseg0,pseg1)
+                # if starting from point  
+                else:
+                    pt = np.array(self.Gs.pos[nstr0])
+                    cn.fromptseg(pt,pseg1)
+            
+                # list all potential successors of interaction i1
+                i2 = nx.neighbors(self.Gi,str(i1))
+                ipoints = filter(lambda x: eval(x)<0 ,i2)
+                # filter tuple (R | T)
+                istup = filter(lambda x : type(eval(x))==tuple,i2)
+                # map first argument segment number  
+                isegments = np.unique(map(lambda x : eval(x)[0],istup))
+
+                #if ((i0==(32, 75)) and (i1==(170, 75, 74))):
+                #    pdb.set_trace()
+                # there are one or more segments
+                if len(isegments)>0:
+                    points = self.seg2pts(isegments)
+                    pta = points[0:2,:]
+                    phe = points[2:,:]
+                    #print points
+                    #print segments 
+                    #cn.show()
+                    # i1 : interaction T
+                    if len(i1)==3:
+                        typ,prob = cn.belong_seg(pta,phe)
+                        #if bs.any():
+                        #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                        #if ~bs.any():
+                        #    plu.displot(pta[:,~bs],phe[:,~bs],color='k')
+                    # i1 : interaction R --> mirror 
+                    if len(i1)==2:    
+                        Mpta = geu.mirror(pta,pseg1[:,0],pseg1[:,1])
+                        Mphe = geu.mirror(phe,pseg1[:,0],pseg1[:,1])
+                        typ,prob = cn.belong_seg(Mpta,Mphe)
+                        #print i0,i1
+                        #if ((i0 == (6, 0)) & (i1 == (7, 0))):
+                        #    pdb.set_trace()
+                        #if bs.any():
+                        #    plu.displot(pta[:,bs],phe[:,bs],color='g')
+                        #if ~bs.any():
+                        #    plu.displot(pta[:,~bs],phe[:,~bs],color='m')
+                        #    plt.show()
+                        #    pdb.set_trace()
+                    isegkeep = isegments[prob>0]     
+                    # dict num segment : proba
+                    dsegprob = {k:v for k,v in zip(isegkeep,prob[prob>0])}
+                    output = filter(lambda x : eval(x)[0] in isegkeep ,istup)
+                    probint  = map(lambda x: dsegprob[eval(x)[0]],output)
+                    # dict interaction : proba
+                    dintprob = {k:v for k,v in zip(output,probint)}
+
+
+                    # keep all segment above nstr1 and in Cone if T 
+                    # keep all segment below nstr1 and in Cone if R 
+
+            self.Gi.add_edge(str(i0),str(i1),output=dintprob)
 
 
         
@@ -5185,16 +5393,17 @@ class Layout(object):
 
         args = {'fig':fig,'ax':ax,'show':False}
 
-        if kwargs['mode']=='cycle':
-            for k, ncy in enumerate(self.Gt.node.keys()):
-                fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
-                args['fig']=fig
-                args['ax']=ax
-        else:
-            for k, nro in enumerate(self.Gr.node.keys()):
-                fig,ax = self.Gr.node[nro]['cycle'].show(**args)
-                args['fig']=fig
-                args['ax']=ax
+        if len(kwargs['edgelist'])==0:
+            if kwargs['mode']=='cycle':
+                for k, ncy in enumerate(self.Gt.node.keys()):
+                    fig,ax = self.Gt.node[ncy]['polyg'].plot(alpha=kwargs['alphacy'],color=kwargs['colorcy'],**args)
+                    args['fig']=fig
+                    args['ax']=ax
+            else:
+                for k, nro in enumerate(self.Gr.node.keys()):
+                    fig,ax = self.Gr.node[nro]['cycle'].show(**args)
+                    args['fig']=fig
+                    args['ax']=ax
 
         ax.axis('scaled')
 

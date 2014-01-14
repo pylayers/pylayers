@@ -1438,6 +1438,14 @@ def intersect(a, b, c, d):
     return ((ccw(a, c, d) != ccw(b, c, d)) & (ccw(a, b, c) != ccw(a, b, d)))
 
 
+
+def isaligned(a,b,c):
+    #return abs(((b[0,:]-a[0,:])*(c[1,:]-a[1,:]) - (b[1,:]-a[1,:])*(c[0,:]-a[0,:])))<1e-8
+    val = abs(((b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])))
+    cond = val<1e-2 
+    #print val
+    return cond
+
 def isleft(a,b,c):
     """ Test point c is at left of the vector a-->b
 
@@ -1449,6 +1457,10 @@ def isleft(a,b,c):
     b : np.array (2xN)
     c : np.array (2xN)
 
+    Returns
+    -------
+
+    boolean array (1xN)
 
     Examples
     --------
@@ -1473,10 +1485,16 @@ def isleft(a,b,c):
         >>> displot(A[:,il],B[:,il],arrow=True,color='g')
         >>> displot(A[:,inl],B[:,inl],arrow=True,color='r')
 
+    See Also
+    --------
 
+    pylayers.antprop.signature
 
     """
     return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>0
+
+def isleftorequal(a,b,c):
+    return ((b[0,:]-a[0,:])*(c[1,:]-a[1,:])) - ((b[1,:]-a[1,:])*(c[0,:]-a[0,:]))>=0
 
 
 def affine(X,Y):
@@ -2146,8 +2164,15 @@ class Polygon(shg.Polygon):
             tu = tuple(tp)
             shg.Polygon.__init__(self, tu)
 
+        self.Np = np.shape(self.exterior.xy)[1] - 1
+
         if vnodes != []:
             self.vnodes = np.array(vnodes)
+            # check if always True
+            # very important fic for buildGv
+            # now vnodes starts always with <0 
+            if self.vnodes[0]>0:
+                self.vnodes = np.roll(self.vnodes,-1)
         else:
             # create sequence
             #
@@ -2263,7 +2288,7 @@ class Polygon(shg.Polygon):
                 color = kwargs['color'],
                 alpha=kwargs['alpha'],
                 ec = kwargs['edgecolor'])
-
+        
         if kwargs['show']:
             plt.show()
 
@@ -2350,12 +2375,15 @@ class Polygon(shg.Polygon):
         Topological error can be raised if the point coordinates accuracy
         is not limited.
 
+        Nodes of polygon are numbered in the global graph in vnodes member.
+
         See Also
         --------
 
         pylayers.gis.layout
 
         """
+
         defaults = {'show': False,
                     'fig': [],
                     'ax': [],
@@ -2375,7 +2403,7 @@ class Polygon(shg.Polygon):
         #self.args=args
         if kwargs['show']:
             if kwargs['fig'] == []:
-                fig = plt.figure()
+                fig = plt.figure(figsize=(20,20))
                 fig.set_frameon(True)
             else:
                 fig = kwargs['fig']
@@ -2403,7 +2431,8 @@ class Polygon(shg.Polygon):
         # determine convex points
         #
         tcc, n = self.ptconvex()
-        Np = self.Np
+        # Np = self.Np
+        Np = np.shape(self.exterior.xy)[1] -1
         #
         # retrieve
         #  npt points label sequence
@@ -2417,9 +2446,11 @@ class Polygon(shg.Polygon):
         else:
             ipt = 2 * np.arange(Np) + 1
             iseg = 2 * np.arange(Np)
-
+        
         npt = self.vnodes[ipt]
         nseg = self.vnodes[iseg]
+        #print "npt : ",npt
+        #print "nseg : ",nseg
 
         assert  np.all(npt < 0), "something wrong with points"
         assert  np.all(nseg > 0), "something wrong with segments"
@@ -2429,7 +2460,7 @@ class Polygon(shg.Polygon):
         #
         # Warning lring recopy the node at the end of the sequence
         #
-        # A problem comes from the fact that a vnodes sequence
+        # A problem arises from the fact that a vnodes sequence
         # do no necessarily starts with a point (negative node)
         #
         #
@@ -2456,7 +2487,7 @@ class Polygon(shg.Polygon):
         xr, yr = lring.xy
 
         #
-        # Degree 1 points : typically doors
+        # Degree 1 points : (should not exist anymore) 
         #
         # Determine diffraction points
         #
@@ -2501,15 +2532,16 @@ class Polygon(shg.Polygon):
             patch = PolygonPatch(self, facecolor='#6699cc',
                                  edgecolor='#000000', alpha=0.5, zorder=2)
             ax.add_patch(patch)
-
+        #pdb.set_trace()
         #
         #  1) Calculate node-node visibility
         #
         # The following exploits definition of convexity.
         #
         # Between all combinations of diffracting points 
-        # create a segment and check it is fully included in the polygon 
-        # if it is true then there is a visibility between the 2 points.
+        # create a segment and check whether it is fully included in the
+        # polygon.
+        # If verified then there is a visibility between the 2 points.
         #
         for nk in combinations(udiff, 2):
             p1 = p[:, nk[0]]
@@ -2564,50 +2596,72 @@ class Polygon(shg.Polygon):
                 for ns in listpoint:
                     pts = p[:, ns]
                     phs = p[:, (ns + 1) % Np]
-                    ls = phs - pts
-                    nls = np.sqrt(np.dot(ls, ls))
-                    lns = ls / nls
-                    epsilons = nls / 1000.
-                    pte = pts + lns * epsilons  # + n[:,ns]*epsilon
-                    phe = phs - lns * epsilons  # + n[:,ns]*epsilon
-                    tbr = pyu.bitreverse(16, 5) / 16.
-                    for alpha in tbr:
-                        pa = pte + alpha * (phe - pte)
-                        seg = shg.LineString((pcorner, pa))
-                        #print "seg: ",seg.xy
-                        #if npt[nk] == -3:
-                        #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=0.2,color='k')
-                        #    plt.draw()
-                        # topological error can be raised here
-                        seg2 = self.intersection(seg)
-                        #if self.contains(seg):
-                        if seg2.almost_equals(seg, decimal=4):
-                            #print alpha,nk,ns
-                            #plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=2,color='r')
-                            #Gv.add_edge(-(uconvex[nk]+1),ns+1,weight=10)
-                            if i == 0:
-                                if nk in udiff:
-                                    Gv.add_edge(npt[nk], nseg[ns], weight=1)
-                                    #plt.plot(np.array([Gv.pos[npt[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[nk]][1],Gv.pos[nseg[ns]][1]]),'r')
-                            if i == 1:
-                                if (nk + 1) % Np in udiff:
-                                    Gv.add_edge(npt[(nk + 1) % Np], nseg[ns], weight=1)
-                                    #plt.plot(np.array([Gv.pos[npt[(nk+1)%Np]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[(nk+1)%Np]][1],Gv.pos[nseg[ns]][1]]),'g')
-                                #plt.draw()
-                            #if i==1:
-                            if nseg[nk] != nseg[ns]:
-                                Gv.add_edge(nseg[nk], nseg[ns], weight=1)
-                                #if (((nseg[nk]==155) & (nseg[ns]==164)) or ((nseg[nk]==164) & (nseg[ns]==155))):
-                                    #plt.plot(np.array([Gv.pos[nseg[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[nseg[nk]][1],Gv.pos[nseg[ns]][1]]),'b')
-                                    #plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),'b')
-                                    #print "seg: ",seg.xy
-                                    #print "seg2: ",seg2.xy
-                                    #print nseg[nk],nseg[ns]
-                                    #print pcorner , ptk
-                                    #print  alpha , pa ,pte
+                    # Add B.Uguen 2/01/2014 no possible visibility relation between aligned segments
+                    if (not (isaligned(pts,phs,ptk) & isaligned(pts,phs,phk))):
+                        ls = phs - pts
+                        nls = np.sqrt(np.dot(ls, ls))
+                        lns = ls / nls
+                        epsilons = nls / 1000.
+                        pte = pts + lns * epsilons  # + n[:,ns]*epsilon
+                        phe = phs - lns * epsilons  # + n[:,ns]*epsilon
+                        tbr = pyu.bitreverse(16, 5) / 16.
+                        for alpha in tbr:
+                            pa = pte + alpha * (phe - pte)
+                            seg = shg.LineString((pcorner, pa))
+                            #print "seg: ",seg.xy
+                            #if npt[nk] == -3:
+                            #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=0.2,color='k')
+                            #    plt.draw()
+                            # topological error can be raised here
+                            seg2 = self.intersection(seg)
+                            #if self.contains(seg):
+                            if seg2.almost_equals(seg, decimal=4):
+                                #print alpha,nk,ns
+                                #plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),linewidth=2,color='r')
+                                #Gv.add_edge(-(uconvex[nk]+1),ns+1,weight=10)
+                                if i == 0:
+                                    if nk in udiff:
+                                        Gv.add_edge(npt[nk], nseg[ns], weight=1)
+                                        #plt.plot(np.array([Gv.pos[npt[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[nk]][1],Gv.pos[nseg[ns]][1]]),'r')
+                                if i == 1:
+                                    if (nk + 1) % Np in udiff:
+                                        Gv.add_edge(npt[(nk + 1) % Np], nseg[ns], weight=1)
+                                        #plt.plot(np.array([Gv.pos[npt[(nk+1)%Np]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[npt[(nk+1)%Np]][1],Gv.pos[nseg[ns]][1]]),'g')
                                     #plt.draw()
-                                    #raw_input()
-                            break
+                                #if i==1:
+                                #if (((nseg[nk]==10) & (nseg[ns]==7)) or
+                                #    ((nseg[nk]==7) & (nseg[ns]==10))):
+                                #    pdb.set_trace()
+                                if nseg[nk] != nseg[ns]:
+                                    Gv.add_edge(nseg[nk], nseg[ns], weight=1)
+                                    #else:
+                                    #    print nseg[nk],nseg[ns]
+                                    #    print pts,phs
+                                    #    print ptk,phk
+                                    #if (((nseg[nk]==10) & (nseg[ns]==7)) or
+                                    #    ((nseg[nk]==7) & (nseg[ns]==10))):
+                                    #    plt.plot(np.array([Gv.pos[nseg[nk]][0],Gv.pos[nseg[ns]][0]]),np.array([Gv.pos[nseg[nk]][1],Gv.pos[nseg[ns]][1]]),'b')
+                                    #    plt.plot(np.array([pcorner[0],pa[0]]),np.array([pcorner[1],pa[1]]),'b')
+                                    #    print "seg: ",seg.xy
+                                    #    print "seg2: ",seg2.xy
+                                    #    print nseg[nk],nseg[ns]
+                                    #    print pcorner , ptk
+                                    #    print  alpha , pa ,pte
+                                    #    plt.draw()
+                                    #    raw_input()
+                                break
+                    #else:
+                        #print p
+                        #print ns
+                        #print nk
+                        #print 'nsegnk : ',nseg[nk]
+                        #print 'nsegns', nseg[ns]
+                        #print 'ptk : ',ptk
+                        #print 'phk : ',phk
+                        #print 'pts : ',pts
+                        #print 'phs : ',phs
+                        #print "aligne :",nseg[nk],nseg[ns]
+                        #pdb.set_trace()
 
         if kwargs['show']:
             nodes = np.array(Gv.nodes())
@@ -3295,7 +3349,7 @@ def linepoly_intersection(l,poly):
     return np.array([[psh.x],[psh.y]])
 
 def mirror(p,pa,pb):
-    """ Compute the mirror of p with respect to the segment pa pb
+    """ Compute the image of p wrt the segment pa pb
 
     Parameters
     ----------
@@ -3312,19 +3366,29 @@ def mirror(p,pa,pb):
     
     M : numpy.ndarray
 
-    Example
-    -------
-
-        >>> p = np.array([0,-1])
-        >>> pa  = np.array([-1,0])
-        >>> pb  = np.array([1,0])
+    Examples
+    --------
+    
+    .. plot::
+        :include-source:
+        >>> from pylayers.util.geomutil import *
+        >>> fron pylayers.util.plotutil import *
+        >>> import numpy as np
+        >>> p = np.random.randn((2,1000))
+        >>> pa  = np.array([0,0])
+        >>> pb  = np.array([0,1])
         >>> M = mirror(p,pa,pb) 
+        >>> displot(pa,pb)
+        >>> plot(p[0,:],p[1,:],'or',alpha=0.2)
+        >>> plot(M[0,:],M[1,:],'ob',alpha=0.2)
+
     """
 
     if np.shape(pa)==(2,):
         pa = pa.reshape(2,1)
     if np.shape(pb)==(2,):
         pb = pb.reshape(2,1)
+
     pab = pb - pa
     alpha = np.sum(pab * pab, axis=0)
     zalpha = np.where(alpha == 0.)
@@ -3347,7 +3411,7 @@ def mirror(p,pa,pb):
     S[1, 1] = a
     A = np.eye(2)
     y = np.zeros(2)
-    vc0 = np.array([c[0], d[0]])
+    vc0 = np.array([c[0], d[0]]).reshape(2,1)
     v0 = np.dot(-S, p) + vc0
     x = la.solve(A, v0)
     return x

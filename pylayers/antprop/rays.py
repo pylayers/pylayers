@@ -692,7 +692,7 @@ class Rays(dict):
 
         for k in self:
             #
-            # k is the number of interactions
+            # k is the number of interactions in the block 
             #
             if k <> 0:
                 nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
@@ -740,9 +740,17 @@ class Rays(dict):
                 #
 
                 # norm : 3 x i x r
+                # TODO  
+                # For the diffraction the norm should be replaced by the unit
+                # vector along the wedge.
+                # udiff not handled yet
+                #
                 self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
+
+                normcheck = np.sum(self[k]['norm']*self[k]['norm'],axis=0)
+                assert normcheck.all()>0.99,pdb.set_trace()
 
                 # 3 : x,y,z
                 # i : interaction index
@@ -752,6 +760,9 @@ class Rays(dict):
                 #
                 v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
                 lsi = np.sqrt(np.sum(v*v, axis=0))
+                if (lsi.any()==0):
+                    pdb.set_trace()
+                assert(lsi.all()>0)
                 if (len(np.where(lsi==0.))==0) :
                     pdb.set_trace()
 
@@ -763,7 +774,8 @@ class Rays(dict):
                 # si : (i+1) x r
                 self[k]['si'] = lsi
                 self[k]['dis'] = np.sum(lsi,axis=0)
-
+                
+                # normal : 3 x i x r 
                 vn = self[k]['norm']
 
                 # s_in : 3 x i x r
@@ -798,8 +810,7 @@ class Rays(dict):
                 Bo0 = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
 
-                self[
-                    k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :], eth[:, np.newaxis, :],
+                self[k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :], eth[:, np.newaxis, :],
                                                 eph[:, np.newaxis, :]), axis=1)
 
                 #
@@ -811,10 +822,16 @@ class Rays(dict):
                 self[k]['theta'] = np.arccos(abs(scpr))  # *180/np.pi
 
                 #
-                # Warning need to handle singular case when s_in//vn
+                # Warning need to handle singular case when s_in // vn
                 #
+                # w : 3 x i x r 
                 w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
-                wn = w/np.sqrt(np.sum(w*w, axis=0))
+                # nw : i x r 
+                nw = np.sqrt(np.sum(w*w, axis=0))
+                if (nw.any()==0):
+                    pdb.set_trace()
+                assert(nw.all()>0), pdb.set_trace()
+                wn = w/nw
                 v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
 
                 es_in = np.expand_dims(s_in, axis=1)
@@ -1154,11 +1171,11 @@ class Rays(dict):
 
         fGHz : array
             frequency in GHz array
-        ib : 
+        ib : list of intercation block
             
         """
 
-        print 'Rays evaluation'
+        #print 'Rays evaluation'
         
         self.I.eval(fGHz)
         B=self.B.eval(fGHz)
