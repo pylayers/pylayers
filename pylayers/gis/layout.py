@@ -3911,7 +3911,18 @@ class Layout(object):
             nstr1 = eval(int1)[0]
             output = self.Gi.edge[int0][int1]['output']
             print " output ", output 
+            ltup = filter(lambda x : type(eval(x))==tuple,output.keys())
+            lref = filter(lambda x : len(eval(x))==2,ltup)
+            ltran =filter(lambda x : len(eval(x))==3,ltup)
             lseg = np.unique(np.array(map(lambda x : eval(x)[0],output.keys())))
+            probR = np.array(map(lambda x : output[x],lref))
+            segR = np.array(map(lambda x : eval(x)[0],lref))
+            probT = np.array(map(lambda x : output[x],ltran))
+            segT = np.array(map(lambda x : eval(x)[0],lref))
+            dprobR = dict(zip(segR,probR))
+            dprobT = dict(zip(segT,probT))
+            print " Sum pR : ",sum(dprobR.values())
+            print " Sum pT : ",sum(dprobT.values())
             print "lseg", lseg 
             # termination points from seg0 and seg1 
             pseg0 = self.seg2pts(nstr0).reshape(2,2).T
@@ -3931,9 +3942,21 @@ class Layout(object):
                 ta, he = self.Gs.neighbors(nse)
                 pta = np.array(self.Gs.pos[ta])
                 phe = np.array(self.Gs.pos[he])
+
+                try: 
+                    pR= dprobR[nse]
+                except: 
+                    pR = 0 
+
+                try:     
+                    pT = dprobT[nse]
+                except:
+                    pT = 0
+
+                alpha = (pR+pT)/2.
                 segment = ax.plot([pta[0],phe[0]],
                                   [pta[1],phe[1]],
-                                   'g',linewidth=3, visible=True)
+                                   'g',linewidth=7, visible=True,alpha=alpha)
 
         return(fig,ax)   
 
