@@ -622,8 +622,8 @@ def Cg2Cl(Cg, Tt, Tr):
     
     # get angular axes
 
-    Rt, tangl = BTB_tx(Cg.tang, Tt)
-    Rr, rangl = BTB_rx(Cg.rang, Tr)
+    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
+    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
 
     VCl.tang = tangl
     VCl.rang = rangl
@@ -641,7 +641,8 @@ def Cg2Cl(Cg, Tt, Tr):
     t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
 
     r0 = np.outer(Rr[1, 0, :], uf)
-    r1 = np.pouter(Rr[1, 1, :], uf)
+    r1 = np.outer(Rr[1, 1, :], uf)
+
     t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
     t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
 
