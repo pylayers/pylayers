@@ -691,7 +691,7 @@ class MatDB(dict):
         """
         """
         self.fileini = _fileini
-        self.filemat=self.fileini.replace('.ini','.mat')
+        self.filemat = self.fileini.replace('.ini','.mat')
 
 
 
@@ -910,6 +910,12 @@ class MatDB(dict):
 
     def load(self,_fileini): 
         """Load a Material from a .ini file
+        
+        Parameters
+        ----------
+
+        _fileini : string 
+            name of the matDB file (usually matDB.ini)
 
         """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
@@ -917,9 +923,11 @@ class MatDB(dict):
         config.read(fileini)
 
         di = dict(config.items("dict") )
+
         self.di={}
         for d in di:
             self.di[eval(d)]=di[d]
+
         for matname in self.di.values():
             M=Mat(name=matname)
             M['sigma'] = eval(config.get(matname,'sigma'))
@@ -928,6 +936,8 @@ class MatDB(dict):
             M['index'] = eval(config.get(matname,'index'))
             M['mur'] = eval(config.get(matname,'mur'))
             self[matname] = M
+        
+        # PULSRAY compatibility : save in the old .mat format 
         self.savemat(self.filemat)
 
     def loadmat(self, _filemat):
