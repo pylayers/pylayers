@@ -1772,16 +1772,20 @@ class Signatures(dict):
         mirror=[]
 
         for i in range(1,lensi):
+            pam = si.pa[:,i].reshape(2,1)
+            pbm = si.pb[:,i].reshape(2,1)
+                
+
+
             if si.typ[i] == 1: # R
-                pta[:,i] = si.pa[:,i]
-                phe[:,i] = si.pb[:,i]
+                for m in mirror:
+                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
                 mirror.append(i)
 
             elif si.typ[i] == 2 : # T
-                pam = si.pa[:,i].reshape(2,1)
-                pbm = si.pb[:,i].reshape(2,1)
-                
-
                 for m in mirror:
                     pam= geu.mirror(pam,pta[:,m],phe[:,m])
                     pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
