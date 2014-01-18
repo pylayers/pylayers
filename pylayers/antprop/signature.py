@@ -511,67 +511,6 @@ class Signatures(dict):
                 visited.pop()
 
 
-    # def propaths(self,G, source, target, cutoff=1):
-    #     """ seek all simple_path from source to target
-
-    #     Parameters
-    #     ----------
-
-    #     G : networkx Graph Gi
-    #     source : tuple 
-    #         interaction (node of Gi) 
-    #     target : tuple 
-    #         interaction (node of Gi) 
-    #     cutoff : int
-
-    #     Notes
-    #     -----
-
-    #     adapted from all_simple_path of networkx 
-
-    #     1- Determine all nodes connected to Gi 
-
-    #     """
-    #     #print "source :",source
-    #     #print "target :",target
-
-    #     if cutoff < 1:
-    #         return
-
-    #     visited = [source]
-    #     # stack is a list of iterators
-
-
-    #     stack = [iter(G[source])]
-    #     # while the list of iterators is not void
-
-
-    #     while stack: #
-    #         # children is the last iterator of stack
-
-    #         children = stack[-1]
-    #         # next child
-    #         child = next(children, None)
-    #         #print "child : ",child
-    #         #print "visited :",visited
-    #         if child is None  : # if no more child
-    #             stack.pop()   # remove last iterator
-    #             visited.pop() # remove from visited list
-    #         elif len(visited) < cutoff: # if visited list length is less than cutoff 
-    #             if child == target:  # if child is the target point
-    #                 #print visited + [target]
-    #                 yield visited + [target] # output signature
-    #             elif child not in visited: # else visit other node
-    #                 stack.append(iter(G[visited[-1]][child]['output']))
-    #                 visited.append(child)
-
-    #         else: #len(visited) == cutoff (visited list is too long)
-    #             if child == target or target in children:
-    #                 #print visited + [target]
-    #                 yield visited + [target]
-    #             stack.pop()
-    #             visited.pop()
-
     def propaths(self,G, source, target, cutoff=1):
         """ seek all simple_path from source to target
 
@@ -604,62 +543,139 @@ class Signatures(dict):
 
 
         stack = [iter(G[source])]
-
-        # list of airwall position in visited
-        nbaw = []
-        # number of useful segments
-
         # while the list of iterators is not void
+
+
         while stack: #
             # children is the last iterator of stack
 
             children = stack[-1]
             # next child
             child = next(children, None)
-
-            # update number of useful segments
-            # if there is airwall in visited
-            # 
-            
+            #print "child : ",child
+            #print "visited :",visited
             if child is None  : # if no more child
                 stack.pop()   # remove last iterator
                 visited.pop() # remove from visited list
-                try:
-                    nbaw.pop()
-                except:
-                    pass
-
-
-            elif len(visited) < (cutoff + sum(nbaw)): # if visited list length is less than cutoff 
-
+            elif len(visited) < cutoff: # if visited list length is less than cutoff 
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node
-                    # only visit output nodes
-                    #pdb.set_trace()
-                    try:
-                        dintpro = G[visited[-1]][child]['output']
-                    except:
-                        dintpro ={}
-                    stack.append(iter(dintpro.keys()))
-                    #stack.append(iter(G[visited[-1]][child]['output']))
+                    stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
-                    # check if child (current segment) is an airwall
-                    if self.L.di[child][0] in self.L.name['AIR']:
-                        nbaw.append(1)
-                    else:
-                        nbaw.append(0)
-                    # number of usefull segment (segment != airwalls)
-                    
+
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
                     #print visited + [target]
                     yield visited + [target]
-
                 stack.pop()
                 visited.pop()
-                nbaw.pop()
+
+    # def propaths(self,G, source, target, cutoff=1, cutprob =0.5):
+    #     """ seek all simple_path from source to target
+
+    #     Parameters
+    #     ----------
+
+    #     G : networkx Graph Gi
+    #     source : tuple 
+    #         interaction (node of Gi) 
+    #     target : tuple 
+    #         interaction (node of Gi) 
+    #     cutoff : int
+
+    #     Notes
+    #     -----
+
+    #     adapted from all_simple_path of networkx 
+
+    #     1- Determine all nodes connected to Gi 
+
+    #     """
+    #     #print "source :",source
+    #     #print "target :",target
+
+    #     if cutoff < 1:
+    #         return
+
+    #     visited = [source]
+    #     # stack is a list of iterators
+    #     stack = [iter(G[source])]
+    #     ps = [iter([1.0]*len((G[source])))] 
+    #     # lawp = list of airwall position in visited
+    #     lawp = []
+
+    #     # while the list of iterators is not void
+    #     # import ipdb
+    #     # ipdb.set_trace()    
+    #     while stack: #
+    #         # children is the last iterator of stack
+
+    #         children = stack[-1]
+    #         pcd = ps[-1]
+    #         # next child
+    #         child = next(children, None)
+    #         pc = next(pcd,None)
+    #         # update number of useful segments
+    #         # if there is airwall in visited
+    #         # 
+            
+    #         if child is None  : # if no more child
+    #             stack.pop()   # remove last iterator
+    #             ps.pop()
+    #             visited.pop() # remove from visited list
+    #             try:
+    #                 lawp.pop()
+    #             except:
+    #                 pass
+
+    #         elif (pc>cutprob): # check proba
+    #             if (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
+    #                 if child == target:  # if child is the target point
+    #                     #print visited + [target]
+    #                     yield visited + [target] # output signature
+    #                 elif child not in visited: # else visit other node
+    #                     # only visit output nodes
+    #                     #pdb.set_trace()
+    #                     try:
+    #                         dintpro = G[visited[-1]][child]['output']
+    #                     except:
+    #                         dintpro ={}
+
+    #                     # pnc : probability of next children
+    #                     # pc : proba of current parent
+    #                     # spnc : sum of proba of next children
+
+    #                     # spnc = sum(dintpro.values())
+    #                     pnc = [(v*pc) for v in dintpro.values()]
+
+    #                     stack.append(iter(dintpro.keys()))
+    #                     ps.append(iter(pnc))
+    #                     #stack.append(iter(G[visited[-1]][child]['output']))
+    #                     visited.append(child)
+    #                     # check if child (current segment) is an airwall
+    #                     if self.L.di[child][0] in self.L.name['AIR']:
+    #                         lawp.append(1)
+    #                     else:
+    #                         lawp.append(0)
+
+
+    #             else :
+    #                 stack.pop()
+    #                 ps.pop()
+    #                 visited.pop()
+    #                 lawp.pop()
+
+    #         else: #len(visited) == cutoff (visited list is too long)
+    #             if child == target or target in children:
+    #                 #print visited + [target]
+    #                 yield visited + [target]
+
+    #             stack.pop()
+    #             ps.pop()
+    #             visited.pop()
+    #             lawp.pop()
 
     def calsig(self,G,dia={},cutoff=None):
         """
@@ -900,7 +916,7 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
-    def run4(self,cutoff=2):
+    def run4(self,cutoff=2,cutprob=1e-9):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1690,7 +1706,93 @@ class Signatures(dict):
             ct = self.target
         return nx.shortest_path(self.L.Gt,source=cs,target=ct)
 
+    def cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):
+        """ display cones of an unfolded signature
 
+            
+         Parameters
+        ----------
+
+        L : Layout
+        i : int
+            the interaction block
+        s : int
+            the signature number in the block
+        
+        """
+        if fig == []:
+            fig= plt.figure()
+            ax = fig.add_subplot(111)
+        elif ax ==[]:
+            ax = fig.add_subplot(111)
+
+        
+        pta,phe = self.unfold(L,i=i,s=s)
+        # create a global array or tahe segments
+        seg = np.vstack((pta,phe))
+        lensi = np.shape(seg)[1]
+        for s in range(1,lensi):
+            pseg0 = seg[:,s-1].reshape(2,2).T
+            pseg1 = seg[:,s].reshape(2,2).T
+            #
+            # create the cone seg0 seg1 
+            #
+            cn = cone.Cone()
+            cn.from2segs(pseg0,pseg1)
+            fig,ax = cn.show(fig = fig, ax = ax, figsize = figsize)
+
+        return (fig,ax)
+
+    def unfold(self,L,i=0,s=0):
+        """ unfold a given signature
+
+            return 2 np.ndarray of pta and phe "aligned" (reflexion interaction are mirrored) 
+
+         Parameters
+        ----------
+
+        L : Layout
+        i : int
+            the interaction block
+        s : int
+            the signature number in the block
+        
+
+        """
+        
+        si=Signature(self[i][(2*s):(2*s)+2])
+        si.ev(L)
+
+        lensi = len(si.seq)
+        pta = np.empty((2,lensi))
+        phe = np.empty((2,lensi))
+
+        pta[:,0] = si.pa[:,0]
+        phe[:,0] = si.pb[:,0]
+        mirror=[]
+
+        for i in range(1,lensi):
+            pam = si.pa[:,i].reshape(2,1)
+            pbm = si.pb[:,i].reshape(2,1)
+                
+
+
+            if si.typ[i] == 1: # R
+                for m in mirror:
+                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
+                mirror.append(i)
+
+            elif si.typ[i] == 2 : # T
+                for m in mirror:
+                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
+
+        return pta,phe
 
     def show(self,L,**kwargs):
         """  plot signatures within the simulated environment
@@ -1994,7 +2096,7 @@ class Signature(object):
         Notes
         -----
 
-        This function converts the sequence of intercation into numpy arrays
+        This function converts the sequence of interactions into numpy arrays
         which contains coordinates of segments extremities involved in the 
         signature. At that level the coordinates of extremities (tx and rx) is 
         not known yet.

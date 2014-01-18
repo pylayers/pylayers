@@ -54,6 +54,19 @@ class Cone(object):
         else:
             self.degenerated = True    
 
+        # update cone angle and probability
+        self.upd_angle()
+        
+
+    def upd_angle(self):
+        """update cone angle attribute 
+           and associated probability of the Cone object
+        """
+        
+        self.angle = np.arccos(self.dot)
+        self.pcone = self.angle/(1.0*np.pi)
+
+
     def belong_seg(self,pta,phe):
         """ test if segment belong to cone
 
@@ -335,7 +348,7 @@ class Cone(object):
 
         if self.cross < 1e-15:
             self.degenerated=True
-
+        self.upd_angle()
 
     def from2segs(self,seg0,seg1):
         """ creates a Cone from 2 segments
@@ -420,6 +433,7 @@ class Cone(object):
 
             kb  = ((b0v-a0v)-self.dot*(b0u-a0u))/(self.dot*self.dot-1)
             self.apex = self.seg0[:,1] + kb*self.v
+        self.upd_angle()
 
     def from2csegs(self,seg0,seg1):
         """ creates a Cone from 2 connected segments
@@ -482,6 +496,9 @@ class Cone(object):
 
         if self.cross < 1e-15:
             self.degenerated=True
+
+        self.upd_angle()
+
 
     def show(self, **kwargs):
         """ show cone 
