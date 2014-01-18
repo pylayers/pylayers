@@ -2095,12 +2095,38 @@ class Signature(object):
     def __init__(self, sig):
         """
 
+        Parameters
+        ----------
+
+        sig : nd.array or list of interactions
+
         >>> seq = np.array([[1,5,1],[1,1,1]])
         >>> s = Signature(seq)
 
         """
-        self.seq = sig[0, :]
-        self.typ = sig[1, :]
+
+        def typinter(l):
+            if type(l)==tuple:
+                if len(l)==2:
+                    return(1)
+                if len(l)==3:
+                    return(2)
+            else:
+                return(3)
+        
+        def seginter(l):
+            if type(l)==tuple:
+                return l[0]
+            else:
+                return(l)
+
+        if type(sig)==np.ndarray:
+            self.seq = sig[0, :]
+            self.typ = sig[1, :]
+
+        if type(sig)==list:    
+            self.seq = map(seginter,sig) 
+            self.typ = map(typinter,sig) 
 
     def __repr__(self):
         #s = self.__class__ + ':' + str(self.__sizeof__())+'\n'
@@ -2120,6 +2146,56 @@ class Signature(object):
         split signature
         """
         pass
+
+
+    def ev2(self, L):
+        """  evaluation of Signature
+
+        Parameters
+        ----------
+
+        L : Layout
+
+        Notes
+        -----
+
+        This function converts the sequence of interactions into numpy arrays
+        which contains coordinates of segments extremities involved in the 
+        signature. At that level the coordinates of extremities (tx and rx) is 
+        not known yet.
+        
+        members data 
+
+        pa  tail of segment  (2xN) 
+        pb  head of segment  (2xN)  
+        pc  the center of segment (2xN) 
+
+        norm normal to the segment if segment 
+        in case the interaction is a point the normal is undefined and then
+        set to 0. 
+
+        """
+        def seqpointa(k,L=L):
+            if k>0:
+                ta, he = L.Gs.neighbors(k)
+                pa = np.array(L.Gs.pos[ta]).reshape(2,1)
+                pb = np.array(L.Gs.pos[he]).reshape(2,1)
+                pc = np.array(L.Gs.pos[k]).reshape(2,1)
+                nor1 = L.Gs.node[k]['norm']
+                norm = np.array([nor1[0], nor1[1]]).reshape(2,1)
+            else:    
+                pa = np.array(L.Gs.pos[k]).reshape(2,1)
+                pb = pa
+                pc = pc
+                norm = np.array([0, 0]).reshape(2,1)
+            return(np.vstack((pa,pb,pc,norm)))
+
+        v = np.array(map(seqpointa,self.seq))
+
+        self.pa = v[:,0:2,:]
+        self.pb = v[:,2:4,:]
+        self.pc = v[:,4:6,:]
+        self.norm = v[:,6:,:] 
 
     def ev(self, L):
         """  evaluation of Signature
@@ -2176,7 +2252,6 @@ class Signature(object):
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
 
-
     def unfold(self):
         """ unfold a given signature
 
@@ -2191,24 +2266,26 @@ class Signature(object):
 
         pta[:,0] = self.pa[:,0]
         phe[:,0] = self.pb[:,0]
+
         mirror=[]
 
         for i in range(1,lensi):
+
             pam = self.pa[:,i].reshape(2,1)
             pbm = self.pb[:,i].reshape(2,1)
                 
             if self.typ[i] == 1: # R
                 for m in mirror:
-                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
-                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
+                    pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
                 pta[:,i] = pam.reshape(2)
                 phe[:,i] = pbm.reshape(2)
                 mirror.append(i)
 
             elif self.typ[i] == 2 : # T
                 for m in mirror:
-                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
-                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
+                    pam = geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm = geu.mirror(pbm,pta[:,m],phe[:,m])
                 pta[:,i] = pam.reshape(2)
                 phe[:,i] = pbm.reshape(2)
 
