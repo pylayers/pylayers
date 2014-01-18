@@ -2180,7 +2180,8 @@ class Signature(object):
     def unfold(self):
         """ unfold a given signature
 
-            return 2 np.ndarray of pta and phe "aligned" (reflexion interaction are mirrored) 
+            return 2 np.ndarray of pta and phe "aligned" 
+            reflexion interactions are mirrored
 
         """
         
