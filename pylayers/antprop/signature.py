@@ -512,12 +512,13 @@ class Signatures(dict):
 
 
 
-    def procone(self,G, source, target, cutoff=1):
+    def procone(self,L, G, source, target, cutoff=1):
         """ seek all simple_path from source to target looking backward
 
         Parameters
         ----------
-
+        
+        L : Layout
         G : networkx Graph Gi
         source : tuple 
             interaction (node of Gi) 
@@ -560,8 +561,38 @@ class Signatures(dict):
                     #print visited + [target]
                     yield visited + [target] # output signature
                 elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
-                    stack.append(iter(G[visited[-1]][child]['output']))
-                    visited.append(child)
+                    # getting signature until last point
+                    diff  = np.where(np.array(visited)<0)[0]
+                    if len(diff)==0:
+                        brin = visited
+                    else:
+                        brin = visited[diff[-1]:]
+                    # looking backward with a cone
+                    if len(brin)>2:
+                        # warning visited is also appended visited[-2] is the
+                        # last node
+                        brin.append(child)
+                        s = Signature(brin)
+                        s.evf(L)
+                        ta,he = s.unfold()
+                        cn = cone.Cone()
+                        segchild = np.vstack((ta[:,-1],he[:,-1])).T
+                        segvm1 = np.vstack((ta[:,-2],he[:,-2])).T
+                        cn.from2segs(segchild,segvm1)
+                        typ,proba = cn.belong_seg(ta[:,:-2],he[:,:-2])
+                        #fig,ax = plu.displot(ta,he)
+                        #fig,ax = cn.show(fig=fig,ax=ax)
+                        #plt.show()
+                        #pdb.set_trace()
+                        if (typ==0).any(): 
+                        # child no valid (do nothing)
+                            visited.pop()
+                        else:
+                        # child valid (append child to visited and go forward)
+                            stack.append(iter(G[visited[-2]][child]['output']))
+                    else:
+                        stack.append(iter(G[visited[-1]][child]['output']))
+                        visited.append(child)
 
             else: #len(visited) == cutoff (visited list is too long)
                 if child == target or target in children:
@@ -569,6 +600,7 @@ class Signatures(dict):
                     yield visited + [target]
                 stack.pop()
                 visited.pop()
+
     def propaths(self,G, source, target, cutoff=1):
         """ seek all simple_path from source to target
 
@@ -1099,7 +1131,8 @@ class Signatures(dict):
                 if (s != t):
                     #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
                     #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
-                    paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+                    #paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
+                    paths = list(self.procone(self.L,Gi,source=s,target=t,cutoff=cutoff))
 
                     #paths = [nx.shortest_path(Gi,source=s,target=t)]
                 else:
@@ -2106,6 +2139,10 @@ class Signature(object):
         """
 
         def typinter(l):
+            try:
+                l = eval(l)
+            except:
+                pass
             if type(l)==tuple:
                 if len(l)==2:
                     return(1)
@@ -2115,6 +2152,10 @@ class Signature(object):
                 return(3)
         
         def seginter(l):
+            try:
+                l = eval(l)
+            except:
+                pass
             if type(l)==tuple:
                 return l[0]
             else:
@@ -2197,6 +2238,45 @@ class Signature(object):
         self.pc = v[:,4:6,:]
         self.norm = v[:,6:,:] 
 
+
+    def evf(self, L):
+        """  evaluation of Signature (fast version)
+
+        Parameters
+        ----------
+
+        L : Layout
+
+        Notes
+        -----
+
+        This function converts the sequence of interactions into numpy arrays
+        which contains coordinates of segments extremities involved in the 
+        signature. 
+        
+        members data 
+
+        pa  tail of segment  (2xN) 
+        pb  head of segment  (2xN)  
+
+
+        """
+
+        N = len(self.seq)
+        self.pa = np.empty((2, N))  # tail
+        self.pb = np.empty((2, N))  # head
+
+        for n in range(N):
+            k = self.seq[n]
+            if k > 0:  # segment
+                ta, he = L.Gs.neighbors(k)
+                self.pa[:, n] = np.array(L.Gs.pos[ta])
+                self.pb[:, n] = np.array(L.Gs.pos[he])
+            else:      # node
+                pa = np.array(L.Gs.pos[k])
+                self.pa[:, n] = pa
+                self.pb[:, n] = pa
+
     def ev(self, L):
         """  evaluation of Signature
 
@@ -2225,20 +2305,16 @@ class Signature(object):
 
         """
         N = len(self.seq)
-        self.pa = np.zeros((2, N))  # tail
-        self.pb = np.zeros((2, N))  # head
-        self.pc = np.zeros((2, N))  # center
-        self.norm = np.zeros((2, N))
-
-        # 
-        # .. TODO:  here a mapping would be more efficient
-        #
+        self.pa = np.empty((2, N))  # tail
+        self.pb = np.empty((2, N))  # head
+        self.pc = np.empty((2, N))  # center
+        self.norm = np.empty((2, N))
 
         for n in range(N):
             k = self.seq[n]
             if k > 0:  # segment
                 ta, he = L.Gs.neighbors(k)
-                norm1 = L.Gs.node[k]['norm']
+                norm1 = np.array(L.Gs.node[k]['norm'])
                 norm = np.array([norm1[0], norm1[1]])
                 self.pa[:, n] = np.array(L.Gs.pos[ta])
                 self.pb[:, n] = np.array(L.Gs.pos[he])
@@ -2251,7 +2327,6 @@ class Signature(object):
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
-
     def unfold(self):
         """ unfold a given signature
 
