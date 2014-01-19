@@ -600,8 +600,8 @@ def Cg2Cl(Cg, Tt, Tr):
     ----------
 
     Cg  : Ctilde global
-    Tt  : Tx rotation matrix
-    Tr  : Rx rotation matrix
+    Tt  : Tx rotation matrix 3x3
+    Tr  : Rx rotation matrix 3x3
 
     Returns
     -------
@@ -622,11 +622,13 @@ def Cg2Cl(Cg, Tt, Tr):
     
     # get angular axes
 
-    Rt, tangl = BTB_tx(Cg.tang, Tt)
-    Rr, rangl = BTB_rx(Cg.rang, Tr)
+    # Rt (2x2)
+    # Rr (2x2) 
+    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
+    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
 
-    VCl.tang = tangl
-    VCl.rang = rangl
+    Cl.tang = tangl
+    Cl.rang = rangl
 
     uf = np.ones(VCg.nfreq)
     r0 = np.outer(Rr[0, 0, :], uf)
@@ -641,7 +643,8 @@ def Cg2Cl(Cg, Tt, Tr):
     t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
 
     r0 = np.outer(Rr[1, 0, :], uf)
-    r1 = np.pouter(Rr[1, 1, :], uf)
+    r1 = np.outer(Rr[1, 1, :], uf)
+
     t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
     t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
 
@@ -656,12 +659,12 @@ def Cg2Cl(Cg, Tt, Tr):
     Ctpl = t00 * r0 + t01 * r1
     Cppl = t10 * r0 + t11 * r1
 
-    VCl.Ctt = bs.FUsignal(fGHz, Cttl)
-    VCl.Ctp = bs.FUsignal(fGHz, Ctpl)
-    VCl.Cpt = bs.FUsignal(fGHz, Cptl)
-    VCl.Cpp = bs.FUsignal(fGHz, Cppl)
+    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
+    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
+    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
+    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
 
-    return VCl
+    return Cl
 
 
 class Tchannel(bs.FUDAsignal):

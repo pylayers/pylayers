@@ -511,6 +511,64 @@ class Signatures(dict):
                 visited.pop()
 
 
+
+    def procone(self,G, source, target, cutoff=1):
+        """ seek all simple_path from source to target looking backward
+
+        Parameters
+        ----------
+
+        G : networkx Graph Gi
+        source : tuple 
+            interaction (node of Gi) 
+        target : tuple 
+            interaction (node of Gi) 
+        cutoff : int
+
+        Notes
+        -----
+
+        adapted from all_simple_path of networkx 
+
+        1- Determine all nodes connected to Gi 
+
+        """
+        #print "source :",source
+        #print "target :",target
+
+        if cutoff < 1:
+            return
+
+        visited = [source]
+
+        # stack is a list of iterators
+        stack = [iter(G[source])]
+
+        # while the list of iterators is not void
+        while stack: #
+            # children is the last iterator of stack
+            children = stack[-1]
+            # next child
+            child = next(children, None)
+            #print "child : ",child
+            #print "visited :",visited
+            if child is None  : # if no more child
+                stack.pop()   # remove last iterator
+                visited.pop() # remove from visited list
+            elif len(visited) < cutoff: # if visited list length is less than cutoff 
+                if child == target:  # if child is the target point - YIELD A SIGNATURE 
+                    #print visited + [target]
+                    yield visited + [target] # output signature
+                elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
+                    stack.append(iter(G[visited[-1]][child]['output']))
+                    visited.append(child)
+
+            else: #len(visited) == cutoff (visited list is too long)
+                if child == target or target in children:
+                    #print visited + [target]
+                    yield visited + [target]
+                stack.pop()
+                visited.pop()
     def propaths(self,G, source, target, cutoff=1):
         """ seek all simple_path from source to target
 
@@ -571,7 +629,6 @@ class Signatures(dict):
                     yield visited + [target]
                 stack.pop()
                 visited.pop()
-
     # def propaths(self,G, source, target, cutoff=1, cutprob =0.5):
     #     """ seek all simple_path from source to target
 
@@ -1709,8 +1766,7 @@ class Signatures(dict):
     def cones(self,L,i=0,s=0,fig=[],ax=[],figsize=(10,10)):
         """ display cones of an unfolded signature
 
-            
-         Parameters
+        Parameters
         ----------
 
         L : Layout
@@ -1728,9 +1784,12 @@ class Signatures(dict):
 
         
         pta,phe = self.unfold(L,i=i,s=s)
+        
         # create a global array or tahe segments
+
         seg = np.vstack((pta,phe))
         lensi = np.shape(seg)[1]
+
         for s in range(1,lensi):
             pseg0 = seg[:,s-1].reshape(2,2).T
             pseg1 = seg[:,s].reshape(2,2).T
@@ -1743,12 +1802,13 @@ class Signatures(dict):
 
         return (fig,ax)
 
+
     def unfold(self,L,i=0,s=0):
         """ unfold a given signature
 
             return 2 np.ndarray of pta and phe "aligned" (reflexion interaction are mirrored) 
 
-         Parameters
+        Parameters
         ----------
 
         L : Layout
@@ -1757,40 +1817,16 @@ class Signatures(dict):
         s : int
             the signature number in the block
         
+        See Also
+        --------
+
+        Signature.unfold
 
         """
         
-        si=Signature(self[i][(2*s):(2*s)+2])
+        si = Signature(self[i][(2*s):(2*s)+2])
         si.ev(L)
-
-        lensi = len(si.seq)
-        pta = np.empty((2,lensi))
-        phe = np.empty((2,lensi))
-
-        pta[:,0] = si.pa[:,0]
-        phe[:,0] = si.pb[:,0]
-        mirror=[]
-
-        for i in range(1,lensi):
-            pam = si.pa[:,i].reshape(2,1)
-            pbm = si.pb[:,i].reshape(2,1)
-                
-
-
-            if si.typ[i] == 1: # R
-                for m in mirror:
-                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
-                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
-                pta[:,i] = pam.reshape(2)
-                phe[:,i] = pbm.reshape(2)
-                mirror.append(i)
-
-            elif si.typ[i] == 2 : # T
-                for m in mirror:
-                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
-                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
-                pta[:,i] = pam.reshape(2)
-                phe[:,i] = pbm.reshape(2)
+        pta,phe = si.unfold()
 
         return pta,phe
 
@@ -2139,6 +2175,44 @@ class Signature(object):
                 self.pb[:, n] = pa
                 self.pc[:, n] = pa
                 self.norm[:, n] = norm
+
+
+    def unfold(self):
+        """ unfold a given signature
+
+            return 2 np.ndarray of pta and phe "aligned" 
+            reflexion interactions are mirrored
+
+        """
+        
+        lensi = len(self.seq)
+        pta = np.empty((2,lensi))
+        phe = np.empty((2,lensi))
+
+        pta[:,0] = self.pa[:,0]
+        phe[:,0] = self.pb[:,0]
+        mirror=[]
+
+        for i in range(1,lensi):
+            pam = self.pa[:,i].reshape(2,1)
+            pbm = self.pb[:,i].reshape(2,1)
+                
+            if self.typ[i] == 1: # R
+                for m in mirror:
+                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
+                mirror.append(i)
+
+            elif self.typ[i] == 2 : # T
+                for m in mirror:
+                    pam= geu.mirror(pam,pta[:,m],phe[:,m])
+                    pbm= geu.mirror(pbm,pta[:,m],phe[:,m])
+                pta[:,i] = pam.reshape(2)
+                phe[:,i] = pbm.reshape(2)
+
+        return pta,phe
 
     def evtx(self, L, tx, rx):
         """ evtx ( deprecated ) 

@@ -987,10 +987,26 @@ class Simul(object):
             pass
         self.config.write(fd)
         fd.close()
+        # save tx 
         self.tx.save()
+        # save rx 
         self.rx.save()
-        self.slab.save(self.fileslabini)
-        self.slab.mat.save(self.filematini)
+        # save slab and mat file
+        # --
+        # self.slab.save(self.fileslabini)
+        # self.slab.mat.save(self.filematini)
+        # --
+        # fix bug #189
+        #   slab is a member of S.L not of S anymore
+        #   mat is a member of S.L.sl not of S.slab 
+        try:
+            self.L.sl.save(self.fileslabini)
+        except:
+            pass
+        try:
+            self.L.sl.mat.save(self.filematini)
+        except:
+            pass
 
 #    def saveold(self):
 #        """ save simulation file
@@ -1343,6 +1359,7 @@ class Simul(object):
 
         Parameters
         ----------
+
         _filestruc : string
             short file name of the Layout object
         _filematini   : string
@@ -1358,7 +1375,6 @@ class Simul(object):
         >>> S.layout('defstr.str')
 
         """
-
         self.filestr = _filestruc
         self.filematini = _filematini
         self.fileslabini = _fileslabini
