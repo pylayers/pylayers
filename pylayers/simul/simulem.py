@@ -1508,6 +1508,56 @@ class Simul(object):
         plt.show()
         return td, tEa, tEo
 
+    def evalcir(self,cutoff=4,algo='new'):
+        """
+        Parameters
+        ----------
+
+        S 
+        tx
+        rx
+        wav
+        cutoff
+
+        """
+
+        crxp =-1
+        ctxp =-1
+        tcir = {}
+        tx = self.tx.position 
+        Ntx = len(tx[0])
+        rx = self.rx.position
+        Nrx = len(rx[0])
+
+        #for kt in range(1,Ntx-1):
+        #print kt+1
+        kt=0
+        tcir[kt+1] = {}
+        t = np.array([self.tx.position[0,kt+1],self.tx.position[1,kt+1],self.tx.position[2,kt+1]])
+        for kr in range(Nrx-1):
+            if (mod(kr,10)==0):
+                print kr+1
+            r =
+            np.array([self.rx.position[0,kr+1],self.rx.position[1,kr+1],self.rx.position[2,kr+1]])
+            ctx = self.L.pt2cy(t)
+            crx = self.L.pt2cy(r)
+            if (ctx<>ctxp)|(crx<>crxp):
+                Si  = Signatures(self.L,ctx,crx)
+                ctxp = ctx
+                crxp = crx
+                Si.run4(cutoff=cutoff)
+            r2d = Si.rays(t,r)
+            #r2d.show(S.L)
+
+            r3d = r2d.to3D(self.L)
+            r3d.locbas(self.L)
+            r3d.fillinter(self.L)   
+            Ct  = r3d.eval(self.fGHz)
+            sca = Ct.prop2tran(self.tx.A,self.rx.A)
+            cir = sca.applywavB(self.wav.sfg)
+            tcir[kt+1][kr+1]=cir
+        return(tcir)
+
     def loadcir(self, itx, irx):
         """
         Parameters
@@ -2291,7 +2341,7 @@ class Simul(object):
                 # Change the run number depending on
                 # the algorithm used for signature determination
                 #
-                Si.run1(cutoff=cutoff)
+                Si.run4(cutoff=cutoff)
                 # keep track and save signature
                 _filesir = prefix + '-sig-'+str((ctx,crx))
                 fd = open(filesig,'w')
