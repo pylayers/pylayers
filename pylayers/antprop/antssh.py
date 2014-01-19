@@ -56,7 +56,6 @@ def SSHFunc(L, theta,phi):
 	return Y,  indx
 
 
-
 def SphereToCart (theta, phi, eth, eph, bfreq ):
     """
     Convert from spherical to cartesian coordinates 
@@ -102,9 +101,6 @@ def CartToSphere (theta, phi, ex, ey,ez, bfreq ):
     es[1] = -np.sin(PHI)*ex +np.cos(PHI)*ey
 
     return es
-
-     
-
 
 def ssh(A, dsf=1, L= 20):
 	"""

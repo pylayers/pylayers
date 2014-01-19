@@ -1471,7 +1471,6 @@ class Antenna(object):
             cy = self.S.Cy.s3
             cz = self.S.Cz.s3
             
-            
         return Fth, Fph
             
 
