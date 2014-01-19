@@ -288,17 +288,12 @@ class Bsignal(object):
                   'xmax'  : 1e15,
                   'logx'  : False,
                   'logy'  : False,
- #                 'fig'   : [],
- #                 'ax'    : []  
                  }
 
         for key, value in defaults.items():
             if key not in kwargs:
                  kwargs[key] = value
 
-
-#       fig = kwargs['fig']
-#       ax  = kwargs['ax']
 
         vline = kwargs['vline']
         hline = kwargs['hline']

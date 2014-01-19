@@ -136,6 +136,40 @@ class Rays(dict):
             return(s)
 
         return(s)
+    
+    def reciprocal(self):
+        """
+        """
+        # switch tx and rx
+        r = Rays(self.pRx,self.pTx)
+        for k in self:
+            r[k]={}
+            r[k]['alpha']=1.0-self[k]['alpha'][::-1,:]
+            r[k]['pt']=self[k]['pt'][:,::-1,:]
+            r[k]['sig']=self[k]['sig'][:,::-1,:]
+        return(r)
+
+    def extract(self,ni,nr):
+        """ Extract a single ray 
+
+        Parameters 
+        ----------
+
+        ni : group of interactions 
+        nr : ray index in group of interactions 
+
+        """
+
+        r = Rays(self.pTx,self.pRx)
+        r.is3d = self.is3D
+        r[ni] = {}
+
+        for k in self[ni].keys():
+            tab  = self[ni][k]
+            if type(tab)==np.ndarray:
+                r[ni][k] = tab[...,nr][...,np.newaxis]
+        r[ni]['nrays']=1 
+        return(r)
 
     def show(self,L,**kwargs):
         """  plot 2D rays within the simulated environment
@@ -859,10 +893,13 @@ class Rays(dict):
                 #
 
                 # th : ,r
-                th = np.arccos(si[2, -1, :])
+                # fix doa/dod reciprocity 
+                #th = np.arccos(si[2, -1, :])
+                th = np.arccos(-si[2, -1, :])
 
                 # th : ,r
-                ph = np.arctan2(si[1, -1, :], si[0, -1, :])
+                #ph = np.arctan2(si[1, -1, :], si[0, -1, :])
+                ph = np.arctan2(-si[1, -1, :], -si[0, -1, :])
 
                 # aoa : 2 x r  (radians)
                 self[k]['aoa'] = np.vstack((th, ph))

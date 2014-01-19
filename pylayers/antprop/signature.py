@@ -652,7 +652,8 @@ class Signatures(dict):
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
-                elif child not in visited: # else visit other node
+                #elif child not in visited: # else visit other node
+                else:
                     stack.append(iter(G[visited[-1]][child]['output']))
                     visited.append(child)
 

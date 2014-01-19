@@ -1532,20 +1532,19 @@ class Simul(object):
         #for kt in range(1,Ntx-1):
         #print kt+1
         kt=0
-        tcir[kt+1] = {}
-        t = np.array([self.tx.position[0,kt+1],self.tx.position[1,kt+1],self.tx.position[2,kt+1]])
-        for kr in range(Nrx-1):
-            if (mod(kr,10)==0):
+        tcir[kt] = {}
+        t = np.array([self.tx.position[0,kt],self.tx.position[1,kt],self.tx.position[2,kt]])
+        for kr in range(Nrx):
+            if (np.mod(kr,10)==0):
                 print kr+1
-            r =
-            np.array([self.rx.position[0,kr+1],self.rx.position[1,kr+1],self.rx.position[2,kr+1]])
+            r = np.array([self.rx.position[0,kr],self.rx.position[1,kr],self.rx.position[2,kr]])
             ctx = self.L.pt2cy(t)
             crx = self.L.pt2cy(r)
             if (ctx<>ctxp)|(crx<>crxp):
-                Si  = Signatures(self.L,ctx,crx)
+                Si  = signature.Signatures(self.L,ctx,crx)
                 ctxp = ctx
                 crxp = crx
-                Si.run4(cutoff=cutoff)
+                Si.run4(cutoff=cutoff,algo=algo)
             r2d = Si.rays(t,r)
             #r2d.show(S.L)
 
@@ -1555,7 +1554,7 @@ class Simul(object):
             Ct  = r3d.eval(self.fGHz)
             sca = Ct.prop2tran(self.tx.A,self.rx.A)
             cir = sca.applywavB(self.wav.sfg)
-            tcir[kt+1][kr+1]=cir
+            tcir[kt][kr] = cir
         return(tcir)
 
     def loadcir(self, itx, irx):
@@ -2336,7 +2335,7 @@ class Simul(object):
             D['Rx'] = rx
 
             if (ctx,crx) not in lsig:
-                Si  = Signatures(S.L,ctx,crx)
+                Si  = signature.Signatures(S.L,ctx,crx)
                 #
                 # Change the run number depending on
                 # the algorithm used for signature determination
