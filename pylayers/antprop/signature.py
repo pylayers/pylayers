@@ -560,7 +560,8 @@ class Signatures(dict):
                 if child == target:  # if child is the target point - YIELD A SIGNATURE 
                     #print visited + [target]
                     yield visited + [target] # output signature
-                elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
+                else:    
+                #elif child not in visited: # else visit other node - CONTINUE APPEND CHILD 
                     # getting signature until last point
                     diff  = np.where(np.array(visited)<0)[0]
                     if len(diff)==0:
@@ -1005,7 +1006,7 @@ class Signatures(dict):
                     except:
                         self[len(path)] = sigarr
 
-    def run4(self,cutoff=2,cutprob=1e-9):
+    def run4(self,cutoff=2,cutprob=1e-9,algo='new'):
         """ get signatures (in one list of arrays) between tx and rx
 
         Parameters
@@ -1131,8 +1132,10 @@ class Signatures(dict):
                 if (s != t):
                     #paths = list(nx.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
                     #paths = list(self.all_simple_paths(Gi,source=s,target=t,cutoff=cutoff))
-                    #paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
-                    paths = list(self.procone(self.L,Gi,source=s,target=t,cutoff=cutoff))
+                    if algo=='new':
+                        paths = list(self.procone(self.L,Gi,source=s,target=t,cutoff=cutoff))
+                    else:
+                        paths = list(self.propaths(Gi,source=s,target=t,cutoff=cutoff))
 
                     #paths = [nx.shortest_path(Gi,source=s,target=t)]
                 else:
