@@ -757,7 +757,7 @@ class Rays(dict):
 
                 uwall = np.where((ityp == 1) | (ityp == 2))
                 udiff = np.where((ityp == 3))
-                ufloor = np.where((ityp == 4))
+                ufloor= np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
                 nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls
@@ -844,8 +844,9 @@ class Rays(dict):
                 Bo0 = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
 
-                self[k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :], eth[:, np.newaxis, :],
-                                                eph[:, np.newaxis, :]), axis=1)
+                self[k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :], 
+                                                 eth[:, np.newaxis, :],
+                                                 eph[:, np.newaxis, :]), axis=1)
 
                 #
                 # scalar product si . norm
@@ -859,14 +860,20 @@ class Rays(dict):
                 # Warning need to handle singular case when s_in // vn
                 #
                 # w : 3 x i x r 
-                w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
+                # 
+                # Handling channel reciprocity s_in --> -s_in 
+                #
+                #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
+                w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
                 # nw : i x r 
                 nw = np.sqrt(np.sum(w*w, axis=0))
                 if (nw.any()==0):
                     pdb.set_trace()
                 assert(nw.all()>0), pdb.set_trace()
                 wn = w/nw
-                v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
+                # Handling channel reciprocity s_in --> -s_in 
+                #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
+                v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
 
                 es_in = np.expand_dims(s_in, axis=1)
                 ew = np.expand_dims(wn, axis=1)
