@@ -878,6 +878,10 @@ class Rays(dict):
                 #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
                 w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
                 # nw : i x r 
+                #
+                #
+                # to do fic the colinear bug
+                #
                 nw = np.sqrt(np.sum(w*w, axis=0))
                 if (nw.any()==0):
                     u = np.where(nw==0)
@@ -1057,8 +1061,8 @@ class Rays(dict):
         # loop on group of interactions 
         
         for k in self:
-            if k == 4:
-                pdb.set_trace()
+            #if k == 4:
+            #    pdb.set_trace()
 
             if k !=0:
                 
