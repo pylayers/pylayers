@@ -1,5 +1,5 @@
 from pylayers.antprop.antenna import *
-from pylayers.antprop.antvsh import *
+#from pylayers.antprop.antvsh import *
 from pylayers.antprop.spharm import *
 
 import numpy as np
@@ -55,7 +55,53 @@ def SSHFunc(L, theta,phi):
 	indx = np.append(indx,indx2, axis = 0)
 	return Y,  indx
 
-
+def SSHFunc2(L, theta,phi):
+	
+	"""
+	L : integer, spherical harmonics order
+	theta: numpy array(1, ndir)
+	phi: numpy array(1,ndir)
+	theta and phi should have the same dimensions which represents the rays 
+	Compute the spherical harmonic functions for the order L
+	return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics 
+		
+	"""
+	
+	nray = len(theta)	
+	l = np.arange(0,1+L).reshape(1,(1+L))
+	m = np.arange(0,1+L).reshape(((1+L),1))
+	# normalize the associated legendre polynoms 
+	NRM = np.sqrt((2*l+1)*factorial(l-abs(m))/(4*np.pi*factorial(l+abs(m)))) 
+	NRM = NRM.reshape((1+L,1+L,1))
+	# compute the associated legendre polynoms part Plm(cos(theta))
+	ll = l.reshape(1,(1+L),1)
+	mm = m.reshape(((1+L),1,1))
+	x  = np.cos(theta).reshape((1,1, nray))
+	PLM = sp.special.lpmv(mm,ll,x)
+	# Normalize
+	NPLM = NRM*PLM
+	NPLM = NPLM.reshape((1+L,1+L,nray))
+	# compute the exp(j*m*phi) part
+	PHI = phi.reshape((1,nray))
+	mm = m.reshape(((1+L),1))
+	EXP = np.exp(1j*mm*PHI)
+	EXP = EXP.reshape((1+L,1,nray))
+	# Compute Y : the spherical harmonics matrix and reshaping it
+	Yi= NPLM*EXP
+	Yi = Yi.reshape(((1+L)**2,nray))
+	#~ Y = Yi
+	nzero_rows = Yi.any(axis = 1)
+	Y = Yi[nzero_rows] # eliminating the non defined functions (Y01) 
+	ll = (l*np.ones((1+L,1))).reshape(((1+L)**2))
+	mm = (m*np.ones((1,1+L))).reshape(((1+L)**2))
+	# spherical harmonics index 
+	#~ indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T
+	indx = np.array([ll[nzero_rows],mm[nzero_rows]]).T
+	Y2 = ((-1)**indx[1+L:,1]).reshape((len(indx[1+L:,1]),1))*np.conj(Y[1+L:,:])
+	Y = np.append(Y,Y2, axis  = 0)
+	indx2 =  np.array([indx[1+L:,0],(-1)*indx[1+L:,1]]).T
+	indx = np.append(indx,indx2, axis = 0)
+	return Y, indx
 
 def SphereToCart (theta, phi, eth, eph, bfreq ):
     """
@@ -81,30 +127,30 @@ def SphereToCart (theta, phi, eth, eph, bfreq ):
     return ec
 
 
-def CartToSphere (theta, phi, ex, ey,ez, bfreq ):
-
-
-    """
+def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
+	
+	"""
     Convert from cartesian to spherical  coordinates 
     bfreq : boolean parameter to indicate if the conversion is done for all frequencies of only one.
     """
-
-    if bfreq == False:
-        PHI = phi.reshape((1,len(phi)))
-        THETA = theta.reshape((len(theta),1))
-        es = np.ndarray(shape = (2, len(theta),len(phi)) , dtype  = complex  )
-
-
-    else:
-        PHI = phi.reshape((1,1,len(phi)))
-        THETA = theta.reshape((1,len(theta),1))
-        es = np.ndarray(shape = (2, ex.shape[0], len(theta),len(phi)) , dtype  = complex  )
+    
+	nray = len(theta)
+	if bfreq == False:
+		
+		es = np.ndarray(shape = (2, nray) , dtype  = complex  )
+	else:
+		es = np.ndarray(shape = (2, ex.shape[0], nray) , dtype  = complex  )
 
 
-    es[0] = np.cos(THETA)*np.cos(PHI)*ex + np.cos(THETA)*np.sin(PHI)*ey -np.sin(THETA)*ez
-    es[1] = -np.sin(PHI)*ex +np.cos(PHI)*ey
-
-    return es[0],es[1]
+	es[0] = np.cos(theta)*np.cos(phi)*ex + np.cos(theta)*np.sin(phi)*ey -np.sin(theta)*ez
+	es[1] = -np.sin(phi)*ex +np.cos(phi)*ey
+	#~ if pattern:			
+		#~ if bfreq:
+			#~ es[0] =es[0].reshape(ex.shape[0],len(theta), len(phi))
+		#~ else:
+			#~ es[0] =es[0].reshape(len(theta), len(phi))
+			
+	return es[0],es[1]
 
 
      

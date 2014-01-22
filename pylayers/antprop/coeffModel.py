@@ -85,21 +85,43 @@ def RepAzimuth1 (Ec, theta, phi, th= np.pi/2,typ = 'Gain'):
 	return V
 
 def mode_energy(C,M,L =20, ifreq = 46):
+	
+	"""
+	shape C = (dim = 3,Ncoef = (1+L)**2)
+	"""
+	Em = []
+	Lc = (1+L)**2
+	for m in range(M+1):
+		im = m*(2*L+3-m)/2
+		bind = (1+L)*(L+2)/2 + im-L-1 
+		if ifreq > 0:
+			if m == 0:
+				em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2)
+			else:
+				em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2) + np.sum(np.abs(C[:,ifreq,bind:bind + L-m+1])**2)
+			Et = np.sum(np.abs(C[:,ifreq,:])**2)
+	   
+		Em.append(em)    
+	return  np.array(Em)/Et
     
-    Em = []
-    Lc = (1+L)**2
-    for m in range(M+1):
-        im = m*(2*L+3-m)/2
-        bind = (1+L)*(L+2)/2 + im-L-1 
-        if ifreq > 0:
-            if m == 0:
-                em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2)
-            else:
-                em  = np.sum(np.abs(C[:,ifreq,im:im+L-m+1])**2) + np.sum(np.abs(C[:,ifreq,bind:bind + L-m+1])**2)
-            Et = np.sum(np.abs(C[:,ifreq,:])**2)
-       
-        Em.append(em)    
-    return  np.array(Em)/Et
+def mode_energy2(A,m, ifreq=46, L= 20):
+	
+	cx = lmreshape(A.S.Cx.s2)
+	cy = lmreshape(A.S.Cy.s2)
+	cz = lmreshape(A.S.Cz.s2)
+	if ifreq >0:
+		em = np.sum(np.abs(cx[ifreq,:,L+m])**2+np.abs(cy[ifreq,:,L+m])**2+np.abs(cz[ifreq,:,L+m])**2)
+		Et = np.sum(np.abs(cx[ifreq])**2+np.abs(cy[ifreq])**2+np.abs(cz[ifreq])**2)
+	return em/Et
+	
+def level_energy(A,l, ifreq = 46,L=20):
+	cx = lmreshape(A.S.Cx.s2)
+	cy = lmreshape(A.S.Cy.s2)
+	cz = lmreshape(A.S.Cz.s2)
+	if ifreq >0:
+		el = np.sum(np.abs(cx[ifreq,l,:])**2+np.abs(cy[ifreq,l,:])**2+np.abs(cz[ifreq,l,:])**2)
+		Et = np.sum(np.abs(cx[ifreq])**2+np.abs(cy[ifreq])**2+np.abs(cz[ifreq])**2)
+	return el/Et
     
 def modeMax(coeff,L= 20, ifreq  = 46):
     
@@ -107,6 +129,25 @@ def modeMax(coeff,L= 20, ifreq  = 46):
     
     max_mode = np.where(Em_dB <-20 )[0][0]-1
     return max_mode
+    
+def lmreshape(coeff,L= 20):
+    
+    sh = coeff.shape
+    
+    coeff_lm = zeros(shape = (sh[0],1+L, 1+2*L), dtype = complex )
+    
+    for m in range(0,1+L):        
+        im = m*(2*L+3-m)/2
+        coeff_lm[:,m:L+1,L+m] = coeff[:,im:im +L+1-m]
+       
+    for m in range(1,L):
+        im = m*(2*L+3-m)/2
+        bind = (1+L)*(L+2)/2 + im-L-1 
+        coeff_lm[:,m:L+1,L-m]= coeff[:,bind: bind + L-m+1]
+    
+    return coeff_lm 
+    
+
 
 def sshModel(c,d, L = 20):
 	

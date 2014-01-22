@@ -1381,7 +1381,7 @@ class Antenna(object):
 
 
 
-    def Fsynth3(self, theta = [], phi=[], pattern=True,typ='vsh'):
+    def Fsynth3(self, theta = [], phi=[], pattern=True):
 
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
@@ -1424,23 +1424,25 @@ class Antenna(object):
         once the V,W function
 
         """
+        typ = self._filename.split('.')[1]
+        Nf = len(self.fa)
+        if theta==[]:
+            theta=np.linspace(0,np.pi,47)
+        if phi == []:
+            phi= np.linspace(0,2*np.pi,47)
 
-        if typ =='vsh':
-        
-            if theta==[]:
-                theta=np.linspace(0,np.pi,47)
-            if phi == []:
-                phi= np.linspace(0,2*np.pi,91)
-                  
-            Nt = len(theta)
-            Np = len(phi)
+        Nt = len(theta)
+        Np = len(phi)
 
-
-            if pattern:
+        if pattern:
                 self.theta = theta[:,np.newaxis]
                 self.phi = phi[np.newaxis,:] 
                 theta = np.kron(theta, np.ones(Np))
                 phi = np.kron(np.ones(Nt),phi)
+                         
+        
+        if typ =='vsh3':        
+            
 
             nray = len(theta)
 
@@ -1460,8 +1462,6 @@ class Antenna(object):
             # vector spherical harmonics basis functions
 
             V, W = VW(lBr, mBr, theta, phi)
-
-
             Fth = np.dot(Br, np.real(V.T)) - \
                 np.dot(Bi, np.imag(V.T)) + \
                 np.dot(Ci, np.real(W.T)) + \
@@ -1473,30 +1473,37 @@ class Antenna(object):
                 np.dot(Br, np.imag(W.T))
             
             if pattern:
-                Nf = len(self.fa)
+                
                 Fth = Fth.reshape(Nf, Nt, Np)
                 Fph = Fph.reshape(Nf, Nt, Np)
-                self.Ftheta = Fth
                 self.Fphi = Fph
+                self.Ftheta = Fth
 
                 G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
                 self.SqG = np.sqrt(G)
 
             
-        else: 
+        if typ == 'sh3':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3
             cz = self.S.Cz.s3
             lmax = self.S.Cx.lmax
-            Y ,indx = SSHFunc(lmax, theta,phi)
+            Y ,indx = SSHFunc2(lmax, theta,phi)
             k = self.S.Cx.k2[:,0]
-           
-            Ex = np.dot(cx,Y[k]).reshape(Nf,Nt,Np)
-            Ey = np.dot(cy,Y[k]).reshape(Nf,Nt,Np)
-            Ez = np.dot(cz,Y[k]).reshape(Nf,Nt,Np)
-            
-            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True ) 
-                
+            if pattern :
+                    
+                Ex = np.dot(cx,Y[k])
+                Ey = np.dot(cy,Y[k])
+                Ez = np.dot(cz,Y[k])
+                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True ) 
+                Fth = Fth.reshape(Nf,Nt,Np)
+                Fph = Fph.reshape(Nf,Nt,Np)
+            else:
+                     
+                Ex = np.dot(cx,Y[k])
+                Ey = np.dot(cy,Y[k])
+                Ez = np.dot(cz,Y[k])
+                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)       
 
         return Fth, Fph
             
