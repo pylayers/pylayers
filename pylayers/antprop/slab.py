@@ -3,19 +3,19 @@
 """
 This module contains the following classes :
 
-    + Interface(object)
-    + MatInterface(Interface)
-    + Mat(dict)
-    + MatDB(dict)
-    + Slab(dict)
-    + SlabDB(dict)
++ Interface(object)
++ MatInterface(Interface)
++ Mat(dict)
++ MatDB(dict)
++ Slab(dict)
++ SlabDB(dict)
 
 This module exploits heavily numpy broadcasting mechanism :
 
-    nf : axis = 0   frequency axis
-    nt : axis = 1   angular axis
-    p  : axis = 2   parallel axis
-    o  : axis = 2   orhogonal axis
+nf : axis = 0 frequency axis
+nt : axis = 1 angular axis
+p : axis = 2 parallel axis
+o : axis = 2 orhogonal axis
 
 """
 import os
@@ -28,32 +28,32 @@ import scipy as sp
 import matplotlib.pylab as plt
 import struct as stru
 import ConfigParser
-from   pylayers.util.project import *
+from pylayers.util.project import *
 import pylayers.util.pyutil as pyu
 import pylayers.util.plotutil as plu
-from   pylayers.util.easygui import *
+from pylayers.util.easygui import *
 import pdb
 
 class Interface(object):
     """ Interface between 2 medium
 
-    Attributes
-    ----------
+Attributes
+----------
 
-    fGHz   np.array (nf,1)
-    theta  np.array (1,nt)
-    Ip     np.array (nf,nt,2,2)
-    Io     np.array (nf,nt,2,2)
+fGHz np.array (nf,1)
+theta np.array (1,nt)
+Ip np.array (nf,nt,2,2)
+Io np.array (nf,nt,2,2)
 
-    """
+"""
     def __init__(self, fGHz=np.array([2.4]), theta=np.array([[0.0 + 0 * 1j]]), name=''):
         """
 
-        fGHz  :
-            frequency in GHz (default 2.4)
-        theta :
-            angle taken from surface normal expressed in radians
-        """
+fGHz :
+frequency in GHz (default 2.4)
+theta :
+angle taken from surface normal expressed in radians
+"""
         #
         # reshape theta if necessary
         # allows to use a ndim = 1 array
@@ -80,18 +80,18 @@ class Interface(object):
     def RT(self, metalic=False, RT='RT'):
         """ evaluate Reflection and Transmission matrix
 
-        .. math::
+.. math::
 
-            R = \\matrix(R_o & 0\\\\0 & R_p)
-            T = \\matrix(T_o & 0\\\\0 & T_p)
+R = \\matrix(R_o & 0\\\\0 & R_p)
+T = \\matrix(T_o & 0\\\\0 & T_p)
 
-        Notes
-        -----
+Notes
+-----
 
-        R : np.array   (f , th , 2, 2)
-        T : np.array   (f , th , 2, 2)
+R : np.array (f , th , 2, 2)
+T : np.array (f , th , 2, 2)
 
-        """
+"""
         sh = np.shape(self.Io)
         nf = sh[0]
         nt = sh[1]
@@ -118,13 +118,13 @@ class Interface(object):
     def pcolor(self, dB=False):
         """ display of R & T coefficients wrt frequency an angle
 
-        Parameters
-        ----------
-        dB : boolean
-             default False
+Parameters
+----------
+dB : boolean
+default False
 
 
-        """
+"""
         rtd = 180 / np.pi
         #nom = self.m1.name+'|'+self.m2.name
         if dB:
@@ -175,14 +175,14 @@ class Interface(object):
     def tocolor(self,fGHz):
         """
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz : np.array
+fGHz : np.array
 
 
-        """
-        # nf x nt x 2 x 2 
+"""
+        # nf x nt x 2 x 2
         modTo = abs(self.T[:, 0, 0, 0])
         modTp = abs(self.T[:, 0, 1, 1])
         N = len(fGHz)
@@ -205,26 +205,26 @@ class Interface(object):
             alpha = (sum(modTo)+sum(modTp))/(2*N)
             val = hex(int(np.floor(alpha*255))).replace('0x','')
             col = '#'+val+val+val
-        return(col)    
+        return(col)
 
 
     def loss0(self, fGHz, display=False):
         """ Evaluate Loss at normal incidence theta=0
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz    : np.array  (nf,1)
-        display : boolean
-                default (False)
+fGHz : np.array (nf,1)
+display : boolean
+default (False)
 
-        Returns
-        -------
+Returns
+-------
 
-        Lo : loss in dB polarization orthogonal
-        Lp : loss in dB polarization parallel
+Lo : loss in dB polarization orthogonal
+Lp : loss in dB polarization parallel
 
-        """
+"""
         modTo = abs(self.T[:, :, 0, 0])
         modTp = abs(self.T[:, :, 1, 1])
 
@@ -242,24 +242,24 @@ class Interface(object):
         return(Lo, Lp)
 
     def losst(self, fGHz, display=False):
-        """  Evaluate Loss 
+        """ Evaluate Loss
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz    : np.arrray (nf)
-        display : boolean
-            default False
+fGHz : np.arrray (nf)
+display : boolean
+default False
 
-        Returns
-        -------
+Returns
+-------
 
-        Lo : np.array
-            Loss orthogonal polarization (dB)
-        Lp : np.array
-            Loss parallel polarization (dB)
+Lo : np.array
+Loss orthogonal polarization (dB)
+Lp : np.array
+Loss parallel polarization (dB)
 
-        """
+"""
 
         modTo = abs(self.T[:, :, 0, 0])
         modTp = abs(self.T[:, :, 1, 1])
@@ -283,50 +283,50 @@ class Interface(object):
     def plotwrt(self,var='a',kv=0,**kwargs):
         """ plot R & T coefficients with respect to angle or frequency
 
-         Parameters
-         ----------
+Parameters
+----------
 
-         kv  : int
-            variable index
-         polar: string 
-                'po', # po | p | o   (parallel+ortho | parallel | ortogonal)
-         coeff: string 
-                'RT', # RT | R | T   (Reflexion & Transmission ) | Reflexion | Transmission 
-         var:  string 
-                'a',    # a | f       angle | frequency 
-         types : string 
-                'm' | 'r' | 'd' | 'l20'
-                mod   rad    deg   dB
+kv : int
+variable index
+polar: string
+'po', # po | p | o (parallel+ortho | parallel | ortogonal)
+coeff: string
+'RT', # RT | R | T (Reflexion & Transmission ) | Reflexion | Transmission
+var: string
+'a', # a | f angle | frequency
+types : string
+'m' | 'r' | 'd' | 'l20'
+mod rad deg dB
 
-         Examples
-         --------
+Examples
+--------
 
-         .. plot::
-             :include-source:
+.. plot::
+:include-source:
 
-             >>> from pylayers.antprop.slab import *
-             >>> import matplotlib.pylab as plt
-             >>> import numpy as np
-             >>> theta = np.arange(0,np.pi/2,0.01)
-             >>> fGHz = np.arange(0.1,10,0.2)
-             >>> sl = SlabDB('matDB.ini','slabDB.ini')
-             >>> mat   = sl.mat
-             >>> lmat  = [mat['AIR'],mat['WOOD']]
-             >>> II    = MatInterface(lmat,0,fGHz,theta)
-             >>> II.RT()
-             >>> fig,ax = II.plotwrt(var='a',kv=10,types=['m'])
-             >>> air = mat['AIR']
-             >>> brick  = mat['BRICK']
-             >>> II  = MatInterface([air,brick],0,fGHz,theta)
-             >>> II.RT()
-             >>> fig,ax = II.plotwrt(var='f',color='k',types=['m'])
-             >>> plt.show()
+>>> from pylayers.antprop.slab import *
+>>> import matplotlib.pylab as plt
+>>> import numpy as np
+>>> theta = np.arange(0,np.pi/2,0.01)
+>>> fGHz = np.arange(0.1,10,0.2)
+>>> sl = SlabDB('matDB.ini','slabDB.ini')
+>>> mat = sl.mat
+>>> lmat = [mat['AIR'],mat['WOOD']]
+>>> II = MatInterface(lmat,0,fGHz,theta)
+>>> II.RT()
+>>> fig,ax = II.plotwrt(var='a',kv=10,types=['m'])
+>>> air = mat['AIR']
+>>> brick = mat['BRICK']
+>>> II = MatInterface([air,brick],0,fGHz,theta)
+>>> II.RT()
+>>> fig,ax = II.plotwrt(var='f',color='k',types=['m'])
+>>> plt.show()
 
 
-        """
-        defaults = {'types':['l20'], 
-                'polar':'po', # po | p | o 
-                'coeff':'RT', # RT | R | T 
+"""
+        defaults = {'types':['l20'],
+                'polar':'po', # po | p | o
+                'coeff':'RT', # RT | R | T
                }
 
         for key, value in defaults.items():
@@ -336,23 +336,23 @@ class Interface(object):
         #fGHz = self.fGHz[k]
         rtd = 180 / np.pi
         
-        # filtering kwargs argument for mulplot function 
+        # filtering kwargs argument for mulplot function
         args ={}
         for k in kwargs:
             if k not in defaults.keys():
                 args[k]=kwargs[k]
         
-        if 'labels' not in kwargs.keys():        
+        if 'labels' not in kwargs.keys():
             args['labels'] = [self.name]
             
         args['titles'] = []
         args['types'] = kwargs['types']
         
-        # Reflexion 
+        # Reflexion
         if 'R' in kwargs['coeff']:
             if 'o' in kwargs['polar']:
                 args['titles'].append(u'$R_{\perp}$')
-                if var=='f':  # wrt frequency 
+                if var=='f': # wrt frequency
                     Ro = self.R[:, kv, 0, 0]
                     y = Ro
                 if var=='a': # wrt angle
@@ -360,7 +360,7 @@ class Interface(object):
                     y = Ro
             if 'p' in kwargs['polar']:
                 args['titles'].append(u'$R_{//}$')
-                if var=='f':  # wrt frequency 
+                if var=='f': # wrt frequency
                     Rp = self.R[:, kv, 1, 1]
                     try:
                         y = np.vstack((y,Rp))
@@ -372,11 +372,11 @@ class Interface(object):
                         y = np.vstack((y,Rp))
                     except:
                         y = Rp
-        # Transmission 
+        # Transmission
         if 'T' in kwargs['coeff']:
             if 'o' in kwargs['polar']:
                 args['titles'].append(u'$T_{\perp}$')
-                if var=='f':  # wrt frequency 
+                if var=='f': # wrt frequency
                     To = self.T[:, kv, 0, 0]
                     try:
                         y = np.vstack((y,To))
@@ -390,7 +390,7 @@ class Interface(object):
                         y = To
             if 'p' in kwargs['polar']:
                 args['titles'].append(u'$T_{//}$')
-                if var=='f':  # wrt frequency 
+                if var=='f': # wrt frequency
                     Tp = self.T[:, kv, 1, 1]
                     try:
                         y = np.vstack((y,Tp))
@@ -403,19 +403,19 @@ class Interface(object):
                     except:
                         y = To
         
-        # setting the x axis 
-        if var=='f':  # wrt frequency 
+        # setting the x axis
+        if var=='f': # wrt frequency
             if len(self.fGHz)==1:
                 #x = self.fGHz[np.newaxis,:]
                 x = self.fGHz[:]
-            else:  # f x a   
+            else: # f x a
                 x = self.fGHz[:,0]
             args['xlabels'] = ['Frequency (GHz)']
-        if var=='a':  # wrt angle
+        if var=='a': # wrt angle
             if len(self.thi)==1:
                 x = self.thi[0,:][:]*rtd
                 #x = self.thi[0,:][np.newaxis,:]*rtd
-            else:  # f x a
+            else: # f x a
                 x = self.thi[0,:]*rtd
             args['xlabels'] = ['Angle (deg)']
 
@@ -438,55 +438,55 @@ class Interface(object):
 class MatInterface(Interface):
     """ MatInterface : Class for Interface between two materials
 
-               l distance from the next Interface
+l distance from the next Interface
 
-    Notes
-    -----
+Notes
+-----
 
-    This is required for recursive utilization of this function when the
-    output angle of an interface happens to be the input angle of the
-    next interface. As this angle depends on materials which themselves
-    depends on frequency THETA is becoming a full matrix without redundancy
-    between lines.
+This is required for recursive utilization of this function when the
+output angle of an interface happens to be the input angle of the
+next interface. As this angle depends on materials which themselves
+depends on frequency THETA is becoming a full matrix without redundancy
+between lines.
 
-       >>> theta  = np.arange(0,np.pi/2,0.01)
-       >>> fGHz   = np.arange(3.1,10.6,0.2)
-       >>> Nf     = len(fGHz)
-       >>> Nt     = len(theta)
-       >>> sl     = SlabDB('matDB.ini','slabDB.ini')
-       >>> mat    = sl.mat
-       >>> m1     = mat['AIR']
-       >>> m2     = mat['PLASTER']
-       >>> II     = MatInterface([m1,m2],0,fGHz,theta)
+>>> theta = np.arange(0,np.pi/2,0.01)
+>>> fGHz = np.arange(3.1,10.6,0.2)
+>>> Nf = len(fGHz)
+>>> Nt = len(theta)
+>>> sl = SlabDB('matDB.ini','slabDB.ini')
+>>> mat = sl.mat
+>>> m1 = mat['AIR']
+>>> m2 = mat['PLASTER']
+>>> II = MatInterface([m1,m2],0,fGHz,theta)
 
-    .. math::
+.. math::
 
-        I_p = \left| \\begin{array}{cc} \\frac{1}{T_p}   & \\frac{R_p}{T_p} \\\\ \\frac{R_p}{T_p} & \\frac{1}{T_p} \end{array}\\right|
+I_p = \left| \\begin{array}{cc} \\frac{1}{T_p} & \\frac{R_p}{T_p} \\\\ \\frac{R_p}{T_p} & \\frac{1}{T_p} \end{array}\\right|
 
-        I_o = \left| \\begin{array}{cc} \\frac{1}{T_o}   & \\frac{R_o}{T_o} \\\\ \\frac{R_o}{T_o} & \\frac{1}{T_o} \end{array}\\right|
-
-
-    .. todo::
-       MatIinterface  fix the np.pi/2 NaN problem
+I_o = \left| \\begin{array}{cc} \\frac{1}{T_o} & \\frac{R_o}{T_o} \\\\ \\frac{R_o}{T_o} & \\frac{1}{T_o} \end{array}\\right|
 
 
-    """
+.. todo::
+MatIinterface fix the np.pi/2 NaN problem
+
+
+"""
     def __init__(self, lmat, l, fGHz, theta):
         """ Fresnel reflection coefficients
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        lmat  : [ m1 , m2]  list of  materials
-        l     : distance between interfaces
-        fGHz  : frequency (GHz)
-        theta : angle with respect to the reflective surface normal
+lmat : [ m1 , m2] list of materials
+l : distance between interfaces
+fGHz : frequency (GHz)
+theta : angle with respect to the reflective surface normal
 
-        """
+"""
         #if not isinstance(fGHz,np.ndarray):
-        #    fGHz=np.array([fGHz])
+        # fGHz=np.array([fGHz])
         #if not isinstance(theta,np.ndarray):
-        #    theta=np.array([theta])
+        # theta=np.array([theta])
         name = '|'.join(mat['name'] for mat in lmat)
         Interface.__init__(self, fGHz, theta, name=name)
         self.m1 = lmat[0]
@@ -499,13 +499,13 @@ class MatInterface(Interface):
         mur1 = self.m1['mur']
         mur2 = self.m2['mur']
 
-        #n1    =  sqrte(epr1/mur1)
+        #n1 = sqrte(epr1/mur1)
 
         n1 = np.sqrt(epr1 / mur1)
         n2 = np.sqrt(epr2 / mur2)
 
         ct = np.cos(self.theta)
-        # //  TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
+        # // TM polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
         nT1p = n1 / ct
         # _|_ TE polarization 8.1.4 http://www.ece.rutgers.edu/~orfanidi/ewa/ch08.pdf
         nT1o = n1 * ct
@@ -516,13 +516,13 @@ class MatInterface(Interface):
         #print "Slab cst nT1p ",nT1p[15,31]
         #print "Slab cst nT1o ",nT1o[15,31]
 
-        #cti       =  pyu.sqrte(1-((n1/n2)*np.sin(self.theta))**2)
+        #cti = pyu.sqrte(1-((n1/n2)*np.sin(self.theta))**2)
         cti = np.sqrt(1 - ((n1 / n2) * np.sin(self.theta)) ** 2)
-        #CTI   =  np.sqrt(1-((n1/n2)*np.sin(THETA))**2)
+        #CTI = np.sqrt(1-((n1/n2)*np.sin(THETA))**2)
         self.theta = np.arccos(cti)
         #print np.shape(cti)
         #print "cti ",cti[15,31]
-        #print "arcos(cti)  ",self.theta[15,31]
+        #print "arcos(cti) ",self.theta[15,31]
         #print '-------------------------'
 
         if l != 0:
@@ -534,8 +534,8 @@ class MatInterface(Interface):
         nT2o = n2 * cti
 
         Rp = (nT1p - nT2p) / (nT1p + nT2p)
-        #Ro    =  (nT1o-nT2o)/(nT1o+nT2o)
-        Ro = -(nT1o - nT2o) / (nT1o + nT2o)  # modif Eric
+        #Ro = (nT1o-nT2o)/(nT1o+nT2o)
+        Ro = -(nT1o - nT2o) / (nT1o + nT2o) # modif Eric
         Tp = 1.0 + Rp
         To = 1.0 + Ro
 
@@ -569,34 +569,34 @@ class MatInterface(Interface):
 class Mat(dict):
     """ Handle constitutive materials dictionnary
 
-    Attributes
-    ----------
+Attributes
+----------
 
-    name  : string
-        name character string (default 'AIR')
-    index : int
-        default 1
-    er    : complex
-        relative permittivity (w.d)   (1+0j)
-    mur   : complex
-        relative permeability (w.d)   (1+0j)
-    sigma : float
-        conductivity  (S/m)            0
-    roughness : float
-        (meter)                        0
+name : string
+name character string (default 'AIR')
+index : int
+default 1
+er : complex
+relative permittivity (w.d) (1+0j)
+mur : complex
+relative permeability (w.d) (1+0j)
+sigma : float
+conductivity (S/m) 0
+roughness : float
+(meter) 0
 
-    """
+"""
     def __init__(self, name="AIR", index=1, epr=1 + 0.0j, mur=1 + 0.0j, sigma=0.0, roughness=0.):
         """
-        Parameters
-        ----------
-        name  :
-        index : int
-        epr   :
-        mur   :
-        sigma  :
-        roughness :
-        """
+Parameters
+----------
+name :
+index : int
+epr :
+mur :
+sigma :
+roughness :
+"""
         self['name'] = name
         self['index'] = index
         self['epr'] = epr
@@ -607,26 +607,26 @@ class Mat(dict):
     def eval(self, fGHz):
         """ evaluate Mat at given frequencies
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        epsc : Calculate complex permittivity
-        fGHz : frequency (GHz)
+epsc : Calculate complex permittivity
+fGHz : frequency (GHz)
 
 
-        Notes
-        -----
+Notes
+-----
 
-        w = 2*np.pi*f*1e-9
-        eps0 = 8.854e-12
+w = 2*np.pi*f*1e-9
+eps0 = 8.854e-12
 
-        100 MHz = 0.1  GHz
-        10  MHz = 0.01 GHz
+100 MHz = 0.1 GHz
+10 MHz = 0.01 GHz
 
-        sigma/(w*eps0) = sigma/(2*pi*f*1e9*eps0)
-        sigma/(w*eps0) = sigma/(2*pi*f*1e9*8.854e-12)
-        sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)
-        """
+sigma/(w*eps0) = sigma/(2*pi*f*1e9*eps0)
+sigma/(w*eps0) = sigma/(2*pi*f*1e9*8.854e-12)
+sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)
+"""
 
         self['fGHz'] = fGHz
         epsc = self['epr'] - 1j * 18 * abs(self['sigma']) / \
@@ -636,7 +636,7 @@ class Mat(dict):
 
     def info(self):
         """ display material properties
-        """
+"""
 
         print "---------------------------------"
         for k in self:
@@ -652,13 +652,13 @@ class Mat(dict):
     def R(self, fGHz, theta):
         """ Calculate Reflection coefficient on the air|mat interface
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz  : frequency GHz
-        theta : incidence angle referenced from interface normal
+fGHz : frequency GHz
+theta : incidence angle referenced from interface normal
 
-        """
+"""
 
         air = Mat()
         lmat = [air, self]
@@ -670,8 +670,8 @@ class Mat(dict):
         theta.reshape(1, Nt)
         II = MatInterface(lmat, 0, fGHz, theta)
         II.RT()
-        #Ro  = II.Ro
-        Ro = II.Ro   # modif eric plouhinec
+        #Ro = II.Ro
+        Ro = II.Ro # modif eric plouhinec
         Rp = II.Rp
 
         return Ro, Rp
@@ -681,15 +681,15 @@ class MatDB(dict):
     """ MatDB Class : Material database
 
 
-    Attributes
-    ----------
-    di  : dict
-        associate numeric and alphanumeric keys
+Attributes
+----------
+di : dict
+associate numeric and alphanumeric keys
 
-    """
+"""
     def __init__(self, _fileini='matDB.ini'):
         """
-        """
+"""
         self.fileini = _fileini
         self.filemat = self.fileini.replace('.ini','.mat')
 
@@ -697,7 +697,7 @@ class MatDB(dict):
 
     def info(self):
         """ get MatDB info
-        """
+"""
         for i in self:
             S = self[i]
             S.info()
@@ -705,34 +705,34 @@ class MatDB(dict):
     def dass(self):
         """ create a dictionnary to associate index | name
 
-        Example of created dictionnary
+Example of created dictionnary
 
-        {-1: 'METALIC',
-        0: 'ABSORBENT',
-        1: 'AIR',
-        2: 'WALL',
-        3: 'PARTITION',
-        4: 'WINDOW',
-        5: 'DOOR',
-        6: 'CEIL',
-        7: 'FLOOR',
-        8: 'WINDOW_GLASS',
-        9: 'WOOD',
-        10: '3D_WINDOW_GLASS',
-        11: 'WALLS',
-        12: 'PILLAR',
-        13: 'METAL',
-        14: 'CONCRETE_15CM3D',
-        15: 'CONCRETE_20CM3D',
-        16: 'CONCRETE_6CM3D',
-        17: 'CONCRETE_7CM3D',
-        18: 'PLASTERBOARD_10CM',
-        19: 'PLASTERBOARD_14CM',
-        20: 'PLASTERBOARD_7CM'}
+{-1: 'METALIC',
+0: 'ABSORBENT',
+1: 'AIR',
+2: 'WALL',
+3: 'PARTITION',
+4: 'WINDOW',
+5: 'DOOR',
+6: 'CEIL',
+7: 'FLOOR',
+8: 'WINDOW_GLASS',
+9: 'WOOD',
+10: '3D_WINDOW_GLASS',
+11: 'WALLS',
+12: 'PILLAR',
+13: 'METAL',
+14: 'CONCRETE_15CM3D',
+15: 'CONCRETE_20CM3D',
+16: 'CONCRETE_6CM3D',
+17: 'CONCRETE_7CM3D',
+18: 'PLASTERBOARD_10CM',
+19: 'PLASTERBOARD_14CM',
+20: 'PLASTERBOARD_7CM'}
 
-        This dictionnary is useful for quick access to a given slab
+This dictionnary is useful for quick access to a given slab
 
-        """
+"""
         di = {}
         for name in self.keys():
             # get the integer
@@ -744,7 +744,7 @@ class MatDB(dict):
 
     def maxindex(self):
         """ find the max value of the index in DB
-        """
+"""
 
         maxi = 0
         for i in self.keys():
@@ -756,25 +756,25 @@ class MatDB(dict):
     def delete(self, name):
         """ Delete a material in the DB
 
-        Parameters
-        ----------
-        name : string
+Parameters
+----------
+name : string
 
-        """
+"""
         self.__delitem__(name)
 
     def edit(self, name):
         """ Edit a material in the DB
 
-           Parameters
-           ----------
-           name : vstring
+Parameters
+----------
+name : vstring
 
-           See Also
-           --------
-           dass
+See Also
+--------
+dass
 
-        """
+"""
         data = multenterbox('Material', 'Enter', ('name', 'index', 'epr', 'mur', 'sigma', 'roughness'),
                             (name, M.index, str(M.epr), str(M.mur), M.sigma, M.roughness))
         self['name'] = data[0]
@@ -789,45 +789,45 @@ class MatDB(dict):
     def add(self, name='MAT', cval=1 + 0 * 1j, sigma=0, alpha_cmm1=1, mur=1, fGHz=1, typ='epsr'):
         """ Add a material in the DB
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        name : string
-            material name
-        cval : float or complex
-            epsilon or index
-        sigma : float or complex
-            permeability
-        mur  : float
-        typ  : string
-            {'epsr'|'ind'|,'reim',|'THz'}
+name : string
+material name
+cval : float or complex
+epsilon or index
+sigma : float or complex
+permeability
+mur : float
+typ : string
+{'epsr'|'ind'|,'reim',|'THz'}
 
-        Notes
-        -----
+Notes
+-----
 
-        Different ways to enter a material are :
+Different ways to enter a material are :
 
-        i)  epsr : epsr and sigma
-            cval = epsr 
-            sigma = sigma 
-        ii) ind : indice @ fGHz
-            cval = indice
-        iii) reim :  real(epsr) and imag(epsr)  @fGHz
-        iv) THZ
+i) epsr : epsr and sigma
+cval = epsr
+sigma = sigma
+ii) ind : indice @ fGHz
+cval = indice
+iii) reim : real(epsr) and imag(epsr) @fGHz
+iv) THZ
 
 
 
-        Examples
-        --------
+Examples
+--------
 
-        >>> from pylayers.antprop.slab import *
-        >>> m = MatDB()
-        >>> m.load('matDB.ini')
-        >>> m.add('ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> m.add('GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
-        >>> out = m.save('Jacob.ini')
+>>> from pylayers.antprop.slab import *
+>>> m = MatDB()
+>>> m.load('matDB.ini')
+>>> m.add('ConcreteJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+>>> m.add('GlassJcB',cval=3.5+0*1j,alpha_cmm1=1.9,fGHz=120,typ='THz')
+>>> out = m.save('Jacob.ini')
 
-        """
+"""
 
         maxid = self.maxindex()
         M = Mat()
@@ -840,7 +840,7 @@ class MatDB(dict):
 
         if typ == 'reim':
             M['epsr'] = cval
-            M['n'] = np.sqrt(mur*M['epsr']) # warning  check causality
+            M['n'] = np.sqrt(mur*M['epsr']) # warning check causality
             M['epr'] = np.real(M['epsr'])
             M['epr2'] = np.imag(M['epsr'])
             M['sigma'] = -M['epr2'] * M['fGHz'] / 18
@@ -873,13 +873,13 @@ class MatDB(dict):
     def addgui(self, name='MAT'):
         """ Add a material in the DB
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        name : string
-            default 'MAT'
+name : string
+default 'MAT'
 
-        """
+"""
         max = self.maxindex()
         data = multenterbox('Material', 'Enter', ('name', 'index', 'epr', 'mur', 'sigma', 'roughness'),
                             (name, max + 1, '(1+0j)', '(1+0j)', 0, 0))
@@ -896,19 +896,19 @@ class MatDB(dict):
 
     def choose(self):
         """ Choose a mat from matdir
-        """
+"""
         import tkFileDialog
         FD = tkFileDialog
         filename = FD.askopenfilename(filetypes=[("Mat file ", "*.ini"),
                                                  ("All", "*")],
-                                      title="Please choose a Material .ini  file",
+                                      title="Please choose a Material .ini file",
                                       initialdir=matdir)
         _filename = pyu.getshort(filename)
         self.load(_filename)
 
 
 
-    def load(self,_fileini): 
+    def load(self,_fileini):
         """Load a Material from a .ini file
         
         Parameters
@@ -917,7 +917,7 @@ class MatDB(dict):
         _fileini : string 
             name of the matDB file (usually matDB.ini)
 
-        """
+"""
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
         config = ConfigParser.ConfigParser()
         config.read(fileini)
@@ -943,12 +943,12 @@ class MatDB(dict):
     def loadmat(self, _filemat):
         """ Load a Material from a .mat file
 
-        Parameters
-        ----------
-        _filemat : string
-                 a short file name
+Parameters
+----------
+_filemat : string
+a short file name
 
-        """
+"""
         filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])
         try:
             fo = open(filemat, "rb")
@@ -1001,16 +1001,16 @@ class MatDB(dict):
     def save(self,_fileini='matDB.ini'):
         """ save MatDB in an ini file
 
-        [dict]
-            id1 = name1
-        [name1]
-            epsr =
-            mur  =
-            roughness =
-            index =
+[dict]
+id1 = name1
+[name1]
+epsr =
+mur =
+roughness =
+index =
 
 
-        """
+"""
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
         fd = open(fileini, "w")
         config = ConfigParser.ConfigParser()
@@ -1049,13 +1049,13 @@ class MatDB(dict):
     def savemat(self, _filemat):
         """ save a .mat file (PulsRay format)
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        _filemat : string
-            a short file name
+_filemat : string
+a short file name
 
-        """
+"""
         filemat = pyu.getlong(_filemat, pstruc['DIRMAT'])
         fo = open(filemat, 'wb')
         N = len(self.di)
@@ -1103,46 +1103,46 @@ class MatDB(dict):
 class Slab(dict, Interface):
     """ Handle slab
 
-    Summary
-    -------
-    A slab is a sequence of layers which has
-        - a given width
-        - an integer index refering a given material in the material DB
+Summary
+-------
+A slab is a sequence of layers which has
+- a given width
+- an integer index refering a given material in the material DB
 
 
-    Attributes
-    ----------
+Attributes
+----------
 
-    name      :
-        Slab name
-    nbmat    :
-        Number of layers
-    index     :
-        Slab Index
-    imat      :
-        index of layers material
-    thickness  :
-        thickness of layers
-    color     :
-        color of slab dor display
-    linewidth :
-        linewidth for structure display
-    mat       :
-        Associated Material Database
-    evaluated   : Boolean
+name :
+Slab name
+nbmat :
+Number of layers
+index :
+Slab Index
+imat :
+index of layers material
+thickness :
+thickness of layers
+color :
+color of slab dor display
+linewidth :
+linewidth for structure display
+mat :
+Associated Material Database
+evaluated : Boolean
 
-    """
+"""
     def __init__(self, mat, name='NEWSLAB'):
         """
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        mat : 
-        name : string     
-            slab name 
+mat :
+name : string
+slab name
 
-        """
+"""
         self['name'] = name
         self['index'] = 0
         self['nbmat'] = 1
@@ -1156,24 +1156,26 @@ class Slab(dict, Interface):
 
     def __repr__(self):
         if self['evaluated']:
-            st = 'fGHz :  '+str(self.fGHz[0,:]) +':'+str(self.fGHz[-1,:]) +':'+str(len(self.fGHz[:,0]))+"\n"
+            st = 'fGHz : '+str(self.fGHz[0,:]) +':'+str(self.fGHz[-1,:]) +':'+str(len(self.fGHz[:,0]))+"\n"
             st = st+ 'theta : '+str(self.theta[:,0])+':'+str(self.theta[:,-1])+':'+str(len(self.theta[0,:]))+"\n"
             st = st + '| '
         else:
             st = '| '
         for k in range(len(self['lmatname'])):
             st = st + self['lmatname'][k]+' | '
-        st = st+'\n|'    
+        st = st+'\n|'
+
         for k in range(len(self['lmatname'])):
             ntick = int(np.ceil(self['lthick'][k]/0.01))
             for l in range(ntick):
                 st = st+'-'
-            st = st +'|' 
+            st = st +'|'
         st = st+'\n'
         return(st)
                 
     def info(self):
         """ Display Slab Info
+
 
         Examples
         --------
@@ -1194,7 +1196,7 @@ class Slab(dict, Interface):
             >>> fig,ax=sl['placo'].plotwrt(var='a',types=['m'])
             >>> plt.show()
 
-        """
+"""
         print "------------"
         print "name : ", self
         print "nbmat : ", len(self['lmatname'])
@@ -1204,11 +1206,11 @@ class Slab(dict, Interface):
             if self['evaluated']:
                 epsrc = self.mat[name].epsc(self.fGHz[0])
                 print "epsrc : ", epsrc
-            chaine = chaine + name + '   '
+            chaine = chaine + name + ' '
             chaine = chaine + ']'
             print chaine
             print "index : ", self['index']
-            print "imat   : ", self['imat']
+            print "imat : ", self['imat']
             print "thickness (cm) : ", self['thickness']
             print "color : ", self['color']
             print "linewidth :", self['linewidth']
@@ -1217,26 +1219,26 @@ class Slab(dict, Interface):
                 nf = len(self.fGHz)
                 nt = len(self.theta)
                 if nf > 1:
-                    print "f (GHz)   : ", (self.fGHz[0], self.fGHz[-1], nf)
+                    print "f (GHz) : ", (self.fGHz[0], self.fGHz[-1], nf)
                 else:
-                    print "f (GHz)   : ", self.fGHz[0]
+                    print "f (GHz) : ", self.fGHz[0]
 
                 if nt > 1:
                     print "theta : ", (self.theta[0], self.theta[-1], nt)
                 else:
-                    print "th (rad)  : ", self.theta[0]
+                    print "th (rad) : ", self.theta[0]
 
     def conv(self):
         """ build lmat and thick
 
-        Warnings
-        --------
+Warnings
+--------
 
-        In .slab file thickness variable is expressed in cm
+In .slab file thickness variable is expressed in cm
 
-        for lthick distance  are expressed in meters
+for lthick distance are expressed in meters
 
-        """
+"""
         #m1 = self.mat['AIR']
         self['lmat'] = []
         self['lthick'] = []
@@ -1247,26 +1249,26 @@ class Slab(dict, Interface):
             name_mat = self.mat.di[index_mat]
             mi = self.mat[name_mat]
             self['lmat'].append(mi)
-            self['lthick'].append(self['thickness'][i] * 0.01)  # cm ->m
+            self['lthick'].append(self['thickness'][i] * 0.01) # cm ->m
 
         #self.lmat.append(m1)
         #
         # ..todo::
-        #    fix this problem in MLAYER need thickness 0 for last medium
+        # fix this problem in MLAYER need thickness 0 for last medium
         #
         #self.thick.append(0.0)
 
     def ev(self, fGHz=np.array([1.0]), theta=np.linspace(0, np.pi / 2, 50),compensate=False,RT='RT'):
         """ Evaluation of the slab
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz  : frequency GHz ( np.array([1.0]) )
-        theta : np.array
-            incidence angle (from normal) radians
+fGHz : frequency GHz ( np.array([1.0]) )
+theta : np.array
+incidence angle (from normal) radians
 
-        """
+"""
 
         if not isinstance(fGHz, np.ndarray):
             fGHz = np.array([fGHz])
@@ -1279,56 +1281,56 @@ class Slab(dict, Interface):
         nt = len(theta)
         #thetai = theta[0]
         #thetaf = theta[-1]
-        ### WARNING thetas can be NOT sorted. 
+        ### WARNING thetas can be NOT sorted.
         ### thetai should be min(theta)
         ### thetaf should be max(theta)
-        #th1  = np.linspace(thetai,thetaf,nt)
+        #th1 = np.linspace(thetai,thetaf,nt)
 
         metalic = False
         name1 = '|'.join(mat['name'] for mat in self['lmat'])
         name2 = '|'.join(str(thick) for thick in self['lthick'])
         name = '(' + name1 + ')' + '(' + name2 + ')'
         Interface.__init__(self, fGHz, theta, name=name)
-        #self.lmat   = lmat
+        #self.lmat = lmat
         #self.lthick = lthick
         self.n = len(self['lmat']) + 2
 
-        #nf    =  len(fGHz)
-        #nt    =  np.shape(self.theta)[1]
+        #nf = len(fGHz)
+        #nt = np.shape(self.theta)[1]
 
         Co = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         Co[:, :, 0, 0] = 1
         Co[:, :, 1, 1] = 1
-#        _Co= np.eye(2,dtype=complex)
+# _Co= np.eye(2,dtype=complex)
 
 
 
         Cp = np.array(np.zeros([self.nf, self.nt, 2, 2]), dtype=complex)
         Cp[:, :, 0, 0] = 1
         Cp[:, :, 1, 1] = 1
-#        _Cp = np.eye(2,dtype=complex)
+# _Cp = np.eye(2,dtype=complex)
         #
         # Boucle sur les n-1 matériaux
-        #      lmat[0] est toujours l'air  (à modifier)
+        # lmat[0] est toujours l'air (à modifier)
         #
         for i in range(self.n - 1):
-            if i == 0:    # first material is AIR
+            if i == 0: # first material is AIR
                 ml = Mat()
             else:
                 ml = self['lmat'][i - 1]
             if i == self.n - 2:
-                mr = Mat()  # last material is AIR
+                mr = Mat() # last material is AIR
             else:
                 mr = self['lmat'][i]
             if mr['name'] == 'METAL':
                 Io = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Io[:, :, 0, 1] = -1
                 Io[:, :, 1, 0] = -1
-#           _Io=np.eye(2,dtype=complex)+np.eye(2)-1
+# _Io=np.eye(2,dtype=complex)+np.eye(2)-1
                 Ip = np.array(np.ones([self.nf, self.nt, 2, 2]), dtype=complex)
                 Ip[:, :, 0, 1] = -1
                 Ip[:, :, 1, 0] = -1
-#           _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
+# _Ip=np.eye(2,dtype=complex)+np.eye(2)-1
             else:
                 if i == self.n - 2:
                     II = MatInterface([ml, mr], 0, fGHz, theta)
@@ -1349,20 +1351,20 @@ class Slab(dict, Interface):
             #
             # dot product Co.Io and Cp.Ip
             #
-            # old version  (keep it for demonstation)
+            # old version (keep it for demonstation)
             # -----------
-            #for kf  in range(nf):
-            #    for kt in range(nt):
-            #        T = np.dot(Co[kf,kt,:,:],Io[kf,kt,:,:])
-            #        Co[kf,kt,:,:] = T
-            #        U = np.dot(Cp[kf,kt,:,:],Ip[kf,kt,:,:])
-            #        Cp[kf,kt,:,:] = U
+            #for kf in range(nf):
+            # for kt in range(nt):
+            # T = np.dot(Co[kf,kt,:,:],Io[kf,kt,:,:])
+            # Co[kf,kt,:,:] = T
+            # U = np.dot(Cp[kf,kt,:,:],Ip[kf,kt,:,:])
+            # Cp[kf,kt,:,:] = U
             #
             # Using Einstein summation instead of a for loop increases speed by an order of magnitude
             #
 
-            #    Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
-            #    Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
+            # Co = np.einsum('ijkl,ijln->ijkn', Co, Io)
+            # Cp = np.einsum('ijkl,ijln->ijkn', Cp, Ip)
 
 
             ### array broadcasing version , new increased speed in regard of einsum
@@ -1378,12 +1380,12 @@ class Slab(dict, Interface):
         self.Ip = Cp
 
         self.RT(metalic,RT=RT)
-#        if compensate:
-#            fGHz  = fGHz.reshape(nf,1,1,1)
-#            th1   = th1.reshape(1,nt,1,1)
-#            thickness = sum(self['lthick'])
-#            d = thickness*np.cos(th1)
-#            self.T = self.T*np.exp(1j*2*np.pi*fGHz*d/0.3)
+# if compensate:
+# fGHz = fGHz.reshape(nf,1,1,1)
+# th1 = th1.reshape(1,nt,1,1)
+# thickness = sum(self['lthick'])
+# d = thickness*np.cos(th1)
+# self.T = self.T*np.exp(1j*2*np.pi*fGHz*d/0.3)
 
 
         # Modification probably not compliant with coverage !!!!
@@ -1395,14 +1397,14 @@ class Slab(dict, Interface):
                                     fGHz[:,np.newaxis,np.newaxis,np.newaxis]
                                     *d[:,:,np.newaxis,np.newaxis]
                                     /0.3)
-#        if 'T' in RT:
-#            epr = [m['epr'] for m in self['lmat']]
-#            epr = sum(epr)
-#            # theta[0] just for 1 freq
-#            self.costt = np.sqrt((epr-1+np.cos(theta[0])**2)/epr)
-#            self.sm = sum(self['lthick'])/self.costt
-#            self.gamma = np.cos(theta[0])/self.costt
-#            self.alpha = np.array(([1./epr]),dtype=complex)
+# if 'T' in RT:
+# epr = [m['epr'] for m in self['lmat']]
+# epr = sum(epr)
+# # theta[0] just for 1 freq
+# self.costt = np.sqrt((epr-1+np.cos(theta[0])**2)/epr)
+# self.sm = sum(self['lthick'])/self.costt
+# self.gamma = np.cos(theta[0])/self.costt
+# self.alpha = np.array(([1./epr]),dtype=complex)
 
 
 
@@ -1411,17 +1413,17 @@ class Slab(dict, Interface):
     def filter(self,win,theta=0):
         """ filtering waveform
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        win : waveform
+win : waveform
 
-        Returns
-        -------
+Returns
+-------
 
-        wout : 
+wout :
 
-        """
+"""
         f = win.sf.x
         self.ev(f,theta)
         wout = Wafeform()
@@ -1430,35 +1432,34 @@ class Slab(dict, Interface):
     def excess_grdelay(self,fGHz=np.arange(2.4,4.0,0.1),theta=np.array([0])):
         """ calculate transmission excess delay in ns
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz : array
-            default arange(2.4,4,0.1)
-        theta : default 0 
+fGHz : array
+default arange(2.4,4,0.1)
+theta : default 0
 
-        Returns
-        -------
-        
-        delayo : excess delay polarization o
-        delayp : excess delay polarization p
+Returns
+-------
+delayo : excess delay polarization o
+delayp : excess delay polarization p
 
 
-        Examples
-        --------
+Examples
+--------
 
-            >>> from pylayers.antprop.slab import *
-            >>> from matplotlib.pylab import *
-            >>> import numpy as np 
-            >>> sl = SlabDB('matDB.ini','slabDB.ini')
-            >>> s1 = sl['PARTITION']
-            >>> fGHz = np.arange(3.1,10.6,0.1)
-            >>> delayo,delayp = s1.excess_grdelay(fGHz,0)
-            >>> lineo = plt.plot(fGHz[0:-1],delayo)
-            >>> linep = plt.plot(fGHz[0:-1],delayp)
-            >>> plt.show()
+>>> from pylayers.antprop.slab import *
+>>> from matplotlib.pylab import *
+>>> import numpy as np
+>>> sl = SlabDB('matDB.ini','slabDB.ini')
+>>> s1 = sl['PARTITION']
+>>> fGHz = np.arange(3.1,10.6,0.1)
+>>> delayo,delayp = s1.excess_grdelay(fGHz,0)
+>>> lineo = plt.plot(fGHz[0:-1],delayo)
+>>> linep = plt.plot(fGHz[0:-1],delayp)
+>>> plt.show()
 
-        """
+"""
         
         assert len(fGHz)>2 , "fGHz too short needs more than one frequency point"
 
@@ -1466,14 +1467,14 @@ class Slab(dict, Interface):
 
         self.ev(fGHz,theta=theta,compensate=True)
         
-        # f x th x p x q 
-        T   = self.T
+        # f x th x p x q
+        T = self.T
 
-        To  = T[:,:,0,0]
-        Tp  = T[:,:,1,1]
+        To = T[:,:,0,0]
+        Tp = T[:,:,1,1]
 
-        ao  = np.unwrap(np.angle(To),axis=0)
-        ap  = np.unwrap(np.angle(Tp),axis=0)
+        ao = np.unwrap(np.angle(To),axis=0)
+        ap = np.unwrap(np.angle(Tp),axis=0)
 
         delayo = -np.mean(np.diff(ao,axis=0)/(2*np.pi*df),axis=0)
         delayp = -np.mean(np.diff(ap,axis=0)/(2*np.pi*df),axis=0)
@@ -1482,22 +1483,20 @@ class Slab(dict, Interface):
 
     def tocolor(self, fGHz=np.array([2.4])):
         """
-        
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz : np.array
-        
-        Examples
-        --------
+fGHz : np.array
+Examples
+--------
 
-        >>> sl  = SlabDB('matDB.ini','slabDB.ini')
-        >>> s1  = sl['PARTITION']
-        >>> col24 = s1.tocolor(np.array([2.4]))
-        >>> fGHz = np.arange(0.5,8,100)
-        >>> col8 = s1.tocolor(fGHz)
+>>> sl = SlabDB('matDB.ini','slabDB.ini')
+>>> s1 = sl['PARTITION']
+>>> col24 = s1.tocolor(np.array([2.4]))
+>>> fGHz = np.arange(0.5,8,100)
+>>> col8 = s1.tocolor(fGHz)
 
-        """
+"""
 
         self.ev(fGHz, theta=np.array([0.0]),compensate=True)
         color = Interface.tocolor(self, fGHz)
@@ -1506,33 +1505,33 @@ class Slab(dict, Interface):
     def loss0(self, fGHz=2.4):
         """ calculate loss for theta=0 at frequency (fGHz)
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz : frequency (GHz)  np.array()
-            default 2.4
+fGHz : frequency (GHz) np.array()
+default 2.4
 
-        Returns
-        -------
+Returns
+-------
 
-        Lo  : np.array
-            Loss at 0 deg polarization ortho
-        Lp :  np.array
-            Loss at 0 deg polarization para
+Lo : np.array
+Loss at 0 deg polarization ortho
+Lp : np.array
+Loss at 0 deg polarization para
 
 
 
-        Examples
-        --------
+Examples
+--------
 
-        >>> from pylayers.antprop.slab import *
-        >>> sl = SlabDB('matDB.ini','slabDB.ini')
-        >>> s1 = sl['PARTITION']
-        >>> Lo,Lp = s1.loss0(2.4)
-        >>> assert ((Lo[0]>5.54)&(Lo[0]<5.56)),'def Partition has changed'
-        >>> assert (Lo[0]==Lp[0]),'something wrong with polarization'
+>>> from pylayers.antprop.slab import *
+>>> sl = SlabDB('matDB.ini','slabDB.ini')
+>>> s1 = sl['PARTITION']
+>>> Lo,Lp = s1.loss0(2.4)
+>>> assert ((Lo[0]>5.54)&(Lo[0]<5.56)),'def Partition has changed'
+>>> assert (Lo[0]==Lp[0]),'something wrong with polarization'
 
-        """
+"""
 
         self.ev(fGHz, theta=np.array([0.0]),compensate=True)
         Lo, Lp = Interface.loss0(self, fGHz)
@@ -1541,26 +1540,26 @@ class Slab(dict, Interface):
     def losst(self, fGHz, theta):
         """ Calculate loss w.r.t angle and frequency
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        fGHz   :  np.array()
-            frequency (GHz)
+fGHz : np.array()
+frequency (GHz)
 
-        theta  :  np.array 
-            theta angle (radians)
+theta : np.array
+theta angle (radians)
 
-        Returns
-        -------
+Returns
+-------
 
-        Lo  : np.array
-            Loss orthogonal
+Lo : np.array
+Loss orthogonal
 
-        Lp  : np.array
-            Loss paralell
+Lp : np.array
+Loss paralell
 
-        """
-        # for backward compatibility 
+"""
+        # for backward compatibility
         if type(theta)==float:
             theta = np.array([theta])
 
@@ -1571,14 +1570,14 @@ class Slab(dict, Interface):
     def editgui(self):
         """ edit a Slab in the DB
 
-        """
+"""
         chaine1 = ""
         chaine2 = ""
         for i in range(self.nbmat):
             index_mat = self.imat[i]
             name_mat = self.mat.di[index_mat]
             thick = str(self.thickness[i])
-            chaine1 = chaine1 + name_mat + '   '
+            chaine1 = chaine1 + name_mat + ' '
             chaine2 = chaine2 + thick + ' '
 
         data = multenterbox('Slab', 'Enter',
@@ -1614,18 +1613,17 @@ class Slab(dict, Interface):
     def show(self, fGHz=2.4, theta=np.arange(0, np.pi / 2., 0.01), dtype=np.float64, dB=False):
         """ show slab Reflection and Transmission coefficient
 
-        Parameters
-        ----------
-        
-        fGHz : float
-        theta : np.array
-        dtype :
-        display :  string
-            {'modulus'}
-        dB  : boolean
-            False
+Parameters
+----------
+fGHz : float
+theta : np.array
+dtype :
+display : string
+{'modulus'}
+dB : boolean
+False
 
-        """
+"""
         self.ev(fGHz, theta)
         if self['evaluated']:
             fig,ax=self.M.plotwrt(var='a',types=['l20'])
@@ -1635,24 +1633,24 @@ class Slab(dict, Interface):
 class SlabDB(dict):
     """ Slab data base
 
-    Attributes
-    ----------
+Attributes
+----------
 
-        DB : slab dictionnary
+DB : slab dictionnary
 
-    """
+"""
     def __init__(self, filemat='matDB.ini', fileslab='slabDB.ini'):
         """
 
-        Parameters
-        ----------
+Parameters
+----------
 
-        filemat : string
-        fileslab : string
+filemat : string
+fileslab : string
 
-        """
+"""
         self.fileslab = fileslab
-        self.fileslab = self.fileslab.replace('.ini','.slab') # WARNING !!!  deprecated in new verion 
+        self.fileslab = self.fileslab.replace('.ini','.slab') # WARNING !!! deprecated in new verion
         self.mat = MatDB()
         if (filemat != ''):
             self.mat.load(filemat)
@@ -1663,7 +1661,7 @@ class SlabDB(dict):
     def showall(self):
         """ show all
 
-        """
+"""
         lsl = self.keys()
         k = len(lsl)
         nl = k / 2
@@ -1676,30 +1674,30 @@ class SlabDB(dict):
 
     def help(self):
         """ The problem with this class is to cope with 2 diferent format
-        - .slab file is used by PulsRay and cannot be modified or extended
-        - .sl file is a pickle file of the SlabDB
+- .slab file is used by PulsRay and cannot be modified or extended
+- .sl file is a pickle file of the SlabDB
 
-        """
-        print "sl.di      : slab dictionnary "
-        print "sl.mat.di  : mat dictionnary  "
+"""
+        print "sl.di : slab dictionnary "
+        print "sl.mat.di : mat dictionnary "
         print "sl.info() "
         print "S=sl[sl.di[5]]"
         print "sl.dass() : update conversion dictionnary"
         print "sl.maxindex() : Find the max value of the index in dB"
         print "sl.delete(name) : Delete an element from the database"
-        print "sl.add(name)  : add an element from the database"
+        print "sl.add(name) : add an element from the database"
         print "sl.edit(name) : edit an element from the database"
         print "sl.show(name,np.array([2.4])) : plot response wrt angle"
-        print "sl.loadsl(_filename) : load a .sl   file (PyRay)"
-        print "sl.load(_filename)   : load a .slab file (PulsRay)"
-        print "sl.save(_filename)   : save  "
+        print "sl.loadsl(_filename) : load a .sl file (PyRay)"
+        print "sl.load(_filename) : load a .slab file (PulsRay)"
+        print "sl.save(_filename) : save "
         print "sl.choose() : dialog to choose mat and slab "
 
     def info(self):
         """ information
-        """
+"""
         print "fileslab : ", self.fileslab
-        print "filemat  : ", self.mat.filemat
+        print "filemat : ", self.mat.filemat
         for i in self.keys():
             S = self[i]
             S.info()
@@ -1707,9 +1705,9 @@ class SlabDB(dict):
     def dass(self):
         """ update conversion dictionnary
 
-        code <--> name
+code <--> name
 
-        """
+"""
         di = {}
         for name in self.keys():
             index = self[name]['index']
@@ -1718,7 +1716,7 @@ class SlabDB(dict):
 
     def maxindex(self):
         """ find the max value of the index in DB
-        """
+"""
 
         maxi = 0
         for i in self.keys():
@@ -1729,30 +1727,30 @@ class SlabDB(dict):
 
     def delete(self, name):
         """ delete an element from the database
-        """
+"""
         self.__delitem__(name)
         self.dass()
 
     def edit(self, name):
         """ edit a Slab in the DB
 
-        Parameters
-        ----------
-        name
+Parameters
+----------
+name
 
-        """
+"""
         slab = self[name]
         slab.edit()
 
     def show(self, name='WOOD', fGHz=np.array([2.4])):
         """ show
 
-        Parameters
-        ----------
-        name : string
-        fGHz : np.array
+Parameters
+----------
+name : string
+fGHz : np.array
 
-        """
+"""
         slab = self[name]
         slab.ev(fGHz=fGHz)
         fig,ax = slab.M.plotwrt(var='a')
@@ -1760,6 +1758,7 @@ class SlabDB(dict):
 
     def add(self, name, lmatname, lthick, color='black'):
         """ add a slab in dB
+
 
         Parameters
         ----------
@@ -1839,7 +1838,8 @@ class SlabDB(dict):
             sl['Optitherm382'].ev(fGHz,theta)
             sl['Optitherm382'].pcolor(dB=True)
 
-        """
+
+"""
 
         U = Slab(self.mat, name)
         maxi = self.maxindex()
@@ -1852,9 +1852,9 @@ class SlabDB(dict):
         for i in range(len(lmatname)):
             namem = lmatname[i]
             imat[i] = U.mat[namem]['index']
-            thickness[i] = lthick[i] * 100  # m ->cm
+            thickness[i] = lthick[i] * 100 # m ->cm
         U['imat'] = tuple(imat)
-        U['thickness'] = tuple(thickness)  # cm
+        U['thickness'] = tuple(thickness) # cm
         U['color'] = color
         U['linewidth'] = 1
         U['evaluated'] = False
@@ -1865,46 +1865,46 @@ class SlabDB(dict):
     def addgui(self, name):
         """ add a slab in the DB
 
-        Parameters
-        ----------
-        name
+Parameters
+----------
+name
 
-        """
+"""
         U = Slab(self.mat, name)
         U.edit()
         self[U.name] = U
         self.dass()
 
-#           Parameters
-#           ----------
-#           _filename : string
+# Parameters
+# ----------
+# _filename : string
 
-#        """
-#        filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-#        fo = open(filename, 'r')
-#        DB = cPickle.load(fo)
-#        self = DB
-#        self.conv()
-#        fo.close()
+# """
+# filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+# fo = open(filename, 'r')
+# DB = cPickle.load(fo)
+# self = DB
+# self.conv()
+# fo.close()
 
-#    def choose(self):
-#        """ Choose a mat file from matdir and slab from slabdir
-#        """
-#        import tkFileDialog
-#        FD = tkFileDialog
+# def choose(self):
+# """ Choose a mat file from matdir and slab from slabdir
+# """
+# import tkFileDialog
+# FD = tkFileDialog
 
-#        self.mat.choose()
-#        fileslab = FD.askopenfilename(filetypes=[("Slab file ", "*.slab"),
-#                                                 ("All", "*")],
-#                                      title="Please choose a .slab  file",
-#                                      initialdir=slabdir)
-#        _fileslab = pyu.getshort(fileslab)
-#        self.load(_fileslab)
+# self.mat.choose()
+# fileslab = FD.askopenfilename(filetypes=[("Slab file ", "*.slab"),
+# ("All", "*")],
+# title="Please choose a .slab file",
+# initialdir=slabdir)
+# _fileslab = pyu.getshort(fileslab)
+# self.load(_fileslab)
 
-    def load(self,_fileini='slabDB.ini'): 
+    def load(self,_fileini='slabDB.ini'):
         """Load a Material from a .ini file
 
-        """
+"""
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
         config = ConfigParser.ConfigParser()
         config.read(fileini)
@@ -1939,11 +1939,11 @@ class SlabDB(dict):
     def loadsl(self, _filename):
         """ load a .slab file (PulsRay format)
 
-        Parameters
-        ----------
-            _filename
+		Parameters
+		----------
+		_filename
 
-        """
+		"""
         filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
         try:
             fo = open(filename, "rb")
@@ -2003,7 +2003,7 @@ class SlabDB(dict):
 
             data_charindex = data[1238 + delta:1268 + delta]
             charindex = data_charindex.replace("\x00", "")
-    #        S['charindex']=charindex
+    # S['charindex']=charindex
 
             data_slab_index = data[1268 + delta:1272 + delta]
             index = stru.unpack('i', data_slab_index)[0]
@@ -2034,7 +2034,7 @@ class SlabDB(dict):
 
     def save(self,_fileini='slabDB.ini'):
         """ save SlabDB in an ini file
-        """
+"""
 
         fileini = pyu.getlong(_fileini, pstruc['DIRSLAB'])
         fd = open(fileini, "w")
@@ -2068,12 +2068,12 @@ class SlabDB(dict):
     def savesl(self, _filename):
         """ Save a Slab database in a .slab file (PulsRay format)
 
-        Parameters
-        ----------
-        _filename  : string
-            shortname of slabfile
+Parameters
+----------
+_filename : string
+shortname of slabfile
 
-        """
+"""
         filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
         fo = open(filename, 'wb')
         N = len(self.di)
@@ -2081,8 +2081,8 @@ class SlabDB(dict):
         data_listname = ''
         for k in range(N):
             data_listname = data_listname + "\"" + self.di[k - 1] + "\" "
-#                data_listname = string.join(tname,"\" \"")
-#                data_listname = "\""+data_listname+"\""
+# data_listname = string.join(tname,"\" \"")
+# data_listname = "\""+data_listname+"\""
         L = len(data_listname)
         # On complete avec \x00 jusqu'a 2500 valeurs
         if L < 1200:
@@ -2133,47 +2133,47 @@ class SlabDB(dict):
         fo.write(data)
         fo.close()
 
-#    def savesl(self, _filename):
-#        """ the short filename _filename needs to have the extension .sl
+# def savesl(self, _filename):
+# """ the short filename _filename needs to have the extension .sl
 
-#        """
-#        ia = _filename.find('.sl')
-#        if (ia == -1):
-#            print("error : _filename needs a .sl extension")
-#            exit()
-#        else:
-#        # save in .sl format
-#            filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
-#            fo = open(filename, 'w')
-#            cPickle.dump(self, fo)
-#            fo.close()
-#        # save in .slab format
-#            f2 = _filename.replace('.sl', pstruc['DIRSLAB'])
-#            self.save(f2)
+# """
+# ia = _filename.find('.sl')
+# if (ia == -1):
+# print("error : _filename needs a .sl extension")
+# exit()
+# else:
+# # save in .sl format
+# filename = pyu.getlong(_filename, pstruc['DIRSLAB'])
+# fo = open(filename, 'w')
+# cPickle.dump(self, fo)
+# fo.close()
+# # save in .slab format
+# f2 = _filename.replace('.sl', pstruc['DIRSLAB'])
+# self.save(f2)
 
 
 def calsig(cval, fGHz, typ='epsr'):
     """ evaluate sigma from epsr or index at a given frequency
 
-    Parameters
-    ----------
-    cval : complex value
-        {epsr | epsr ^2 }
-    fGHz : frequency GHz
-    type :
-        {'epsr' | 'ind'}
+Parameters
+----------
+cval : complex value
+{epsr | epsr ^2 }
+fGHz : frequency GHz
+type :
+{'epsr' | 'ind'}
 
 
-    Returns
-    -------
-    epr1  :  ..math::
-    sigma : float
-        conductivity (S/m)
-    delta :
+Returns
+-------
+epr1 : ..math::
+sigma : float
+conductivity (S/m)
+delta :
 
 
 
-    """
+"""
 
     if typ == 'epsr':
         epsr = cval
@@ -2197,3 +2197,5 @@ if (__name__ == "__main__"):
     sl = SlabDB('matDB.ini','slabDB.ini')
     s1 = sl['PILLAR']
     fGHz=np.arange(0.6,5.0,0.1)
+
+   

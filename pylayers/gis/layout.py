@@ -183,7 +183,7 @@ class Layout(object):
 
 
     """
-    def __init__(self,_filename='defstr.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
+    def __init__(self,_filename='defstr3.ini',_filematini='matDB.ini',_fileslabini='slabDB.ini',_filefur=''):
 
 
         mat = sb.MatDB()
@@ -1767,7 +1767,7 @@ class Layout(object):
         -------
 
             >>> from pylayers.gis.layout import *
-            >>> L = Layout('example.str')
+            >>> L = Layout('defstr.str')
             >>> L.add_fnod((10.0,10.0))
             -9
 
