@@ -90,6 +90,7 @@ class Rays(dict):
         self.raypt = 0
         self.los=False
         self.is3D=False
+        self.isbased=False
         self.filled = False
         self.evaluated = False
         
@@ -138,9 +139,14 @@ class Rays(dict):
         return(s)
     
     def reciprocal(self):
+        """ switch tx and rx
+        
         """
-        """
-        # switch tx and rx
+
+        if not self.isbased:
+            raise NameError('bases have not yet been computed. Please rune self.locbas(Layout) before.')
+
+        # 
         r = Rays(self.pRx,self.pTx)
         for k in self:
             r[k]={}
@@ -159,6 +165,7 @@ class Rays(dict):
         nr : ray index in group of interactions 
 
         """
+
 
         r = Rays(self.pTx,self.pRx)
         r.is3d = self.is3D
@@ -887,7 +894,7 @@ class Rays(dict):
 
                 #  Bi 3 x 2 x i x r
                 Bi = np.concatenate((ew, ev), axis=1)
-                # self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
+                self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
                 wn = w/np.sqrt(np.sum(w*w, axis=0))
@@ -899,7 +906,7 @@ class Rays(dict):
 
                 #  Bi 3 x 2 x i x r
                 Bo = np.concatenate((ew, ev), axis=1)
-                # self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
+                self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
 
                 #
                 # AOA (rad)
@@ -926,8 +933,8 @@ class Rays(dict):
                 BiN = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
 
-                # self[k]['BiN'] = np.concatenate((si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
-                #                                    eph[:,np.newaxis,:]),axis=1)
+                self[k]['BiN'] = np.concatenate((si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
+                                                   eph[:,np.newaxis,:]),axis=1)
 
                 #
                 # pasting (Bo0,B,BiN)
@@ -941,8 +948,8 @@ class Rays(dict):
 
                 self[k]['B'] = np.einsum('xv...,xw...->vw...', Bo, Bi)
 
-                # BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
-                # self[k]['BiN']=BiN
+                #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
+                #self[k]['BiN']=BiN
                 # self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
 
             # if los exists
@@ -963,6 +970,8 @@ class Rays(dict):
                 self[k]['aoa'] =  np.vstack((th, ph))
                 E=np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
+
+            self.isbased=True
 
     def fillinter(self, L,append=False):
         """  docstring for fillinter
@@ -1046,7 +1055,11 @@ class Rays(dict):
         rsl = np.array(())
         
         # loop on group of interactions 
+        
         for k in self:
+            if k == 4:
+                pdb.set_trace()
+
             if k !=0:
                 
                 uR = uT = uD = uRf = uRc = 0.
@@ -1517,13 +1530,14 @@ class Rays(dict):
                col=np.array([1, 0, 1]),
                id=0,
                linewidth=1):
-        """ plot a 3D ray
+        """ plot a set of 3D rays
 
         Parameters
         ----------
 
         ray : 
-
+        block : int
+            interaction block
         bdis : Boolean
             if False return .vect filename (True)
         bbas : Boolean
@@ -1543,6 +1557,7 @@ class Rays(dict):
         _filerac = pyu.getshort(filerac)
         filename_list = filerac + '.list'
         filename_vect = filerac + '.vect'
+
         try:
             fo = open(filename_vect, "w")
         except:
@@ -1565,6 +1580,8 @@ class Rays(dict):
         #
         # Ajout des bases locales
         #
+        
+
 
         fo = open(filename_list, "w")
         fo.write("LIST\n")
@@ -1572,7 +1589,6 @@ class Rays(dict):
         if (bstruc):
             # fo.write("{<strucTxRx.off}\n")
             fo.write("{<" + _filestr + ".off}\n")
-
         filename = filename_list
         fo.close()
 
@@ -1590,6 +1606,8 @@ class Rays(dict):
               L=[],
               bdis=True, 
               bstruc=True, 
+              bbasi = False,
+              bbaso = False,
               id=0,
               ilist=[], 
               raylist=[],centered=True):
@@ -1602,6 +1620,10 @@ class Rays(dict):
             True
         bstruc : boolean
             True
+        bbasi : boolean
+            display input basis of each interaction of rays
+        bbaso : boolean
+            display ouput basis of each interaction of rays
         id : int 
         L : Layout object
             Layout to be displayed
@@ -1634,7 +1656,21 @@ class Rays(dict):
         fo.write("LIST\n")
         if bstruc:
             fo.write("{<"+strucname+".off}\n")
+            if bbasi:
+                if not self.isbased:
+                    raise NameError('Bases have not been computed (self.locbas(Layout)')
+                else:    
+                    base_listi = geu.Geomlist('baselisti',clear=True) 
+                    base_listi.append("LIST\n")
+            if bbaso:
+                if not self.isbased:
+                    raise NameError('Bases have not been computed (self.locbas(Layout)')
+                else:    
+                    base_listo = geu.Geomlist('baselisto',clear=True) 
+                    base_listo.append("LIST\n")
+
             # fo.write("{<strucTxRx.off}\n")
+
             k = 0
             for i in ilist:
                 if raylist == []:
@@ -1650,6 +1686,31 @@ class Rays(dict):
                                           bstruc=False, col=col, id=k)
                     k += 1
                     fo.write("{< " + fileray + " }\n")
+                    if bbasi:
+                        for inter in range(i):
+                            filebi = 'bi_' + str(j) + '_' + str(i) + '_' +str(inter)
+                            basi = geu.GeomVect(filebi)
+                            basi.geomBase(self[i]['Bi'][:,:,inter,j],pt=self[i]['pt'][:,inter+1,j]-pg[:,0])
+                            base_listi.append("{<" + filebi +'.vect' "}\n")
+                        filebi = 'bi_' + str(j) + '_' + str(i) + '_' +str(inter-1)
+                        basi = geu.GeomVect(filebi)
+                        basi.geomBase(self[i]['BiN'][:,:,j],pt=self[i]['pt'][:,-1,j]-pg[:,0])
+                        base_listi.append("{<" + filebi +'.vect' "}\n")
+                    if bbaso:
+                        for inter in range(i):
+                            filebo = 'bo_' + str(j) + '_' + str(i) + '_' +str(inter)
+                            baso = geu.GeomVect(filebo)
+                            baso.geomBase(self[i]['Bo'][:,:,inter,j],pt=self[i]['pt'][:,inter+1,j]-pg[:,0])
+                            base_listo.append("{<" + filebo +'.vect' "}\n")
+                        filebo = 'bo_' + str(j) + '_' + str(i) + '_' +str(inter+1)
+                        baso = geu.GeomVect(filebo)
+                        baso.geomBase(self[i]['Bo0'][:,:,j],pt=self[i]['pt'][:,0,j]-pg[:,0])
+                        base_listo.append("{<" + filebo +'.vect' "}\n")
+            if bbasi:
+                fo.write("{< " + "baselisti.list}\n") 
+            if bbaso:   
+                fo.write("{< " + "baselisto.list}\n") 
+
         fo.close()
         if (bdis):
             chaine = "geomview " + filename + " 2>/dev/null &"

@@ -277,6 +277,8 @@ class GeomVect(Geomview):
         fo.write("%6.3f %6.3f %6.3f  0.\n" % (col[2, 0], col[2, 1], col[2, 2]))
         #fo.write("{<}\n")
         fo.close()
+    
+
 
     def points(self, pt, colorname='blue'):
         """ Geomview display a set of points with color
@@ -3372,7 +3374,7 @@ def mirror(p,pa,pb):
     .. plot::
         :include-source:
         >>> from pylayers.util.geomutil import *
-        >>> fron pylayers.util.plotutil import *
+        >>> from pylayers.util.plotutil import *
         >>> import numpy as np
         >>> p = np.random.randn((2,1000))
         >>> pa  = np.array([0,0])
