@@ -301,7 +301,7 @@ class Antenna(object):
         self.Np = 180
         self.Nf = 104
 
-    def pattern(self,theta,phi,typ='s3'):
+    def pattern(self,theta=[],phi=[],typ='s3'):
         """ return multidimensionnal radiation patterns 
 
         Parameters
@@ -313,6 +313,12 @@ class Antenna(object):
             1xNp
 
         """
+
+        if theta == []:
+            theta = np.linspace(0,np.pi,30)
+        if phi == []:
+            phi = np.linspace(0,2*np.pi,60)
+
         Nt = len(theta)
         Np = len(phi)
         Nf = len(self.fa)
@@ -1478,11 +1484,8 @@ class Antenna(object):
                 
                 Fth = Fth.reshape(Nf, Nt, Np)
                 Fph = Fph.reshape(Nf, Nt, Np)
-                self.Fphi = Fph
-                self.Ftheta = Fth
 
-                G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
-                self.SqG = np.sqrt(G)
+                
 
             
         if typ == 'sh3':
@@ -1501,12 +1504,22 @@ class Antenna(object):
                 Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True ) 
                 Fth = Fth.reshape(Nf,Nt,Np)
                 Fph = Fph.reshape(Nf,Nt,Np)
+                
+
             else:
                      
                 Ex = np.dot(cx,Y[k])
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
                 Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)       
+                
+
+        if pattern :
+            self.Fphi = Fph
+            self.Ftheta = Fth
+            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+            self.SqG = np.sqrt(G)   
+
 
         return Fth, Fph
             
