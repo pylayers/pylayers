@@ -490,11 +490,13 @@ class Ctilde(object):
             Fat = bs.FUsignal(self.fGHz,Fat)
             Fap = bs.FUsignal(self.fGHz,Fap)
         else:
-            Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
-            Fat = Fat.transpose()
-            Fap = Fap.transpose()
-            Fat = bs.FUsignal(a.fa,Fat)
-            Fap = bs.FUsignal(a.fa,Fap)
+			
+			Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
+		
+			Fat = Fat.transpose()
+			Fap = Fap.transpose()
+			Fat = bs.FUsignal(a.fa,Fat)
+			Fap = bs.FUsignal(a.fa,Fap)
 
         if type(b)==str:
             Fbt = np.zeros(nray*nfreq).reshape((nray,nfreq))
@@ -512,6 +514,7 @@ class Ctilde(object):
             Fbp = Fbp.transpose()
             Fbt = bs.FUsignal(b.fa,Fbt)
             Fbp = bs.FUsignal(b.fa,Fbp)
+        #pdb.set_trace()
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
