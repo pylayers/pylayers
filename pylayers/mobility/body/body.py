@@ -59,7 +59,7 @@ class Body(object):
 	loadC3D
 	settopos
 	setccs
-	setaccs
+	setdcs
 	geomfile
 	plot3d
 	movie
@@ -147,11 +147,12 @@ class Body(object):
 		self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
 
 		self.g.add_nodes_from(keys)
+		
 		for cyl in di['cylinder'].keys():
 			t = di['cylinder'][cyl]['t']
 			h = di['cylinder'][cyl]['h']
 			r = di['cylinder'][cyl]['r']
-			self.g.add_edge(t,h)
+			self.g.add_edge(t,h,id=cyl)
 			self.g[t][h]['radius']= r
 	   
 		self.ant={}
@@ -332,19 +333,19 @@ class Body(object):
 		self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
         
     
-	def setaccs(self):
-		""" set antenna cylinder coordinate system (accs) from a topos
+	def setdcs(self):
+		""" set device coordinate system (dcs) from a topos
 
-		This method evaluates the set of all accs.
-		It provides the information necessary for antenna placement on
+		This method evaluates the set of all dcs.
+		It provides the information necessary for device placement on
 		the body.
 
-		If N is the number of antenna an accs is an MDA of size 3x4xN
+		If N is the number of antenna an dcs is an MDA of size 3x4xN
 
 		Returns
 		-------
 
-		self.accs : dictionnary
+		self.dcs : dictionnary
 		Examples
 		--------
 		>>> import numpy as np
@@ -358,13 +359,13 @@ class Body(object):
 		>>> bc = Body()
 		>>> bc.settopos(traj,2.3,2)
 		>>> bc.setccs(topos=True)
-		>>> bc.setaccs()
+		>>> bc.setdcs()
 		>>> nx.draw(bc.g,bc.g.pos)
 		>>> axe = plt.axis('scaled')
 		>>> plt.show()
 
 		"""
-		self.accs = {}
+		self.dcs = {}
 		for ant in self.ant.keys():
 
 			# retrieving antenna placement information from dictionnary ant
@@ -382,10 +383,10 @@ class Body(object):
 			Rcyl = self.g[kta][khe]['radius']
 			phe = np.array(self.topos[:,khe])
 			pta = np.array(self.topos[:,kta])
-			dl = phe - pta
-			lmax = np.sqrt(np.dot(dl,dl))
+			vl = phe - pta
+			lmax = np.sqrt(np.dot(vl,vl))
+			
 			CCS = self.ccs[Id,:,:]
-
 			#self.nodes_Id[kta],self.nodes_Id[khe]
 
 			# applying rotation and translation
@@ -394,7 +395,7 @@ class Body(object):
 			CCSr = np.dot(CCS,Rot)
 			neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
 
-			self.accs[ant] = np.hstack((neworigin[:,np.newaxis],CCSr))
+			self.dcs[ant] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
 	def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
 		""" load nframes of motion capture C3D file
@@ -501,7 +502,7 @@ class Body(object):
 		topos : True
 		wire : True
 		ccs : False
-		accs : False
+		dcs : False
 		struc : True
 		traj : []
 		filestruc:'DLR.off'
@@ -518,7 +519,7 @@ class Body(object):
 					'topos': True,
 					'wire': True,
 					'ccs': False,
-					'accs': False,
+					'dcs': False,
 					'struc':True,
 					'pattern':False,
 					'traj':[],
@@ -540,8 +541,8 @@ class Body(object):
 				self.settopos(traj=kwargs['traj'],tk=ttk)
 				if kwargs['ccs']:
 					self.setccs(topos=True)
-				if kwargs['accs']:
-					self.setaccs()
+				if kwargs['dcs']:
+					self.setdcs()
 				kwargs['tag']=stk
 				self.geomfile(**kwargs)
 
@@ -616,7 +617,7 @@ class Body(object):
 					'wire':False,
 					'ccs':False,
 					'lccs':[],
-					'accs':False,
+					'dcs':False,
 					'struc':False,
 					'pattern':False,
 					'filestruc':'DLR.off'
@@ -664,7 +665,7 @@ class Body(object):
 
 		"""
 		# temporary code
-		Ant = ant.Antenna('defant.vsh3')
+		Ant = ant.Antenna('S2R3.sh3')
 		Ant.Fsynth3()
 
 		defaults = { 'iframe': 0,
@@ -674,8 +675,8 @@ class Body(object):
 					'wire': False,
 					'ccs': False,
 					'lccs': [],
-					'accs': False,
-					'laccs': [],
+					'dcs': False,
+					'ldcs': [],
 					'struc':False,
 					'pattern':False,
 					'velocity':False,
@@ -721,9 +722,10 @@ class Body(object):
 			print ("LIST\n")
 		
 		dbody = {}
-		for k,e in enumerate(self.g.edges()):
+		for e in self.g.edges():
 			e0 = e[0]
 			e1 = e[1]
+			k = int(self.g[e0][e1]['id'])
 			if not kwargs['topos']:
 				pA = self.d[:,e0,iframe].reshape(3,1)
 				pB = self.d[:,e1,iframe].reshape(3,1)
@@ -769,22 +771,22 @@ class Body(object):
 					bodylist.append('{<'+fileccs+'.vect'+"}\n")
 
 		# display antenna cylinder coordinate system
-		if kwargs['accs']:
-			for key in self.accs.keys():
-				fileaccs = kwargs['tag']+'accs-'+key
-				U = self.accs[key]
-				geoa = geu.GeomVect(fileaccs)
+		if kwargs['dcs']:
+			for key in self.dcs.keys():
+				filedcs = kwargs['tag']+'dcs-'+key
+				U = self.dcs[key]
+				geoa = geu.GeomVect(filedcs)
 				geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
-				bodylist.append('{<'+fileaccs+'.vect'+"}\n")
+				bodylist.append('{<'+filedcs+'.vect'+"}\n")
 
 		# display antenna pattern
 		if kwargs['pattern']:
-			for key in self.accs.keys():
+			for key in self.dcs.keys():
 			#A = antenna(self.ant[key]['file'])
-				U = self.accs[key]
+				U = self.dcs[key]
 				_filepatt = kwargs['tag']+'patt-'+key
 				geo = geu.Geomoff(_filepatt)
-				k = 0 # frequency index
+				k = 46 # frequency index
 				V = Ant.SqG[k,:,:]
 				#T = U[:,1:]
 				Rab = self.ant[key]['T']
@@ -850,13 +852,15 @@ class Body(object):
 		#
 		# ccs : nc x 3 x 3
 		#
-		self.ccs = np.ndarray(shape=(nc,3,3))
-
-		for k,e in enumerate(self.g.edges()):
+		self.ccs = np.empty((nc,3,3))
+		
+		for e in self.g.edges():
 			# e0 : tail node of cylinder segment
 			e0 = e[0]
 			# e1 : head node of cylinder segment
 			e1 = e[1]
+			k = int(self.g[e0][e1]['id'])
+			print k
 			if not topos:
 				# pA : tail point
 				pA = self.d[:,e0,frameId].reshape(3,1)
@@ -876,7 +880,6 @@ class Body(object):
 			# 2 nd vector : 3 x 1
 			# 3 rd vector : PA-PB normalized
 			T = geu.onb(pA,pB,vg)
-
 			self.ccs[k,:,:] = T
 
 	def cylinder_basis_k(self, frameId):
@@ -1055,11 +1058,11 @@ if __name__ == '__main__':
 	traj = tr.Trajectory()
 	bd.settopos(traj,0.3)
 	bd.setccs(topos=True)
-	bd.setaccs()
-	#bd.show3(wire=True,accs=True,topos=True)
-	#bd.show3(wire=False,accs=True,topos=True)
+	bd.setdcs()
+	#bd.show3(wire=True,dcs=True,topos=True)
+	#bd.show3(wire=False,dcs=True,topos=True)
 	#lt = tr.importsn()
-	bd.movie(traj=traj,wire=True,accs=True,pattern=True,filestruc='TA-Office.off')
+	bd.movie(traj=traj,wire=True,dcs=True,pattern=True,filestruc='TA-Office.off')
 
 	# nframes = 126
 	# Bc = Body()

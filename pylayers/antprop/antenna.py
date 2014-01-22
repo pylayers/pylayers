@@ -1504,7 +1504,11 @@ class Antenna(object):
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
                 Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)       
-
+            
+            self.Fphi = Fph
+            self.Ftheta = Fth
+            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+            self.SqG = np.sqrt(G)
         return Fth, Fph
             
 
