@@ -879,7 +879,7 @@ class Rays(dict):
                 #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
                 v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
 
-                es_in = np.expand_dims(s_in, axis=1)
+                es_in = np.expand_dims(-s_in, axis=1)
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
@@ -924,7 +924,7 @@ class Rays(dict):
                 BiN = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
 
-                self[k]['BiN'] = np.concatenate((si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
+                self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
                                                    eph[:,np.newaxis,:]),axis=1)
 
                 #
