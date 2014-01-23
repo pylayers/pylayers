@@ -582,65 +582,70 @@ class Rays(dict):
                     ks = np.argsort(a1es, axis=0)
                     ptees = pte
                     siges = sig
-
+               
+                #---------------------------------
+                # handling subsegments (if any)
+                #---------------------------------
+                #
                 #   ptes (3 x i+2 x r ) 
-                lsss = np.unique(np.array(L.lsss))
-                # index of signature which corresponds to subsegment
-                u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
-                # dimension extension of index u for : 
-                #    z coordinate extraction (append line 2 on dimension 0)    
-                #    0 signature extraction  (append line 0 on  dimension 0)    
-                v   = [2*np.ones(len(u[0]),dtype=int)]+u
-                w   = [0*np.ones(len(u[0]),dtype=int)]+u
-                # zss : height of interactions on subsegments
-                zss = ptees[v]
-                # structure index of corresponding subsegments 
-                nstrs = siges[w]
-                #print "nstrs: ",nstrs
-                #print "zss:",zss
-                #
-                # Determine which subsegment has been intersected 
-                # k = 0 : no subsegment intersected
-                zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
-                tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
-                                                       (z[1]>x[1])),x[0]),zip(zinterval,zss))
-                #print tab
-                def findindex(x):
-                    if len(x[1])>0:
-                        k = x[0].index(x[1][0])+1
-                        return(k)
-                    else:
-                        return(0)
+                if L.Nss>0:
+                    lsss = np.unique(np.array(L.lsss))
+                    # index of signature which corresponds to subsegment
+                    u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
+                    # dimension extension of index u for : 
+                    #    z coordinate extraction (append line 2 on dimension 0)    
+                    #    0 signature extraction  (append line 0 on  dimension 0)    
+                    v   = [2*np.ones(len(u[0]),dtype=int)]+u
+                    w   = [0*np.ones(len(u[0]),dtype=int)]+u
+                    # zss : height of interactions on subsegments
+                    zss = ptees[v]
+                    # structure index of corresponding subsegments 
+                    nstrs = siges[w]
+                    #print "nstrs: ",nstrs
+                    #print "zss:",zss
+                    #
+                    # Determine which subsegment has been intersected 
+                    # k = 0 : no subsegment intersected
+                    zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
+                    tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
+                                                           (z[1]>x[1])),x[0]),zip(zinterval,zss))
+                    #print tab
+                    def findindex(x):
+                        if len(x[1])>0:
+                            k = x[0].index(x[1][0])+1
+                            return(k)
+                        else:
+                            return(0)
 
-                indexss = map(findindex,zip(zinterval,tab))
-                indexnew = L.stridess[nstrs]+indexss
-                #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
-                #iindexnex = L.isss[ind]
-                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
-                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
-                # update signature
-                siges[w] = indexnew
-                #print "indexss:",indexss
-                #print "indexnew:",indexnew
-                #print siges
-                #pdb.set_trace()
-                #pdb.set_trace()
-                # expand dimension add z dimension (2) 
-                # tuple concatenation doesn't work with array this is strange!!
-                #
-                # >> a = (1,2,3)
-                # >> b = (3,5,6) 
-                # >> a+b 
-                # (1,2,3,3,5,6)
-                # but 
-                # >> u = (array([1,2]),array([1,2]))
-                # >> v = (array([2,2]))
-                # >> u + v 
-                # array([[3,4],[3,4]])  inconsistent !
-                #
-                #   z --> kl subseg level  
-                #   siges[0,:] --> Ms + nstr *Mss + (kl) 
-                #
+                    indexss = map(findindex,zip(zinterval,tab))
+                    indexnew = L.stridess[nstrs]+indexss
+                    #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
+                    #iindexnex = L.isss[ind]
+                    #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                    #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                    # update signature
+                    siges[w] = indexnew
+                    #print "indexss:",indexss
+                    #print "indexnew:",indexnew
+                    #print siges
+                    #pdb.set_trace()
+                    #pdb.set_trace()
+                    # expand dimension add z dimension (2) 
+                    # tuple concatenation doesn't work with array this is strange!!
+                    #
+                    # >> a = (1,2,3)
+                    # >> b = (3,5,6) 
+                    # >> a+b 
+                    # (1,2,3,3,5,6)
+                    # but 
+                    # >> u = (array([1,2]),array([1,2]))
+                    # >> v = (array([2,2]))
+                    # >> u + v 
+                    # array([[3,4],[3,4]])  inconsistent !
+                    #
+                    #   z --> kl subseg level  
+                    #   siges[0,:] --> Ms + nstr *Mss + (kl) 
+                    #
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
@@ -870,10 +875,15 @@ class Rays(dict):
                 #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
                 w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
                 # nw : i x r 
+                #
+                #
+                # to do fic the colinear bug
+                #
                 nw = np.sqrt(np.sum(w*w, axis=0))
                 if (nw.any()==0):
+                    u = np.where(nw==0)
                     pdb.set_trace()
-                assert(nw.all()>0), pdb.set_trace()
+                #assert(nw.all()>0), pdb.set_trace()
                 wn = w/nw
                 # Handling channel reciprocity s_in --> -s_in 
                 #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
@@ -1048,8 +1058,8 @@ class Rays(dict):
         # loop on group of interactions 
         
         for k in self:
-            if k == 4:
-                pdb.set_trace()
+            #if k == 4:
+            #    pdb.set_trace()
 
             if k !=0:
                 

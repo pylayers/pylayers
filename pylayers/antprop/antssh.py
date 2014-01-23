@@ -55,13 +55,19 @@ def SSHFunc(L, theta,phi):
 	indx = np.append(indx,indx2, axis = 0)
 	return Y,  indx
 
-
 def SSHFunc2(L, theta,phi):
-	
 	"""
-	L : integer, spherical harmonics order
+    Parameters
+    ----------
+
+	L : integer,
+        spherical harmonics order
 	theta: numpy array(1, ndir)
 	phi: numpy array(1,ndir)
+    
+    Notes
+    -----
+
 	theta and phi should have the same dimensions which represents the rays 
 	Compute the spherical harmonic functions for the order L
 	return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics 

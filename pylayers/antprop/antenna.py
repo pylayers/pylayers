@@ -1387,9 +1387,7 @@ class Antenna(object):
 
 
 
-
     def Fsynth3(self, theta = [], phi=[], pattern=True):
-
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
@@ -1433,6 +1431,10 @@ class Antenna(object):
         """
 
         typ = self._filename.split('.')[1]
+        if typ not in ['sh3','vsh3']:
+            # temporary what to do if originbal file is not sh3 or vsh3 ? 
+            typ = 'vsh3'
+
         Nf = len(self.fa)
         if theta==[]:
             theta=np.linspace(0,np.pi,47)
@@ -1443,10 +1445,10 @@ class Antenna(object):
         Np = len(phi)
 
         if pattern:
-                self.theta = theta[:,np.newaxis]
-                self.phi = phi[np.newaxis,:] 
-                theta = np.kron(theta, np.ones(Np))
-                phi = np.kron(np.ones(Nt),phi)
+            self.theta = theta[:,np.newaxis]
+            self.phi = phi[np.newaxis,:] 
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
                          
         
         if typ =='vsh3':        
@@ -1512,6 +1514,11 @@ class Antenna(object):
                 Ey = np.dot(cy,Y[k])
                 Ez = np.dot(cz,Y[k])
                 Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)       
+            
+            self.Fphi = Fph
+            self.Ftheta = Fth
+            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+            self.SqG = np.sqrt(G)
                 
 
         if pattern :
