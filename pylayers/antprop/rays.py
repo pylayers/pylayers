@@ -881,8 +881,6 @@ class Rays(dict):
                 # to do fic the colinear bug
                 #
                 nw = np.sqrt(np.sum(w*w, axis=0))
-                import ipdb
-                ipdb.set_trace()
                 if (nw.any()==0):
                     u = np.where(nw==0)
                     uv = np.array(filter(lambda x : abs(vn[2,u])>0.99,u))
