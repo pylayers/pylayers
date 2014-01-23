@@ -874,14 +874,21 @@ class Rays(dict):
                 #
                 #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
                 w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
+
                 # nw : i x r 
                 #
                 #
                 # to do fic the colinear bug
                 #
                 nw = np.sqrt(np.sum(w*w, axis=0))
+                import ipdb
+                ipdb.set_trace()
                 if (nw.any()==0):
                     u = np.where(nw==0)
+                    uv = np.array(filter(lambda x : abs(vn[2,u])>0.99,u))
+                    uh = np.setdiff1d(u,uv)
+                    w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
+                    w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
                     pdb.set_trace()
                 #assert(nw.all()>0), pdb.set_trace()
                 wn = w/nw
