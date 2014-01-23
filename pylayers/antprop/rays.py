@@ -143,10 +143,7 @@ class Rays(dict):
         
         """
 
-        if not self.isbased:
-            raise NameError('bases have not yet been computed. Please rune self.locbas(Layout) before.')
 
-        # 
         r = Rays(self.pRx,self.pTx)
         for k in self:
             r[k]={}

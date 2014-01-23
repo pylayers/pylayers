@@ -656,7 +656,7 @@ class Signatures(dict):
                 except:
                     pass
 
-            if (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
+            elif (len(visited) < (cutoff + sum(lawp))):# if visited list length is less than cutoff 
                 if child == target:  # if child is the target point
                     #print visited + [target]
                     yield visited + [target] # output signature
