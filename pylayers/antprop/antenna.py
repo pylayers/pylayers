@@ -1429,7 +1429,12 @@ class Antenna(object):
         once the V,W function
 
         """
+
         typ = self._filename.split('.')[1]
+        if typ not in ['sh3','vsh3']:
+            # temporary what to do if originbal file is not sh3 or vsh3 ? 
+            typ = 'vsh3'
+
         Nf = len(self.fa)
         if theta==[]:
             theta=np.linspace(0,np.pi,47)
@@ -1440,10 +1445,10 @@ class Antenna(object):
         Np = len(phi)
 
         if pattern:
-                self.theta = theta[:,np.newaxis]
-                self.phi = phi[np.newaxis,:] 
-                theta = np.kron(theta, np.ones(Np))
-                phi = np.kron(np.ones(Nt),phi)
+            self.theta = theta[:,np.newaxis]
+            self.phi = phi[np.newaxis,:] 
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
                          
         
         if typ =='vsh3':        
