@@ -284,6 +284,8 @@ class Layout(object):
         st = st + "\nUseful arrays"+"\n----------------\n"
         if hasattr(self,'tsg'):
             st = st + "tsg : get segment index in Gs from tahe" +"\n"
+        if hasattr(self,'isss'):
+            st = st + "isss :  sub-segment index above Nsmax"+"\n"
         if hasattr(self,'tgs'):
             st = st + "tgs : get segment index in tahe from Gs" +"\n"
         if hasattr(self,'lsss'):
@@ -291,9 +293,7 @@ class Layout(object):
         if hasattr(self,'sridess'):
             st = st + "stridess : stride to calculate the index of a subsegment" +"\n"
         if hasattr(self,'sla'):
-            st = st + "sla : associated slab name" +"\n"
-        if hasattr(self,'stridess'):
-            st = st + "stridess : stride for adressing sub segment " +"\n"
+            st = st + "sla : list of all slab names (Nsmax+Nss+1)" +"\n"
         if hasattr(self,'degree'):
             st = st + "degree : degree of nodes " +"\n"
             
@@ -2979,8 +2979,8 @@ class Layout(object):
         seglist2 = seglist[upos_intersect]
         idxlnk = ilink[upos_intersect]
 
-        #k
-        # Calculate  angle of incidence refered from segment normal 
+        #
+        # Calculate angle of incidence refered from segment normal 
         #
 
         norm  = self.normal[0:2,seglist2]

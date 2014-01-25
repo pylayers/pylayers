@@ -123,17 +123,19 @@ class Rays(dict):
             else:
                 s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
 
-                nray=np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
-                s = 'number of 2D rays : '+ str(nray) + '\n'
+                nray = np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
+                s = 'N2Drays : '+ str(nray) + '\n'
                 s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
-                s = s + 'ratio ray/sig : '+ str( len(self)/(1.*self.nb_origin_sig) ) 
+                s = s + 'R/S : '+ str( len(self)/(1.*self.nb_origin_sig) ) 
 
-                s = s + '\nfrom pTx : '+ str(self.pTx) + '\n to pRx ' + str(self.pRx)+'\n'
+                s = s + '\npTx : '+ str(self.pTx) + '\n pRx ' + str(self.pRx)+'\n'
                 
                 for k in self:
-                    size[k] = np.shape(self[k]['sig'])[2]
-                    s = s + str(size[k]) + 'rays with' + str(k) + ' interactions'                     
+                    #sk = np.shape(self[k]['sig'])[2]
+                    s = s + str(k) + ': '+ str(self[k]['sig'][0,:])+'\n'
+                    #s = s + str(sk) + 'rays with' + str(k) + ' interactions'                     
         except:
+            print "problem"
             return(s)
 
         return(s)
@@ -143,11 +145,14 @@ class Rays(dict):
         
         """
 
-
+        
         r = Rays(self.pRx,self.pTx)
+        r.is3D = self.is3D
+        r.nray = self.nray
+        r.nb_origin_sig = self.nb_origin_sig
+
         for k in self:
             r[k]={}
-            r[k]['alpha']=1.0-self[k]['alpha'][::-1,:]
             r[k]['pt']=self[k]['pt'][:,::-1,:]
             r[k]['sig']=self[k]['sig'][:,::-1,:]
         return(r)
@@ -399,14 +404,22 @@ class Rays(dict):
         #
         for k in self:   # for all interaction group k
             # k = int(k)
+
+            
             # Number of rays in interaction group k
             Nrayk = np.shape(self[k]['alpha'])[1] 
+
             # get  2D horizontal parameterization
             a1 = self[k]['alpha']          
+
+            #if (k==1):
+            #    pdb.set_trace()
             # get  2D signature
             sig = self[k]['sig']            
+
             # add parameterization of tx and rx (0,1)
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))   
+
             # reshape signature in adding tx and rx
             sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
                              sig,
@@ -414,13 +427,17 @@ class Rays(dict):
             # broadcast tx and rx 
             Tx = tx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
             Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
+
             # pte is the sequence of point in 3D ndim =3   ( ndim x k x Nrayk)
             pte = self[k]['pt']            
+
             # ndim x k+2 x Nrayk
             pte = np.hstack((Tx, pte, Rx))  
 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
                 Nint = len(d[l])            # number of additional interaction
+                #if ((k==1) & (l==5.0)):
+                #    pdb.set_trace()
                 if Nint > 0:                # if new interaction ==> need extension 
                     # a1e : extended horizontal+vertical parameterization
                     a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*
@@ -445,11 +462,12 @@ class Rays(dict):
                     #
                     # u is 4 (floor interaction ) 
                     #      5 (ceil interaction ) 
-                    #  depending on the vertical pattern l. The observation is
-                    #  that negative l corresponds always to last reflexion on
-                    #  the floor and positive l corresponds to last reflexion
-                    #  on the ceil 
+                    #  depending on the vertical pattern l. 
                     #
+                    #  l <0 corresponds to last reflexion on floor
+                    #  l >0 corresponds to last reflexion on ceil 
+                    #
+                    # u =0 (floor) or 1 (ceil) 
                     if l < 0:
                         u = np.mod(range(Nint), 2)
                     else:
@@ -470,13 +488,15 @@ class Rays(dict):
                     esig = np.vstack((esigs, esigi))
                     # sige : signature extended  ( 2 x (Nint+k+2) x Nrayk ) 
                     sige = np.hstack((sig, esig))
+                    #
                     # 2 x (Nint+k+2) x Nrayk
                     #
-                    # Now come the time to sort extended sequence of points
+                    # Now comes the time to sort extended sequence of points
                     # and extended sequence of signatures with the sorting
                     # index ks obtained from argsort of merge parametization  
                     #
                     # sequence of extended sorted points
+                    #
                     ptees = ptee[:, ks, range(Nrayk)]     
                     siges = sige[:, ks, range(Nrayk)]   
                     # extended and sorted signature
@@ -491,14 +511,15 @@ class Rays(dict):
                     # Tous les points précédents qui ne sont pas des Ceils ou
                     # des floors et tous les points suivants qui ne sont pas
                     # des points de réflexion ceil ou floor 
-                    # Afin de tenir compte du rayon du groupe d'interaction
-                    # concerné il faut passer un tuple qui concatène la valeur
+                    #
+                    # Afin de tenir compte du rayon et du groupe d'interaction
+                    # concerné, il faut passer un tuple qui concatène la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
                     # rayons du groupe associé (d'ou le zip) 
                     #
                     # Cette séquence d'instruction fixe le bug #133
                     #
-                    # Antérieurement il y avait une hypothèse de succesion
+                    # Antérieurement il y avait une hypothèse de succession
                     # immediate d'un point 2D renseigné.
                     #
                     try:
@@ -581,7 +602,8 @@ class Rays(dict):
                     a1es = a1                       
                     ks = np.argsort(a1es, axis=0)
                     ptees = pte
-                    siges = sig
+                    # fixing bug 
+                    siges = copy.copy(sig)
                
                 #---------------------------------
                 # handling subsegments (if any)
@@ -589,24 +611,43 @@ class Rays(dict):
                 #
                 #   ptes (3 x i+2 x r ) 
                 if L.Nss>0:
+                    # lsss[k] = n means subsegment k belongs to segment n 
+                    # a same segment n can have several subsegments
+                    # (multi-subsegment case) that is the reason of unique
                     lsss = np.unique(np.array(L.lsss))
+
                     # index of signature which corresponds to subsegment
                     u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
+
                     # dimension extension of index u for : 
                     #    z coordinate extraction (append line 2 on dimension 0)    
                     #    0 signature extraction  (append line 0 on  dimension 0)    
+
+                    # v : index 2 is for getting z coordinate
+                    # w : index 0 is for getting segment number (first line of
+                    # siges)
                     v   = [2*np.ones(len(u[0]),dtype=int)]+u
                     w   = [0*np.ones(len(u[0]),dtype=int)]+u
+                   
                     # zss : height of interactions on subsegments
                     zss = ptees[v]
+                    #if k==1:
+                    #    print "l",l
+                    #    print "ptees : ",ptees
+                    #    print "u ",u
+                    #    print "v ",v
+                    #    print "w ",w
                     # structure index of corresponding subsegments 
                     nstrs = siges[w]
-                    #print "nstrs: ",nstrs
-                    #print "zss:",zss
+
+                    #if k==1:
+                    #    print "nstrs: ",nstrs
+                    #    print "zss:",zss
                     #
                     # Determine which subsegment has been intersected 
                     # k = 0 : no subsegment intersected
                     zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
+
                     tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
                                                            (z[1]>x[1])),x[0]),zip(zinterval,zss))
                     #print tab
@@ -625,8 +666,10 @@ class Rays(dict):
                     #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
                     # update signature
                     siges[w] = indexnew
-                    #print "indexss:",indexss
-                    #print "indexnew:",indexnew
+                    #if k==1:
+                    #    print "indexss:",indexss
+                    #    print "indexnew:",indexnew
+                    #    print "siges",siges
                     #print siges
                     #pdb.set_trace()
                     #pdb.set_trace()
@@ -900,6 +943,7 @@ class Rays(dict):
 
                 #  Bi 3 x 2 x i x r
                 Bi = np.concatenate((ew, ev), axis=1)
+                #  self[k]['Bi'] 3 x 3 x i x r  
                 self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
@@ -912,6 +956,7 @@ class Rays(dict):
 
                 #  Bi 3 x 2 x i x r
                 Bo = np.concatenate((ew, ev), axis=1)
+                #  self[k]['Bo'] 3 x 3 x i x r  
                 self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
 
                 #
@@ -945,6 +990,7 @@ class Rays(dict):
                 #
                 # pasting (Bo0,B,BiN)
                 #
+
                 # B : 3 x 2 x i x r
 
                 Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
@@ -974,12 +1020,12 @@ class Rays(dict):
                 self[k]['scpr'] = np.array(())
                 self[k]['theta'] = np.zeros((1,1))
                 self[k]['aoa'] =  np.vstack((th, ph))
-                E=np.eye(2)[:,:,np.newaxis,np.newaxis]
+                E = np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
 
             self.isbased=True
 
-    def fillinter(self, L,append=False):
+    def fillinter(self,L,append=False):
         """  docstring for fillinter
 
         Parameters
@@ -995,11 +1041,12 @@ class Rays(dict):
         # reinitilized ray pointer if not in append mode 
         if not append:
             self.raypt = 0
+
         # stacked interactions
         I = Interactions()
 
         # rotation basis
-        B = IntB()
+        B  = IntB()
         B0 = IntB()
 
         # LOS Interaction
@@ -1015,22 +1062,23 @@ class Rays(dict):
         D = IntD()
 
         idx = np.array(())
+
         if self.los:
             idxts = 1
             nbrayt = 1
-
         else:
             idxts = 0
             nbrayt = 0
 
 
-
-
         # Transform dictionnary of slab name to array
-        #slv = nx.get_node_attributes(L.Gs, "name").values()
-        #slk = nx.get_node_attributes(L.Gs, "name").keys()
+        # slv = nx.get_node_attributes(L.Gs, "name").values()
+        # slk = nx.get_node_attributes(L.Gs, "name").keys()
         # find all material used in simulation
         uslv = np.unique(L.sla[1:])
+        #
+        # add CEIL and FLOOR
+        #
         uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
 
         # create reverse dictionnary with all material as a key
@@ -1131,8 +1179,13 @@ class Rays(dict):
                 sif = si[:, :].reshape(size2,order='F')
                 # 2x2,(i+1)xr
 
+                #
+                # self[k]['B'] 2 x 2 x i x r 
+                #
+                # first unitary matrix (2x2xr)
                 b0 = self[k]['B'][:,:,0,:]
-                b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                # first unitary matrix 1: 
+                b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
 
                 ## find used slab
                 ##################
@@ -1145,6 +1198,7 @@ class Rays(dict):
 
                 # seek for interactions position
                 ################################
+
                 uR = np.where((itypf == 1))[0]
                 uT = np.where((itypf == 2))[0]
                 uD = np.where((itypf == 3))[0]
@@ -1246,9 +1300,12 @@ class Rays(dict):
 
         #print 'Rays evaluation'
         
+        # evaluation of interaction
         self.I.eval(fGHz)
-        B=self.B.eval(fGHz)
-        B0=self.B0.eval(fGHz)
+        # evaluation of base B  (2x2)
+        B  = self.B.eval(fGHz)
+        # evaluation of base B0  (2x2)
+        B0 = self.B0.eval(fGHz)
 
         # Ct : f x r x 2 x 2
         Ct = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
@@ -1269,27 +1326,30 @@ class Rays(dict):
             ib=self.keys()
 
         for l in ib:
-            aoa[:,self[l]['rayidx']]=self[l]['aoa']
-            aod[:,self[l]['rayidx']]=self[l]['aod']
+            # ir : ray index
+            ir = self[l]['rayidx']
+            aoa[:,ir]=self[l]['aoa']
+            aod[:,ir]=self[l]['aod']
             if l != 0:
                 # l stands for the number of interactions
                 r = self[l]['nbrays']
-
                 # reshape in order to have a 1D list of index
                 # reshape ray index
                 rrl = self[l]['rays'].reshape(r*l,order='F')
-
                 # get the corresponding evaluated interactions
                 A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+                # get the corresponding unitary matrix B 
                 Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
-                B0l = B0[:, self[l]['rayidx'], :, :]
+                # get the first uitary matrix B0l 
+                B0l = B0[:,ir,:, :]
+                # get alpha
                 alpha = self.I.alpha[rrl].reshape(r, l,order='F')
+                # get gamma
                 gamma = self.I.gamma[rrl].reshape(r, l,order='F')
+                # get si0 
                 si0 = self.I.si0[rrl].reshape(r, l,order='F')
+                # get sout 
                 sout = self.I.sout[rrl].reshape(r, l,order='F')
-
-
-
 
                 try:
                     del Z
@@ -1360,7 +1420,7 @@ class Rays(dict):
                                    ..., np.newaxis, :, :], axis=-2)
 
                 # fill the C tilde
-                Ct[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
+                Ct[:,ir, :, :] = Z[:, :, :, :]
 
                 # delay computation:
                 # sum the distance from antenna to first interaction si0
@@ -1370,10 +1430,9 @@ class Rays(dict):
 
                 # Power losses due to distances
                 # will be removed once the divergence factor will be implemented
-                Ct[:, self[l]['rayidx'], :, :] = Ct[:, self[l][
-                    'rayidx'], :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
-                self.delays[self[l]['rayidx']] = self[l]['dis']/0.3
-                self.dis[self[l]['rayidx']] = self[l]['dis']
+                Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+                self.delays[ir] = self[l]['dis']/0.3
+                self.dis[ir] = self[l]['dis']
         #
         # true LOS when no interaction
         # 
@@ -1387,6 +1446,7 @@ class Rays(dict):
 
 
         # To be corrected in a future version
+
         Ct = np.swapaxes(Ct, 1, 0)
 
         c11 = Ct[:,:,0,0]
@@ -1502,18 +1562,19 @@ class Rays(dict):
         else: 
             print 'Rays have not been evaluated yet'
 
-    def signature(self, L):
+    def signature(self, ni ,nr):
         """ extract ray signature
 
         Parameters
         ----------
 
-        L : Layout 
+        ni : int
+        nr : int 
 
         Returns
         -------
 
-        sig 
+        sig : ndarray
 
         Notes
         -----
@@ -1523,9 +1584,7 @@ class Rays(dict):
         r[nint]['sig']
 
         """
-        sig = Signatures(L, self.pTx, self.pRx)
-        for k in self:
-            sig[k] = self[k]['sig']
+        sig = self[ni]['sig'][:,:,nr]
         return(sig)
 
     def show3d(self,
