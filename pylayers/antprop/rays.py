@@ -156,6 +156,19 @@ class Rays(dict):
             r[k]['pt']=self[k]['pt'][:,::-1,:]
             r[k]['sig']=self[k]['sig'][:,::-1,:]
         return(r)
+ 
+
+    def check_reciprocity(self,r):
+        """
+        """
+        assert (self.pTx==r.pRx).all()
+        assert (self.pRx==r.pTx).all()
+        assert (self.delays==r.delays).all()
+
+    def sort(self):
+        """
+        """
+        u = np.argsort(self.delays)
 
     def extract(self,ni,nr):
         """ Extract a single ray 
@@ -775,14 +788,26 @@ class Rays(dict):
         #  nstrs is the nstr of the segment if subsegment : 
         #  nstr  is the glabal which allows to recover the slab values 
         #
+        idx = np.array(())
+        if self.los:
+            idxts = 1
+            nbrayt = 1
+        else:
+            idxts = 0
+            nbrayt = 0
 
         for k in self:
             #
             # k is the number of interactions in the block 
             #
             if k <> 0:
-                nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
-                ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
+
+                # structure number (segment or point)
+                # nstr : i x r
+                nstr = self[k]['sig'][0, 1:-1, :]      
+
+                # ityp : i x r
+                ityp = self[k]['sig'][1, 1:-1, :]      
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment 
                 # print nstr
@@ -1004,6 +1029,36 @@ class Rays(dict):
                 #self[k]['BiN']=BiN
                 # self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
 
+                ## index creation
+                ##################
+                # create index for retrieving interactions
+
+                # integer offset : total size idx
+
+                idxts = idxts + idx.size
+
+                idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
+
+                nbray = np.shape(idx)[1]
+
+                self[k]['rays'] = idx
+                self[k]['nbrays'] = nbray
+                self[k]['rayidx'] = nbrayt + np.arange(nbray)
+
+                # create a numpy array to relate the ray index to its corresponding
+                # number of interactions
+
+                ray2nbi = np.ones((nbray))
+
+                
+                try:
+                    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
+                except:
+                    self.ray2nbi=ray2nbi
+
+                self.ray2nbi[self[k]['rayidx']]  = k
+                nbrayt = nbrayt + nbray
+                self.raypt = self.raypt + self[k]['nbrays']
             # if los exists
             else :
                 self[k]['nstrwall'] = np.array(())
@@ -1022,11 +1077,17 @@ class Rays(dict):
                 self[k]['aoa'] =  np.vstack((th, ph))
                 E = np.eye(2)[:,:,np.newaxis,np.newaxis]
                 self[k]['B'] = np.dstack((E,E))
+                ze = np.array([0])
+                self[k]['rays'] = np.array(([[0]]))
+                self[k]['nbrays'] = 1
+                self[k]['rayidx'] = ze
+                self.raypt = 1
+                self.ray2nbi=ze
 
             self.isbased=True
 
     def fillinter(self,L,append=False):
-        """  docstring for fillinter
+        """  fill ray interactions
 
         Parameters
         ----------
@@ -1109,22 +1170,20 @@ class Rays(dict):
         rsl = np.array(())
         
         # loop on group of interactions 
-        
         for k in self:
-            #if k == 4:
-            #    pdb.set_trace()
 
             if k !=0:
                 
                 uR = uT = uD = uRf = uRc = 0.
-
+                
+                # structure number (segment or point)
                 # nstr : i x r
                 nstr = self[k]['sig'][0, 1:-1, :]
 
                 # ityp : i x r
                 ityp = self[k]['sig'][1, 1:-1, :]
 
-                # theta : i x r   ( related to interaction )
+                # theta : i x r   ( related to interactions )
                 theta = self[k]['theta']
 
                 # (i+1) x r
@@ -1133,7 +1192,7 @@ class Rays(dict):
                 ## flatten information
                 ######################
 
-                # reshape nstr in order to be flat (1 dimension)
+                # flatten nstr (1 dimension)
                 # size1 = i x r
                 size1 = nstr.size
                 # flatten ityp (method faster than np.ravel() ) 
@@ -1161,17 +1220,18 @@ class Rays(dict):
                 # create a numpy array to relate the ray index to its corresponding
                 # number of interactions
 
-                ray2nbi = np.ones((nbray))
+                #ray2nbi = np.ones((nbray))
 
                 
-                try:
-                    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
-                except:
-                    self.ray2nbi=ray2nbi
+                #try:
+                #    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
+                #except:
+                #    self.ray2nbi=ray2nbi
 
-                self.ray2nbi[self[k]['rayidx']]  = k
+                #self.ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
-                self.raypt = self.raypt + self[k]['nbrays']
+                #self.raypt = self.raypt + self[k]['nbrays']
+
                 idxf = idx.reshape(idx.size,order='F')
                 #  (i+1)xr
                 size2 = si[:, :].size
@@ -1270,11 +1330,11 @@ class Rays(dict):
 
             elif self.los:
                 ze = np.array([0])
-                self[k]['rays'] = np.array(([[0]]))
-                self[k]['nbrays'] = 1
-                self[k]['rayidx'] = ze
-                self.raypt = 1
-                self.ray2nbi=ze
+                #self[k]['rays'] = np.array(([[0]]))
+                #self[k]['nbrays'] = 1
+                #self[k]['rayidx'] = ze
+                #self.raypt = 1
+                #self.ray2nbi=ze
                 B.stack(data=np.eye(2)[np.newaxis,:,:], idx=ze)
                 B0.stack(data=np.eye(2)[np.newaxis,:,:],idx=ze)
 
@@ -1319,6 +1379,7 @@ class Rays(dict):
         #nf : number of frequency point
         nf = self.I.nf
 
+        self.drayidx = {}
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
         # loop on interaction blocks
@@ -1482,13 +1543,15 @@ class Rays(dict):
 
         Parameters
         ----------
+
         r : integer
             ray index
         
         Notes
         -----
 
-            Give the ray number and it returns the index of its interactions
+        Give the ray number and it returns the index of its interactions
+
         """
         raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
         return(self[self.ray2nbi[r]]['rays'][:,raypos][:,0])
