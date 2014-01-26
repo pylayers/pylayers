@@ -22,12 +22,29 @@ class Ctilde(object):
     Ctp : FUsignal
     Cpt : FUsignal
     Cpp : FUsignal
+
+    tauk 
+    tang 
+    rang 
+
     fGHz : np.array
         frequency array
     nfreq : int
         number of frequency point
     nray  : int
         number of rays
+
+    Methods
+    -------
+
+    choose
+    load
+    mobility 
+    doadod
+    show
+    energy
+    sort
+    prop2tran
 
     """
     def __init__(self):
@@ -304,85 +321,49 @@ class Ctilde(object):
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
         plt.axis
 
-    def show(self, display=False, mode='linear'):
+    def show(self, **kwargs):
         """ show the propagation channel 
         
         Parameters
         ----------
         
-        display : True or False
-        mode    : 'linear', 'dB'
-        
+        typ   : 'm', 'l20' , 'r'
+         
         """
 
-        f = abs(self.Ctt.x)
-        u = np.argsort(self.tauk)
-        tt = self.tauk[u]
-        utt = abs(self.Ctt.y[u, :])
-        utp = abs(self.Ctp.y[u, :])
-        upt = abs(self.Ctp.y[u, :])
-        upp = abs(self.Cpp.y[u, :])
+        defaults = {'typ': 'm',
+                   'cmap': plt.cm.hot}
 
-        uttmax = utt.max()
-        utpmax = utp.max()
-        uptmax = upt.max()
-        uppmax = upp.max()
-
-        #vmax=max(uttmax,utpmax,uptmax,uppmax)
-        if mode == 'linear':
-            plt.figure()
-            plt.subplot(221)
-            plt.pcolor(f, tt, utt)
-            plt.colorbar()
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.title('Ctt')
-            plt.subplot(222)
-            plt.pcolor(f, tt, utp)
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Ctp')
-            plt.subplot(223)
-            plt.pcolor(f, tt, upt)
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpt')
-            plt.subplot(224)
-            plt.pcolor(f, tt, upp)
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpp')
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+        
+        if 'fig' not in kwargs:
+            fig = plt.figure()
         else:
-            plt.figure()
-            plt.subplot(221)
-            plt.pcolor(f, tt, 20 * np.log10(utt + 1e-5))
-            plt.colorbar()
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.title('Ctt')
-            plt.subplot(222)
-            plt.pcolor(f, tt, 20 * np.log10(utp + 1e-5))
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Ctp')
-            plt.subplot(223)
-            plt.pcolor(f, tt, 20 * np.log10(upt + 1e-5))
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpt')
-            plt.subplot(224)
-            plt.pcolor(f, tt, 20 * np.log10(upp + 1e-5))
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpp')
-        if display:
-            plt.show()
+            fig = kwargs['fig']
+
+        ax1 = fig.add_subplot(221)
+        fig,ax1 = self.Ctt.imshow(fig=fig,ax=ax1,**kwargs)
+        ax1.set_xlabel('f (GHz)')
+        ax1.set_title(u'$C_{\\theta\\theta}$')
+
+        ax2 = fig.add_subplot(222)
+        fig,ax2 = self.Ctp.imshow(fig=fig,ax=ax2,**kwargs)
+        ax2.set_xlabel('f (GHz)')
+        ax2.set_title(u'$C_{\\theta\phi}$')
+
+        ax3 = fig.add_subplot(223)
+        fig,ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
+        ax3.set_xlabel('f (GHz)')
+        ax3.set_title(u'$C_{\phi\\theta}$')
+        
+        ax4 = fig.add_subplot(224)
+        fig,ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
+        ax4.set_xlabel('f (GHz)')
+        ax4.set_title(u'$C_{\phi\phi}$')
+
+        return fig,(ax1,ax2,ax3,ax4)
 
     def energy(self):
         """ Calculates energy on each channel
@@ -415,7 +396,7 @@ class Ctilde(object):
         return ECtt,ECpp,ECtp,ECpt
 
     def sort(self,typ='tauk'):
-        """ sort Ctilde with respect to tauk
+        """ sort Ctilde with respect to typ (default tauk)
 
         Parameters
         ----------
