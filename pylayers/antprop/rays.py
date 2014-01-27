@@ -126,9 +126,9 @@ class Rays(dict):
                 nray = np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
                 s = 'N2Drays : '+ str(nray) + '\n'
                 s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
-                s = s + 'R/S : '+ str( len(self)/(1.*self.nb_origin_sig) ) 
+                s = s + '#Rays/#Sig: '+ str( len(self)/(1.*self.nb_origin_sig) ) 
 
-                s = s + '\npTx : '+ str(self.pTx) + '\n pRx ' + str(self.pRx)+'\n'
+                s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
                 
                 for k in self:
                     #sk = np.shape(self[k]['sig'])[2]
@@ -163,12 +163,26 @@ class Rays(dict):
         """
         assert (self.pTx==r.pRx).all()
         assert (self.pRx==r.pTx).all()
-        assert (self.delays==r.delays).all()
+        for k in self: 
+            assert (np.allclose(self[k]['dis'],r[k]['dis']))
+            assert (np.allclose(self[k]['pt'],r[k]['pt'][:,::-1,:]))
+            assert (np.allclose(self[k]['sig'],r[k]['sig'][:,::-1,:]))
+            if (self.isbased) & (r.isbased):
+                #assert (np.allclose(self[k]['nstrwall'],r[k]['nstrwall'][:,::-1,:]))
+                assert (np.allclose(self[k]['norm'],r[k]['norm'][:,::-1,:]))
+                #assert ((np.mod(self[k]['aoa']-r[k]['aod'],2*np.pi)==0).all())
+                #assert ((np.mod(self[k]['aod']-r[k]['aoa'],2*np.pi)==0).all())
+                assert (np.allclose(self[k]['Bo0'],r[k]['BiN']))
+                assert (np.allclose(self[k]['BiN'],r[k]['Bo0']))
+                assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:]))
+                assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:])))
+                assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:]))
+
 
     def sort(self):
         """
         """
-        u = np.argsort(self.delays)
+        u = np.argsort(self.dis)
 
     def extract(self,ni,nr):
         """ Extract a single ray 
@@ -353,6 +367,8 @@ class Rays(dict):
         Notes
         -----
 
+        1. 
+
 
         """
 
@@ -392,8 +408,10 @@ class Rays(dict):
             self[i]['alpha'] = np.zeros(np.shape(si[:-1, :]))
 
             for j in range(len(self[i]['alpha'][:, 0])):
+                # get alpha
                 self[i]['alpha'][j, :] = np.sum(si[0:j+1, :], axis=0) \
                         /np.sum(si, axis=0)
+                # get z coordinate
                 self[i]['pt'][2, j, :] = tx[2] + self[i]['alpha'][j, :] \
                     * (rx[2] - tx[2])
 
@@ -417,8 +435,6 @@ class Rays(dict):
         #
         for k in self:   # for all interaction group k
             # k = int(k)
-
-            
             # Number of rays in interaction group k
             Nrayk = np.shape(self[k]['alpha'])[1] 
 
@@ -429,7 +445,9 @@ class Rays(dict):
             #    pdb.set_trace()
             # get  2D signature
             sig = self[k]['sig']            
-
+            #print "signatures 2D ",sig
+            #print "----"
+            sigsave = copy.copy(sig)
             # add parameterization of tx and rx (0,1)
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))   
 
@@ -448,6 +466,7 @@ class Rays(dict):
             pte = np.hstack((Tx, pte, Rx))  
 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
+                #print k,l,d[l] 
                 Nint = len(d[l])            # number of additional interaction
                 #if ((k==1) & (l==5.0)):
                 #    pdb.set_trace()
@@ -491,7 +510,7 @@ class Rays(dict):
                     # At that point we introduce the signature of the new
                     # introced points on the ceil and/or floor. 
                     #
-                    # A signatue is compose of two lines 
+                    # A signature is compose of two lines 
                     # esigs sup line : interaction number 
                     # esigi inf line : interaction type 
                     #
@@ -501,6 +520,7 @@ class Rays(dict):
                     esig = np.vstack((esigs, esigi))
                     # sige : signature extended  ( 2 x (Nint+k+2) x Nrayk ) 
                     sige = np.hstack((sig, esig))
+                    
                     #
                     # 2 x (Nint+k+2) x Nrayk
                     #
@@ -515,7 +535,7 @@ class Rays(dict):
                     # extended and sorted signature
                     iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
                     iint_c, iray_c = np.where(siges[ 1, :] == 5)  # ceil interaction
-                        
+                    #print siges     
                     #
                     # find the list of the previous and next point around the
                     # new ceil or floor point. The case of successive ceil or
@@ -617,6 +637,7 @@ class Rays(dict):
                     ptees = pte
                     # fixing bug 
                     siges = copy.copy(sig)
+                    #print siges
                
                 #---------------------------------
                 # handling subsegments (if any)
@@ -651,6 +672,8 @@ class Rays(dict):
                     #    print "v ",v
                     #    print "w ",w
                     # structure index of corresponding subsegments 
+
+                    # nstrs = [ 1 , 1 , 1 , 1, 1 , 1] 
                     nstrs = siges[w]
 
                     #if k==1:
@@ -661,6 +684,20 @@ class Rays(dict):
                     # k = 0 : no subsegment intersected
                     zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
 
+
+                    # Example 
+                    #
+                    # zinterval = [[(0.0, 2.4), (2.7, 2.8), (2.8, 3)], 
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)], 
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)], 
+                    #              [(0 .0, 2.4), (2.7, 2.8), (2.8, 3)],
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)]]
+                    # zss = array([ 2.62590637,  2.62589727,  1.34152518, 
+                    # 2.0221785 ,  0.23706671, 0.2378053])
+                    # 
+                    # tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]   
+                    #
                     tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
                                                            (z[1]>x[1])),x[0]),zip(zinterval,zss))
                     #print tab
@@ -670,15 +707,24 @@ class Rays(dict):
                             return(k)
                         else:
                             return(0)
-
-                    indexss = map(findindex,zip(zinterval,tab))
+                    #
+                    # indexss = [0, 0 , 1 , 1 ,1 ,1] 
+                    # L.stridess[nstrs] = [ 9 , 9 , 9, 9 , 9 , 9 ]
+                    # indexnex = [ 9 , 9 , 10 , 10 , 10 , 10 ] 
+                    #
+                    indexss = np.array(map(findindex,zip(zinterval,tab)))
+                    uw = np.where(indexss==0)[0]
                     indexnew = L.stridess[nstrs]+indexss
+                    indexnew[uw] = nstrs[uw]
                     #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
                     #iindexnex = L.isss[ind]
                     #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
                     #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
                     # update signature
                     siges[w] = indexnew
+                    #if k==3:
+                    #    print siges
+                    
                     #if k==1:
                     #    print "indexss:",indexss
                     #    print "indexnew:",indexnew
@@ -705,14 +751,16 @@ class Rays(dict):
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
-                    r3d[k+Nint]['pt'] = np.dstack((r3d[k+Nint]['pt'], ptees))
+                    r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
+                    r3d[k+Nint]['sig2d'].append(sigsave)
                 except:
                     r3d[k+Nint] = {}
                     # r3d[k+Nint]['alpha'] = a1es
                     # r3d[k+Nint]['ks'] = ks
                     r3d[k+Nint]['pt'] = ptees
                     r3d[k+Nint]['sig'] = siges
+                    r3d[k+Nint]['sig2d'] = [sigsave]
 
         #
         # Add Line Of Sight ray information 
@@ -722,17 +770,58 @@ class Rays(dict):
         if self.los :
             r3d[0]={}
             r3d[0]['sig']=np.zeros((2,2,1))
+            r3d[0]['sig2d']=np.zeros((2,2,1))
             r3d[0]['pt']=np.zeros((3,2,1))
             r3d[0]['pt'][:,0,:]=tx[:,np.newaxis]
             r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
         
-        # lnint : list of number of interactions
-        lnint = r3d.keys()
         # r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint) 
         # count total number of ray 
-        for k in lnint:
-            r3d.nray = r3d.nray + np.shape(r3d[k]['sig'])[2]
+        # evaluate length of ray segment 
+        #
+        # vsi 
+        # si 
+        # dis
+        #
+        val =0
+        for k in r3d.keys():
+            nrayk = np.shape(r3d[k]['sig'])[2]
+            r3d[k]['nbrays'] = nrayk
+            r3d[k]['rayidx'] = np.arange(nrayk)+val 
+            r3d.nray = r3d.nray + nrayk 
+            val=r3d[k]['rayidx'][-1]+1
+            # 3 : x,y,z
+            # i : interaction index
+            # r : ray index 
+            #
+            # k : group of interactions index 
+            #
+            v = r3d[k]['pt'][:, 1:, :]-r3d[k]['pt'][:, 0:-1, :]
+            lsi = np.sqrt(np.sum(v*v, axis=0))
+            rlength = np.sum(lsi,axis=0)
+            if (lsi.any()==0):
+                pdb.set_trace()
+            assert(lsi.all()>0)
+            if (len(np.where(lsi==0.))==0) :
+                pdb.set_trace()
 
+            #
+            # sort rays w.r.t their length 
+            #
+
+            u = np.argsort(rlength)
+            r3d[k]['pt']  = r3d[k]['pt'][:,:,u]
+            r3d[k]['sig'] = r3d[k]['sig'][:,:,u]
+            #r3d[k]['sig2d'] = r3d[k]['sig2d'][:,:,u]
+            si = v/lsi             # ndim , nint - 1 , nray
+
+            # vsi : 3 x (i+1) x r
+            r3d[k]['vsi'] = si[:,:,u]
+
+            # si : (i+1) x r
+            r3d[k]['si']  = lsi[:,u] 
+            r3d[k]['dis'] = rlength[u] 
+            
         return(r3d)
 
     def length(self,typ=2):
@@ -863,32 +952,32 @@ class Rays(dict):
                 normcheck = np.sum(self[k]['norm']*self[k]['norm'],axis=0)
                 assert normcheck.all()>0.99,pdb.set_trace()
 
+
                 # 3 : x,y,z
                 # i : interaction index
                 # r : ray index 
                 #
                 # k : group of interactions index 
                 #
-                v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
-                lsi = np.sqrt(np.sum(v*v, axis=0))
-                if (lsi.any()==0):
-                    pdb.set_trace()
-                assert(lsi.all()>0)
-                if (len(np.where(lsi==0.))==0) :
-                    pdb.set_trace()
+                #v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
+                #lsi = np.sqrt(np.sum(v*v, axis=0))
+                #if (lsi.any()==0):
+                #    pdb.set_trace()
+                #assert(lsi.all()>0)
+                #if (len(np.where(lsi==0.))==0) :
+                #    pdb.set_trace()
 
-                si = v/lsi             # ndim , nint - 1 , nray
+                #si = v/lsi             # ndim , nint - 1 , nray
 
-                # vsi : 3 x (i+1) x r
-                self[k]['vsi'] = si
+                # si : 3 x (i+1) x r
+                si = self[k]['vsi'] 
 
                 # si : (i+1) x r
-                self[k]['si'] = lsi
-                self[k]['dis'] = np.sum(lsi,axis=0)
+                #self[k]['si'] = lsi
+                #self[k]['dis'] = np.sum(lsi,axis=0)
                 
                 # normal : 3 x i x r 
                 vn = self[k]['norm']
-
                 # s_in : 3 x i x r
                 s_in = si[:, 0:-1, :]
 
@@ -928,10 +1017,25 @@ class Rays(dict):
                 #
                 # scalar product si . norm
                 #
+                # vn   : 3 x i x r 
+                # s_in : 3 x i x r 
 
-                scpr = np.sum(vn*s_in, axis=0)
+                #
+                # scpr : i x r 
+                #
+                #if k ==5:
+                #    pdb.set_trace()
+                #scpr = np.sum(vn*s_in, axis=0)
+                scpr = np.sum(vn*si[:,0:-1,:], axis=0)
                 self[k]['scpr'] = scpr
                 self[k]['theta'] = np.arccos(abs(scpr))  # *180/np.pi
+                #if k ==5:
+                    #print "vsi :",self[k]['vsi'][:,:,43]
+                    #print "si :",si[:,0:-1,43]
+                    #print "vn :",vn[:,:,43]
+                    #print "scpr :",self[k]['scpr'][:,43]
+                    #print "scpr :",self[k]['scpr'][:,43]
+                    #print "theta :",self[k]['scpr'][:,43]
 
                 #
                 # Warning need to handle singular case when s_in // vn
