@@ -177,6 +177,9 @@ class Rays(dict):
                 assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:]))
                 assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:])))
                 assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:]))
+                assert (np.allclose(self[k]['Bi'],r[k]['Bo'][:,:,::-1,:]))
+                assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:]))
+                assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1)))
 
 
     def sort(self):
@@ -1299,6 +1302,7 @@ class Rays(dict):
                 # flatten nstr (1 dimension)
                 # size1 = i x r
                 size1 = nstr.size
+
                 # flatten ityp (method faster than np.ravel() ) 
                 nstrf = np.reshape(nstr,size1,order='F')
                 itypf = ityp.reshape(size1,order='F')
@@ -1349,6 +1353,7 @@ class Rays(dict):
                 # first unitary matrix (2x2xr)
                 b0 = self[k]['B'][:,:,0,:]
                 # first unitary matrix 1: 
+                # dimension i and r are merged    
                 b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
 
                 ## find used slab
@@ -1408,6 +1413,7 @@ class Rays(dict):
                 # need to check how B is used in eval()
                 #
                 # Warning
+                # -------
                 # B.idx refers to an interaction index
                 # whereas B0.idx refers to a ray number
 
@@ -1427,7 +1433,6 @@ class Rays(dict):
                         idx=idxf[uRc])
 
                 ### sl[idxf[uT]]
-
                 # Transmision
                 ############
                 T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
@@ -1444,10 +1449,15 @@ class Rays(dict):
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
+
+        # create interactions structure 
         self.I = I
         self.I.add([T, R])
+        # create rotation base B 
         self.B = B
+        # create rotation base B0 
         self.B0 = B0
+
         self.filled = True
 
     def eval(self,fGHz=np.array([2.4]),ib=[]):
@@ -1467,9 +1477,14 @@ class Rays(dict):
         # evaluation of interaction
         self.I.eval(fGHz)
         # evaluation of base B  (2x2)
-        B  = self.B.eval(fGHz)
-        # evaluation of base B0  (2x2)
-        B0 = self.B0.eval(fGHz)
+        # B and B0 do no depend on frequency 
+        # just an axis extension (np.newaxis)
+        #pdb.set_trace()
+
+        # 1 x i x 2 x 2
+        B  = self.B.data[np.newaxis,...]
+        # 1 x r x 2 x 2
+        B0 = self.B0.data[np.newaxis,...]
 
         # Ct : f x r x 2 x 2
         Ct = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
@@ -1502,9 +1517,12 @@ class Rays(dict):
                 # reshape ray index
                 rrl = self[l]['rays'].reshape(r*l,order='F')
                 # get the corresponding evaluated interactions
+                # f , r , l , 2 , 2
                 A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
                 # get the corresponding unitary matrix B 
-                Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+                # 1 , r , l , 2 , 2
+                #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2,order='F')
                 # get the first uitary matrix B0l 
                 B0l = B0[:,ir,:, :]
                 # get alpha
@@ -1575,7 +1593,7 @@ class Rays(dict):
                     #pdb.set_trace()
 
                     if i == 0:
-                    ## First Baspdis added
+                    ## First Basis added
                         A0 = B0l[:, :,  :, :]
                         Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
                                    ..., np.newaxis, :, :], axis=-2)
