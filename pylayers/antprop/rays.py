@@ -1585,22 +1585,28 @@ class Rays(dict):
                     #
                     # Z=Atmp(i) dot Atmp(i+1)
 
-                    X = A [:, :, i, :, :]
-                    Y = Bl[:, :, i, :, :]
+                    #X = A [:, :, i, :, :]
+                    #Y = Bl[:, :, i, :, :]
+                    X = Bl[:, :, i, :, :]
+                    Y = A[:, :, i, :, :]
                     ## Dot product interaction X Basis
-                    Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
-                                  ..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
+                    Atmp = np.sum(X[..., :, :, np.newaxis]
+                                 *Y[..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
                     #pdb.set_trace()
 
                     if i == 0:
                     ## First Basis added
-                        A0 = B0l[:, :,  :, :]
-                        Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
-                                   ..., np.newaxis, :, :], axis=-2)
+                        U = B0l[:, :,  :, :]
+                        Z = np.sum(Atmp[..., :, :, np.newaxis]
+                                  *U[..., np.newaxis, :, :], axis=-2)
+                        #Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
+                        #           ..., np.newaxis, :, :], axis=-2)
                     else:
                         # dot product previous interaction with latest
-                        Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
-                                   ..., np.newaxis, :, :], axis=-2)
+                        Z = np.sum(Atmp[..., :, :, np.newaxis]
+                                  *Z[ ..., np.newaxis, :, :], axis=-2)
+                        #Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
+                        #           ..., np.newaxis, :, :], axis=-2)
 
                 # fill the C tilde
                 Ct[:,ir, :, :] = Z[:, :, :, :]

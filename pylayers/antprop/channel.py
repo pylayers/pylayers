@@ -365,6 +365,16 @@ class Ctilde(object):
 
         return fig,(ax1,ax2,ax3,ax4)
 
+    def check_reciprocity(self,C):
+        assert np.allclose(self.tauk,C.tauk)
+        for r in range(self.nray):
+            if np.allclose(self.Ctt.y[r,:],C.Ctt.y[r,:]):
+                print r
+
+        #assert np.allclose(self.tang,C.rang)
+        #assert np.allclose(self.rang,C.tang)
+        
+
     def energy(self):
         """ Calculates energy on each channel
 
