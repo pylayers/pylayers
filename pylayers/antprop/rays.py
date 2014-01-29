@@ -1615,7 +1615,6 @@ class Rays(dict):
                         B00 = B0l[:, :,  :, :]
                         Z = np.sum(Atmp[..., :, :, np.newaxis]
                                   *B00[..., np.newaxis, :, :], axis=-2)
-                        print "b0",B00[0,:,:,:]
                     else:
                         Atmp = A[:, :, i, :, :]                    
                         BB = Bl[:, :, i-1, :, :]
@@ -1630,7 +1629,6 @@ class Rays(dict):
                         BB = Bl[:, :, i, :, :]
                         Z = np.sum(BB[..., :, :, np.newaxis]
                                   *Z[..., np.newaxis, :, :], axis=-2)
-                        print 'B'+str(i),BB[0,:,:,:]
 
 
 
