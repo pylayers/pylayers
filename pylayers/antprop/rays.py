@@ -181,6 +181,26 @@ class Rays(dict):
                 assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:]))
                 assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1)))
 
+        if self.evaluated :
+
+            for ir in range(self.nray):
+                
+                iint1 = self.ray(ir)
+                iint2 = r.ray(ir)
+
+                # check Interactions
+                A1 = self.I.I[:, iint1, :, :]
+                A2 = r.I.I[:, iint2, :, :][:,::-1,:,:]
+                assert np.allclose(A1,A2),pdb.set_trace() 
+                
+                # check bases
+                #  ray 1 : B0   | B[0]   | B[1] | B[2] | B[3] | B[4] 
+                #  ray 2 : B[4] | B[3]  | B[2]  | B[1] | B[0] | B0
+                assert np.allclose(self.B0.data[ir,:,:],r.B.data[iint2,:,:][-1,:,:].swapaxes(1,0))
+                assert np.allclose(r.B0.data[ir,:,:],self.B.data[iint1,:,:][-1,:,:].swapaxes(1,0))
+                assert np.allclose(self.B.data[iint1,:,:][:-1],r.B.data[iint2,:,:][:-1][::-1,:,:].swapaxes(2,1))
+
+
 
     def sort(self):
         """
@@ -1130,7 +1150,7 @@ class Rays(dict):
 
                 # B : 2 x 2 x i x r
 
-                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bo, Bi)
+                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bi, Bo)
 
                 #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
                 #self[k]['BiN']=BiN
@@ -1501,7 +1521,7 @@ class Rays(dict):
         self.drayidx = {}
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
-        # loop on interaction blocks
+        # loop on interaction blocks    
         if ib==[]:
             ib=self.keys()
 
@@ -1518,21 +1538,21 @@ class Rays(dict):
                 rrl = self[l]['rays'].reshape(r*l,order='F')
                 # get the corresponding evaluated interactions
                 # f , r , l , 2 , 2
-                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
                 # get the corresponding unitary matrix B 
                 # 1 , r , l , 2 , 2
                 #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
-                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2,order='F')
+                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2)
                 # get the first uitary matrix B0l 
                 B0l = B0[:,ir,:, :]
                 # get alpha
-                alpha = self.I.alpha[rrl].reshape(r, l,order='F')
-                # get gamma
-                gamma = self.I.gamma[rrl].reshape(r, l,order='F')
-                # get si0 
-                si0 = self.I.si0[rrl].reshape(r, l,order='F')
-                # get sout 
-                sout = self.I.sout[rrl].reshape(r, l,order='F')
+                # alpha = self.I.alpha[rrl].reshape(r, l,order='F')
+                # # get gamma
+                # gamma = self.I.gamma[rrl].reshape(r, l,order='F')
+                # # get si0 
+                # si0 = self.I.si0[rrl].reshape(r, l,order='F')
+                # # get sout 
+                # sout = self.I.sout[rrl].reshape(r, l,order='F')
 
                 try:
                     del Z
@@ -1540,7 +1560,8 @@ class Rays(dict):
                     pass
 
 
-
+                print "\nrays",ir
+                print "-----------------------"
                 ## loop on all the interactions of ray with l interactions
                 for i in range(0, l):
 
@@ -1587,26 +1608,54 @@ class Rays(dict):
 
                     #X = A [:, :, i, :, :]
                     #Y = Bl[:, :, i, :, :]
-                    X = Bl[:, :, i, :, :]
-                    Y = A[:, :, i, :, :]
-                    ## Dot product interaction X Basis
-                    Atmp = np.sum(X[..., :, :, np.newaxis]
-                                 *Y[..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
-                    #pdb.set_trace()
-
+                    # pdb.set_trace()
                     if i == 0:
                     ## First Basis added
-                        U = B0l[:, :,  :, :]
+                        Atmp = A[:, :, i, :, :]
+                        B00 = B0l[:, :,  :, :]
                         Z = np.sum(Atmp[..., :, :, np.newaxis]
-                                  *U[..., np.newaxis, :, :], axis=-2)
-                        #Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
-                        #           ..., np.newaxis, :, :], axis=-2)
+                                  *B00[..., np.newaxis, :, :], axis=-2)
                     else:
-                        # dot product previous interaction with latest
-                        Z = np.sum(Atmp[..., :, :, np.newaxis]
-                                  *Z[ ..., np.newaxis, :, :], axis=-2)
-                        #Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
-                        #           ..., np.newaxis, :, :], axis=-2)
+                        Atmp = A[:, :, i, :, :]                    
+                        BB = Bl[:, :, i-1, :, :]
+                        Ztmp = np.sum(Atmp[..., :, :, np.newaxis]
+                                  *BB[..., np.newaxis, :, :], axis=-2)
+     
+
+                        Z = np.sum(Ztmp[..., :, :, np.newaxis]
+                                  *Z[..., np.newaxis, :, :], axis=-2)
+                        
+                    if i == l-1:
+                        BB = Bl[:, :, i, :, :]
+                        Z = np.sum(BB[..., :, :, np.newaxis]
+                                  *Z[..., np.newaxis, :, :], axis=-2)
+
+
+
+
+
+
+                    # X = Bl[:, :, i, :, :]
+                    # Y = A[:, :, i, :, :]
+                    # ## Dot product interaction X Basis
+                    # Atmp = np.sum(X[..., :, :, np.newaxis]
+                    #              *Y[..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
+                    # #pdb.set_trace()
+
+                    # if i == 0:
+                    # ## First Basis added
+                    #     U = B0l[:, :,  :, :]
+                    #     Z = np.sum(Atmp[..., :, :, np.newaxis]
+                    #               *U[..., np.newaxis, :, :], axis=-2)
+                    #     #Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
+                    #     #           ..., np.newaxis, :, :], axis=-2)
+                    # else:
+                    #     # dot product previous interaction with latest
+                    #     Z = np.sum(Atmp[..., :, :, np.newaxis]
+                    #               *Z[ ..., np.newaxis, :, :], axis=-2)
+                    #     #Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
+                    #     #           ..., np.newaxis, :, :], axis=-2)
+                print "Z",Z
 
                 # fill the C tilde
                 Ct[:,ir, :, :] = Z[:, :, :, :]
@@ -1697,7 +1746,7 @@ class Rays(dict):
         a = self.ray(r)
         return(self.I.typ[a])
 
-    def info(self, r):
+    def info(self, r,ifGHz=0):
         '''
             provides information for a given ray r
 
@@ -1739,7 +1788,7 @@ class Rays(dict):
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
             print '\n----------------------------------------'
-            print ' Matrix of ray #', r, 'at f=', self.I.fGHz[0]
+            print ' Matrix of ray #', r, 'at f=', self.I.fGHz[ifGHz]
             print '----------------------------------------'
 
             print 'rotation matrix#', 'type: B0'
@@ -1747,7 +1796,7 @@ class Rays(dict):
             for iidx, i in enumerate(typ):
                 print 'interaction #', ray[iidx], 'type:', i
                 # f x l x 2 x 2
-                print self.I.I[0, ray[iidx], :, :]
+                print self.I.I[ifGHz, ray[iidx], :, :]
                 print 'rotation matrix#',[ray[iidx]], 'type: B'
                 print self.B.data[ray[iidx], :, :]
         else: 
