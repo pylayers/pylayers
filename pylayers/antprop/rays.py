@@ -1640,33 +1640,8 @@ class Rays(dict):
                                   *Z[..., np.newaxis, :, :], axis=-2)
 
 
+                # fill the C tilde MDA
 
-
-
-
-                    # X = Bl[:, :, i, :, :]
-                    # Y = A[:, :, i, :, :]
-                    # ## Dot product interaction X Basis
-                    # Atmp = np.sum(X[..., :, :, np.newaxis]
-                    #              *Y[..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
-                    # #pdb.set_trace()
-
-                    # if i == 0:
-                    # ## First Basis added
-                    #     U = B0l[:, :,  :, :]
-                    #     Z = np.sum(Atmp[..., :, :, np.newaxis]
-                    #               *U[..., np.newaxis, :, :], axis=-2)
-                    #     #Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
-                    #     #           ..., np.newaxis, :, :], axis=-2)
-                    # else:
-                    #     # dot product previous interaction with latest
-                    #     Z = np.sum(Atmp[..., :, :, np.newaxis]
-                    #               *Z[ ..., np.newaxis, :, :], axis=-2)
-                    #     #Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
-                    #     #           ..., np.newaxis, :, :], axis=-2)
-                #print "Z",Z
-
-                # fill the C tilde
                 Ct[:,ir, :, :] = Z[:, :, :, :]
 
                 # delay computation:
@@ -1675,7 +1650,7 @@ class Rays(dict):
                 #self[l]['dis'] = self.I.si0[self[l]['rays'][0,:]] \
                 #        + np.sum(self.I.sout[self[l]['rays']], axis=0)
 
-                # Power losses due to distances
+                # attenuation due to distance 
                 # will be removed once the divergence factor will be implemented
                 Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
                 self.delays[ir] = self[l]['dis']/0.3
