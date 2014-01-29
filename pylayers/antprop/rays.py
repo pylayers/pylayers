@@ -1150,7 +1150,7 @@ class Rays(dict):
 
                 # B : 2 x 2 x i x r
 
-                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bo, Bi)
+                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bi, Bo)
 
                 #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
                 #self[k]['BiN']=BiN
@@ -1521,7 +1521,7 @@ class Rays(dict):
         self.drayidx = {}
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
-        # loop on interaction blocks
+        # loop on interaction blocks    
         if ib==[]:
             ib=self.keys()
 
@@ -1538,21 +1538,21 @@ class Rays(dict):
                 rrl = self[l]['rays'].reshape(r*l,order='F')
                 # get the corresponding evaluated interactions
                 # f , r , l , 2 , 2
-                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
                 # get the corresponding unitary matrix B 
                 # 1 , r , l , 2 , 2
                 #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
-                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2,order='F')
+                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2)
                 # get the first uitary matrix B0l 
                 B0l = B0[:,ir,:, :]
                 # get alpha
-                alpha = self.I.alpha[rrl].reshape(r, l,order='F')
-                # get gamma
-                gamma = self.I.gamma[rrl].reshape(r, l,order='F')
-                # get si0 
-                si0 = self.I.si0[rrl].reshape(r, l,order='F')
-                # get sout 
-                sout = self.I.sout[rrl].reshape(r, l,order='F')
+                # alpha = self.I.alpha[rrl].reshape(r, l,order='F')
+                # # get gamma
+                # gamma = self.I.gamma[rrl].reshape(r, l,order='F')
+                # # get si0 
+                # si0 = self.I.si0[rrl].reshape(r, l,order='F')
+                # # get sout 
+                # sout = self.I.sout[rrl].reshape(r, l,order='F')
 
                 try:
                     del Z
@@ -1560,7 +1560,8 @@ class Rays(dict):
                     pass
 
 
-
+                print "\nrays",ir
+                print "-----------------------"
                 ## loop on all the interactions of ray with l interactions
                 for i in range(0, l):
 
@@ -1607,26 +1608,56 @@ class Rays(dict):
 
                     #X = A [:, :, i, :, :]
                     #Y = Bl[:, :, i, :, :]
-                    X = Bl[:, :, i, :, :]
-                    Y = A[:, :, i, :, :]
-                    ## Dot product interaction X Basis
-                    Atmp = np.sum(X[..., :, :, np.newaxis]
-                                 *Y[..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
-                    #pdb.set_trace()
-
+                    # pdb.set_trace()
                     if i == 0:
                     ## First Basis added
-                        U = B0l[:, :,  :, :]
+                        Atmp = A[:, :, i, :, :]
+                        B00 = B0l[:, :,  :, :]
                         Z = np.sum(Atmp[..., :, :, np.newaxis]
-                                  *U[..., np.newaxis, :, :], axis=-2)
-                        #Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
-                        #           ..., np.newaxis, :, :], axis=-2)
+                                  *B00[..., np.newaxis, :, :], axis=-2)
+                        print "b0",B00[0,:,:,:]
                     else:
-                        # dot product previous interaction with latest
-                        Z = np.sum(Atmp[..., :, :, np.newaxis]
-                                  *Z[ ..., np.newaxis, :, :], axis=-2)
-                        #Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
-                        #           ..., np.newaxis, :, :], axis=-2)
+                        Atmp = A[:, :, i, :, :]                    
+                        BB = Bl[:, :, i-1, :, :]
+                        Ztmp = np.sum(Atmp[..., :, :, np.newaxis]
+                                  *BB[..., np.newaxis, :, :], axis=-2)
+     
+
+                        Z = np.sum(Ztmp[..., :, :, np.newaxis]
+                                  *Z[..., np.newaxis, :, :], axis=-2)
+                        
+                    if i == l-1:
+                        BB = Bl[:, :, i, :, :]
+                        Z = np.sum(BB[..., :, :, np.newaxis]
+                                  *Z[..., np.newaxis, :, :], axis=-2)
+                        print 'B'+str(i),BB[0,:,:,:]
+
+
+
+
+
+
+                    # X = Bl[:, :, i, :, :]
+                    # Y = A[:, :, i, :, :]
+                    # ## Dot product interaction X Basis
+                    # Atmp = np.sum(X[..., :, :, np.newaxis]
+                    #              *Y[..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
+                    # #pdb.set_trace()
+
+                    # if i == 0:
+                    # ## First Basis added
+                    #     U = B0l[:, :,  :, :]
+                    #     Z = np.sum(Atmp[..., :, :, np.newaxis]
+                    #               *U[..., np.newaxis, :, :], axis=-2)
+                    #     #Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
+                    #     #           ..., np.newaxis, :, :], axis=-2)
+                    # else:
+                    #     # dot product previous interaction with latest
+                    #     Z = np.sum(Atmp[..., :, :, np.newaxis]
+                    #               *Z[ ..., np.newaxis, :, :], axis=-2)
+                    #     #Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
+                    #     #           ..., np.newaxis, :, :], axis=-2)
+                print "Z",Z
 
                 # fill the C tilde
                 Ct[:,ir, :, :] = Z[:, :, :, :]
