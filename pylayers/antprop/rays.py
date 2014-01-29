@@ -181,6 +181,26 @@ class Rays(dict):
                 assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:]))
                 assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1)))
 
+        if self.evaluated :
+
+            for ir in range(self.nray):
+                
+                iint1 = self.ray(ir)
+                iint2 = r.ray(ir)
+
+                # check Interactions
+                A1 = self.I.I[:, iint1, :, :]
+                A2 = r.I.I[:, iint2, :, :][:,::-1,:,:]
+                assert np.allclose(A1,A2),pdb.set_trace() 
+                
+                # check bases
+                #  ray 1 : B0   | B[0]   | B[1] | B[2] | B[3] | B[4] 
+                #  ray 2 : B[4] | B[3]  | B[2]  | B[1] | B[0] | B0
+                assert np.allclose(self.B0.data[ir,:,:],r.B.data[iint2,:,:][-1,:,:].swapaxes(1,0))
+                assert np.allclose(r.B0.data[ir,:,:],self.B.data[iint1,:,:][-1,:,:].swapaxes(1,0))
+                assert np.allclose(self.B.data[iint1,:,:][:-1],r.B.data[iint2,:,:][:-1][::-1,:,:].swapaxes(2,1))
+
+
 
     def sort(self):
         """
@@ -1697,7 +1717,7 @@ class Rays(dict):
         a = self.ray(r)
         return(self.I.typ[a])
 
-    def info(self, r):
+    def info(self, r,ifGHz=0):
         '''
             provides information for a given ray r
 
@@ -1739,7 +1759,7 @@ class Rays(dict):
                 #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
             print '\n----------------------------------------'
-            print ' Matrix of ray #', r, 'at f=', self.I.fGHz[0]
+            print ' Matrix of ray #', r, 'at f=', self.I.fGHz[ifGHz]
             print '----------------------------------------'
 
             print 'rotation matrix#', 'type: B0'
@@ -1747,7 +1767,7 @@ class Rays(dict):
             for iidx, i in enumerate(typ):
                 print 'interaction #', ray[iidx], 'type:', i
                 # f x l x 2 x 2
-                print self.I.I[0, ray[iidx], :, :]
+                print self.I.I[ifGHz, ray[iidx], :, :]
                 print 'rotation matrix#',[ray[iidx]], 'type: B'
                 print self.B.data[ray[iidx], :, :]
         else: 
