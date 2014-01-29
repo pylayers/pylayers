@@ -2,8 +2,7 @@
 Example of a trajectory synthesis in DLR WHERE2 environment
 -----------------------------------------------------------
 
-
-.. code-block:: python
+.. code:: python
 
     from pylayers.simul.simulem import *
     from pylayers.antprop.rays import *
@@ -23,14 +22,14 @@ Example of a trajectory synthesis in DLR WHERE2 environment
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x42a1bd0>
+    <matplotlib.figure.Figure at 0x50d7f50>
 
 
 This function has to be moved in simulem module. It is a temporary
 implementation. Signatures can be handled much more efficiently here. It
 run a full simulation and returns a list of channel impulse response.
 
-.. code-block:: python
+.. code:: python
 
     def evalcir(S,wav,cutoff=4):
         """
@@ -68,7 +67,7 @@ run a full simulation and returns a list of channel impulse response.
                 Si  = Signatures(S.L,ctx,crx)
                 ctxp = ctx
                 crxp = crx
-                Si.run1(cutoff=cutoff)
+                Si.run4(cutoff=cutoff,algo='old')
             r2d = Si.rays(t,r)
             #r2d.show(S.L)
     
@@ -83,8 +82,7 @@ run a full simulation and returns a list of channel impulse response.
 loading the Layout
 ^^^^^^^^^^^^^^^^^^
 
-
-.. code-block:: python
+.. code:: python
 
     S = Simul()
     filestr = 'DLR2'
@@ -94,7 +92,7 @@ loading the Layout
     except:
         S.L.build()
         S.L.dumpw()
-.. code-block:: python
+.. code:: python
 
     S.L.display['ednodes']=False
     S.L.display['nodes']=False
@@ -110,7 +108,7 @@ We have a list of static Anchor Nodes. Those values correspond to the
 actual anchor nodes coordinates of the WHERE2 project DLR measurement
 campaign.
 
-.. code-block:: python
+.. code:: python
 
     AnchorNodes = {390:{'name':'MT_ACO_05','coord':[6,0.81,1.64]},
                    386:{'name':'MT_ACO_08','coord':[30.574,2.8,1.291]},
@@ -120,7 +118,7 @@ campaign.
                    400:{'name':'MT_ACO_02','coord':[30.574,2.8,1.291]},
                    1:{'name':'MT_DLR_RTDSlave','coord':[0.85,0,1.18]}
                   }
-.. code-block:: python
+.. code:: python
 
     S.tx.clear()
     S.rx.clear()
@@ -130,7 +128,7 @@ campaign.
     dm ={}
 Vizualization of the simulated scenario
 
-.. code-block:: python
+.. code:: python
 
     fig,ax=S.L.showG('s',nodes=False)
     plt.axis('off')
@@ -152,7 +150,7 @@ Vizualization of the simulated scenario
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x5288290>]
+    [<matplotlib.lines.Line2D at 0x7f501d60ea10>]
 
 
 
@@ -165,14 +163,14 @@ In the following a trajectory for the receiver is defined.
 ``linevect`` function allows to define a linear trajectory from ``ptt``
 along direction ``vec``.
 
-.. code-block:: python
+.. code:: python
 
-    S.rx.linevect(npt=150, step=0.2, ptt=[0, 0, 1.275], vec=[1, 0, 0], mode='subst')
+    S.rx.linevect(npt=290, step=0.1, ptt=[0, 0, 1.275], vec=[1, 0, 0], mode='subst')
     ps = S.rx.position[:,-1]
-    S.rx.linevect(npt=20, step=0.2, ptt=ps,vec=[0,1,0],mode='append')
+    S.rx.linevect(npt=60, step=0.1, ptt=ps,vec=[0,1,0],mode='append')
 Looking what is does
 
-.. code-block:: python
+.. code:: python
 
     S.L.display['ednodes']=False
     S.L.display['edges']=True
@@ -189,8 +187,8 @@ Looking what is does
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x52b33d0>,
-     <matplotlib.axes.AxesSubplot at 0x7fd4f599b150>)
+    (<matplotlib.figure.Figure at 0x7f501c0fcc90>,
+     <matplotlib.axes.AxesSubplot at 0x7f501d30b910>)
 
 
 
@@ -200,7 +198,7 @@ Looking what is does
 
 Choosing a UWB waveform for the simulation
 
-.. code-block:: python
+.. code:: python
 
     wav = wvf.Waveform(type='W1compensate')
     wav.show()
@@ -211,217 +209,21 @@ Choosing a UWB waveform for the simulation
 
 running the simulation
 
-.. code-block:: python
+.. code:: python
 
-    tcir = evalcir(S,wav,cutoff=3)
-
-.. parsed-literal::
-
-    1
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    11
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    21
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    31
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    41
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    51
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    61
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    71
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    81
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    no T interaction to evaluate
-    Rays evaluation
-    Rays evaluation
-    91
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    101
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    111
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    121
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    131
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    141
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    151
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    161
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-    Rays evaluation
-
-
-The full trajectory simulation took **56.8s** on a Dell M6700. It is
-stored as a dictionnary of 59 entries containing object from class
-Usignal of length 9930 points.
-
+    #tcir = evalcir(S,wav,cutoff=4)
 Saving the data in pickle format
 
-.. code-block:: python
+.. code:: python
 
-    file = open("tcir5.pickle","w")
-    pickle.dump(tcir,file)
-    file.close()
+    #file = open("tcir5.pickle","w")
+    #pickle.dump(tcir,file)
+    #file.close()
 Reading the data from the above file
 
-.. code-block:: python
+.. code:: python
 
-    del tcir
+    #del tcir
     file=open("tcir5.pickle","r")
     tcir=pickle.load(file)
     file.close()
@@ -436,12 +238,11 @@ Reading the data from the above file
 Aggregated CIR along a synthetic trajectory (line in the corridor)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-.. code-block:: python
+.. code:: python
 
     plt.figure(figsize=(10,10))
-    dmax=150*0.3
-    plt.imshow(20*np.log10(ttcir+1e-20),vmax=-40,vmin=-120,origin='lower',extent=[0,dmax,1,69])
+    dmax=150
+    plt.imshow(20*np.log10(ttcir+1e-20),vmax=-40,vmin=-120,origin='lower',extent=[0,dmax,1,69],interpolation='nearest')
     plt.xlabel(r'delay $\times$ c (meters)',fontsize=20)
     #plt.ylabel(r'distance along trajectory (meters)',fontsize=20)
     plt.ylabel(r'trajectory index number',fontsize=20)
@@ -454,21 +255,21 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    (0.0, 45.0, 1.0, 69.0)
+    (0.0, 150.0, 1.0, 69.0)
 
 
 
 
-.. image:: Trajectory_files/Trajectory_26_1.png
+.. image:: Trajectory_files/Trajectory_25_1.png
 
 
-.. code-block:: python
+.. code:: python
 
-    tcir[1][1].plot(types=['v'])
+    tcir[1][10].plot(typ=['v'])
 
 .. parsed-literal::
 
-    /usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
       warnings.warn("No labeled objects found. "
 
 
@@ -476,19 +277,44 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x54f9cd0>,
-     array([[<matplotlib.axes.AxesSubplot object at 0x54f7410>]], dtype=object))
+    (<matplotlib.figure.Figure at 0x3730f90>,
+     array([[<matplotlib.axes.AxesSubplot object at 0x7f501d91dd50>]], dtype=object))
 
+
+
+
+.. image:: Trajectory_files/Trajectory_26_2.png
+
+
+.. code:: python
+
+    plt.figure(figsize=(10,5))
+    tcir[1][1].plot(typ=['v'])
+    xlabel('Delay (ns)')
+    ylabel('Level (V)')
+    title('Received Waveform')
+
+
+
+.. parsed-literal::
+
+    <matplotlib.text.Text at 0x7f50063d5350>
+
+
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x7f501fa2f610>
 
 
 
 .. image:: Trajectory_files/Trajectory_27_2.png
 
 
-.. code-block:: python
+.. code:: python
 
-    plt.figure(figsize=(10,5))
-    tcir[1][1].plot(types=['v'])
+    tcir[1][11].plot(typ=['v'])
     xlabel('Delay (ns)')
     ylabel('Level (V)')
     title('Received Waveform')
@@ -497,35 +323,10 @@ Aggregated CIR along a synthetic trajectory (line in the corridor)
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x5d30950>
+    <matplotlib.text.Text at 0x7f5006405b90>
 
 
 
 
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x7fd4e4746cd0>
-
-
-
-.. image:: Trajectory_files/Trajectory_28_2.png
-
-
-.. code-block:: python
-
-    tcir[1][40].plot(types=['v'])
-    xlabel('Delay (ns)')
-    ylabel('Level (V)')
-    title('Received Waveform')
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x5d55a10>
-
-
-
-
-.. image:: Trajectory_files/Trajectory_29_1.png
+.. image:: Trajectory_files/Trajectory_28_1.png
 

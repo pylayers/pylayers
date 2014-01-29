@@ -11,6 +11,13 @@ Robust Geometric Positioning Algorithm
     
     import matplotlib.pyplot as plt
 
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x3aba850>
+
+
 Let's define 4 anchors in the plane.
 
 .. code-block:: python
@@ -41,7 +48,7 @@ blue
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x489f990>
+    <matplotlib.legend.Legend at 0x3c4fa10>
 
 
 
@@ -49,8 +56,8 @@ blue
 .. image:: DOC-RGPA_files/DOC-RGPA_5_1.png
 
 
-The euclidian distance betwenn blind node :math:`$p$` and anchors ans
-the corresponding Time of flight are evaluated.
+The euclidian distance betwenn blind node :math:`p` and anchors ans the
+corresponding Time of flight are evaluated.
 
 .. code-block:: python
 
@@ -80,10 +87,8 @@ the corresponding Time of flight are evaluated.
 RGPA (Robust Geometric Positioning Algorithm)
 =============================================
 
-
 Exploiting Time of Arrival (ToA) only
 -------------------------------------
-
 
 We call ``Constraint Layer Array`` (CLA) the object which gathers all
 the geometric constraints of a considered scenario.
@@ -117,10 +122,14 @@ All the constraints of the CLA can be listed as follows
 
 .. parsed-literal::
 
-    [<pylayers.location.geometric.constraints.toa.TOA at 0x47cb210>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x47cb810>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x47cbfd0>,
-     <pylayers.location.geometric.constraints.toa.TOA at 0x47cb5d0>]
+    [node | peer   |type | rat  | p              | value    | std  | runable| usable|
+        0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,
+     node | peer   |type | rat  | p              | value    | std  | runable| usable|
+        1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,
+     node | peer   |type | rat  | p              | value    | std  | runable| usable|
+        2 |        |TOA  |      | [ 5 28]        | [ 78.457]| [ 1.]|       1|      1|,
+     node | peer   |type | rat  | p              | value    | std  | runable| usable|
+        3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]
 
 
 
@@ -129,12 +138,11 @@ Get information on the cla :
 -  type : TOA / RSS
 -  p : Position of the origin of the constraint
 -  value : power ( RSS ) / time in ns ( TOA)
--  std : standard deviation :math:`$\sigma^2$` of value
+-  std : standard deviation :math:`\sigma^2` of value
 -  runable : does the constraint has a position p ?
 -  obsolete : does the value has been obtained recently ?
 -  usuable : runbale AND NOT obsolete
 -  evlauated : obsolete
-
 
 .. code-block:: python
 
@@ -142,14 +150,14 @@ Get information on the cla :
 
 .. parsed-literal::
 
-    type , p         , value     , std    , runable, usable, obsolete, evaluated
-    TOA , [0 0]     , 16.6666666667, [ 1.]  , 1, 1, 0, 0
-    type , p         , value     , std    , runable, usable, obsolete, evaluated
-    TOA , [10 15]   , 47.1404520791, [ 1.]  , 1, 1, 0, 0
-    type , p         , value     , std    , runable, usable, obsolete, evaluated
-    TOA , [ 5 28]   , 78.4573486396, [ 1.]  , 1, 1, 0, 0
-    type , p         , value     , std    , runable, usable, obsolete, evaluated
-    TOA , [-10 -10] , 60.0925212577, [ 1.]  , 1, 1, 0, 0
+    type , p              , value, std  , runable, usable, obsolete, evaluated
+    TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
+    type , p              , value, std  , runable, usable, obsolete, evaluated
+    TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0
+    type , p              , value, std  , runable, usable, obsolete, evaluated
+    TOA  , [ 5 28]        , [ 78.457], [ 1.],       1,      1,        0,         0
+    type , p              , value, std  , runable, usable, obsolete, evaluated
+    TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0
 
 
 Update the CLA
@@ -202,7 +210,6 @@ to be compare with the actual position value
 RSS
 ---
 
-
 The RSS is a quantity which is weakly related to distance via a
 parametric model. The bettet the model, better would be tthe inference
 ab out tthe associated distance. t To model the Path Loss shadowing
@@ -237,13 +244,12 @@ with the above model
 
 .. parsed-literal::
 
-    7.1990008820632072
+    10.271380031020819
 
 
 
 TDOA
 ----
-
 
 .. code-block:: python
 

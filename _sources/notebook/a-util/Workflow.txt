@@ -2,18 +2,14 @@
 Workflow for integrating notebook in other format
 =================================================
 
-
 Titre 2
 -------
-
 
 Titre 3
 ~~~~~~~
 
-
 Titre 4
 ^^^^^^^
-
 
 .. code-block:: python
 
@@ -31,4 +27,4 @@ nbconvert Workflow.ipynb -o latex
 
 padflatex Workflow.tex
 
-This is a latex equation :math:`$\sqrt{x}$`
+This is a latex equation :math:`\sqrt{x}`

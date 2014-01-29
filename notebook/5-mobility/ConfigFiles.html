@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Network Simulation Configuration &mdash; PyLayers</title>
+    <title>22. Network Simulation Configuration &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
     <link rel="next" title="&lt;no title&gt;" href="Mobility.html" />
-    <link rel="prev" title="Example of an UWB channel Ray Tracing simulation" href="../8-simul/DOC-RayTracing2.html" /> 
+    <link rel="prev" title="21. Example of an UWB channel Ray Tracing simulation" href="../8-simul/DOC-RayTracing2.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="Mobility.html" title="&lt;no title&gt;"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="../8-simul/DOC-RayTracing2.html" title="Example of an UWB channel Ray Tracing simulation"
+          <a href="../8-simul/DOC-RayTracing2.html" title="21. Example of an UWB channel Ray Tracing simulation"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
@@ -59,14 +59,14 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Network Simulation Configuration</a><ul>
-<li><a class="reference internal" href="#simulnet-ini">Simulnet.ini</a></li>
-<li><a class="reference internal" href="#save-section">Save section</a><ul>
-<li><a class="reference internal" href="#layout">Layout</a></li>
-<li><a class="reference internal" href="#network">Network</a></li>
-<li><a class="reference internal" href="#mechanics">Mechanics</a></li>
-<li><a class="reference internal" href="#localization">Localization</a></li>
-<li><a class="reference internal" href="#simulation">Simulation</a></li>
+<li><a class="reference internal" href="#">22. Network Simulation Configuration</a><ul>
+<li><a class="reference internal" href="#simulnet-ini">22.1. Simulnet.ini</a></li>
+<li><a class="reference internal" href="#save-section">22.2. Save section</a><ul>
+<li><a class="reference internal" href="#layout">22.2.1. Layout</a></li>
+<li><a class="reference internal" href="#network">22.2.2. Network</a></li>
+<li><a class="reference internal" href="#mechanics">22.2.3. Mechanics</a></li>
+<li><a class="reference internal" href="#localization">22.2.4. Localization</a></li>
+<li><a class="reference internal" href="#simulation">22.2.5. Simulation</a></li>
 </ul>
 </li>
 </ul>
@@ -75,7 +75,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../8-simul/DOC-RayTracing2.html"
-                        title="previous chapter">Example of an UWB channel Ray Tracing simulation</a></p>
+                        title="previous chapter">21. Example of an UWB channel Ray Tracing simulation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Mobility.html"
                         title="next chapter">&lt;no title&gt;</a></p>
@@ -104,8 +104,10 @@
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x54bb850&gt;</pre>
+</div>
 <div class="section" id="network-simulation-configuration">
-<h1>Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
+<h1>22. Network Simulation Configuration<a class="headerlink" href="#network-simulation-configuration" title="Permalink to this headline">¶</a></h1>
 <p>PyLayers is designed to provide indoor radio channel simulation for
 mobile agents.</p>
 <p>The goal is to adress mobility in indoor environement heterogeneous
@@ -119,7 +121,7 @@ topology of the mobile network.</p>
 level <tt class="docutils literal"><span class="pre">PyLayers</span></tt> simulation are described.</p>
 <p>The configuration file is <tt class="docutils literal"><span class="pre">simulnet.ini</span></tt></p>
 <div class="section" id="simulnet-ini">
-<h2>Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
+<h2>22.1. Simulnet.ini<a class="headerlink" href="#simulnet-ini" title="Permalink to this headline">¶</a></h2>
 <p>This file is located in <tt class="docutils literal"><span class="pre">$BASENAME/ini</span></tt></p>
 <div class="highlight-python"><pre>!cat $BASENAME/ini/simulnet.ini</pre>
 </div>
@@ -215,7 +217,7 @@ verbose = True</pre>
 </div>
 </div>
 <div class="section" id="save-section">
-<h2>Save section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h2>
+<h2>22.2. Save section<a class="headerlink" href="#save-section" title="Permalink to this headline">¶</a></h2>
 <p>This section define the save options.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Save&#39;</span><span class="p">))</span>
 </pre></div>
@@ -238,7 +240,7 @@ verbose = True</pre>
 <div class="highlight-python"><pre>ls: impossible d'accéder à /home/Bureau/P1/netsave/: Aucun fichier ou dossier de ce type</pre>
 </div>
 <div class="section" id="layout">
-<h3>Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h3>
+<h3>22.2.1. Layout<a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h3>
 <p>This section allow setup the layout for the simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Layout&#39;</span><span class="p">))</span>
 </pre></div>
@@ -269,7 +271,7 @@ verbose = True</pre>
 </div>
 </div>
 <div class="section" id="network">
-<h3>Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h3>
+<h3>22.2.2. Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Network&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -326,7 +328,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="mechanics">
-<h3>Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h3>
+<h3>22.2.3. Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h3>
 <p>This section allow to setup the agent movement during simulation</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Mechanics&#39;</span><span class="p">))</span>
 </pre></div>
@@ -355,7 +357,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="localization">
-<h3>Localization<a class="headerlink" href="#localization" title="Permalink to this headline">¶</a></h3>
+<h3>22.2.4. Localization<a class="headerlink" href="#localization" title="Permalink to this headline">¶</a></h3>
 <p>Setup Localization algorithms</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Localization&#39;</span><span class="p">))</span>
 </pre></div>
@@ -392,7 +394,7 @@ periodically refreshed at the network_update_time</li>
 </div>
 </div>
 <div class="section" id="simulation">
-<h3>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h3>
+<h3>22.2.5. Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">dict</span><span class="p">(</span><span class="n">Cp</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;Simulation&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -516,7 +518,7 @@ Path (<tt>Mobility.ipynb</tt>) doesn't exist. It may still be in the process of 
           <a href="Mobility.html" title="&lt;no title&gt;"
              >next</a></li>
         <li class="right" >
-          <a href="../8-simul/DOC-RayTracing2.html" title="Example of an UWB channel Ray Tracing simulation"
+          <a href="../8-simul/DOC-RayTracing2.html" title="21. Example of an UWB channel Ray Tracing simulation"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>

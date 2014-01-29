@@ -2,7 +2,6 @@
 Coverage with a Multi Wall model
 ================================
 
-
     Sometimes it might be useful to get a fast estimate about losses in
     a given indoor environment. Ray tracing is generally time consuming
     and depending on the purpose of the study it could be relevant to
@@ -20,7 +19,7 @@ First let's import the ``coverage`` module
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4b3eb50>
+    <matplotlib.figure.Figure at 0x4c47850>
 
 
 Instantiate a coverage object. By defaut, ``TA-Office.str`` layout
@@ -113,14 +112,12 @@ parameters of the current coverage object
 
 
 
-
 .. code-block:: python
 
     # evaluate coverage 
     C.cover()
 Calculating Received Power Coverage
 ===================================
-
 
 .. code-block:: python
 
@@ -132,8 +129,8 @@ Calculating Received Power Coverage
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5bb5ed0>,
-     <matplotlib.axes.AxesSubplot at 0x4b3ead0>)
+    (<matplotlib.figure.Figure at 0x589dbd0>,
+     <matplotlib.axes.AxesSubplot at 0x587f210>)
 
 
 
@@ -150,7 +147,6 @@ functions.
 -  showLoss : display the path loss
 -  showPower : display the received powercover
 
-
 The following examples represent the estimated received power for 3
 different frequencies
 
@@ -165,7 +161,7 @@ different frequencies
 
 .. parsed-literal::
 
-    /usr/local/lib/python2.7/dist-packages/numpy/ma/core.py:3791: UserWarning: Warning: converting a masked element to nan.
+    /usr/local/lib/python2.7/dist-packages/numpy/ma/core.py:3847: UserWarning: Warning: converting a masked element to nan.
       warnings.warn("Warning: converting a masked element to nan.")
 
 
@@ -175,7 +171,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.11 seconds
+    Elapsed time : 1.15 seconds
 
 
 .. code-block:: python
@@ -193,7 +189,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.10 seconds
+    Elapsed time : 1.08 seconds
 
 
 .. code-block:: python
@@ -211,7 +207,7 @@ different frequencies
 
 .. parsed-literal::
 
-    Elapsed time : 1.10 seconds
+    Elapsed time : 1.20 seconds
 
 
 The transmitter coordinates are :
@@ -253,8 +249,8 @@ accordingly
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5b78950>,
-     <matplotlib.axes.AxesSubplot at 0x5b53910>)
+    (<matplotlib.figure.Figure at 0x5eb8150>,
+     <matplotlib.axes.AxesSubplot at 0x63be450>)
 
 
 

@@ -798,6 +798,7 @@ Author : Martin Laloux 2010</p>
 The degree of a point is dependent from other polygons around</p>
 <p>Topological error can be raised if the point coordinates accuracy
 is not limited.</p>
+<p>Nodes of polygon are numbered in the global graph in vnodes member.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.util.geomutil</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="kn">as</span> <span class="nn">shg</span>
@@ -1462,6 +1463,51 @@ N     : descretization step</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="pylayers.util.geomutil.isleft">
+<tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">isleft</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="headerlink" href="#pylayers.util.geomutil.isleft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test point c is at left of the vector a&#8211;&gt;b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>a</strong> : np.array (2xN)</p>
+<p><strong>b</strong> : np.array (2xN)</p>
+<p><strong>c</strong> : np.array (2xN)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first last"><strong>boolean array (1xN)</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="antprop.signature.html#module-pylayers.antprop.signature" title="pylayers.antprop.signature"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.antprop.signature</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<p>&gt;&gt;&gt;from pylayers.util.plotutil import *
+&gt;&gt;&gt; import scipy as sp
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; from pylayers.util.geomutil import *
+&gt;&gt;&gt; from pylayers.util.plotutil import *
+&gt;&gt;&gt; import matplotlib.pylab as plot
+&gt;&gt;&gt; N = 20
+&gt;&gt;&gt; A = sp.rand(2,N)
+&gt;&gt;&gt; B = sp.rand(2,N)
+&gt;&gt;&gt; C = np.array(([0.5,0.5])).reshape(2,1)
+&gt;&gt;&gt; left=isleft(A,B,C)
+&gt;&gt;&gt; il = np.where(left)[0]
+&gt;&gt;&gt; inl = np.where(~left)[0]
+&gt;&gt;&gt; plt.scatter(C[0],C[1],color=&#8217;b&#8217;,s=10)
+&gt;&gt;&gt; displot(A[:,il],B[:,il],arrow=True,color=&#8217;g&#8217;)
+&gt;&gt;&gt; displot(A[:,inl],B[:,inl],arrow=True,color=&#8217;r&#8217;)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-7.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-7.png">png</a>, <a class="reference external" href="../modules/util-geomutil-7.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-7.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/util-geomutil-7.png" src="../_images/util-geomutil-7.png" />
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="pylayers.util.geomutil.line_intersection">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">line_intersection</tt><big>(</big><em>l1</em>, <em>l2</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#line_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.line_intersection" title="Permalink to this definition">¶</a></dt>
 <dd><p>intersection between two 2D lines using shapely</p>
@@ -1568,16 +1614,16 @@ Parameters
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="n">linet</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="n">p4</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">al</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;cyan&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(<a class="reference external" href="../modules/util-geomutil-7.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-7.png">png</a>, <a class="reference external" href="../modules/util-geomutil-7.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-7.pdf">pdf</a>)</p>
+<p>(<a class="reference external" href="../modules/util-geomutil-8.py">Source code</a>, <a class="reference external" href="../modules/util-geomutil-8.png">png</a>, <a class="reference external" href="../modules/util-geomutil-8.hires.png">hires.png</a>, <a class="reference external" href="../modules/util-geomutil-8.pdf">pdf</a>)</p>
 <div class="figure">
-<img alt="../_images/util-geomutil-7.png" src="../_images/util-geomutil-7.png" />
+<img alt="../_images/util-geomutil-8.png" src="../_images/util-geomutil-8.png" />
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="pylayers.util.geomutil.mirror">
 <tt class="descclassname">pylayers.util.geomutil.</tt><tt class="descname">mirror</tt><big>(</big><em>p</em>, <em>pa</em>, <em>pb</em><big>)</big><a class="reference internal" href="../_modules/pylayers/util/geomutil.html#mirror"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.util.geomutil.mirror" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the mirror of p with respect to the segment pa pb</p>
+<dd><p>Compute the image of p wrt the segment pa pb</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1601,6 +1647,7 @@ Parameters
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
 </dd></dl>
 
 <dl class="function">

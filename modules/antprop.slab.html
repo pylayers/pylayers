@@ -88,8 +88,7 @@
   <div class="section" id="module-pylayers.antprop.slab">
 <span id="slab"></span><h1>slab<a class="headerlink" href="#module-pylayers.antprop.slab" title="Permalink to this headline">¶</a></h1>
 <p>This module contains the following classes :</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Interface(object)</li>
 <li>MatInterface(Interface)</li>
 <li>Mat(dict)</li>
@@ -97,13 +96,11 @@
 <li>Slab(dict)</li>
 <li>SlabDB(dict)</li>
 </ul>
-</div></blockquote>
 <p>This module exploits heavily numpy broadcasting mechanism :</p>
-<blockquote>
-<div>nf : axis = 0   frequency axis
-nt : axis = 1   angular axis
-p  : axis = 2   parallel axis
-o  : axis = 2   orhogonal axis</div></blockquote>
+<p>nf : axis = 0 frequency axis
+nt : axis = 1 angular axis
+p : axis = 2 parallel axis
+o : axis = 2 orhogonal axis</p>
 <dl class="class">
 <dt id="pylayers.antprop.slab.Interface">
 <em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">Interface</tt><big>(</big><em>fGHz=array([ 2.4])</em>, <em>theta=array([[ 0.+0.j]])</em>, <em>name=''</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface" title="Permalink to this definition">¶</a></dt>
@@ -112,10 +109,10 @@ o  : axis = 2   orhogonal axis</div></blockquote>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>fGHz   np.array (nf,1)</strong> :</p>
-<p><strong>theta  np.array (1,nt)</strong> :</p>
-<p><strong>Ip     np.array (nf,nt,2,2)</strong> :</p>
-<p class="last"><strong>Io     np.array (nf,nt,2,2)</strong> :</p>
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>fGHz np.array (nf,1)</strong> :</p>
+<p><strong>theta np.array (1,nt)</strong> :</p>
+<p><strong>Ip np.array (nf,nt,2,2)</strong> :</p>
+<p class="last"><strong>Io np.array (nf,nt,2,2)</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -124,98 +121,13 @@ o  : axis = 2   orhogonal axis</div></blockquote>
 <dt id="pylayers.antprop.slab.Interface.RT">
 <tt class="descname">RT</tt><big>(</big><em>metalic=False</em>, <em>RT='RT'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Interface.RT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Interface.RT" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate Reflection and Transmission matrix</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">R = \matrix(R_o &amp; 0\\0 &amp; R_p)
-T = \matrix(T_o &amp; 0\\0 &amp; T_p)</tt>)</p>
-latex exited with error
-[stdout]
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian)
-entering extended mode
-(./math.tex
-LaTeX2e &lt;2009/09/24&gt;
-Babel &lt;v3.8l&gt; and hyphenation patterns for english, usenglishmax, dumylang, noh
-yphenation, farsi, arabic, croatian, bulgarian, ukrainian, russian, czech, slov
-ak, danish, dutch, finnish, french, basque, ngerman, german, german-x-2009-06-1
-9, ngerman-x-2009-06-19, ibycus, monogreek, greek, ancientgreek, hungarian, san
-skrit, italian, latin, latvian, lithuanian, mongolian2a, mongolian, bokmal, nyn
-orsk, romanian, irish, coptic, serbian, turkish, welsh, esperanto, uppersorbian
-, estonian, indonesian, interlingua, icelandic, kurmanji, slovenian, polish, po
-rtuguese, spanish, galician, catalan, swedish, ukenglish, pinyin, loaded.
-(/usr/share/texmf-texlive/tex/latex/base/article.cls
-Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texmf-texlive/tex/latex/base/size12.clo))
-(/usr/share/texmf-texlive/tex/latex/base/inputenc.sty
-(/home/uguen/texmf/tex/latex/ucs/utf8x.def))
-(/home/uguen/texmf/tex/latex/ucs/ucs.sty
-(/home/uguen/texmf/tex/latex/ucs/data/uni-global.def))
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
-For additional information on amsmath, use the `?&#8217; option.
-(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty))
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty)
-(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty))
-(/usr/share/texmf-texlive/tex/latex/amscls/amsthm.sty)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/amssymb.sty
-(/usr/share/texmf-texlive/tex/latex/amsfonts/amsfonts.sty))
-(/usr/share/texmf-texlive/tex/latex/tools/bm.sty)
-No file math.aux.
-(/home/uguen/texmf/tex/latex/ucs/ucsencs.def)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd)
-(/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd)
-
-! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
-
-See the amsmath package documentation for explanation.
-Type  H &lt;return&gt;  for immediate help.
- ...                                              
-                                                  
-l.15 \end{gather}
-                 
-
-! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
-
-See the amsmath package documentation for explanation.
-Type  H &lt;return&gt;  for immediate help.
- ...                                              
-                                                  
-l.15 \end{gather}
-                 
-! Extra alignment tab has been changed to \cr.
-&lt;template&gt; }$\hfill \endtemplate 
-                                 
-l.15 \end{gather}
-                 
-
-! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
-
-See the amsmath package documentation for explanation.
-Type  H &lt;return&gt;  for immediate help.
- ...                                              
-                                                  
-l.15 \end{gather}
-                 
-
-! Package amsmath Error: Old form `\matrix&#8217; should be \begin{matrix}.
-
-See the amsmath package documentation for explanation.
-Type  H &lt;return&gt;  for immediate help.
- ...                                              
-                                                  
-l.15 \end{gather}
-                 
-! Extra alignment tab has been changed to \cr.
-&lt;template&gt; }$\hfill \endtemplate 
-                                 
-l.15 \end{gather}
-                 
-[1] (./math.aux) )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 460 bytes).
-Transcript written on math.log.
-</div>
+<div class="math">
+<p><img src="../_images/math/bf55b0fcce0907a58d78344a6ca1a17eac01d8f4.png" alt=""/></p>
+</div><p>R = matrix(R_o &amp; 0\0 &amp; R_p)
+T = matrix(T_o &amp; 0\0 &amp; T_p)</p>
 <p class="rubric">Notes</p>
-<p>R : np.array   (f , th , 2, 2)
-T : np.array   (f , th , 2, 2)</p>
+<p>R : np.array (f , th , 2, 2)
+T : np.array (f , th , 2, 2)</p>
 </dd></dl>
 
 <dl class="method">
@@ -226,11 +138,9 @@ T : np.array   (f , th , 2, 2)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array  (nf,1)</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array (nf,1)</p>
 <p><strong>display</strong> : boolean</p>
-<blockquote>
-<div><p>default (False)</p>
-</div></blockquote>
+<p><strong>default (False)</strong> :</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Lo</strong> : loss in dB polarization orthogonal</p>
@@ -251,19 +161,13 @@ T : np.array   (f , th , 2, 2)</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.arrray (nf)</p>
 <p><strong>display</strong> : boolean</p>
-<blockquote>
-<div><p>default False</p>
-</div></blockquote>
+<p><strong>default False</strong> :</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Lo</strong> : np.array</p>
-<blockquote>
-<div><p>Loss orthogonal polarization (dB)</p>
-</div></blockquote>
+<p><strong>Loss orthogonal polarization (dB)</strong> :</p>
 <p><strong>Lp</strong> : np.array</p>
-<blockquote class="last">
-<div><p>Loss parallel polarization (dB)</p>
-</div></blockquote>
+<p class="last"><strong>Loss parallel polarization (dB)</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -279,9 +183,7 @@ T : np.array   (f , th , 2, 2)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dB</strong> : boolean</p>
-<blockquote class="last">
-<div><p>default False</p>
-</div></blockquote>
+<p class="last"><strong>default False</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -297,53 +199,52 @@ T : np.array   (f , th , 2, 2)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>kv</strong> : int</p>
-<blockquote>
-<div><p>variable index</p>
-</div></blockquote>
+<p><strong>variable index</strong> :</p>
 <p><strong>polar: string</strong> :</p>
-<blockquote>
-<div><p>&#8216;po&#8217;, # po | p | o   (parallel+ortho | parallel | ortogonal)</p>
-</div></blockquote>
+<p><strong>&#8216;po&#8217;, # po | p | o (parallel+ortho | parallel | ortogonal)</strong> :</p>
 <p><strong>coeff: string</strong> :</p>
-<blockquote>
-<div><p>&#8216;RT&#8217;, # RT | R | T   (Reflexion &amp; Transmission ) | Reflexion | Transmission</p>
-</div></blockquote>
-<p><strong>var:  string</strong> :</p>
-<blockquote>
-<div><p>&#8216;a&#8217;,    # a | f       angle | frequency</p>
-</div></blockquote>
-<p><strong>types</strong> : string</p>
-<blockquote class="last">
-<div><p>&#8216;m&#8217; | &#8216;r&#8217; | &#8216;d&#8217; | &#8216;l20&#8217;
-mod   rad    deg   dB</p>
-</div></blockquote>
+<p><strong>&#8216;RT&#8217;, # RT | R | T (Reflexion &amp; Transmission ) | Reflexion | Transmission</strong> :</p>
+<p><strong>var: string</strong> :</p>
+<p><strong>&#8216;a&#8217;, # a | f angle | frequency</strong> :</p>
+<p><strong>typ</strong> : string</p>
+<p><strong>&#8216;m&#8217; | &#8216;r&#8217; | &#8216;d&#8217; | &#8216;l20&#8217;</strong> :</p>
+<p class="last"><strong>mod rad deg dB</strong> :</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
+<p>(<a class="reference external" href="../modules/antprop-slab-1.py">Source code</a>, <a class="reference external" href="../modules/antprop-slab-1.png">png</a>, <a class="reference external" href="../modules/antprop-slab-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-slab-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../_images/antprop-slab-1.png" src="../_images/antprop-slab-1.png" />
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Include-source :</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span>   <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lmat</span>  <span class="o">=</span> <span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">],</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span>    <span class="o">=</span> <span class="n">MatInterface</span><span class="p">(</span><span class="n">lmat</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lmat</span> <span class="o">=</span> <span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">],</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span> <span class="o">=</span> <span class="n">MatInterface</span><span class="p">(</span><span class="n">lmat</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">II</span><span class="o">.</span><span class="n">RT</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">air</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">brick</span>  <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span>  <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">air</span><span class="p">,</span><span class="n">brick</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brick</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span> <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">air</span><span class="p">,</span><span class="n">brick</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">II</span><span class="o">.</span><span class="n">RT</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-</div>
-<p>(<a class="reference external" href="../modules/antprop-slab-1.py">Source code</a>, <a class="reference external" href="../modules/antprop-slab-1.png">png</a>, <a class="reference external" href="../modules/antprop-slab-1.hires.png">hires.png</a>, <a class="reference external" href="../modules/antprop-slab-1.pdf">pdf</a>)</p>
-<div class="figure">
-<img alt="../_images/antprop-slab-1.png" src="../_images/antprop-slab-1.png" />
 </div>
 </dd></dl>
 
@@ -371,29 +272,17 @@ mod   rad    deg   dB</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<blockquote>
-<div><p>name character string (default &#8216;AIR&#8217;)</p>
-</div></blockquote>
+<p><strong>name character string (default &#8216;AIR&#8217;)</strong> :</p>
 <p><strong>index</strong> : int</p>
-<blockquote>
-<div><p>default 1</p>
-</div></blockquote>
+<p><strong>default 1</strong> :</p>
 <p><strong>er</strong> : complex</p>
-<blockquote>
-<div><p>relative permittivity (w.d)   (1+0j)</p>
-</div></blockquote>
+<p><strong>relative permittivity (w.d) (1+0j)</strong> :</p>
 <p><strong>mur</strong> : complex</p>
-<blockquote>
-<div><p>relative permeability (w.d)   (1+0j)</p>
-</div></blockquote>
+<p><strong>relative permeability (w.d) (1+0j)</strong> :</p>
 <p><strong>sigma</strong> : float</p>
-<blockquote>
-<div><p>conductivity  (S/m)            0</p>
-</div></blockquote>
+<p><strong>conductivity (S/m) 0</strong> :</p>
 <p><strong>roughness</strong> : float</p>
-<blockquote class="last">
-<div><p>(meter)                        0</p>
-</div></blockquote>
+<p class="last"><strong>(meter) 0</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -431,8 +320,8 @@ mod   rad    deg   dB</p>
 <p class="rubric">Notes</p>
 <p>w = 2*np.pi*f*1e-9
 eps0 = 8.854e-12</p>
-<p>100 MHz = 0.1  GHz
-10  MHz = 0.01 GHz</p>
+<p>100 MHz = 0.1 GHz
+10 MHz = 0.01 GHz</p>
 <p>sigma/(w*eps0) = sigma/(2*pi*f*1e9*eps0)
 sigma/(w*eps0) = sigma/(2*pi*f*1e9*8.854e-12)
 sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)</p>
@@ -455,9 +344,7 @@ sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>di</strong> : dict</p>
-<blockquote class="last">
-<div><p>associate numeric and alphanumeric keys</p>
-</div></blockquote>
+<p class="last"><strong>associate numeric and alphanumeric keys</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -471,37 +358,27 @@ sigma/(w*eps0) = sigma/(2*pi*f*1e-3*8.854)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<blockquote>
-<div><p>material name</p>
-</div></blockquote>
+<p><strong>material name</strong> :</p>
 <p><strong>cval</strong> : float or complex</p>
-<blockquote>
-<div><p>epsilon or index</p>
-</div></blockquote>
+<p><strong>epsilon or index</strong> :</p>
 <p><strong>sigma</strong> : float or complex</p>
-<blockquote>
-<div><p>permeability</p>
-</div></blockquote>
+<p><strong>permeability</strong> :</p>
 <p><strong>mur</strong> : float</p>
 <p><strong>typ</strong> : string</p>
-<blockquote class="last">
-<div><p>{&#8216;epsr&#8217;|&#8217;ind&#8217;<a href="#id1"><span class="problematic" id="id2">|,&#8217;reim&#8217;,|</span></a>&#8216;THz&#8217;}</p>
-</div></blockquote>
+<p class="last"><strong>{&#8216;epsr&#8217;|&#8217;ind&#8217;|,&#8217;reim&#8217;,|&#8217;THz&#8217;}</strong> :</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
 <p>Different ways to enter a material are :</p>
-<ol class="lowerroman simple">
-<li>epsr : epsr and sigma
-cval = epsr 
-sigma = sigma</li>
-<li>ind : indice &#64; fGHz
-cval = indice</li>
-<li>reim :  real(epsr) and imag(epsr)  &#64;fGHz</li>
-<li>THZ</li>
-</ol>
+<p>i) epsr : epsr and sigma
+cval = epsr
+sigma = sigma
+ii) ind : indice &#64; fGHz
+cval = indice
+iii) reim : real(epsr) and imag(epsr) &#64;fGHz
+iv) THZ</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MatDB</span><span class="p">()</span>
@@ -522,9 +399,7 @@ cval = indice</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
-<blockquote class="last">
-<div><p>default &#8216;MAT&#8217;</p>
-</div></blockquote>
+<p class="last"><strong>default &#8216;MAT&#8217;</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -609,6 +484,18 @@ cval = indice</li>
 <dt id="pylayers.antprop.slab.MatDB.load">
 <tt class="descname">load</tt><big>(</big><em>_fileini</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#MatDB.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.MatDB.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a Material from a .ini file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_fileini</strong> : string</p>
+<blockquote class="last">
+<div><p>name of the matDB file (usually matDB.ini)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -620,9 +507,7 @@ cval = indice</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_filemat</strong> : string</p>
-<blockquote class="last">
-<div><p>a short file name</p>
-</div></blockquote>
+<p class="last"><strong>a short file name</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -639,15 +524,13 @@ cval = indice</li>
 <dt id="pylayers.antprop.slab.MatDB.save">
 <tt class="descname">save</tt><big>(</big><em>_fileini='matDB.ini'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#MatDB.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.MatDB.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>save MatDB in an ini file</p>
-<dl class="docutils">
-<dt>[dict]</dt>
-<dd>id1 = name1</dd>
-<dt>[name1]</dt>
-<dd>epsr =
-mur  =
+<p>[dict]
+id1 = name1
+[name1]
+epsr =
+mur =
 roughness =
-index =</dd>
-</dl>
+index =</p>
 </dd></dl>
 
 <dl class="method">
@@ -659,9 +542,7 @@ index =</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_filemat</strong> : string</p>
-<blockquote class="last">
-<div><p>a short file name</p>
-</div></blockquote>
+<p class="last"><strong>a short file name</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -674,78 +555,57 @@ index =</dd>
 <dt id="pylayers.antprop.slab.MatInterface">
 <em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">MatInterface</tt><big>(</big><em>lmat</em>, <em>l</em>, <em>fGHz</em>, <em>theta</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#MatInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.MatInterface" title="Permalink to this definition">¶</a></dt>
 <dd><p>MatInterface : Class for Interface between two materials</p>
-<blockquote>
-<div>l distance from the next Interface</div></blockquote>
+<p>l distance from the next Interface</p>
 <p class="rubric">Notes</p>
 <p>This is required for recursive utilization of this function when the
 output angle of an interface happens to be the input angle of the
 next interface. As this angle depends on materials which themselves
 depends on frequency THETA is becoming a full matrix without redundancy
 between lines.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">3.1</span><span class="p">,</span><span class="mf">10.6</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Nf</span>     <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Nt</span>     <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span>     <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span>    <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span>     <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m2</span>     <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;PLASTER&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span>     <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">3.1</span><span class="p">,</span><span class="mf">10.6</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Nf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Nt</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span> <span class="o">=</span> <span class="n">sl</span><span class="o">.</span><span class="n">mat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m2</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;PLASTER&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">II</span> <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="math">
-<p><img src="../_images/math/a1a21454210271898ec33236787f0f1b1cd820f0.png" alt="I_p = \left| \begin{array}{cc} \frac{1}{T_p}   &amp; \frac{R_p}{T_p} \\ \frac{R_p}{T_p} &amp; \frac{1}{T_p} \end{array}\right|
-
-I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_o}{T_o} &amp; \frac{1}{T_o} \end{array}\right|"/></p>
-</div></dd></dl>
+<p><img src="../_images/math/bf55b0fcce0907a58d78344a6ca1a17eac01d8f4.png" alt=""/></p>
+</div><p>I_p = left| begin{array}{cc} frac{1}{T_p} &amp; frac{R_p}{T_p} \ frac{R_p}{T_p} &amp; frac{1}{T_p} end{array}right|</p>
+<p>I_o = left| begin{array}{cc} frac{1}{T_o} &amp; frac{R_o}{T_o} \ frac{R_o}{T_o} &amp; frac{1}{T_o} end{array}right|</p>
+<p>MatIinterface fix the np.pi/2 NaN problem</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="pylayers.antprop.slab.Slab">
 <em class="property">class </em><tt class="descclassname">pylayers.antprop.slab.</tt><tt class="descname">Slab</tt><big>(</big><em>mat</em>, <em>name='NEWSLAB'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/slab.html#Slab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.slab.Slab" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>A slab is a sequence of layers which has</dt>
-<dd><ul class="first last simple">
-<li>a given width</li>
-<li>an integer index refering a given material in the material DB</li>
-</ul>
-</dd>
-</dl>
+<dd><p>A slab is a sequence of layers which has
+- a given width
+- an integer index refering a given material in the material DB</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>name      :</strong> :</p>
-<blockquote>
-<div><p>Slab name</p>
-</div></blockquote>
-<p><strong>nbmat    :</strong> :</p>
-<blockquote>
-<div><p>Number of layers</p>
-</div></blockquote>
-<p><strong>index     :</strong> :</p>
-<blockquote>
-<div><p>Slab Index</p>
-</div></blockquote>
-<p><strong>imat      :</strong> :</p>
-<blockquote>
-<div><p>index of layers material</p>
-</div></blockquote>
-<p><strong>thickness  :</strong> :</p>
-<blockquote>
-<div><p>thickness of layers</p>
-</div></blockquote>
-<p><strong>color     :</strong> :</p>
-<blockquote>
-<div><p>color of slab dor display</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>name :</strong> :</p>
+<p><strong>Slab name</strong> :</p>
+<p><strong>nbmat :</strong> :</p>
+<p><strong>Number of layers</strong> :</p>
+<p><strong>index :</strong> :</p>
+<p><strong>Slab Index</strong> :</p>
+<p><strong>imat :</strong> :</p>
+<p><strong>index of layers material</strong> :</p>
+<p><strong>thickness :</strong> :</p>
+<p><strong>thickness of layers</strong> :</p>
+<p><strong>color :</strong> :</p>
+<p><strong>color of slab dor display</strong> :</p>
 <p><strong>linewidth :</strong> :</p>
-<blockquote>
-<div><p>linewidth for structure display</p>
-</div></blockquote>
-<p><strong>mat       :</strong> :</p>
-<blockquote>
-<div><p>Associated Material Database</p>
-</div></blockquote>
+<p><strong>linewidth for structure display</strong> :</p>
+<p><strong>mat :</strong> :</p>
+<p><strong>Associated Material Database</strong> :</p>
 <p class="last"><strong>evaluated</strong> : Boolean</p>
 </td>
 </tr>
@@ -758,7 +618,7 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p>In .slab file thickness variable is expressed in cm</p>
-<p class="last">for lthick distance  are expressed in meters</p>
+<p class="last">for lthick distance are expressed in meters</p>
 </div>
 </dd></dl>
 
@@ -796,9 +656,7 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency GHz ( np.array([1.0]) )</p>
 <p><strong>theta</strong> : np.array</p>
-<blockquote class="last">
-<div><p>incidence angle (from normal) radians</p>
-</div></blockquote>
+<p class="last"><strong>incidence angle (from normal) radians</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -816,9 +674,7 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : array</p>
-<blockquote>
-<div><p>default arange(2.4,4,0.1)</p>
-</div></blockquote>
+<p><strong>default arange(2.4,4,0.1)</strong> :</p>
 <p><strong>theta</strong> : default 0</p>
 </td>
 </tr>
@@ -831,7 +687,7 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pylayers.antprop.slab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">matplotlib.pylab</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span> <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">3.1</span><span class="p">,</span><span class="mf">10.6</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
@@ -874,7 +730,7 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">57.5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">sl</span><span class="p">[</span><span class="s">&#39;placo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -892,20 +748,14 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency (GHz)  np.array()</p>
-<blockquote>
-<div><p>default 2.4</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : frequency (GHz) np.array()</p>
+<p><strong>default 2.4</strong> :</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Lo</strong> : np.array</p>
-<blockquote>
-<div><p>Loss at 0 deg polarization ortho</p>
-</div></blockquote>
-<p><strong>Lp</strong> :  np.array</p>
-<blockquote class="last">
-<div><p>Loss at 0 deg polarization para</p>
-</div></blockquote>
+<p><strong>Loss at 0 deg polarization ortho</strong> :</p>
+<p><strong>Lp</strong> : np.array</p>
+<p class="last"><strong>Loss at 0 deg polarization para</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -929,24 +779,16 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> :  np.array()</p>
-<blockquote>
-<div><p>frequency (GHz)</p>
-</div></blockquote>
-<p><strong>theta</strong> :  np.array</p>
-<blockquote>
-<div><p>theta angle (radians)</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array()</p>
+<p><strong>frequency (GHz)</strong> :</p>
+<p><strong>theta</strong> : np.array</p>
+<p><strong>theta angle (radians)</strong> :</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>Lo</strong> : np.array</p>
-<blockquote>
-<div><p>Loss orthogonal</p>
-</div></blockquote>
+<p><strong>Loss orthogonal</strong> :</p>
 <p><strong>Lp</strong> : np.array</p>
-<blockquote class="last">
-<div><p>Loss paralell</p>
-</div></blockquote>
+<p class="last"><strong>Loss paralell</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -998,14 +840,10 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : float</p>
 <p><strong>theta</strong> : np.array</p>
 <p><strong>dtype :</strong> :</p>
-<p><strong>display</strong> :  string</p>
-<blockquote>
-<div><p>{&#8216;modulus&#8217;}</p>
-</div></blockquote>
+<p><strong>display</strong> : string</p>
+<p><strong>{&#8216;modulus&#8217;}</strong> :</p>
 <p><strong>dB</strong> : boolean</p>
-<blockquote class="last">
-<div><p>False</p>
-</div></blockquote>
+<p class="last"><strong>False</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -1019,18 +857,18 @@ I_o = \left| \begin{array}{cc} \frac{1}{T_o}   &amp; \frac{R_o}{T_o} \\ \frac{R_
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><strong>fGHz</strong> : np.array</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>fGHz</strong> : np.array</p>
+<p><strong>Examples</strong> :</p>
+<p><strong>&#8212;&#8212;&#8211;</strong> :</p>
+<p><strong>&gt;&gt;&gt; sl = SlabDB(&#8216;matDB.ini&#8217;,&#8217;slabDB.ini&#8217;)</strong> :</p>
+<p><strong>&gt;&gt;&gt; s1 = sl[&#8216;PARTITION&#8217;]</strong> :</p>
+<p><strong>&gt;&gt;&gt; col24 = s1.tocolor(np.array([2.4]))</strong> :</p>
+<p><strong>&gt;&gt;&gt; fGHz = np.arange(0.5,8,100)</strong> :</p>
+<p class="last"><strong>&gt;&gt;&gt; col8 = s1.tocolor(fGHz)</strong> :</p>
+</td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sl</span>  <span class="o">=</span> <span class="n">SlabDB</span><span class="p">(</span><span class="s">&#39;matDB.ini&#39;</span><span class="p">,</span><span class="s">&#39;slabDB.ini&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span>  <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;PARTITION&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">col24</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.4</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">col8</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">tocolor</span><span class="p">(</span><span class="n">fGHz</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </dd></dl>
@@ -1087,10 +925,10 @@ EUCAP 2010</p>
     <span class="mf">0.0029</span><span class="p">,</span><span class="mf">0.0102</span><span class="p">,</span><span class="mf">0.0029</span><span class="p">])</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
-<span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
-<span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
+<span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;l20&#39;</span><span class="p">])</span>
 <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
@@ -1234,9 +1072,7 @@ The surface impedance is <img class="math" src="../_images/math/0a17504d2da9d0f1
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>_filename</strong> : string</p>
-<blockquote class="last">
-<div><p>shortname of slabfile</p>
-</div></blockquote>
+<p class="last"><strong>shortname of slabfile</strong> :</p>
 </td>
 </tr>
 </tbody>
@@ -1275,22 +1111,16 @@ The surface impedance is <img class="math" src="../_images/math/0a17504d2da9d0f1
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>cval</strong> : complex value</p>
-<blockquote>
-<div><p>{epsr | epsr ^2 }</p>
-</div></blockquote>
+<p><strong>{epsr | epsr ^2 }</strong> :</p>
 <p><strong>fGHz</strong> : frequency GHz</p>
 <p><strong>type :</strong> :</p>
-<blockquote>
-<div><p>{&#8216;epsr&#8217; | &#8216;ind&#8217;}</p>
-</div></blockquote>
+<p><strong>{&#8216;epsr&#8217; | &#8216;ind&#8217;}</strong> :</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>epr1</strong> :  ..math:</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>epr1</strong> : ..math:</p>
 <div class="highlight-python"><pre>**sigma** : float</pre>
 </div>
-<blockquote>
-<div><p>conductivity (S/m)</p>
-</div></blockquote>
+<p><strong>conductivity (S/m)</strong> :</p>
 <p class="last"><strong>delta :</strong> :</p>
 </td>
 </tr>

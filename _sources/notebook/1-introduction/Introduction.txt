@@ -1,7 +1,6 @@
 
 What is PyLayers about ?
-------------------------
-
+========================
 
 The scientific face of the Python world is vibrant nowadays and the
 collection of all recentlty developped tools is facilitating studies of
@@ -24,7 +23,7 @@ parcimonious and resiliant way.
 
 PyLayers owes immensly to two former FP7 European Projects brillantly
 led by Ronald Raulefs from DLR (WHERE1 and
-`WHERE2 <http://www.kn-s.dlr.de/where2/>`_ ) and to the amazing
+`WHERE2 <http://www.kn-s.dlr.de/where2/>`__ ) and to the amazing
 expertise and frienship which was there concentrated on the topic of
 Indoor localization between 2008 and 2013. Most of the examples provided
 and currently studied comes out from those 2 projects.
@@ -44,7 +43,6 @@ France
 PyLayers Keywords
 -----------------
 
-
 -  Python scientific framework
 -  Ray Tracing
 -  Electromagnetism
@@ -63,10 +61,8 @@ PyLayers Keywords
 -  Human mobility simulation
 -  Motion capture
 
-
 Warnings
 --------
-
 
 This documentation is generated automatically with sphinx from the
 PyLayers source code files on github
@@ -76,7 +72,7 @@ unsufficiently explained features which remain in the source code.
 
 The collection of notebooks in the doc directory is used as a
 complementary battery of tests using
-`runipy <https://pypi.python.org/pypi/runipy>`_, it is used to track
+`runipy <https://pypi.python.org/pypi/runipy>`__, it is used to track
 regressions and unworking functionalities.
 
 It is expected that the magic of ``git`` (an other gi(f)t from Linus
@@ -93,7 +89,7 @@ the necessary continuous improvement of the PyLayers platform.
 So, if you see any wrong assertion or have seen any thing that could be
 improved, please do not hesitate to provide a feed back on the `issues
 page of the
-project <https://github.com/pylayers/pylayers/issues?milestone=1&state=open>`_
+project <https://github.com/pylayers/pylayers/issues?milestone=1&state=open>`__
 
 If you find any bug, please keep preciously track of it in a notebook
 and ``gist`` it and send the link on the issues page.
@@ -110,17 +106,16 @@ needs, and if you wish provide feedback to the project with a **pull
 request**.
 
 How to install PyLayers ?
--------------------------
-
+=========================
 
 PyLayers is developped on Linux platform. If you are working on a
 Windows platform and you are not familiar with the Python ecosystem, a
 good idea is to install first
-`Anaconda <https://store.continuum.io/cshop/anaconda/>`_. It provides
+`Anaconda <https://store.continuum.io/cshop/anaconda/>`__. It provides
 you most of the required dependencies.
 
 Dependencies
-~~~~~~~~~~~~
+------------
 
 ::
 
@@ -160,7 +155,7 @@ http://imposm.org/docs/imposm/latest/install.html#id1
     python setup.py install
 
 Setting of environment variables $BASENAME and $PYLAYERS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------
 
 ::
 
@@ -176,7 +171,7 @@ Setting of environment variables $BASENAME and $PYLAYERS
     export BASENAME=~/plproject
 
 Installing PyInterval
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 ::
 
@@ -189,6 +184,6 @@ Installing PyInterval
     sudo easy_install pyinterval
 
 Testing
-~~~~~~~
+-------
 
 make test-code

@@ -1,24 +1,23 @@
 
-.. code-block:: python
+Description of the propagation environment
+==========================================
+
+.. code:: python
+
+    
+.. code:: python
 
     from pylayers.gis.layout import *
     from IPython.display import Image
+    
     import os
-
-
-.. parsed-literal::
-
-    <matplotlib.figure.Figure at 0x4840110>
-
-
-The ``ls()`` method
--------------------
-
+Getting the list of all available Layouts : the ``ls()`` method
+---------------------------------------------------------------
 
 The ``ls()`` method lists the layout file which are available in the
 ``struc`` directory of the current project.
 
-.. code-block:: python
+.. code:: python
 
     L=Layout()
     L.ls()
@@ -34,16 +33,19 @@ The ``ls()`` method lists the layout file which are available in the
      'TA-Office.ini',
      'W2PTIN.ini',
      'WHERE1.ini',
+     'creationPiece_09_SceneInitiale.ini',
      'defstr.ini',
      'defstr3.ini',
      'example.ini',
      'klepal.ini',
+     'mokadem.ini',
+     'newfm.ini',
      'w2ptin.ini',
      'where1.ini']
 
 
 
-.. code-block:: python
+.. code:: python
 
     L.ls(typ='osm')
 
@@ -55,11 +57,11 @@ The ``ls()`` method lists the layout file which are available in the
 
 
 
-.. code-block:: python
+.. code:: python
 
     L=Layout('DLR.osm')
 
-.. code-block:: python
+.. code:: python
 
     L.Gs.node[1]
 
@@ -74,31 +76,31 @@ The ``ls()`` method lists the layout file which are available in the
 
 
 
-.. code-block:: python
+.. code:: python
 
     L.saveosm('DLR.osm')
-.. code-block:: python
+.. code:: python
 
-    Image('../../data/struc/images/TA-Office.png')
-
-
-
-.. image:: DEV-Layout_files/DEV-Layout_8_0.png
+    Image('../../../data/struc/images/TA-Office.png')
 
 
 
-.. code-block:: python
+.. image:: DEV-Layout_files/DEV-Layout_10_0.png
+
+
+
+.. code:: python
 
     fig,ax=L.showGs()
 
 
-.. image:: DEV-Layout_files/DEV-Layout_9_0.png
+.. image:: DEV-Layout_files/DEV-Layout_11_0.png
 
 
-.. code-block:: python
+.. code:: python
 
     L=Layout('TA-Office.ini')
-.. code-block:: python
+.. code:: python
 
     L.showGs()
 
@@ -106,16 +108,16 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4840c50>,
-     <matplotlib.axes.AxesSubplot at 0x4948f50>)
+    (<matplotlib.figure.Figure at 0x481ad10>,
+     <matplotlib.axes.AxesSubplot at 0x48279d0>)
 
 
 
 
-.. image:: DEV-Layout_files/DEV-Layout_11_1.png
+.. image:: DEV-Layout_files/DEV-Layout_13_1.png
 
 
-.. code-block:: python
+.. code:: python
 
     L=Layout('11D-E1.ini')
     L
@@ -160,16 +162,15 @@ The ``ls()`` method lists the layout file which are available in the
     Useful arrays
     ----------------
     tsg : get segment index in Gs from tahe
+    isss :  sub-segment index above Nsmax
     tgs : get segment index in tahe from Gs
     lsss : list of segments with sub-segment
-    sla : associated slab name
-    stridess : stride for adressing sub segment 
+    sla : list of all slab names (Nsmax+Nss+1)
     degree : degree of nodes 
 
 
 
-
-.. code-block:: python
+.. code:: python
 
     L.showG('s',figsize=(20,10))
 
@@ -177,16 +178,16 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4948910>,
-     <matplotlib.axes.AxesSubplot at 0x4944210>)
+    (<matplotlib.figure.Figure at 0x7f340a4b0b90>,
+     <matplotlib.axes.AxesSubplot at 0x7f340a4c9410>)
 
 
 
 
-.. image:: DEV-Layout_files/DEV-Layout_13_1.png
+.. image:: DEV-Layout_files/DEV-Layout_15_1.png
 
 
-.. code-block:: python
+.. code:: python
 
     L=Layout('klepal.ini')
     L
@@ -228,18 +229,17 @@ The ``ls()`` method lists the layout file which are available in the
     Useful arrays
     ----------------
     tsg : get segment index in Gs from tahe
+    isss :  sub-segment index above Nsmax
     tgs : get segment index in tahe from Gs
     lsss : list of segments with sub-segment
-    sla : associated slab name
-    stridess : stride for adressing sub segment 
+    sla : list of all slab names (Nsmax+Nss+1)
     degree : degree of nodes 
-
 
 
 
 This Layout is still in construction
 
-.. code-block:: python
+.. code:: python
 
     L.showGs()
 
@@ -247,28 +247,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x68244d0>,
-     <matplotlib.axes.AxesSubplot at 0x680bdd0>)
-
-
-
-
-.. image:: DEV-Layout_files/DEV-Layout_16_1.png
-
-
-.. code-block:: python
-
-    L=Layout('W2PTIN.ini')
-.. code-block:: python
-
-    L.showGs()
-
-
-
-.. parsed-literal::
-
-    (<matplotlib.figure.Figure at 0x4a48d50>,
-     <matplotlib.axes.AxesSubplot at 0x680bc10>)
+    (<matplotlib.figure.Figure at 0x4c78690>,
+     <matplotlib.axes.AxesSubplot at 0x7f34093551d0>)
 
 
 
@@ -276,78 +256,193 @@ This Layout is still in construction
 .. image:: DEV-Layout_files/DEV-Layout_18_1.png
 
 
-.. code-block:: python
+.. code:: python
 
-    from IPython.core.display import HTML
-    
-    def css_styling():
-        styles = open("../styles/custom.css", "r").read()
-        return HTML(styles)
-    css_styling()
+    L=Layout('W2PTIN.ini')
+.. code:: python
+
+     L.showGs()
 
 
 
-.. raw:: html
+.. parsed-literal::
 
-    <style>
-        @font-face {
-            font-family: "Computer Modern";
-            src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
-        }
-        div.cell{
-            width:800px;
-            margin-left:16% !important;
-            margin-right:auto;
-        }
-        h1 {
-            font-family: Helvetica, serif;
-        }
-        h4{
-            margin-top:12px;
-            margin-bottom: 3px;
-           }
-        div.text_cell_render{
-            font-family: Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-            line-height: 145%;
-            font-size: 130%;
-            width:800px;
-            margin-left:auto;
-            margin-right:auto;
-        }
-        .CodeMirror{
-                font-family: "Source Code Pro", source-code-pro,Consolas, monospace;
-        }
-        .prompt{
-            display: None;
-        }
-        .text_cell_render h5 {
-            font-weight: 300;
-            font-size: 22pt;
-            color: #4057A1;
-            font-style: italic;
-            margin-bottom: .5em;
-            margin-top: 0.5em;
-            display: block;
-        }
-        
-        .warning{
-            color: rgb( 240, 20, 20 )
-            }  
-    </style>
-    <script>
-        MathJax.Hub.Config({
-                            TeX: {
-                               extensions: ["AMSmath.js"]
-                               },
-                    tex2jax: {
-                        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-                        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-                    },
-                    displayAlign: 'center', // Change this to 'center' to center equations.
-                    "HTML-CSS": {
-                        styles: {'.MathJax_Display': {"margin": 4}}
-                    }
-            });
-    </script>
+    (<matplotlib.figure.Figure at 0x7f340a4c9310>,
+     <matplotlib.axes.AxesSubplot at 0x4c94c50>)
 
+
+
+
+.. image:: DEV-Layout_files/DEV-Layout_20_1.png
+
+
+The useful numpy arrays of the Layout
+-------------------------------------
+
+``pt`` the array of points
+--------------------------
+
+point coordinates are stored in two places :
+
+::
+
+    L.Gs.pos : in a dictionnary form (key is the point negative index) 
+    L.pt : in a numpy array
+
+.. code:: python
+
+    print np.shape(L.pt)
+    print len(filter(lambda x: x<0,L.Gs.pos))
+
+.. parsed-literal::
+
+    (2, 185)
+    185
+
+
+This dual storage is chosen (temporarily ? ) for computational
+efficiency reason. The priority goes to the graph and the numpy array is
+calculated at the end of the edition in the ``Layout.g2npy`` method
+(graph to numpy) which is in charge of the conversion.
+
+tahe (tail-head)
+~~~~~~~~~~~~~~~~
+
+``tahe`` is a :math:`(2\times N_{s})` where :math:`N_s` denotes the
+number of segment. The first line is the tail index of the segment
+:math:`k` and the second line is the head of the segment :math:`k`.
+Where :math:`k` is the index of a given segment (starting in 0).
+
+``tgs`` : trancodage from graph indexing to numpy array indexing
+----------------------------------------------------------------
+
+``tgs`` is an arry with length :math:`N_s`\ +1. The index 0 is not used
+because none segment has 0 as an index.
+
+.. code:: python
+
+    ns = 5
+    utahe = L.tgs[ns]
+.. code:: python
+
+    tahe =  L.tahe[:,utahe]
+.. code:: python
+
+    ptail = L.pt[:,tahe[0]]
+    phead = L.pt[:,tahe[1]]
+.. code:: python
+
+    print ptail
+
+.. parsed-literal::
+
+    [ 29.785   6.822]
+
+
+.. code:: python
+
+    print phead 
+
+.. parsed-literal::
+
+    [ 27.414   6.822]
+
+
+.. code:: python
+
+    L.Gs.node[5]
+
+
+
+.. parsed-literal::
+
+    {'connect': [-8, -139],
+     'name': 'PARTITION',
+     'ncycles': [35],
+     'norm': array([ 0., -1.,  0.]),
+     'transition': False,
+     'z': (0, 3.0)}
+
+
+
+.. code:: python
+
+    print L.Gs.pos[-8]
+    print L.Gs.pos[-139]
+
+.. parsed-literal::
+
+    (29.785, 6.822)
+    (27.414, 6.822)
+
+
+.. code:: python
+
+    aseg = np.array([4,7,134])
+.. code:: python
+
+    print np.shape(aseg)
+
+.. parsed-literal::
+
+    (3,)
+
+
+.. code:: python
+
+    pt  = L.tahe[:,L.tgs[aseg]][0,:]
+    ph = L.tahe[:,L.tgs[aseg]][1,:]
+    pth = np.vstack((pt,ph))
+.. code:: python
+
+    np.shape(pth)
+
+
+
+.. parsed-literal::
+
+    (2, 3)
+
+
+
+``Layout.seg2pts`` a function for getting points coordinates from segment number array
+--------------------------------------------------------------------------------------
+
+.. code:: python
+
+    L.seg2pts(aseg)
+
+
+
+.. parsed-literal::
+
+    array([[ 29.785,   0.044,  22.538],
+           [  6.822,  23.078,   8.711],
+           [ 29.785,  -3.754,  20.326],
+           [  8.921,  23.078,   8.693]])
+
+
+
+.. code:: python
+
+    aseg = array(filter(lambda x: x>0,L.Gs.nodes()))
+    pth = L.seg2pts(aseg)
+.. code:: python
+
+    from pylayers.util.plotutil import displot
+.. code:: python
+
+    displot(pth[0:2,:],pth[2:,:])
+
+
+
+.. parsed-literal::
+
+    (<matplotlib.figure.Figure at 0x4c97690>,
+     <matplotlib.axes.AxesSubplot at 0x7f3409269990>)
+
+
+
+
+.. image:: DEV-Layout_files/DEV-Layout_45_1.png
 

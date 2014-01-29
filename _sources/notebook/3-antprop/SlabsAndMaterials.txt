@@ -4,7 +4,6 @@ Slabs and Materials
 
 
 
-
 A slab is a set ol several layers of materials with specified thickness.
 Slabs are used to describe properties of the different constitutive
 elements of a building such as wall, windows ,...
@@ -14,7 +13,7 @@ specify a set of different slabs with different characteristics.
 
 The structure which gathers this set is ``SlabDB``. If no file argument
 is given, this structure is initialized with the default file:
-`slabDB.ini <https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini>`_
+`slabDB.ini <https://github.com/pylayers/pylayers/blob/master/data/ini/slabDB.ini>`__
 
 This section demonstates some features of the ``pylayers.antprop.slab``
 module.
@@ -27,7 +26,13 @@ module.
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x3f6d4d0>
+    <matplotlib.figure.Figure at 0x3bee850>
+
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x3bf8b90>
 
 
 The Class ``SlabDB`` contains a dictionnary of all available Slab. This
@@ -75,7 +80,6 @@ materials of a ``Slab``
 
 Defining a new Slab and a new Material
 --------------------------------------
-
 
 .. code-block:: python
 
@@ -129,7 +133,7 @@ Defining a new Slab and a new Material
 
 .. parsed-literal::
 
-    <bound method Slab.ev of fGHz :  [ 3.]:[ 4.99]:200
+    <bound method Slab.ev of fGHz : [ 3.]:[ 4.99]:200
     theta : [ 0.]:[ 1.57]:158
     | wall2 | 
     |---------------|
@@ -273,13 +277,11 @@ properties can be obtained as:
 Slab evaluation
 ---------------
 
-
 Each Slab can be evaluated to obtain the Transmission and Reflexion
 coefficients for
 
 -  a given frequency range
--  a given incidence angle range (:math:`$0\le\theta<\frac{\pi}{2}$`)
-
+-  a given incidence angle range (:math:`0\le\theta<\frac{\pi}{2}`)
 
 .. code-block:: python
 
@@ -299,7 +301,6 @@ coefficients for
 
 Transmission and Reflexion coefficients
 ---------------------------------------
-
 
 Reflexion and transmission coefficient are computed for the given
 frequency range and theta range
@@ -331,11 +332,10 @@ frequency range and theta range
 Ploting Coefficients
 ~~~~~~~~~~~~~~~~~~~~
 
-
 ::
 
     plotwrt (plot with respect to)
-
+         
     Parameters
     ----------
 
@@ -350,7 +350,6 @@ Ploting Coefficients
      types : string 
             'm' | 'r' | 'd' | 'l20'
             mod   rad    deg   dB
-
 
 .. code-block:: python
 
@@ -373,7 +372,7 @@ with respect to angle
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x432af50>
+    <matplotlib.figure.Figure at 0x11147cd0>
 
 
 
@@ -402,13 +401,13 @@ wrt to angle and frequency
     lmat  = [mat['AIR'],mat['WOOD']]
     II    = MatInterface(lmat,0,fGHz,theta)
     II.RT()
-    fig,ax = II.plotwrt(var='a',kv=10,types=['m'])
+    fig,ax = II.plotwrt(var='a',kv=10,typ=['m'])
     tight_layout()
     air = mat['AIR']
     brick  = mat['BRICK']
     II  = MatInterface([air,brick],0,fGHz,theta)
     II.RT()
-    fig,ax = II.plotwrt(var='f',color='k',types=['m'])
+    fig,ax = II.plotwrt(var='f',color='k',typ=['m'])
     tight_layout()
 
 
@@ -447,7 +446,7 @@ wrt to angle and frequency
 
 .. parsed-literal::
 
-    /usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+    /usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
       warnings.warn("No labeled objects found. "
 
 
@@ -458,7 +457,6 @@ wrt to angle and frequency
 Evaluation without phase compensation
 -------------------------------------
 
-
 .. code-block:: python
 
     fGHz = np.arange(2,16,0.1)
@@ -468,7 +466,7 @@ Evaluation without phase compensation
     sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=False)
     sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=False)
         
-    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k')
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',typ=['ru'],labels=[''],color='k')
     print ax
     #fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
     #fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=[''],color='k',linestyle='dashdot')
@@ -476,8 +474,8 @@ Evaluation without phase compensation
 
 .. parsed-literal::
 
-    [[<matplotlib.axes.AxesSubplot object at 0xf8b9d10>]
-     [<matplotlib.axes.AxesSubplot object at 0x83ca510>]]
+    [[<matplotlib.axes.AxesSubplot object at 0x4b610d0>]
+     [<matplotlib.axes.AxesSubplot object at 0x43d4f50>]]
 
 
 
@@ -492,9 +490,9 @@ Evaluation without phase compensation
     sl['TESS-p50-10cm'].ev(fGHz,theta,compensate=True)
     sl['TESS-p50-15cm'].ev(fGHz,theta,compensate=True)
     
-    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',types=['ru'],labels=['5cm compensated',''],color='r',fig=fig,ax=ax)
-    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',types=['ru'],labels=['10cm compensated',''],color='r',linestyle='dashed',fig=fig,ax=ax)
-    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',types=['ru'],labels=['15cm not compensated',''],color='r',linestyle='dashdot',fig=fig,ax=ax) 
+    fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['5cm compensated',''],color='r',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['10cm compensated',''],color='r',linestyle='dashed',fig=fig,ax=ax)
+    fig,ax = sl['TESS-p50-15cm'].plotwrt('f',coeff='T',typ=['ru'],labels=['15cm not compensated',''],color='r',linestyle='dashdot',fig=fig,ax=ax) 
     
     fig,ax = sl['TESS-p50-5cm'].plotwrt('f',coeff='T',labels=[''],color='k')
     fig,ax = sl['TESS-p50-10cm'].plotwrt('f',coeff='T',labels=[''],color='k',linestyle='dashed',fig=fig,ax=ax)
@@ -504,10 +502,8 @@ Evaluation without phase compensation
 .. image:: SlabsAndMaterials_files/SlabsAndMaterials_46_0.png
 
 
-Double Glass example from litterature [1] in sub TeraHertz D-band @
-120GHz
+Double Glass example from litterature [1] in sub TeraHertz D-band @ 120GHz
 --------------------------------------------------------------------------
-
 
 .. code-block:: python
 
@@ -540,13 +536,13 @@ Double Glass example from litterature [1] in sub TeraHertz D-band @
 
     plt.figure(figsize=(10,10))
     sl['DoubleGlass'].ev(120,theta)
-    fig,ax = sl['DoubleGlass'].plotwrt('a')
+    fig,ax = sl['DoubleGlass'].plotwrt('a',figsize=(10,10))
     tight_layout()
 
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0xb5e2f90>
+    <matplotlib.figure.Figure at 0x4b83d10>
 
 
 
@@ -567,13 +563,12 @@ Double Glass example from litterature [1] in sub TeraHertz D-band @
 References
 ----------
 
-
 [1]. `Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. "Reflection
 ant Transmission Properties of Building Materials in D-Band for Modeling
 Future mm-Wave Communication Systems" Antennas and Propagation (EuCAP),
 2010 Proceedings of the Fourth European Conference
-on <http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5505315&queryText=Reflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation>`_
+on <http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=5505315&queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation>`__
 
 [2]. `R.Piesiewicz 'Terahertz characterization of building materials'
 Electronics .Letters Jan 2005 Vol 41
-N°18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http://www-ece.rice.edu/~daniel/papers/normanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`_
+N°18 <https://www.google.fr/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCwQFjAA&url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&ei=Tr_eUe6EG-OM0AWA0IAw&usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&sig2=QLZlhoTJtiuHAW5Zzg_xOw&bvm=bv.48705608,d.d2k>`__

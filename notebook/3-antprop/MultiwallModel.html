@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Multi-wall model &mdash; PyLayers</title>
+    <title>9. Multi-wall model &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Coverage with a Multi Wall model" href="Coverage.html" />
-    <link rel="prev" title="Slabs and Materials" href="SlabsAndMaterials.html" /> 
+    <link rel="next" title="11. Coverage with a Multi Wall model" href="Coverage.html" />
+    <link rel="prev" title="8. Slabs and Materials" href="SlabsAndMaterials.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -41,10 +41,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="Coverage.html" title="Coverage with a Multi Wall model"
+          <a href="Coverage.html" title="11. Coverage with a Multi Wall model"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="SlabsAndMaterials.html" title="Slabs and Materials"
+          <a href="SlabsAndMaterials.html" title="8. Slabs and Materials"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
@@ -59,24 +59,24 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Multi-wall model</a><ul>
-<li><a class="reference internal" href="#defining-a-radio-link">Defining a radio link</a></li>
-<li><a class="reference internal" href="#ploting-the-scene">Ploting the scene</a><ul>
-<li><a class="reference internal" href="#finding-the-intersection-between-the-direct-path-and-the-walls">Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
-<li><a class="reference internal" href="#computing-the-multi-wall-model">Computing the Multi-wall model</a></li>
+<li><a class="reference internal" href="#">9. Multi-wall model</a><ul>
+<li><a class="reference internal" href="#defining-a-radio-link">9.1. Defining a radio link</a></li>
+<li><a class="reference internal" href="#ploting-the-scene">9.2. Ploting the scene</a><ul>
+<li><a class="reference internal" href="#finding-the-intersection-between-the-direct-path-and-the-walls">9.2.1. Finding the intersection between the &#8220;direct&#8221; path and the walls</a></li>
+<li><a class="reference internal" href="#computing-the-multi-wall-model">9.2.2. Computing the Multi-wall model</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#coverage-class">Coverage class</a></li>
+<li><a class="reference internal" href="#coverage-class">10. Coverage class</a></li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="SlabsAndMaterials.html"
-                        title="previous chapter">Slabs and Materials</a></p>
+                        title="previous chapter">8. Slabs and Materials</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Coverage.html"
-                        title="next chapter">Coverage with a Multi Wall model</a></p>
+                        title="next chapter">11. Coverage with a Multi Wall model</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -99,7 +99,7 @@
           <div class="body">
             
   <div class="section" id="multi-wall-model">
-<h1>Multi-wall model<a class="headerlink" href="#multi-wall-model" title="Permalink to this headline">¶</a></h1>
+<h1>9. Multi-wall model<a class="headerlink" href="#multi-wall-model" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">pylayers.util.project</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">pylayers.util.pyutil</span> <span class="kn">as</span> <span class="nn">pyu</span>
@@ -110,7 +110,7 @@
 <span class="kn">from</span> <span class="nn">pylayers.network.model</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5096c10&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x442c850&gt;</pre>
 </div>
 <p>The layout is loaded from an ini file. If the graphs are not available,
 they are built.</p>
@@ -118,7 +118,7 @@ they are built.</p>
 </pre></div>
 </div>
 <div class="section" id="defining-a-radio-link">
-<h2>Defining a radio link<a class="headerlink" href="#defining-a-radio-link" title="Permalink to this headline">¶</a></h2>
+<h2>9.1. Defining a radio link<a class="headerlink" href="#defining-a-radio-link" title="Permalink to this headline">¶</a></h2>
 <p>The 2 extremities of the radio link are coordinates in <tt class="docutils literal"><span class="pre">numpy.array</span></tt>
 of transmitter and receiver.</p>
 <ul class="simple">
@@ -131,7 +131,7 @@ of transmitter and receiver.</p>
 </div>
 </div>
 <div class="section" id="ploting-the-scene">
-<h2>Ploting the scene<a class="headerlink" href="#ploting-the-scene" title="Permalink to this headline">¶</a></h2>
+<h2>9.2. Ploting the scene<a class="headerlink" href="#ploting-the-scene" title="Permalink to this headline">¶</a></h2>
 <p>The scene is plotted with the <tt class="docutils literal"><span class="pre">showG</span></tt> method of the Layout</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># figure instanciation</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">))</span>
@@ -149,7 +149,7 @@ of transmitter and receiver.</p>
 </div>
 <img alt="./MultiwallModel_files/MultiwallModel_9_0.png" src="./MultiwallModel_files/MultiwallModel_9_0.png" />
 <div class="section" id="finding-the-intersection-between-the-direct-path-and-the-walls">
-<h3>Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
+<h3>9.2.1. Finding the intersection between the &#8220;direct&#8221; path and the walls<a class="headerlink" href="#finding-the-intersection-between-the-direct-path-and-the-walls" title="Permalink to this headline">¶</a></h3>
 <p>The function <tt class="docutils literal"><span class="pre">angleonlink</span></tt> returns the list of intersected segments
 and the corresponding incidence angles (in radians) with respect to the
 segment normal.</p>
@@ -163,7 +163,7 @@ segment normal.</p>
 </div>
 </div>
 <div class="section" id="computing-the-multi-wall-model">
-<h3>Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
+<h3>9.2.2. Computing the Multi-wall model<a class="headerlink" href="#computing-the-multi-wall-model" title="Permalink to this headline">¶</a></h3>
 <p>The multi-wall model computation returns losses and LOS excess delay for
 orthogonal and parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="mf">2.4</span>
@@ -188,7 +188,7 @@ Excess delay parallel polarization           2.12364 ns</pre>
 </div>
 </div>
 <div class="section" id="coverage-class">
-<h1>Coverage class<a class="headerlink" href="#coverage-class" title="Permalink to this headline">¶</a></h1>
+<h1>10. Coverage class<a class="headerlink" href="#coverage-class" title="Permalink to this headline">¶</a></h1>
 <p>By extension, the multi-wall model can also be used to perform a full
 coverage of a Layout given a transmitter position.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span> <span class="o">=</span> <span class="n">Coverage</span><span class="p">()</span>
@@ -225,10 +225,10 @@ name :  {slab :seglist}
 Useful arrays
 ----------------
 tsg : get segment index in Gs from tahe
+isss :  sub-segment index above Nsmax
 tgs : get segment index in tahe from Gs
 lsss : list of segments with sub-segment
-sla : associated slab name
-stridess : stride for adressing sub segment
+sla : list of all slab names (Nsmax+Nss+1)
 degree : degree of nodes</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">creategrid</span><span class="p">()</span>
@@ -254,7 +254,7 @@ the coverage.ini file</p>
 <span class="k">print</span> <span class="s">&#39;Coverage performed in &#39;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>Coverage performed in  1.41932010651 s</pre>
+<div class="highlight-python"><pre>Coverage performed in  1.38903713226 s</pre>
 </div>
 <p>For Orthogonal polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -266,8 +266,8 @@ the coverage.ini file</p>
 </div>
 <img alt="./MultiwallModel_files/MultiwallModel_26_0.png" src="./MultiwallModel_files/MultiwallModel_26_0.png" />
 <img alt="./MultiwallModel_files/MultiwallModel_26_1.png" src="./MultiwallModel_files/MultiwallModel_26_1.png" />
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x62bb990&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x5e81290&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f5bd0b77c50&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f5bd09b8650&gt;)</pre>
 </div>
 <p>For parallel polarization</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fig1</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
@@ -279,8 +279,8 @@ the coverage.ini file</p>
 </div>
 <img alt="./MultiwallModel_files/MultiwallModel_28_0.png" src="./MultiwallModel_files/MultiwallModel_28_0.png" />
 <img alt="./MultiwallModel_files/MultiwallModel_28_1.png" src="./MultiwallModel_files/MultiwallModel_28_1.png" />
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f426c311e90&gt;,
- &lt;matplotlib.axes.AxesSubplot at 0x7f426c3c9e10&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x7f5bd0d65d90&gt;,
+ &lt;matplotlib.axes.AxesSubplot at 0x7f5bd0d60950&gt;)</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">HTML</span>
 
@@ -361,10 +361,10 @@ the coverage.ini file</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="Coverage.html" title="Coverage with a Multi Wall model"
+          <a href="Coverage.html" title="11. Coverage with a Multi Wall model"
              >next</a></li>
         <li class="right" >
-          <a href="SlabsAndMaterials.html" title="Slabs and Materials"
+          <a href="SlabsAndMaterials.html" title="8. Slabs and Materials"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>

@@ -1,2 +1,0 @@
-/usr/local/lib/python2.7/dist-packages/numpy/ma/core.py:3791: UserWarning: Warning: converting a masked element to nan.
-  warnings.warn("Warning: converting a masked element to nan.")

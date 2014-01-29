@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Slabs and Materials &mdash; PyLayers</title>
+    <title>8. Slabs and Materials &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Multi-wall model" href="MultiwallModel.html" />
-    <link rel="prev" title="Ray Signatures" href="Signatures.html" /> 
+    <link rel="next" title="9. Multi-wall model" href="MultiwallModel.html" />
+    <link rel="prev" title="7. Ray Signatures" href="Signatures.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -41,10 +41,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="MultiwallModel.html" title="Multi-wall model"
+          <a href="MultiwallModel.html" title="9. Multi-wall model"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="Signatures.html" title="Ray Signatures"
+          <a href="Signatures.html" title="7. Ray Signatures"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
@@ -59,26 +59,27 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Slabs and Materials</a><ul>
-<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">Defining a new Slab and a new Material</a></li>
-<li><a class="reference internal" href="#slab-information">Slab Information</a></li>
-<li><a class="reference internal" href="#slab-evaluation">Slab evaluation</a></li>
-<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">Transmission and Reflexion coefficients</a><ul>
-<li><a class="reference internal" href="#ploting-coefficients">Ploting Coefficients</a></li>
+<li><a class="reference internal" href="#">8. Slabs and Materials</a><ul>
+<li><a class="reference internal" href="#defining-a-new-slab-and-a-new-material">8.1. Defining a new Slab and a new Material</a></li>
+<li><a class="reference internal" href="#slab-information">8.2. Slab Information</a></li>
+<li><a class="reference internal" href="#slab-evaluation">8.3. Slab evaluation</a></li>
+<li><a class="reference internal" href="#transmission-and-reflexion-coefficients">8.4. Transmission and Reflexion coefficients</a><ul>
+<li><a class="reference internal" href="#ploting-coefficients">8.4.1. Ploting Coefficients</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#evaluation-without-phase-compensation">Evaluation without phase compensation</a></li>
-<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#evaluation-without-phase-compensation">8.5. Evaluation without phase compensation</a></li>
+<li><a class="reference internal" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">8.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz</a></li>
+<li><a class="reference internal" href="#references">8.7. References</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="Signatures.html"
-                        title="previous chapter">Ray Signatures</a></p>
+                        title="previous chapter">7. Ray Signatures</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="MultiwallModel.html"
-                        title="next chapter">Multi-wall model</a></p>
+                        title="next chapter">9. Multi-wall model</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -101,7 +102,7 @@
           <div class="body">
             
   <div class="section" id="slabs-and-materials">
-<h1>Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
+<h1>8. Slabs and Materials<a class="headerlink" href="#slabs-and-materials" title="Permalink to this headline">¶</a></h1>
 <p>A slab is a set ol several layers of materials with specified thickness.
 Slabs are used to describe properties of the different constitutive
 elements of a building such as wall, windows ,...</p>
@@ -116,7 +117,9 @@ module.</p>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3f6d4d0&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3bee850&gt;</pre>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3bf8b90&gt;</pre>
 </div>
 <p>The Class <tt class="docutils literal"><span class="pre">SlabDB</span></tt> contains a dictionnary of all available Slab. This
 information is read in the file <tt class="docutils literal"><span class="pre">slabDB.ini</span></tt> of the current project
@@ -154,7 +157,7 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 </pre></div>
 </div>
 <div class="section" id="defining-a-new-slab-and-a-new-material">
-<h2>Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
+<h2>8.1. Defining a new Slab and a new Material<a class="headerlink" href="#defining-a-new-slab-and-a-new-material" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;wall2&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;reim&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.6</span><span class="o">-</span><span class="mf">0.026</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -190,7 +193,7 @@ materials of a <tt class="docutils literal"><span class="pre">Slab</span></tt></
 <div class="highlight-python"><div class="highlight"><pre><span class="n">S</span><span class="p">[</span><span class="s">&#39;slab2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;bound method Slab.ev of fGHz :  [ 3.]:[ 4.99]:200
+<div class="highlight-python"><pre>&lt;bound method Slab.ev of fGHz : [ 3.]:[ 4.99]:200
 theta : [ 0.]:[ 1.57]:158
 | wall2 |
 |---------------|
@@ -208,7 +211,7 @@ theta : [ 0.]:[ 1.57]:158
 </div>
 </div>
 <div class="section" id="slab-information">
-<h2>Slab Information<a class="headerlink" href="#slab-information" title="Permalink to this headline">¶</a></h2>
+<h2>8.2. Slab Information<a class="headerlink" href="#slab-information" title="Permalink to this headline">¶</a></h2>
 <p>Each slab contains informations about its constitutive materials
 electromagnetic properties.</p>
 <p>Below an example for a simple slab, constituted with a single material.
@@ -281,12 +284,12 @@ properties can be obtained as:</p>
 </div>
 </div>
 <div class="section" id="slab-evaluation">
-<h2>Slab evaluation<a class="headerlink" href="#slab-evaluation" title="Permalink to this headline">¶</a></h2>
+<h2>8.3. Slab evaluation<a class="headerlink" href="#slab-evaluation" title="Permalink to this headline">¶</a></h2>
 <p>Each Slab can be evaluated to obtain the Transmission and Reflexion
 coefficients for</p>
 <ul class="simple">
 <li>a given frequency range</li>
-<li>a given incidence angle range (<img class="math" src="../../_images/math/77375b78a9e3285bb5338b7abdda4ac01b7d0d59.png" alt="$0\le\theta&lt;\frac{\pi}{2}$"/>)</li>
+<li>a given incidence angle range (<img class="math" src="../../_images/math/cc252e43022d2dfe51620c5ed140b7db3d8a0968.png" alt="0\le\theta&lt;\frac{\pi}{2}"/>)</li>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
@@ -300,7 +303,7 @@ coefficients for</p>
 </div>
 </div>
 <div class="section" id="transmission-and-reflexion-coefficients">
-<h2>Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
+<h2>8.4. Transmission and Reflexion coefficients<a class="headerlink" href="#transmission-and-reflexion-coefficients" title="Permalink to this headline">¶</a></h2>
 <p>Reflexion and transmission coefficient are computed for the given
 frequency range and theta range</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ifreq</span><span class="o">=</span><span class="mi">1</span>
@@ -321,7 +324,7 @@ Transmission coefficient @ 3.01 GHz and theta= 0.1 :
  [-0.00000000+0.j         -0.17594898-0.86927604j]]</pre>
 </div>
 <div class="section" id="ploting-coefficients">
-<h3>Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h3>
+<h3>8.4.1. Ploting Coefficients<a class="headerlink" href="#ploting-coefficients" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><pre>plotwrt (plot with respect to)
 
 Parameters
@@ -351,7 +354,7 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x432af50&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x11147cd0&gt;</pre>
 </div>
 <img alt="./SlabsAndMaterials_files/SlabsAndMaterials_38_1.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_38_1.png" />
 <p>wrt to angle and frequency</p>
@@ -369,13 +372,13 @@ Parameters
 <span class="n">lmat</span>  <span class="o">=</span> <span class="p">[</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">],</span><span class="n">mat</span><span class="p">[</span><span class="s">&#39;WOOD&#39;</span><span class="p">]]</span>
 <span class="n">II</span>    <span class="o">=</span> <span class="n">MatInterface</span><span class="p">(</span><span class="n">lmat</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">II</span><span class="o">.</span><span class="n">RT</span><span class="p">()</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">kv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
 <span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">air</span> <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;AIR&#39;</span><span class="p">]</span>
 <span class="n">brick</span>  <span class="o">=</span> <span class="n">mat</span><span class="p">[</span><span class="s">&#39;BRICK&#39;</span><span class="p">]</span>
 <span class="n">II</span>  <span class="o">=</span> <span class="n">MatInterface</span><span class="p">([</span><span class="n">air</span><span class="p">,</span><span class="n">brick</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">II</span><span class="o">.</span><span class="n">RT</span><span class="p">()</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">II</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="n">var</span><span class="o">=</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;m&#39;</span><span class="p">])</span>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -406,14 +409,14 @@ Parameters
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib-1.2.1-py2.7-linux-x86_64.egg/matplotlib/axes.py:4601: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
+<div class="highlight-python"><pre>/usr/local/lib/python2.7/dist-packages/matplotlib/axes.py:4747: UserWarning: No labeled objects found. Use label='...' kwarg on individual plots.
   warnings.warn("No labeled objects found. "</pre>
 </div>
 <img alt="./SlabsAndMaterials_files/SlabsAndMaterials_43_1.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_43_1.png" />
 </div>
 </div>
 <div class="section" id="evaluation-without-phase-compensation">
-<h2>Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
+<h2>8.5. Evaluation without phase compensation<a class="headerlink" href="#evaluation-without-phase-compensation" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fGHz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -421,24 +424,24 @@ Parameters
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">ax</span>
 <span class="c">#fig,ax = sl[&#39;TESS-p50-10cm&#39;].plotwrt(&#39;f&#39;,coeff=&#39;T&#39;,types=[&#39;ru&#39;],labels=[&#39;&#39;],color=&#39;k&#39;,linestyle=&#39;dashed&#39;,fig=fig,ax=ax)</span>
 <span class="c">#fig,ax = sl[&#39;TESS-p50-15cm&#39;].plotwrt(&#39;f&#39;,coeff=&#39;T&#39;,types=[&#39;ru&#39;],labels=[&#39;&#39;],color=&#39;k&#39;,linestyle=&#39;dashdot&#39;)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[[&lt;matplotlib.axes.AxesSubplot object at 0xf8b9d10&gt;]
- [&lt;matplotlib.axes.AxesSubplot object at 0x83ca510&gt;]]</pre>
+<div class="highlight-python"><pre>[[&lt;matplotlib.axes.AxesSubplot object at 0x4b610d0&gt;]
+ [&lt;matplotlib.axes.AxesSubplot object at 0x43d4f50&gt;]]</pre>
 </div>
 <img alt="./SlabsAndMaterials_files/SlabsAndMaterials_45_1.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_45_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="n">fGHz</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">compensate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;5cm compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;10cm compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">types</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;15cm not compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;5cm compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;10cm compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-15cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ru&#39;</span><span class="p">],</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;15cm not compensated&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashdot&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-5cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;TESS-p50-10cm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span><span class="n">coeff</span><span class="o">=</span><span class="s">&#39;T&#39;</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s">&#39;dashed&#39;</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
@@ -446,9 +449,9 @@ Parameters
 </pre></div>
 </div>
 <img alt="./SlabsAndMaterials_files/SlabsAndMaterials_46_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_46_0.png" />
-<p>Double Glass example from litterature [1] in sub TeraHertz D-band &#64;
-120GHz
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;</p>
+</div>
+<div class="section" id="double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz">
+<h2>8.6. Double Glass example from litterature [1] in sub TeraHertz D-band &#64; 120GHz<a class="headerlink" href="#double-glass-example-from-litterature-1-in-sub-terahertz-d-band-120ghz" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">3.5</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">mat</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;GlassJc&#39;</span><span class="p">,</span><span class="n">cval</span><span class="o">=</span><span class="mf">2.55</span><span class="p">,</span><span class="n">alpha_cmm1</span><span class="o">=</span><span class="mf">2.4</span><span class="p">,</span><span class="n">fGHz</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span><span class="n">typ</span><span class="o">=</span><span class="s">&#39;THz&#39;</span><span class="p">)</span>
 <span class="n">sl</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">,[</span><span class="s">&#39;ConcreteJc&#39;</span><span class="p">],[</span><span class="mf">0.049</span><span class="p">])</span>
@@ -468,11 +471,11 @@ Parameters
 <img alt="./SlabsAndMaterials_files/SlabsAndMaterials_49_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_49_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ev</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span><span class="n">theta</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">sl</span><span class="p">[</span><span class="s">&#39;DoubleGlass&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plotwrt</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0xb5e2f90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4b83d10&gt;</pre>
 </div>
 <img alt="./SlabsAndMaterials_files/SlabsAndMaterials_50_1.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_50_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
@@ -484,13 +487,13 @@ Parameters
 <img alt="./SlabsAndMaterials_files/SlabsAndMaterials_51_0.png" src="./SlabsAndMaterials_files/SlabsAndMaterials_51_0.png" />
 </div>
 <div class="section" id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<p>[1]. <a class="reference external" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&amp;arnumber=5505315&amp;queryText=Reflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation">Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. &#8220;Reflection
+<h2>8.7. References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>[1]. <a class="reference external" href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&amp;arnumber=5505315&amp;queryText%3DReflection+ant+Transmission+Properties+of+Building+Materials+in+D-Band+for+Modeling+Future+mm-Wave+Communication+Systems.QT.+Antennas+and+Propagation">Jacob, M. ; Kurner, T. ; Geise, R. ; Piesiewicz, R. &#8220;Reflection
 ant Transmission Properties of Building Materials in D-Band for Modeling
 Future mm-Wave Communication Systems&#8221; Antennas and Propagation (EuCAP),
 2010 Proceedings of the Fourth European Conference
 on</a></p>
-<p>[2]. <a class="reference external" href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCwQFjAA&amp;url=http://www-ece.rice.edu/~daniel/papers/normanElecLett.pdf&amp;ei=Tr_eUe6EG-OM0AWA0IAw&amp;usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&amp;sig2=QLZlhoTJtiuHAW5Zzg_xOw&amp;bvm=bv.48705608,d.d2k">R.Piesiewicz &#8216;Terahertz characterization of building materials&#8217;
+<p>[2]. <a class="reference external" href="https://www.google.fr/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CCwQFjAA&amp;url=http%3A%2F%2Fwww-ece.rice.edu%2F~daniel%2Fpapers%2FnormanElecLett.pdf&amp;ei=Tr_eUe6EG-OM0AWA0IAw&amp;usg=AFQjCNHzt9H3RkLAtws51E9EpEgyqh-6LA&amp;sig2=QLZlhoTJtiuHAW5Zzg_xOw&amp;bvm=bv.48705608,d.d2k">R.Piesiewicz &#8216;Terahertz characterization of building materials&#8217;
 Electronics .Letters Jan 2005 Vol 41
 N°18</a></p>
 </div>
@@ -506,10 +509,10 @@ N°18</a></p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="MultiwallModel.html" title="Multi-wall model"
+          <a href="MultiwallModel.html" title="9. Multi-wall model"
              >next</a></li>
         <li class="right" >
-          <a href="Signatures.html" title="Ray Signatures"
+          <a href="Signatures.html" title="7. Ray Signatures"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>

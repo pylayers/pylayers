@@ -2,7 +2,6 @@
 Ray Signatures
 ==============
 
-
 .. code-block:: python
 
     import time
@@ -13,7 +12,7 @@ Ray Signatures
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x4dd2210>
+    <matplotlib.figure.Figure at 0x432c850>
 
 
 .. code-block:: python
@@ -78,207 +77,18 @@ cycle numbers. In example below it is 0 and 1.
 .. code-block:: python
 
     Si = Signatures(L,0,1)
-The cold start determination of the signature is done with ``run1``
+The cold start determination of the signature is done with a ``run``
 function. The code is not in its final shape here and there is room for
 significant acceleration in incorporating propagation based heuristics.
-The mitigation of combinatorics explosion is done in setting a cutoff
-value which limits the exploration in the interaction graph.
+The mitigation of graph exploration depth is done in setting a
+``cutoff`` value which limits the exploration in the interaction graph.
 
 .. code-block:: python
 
-    Si.run1(cutoff=3)
-An exhaustive search of signatures when no prior information is given is
-a combinatory hard problem. The number of signatures grows rapidly with
-the cutoff parameter.
-
-The representaion method of a signature gives informations about the
-different signatures. Signatures are grouped by number of interactions.
-
-.. code-block:: python
-
-    Si
-
-
-
-.. parsed-literal::
-
-    Signatures
-    ----------
-    from cycle : 0 to cycle 1
-    1 : 3
-       [7 9 8]
-       [2 2 2]
-    2 : 18
-       [7 7 7 9 9 9 8 8 8 3 3 3 4 4 4 2 2 2]
-       [2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1]
-       [6 5 1 6 5 1 6 5 1 7 9 8 7 9 8 7 9 8]
-       [1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2]
-    3 : 69
-       [7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-     3 4 4 4 4 4 4 4 4 4 4 4 4 7 7 9 9 9 8 8 2 2 2 2 2 2 2 2 2 2 2 2]
-       [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
-       [5 1 1 6 6 5 6 5 1 6 1 6 6 6 5 6 5 1 6 1 6 6 5 4 2 4 2 4 2 9 8 7 9 8 7 9 8
-     7 2 3 2 3 2 9 7 8 7 9 7 8 3 3 3 3 3 3 3 3 4 3 4 4 9 8 7 9 8 7 8]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
-     2 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2]
-       [6 6 5 9 8 1 1 6 6 5 5 7 9 8 1 1 6 6 5 5 7 9 1 7 7 9 9 8 8 6 6 6 5 5 5 1 1
-     1 7 9 9 8 8 6 6 6 5 1 1 1 9 8 7 9 8 7 9 7 7 9 9 8 6 6 6 5 5 5 1]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1
-     1 2 2 2 2 2 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1]
-    4 : 258
-       [7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-     9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 3 3 3 3 3 3
-     3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-     4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
-     4 4 4 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9
-     9 9 9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 2 2 2 2 2 2
-     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2]
-       [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
-       [5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 5 1 6 6 6 1 5 6 6 1 1 5 5 6 6 1
-     1 5 5 6 6 1 5 6 6 6 5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 4 2 4 2 4 2
-     9 9 8 8 4 4 4 7 7 2 2 2 9 9 8 8 4 7 2 2 2 9 8 9 8 7 9 7 9 9 8 4 4 4 7 7 2
-     3 2 9 3 7 2 9 3 7 9 3 3 9 7 7 2 2 2 8 3 3 9 9 7 2 2 2 8 8 9 8 9 7 8 9 7 3
-     3 9 7 7 2 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 3 2 2 4 3 3 2 2 4 4 3 3
-     2 4 4 3 3 3 3 3 3 3 3 3 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 8 9 3 4 8
-     9 3 4 9 3 3 9 8 8 4 4 4 7 3 3 9 8 8 4 9 8 9 8 7 9 7 3 3 9 9 8 4 4 4 7 7]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     2 2 2 2 1 1 1 2 2 1 1 1 2 2 2 2 1 2 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 1
-     1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 1 1 2 2 2 2 2 2 2 2 2 1
-     1 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 2 2 2 2 2 2 2 1 1 2 2 2 1 1 1 2 2]
-       [1 5 9 1 6 1 1 5 6 1 6 1 5 6 1 6 1 5 6 9 8 1 5 7 9 1 6 1 1 5 5 6 1 6 1 5 5
-     6 1 6 1 5 5 6 9 8 5 1 5 7 9 6 1 5 5 6 1 6 5 5 6 1 6 5 5 6 9 5 2 4 2 4 2 4
-     5 1 5 1 9 7 8 5 1 9 8 7 6 1 6 1 7 1 9 8 7 6 6 6 6 6 6 6 5 6 5 9 7 8 5 6 8
-     2 3 3 2 3 3 3 2 3 3 9 8 1 5 1 9 8 7 1 9 8 6 1 1 9 8 7 6 1 6 6 6 6 6 6 6 9
-     8 6 5 6 8 2 3 4 2 2 3 4 3 2 2 4 3 2 9 8 9 8 9 8 4 2 3 4 2 4 2 3 4 3 2 4 2
-     4 3 2 9 8 7 9 8 7 9 8 7 4 3 4 2 4 3 4 3 2 4 4 3 2 9 7 9 7 9 7 4 3 3 4 3 3
-     3 4 3 3 9 7 5 5 1 9 7 8 5 9 7 6 6 1 7 6 6 6 6 6 6 6 9 7 5 6 5 9 7 8 5 6]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 2 2 2 1 1 2 2 2 1 1 1 1 2 1 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 2
-     1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 2 2 1 1 1 1 1 1 1 1 1 2
-     2 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1
-     1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 1]
-       [6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 6 6 5 5 5 5 7 7 7 7 7 9 9 9 9 9
-     9 8 8 8 8 8 1 1 1 1 6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 7 7 9 9 8 8
-     6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1
-     7 7 7 9 9 9 9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1
-     1 1 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 7 7 9 9 9 9 9 9 8 8
-     8 8 8 6 6 6 5 5 5 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 9 9 9
-     9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1 1]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
-     2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
-     2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
-
-
-
-
-.. code-block:: python
-
-    Si
-
-
-
-.. parsed-literal::
-
-    Signatures
-    ----------
-    from cycle : 0 to cycle 1
-    1 : 3
-       [7 9 8]
-       [2 2 2]
-    2 : 18
-       [7 7 7 9 9 9 8 8 8 3 3 3 4 4 4 2 2 2]
-       [2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1]
-       [6 5 1 6 5 1 6 5 1 7 9 8 7 9 8 7 9 8]
-       [1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2]
-    3 : 69
-       [7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-     3 4 4 4 4 4 4 4 4 4 4 4 4 7 7 9 9 9 8 8 2 2 2 2 2 2 2 2 2 2 2 2]
-       [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
-       [5 1 1 6 6 5 6 5 1 6 1 6 6 6 5 6 5 1 6 1 6 6 5 4 2 4 2 4 2 9 8 7 9 8 7 9 8
-     7 2 3 2 3 2 9 7 8 7 9 7 8 3 3 3 3 3 3 3 3 4 3 4 4 9 8 7 9 8 7 8]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
-     2 1 1 1 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2]
-       [6 6 5 9 8 1 1 6 6 5 5 7 9 8 1 1 6 6 5 5 7 9 1 7 7 9 9 8 8 6 6 6 5 5 5 1 1
-     1 7 9 9 8 8 6 6 6 5 1 1 1 9 8 7 9 8 7 9 7 7 9 9 8 6 6 6 5 5 5 1]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1
-     1 2 2 2 2 2 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1]
-    4 : 258
-       [7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-     9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 3 3 3 3 3 3
-     3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-     4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
-     4 4 4 4 4 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 9 9 9 9 9 9 9 9 9 9 9 9 9
-     9 9 9 9 9 9 9 9 9 9 9 9 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 2 2 2 2 2 2
-     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2]
-       [2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-     2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
-       [5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 5 1 6 6 6 1 5 6 6 1 1 5 5 6 6 1
-     1 5 5 6 6 1 5 6 6 6 5 1 6 6 1 5 6 1 1 5 5 6 1 1 5 5 6 1 5 6 6 4 2 4 2 4 2
-     9 9 8 8 4 4 4 7 7 2 2 2 9 9 8 8 4 7 2 2 2 9 8 9 8 7 9 7 9 9 8 4 4 4 7 7 2
-     3 2 9 3 7 2 9 3 7 9 3 3 9 7 7 2 2 2 8 3 3 9 9 7 2 2 2 8 8 9 8 9 7 8 9 7 3
-     3 9 7 7 2 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 3 2 2 4 3 3 2 2 4 4 3 3
-     2 4 4 3 3 3 3 3 3 3 3 3 3 2 2 4 3 2 2 4 4 3 2 4 4 3 3 3 3 3 3 3 8 9 3 4 8
-     9 3 4 9 3 3 9 8 8 4 4 4 7 3 3 9 8 8 4 9 8 9 8 7 9 7 3 3 9 9 8 4 4 4 7 7]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     2 2 2 2 1 1 1 2 2 1 1 1 2 2 2 2 1 2 1 1 1 2 2 2 2 2 2 2 2 2 2 1 1 1 2 2 1
-     1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 1 1 2 2 2 2 2 2 2 2 2 1
-     1 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 2 2 2 1 1 1 2 1 1 2 2 2 1 2 2 2 2 2 2 2 1 1 2 2 2 1 1 1 2 2]
-       [1 5 9 1 6 1 1 5 6 1 6 1 5 6 1 6 1 5 6 9 8 1 5 7 9 1 6 1 1 5 5 6 1 6 1 5 5
-     6 1 6 1 5 5 6 9 8 5 1 5 7 9 6 1 5 5 6 1 6 5 5 6 1 6 5 5 6 9 5 2 4 2 4 2 4
-     5 1 5 1 9 7 8 5 1 9 8 7 6 1 6 1 7 1 9 8 7 6 6 6 6 6 6 6 5 6 5 9 7 8 5 6 8
-     2 3 3 2 3 3 3 2 3 3 9 8 1 5 1 9 8 7 1 9 8 6 1 1 9 8 7 6 1 6 6 6 6 6 6 6 9
-     8 6 5 6 8 2 3 4 2 2 3 4 3 2 2 4 3 2 9 8 9 8 9 8 4 2 3 4 2 4 2 3 4 3 2 4 2
-     4 3 2 9 8 7 9 8 7 9 8 7 4 3 4 2 4 3 4 3 2 4 4 3 2 9 7 9 7 9 7 4 3 3 4 3 3
-     3 4 3 3 9 7 5 5 1 9 7 8 5 9 7 6 6 1 7 6 6 6 6 6 6 6 9 7 5 6 5 9 7 8 5 6]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 2 2 2 1 1 2 2 2 1 1 1 1 2 1 2 2 2 1 1 1 1 1 1 1 1 1 1 2 2 2 1 1 2
-     1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 2 2 1 1 1 1 1 1 1 1 1 2
-     2 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 1 1 1 1 1 1
-     1 1 1 1 2 2 1 1 1 2 2 2 1 2 2 1 1 1 2 1 1 1 1 1 1 1 2 2 1 1 1 2 2 2 1 1]
-       [6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 6 6 5 5 5 5 7 7 7 7 7 9 9 9 9 9
-     9 8 8 8 8 8 1 1 1 1 6 6 5 5 5 7 7 7 7 9 9 9 9 9 8 8 8 8 1 1 1 7 7 9 9 8 8
-     6 6 6 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1
-     7 7 7 9 9 9 9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 5 5 5 5 7 7 9 9 9 8 8 1
-     1 1 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 7 7 9 9 9 9 9 9 8 8
-     8 8 8 6 6 6 5 5 5 1 1 1 7 7 7 7 9 9 9 9 9 8 8 8 8 6 6 5 5 1 1 7 7 7 9 9 9
-     9 8 8 8 6 6 6 6 6 6 6 6 6 5 5 5 5 5 5 7 7 9 9 9 8 8 1 1 1 1 1 1 1 1 1 1]
-       [1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-     1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
-     2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
-     2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1]
-
-
-
+    Si.run4(cutoff=5)
+The representation method of a signature gives varous informations about
+the different signatures. Signatures are grouped by number of
+interactions.
 
 .. code-block:: python
 
@@ -288,7 +98,7 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. parsed-literal::
 
-    {0: (7.5, 0.0), 1: (2.5, -0)}
+    {0: (7.5, 0.0), 1: (2.5, -0.0)}
 
 
 
@@ -301,225 +111,8 @@ different signatures. Signatures are grouped by number of interactions.
 
 .. parsed-literal::
 
-    [ 7.99288215  0.27757884]
-    [ 2.67932184  0.55618627]
-
-
-Evaluate performances of signature and ray evaluation
-
-.. code-block:: python
-
-    tt1 = {}
-    tt2 = {}
-    tint={}
-    tsig={} # number of sig
-    tray={} # number of rays
-    maxcutoff=7
-    for cutoff in range(maxcutoff):
-         del Si
-            
-         Si = Signatures(L,0,1)
-         tic1=time.time()
-         Si.run1(cutoff=cutoff)
-         tic2=time.time()
-         r2d = Si.rays(ptx,prx)   
-         tic3=time.time()
-         Si.num()   
-         Nr = len(r2d)   
-         tt1[cutoff]=tic2-tic1
-         tt2[cutoff]=tic3-tic2   
-         tint[cutoff]=Si.nint   
-         tsig[cutoff]=Si.nsig
-         tray[cutoff]=Nr
-         print cutoff,tt2[cutoff]
-    #    L.display['ednodes']=False
-    #    r2d.show(L)
-
-.. parsed-literal::
-
-    0 0.00189018249512
-    1 0.0104110240936
-    2 0.0499429702759
-    3 0.205840110779
-    4 0.652987957001
-    5 1.77520799637
-    6 4.35679721832
-
-
-It appears that the increasing number of signatures obatined with the
-run1 algorithm do not yield necessarily a significant increase in the
-number of rays.
-
-.. code-block:: python
-
-    p1=semilogy(tt1.keys(),tray.values(),'ob')
-    p2=semilogy(tt1.keys(),tsig.values(),'or')
-    legend((p1[0],p2[0]),('rays','signature'),loc='best')
-    xlabel('cutoff')
-    ylabel('#')
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x7fc4b81b2750>
-
-
-
-
-.. image:: Signatures_files/Signatures_22_1.png
-
-
-.. code-block:: python
-
-    #b1=bar(tt2.keys(),tt2.values(),color='red')
-    #b2=bar(tt1.keys(),tt1.values(),color='blue')
-    #b1=semilogx(tt2.keys(),log10(tt2.values()),color='red')
-    #b2=semilogx(tt1.keys(),log10(tt1.values()),color='blue')
-    #b3=semilogx(tt1.keys(),log10(0.1*(arange(10))**3),color='green')
-    b1=loglog(tt2.keys(),tt2.values(),'k.')
-    b2=loglog(tt1.keys(),tt1.values(),'r.')
-    b3=loglog(tt1.keys(),0.1*arange(maxcutoff)**3,color='green')
-    b4=loglog(tt1.keys(),0.001*arange(maxcutoff)**2,color='green')
-    b5=loglog(tt1.keys(),0.1*arange(maxcutoff)**4.4,color='cyan')
-    legend((b1[0],b2[0],b3[0],b4[0],b5[0]),('rays','signature',r'$O(N^3)$',r'$O(N^2)$',r'$O(N^{4.4})$'),loc='best')
-    xlabel('cutoff')
-    ylabel('time (s)')
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x5a7a990>
-
-
-
-
-.. image:: Signatures_files/Signatures_23_1.png
-
-
-.. code-block:: python
-
-    b1=loglog(tt2.keys(),tint.values(),color='red')
-    b2=loglog(tt1.keys(),tsig.values(),color='blue')
-    #b3=loglog(tt1.keys(),arange(maxcutoff)**3,color='green')
-    #b4=loglog(tt1.keys(),arange(maxcutoff)**2,color='green')
-    #legend((b1[0],b2[0],b3[0],b4[0]),('interactions','signatures',r'$O(N^3)$',r'$O(N^2)$'),loc='best')
-    legend((b1[0],b2[0]),('interactions','signatures'),loc='best')
-    xlabel('cutoff')
-    ylabel('#')
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x5f78550>
-
-
-
-
-.. image:: Signatures_files/Signatures_24_1.png
-
-
-.. code-block:: python
-
-    #b1=loglog(tsig.values(),tt1.values(),color='red')
-    b2=loglog(tint.values(),tt2.values(),color='red')
-    b3=loglog(tint.values(),0.0004*array(tint.values())**0.88,color='blue')
-    xlabel('# Interactions')
-
-
-
-.. parsed-literal::
-
-    <matplotlib.text.Text at 0x7fc4b85784d0>
-
-
-
-
-.. image:: Signatures_files/Signatures_25_1.png
-
-
-.. code-block:: python
-
-    plot(tint.values(),tt2.values(),color='red')
-    plot(tint.values(),0.0004*array(tint.values())**0.88,color='blue')
-
-
-
-.. parsed-literal::
-
-    [<matplotlib.lines.Line2D at 0x68dd5d0>]
-
-
-
-
-.. image:: Signatures_files/Signatures_26_1.png
-
-
-The computation time in rays grows exponentially with the number of
-interactions.
-
-:math:`$$T_{rays}=\alpha N_i^{0.88} [s]$$`
-
-.. code-block:: python
-
-    b1=loglog(tt2.keys(),tint.values(),color='red')
-    b2=loglog(tt2.keys(),array(tt2.keys())**5,color='blue')
-
-
-.. image:: Signatures_files/Signatures_28_0.png
-
-
-.. code-block:: python
-
-    for k in range(maxcutoff):
-        r2d.show(L,i=k+1,colray='red',widthray=0.5)
-        title(str(k+1))
-
-
-.. image:: Signatures_files/Signatures_29_0.png
-
-
-
-.. image:: Signatures_files/Signatures_29_1.png
-
-
-
-.. image:: Signatures_files/Signatures_29_2.png
-
-
-
-.. image:: Signatures_files/Signatures_29_3.png
-
-
-
-.. image:: Signatures_files/Signatures_29_4.png
-
-
-
-.. image:: Signatures_files/Signatures_29_5.png
-
-
-
-.. image:: Signatures_files/Signatures_29_6.png
-
-
-.. code-block:: python
-
-    fig,ax=r2d.show(L,i=1,figsize=(20,10),colray='red',widthray=3)
-    fig,ax=r2d.show(L,i=1,colray='green',widthray=2,fig=fig,ax=ax)
-    fig,ax=r2d.show(L,i=2,colray='blue',widthray=1,fig=fig,ax=ax)
-    fig,ax=r2d.show(L,i=3,colray='black',widthray=1,fig=fig,ax=ax)
-    fig,ax=r2d.show(L,i=4,colray='green',widthray=0.5,fig=fig,ax=ax)
-    fig,ax=r2d.show(L,i=5,colray='green',widthray=0.5,fig=fig,ax=ax)
-    fig,ax=r2d.show(L,i=6,colray='green',widthray=0.5,fig=fig,ax=ax)
-    fig,ax=r2d.show(L,i=7,colray='green',widthray=0.5,fig=fig,ax=ax)
-    #fig,ax=r2d.show(L,i=8,colray='green',widthray=0.5,fig=fig,ax=ax)
-    #fig,ax=r2d.show(L,i=9,colray='green',widthray=0.5,fig=fig,ax=ax)
-
-
-.. image:: Signatures_files/Signatures_30_0.png
+    [ 7.90716852  0.74635487]
+    [ 2.53627782  0.94378265]
 
 
 .. code-block:: python

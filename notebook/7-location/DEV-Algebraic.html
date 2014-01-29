@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Algebraic Localization Class &mdash; PyLayers</title>
+    <title>24. Algebraic Localization Class &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="RGPA (Robust Geometric Positioning Algorithm)" href="DOC-RGPA.html" />
-    <link rel="prev" title="Example of a trajectory synthesis in DLR WHERE2 environment" href="../5-mobility/Trajectory.html" /> 
+    <link rel="next" title="25. RGPA (Robust Geometric Positioning Algorithm)" href="DOC-RGPA.html" />
+    <link rel="prev" title="23. Example of a trajectory synthesis in DLR WHERE2 environment" href="../5-mobility/Trajectory.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -41,10 +41,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="DOC-RGPA.html" title="RGPA (Robust Geometric Positioning Algorithm)"
+          <a href="DOC-RGPA.html" title="25. RGPA (Robust Geometric Positioning Algorithm)"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="../5-mobility/Trajectory.html" title="Example of a trajectory synthesis in DLR WHERE2 environment"
+          <a href="../5-mobility/Trajectory.html" title="23. Example of a trajectory synthesis in DLR WHERE2 environment"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
@@ -59,10 +59,10 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="../5-mobility/Trajectory.html"
-                        title="previous chapter">Example of a trajectory synthesis in DLR WHERE2 environment</a></p>
+                        title="previous chapter">23. Example of a trajectory synthesis in DLR WHERE2 environment</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="DOC-RGPA.html"
-                        title="next chapter">RGPA (Robust Geometric Positioning Algorithm)</a></p>
+                        title="next chapter">25. RGPA (Robust Geometric Positioning Algorithm)</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -85,12 +85,14 @@
           <div class="body">
             
   <div class="section" id="algebraic-localization-class">
-<h1>Algebraic Localization Class<a class="headerlink" href="#algebraic-localization-class" title="Permalink to this headline">¶</a></h1>
+<h1>24. Algebraic Localization Class<a class="headerlink" href="#algebraic-localization-class" title="Permalink to this headline">¶</a></h1>
 <p>For localization in the plane it is important not to provide the z
 coordinates. Otherwise a singularity problem arises.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">pylayers.location.algebraic.algebraic</span>  <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x5312850&gt;</pre>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">c</span> <span class="o">=</span> <span class="mf">0.2997924583</span>
 <span class="n">nodes</span><span class="o">=</span><span class="p">{}</span>
@@ -112,8 +114,8 @@ coordinates. Otherwise a singularity problem arises.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;TOA_std&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="s">&#39;TOA&#39;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span> <span class="mf">1.41421356</span><span class="p">,</span>  <span class="mf">1.41421356</span><span class="p">,</span>  <span class="mf">1.</span>        <span class="p">])}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x467d9d0&gt;,
- &lt;mpl_toolkits.mplot3d.axes3d.Axes3D at 0x467df90&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x544ad10&gt;,
+ &lt;mpl_toolkits.mplot3d.axes3d.Axes3D at 0x54550d0&gt;)</pre>
 </div>
 <img alt="./DEV-Algebraic_files/DEV-Algebraic_4_2.png" src="./DEV-Algebraic_files/DEV-Algebraic_4_2.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pest</span> <span class="o">=</span> <span class="n">Alg</span><span class="o">.</span><span class="n">ls_locate</span><span class="p">(</span><span class="n">toa</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">tdoa</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">rss</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -122,8 +124,8 @@ coordinates. Otherwise a singularity problem arises.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Alg</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x468cd90&gt;,
- &lt;mpl_toolkits.mplot3d.axes3d.Axes3D at 0x469fed0&gt;)</pre>
+<div class="highlight-python"><pre>(&lt;matplotlib.figure.Figure at 0x5478090&gt;,
+ &lt;mpl_toolkits.mplot3d.axes3d.Axes3D at 0x54769d0&gt;)</pre>
 </div>
 <img alt="./DEV-Algebraic_files/DEV-Algebraic_6_1.png" src="./DEV-Algebraic_files/DEV-Algebraic_6_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pest</span>
@@ -156,10 +158,10 @@ LDPs :{'TOA_std': array([1, 1, 1]), 'TOA': array([ 1.41421356,  1.41421356,  1. 
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="DOC-RGPA.html" title="RGPA (Robust Geometric Positioning Algorithm)"
+          <a href="DOC-RGPA.html" title="25. RGPA (Robust Geometric Positioning Algorithm)"
              >next</a></li>
         <li class="right" >
-          <a href="../5-mobility/Trajectory.html" title="Example of a trajectory synthesis in DLR WHERE2 environment"
+          <a href="../5-mobility/Trajectory.html" title="23. Example of a trajectory synthesis in DLR WHERE2 environment"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>

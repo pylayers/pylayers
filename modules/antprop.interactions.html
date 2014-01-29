@@ -367,7 +367,14 @@ the input matrix 2x2 is rehaped as 1x 4</p>
 <tr class="field-odd field"><th class="field-name">Attributes :</th><td class="field-body"><p class="first"><strong>typ</strong> : int</p>
 <blockquote class="last">
 <div><blockquote>
-<div><p>type of interaction</p>
+<div><blockquote>
+<div><p>type of interaction
+1 : R 
+2 : T
+3 : D 
+0 : Tx or Rx</p>
+</div></blockquote>
+<p>-1 : B</p>
 </div></blockquote>
 <dl class="docutils">
 <dt>data: np.array</dt>
@@ -410,9 +417,20 @@ the input matrix 2x2 is rehaped as 1x 4</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.antprop.interactions.Inter.delay">
-<tt class="descname">delay</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/antprop/interactions.html#Inter.delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.antprop.interactions.Inter.delay" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate delays of a given basis Interaction</p>
+<dt id="pylayers.antprop.interactions.Inter.sinsout">
+<tt class="descname">sinsout</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.antprop.interactions.Inter.sinsout" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate sin sout of the interaction</p>
+<p class="rubric">Notes</p>
+<p>if typ</p>
+<blockquote>
+<div><p>1 : Reflexion 
+2 : Transmission 
+3 : Diffraction</p>
+<p>si : self.data[:,1]
+so : self.data[:,2]</p>
+</div></blockquote>
+<p>if typ = 0</p>
+<p>if typ = -1</p>
 </dd></dl>
 
 <dl class="method">

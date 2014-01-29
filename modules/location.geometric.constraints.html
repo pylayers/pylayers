@@ -337,13 +337,6 @@ requiere  pyinterval class</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pylayers.location.geometric.constraints.cla.CLA.info_old">
-<tt class="descname">info_old</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.info_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.info_old" title="Permalink to this definition">¶</a></dt>
-<dd><p>gives info on the CLA</p>
-<p>DEPECRATED</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="pylayers.location.geometric.constraints.cla.CLA.merge2">
 <tt class="descname">merge2</tt><big>(</big><em>vcw_init=1.0</em>, <em>RSS=False</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/cla.html#CLA.merge2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.cla.CLA.merge2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge all constraints from the CLA2_reduc2</p>
@@ -627,8 +620,8 @@ self.obsolete = False</p>
 <p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.simul.simulnet</span></tt>, <a class="reference internal" href="location.localization.html#module-pylayers.location.localization" title="pylayers.location.localization"><tt class="xref py py-obj docutils literal"><span class="pre">pylayers.location.localization</span></tt></a></p>
 </div>
 <dl class="method">
-<dt id="pylayers.location.geometric.constraints.constraint.Constraint.info">
-<tt class="descname">info</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/constraint.html#Constraint.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.info" title="Permalink to this definition">¶</a></dt>
+<dt id="pylayers.location.geometric.constraints.constraint.Constraint.info_old">
+<tt class="descname">info_old</tt><big>(</big><big>)</big><a class="headerlink" href="#pylayers.location.geometric.constraints.constraint.Constraint.info_old" title="Permalink to this definition">¶</a></dt>
 <dd><p>display info on constraint</p>
 </dd></dl>
 
@@ -683,7 +676,7 @@ Compute the minimum and maximum distance of the enclosing annulus of the constra
 
 <span class="target" id="module-pylayers.location.geometric.constraints.rss"></span><dl class="class">
 <dt id="pylayers.location.geometric.constraints.rss.RSS">
-<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.rss.</tt><tt class="descname">RSS</tt><big>(</big><em>id='0'</em>, <em>value=0</em>, <em>std=array(1.0)</em>, <em>vcw=3</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>model={}</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.rss.</tt><tt class="descname">RSS</tt><big>(</big><em>id='0'</em>, <em>value=array([0])</em>, <em>std=array(1.0)</em>, <em>vcw=3</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>model={}</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/rss.html#RSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.rss.RSS" title="Permalink to this definition">¶</a></dt>
 <dd><p>RSS Constraint</p>
 <p>Description and evaluation of RSS constraints</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -880,7 +873,7 @@ pmin&lt;Dmax       |</p>
 
 <span class="target" id="module-pylayers.location.geometric.constraints.toa"></span><dl class="class">
 <dt id="pylayers.location.geometric.constraints.toa.TOA">
-<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.toa.</tt><tt class="descname">TOA</tt><big>(</big><em>id='0'</em>, <em>value=30</em>, <em>std=array(1.0)</em>, <em>vcw=3</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pylayers.location.geometric.constraints.toa.</tt><tt class="descname">TOA</tt><big>(</big><em>id='0'</em>, <em>value=array([30])</em>, <em>std=array(1.0)</em>, <em>vcw=3</em>, <em>p=array(</em><span class="optional">[</span><span class="optional">]</span>, <em>dtype=float64)</em>, <em>origin={}</em><big>)</big><a class="reference internal" href="../_modules/pylayers/location/geometric/constraints/toa.html#TOA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.location.geometric.constraints.toa.TOA" title="Permalink to this definition">¶</a></dt>
 <dd><p>TOA Constraint</p>
 <p>Description and evaluation of TOA constraints</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1074,7 +1067,7 @@ pmin&lt;Dmax       |</p>
 
 <span class="target" id="module-pylayers.location.geometric.constraints.tdoa"></span><dl class="class">
 <dt>
-<tt class="descname">TDOA(id='0', value=45, std=array(4.0), vcw=3, p=array([[ 0,  0,  0],</tt></dt>
+<tt class="descname">TDOA(id='0', value=array([45]), std=array(4.0), vcw=3, p=array([[ 0,  0,  0],</tt></dt>
 <dt>
 <tt class="descname">[10, 10, 10]]), origin={})</tt></dt>
 <dd><p>TDOA Constraint</p>

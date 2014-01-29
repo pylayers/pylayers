@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Handling Antennas &mdash; PyLayers</title>
+    <title>6. Handling Antennas &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
-    <link rel="next" title="Ray Signatures" href="Signatures.html" />
-    <link rel="prev" title="Multi sub-segments" href="../2-gis/MultiSubsegments.html" /> 
+    <link rel="next" title="7. Ray Signatures" href="Signatures.html" />
+    <link rel="prev" title="5. Segment and sub-segments" href="../2-gis/MultiSubsegments.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -41,10 +41,10 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="Signatures.html" title="Ray Signatures"
+          <a href="Signatures.html" title="7. Ray Signatures"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="../2-gis/MultiSubsegments.html" title="Multi sub-segments"
+          <a href="../2-gis/MultiSubsegments.html" title="5. Segment and sub-segments"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
@@ -59,19 +59,19 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Handling Antennas</a><ul>
-<li><a class="reference internal" href="#unwraping-the-phase">Unwraping the phase</a></li>
-<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">Evaluation of Vector Spherical Harmonics Coefficients</a></li>
+<li><a class="reference internal" href="#">6. Handling Antennas</a><ul>
+<li><a class="reference internal" href="#unwraping-the-phase">6.1. Unwraping the phase</a></li>
+<li><a class="reference internal" href="#evaluation-of-vector-spherical-harmonics-coefficients">6.2. Evaluation of Vector Spherical Harmonics Coefficients</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../2-gis/MultiSubsegments.html"
-                        title="previous chapter">Multi sub-segments</a></p>
+                        title="previous chapter">5. Segment and sub-segments</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Signatures.html"
-                        title="next chapter">Ray Signatures</a></p>
+                        title="next chapter">7. Ray Signatures</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -94,7 +94,7 @@
           <div class="body">
             
   <div class="section" id="handling-antennas">
-<h1>Handling Antennas<a class="headerlink" href="#handling-antennas" title="Permalink to this headline">¶</a></h1>
+<h1>6. Handling Antennas<a class="headerlink" href="#handling-antennas" title="Permalink to this headline">¶</a></h1>
 <blockquote>
 <div>Antennas are handled in the <tt class="docutils literal"><span class="pre">pylayers.antenna</span></tt> module.
 <tt class="docutils literal"><span class="pre">PyLayers</span></tt> provides a compact representation of complex antennas
@@ -103,6 +103,8 @@ the complex antenna radiation pattern.</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pylayers.antprop.antenna</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">pylayers.antprop.antvsh</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
+</div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x4647850&gt;</pre>
 </div>
 <p>The first step consists in reading the raw data from an antenna <tt class="docutils literal"><span class="pre">.mat</span></tt>
 file. In the example below the antenna has been measured in a
@@ -131,8 +133,8 @@ Nb phi (lon) :180</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#%pfile A.show3</span>
 </pre></div>
 </div>
-<p>If <a class="reference external" href="http://www.geomview.org/">geomview</a> is installed a vizalization of
-the antenna pattern is obtained in using a <tt class="docutils literal"><span class="pre">show3</span></tt> method</p>
+<p>If <a class="reference external" href="http://www.geomview.org/">geomview</a> is installed a vizalization
+of the antenna pattern is obtained in using a <tt class="docutils literal"><span class="pre">show3</span></tt> method</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#A.show3(k=0,typ=&#39;Gain&#39;)</span>
 </pre></div>
 </div>
@@ -140,7 +142,7 @@ the antenna pattern is obtained in using a <tt class="docutils literal"><span cl
 </pre></div>
 </div>
 <div class="section" id="unwraping-the-phase">
-<h2>Unwraping the phase<a class="headerlink" href="#unwraping-the-phase" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Unwraping the phase<a class="headerlink" href="#unwraping-the-phase" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">freq</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">104</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">ed</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">getdelay</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
 <span class="n">I</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Ftheta</span><span class="p">[:,:,:]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">freq</span><span class="o">*</span><span class="n">ed</span><span class="p">)</span>
@@ -153,14 +155,14 @@ the antenna pattern is obtained in using a <tt class="docutils literal"><span cl
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;theta&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x44f4950&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x471f690&gt;</pre>
 </div>
 <img alt="./Antennas_files/Antennas_13_1.png" src="./Antennas_files/Antennas_13_1.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e9</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">I</span><span class="p">[:,</span><span class="mi">45</span><span class="p">,</span><span class="mi">85</span><span class="p">])))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;frequency (GHz)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x44f4d90&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.text.Text at 0x522fc50&gt;</pre>
 </div>
 <img alt="./Antennas_files/Antennas_14_1.png" src="./Antennas_files/Antennas_14_1.png" />
 <p>The following figure represents all the radiation patterns in the
@@ -193,7 +195,7 @@ No vsh coefficient calculated yet</pre>
 </div>
 </div>
 <div class="section" id="evaluation-of-vector-spherical-harmonics-coefficients">
-<h2>Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h2>
+<h2>6.2. Evaluation of Vector Spherical Harmonics Coefficients<a class="headerlink" href="#evaluation-of-vector-spherical-harmonics-coefficients" title="Permalink to this headline">¶</a></h2>
 <p>At that stage the Vector Spherical Harmonics coefficients are computed.</p>
 <p>The <tt class="docutils literal"><span class="pre">vsh</span></tt> function is implemented in the module <tt class="docutils literal"><span class="pre">antvsh.py</span></tt> and is
 relying on the &#8216;spherepack
@@ -204,9 +206,8 @@ relying on the &#8216;spherepack
 <p>The information about the antenna indicates now the presence of
 spherical coefficients, in format vsh1.</p>
 <p>N1 = 90 and M1 = 89.</p>
-<p>There is the same number of coefficients for <img class="math" src="../../_images/math/d42705f925da45aa80f668ce2461fa7b24ec5ed6.png" alt="$B_r$"/>,
-<img class="math" src="../../_images/math/98fabc6dbd035331422ef853a7a3cd7caa0e2b66.png" alt="$B_i$"/>, <img class="math" src="../../_images/math/73c7499fede9fbced195745f44a1f89b75a3f1c4.png" alt="$C_r$"/>, <img class="math" src="../../_images/math/114be4e6129a6229437e3ecafb9dea8a051d937e.png" alt="$C_i$"/> independently to their
-relative importance.</p>
+<p>There is the same number of coefficients for <img class="math" src="../../_images/math/5316640ddc72cf5961c961effc9db81964a862bd.png" alt="B_r"/>, <img class="math" src="../../_images/math/68f7ff1d2561a1aeb9c1e6a0e4a4cc2da1bab71e.png" alt="B_i"/>,
+<img class="math" src="../../_images/math/c7ef6667d9d2eec2f214fc632ebfe3d0bdff929e.png" alt="C_r"/>, <img class="math" src="../../_images/math/c117e8403b3b9cf74d2f63f6627aa17c1995e3bc.png" alt="C_i"/> independently to their relative importance.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span><span class="o">.</span><span class="n">C</span>
 </pre></div>
 </div>
@@ -290,13 +291,28 @@ NCoeff s2  : 495</pre>
 <span class="mi">180</span>
 </pre></div>
 </div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
+</pre></div>
+</div>
+<div class="highlight-python"><pre>file name : S1R1.mat
+antenna name : Th1
+date : 04/12/12
+time : 15:55
+Notes : Mohamed at the log
+
+Serie : 1
+Run : 1
+Nb theta (lat) : 91
+Nb phi (lon) :180</pre>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Fth2</span><span class="p">,</span><span class="n">Fph2</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Fsynth3</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">pattern</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">compdiag</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">Fth2</span><span class="p">,</span><span class="n">Fph2</span><span class="p">,</span><span class="s">&#39;modulus&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">figsize</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">compdiag</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span><span class="n">A</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span><span class="n">Fth2</span><span class="p">,</span><span class="n">Fph2</span><span class="p">,</span><span class="s">&#39;phase&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="./Antennas_files/Antennas_30_0.png" src="./Antennas_files/Antennas_30_0.png" />
+<img alt="./Antennas_files/Antennas_31_0.png" src="./Antennas_files/Antennas_31_0.png" />
 <div class="highlight-python"><div class="highlight"><pre><span class="n">A</span>
 </pre></div>
 </div>
@@ -391,10 +407,10 @@ Nb phi (lon) :180</pre>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="Signatures.html" title="Ray Signatures"
+          <a href="Signatures.html" title="7. Ray Signatures"
              >next</a></li>
         <li class="right" >
-          <a href="../2-gis/MultiSubsegments.html" title="Multi sub-segments"
+          <a href="../2-gis/MultiSubsegments.html" title="5. Segment and sub-segments"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>

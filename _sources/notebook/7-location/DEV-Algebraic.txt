@@ -2,7 +2,6 @@
 Algebraic Localization Class
 ============================
 
-
 For localization in the plane it is important not to provide the z
 coordinates. Otherwise a singularity problem arises.
 
@@ -10,6 +9,13 @@ coordinates. Otherwise a singularity problem arises.
 
     import numpy as np
     from pylayers.location.algebraic.algebraic  import *
+
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x5312850>
+
 
 .. code-block:: python
 
@@ -38,8 +44,8 @@ coordinates. Otherwise a singularity problem arises.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x467d9d0>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x467df90>)
+    (<matplotlib.figure.Figure at 0x544ad10>,
+     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x54550d0>)
 
 
 
@@ -58,8 +64,8 @@ coordinates. Otherwise a singularity problem arises.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x468cd90>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x469fed0>)
+    (<matplotlib.figure.Figure at 0x5478090>,
+     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x54769d0>)
 
 
 
@@ -92,7 +98,6 @@ coordinates. Otherwise a singularity problem arises.
            [0]]), 'RN_TOA': array([[-1,  1,  0],
            [-1, -1,  1]])}
     LDPs :{'TOA_std': array([1, 1, 1]), 'TOA': array([ 1.41421356,  1.41421356,  1.        ])}
-
 
 
 

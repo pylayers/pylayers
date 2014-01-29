@@ -3,9 +3,15 @@
 
     import ConfigParser
     import pylayers.util.pyutil as pyu
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x54bb850>
+
+
 Network Simulation Configuration
 ================================
-
 
 PyLayers is designed to provide indoor radio channel simulation for
 mobile agents.
@@ -26,7 +32,6 @@ The configuration file is ``simulnet.ini``
 
 Simulnet.ini
 ~~~~~~~~~~~~
-
 
 This file is located in ``$BASENAME/ini``
 
@@ -144,7 +149,6 @@ Simulnet.ini contains the following sections
 Save section
 ~~~~~~~~~~~~
 
-
 This section define the save options.
 
 .. code-block:: python
@@ -237,7 +241,6 @@ Setup an offset on the origin of axis
 Network
 -------
 
-
 .. code-block:: python
 
     dict(Cp.items('Network'))
@@ -263,7 +266,6 @@ Setup communication mode between node:
    position a communication request is send to the communication stae
 -  synchro : the data exchange between nodes is periodic. LDPs are
    periodically refreshed at the network\_update\_time
-
 
 .. code-block:: python
 
@@ -356,7 +358,6 @@ Setup how agent choose their target:
 -  file : the agent follow the sequence specified in
    /nodes\_destination.ini
 
-
 .. code-block:: python
 
     dict(Cp.items('Mechanics'))['choose_destination']
@@ -421,7 +422,6 @@ Select localization methods :
 -  Algebraic : hétérogeneous localization algorithm
 -  Geometric : RGPA
 
-
 .. code-block:: python
 
     dict(Cp.items('Localization'))['method']
@@ -450,7 +450,6 @@ Time step for localization update
 
 Simulation
 ----------
-
 
 .. code-block:: python
 

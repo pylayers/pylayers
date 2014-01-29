@@ -2,7 +2,6 @@
 Handling Antennas
 =================
 
-
     Antennas are handled in the ``pylayers.antenna`` module.
     ``PyLayers`` provides a compact representation of complex antennas
     using both vector and scalar spherical harmonics representation of
@@ -12,9 +11,16 @@ Handling Antennas
 
     from pylayers.antprop.antenna import *
     from pylayers.antprop.antvsh import *
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x4647850>
+
+
 The first step consists in reading the raw data from an antenna ``.mat``
 file. In the example below the antenna has been measured in a
-`SATIMO <http://satimo.com/>`_ near field chamber. Antennas are by
+`SATIMO <http://satimo.com/>`__ near field chamber. Antennas are by
 default read in a directory specified relativeley to the curent project
 pointed by the ``$BASENAME`` environment variable.
 
@@ -45,12 +51,11 @@ the curent object.
 
 
 
-
 .. code-block:: python
 
     #%pfile A.show3
-If `geomview <http://www.geomview.org/>`_ is installed a vizalization of
-the antenna pattern is obtained in using a ``show3`` method
+If `geomview <http://www.geomview.org/>`__ is installed a vizalization
+of the antenna pattern is obtained in using a ``show3`` method
 
 .. code-block:: python
 
@@ -60,7 +65,6 @@ the antenna pattern is obtained in using a ``show3`` method
     #A.show3(k=60,typ='Gain')
 Unwraping the phase
 -------------------
-
 
 .. code-block:: python
 
@@ -80,7 +84,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x44f4950>
+    <matplotlib.text.Text at 0x471f690>
 
 
 
@@ -97,7 +101,7 @@ Unwraping the phase
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x44f4d90>
+    <matplotlib.text.Text at 0x522fc50>
 
 
 
@@ -159,9 +163,8 @@ spherical coefficients, in format vsh1.
 
 N1 = 90 and M1 = 89.
 
-There is the same number of coefficients for :math:`$B_r$`,
-:math:`$B_i$`, :math:`$C_r$`, :math:`$C_i$` independently to their
-relative importance.
+There is the same number of coefficients for :math:`B_r`, :math:`B_i`,
+:math:`C_r`, :math:`C_i` independently to their relative importance.
 
 .. code-block:: python
 
@@ -194,7 +197,6 @@ relative importance.
     N1  : 90
     M1  : 89
     Ncoeff s1 8010
-
 
 
 
@@ -239,7 +241,6 @@ relative importance.
 
 
 
-
 .. code-block:: python
 
     plt.figure(figsize=(10,10))
@@ -276,13 +277,35 @@ Transformation in shape 3 - energy thresholding
 
 .. code-block:: python
 
+    A
+
+
+
+.. parsed-literal::
+
+    file name : S1R1.mat
+    antenna name : Th1
+    date : 04/12/12
+    time : 15:55
+    Notes : Mohamed at the log
+    
+    Serie : 1
+    Run : 1
+    Nb theta (lat) : 91
+    Nb phi (lon) :180
+
+
+
+.. code-block:: python
+
     Fth2,Fph2 = A.Fsynth3(A.theta,A.phi,pattern=True) 
 .. code-block:: python
 
-    compdiag(0,A,A.theta,A.phi,Fth2,Fph2,'modulus')
+    figsize(10,10)
+    compdiag(0,A,A.theta,A.phi,Fth2,Fph2,'phase')
 
 
-.. image:: Antennas_files/Antennas_30_0.png
+.. image:: Antennas_files/Antennas_31_0.png
 
 
 .. code-block:: python
@@ -303,7 +326,6 @@ Transformation in shape 3 - energy thresholding
     Run : 1
     Nb theta (lat) : 91
     Nb phi (lon) :180
-
 
 
 

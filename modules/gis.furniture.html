@@ -102,31 +102,19 @@
 For now furnitures are rectangular objects.
 In the future it should be able to accept any polygon as a furniture element</p>
 <p>Furniture are stored in an ini file of dirstruc.</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="go">import Layout</span>
-<span class="go">import matplotlib.pylab as plt</span>
-<span class="go">L = Layout.Layout()</span>
-<span class="go">L.loadstr(&#39;sircut.str&#39;)</span>
-<span class="go">L.showGs()</span>
-<span class="go">L.loadfur(&#39;Furw1.ini&#39;)</span>
-<span class="go">fig = plt.gcf()</span>
-<span class="go">ax  = fig.get_axes()[0]</span>
-<span class="go">for fur in L.lfur:</span>
-<span class="go">    fur.show(fig,ax)</span>
-
-
-<span class="go">import Layout</span>
-<span class="go">import matplotlib.pylab as plt</span>
-<span class="go">L = Layout.Layout()</span>
-<span class="go">L.loadstr(&#39;sircut.str&#39;)</span>
-<span class="go">plt.figure(figsize=(10,4))</span>
-<span class="go">L.showGs()</span>
-<span class="go">L.loadfur(&#39;Furw1.ini&#39;)</span>
-<span class="go">fig = plt.gcf()</span>
-<span class="go">ax  = fig.get_axes()[0]</span>
-<span class="go">for fur in L.lfur:</span>
-<span class="go">    fur.show(fig,ax)</span>
-</pre></div>
-</div>
+<blockquote>
+<div><p>from pylayers.gis.layout import *
+import matplotlib.pylab as plt
+L = Layout()
+L.loadstr(&#8216;where1.ini&#8217;)
+L.showGs()
+L.loadfur(&#8216;Furw1.ini&#8217;)
+fig = plt.gcf()
+ax  = fig.get_axes()[0]
+for fur in L.lfur:</p>
+<blockquote>
+<div>fur.show(fig,ax)</div></blockquote>
+</div></blockquote>
 <dl class="class">
 <dt id="pylayers.gis.furniture.Furniture">
 <em class="property">class </em><tt class="descclassname">pylayers.gis.furniture.</tt><tt class="descname">Furniture</tt><big>(</big><em>name=''</em>, <em>desc=''</em>, <em>origin=array([0</em>, <em>0])</em>, <em>angle=0</em>, <em>H=1.0</em>, <em>L=1.0</em>, <em>W=1</em>, <em>T=0</em>, <em>Matname='METAL'</em><big>)</big><a class="reference internal" href="../_modules/pylayers/gis/furniture.html#Furniture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pylayers.gis.furniture.Furniture" title="Permalink to this definition">¶</a></dt>

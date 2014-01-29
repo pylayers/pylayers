@@ -1,8 +1,0 @@
-{'Np': 3000,
- 'bandGHz': 0.499,
- 'fcGHz': 4.493,
- 'feGHz': 100,
- 'te': 0.01,
- 'threshdB': 3,
- 'twns': 30,
- 'typ': 'generic'}

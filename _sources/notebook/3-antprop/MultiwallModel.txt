@@ -2,7 +2,6 @@
 Multi-wall model
 ================
 
-
 .. code-block:: python
 
     import time
@@ -17,7 +16,7 @@ Multi-wall model
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x5096c10>
+    <matplotlib.figure.Figure at 0x442c850>
 
 
 The layout is loaded from an ini file. If the graphs are not available,
@@ -29,7 +28,6 @@ they are built.
 Defining a radio link
 ---------------------
 
-
 The 2 extremities of the radio link are coordinates in ``numpy.array``
 of transmitter and receiver.
 
@@ -37,15 +35,12 @@ of transmitter and receiver.
 
 -  B a radio node
 
-
-
 .. code-block:: python
 
     A=np.array((4,1)) # defining transmitter position 
     B=np.array((30,12)) # defining receiver position
 Ploting the scene
 -----------------
-
 
 The scene is plotted with the ``showG`` method of the Layout
 
@@ -118,7 +113,6 @@ orthogonal and parallel polarization
 Coverage class
 ==============
 
-
 By extension, the multi-wall model can also be used to perform a full
 coverage of a Layout given a transmitter position.
 
@@ -162,12 +156,11 @@ coverage of a Layout given a transmitter position.
     Useful arrays
     ----------------
     tsg : get segment index in Gs from tahe
+    isss :  sub-segment index above Nsmax
     tgs : get segment index in tahe from Gs
     lsss : list of segments with sub-segment
-    sla : associated slab name
-    stridess : stride for adressing sub segment 
+    sla : list of all slab names (Nsmax+Nss+1)
     degree : degree of nodes 
-
 
 
 
@@ -198,7 +191,6 @@ the coverage.ini file
 Compute the coverage
 ~~~~~~~~~~~~~~~~~~~~
 
-
 .. code-block:: python
 
     t1=time.time()
@@ -208,12 +200,11 @@ Compute the coverage
 
 .. parsed-literal::
 
-    Coverage performed in  1.41932010651 s
+    Coverage performed in  1.38903713226 s
 
 
 Coverage Map
 ~~~~~~~~~~~~
-
 
 For Orthogonal polarization
 
@@ -238,8 +229,8 @@ For Orthogonal polarization
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x62bb990>,
-     <matplotlib.axes.AxesSubplot at 0x5e81290>)
+    (<matplotlib.figure.Figure at 0x7f5bd0b77c50>,
+     <matplotlib.axes.AxesSubplot at 0x7f5bd09b8650>)
 
 
 
@@ -265,8 +256,8 @@ For parallel polarization
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f426c311e90>,
-     <matplotlib.axes.AxesSubplot at 0x7f426c3c9e10>)
+    (<matplotlib.figure.Figure at 0x7f5bd0d65d90>,
+     <matplotlib.axes.AxesSubplot at 0x7f5bd0d60950>)
 
 
 

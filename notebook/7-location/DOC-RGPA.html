@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RGPA (Robust Geometric Positioning Algorithm) &mdash; PyLayers</title>
+    <title>25. RGPA (Robust Geometric Positioning Algorithm) &mdash; PyLayers</title>
     
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -26,7 +26,7 @@
     <link rel="top" title="PyLayers" href="../../index.html" />
     <link rel="up" title="User Manual" href="../index.html" />
     <link rel="next" title="User references" href="../../modules/index.html" />
-    <link rel="prev" title="Algebraic Localization Class" href="DEV-Algebraic.html" /> 
+    <link rel="prev" title="24. Algebraic Localization Class" href="DEV-Algebraic.html" /> 
   </head>
   <body>
 <div style="color: black;background-color: white; font-size: 3.2em; text-align: left; padding: 15px 10px 10px 15px">
@@ -44,7 +44,7 @@
           <a href="../../modules/index.html" title="User references"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="DEV-Algebraic.html" title="Algebraic Localization Class"
+          <a href="DEV-Algebraic.html" title="24. Algebraic Localization Class"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
@@ -59,17 +59,17 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">RGPA (Robust Geometric Positioning Algorithm)</a><ul>
-<li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">Exploiting Time of Arrival (ToA) only</a></li>
-<li><a class="reference internal" href="#rss">RSS</a></li>
-<li><a class="reference internal" href="#tdoa">TDOA</a></li>
+<li><a class="reference internal" href="#">25. RGPA (Robust Geometric Positioning Algorithm)</a><ul>
+<li><a class="reference internal" href="#exploiting-time-of-arrival-toa-only">25.1. Exploiting Time of Arrival (ToA) only</a></li>
+<li><a class="reference internal" href="#rss">25.2. RSS</a></li>
+<li><a class="reference internal" href="#tdoa">25.3. TDOA</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="DEV-Algebraic.html"
-                        title="previous chapter">Algebraic Localization Class</a></p>
+                        title="previous chapter">24. Algebraic Localization Class</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../../modules/index.html"
                         title="next chapter">User references</a></p>
@@ -104,6 +104,8 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
+<div class="highlight-python"><pre>&lt;matplotlib.figure.Figure at 0x3aba850&gt;</pre>
+</div>
 <p>Let&#8217;s define 4 anchors in the plane.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pt1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
 <span class="n">pt2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(([</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">]))</span>
@@ -127,11 +129,11 @@ blue</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x489f990&gt;</pre>
+<div class="highlight-python"><pre>&lt;matplotlib.legend.Legend at 0x3c4fa10&gt;</pre>
 </div>
 <img alt="./DOC-RGPA_files/DOC-RGPA_5_1.png" src="./DOC-RGPA_files/DOC-RGPA_5_1.png" />
-<p>The euclidian distance betwenn blind node <img class="math" src="../../_images/math/4917fe9fdbc10ea56d39d18328b8d1ad7f7871da.png" alt="$p$"/> and anchors ans
-the corresponding Time of flight are evaluated.</p>
+<p>The euclidian distance betwenn blind node <img class="math" src="../../_images/math/36f73fc1312ee0349b3f3a0f3bd9eb5504339011.png" alt="p"/> and anchors ans the
+corresponding Time of flight are evaluated.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">d1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt2</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">d3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pt3</span><span class="o">-</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -154,9 +156,9 @@ distance p-3= 23.5372045919 / toa3= 78.4573486396
 distance p-4= 18.0277563773 / toa3= 60.0925212577</pre>
 </div>
 <div class="section" id="rgpa-robust-geometric-positioning-algorithm">
-<h1>RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
+<h1>25. RGPA (Robust Geometric Positioning Algorithm)<a class="headerlink" href="#rgpa-robust-geometric-positioning-algorithm" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="exploiting-time-of-arrival-toa-only">
-<h2>Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
+<h2>25.1. Exploiting Time of Arrival (ToA) only<a class="headerlink" href="#exploiting-time-of-arrival-toa-only" title="Permalink to this headline">¶</a></h2>
 <p>We call <tt class="docutils literal"><span class="pre">Constraint</span> <span class="pre">Layer</span> <span class="pre">Array</span></tt> (CLA) the object which gathers all
 the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">=</span><span class="n">CLA</span><span class="p">()</span>
@@ -180,17 +182,21 @@ the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">c</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>[&lt;pylayers.location.geometric.constraints.toa.TOA at 0x47cb210&gt;,
- &lt;pylayers.location.geometric.constraints.toa.TOA at 0x47cb810&gt;,
- &lt;pylayers.location.geometric.constraints.toa.TOA at 0x47cbfd0&gt;,
- &lt;pylayers.location.geometric.constraints.toa.TOA at 0x47cb5d0&gt;]</pre>
+<div class="highlight-python"><pre>[node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    0 |        |TOA  |      | [0 0]          | [ 16.667]| [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    1 |        |TOA  |      | [10 15]        | [ 47.14] | [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    2 |        |TOA  |      | [ 5 28]        | [ 78.457]| [ 1.]|       1|      1|,
+ node | peer   |type | rat  | p              | value    | std  | runable| usable|
+    3 |        |TOA  |      | [-10 -10]      | [ 60.093]| [ 1.]|       1|      1|]</pre>
 </div>
 <p>Get information on the cla :</p>
 <ul class="simple">
 <li>type : TOA / RSS</li>
 <li>p : Position of the origin of the constraint</li>
 <li>value : power ( RSS ) / time in ns ( TOA)</li>
-<li>std : standard deviation <img class="math" src="../../_images/math/67e9c54552143be4b47c98d27e4fe9669cfe5459.png" alt="$\sigma^2$"/> of value</li>
+<li>std : standard deviation <img class="math" src="../../_images/math/741fb9098efcb98055f467f87630a5d0ca599b6b.png" alt="\sigma^2"/> of value</li>
 <li>runable : does the constraint has a position p ?</li>
 <li>obsolete : does the value has been obtained recently ?</li>
 <li>usuable : runbale AND NOT obsolete</li>
@@ -199,14 +205,14 @@ the geometric constraints of a considered scenario.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><pre>type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [0 0]     , 16.6666666667, [ 1.]  , 1, 1, 0, 0
-type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [10 15]   , 47.1404520791, [ 1.]  , 1, 1, 0, 0
-type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [ 5 28]   , 78.4573486396, [ 1.]  , 1, 1, 0, 0
-type , p         , value     , std    , runable, usable, obsolete, evaluated
-TOA , [-10 -10] , 60.0925212577, [ 1.]  , 1, 1, 0, 0</pre>
+<div class="highlight-python"><pre>type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [0 0]          , [ 16.667], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [10 15]        , [ 47.14], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [ 5 28]        , [ 78.457], [ 1.],       1,      1,        0,         0
+type , p              , value, std  , runable, usable, obsolete, evaluated
+TOA  , [-10 -10]      , [ 60.093], [ 1.],       1,      1,        0,         0</pre>
 </div>
 <p>Update the CLA</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">C</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
@@ -235,7 +241,7 @@ TOA , [-10 -10] , 60.0925212577, [ 1.]  , 1, 1, 0, 0</pre>
 </div>
 </div>
 <div class="section" id="rss">
-<h2>RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
+<h2>25.2. RSS<a class="headerlink" href="#rss" title="Permalink to this headline">¶</a></h2>
 <p>The RSS is a quantity which is weakly related to distance via a
 parametric model. The bettet the model, better would be tthe inference
 ab out tthe associated distance. t To model the Path Loss shadowing
@@ -256,12 +262,12 @@ with the above model</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">M</span><span class="o">.</span><span class="n">getPL</span><span class="p">(</span><span class="n">toa1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="mf">7.1990008820632072</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="mf">10.271380031020819</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="tdoa">
-<h2>TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
+<h2>25.3. TDOA<a class="headerlink" href="#tdoa" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Td1</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa2</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt2</span><span class="p">]))</span>
 <span class="n">Td2</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa3</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt3</span><span class="p">]))</span>
 <span class="n">Td3</span><span class="o">=</span><span class="n">TDOA</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">toa1</span><span class="o">-</span><span class="n">toa4</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span> <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span><span class="n">pt4</span><span class="p">]))</span>
@@ -381,7 +387,7 @@ TDOA 1.375</pre>
           <a href="../../modules/index.html" title="User references"
              >next</a></li>
         <li class="right" >
-          <a href="DEV-Algebraic.html" title="Algebraic Localization Class"
+          <a href="DEV-Algebraic.html" title="24. Algebraic Localization Class"
              >previous</a> |</li>
         <li><a href="../../index.html">PyLayers Home </a> |&nbsp;</li>
         <li><a href="../index.html">Documentation </a> |&nbsp;</li>
