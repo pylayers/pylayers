@@ -159,7 +159,12 @@ class Rays(dict):
  
 
     def check_reciprocity(self,r):
-        """
+        """ check ray reciprocity 
+
+        Parameters
+        ----------
+
+        r : Rays
         """
         assert (self.pTx==r.pRx).all()
         assert (self.pRx==r.pTx).all()
@@ -1537,6 +1542,10 @@ class Rays(dict):
                 # reshape ray index
                 rrl = self[l]['rays'].reshape(r*l,order='F')
                 # get the corresponding evaluated interactions
+                #
+                # reshape error can be tricky to debug. 
+                #
+                #
                 # f , r , l , 2 , 2
                 A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
                 # get the corresponding unitary matrix B 
@@ -1560,8 +1569,8 @@ class Rays(dict):
                     pass
 
 
-                print "\nrays",ir
-                print "-----------------------"
+                #print "\nrays",ir
+                #print "-----------------------"
                 ## loop on all the interactions of ray with l interactions
                 for i in range(0, l):
 
@@ -1655,7 +1664,7 @@ class Rays(dict):
                     #               *Z[ ..., np.newaxis, :, :], axis=-2)
                     #     #Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
                     #     #           ..., np.newaxis, :, :], axis=-2)
-                print "Z",Z
+                #print "Z",Z
 
                 # fill the C tilde
                 Ct[:,ir, :, :] = Z[:, :, :, :]
