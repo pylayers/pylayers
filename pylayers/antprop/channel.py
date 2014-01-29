@@ -22,12 +22,29 @@ class Ctilde(object):
     Ctp : FUsignal
     Cpt : FUsignal
     Cpp : FUsignal
+
+    tauk 
+    tang 
+    rang 
+
     fGHz : np.array
         frequency array
     nfreq : int
         number of frequency point
     nray  : int
         number of rays
+
+    Methods
+    -------
+
+    choose
+    load
+    mobility 
+    doadod
+    show
+    energy
+    sort
+    prop2tran
 
     """
     def __init__(self):
@@ -304,85 +321,130 @@ class Ctilde(object):
         plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
         plt.axis
 
-    def show(self, display=False, mode='linear'):
+    def Cg2Cl(self, Tt, Tr):
+        """ global reference frame to local reference frame
+
+        Parameters
+        ----------
+
+        Tt  : Tx rotation matrix 3x3
+        Tr  : Rx rotation matrix 3x3
+
+        Returns
+        -------
+
+        Cl : Ctilde local 
+
+        Examples
+        --------
+
+        """
+        import copy
+        
+        # get frequency axes    
+        fGHz = Cl.fGHz
+        self.Tt = Tt 
+        self.Tr = Tr 
+        
+        # get angular axes
+        # Rt (2x2)
+        # Rr (2x2) 
+        Rt, tangl = geu.BTB_tx(self.tang, Tt)
+        Rr, rangl = geu.BTB_rx(self.rang, Tr)
+
+        self.tang = tangl
+        self.rang = rangl
+
+        uf = np.ones(VCg.nfreq)
+        r0 = np.outer(Rr[0, 0, :], uf)
+        r1 = np.outer(Rr[0, 1, :], uf)
+
+        # print "shape r0 = ",np.shape(r0)
+        # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
+        # print "shape r1 = ",np.shape(r1)
+        # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
+
+        t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+        t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+
+        r0 = np.outer(Rr[1, 0, :], uf)
+        r1 = np.outer(Rr[1, 1, :], uf)
+
+        t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+        t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+
+        r0 = np.outer(Rt[0, 0, :], uf)
+        r1 = np.outer(Rt[1, 0, :], uf)
+
+        Cttl = t00 * r0 + t01 * r1
+        Cptl = t10 * r0 + t11 * r1
+
+        r0 = np.outer(Rt[0, 1, :], uf)
+        r1 = np.outer(Rt[1, 1, :], uf)
+        Ctpl = t00 * r0 + t01 * r1
+        Cppl = t10 * r0 + t11 * r1
+
+        Cl.Ctt = bs.FUsignal(fGHz, Cttl)
+        Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
+        Cl.Cpt = bs.FUsignal(fGHz, Cptl)
+        Cl.Cpp = bs.FUsignal(fGHz, Cppl)
+
+        return Cl
+
+
+    def show(self, **kwargs):
         """ show the propagation channel 
         
         Parameters
         ----------
         
-        display : True or False
-        mode    : 'linear', 'dB'
-        
+        typ   : 'm', 'l20' , 'r'
+         
         """
 
-        f = abs(self.Ctt.x)
-        u = np.argsort(self.tauk)
-        tt = self.tauk[u]
-        utt = abs(self.Ctt.y[u, :])
-        utp = abs(self.Ctp.y[u, :])
-        upt = abs(self.Ctp.y[u, :])
-        upp = abs(self.Cpp.y[u, :])
+        defaults = {'typ': 'm',
+                   'cmap': plt.cm.hot}
 
-        uttmax = utt.max()
-        utpmax = utp.max()
-        uptmax = upt.max()
-        uppmax = upp.max()
-
-        #vmax=max(uttmax,utpmax,uptmax,uppmax)
-        if mode == 'linear':
-            plt.figure()
-            plt.subplot(221)
-            plt.pcolor(f, tt, utt)
-            plt.colorbar()
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.title('Ctt')
-            plt.subplot(222)
-            plt.pcolor(f, tt, utp)
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Ctp')
-            plt.subplot(223)
-            plt.pcolor(f, tt, upt)
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpt')
-            plt.subplot(224)
-            plt.pcolor(f, tt, upp)
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpp')
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+        
+        if 'fig' not in kwargs:
+            fig = plt.figure()
         else:
-            plt.figure()
-            plt.subplot(221)
-            plt.pcolor(f, tt, 20 * np.log10(utt + 1e-5))
-            plt.colorbar()
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.title('Ctt')
-            plt.subplot(222)
-            plt.pcolor(f, tt, 20 * np.log10(utp + 1e-5))
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Ctp')
-            plt.subplot(223)
-            plt.pcolor(f, tt, 20 * np.log10(upt + 1e-5))
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpt')
-            plt.subplot(224)
-            plt.pcolor(f, tt, 20 * np.log10(upp + 1e-5))
-            plt.xlabel('f (GHz)')
-            plt.ylabel('delay (ns)')
-            plt.colorbar()
-            plt.title('Cpp')
-        if display:
-            plt.show()
+            fig = kwargs['fig']
+
+        ax1 = fig.add_subplot(221)
+        fig,ax1 = self.Ctt.imshow(fig=fig,ax=ax1,**kwargs)
+        ax1.set_xlabel('f (GHz)')
+        ax1.set_title(u'$C_{\\theta\\theta}$')
+
+        ax2 = fig.add_subplot(222)
+        fig,ax2 = self.Ctp.imshow(fig=fig,ax=ax2,**kwargs)
+        ax2.set_xlabel('f (GHz)')
+        ax2.set_title(u'$C_{\\theta\phi}$')
+
+        ax3 = fig.add_subplot(223)
+        fig,ax3 = self.Cpt.imshow(fig=fig,ax=ax3,**kwargs)
+        ax3.set_xlabel('f (GHz)')
+        ax3.set_title(u'$C_{\phi\\theta}$')
+        
+        ax4 = fig.add_subplot(224)
+        fig,ax4 = self.Cpp.imshow(fig=fig,ax=ax4,**kwargs)
+        ax4.set_xlabel('f (GHz)')
+        ax4.set_title(u'$C_{\phi\phi}$')
+
+        return fig,(ax1,ax2,ax3,ax4)
+
+    def check_reciprocity(self,C):
+        assert np.allclose(self.tauk,C.tauk)
+        for r in range(self.nray):
+            if np.allclose(self.Ctt.y[r,:],C.Ctt.y[r,:]):
+                print r
+
+        #assert np.allclose(self.tang,C.rang)
+        #assert np.allclose(self.rang,C.tang)
+        
 
     def energy(self):
         """ Calculates energy on each channel
@@ -415,7 +477,7 @@ class Ctilde(object):
         return ECtt,ECpp,ECtp,ECpt
 
     def sort(self,typ='tauk'):
-        """ sort Ctilde with respect to tauk
+        """ sort Ctilde with respect to typ (default tauk)
 
         Parameters
         ----------
@@ -596,79 +658,6 @@ class Ctilde(object):
         print "shape Cpp :", np.shape(self.Cpp.y)
 
 
-def Cg2Cl(Cg, Tt, Tr):
-    """ global reference frame to local reference frame
-
-    Parameters
-    ----------
-
-    Cg  : Ctilde global
-    Tt  : Tx rotation matrix 3x3
-    Tr  : Rx rotation matrix 3x3
-
-    Returns
-    -------
-
-    Cl : Ctilde local 
-
-    Examples
-    --------
-
-    """
-    import copy
-    
-    # don't loose the global channel
-    Cl = copy.deepcopy(Cg)
-    
-    # get frequency axes    
-    fGHz = Cl.fGHz
-    
-    # get angular axes
-
-    # Rt (2x2)
-    # Rr (2x2) 
-    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
-    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
-
-    Cl.tang = tangl
-    Cl.rang = rangl
-
-    uf = np.ones(VCg.nfreq)
-    r0 = np.outer(Rr[0, 0, :], uf)
-    r1 = np.outer(Rr[0, 1, :], uf)
-
-    # print "shape r0 = ",np.shape(r0)
-    # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
-    # print "shape r1 = ",np.shape(r1)
-    # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
-
-    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-
-    r0 = np.outer(Rr[1, 0, :], uf)
-    r1 = np.outer(Rr[1, 1, :], uf)
-
-    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
-    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
-
-    r0 = np.outer(Rt[0, 0, :], uf)
-    r1 = np.outer(Rt[1, 0, :], uf)
-
-    Cttl = t00 * r0 + t01 * r1
-    Cptl = t10 * r0 + t11 * r1
-
-    r0 = np.outer(Rt[0, 1, :], uf)
-    r1 = np.outer(Rt[1, 1, :], uf)
-    Ctpl = t00 * r0 + t01 * r1
-    Cppl = t10 * r0 + t11 * r1
-
-    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
-    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
-    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
-    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
-
-    return Cl
-
 
 class Tchannel(bs.FUDAsignal):
     """ Handle the transmission channel 
@@ -687,6 +676,20 @@ class Tchannel(bs.FUDAsignal):
         direction of arrival (rad)  [theta_r,phi_r]  nray x 2
     tauk :
         delay ray k in ns
+    
+    Methods
+    -------
+
+    imshow()
+    apply(W) 
+    applywavB(Wgam,Tw) 
+    applywavB(Wgam) 
+    applywavC(Wgam) 
+    chantap(fcGHz,WGHz,Ntap) 
+    doddoa()
+    wavefig(w,Nray)
+    rayfig(w,Nray)
+    RSSI(ufreq)
 
 
     """
@@ -723,16 +726,6 @@ class Tchannel(bs.FUDAsignal):
         print 'H - FUDsignal '
         print 'tau min , tau max :', min(self.tau), max(self.tau)
         self.H.info()
-
-    def imshow(self):
-        """ imshow vizualization of H
-
-        """
-        self.H
-        sh = np.shape(self.H.y)
-        itau = np.arange(len(self.tau))
-        plt.imshow(abs(self.H.y))
-        plt.show()
 
     def apply(self, W):
         """ Apply a FUsignal W to the ScalChannel.
@@ -795,13 +788,20 @@ class Tchannel(bs.FUDAsignal):
         return(ri)
 
     def chantap(self,**kwargs):
+        """ channel tap
 
+        Parameters
+        ----------
 
-        defaults = {
-                    'fcGHz':4.5,
+        fcGHz :
+            WGHz  :
+        Ntap  : 
+        
+        """
+
+        defaults = {'fcGHz':4.5,
                     'WGHz':1,
-                    'Ntap':100
-        }
+                    'Ntap':100}
 
         for key, value in defaults.items():
             if key not in kwargs:
@@ -998,6 +998,80 @@ class Tchannel(bs.FUDAsignal):
     
         Tk = np.real(self.y[:,ufreq])
         return(20*np.log(np.sum(Tk**2)))
+
+def Cg2Cl(Cg, Tt, Tr):
+    """ global reference frame to local reference frame
+
+    Parameters
+    ----------
+
+    Cg  : Ctilde global
+    Tt  : Tx rotation matrix 3x3
+    Tr  : Rx rotation matrix 3x3
+
+    Returns
+    -------
+
+    Cl : Ctilde local 
+
+    Examples
+    --------
+
+    """
+    import copy
+    
+    # don't loose the global channel
+    Cl = copy.deepcopy(Cg)
+    
+    # get frequency axes    
+    fGHz = Cl.fGHz
+    
+    # get angular axes
+
+    # Rt (2x2)
+    # Rr (2x2) 
+    Rt, tangl = geu.BTB_tx(Cg.tang, Tt)
+    Rr, rangl = geu.BTB_rx(Cg.rang, Tr)
+
+    Cl.tang = tangl
+    Cl.rang = rangl
+
+    uf = np.ones(VCg.nfreq)
+    r0 = np.outer(Rr[0, 0, :], uf)
+    r1 = np.outer(Rr[0, 1, :], uf)
+
+    # print "shape r0 = ",np.shape(r0)
+    # print "shape VCg.Ctt.y = ",np.shape(VCg.Ctt.y)
+    # print "shape r1 = ",np.shape(r1)
+    # print "shape VCg.Cpt.y = ",np.shape(VCg.Cpt.y)
+
+    t00 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+    t01 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+
+    r0 = np.outer(Rr[1, 0, :], uf)
+    r1 = np.outer(Rr[1, 1, :], uf)
+
+    t10 = r0 * VCg.Ctt.y + r1 * VCg.Cpt.y
+    t11 = r0 * VCg.Ctp.y + r1 * VCg.Cpp.y
+
+    r0 = np.outer(Rt[0, 0, :], uf)
+    r1 = np.outer(Rt[1, 0, :], uf)
+
+    Cttl = t00 * r0 + t01 * r1
+    Cptl = t10 * r0 + t11 * r1
+
+    r0 = np.outer(Rt[0, 1, :], uf)
+    r1 = np.outer(Rt[1, 1, :], uf)
+    Ctpl = t00 * r0 + t01 * r1
+    Cppl = t10 * r0 + t11 * r1
+
+    Cl.Ctt = bs.FUsignal(fGHz, Cttl)
+    Cl.Ctp = bs.FUsignal(fGHz, Ctpl)
+    Cl.Cpt = bs.FUsignal(fGHz, Cptl)
+    Cl.Cpp = bs.FUsignal(fGHz, Cppl)
+
+    return Cl
+
 
 if __name__ == "__main__":
     plt.ion()

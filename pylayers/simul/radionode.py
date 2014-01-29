@@ -193,7 +193,7 @@ class RadioNode(object):
 
         """
         self.position = np.array([], dtype=float)
-        self.position = np.array([0, 0, 0]).reshape(3, 1)
+        self.position = np.array([0., 0., 0.]).reshape(3, 1)
         self.N = 1
 
     def points(self, pt=np.array([[0], [0], [0]])):
