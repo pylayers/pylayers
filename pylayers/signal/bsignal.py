@@ -919,6 +919,9 @@ class Usignal(Bsignal):
         """
         energy = self.dx() * sum(self.y * np.conj(self.y))
         return(energy)
+    
+    def fftshift(self):
+        self.y = fft.fftshift(self.y,axes=1)
 
     def zright(self, xmax):
         """ add zeros on the right until xmax
@@ -1281,6 +1284,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
+
         FHsignal : Frequency signal with hermitian symmetry
 
         """
@@ -1288,8 +1292,8 @@ class TUsignal(TBsignal, Usignal):
         te = self.x[1] - self.x[0]
         fe = 1.0 / te
         f = np.linspace(0, fe, Np, endpoint=False)
-        #y=fft(self.y)
-        #y     = fftshift(y)
+        #y = fft(self.y)
+        #y = fftshift(y)
         y = fft.fftshift(self.y)
         y = fft.fft(y)
         S = FHsignal()
@@ -3568,7 +3572,13 @@ class FUDsignal(FUsignal):
         r = r + si
         return r
         
+    def cir(self,fGHzmin=0,fGHzmax=1000):
+        """
+        """
+        u = (self.x>fGHzmin) & (self.y<fGHzmax)
+        cir = sum(self.y)
         
+
     def plot3d(self,fig=[],ax=[]):
         """
 
@@ -3654,8 +3664,7 @@ class FUDsignal(FUsignal):
 
 
 class FUDAsignal(FUDsignal):
-    """
-    FUDAsignal : Uniform signal in frequency domain with delays and angles
+    """ FUDAsignal : Frequency domain Uniform signal with Delays and Angles
 
 
     Attributes
