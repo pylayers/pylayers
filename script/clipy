@@ -1,0 +1,7 @@
+#!/bin/bash 
+
+for i in `ls $PYLAYERS/notebook/*.ipynb`;
+do
+    python $PYLAYERS/script/remove_output.py $i > tmp.ipynb 
+    mv tmp.ipynb $i
+done

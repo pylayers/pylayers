@@ -7,14 +7,97 @@ from matplotlib import cm
 import doctest
 import pdb
 
+
+            
+def cformat(x,y,**kwargs):
+    """ complex format 
+
+    Parameters
+    ----------
+
+    x : ndarray   (,Nx)
+    y : ndarray (Ny,Nx)
+    
+    uy : ndarray()
+        select rows of y 
+
+    Returns
+    -------
+
+    xn 
+    yn 
+    ylabels
+
+    """
+    defaults = {'typ':['l20']}
+
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+
+    if 'uy' not in kwargs:
+        uy = np.arange(np.shape(y)[1])
+    else:
+        uy = kwargs['uy']
+
+    # radians to degree coefficient   
+    rtd = 180./np.pi
+    
+    t = kwargs['typ']
+
+    xn = x
+    if t=='m':
+        ylabels='Magnitude'
+        yn = np.abs(y[u,:])
+    if t=='v':
+        ylabels='Amplitude'
+        yn = y[u,:]
+    if t=='l10':
+        ylabels='Magnitude (dB)'
+        yn = 10*np.log10(np.abs(y[u,:]))
+    if t=='l20':
+        ylabels='Magnitude (dB)'
+        yn = 20*np.log10(np.abs(y[u,:]))
+    if t=='d':
+        ylabels='Phase (deg)'
+    if t=='r':
+        ylabels='Phase (rad)'
+        yn = np.angle(y[u,:])
+    if t=='du':
+        ylabels='Unwrapped Phase (deg)'
+        yn = p.unwrap(np.angle(y[u,:]))*rtd
+    if t=='ru':
+        ylabels='Unwrapped Phase (rad)'
+        yn = np.unwrap(np.angle(y[u,:]))
+    if t=='re':
+        ylabels='Real part'
+        yn = np.real(y[u,:])
+    if t=='im':
+        ylabels='Imaginary part'
+        yn = np.imag(y[u,:])
+    if t=='gdn':
+        ylabels='Group delay (ns)'
+        df  = x[1]-x[0]
+        xn  = x[0:-1]               
+        yn  = -np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
+    if t=='gdm':
+        ylabels='Group distance (m)'
+        df  = x[1]-x[0]
+        xn  = x[0:-1]               
+        yn = -0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df)
+    if 'ylabels'  in kwargs:
+        ylabels = kwargs['ylabels']
+
+    return(xn,yn,ylabels)                           
 def mulcplot(x,y,**kwargs):
     """ handling multiple complex variable plots
 
     Parameters
     ----------
 
-    x : ndarray  (Nc x Nx)
-    y : ndarray  (Nv x Ny)
+    x : ndarray  
+        
+    y : ndarray  
 
     types : 'm'   : modulus 
             'v'   : value
@@ -29,12 +112,8 @@ def mulcplot(x,y,**kwargs):
             're'  : real part
             'im'  : imaginary part 
 
-    dB : bool
-        False
-    fig = []    
-    ax  = []    
-    nlg  : int 
-        number of lines 
+    
+    fig and ax are numpy arrays of fig and ax
 
     Examples
     --------
@@ -46,19 +125,19 @@ def mulcplot(x,y,**kwargs):
     -----
 
     If len(y.shape) > 2 the two first axes are used as nlin and ncol this
-    takes the priority over the pased values nlin and ncol 
+    takes the priority over the passed values nlin and ncol 
 
 
     """
-    defaults = {'types':['l20'],
+    defaults = {'typ':['l20'],
                 'titles':[''],
                 'labels':[''],
                 'xlabels':['time (ns)'],
-                'ylabels':['Amplitude (dB)'],
                 'ncol':1,
                 'nlin':1,
                 'fig':[],
                 'ax':[],
+                'figsize':(8,8)
                }
 
     # radians to degree coefficient   
@@ -74,10 +153,13 @@ def mulcplot(x,y,**kwargs):
     for key, value in defaults.items():
         if key not in kwargs:
             kwargs[key] = value
-   
+    #
+    # ylabels is deduced from types 
+    # ==> do not set any ylabels defaults
+    #
     if 'ylabels' not in kwargs:
         ylabels = []
-        for t in kwargs['types']:
+        for t in kwargs['typ']:
             if t=='m':
                 ylabels.append('Amplitude'),
             if t=='v':
@@ -109,16 +191,17 @@ def mulcplot(x,y,**kwargs):
     ax = kwargs['ax']
     nlin = kwargs['nlin']
     ncol = kwargs['ncol']
-    types = kwargs['types']
+    types = kwargs['typ']
     titles = kwargs['titles']
     labels = kwargs['labels']
     xlabels = kwargs['xlabels']
+    figsize = kwargs['figsize']
 
-    ntypes = np.prod(np.array(types).shape)
-    ntitles = np.prod(np.array(titles).shape)
-    nlabels = np.prod(np.array(labels).shape)
-    nxlabels = np.prod(np.array(xlabels).shape)
-    nylabels = np.prod(np.array(ylabels).shape)
+    ntypes = np.prod(np.array(types).shape,dtype='int')
+    ntitles = np.prod(np.array(titles).shape,dtype='int')
+    nlabels = np.prod(np.array(labels).shape,dtype='int')
+    nxlabels = np.prod(np.array(xlabels).shape,dtype='int')
+    nylabels = np.prod(np.array(ylabels).shape,dtype='int')
 
 
     # filtering kwargs argument for plot function 
@@ -127,19 +210,25 @@ def mulcplot(x,y,**kwargs):
         if k not in defaults.keys():
             args[k]=kwargs[k]
 
+    #
+    # shape of entries
+    #
     shx = x.shape
     shy = y.shape
 
-    if len(shy)>2:
-        ydim = shy[0:-1]
+    # 
+    # This is for handling MDA of shape 
+    #
+    if len(shy)>2: # 3
+        ydim = shy[0:-1]   
         nlin = ydim[0]
         ncol = ydim[1]
     else:
         if not grid:
-            if len(shy)>1:
+            if len(shy)>1: #2   1 column 
                 nlin = shy[0]
                 ncol = 1
-            else:
+            else:          #0   1 line / 1 column 
                 nlin = 1
                 ncol = 1
                 y = y[np.newaxis,:]
@@ -151,13 +240,15 @@ def mulcplot(x,y,**kwargs):
     nfigy = np.prod(np.array(y.shape[0:-1]))
 
     assert((nfigy==ncol*nlin) | (nfigy==1))
-    assert((nlabels==nfigy)|(nlabels==1))
-    assert((ntitles==ncol*nlin)|(ntitles==1))
-    assert((nxlabels==nfigy)|(nxlabels==1))
-    assert((nylabels==nfigy)|(nxlabels==1))
+    assert((nlabels==nfigy) | (nlabels==1))
+    assert((ntitles==ncol*nlin) | (ntitles==1))
+    assert((nxlabels==nfigy) | (nxlabels==1))
+    assert((nylabels==nfigy) | (nxlabels==1))
 
     if ax==[]:    
-        fig,ax=plt.subplots(nlin,ncol,sharey=True,sharex=True)
+        # nlin , ncol subplot 
+        fig,ax = plt.subplots(nlin,ncol,sharey=True,sharex=True,figsize=kwargs['figsize'])
+
         if (nlin==1)&(ncol==1):
             ax = np.array(ax)[np.newaxis,np.newaxis]
         else:    
@@ -165,6 +256,9 @@ def mulcplot(x,y,**kwargs):
                 ax = ax[np.newaxis,:]
             if ncol==1:
                 ax = ax[:,np.newaxis]
+    else:
+        if (nlin==1)&(ncol==1):
+            ax = np.array(ax)[np.newaxis,np.newaxis]
    
     for l in range(nlin):
         for c in range(ncol):
@@ -173,6 +267,7 @@ def mulcplot(x,y,**kwargs):
                     lablc = labels[l,c]
                 else:
                     lablc = labels[0]
+                
                 if types[0]=='v':
                         ax[l,c].plot(x,y[l,c,:],label=lablc,**args)
                 if types[0]=='r':
@@ -199,7 +294,6 @@ def mulcplot(x,y,**kwargs):
                 if types[0]=='gdm':
                     df  = x[1]-x[0]
                     ax[l,c].plot(x[0:-1],-0.3*np.diff(np.unwrap(np.angle(y[l,c,:])))/(2*np.pi*df),label=lablc,**args)
-                
                 if nxlabels>1:
                     ax[l,c].set_xlabel(xlabels[l,c])
                 else:
@@ -246,6 +340,7 @@ def mulcplot(x,y,**kwargs):
 
                 ax[l,c].set_xlabel(xlabels[k%nxlabels])
                 ax[l,c].set_ylabel(ylabels[k%nylabels])
+
                 ax[l,c].set_title(titles[k%ntitles])
                 ax[l,c].legend()
                 #ax[l,c].get_xaxis().set_visible(False)
@@ -255,20 +350,23 @@ def mulcplot(x,y,**kwargs):
 
     return(fig,ax)                  
 
-def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
+
+def displot(pt, ph, arrow=False, **kwargs ):
     """ discontinuous plot
 
     Parameters
     ----------
+
     pt:
         tail points array (2 x (2*Nseg))
     ph :
         head points array (2 x (2*Nseg))
-    col : string 
-        color name
+    arrow : bool
+        display arrow on segments (square = tail, triangle = head)
 
     Returns
     -------
+
     f,a
         fig and ax
 
@@ -288,9 +386,25 @@ def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
         >>> txt = plt.title('pylayers.util.geomutil.displot(pt,ph) : plot 10 random segments')
 
     """
-    if fig == None:
+    defaults = {   'fig': [],
+                    'ax': [],
+                    
+                }
+
+    for key, value in defaults.items():
+        if key not in kwargs:
+            kwargs[key] = value
+
+    args ={}
+    for k in kwargs:
+        if k not in defaults.keys():
+            args[k]=kwargs[k]
+
+    if kwargs['fig']==[]:
         fig = plt.gcf()
-        ax  = fig.gca()
+        if kwargs['ax']==[]:
+            ax  = fig.gca()
+
     Nseg = np.shape(pt)[1]
     pz = np.empty((2,))
     pn = np.zeros((2,))
@@ -302,14 +416,20 @@ def displot(pt, ph,color='black',fig=None,ax =None,linewidth=2):
     mask = np.kron(np.ones((2, Nseg)), m1)
     pzz = pz[1:, :].T
     vertices = np.ma.masked_array(pzz, mask)
-    ax.plot(vertices[0, :], vertices[1, :], color=color,linewidth=linewidth)
+    ax.plot(vertices[0, :], vertices[1, :],**args)
+    if arrow:
+        ax.scatter(pt[0,:],pt[1,:],marker='s',color='k')
+        ax.scatter(ph[0,:],ph[1,:],marker='^',color='k')
+
     return fig, ax
+
 
 def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
     """ polar 3D  surface plot
 
     Parameters
     ----------
+
     rho  : np.array
           t  x p
     theta : np.array
@@ -317,17 +437,19 @@ def pol3D(fig,rho,theta,phi,sf=False,shade=True,title='pol3D'):
     phi  : np.array
           1 x p
 
-    Example
-    -------
+    Examples
+    --------
 
-    >>> from pylayers.util.plotutil import *
-    >>> import numpy as np
-    >>> theta = np.linspace(0,np.pi,90)
-    >>> phi = np.linspace(0,2*np.pi,180)
-    >>> rho = np.ones((len(theta),len(phi)))
-    >>> fig=plt.figure()
-    >>> pol3D(fig,rho,theta,phi)
-    >>> plt.show()
+    .. plot:: 
+
+        >>> from pylayers.util.plotutil import *
+        >>> import numpy as np
+        >>> theta = np.linspace(0,np.pi,90)
+        >>> phi = np.linspace(0,2*np.pi,180)
+        >>> rho = np.ones((len(theta),len(phi)))
+        >>> fig=plt.figure()
+        >>> pol3D(fig,rho,theta,phi)
+        >>> plt.show()
 
     """
     ax = axes3d.Axes3D(fig)

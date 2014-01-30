@@ -43,7 +43,7 @@ from mpl_toolkits.mplot3d import axes3d
 #from scipy import sparse
 from matplotlib import rc
 from matplotlib import cm # colormaps
-
+from pylayers.antprop.antssh import *
 
 class Antenna(object):
     """ Antenna
@@ -90,7 +90,7 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', directory="ant", nf=104, ntheta=181, nphi=90):
+    def __init__(self, _filename='defant.vsh3', pattern = False, directory="ant", nf=104, ntheta=90, nphi=181):
         """
 
         Parameters
@@ -123,31 +123,47 @@ class Antenna(object):
          A = Antenna('my_antenna.mat')
 
         """
-        typ = _filename.split('.')[1]
-        self.typ = typ
-        self._filename = _filename
-        if typ == 'vsh3':
-            self.loadvsh3()
-        if typ == 'vsh2':
-            self.loadvsh2()
-        if typ == 'sh3':
-            self.loadsh3()
-        if typ == 'sh2':
-            self.loadsh2()
-        if typ == 'trx1':
-            self.load_trx(directory, nf, ntheta, nphi)
-        if typ == 'trx':
-            self.loadtrx(directory)
-        if typ == 'mat':
-            self.loadmat(directory)
+        self.nf = nf
+        self.ntheta = ntheta
+        self.nphi = nphi
+        self.pattern = pattern
+        if not pattern :
+            typ = _filename.split('.')[1]
+            self.typ = typ
+            self._filename = _filename
+            if typ == 'vsh3':
+                self.loadvsh3()
+            if typ == 'vsh2':
+                self.loadvsh2()
+            if typ == 'sh3':
+                self.loadsh3()
+            if typ == 'sh2':
+                self.loadsh2()
+            if typ == 'trx1':
+                self.load_trx(directory, nf, ntheta, nphi)
+            if typ == 'trx':
+                self.loadtrx(directory)
+            if typ == 'mat':
+                self.loadmat(directory)
+
+        else :
+            self.typ = 'Gauss'
+            self.p0 = 0
+            self.t0 = np.pi/2.
+            self.p3 = np.pi/6. # 30 degrees
+            self.t3 = np.pi/6. # 30 degrees
+            self.GdB  = 10. # gain
+            self.G  = pow(10.,self.GdB/10.) # gain
+            self.sqG = np.sqrt(self.G)
 
     def __repr__(self):
         st = ''
-        st = st + 'file name : ' + self._filename+'\n'
+        if not self.pattern:
+            st = st + 'file name : ' + self._filename+'\n'
         #st = st + 'file type : ' + self.typ+'\n'
         if self.typ == 'mat':
             #st = st + self.DataFile + '\n'
-            st = st + 'antenna name : ', self.AntennaName + '\n'
+            st = st + 'antenna name : '+ self.AntennaName + '\n'
             st = st + 'date : ' + self.Date +'\n'
             st = st + 'time : ' + self.StartTime +'\n'
             st = st + 'Notes : ' + self.Notes+'\n'
@@ -155,7 +171,54 @@ class Antenna(object):
             st = st + 'Run : ' + str(self.Run)+'\n'
             st = st + "Nb theta (lat) : "+ str(self.Nt)+'\n'
             st = st + "Nb phi (lon) :"+ str(self.Np)+'\n'
+        if self.typ == 'Gauss':
+            st = st + 'Gaussian pattern' + '\n'
+            st = st + 'phi0 : ' + str(self.p0) +'\n'
+            st = st + 'theta0 :' + str(self.t0) + '\n'
+            st = st + 'phi 3dB :' + str(self.p3) + '\n'
+            st = st + 'theta 3dB :' + str(self.t3) + '\n'
+            st = st + 'Gain dB :' + str(self.GdB) + '\n'
+            st = st + 'Gain linear :' + str(self.G ) + '\n'
+            st = st + 'sqrt G :' + str(self.sqG) + '\n'
+
         return(st)
+
+
+    def Fpatt(self,th=[],ph=[],pattern=True):
+        """
+        """
+
+        assert self.pattern , 'not a pattern antenna' 
+
+        self.fa = np.linspace(2,10,self.nf)
+
+
+        if (th == []) and (ph == []):
+            self.th = np.linspace(0,np.pi,self.ntheta)
+            self.ph = np.linspace(0,2*np.pi,self.nphi,endpoint=False)
+        else :
+            self.th = th
+            self.ph = ph
+
+        if self.typ == 'Gauss':
+
+
+            argth = ((self.th-self.t0)**2)/self.t3
+            e1 = np.mod(self.ph-self.p0,2*np.pi)
+            e2 = np.mod(self.p0-self.ph,2*np.pi)
+            e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
+            argphi = (e**2)/self.p3
+
+            if pattern :
+                Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+                Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+            else:
+                Fat = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+                Fap = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+                Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+                Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+                
+        return (Fat,Fap)    
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
@@ -212,7 +275,10 @@ class Antenna(object):
         self.SqG = np.sqrt(Gr)
         self.Nt = len(self.theta)
         self.Np = len(self.phi)
-        self.Nf = len(self.fa)
+        if type(self.fa) ==  float:
+            self.Nf = 1
+        else:
+            self.Nf = len(self.fa)
 
     def load_trx(self, directory="ant", nf=104, ntheta=181, nphi=90, ncol=6):
         """ load a trx file (deprecated)
@@ -298,7 +364,7 @@ class Antenna(object):
         self.Np = 180
         self.Nf = 104
 
-    def pattern(self,theta,phi,typ='s3'):
+    def pattern(self,theta=[],phi=[],typ='s3'):
         """ return multidimensionnal radiation patterns 
 
         Parameters
@@ -310,6 +376,12 @@ class Antenna(object):
             1xNp
 
         """
+
+        if theta == []:
+            theta = np.linspace(0,np.pi,30)
+        if phi == []:
+            phi = np.linspace(0,2*np.pi,60)
+
         Nt = len(theta)
         Np = len(phi)
         Nf = len(self.fa)
@@ -637,9 +709,6 @@ class Antenna(object):
     def info(self):
         """ gives info about antenna object
 
-           >>> A1 = Antenna('defant.trx')
-           >>> A2 = Antenna('defant.vsh3')
-           >>> A3 = Antenna('S1R1.mat','ant/UWBAN/Matfile')
 
         """
         print self._filename
@@ -673,39 +742,38 @@ class Antenna(object):
     def polar(self, k=[0], it=0, ip=-1, dyn=6, GmaxdB=20, alpha=0.1,fig=[],ax=[]):
         """ polar plot
 
-            Parameters
-            ----------
+        Parameters
+        ----------
 
-            k : list of int
-                frequency index  (default 0)
-            it  : int
-                theta index      (default 0)
-            ip  : int
-                phi index        (default -1)
-            GmaxdB :
-                Max Gain (dB)
-            dyn    :
-                dynamic number of 5dB step
-            alpha  : float
-                default 0.1
+        k : list of int
+            frequency index  (default 0)
+        it : int
+            theta index      (default 0)
+        ip : int
+            phi index        (default -1)
+        GmaxdB :
+            Max Gain (dB)
+        dyn    :
+            dynamic number of 5dB step
+        alpha  : float
+            default 0.1
 
-            Returns    
-            -------
+        Returns    
+        -------
 
-            fig 
-            ax 
+        fig 
+        ax 
 
-            Examples
-            --------
+        Examples
+        --------
 
-            .. plot::
-                :include-source:
+        .. plot::
+            :include-source:
 
-                >>> import matplotlib.pyplot as plt
-                >>> from pylayers.antprop.antenna import *
-                >>> A = Antenna('defant.trx')
-                >>> fig,ax = A.polar(k=[0,10,50])
-                >>> plt.show()
+            >>> import matplotlib.pyplot as plt
+            >>> from pylayers.antprop.antenna import *
+            >>> A = Antenna('defant.trx')
+            >>> fig,ax = A.polar(k=[0,10,50])
 
         """
 
@@ -801,8 +869,8 @@ class Antenna(object):
             >>> from pylayers.antprop.antenna import *
             >>> import numpy as np
             >>> import matplotlib.pylab as plt
-            >>> A = Antenna('defant.vsh3')
-            >>> A.show3()
+            >>> A = Antenna('defant.trx')
+            >>> #A.show3()
 
         """
 
@@ -823,7 +891,12 @@ class Antenna(object):
         _filename = 'antbody' 
 
         geo = geu.Geomoff(_filename)
-        geo.pattern(self.theta,self.phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
+        # geo.pattern requires the following shapes  
+        # theta (Ntx1)
+        # phi (1xNp)
+        theta = self.theta[:,np.newaxis] 
+        phi = self.phi[np.newaxis,:]  
+        geo.pattern(theta,phi,V,po=po,T=T,ilog=False,minr=0.01,maxr=0.2)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
         #filename = geom_pattern(self.theta, self.phi, V, k, po, minr, maxr, typ)
 
@@ -1295,7 +1368,7 @@ class Antenna(object):
 
         return Fth, Fph
 
-    def Fsynth2(self, theta, phi,pattern=False):
+    def Fsynth2(self, theta, phi,pattern=False, typ = 'vsh'):
         """  pattern synthesis from shape 2 vsh coeff
 
         Parameters
@@ -1317,50 +1390,66 @@ class Antenna(object):
 
         Nt = len(theta)
         Np = len(phi)
+        if typ =='vsh' :
+            
+            if pattern:
+                theta = np.kron(theta, np.ones(Np))
+                phi = np.kron(np.ones(Nt),phi)
 
-        if pattern:
-            theta = np.kron(theta, np.ones(Np))
-            phi = np.kron(np.ones(Nt),phi)
+            Br = self.C.Br.s2
+            Bi = self.C.Bi.s2
+            Cr = self.C.Cr.s2
+            Ci = self.C.Ci.s2
 
-        Br = self.C.Br.s2
-        Bi = self.C.Bi.s2
-        Cr = self.C.Cr.s2
-        Ci = self.C.Ci.s2
+            N = self.C.Br.N2
+            M = self.C.Br.M2
 
-        N = self.C.Br.N2
-        M = self.C.Br.M2
+            #print "N,M",N,M
+            #
+            # The - sign is necessary to get the good reconstruction
+            #     deduced from observation
+            #     May be it comes from a different definition of theta in SPHEREPACK
+            x = -np.cos(theta)
 
-        #print "N,M",N,M
-        #
-        # The - sign is necessary to get the good reconstruction
-        #     deduced from observation
-        #     May be it comes from a different definition of theta in SPHEREPACK
-        x = -np.cos(theta)
+            Pmm1n, Pmp1n = AFLegendre3(N, M, x)
+            ind = index_vsh(N, M)
 
-        Pmm1n, Pmp1n = AFLegendre3(N, M, x)
-        ind = index_vsh(N, M)
+            n = ind[:, 0]
+            m = ind[:, 1]
 
-        n = ind[:, 0]
-        m = ind[:, 1]
-
-        #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
-        V, W = VW(n, m, x, phi)
+            #~ V, W = VW(n, m, x, phi, Pmm1n, Pmp1n)
+            V, W = VW(n, m, x, phi)
 
 
-        Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
-            np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
-        Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
-            np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
+            Fth = np.dot(Br, np.real(V.T)) - np.dot(Bi, np.imag(V.T)) + \
+                np.dot(Ci, np.real(W.T)) + np.dot(Cr, np.imag(W.T))
+            Fph = -np.dot(Cr, np.real(V.T)) + np.dot(Ci, np.imag(V.T)) + \
+                np.dot(Bi, np.real(W.T)) + np.dot(Br, np.imag(W.T))
 
-        if pattern:
+            if pattern:
+                Nf = len(self.fa)
+                Fth = Fth.reshape(Nf, Nt, Np)
+                Fph = Fph.reshape(Nf, Nt, Np)
+        else:
             Nf = len(self.fa)
-            Fth = Fth.reshape(Nf, Nt, Np)
-            Fph = Fph.reshape(Nf, Nt, Np)
+            Nt = len(theta)
+            Np = len(phi)                  
+            cx = self.S.Cx.s2
+            cy = self.S.Cy.s2
+            cz = self.S.Cz.s2
+            lmax = self.S.Cx.lmax
+            Y ,indx = SSHFunc(lmax, theta,phi)
+            Ex = np.dot(cx,Y).reshape(Nf,Nt,Np)
+            Ey = np.dot(cy,Y).reshape(Nf,Nt,Np)
+            Ez = np.dot(cz,Y).reshape(Nf,Nt,Np)
+            
+            Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True ) 
+            
 
         return Fth, Fph
 
 
-    def Fsynth3(self, theta = [], phi=[], pattern=True,typ='vsh'):
+    def Fsynth3(self, theta = [], phi=[], pattern=True):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
@@ -1368,8 +1457,8 @@ class Antenna(object):
         Parameters
         ----------
 
-        theta : ndarray (1xNdir)
-        phi   : ndarray (1xNdir)
+        theta : ndarray (1xNdir if not pattern)  (1xNtheta if pattern)
+        phi   : ndarray (1xNdir if not pattter)  (1xNphi if pattern)
         
         pattern : boolean
             if True theta and phi are reorganized for building the pattern
@@ -1396,28 +1485,35 @@ class Antenna(object):
             >>> A = Antenna('defant.vsh3')
             >>> theta = np.linspace(0,np.pi,70)
             >>> phi = np.linspace(0,2*np.pi,180)
-            >>> A.Fsynth3(theta,phi,pattern=True)
+            >>> F = A.Fsynth3(theta,phi,pattern=True)
 
         All Br,Cr,Bi,Ci have the same (l,m) index in order to evaluate only
         once the V,W function
 
         """
+        typ = self._filename.split('.')[1]
+        if typ not in ['sh3','vsh3']:
+            # temporary what to do if originbal file is not sh3 or vsh3 ? 
+            typ = 'vsh3'
 
-        if typ =='vsh':
+        Nf = len(self.fa)
+        if theta==[]:
+            theta=np.linspace(0,np.pi,47)
+        if phi == []:
+            phi= np.linspace(0,2*np.pi,47)
+
+        Nt = len(theta)
+        Np = len(phi)
+
+        if pattern:
+            self.theta = theta[:,np.newaxis]
+            self.phi = phi[np.newaxis,:] 
+            theta = np.kron(theta, np.ones(Np))
+            phi = np.kron(np.ones(Nt),phi)
+                         
         
-            if theta==[]:
-                theta=np.linspace(0,np.pi,47)
-            if phi == []:
-                phi= np.linspace(0,2*np.pi,91)
-                  
-            Nt = len(theta)
-            Np = len(phi)
-
-            if pattern:
-                self.theta = theta[:,np.newaxis]
-                self.phi = phi[np.newaxis,:] 
-                theta = np.kron(theta, np.ones(Np))
-                phi = np.kron(np.ones(Nt),phi)
+        if typ =='vsh3':        
+            
 
             nray = len(theta)
 
@@ -1437,8 +1533,6 @@ class Antenna(object):
             # vector spherical harmonics basis functions
 
             V, W = VW(lBr, mBr, theta, phi)
-
-
             Fth = np.dot(Br, np.real(V.T)) - \
                 np.dot(Bi, np.imag(V.T)) + \
                 np.dot(Ci, np.real(W.T)) + \
@@ -1450,25 +1544,49 @@ class Antenna(object):
                 np.dot(Br, np.imag(W.T))
             
             if pattern:
-                Nf = len(self.fa)
+                
                 Fth = Fth.reshape(Nf, Nt, Np)
                 Fph = Fph.reshape(Nf, Nt, Np)
-                self.Ftheta = Fth
-                self.Fphi = Fph
-                G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
-                self.SqG = np.sqrt(G)
 
-            
-        else :
-
-            Nt = len(theta)
-            Np = len(phi)            
-            
+                
+        if typ == 'sh3':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3
             cz = self.S.Cz.s3
+
+            lmax = self.S.Cx.lmax
+            Y ,indx = SSHFunc2(lmax, theta,phi)
+            k = self.S.Cx.k2[:,0]
+            if pattern :
+                    
+                Ex = np.dot(cx,Y[k])
+                Ey = np.dot(cy,Y[k])
+                Ez = np.dot(cz,Y[k])
+                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = True ) 
+                Fth = Fth.reshape(Nf,Nt,Np)
+                Fph = Fph.reshape(Nf,Nt,Np)
+                
+
+            else:
+                     
+                Ex = np.dot(cx,Y[k])
+                Ey = np.dot(cy,Y[k])
+                Ez = np.dot(cz,Y[k])
+                Fth,Fph = CartToSphere (theta, phi, Ex, Ey,Ez, bfreq = True, pattern = False)       
             
-            
+            self.Fphi = Fph
+            self.Ftheta = Fth
+            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+            self.SqG = np.sqrt(G)
+                
+
+        if pattern :
+            self.Fphi = Fph
+            self.Ftheta = Fth
+            G = np.real(Fph * np.conj(Fph) + Fth * np.conj(Fth))
+            self.SqG = np.sqrt(G)   
+
+
         return Fth, Fph
             
 
@@ -1639,9 +1757,15 @@ class Antenna(object):
             coeff = {}
             coeff['fmin'] = self.fa[0]
             coeff['fmax'] = self.fa[-1]
+
+            
             coeff['Cx.ind'] = self.S.Cx.ind2
             coeff['Cy.ind'] = self.S.Cy.ind2
-            coeff['Cz.ind'] = self.S.Cz.ind2            
+            coeff['Cz.ind'] = self.S.Cz.ind2
+            coeff['Cx.lmax']= self.S.Cx.lmax           
+            coeff['Cy.lmax']= self.S.Cy.lmax           
+            coeff['Cz.lmax']= self.S.Cz.lmax           
+
             coeff['Cx.s2'] = self.S.Cx.s2
             coeff['Cy.s2'] = self.S.Cy.s2
             coeff['Cz.s2'] = self.S.Cz.s2
@@ -1681,6 +1805,11 @@ class Antenna(object):
             coeff['Cy.k'] = self.S.Cy.k2
             coeff['Cz.k'] = self.S.Cz.k2
             
+
+            coeff['Cx.lmax']= self.S.Cx.lmax           
+            coeff['Cy.lmax']= self.S.Cy.lmax           
+            coeff['Cz.lmax']= self.S.Cz.lmax 
+
             coeff['Cx.s3'] = self.S.Cx.s3
             coeff['Cy.s3'] = self.S.Cy.s3
             coeff['Cz.s3'] = self.S.Cz.s3
@@ -1754,27 +1883,40 @@ class Antenna(object):
             # Warning modification takes only one dimension for k 
             # if the .sh3 format evolve it may not work anymore 
             #
+
+                      
+            if type(coeff['Cx.lmax']) == float:
+                lmax = coeff['Cx.lmax']
+            else:
+                lmax = coeff['Cx.lmax'][0][0]
             Cx = SCoeff(typ = 's3',
                         fmin = fmin ,
                         fmax = fmax , 
+                        lmax = lmax,
                         data = coeff['Cx.s3'],
                         ind =  coeff['Cx.ind'],
-                        k =  coeff['Cx.k'][0])
+                        k =  coeff['Cx.k'])
+
                         
             Cy = SCoeff(typ= 's3', 
                         fmin = fmin ,
                         fmax = fmax , 
+                        lmax = lmax,
                         data = coeff['Cy.s3'],
                         ind =  coeff['Cy.ind'],
-                        k =  coeff['Cy.k'][0])
+                        k =  coeff['Cy.k'])
+
                         
                          
             Cz = SCoeff(typ = 's3', 
                         fmin = fmin ,
                         fmax = fmax , 
                         data = coeff['Cz.s3'],
+
+                        lmax = lmax,
                         ind =  coeff['Cz.ind'],
-                        k =  coeff['Cz.k'][0])
+                        k =  coeff['Cz.k'])
+
             
             if not 'S' in self.__dict__.keys():
                 self.S = SSHCoeff(Cx, Cy,Cz)
@@ -1836,12 +1978,35 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
-            Cx = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
-                         data=coeff['Cx.s2'], ind=coeff['Cx.ind'])
-            Cy = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
-                         data=coeff['Cy.s2'], ind=coeff['Cy.ind'])
-            Cz = SCoeff(typ='s2', fmin=fmin, fmax=fmax,
-                         data=coeff['Cz.s2'], ind=coeff['Cz.ind'])
+
+                
+            if type(coeff['Cx.lmax']) == float:
+                lmax = coeff['Cx.lmax']
+            else:
+                lmax = coeff['Cx.lmax'][0][0]
+                
+                
+            Cx = SCoeff(typ='s2', 
+                        fmin=fmin, 
+                        fmax=fmax,
+                        lmax = lmax,
+                        data=coeff['Cx.s2'], 
+                        ind=coeff['Cx.ind'])
+                        
+            Cy = SCoeff(typ='s2', 
+                        fmin=fmin, 
+                        fmax=fmax,
+                        lmax = lmax,
+                        data=coeff['Cy.s2'], 
+                        ind=coeff['Cy.ind'])
+            Cz = SCoeff(typ='s2', 
+                        fmin=fmin, 
+                        fmax=fmax,
+                        lmax = lmax,
+                        data=coeff['Cz.s2'], 
+                        ind=coeff['Cz.ind'])
+                         
+
             self.S = SSHCoeff(Cx, Cy,Cz)
             Nf = np.shape(Cx.s2)[0]
             self.fa = np.linspace(fmin, fmax, Nf)
@@ -1873,6 +2038,7 @@ class Antenna(object):
             else:
                 fmin = coeff['fmin'][0][0]
                 fmax = coeff['fmax'][0][0]
+
             Br = VCoeff(typ='s2', fmin=fmin, fmax=fmax,
                          data=coeff['Br.s2'], ind=coeff['Br.ind'])
             Bi = VCoeff(typ='s2', fmin=fmin, fmax=fmax,
@@ -2180,6 +2346,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
 
     Parameters
     ----------
+
     k : frequency index
     A : Antenna
 
@@ -2191,6 +2358,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
 
     lang = 'french'
          = 'english'
+
     """
 
     Nf = np.shape(Fthr)[0]
@@ -2298,7 +2466,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         title(r'Im ($F_{\theta}$) original', fontsize=fontsize)
     if typ == 'phase':
         #pcolor(A.phi*rtd,A.theta*rtd,angle(Ftho[k,:,:]),cmap=cm.gray_r,vmin=maT0,vmax=maT)
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Ftho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Ftho[k, :, :]),
                    cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) original', fontsize=fontsize)
@@ -2326,7 +2494,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
                    cmap=cm.hot_r, vmin=miP, vmax=MiP)
         plt.title('Im ($F_{\phi}$) original', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fpho[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fpho[k, :, :]),
                    cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) original', fontsize=fontsize)
@@ -2362,7 +2530,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         else:
             plt.title(r'Im ($F_{\theta}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fthr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fthr[k, :, :]),
                    cmap=cm.hot_r, vmin=maT0, vmax=maT)
         if lang == 'french':
             plt.title(r'Arg ($F_{\theta}$) reconstruit', fontsize=fontsize)
@@ -2400,7 +2568,7 @@ def compdiag(k, A, th, ph, Fthr, Fphr, typ='modulus', lang='english', fontsize=1
         else:
             plt.title('Im ($F_{\phi}$) reconstructed', fontsize=fontsize)
     if typ == 'phase':
-        plt.pcolor(A.phi * rtd, A.theta * rtd, angle(Fphr[k, :, :]),
+        plt.pcolor(A.phi * rtd, A.theta * rtd, np.angle(Fphr[k, :, :]),
                    cmap=cm.hot_r, vmin=maP0, vmax=maP)
         if lang == 'french':
             plt.title('Arg ($F_{\phi}$) reconstruit', fontsize=fontsize)
@@ -2447,14 +2615,11 @@ def show3D(F, theta, phi, k, col=True):
         >>> A.Nf  = len(A.fa)
         >>> theta = np.linspace(0,np.pi,A.Nt)
         >>> phi   = np.linspace(0,2*np.pi,A.Np)
-        >>> th    = np.kron(theta,np.ones(A.Np))
-        >>> ph    = np.kron(np.ones(A.Nt),phi)
-        >>> Fth3,Fph3 = A.Fsynth3(th,ph)
+        >>> Fth3,Fph3 = A.Fsynth3(theta,phi)
         >>> FTh3 = Fth3.reshape(A.Nf,A.Nt,A.Np)
         >>> FPh3 = Fph3.reshape(A.Nf,A.Nt,A.Np)
         >>> show3D(FTh3,theta,phi,ifreq)
         >>> txt = plt.title('show3D example')
-        >>> plt.show()
 
 
     Warnings

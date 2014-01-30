@@ -1,5 +1,13 @@
- #!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: latin1 -*-
+""" Module Rays 
+
+Summary
+-------
+
+This modules contains Rays class 
+
+"""
 import pdb
 import os
 import copy 
@@ -64,7 +72,7 @@ class Rays(dict):
     the height from floor to ceil, and the number N of 
     multiple reflections to take into account. 
 
-    Once the 3d rays have been calculated, 
+    Once the 3d rays have been calculated, the  
     the local basis are evaluated along those rays. This is
     done through the **locbas** method
 
@@ -81,7 +89,11 @@ class Rays(dict):
         self.nray = 0
         self.raypt = 0
         self.los=False
-
+        self.is3D=False
+        self.isbased=False
+        self.filled = False
+        self.evaluated = False
+        
     def __len__(self):
         Nray = 0
         for k in self.keys():
@@ -94,24 +106,137 @@ class Rays(dict):
         s = ''
         ni = 0
         nl = 0
+
         try:
-            for k in self:
-                r = self[k]['rayidx']
-                nr = len(r)
-                s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
-                ni = ni + nr*k
-                nl = nl + nr*(2*k+1)
-            s = s + '-----'+'\n'
-            s = s+'ni : '+str(ni)+'\n'
-            s = s+'nl : '+str(nl)+'\n'
+            if self.is3D:
+                s = self.__class__.__name__ + '3D\n' + '----------'+'\n'
+
+                for k in self:
+                    r = self[k]['rayidx']
+                    nr = len(r)
+                    s = s + str(k)+' / '+str(nr)+ ' : '+str(r)+'\n'
+                    ni = ni + nr*k
+                    nl = nl + nr*(2*k+1)
+                s = s + '-----'+'\n'
+                s = s+'ni : '+str(ni)+'\n'
+                s = s+'nl : '+str(nl)+'\n'
+            else:
+                s = self.__class__.__name__ + '2D\n' + '----------'+'\n'
+
+                nray = np.sum([np.shape(self[i]['sig'])[2] for i in self.keys()])
+                s = 'N2Drays : '+ str(nray) + '\n'
+                s = s + 'from '+ str(self.nb_origin_sig) + ' signatures\n'
+                s = s + '#Rays/#Sig: '+ str( len(self)/(1.*self.nb_origin_sig) ) 
+
+                s = s + '\npTx : '+ str(self.pTx) + '\npRx : ' + str(self.pRx)+'\n'
+                
+                for k in self:
+                    #sk = np.shape(self[k]['sig'])[2]
+                    s = s + str(k) + ': '+ str(self[k]['sig'][0,:])+'\n'
+                    #s = s + str(sk) + 'rays with' + str(k) + ' interactions'                     
         except:
+            print "problem"
             return(s)
 
         return(s)
+    
+    def reciprocal(self):
+        """ switch tx and rx
+        
+        """
+
+        
+        r = Rays(self.pRx,self.pTx)
+        r.is3D = self.is3D
+        r.nray = self.nray
+        r.nb_origin_sig = self.nb_origin_sig
+
+        for k in self:
+            r[k]={}
+            r[k]['pt']=self[k]['pt'][:,::-1,:]
+            r[k]['sig']=self[k]['sig'][:,::-1,:]
+        return(r)
+ 
+
+    def check_reciprocity(self,r):
+        """ check ray reciprocity 
+
+        Parameters
+        ----------
+
+        r : Rays
+        """
+        assert (self.pTx==r.pRx).all()
+        assert (self.pRx==r.pTx).all()
+        for k in self: 
+            assert (np.allclose(self[k]['dis'],r[k]['dis']))
+            assert (np.allclose(self[k]['pt'],r[k]['pt'][:,::-1,:]))
+            assert (np.allclose(self[k]['sig'],r[k]['sig'][:,::-1,:]))
+            if (self.isbased) & (r.isbased):
+                #assert (np.allclose(self[k]['nstrwall'],r[k]['nstrwall'][:,::-1,:]))
+                assert (np.allclose(self[k]['norm'],r[k]['norm'][:,::-1,:]))
+                #assert ((np.mod(self[k]['aoa']-r[k]['aod'],2*np.pi)==0).all())
+                #assert ((np.mod(self[k]['aod']-r[k]['aoa'],2*np.pi)==0).all())
+                assert (np.allclose(self[k]['Bo0'],r[k]['BiN']))
+                assert (np.allclose(self[k]['BiN'],r[k]['Bo0']))
+                assert (np.allclose(self[k]['vsi'],-r[k]['vsi'][:,::-1,:]))
+                assert (np.allclose(abs(self[k]['scpr']),abs(r[k]['scpr'][::-1,:])))
+                assert (np.allclose(self[k]['theta'],r[k]['theta'][::-1,:]))
+                assert (np.allclose(self[k]['Bi'],r[k]['Bo'][:,:,::-1,:]))
+                assert (np.allclose(self[k]['Bo'],r[k]['Bi'][:,:,::-1,:]))
+                assert (np.allclose(self[k]['B'],r[k]['B'][:,:,::-1,:].swapaxes(0,1)))
+
+        if self.evaluated :
+
+            for ir in range(self.nray):
+                
+                iint1 = self.ray(ir)
+                iint2 = r.ray(ir)
+
+                # check Interactions
+                A1 = self.I.I[:, iint1, :, :]
+                A2 = r.I.I[:, iint2, :, :][:,::-1,:,:]
+                assert np.allclose(A1,A2),pdb.set_trace() 
+                
+                # check bases
+                #  ray 1 : B0   | B[0]   | B[1] | B[2] | B[3] | B[4] 
+                #  ray 2 : B[4] | B[3]  | B[2]  | B[1] | B[0] | B0
+                assert np.allclose(self.B0.data[ir,:,:],r.B.data[iint2,:,:][-1,:,:].swapaxes(1,0))
+                assert np.allclose(r.B0.data[ir,:,:],self.B.data[iint1,:,:][-1,:,:].swapaxes(1,0))
+                assert np.allclose(self.B.data[iint1,:,:][:-1],r.B.data[iint2,:,:][:-1][::-1,:,:].swapaxes(2,1))
+
+
+
+    def sort(self):
+        """
+        """
+        u = np.argsort(self.dis)
+
+    def extract(self,ni,nr):
+        """ Extract a single ray 
+
+        Parameters 
+        ----------
+
+        ni : group of interactions 
+        nr : ray index in group of interactions 
+
+        """
+
+
+        r = Rays(self.pTx,self.pRx)
+        r.is3d = self.is3D
+        r[ni] = {}
+
+        for k in self[ni].keys():
+            tab  = self[ni][k]
+            if type(tab)==np.ndarray:
+                r[ni][k] = tab[...,nr][...,np.newaxis]
+        r[ni]['nrays']=1 
+        return(r)
 
     def show(self,L,**kwargs):
         """  plot 2D rays within the simulated environment
-
 
         Parameters
         ----------
@@ -159,6 +284,8 @@ class Rays(dict):
         for i in lgrint:
             if kwargs['r']==-1:
                 lray = range(len(self[i]['pt'][0, 0, :]))
+                if self.filled :
+                    ax.set_title('rays index :'+ str(self[i]['rayidx']))
             else:
                 lray = [kwargs['r']]
             for j in lray: 
@@ -169,6 +296,8 @@ class Rays(dict):
                 ax.plot(ray[0, :], ray[1, :],
                         alpha=kwargs['alpharay'],color=kwargs['colray'],linewidth=kwargs['widthray'])
                 ax.axis('off')
+                if self.filled :
+                    ax.set_title('rays index :'+ str(self[i]['rayidx'][lray]))
         return(fig,ax)       
 
     def mirror(self, H=3, N=1):
@@ -266,6 +395,8 @@ class Rays(dict):
         Notes
         -----
 
+        1. 
+
 
         """
 
@@ -305,8 +436,10 @@ class Rays(dict):
             self[i]['alpha'] = np.zeros(np.shape(si[:-1, :]))
 
             for j in range(len(self[i]['alpha'][:, 0])):
+                # get alpha
                 self[i]['alpha'][j, :] = np.sum(si[0:j+1, :], axis=0) \
                         /np.sum(si, axis=0)
+                # get z coordinate
                 self[i]['pt'][2, j, :] = tx[2] + self[i]['alpha'][j, :] \
                     * (rx[2] - tx[2])
 
@@ -332,12 +465,20 @@ class Rays(dict):
             # k = int(k)
             # Number of rays in interaction group k
             Nrayk = np.shape(self[k]['alpha'])[1] 
+
             # get  2D horizontal parameterization
             a1 = self[k]['alpha']          
+
+            #if (k==1):
+            #    pdb.set_trace()
             # get  2D signature
             sig = self[k]['sig']            
+            #print "signatures 2D ",sig
+            #print "----"
+            sigsave = copy.copy(sig)
             # add parameterization of tx and rx (0,1)
             a1 = np.concatenate((np.zeros((1, Nrayk)), a1, np.ones((1, Nrayk))))   
+
             # reshape signature in adding tx and rx
             sig = np.hstack((np.zeros((2, 1, Nrayk), dtype=int),
                              sig,
@@ -345,21 +486,34 @@ class Rays(dict):
             # broadcast tx and rx 
             Tx = tx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
             Rx = rx.reshape(3, 1, 1)*np.ones((1, 1, Nrayk))
+
             # pte is the sequence of point in 3D ndim =3   ( ndim x k x Nrayk)
             pte = self[k]['pt']            
+
             # ndim x k+2 x Nrayk
             pte = np.hstack((Tx, pte, Rx))  
 
             for l in d:                     # for each vertical pattern (C,F,CF,FC,....)
+                #print k,l,d[l] 
                 Nint = len(d[l])            # number of additional interaction
+                #if ((k==1) & (l==5.0)):
+                #    pdb.set_trace()
                 if Nint > 0:                # if new interaction ==> need extension 
                     # a1e : extended horizontal+vertical parameterization
-                    a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*\
+                    a1e = np.concatenate((a1, d[l].reshape(len(d[l]), 1)*
                                           np.ones((1, Nrayk)))) 
                     # get sorted indices
                     ks = np.argsort(a1e, axis=0) 
                     # a1es : extended sorted horizontal + vertical parameterization
                     a1es = np.sort(a1e, axis=0)  
+
+                    # #### Check if it exist same parameter value  in horizontal plane
+                    # #### and vertical plane. Move parameter is so.
+                    da1es = np.diff(a1es,axis=0)
+                    pda1es = np.where(da1es<1e-10)
+                    a1es[pda1es]=a1es[pda1es]-1e-3
+                    
+
                     # prepare an extended sequence of points ( ndim x  (Nint+k+2) x Nrayk )
                     ptee = np.hstack((pte, np.zeros((3, Nint, Nrayk))))     
                     
@@ -368,11 +522,12 @@ class Rays(dict):
                     #
                     # u is 4 (floor interaction ) 
                     #      5 (ceil interaction ) 
-                    #  depending on the vertical pattern l. The observation is
-                    #  that negative l corresponds always to last reflexion on
-                    #  the floor and positive l corresponds to last reflexion
-                    #  on the ceil 
+                    #  depending on the vertical pattern l. 
                     #
+                    #  l <0 corresponds to last reflexion on floor
+                    #  l >0 corresponds to last reflexion on ceil 
+                    #
+                    # u =0 (floor) or 1 (ceil) 
                     if l < 0:
                         u = np.mod(range(Nint), 2)
                     else:
@@ -383,7 +538,7 @@ class Rays(dict):
                     # At that point we introduce the signature of the new
                     # introced points on the ceil and/or floor. 
                     #
-                    # A signatue is compose of two lines 
+                    # A signature is compose of two lines 
                     # esigs sup line : interaction number 
                     # esigi inf line : interaction type 
                     #
@@ -393,34 +548,39 @@ class Rays(dict):
                     esig = np.vstack((esigs, esigi))
                     # sige : signature extended  ( 2 x (Nint+k+2) x Nrayk ) 
                     sige = np.hstack((sig, esig))
+                    
+                    #
                     # 2 x (Nint+k+2) x Nrayk
                     #
-                    # Now come the time to sort extended sequence of points
+                    # Now comes the time to sort extended sequence of points
                     # and extended sequence of signatures with the sorting
                     # index ks obtained from argsort of merge parametization  
                     #
                     # sequence of extended sorted points
+                    #
                     ptees = ptee[:, ks, range(Nrayk)]     
                     siges = sige[:, ks, range(Nrayk)]   
                     # extended and sorted signature
                     iint_f, iray_f = np.where(siges[ 1, :] == 4)  # floor interaction
                     iint_c, iray_c = np.where(siges[ 1, :] == 5)  # ceil interaction
-                        
+                    #print siges     
                     #
                     # find the list of the previous and next point around the
                     # new ceil or floor point. The case of successive ceil or
                     # floor reflexion make 
+                    #
                     # Tous les points précédents qui ne sont pas des Ceils ou
                     # des floors et tous les points suivants qui ne sont pas
                     # des points de réflexion ceil ou floor 
-                    # Afin de tenir compte du rayon du groupe d'interaction
-                    # concerné il faut passer un tuple qui concatène la valeur
+                    #
+                    # Afin de tenir compte du rayon et du groupe d'interaction
+                    # concerné, il faut passer un tuple qui concatène la valeur
                     # de l'indice d'interaction floor ou ceil et l'indice de
                     # rayons du groupe associé (d'ou le zip) 
                     #
                     # Cette séquence d'instruction fixe le bug #133
                     #
-                    # Antérieurement il y avait une hypothèse de succesion
+                    # Antérieurement il y avait une hypothèse de succession
                     # immediate d'un point 2D renseigné.
                     #
                     try:
@@ -503,91 +663,193 @@ class Rays(dict):
                     a1es = a1                       
                     ks = np.argsort(a1es, axis=0)
                     ptees = pte
-                    siges = sig
-
+                    # fixing bug 
+                    siges = copy.copy(sig)
+                    #print siges
+               
+                #---------------------------------
+                # handling subsegments (if any)
+                #---------------------------------
+                #
                 #   ptes (3 x i+2 x r ) 
-                lsss = np.unique(np.array(L.lsss))
-                # index of signature which corresponds to subsegment
-                u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
-                # dimension extension of index u for : 
-                #    z coordinate extraction (append line 2 on dimension 0)    
-                #    0 signature extraction  (append line 0 on  dimension 0)    
-                v   = [2*np.ones(len(u[0]),dtype=int)]+u
-                w   = [0*np.ones(len(u[0]),dtype=int)]+u
-                # zss : height of interactions on subsegments
-                zss = ptees[v]
-                # structure index of corresponding subsegments 
-                nstrs = siges[w]
-                #print "nstrs: ",nstrs
-                #print "zss:",zss
-                #
-                # Determine which subsegment has been intersected 
-                # k = 0 : no subsegment intersected
-                zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
-                tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
-                                                       (z[1]>x[1])),x[0]),zip(zinterval,zss))
-                #print tab
-                def findindex(x):
-                    if len(x[1])>0:
-                        k = x[0].index(x[1][0])+1
-                        return(k)
-                    else:
-                        return(0)
+                if L.Nss>0:
+                    # lsss[k] = n means subsegment k belongs to segment n 
+                    # a same segment n can have several subsegments
+                    # (multi-subsegment case) that is the reason of unique
+                    lsss = np.unique(np.array(L.lsss))
 
-                indexss = map(findindex,zip(zinterval,tab))
-                indexnew = L.stridess[nstrs]+indexss
-                #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
-                #iindexnex = L.isss[ind]
-                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
-                #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
-                # update signature
-                siges[w] = indexnew
-                #print "indexss:",indexss
-                #print "indexnew:",indexnew
-                #print siges
-                #pdb.set_trace()
-                #pdb.set_trace()
-                # expand dimension add z dimension (2) 
-                # tuple concatenation doesn't work with array this is strange!!
-                #
-                # >> a = (1,2,3)
-                # >> b = (3,5,6) 
-                # >> a+b 
-                # (1,2,3,3,5,6)
-                # but 
-                # >> u = (array([1,2]),array([1,2]))
-                # >> v = (array([2,2]))
-                # >> u + v 
-                # array([[3,4],[3,4]])  inconsistent !
-                #
-                #   z --> kl subseg level  
-                #   siges[0,:] --> Ms + nstr *Mss + (kl) 
-                #
+                    # index of signature which corresponds to subsegment
+                    u   = map(lambda x: list(np.where(siges[0,:,:]==x)),lsss)[0]
+
+                    # dimension extension of index u for : 
+                    #    z coordinate extraction (append line 2 on dimension 0)    
+                    #    0 signature extraction  (append line 0 on  dimension 0)    
+
+                    # v : index 2 is for getting z coordinate
+                    # w : index 0 is for getting segment number (first line of
+                    # siges)
+                    v   = [2*np.ones(len(u[0]),dtype=int)]+u
+                    w   = [0*np.ones(len(u[0]),dtype=int)]+u
+                   
+                    # zss : height of interactions on subsegments
+                    zss = ptees[v]
+                    #if k==1:
+                    #    print "l",l
+                    #    print "ptees : ",ptees
+                    #    print "u ",u
+                    #    print "v ",v
+                    #    print "w ",w
+                    # structure index of corresponding subsegments 
+
+                    # nstrs = [ 1 , 1 , 1 , 1, 1 , 1] 
+                    nstrs = siges[w]
+
+                    #if k==1:
+                    #    print "nstrs: ",nstrs
+                    #    print "zss:",zss
+                    #
+                    # Determine which subsegment has been intersected 
+                    # k = 0 : no subsegment intersected
+                    zinterval = map(lambda x: L.Gs.node[x]['ss_z'],nstrs)
+
+
+                    # Example 
+                    #
+                    # zinterval = [[(0.0, 2.4), (2.7, 2.8), (2.8, 3)], 
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)], 
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)], 
+                    #              [(0 .0, 2.4), (2.7, 2.8), (2.8, 3)],
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)],
+                    #              [(0.0, 2.4), (2.7, 2.8), (2.8, 3)]]
+                    # zss = array([ 2.62590637,  2.62589727,  1.34152518, 
+                    # 2.0221785 ,  0.23706671, 0.2378053])
+                    # 
+                    # tab = [[], [], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)], [(0.0, 2.4)]]   
+                    #
+                    tab = map (lambda x: filter(lambda z: ((z[0]<x[1]) &
+                                                           (z[1]>x[1])),x[0]),zip(zinterval,zss))
+                    #print tab
+                    def findindex(x):
+                        if len(x[1])>0:
+                            k = x[0].index(x[1][0])+1
+                            return(k)
+                        else:
+                            return(0)
+                    #
+                    # indexss = [0, 0 , 1 , 1 ,1 ,1] 
+                    # L.stridess[nstrs] = [ 9 , 9 , 9, 9 , 9 , 9 ]
+                    # indexnex = [ 9 , 9 , 10 , 10 , 10 , 10 ] 
+                    #
+                    indexss = np.array(map(findindex,zip(zinterval,tab)))
+                    uw = np.where(indexss==0)[0]
+                    indexnew = L.stridess[nstrs]+indexss
+                    indexnew[uw] = nstrs[uw]
+                    #ind  = map(lambda x: np.where(L.lsss==x[0])+x[1],zip(nstrs,indexss))
+                    #iindexnex = L.isss[ind]
+                    #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                    #indexnew = map(lambda x: x[0] if x[1]==0 else 1000000+100*x[0]+x[1]-1,zip(nstrs,indexss))
+                    # update signature
+                    siges[w] = indexnew
+                    #if k==3:
+                    #    print siges
+                    
+                    #if k==1:
+                    #    print "indexss:",indexss
+                    #    print "indexnew:",indexnew
+                    #    print "siges",siges
+                    #print siges
+                    #pdb.set_trace()
+                    #pdb.set_trace()
+                    # expand dimension add z dimension (2) 
+                    # tuple concatenation doesn't work with array this is strange!!
+                    #
+                    # >> a = (1,2,3)
+                    # >> b = (3,5,6) 
+                    # >> a+b 
+                    # (1,2,3,3,5,6)
+                    # but 
+                    # >> u = (array([1,2]),array([1,2]))
+                    # >> v = (array([2,2]))
+                    # >> u + v 
+                    # array([[3,4],[3,4]])  inconsistent !
+                    #
+                    #   z --> kl subseg level  
+                    #   siges[0,:] --> Ms + nstr *Mss + (kl) 
+                    #
                 try:
                     # r3d[k+Nint]['alpha'] = np.hstack((r3d[k+Nint]['alpha'],a1es))
                     # r3d[k+Nint]['ks'] = np.hstack((r3d[k+Nint]['ks'],ks))
-                    r3d[k+Nint]['pt'] = np.dstack((r3d[k+Nint]['pt'], ptees))
+                    r3d[k+Nint]['pt']  = np.dstack((r3d[k+Nint]['pt'], ptees))
                     r3d[k+Nint]['sig'] = np.dstack((r3d[k+Nint]['sig'], siges))
+                    r3d[k+Nint]['sig2d'].append(sigsave)
                 except:
                     r3d[k+Nint] = {}
                     # r3d[k+Nint]['alpha'] = a1es
                     # r3d[k+Nint]['ks'] = ks
                     r3d[k+Nint]['pt'] = ptees
                     r3d[k+Nint]['sig'] = siges
+                    r3d[k+Nint]['sig2d'] = [sigsave]
 
-
+        #
+        # Add Line Of Sight ray information 
+        #   pt =  [tx,rx]
+        #   sig = [0,0]
+        #
         if self.los :
             r3d[0]={}
             r3d[0]['sig']=np.zeros((2,2,1))
+            r3d[0]['sig2d']=np.zeros((2,2,1))
             r3d[0]['pt']=np.zeros((3,2,1))
             r3d[0]['pt'][:,0,:]=tx[:,np.newaxis]
             r3d[0]['pt'][:,1,:]=rx[:,np.newaxis]
+        
+        # r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint) 
+        # count total number of ray 
+        # evaluate length of ray segment 
+        #
+        # vsi 
+        # si 
+        # dis
+        #
+        val =0
+        for k in r3d.keys():
+            nrayk = np.shape(r3d[k]['sig'])[2]
+            r3d[k]['nbrays'] = nrayk
+            r3d[k]['rayidx'] = np.arange(nrayk)+val 
+            r3d.nray = r3d.nray + nrayk 
+            val=r3d[k]['rayidx'][-1]+1
+            # 3 : x,y,z
+            # i : interaction index
+            # r : ray index 
+            #
+            # k : group of interactions index 
+            #
+            v = r3d[k]['pt'][:, 1:, :]-r3d[k]['pt'][:, 0:-1, :]
+            lsi = np.sqrt(np.sum(v*v, axis=0))
+            rlength = np.sum(lsi,axis=0)
+            if (lsi.any()==0):
+                pdb.set_trace()
+            assert(lsi.all()>0)
+            if (len(np.where(lsi==0.))==0) :
+                pdb.set_trace()
 
-        lnint = r3d.keys()
-        #r3d.nray = reduce(lambda x,y : y + np.shape(r3d[x]['sig'])[2],lnint) 
-        for k in lnint:
-            r3d.nray = r3d.nray + np.shape(r3d[k]['sig'])[2]
+            #
+            # sort rays w.r.t their length 
+            #
 
+            u = np.argsort(rlength)
+            r3d[k]['pt']  = r3d[k]['pt'][:,:,u]
+            r3d[k]['sig'] = r3d[k]['sig'][:,:,u]
+            #r3d[k]['sig2d'] = r3d[k]['sig2d'][:,:,u]
+            si = v/lsi             # ndim , nint - 1 , nray
+
+            # vsi : 3 x (i+1) x r
+            r3d[k]['vsi'] = si[:,:,u]
+
+            # si : (i+1) x r
+            r3d[k]['si']  = lsi[:,u] 
+            r3d[k]['dis'] = rlength[u] 
+            
         return(r3d)
 
     def length(self,typ=2):
@@ -608,7 +870,8 @@ class Rays(dict):
 
 
     def locbas(self, L):
-        """
+        """ calculate ray local basis
+
         Parameters
         ----------
 
@@ -625,8 +888,12 @@ class Rays(dict):
 
         # nsegment x k
         key = np.array(nx.get_node_attributes( L.Gs, 'norm').keys())
+        
+        # maximum number for refering to segment 
+        # not to be confused with a number of segment 
 
         nsmax = max(L.Gs.node.keys())
+
         mapping = np.zeros(nsmax+1, dtype=int)
         mapping[key] = np.arange(len(key), dtype=int)
 
@@ -638,18 +905,44 @@ class Rays(dict):
         #  nstrs is the nstr of the segment if subsegment : 
         #  nstr  is the glabal which allows to recover the slab values 
         #
+        idx = np.array(())
+        if self.los:
+            idxts = 1
+            nbrayt = 1
+        else:
+            idxts = 0
+            nbrayt = 0
+
         for k in self:
+            #
+            # k is the number of interactions in the block 
+            #
             if k <> 0:
-                nstr = self[k]['sig'][0, 1:-1, :]      # nint x nray
-                ityp = self[k]['sig'][1, 1:-1, :]      # nint x nray
+
+                # structure number (segment or point)
+                # nstr : i x r
+                nstr = self[k]['sig'][0, 1:-1, :]      
+
+                # ityp : i x r
+                ityp = self[k]['sig'][1, 1:-1, :]      
                 # nstr of underlying segment
                 # position of interaction corresponding to a sub segment 
-                #print nstr
+                # print nstr
+                # 
+                # uss : index of subsegment 
+                # subsegments are not nodes of Gs but have positive nst index 
+                #
+
                 uss   = np.where(nstr>nsmax)
-                #print uss
+
+                # print uss
+
                 nstrs = copy.copy(nstr)
+                #
+                # if subsegments have been found
+                #
                 if len(uss)>0:
-                    ind   = nstr[uss]-nsmax
+                    ind   = nstr[uss]-nsmax-1
                     nstrs[uss] = np.array(L.lsss)[ind] 
                 #    print nstr
                 #print nstrs
@@ -658,7 +951,7 @@ class Rays(dict):
 
                 uwall = np.where((ityp == 1) | (ityp == 2))
                 udiff = np.where((ityp == 3))
-                ufloor = np.where((ityp == 4))
+                ufloor= np.where((ityp == 4))
                 uceil = np.where((ityp == 5))
 
                 nstrwall  = nstr[uwall[0], uwall[1]]   # nstr of walls
@@ -675,23 +968,44 @@ class Rays(dict):
                 #
 
                 # norm : 3 x i x r
+                # TODO  
+                # For the diffraction the norm should be replaced by the unit
+                # vector along the wedge.
+                # udiff not handled yet
+                #
                 self[k]['norm'][:, uwall[0], uwall[1]] = norm[mapping[nstrswall],:].T
                 self[k]['norm'][2, ufloor[0], ufloor[1]] = np.ones(len(ufloor[0]))
                 self[k]['norm'][2, uceil[0], uceil[1]] = -np.ones(len(uceil[0]))
 
-                v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
-                lsi = np.sqrt(np.sum(v*v, axis=0))
-                si = v/lsi             # ndim , nint - 1 , nray
+                normcheck = np.sum(self[k]['norm']*self[k]['norm'],axis=0)
+                assert normcheck.all()>0.99,pdb.set_trace()
 
-                # vsi : 3 x (i+1) x r
-                self[k]['vsi'] = si
+
+                # 3 : x,y,z
+                # i : interaction index
+                # r : ray index 
+                #
+                # k : group of interactions index 
+                #
+                #v = self[k]['pt'][:, 1:, :]-self[k]['pt'][:, 0:-1, :]
+                #lsi = np.sqrt(np.sum(v*v, axis=0))
+                #if (lsi.any()==0):
+                #    pdb.set_trace()
+                #assert(lsi.all()>0)
+                #if (len(np.where(lsi==0.))==0) :
+                #    pdb.set_trace()
+
+                #si = v/lsi             # ndim , nint - 1 , nray
+
+                # si : 3 x (i+1) x r
+                si = self[k]['vsi'] 
 
                 # si : (i+1) x r
-                self[k]['si'] = lsi
-                self[k]['dis'] = np.sum(lsi,axis=0)
-
+                #self[k]['si'] = lsi
+                #self[k]['dis'] = np.sum(lsi,axis=0)
+                
+                # normal : 3 x i x r 
                 vn = self[k]['norm']
-
                 # s_in : 3 x i x r
                 s_in = si[:, 0:-1, :]
 
@@ -724,32 +1038,70 @@ class Rays(dict):
                 Bo0 = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
 
-                self[
-                    k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :], eth[:, np.newaxis, :],
-                                                eph[:, np.newaxis, :]), axis=1)
+                self[k]['Bo0'] = np.concatenate((si[:, 0, np.newaxis, :], 
+                                                 eth[:, np.newaxis, :],
+                                                 eph[:, np.newaxis, :]), axis=1)
 
                 #
                 # scalar product si . norm
                 #
+                # vn   : 3 x i x r 
+                # s_in : 3 x i x r 
 
-                scpr = np.sum(vn*s_in, axis=0)
+                #
+                # scpr : i x r 
+                #
+                #if k ==5:
+                #    pdb.set_trace()
+                #scpr = np.sum(vn*s_in, axis=0)
+                scpr = np.sum(vn*si[:,0:-1,:], axis=0)
                 self[k]['scpr'] = scpr
                 self[k]['theta'] = np.arccos(abs(scpr))  # *180/np.pi
+                #if k ==5:
+                    #print "vsi :",self[k]['vsi'][:,:,43]
+                    #print "si :",si[:,0:-1,43]
+                    #print "vn :",vn[:,:,43]
+                    #print "scpr :",self[k]['scpr'][:,43]
+                    #print "scpr :",self[k]['scpr'][:,43]
+                    #print "theta :",self[k]['scpr'][:,43]
 
                 #
-                # Warning need to handle singular case when s_in//vn
+                # Warning need to handle singular case when s_in // vn
                 #
-                w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
-                wn = w/np.sqrt(np.sum(w*w, axis=0))
-                v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
+                # w : 3 x i x r 
+                # 
+                # Handling channel reciprocity s_in --> -s_in 
+                #
+                #w = np.cross(s_in, vn, axisa=0, axisb=0, axisc=0)
+                w = np.cross(-s_in, vn, axisa=0, axisb=0, axisc=0)
 
-                es_in = np.expand_dims(s_in, axis=1)
+                # nw : i x r 
+                #
+                #
+                # to do fic the colinear bug
+                #
+                nw = np.sqrt(np.sum(w*w, axis=0))
+                if (nw.any()==0):
+                    u = np.where(nw==0)
+                    uv = np.array(filter(lambda x : abs(vn[2,u])>0.99,u))
+                    uh = np.setdiff1d(u,uv)
+                    w[:,uv] = np.array(([1,0,0]))[:,np.newaxis,np.newaxis]
+                    w[:,uh] = np.array(([0,0,1]))[:,np.newaxis,np.newaxis]
+                    pdb.set_trace()
+                #assert(nw.all()>0), pdb.set_trace()
+                wn = w/nw
+                # Handling channel reciprocity s_in --> -s_in 
+                #v = np.cross(wn, s_in, axisa=0, axisb=0, axisc=0)
+                v = np.cross(wn, -s_in, axisa=0, axisb=0, axisc=0)
+
+                es_in = np.expand_dims(-s_in, axis=1)
                 ew = np.expand_dims(wn, axis=1)
                 ev = np.expand_dims(v, axis=1)
 
                 #  Bi 3 x 2 x i x r
                 Bi = np.concatenate((ew, ev), axis=1)
-                # self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
+                #  self[k]['Bi'] 3 x 3 x i x r  
+                self[k]['Bi'] = np.concatenate((es_in,ew,ev),axis=1)
 
                 w = np.cross(s_out, vn, axisa=0, axisb=0, axisc=0)
                 wn = w/np.sqrt(np.sum(w*w, axis=0))
@@ -761,17 +1113,21 @@ class Rays(dict):
 
                 #  Bi 3 x 2 x i x r
                 Bo = np.concatenate((ew, ev), axis=1)
-                # self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
+                #  self[k]['Bo'] 3 x 3 x i x r  
+                self[k]['Bo'] = np.concatenate((es_out,ew,ev),axis=1)
 
                 #
                 # AOA (rad)
                 #
 
                 # th : ,r
-                th = np.arccos(si[2, -1, :])
+                # fix doa/dod reciprocity 
+                #th = np.arccos(si[2, -1, :])
+                th = np.arccos(-si[2, -1, :])
 
                 # th : ,r
-                ph = np.arctan2(si[1, -1, :], si[0, -1, :])
+                #ph = np.arctan2(si[1, -1, :], si[0, -1, :])
+                ph = np.arctan2(-si[1, -1, :], -si[0, -1, :])
 
                 # aoa : 2 x r  (radians)
                 self[k]['aoa'] = np.vstack((th, ph))
@@ -785,12 +1141,13 @@ class Rays(dict):
                 BiN = np.concatenate((eth[:, np.newaxis, :],
                                       eph[:, np.newaxis, :]), axis=1)
 
-                # self[k]['BiN'] = np.concatenate((si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
-                #                                    eph[:,np.newaxis,:]),axis=1)
+                self[k]['BiN'] = np.concatenate((-si[:,-1,np.newaxis,:],eth[:,np.newaxis,:],
+                                                   eph[:,np.newaxis,:]),axis=1)
 
                 #
                 # pasting (Bo0,B,BiN)
                 #
+
                 # B : 3 x 2 x i x r
 
                 Bo = np.concatenate((Bo0[:, :, np.newaxis, :], Bo), axis=2)
@@ -798,141 +1155,11 @@ class Rays(dict):
 
                 # B : 2 x 2 x i x r
 
-                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bo, Bi)
+                self[k]['B'] = np.einsum('xv...,xw...->vw...', Bi, Bo)
 
-                # BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
-                # self[k]['BiN']=BiN
+                #BiN = np.array([si[:,-1,:], eth, eph])    # ndim x 3 x Nray
+                #self[k]['BiN']=BiN
                 # self[k]['B']=np.sum(self[k]['Bi'][:2,:2,np.newaxis]*self[k]['Bo'][np.newaxis,:2,:2],axis=1)
-
-            # if los exists
-            else :
-                self[k]['nstrwall'] = np.array(())
-                self[k]['norm'] = np.array(())
-                si = np.sqrt(np.sum((self[0]['pt'][:,0]-self[0]['pt'][:,1])**2,axis=0))
-                self[k]['si'] = np.vstack((si,0.))
-                self[k]['vsi'] = (self[0]['pt'][:,0]-self[0]['pt'][:,1])/si
-                self[k]['dis'] = np.array((si))
-                vsi=self[k]['vsi']
-                th = np.arccos(vsi[2])
-                ph = np.arctan2(vsi[1], vsi[0])
-                self[k]['aod'] = np.vstack((th, ph))
-                self[k]['Bo0'] = np.array(())
-                self[k]['scpr'] = np.array(())
-                self[k]['theta'] = np.zeros((1,1))
-                self[k]['aoa'] =  np.vstack((th, ph))
-                E=np.eye(2)[:,:,np.newaxis,np.newaxis]
-                self[k]['B'] = np.dstack((E,E))
-
-    def fillinter(self, L,append=False):
-        """  docstring for fillinter
-
-        Parameters
-        ----------
-
-        L      : Layout
-        append : Boolean 
-            if   True append new rays to existing structure
-            else True append new rays to existing structure
-
-        """
-       
-        # reinitilized ray pointer if not in append mode 
-        if not append:
-            self.raypt = 0
-        # stacked interactions
-        I = Interactions()
-
-        # rotation basis
-        B = IntB()
-        B0 = IntB()
-
-        # LOS Interaction
-        Los = IntL()
-
-        # Reflexion
-        R = IntR()
-
-        # transmission
-        T = IntT()
-
-        # Diffraction
-        D = IntD()
-
-        idx = np.array(())
-        if self.los:
-            idxts = 1
-            nbrayt = 1
-
-        else:
-            idxts = 0
-            nbrayt = 0
-
-
-
-
-        # Transform dictionnary of slab name to array
-        #slv = nx.get_node_attributes(L.Gs, "name").values()
-        #slk = nx.get_node_attributes(L.Gs, "name").keys()
-        # find all material used in simulation
-        uslv = np.unique(L.sla[1:])
-        uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
-
-        # create reverse dictionnary with all material as a key
-        # and associated point/segment as a value
-
-        #dsla = {}
-        #for s in uslv:
-        #    dsla[s] = np.where(s == np.array(slv))[0]
-
-        nsmax = max(L.Gs.node.keys())
-        #sla = np.zeros((nsmax+1), dtype='S20')
-
-        # array type str with more than 1 character
-        # warning use zeros instead of empty because slab zero
-        # is virtually used before assigning correct slab to ceil and floor
-
-        #
-        # sla is an array of string.
-        # each value of Gs node is the index of the corresponding slab
-        #
-
-        #sla[slk] = np.array(slv)
-
-        R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-        T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
-        
-        tsl = np.array(())
-        rsl = np.array(())
-        
-        # loop on group of interactions 
-        for k in self:
-            if k !=0:
-                
-                uR = uT = uD = uRf = uRc = 0.
-
-                # nstr : i x r
-                nstr = self[k]['sig'][0, 1:-1, :]
-
-                # ityp : i x r
-                ityp = self[k]['sig'][1, 1:-1, :]
-
-                # theta : i x r   ( related to interaction )
-                theta = self[k]['theta']
-
-                # (i+1) x r
-                si = self[k]['si']
-
-                ## flatten information
-                ######################
-
-                # reshape nstr in order to be flat (1 dimension)
-                # size1 = i x r
-                size1 = nstr.size
-                # flatten ityp (method faster than np.ravel() ) 
-                nstrf = np.reshape(nstr,size1,order='F')
-                itypf = ityp.reshape(size1,order='F')
-                thetaf = theta.reshape(size1,order='F')
-                #sif = si[0, :, :].reshape(si[0, :, :].size)
 
                 ## index creation
                 ##################
@@ -964,6 +1191,180 @@ class Rays(dict):
                 self.ray2nbi[self[k]['rayidx']]  = k
                 nbrayt = nbrayt + nbray
                 self.raypt = self.raypt + self[k]['nbrays']
+            # if los exists
+            else :
+                self[k]['nstrwall'] = np.array(())
+                self[k]['norm'] = np.array(())
+                si = np.sqrt(np.sum((self[0]['pt'][:,0]-self[0]['pt'][:,1])**2,axis=0))
+                self[k]['si'] = np.vstack((si,0.))
+                self[k]['vsi'] = (self[0]['pt'][:,0]-self[0]['pt'][:,1])/si
+                self[k]['dis'] = np.array((si))
+                vsi=self[k]['vsi']
+                th = np.arccos(vsi[2])
+                ph = np.arctan2(vsi[1], vsi[0])
+                self[k]['aod'] = np.vstack((th, ph))
+                self[k]['Bo0'] = np.array(())
+                self[k]['scpr'] = np.array(())
+                self[k]['theta'] = np.zeros((1,1))
+                self[k]['aoa'] =  np.vstack((th, ph))
+                E = np.eye(2)[:,:,np.newaxis,np.newaxis]
+                self[k]['B'] = np.dstack((E,E))
+                ze = np.array([0])
+                self[k]['rays'] = np.array(([[0]]))
+                self[k]['nbrays'] = 1
+                self[k]['rayidx'] = ze
+                self.raypt = 1
+                self.ray2nbi=ze
+
+            self.isbased=True
+
+    def fillinter(self,L,append=False):
+        """  fill ray interactions
+
+        Parameters
+        ----------
+
+        L      : Layout
+        append : Boolean 
+            if   True append new rays to existing structure
+            else True append new rays to existing structure
+
+        """
+       
+        # reinitilized ray pointer if not in append mode 
+        if not append:
+            self.raypt = 0
+
+        # stacked interactions
+        I = Interactions()
+
+        # rotation basis
+        B  = IntB()
+        B0 = IntB()
+
+        # LOS Interaction
+        Los = IntL()
+
+        # Reflexion
+        R = IntR()
+
+        # transmission
+        T = IntT()
+
+        # Diffraction
+        D = IntD()
+
+        idx = np.array(())
+
+        if self.los:
+            idxts = 1
+            nbrayt = 1
+        else:
+            idxts = 0
+            nbrayt = 0
+
+
+        # Transform dictionnary of slab name to array
+        # slv = nx.get_node_attributes(L.Gs, "name").values()
+        # slk = nx.get_node_attributes(L.Gs, "name").keys()
+        # find all material used in simulation
+        uslv = np.unique(L.sla[1:])
+        #
+        # add CEIL and FLOOR
+        #
+        uslv = np.hstack((uslv, np.array(('CEIL', 'FLOOR'))))
+
+        # create reverse dictionnary with all material as a key
+        # and associated point/segment as a value
+
+        #dsla = {}
+        #for s in uslv:
+        #    dsla[s] = np.where(s == np.array(slv))[0]
+
+        nsmax = max(L.Gs.node.keys())
+        #sla = np.zeros((nsmax+1), dtype='S20')
+
+        # array type str with more than 1 character
+        # warning use zeros instead of empty because slab zero
+        # is virtually used before assigning correct slab to ceil and floor
+
+        #
+        # sla is an array of string.
+        # each value of Gs node is the index of the corresponding slab
+        #
+
+        #sla[slk] = np.array(slv)
+
+        R.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
+        T.dusl = dict.fromkeys(uslv, np.array((), dtype=int))
+        
+        tsl = np.array(())
+        rsl = np.array(())
+        
+        # loop on group of interactions 
+        for k in self:
+
+            if k !=0:
+                
+                uR = uT = uD = uRf = uRc = 0.
+                
+                # structure number (segment or point)
+                # nstr : i x r
+                nstr = self[k]['sig'][0, 1:-1, :]
+
+                # ityp : i x r
+                ityp = self[k]['sig'][1, 1:-1, :]
+
+                # theta : i x r   ( related to interactions )
+                theta = self[k]['theta']
+
+                # (i+1) x r
+                si = self[k]['si']
+
+                ## flatten information
+                ######################
+
+                # flatten nstr (1 dimension)
+                # size1 = i x r
+                size1 = nstr.size
+
+                # flatten ityp (method faster than np.ravel() ) 
+                nstrf = np.reshape(nstr,size1,order='F')
+                itypf = ityp.reshape(size1,order='F')
+                thetaf = theta.reshape(size1,order='F')
+                #sif = si[0, :, :].reshape(si[0, :, :].size)
+
+                ## index creation
+                ##################
+                # create index for retrieving interactions
+
+                # integer offset : total size idx
+
+                idxts = idxts + idx.size
+
+                idx = idxts + np.arange(ityp.size).reshape(np.shape(ityp),order='F')
+
+                nbray = np.shape(idx)[1]
+
+                self[k]['rays'] = idx
+                self[k]['nbrays'] = nbray
+                self[k]['rayidx'] = nbrayt + np.arange(nbray)
+
+                # create a numpy array to relate the ray index to its corresponding
+                # number of interactions
+
+                #ray2nbi = np.ones((nbray))
+
+                
+                #try:
+                #    self.ray2nbi=np.hstack((self.ray2nbi,ray2nbi))
+                #except:
+                #    self.ray2nbi=ray2nbi
+
+                #self.ray2nbi[self[k]['rayidx']]  = k
+                nbrayt = nbrayt + nbray
+                #self.raypt = self.raypt + self[k]['nbrays']
+
                 idxf = idx.reshape(idx.size,order='F')
                 #  (i+1)xr
                 size2 = si[:, :].size
@@ -971,8 +1372,14 @@ class Rays(dict):
                 sif = si[:, :].reshape(size2,order='F')
                 # 2x2,(i+1)xr
 
+                #
+                # self[k]['B'] 2 x 2 x i x r 
+                #
+                # first unitary matrix (2x2xr)
                 b0 = self[k]['B'][:,:,0,:]
-                b = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
+                # first unitary matrix 1: 
+                # dimension i and r are merged    
+                b  = self[k]['B'][:,:,1:,:].reshape(2, 2, size2-nbray,order='F')
 
                 ## find used slab
                 ##################
@@ -985,6 +1392,7 @@ class Rays(dict):
 
                 # seek for interactions position
                 ################################
+
                 uR = np.where((itypf == 1))[0]
                 uT = np.where((itypf == 2))[0]
                 uD = np.where((itypf == 3))[0]
@@ -1030,6 +1438,7 @@ class Rays(dict):
                 # need to check how B is used in eval()
                 #
                 # Warning
+                # -------
                 # B.idx refers to an interaction index
                 # whereas B0.idx refers to a ray number
 
@@ -1049,28 +1458,32 @@ class Rays(dict):
                         idx=idxf[uRc])
 
                 ### sl[idxf[uT]]
-
                 # Transmision
                 ############
                 T.stack(data=np.array((thetaf[uT], sif[uT], sif[uT+1])).T, idx=idxf[uT])
 
             elif self.los:
                 ze = np.array([0])
-                self[k]['rays'] = np.array(([[0]]))
-                self[k]['nbrays'] = 1
-                self[k]['rayidx'] = ze
-                self.raypt = 1
-                self.ray2nbi=ze
+                #self[k]['rays'] = np.array(([[0]]))
+                #self[k]['nbrays'] = 1
+                #self[k]['rayidx'] = ze
+                #self.raypt = 1
+                #self.ray2nbi=ze
                 B.stack(data=np.eye(2)[np.newaxis,:,:], idx=ze)
                 B0.stack(data=np.eye(2)[np.newaxis,:,:],idx=ze)
 
         T.create_dusl(tsl)
         R.create_dusl(rsl)
+
+        # create interactions structure 
         self.I = I
         self.I.add([T, R])
+        # create rotation base B 
         self.B = B
+        # create rotation base B0 
         self.B0 = B0
 
+        self.filled = True
 
     def eval(self,fGHz=np.array([2.4]),ib=[]):
         """  docstring for eval
@@ -1080,15 +1493,23 @@ class Rays(dict):
 
         fGHz : array
             frequency in GHz array
-        ib : 
+        ib : list of intercation block
             
         """
 
-        print 'Rays evaluation'
+        #print 'Rays evaluation'
         
+        # evaluation of interaction
         self.I.eval(fGHz)
-        B=self.B.eval(fGHz)
-        B0=self.B0.eval(fGHz)
+        # evaluation of base B  (2x2)
+        # B and B0 do no depend on frequency 
+        # just an axis extension (np.newaxis)
+        #pdb.set_trace()
+
+        # 1 x i x 2 x 2
+        B  = self.B.data[np.newaxis,...]
+        # 1 x r x 2 x 2
+        B0 = self.B0.data[np.newaxis,...]
 
         # Ct : f x r x 2 x 2
         Ct = np.zeros((self.I.nf, self.nray, 2, 2), dtype=complex)
@@ -1102,34 +1523,44 @@ class Rays(dict):
         #nf : number of frequency point
         nf = self.I.nf
 
+        self.drayidx = {}
         aod= np.empty((2,self.nray))
         aoa= np.empty((2,self.nray))
-        # loop on interaction blocks
+        # loop on interaction blocks    
         if ib==[]:
             ib=self.keys()
 
         for l in ib:
-            aoa[:,self[l]['rayidx']]=self[l]['aoa']
-            aod[:,self[l]['rayidx']]=self[l]['aod']
+            # ir : ray index
+            ir = self[l]['rayidx']
+            aoa[:,ir]=self[l]['aoa']
+            aod[:,ir]=self[l]['aod']
             if l != 0:
                 # l stands for the number of interactions
                 r = self[l]['nbrays']
-
                 # reshape in order to have a 1D list of index
                 # reshape ray index
                 rrl = self[l]['rays'].reshape(r*l,order='F')
-
                 # get the corresponding evaluated interactions
-                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
-                Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
-                B0l = B0[:, self[l]['rayidx'], :, :]
-                alpha = self.I.alpha[rrl].reshape(r, l,order='F')
-                gamma = self.I.gamma[rrl].reshape(r, l,order='F')
-                si0 = self.I.si0[rrl].reshape(r, l,order='F')
-                sout = self.I.sout[rrl].reshape(r, l,order='F')
-
-
-
+                #
+                # reshape error can be tricky to debug. 
+                #
+                # f , r , l , 2 , 2
+                A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
+                # get the corresponding unitary matrix B 
+                # 1 , r , l , 2 , 2
+                #Bl = B[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2,order='F')
+                Bl = B[:, rrl, :, :].reshape(1, r, l, 2, 2)
+                # get the first uitary matrix B0l 
+                B0l = B0[:,ir,:, :]
+                # get alpha
+                # alpha = self.I.alpha[rrl].reshape(r, l,order='F')
+                # # get gamma
+                # gamma = self.I.gamma[rrl].reshape(r, l,order='F')
+                # # get si0 
+                # si0 = self.I.si0[rrl].reshape(r, l,order='F')
+                # # get sout 
+                # sout = self.I.sout[rrl].reshape(r, l,order='F')
 
                 try:
                     del Z
@@ -1137,7 +1568,8 @@ class Rays(dict):
                     pass
 
 
-
+                #print "\nrays",ir
+                #print "-----------------------"
                 ## loop on all the interactions of ray with l interactions
                 for i in range(0, l):
 
@@ -1182,25 +1614,34 @@ class Rays(dict):
                     #
                     # Z=Atmp(i) dot Atmp(i+1)
 
-                    X = A [:, :, i, :, :]
-                    Y = Bl[:, :, i, :, :]
-                    ## Dot product interaction X Basis
-                    Atmp = np.sum(X[..., :, :, np.newaxis]*Y[
-                                  ..., np.newaxis, :, :], axis=-2)   #*D[np.newaxis,:,np.newaxis,np.newaxis]
-                    #pdb.set_trace()
-
+                    #X = A [:, :, i, :, :]
+                    #Y = Bl[:, :, i, :, :]
+                    # pdb.set_trace()
                     if i == 0:
-                    ## First Baspdis added
-                        A0 = B0l[:, :,  :, :]
-                        Z = np.sum(A0[..., :, :, np.newaxis]*Atmp[
-                                   ..., np.newaxis, :, :], axis=-2)
+                    ## First Basis added
+                        Atmp = A[:, :, i, :, :]
+                        B00 = B0l[:, :,  :, :]
+                        Z = np.sum(Atmp[..., :, :, np.newaxis]
+                                  *B00[..., np.newaxis, :, :], axis=-2)
                     else:
-                        # dot product previous interaction with latest
-                        Z = np.sum(Z[..., :, :, np.newaxis]*Atmp[
-                                   ..., np.newaxis, :, :], axis=-2)
+                        Atmp = A[:, :, i, :, :]                    
+                        BB = Bl[:, :, i-1, :, :]
+                        Ztmp = np.sum(Atmp[..., :, :, np.newaxis]
+                                  *BB[..., np.newaxis, :, :], axis=-2)
+     
 
-                # fill the C tilde
-                Ct[:, self[l]['rayidx'], :, :] = Z[:, :, :, :]
+                        Z = np.sum(Ztmp[..., :, :, np.newaxis]
+                                  *Z[..., np.newaxis, :, :], axis=-2)
+                        
+                    if i == l-1:
+                        BB = Bl[:, :, i, :, :]
+                        Z = np.sum(BB[..., :, :, np.newaxis]
+                                  *Z[..., np.newaxis, :, :], axis=-2)
+
+
+                # fill the C tilde MDA
+
+                Ct[:,ir, :, :] = Z[:, :, :, :]
 
                 # delay computation:
                 # sum the distance from antenna to first interaction si0
@@ -1208,12 +1649,11 @@ class Rays(dict):
                 #self[l]['dis'] = self.I.si0[self[l]['rays'][0,:]] \
                 #        + np.sum(self.I.sout[self[l]['rays']], axis=0)
 
-                # Power losses due to distances
+                # attenuation due to distance 
                 # will be removed once the divergence factor will be implemented
-                Ct[:, self[l]['rayidx'], :, :] = Ct[:, self[l][
-                    'rayidx'], :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
-                self.delays[self[l]['rayidx']] = self[l]['dis']/0.3
-                self.dis[self[l]['rayidx']] = self[l]['dis']
+                Ct[:,ir, :, :] = Ct[:, ir, :, :]*1./(self[l]['dis'][np.newaxis, :, np.newaxis, np.newaxis])
+                self.delays[ir] = self[l]['dis']/0.3
+                self.dis[ir] = self[l]['dis']
         #
         # true LOS when no interaction
         # 
@@ -1227,6 +1667,7 @@ class Rays(dict):
 
 
         # To be corrected in a future version
+
         Ct = np.swapaxes(Ct, 1, 0)
 
         c11 = Ct[:,:,0,0]
@@ -1252,6 +1693,8 @@ class Rays(dict):
         # r x 2
         Cn.rang = aoa.T
         # add aoa and aod 
+
+        self.evaluated = True
         return(Cn)
 
 
@@ -1260,13 +1703,15 @@ class Rays(dict):
 
         Parameters
         ----------
+
         r : integer
             ray index
         
         Notes
         -----
 
-            Give the ray number and it returns the index of its interactions
+        Give the ray number and it returns the index of its interactions
+
         """
         raypos = np.nonzero(self[self.ray2nbi[r]]['rayidx'] == r)[0]
         return(self[self.ray2nbi[r]]['rays'][:,raypos][:,0])
@@ -1284,7 +1729,7 @@ class Rays(dict):
         a = self.ray(r)
         return(self.I.typ[a])
 
-    def info(self, r):
+    def info(self, r,ifGHz=0):
         '''
             provides information for a given ray r
 
@@ -1294,61 +1739,65 @@ class Rays(dict):
             ray index
 
         '''
-        print '-------------------------'
-        print 'Informations of ray #', r
-        print '-------------------------\n'
 
-        ray = self.ray(r)
-        typ = self.typ(r)
-        print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index',
-                                                                    'type',
-                                                                    'slab', 'th(rad)', 'alpha', 'gamma2')
-        print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
-        for iidx, i in enumerate(typ):
-            if i == 'T' or i == 'R':
-                I = getattr(self.I, i)
-                for slab in I.dusl.keys():
-#                    print slab
-                    midx = I.dusl[slab]
-#                    print midx
-                    Iidx = np.array((I.idx))[midx]
-                    th = I.data[I.dusl[slab], 0]
-                    gamma = I.gamma[midx]
-                    alpha = I.alpha[midx]
-                    for ii, Ii in enumerate(Iidx):
-                        if Ii == ray[iidx]:
-                            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])
+        if self.evaluated:
+            print '-------------------------'
+            print 'Informations of ray #', r
+            print '-------------------------\n'
 
-            # else:
-            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
-            #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
+            ray = self.ray(r)
+            typ = self.typ(r)
+            print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format('Index',
+                                                                        'type',
+                                                                        'slab', 'th(rad)', 'alpha', 'gamma2')
+            print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(r, 'B0', '-', '-', '-', '-')
+            for iidx, i in enumerate(typ):
+                if i == 'T' or i == 'R':
+                    I = getattr(self.I, i)
+                    for slab in I.dusl.keys():
+    #                    print slab
+                        midx = I.dusl[slab]
+    #                    print midx
+                        Iidx = np.array((I.idx))[midx]
+                        th = I.data[I.dusl[slab], 0]
+                        gamma = I.gamma[midx]
+                        alpha = I.alpha[midx]
+                        for ii, Ii in enumerate(Iidx):
+                            if Ii == ray[iidx]:
+                                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(Ii, i, slab, th[ii], alpha[ii], gamma[ii])
 
-        print '\n----------------------------------------'
-        print ' Matrix of ray #', r, 'at f=', self.I.fGHz[0]
-        print '----------------------------------------'
+                # else:
+                print '{0:5} , {1:4}, {2:10}, {3:7.2}, {4:10.2}, {5:10.2}'.format(ray[iidx], 'B', '-', '-', '-', '-')
+                #              print '{0:5} , {1:4}, {2:10}, {3:7}, {4:10}, {5:10}'.format(ray[iidx], i, '-', '-', '-', '-')
 
-        print 'rotation matrix#', 'type: B0'
-        print self.B0.data[r,:,:]
-        for iidx, i in enumerate(typ):
-            print 'interaction #', ray[iidx], 'type:', i
-            # f x l x 2 x 2
-            print self.I.I[0, ray[iidx], :, :]
-            print 'rotation matrix#',[ray[iidx]], 'type: B'
-            print self.B.data[ray[iidx], :, :]
+            print '\n----------------------------------------'
+            print ' Matrix of ray #', r, 'at f=', self.I.fGHz[ifGHz]
+            print '----------------------------------------'
 
+            print 'rotation matrix#', 'type: B0'
+            print self.B0.data[r,:,:]
+            for iidx, i in enumerate(typ):
+                print 'interaction #', ray[iidx], 'type:', i
+                # f x l x 2 x 2
+                print self.I.I[ifGHz, ray[iidx], :, :]
+                print 'rotation matrix#',[ray[iidx]], 'type: B'
+                print self.B.data[ray[iidx], :, :]
+        else: 
+            print 'Rays have not been evaluated yet'
 
-    def signature(self, L):
+    def signature(self, ni ,nr):
         """ extract ray signature
 
         Parameters
         ----------
 
-        L : Layout 
+        ni : int
+        nr : int 
 
         Returns
         -------
 
-        sig 
+        sig : ndarray
 
         Notes
         -----
@@ -1358,9 +1807,7 @@ class Rays(dict):
         r[nint]['sig']
 
         """
-        sig = Signatures(L, self.pTx, self.pRx)
-        for k in self:
-            sig[k] = self[k]['sig']
+        sig = self[ni]['sig'][:,:,nr]
         return(sig)
 
     def show3d(self,
@@ -1371,13 +1818,14 @@ class Rays(dict):
                col=np.array([1, 0, 1]),
                id=0,
                linewidth=1):
-        """ plot a 3D ray
+        """ plot a set of 3D rays
 
         Parameters
         ----------
 
         ray : 
-
+        block : int
+            interaction block
         bdis : Boolean
             if False return .vect filename (True)
         bbas : Boolean
@@ -1397,6 +1845,7 @@ class Rays(dict):
         _filerac = pyu.getshort(filerac)
         filename_list = filerac + '.list'
         filename_vect = filerac + '.vect'
+
         try:
             fo = open(filename_vect, "w")
         except:
@@ -1419,6 +1868,8 @@ class Rays(dict):
         #
         # Ajout des bases locales
         #
+        
+
 
         fo = open(filename_list, "w")
         fo.write("LIST\n")
@@ -1426,7 +1877,6 @@ class Rays(dict):
         if (bstruc):
             # fo.write("{<strucTxRx.off}\n")
             fo.write("{<" + _filestr + ".off}\n")
-
         filename = filename_list
         fo.close()
 
@@ -1441,12 +1891,14 @@ class Rays(dict):
             return(filename)
 
     def show3(self, 
+              L=[],
               bdis=True, 
               bstruc=True, 
-              id=0, 
-              strucname='defstr', 
+              bbasi = False,
+              bbaso = False,
+              id=0,
               ilist=[], 
-              raylist=[],pg=np.array([[0],[0],[0]])):
+              raylist=[],centered=True):
         """ plot 3D rays within the simulated environment
 
         Parameters
@@ -1456,15 +1908,33 @@ class Rays(dict):
             True
         bstruc : boolean
             True
+        bbasi : boolean
+            display input basis of each interaction of rays
+        bbaso : boolean
+            display ouput basis of each interaction of rays
         id : int 
-        strucname : string 
-            'defstr'
+        L : Layout object
+            Layout to be displayed
         ilist : list of group of interactions
         raylist : list of index rays 
-        pg : centroid of the structure 
+        centered : boolean     
+            if True center the layout before display
          
 
         """
+
+        try:
+            L.filename
+        except:
+            raise NameError('L argument must be a layout object')
+
+        if not centered:
+            pg=np.array([[0],[0],[0]])
+
+        strucname= L.filename.split('.')[0]
+        pg = L.geomfile(centered=centered)
+        pg = np.hstack((pg,0.)).reshape(3,1)
+
         if ilist == []:
             ilist = self.keys()
         pTx = self.pTx.reshape((3, 1))-pg
@@ -1474,7 +1944,21 @@ class Rays(dict):
         fo.write("LIST\n")
         if bstruc:
             fo.write("{<"+strucname+".off}\n")
+            if bbasi:
+                if not self.isbased:
+                    raise NameError('Bases have not been computed (self.locbas(Layout)')
+                else:    
+                    base_listi = geu.Geomlist('baselisti',clear=True) 
+                    base_listi.append("LIST\n")
+            if bbaso:
+                if not self.isbased:
+                    raise NameError('Bases have not been computed (self.locbas(Layout)')
+                else:    
+                    base_listo = geu.Geomlist('baselisto',clear=True) 
+                    base_listo.append("LIST\n")
+
             # fo.write("{<strucTxRx.off}\n")
+
             k = 0
             for i in ilist:
                 if raylist == []:
@@ -1490,12 +1974,93 @@ class Rays(dict):
                                           bstruc=False, col=col, id=k)
                     k += 1
                     fo.write("{< " + fileray + " }\n")
+                    if bbasi:
+                        for inter in range(i):
+                            filebi = 'bi_' + str(j) + '_' + str(i) + '_' +str(inter)
+                            basi = geu.GeomVect(filebi)
+                            basi.geomBase(self[i]['Bi'][:,:,inter,j],pt=self[i]['pt'][:,inter+1,j]-pg[:,0])
+                            base_listi.append("{<" + filebi +'.vect' "}\n")
+                        filebi = 'bi_' + str(j) + '_' + str(i) + '_' +str(inter-1)
+                        basi = geu.GeomVect(filebi)
+                        basi.geomBase(self[i]['BiN'][:,:,j],pt=self[i]['pt'][:,-1,j]-pg[:,0])
+                        base_listi.append("{<" + filebi +'.vect' "}\n")
+                    if bbaso:
+                        for inter in range(i):
+                            filebo = 'bo_' + str(j) + '_' + str(i) + '_' +str(inter)
+                            baso = geu.GeomVect(filebo)
+                            baso.geomBase(self[i]['Bo'][:,:,inter,j],pt=self[i]['pt'][:,inter+1,j]-pg[:,0])
+                            base_listo.append("{<" + filebo +'.vect' "}\n")
+                        filebo = 'bo_' + str(j) + '_' + str(i) + '_' +str(inter+1)
+                        baso = geu.GeomVect(filebo)
+                        baso.geomBase(self[i]['Bo0'][:,:,j],pt=self[i]['pt'][:,0,j]-pg[:,0])
+                        base_listo.append("{<" + filebo +'.vect' "}\n")
+            if bbasi:
+                fo.write("{< " + "baselisti.list}\n") 
+            if bbaso:   
+                fo.write("{< " + "baselisto.list}\n") 
+
         fo.close()
         if (bdis):
             chaine = "geomview " + filename + " 2>/dev/null &"
             os.system(chaine)
         else:
             return(filename)
+   # def show3(self, 
+   #            bdis=True, 
+   #            bstruc=True, 
+   #            id=0, 
+   #            strucname='defstr', 
+   #            ilist=[], 
+   #            raylist=[],pg=np.array([[0],[0],[0]])):
+   #      """ plot 3D rays within the simulated environment
+
+   #      Parameters
+   #      ----------
+
+   #      bdis : boolean
+   #          True
+   #      bstruc : boolean
+   #          True
+   #      id : int 
+   #      strucname : string 
+   #          'defstr'
+   #      ilist : list of group of interactions
+   #      raylist : list of index rays 
+   #      pg : centroid of the structure 
+         
+
+   #      """
+   #      if ilist == []:
+   #          ilist = self.keys()
+   #      pTx = self.pTx.reshape((3, 1))-pg
+   #      pRx = self.pRx.reshape((3, 1))-pg
+   #      filename = pyu.getlong("grRay" + str(id) + ".list", pstruc['DIRGEOM'])
+   #      fo = open(filename, "w")
+   #      fo.write("LIST\n")
+   #      if bstruc:
+   #          fo.write("{<"+strucname+".off}\n")
+   #          # fo.write("{<strucTxRx.off}\n")
+   #          k = 0
+   #          for i in ilist:
+   #              if raylist == []:
+   #                  rlist = range(np.shape(self[i]['pt'])[2])
+   #              else:
+   #                  rlist = raylist
+   #              for j in rlist:
+   #                  ray = np.hstack((pTx,np.hstack((self[i]['pt'][:, :, j]-pg, pRx))))
+   #                  # ray = rays[i]['pt'][:,:,j]
+   #                  col = np.array([2, 0, 1])
+   #                  # print ray
+   #                  fileray = self.show3d(ray=ray, bdis=False,
+   #                                        bstruc=False, col=col, id=k)
+   #                  k += 1
+   #                  fo.write("{< " + fileray + " }\n")
+   #      fo.close()
+   #      if (bdis):
+   #          chaine = "geomview " + filename + " 2>/dev/null &"
+   #          os.system(chaine)
+   #      else:
+   #          return(filename)
 
 
 if __name__ == "__main__":

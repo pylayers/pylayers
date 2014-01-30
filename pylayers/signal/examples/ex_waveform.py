@@ -5,8 +5,9 @@ param= {'type' : 'generic',\
             'fe': 100,\
             'thresh': 3,\
             'tw': 30}
-w = Waveform({'type':'W1offset'})
+#w = Waveform({'type':'W1offset'})
+w = Waveform()
 w.show()
-
+plt.show()
 
 

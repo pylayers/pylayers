@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin1 -*-
+# -*- coding: utf8 -*-
 import pdb
 import os
 import pdb
@@ -18,17 +18,21 @@ from pylayers.antprop.slab import *
 
 
 class Inter(object):
+    """ Interactions 
+    
+    Meta class of interactions ( Interactions, IntB/IntL/IntT/intR/intD)
 
-    def __init__(self, typ=0, data=np.array(()), idx=[],
-                 _filemat='matDB.ini',_fileslab='slabDB.ini'):
-        """
-        Meta class of specific interactions ( Interactions, IntB/IntL/IntT/intR/intD)
+    Attributes
+    ----------
 
-
-        Attributes
-        ----------
         typ : int
             type of interaction
+            1 : R 
+            2 : T
+            3 : D 
+            0 : Tx or Rx 
+           -1 : B
+
         data: np.array
             data for the interaction
         idx:
@@ -40,6 +44,21 @@ class Inter(object):
         olf : np.array
             np.ones((nf)) used for broadcasting
 
+
+    """
+
+    def __init__(self, typ=0, data=np.array(()), idx=[],
+                 _filemat='matDB.ini',_fileslab='slabDB.ini'):
+        """
+
+        Parameters
+        ----------
+
+        typ 
+        data  : ndarray 
+        idx 
+        _filemat 
+        _fileslab 
 
         """
 
@@ -77,18 +96,24 @@ class Inter(object):
 
 
 
-    def delay(self):
-        """ calculate delays of a given basis Interaction
+    def sinsout(self):
+        """ calculate sin sout of the interaction 
 
-        Note
-        ----
+        Notes
+        -----
 
-        typ 
+        if typ 
 
             1 : Reflexion 
             2 : Transmission 
             3 : Diffraction
-
+            
+            si : self.data[:,1]
+            so : self.data[:,2]
+        
+        if typ = 0 
+            
+        if typ = -1    
         """
 
         if self.typ in [1, 2, 3]:
@@ -102,14 +127,18 @@ class Inter(object):
     def stack(self, data=np.array(()), idx=0, isdata=True):
         """ stack data and the associated idx
 
-        Attributes:
+        Parameters 
         ----------
-            data : np.array()
-                data to stack
-            idx :
-                index to stack
-            isdata: bool
-                False if you just want to stack idx (only used for intE class )
+
+        data : np.array()
+            data to stack
+        idx :
+            index to stack
+        isdata: bool
+            False if you just want to stack idx (only used for intE class )
+
+        Examples
+        --------
 
         >>> from pylayers.antprop.rays import *
         >>> import numpy as np
@@ -168,17 +197,13 @@ class Interactions(Inter,dict):
 
         Methods
         -------
+
         add(self,li): add a list of basis interactions
         addi(self,i): add a single interaction
         eval(self) : evaluate all the interactions added thanks to self.add or self.addi
                      and create the self.I which gather all thoses interactions
-
-    """
-
-    def __init__(self):
-        """
-
-        There are 5 types of interactions
+        
+        5 following types of interactions
 
         B : local basis transformation matrix (unitary)
         L : LOS case
@@ -186,7 +211,13 @@ class Interactions(Inter,dict):
         T : Transmission
         D : Diffraction
 
+
+    """
+
+    def __init__(self):
         """
+
+                """
         Inter.__init__(self)
         self['B'] = []
         self['L'] = []
@@ -252,6 +283,11 @@ class Interactions(Inter,dict):
     def eval(self,fGHz=np.array([2.4])):
         ''' evaluate all the interactions
 
+        Parameters
+        ----------
+
+        fGHz : np.array()
+
         Notes
         -----
 
@@ -265,7 +301,7 @@ class Interactions(Inter,dict):
         self.alpha :
             alpha as described into Legendre Thesis
         self.gamma :
-            !! gamma**2 !!! (squared included) as described into J.F Legendre Thesis
+            !! gamma**2 !!! (squared included) as described 
 
         '''
 
@@ -344,19 +380,21 @@ class IntB(Inter):
         Attributes
         ----------
 
-            data : np.array:
-                WARNING np.shape(data) = (ninter x 4)
-                the input matrix 2x2 is rehaped as 1x 4
+        data : np.array:
+            WARNING np.shape(data) = (ninter x 4)
+            the input matrix 2x2 is rehaped as 1x 4
+        idx : list
+            index of the corresponding ray and interaction
 
-
-            idx : list
-                index of the corresponding ray and interaction
-
-        Returns
+        Methods
         -------
 
-        np.array:
-            (nf,ninter 2, 2)
+        eval : evaluation of B interaction 
+
+        Notes 
+        -----
+
+        The interaction object is np.array with shape (nf,ninter 2, 2)
 
     """
     def __init__(self, data=np.array(()), idx=[]): 
@@ -368,6 +406,21 @@ class IntB(Inter):
 
     def eval(self,fGHz=np.array([2.4])):
         """ evaluation of B interactions
+
+        Parameters
+        ----------
+
+        fGHz : np.array() 
+            freqeuncy range
+
+
+        Returns
+        -------
+
+        self.data 
+
+        Examples
+        --------
 
         >>> from pylayers.antprop.rays import *
         >>> M = np.eye(2).reshape(4)
@@ -392,7 +445,7 @@ class IntB(Inter):
         self.nf=len(fGHz)
 
 
-        self.delay()
+        self.sinsout()
         if len(self.data) != 0:
             lidx = len(self.idx)
             data = self.data.reshape(lidx, 2, 2)
@@ -452,7 +505,7 @@ class IntL(Inter):
         self.fGHz=fGHz
         self.nf=len(fGHz)
 
-        self.delay()
+        self.sinsout()
 
         if len(self.data != 0):
             try:
@@ -499,9 +552,16 @@ class IntR(Inter):
     def eval(self,fGHz=np.array([2.4])):
         """ evaluation of reflexion interactions
 
-        Attributes
+        Parameters
         ----------
 
+        fGHz : np.array (,Nf)
+
+
+        Returns
+        -------
+
+        self.A  : evaluated interaction
 
 
         Examples
@@ -509,7 +569,7 @@ class IntR(Inter):
 
         >>> from pylayers.antprop.rays import *
 
-        # generate input data
+        >>> # generate input data
         >>> theta1 = 0.1
         >>> theta2 = 0.4
         >>> si01 = 4
@@ -519,7 +579,7 @@ class IntR(Inter):
         >>> data1=np.array((theta1,si01,sir1))
         >>> data2=np.array((theta2,si02,sir2))
 
-        # store input data to Instance
+        >>> # store input data to Instance
         >>> R = IntR(data1,idx=0)
         >>> R.data
         array([ 0.1 ,  4.  ,  3.15])
@@ -527,15 +587,15 @@ class IntR(Inter):
         >>> R.uslidx=1
         >>> R.dusl['WOOD']=[0,1]
 
-        # evaluation parameters (normally read from config.ini)
+        >>> # evaluation parameters (normally read from config.ini)
         >>> R.f = np.array([  2.,  11.])
         >>> R.nf = len(R.f)
         >>> R.olf = np.ones((R.nf))
 
-        # evaluation
+        >>> # evaluation
         >>> eR=R.eval()
 
-        # examples
+        >>> # examples
         >>> ninter = len(R.idx)
         >>> np.shape(eR)
         (181, 2, 2, 2)
@@ -548,11 +608,12 @@ class IntR(Inter):
         -----
 
         data = np.array((ninter x [theta,si,st]))
+
         """
 
 
 
-        self.delay()
+        self.sinsout()
 
 
         self.fGHz=fGHz
@@ -630,7 +691,7 @@ class IntT(Inter):
 
         >>> from pylayers.antprop.rays import *
 
-        # generate input data
+        >>> # generate input data
         >>> theta1 = 0.1
         >>> theta2 = 0.4
         >>> si01 = 4
@@ -640,7 +701,7 @@ class IntT(Inter):
         >>> data1=np.array((theta1,si01,sir1))
         >>> data2=np.array((theta2,si02,sir2))
 
-        # store input data to Instance
+        >>> # store input data to Instance
         >>> T = IntT(data1,idx=0)
         >>> T.data
         array([ 0.1 ,  4.  ,  3.15])
@@ -648,15 +709,15 @@ class IntT(Inter):
         >>> T.uslidx=1
         >>> T.dusl['WOOD']=[0,1]
 
-        # evaluation parameters (normally read from config.ini)
+        >>> # evaluation parameters (normally read from config.ini)
         >>> T.f = np.array([  2.,  11.])
         >>> T.nf = len(T.f)
         >>> T.olf = np.ones((T.nf))
 
-        # evaluation
+        >>> # evaluation
         >>> eT=T.eval()
 
-        # examples
+        >>> # examples
         >>> ninter = len(T.idx)
         >>> np.shape(eT)
         (181, 2, 2, 2)
@@ -667,7 +728,7 @@ class IntT(Inter):
         array([ 13.33333333,   2.        ])
         """
 
-        self.delay()
+        self.sinsout()
 
         self.fGHz=fGHz
         self.nf=len(fGHz)
@@ -749,7 +810,7 @@ class IntD(Inter):
         self.fGHz=fGHz
         self.nf=len(fGHz)
 
-        self.delay()
+        self.sinsout()
 
         if len(self.data) != 0:
             self.A = self.data[:, np.newaxis, np.newaxis, np.newaxis]

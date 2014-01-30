@@ -5,6 +5,7 @@ import pylayers.signal.bsignal as bs
 import pylayers.signal.waveform as wvf 
 from pylayers.simul.simulem import *
 import matplotlib.pyplot as plt 
+import time
 print "======================="
 print " start test_rays.py (Ray Tracing numpy) "
 print "======================="
@@ -22,8 +23,11 @@ S.rx.point(rx)
 Ctx = S.L.pt2cy(S.tx.position[:,0])
 Crx = S.L.pt2cy(S.rx.position[:,0])
 Si = Signatures(S.L,Ctx,Crx)
-print "Signature : run1" 
-Si.run1(cutoff=5)
+print "Signature : run4" 
+tic = time.time()
+Si.run4(cutoff=5,algo='old')
+toc = time.time()
+print "Elapsed Time : ",toc-tic
 #Si.run2(cutoff=3,dcut=2)
 print "Signature : rays" 
 r2d = Si.rays(tx,rx)

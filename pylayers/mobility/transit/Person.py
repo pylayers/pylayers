@@ -102,7 +102,7 @@ class Person(Process):
     average_radius   = 0.6
     npers        = 0
     #GeomNet      = np.array((0,0,[[1,2,3]],[[1,0,0]],[[0,0,1]]),dtype=GeomNetType)
-    def __init__(self, ID = 0, interval=0.05,roomId=0, L=[], net=Network(),
+    def __init__(self, ID = 0, interval=0.05,roomId=-1, L=[], net=Network(),
         wld = world(),sim=None,moving=True,froom=[],wait=1.0,cdest='random',save=[]):
         """ Class Person
             inherits of Simpy.SimulationRT
@@ -122,12 +122,21 @@ class Person(Process):
         self.manager_args = []
         self.waypoints = []
         self.moving=moving
-        self.roomId    = roomId
+        if roomId < 0:
+            try :
+                self.roomId   = sample(self.L.Gr.nodes(),1)[0]
+            except: 
+                raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
+        else:
+            self.roomId    = roomId
         self.forbidroomId = froom 
         self.cdest = cdest # choose tdestination type
         if self.cdest == 'random':
             # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
-            self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+            try :
+                self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
+            except: 
+                raise NameError('This error is due to the lack of Gr graph in the Layout argument passed to Person(Object)')
             while self.nextroomId == self.roomId or (self.nextroomId in self.forbidroomId): # or (self.nextroomId in self.sim.roomlist): # test destination different de l'arrive
                 # self.nextroomId   = int(np.floor(uniform(0,self.L.Gr.size())))
                 self.nextroomId   = sample(self.L.Gr.nodes(),1)[0]
@@ -157,6 +166,7 @@ class Person(Process):
         self.stuck = 0           
         self.destination = self.waypoints[0]
         self.velocity = vec3()
+        self.acceleration = vec3()
         self.localx = vec3(1, 0)
         self.localy = vec3(0, 1)
         self.world.add_boid(self)
@@ -184,6 +194,23 @@ class Person(Process):
            sql_opt = dict(config.items('Mysql'))
            self.db = Database(sql_opt['host'],sql_opt['user'],sql_opt['passwd'],sql_opt['dbname'])
            self.date = datetime.datetime.now()
+
+    def __repr__(self):
+        s = 'Mechanical information\n***********************\n'
+        s = s + 'agent ID: ' + str(self.ID) +'\n'
+        s = s + '\nposition: ' + str(conv_vecarr(self.position)) +'\n'
+        s = s + 'velocity: ' + str(conv_vecarr(self.velocity)) +'\n'
+        s = s + 'acceleration: ' + str(conv_vecarr(self.acceleration)) +'\n'
+
+        s = s + '\ncurrent room ID -----> destination room ID\n'
+        s = s + str(self.roomId).ljust(15) +' -----> ' + str(self.nextroomId) + '\n'
+
+        s = s + 'pos destination room ID: ' + str(conv_vecarr(self.destination)) +'\n'
+        s = s + 'forbiden room list: ' + str(self.forbidroomId) +'\n'
+        return s
+
+        
+
 
 
     def move(self):
