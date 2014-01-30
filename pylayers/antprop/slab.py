@@ -294,7 +294,7 @@ coeff: string
 'RT', # RT | R | T (Reflexion & Transmission ) | Reflexion | Transmission
 var: string
 'a', # a | f angle | frequency
-types : string
+typ : string
 'm' | 'r' | 'd' | 'l20'
 mod rad deg dB
 
@@ -314,17 +314,17 @@ Examples
 >>> lmat = [mat['AIR'],mat['WOOD']]
 >>> II = MatInterface(lmat,0,fGHz,theta)
 >>> II.RT()
->>> fig,ax = II.plotwrt(var='a',kv=10,types=['m'])
+>>> fig,ax = II.plotwrt(var='a',kv=10,typ=['m'])
 >>> air = mat['AIR']
 >>> brick = mat['BRICK']
 >>> II = MatInterface([air,brick],0,fGHz,theta)
 >>> II.RT()
->>> fig,ax = II.plotwrt(var='f',color='k',types=['m'])
+>>> fig,ax = II.plotwrt(var='f',color='k',typ=['m'])
 >>> plt.show()
 
 
 """
-        defaults = {'types':['l20'],
+        defaults = {'typ':['l20'],
                 'polar':'po', # po | p | o
                 'coeff':'RT', # RT | R | T
                }
@@ -346,7 +346,7 @@ Examples
             args['labels'] = [self.name]
             
         args['titles'] = []
-        args['types'] = kwargs['types']
+        args['typ'] = kwargs['typ']
         
         # Reflexion
         if 'R' in kwargs['coeff']:
@@ -691,7 +691,7 @@ associate numeric and alphanumeric keys
         """
 """
         self.fileini = _fileini
-        self.filemat=self.fileini.replace('.ini','.mat')
+        self.filemat = self.fileini.replace('.ini','.mat')
 
 
 
@@ -910,6 +910,12 @@ default 'MAT'
 
     def load(self,_fileini):
         """Load a Material from a .ini file
+        
+        Parameters
+        ----------
+
+        _fileini : string 
+            name of the matDB file (usually matDB.ini)
 
 """
         fileini = pyu.getlong(_fileini, pstruc['DIRMAT'])
@@ -917,9 +923,11 @@ default 'MAT'
         config.read(fileini)
 
         di = dict(config.items("dict") )
+
         self.di={}
         for d in di:
             self.di[eval(d)]=di[d]
+
         for matname in self.di.values():
             M=Mat(name=matname)
             M['sigma'] = eval(config.get(matname,'sigma'))
@@ -928,6 +936,8 @@ default 'MAT'
             M['index'] = eval(config.get(matname,'index'))
             M['mur'] = eval(config.get(matname,'mur'))
             self[matname] = M
+        
+        # PULSRAY compatibility : save in the old .mat format 
         self.savemat(self.filemat)
 
     def loadmat(self, _filemat):
@@ -1183,7 +1193,7 @@ slab name
             >>> theta = np.arange(0,np.pi/2,0.01)
             >>> fGHz = np.array([57.5])
             >>> sl['placo'].ev(fGHz,theta)
-            >>> fig,ax=sl['placo'].plotwrt(var='a',types=['m'])
+            >>> fig,ax=sl['placo'].plotwrt(var='a',typ=['m'])
             >>> plt.show()
 
 """
@@ -1616,7 +1626,7 @@ False
 """
         self.ev(fGHz, theta)
         if self['evaluated']:
-            fig,ax=self.M.plotwrt(var='a',types=['l20'])
+            fig,ax=self.M.plotwrt(var='a',typ=['l20'])
 
         return fig,ax
 
@@ -1788,10 +1798,10 @@ fGHz : np.array
                 0.0029,0.0102,0.0029])
             theta = np.linspace(20,60,100)*np.pi/180
             sl['ConcreteJc'].ev(120,theta)
-            sl['ConcreteJc'].plotwrt(var='a',types=['l20'])
+            sl['ConcreteJc'].plotwrt(var='a',typ=['l20'])
             fig = plt.figure()
             sl['DoubleGlass'].ev(120,theta)
-            sl['DoubleGlass'].plotwrt(var='a',types=['l20'])
+            sl['DoubleGlass'].plotwrt(var='a',typ=['l20'])
             freq = np.linspace(110,135,50)
             fig = plt.figure()
             sl['DoubleGlass'].ev(freq,theta)

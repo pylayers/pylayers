@@ -193,7 +193,7 @@ class RadioNode(object):
 
         """
         self.position = np.array([], dtype=float)
-        self.position = np.array([0, 0, 0]).reshape(3, 1)
+        self.position = np.array([0., 0., 0.]).reshape(3, 1)
         self.N = 1
 
     def points(self, pt=np.array([[0], [0], [0]])):
@@ -603,13 +603,24 @@ class RadioNode(object):
             colorname = 'blue'
 
         # save points in GeomVect container
-
         filename = self.filegeom.replace('.vect', '')
-        gv = geo.GeomVect(filename)
-        try:
-            gv.points(self.position, colorname)
+        filename = filename.replace('.off', '')
+
+        try: 
+            gv = geo.Geomoff(filename)
+            ant = self.A
+            if not hasattr(ant,'theta'):
+                ant.Fsynth3()
+            V = ant.SqG[ant.nf/2,:,:]
+            if not hasattr(self,'position'):
+                print "no position available"
+            gv.pattern(ant.theta,ant.phi,V,po=self.position,ilog=False,minr=0.01,maxr=0.2)
+            self.filegeom=filename + '.off'
         except:
-            print " no position available "
+            if hasattr(self,'position'):
+                gv.points(self.position, colorname)
+            else :
+                print " no position available "
 
         if _filespa.split('.')[1] == 'spa':
             fi_spa = open(filespa, 'w')

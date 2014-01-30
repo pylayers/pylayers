@@ -14,10 +14,7 @@ pylayers/antprop/channel.py
 pylayers/antprop/channelc.py
 pylayers/antprop/coverage.py
 pylayers/antprop/interactions.py
-<<<<<<< HEAD
-=======
 pylayers/antprop/loadTMP.py
->>>>>>> d65f673453de32b765ac95034af2d84f2d805577
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py

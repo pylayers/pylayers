@@ -21,6 +21,7 @@ import scipy as sp
 import scipy.interpolate as interp
 import numpy.fft as fft
 import pandas as pd
+import matplotlib.gridspec as gridspec
 from copy import *
 import matplotlib.pylab as plt
 import matplotlib.gridspec as gridspec
@@ -72,10 +73,13 @@ class Bsignal(object):
             lx  = shx[0]
             ly  = shy[-1]
             # last dimension of y should be equal to dimension of x
-            if (ly != lx):
-                print "Error in Bsignal : Dimension incompatibility "
-                print "x : ", lx
-                print "y : ", ly
+            if (ly != 1):
+                if (ly != lx) :
+                    print "Error in Bsignal : Dimension incompatibility "
+                    print "x : ", lx
+                    print "y : ", ly
+            
+
 
     def __repr__(self):
         return '%s :  %s  %s' % (
@@ -85,6 +89,18 @@ class Bsignal(object):
 
 
 
+    def extract(self,u):
+        """ extract y[u,:]
+
+        Returns
+        -------
+
+        O : Usignal
+
+        """
+        O = copy(self)
+        O.y = O.y[u,:]
+        return(O)
 
     def save(self, filename):
         """
@@ -102,12 +118,12 @@ class Bsignal(object):
             >>> from pylayers.signal.bsignal import *
             >>> import matplotlib.pyplot as plt
             >>> e = EnImpulse()
-            >>> fig,ax = e.plot(types=['v'])
+            >>> fig,ax = e.plot(typ=['v'])
             >>> e.save('impulse.mat')
             >>> del e
             >>> h = TUsignal()
             >>> h.load('impulse.mat')
-            >>> fig,ax = h.plot(types=['v'])
+            >>> fig,ax = h.plot(typ=['v'])
         """
 
         d = {}
@@ -198,14 +214,115 @@ class Bsignal(object):
         else:
             plt.plot(self.x, self.y, color, linestyle='steps')
 
+    def cformat(self,**kwargs):
+        """ complex format 
+
+        Parameters
+        ----------
+
+        uy : ndarray()
+            select rows of y 
+
+        Returns
+        -------
+
+        xn 
+        yn 
+        ylabels
+
+        """
+        defaults = {'typ':'l20'}
+
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
+
+        if 'uy' not in kwargs:
+            u = np.arange(np.shape(self.y)[0])
+        else:
+            u = kwargs['uy']
+        
+        # radians to degree coefficient   
+        rtd = 180./np.pi
+        
+        t = kwargs['typ']
+
+        xn = self.x
+        if t=='m':
+            ylabels='Magnitude'
+            yn = np.abs(self.y[u,:])
+        if t=='v':
+            ylabels='Amplitude'
+            yn = self.y[u,:]
+        if t=='l10':
+            ylabels='Magnitude (dB)'
+            yn = 10*np.log10(np.abs(self.y[u,:])+1e-12)
+        if t=='l20':
+            ylabels='Magnitude (dB)'
+            yn = 20*np.log10(np.abs(self.y[u,:])+1e-12)
+        if t=='d':
+            ylabels='Phase (deg)'
+            yn = np.angle(self.y[u,:])*rtd
+        if t=='r':
+            ylabels='Phase (rad)'
+            yn = np.angle(self.y[u,:])
+        if t=='du':
+            ylabels='Unwrapped Phase (deg)'
+            yn = np.unwrap(np.angle(self.y[u,:]))*rtd
+        if t=='ru':
+            ylabels='Unwrapped Phase (rad)'
+            yn = np.unwrap(np.angle(self.y[u,:]))
+        if t=='re':
+            ylabels='Real part'
+            yn = np.real(self.y[u,:])
+        if t=='im':
+            ylabels='Imaginary part'
+            yn = np.imag(self.y[u,:])
+        if t=='gdn':
+            ylabels='Group delay (ns)'
+            df  = self.x[1]-self.x[0]
+            xn  = self.x[0:-1]               
+            yn  = -np.diff(np.unwrap(np.angle(self.y[l,c,:])))/(2*np.pi*df)
+        if t=='gdm':
+            ylabels='Group distance (m)'
+            df  = self.x[1]-self.x[0]
+            xn  = self.x[0:-1]               
+            yn = -0.3*np.diff(np.unwrap(np.angle(self.y[l,c,:])))/(2*np.pi*df)
+        if 'ylabels'  in kwargs:
+            ylabels = kwargs['ylabels']
+
+        return(xn,yn,ylabels)                           
+
     def imshow(self,**kwargs):
         """ imshow of y matrix
+
+        Parameters
+        ----------
+
+        interpolation : string 
+            'none'|'nearest'|'bilinear'
+        cmap : colormap 
+            plt.cm.BrBG
+        aspect : string 
+            'auto' (default) ,'equal','scalar'
+        dB : boolean 
+            False
+
+        Examples
+        --------
+        
+
+        >>> f = arange(100)
+        >>> y = np.random.randn(50,100)+1j*np.random.randn(50,100)
+        >>> F = FUsignal(f,y)
+
         """
 
-        defaults = {'interpolation':None,
-                    'cmap':plt.cm.BrBg,
-                    'aspect':auto,
-                    'dB':False}
+        defaults = {'interpolation':'none',
+                    'cmap':plt.cm.BrBG,
+                    'aspect':'auto',
+                    'typ':'l20',
+                    'function':'imshow'}
 
         for k in defaults.keys():
             if not kwargs.has_key(k):
@@ -213,37 +330,45 @@ class Bsignal(object):
 
         if not kwargs.has_key('fig'):
             fig = plt.figure()
-        if not kwargs.has_key('arg'):
-            ax = fig.ad_subplot(111)
+        else:    
+            fig = kwargs['fig']
+
+        if not kwargs.has_key('ax'):
+            ax = fig.add_subplot(111)
+        else:
+            ax = kwargs['ax']
 
         if self.y.ndim>1:
-            if not kwargs['dB']:
-                vmin = abs(self.y.min())
-                vmax = abs(self.y.max())
-                vm   = max(vmin,vmax)
-                vmin = -vm
-                vmax = +vm
-                val  = self.y
-                cmap = kwargs['cmap']
+            xn,yn,ylabels = self.cformat(**kwargs)
+
+            if 'vmin' not in kwargs:
+                vmin = yn.min()
             else:
-                vmin = -100
-                vmax = 10*np.log10(abs(self.y.max()))
-                val  = 10*np.log10(abs(self.y)+1e-10)
-                cmap = kwargs['cmap']
+                vmin = kwargs['vmin']
 
-            ax.imshow(val,
-                       origin = 'lower',
-                       vmin = vmin,
-                       vmax = vmax,
-                       aspect = kwargs['aspect'],
-                       extent = (self.x[0],self.x[-1],0,self.y.shape[0]),
-                       interpolation=interpolation,
-                      # cmap=plt.cm.PiYG)
-                       cmap=cmap)
-            c = ax.colorbar()
+            if 'vmax' not in kwargs:
+                vmax = yn.max()
+            else:
+                vmax = kwargs['vmax']
+            
+            if kwargs['function']=='imshow':
+                im = ax.imshow(yn,
+                           origin = 'lower',
+                           vmin = vmin,
+                           vmax = vmax,
+                           aspect = kwargs['aspect'],
+                           extent = (xn[0],xn[-1],0,yn.shape[0]),
+                           interpolation=kwargs['interpolation'],
+                           cmap=kwargs['cmap'])
+
+            if kwargs['function'] =='pcolormesh':
+                im = ax.pcolormesh(xn,np.arange(yn.shape[0]),yn)
+
+            cb = fig.colorbar(im)
+            cb.set_label(ylabels)
             plt.axis('auto')
-            plt.tight_layout()
-
+            fig.tight_layout()
+            
             return fig,ax
 
     def plot(self, **kwargs):
@@ -288,17 +413,12 @@ class Bsignal(object):
                   'xmax'  : 1e15,
                   'logx'  : False,
                   'logy'  : False,
- #                 'fig'   : [],
- #                 'ax'    : []  
                  }
 
         for key, value in defaults.items():
             if key not in kwargs:
                  kwargs[key] = value
 
-
-#       fig = kwargs['fig']
-#       ax  = kwargs['ax']
 
         vline = kwargs['vline']
         hline = kwargs['hline']
@@ -396,11 +516,11 @@ class Bsignal(object):
             >>> x = np.linspace(-10,10,100)
             >>> y = np.sin(2*np.pi*12*x)+np.random.normal(0,0.1,len(x))
             >>> s = TUsignal(x,y)
-            >>> fig,ax = s.plot(types=['v'])
+            >>> fig,ax = s.plot(typ=['v'])
             >>> txt1 = plt.title('before gating')
             >>> plt.show()
             >>> s.gating(-3,4)
-            >>> fig,ax=s.plot(types=['v'])
+            >>> fig,ax=s.plot(typ=['v'])
             >>> txt2 = plt.title('after gating')
             >>> plt.show()
 
@@ -679,7 +799,7 @@ class Usignal(Bsignal):
             >>> i2 = EnImpulse()
             >>> i2.translate(-10)
             >>> i3 = i1.align(i2)
-            >>> fig,ax=i3.plot(types=['v'])
+            >>> fig,ax=i3.plot(typ=['v'])
             >>> plt.show()
 
         """
@@ -802,6 +922,9 @@ class Usignal(Bsignal):
         """
         energy = self.dx() * sum(self.y * np.conj(self.y))
         return(energy)
+    
+    def fftshift(self):
+        self.y = fft.fftshift(self.y,axes=1)
 
     def zright(self, xmax):
         """ add zeros on the right until xmax
@@ -856,9 +979,9 @@ class Usignal(Bsignal):
             >>> from pylayers.signal import *
             >>> from matplotlib.pylab import *
             >>> ip = EnImpulse()
-            >>> fig,ax = ip.plot(types=['v'])
+            >>> fig,ax = ip.plot(typ=['v'])
             >>> ip.zlr(-10,10)
-            >>> fig,ax = ip.plot(types=['v'],fig=fig,ax=ax)
+            >>> fig,ax = ip.plot(typ=['v'],fig=fig,ax=ax)
             >>> show()
 
         """
@@ -917,7 +1040,7 @@ class TBsignal(Bsignal):
         >>> y = np.array( [ 0,1 ,-5, 8 , 10])
         >>> s = Bsignal(x,y)
         >>> fi = figure()
-        >>> fig,ax=s.plot(types=['v'])
+        >>> fig,ax=s.plot(typ=['v'])
         >>> ti = title('TBsignal : plot')
         >>> show()
 
@@ -995,7 +1118,7 @@ class TBsignal(Bsignal):
             >>> from matplotlib.pylab import *
             >>> ip = EnImpulse()
             >>> ip.translate(-10)
-            >>> fig,ax=ip.plot(types=['v'])
+            >>> fig,ax=ip.plot(typ=['v'])
             >>> show()
 
 
@@ -1087,10 +1210,10 @@ class TUsignal(TBsignal, Usignal):
             >>> ddsu  = dsu.diff()
             >>> dddsu = ddsu.diff()
             >>> fi = plt.figure()
-            >>> fig,ax=su.plot(types=['v'] ,color='k')
-            >>> fig,ax=dsu.plot(types=['v'],color='g',fig=fig,ax=ax)
-            >>> fig,ax=ddsu.plot(types=['v'],color='r',fig=fig,ax=ax)
-            >>> fig,ax=dddsu.plot(types=['v'],color='b',fig=fig,ax=ax)
+            >>> fig,ax=su.plot(typ=['v'] ,color='k')
+            >>> fig,ax=dsu.plot(typ=['v'],color='g',fig=fig,ax=ax)
+            >>> fig,ax=ddsu.plot(typ=['v'],color='r',fig=fig,ax=ax)
+            >>> fig,ax=dddsu.plot(typ=['v'],color='b',fig=fig,ax=ax)
             >>> ti = plt.title('TUsignal : diff')
             >>> plt.show()
 
@@ -1164,6 +1287,7 @@ class TUsignal(TBsignal, Usignal):
 
         Returns
         -------
+
         FHsignal : Frequency signal with hermitian symmetry
 
         """
@@ -1171,8 +1295,8 @@ class TUsignal(TBsignal, Usignal):
         te = self.x[1] - self.x[0]
         fe = 1.0 / te
         f = np.linspace(0, fe, Np, endpoint=False)
-        #y=fft(self.y)
-        #y     = fftshift(y)
+        #y = fft(self.y)
+        #y = fftshift(y)
         y = fft.fftshift(self.y)
         y = fft.fft(y)
         S = FHsignal()
@@ -1246,6 +1370,7 @@ class TUsignal(TBsignal, Usignal):
 
         Parameters
         ----------
+
         fig
         ax
         display
@@ -2510,8 +2635,8 @@ class FBsignal(Bsignal):
 
         """
 
-        if 'types' not in kwargs:
-            kwargs['types'] = ['l20']
+        if 'typ' not in kwargs:
+            kwargs['typ'] = ['l20']
 
         fig,ax = Bsignal.plot(self,**kwargs)
 
@@ -3117,10 +3242,16 @@ class FUsignal(FBsignal, Usignal):
 
         return(u1, u2)
 
-    def ifft(self, Npt=0):
+    def ifft(self, Npt=-1):
         """
+        Parameters
+        ----------
+
+        Npt : int 
+            default -1 (same number as x)  
+
         """
-        if Npt == 0:
+        if Npt == -1:
             Npt = len(self.x)
         Y = self.y
         y = ifft(Y, Npt)
@@ -3177,19 +3308,18 @@ class FUsignal(FBsignal, Usignal):
         uh.y = flipud(fftshift(flipud(uh.y)))
         return(uh)
 
-    def show(self):
+    def show(self,**kwargs):
         """ pcolor visualization of Modulus and Phase
         """
-        N = np.shape(self.y)[0]
-        tt = np.arange(N)
-        plt.subplot(121)
-        plt.pcolor(self.x, tt, np.abs(self.y))
-        plt.title('modulus')
-        plt.colorbar()
-        plt.subplot(122)
-        plt.pcolor(self.x, tt, np.angle(self.y))
-        plt.title('Phase (rd)')
-        plt. colorbar()
+
+        if 'fig' not in kwargs:
+            fig = plt.figure()
+        ax1 = fig.add_subplot(121)
+        fig,ax1 = self.imshow(typ='l20',fig=fig,ax=ax1,**kwargs)
+        ax2 = fig.add_subplot(122)
+        fig,ax2= self.imshow(typ='d',fig=fig,ax=ax2,**kwargs)
+
+        return fig,[ax1,ax2]
 #       def fig(self,N):
 #          """
 #          """
@@ -3445,7 +3575,13 @@ class FUDsignal(FUsignal):
         r = r + si
         return r
         
+    def cir(self,fGHzmin=0,fGHzmax=1000):
+        """
+        """
+        u = (self.x>fGHzmin) & (self.y<fGHzmax)
+        cir = sum(self.y)
         
+
     def plot3d(self,fig=[],ax=[]):
         """
 
@@ -3531,8 +3667,7 @@ class FUDsignal(FUsignal):
 
 
 class FUDAsignal(FUDsignal):
-    """
-    FUDAsignal : Uniform signal in frequency domain with delays and angles
+    """ FUDAsignal : Frequency domain Uniform signal with Delays and Angles
 
 
     Attributes

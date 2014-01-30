@@ -987,10 +987,26 @@ class Simul(object):
             pass
         self.config.write(fd)
         fd.close()
+        # save tx 
         self.tx.save()
+        # save rx 
         self.rx.save()
-        self.slab.save(self.fileslabini)
-        self.slab.mat.save(self.filematini)
+        # save slab and mat file
+        # --
+        # self.slab.save(self.fileslabini)
+        # self.slab.mat.save(self.filematini)
+        # --
+        # fix bug #189
+        #   slab is a member of S.L not of S anymore
+        #   mat is a member of S.L.sl not of S.slab 
+        try:
+            self.L.sl.save(self.fileslabini)
+        except:
+            pass
+        try:
+            self.L.sl.mat.save(self.filematini)
+        except:
+            pass
 
 #    def saveold(self):
 #        """ save simulation file
@@ -1343,6 +1359,7 @@ class Simul(object):
 
         Parameters
         ----------
+
         _filestruc : string
             short file name of the Layout object
         _filematini   : string
@@ -1358,7 +1375,6 @@ class Simul(object):
         >>> S.layout('defstr.str')
 
         """
-
         self.filestr = _filestruc
         self.filematini = _filematini
         self.fileslabini = _fileslabini
@@ -1491,6 +1507,55 @@ class Simul(object):
         plt.semilogx(td, 10 * np.log10(tEo), 'xb')
         plt.show()
         return td, tEa, tEo
+
+    def evalcir(self,cutoff=4,algo='new'):
+        """
+        Parameters
+        ----------
+
+        S 
+        tx
+        rx
+        wav
+        cutoff
+
+        """
+
+        crxp =-1
+        ctxp =-1
+        tcir = {}
+        tx = self.tx.position 
+        Ntx = len(tx[0])
+        rx = self.rx.position
+        Nrx = len(rx[0])
+
+        #for kt in range(1,Ntx-1):
+        #print kt+1
+        kt=0
+        tcir[kt] = {}
+        t = np.array([self.tx.position[0,kt],self.tx.position[1,kt],self.tx.position[2,kt]])
+        for kr in range(Nrx):
+            if (np.mod(kr,10)==0):
+                print kr+1
+            r = np.array([self.rx.position[0,kr],self.rx.position[1,kr],self.rx.position[2,kr]])
+            ctx = self.L.pt2cy(t)
+            crx = self.L.pt2cy(r)
+            if (ctx<>ctxp)|(crx<>crxp):
+                Si  = signature.Signatures(self.L,ctx,crx)
+                ctxp = ctx
+                crxp = crx
+                Si.run4(cutoff=cutoff,algo=algo)
+            r2d = Si.rays(t,r)
+            #r2d.show(S.L)
+
+            r3d = r2d.to3D(self.L)
+            r3d.locbas(self.L)
+            r3d.fillinter(self.L)   
+            Ct  = r3d.eval(self.fGHz)
+            sca = Ct.prop2tran(self.tx.A,self.rx.A)
+            cir = sca.applywavB(self.wav.sfg)
+            tcir[kt][kr] = cir
+        return(tcir)
 
     def loadcir(self, itx, irx):
         """
@@ -1828,7 +1893,7 @@ class Simul(object):
 
         return(gr)
 
-    def show3(self):
+    def show3(self,rays=[],**kwargs):
         """ geomview display of the simulation configuration
         """
         try:
@@ -1859,7 +1924,14 @@ class Simul(object):
         fo.write(strx)
         fo.write(stst)
         fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
+        if rays !=[]:
+
+            kwargs['bdis']=False
+            fo.write("{<" + rays.show3(**kwargs) + "}")
+
         fo.close()
+
+
         command = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(command)
 
@@ -2270,12 +2342,12 @@ class Simul(object):
             D['Rx'] = rx
 
             if (ctx,crx) not in lsig:
-                Si  = Signatures(S.L,ctx,crx)
+                Si  = signature.Signatures(S.L,ctx,crx)
                 #
                 # Change the run number depending on
                 # the algorithm used for signature determination
                 #
-                Si.run1(cutoff=cutoff)
+                Si.run4(cutoff=cutoff)
                 # keep track and save signature
                 _filesir = prefix + '-sig-'+str((ctx,crx))
                 fd = open(filesig,'w')
@@ -2593,5 +2665,5 @@ class Simul(object):
 
 
 if (__name__ == "__main__"):
-    plt.ion()
+    #plt.ion()
     doctest.testmod()

@@ -56,11 +56,18 @@ def SSHFunc(L, theta,phi):
 	return Y,  indx
 
 def SSHFunc2(L, theta,phi):
-	
 	"""
-	L : integer, spherical harmonics order
+    Parameters
+    ----------
+
+	L : integer,
+        spherical harmonics order
 	theta: numpy array(1, ndir)
 	phi: numpy array(1,ndir)
+    
+    Notes
+    -----
+
 	theta and phi should have the same dimensions which represents the rays 
 	Compute the spherical harmonic functions for the order L
 	return a spherical matrix ((1+L)*(2+L)/2,ndir) and the index (l,m) of the shperical harmonics 
@@ -151,9 +158,6 @@ def CartToSphere (theta, phi, ex, ey,ez, bfreq=True, pattern = True):
 			#~ es[0] =es[0].reshape(len(theta), len(phi))
 			
 	return es[0],es[1]
-
-
-     
 
 
 def ssh(A, dsf=1, L= 20):
