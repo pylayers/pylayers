@@ -1893,7 +1893,7 @@ class Simul(object):
 
         return(gr)
 
-    def show3(self):
+    def show3(self,rays=[],**kwargs):
         """ geomview display of the simulation configuration
         """
         try:
@@ -1924,7 +1924,14 @@ class Simul(object):
         fo.write(strx)
         fo.write(stst)
         fo.write("{</usr/share/geomview/geom/xyz.vect}\n")
+        if rays !=[]:
+
+            kwargs['bdis']=False
+            fo.write("{<" + rays.show3(**kwargs) + "}")
+
         fo.close()
+
+
         command = "geomview -nopanel -b 1 1 1 " + filename + " 2>/dev/null &"
         os.system(command)
 
