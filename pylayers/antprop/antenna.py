@@ -90,7 +90,7 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', pattern = False, directory="ant", nf=104, ntheta=90, nphi=181):
+    def __init__(self, _filename='defant.vsh3', directory="ant", pattern=False, nf=104, ntheta=90, nphi=181):
         """
 
         Parameters
