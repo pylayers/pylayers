@@ -1085,7 +1085,7 @@ def onb(A,B,v):
     # vn : 3xN
     vn = np.cross(wn,un,axis=0)
     #pdb.set_trace()
-    T  = np.dstack((un,vn,wn))
+    T  = np.dstack((un,vn,wn))    
     # reshape dimension for having index of cylinder axe first
     # N x 3 x 3
     T  = T.swapaxes(0,1)

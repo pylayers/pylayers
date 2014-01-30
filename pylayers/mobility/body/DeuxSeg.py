@@ -5,10 +5,6 @@ from scipy.linalg import *
 
 
 
-A = rand(3)
-B = rand(3)
-C = rand(3)
-D = rand(3)
 
 
 
@@ -40,7 +36,6 @@ def dmin3d(A,B,C,D):
       B   (3xN) end point segment 1
       C   (3xN) starting point segment 2
       D   (3xN) end point segment 2  
-
     """
     
     AC=C-A
@@ -63,35 +58,42 @@ def dmin3d(A,B,C,D):
     #~ print 'dmin', dmin
     return(alpha,beta,dmin)
 
-
-a,b,d=dmin3d(A,B,C,D)
-
-if a < 0:
-	a = 0 
-
-if a > 1:
-	a = 1
-if b < 0:
-	b = 0 
-if b > 1:
-	b = 1 
-	   
-f, g   = dist(A,B,C,D,a,b)
-
-print a,b,d
-
-print f,g
-
-print 'sqrt ' ,  sqrt(f), sqrt(g)
-
 # <codecell>
+if (__name__=="__main__"):
+		
+	A = rand(3)
+	B = rand(3)
+	C = rand(3)
+	D = rand(3)
 
-a
+	a,b,d=dmin3d(A,B,C,D)
 
-# <codecell>
+	if a < 0:
+		a = 0 
 
-b
+	if a > 1:
+		a = 1
+	if b < 0:
+		b = 0 
+	if b > 1:
+		b = 1 
+		   
+	f, g   = dist(A,B,C,D,a,b)
 
-# <codecell>
+	print a,b,d
+
+	print f,g
+
+	print 'sqrt ' ,  sqrt(f), sqrt(g)
+
+	# <codecell>
+
+	a
+
+	# <codecell>
+
+	b
+
+	# <codecell>
 
 

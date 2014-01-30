@@ -48,7 +48,7 @@ def dist(A, B):
 
 
 class Body(object):
-    """ Class to manage the Body model 
+    """ Class to manage the Body model
 
     Methods
     -------
@@ -57,9 +57,9 @@ class Body(object):
     center
     posvel
     loadC3D
-    settopos 
+    settopos
     setccs
-    setaccs
+    setdcs
     geomfile
     plot3d
     movie
@@ -69,12 +69,12 @@ class Body(object):
     Notes
     -----
 
-        nodes_Id = {0:'STRN',1:'CLAV',2:'RFHD',3:'RSHO',
-        4:'LSHO', 5:'RELB',6:'LELB', 7:'RWRB',8:'LWRB', 9:'RFWT',
-        10:'LFWT', 11:'RKNE', 12:'LKNE',13:'RANK',  14:'LANK' , 
-        15:'LFIN' ,16:'LELB', 17:'RUPA',18:'LUPA',  19:'RFRM', 
-        20:'LFRM', 21:'LSHN', 22:'RSHN',23:'LTHI',  24:'RTHI', 
-        25:'LHEE', 26:'RHEE', 27:'LTOE',28:'RTOE',  29:'RMT5'}
+    nodes_Id = {0:'STRN',1:'CLAV',2:'RFHD',3:'RSHO',
+    4:'LSHO', 5:'RELB',6:'LELB', 7:'RWRB',8:'LWRB', 9:'RFWT',
+    10:'LFWT', 11:'RKNE', 12:'LKNE',13:'RANK', 14:'LANK' ,
+    15:'LFIN' ,16:'LELB', 17:'RUPA',18:'LUPA', 19:'RFRM',
+    20:'LFRM', 21:'LSHN', 22:'RSHN',23:'LTHI', 24:'RTHI',
+    25:'LHEE', 26:'RHEE', 27:'LTOE',28:'RTOE', 29:'RMT5'}
     """
 
     def __init__(self,_filebody='John.ini',_filemocap='07_01.c3d'):
@@ -87,7 +87,7 @@ class Body(object):
         
         if 'filename' in dir(self):
             st = st +'filename : '+ self.filename +'\n'
-        if 'nframes' in dir(self):    
+        if 'nframes' in dir(self):
             st = st +'nframes : ' + str(self.nframes) +'\n'
         if 'pg' in dir(self):
             st = st + 'Centered : True'+'\n'
@@ -100,9 +100,9 @@ class Body(object):
 
         if 'topos' in dir(self):
             st = st + 'topos : True'+'\n'
-        else:    
+        else:
             st = st + 'topos : False'+'\n'
-        return(st)    
+        return(st)
 
 
     def load(self,_filebody='John.ini'):
@@ -112,18 +112,17 @@ class Body(object):
         ----------
 
         _filebody : body short filename
-        
         Notes
         -----
 
         A body .ini file contains 4 sections
 
         + section [nodes]
-            Node number = Node name 
-        + section [cylinder]    
-            Cylinder number = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
-        + section [antennas]    
-            Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
+        Node number = Node name
+        + section [cylinder]
+        Cylinder number = {'t':tail node number, 'h':head node number , 'r': cylinder' radius}
+        + section [antennas]
+        Antenna number = {'cylId' cylinder Id, 'l': ,'h': parameter,'a':angle,'filename': filename}
 
         """
         filebody = pyu.getlong(_filebody,'ini')
@@ -148,65 +147,64 @@ class Body(object):
         self.nodes_Id = {k:v for (k,v) in zip(keys,di['nodes'].values())}
 
         self.g.add_nodes_from(keys)
+        
+        self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
         for cyl in di['cylinder'].keys():
             t = di['cylinder'][cyl]['t']
             h = di['cylinder'][cyl]['h']
             r = di['cylinder'][cyl]['r']
             self.g.add_edge(t,h,id=cyl)
-            self.g[t][h]['radius']= r 
-       
-        self.ant={}
-        for ant in di['antenna'].keys():
-            self.ant[ant]=di['antenna'][ant]
-
+            self.g[t][h]['radius']= r
+            #pdb.set_trace()
+            self.sl[int(cyl),:] = np.array([t,h,r]) 
+            
+        self.dev={}
+        for dev in di['device'].keys():
+            self.dev[dev]=di['device'][dev]
+        
         return(di)
 
     def center(self):
-        """ centering the body 
+        """ centering the body
 
         Returns
         -------
 
-        self.pg : center of gravity 
-        self.vg : velocity 
-        self.d  : set of centered frames
-        self.smocap : integrated distance 
-        self.vmocap : averaged velocity 
+        self.pg : center of gravity
+        self.vg : velocity
+        self.d : set of centered frames
+        self.smocap : integrated distance
+        self.vmocap : averaged velocity
 
         Notes
         -----
 
-        The center method creates a centered version of the motion capture data stored in 
+        The center method creates a centered version of the motion capture data stored in
         self.d
         It also calculates :
         self.smocap : total distance along trajectory
-        self.vmocap : averaged speed along trajectory 
-        Here only the projection of the body centroid in the
-        plane 0xy is calculated
+        self.vmocap : averaged speed along trajectory
+        Here only the projection of the body centroid in the plan 0xy is calculated
 
         """
-        # self.d  : 3 x 16 x Nf
+        # self.d : 3 x 16 x Nf
         # self.pg : 3 x Nf
         if not self.centered:
             self.pg = np.sum(self.d,axis=1)/self.npoints
             self.pg[2,:] = 0
             self.d = self.d - self.pg[:,np.newaxis,:]
-            # speed vector of the gravity centernp. 
-            self.vg = self.pg[:,1:]-self.pg[:,0:-1] 
-            # duplicate last spped vector for size homogeneity  
+            # speed vector of the gravity centernp.
+            self.vg = self.pg[:,1:]-self.pg[:,0:-1]
+            # duplicate last spped vector for size homogeneity
             self.vg = np.hstack((self.vg,self.vg[:,-1][:,np.newaxis]))
             # length of trajectory
             d = self.pg[0:-1,1:]-self.pg[0:-1,0:-1]
             self.smocap = np.cumsum(np.sqrt(np.sum(d*d,axis=0)))
             self.vmocap = self.smocap[-1]/self.Tmocap
             self.centered = True
-
+    
     def posvel(self,traj,tk):
-        """ position and velocity
-
-        Parameters
-        ----------
-
+        """
         traj : Tajectory DataFrame 
             nx3
         tk : float 
@@ -221,20 +219,14 @@ class Body(object):
         wsn : planar vector orthogonal to vsn 
         vtn : normalized speed vector along motion trajectory (target)  
         wtn : planar vector orthogonal to wtn  
-
         """
         # tk should be in the trajectory time range
         assert ((tk>=traj.tmin) & (tk<=traj.tmax)),'posvel: tk not in trajectory time range'
         
-        #pdb.set_trace()
         sk = traj.distance(tk) # covered distance along trajectory at time tk 
         smax = self.smocap[-1]
         ks = int(np.floor(sk/smax)) # number of sequences  
         df = sk - ks*smax # covered distance into the sequence  
-        print "smax = ", smax
-        print "ks =",ks
-        print "sk = ",sk
-        print "df = ",df 
         kf = np.where(self.smocap>=df)[0][0]
         
         #tf = self.Tmocap/(1.0*self.nframes) # frame body time sampling period  
@@ -252,22 +244,23 @@ class Body(object):
         #
         # vs  : speed vector along motion capture frame
         # vsn : unitary speed vector along motion capture frame
-
+        #
         vs = self.pg[0:-1,kf] - self.pg[0:-1,kf-1]
         vsn = vs/np.sqrt(np.dot(vs,vs))
         wsn = np.array([vsn[1],-vsn[0]])
-
         #
-        #  TRJECTORY SIDE  (Topos)
+        #
+        #  TRAJECTORY SIDE  (Topos)
         #
         #
         # vt : speed vector along trajectory 
         #
-        #vt = traj[kt+1,1:] - traj[kt,1:]
-
-        vt  = np.array([traj['vx'][kt],traj['vy'][kt]])
+        vt = np.array([traj['vx'][kt],traj['vy'][kt]])
         vtn = vt/np.sqrt(np.dot(vt,vt))
         wtn = np.array([vtn[1],-vtn[0]])
+
+        # vt = traj[kt+1,1:] - traj[kt,1:]
+        # vt = traj[kt+1,1:] - traj[kt,1:]
         
         return(kf,kt,vsn,wsn,vtn,wtn)
 
@@ -278,10 +271,10 @@ class Body(object):
         ----------
 
         traj : ndarray (3,N)
-            t,x,y
-        tk : float 
-            time for evaluation of topos (seconds) this value should be in the
-            range of the trajectory timestamp
+        t,x,y
+        tk : float
+        time for evaluation of topos (seconds) this value should be in the
+        range of the trajectory timestamp
 
         Returns
         -------
@@ -292,8 +285,8 @@ class Body(object):
         Examples
         --------
 
-        >>> import numpy as np 
-        >>> import pylayers.mobility.trajectory as tr  
+        >>> import numpy as np
+        >>> import pylayers.mobility.trajectory as tr
         >>> import matplotlib.pyplot as plt
         >>> time = np.arange(0,10,0.1)
         >>> v = 4000/3600.
@@ -312,7 +305,7 @@ class Body(object):
         topos is the current spatial global position of a body configuration.
 
 
-        See Also 
+        See Also
         --------
 
         pylayers.util.geomutil.affine
@@ -322,10 +315,10 @@ class Body(object):
         #
         #
         # psa : origin source
-        # psb = psa+vsn : a point in the direction of pedestrian motion 
+        # psb = psa+vsn : a point in the direction of pedestrian motion
         #
-        # pta : target translation 
-        # ptb = pta+vtn : a point in the direction of trajectory 
+        # pta : target translation
+        # ptb = pta+vtn : a point in the direction of trajectory
         
         kf,kt,vsn,wsn,vtn,wtn = self.posvel(traj,tk)
 
@@ -336,23 +329,18 @@ class Body(object):
         pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
-    
 
-        #
-        # Identification of linear transformation between : 
-        # BODY and TOPOS
-        #
-        X   = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
-        Y   = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
+        X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
+        Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
 
         a,b = geu.affine(X,Y)
 
-        A = np.eye(3)                
-        B = np.zeros((3,1))                
-        A[0:-1,0:-1] = a                
+        A = np.eye(3)
+        B = np.zeros((3,1))
+        A[0:-1,0:-1] = a
         B[0:-1,:] = b
 
-        self.toposFrameId = kf 
+        self.toposFrameId = kf
         #
         # TOPOS = A d + B     d == BODY at kf frame 
         #
@@ -361,303 +349,317 @@ class Body(object):
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
         
     
+
     def setdcs(self):
-		""" set device coordinate system (dcs) from a topos
+        """ set device coordinate system (dcs) from a topos
 
-		This method evaluates the set of all dcs.
-		It provides the information necessary for device placement on
-		the body.
+        This method evaluates the set of all dcs.
+        It provides the information necessary for device placement on
+        the body.
 
-		If N is the number of antenna an dcs is an MDA of size 3x4xN
+        If N is the number of antenna an dcs is an MDA of size 3x4xN
 
-		Returns
-		-------
+        Returns
+        -------
 
-		self.dcs : dictionnary
+        self.dcs : dictionnary
 
-		Examples
-		--------
-		>>> import numpy as np
-		>>> import pylayers.mobility.trajectory as tr
-		>>> import matplotlib.pyplot as plt
-		>>> time = np.arange(0,10,0.1)
-		>>> v = 4000/3600.
-		>>> x = v*time
-		>>> y = np.zeros(len(time))
-		>>> traj = tr.Trajectory()
-		>>> bc = Body()
-		>>> bc.settopos(traj,2.3,2)
-		>>> bc.setccs(topos=True)
-		>>> bc.setdcs()
-		>>> nx.draw(bc.g,bc.g.pos)
-		>>> axe = plt.axis('scaled')
-		>>> plt.show()
+        Examples
+        --------
+        >>> import numpy as np
+        >>> import pylayers.mobility.trajectory as tr
+        >>> import matplotlib.pyplot as plt
+        >>> time = np.arange(0,10,0.1)
+        >>> v = 4000/3600.
+        >>> x = v*time
+        >>> y = np.zeros(len(time))
+        >>> traj = tr.Trajectory()
+        >>> bc = Body()
+        >>> bc.settopos(traj,2.3,2)
+        >>> bc.setccs(topos=True)
+        >>> bc.setdcs()
+        >>> nx.draw(bc.g,bc.g.pos)
+        >>> axe = plt.axis('scaled')
+        >>> plt.show()
 
-		"""
-		self.dcs = {}
-		for ant in self.ant.keys():
+        """
+        self.dcs = {}
+        for dev in self.dev.keys():
 
-			# retrieving antenna placement information from dictionnary ant
+            # retrieving antenna placement information from dictionnary ant
 
-			Id = self.ant[ant]['cyl']
-			alpha = self.ant[ant]['a']*np.pi/180.
-			l = self.ant[ant]['l']
-			h = self.ant[ant]['h']
+            Id = self.dev[dev]['cyl']
+            alpha = self.dev[dev]['a']*np.pi/180.
+            l = self.dev[dev]['l']
+            h = self.dev[dev]['h']
 
-			# getting cylinder information
+            # getting cylinder information
+                
+            #pdb.set_trace()
+            #~ l_edge =list(self.g.edges_iter(data = True))
+            #~ a_edge = np.array(l_edge)
+            #~ a_data = a_edge[:,2]
+            #~ dtk = filter(lambda x: x['id']==str(Id),a_data)
+            #~ k = np.where(a_data ==dtk)[0][0]
+            
+            #ed = self.g.edges()[k]
+            #ed = self.g.edges()[Id]
+            #~ kta = ed[0]
+            #~ khe = ed[1]
+            kta = self.sl[int(Id),0]
+            khe = self.sl[int(Id),1]
+            #Rcyl = self.g[kta][khe]['radius']
+            Rcyl = self.sl[int(Id),2]
+            pta = np.array(self.topos[:,kta])
+            phe = np.array(self.topos[:,khe])            
+            vl = phe - pta
+            lmax = np.sqrt(np.dot(vl,vl))
+            
+            #CCS = self.ccs[k,:,:]
+            CCS = self.ccs[Id,:,:]
+            #self.nodes_Id[kta],self.nodes_Id[khe]
 
-			ed = self.g.edges()[Id]
-			kta = ed[0]
-			khe = ed[1]
-			Rcyl = self.g[kta][khe]['radius']
-			phe = np.array(self.topos[:,khe])
-			pta = np.array(self.topos[:,kta])
-			vl = phe - pta
-			lmax = np.sqrt(np.dot(vl,vl))
-			
-			CCS = self.ccs[Id,:,:]
-			#self.nodes_Id[kta],self.nodes_Id[khe]
+            # applying rotation and translation
 
-			# applying rotation and translation
-
-			Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
-			CCSr = np.dot(CCS,Rot)
-			neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
-
-			self.dcs[ant] = np.hstack((neworigin[:,np.newaxis],CCSr))
+            Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
+            CCSr = np.dot(CCS,Rot)
+            neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)            
+            self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
     def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
-		""" load nframes of motion capture C3D file
+        """ load nframes of motion capture C3D file
 
-		Parameters
-		----------
+        Parameters
+        ----------
 
-		filename : string
-		file name
-		nframes : int
-		number of frames
+        filename : string
+        file name
+        nframes : int
+        number of frames
 
-		Notes
-		-----
+        Notes
+        -----
 
-		The body is centered at the
+        The body is centered at the
 
-		"""
-		
+        """
+        
 
-		#if 'pg' in dir(self):
-		# del self.pg
+        #if 'pg' in dir(self):
+        # del self.pg
 
-		s, p, f, info = c3d.read_c3d(filename)
+        s, p, f, info = c3d.read_c3d(filename)
 
-		self.mocapinfo = info
-		
-		self.filename = filename
-		if nframes<>-1:
-			self.nframes = nframes
-		else:
-			self.nframes = np.shape(f)[0]
-		#
-		# s : prefix
-		# p : list of points name
-		# f : nframe x npoints x 3
-		#
+        self.mocapinfo = info
+        
+        self.filename = filename
+        if nframes<>-1:
+            self.nframes = nframes
+        else:
+            self.nframes = np.shape(f)[0]
+        #
+        # s : prefix
+        # p : list of points name
+        # f : nframe x npoints x 3
+        #
 
-		CM_TO_M = 0.01
-		
-		# duration of the motion capture snapshot
+        CM_TO_M = 0.01
+        
+        # duration of the motion capture snapshot
 
-		self.Tmocap = self.nframes / info['VideoFrameRate']
+        self.Tmocap = self.nframes / info['VideoFrameRate']
 
-		#
-		# motion capture data
-		#
-		# self.d : 3 x npoints x nframes
-		#
+        #
+        # motion capture data
+        #
+        # self.d : 3 x npoints x nframes
+        #
 
-		self.npoints = 15
+        self.npoints = 15
 
-		self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
+        self.d = np.ndarray(shape=(3, self.npoints, self.nframes))
 
-		#if self.d[2,:,:].max()>50:
-		# extract only known nodes in nodes_Id
-		ind = []
-		for i in self.nodes_Id:
-			if self.nodes_Id[i]<>'BOTT':
-				ind.append(p.index(s[0] + self.nodes_Id[i]))
+        #if self.d[2,:,:].max()>50:
+        # extract only known nodes in nodes_Id
+        ind = []
+        for i in self.nodes_Id:
+            if self.nodes_Id[i]<>'BOTT':
+                ind.append(p.index(s[0] + self.nodes_Id[i]))
 
-		# f.T : 3 x npoints x nframe
-		#
-		# cm to meter conversion if required
-		#
-		self.d = f[0:nframes, ind, :].T
-		if unit=='cm':
-			self.d = self.d*CM_TO_M
-		
-		#
-		# Creating the body graph structure
-		#
-		self.g.pos = {}
-		for i in range(self.npoints):
-			self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
-		#
-		# Extension of cylinder
-		#
+        # f.T : 3 x npoints x nframe
+        #
+        # cm to meter conversion if required
+        #
+        self.d = f[0:nframes, ind, :].T
+        if unit=='cm':
+            self.d = self.d*CM_TO_M
+        
+        #
+        # Creating the body graph structure
+        #
+        self.g.pos = {}
+        for i in range(self.npoints):
+            self.g.pos[i] = (self.d[1, i, 0], self.d[2, i, 0])
+        #
+        # Extension of cylinder
+        #
 
-		#self.g.add_node(15)
-		self.npoints = 16
+        #self.g.add_node(15)
+        self.npoints = 16
 
-		pm = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
-		pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
-		pmf = pmf[:,np.newaxis,:]
+        pm = (self.d[:, 9, 0] + self.d[:, 10, 0])/2.
+        pmf = (self.d[:, 9, :] + self.d[:, 10, :])/2.
+        pmf = pmf[:,np.newaxis,:]
 
-		self.d = np.concatenate((self.d,pmf),axis=1)
+        self.d = np.concatenate((self.d,pmf),axis=1)
 
-		#self.g.add_edge(0, 15)
-		self.g.pos[15] = (pm[1],pm[2])
-		#self.g[0][15]['radius']=0.1
-		#self.nodes_Id[15]='bottom'
-		if centered:
-			self.centered = False
-			self.center()
+        #self.g.add_edge(0, 15)
+        self.g.pos[15] = (pm[1],pm[2])
+        #self.g[0][15]['radius']=0.1
+        #self.nodes_Id[15]='bottom'
+        if centered:
+            self.centered = False
+            self.center()
 
     def movie(self,**kwargs):
-		""" creates a geomview movie
+        """ creates a geomview movie
 
-		Parameters
-		----------
+        Parameters
+        ----------
 
-		lframe : []
-		verbose : False
-		topos : True
-		wire : True
-		ccs : False
-		dcs : False
-		struc : True
-		traj : []
-		filestruc:'DLR.off'
+        lframe : []
+        verbose : False
+        topos : True
+        wire : True
+        ccs : False
+        dcs : False
+        struc : True
+        traj : []
+        filestruc:'DLR.off'
 
-		See Also
-		--------
+        See Also
+        --------
 
-		Body.geomfile
+        Body.geomfile
 
-		"""
+        """
 
-		defaults = {'lframe':[],
-					'verbose':False,
-					'topos': True,
-					'wire': True,
-					'ccs': False,
-					'dcs': False,
-					'struc':True,
-					'pattern':False,
-					'traj':[],
-					'filestruc':'DLR.off'
-				   }
+        defaults = {'lframe':[],
+                    'verbose':False,
+                    'topos': True,
+                    'wire': True,
+                    'ccs': False,
+                    'dcs': False,
+                    'struc':True,
+                    'pattern':False,
+                    'traj':[],
+                    'filestruc':'DLR.off'
+                   }
 
 
-		for key, value in defaults.items():
-			if key not in kwargs:
-				kwargs[key] = value
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
 
-		if not kwargs['topos']:
-			for k in range(self.nframes):
-				self.geomfile(iframe=k,verbose=True)
-		else:
-			tk = kwargs['traj'].time()
-			for k,ttk in enumerate(tk):
-				stk = str(k).zfill(6) # for string alignement
-				self.settopos(traj=kwargs['traj'],tk=ttk)
-				if kwargs['ccs']:
-					self.setccs(topos=True)
-				if kwargs['dcs']:
-					self.setdcs()
-				kwargs['tag']=stk
-				self.geomfile(**kwargs)
+        if not kwargs['topos']:
+            for k in range(self.nframes):
+                self.geomfile(iframe=k,verbose=True)
+        else:
+            tk = kwargs['traj'].time()
+            for k,ttk in enumerate(tk):
+                stk = str(k).zfill(6) # for string alignement
+                self.settopos(traj=kwargs['traj'],tk=ttk)
+                if kwargs['ccs']:
+                    self.setccs(topos=True)
+                if kwargs['dcs']:
+                    self.setdcs()
+                kwargs['tag']=stk
+                self.geomfile(**kwargs)
 
     def plot3d(self,iframe=0,topos=False,fig=[],ax=[],col='b'):
-		""" scatter 3d plot
-		Parameters
-		----------
+        """ scatter 3d plot
+        Parameters
+        ----------
 
-		iframe : int
-		topos : boolean
-		fig :
-		ax :
+        iframe : int
+        topos : boolean
+        fig :
+        ax :
 
-		Returns
-		-------
-		fig,ax
+        Returns
+        -------
+        fig,ax
 
-		"""
-		if fig == []:
-			fig = plt.figure()
-		if ax == []:
-			ax = fig.add_subplot(111, projection='3d')
-		if not topos:
-			ax.scatter(self.d[0, :, iframe], self.d[1, :, iframe], self.d[2, :, iframe],color=col)
-		else:
-			ax.scatter(self.topos[0, :], self.topos[1, :], self.topos[2, :],color=col)
+        """
+        if fig == []:
+            fig = plt.figure()
+        if ax == []:
+            ax = fig.add_subplot(111, projection='3d')
+        if not topos:
+            ax.scatter(self.d[0, :, iframe], self.d[1, :, iframe], self.d[2, :, iframe],color=col)
+        else:
+            ax.scatter(self.topos[0, :], self.topos[1, :], self.topos[2, :],color=col)
 
-		for k,e in enumerate(self.g.edges()):
-			e0 = e[0]
-			e1 = e[1]
-			if not topos:
-				pA = self.d[:,e0,iframe].reshape(3,1)
-				pB = self.d[:,e1,iframe].reshape(3,1)
-			else:
-				pA = self.topos[:,e0].reshape(3,1)
-				pB = self.topos[:,e1].reshape(3,1)
-			ax.plot(np.array([pA[0][0],pB[0][0]]),np.array([pA[1][0],pB[1][0]]),
-					np.array([pA[2][0],pB[2][0]]),zdir='z',c=col)
-		#ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
-		ax.autoscale(enable=True)
-		return(fig,ax)
+        for k,e in enumerate(self.g.edges()):
+            e0 = e[0]
+            e1 = e[1]
+            if not topos:
+                pA = self.d[:,e0,iframe].reshape(3,1)
+                pB = self.d[:,e1,iframe].reshape(3,1)
+            else:
+                pA = self.topos[:,e0].reshape(3,1)
+                pB = self.topos[:,e1].reshape(3,1)
+            ax.plot(np.array([pA[0][0],pB[0][0]]),np.array([pA[1][0],pB[1][0]]),
+                    np.array([pA[2][0],pB[2][0]]),zdir='z',c=col)
+        #ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
+        ax.autoscale(enable=True)
+        return(fig,ax)
+
                     
-	#def show3(self,iframe=0,topos=True,tag=''):
+    #def show3(self,iframe=0,topos=True,tag=''):
     def showg(self,frameId):
 
-		for i in range(self.npoints):
-			self.g.pos[i] = (self.d[1, i, frameId], self.d[2, i, frameId])
+        for i in range(self.npoints):
+            self.g.pos[i] = (self.d[1, i, frameId], self.d[2, i, frameId])
 
-		nx.draw(self.g,self.g.pos)
-		plt.axis('scaled')
-		plt.show()
+        nx.draw(self.g,self.g.pos)
+        plt.axis('scaled')
+        plt.show()
+
 
     def show3(self,**kwargs):
-		""" create geomfile for frame iframe
+        """ create geomfile for frame iframe
 
-		Parameters
-		----------
+        Parameters
+        ----------
 
-		iframe : int
-		frame number (useless if topos == True)
-		topos : boolean
-		if True shows the current body topos
-		tag : aditional string for naming file .off (useless if topos==False)
+        iframe : int
+        frame number (useless if topos == True)
+        topos : boolean
+        if True shows the current body topos
+        tag : aditional string for naming file .off (useless if topos==False)
 
-		"""
+        """
 
-		defaults = { 'iframe': 0,
-					'verbose':False,
-					'topos':False,
-					'tag':'',
-					'wire':False,
-					'ccs':False,
-					'lccs':[],
-					'dcs':False,
-					'struc':False,
-					'pattern':False,
-					'filestruc':'DLR.off'
-				  }
+        defaults = { 'iframe': 0,
+                    'verbose':False,
+                    'topos':False,
+                    'tag':'',
+                    'wire':False,
+                    'ccs':False,
+                    'lccs':[],
+                    'dcs':False,
+                    'struc':False,
+                    'pattern':False,
+                    'filestruc':'DLR.off'
+                  }
 
-		for key, value in defaults.items():
-			if key not in kwargs:
-				kwargs[key] = value
+        for key, value in defaults.items():
+            if key not in kwargs:
+                kwargs[key] = value
 
-		bdy = self.geomfile(**kwargs)
-		bdy.show3()
+        bdy = self.geomfile(**kwargs)
+        bdy.show3()
 
     def geomfile(self,**kwargs):
         """ create a geomview file from a body configuration
@@ -710,8 +712,8 @@ class Body(object):
                     'k':0 } 
 
         for key, value in defaults.items():
-			if key not in kwargs:
-				kwargs[key] = value
+            if key not in kwargs:
+                kwargs[key] = value
 
         iframe = kwargs['iframe']
 
@@ -737,7 +739,6 @@ class Body(object):
             else:
                 _filebody = 'body'
 
-        #pdb.set_trace()
         bodylist = geu.Geomlist(_filebody,clear=True)
         filestruc = pyu.getlong(kwargs['filestruc'],"geom")
 
@@ -748,12 +749,17 @@ class Body(object):
             bodylist.append('{<'+filestruc+'}\n')
         if kwargs['verbose']:
             print ("LIST\n")
-
+        
         dbody = {}
-        for e in self.g.edges():
-            e0 = e[0]
-            e1 = e[1]
-            k = int(self.g[e0][e1]['id'])
+        #~ for e in self.g.edges():
+            #~ e0 = e[0]
+            #~ e1 = e[1]
+            #~ k = int(self.g[e0][e1]['id'])
+        for k in range(self.sl.shape[0]):
+            # e0 : tail node of cylinder segment
+            e0 = self.sl[k,0]
+            # e1 : head node of cylinder segment
+            e1 = self.sl[k,1]
             if not kwargs['topos']:
                 pA = self.d[:,e0,iframe].reshape(3,1)
                 pB = self.d[:,e1,iframe].reshape(3,1)
@@ -795,6 +801,7 @@ class Body(object):
                     fileccs = kwargs['tag']+'ccs'+str(k)
                     geov = geu.GeomVect(fileccs)
                     pt = pA[:,0]+Rcyl*self.ccs[k,:,0]
+                    
                     geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
                     bodylist.append('{<'+fileccs+'.vect'+"}\n")
 
@@ -804,10 +811,12 @@ class Body(object):
                 filedcs = kwargs['tag']+'dcs-'+key
                 U = self.dcs[key]
                 geoa = geu.GeomVect(filedcs)
+                
                 geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
                 bodylist.append('{<'+filedcs+'.vect'+"}\n")
 
         # display antenna pattern
+
         if kwargs['pattern']:
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.ant[key]['file'])
@@ -851,119 +860,149 @@ class Body(object):
 
 
     def setccs(self,frameId=0,topos=False):
-		""" set cylinder coordinate system
+        """ set cylinder coordinate system
 
-		Parameters
-		----------
+        Parameters
+        ----------
 
-		frameId : int
-		frame id in the mocap dataframe (default 0)
-		topos : boolean
-		default False
+        frameId : int
+        frame id in the mocap dataframe (default 0)
+        topos : boolean
+        default False
 
-		Returns
-		-------
+        Returns
+        -------
 
-		self.ccs : ndarray (nc,3,3)
-		Notes
-		-----
+        self.ccs : ndarray (nc,3,3)
+        Notes
+        -----
 
-		There are as many frames as cylinders (body graph edges)
+        There are as many frames as cylinders (body graph edges)
 
-		ccs is a MDA (nc x 3 x 3 ) where nc denotes the number of cylinders
-		For each cylinder there is an attached coordinate systems
+        ccs is a MDA (nc x 3 x 3 ) where nc denotes the number of cylinders
+        For each cylinder there is an attached coordinate systems
 
-		1st vector
-		2nd
-		"""
+        1st vector
+        2nd
+        """
 
-		nc = len(self.g.edges())
-		#
-		# ccs : nc x 3 x 3
-		#
-		self.ccs = np.empty((nc,3,3))
-		
-		for e in self.g.edges():
-			# e0 : tail node of cylinder segment
-			e0 = e[0]
-			# e1 : head node of cylinder segment
-			e1 = e[1]
-			k = int(self.g[e0][e1]['id'])
-			if not topos:
-				# pA : tail point
-				pA = self.d[:,e0,frameId].reshape(3,1)
-				# pB : head point
-				pB = self.d[:,e1,frameId].reshape(3,1)
-				vg = self.vg[:,frameId][:,np.newaxis]
-			else:
-				# pA : tail point
-				pA = self.topos[:,e0].reshape(3,1)
-				# pB : head point
-				pB = self.topos[:,e1].reshape(3,1)
-				# vtopos : mean topos velociy
-				vg = self.vtopos
-			pM = (pA+pB)/2.
-			# create an orthonormal basis
-			# 1 st vector : vg normalized (blue)
-			# 2 nd vector : 3 x 1
-			# 3 rd vector : PA-PB normalized
-			T = geu.onb(pA,pB,vg)
-			self.ccs[k,:,:] = T
+        nc = len(self.g.edges())
+        #
+        # ccs : nc x 3 x 3
+        #
+        self.ccs = np.empty((nc,3,3))
+        for k in range(self.sl.shape[0]):
+            # e0 : tail node of cylinder segment
+            e0 = self.sl[k,0]
+            # e1 : head node of cylinder segment
+
+            e1 = self.sl[k,1]
+
+            if not topos:
+                # pA : tail point
+                pA = self.d[:,e0,frameId].reshape(3,1)
+                # pB : head point
+                pB = self.d[:,e1,frameId].reshape(3,1)
+                vg = self.vg[:,frameId][:,np.newaxis]
+            else:
+                # pA : tail point
+                pA = self.topos[:,e0].reshape(3,1)
+                # pB : head point
+                pB = self.topos[:,e1].reshape(3,1)
+                # vtopos : mean topos velociy
+                vg = self.vtopos
+            pM = (pA+pB)/2.
+            # create an orthonormal basis
+            # 1 st vector : vg normalized (blue)
+            # 2 nd vector : 3 x 1
+            # 3 rd vector : PB-PA normalized
+            T = geu.onb(pA,pB,vg)
+            self.ccs[k,:,:] = T
+                
+            
+            
+        #~ for e in self.g.edges():
+            #~ # e0 : tail node of cylinder segment
+            #~ e0 = e[0]
+            #~ # e1 : head node of cylinder segment
+            #~ e1 = e[1]
+            #~ k = int(self.g[e0][e1]['id'])            
+            #~ if not topos:
+                #~ # pA : tail point
+                #~ pA = self.d[:,e0,frameId].reshape(3,1)
+                #~ # pB : head point
+                #~ pB = self.d[:,e1,frameId].reshape(3,1)
+                #~ vg = self.vg[:,frameId][:,np.newaxis]
+            #~ else:
+                #~ # pA : tail point
+                #~ pA = self.topos[:,e0].reshape(3,1)
+                #~ # pB : head point
+                #~ pB = self.topos[:,e1].reshape(3,1)
+                #~ # vtopos : mean topos velociy
+                #~ vg = self.vtopos
+            #~ pM = (pA+pB)/2.
+            #~ # create an orthonormal basis
+            #~ # 1 st vector : vg normalized (blue)
+            #~ # 2 nd vector : 3 x 1
+            #~ # 3 rd vector : PA-PB normalized
+            #~ T = geu.onb(pA,pB,vg)
+            #~ self.ccs[k,:,:] = T
+        
 
     def cylinder_basis_k(self, frameId):
-		"""
+        """
 
-		Parameters
-		----------
+        Parameters
+        ----------
 
-		frameId : int
+        frameId : int
 
-		"""
-		nc = self.c.shape[0]
-		self.basisk = np.ndarray(shape=(nc, 9))
-		for i in range(nc):
-			u0 = self.ccs[i, 0:3]
-			v0 = self.ccs[i, 3:6]
-			w0 = self.ccs[i, 6:]
-			v1 = self.c[i, 4:7, frameId] - self.c[i, 1:4, frameId]
-			v1 = v1 / np.linalg.norm(v1)
-			uk, vk, wk = ChangeBasis(u0, v0, w0, v1)
-			self.basisk[i, 0:3] = uk
-			self.basisk[i, 3:6] = vk
-			self.basisk[i, 6:] = wk
+        """
+        nc = self.c.shape[0]
+        self.basisk = np.ndarray(shape=(nc, 9))
+        for i in range(nc):
+            u0 = self.ccs[i, 0:3]
+            v0 = self.ccs[i, 3:6]
+            w0 = self.ccs[i, 6:]
+            v1 = self.c[i, 4:7, frameId] - self.c[i, 1:4, frameId]
+            v1 = v1 / np.linalg.norm(v1)
+            uk, vk, wk = ChangeBasis(u0, v0, w0, v1)
+            self.basisk[i, 0:3] = uk
+            self.basisk[i, 3:6] = vk
+            self.basisk[i, 6:] = wk
 
     def cyl_antenna(self, cylinderId, l, alpha, frameId=0):
-		"""
-		Parameters
-		----------
+        """
+        Parameters
+        ----------
 
-		cylinderId : int
-		index of cylinder
-		l : distance from origin of cylider
-		alpha : angle from reference direction
-		frameId : frameId
+        cylinderId : int
+        index of cylinder
+        l : distance from origin of cylider
+        alpha : angle from reference direction
+        frameId : frameId
 
-		"""
-		r = self.c[cylinderId, 7, frameId]
+        """
+        r = self.c[cylinderId, 7, frameId]
 
-		x = r * np.cos(alpha)
-		y = r * np.sin(alpha)
-		z = l
+        x = r * np.cos(alpha)
+        y = r * np.sin(alpha)
+        z = l
 
-		if frameId == 0:
-			u0 = self.ccs[cylinderId, 0:3]
-			v0 = self.ccs[cylinderId, 3:6]
-			w0 = self.ccs[cylinderId, 6:]
+        if frameId == 0:
+            u0 = self.ccs[cylinderId, 0:3]
+            v0 = self.ccs[cylinderId, 3:6]
+            w0 = self.ccs[cylinderId, 6:]
 
-		else:
-			self.cylinder_basis_k(frameId)
-			u0 = self.basisk[cylinderId, 0:3]
-			v0 = self.basisk[cylinderId, 3:6]
-			w0 = self.basisk[cylinderId, 6:]
+        else:
+            self.cylinder_basis_k(frameId)
+            u0 = self.basisk[cylinderId, 0:3]
+            v0 = self.basisk[cylinderId, 3:6]
+            w0 = self.basisk[cylinderId, 6:]
 
-		self.ant = x.reshape((len(x)), 1) * u0 + \
-				   y.reshape((len(y)), 1) * w0 + \
-				   z.reshape((len(z)), 1) * v0
+        self.ant = x.reshape((len(x)), 1) * u0 + \
+                   y.reshape((len(y)), 1) * w0 + \
+                   z.reshape((len(z)), 1) * v0
 
 
 def translate(cycle, new_origin):
@@ -1083,35 +1122,36 @@ if __name__ == '__main__':
     # doctest.testmod()
     bd = Body(_filemocap='walk.c3d')
     traj = tr.Trajectory()
-    #bd.settopos(traj,0.3)
-    #bd.setccs(topos=True)
-    #bd.setdcs()
-    #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
+    bd.settopos(traj,0.3)
+    bd.setccs(topos=True)
+    bd.setdcs()
+    bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
     lt = tr.importsn()
-    bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')
+    #bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')
 
-	# nframes = 126
-	# Bc = Body()
-	# Bc.loadC3D()
-	# c10_1t = Bc.d
-	# #nx.draw(B.g)
-	# fig = plt.figure()
-	#
-	# ax = fig.add_subplot(111, projection='3d')
-	# frameID = 30
-	# ax.scatter(c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
-	# ax.axis('scaled')
-	#
-	# #ax.scatter(c10_15[frameID,:,0],c10_15[frameID,:,1],c10_15[frameID,:,2] )
-	#
-	# pointID = 13
-	#
-	# plt.figure()
-	# plt.plot(c10_15[0, pointID].T, '*--', label='x')
-	# plt.plot(c10_15[1, pointID].T, '*--', label='y')
-	# plt.plot(c10_15[2, pointID].T, '*--', label='z')
-	# plt.legend()
-	#
-	# plt.show()
+
+    # nframes = 126
+    # Bc = Body()
+    # Bc.loadC3D()
+    # c10_1t = Bc.d
+    # #nx.draw(B.g)
+    # fig = plt.figure()
+    #
+    # ax = fig.add_subplot(111, projection='3d')
+    # frameID = 30
+    # ax.scatter(c10_15[0, :, frameID], c10_15[1, :, frameID], c10_15[2, :, frameID])
+    # ax.axis('scaled')
+    #
+    # #ax.scatter(c10_15[frameID,:,0],c10_15[frameID,:,1],c10_15[frameID,:,2] )
+    #
+    # pointID = 13
+    #
+    # plt.figure()
+    # plt.plot(c10_15[0, pointID].T, '*--', label='x')
+    # plt.plot(c10_15[1, pointID].T, '*--', label='y')
+    # plt.plot(c10_15[2, pointID].T, '*--', label='z')
+    # plt.legend()
+    #
+    # plt.show()
