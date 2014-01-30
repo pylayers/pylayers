@@ -784,11 +784,8 @@ class Body(object):
         if kwargs['pattern']:
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.ant[key]['file'])
-                try :
-                    Ant.SqG
-                except:
+                if not hasattr(Ant,'SqG'):
                     Ant.Fsynth3()
-
                 U = self.dcs[key]
                 _filepatt = kwargs['tag']+'patt-'+key
                 geo = geu.Geomoff(_filepatt)
