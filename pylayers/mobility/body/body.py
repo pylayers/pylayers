@@ -210,7 +210,7 @@ class Body(object):
         traj : Tajectory DataFrame 
             nx3
         tk : float 
-            time for evaluation of topos
+            trajectory time for evaluation of topos
         
         Returns
         -------
@@ -225,16 +225,31 @@ class Body(object):
         """
         # tk should be in the trajectory time range
         assert ((tk>=traj.tmin) & (tk<=traj.tmax)),'posvel: tk not in trajectory time range'
+        
+        #pdb.set_trace()
+        sk = traj.distance(tk) # covered distance along trajectory at time tk 
+        smax = self.smocap[-1]
+        ks = int(np.floor(sk/smax)) # number of sequences  
+        df = sk - ks*smax # covered distance into the sequence  
+        print "smax = ", smax
+        print "ks =",ks
+        print "sk = ",sk
+        print "df = ",df 
+        kf = np.where(self.smocap>=df)[0][0]
+        
+        #tf = self.Tmocap/(1.0*self.nframes) # frame body time sampling period  
+        #timetraj = traj.time()
+        #tt = timetraj[1]-timetraj[0]        # trajectory time sampling period
 
-        tf = self.Tmocap/(1.0*self.nframes) # frame sampling period  
-        timetraj = traj.time()
-        tt = timetraj[1]-timetraj[0]
-
-        kt = int(np.floor(tk/tt))
-        kf = int(np.floor(np.mod(tk,self.Tmocap)/tf))
+        kt = int(np.floor(tk/traj.ts))           # trajectory time integer index 
+        #kf = int(np.floor(np.mod(tk,self.Tmocap)/tf))  # 
         # self.pg : 3 x Nframes 
         # traj : Nptraj x 3 (t,x,y)
 
+
+        #
+        #  BODY SIDE
+        #
         # vs  : speed vector along motion capture frame
         # vsn : unitary speed vector along motion capture frame
 
@@ -242,6 +257,9 @@ class Body(object):
         vsn = vs/np.sqrt(np.dot(vs,vs))
         wsn = np.array([vsn[1],-vsn[0]])
 
+        #
+        #  TRJECTORY SIDE  (Topos)
+        #
         #
         # vt : speed vector along trajectory 
         #
@@ -318,7 +336,12 @@ class Body(object):
         pta = np.hstack((traj['x'].values[kt],traj['y'].values[kt]))
         ptb = pta + vtn
         ptc = pta + wtn
+    
 
+        #
+        # Identification of linear transformation between : 
+        # BODY and TOPOS
+        #
         X   = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
         Y   = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
 
@@ -330,6 +353,9 @@ class Body(object):
         B[0:-1,:] = b
 
         self.toposFrameId = kf 
+        #
+        # TOPOS = A d + B     d == BODY at kf frame 
+        #
         self.topos = (np.dot(A,self.d[:,:,kf])+B)
 
         self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
@@ -711,76 +737,77 @@ class Body(object):
             else:
                 _filebody = 'body'
 
-		bodylist = geu.Geomlist(_filebody,clear=True)
-		filestruc = pyu.getlong(kwargs['filestruc'],"geom")
+        #pdb.set_trace()
+        bodylist = geu.Geomlist(_filebody,clear=True)
+        filestruc = pyu.getlong(kwargs['filestruc'],"geom")
 
-		bodylist.append("LIST\n")
+        bodylist.append("LIST\n")
 
-		# add layout
-		if kwargs['struc']:
-			bodylist.append('{<'+filestruc+'}\n')
-		if kwargs['verbose']:
-			print ("LIST\n")
-		
-		dbody = {}
-		for e in self.g.edges():
-			e0 = e[0]
-			e1 = e[1]
-			k = int(self.g[e0][e1]['id'])
-			if not kwargs['topos']:
-				pA = self.d[:,e0,iframe].reshape(3,1)
-				pB = self.d[:,e1,iframe].reshape(3,1)
-				vg = self.vg[:,iframe][:,np.newaxis]
-			else:
-				pA = self.topos[:,e0].reshape(3,1)
-				pB = self.topos[:,e1].reshape(3,1)
-				vg = self.vtopos
-			pM = (pA+pB)/2.
-			Rcyl = self.g[e0][e1]['radius']
+        # add layout
+        if kwargs['struc']:
+            bodylist.append('{<'+filestruc+'}\n')
+        if kwargs['verbose']:
+            print ("LIST\n")
 
-			if kwargs['wire']:
-				dbody[k]=(pA,pB)
-			else:
-				# affine transformation of cylinder
-				T = geu.onb(pA,pB,vg)
-				Y = np.hstack((pM,pA,pB,pM+Rcyl*T[0,:,0].reshape(3,1),
-										pM+Rcyl*T[0,:,1].reshape(3,1),
-										pB+Rcyl*T[0,:,0].reshape(3,1)))
-				# idem geu.affine for a specific cylinder
-				#A,B = geu.cylmap(Y,r=2,l=6)
-				A,B = geu.cylmap(Y)
-				ptn = np.dot(A,ptc.T)+B
+        dbody = {}
+        for e in self.g.edges():
+            e0 = e[0]
+            e1 = e[1]
+            k = int(self.g[e0][e1]['id'])
+            if not kwargs['topos']:
+                pA = self.d[:,e0,iframe].reshape(3,1)
+                pB = self.d[:,e1,iframe].reshape(3,1)
+                vg = self.vg[:,iframe][:,np.newaxis]
+            else:
+                pA = self.topos[:,e0].reshape(3,1)
+                pB = self.topos[:,e1].reshape(3,1)
+                vg = self.vtopos
+            pM = (pA+pB)/2.
+            Rcyl = self.g[e0][e1]['radius']
 
-				if not kwargs['topos']:
-					_filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
-				else:
-					_filename = kwargs['tag']+'-edge'+str(k)+'.off'
+            if kwargs['wire']:
+                dbody[k]=(pA,pB)
+            else:
+                # affine transformation of cylinder
+                T = geu.onb(pA,pB,vg)
+                Y = np.hstack((pM,pA,pB,pM+Rcyl*T[0,:,0].reshape(3,1),
+                                        pM+Rcyl*T[0,:,1].reshape(3,1),
+                                        pB+Rcyl*T[0,:,0].reshape(3,1)))
+                # idem geu.affine for a specific cylinder
+                #A,B = geu.cylmap(Y,r=2,l=6)
+                A,B = geu.cylmap(Y)
+                ptn = np.dot(A,ptc.T)+B
 
-				filename = pyu.getlong(_filename,"geom")
-				cyl.savept(ptn.T,_filename)
-				bodylist.append('{<'+filename+'}\n')
-				if kwargs['verbose']:
-					print('{<'+filename+'}\n')
+                if not kwargs['topos']:
+                    _filename = 'edge'+str(k)+'-'+str(kwargs['iframe'])+'.off'
+                else:
+                    _filename = kwargs['tag']+'-edge'+str(k)+'.off'
 
-			# display selected cylinder coordinate system
-			if kwargs['ccs']:
-				if k in lccs:
-					fileccs = kwargs['tag']+'ccs'+str(k)
-					geov = geu.GeomVect(fileccs)
-					pt = pA[:,0]+Rcyl*self.ccs[k,:,0]
-					geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
-					bodylist.append('{<'+fileccs+'.vect'+"}\n")
+                filename = pyu.getlong(_filename,"geom")
+                cyl.savept(ptn.T,_filename)
+                bodylist.append('{<'+filename+'}\n')
+                if kwargs['verbose']:
+                    print('{<'+filename+'}\n')
 
-		# display antenna cylinder coordinate system
-		if kwargs['dcs']:
-			for key in self.dcs.keys():
-				filedcs = kwargs['tag']+'dcs-'+key
-				U = self.dcs[key]
-				geoa = geu.GeomVect(filedcs)
-				geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
-				bodylist.append('{<'+filedcs+'.vect'+"}\n")
+            # display selected cylinder coordinate system
+            if kwargs['ccs']:
+                if k in lccs:
+                    fileccs = kwargs['tag']+'ccs'+str(k)
+                    geov = geu.GeomVect(fileccs)
+                    pt = pA[:,0]+Rcyl*self.ccs[k,:,0]
+                    geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
+                    bodylist.append('{<'+fileccs+'.vect'+"}\n")
 
-		# display antenna pattern
+        # display antenna cylinder coordinate system
+        if kwargs['dcs']:
+            for key in self.dcs.keys():
+                filedcs = kwargs['tag']+'dcs-'+key
+                U = self.dcs[key]
+                geoa = geu.GeomVect(filedcs)
+                geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
+                bodylist.append('{<'+filedcs+'.vect'+"}\n")
+
+        # display antenna pattern
         if kwargs['pattern']:
             for key in self.dcs.keys():
                 Ant =  ant.Antenna(self.ant[key]['file'])
@@ -803,27 +830,27 @@ class Body(object):
                 geo.pattern(Ant.theta,Ant.phi,V,po=U[:,0],T=T,ilog=False,minr=0.01,maxr=0.2)
                 bodylist.append('{<'+_filepatt+'.off'+"}\n")
 
-		# wireframe body
-		if kwargs['wire']:
-			if not kwargs['topos']:
-				_filebody = 'body'+str(kwargs['iframe'])
-			else:
-				_filebody = kwargs['tag']+'bwire'
-			bodygv = geu.GeomVect(_filebody,clear=True)
-			bodygv.segments(dbody,i2d=False,linewidth=5)
-			bodylist.append('{<'+_filebody+'.vect}\n')
+        # wireframe body
+        if kwargs['wire']:
+            if not kwargs['topos']:
+                _filebody = 'body'+str(kwargs['iframe'])
+            else:
+                _filebody = kwargs['tag']+'bwire'
+            bodygv = geu.GeomVect(_filebody,clear=True)
+            bodygv.segments(dbody,i2d=False,linewidth=5)
+            bodylist.append('{<'+_filebody+'.vect}\n')
 
 
-		if kwargs['velocity']:
-			_filevelo = kwargs['tag']+'velo'
-			velo = geu.GeomVect(_filevelo,clear=True)
-			pta = self.pg
-			phe = self.pg+self.vtopos
-			ds = {0:(pta,phe)}
-			velo.segments(ds,i2d=True,linewidth=3)
-			bodylist.append('{<'+_filevelo+'.vect}\n')
+        if kwargs['velocity']:
+            _filevelo = kwargs['tag']+'velo'
+            velo = geu.GeomVect(_filevelo,clear=True)
+            pta = self.pg
+            phe = self.pg+self.vtopos
+            ds = {0:(pta,phe)}
+            velo.segments(ds,i2d=True,linewidth=3)
+            bodylist.append('{<'+_filevelo+'.vect}\n')
 
-		return(bodylist)
+        return(bodylist)
 
 
     def setccs(self,frameId=0,topos=False):
@@ -1059,14 +1086,14 @@ if __name__ == '__main__':
     # doctest.testmod()
     bd = Body(_filemocap='walk.c3d')
     traj = tr.Trajectory()
-    bd.settopos(traj,0.3)
-    bd.setccs(topos=True)
-    bd.setdcs()
-    bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
-#bd.show3(wire=True,dcs=True,topos=True)
-#bd.show3(wire=False,dcs=True,topos=True)
-#lt = tr.importsn()
-#bd.movie(traj=traj,wire=True,dcs=True,pattern=True,filestruc='TA-Office.off')
+    #bd.settopos(traj,0.3)
+    #bd.setccs(topos=True)
+    #bd.setdcs()
+    #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
+    #bd.show3(wire=True,dcs=True,topos=True)
+    #bd.show3(wire=False,dcs=True,topos=True)
+    lt = tr.importsn()
+    bd.movie(traj=lt[0],wire=True,dcs=False,pattern=False,filestruc='TA-Office.off')
 
 	# nframes = 126
 	# Bc = Body()
