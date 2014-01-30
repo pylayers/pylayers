@@ -90,7 +90,7 @@ class Antenna(object):
     F   Phi   Theta  Fphi  Ftheta
 
     """
-    def __init__(self, _filename='defant.vsh3', directory="ant", nf=104, ntheta=181, nphi=90):
+    def __init__(self, _filename='defant.vsh3', pattern = False, directory="ant", nf=104, ntheta=90, nphi=181):
         """
 
         Parameters
@@ -123,27 +123,43 @@ class Antenna(object):
          A = Antenna('my_antenna.mat')
 
         """
-        typ = _filename.split('.')[1]
-        self.typ = typ
-        self._filename = _filename
-        if typ == 'vsh3':
-            self.loadvsh3()
-        if typ == 'vsh2':
-            self.loadvsh2()
-        if typ == 'sh3':
-            self.loadsh3()
-        if typ == 'sh2':
-            self.loadsh2()
-        if typ == 'trx1':
-            self.load_trx(directory, nf, ntheta, nphi)
-        if typ == 'trx':
-            self.loadtrx(directory)
-        if typ == 'mat':
-            self.loadmat(directory)
+        self.nf = nf
+        self.ntheta = ntheta
+        self.nphi = nphi
+        self.pattern = pattern
+        if not pattern :
+            typ = _filename.split('.')[1]
+            self.typ = typ
+            self._filename = _filename
+            if typ == 'vsh3':
+                self.loadvsh3()
+            if typ == 'vsh2':
+                self.loadvsh2()
+            if typ == 'sh3':
+                self.loadsh3()
+            if typ == 'sh2':
+                self.loadsh2()
+            if typ == 'trx1':
+                self.load_trx(directory, nf, ntheta, nphi)
+            if typ == 'trx':
+                self.loadtrx(directory)
+            if typ == 'mat':
+                self.loadmat(directory)
+
+        else :
+            self.typ = 'Gauss'
+            self.p0 = 0
+            self.t0 = np.pi/2.
+            self.p3 = np.pi/6. # 30 degrees
+            self.t3 = np.pi/6. # 30 degrees
+            self.GdB  = 10. # gain
+            self.G  = pow(10.,self.GdB/10.) # gain
+            self.sqG = np.sqrt(self.G)
 
     def __repr__(self):
         st = ''
-        st = st + 'file name : ' + self._filename+'\n'
+        if not self.pattern:
+            st = st + 'file name : ' + self._filename+'\n'
         #st = st + 'file type : ' + self.typ+'\n'
         if self.typ == 'mat':
             #st = st + self.DataFile + '\n'
@@ -155,7 +171,42 @@ class Antenna(object):
             st = st + 'Run : ' + str(self.Run)+'\n'
             st = st + "Nb theta (lat) : "+ str(self.Nt)+'\n'
             st = st + "Nb phi (lon) :"+ str(self.Np)+'\n'
+        if self.typ == 'Gauss':
+            st = st + 'Gaussian pattern' + '\n'
+            st = st + 'phi0 : ' + str(self.p0) +'\n'
+            st = st + 'theta0 :' + str(self.t0) + '\n'
+            st = st + 'phi 3dB :' + str(self.p3) + '\n'
+            st = st + 'theta 3dB :' + str(self.t3) + '\n'
+            st = st + 'Gain dB :' + str(self.GdB) + '\n'
+            st = st + 'Gain linear :' + str(self.G ) + '\n'
+            st = st + 'sqrt G :' + str(self.sqG) + '\n'
+
         return(st)
+
+
+    def Fpatt(self,th=[],ph=[]):
+        """
+        """
+
+        assert self.pattern , 'not a pattern antenna' 
+
+        if (th == []) and (ph == []):
+            self.th = np.linspace(0,np.pi,self.ntheta)
+            self.ph = np.linspace(0,2*np.pi,self.nphi,endpoint=False)
+
+        if self.typ == 'Gauss':
+
+
+            argth = ((self.th-self.t0)**2)/self.t3
+            e1 = np.mod(self.ph-self.p0,2*np.pi)
+            e2 = np.mod(self.p0-self.ph,2*np.pi)
+            e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
+            argphi = (e**2)/self.p3
+
+            Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+            Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+            
+        return (Fat,Fap)    
 
     def loadmat(self, directory="ant"):
         """ load an antenna stored in a mat file
