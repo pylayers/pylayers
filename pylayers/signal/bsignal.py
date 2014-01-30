@@ -73,10 +73,13 @@ class Bsignal(object):
             lx  = shx[0]
             ly  = shy[-1]
             # last dimension of y should be equal to dimension of x
-            if (ly != lx):
-                print "Error in Bsignal : Dimension incompatibility "
-                print "x : ", lx
-                print "y : ", ly
+            if (ly != 1):
+                if (ly != lx) :
+                    print "Error in Bsignal : Dimension incompatibility "
+                    print "x : ", lx
+                    print "y : ", ly
+            
+
 
     def __repr__(self):
         return '%s :  %s  %s' % (
