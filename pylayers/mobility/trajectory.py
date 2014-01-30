@@ -39,25 +39,31 @@ class Trajectory(pd.DataFrame):
         if t ==[]:
             t = np.linspace(0,10,npt)
         td = pd.to_datetime(t,unit=unit)
+        # velocity vector
         v = pt[1:,:]-pt[0:-1,:]
+        # acceleration vector
         a = v[1:,:]-v[0:-1,:]
+        # 
         d = np.sqrt(np.sum(v*v,axis=1))
         s = np.cumsum(d)
+        s[-1] = 0 
+        s = np.roll(s,1)
         pd.DataFrame.__init__(self,{'t':td[:-2],
                                     'x':pt[:-2,0],
                                     'y':pt[:-2,1],
-                                    #'z':pt[:-2,2],
+                                    'z':pt[:-2,2],
                                     'vx':v[:-1,0],
                                     'vy':v[:-1,1],
-                                    #'vz':v[:-1,2],
+                                    'vz':v[:-1,2],
                                     'ax':a[:,0],
                                     'ay':a[:,1],
-                                    #'az':a[:,2],
+                                    'az':a[:,2],
                                     's' :s[:-1]},columns=['t','x','y','vx','vy','ax','ay','s'])
 
         N = len(t) 
         self.tmin = t[0]
         self.tmax = t[N-2]
+        self.ts = t[1]-t[0]
         #self.tmin = t[0].second + t[0].microsecond/1e6
         #self.tmax = t[N-2].second + t[N-2].microsecond/1e6
         self.ttime = self.tmax-self.tmin
@@ -77,6 +83,7 @@ class Trajectory(pd.DataFrame):
         st = st+'Vmoy (m/s) : '+ str(dtot/T)+'\n'
         return(st)
     
+
     def rescale(self,speedkmph=3):
         """ same length but specified speed 
        
@@ -100,7 +107,13 @@ class Trajectory(pd.DataFrame):
         return(t)
 
         
-
+    def distance(self,tk):
+        """
+        """
+        t = self.time()
+        u = np.where((t>tk-self.ts/2.)&(t<=tk+self.ts/2.))[0][0]
+        return(self['s'][u])             
+                     
     def space(self,ndim=2):
         """ extract space information 
 
@@ -211,7 +224,10 @@ def importsn(_filename='pos.csv'):
     Ntraj = (N-1)/3
     lt = []
     for it in range(Ntraj):
-        pt = np.vstack((dt[dtk[3*it+1]].values,dt[dtk[3*it+2]].values))
+        x = dt[dtk[3*it+1]].values
+        y = dt[dtk[3*it+2]].values
+        z = np.zeros(len(x)) 
+        pt = np.vstack((x,y,z))
         lt.append(Trajectory(dt['time'].values,pt=pt.T,unit='s'))
     return(lt)    
 
