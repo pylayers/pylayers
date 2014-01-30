@@ -184,15 +184,21 @@ class Antenna(object):
         return(st)
 
 
-    def Fpatt(self,th=[],ph=[]):
+    def Fpatt(self,th=[],ph=[],pattern=True):
         """
         """
 
         assert self.pattern , 'not a pattern antenna' 
 
+        self.fa = np.linspace(2,10,self.nf)
+
+
         if (th == []) and (ph == []):
             self.th = np.linspace(0,np.pi,self.ntheta)
             self.ph = np.linspace(0,2*np.pi,self.nphi,endpoint=False)
+        else :
+            self.th = th
+            self.ph = ph
 
         if self.typ == 'Gauss':
 
@@ -203,9 +209,15 @@ class Antenna(object):
             e = np.array(map(lambda x: min(x[0],x[1]),zip(e1,e2)))
             argphi = (e**2)/self.p3
 
-            Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
-            Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
-            
+            if pattern :
+                Fat = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+                Fap = self.sqG * ( np.exp(-2.76*argth[:,np.newaxis]) * np.exp(-2.76*argphi[np.newaxis,:]) )
+            else:
+                Fat = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+                Fap = self.sqG * ( np.exp(-2.76*argth) * np.exp(-2.76*argphi) )
+                Fat = np.dot(Fat[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+                Fap = np.dot(Fap[:,np.newaxis],np.ones(len(self.fa))[np.newaxis,:])
+                
         return (Fat,Fap)    
 
     def loadmat(self, directory="ant"):
