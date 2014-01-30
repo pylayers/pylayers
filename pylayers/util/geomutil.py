@@ -394,10 +394,10 @@ class Geomoff(Geomview):
     # 3 or 4 integers RGB[A] values 0..255
     #
     """
-    def __init__(self, _filename):
+    def __init__(self, _filename= 'geomoff'):
         _filename = _filename + '.off'
         Geomview.__init__(self, _filename)
-
+ 
     def loadpt(self):
         """ load points 
             

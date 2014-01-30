@@ -254,7 +254,7 @@ class Ctilde(object):
 
         return(tauk_ch)
 
-    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360)):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360),polar=False):
         """ doadod scatter plot
 
         Parameters
@@ -291,7 +291,7 @@ class Ctilde(object):
         if len(col) != len(dod):
             print "len(col):", len(col)
             print "len(dod):", len(dod)
-        plt.subplot(121)
+        plt.subplot(121,polar=polar)
         plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
                     cmap=cmap, edgecolors='none')
         #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
@@ -306,7 +306,7 @@ class Ctilde(object):
         plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
         #ylabel('$\phi_t(\degree)$',fontsize=18)
         plt.title('DoD',fontsize=fontsize+2)
-        plt.subplot(122)
+        plt.subplot(122,polar=polar)
         plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
                     cmap=plt.cm.hot_r, edgecolors='none')
         plt.axis((0, 180, phi[0], phi[1]))
@@ -544,40 +544,55 @@ class Ctilde(object):
         sh = np.shape(self.Ctt.y)
 
         if type(a)==str:
-            Fat = np.zeros(nray*nfreq).reshape((nray,nfreq))
-            Fap = np.zeros(nray*nfreq).reshape((nray,nfreq))
+
             if a=='theta':
                 Fat = np.ones((nray,nfreq))
+                Fap = np.zeros(nray*nfreq).reshape((nray,nfreq))
+
             if a=='phi':
                 Fap = np.ones((nray,nfreq))
+                Fat = np.zeros(nray*nfreq).reshape((nray,nfreq))
             Fat = bs.FUsignal(self.fGHz,Fat)
             Fap = bs.FUsignal(self.fGHz,Fap)
+
         else:
-			
-			Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
-		
-			Fat = Fat.transpose()
-			Fap = Fap.transpose()
-			Fat = bs.FUsignal(a.fa,Fat)
-			Fap = bs.FUsignal(a.fa,Fap)
+            if not a.pattern :
+                Fat , Fap = a.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
+                Fat = Fat.transpose()
+                Fap = Fap.transpose()
+                Fat = bs.FUsignal(a.fa,Fat)
+                Fap = bs.FUsignal(a.fa,Fap)
+            else: 
+                Fat , Fap = a.Fpatt(self.rang[:, 0],self.rang[:,1],pattern=False)
+                Fat = bs.FUsignal(a.fa,Fat)
+                Fap = bs.FUsignal(a.fa,Fap)
+            
 
         if type(b)==str:
-            Fbt = np.zeros(nray*nfreq).reshape((nray,nfreq))
-            Fbp = np.zeros(nray*nfreq).reshape((nray,nfreq))
+            
             if b=='theta':
                 Fbt = np.ones((nray,nfreq))
+                Fbp = np.zeros(nray*nfreq).reshape((nray,nfreq))
             if b=='phi':
                 Fbp = np.ones((nray,nfreq))
+                Fbt = np.zeros(nray*nfreq).reshape((nray,nfreq))
+
             Fbt = bs.FUsignal(self.fGHz,Fbt)
             Fbp = bs.FUsignal(self.fGHz,Fbp)
         else:
-            Fbt , Fbp = b.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
 
-            Fbt = Fbt.transpose()
-            Fbp = Fbp.transpose()
-            Fbt = bs.FUsignal(b.fa,Fbt)
-            Fbp = bs.FUsignal(b.fa,Fbp)
-        #pdb.set_trace()
+            if not b.pattern :
+                Fbt , Fbp = b.Fsynth3(self.rang[:, 0],self.rang[:,1],pattern=False)
+                Fbt = Fbt.transpose()
+                Fbp = Fbp.transpose()
+                Fbt = bs.FUsignal(b.fa,Fbt)
+                Fbp = bs.FUsignal(b.fa,Fbp)
+            else: 
+                Fbt , Fbp = b.Fpatt(self.rang[:, 0],self.rang[:,1],pattern=False)
+                Fbt = bs.FUsignal(b.fa,Fbt)
+                Fbp = bs.FUsignal(b.fa,Fbp)
+        # Ctt : r x f
+        
         t1 = self.Ctt * Fat + self.Cpt * Fap
         t2 = self.Ctp * Fat + self.Cpp * Fap
         alpha = t1 * Fbt + t2 * Fbp
@@ -872,37 +887,105 @@ class Tchannel(bs.FUDAsignal):
         ri.translate(-Tw)
         return(ri)
 
-    def doddoa(self):
-        """ doddoa() : DoD / DoA diagram
+    # def doddoa(self):
+    #     """ doddoa() : DoD / DoA diagram
+
+    #     """
+    #     dod = self.dod
+    #     doa = self.doa
+    #     #
+    #     #col  = 1 - (10*np.log10(Etot)-Emin)/(Emax-Emin)
+    #     Etot = self.energy()
+    #     Etot = Etot / max(Etot)
+    #     al = 180 / np.pi
+    #     col = 10 * np.log10(Etot)
+    #     print len(dod[:, 0]), len(dod[:, 1]), len(col[:])
+    #     plt.subplot(121)
+    #     plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=15, c=col,
+    #                 cmap=plt.cm.gray_r, edgecolors='none')
+    #     a = colorbar()
+    #     #a.set_label('dB')
+    #     plt.xlabel("$\\theta_t(\degree)$", fontsize=18)
+    #     plt.ylabel('$\phi_t(\degree)$', fontsize=18)
+    #     title('DoD')
+    #     plt.subplot(122)
+    #     plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=15, c=col,
+    #                 cmap=plt.cm.gray_r, edgecolors='none')
+    #     b = colorbar()
+    #     b.set_label('dB')
+    #     plt.title('DoA')
+    #     plt.xlabel("$\\theta_r(\degree)$", fontsize=18)
+    #     plt.ylabel("$\phi_r (\degree)$", fontsize=18)
+    #     plt.show()
+    # def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360),polar=False):
+    def doadod(self, cmap=plt.cm.hot_r, s=30,fontsize = 12,phi=(0,360),polar=False):
+        """ doadod scatter plot
+
+        Parameters
+        -----------
+
+        cmap : color map
+        s    : float
+            size (default 30)
+        fontsize : integer
+            default 12
+
+        Summary
+        --------
+
+        scatter plot of the DoA-DoD channel structure
+        the energy is colorcoded over all couples of DoA-DoD
 
         """
         dod = self.dod
         doa = self.doa
+        # determine Energy in each channel 
+        
+        Etot = self.energy(axis=1)
+        Emax = max(Etot)
+        Etot = Etot / Emax + 1e-7
+        Emax = max(10 * np.log10(Etot))
+        Emin = min(10 * np.log10(Etot))
         #
-        #col  = 1 - (10*np.log10(Etot)-Emin)/(Emax-Emin)
-        Etot = self.H.energy()
-        Etot = Etot / max(Etot)
-        al = 180 / np.pi
+        #
+        #
+        #col  = 1 - (10*log10(Etot)-Emin)/(Emax-Emin)
+        al = 180. / np.pi
         col = 10 * np.log10(Etot)
-        print len(dod[:, 0]), len(dod[:, 1]), len(col[:])
-        plt.subplot(121)
-        plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=15, c=col,
-                    cmap=plt.cm.gray_r, edgecolors='none')
-        a = colorbar()
+        if len(col) != len(dod):
+            print "len(col):", len(col)
+            print "len(dod):", len(dod)
+        plt.subplot(121,polar=polar)
+        plt.scatter(dod[:, 0] * al, dod[:, 1] * al, s=s, c=col,
+                    cmap=cmap, edgecolors='none')
+        #scatter(dod[:,0]*al,dod[:,1]*al,s=s)
+        plt.axis((0, 180, phi[0], phi[1]))
+        #plt.xticks(fontsize=20)
+        #plt.yticks(fontsize=20)
+        #a = plt.colorbar()
+        #for t in a.ax.get_yticklabels():
+        #    t.set_fontsize(18)
         #a.set_label('dB')
-        plt.xlabel("$\\theta_t(\degree)$", fontsize=18)
-        plt.ylabel('$\phi_t(\degree)$', fontsize=18)
-        title('DoD')
-        plt.subplot(122)
-        plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=15, c=col,
-                    cmap=plt.cm.gray_r, edgecolors='none')
-        b = colorbar()
+        plt.xlabel("$\\theta_t(\degree)$", fontsize=fontsize)
+        plt.ylabel('$\phi(\degree)$', fontsize=fontsize)
+        #ylabel('$\phi_t(\degree)$',fontsize=18)
+        plt.title('DoD',fontsize=fontsize+2)
+        plt.subplot(122,polar=polar)
+        plt.scatter(doa[:, 0] * al, doa[:, 1] * al, s=30, c=col,
+                    cmap=plt.cm.hot_r, edgecolors='none')
+        plt.axis((0, 180, phi[0], phi[1]))
+        #plt.xticks(fontsize=20)
+        #plt.yticks(fontsize=20)
+        b = plt.colorbar()
         b.set_label('dB')
-        plt.title('DoA')
-        plt.xlabel("$\\theta_r(\degree)$", fontsize=18)
-        plt.ylabel("$\phi_r (\degree)$", fontsize=18)
-        plt.show()
+        #for t in b.ax.get_yticklabels():
+        #    t.set_fontsize(20)
+        plt.xlabel("$\\theta_r(\degree)$", fontsize=fontsize)
+        plt.title('DoA', fontsize=fontsize+2)
+        plt.ylabel("$\phi_r (\degree)$", fontsize=fontsize)
+        plt.axis 
 
+        
     def wavefig(self, w, Nray=5):
         """ display
 

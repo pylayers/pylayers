@@ -4738,7 +4738,7 @@ class Layout(object):
                         delta = nl / 10
 
                         # with  AIR or ABSORBENT there is no reflection
-                        if (name<>'AIR') & (name<>'ABSORBENT'):
+                        if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss) :
                             self.dGi[k].add_node(str((n,k)))
                             if k==cy0:
                                 self.dGi[k].pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
@@ -4747,7 +4747,7 @@ class Layout(object):
 
 
                         # with METAL or ABSORBENT there is no transmission
-                        if (name<>'METAL') & (name<>'ABSORBENT'):
+                        if ((name<>'METAL') & (name<>'ABSORBENT')) or (n in self.lsss):
                             self.dGi[k].add_node(str((n,cy0,cy1))) 
                             self.dGi[k].add_node(str((n,cy1,cy0)))
                             self.dGi[k].pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.) 
@@ -4871,14 +4871,14 @@ class Layout(object):
 
                     delta = nl / 10
                     # On AIR or ABSORBENT there is no reflection
-                    if (name<>'AIR') & (name<>'ABSORBENT'):
+                    if ((name<>'AIR') & (name<>'ABSORBENT')) or (n in self.lsss):
                         self.Gi.add_node(str((n,cy0)))
                         self.Gi.add_node(str((n,cy1)))
                         self.Gi.pos[str((n, cy0))] = tuple(self.Gs.pos[n] + ln * delta)
                         self.Gi.pos[str((n, cy1))] = tuple(self.Gs.pos[n] - ln * delta)
 
                     # Through METAL or ABSORBENT there is no transmission
-                    if (name<>'METAL') & (name<>'ABSORBENT'):
+                    if (name<>'METAL') & (name<>'ABSORBENT') or (n in self.lsss):
                         self.Gi.add_node(str((n,cy0,cy1)))
                         self.Gi.add_node(str((n,cy1,cy0)))
                         self.Gi.pos[str((n, cy0, cy1))] = tuple(self.Gs.pos[n]+ln*delta/2.)
@@ -4886,7 +4886,7 @@ class Layout(object):
 
                 if len(cy) == 1: # segment which is not a separation between rooms
                     # On AIR or ABSORBENT there is no reflection
-                    if (name<>'AIR') & (name<>'ABSORBENT'):
+                    if (name<>'AIR') & (name<>'ABSORBENT')  or (n in self.lsss):
                         self.Gi.add_node(str((n, cy[0])))
                         self.Gi.pos[str((n, cy[0]))] = tuple(self.Gs.pos[n])
 
