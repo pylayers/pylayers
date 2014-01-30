@@ -14,6 +14,10 @@ pylayers/antprop/channel.py
 pylayers/antprop/channelc.py
 pylayers/antprop/coverage.py
 pylayers/antprop/interactions.py
+<<<<<<< HEAD
+=======
+pylayers/antprop/loadTMP.py
+>>>>>>> d65f673453de32b765ac95034af2d84f2d805577
 pylayers/antprop/multiwall.py
 pylayers/antprop/rays.py
 pylayers/antprop/raysc.py
@@ -21,6 +25,7 @@ pylayers/antprop/signature.py
 pylayers/antprop/signew.py
 pylayers/antprop/slab.py
 pylayers/antprop/spharm.py
+pylayers/antprop/testnico.py
 pylayers/exploit/__init__.py
 pylayers/exploit/simnet.py
 pylayers/gis/__init__.py
@@ -91,17 +96,21 @@ pylayers/simul/exploit_simulnet.py
 pylayers/simul/radionode.py
 pylayers/simul/simulem.py
 pylayers/simul/simulnet.py
+pylayers/simul/tmp.py
+pylayers/simul/toto.py
 pylayers/util/CDF.py
 pylayers/util/__init__.py
 pylayers/util/easygui.py
 pylayers/util/geomutil.py
 pylayers/util/graphutil.py
+pylayers/util/plot_simulation_loc.py
 pylayers/util/plotutil.py
 pylayers/util/project.py
 pylayers/util/pydb.py
 pylayers/util/pymysqldb.py
 pylayers/util/pyutil.py
 pylayers/util/save.py
+pylayers/util/thesesave.py
 pylayers/util/utilnet.py
 pylayers/util/vect.py
 pylayers/util/versions.py

@@ -11,12 +11,10 @@ In the future it should be able to accept any polygon as a furniture element
 
 Furniture are stored in an ini file of dirstruc.
 
-.. sourcecode:: ipython
-
-    import Layout
+    from pylayers.gis.layout import *
     import matplotlib.pylab as plt
-    L = Layout.Layout()
-    L.loadstr('sircut.str')
+    L = Layout()
+    L.loadstr('where1.ini')
     L.showGs()
     L.loadfur('Furw1.ini')
     fig = plt.gcf()
@@ -24,18 +22,6 @@ Furniture are stored in an ini file of dirstruc.
     for fur in L.lfur:
         fur.show(fig,ax)
 
-
-    import Layout
-    import matplotlib.pylab as plt
-    L = Layout.Layout()
-    L.loadstr('sircut.str')
-    plt.figure(figsize=(10,4))
-    L.showGs()
-    L.loadfur('Furw1.ini')
-    fig = plt.gcf()
-    ax  = fig.get_axes()[0]
-    for fur in L.lfur:
-        fur.show(fig,ax)
 
 """
 
@@ -69,6 +55,7 @@ class Furniture(object):
 
     Notes
     -----
+
     A piece of furniture is a rectangular object with the following parameters
 
     """
@@ -117,6 +104,7 @@ class Furniture(object):
 
         Parameters
         ----------
+
         p : ndarray (1x2)
 
         """

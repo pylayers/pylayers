@@ -36,6 +36,23 @@ Antennas and Propagation
    ./3-antprop/MultiwallModel.rst
    ./3-antprop/Coverage.rst
 
+Signal 
+******
+
+.. toctree::
+    :maxdepth: 3
+
+    ./4-signal/UwbWaveforms
+
+Example of PyLayers Electromagnetic Simulations 
+*************************************************
+
+.. toctree::
+   :maxdepth: 3 
+
+   ./8-simul/DEV-RayTracingW1.rst
+   ./8-simul/DOC-RayTracing2.rst
+
 Mobility 
 ********
 
@@ -54,3 +71,4 @@ Localization
 
    ./7-location/DEV-Algebraic.rst
    ./7-location/DOC-RGPA.rst
+

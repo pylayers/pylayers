@@ -48,6 +48,7 @@ def dist(A, B):
 
 
 class Body(object):
+
 	""" Class to manage the Body model
 
 	Methods
@@ -148,17 +149,20 @@ class Body(object):
 
 		self.g.add_nodes_from(keys)
 		
+		self.sl = np.ndarray(shape=(len(di['cylinder'].keys()),3))
 		for cyl in di['cylinder'].keys():
 			t = di['cylinder'][cyl]['t']
 			h = di['cylinder'][cyl]['h']
 			r = di['cylinder'][cyl]['r']
 			self.g.add_edge(t,h,id=cyl)
 			self.g[t][h]['radius']= r
-	   
-		self.ant={}
-		for ant in di['antenna'].keys():
-			self.ant[ant]=di['antenna'][ant]
-
+			#pdb.set_trace()
+			self.sl[int(cyl),:] = np.array([t,h,r]) 
+			
+		self.dev={}
+		for dev in di['device'].keys():
+			self.dev[dev]=di['device'][dev]
+		
 		return(di)
 
 	def center(self):
@@ -317,6 +321,7 @@ class Body(object):
 		ptb = pta + vtn
 		ptc = pta + wtn
 
+
 		X = np.array([[0,0],[psb[0],psb[1]],[psc[0],psc[1]]]).T
 		Y = np.array([[pta[0],pta[1]],[ptb[0],ptb[1]],[ptc[0],ptc[1]]]).T
 
@@ -333,6 +338,7 @@ class Body(object):
 		self.vtopos = np.hstack((vtn,np.array([0])))[:,np.newaxis]
         
     
+
 	def setdcs(self):
 		""" set device coordinate system (dcs) from a topos
 
@@ -366,26 +372,38 @@ class Body(object):
 
 		"""
 		self.dcs = {}
-		for ant in self.ant.keys():
+		for dev in self.dev.keys():
 
 			# retrieving antenna placement information from dictionnary ant
 
-			Id = self.ant[ant]['cyl']
-			alpha = self.ant[ant]['a']*np.pi/180.
-			l = self.ant[ant]['l']
-			h = self.ant[ant]['h']
+			Id = self.dev[dev]['cyl']
+			alpha = self.dev[dev]['a']*np.pi/180.
+			l = self.dev[dev]['l']
+			h = self.dev[dev]['h']
 
 			# getting cylinder information
-
-			ed = self.g.edges()[Id]
-			kta = ed[0]
-			khe = ed[1]
-			Rcyl = self.g[kta][khe]['radius']
-			phe = np.array(self.topos[:,khe])
+				
+			#pdb.set_trace()
+			#~ l_edge =list(self.g.edges_iter(data = True))
+			#~ a_edge = np.array(l_edge)
+			#~ a_data = a_edge[:,2]
+			#~ dtk = filter(lambda x: x['id']==str(Id),a_data)
+			#~ k = np.where(a_data ==dtk)[0][0]
+			
+			#ed = self.g.edges()[k]
+			#ed = self.g.edges()[Id]
+			#~ kta = ed[0]
+			#~ khe = ed[1]
+			kta = self.sl[int(Id),0]
+			khe = self.sl[int(Id),1]
+			#Rcyl = self.g[kta][khe]['radius']
+			Rcyl = self.sl[int(Id),2]
 			pta = np.array(self.topos[:,kta])
+			phe = np.array(self.topos[:,khe])			
 			vl = phe - pta
 			lmax = np.sqrt(np.dot(vl,vl))
 			
+			#CCS = self.ccs[k,:,:]
 			CCS = self.ccs[Id,:,:]
 			#self.nodes_Id[kta],self.nodes_Id[khe]
 
@@ -393,9 +411,8 @@ class Body(object):
 
 			Rot = np.array([[np.cos(alpha),-np.sin(alpha),0],[np.sin(alpha),np.cos(alpha),0],[0,0,1]])
 			CCSr = np.dot(CCS,Rot)
-			neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)
-
-			self.dcs[ant] = np.hstack((neworigin[:,np.newaxis],CCSr))
+			neworigin = pta + CCSr[:,2]*(l*lmax) + CCSr[:,0]*(Rcyl+h)			
+			self.dcs[dev] = np.hstack((neworigin[:,np.newaxis],CCSr))
 
 	def loadC3D(self, filename='07_01.c3d', nframes=300 ,unit='cm',centered = False):
 		""" load nframes of motion capture C3D file
@@ -584,9 +601,11 @@ class Body(object):
 		#ax.auto_scale_xyz([-2,2], [-2, 1], [-2, 2])
 		ax.autoscale(enable=True)
 		return(fig,ax)
+
                     
 	#def show3(self,iframe=0,topos=True,tag=''):
     
+
 	def showg(self,frameId):
 
 		for i in range(self.npoints):
@@ -722,10 +741,15 @@ class Body(object):
 			print ("LIST\n")
 		
 		dbody = {}
-		for e in self.g.edges():
-			e0 = e[0]
-			e1 = e[1]
-			k = int(self.g[e0][e1]['id'])
+		#~ for e in self.g.edges():
+			#~ e0 = e[0]
+			#~ e1 = e[1]
+			#~ k = int(self.g[e0][e1]['id'])
+		for k in range(self.sl.shape[0]):
+			# e0 : tail node of cylinder segment
+			e0 = self.sl[k,0]
+			# e1 : head node of cylinder segment
+			e1 = self.sl[k,1]
 			if not kwargs['topos']:
 				pA = self.d[:,e0,iframe].reshape(3,1)
 				pB = self.d[:,e1,iframe].reshape(3,1)
@@ -767,6 +791,7 @@ class Body(object):
 					fileccs = kwargs['tag']+'ccs'+str(k)
 					geov = geu.GeomVect(fileccs)
 					pt = pA[:,0]+Rcyl*self.ccs[k,:,0]
+					
 					geov.geomBase(self.ccs[k,:,:],pt=pt,scale=0.1)
 					bodylist.append('{<'+fileccs+'.vect'+"}\n")
 
@@ -776,20 +801,21 @@ class Body(object):
 				filedcs = kwargs['tag']+'dcs-'+key
 				U = self.dcs[key]
 				geoa = geu.GeomVect(filedcs)
+				
 				geoa.geomBase(U[:,1:],pt=U[:,0],scale=0.1)
 				bodylist.append('{<'+filedcs+'.vect'+"}\n")
 
 		# display antenna pattern
 		if kwargs['pattern']:
 			for key in self.dcs.keys():
-			#A = antenna(self.ant[key]['file'])
+			#A = antenna(self.dev[key]['file'])
 				U = self.dcs[key]
 				_filepatt = kwargs['tag']+'patt-'+key
 				geo = geu.Geomoff(_filepatt)
-				k = 46 # frequency index
-				V = Ant.SqG[k,:,:]
+				kf = 46 # frequency index
+				V = Ant.SqG[kf,:,:]
 				#T = U[:,1:]
-				Rab = self.ant[key]['T']
+				Rab = self.dev[key]['T']
 				#T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
 				Rbg = U[:,1:]
 				# combine rotation antenna -> body -> global
@@ -853,14 +879,11 @@ class Body(object):
 		# ccs : nc x 3 x 3
 		#
 		self.ccs = np.empty((nc,3,3))
-		
-		for e in self.g.edges():
+		for k in range(self.sl.shape[0]):
 			# e0 : tail node of cylinder segment
-			e0 = e[0]
+			e0 = self.sl[k,0]
 			# e1 : head node of cylinder segment
-			e1 = e[1]
-			k = int(self.g[e0][e1]['id'])
-			print k
+			e1 = self.sl[k,1]
 			if not topos:
 				# pA : tail point
 				pA = self.d[:,e0,frameId].reshape(3,1)
@@ -878,9 +901,39 @@ class Body(object):
 			# create an orthonormal basis
 			# 1 st vector : vg normalized (blue)
 			# 2 nd vector : 3 x 1
-			# 3 rd vector : PA-PB normalized
+			# 3 rd vector : PB-PA normalized
 			T = geu.onb(pA,pB,vg)
 			self.ccs[k,:,:] = T
+				
+			
+			
+		#~ for e in self.g.edges():
+			#~ # e0 : tail node of cylinder segment
+			#~ e0 = e[0]
+			#~ # e1 : head node of cylinder segment
+			#~ e1 = e[1]
+			#~ k = int(self.g[e0][e1]['id'])			
+			#~ if not topos:
+				#~ # pA : tail point
+				#~ pA = self.d[:,e0,frameId].reshape(3,1)
+				#~ # pB : head point
+				#~ pB = self.d[:,e1,frameId].reshape(3,1)
+				#~ vg = self.vg[:,frameId][:,np.newaxis]
+			#~ else:
+				#~ # pA : tail point
+				#~ pA = self.topos[:,e0].reshape(3,1)
+				#~ # pB : head point
+				#~ pB = self.topos[:,e1].reshape(3,1)
+				#~ # vtopos : mean topos velociy
+				#~ vg = self.vtopos
+			#~ pM = (pA+pB)/2.
+			#~ # create an orthonormal basis
+			#~ # 1 st vector : vg normalized (blue)
+			#~ # 2 nd vector : 3 x 1
+			#~ # 3 rd vector : PA-PB normalized
+			#~ T = geu.onb(pA,pB,vg)
+			#~ self.ccs[k,:,:] = T
+		
 
 	def cylinder_basis_k(self, frameId):
 		"""
@@ -936,6 +989,7 @@ class Body(object):
 		self.ant = x.reshape((len(x)), 1) * u0 + \
 				   y.reshape((len(y)), 1) * w0 + \
 				   z.reshape((len(z)), 1) * v0
+
 
 
 def translate(cycle, new_origin):
@@ -1052,6 +1106,7 @@ def Global_Trajectory(cycle, traj):
 
 
 if __name__ == '__main__':
+
 	# plt.ion()
 	# doctest.testmod()
 	bd = Body()
@@ -1087,3 +1142,4 @@ if __name__ == '__main__':
 	# plt.legend()
 	#
 	# plt.show()
+

@@ -5,7 +5,7 @@ import networkx as nx
 import pylayers.network.net as net
 
 
-numMotes = 500
+numMotes = 200
 numGateways =  10
 loadBalance  = 60
 dx = 316
@@ -15,7 +15,7 @@ numTimeSlots = 334
 # create a network
 network = net.Network(numMotes, numGateways, loadBalance)
 
-network.connect(fGHz=2.40,PtdBm=0,n=2)
+network.connect(fGHz=2.40,PtdBm=0,n=2.5)
 
 network.routing()
 

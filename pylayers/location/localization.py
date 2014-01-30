@@ -43,6 +43,16 @@ class Localization(object):
         self.cla = CLA()
         self.algloc=algloc()
         self.idx = 0
+
+    def __repr__(self):
+        s = 'Localization information\n*************************\n'
+        s = s + '\nNode ID: ' + str(self.ID)
+        s = s + '\nLocalization methods: ' + str(self.method)
+        s = s + '\n\n CLA:\n'
+        s = s + self.cla.__repr__() + '\n'
+
+        return s
+
 #    def get_const(self, RAT=None, LDP=None):
 #        """ get constraints
 #
@@ -178,11 +188,11 @@ class Localization(object):
             pass
         self.cla.update()
 
-        ############"" FOR DEBUG
-        prss=np.where(np.array(self.cla.type)=='RSS')[0]
-        for x in range(len(self.cla.c)):
-            if x in prss:
-                self.cla.usable[x]=False
+        # ############"" FOR DEBUG
+        # prss=np.where(np.array(self.cla.type)=='RSS')[0]
+        # for x in range(len(self.cla.c)):
+        #     if x in prss:
+        #         self.cla.usable[x]=False
 
 
     def savep(self,value,now=0.,name='pe'):
@@ -266,7 +276,6 @@ class PLocalization(Process):
         self.loc_updt_time = loc_updt_time
         self.method = self.loc.method
         self.sim = sim
-
 
 
 

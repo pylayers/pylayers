@@ -1383,6 +1383,7 @@ class Antenna(object):
 
     def Fsynth3(self, theta = [], phi=[], pattern=True):
 
+   
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
         Ndir is the number of directions
@@ -1390,8 +1391,8 @@ class Antenna(object):
         Parameters
         ----------
 
-        theta : ndarray (1xNdir)
-        phi   : ndarray (1xNdir)
+        theta : ndarray (1xNdir if not pattern)  (1xNtheta if pattern)
+        phi   : ndarray (1xNdir if not pattter)  (1xNphi if pattern)
         
         pattern : boolean
             if True theta and phi are reorganized for building the pattern

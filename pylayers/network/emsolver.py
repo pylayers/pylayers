@@ -44,6 +44,29 @@ import pdb
 class EMSolver(object):
     """ Invoque an electromagnetic solver
 
+    Attributes
+    ----------
+
+    config 
+    fileini 
+    ems_opt
+    toa_opt 
+    EMS_method
+        
+    sigmaTOA
+
+    Notes
+    -----
+
+    During dynamic simulation, on a regular basis nodes needs radio information
+    about their neighbors. This radio information can be obtained with
+    different technique from statistical model to site specific simulation
+    using ray tracing. 
+
+    EMS_method = { 'multiwall','raytracing'}
+
+
+
     """
 
     def __init__(self,L=Layout()):
@@ -70,9 +93,11 @@ class EMSolver(object):
         RAT : string 
             RAT name 
         model : dictionnary
+            parameters of the PL model 
             
             
         """
+
         fileini = pyu.getlong(self.fileini, pstruc['DIRSIMUL'])
         fd = open(fileini, "a")
         nconfig     = ConfigParser.ConfigParser()
@@ -88,7 +113,7 @@ class EMSolver(object):
 
 
     def load_model(self,RAT):
-        """
+        """ load a path loss shadowing model for a RAT 
 
         Parameters
         ----------
@@ -110,22 +135,19 @@ class EMSolver(object):
 
 
     def solve(self,p,e,LDP,RAT,epwr,sens):
-        """compute and return a LDP value thanks to a given method
+        """ computes and returns a LDP value a given method
 
         Parameters
         ----------
         
-        p 
-        e 
-
-        n1p : np.array
-            node 1 position
-        n2p : np.array
-            node 2 position
+        p : np.array
+        e : np.array
         LDP : string
             Type of LDP ( TOA, Pr, .... any other are to be add in teh todo list)
-        epwr : list of nodes emmited power
-        sens : list of nodes sensitivity
+        epwr : list 
+           nodes emmited power
+        sens : list 
+            nodes sensitivity
                 
         Returns
         -------
@@ -182,10 +204,9 @@ class EMSolver(object):
             if len(e) > 0:
 
                 lp = np.array([np.array((p[e[i][0]],p[e[i][1]])) for i in range(len(e))])
+                # euclidian distance 
                 d = np.sqrt(np.sum((lp[:,0]-lp[:,1])**2,axis=1))
                 slp = np.shape(lp)[1]
-
-
 
                 # evaluation of all LDPs
                 if LDP=='all':
@@ -200,12 +221,21 @@ class EMSolver(object):
 
                     for i in range(lpa-1):
                         # excess time of flight + losses computation
+                        # 
+                        # Losst returns 4 parameters   
+                        #   Lo Lp Edo Edp 
+                        #
+                        #
                         MW = mw.Losst(self.L,model.f,pa[i+1:lpa].T,pa[i]) 
-                        #MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) 
+                        # MW = mw.Loss0_v2(self.L,pa[i+1:lpa],model.f,pa[i]) 
                         # loss free space
                         frees=np.hstack((frees,mw.PL(model.f,pa[i+1:lpa],pa[i],model.rssnp) ))
-#                        Pr.extend(lepwr - MW[0] - frees)
+                        # Pr.extend(lepwr - MW[0] - frees)
+                        
+                        # WARNING : only one polarization is taken into
+                        # account here
                         # save losses computation 
+
                         loss = np.hstack((loss,MW[0][0]))
                         # save excess tof computation 
                         TOA  = np.hstack((TOA,MW[2][0]))
@@ -214,11 +244,13 @@ class EMSolver(object):
                     lepwr1 = [epwr[i[0]][RAT] for i in e]
                     lepwr2 = [epwr[i[1]][RAT] for i in e]
                     Pr = lepwr1 - loss - frees
+
                     # concatenate reverse link
                     Pr = np.hstack((Pr, lepwr2 - loss - frees))
                     P = np.outer(Pr,[1,1])
                     P[:,1] = model.sigrss
                     lsens = [sens[i[0]][RAT] for i in e] + [sens[i[1]][RAT] for i in e]
+
                     # visibility or not 
                     v = P[:,0] > lsens
 
@@ -255,7 +287,7 @@ class EMSolver(object):
                 return (np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)),np.array((0.,0.)))
 
 
-        elif self.method == 'Pyray':
+        elif self.method == 'raytracing':
             print 'Okay, I think we\'ve got something to append in the TODO list'
 
 

@@ -2,7 +2,8 @@
 #
 # Class Layout
 #
-# This class handle the description of buildings
+# This class handle the description of indoor layout
+#
 #
 import pdb
 import os
@@ -204,6 +205,7 @@ class Layout(object):
         self.Gm = nx.Graph()
         self.Gs.pos = {}
         self.tahe = np.zeros(([2, 0]), dtype=int)
+        self.lbltg=[]
 
         #
         # related file names
@@ -942,11 +944,13 @@ class Layout(object):
 
         Parameters
         ----------
+
         _filefur  : string
             short name of the furniture ini file
 
         Notes
         -----
+
             Furniture objects are stored in self.lfur list
 
         Examples
@@ -1024,6 +1028,7 @@ class Layout(object):
         else:
             raise NameError('layout filename extension not recognized')
 
+        self.lbltg=['s']
         #  construct geomfile (.off) for vizualisation with geomview
         self.subseg()
         if os.path.exists(filename):
@@ -2470,7 +2475,7 @@ class Layout(object):
                                             (name, zmin, zmax))
 
         self.Gs.node[s1]['ss_name'] = [data[0]]
-        self.Gs.node[s1]['ss_z'] = [eval(data[1]),eval(data[2])]
+        self.Gs.node[s1]['ss_z'] = [(eval(data[1]),eval(data[2]))]
         self.Gs.node[s1]['ss_ce'] = [ (0,0) ] 
         self.Gs.node[s1]['transition'] = True
         self.Nss += 1
@@ -3197,6 +3202,41 @@ class Layout(object):
 
         return(seglist)
 
+    def seg2pts(self,aseg):
+        """ convert segments array to cooresponding termination points array
+        
+        Parameters
+        ----------
+        
+        aseg : np.array (,Ns) or int for single value:w
+            array of segment number (>0)
+        
+        Returns
+        -------
+        
+        pth : np.array (4 x Ns)
+            pth is a vstacking of tail point (2,Ns) and head point (2,Ns)
+            
+        Examples
+        --------
+        
+        >>> from pylayers.gis.layout import *
+        >>> import numpy as np
+        >>> L = Layout('defstr.ini')
+        >>> aseg = np.array([1,3,6])
+        >>> L.seg2pts(aseg)
+        """
+        
+        if not isinstance(aseg,np.ndarray):
+            aseg = np.array([aseg])
+        assert(len(np.where(aseg<0)[0])==0)
+        utahe = self.tgs[aseg]
+        tahe =  self.tahe[:,utahe]
+        ptail =  self.pt[:,tahe[0,:]]
+        phead = self.pt[:,tahe[1,:]]
+        pth = np.vstack((ptail,phead))
+        return pth
+
     def segpt(self, ptlist=np.array([0])):
         """ return the seg list of a sequence of point number
 
@@ -3234,6 +3274,8 @@ class Layout(object):
             seglist = np.hstack((seglist, ut, uv))
         seglist = np.unique(seglist)
         return(seglist)
+
+
 
     def extrseg(self):
         """ calculate extremum of segments
@@ -3911,16 +3953,9 @@ class Layout(object):
         if not isinstance(ax, plt.Axes):
             ax  = fig.add_subplot(111)
 
-        if furniture:
-            if 'lfur' in self.__dict__:
-                for fur1 in self.lfur:
-                    if fur1.Matname == 'METAL':
-                        fur1.show(fig, ax)
-            else:
-                print "Warning : no furniture file loaded"
-
         if self.display['clear']:
             ax.cla()
+
         # display overlay image
         if self.display['overlay']:
             imok = False 
@@ -3938,7 +3973,6 @@ class Layout(object):
                     ax.imshow(image, extent=self.display['box'], alpha=self.display['alpha'])
                 else:                
                     ax.imshow(image, extent=self.display['box'],alpha=self.display['alpha'],origin='lower')
-
         if ndlist == []:
             tn = np.array(self.Gs.node.keys())
             u = np.nonzero(tn < 0)[0]
@@ -3998,6 +4032,15 @@ class Layout(object):
             for loc, spine in ax.spines.iteritems():
                 spine.set_color('none')
 
+        if furniture:
+            if 'lfur' in self.__dict__:
+                for fur1 in self.lfur:
+                    if fur1.Matname == 'METAL':
+                        fig,ax = fur1.show(fig, ax)
+            else:
+                print "Warning : no furniture file loaded"
+
+
         for nr in roomlist:
             ncy = self.Gr.node[nr]['cycle']
             self.Gt.node[ncy]['polyg'].plot()
@@ -4026,20 +4069,27 @@ class Layout(object):
             'i' : Gi
 
         """
+        # list of built graphs
+        
 
         if 't' in graph:
             self.buildGt()
+            self.lbltg.extend('t')
         if 'r' in graph:
             self.buildGr()
-        if 'w' in graph:
+            self.lbltg.extend('r')
+        if 'w' in graph and len(self.Gr.nodes())>1:
             self.buildGw()
+            self.lbltg.extend('w')
         #if 'c' in graph:
         #    self.buildGc()
         if 'v' in graph:
             self.buildGv()
+            self.lbltg.extend('v')
         if 'i' in graph:
             self.buildGi()
             self.buildGi2()
+            self.lbltg.extend('i')
 
         # dictionnary of cycles which have an air wall
         #self.build()
@@ -4064,33 +4114,33 @@ class Layout(object):
             self.saveini(f[0] +'.ini')
 
 
-    def dumpw(self, graph='trwcvi'):
+    def dumpw(self):
         """ write a dump of given Graph
 
-        Parameters
-        ----------
-            't' : Gt
-            'r' : Gr
-            's' : Gs
-            'v' : Gv 
-            'i' : Gi 
+        Notes
+        -----
+
+        't' : Gt
+        'r' : Gr
+        's' : Gs
+        'v' : Gv 
+        'i' : Gi 
+
         """
-        allg= ['t','r','w','c','v','i']
-        for g in allg:
-            if g in graph:
-                try:
-                    if g in ['v','i']:
-                        gname1 ='G'+g
-                        gname2 ='dG'+g
-                        write_gpickle(getattr(self,gname1),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
-                        write_gpickle(getattr(self,gname2),basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle')
-                    else:
-                        gname='G'+g
-                        write_gpickle(getattr(self,gname),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
-                except:
-                    raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
+        for g in self.lbltg:
+            try:
+                if g in ['v','i']:
+                    gname1 ='G'+g
+                    gname2 ='dG'+g
+                    write_gpickle(getattr(self,gname1),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
+                    write_gpickle(getattr(self,gname2),basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle')
+                else:
+                    gname='G'+g
+                    write_gpickle(getattr(self,gname),basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle')
+            except:
+                raise NameError('G'+g+' graph cannot be saved, probably because it has not been built')
         # save dictionnary which maps string interaction to [interactionnode, interaction type]
-        if 'i' in graph:
+        if 'i' in self.lbltg:
             write_gpickle(getattr(self,'di'),basename+'/struc/gpickle/di_'+self.filename+'.gpickle')
         write_gpickle(getattr(self,'dca'),basename+'/struc/gpickle/dca_'+self.filename+'.gpickle')
 
@@ -4099,11 +4149,11 @@ class Layout(object):
         if ext == '.ini':
             self.saveini(self.filename)
 
-    def dumpr(self, graph='trwcvi'):
+    def dumpr(self):
         """ read a dump of given Graph
 
-        Parameters
-        ----------
+        Notes
+        -----
 
         graph : string
             't' : Gt
@@ -4111,30 +4161,30 @@ class Layout(object):
             's' : Gs
             'v' : Gv
             'i' : Gi
-        Notes
-        -----
+
 
         .gpickle files are store under the struc directory of the project
         specified by the $BASENAME environment variable
 
         """
-        allg= ['t','r','w','c','v','i']
-        for g in allg:
-            if g in graph:
-                try:
-                    if g in ['v','i']:
-                        gname1 ='G'+g
-                        gname2 ='dG'+g
-                        setattr(self, gname1,
-                                read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
-                        setattr(self, gname2,
-                                read_gpickle(basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle'))
-                    else:
-                        gname='G'+g
-                        setattr(self, gname,
-                                read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
-                except:
-                    raise NameError('G'+g +' graph cannot be load')
+        graphs=['s','t','w','r','v','i']
+        for g in graphs:
+            try:
+                if g in ['v','i']:
+                    gname1 ='G'+g
+                    gname2 ='dG'+g
+                    setattr(self, gname1,
+                            read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
+                    setattr(self, gname2,
+                            read_gpickle(basename+'/struc/gpickle/dG'+g+'_'+self.filename+'.gpickle'))
+                else:
+                    gname='G'+g
+                    setattr(self, gname,
+                            read_gpickle(basename+'/struc/gpickle/G'+g+'_'+self.filename+'.gpickle'))
+                self.lbltg.extend(g)
+            except:
+                pass
+                #print 'G',g,' not saved'
 
         #
         # fixing bug #136 
@@ -4531,17 +4581,24 @@ class Layout(object):
             # seek node of degree 2
             #
             # udeg2 is the index of the deg 2 point in the sequence of points
-            for ik, inode in enumerate(vnodes):
-                deg = self.Gs.degree(inode)
-                if vnodes[0] < 0:
-                    index = ik / 2
-                else:
-                    index = (ik - 1) / 2
-                if inode < 0:
-                    if deg == 2:
-                        udeg2.append(index)
-                    if deg == 1:
-                        udeg1.append(index)    # warning not used
+
+            # for ik, inode in enumerate(vnodes):
+            #     deg = self.Gs.degree(inode)
+            #     if vnodes[0] < 0:
+            #         index = ik / 2
+            #     else:
+            #         index = (ik - 1) / 2
+            #     if inode < 0:
+            #         if deg == 2:
+            #             udeg2.append(index)
+            #         if deg == 1:
+            #             udeg1.append(index)    # warning not used
+            pts = filter(lambda x:  x<0,vnodes)
+            udeg2 = filter(lambda x : x in pts , self.degree[2])
+            # awpts = self.
+
+
+
             # udeg1 = self.degree[1]
             # udeg2 = self.degree[2]        
             #print udeg2    
@@ -4781,9 +4838,9 @@ class Layout(object):
     #                                else:
     #                                    print node1, node2
                                         #pdb_set_trace()
-                            else:                   # R-D
-                                node1 = str(n)
-                                node2 = str(nb)
+                            else:                 # D diffraction
+                                node1 = str(n)  #  
+                                node2 = str(nb) #
                                 if ((node1 in self.Gi.node.keys())
                                  & (node2 in self.Gi.node.keys())):
                                     self.Gi.add_edge(node1, node2)
@@ -5020,7 +5077,7 @@ class Layout(object):
                     'node_color':'w',
                     'edge_color':'k',
                     'node_size':20,
-                    'font_size':30,
+                    'font_size':15,
                     'nodelist': [],
                     'edgelist': [],
                     'figsize': (5,5),
@@ -5355,6 +5412,32 @@ class Layout(object):
                 return(ncy)
         if not cycle_exists:
             raise NameError(str(pt)+" is not in any cycle")
+
+    def cy2pt(self, cy=0, h=1.2):
+        """return a point into a given cycle
+
+        Parameters
+        ----------
+        cy :  
+            cycle
+
+        h : float
+            point height    
+        Returns
+        -------
+        point  : nd.array
+
+        """
+
+        if cy in self.Gt.nodes():
+            pt = np.array((self.Gt.pos[cy]))
+            pt=np.hstack((pt,h))
+            return(pt)
+        else:
+            raise NameError("cycle "+str(cy)+" not in self.Gt")
+
+
+
 
     def pt2ro(self, pt=np.array((0, 0))):
         """ point to room
