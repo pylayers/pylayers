@@ -1545,7 +1545,6 @@ class Rays(dict):
                 #
                 # reshape error can be tricky to debug. 
                 #
-                #
                 # f , r , l , 2 , 2
                 A = self.I.I[:, rrl, :, :].reshape(self.I.nf, r, l, 2, 2)
                 # get the corresponding unitary matrix B 

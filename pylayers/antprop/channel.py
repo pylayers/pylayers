@@ -343,6 +343,7 @@ class Ctilde(object):
         
         # get frequency axes    
         fGHz = Cl.fGHz
+
         self.Tt = Tt 
         self.Tr = Tr 
         
@@ -744,7 +745,6 @@ class Tchannel(bs.FUDAsignal):
 
         """
 
-        #H = self.H
         U = self * W
         V = bs.FUDAsignal(U.x, U.y, self.tau0,self.dod,self.doa)
 
