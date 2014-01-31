@@ -1449,7 +1449,6 @@ class Antenna(object):
         return Fth, Fph
 
 
-
     def Fsynth3(self, theta = [], phi=[], pattern=True):
         """ synthesis of a complex antenna pattern from VSH coefficients (shape 3)
 
@@ -1492,7 +1491,6 @@ class Antenna(object):
         once the V,W function
 
         """
-
         typ = self._filename.split('.')[1]
         if typ not in ['sh3','vsh3']:
             # temporary what to do if originbal file is not sh3 or vsh3 ? 
@@ -1551,8 +1549,6 @@ class Antenna(object):
                 Fph = Fph.reshape(Nf, Nt, Np)
 
                 
-
-            
         if typ == 'sh3':
             cx = self.S.Cx.s3
             cy = self.S.Cy.s3

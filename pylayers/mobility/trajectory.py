@@ -58,7 +58,8 @@ class Trajectory(pd.DataFrame):
                                     'ax':a[:,0],
                                     'ay':a[:,1],
                                     'az':a[:,2],
-                                    's' :s[:-1]},columns=['t','x','y','vx','vy','ax','ay','s'])
+                                    's'
+                                    :s[:-1]},columns=['t','x','y','z','vx','vy','vz','ax','ay','az','s'])
 
         N = len(t) 
         self.tmin = t[0]
@@ -179,7 +180,8 @@ class Trajectory(pd.DataFrame):
             >>> t = np.arange(0,10,0.01)
             >>> x = 2*t*np.cos(t)
             >>> y = 3*t*np.sin(t) 
-            >>> pt =np.vstack((x,y)).T
+            >>> z = 0*t
+            >>> pt =np.vstack((x,y,z)).T
             >>> traj = Trajectory(t,pt)
             >>> f,a = traj.plot()
             >>> plt.show()
