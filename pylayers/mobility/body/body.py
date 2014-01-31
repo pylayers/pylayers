@@ -819,7 +819,7 @@ class Body(object):
 
         if kwargs['pattern']:
             for key in self.dcs.keys():
-                Ant =  ant.Antenna(self.ant[key]['file'])
+                Ant =  ant.Antenna(self.dev[key]['file'])
                 if not hasattr(Ant,'SqG'):
                     Ant.Fsynth3()
                 U = self.dcs[key]
@@ -827,7 +827,7 @@ class Body(object):
                 geo = geu.Geomoff(_filepatt)
                 V = Ant.SqG[kwargs['k'],:,:]
                 #T = U[:,1:]
-                Rab = self.ant[key]['T']
+                Rab = self.dev[key]['T']
                 #T = np.vstack((U[:,1+DT[0]],U[:,1+DT[1]],U[:,1+DT[2]]))
                 Rbg = U[:,1:]
                 # combine rotation antenna -> body -> global
@@ -1122,10 +1122,10 @@ if __name__ == '__main__':
     # doctest.testmod()
     bd = Body(_filemocap='walk.c3d')
     traj = tr.Trajectory()
-    bd.settopos(traj,0.3)
-    bd.setccs(topos=True)
-    bd.setdcs()
-    bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
+    #bd.settopos(traj,0.0)
+    #bd.setccs(topos=True)
+    #bd.setdcs()
+    #bd.show3(k=46,wire=True,dcs=True,topos=True,pattern=True)
     #bd.show3(wire=True,dcs=True,topos=True)
     #bd.show3(wire=False,dcs=True,topos=True)
     lt = tr.importsn()
