@@ -14,7 +14,7 @@ coordinates. Otherwise a singularity problem arises.
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x5312850>
+    <matplotlib.figure.Figure at 0x450e890>
 
 
 .. code-block:: python
@@ -44,8 +44,8 @@ coordinates. Otherwise a singularity problem arises.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x544ad10>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x54550d0>)
+    (<matplotlib.figure.Figure at 0x46b0e90>,
+     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x46c4090>)
 
 
 
@@ -64,8 +64,8 @@ coordinates. Otherwise a singularity problem arises.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x5478090>,
-     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x54769d0>)
+    (<matplotlib.figure.Figure at 0x46e0710>,
+     <mpl_toolkits.mplot3d.axes3d.Axes3D at 0x46dea10>)
 
 
 

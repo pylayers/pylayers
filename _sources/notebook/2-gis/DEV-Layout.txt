@@ -2,22 +2,29 @@
 Description of the propagation environment
 ==========================================
 
-.. code:: python
+.. code-block:: python
 
     
-.. code:: python
+.. code-block:: python
 
     from pylayers.gis.layout import *
     from IPython.display import Image
     
     import os
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x379d890>
+
+
 Getting the list of all available Layouts : the ``ls()`` method
 ---------------------------------------------------------------
 
 The ``ls()`` method lists the layout file which are available in the
 ``struc`` directory of the current project.
 
-.. code:: python
+.. code-block:: python
 
     L=Layout()
     L.ls()
@@ -45,7 +52,7 @@ The ``ls()`` method lists the layout file which are available in the
 
 
 
-.. code:: python
+.. code-block:: python
 
     L.ls(typ='osm')
 
@@ -57,11 +64,11 @@ The ``ls()`` method lists the layout file which are available in the
 
 
 
-.. code:: python
+.. code-block:: python
 
     L=Layout('DLR.osm')
 
-.. code:: python
+.. code-block:: python
 
     L.Gs.node[1]
 
@@ -76,10 +83,10 @@ The ``ls()`` method lists the layout file which are available in the
 
 
 
-.. code:: python
+.. code-block:: python
 
     L.saveosm('DLR.osm')
-.. code:: python
+.. code-block:: python
 
     Image('../../../data/struc/images/TA-Office.png')
 
@@ -89,7 +96,7 @@ The ``ls()`` method lists the layout file which are available in the
 
 
 
-.. code:: python
+.. code-block:: python
 
     fig,ax=L.showGs()
 
@@ -97,10 +104,10 @@ The ``ls()`` method lists the layout file which are available in the
 .. image:: DEV-Layout_files/DEV-Layout_11_0.png
 
 
-.. code:: python
+.. code-block:: python
 
     L=Layout('TA-Office.ini')
-.. code:: python
+.. code-block:: python
 
     L.showGs()
 
@@ -108,8 +115,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x481ad10>,
-     <matplotlib.axes.AxesSubplot at 0x48279d0>)
+    (<matplotlib.figure.Figure at 0x7fbe6c63edd0>,
+     <matplotlib.axes.AxesSubplot at 0x7fbe6c649ed0>)
 
 
 
@@ -117,7 +124,7 @@ The ``ls()`` method lists the layout file which are available in the
 .. image:: DEV-Layout_files/DEV-Layout_13_1.png
 
 
-.. code:: python
+.. code-block:: python
 
     L=Layout('11D-E1.ini')
     L
@@ -170,7 +177,7 @@ The ``ls()`` method lists the layout file which are available in the
 
 
 
-.. code:: python
+.. code-block:: python
 
     L.showG('s',figsize=(20,10))
 
@@ -178,8 +185,8 @@ The ``ls()`` method lists the layout file which are available in the
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f340a4b0b90>,
-     <matplotlib.axes.AxesSubplot at 0x7f340a4c9410>)
+    (<matplotlib.figure.Figure at 0x7fbe6c645bd0>,
+     <matplotlib.axes.AxesSubplot at 0x7fbe6c63e390>)
 
 
 
@@ -187,7 +194,7 @@ The ``ls()`` method lists the layout file which are available in the
 .. image:: DEV-Layout_files/DEV-Layout_15_1.png
 
 
-.. code:: python
+.. code-block:: python
 
     L=Layout('klepal.ini')
     L
@@ -239,7 +246,7 @@ The ``ls()`` method lists the layout file which are available in the
 
 This Layout is still in construction
 
-.. code:: python
+.. code-block:: python
 
     L.showGs()
 
@@ -247,8 +254,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4c78690>,
-     <matplotlib.axes.AxesSubplot at 0x7f34093551d0>)
+    (<matplotlib.figure.Figure at 0x7fbe6c892590>,
+     <matplotlib.axes.AxesSubplot at 0x46ba410>)
 
 
 
@@ -256,10 +263,10 @@ This Layout is still in construction
 .. image:: DEV-Layout_files/DEV-Layout_18_1.png
 
 
-.. code:: python
+.. code-block:: python
 
     L=Layout('W2PTIN.ini')
-.. code:: python
+.. code-block:: python
 
      L.showGs()
 
@@ -267,8 +274,8 @@ This Layout is still in construction
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x7f340a4c9310>,
-     <matplotlib.axes.AxesSubplot at 0x4c94c50>)
+    (<matplotlib.figure.Figure at 0x7fbe6e539310>,
+     <matplotlib.axes.AxesSubplot at 0x7fbe6c88b8d0>)
 
 
 
@@ -289,7 +296,7 @@ point coordinates are stored in two places :
     L.Gs.pos : in a dictionnary form (key is the point negative index) 
     L.pt : in a numpy array
 
-.. code:: python
+.. code-block:: python
 
     print np.shape(L.pt)
     print len(filter(lambda x: x<0,L.Gs.pos))
@@ -319,18 +326,18 @@ Where :math:`k` is the index of a given segment (starting in 0).
 ``tgs`` is an arry with length :math:`N_s`\ +1. The index 0 is not used
 because none segment has 0 as an index.
 
-.. code:: python
+.. code-block:: python
 
     ns = 5
     utahe = L.tgs[ns]
-.. code:: python
+.. code-block:: python
 
     tahe =  L.tahe[:,utahe]
-.. code:: python
+.. code-block:: python
 
     ptail = L.pt[:,tahe[0]]
     phead = L.pt[:,tahe[1]]
-.. code:: python
+.. code-block:: python
 
     print ptail
 
@@ -339,7 +346,7 @@ because none segment has 0 as an index.
     [ 29.785   6.822]
 
 
-.. code:: python
+.. code-block:: python
 
     print phead 
 
@@ -348,7 +355,7 @@ because none segment has 0 as an index.
     [ 27.414   6.822]
 
 
-.. code:: python
+.. code-block:: python
 
     L.Gs.node[5]
 
@@ -365,7 +372,7 @@ because none segment has 0 as an index.
 
 
 
-.. code:: python
+.. code-block:: python
 
     print L.Gs.pos[-8]
     print L.Gs.pos[-139]
@@ -376,10 +383,10 @@ because none segment has 0 as an index.
     (27.414, 6.822)
 
 
-.. code:: python
+.. code-block:: python
 
     aseg = np.array([4,7,134])
-.. code:: python
+.. code-block:: python
 
     print np.shape(aseg)
 
@@ -388,12 +395,12 @@ because none segment has 0 as an index.
     (3,)
 
 
-.. code:: python
+.. code-block:: python
 
     pt  = L.tahe[:,L.tgs[aseg]][0,:]
     ph = L.tahe[:,L.tgs[aseg]][1,:]
     pth = np.vstack((pt,ph))
-.. code:: python
+.. code-block:: python
 
     np.shape(pth)
 
@@ -408,7 +415,7 @@ because none segment has 0 as an index.
 ``Layout.seg2pts`` a function for getting points coordinates from segment number array
 --------------------------------------------------------------------------------------
 
-.. code:: python
+.. code-block:: python
 
     L.seg2pts(aseg)
 
@@ -423,14 +430,14 @@ because none segment has 0 as an index.
 
 
 
-.. code:: python
+.. code-block:: python
 
     aseg = array(filter(lambda x: x>0,L.Gs.nodes()))
     pth = L.seg2pts(aseg)
-.. code:: python
+.. code-block:: python
 
     from pylayers.util.plotutil import displot
-.. code:: python
+.. code-block:: python
 
     displot(pth[0:2,:],pth[2:,:])
 
@@ -438,8 +445,8 @@ because none segment has 0 as an index.
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4c97690>,
-     <matplotlib.axes.AxesSubplot at 0x7f3409269990>)
+    (<matplotlib.figure.Figure at 0x7fbe6d1264d0>,
+     <matplotlib.axes.AxesSubplot at 0x7fbe6d069f50>)
 
 
 

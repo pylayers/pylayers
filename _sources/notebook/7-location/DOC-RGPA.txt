@@ -15,7 +15,7 @@ Robust Geometric Positioning Algorithm
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x3aba850>
+    <matplotlib.figure.Figure at 0x5428890>
 
 
 Let's define 4 anchors in the plane.
@@ -48,7 +48,7 @@ blue
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x3c4fa10>
+    <matplotlib.legend.Legend at 0x565da50>
 
 
 
@@ -244,7 +244,7 @@ with the above model
 
 .. parsed-literal::
 
-    10.271380031020819
+    10.61265176201794
 
 
 

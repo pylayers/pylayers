@@ -3,5 +3,5 @@
 .. toctree::
    :hidden:
 
-   notebook/index.rst
+   notebook/UserManual.rst
    modules/index

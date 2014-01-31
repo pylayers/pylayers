@@ -12,7 +12,7 @@ Ray Signatures
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x432c850>
+    <matplotlib.figure.Figure at 0x53a6890>
 
 
 .. code-block:: python
@@ -111,8 +111,8 @@ interactions.
 
 .. parsed-literal::
 
-    [ 7.90716852  0.74635487]
-    [ 2.53627782  0.94378265]
+    [ 8.09995354  0.07161428]
+    [ 2.62822229  0.47915065]
 
 
 .. code-block:: python

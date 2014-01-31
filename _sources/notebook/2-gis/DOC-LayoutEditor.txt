@@ -80,10 +80,17 @@ following :
 -  ``.osm`` : an xml file which can be edited with
    `JOSM <http://josm.openstreetmap.de/>`__
 
-.. code:: python
+.. code-block:: python
 
     from pylayers.gis.layout import *
     from pylayers.util.project import *
+
+
+.. parsed-literal::
+
+    <matplotlib.figure.Figure at 0x480f890>
+
+
 Reading an exiting Layout
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -93,7 +100,7 @@ All files are stored in the ``pstruc['DIRSTRUC']`` directory of the
 project. The project root directory is defined in the ``$BASENAME``
 environment variable.
 
-.. code:: python
+.. code-block:: python
 
     print pstruc['DIRSTRUC']
 
@@ -105,7 +112,7 @@ environment variable.
 ``pstruc`` is a dictionnary which gathers all directories which are used
 in ``PyLayers``
 
-.. code:: python
+.. code-block:: python
 
     pstruc
 
@@ -143,7 +150,7 @@ in ``PyLayers``
 
 The structure of the ``.osm`` file is shown below
 
-.. code:: python
+.. code-block:: python
 
     %%bash 
     
@@ -156,7 +163,7 @@ The structure of the ``.osm`` file is shown below
     DLR.osm
 
 
-.. code:: python
+.. code-block:: python
 
     %%bash 
         cd $BASENAME/struc
@@ -198,10 +205,10 @@ The structure of the ``.osm`` file is shown below
 
 To read a new layout in osm format :
 
-.. code:: python
+.. code-block:: python
 
     L=Layout('DLR.osm')
-.. code:: python
+.. code-block:: python
 
     fig,ax=L.showGs()
 
@@ -209,7 +216,7 @@ To read a new layout in osm format :
 .. image:: DOC-LayoutEditor_files/DOC-LayoutEditor_20_0.png
 
 
-.. code:: python
+.. code-block:: python
 
     L.info()
 
@@ -236,7 +243,7 @@ To read a new layout in osm format :
 
 The different graphs associated with the layout are then built
 
-.. code:: python
+.. code-block:: python
 
     L.build()
 
@@ -252,6 +259,8 @@ The different graphs associated with the layout are then built
       pr2 = np.arccos(np.dot(self.v,vn2))/np.arccos(self.dot)
     /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:168: RuntimeWarning: invalid value encountered in arccos
       pr4 = np.arccos(np.dot(self.u,vn4))/np.arccos(self.dot)
+    /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:160: RuntimeWarning: invalid value encountered in arccos
+      pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
 
 
 .. parsed-literal::
@@ -259,16 +268,10 @@ The different graphs associated with the layout are then built
     [1, 18, 14]
 
 
-.. parsed-literal::
-
-    /home/uguen/Documents/rch/devel/pylayers/pylayers/util/cone.py:160: RuntimeWarning: invalid value encountered in arccos
-      pr3 = np.arccos(np.dot(self.v,vn3))/np.arccos(self.dot)
-
-
 The topological graph :math:`\mathcal{G}_t` or graph of non overlapping
 cycles.
 
-.. code:: python
+.. code-block:: python
 
     f,a=L.showG('t')
     b=plt.axis('off')
@@ -281,7 +284,7 @@ The graph of room :math:`\mathcal{G}_r`. Two rooms which share at least
 a wall are connected. Two rooms which share only a corner (punctual
 connection) are not connected
 
-.. code:: python
+.. code-block:: python
 
     f,a=L.showG('r')
     b=plt.axis('off')
@@ -295,7 +298,7 @@ mobility. This allows to determine the shortest path between 2 rooms.
 This information could be included in the osm file. This is not the case
 yet
 
-.. code:: python
+.. code-block:: python
 
     f,a=L.showG('w')
     b=plt.axis('off')
@@ -306,7 +309,7 @@ yet
 
 The graph of visibility :math:`\mathcal{G_v}`
 
-.. code:: python
+.. code-block:: python
 
     f,a=L.showG('v')
     b=plt.axis('off')
@@ -318,7 +321,7 @@ The graph of visibility :math:`\mathcal{G_v}`
 The graph of interactions :math:`\mathcal{G}_i` used to determine the
 ray signatures.
 
-.. code:: python
+.. code-block:: python
 
     f=plt.figure(figsize=(15,15))
     a = f.gca()
@@ -332,7 +335,7 @@ ray signatures.
 The display options dictionnary
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code:: python
+.. code-block:: python
 
     L.info()
 
@@ -361,7 +364,7 @@ The layout can be displayed using matplotlib ploting primitive. Several
 display options are specified in the display dictionnary. Those options
 are exploited in ``showGs()`` vizualisation method.
 
-.. code:: python
+.. code-block:: python
 
     L.display
 
@@ -503,33 +506,18 @@ It is useful while editing a layout to have an overlay of an image in
 order to help placing points. The image overlay can either be an url or
 a filename. In that case the file is stored in
 
-.. code:: python
+.. code-block:: python
 
     L=Layout()
     L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
-
-::
-
-
-    ---------------------------------------------------------------------------
-    NameError                                 Traceback (most recent call last)
-
-    <ipython-input-1-cead63e6ceaa> in <module>()
-    ----> 1 L=Layout()
-          2 L.display['fileoverlay']='http://images.wikia.com/theoffice/images/9/9e/Layout.jpg'
-
-
-    NameError: name 'Layout' is not defined
-
-
-.. code:: python
+.. code-block:: python
 
     L.display['overlay']=True
     L.display['alpha']=1
     L.display['scaled']=False
     L.display['ticksoff']=False
     L.display['inverse']=True
-.. code:: python
+.. code-block:: python
 
     plt.figure(figsize=(10,10))
     L.showGs()
@@ -538,8 +526,8 @@ a filename. In that case the file is stored in
 
 .. parsed-literal::
 
-    (<matplotlib.figure.Figure at 0x4e48850>,
-     <matplotlib.axes.AxesSubplot at 0x4e48490>)
+    (<matplotlib.figure.Figure at 0x5b89350>,
+     <matplotlib.axes.AxesSubplot at 0x5b89590>)
 
 
 
@@ -593,7 +581,7 @@ At that stage, it is possible to start creating points
 Vizualisation of the layout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code:: python
+.. code-block:: python
 
     L = Layout('TA-Office.ini')
     L.dumpr()

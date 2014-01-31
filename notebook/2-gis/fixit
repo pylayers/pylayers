@@ -1,9 +1,0 @@
-for i in *.html;
-do 
-cat $i | sed "s/notebook\/2-gis/\./g" > tmp
-if [ $? -eq 0 ]
-then 
-mv tmp $i
-echo $i
-fi
-done

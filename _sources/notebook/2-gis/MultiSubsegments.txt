@@ -2,7 +2,7 @@
 Segment and sub-segments
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code:: python
+.. code-block:: python
 
     from pylayers.simul.simulem import *
     from pylayers.antprop.rays import *
@@ -16,10 +16,10 @@ Segment and sub-segments
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x48fff50>
+    <matplotlib.figure.Figure at 0x4742890>
 
 
-.. code:: python
+.. code-block:: python
 
     S = Simul()
     filestr = 'defstr3'
@@ -29,7 +29,7 @@ separated by a subsegment which has a multi subsegment attribute. The
 attribute of the subsegment can be changed with the method ``chgmss``
 (change multisubsegment)
 
-.. code:: python
+.. code-block:: python
 
     S.L.chgmss(1,ss_name=['WOOD','AIR','WOOD'],ss_z =[(0.0,2.7),(2.7,2.8),(2.8,3)])
     S.L.build()
@@ -43,7 +43,7 @@ attribute of the subsegment can be changed with the method ``chgmss``
 
 The :math:`\mathcal{G}_s` graph dictionnary has the following structure
 
-.. code:: python
+.. code-block:: python
 
     S.L.Gs.node
 
@@ -120,7 +120,7 @@ The :math:`\mathcal{G}_s` graph dictionnary has the following structure
 
 
 
-.. code:: python
+.. code-block:: python
 
     S.info()
 
@@ -156,7 +156,7 @@ The :math:`\mathcal{G}_s` graph dictionnary has the following structure
     type       :  tx
     fileini    :  radiotx.ini
     filespa    :  radiotx.spa
-    filegeom   :  radiotx.vect
+    filegeom   :  radiotx.off
     fileant    :  defant.vsh3
     filestr    :  defstr.str2
     None
@@ -169,13 +169,13 @@ The :math:`\mathcal{G}_s` graph dictionnary has the following structure
     type       :  rx
     fileini    :  radiorx.ini
     filespa    :  radiorx.spa
-    filegeom   :  radiorx.vect
+    filegeom   :  radiorx.off
     fileant    :  defant.vsh3
     filestr    :  defstr.str2
     None
 
 
-.. code:: python
+.. code-block:: python
 
     S.tx.clear()
     S.rx.clear()
@@ -202,7 +202,7 @@ The :math:`\mathcal{G}_s` graph dictionnary has the following structure
 .. image:: MultiSubsegments_files/MultiSubsegments_9_1.png
 
 
-.. code:: python
+.. code-block:: python
 
     fGHz=np.arange(2,6,0.5)
     wav = wvf.Waveform(fcGHz=4,bandGHz=1.5)
@@ -220,7 +220,7 @@ The different steps are :
 -  determine local basis on 3D rays
 -  fill interactions
 
-.. code:: python
+.. code-block:: python
 
     Si = Signatures(S.L,ctx,crx)
     Si.run4(cutoff=5)
@@ -231,7 +231,7 @@ The different steps are :
 Channel variability due to different ``Layout`` constitutive materials
 ----------------------------------------------------------------------
 
-.. code:: python
+.. code-block:: python
 
     r3d
 
@@ -270,7 +270,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 
 
-.. code:: python
+.. code-block:: python
 
     layer = ['AIR','AIR','AIR']
     S.L.chgmss(1,ss_name=layer)
@@ -295,7 +295,7 @@ Channel variability due to different ``Layout`` constitutive materials
 .. image:: MultiSubsegments_files/MultiSubsegments_16_1.png
 
 
-.. code:: python
+.. code-block:: python
 
     type(cirair)
 
@@ -307,7 +307,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 
 
-.. code:: python
+.. code-block:: python
 
     layer = ['PARTITION','PARTITION','PARTITION']
     S.L.chgmss(1,ss_name=layer)
@@ -325,7 +325,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.text.Text at 0x7f49a126f050>
+    <matplotlib.text.Text at 0x7fa2bc88bb50>
 
 
 
@@ -333,7 +333,7 @@ Channel variability due to different ``Layout`` constitutive materials
 .. image:: MultiSubsegments_files/MultiSubsegments_18_1.png
 
 
-.. code:: python
+.. code-block:: python
 
     layer = ['METAL','METAL','METAL']
     S.L.chgmss(1,ss_name=layer)
@@ -352,7 +352,7 @@ Channel variability due to different ``Layout`` constitutive materials
 .. image:: MultiSubsegments_files/MultiSubsegments_19_0.png
 
 
-.. code:: python
+.. code-block:: python
 
     #fig2=plt.figure()
     f,a=cirair.plot(typ=['l20'],color='b')
@@ -370,7 +370,7 @@ Channel variability due to different ``Layout`` constitutive materials
 
 .. parsed-literal::
 
-    <matplotlib.legend.Legend at 0x7f49a17c7310>
+    <matplotlib.legend.Legend at 0x7fa2bceb3dd0>
 
 
 

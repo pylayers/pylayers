@@ -7,7 +7,7 @@
 
 .. parsed-literal::
 
-    <matplotlib.figure.Figure at 0x54bb850>
+    <matplotlib.figure.Figure at 0x4ca8890>
 
 
 Network Simulation Configuration

@@ -10,10 +10,10 @@ sl.add('DoubleGlass',['GlassJc','AIR','GlassJc'],[
     0.0029,0.0102,0.0029])
 theta = np.linspace(20,60,100)*np.pi/180
 sl['ConcreteJc'].ev(120,theta)
-sl['ConcreteJc'].plotwrt(var='a',types=['l20'])
+sl['ConcreteJc'].plotwrt(var='a',typ=['l20'])
 fig = plt.figure()
 sl['DoubleGlass'].ev(120,theta)
-sl['DoubleGlass'].plotwrt(var='a',types=['l20'])
+sl['DoubleGlass'].plotwrt(var='a',typ=['l20'])
 freq = np.linspace(110,135,50)
 fig = plt.figure()
 sl['DoubleGlass'].ev(freq,theta)
